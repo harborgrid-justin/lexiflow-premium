@@ -82,7 +82,7 @@ export class NotificationsService {
   /**
    * Mark all notifications as read
    */
-  async markAllAsRead(userId: string) {
+  async markAllAsRead(_userId: string) {
     // Update all unread notifications for user
     return {
       updated: 0,

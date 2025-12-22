@@ -6,9 +6,9 @@ import {
   IsNumber,
   IsArray,
   IsUUID,
-  _IsBoolean,
+  IsBoolean,
   MaxLength,
-  _ValidateNested,
+  ValidateNested,
 } from 'class-validator';
 import { DepositionMethod } from '../entities/deposition.entity';
 

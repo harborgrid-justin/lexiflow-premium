@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { TimeEntry, TimeEntryStatus } from '../time-entries/entities/time-entry.entity';
 import { Expense, ExpenseStatus } from '../expenses/entities/expense.entity';
 import { Invoice, InvoiceStatus } from '../invoices/entities/invoice.entity';
@@ -287,7 +287,7 @@ export class BillingAnalyticsService {
     const today = new Date();
 
     const invoices = await this.invoiceRepository.find({
-      where: { deletedAt: null },
+      where: { deletedAt: IsNull() },
     });
 
     const unpaidInvoices = invoices.filter(

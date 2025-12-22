@@ -56,7 +56,7 @@ export class BloomFilter {
     test(item: string): boolean {
       const h1 = this.hash1(item);
       const h2 = this.hash2(item);
-  
+
       for (let i = 0; i < this.hashes; i++) {
         const hash = (h1 + i * h2) % this.size;
         const byteIndex = Math.floor(hash / 8);
@@ -66,5 +66,10 @@ export class BloomFilter {
         }
       }
       return true;
+    }
+
+    // Alias for test() - more semantic name
+    mightContain(item: string): boolean {
+      return this.test(item);
     }
   }

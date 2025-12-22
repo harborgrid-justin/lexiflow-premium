@@ -80,9 +80,9 @@ export const transformNodesToGantt = (
         title: node.label,
         startDate: DateCalculationService.formatToISO(startDate),
         dueDate: DateCalculationService.formatToISO(dueDate),
-        status: 'Pending',
+        status: TaskStatusBackend.TODO,
         assignee: node.config.assignee || 'Unassigned',
-        priority: 'Medium',
+        priority: TaskPriorityBackend.MEDIUM,
         dependencies
       });
     }

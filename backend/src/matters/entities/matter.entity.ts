@@ -4,8 +4,8 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  _ManyToOne,
-  _JoinColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 export enum MatterStatus {

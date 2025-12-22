@@ -38,7 +38,7 @@ export class CasePhasesService {
 
   async update(id: string, updateCasePhaseDto: UpdateCasePhaseDto): Promise<CasePhase> {
     await this.findOne(id);
-    await this.casePhaseRepository.update(id, updateCasePhaseDto);
+    await this.casePhaseRepository.update(id, { ...updateCasePhaseDto });
     return this.findOne(id);
   }
 

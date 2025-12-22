@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { ESISource } from './entities/esi-source.entity';
 import { CreateESISourceDto } from './dto/create-esi-source.dto';
 import { UpdateESISourceDto } from './dto/update-esi-source.dto';
@@ -91,7 +91,7 @@ export class ESISourcesService {
 
   async findOne(id: string): Promise<ESISource> {
     const esiSource = await this.esiSourceRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!esiSource) {
@@ -118,7 +118,7 @@ export class ESISourcesService {
 
   async getStatistics(caseId: string) {
     const sources = await this.esiSourceRepository.find({
-      where: { caseId, deletedAt: null },
+      where: { caseId, deletedAt: IsNull() },
     });
 
     const stats = {

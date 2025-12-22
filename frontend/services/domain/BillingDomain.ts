@@ -427,8 +427,8 @@ export class BillingRepository extends Repository<TimeEntry> {
             ]);
             
             return clients.slice(0, 3).map(c => ({
-                name: c.name.split(' ')[0],
-                wip: Math.floor(Math.random() * 50000), 
+                name: (c.name || '').split(' ')[0],
+                wip: Math.floor(Math.random() * 50000),
                 billed: c.totalBilled
             }));
         } catch (error) {

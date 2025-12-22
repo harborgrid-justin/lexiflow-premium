@@ -167,7 +167,7 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
                                     <FileText className="h-3 w-3 mr-2"/> Live Logs
                                 </div>
                                 <div className={cn("flex-1 p-4 overflow-y-auto font-mono text-xs leading-relaxed", theme.surface.default, theme.text.primary)}>
-                                    {selectedJob.logs.map((log) => {
+                                    {(selectedJob.logs || []).map((log) => {
                                             let logClass = theme.status.success.text;
                                             if (log.includes('[ERROR]')) {
                                                 logClass = theme.status.error.text;

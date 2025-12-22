@@ -8,15 +8,15 @@ const MATTER_TYPES: MatterType[] = ['Case', 'Advisory', 'Compliance'];
 const MATTER_STATUSES: MatterStatus[] = [MatterStatus.ACTIVE, MatterStatus.PENDING, MatterStatus.CLOSED, MatterStatus.ON_HOLD];
 const MATTER_PRIORITIES: MatterPriority[] = [MatterPriority.LOW, MatterPriority.MEDIUM, MatterPriority.HIGH, MatterPriority.URGENT];
 const PRACTICE_AREAS: PracticeArea[] = [
-  'Corporate',
-  'Litigation',
-  'Real Estate',
-  'IP',
-  'Tax',
-  'Employment',
-  'Criminal',
-  'Immigration',
-  'Environmental'
+  PracticeArea.CORPORATE_LAW,
+  PracticeArea.CIVIL_LITIGATION,
+  PracticeArea.REAL_ESTATE,
+  PracticeArea.INTELLECTUAL_PROPERTY,
+  PracticeArea.TAX_LAW,
+  PracticeArea.EMPLOYMENT_LAW,
+  PracticeArea.CRIMINAL_DEFENSE,
+  PracticeArea.IMMIGRATION,
+  PracticeArea.ENVIRONMENTAL_LAW
 ];
 
 interface BasicInfoSectionProps {
@@ -37,7 +37,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ formData, er
         <input
           type="text"
           value={formData.matterNumber}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('matterNumber', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('matterNumber', e.target.value)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
           placeholder="Auto-generated if empty"
         />
@@ -48,7 +48,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ formData, er
         <select
           id="matterType"
           value={formData.matterType}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('matterType', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onChange('matterType', e.target.value)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
         >
           {MATTER_TYPES.map(type => (
@@ -62,7 +62,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ formData, er
         <input
           type="text"
           value={formData.title}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('title', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('title', e.target.value)}
           className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg ${
             errors.title ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
           } text-slate-900 dark:text-slate-100`}
@@ -87,7 +87,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ formData, er
         <select
           id="status"
           value={formData.status}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('status', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onChange('status', e.target.value)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
         >
           {MATTER_STATUSES.map(status => (
@@ -101,7 +101,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ formData, er
         <select
           id="priority"
           value={formData.priority}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('priority', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onChange('priority', e.target.value)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
         >
           {MATTER_PRIORITIES.map(priority => (
@@ -115,7 +115,7 @@ export const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ formData, er
         <select
           id="practiceArea"
           value={formData.practiceArea}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange('practiceArea', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onChange('practiceArea', e.target.value)}
           className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg ${
             errors.practiceArea ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
           } text-slate-900 dark:text-slate-100`}

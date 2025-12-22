@@ -89,7 +89,7 @@ export const SearchToolbar: React.FC<SearchToolbarProps> = ({ value, onChange, p
           )}
           placeholder={placeholder}
           value={value}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
           onFocus={handleFocus}
           onKeyUp={handleKeyUp}
         />

@@ -53,11 +53,11 @@ export abstract class BaseService<T, R extends BaseRepository<T>> {
    */
   async create(data: DeepPartial<T>, eventType?: string): Promise<T> {
     const entity = await this.repository.create(data);
-    
+
     if (eventType) {
-      await this.publishEvent(eventType, entity);
+      await this.publishEvent(eventType, entity as Partial<T> & { id?: string | number });
     }
-    
+
     return entity;
   }
 
@@ -77,11 +77,11 @@ export abstract class BaseService<T, R extends BaseRepository<T>> {
     eventType?: string,
   ): Promise<T> {
     const entity = await this.repository.update(id, data);
-    
+
     if (eventType) {
-      await this.publishEvent(eventType, entity);
+      await this.publishEvent(eventType, entity as Partial<T> & { id?: string | number });
     }
-    
+
     return entity;
   }
 
@@ -90,11 +90,11 @@ export abstract class BaseService<T, R extends BaseRepository<T>> {
    */
   async delete(id: string | number, eventType?: string): Promise<boolean> {
     const result = await this.repository.delete(id);
-    
+
     if (result && eventType) {
-      await this.publishEvent(eventType, { id });
+      await this.publishEvent(eventType, { id } as Partial<T> & { id: string | number });
     }
-    
+
     return result;
   }
 

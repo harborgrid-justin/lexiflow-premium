@@ -79,7 +79,7 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isO
                     <input 
                         className={cn("w-full pl-8 pr-3 py-1.5 text-xs border rounded-md outline-none focus:ring-1 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                         placeholder="Search rules (e.g. '201')..."
-                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setSearchTerm(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
                     />
                 </div>
             </div>

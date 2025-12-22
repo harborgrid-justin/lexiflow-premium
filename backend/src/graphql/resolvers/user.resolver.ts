@@ -99,7 +99,7 @@ export class UserResolver {
   async enableMfa(@CurrentUser() user: AuthenticatedUser): Promise<boolean> {
     // Note: This requires a verification code in production.
     // For now, just set up MFA which returns a QR code
-    const _mfaSetup = await this.authService.setupMfa(user.id);
+    const __mfaSetup = await this.authService.setupMfa(user.id);
     // In a real implementation, client would scan QR and provide verification code
     throw new Error('MFA setup requires QR code scanning - use REST API endpoint');
   }

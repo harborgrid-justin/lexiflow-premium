@@ -91,7 +91,7 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async logout(@Request() req, @CurrentUser('id') userId: string) {
+  async logout(@Request() req: any, @CurrentUser('id') userId: string) {
     // Extract JTI and expiration from the decoded token
     const jti = req.user?.jti;
     const exp = req.user?.exp;
@@ -225,7 +225,7 @@ export class AuthController {
       return { message: 'MFA is not enabled' };
     }
     await this.usersService.setMfaEnabled(userId, false);
-    await this.usersService.clearTotpSecret(userId);
+    await this.usersService.setTotpSecret(userId, null as any);
     return { message: 'MFA disabled successfully' };
   }
 }

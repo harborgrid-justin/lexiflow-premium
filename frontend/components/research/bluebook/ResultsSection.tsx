@@ -47,7 +47,7 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({
           <Filter className="h-4 w-4 text-slate-500" />
           <select
             value={filters.type}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onFiltersChange({ ...filters, type: e.target.value as BluebookCitationType | 'ALL' })}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onFiltersChange({ ...filters, type: e.target.value as BluebookCitationType | 'ALL' })}
             title="Filter citations by type"
             className={cn(
               "px-3 py-1.5 rounded border text-sm",
@@ -67,7 +67,7 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({
             <input
               type="checkbox"
               checked={filters.showOnlyErrors}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onFiltersChange({ ...filters, showOnlyErrors: e.target.checked })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => onFiltersChange({ ...filters, showOnlyErrors: e.target.checked })}
               className="rounded"
             />
             <span className="text-sm text-slate-600">Errors Only</span>

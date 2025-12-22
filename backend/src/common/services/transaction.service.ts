@@ -42,11 +42,11 @@ export class TransactionService {
       
       return result;
     } catch (error) {
-      const _message = error instanceof Error ? error._message : 'Unknown error';
+      const __message = error instanceof Error ? error.message : 'Unknown error';
       const stack = error instanceof Error ? error.stack : undefined;
       this.logger.error('Transaction failed, rolling back', stack);
       await queryRunner.rollbackTransaction();
-      throw error;
+      throw error instanceof Error ? error : new Error(String(error));
     } finally {
       await queryRunner.release();
     }
@@ -67,7 +67,7 @@ export class TransactionService {
         return await this.executeInTransaction(work);
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
-        const _stack = error instanceof Error ? error._stack : undefined;
+        const __stack = error instanceof Error ? error.stack : undefined;
         lastError = error;
         this.logger.warn(
           `Transaction attempt ${attempt} failed: ${message}`,

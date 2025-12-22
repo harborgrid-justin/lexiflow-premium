@@ -5,7 +5,6 @@ import {
   CaseMetricsDto,
   CaseTrendDataPoint,
   CaseSpecificMetricsDto,
-  ActivityDataPoint,
   PracticeAreaBreakdownDto,
   MetricPeriod,
 } from './dto/case-analytics.dto';
@@ -177,7 +176,7 @@ export class CaseAnalyticsService {
    * Get case trends over time
    */
   async getCaseTrends(query: CaseMetricsQueryDto): Promise<CaseTrendDataPoint[]> {
-    const { period = MetricPeriod.MONTH } = query;
+    const { period: _period = MetricPeriod.MONTH } = query;
 
     // Mock implementation - would use PostgreSQL date_trunc
     /*
@@ -232,7 +231,7 @@ export class CaseAnalyticsService {
   /**
    * Get practice area breakdown
    */
-  async getPracticeAreaBreakdown(query: CaseMetricsQueryDto): Promise<PracticeAreaBreakdownDto[]> {
+  async getPracticeAreaBreakdown(_query: CaseMetricsQueryDto): Promise<PracticeAreaBreakdownDto[]> {
     try {
       // Mock implementation
       /*

@@ -17,15 +17,15 @@ export class DocketIngestedHandler extends BaseEventHandler<SystemEventPayloads[
   async handle(payload: SystemEventPayloads[typeof SystemEventType.DOCKET_INGESTED]): Promise<IntegrationResult> {
     const actions: string[] = [];
     const { entry } = payload;
-    
+
     // Rule: Motion filings trigger response deadline
-    if (entry.title.toLowerCase().includes('motion')) {
+    if ((entry.title || '').toLowerCase().includes('motion')) {
       await this.createResponseDeadline(entry);
       actions.push('Calculated Response Deadline per Local Rules');
     }
-    
+
     // Rule: Hearings sync to calendar
-    if (entry.type === 'Hearing' || entry.title.toLowerCase().includes('hearing')) {
+    if (entry.type === 'Hearing' || (entry.title || '').toLowerCase().includes('hearing')) {
       await this.createHearingEvent(entry);
       actions.push('Synced Hearing to Master Calendar');
     }

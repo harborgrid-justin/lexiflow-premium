@@ -125,7 +125,7 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const _stack = error instanceof Error ? error._stack : undefined;
+      const __stack = error instanceof Error ? error.stack : undefined;
       this.logger.error(`Authentication failed for client ${client.id}:`, message);
       client.disconnect();
     }

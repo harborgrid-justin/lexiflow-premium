@@ -46,7 +46,7 @@ export const ResearchInput: React.FC<ResearchInputProps> = ({ query, setQuery, o
           <input
               type="text"
               value={query}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setQuery(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
               placeholder="Enter natural language query (e.g., 'Standard for piercing corporate veil in Delaware')..."
               className={cn(
                 "w-full pl-12 pr-4 py-3 border rounded-lg outline-none transition-all text-sm shadow-inner",

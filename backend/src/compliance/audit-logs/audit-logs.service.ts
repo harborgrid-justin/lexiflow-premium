@@ -4,7 +4,7 @@ import {
   CreateAuditLogDto,
   QueryAuditLogsDto,
   ExportAuditLogsDto,
-  _AuditAction,
+  AuditAction,
   AuditEntityType,
 } from './dto/audit-log.dto';
 
@@ -52,7 +52,7 @@ export class AuditLogsService {
     }
 
     // Sort
-    const sortBy = query.sortBy || 'timestamp';
+    const sortBy = (query.sortBy || 'timestamp') as keyof AuditLogDto;
     const sortOrder = query.sortOrder || 'desc';
     logs.sort((a, b) => {
       const aVal = a[sortBy];

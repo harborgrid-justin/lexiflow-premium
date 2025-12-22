@@ -65,45 +65,57 @@ const discoveryTypes = ['Production', 'Interrogatory', 'Admission', 'Deposition'
  */
 const validateDiscoveryRequest = (data: unknown): ValidationResult<Partial<DiscoveryRequest>> => {
   const errors: Array<{ path: string; message: string }> = [];
-  
-  if (!data.id || typeof data.id !== 'string') {
+
+  // Type guard
+  if (typeof data !== 'object' || data === null) {
+    return { success: false, error: { errors: [{ path: 'root', message: 'Data must be an object' }] } };
+  }
+
+  const dataId = 'id' in data ? data.id : undefined;
+  if (!dataId || typeof dataId !== 'string') {
     errors.push({ path: 'id', message: 'Request ID is required' });
   }
-  
-  const title = data.title ? sanitizeString(data.title) : '';
+
+  const dataTitle = 'title' in data && typeof data.title === 'string' ? data.title : '';
+  const title = dataTitle ? sanitizeString(dataTitle) : '';
   if (!title) {
     errors.push({ path: 'title', message: 'Title is required' });
   } else if (title.length > 500) {
     errors.push({ path: 'title', message: 'Title too long (max 500 characters)' });
   }
-  
-  if (!discoveryTypes.includes(data.type)) {
+
+  const dataType = 'type' in data ? data.type : undefined;
+  if (!discoveryTypes.includes(dataType as any)) {
     errors.push({ path: 'type', message: 'Invalid discovery type' });
   }
-  
-  if (data.serviceDate && !isValidDate(data.serviceDate)) {
+
+  const dataServiceDate = 'serviceDate' in data ? data.serviceDate : undefined;
+  if (dataServiceDate && !isValidDate(dataServiceDate)) {
     errors.push({ path: 'serviceDate', message: 'Invalid service date format (YYYY-MM-DD)' });
   }
-  
-  if (!data.dueDate || !isValidDate(data.dueDate)) {
+
+  const dataDueDate = 'dueDate' in data ? data.dueDate : undefined;
+  if (!dataDueDate || !isValidDate(dataDueDate)) {
     errors.push({ path: 'dueDate', message: 'Invalid due date format (YYYY-MM-DD)' });
   }
-  
-  if (!discoveryRequestStatuses.includes(data.status)) {
+
+  const dataStatus = 'status' in data ? data.status : undefined;
+  if (!discoveryRequestStatuses.includes(dataStatus as any)) {
     errors.push({ path: 'status', message: 'Invalid status' });
   }
-  
-  const description = data.description ? sanitizeString(data.description) : '';
+
+  const dataDescription = 'description' in data && typeof data.description === 'string' ? data.description : '';
+  const description = dataDescription ? sanitizeString(dataDescription) : '';
   if (description.length > 5000) {
     errors.push({ path: 'description', message: 'Description too long (max 5000 characters)' });
   }
-  
+
   if (errors.length > 0) {
     return { success: false, error: { errors } };
   }
-  
-  return { 
-    success: true, 
+
+  return {
+    success: true,
     data: {
       ...data,
       title,
@@ -118,27 +130,37 @@ const validateDiscoveryRequest = (data: unknown): ValidationResult<Partial<Disco
  */
 const validatePrivilegeLogEntry = (data: unknown): ValidationResult<Partial<PrivilegeLogEntry>> => {
   const errors: Array<{ path: string; message: string }> = [];
-  
-  if (!data.id || typeof data.id !== 'string') {
+
+  // Type guard
+  if (typeof data !== 'object' || data === null) {
+    return { success: false, error: { errors: [{ path: 'root', message: 'Data must be an object' }] } };
+  }
+
+  const dataId = 'id' in data ? data.id : undefined;
+  if (!dataId || typeof dataId !== 'string') {
     errors.push({ path: 'id', message: 'Entry ID is required' });
   }
-  
-  if (!data.date || !isValidDate(data.date)) {
+
+  const dataDate = 'date' in data ? data.date : undefined;
+  if (!dataDate || !isValidDate(dataDate)) {
     errors.push({ path: 'date', message: 'Invalid date format (YYYY-MM-DD)' });
   }
-  
-  if (!privilegeBasisTypes.includes(data.basis)) {
+
+  const dataBasis = 'basis' in data ? data.basis : undefined;
+  if (!privilegeBasisTypes.includes(dataBasis as any)) {
     errors.push({ path: 'basis', message: 'Invalid privilege basis' });
   }
-  
-  const author = data.author ? sanitizeString(data.author) : '';
+
+  const dataAuthor = 'author' in data && typeof data.author === 'string' ? data.author : '';
+  const author = dataAuthor ? sanitizeString(dataAuthor) : '';
   if (!author) {
     errors.push({ path: 'author', message: 'Author is required' });
   } else if (author.length > 200) {
     errors.push({ path: 'author', message: 'Author name too long' });
   }
-  
-  const recipient = data.recipient ? sanitizeString(data.recipient) : '';
+
+  const dataRecipient = 'recipient' in data && typeof data.recipient === 'string' ? data.recipient : '';
+  const recipient = dataRecipient ? sanitizeString(dataRecipient) : '';
   if (!recipient) {
     errors.push({ path: 'recipient', message: 'Recipient is required' });
   } else if (recipient.length > 200) {

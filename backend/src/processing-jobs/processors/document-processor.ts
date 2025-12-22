@@ -74,7 +74,7 @@ export class DocumentProcessor {
       this.logger.log(`OCR job completed: ${jobId}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const _stack = error instanceof Error ? error._stack : undefined;
+      const _stack = error instanceof Error ? error.stack : undefined;
       this.logger.error(`OCR job failed: ${jobId}`, error);
       await this.processingJobsService.updateJobStatus(
         jobId,
@@ -112,7 +112,7 @@ export class DocumentProcessor {
       this.logger.log(`Metadata extraction job completed: ${jobId}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const _stack = error instanceof Error ? error._stack : undefined;
+      const _stack = error instanceof Error ? error.stack : undefined;
       this.logger.error(`Metadata extraction job failed: ${jobId}`, error);
       await this.processingJobsService.updateJobStatus(
         jobId,
@@ -150,7 +150,7 @@ export class DocumentProcessor {
       this.logger.log(`Redaction job completed: ${jobId}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const _stack = error instanceof Error ? error._stack : undefined;
+      const _stack = error instanceof Error ? error.stack : undefined;
       this.logger.error(`Redaction job failed: ${jobId}`, error);
       await this.processingJobsService.updateJobStatus(
         jobId,

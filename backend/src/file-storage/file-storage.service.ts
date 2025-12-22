@@ -3,7 +3,7 @@ import {
   Logger,
   NotFoundException,
   BadRequestException,
-  _InternalServerErrorException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as path from 'path';

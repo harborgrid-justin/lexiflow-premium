@@ -86,8 +86,8 @@ export const DataCatalogService = {
     // Dynamically build lineage based on current Entity Relationships in backend
     getLineageGraph: async (): Promise<{ nodes: LineageNode[], links: LineageLink[] }> => {
         const [entities, relationships] = await Promise.all([
-            api.dataPlatform?.getEntities?.() || [],
-            api.dataPlatform?.getRelationships?.() || []
+            dataPlatformApi.dataPlatform?.getEntities?.() || [],
+            dataPlatformApi.dataPlatform?.getRelationships?.() || []
         ]);
 
         const nodes: LineageNode[] = entities.map((e: unknown) => ({

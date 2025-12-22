@@ -213,3 +213,5 @@ export const EvidenceVault: React.FC<EvidenceVaultProps> = (props) => {
     </EvidenceErrorBoundary>
   );
 };
+
+export default EvidenceVault;

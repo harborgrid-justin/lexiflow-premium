@@ -98,7 +98,7 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
                     theme.text.primary
                   )}
                   value={formData.name}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, name: e.target.value})}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})}
                   placeholder="e.g. Production Warehouse"
                 />
               </div>
@@ -116,7 +116,7 @@ export const ConnectionForm: React.FC<ConnectionFormProps> = ({
                     theme.text.primary
                   )}
                   value={formData.host}
-                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, host: e.target.value})}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, host: e.target.value})}
                   placeholder="e.g. xy12345.us-east-1.snowflakecomputing.com"
                 />
               </div>

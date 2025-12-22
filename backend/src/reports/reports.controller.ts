@@ -6,7 +6,7 @@ import {
   Param,
   Body,
   Query,
-  _UseGuards,
+  UseGuards,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';

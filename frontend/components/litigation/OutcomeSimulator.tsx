@@ -68,13 +68,13 @@ export const OutcomeSimulator: React.FC = () => {
              label="Low Estimate ($)" 
              type="number" 
              value={low} 
-             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setLow(Number(e.target.value))} 
+             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLow(Number(e.target.value))} 
            />
            <Input 
              label="High Estimate ($)" 
              type="number" 
              value={high} 
-             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setHigh(Number(e.target.value))} 
+             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setHigh(Number(e.target.value))} 
            />
            <div>
               <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Liability Probability ({liabilityProb}%)</label>
@@ -82,7 +82,7 @@ export const OutcomeSimulator: React.FC = () => {
                 type="range" 
                 min="0" max="100" 
                 value={liabilityProb} 
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setLiabilityProb(Number(e.target.value))}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLiabilityProb(Number(e.target.value))}
                 className="w-full"
               />
            </div>

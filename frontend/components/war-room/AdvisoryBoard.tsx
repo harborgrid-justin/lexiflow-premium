@@ -200,7 +200,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
               title="Filter by role"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterRole}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFilterRole(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterRole(e.target.value)}
             >
               <option value="all">All Roles</option>
               <option value="Expert Witness">Expert Witness</option>
@@ -215,7 +215,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
               title="Filter by specialty"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterSpecialty}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFilterSpecialty(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterSpecialty(e.target.value)}
             >
               <option value="all">All Specialties</option>
               <option value="Medical">Medical</option>
@@ -232,7 +232,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
               title="Filter by status"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterStatus}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFilterStatus(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterStatus(e.target.value)}
             >
               <option value="all">All Statuses</option>
               <option value="Retained">Retained</option>

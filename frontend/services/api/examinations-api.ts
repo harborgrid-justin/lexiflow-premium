@@ -4,14 +4,15 @@
  */
 
 import { apiClient, type PaginatedResponse } from '../infrastructure/apiClient';
-import type { 
-  Case, 
-  DocketEntry, 
-  LegalDocument, 
+import type {
+  Case,
+  DocketEntry,
+  LegalDocument,
   EvidenceItem,
   TimeEntry,
   User,
 } from '../../types';
+import type { Examination } from '../../types/discovery';
 
 export class ExaminationsApiService {
   async getAll(filters?: { caseId?: string; status?: string; type?: string }): Promise<Examination[]> {

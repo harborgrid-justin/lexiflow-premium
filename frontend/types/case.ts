@@ -74,6 +74,7 @@ export interface Case extends BaseEntity {
   value?: number;
   valuation?: Money;
   billingModel?: BillingModel;
+  billingValue?: number; // Total billed amount
   feeAgreement?: FeeAgreement;
   budget?: Money;
   budgetAlertThreshold?: number;
@@ -211,6 +212,7 @@ export interface Matter extends BaseEntity {
   clientPhone?: string;
   teamMembers?: UserId[];
   courtName?: string;
+  court?: string; // Alias for courtName
   caseNumber?: string;
   judgeAssigned?: string;
   jurisdictions?: string[];

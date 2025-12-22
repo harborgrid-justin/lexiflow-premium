@@ -20,12 +20,12 @@ export class BluebookService {
         type: 'CASE',
         party1: caseMatch[1].trim(),
         party2: caseMatch[2].trim(),
-        volume: parseInt(caseMatch[3]),
+        volume: parseInt(caseMatch[3] || '0', 10),
         reporter: caseMatch[4].trim(),
-        page: parseInt(caseMatch[5]),
+        page: parseInt(caseMatch[5] || '0', 10),
         pinpoint: caseMatch[6],
         court: caseMatch[7]?.trim(),
-        year: parseInt(caseMatch[8]),
+        year: parseInt(caseMatch[8] || '0', 10),
         raw: rawCitation
       };
     }
@@ -37,10 +37,10 @@ export class BluebookService {
     if (statuteMatch) {
       return {
         type: 'STATUTE',
-        title: parseInt(statuteMatch[1]),
+        title: parseInt(statuteMatch[1] || '0', 10),
         code: statuteMatch[2],
         section: statuteMatch[3],
-        year: statuteMatch[4] ? parseInt(statuteMatch[4]) : undefined,
+        year: statuteMatch[4] ? parseInt(statuteMatch[4], 10) : undefined,
         raw: rawCitation
       };
     }
@@ -66,9 +66,9 @@ export class BluebookService {
     if (regulationMatch) {
       return {
         type: 'REGULATION',
-        title: parseInt(regulationMatch[1]),
+        title: parseInt(regulationMatch[1] || '0', 10),
         section: regulationMatch[2],
-        year: regulationMatch[3] ? parseInt(regulationMatch[3]) : undefined,
+        year: regulationMatch[3] ? parseInt(regulationMatch[3], 10) : undefined,
         raw: rawCitation
       };
     }
@@ -297,7 +297,7 @@ export class BluebookService {
     let html = '<div class="table-of-authorities">';
 
     const typeOrder = ['CASE', 'CONSTITUTION', 'STATUTE', 'REGULATION', 'BOOK'];
-    const typeLabels = {
+    const typeLabels: Record<string, string> = {
       CASE: 'Cases',
       CONSTITUTION: 'Constitutional Provisions',
       STATUTE: 'Statutes',

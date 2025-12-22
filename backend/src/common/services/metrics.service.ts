@@ -32,7 +32,7 @@ export interface Metric {
  */
 @Injectable()
 export class MetricsService {
-  private readonly _logger = new Logger(MetricsService.name);
+  private readonly __logger = new Logger(MetricsService.name);
   private metrics: Map<string, Metric[]> = new Map();
   private counters: Map<string, number> = new Map();
   private gauges: Map<string, number> = new Map();
@@ -199,12 +199,14 @@ export class MetricsService {
     if (!match) return [key, undefined];
 
     const [, name, labelStr] = match;
-    if (!labelStr) return [name, undefined];
+    if (!labelStr || !name) return [name ?? key, undefined];
 
     const labels: Record<string, string> = {};
     for (const pair of labelStr.split(',')) {
       const [k, v] = pair.split('=');
-      labels[k] = v.replace(/"/g, '');
+      if (k && v) {
+      }
+        labels[k] = v.replace(/"/g, '');
     }
 
     return [name, labels];

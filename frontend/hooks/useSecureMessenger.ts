@@ -105,9 +105,9 @@ export const useSecureMessenger = () => {
   const contacts = useMemo(() => {
       // Ensure contactsList is an array before filtering
       const safeContactsList = Array.isArray(contactsList) ? contactsList : [];
-      return safeContactsList.filter(c => 
-          c.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-          c.role.toLowerCase().includes(searchTerm.toLowerCase())
+      return safeContactsList.filter(c =>
+          c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (c.role || '').toLowerCase().includes(searchTerm.toLowerCase())
       );
   }, [contactsList, searchTerm]);
 

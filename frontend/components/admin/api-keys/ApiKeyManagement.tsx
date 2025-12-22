@@ -248,8 +248,8 @@ export const ApiKeyManagement: React.FC = () => {
             </div>
           ) : (
             <>
-              <Input label="Key Name" value={formData.name} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, name: e.target.value})} placeholder="e.g., Production API Key" />
-              <Input label="Expiration Date (optional)" type="date" value={formData.expiresAt || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, expiresAt: e.target.value})} />
+              <Input label="Key Name" value={formData.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})} placeholder="e.g., Production API Key" />
+              <Input label="Expiration Date (optional)" type="date" value={formData.expiresAt || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, expiresAt: e.target.value})} />
 
               <div>
                 <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Scopes (Permissions)</label>

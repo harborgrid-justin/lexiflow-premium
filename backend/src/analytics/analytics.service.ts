@@ -19,7 +19,11 @@ export class AnalyticsService {
       timestamp: new Date(),
     });
     const saved = await this.analyticsEventRepository.save(event);
-    return Array.isArray(saved) ? saved[0] : saved;
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) {
+      throw new Error('Failed to save analytics event');
+    }
+    return result;
   }
 
   async getEventsByType(eventType: string): Promise<AnalyticsEvent[]> {
@@ -141,7 +145,11 @@ export class AnalyticsService {
   async createDashboard(data: any): Promise<Dashboard> {
     const dashboard = this.dashboardRepository.create(data);
     const saved = await this.dashboardRepository.save(dashboard);
-    return Array.isArray(saved) ? saved[0] : saved;
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) {
+      throw new Error('Failed to save dashboard');
+    }
+    return result;
   }
 
   async updateDashboard(id: string, data: any): Promise<Dashboard> {

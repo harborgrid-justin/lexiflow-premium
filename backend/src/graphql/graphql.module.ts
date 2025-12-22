@@ -27,7 +27,7 @@ import { BillingModule } from '../billing/billing.module';
       introspection: process.env.NODE_ENV !== 'production',
 
       // Context for GraphQL requests
-      context: ({ req, res }) => ({ req, res }),
+      context: ({ req, res }: { req: any; res: any }) => ({ req, res }),
 
       // Subscriptions configuration
       subscriptions: {

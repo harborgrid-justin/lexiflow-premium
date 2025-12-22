@@ -45,17 +45,25 @@ export const CaseListReporters: React.FC = () => {
        </div>
 
        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-           {reporters.map((r: unknown) => (
-               <div key={r.id} className={cn("p-4 rounded-lg border shadow-sm flex items-center gap-3", theme.surface.default, theme.border.default)}>
+           {reporters.map((r: unknown) => {
+               if (typeof r !== 'object' || r === null) return null;
+               const reporterId = 'id' in r ? String(r.id) : '';
+               const reporterName = 'name' in r && typeof r.name === 'string' ? r.name : '';
+               const reporterType = 'type' in r && typeof r.type === 'string' ? r.type : '';
+               const reporterStatus = 'status' in r && typeof r.status === 'string' ? r.status : '';
+
+               return (
+               <div key={reporterId} className={cn("p-4 rounded-lg border shadow-sm flex items-center gap-3", theme.surface.default, theme.border.default)}>
                    <div className="p-2 bg-purple-50 rounded-full text-purple-600">
                        <Mic2 className="h-5 w-5"/>
                    </div>
                    <div>
-                       <p className={cn("font-bold text-sm", theme.text.primary)}>{r.name}</p>
-                       <p className={cn("text-xs", theme.text.secondary)}>{r.type} • {r.status}</p>
+                       <p className={cn("font-bold text-sm", theme.text.primary)}>{reporterName}</p>
+                       <p className={cn("text-xs", theme.text.secondary)}>{reporterType} • {reporterStatus}</p>
                    </div>
                </div>
-           ))}
+               );
+           })}
            
            <div className={cn("rounded-lg border-2 border-dashed p-4 flex flex-col items-center justify-center text-center text-slate-400", theme.border.default)}>
                 <p className="text-sm">Manage preferred reporting agencies and individual reporters.</p>

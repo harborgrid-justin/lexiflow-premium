@@ -138,3 +138,5 @@ export const AdminDatabaseControl: React.FC<AdminDatabaseControlProps> = ({ init
     </div>
   );
 };
+
+export default AdminDatabaseControl;

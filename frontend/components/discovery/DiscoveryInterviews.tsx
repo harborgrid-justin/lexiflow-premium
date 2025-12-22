@@ -56,18 +56,18 @@ export const DiscoveryInterviews: React.FC = () => {
                 </h3>
                 <p className={cn("text-sm", theme.text.secondary)}>Track interviews to identify data sources and preservation scope.</p>
             </div>
-            <Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)}>Log Interview</Button>
+            <Button variant="primary" icon={Plus} onClick={interviewModal.open}>Log Interview</Button>
         </div>
 
-        <InterviewList 
-          interviews={interviews} 
-          onManage={(interview) => console.log('Manage', interview)} 
+        <InterviewList
+          interviews={interviews}
+          onManage={(interview) => console.log('Manage', interview)}
         />
 
-        <InterviewModal 
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)} 
-          onSave={handleCreate} 
+        <InterviewModal
+          isOpen={interviewModal.isOpen}
+          onClose={interviewModal.close}
+          onSave={handleCreate}
         />
     </div>
   );

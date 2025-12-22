@@ -10,7 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiResponse }from '@nestjs/swagger';
 import { FeeAgreementsService } from './fee-agreements.service';
 import { CreateFeeAgreementDto } from './dto/create-fee-agreement.dto';
 import { UpdateFeeAgreementDto } from './dto/update-fee-agreement.dto';

@@ -101,7 +101,9 @@ export class ClausesService {
     const clause = await this.findOne(id);
 
     Object.assign(clause, updateClauseDto);
-    clause.updatedBy = userId;
+    if (userId) {
+      clause.updatedBy = userId;
+    }
 
     const updatedClause = await this.clauseRepository.save(clause);
     this.logger.log(`Clause updated: ${id}`);

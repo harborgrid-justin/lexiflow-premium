@@ -6,7 +6,7 @@ import {
   Patch,
   Param,
   Delete,
-  _Query,
+  Query,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';

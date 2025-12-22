@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as MasterConfig from '../../config/master.config';
-import { Repository } from 'typeorm';
+import { Repository, ObjectLiteral } from 'typeorm';
 
 /**
  * Bulk Operation Result
@@ -39,7 +39,7 @@ export class BulkOperationsService {
   /**
    * Bulk insert with batching and transaction support
    */
-  async bulkInsert<T>(
+  async bulkInsert<T extends ObjectLiteral>(
     repository: Repository<T>,
     items: Partial<T>[],
     options: {
@@ -102,7 +102,7 @@ export class BulkOperationsService {
   /**
    * Bulk update with batching
    */
-  async bulkUpdate<T>(
+  async bulkUpdate<T extends ObjectLiteral>(
     repository: Repository<T>,
     items: Array<{ id: any; updates: Partial<T> }>,
     options: {
@@ -154,7 +154,7 @@ export class BulkOperationsService {
   /**
    * Bulk delete with batching
    */
-  async bulkDelete<T>(
+  async bulkDelete<T extends ObjectLiteral>(
     repository: Repository<T>,
     ids: any[],
     options: {
@@ -199,7 +199,7 @@ export class BulkOperationsService {
   /**
    * Bulk upsert (insert or update)
    */
-  async bulkUpsert<T>(
+  async bulkUpsert<T extends ObjectLiteral>(
     repository: Repository<T>,
     items: Partial<T>[],
     conflictColumns: string[],

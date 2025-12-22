@@ -7,7 +7,7 @@ import {
   Body,
   Param,
   Query,
-  _UseGuards,
+  UseGuards,
   Request,
 } from '@nestjs/common';
 import { Public } from '../../common/decorators/public.decorator';
@@ -49,7 +49,7 @@ export class CorrespondenceController {
   @ApiResponse({ status: 200, description: 'Returns paginated correspondence' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getCorrespondence(@Query() query: CorrespondenceQueryDto, @Request() req) {
+  async getCorrespondence(@Query() query: CorrespondenceQueryDto, @Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.correspondenceService.findAll(query, userId);
   }
@@ -65,7 +65,7 @@ export class CorrespondenceController {
   @ApiParam({ name: 'id', description: 'Correspondence ID' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getCorrespondenceById(@Param('id') id: string, @Request() req) {
+  async getCorrespondenceById(@Param('id') id: string, @Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.correspondenceService.findById(id, userId);
   }
@@ -100,7 +100,7 @@ export class CorrespondenceController {
   async updateCorrespondence(
     @Param('id') id: string,
     @Body() updateDto: UpdateCorrespondenceDto,
-    @Request() req,
+    @Request() req: any,
   ) {
     const userId = req.user?.id || 'temp-user-id';
     return this.correspondenceService.update(id, updateDto, userId);
@@ -117,7 +117,7 @@ export class CorrespondenceController {
   @ApiParam({ name: 'id', description: 'Correspondence ID' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async deleteCorrespondence(@Param('id') id: string, @Request() req) {
+  async deleteCorrespondence(@Param('id') id: string, @Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.correspondenceService.delete(id, userId);
   }
@@ -135,7 +135,7 @@ export class CorrespondenceController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async sendCorrespondence(@Param('id') id: string, @Request() req) {
+  async sendCorrespondence(@Param('id') id: string, @Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.correspondenceService.send(id, userId);
   }

@@ -94,7 +94,11 @@ export class ComplianceService {
       timestamp: new Date(),
     });
     const saved = await this.auditLogRepository.save(auditLog);
-    return Array.isArray(saved) ? saved[0] : saved;
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) {
+      throw new Error('Failed to save audit log');
+    }
+    return result;
   }
 
   async getAllConflictChecks(): Promise<any[]> {
@@ -168,12 +172,6 @@ export class ComplianceService {
       throw new NotFoundException(`Compliance rule with ID ${id} not found`);
     }
     return rule;
-  }
-
-  async createRule(data: any): Promise<ComplianceRule> {
-    const rule = this.complianceRuleRepository.create(data);
-    const saved = await this.complianceRuleRepository.save(rule);
-    return Array.isArray(saved) ? saved[0] : saved;
   }
 
   async updateRule(id: string, data: any): Promise<ComplianceRule> {

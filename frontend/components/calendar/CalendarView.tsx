@@ -108,3 +108,5 @@ export const CalendarView: React.FC = () => {
     </TabbedPageLayout>
   );
 };
+
+export default CalendarView;

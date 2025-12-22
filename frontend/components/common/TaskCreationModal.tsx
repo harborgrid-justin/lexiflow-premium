@@ -33,7 +33,7 @@ import { RuleSelector } from './RuleSelector';
 import { UserSelect } from './UserSelect';
 
 // Types
-import { WorkflowTask, TaskId, ProjectId, CaseId, User } from '../../types';
+import { WorkflowTask, TaskId, ProjectId, CaseId, User, TaskStatusBackend } from '../../types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -62,8 +62,8 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
   
   const [task, setTask] = useState<Partial<WorkflowTask>>({
     title: initialTitle || '',
-    priority: 'Medium',
-    status: 'Pending',
+    priority: TaskPriorityBackend.MEDIUM,
+    status: TaskStatusBackend.TODO,
     assignee: 'James Doe',
     dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
     projectId: '',
@@ -76,7 +76,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
     const newTask: WorkflowTask = {
         id: `t-${Date.now()}` as TaskId,
         title: task.title!,
-        status: 'Pending',
+        status: TaskStatusBackend.TODO,
         assignee: task.assignee || 'Unassigned',
         dueDate: task.dueDate || '',
         priority: task.priority as any,
@@ -115,7 +115,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
             label="Task Title" 
             placeholder="e.g. Review Document" 
             value={task.title} 
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setTask({...task, title: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTask({...task, title: e.target.value})}
             autoFocus
         />
         
@@ -136,7 +136,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                         type="date"
                         className="w-full pl-9 pr-3 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500"
                         value={task.dueDate}
-                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setTask({...task, dueDate: e.target.value})}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTask({...task, dueDate: e.target.value})}
                         aria-label="Due Date"
                     />
                 </div>
@@ -149,12 +149,12 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                 <select 
                     className="w-full px-3 py-2 border rounded-md text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
                     value={task.priority}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setTask({...task, priority: e.target.value as any})}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTask({...task, priority: e.target.value as any})}
                     aria-label="Priority"
                 >
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
+                    <option value={TaskPriorityBackend.LOW}>Low</option>
+                    <option value={TaskPriorityBackend.MEDIUM}>Medium</option>
+                    <option value={TaskPriorityBackend.HIGH}>High</option>
                 </select>
             </div>
             <div>
@@ -164,7 +164,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                     <select 
                         className="w-full pl-9 pr-3 py-2 border rounded-md text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
                         value={task.projectId}
-                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setTask({...task, projectId: e.target.value as any})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTask({...task, projectId: e.target.value as any})}
                         aria-label="Link to Project"
                     >
                         <option value="">-- No Project --</option>

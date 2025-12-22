@@ -52,7 +52,7 @@ export class ProductionService {
 
   async update(id: string, updateProductionDto: UpdateProductionDto): Promise<Production> {
     await this.findOne(id);
-    await this.productionRepository.update(id, updateProductionDto);
+    await this.productionRepository.update(id, { ...updateProductionDto });
     return this.findOne(id);
   }
 
@@ -79,7 +79,7 @@ export class ProductionService {
         completed: 0,
         failed: 0,
         cancelled: 0,
-      },
+      } as Record<string, number>,
       totalDocuments: 0,
       totalPages: 0,
       totalSize: 0,

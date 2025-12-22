@@ -213,7 +213,7 @@ export const FeeAgreementManagement: React.FC = () => {
         title={createModal.isOpen ? 'Create Fee Agreement' : 'Edit Fee Agreement'}
       >
         <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
-          <Input label="Client Name" value={formData.clientName || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, clientName: e.target.value})} placeholder="Enter client name" />
+          <Input label="Client Name" value={formData.clientName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, clientName: e.target.value})} placeholder="Enter client name" />
 
           <div>
             <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Fee Type</label>
@@ -221,7 +221,7 @@ export const FeeAgreementManagement: React.FC = () => {
               title="Select fee type"
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.type || ''}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, type: e.target.value as FeeAgreement['type']})}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, type: e.target.value as FeeAgreement['type']})}
             >
               <option value="">Select fee type...</option>
               <option value="Hourly">Hourly</option>
@@ -233,19 +233,19 @@ export const FeeAgreementManagement: React.FC = () => {
           </div>
 
           {formData.type === 'Hourly' && (
-            <Input label="Hourly Rate ($)" type="number" value={formData.hourlyRate || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, hourlyRate: parseFloat(e.target.value)})} />
+            <Input label="Hourly Rate ($)" type="number" value={formData.hourlyRate || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, hourlyRate: parseFloat(e.target.value)})} />
           )}
           {formData.type === 'Contingency' && (
-            <Input label="Contingency Percentage (%)" type="number" value={formData.contingencyPercent || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, contingencyPercent: parseFloat(e.target.value)})} />
+            <Input label="Contingency Percentage (%)" type="number" value={formData.contingencyPercent || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, contingencyPercent: parseFloat(e.target.value)})} />
           )}
           {formData.type === 'Flat Fee' && (
-            <Input label="Flat Fee Amount ($)" type="number" value={formData.flatFeeAmount || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, flatFeeAmount: parseFloat(e.target.value)})} />
+            <Input label="Flat Fee Amount ($)" type="number" value={formData.flatFeeAmount || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, flatFeeAmount: parseFloat(e.target.value)})} />
           )}
           {formData.type === 'Retainer' && (
-            <Input label="Monthly Retainer ($)" type="number" value={formData.retainerAmount || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, retainerAmount: parseFloat(e.target.value)})} />
+            <Input label="Monthly Retainer ($)" type="number" value={formData.retainerAmount || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, retainerAmount: parseFloat(e.target.value)})} />
           )}
 
-          <Input label="Effective Date" type="date" value={formData.effectiveDate || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, effectiveDate: e.target.value})} />
+          <Input label="Effective Date" type="date" value={formData.effectiveDate || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, effectiveDate: e.target.value})} />
 
           <TextArea label="Terms & Conditions" value={formData.terms || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, terms: e.target.value})} rows={4} placeholder="Enter agreement terms..." />
 
@@ -256,7 +256,7 @@ export const FeeAgreementManagement: React.FC = () => {
                 title="Select agreement status"
                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                 value={formData.status || ''}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, status: e.target.value as FeeAgreement['status']})}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, status: e.target.value as FeeAgreement['status']})}
               >
                 <option value="Draft">Draft</option>
                 <option value="Pending Signature">Pending Signature</option>

@@ -44,7 +44,7 @@ export class PartiesService {
 
   async update(id: string, updatePartyDto: UpdatePartyDto): Promise<Party> {
     await this.findOne(id);
-    await this.partyRepository.update(id, updatePartyDto);
+    await this.partyRepository.update(id, { ...updatePartyDto });
     return this.findOne(id);
   }
 

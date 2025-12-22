@@ -117,7 +117,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
 
             <Modal isOpen={createModal.isOpen} onClose={createModal.close} title="Create New Pleading">
                 <div className="p-6 space-y-4">
-                    <Input label="Document Title" value={newDocData.title} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewDocData({...newDocData, title: e.target.value})} placeholder="e.g. Plaintiff's Motion to Compel" />
+                    <Input label="Document Title" value={newDocData.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDocData({...newDocData, title: e.target.value})} placeholder="e.g. Plaintiff's Motion to Compel" />
                     
                     <div>
                         <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Related Matter</label>
@@ -125,7 +125,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
                             title="Select related case"
                             className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={newDocData.caseId}
-                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewDocData({...newDocData, caseId: e.target.value})}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewDocData({...newDocData, caseId: e.target.value})}
                         >
                             <option value="">Select Case...</option>
                             {cases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}

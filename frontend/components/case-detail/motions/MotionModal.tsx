@@ -88,7 +88,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
           <select 
             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
             value={newMotion.type}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewMotion({...newMotion, type: e.target.value as MotionType})}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewMotion({...newMotion, type: e.target.value as MotionType})}
             aria-label="Motion Type"
           >
             <option value="Dismiss">Motion to Dismiss</option>
@@ -103,7 +103,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
           label="Title" 
           placeholder="e.g. Motion to Dismiss Count III"
           value={newMotion.title || ''}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewMotion({...newMotion, title: e.target.value})}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMotion({...newMotion, title: e.target.value})}
         />
 
         <div>
@@ -112,7 +112,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
             type="date"
             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
             value={newMotion.hearingDate || ''}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewMotion({...newMotion, hearingDate: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMotion({...newMotion, hearingDate: e.target.value})}
             aria-label="Hearing Date"
           />
           {newMotion.hearingDate && (

@@ -11,7 +11,6 @@ import { TokenStorageService, RefreshTokenData, ResetTokenData, MfaTokenData } f
 
 describe('TokenStorageService', () => {
   let service: TokenStorageService;
-  let _configService: ConfigService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -21,7 +20,7 @@ describe('TokenStorageService', () => {
           provide: ConfigService,
           useValue: {
             get: jest.fn((key: string, defaultValue?: any) => {
-              const config = {
+              const config: Record<string, string | number> = {
                 'REDIS_ENABLED': 'false', // Use in-memory for tests
                 'redis.host': 'localhost',
                 'redis.port': 6379,
@@ -37,7 +36,6 @@ describe('TokenStorageService', () => {
     }).compile();
 
     service = module.get<TokenStorageService>(TokenStorageService);
-    configService = module.get<ConfigService>(ConfigService);
   });
 
   afterEach(async () => {
@@ -211,7 +209,7 @@ describe('TokenStorageService', () => {
             provide: ConfigService,
             useValue: {
               get: jest.fn((key: string, defaultValue?: any) => {
-                const config = {
+                const config: Record<string, string | number> = {
                   'REDIS_ENABLED': 'true', // Use Redis for this test
                   'redis.host': 'localhost',
                   'redis.port': 6379,

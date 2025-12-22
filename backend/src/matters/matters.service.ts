@@ -31,7 +31,7 @@ export class MattersService {
       return `${prefix}0001`;
     }
 
-    const lastNumber = parseInt(lastMatter.matterNumber.split('-')[2], 10);
+    const lastNumber = parseInt(lastMatter.matterNumber.split('-')[2] || '0', 10);
     const newNumber = (lastNumber + 1).toString().padStart(4, '0');
     
     return `${prefix}${newNumber}`;

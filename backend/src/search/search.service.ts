@@ -33,8 +33,8 @@ export class SearchService {
    */
   async search(query: SearchQueryDto): Promise<SearchResultDto> {
     const startTime = Date.now();
-    const { page = 1, limit = 20, entityType, fuzzy } = query;
-    const offset = calculateOffset(page, limit);
+    const { page = 1, limit = 20, entityType, fuzzy: _fuzzy } = query;
+    const _offset = calculateOffset(page, limit);
 
     try {
       let results: SearchResultItem[] = [];
@@ -92,8 +92,8 @@ export class SearchService {
    * Search cases with full-text search
    */
   async searchCases(query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
-    const { query: searchQuery, page = 1, limit = 20, startDate, endDate, status, practiceArea, fuzzy } = query;
-    const offset = calculateOffset(page, limit);
+    const { query: searchQuery, page = 1, limit = 20, startDate: _startDate, endDate: _endDate, status, practiceArea, fuzzy: _fuzzy } = query;
+    const _offset = calculateOffset(page, limit);
 
     // Mock implementation - replace with actual TypeORM query when entities are available
     // Example PostgreSQL full-text search query:
@@ -189,7 +189,7 @@ export class SearchService {
   /**
    * Search documents with full-text search
    */
-  async searchDocuments(query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
+  async searchDocuments(_query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
     const { query: searchQuery, page = 1, limit = 20, fuzzy } = query;
 
     // Mock implementation - replace with actual query
@@ -221,7 +221,7 @@ export class SearchService {
   /**
    * Search clients
    */
-  async searchClients(query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
+  async searchClients(_query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
     const { query: searchQuery, page = 1, limit = 20 } = query;
 
     // Mock implementation
@@ -346,9 +346,9 @@ export class SearchService {
    */
   private async generateFacets(results: SearchResultItem[]): Promise<any> {
     const facets = {
-      entityTypes: {},
-      practiceAreas: {},
-      statuses: {},
+      entityTypes: {} as Record<string, number>,
+      practiceAreas: {} as Record<string, number>,
+      statuses: {} as Record<string, number>,
     };
 
     results.forEach((result) => {
@@ -373,7 +373,7 @@ export class SearchService {
   /**
    * Map case entity to search result
    */
-  private mapCaseToSearchResult(caseEntity: any): SearchResultItem {
+  private _mapCaseToSearchResult(caseEntity: any): SearchResultItem {
     return {
       id: caseEntity.id,
       entityType: SearchEntityType.CASE,

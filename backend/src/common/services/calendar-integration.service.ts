@@ -138,8 +138,8 @@ export class CalendarIntegrationService {
 
       const googleEvent: calendar_v3.Schema$Event = {
         summary: event.summary,
-        description: event.description,
-        location: event.location,
+        description: event.description ?? undefined,
+        location: event.location ?? undefined,
         start: {
           dateTime: event.start.toISOString(),
           timeZone: 'UTC',
@@ -238,10 +238,10 @@ export class CalendarIntegrationService {
     return {
       id: event.id!,
       summary: event.summary || '',
-      description: event.description,
+      description: event.description ?? undefined,
       start: new Date(event.start?.dateTime || event.start?.date || ''),
       end: new Date(event.end?.dateTime || event.end?.date || ''),
-      location: event.location,
+      location: event.location ?? undefined,
       attendees: event.attendees?.map((a) => a.email!).filter(Boolean),
       reminders: event.reminders?.overrides?.map((r) => r.minutes!).filter(Boolean),
       provider: 'google',

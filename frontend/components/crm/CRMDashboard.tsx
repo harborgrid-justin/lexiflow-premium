@@ -38,10 +38,27 @@ export const CRMDashboard: React.FC = () => {
   const { theme } = useTheme();
 
   // Enterprise Data Access
-  const { data: analytics = { growth: [], industry: [], revenue: [], sources: [] } } = useQuery(
+  const { data: analyticsData } = useQuery(
       ['crm', 'analytics'],
       DataService.crm.getAnalytics
   );
+
+  // Type guard for analytics with proper array checks
+  const analyticsGrowth = typeof analyticsData === 'object' && analyticsData !== null && 'growth' in analyticsData && Array.isArray(analyticsData.growth)
+    ? analyticsData.growth : [];
+  const analyticsIndustry = typeof analyticsData === 'object' && analyticsData !== null && 'industry' in analyticsData && Array.isArray(analyticsData.industry)
+    ? analyticsData.industry : [];
+  const analyticsRevenue = typeof analyticsData === 'object' && analyticsData !== null && 'revenue' in analyticsData && Array.isArray(analyticsData.revenue)
+    ? analyticsData.revenue : [];
+  const analyticsSources = typeof analyticsData === 'object' && analyticsData !== null && 'sources' in analyticsData && Array.isArray(analyticsData.sources)
+    ? analyticsData.sources : [];
+
+  const analytics = {
+    growth: analyticsGrowth,
+    industry: analyticsIndustry,
+    revenue: analyticsRevenue,
+    sources: analyticsSources
+  };
 
   const { data: clients = [] } = useQuery(['clients', 'all'], () => DataService.clients.getAll());
   const { data: cases = [] } = useQuery(['cases', 'all'], () => DataService.cases.getAll());
@@ -53,12 +70,31 @@ export const CRMDashboard: React.FC = () => {
   const leadsArray = Array.isArray(leads) ? leads : [];
 
   // Calculate dynamic metrics
-  const activeClients = clientsArray.filter((c: unknown) => c.status === 'Active' || c.status === 'active').length;
-  const lifetimeRevenue = clientsArray.reduce((acc: number, c: unknown) => acc + (c.totalBilled || 0), 0);
-  const activeMatters = casesArray.filter((c: unknown) => c.status !== 'Closed' && c.status !== 'closed').length;
+  const activeClients = clientsArray.filter((c: unknown) => {
+    const status = typeof c === 'object' && c !== null && 'status' in c ? String(c.status) : '';
+    return status === 'Active' || status === 'active';
+  }).length;
+
+  const lifetimeRevenue = clientsArray.reduce((acc: number, c: unknown) => {
+    if (typeof c === 'object' && c !== null && 'totalBilled' in c) {
+      const totalBilled = typeof c.totalBilled === 'number' ? c.totalBilled : 0;
+      return acc + totalBilled;
+    }
+    return acc;
+  }, 0);
+
+  const activeMatters = casesArray.filter((c: unknown) => {
+    const status = typeof c === 'object' && c !== null && 'status' in c ? String(c.status) : '';
+    return status !== 'Closed' && status !== 'closed';
+  }).length;
+
   const pipelineValue = leadsArray.reduce((acc: number, l: unknown) => {
-    const value = parseFloat(l.value?.replace(/[^0-9.]/g, '') || '0');
-    return acc + value;
+    if (typeof l === 'object' && l !== null && 'value' in l) {
+      const valueStr = typeof l.value === 'string' ? l.value : '';
+      const value = parseFloat(valueStr.replace(/[^0-9.]/g, '') || '0');
+      return acc + value;
+    }
+    return acc;
   }, 0);
 
   return (
@@ -130,9 +166,11 @@ export const CRMDashboard: React.FC = () => {
                 <YAxis dataKey="name" type="category" width={80} tick={{fontSize: 11, fill: '#64748b'}} />
                 <Tooltip cursor={{fill: 'transparent'}} />
                 <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={20}>
-                  {analytics.industry.map((entry: unknown, index: number) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
+                  {analytics.industry.map((entry: unknown, index: number) => {
+                    const color = typeof entry === 'object' && entry !== null && 'color' in entry && typeof entry.color === 'string'
+                      ? entry.color : '#3b82f6';
+                    return <Cell key={`cell-${index}`} fill={color} />;
+                  })}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
@@ -144,22 +182,32 @@ export const CRMDashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card title="Recent Client Interactions">
           <div className="space-y-4">
-            {casesArray.slice(0, 3).map((caseItem: unknown, idx: number) => (
+            {casesArray.slice(0, 3).map((caseItem: unknown, idx: number) => {
+              if (typeof caseItem !== 'object' || caseItem === null) return null;
+              const client = 'client' in caseItem && typeof caseItem.client === 'string' ? caseItem.client : 'Unknown Client';
+              const status = 'status' in caseItem && typeof caseItem.status === 'string' ? caseItem.status : '';
+              const title = 'title' in caseItem && typeof caseItem.title === 'string' ? caseItem.title : '';
+              const updatedAt = 'updatedAt' in caseItem ? caseItem.updatedAt : null;
+              const createdAt = 'createdAt' in caseItem ? caseItem.createdAt : null;
+              const dateToShow = updatedAt || createdAt;
+
+              return (
               <div key={idx} className={cn("flex justify-between items-center p-3 border-b last:border-0", theme.border.default)}>
                 <div className="flex items-center gap-3">
                   <div className={cn("p-2 rounded-full", theme.surface.highlight)}>
                     <Activity className={cn("h-4 w-4", theme.text.secondary)} />
                   </div>
                   <div>
-                    <p className={cn("text-sm font-bold", theme.text.primary)}>{caseItem.client || 'Unknown Client'}</p>
-                    <p className={cn("text-xs", theme.text.secondary)}>{caseItem.status} • {caseItem.title}</p>
+                    <p className={cn("text-sm font-bold", theme.text.primary)}>{client}</p>
+                    <p className={cn("text-xs", theme.text.secondary)}>{status} • {title}</p>
                   </div>
                 </div>
                 <span className={cn("text-xs font-mono", theme.text.tertiary)}>
-                  {new Date(caseItem.updatedAt || caseItem.createdAt).toLocaleDateString()}
+                  {dateToShow ? new Date(dateToShow).toLocaleDateString() : 'N/A'}
                 </span>
               </div>
-            ))}
+              );
+            })}
             {casesArray.length === 0 && (
               <p className={cn("text-sm text-center py-8", theme.text.secondary)}>No recent interactions</p>
             )}
@@ -169,22 +217,33 @@ export const CRMDashboard: React.FC = () => {
         <Card title="Key Accounts (Top Revenue)">
           <div className="space-y-4">
             {clientsArray
-              .sort((a: unknown, b: unknown) => (b.totalBilled || 0) - (a.totalBilled || 0))
+              .sort((a: unknown, b: unknown) => {
+                const aTotalBilled = typeof a === 'object' && a !== null && 'totalBilled' in a && typeof a.totalBilled === 'number' ? a.totalBilled : 0;
+                const bTotalBilled = typeof b === 'object' && b !== null && 'totalBilled' in b && typeof b.totalBilled === 'number' ? b.totalBilled : 0;
+                return bTotalBilled - aTotalBilled;
+              })
               .slice(0, 3)
-              .map((client: unknown, idx: number) => (
+              .map((client: unknown, idx: number) => {
+                if (typeof client !== 'object' || client === null) return null;
+                const clientName = 'name' in client && typeof client.name === 'string' ? client.name : 'Unknown';
+                const clientStatus = 'status' in client && typeof client.status === 'string' ? client.status : 'Active';
+                const clientTotalBilled = 'totalBilled' in client && typeof client.totalBilled === 'number' ? client.totalBilled : 0;
+
+                return (
               <div key={idx} className={cn("flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition-all", theme.surface.default, theme.border.default)}>
                 <div>
-                  <p className={cn("font-bold text-sm", theme.text.primary)}>{client.name}</p>
-                  <p className={cn("text-xs", theme.text.secondary)}>{client.status || 'Active'}</p>
+                  <p className={cn("font-bold text-sm", theme.text.primary)}>{clientName}</p>
+                  <p className={cn("text-xs", theme.text.secondary)}>{clientStatus}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className={cn("font-mono font-bold text-sm", theme.text.primary)}>
-                    ${((client.totalBilled || 0) / 1000).toFixed(0)}k
+                    ${(clientTotalBilled / 1000).toFixed(0)}k
                   </span>
                   <ArrowUpRight className={cn("h-4 w-4", theme.text.tertiary)} />
                 </div>
               </div>
-            ))}
+                );
+              })}
             {clientsArray.length === 0 && (
               <p className={cn("text-sm text-center py-8", theme.text.secondary)}>No clients yet</p>
             )}

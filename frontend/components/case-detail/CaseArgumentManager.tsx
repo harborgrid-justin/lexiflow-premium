@@ -98,7 +98,7 @@ export const CaseArgumentManager: React.FC<CaseArgumentManagerProps> = ({ caseDa
                 <select 
                     className={cn("text-sm bg-transparent outline-none py-1.5", theme.text.primary)}
                     value={filterStatus}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFilterStatus(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterStatus(e.target.value)}
                     aria-label="Filter arguments by status"
                 >
                     <option value="All">All Status</option>

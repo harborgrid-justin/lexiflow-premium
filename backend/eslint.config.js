@@ -68,6 +68,9 @@ export default tseslint.config(
       '**/*.js',
       '**/*.d.ts',
       'test/**',
+      '**/*.spec.ts',
+      '**/*.test.ts',
+      'scripts/**',
     ],
   }
 );

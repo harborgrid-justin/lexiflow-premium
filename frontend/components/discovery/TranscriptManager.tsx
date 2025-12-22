@@ -52,7 +52,7 @@ export const TranscriptManager: React.FC = () => {
                 </h3>
                 <p className={cn("text-sm", theme.text.secondary)}>Deposition indexing, full-text search, and video syncing.</p>
             </div>
-            <Button variant="primary" icon={Upload} onClick={() => setIsModalOpen(true)}>Import Transcript</Button>
+            <Button variant="primary" icon={Upload} onClick={transcriptModal.open}>Import Transcript</Button>
         </div>
 
         <TableContainer>
@@ -88,7 +88,7 @@ export const TranscriptManager: React.FC = () => {
             </TableBody>
         </TableContainer>
 
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Import Transcript">
+        <Modal isOpen={transcriptModal.isOpen} onClose={transcriptModal.close} title="Import Transcript">
             <div className="p-6 space-y-4">
                 <Input label="Deponent Name" value={newTranscript.deponent || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewTranscript({...newTranscript, deponent: e.target.value})}/>
                 <Input type="date" label="Deposition Date" value={newTranscript.date || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewTranscript({...newTranscript, date: e.target.value})}/>

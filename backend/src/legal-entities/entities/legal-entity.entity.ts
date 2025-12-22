@@ -81,7 +81,7 @@ export class LegalEntity extends BaseEntity {
   email!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  relationships: Record<string, any>[];
+  relationships!: Record<string, unknown>[];
 
   @Column({ name: 'parent_entity_id', type: 'uuid', nullable: true })
   parentEntityId!: string;
@@ -90,13 +90,13 @@ export class LegalEntity extends BaseEntity {
   parentEntityName!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  subsidiaries: Record<string, any>[];
+  subsidiaries!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  affiliates: Record<string, any>[];
+  affiliates!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  representatives: Record<string, any>[];
+  representatives!: Record<string, unknown>[];
 
   @Column({ name: 'primary_representative', type: 'varchar', length: 255, nullable: true })
   primaryRepresentative!: string;
@@ -114,19 +114,19 @@ export class LegalEntity extends BaseEntity {
   registeredAgentAddress!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  officers: Record<string, any>[];
+  officers!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  directors: Record<string, any>[];
+  directors!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  members: Record<string, any>[];
+  members!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  beneficiaries: Record<string, any>[];
+  beneficiaries!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  trustees: Record<string, any>[];
+  trustees!: Record<string, unknown>[];
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   industry!: string;
@@ -147,31 +147,31 @@ export class LegalEntity extends BaseEntity {
   totalLiabilities!: number;
 
   @Column({ name: 'ownership_structure', type: 'jsonb', nullable: true })
-  ownershipStructure!: Record<string, any>;
+  ownershipStructure!: Record<string, unknown>;
 
   @Column({ type: 'jsonb', nullable: true })
-  licenses: Record<string, any>[];
+  licenses!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  permits: Record<string, any>[];
+  permits!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  filings: Record<string, any>[];
+  filings!: Record<string, unknown>[];
 
   @Column({ name: 'governing_documents', type: 'jsonb', nullable: true })
-  governingDocuments: Record<string, any>[];
+  governingDocuments!: Record<string, unknown>[];
 
   @Column({ name: 'has_active_litigation', type: 'boolean', default: false })
   hasActiveLitigation!: boolean;
 
   @Column({ name: 'litigation_history', type: 'jsonb', nullable: true })
-  litigationHistory: Record<string, any>[];
+  litigationHistory!: Record<string, unknown>[];
 
   @Column({ name: 'has_regulatory_issues', type: 'boolean', default: false })
   hasRegulatoryIssues!: boolean;
 
   @Column({ name: 'regulatory_issues', type: 'jsonb', nullable: true })
-  regulatoryIssues: Record<string, any>[];
+  regulatoryIssues!: Record<string, unknown>[];
 
   @Column({ name: 'is_subject_to_conflict_check', type: 'boolean', default: false })
   isSubjectToConflictCheck!: boolean;
@@ -189,8 +189,8 @@ export class LegalEntity extends BaseEntity {
   notes!: string;
 
   @Column({ name: 'custom_fields', type: 'jsonb', nullable: true })
-  customFields!: Record<string, any>;
+  customFields!: Record<string, unknown>;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 }

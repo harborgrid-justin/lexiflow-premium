@@ -144,7 +144,9 @@ export class HRService {
     const { employeeId, status, page = 1, limit = 50 } = filters;
     
     const where: FindOptionsWhere<TimeOffRequest> = {};
-    if (employeeId) where.employeeId = employeeId;
+    if (employeeId) {
+          if (employeeId) where.employeeId = employeeId;
+    }
     if (status) where.status = status;
 
     const [data, total] = await this.timeOffRepository.findAndCount({

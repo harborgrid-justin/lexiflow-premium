@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between, MoreThan } from 'typeorm';
+import { Repository, MoreThan } from 'typeorm';
 import { PerformanceMetric } from './entities/performance-metric.entity';
 import { SystemAlert, AlertSeverity } from './entities/system-alert.entity';
 
@@ -17,7 +17,7 @@ export class MonitoringService {
     metricName: string;
     value: number;
     unit?: string;
-    tags?: Record<string, any>;
+    tags?: Record<string, unknown>;
   }): Promise<PerformanceMetric> {
     const metric = this.metricRepository.create({
       ...data,
@@ -141,9 +141,9 @@ export class MonitoringService {
     return await this.alertRepository.save(alert);
   }
 
-  async acknowledgeAlert(id: string, userId: string): Promise<SystemAlert> {
+  async acknowledgeAlert(id: string, userId: string): Promise<SystemAlert | null> {
     const alert = await this.alertRepository.findOne({ where: { id } });
-    
+
     if (alert) {
       alert.acknowledged = true;
       alert.acknowledgedBy = userId;
@@ -151,18 +151,18 @@ export class MonitoringService {
       return await this.alertRepository.save(alert);
     }
 
-    return alert;
+    return null;
   }
 
-  async resolveAlert(id: string): Promise<SystemAlert> {
+  async resolveAlert(id: string): Promise<SystemAlert | null> {
     const alert = await this.alertRepository.findOne({ where: { id } });
-    
+
     if (alert) {
       alert.resolved = true;
       alert.resolvedAt = new Date();
       return await this.alertRepository.save(alert);
     }
 
-    return alert;
+    return null;
   }
 }

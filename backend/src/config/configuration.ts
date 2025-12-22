@@ -111,7 +111,7 @@ export default () => {
       origin:
         validatedEnv.NODE_ENV === 'production'
           ? validatedEnv.CORS_ORIGINS.split(',')
-          : (origin, callback) => {
+          : (origin: any, callback: any) => {
               if (!origin || /^http:\/\/localhost:(3[0-9]{3})$/.test(origin)) {
                 callback(null, true);
               } else {
@@ -123,7 +123,7 @@ export default () => {
 
     // Security
     security: {
-      bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS, 10) || 12,
+      bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS || '12', 10),
     },
   };
 };

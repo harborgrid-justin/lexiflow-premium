@@ -158,8 +158,14 @@ const BillingWIPComponent: React.FC = () => {
       },
       {
           invalidateKeys: [billingQueryKeys.billing.wip(), billingQueryKeys.billing.invoices()],
-          onSuccess: (invoice) => {
-              notify.success(`Invoice ${invoice.id} generated for $${invoice.amount.toFixed(2)}`);
+          onSuccess: (invoice: unknown) => {
+              if (typeof invoice === 'object' && invoice !== null && 'id' in invoice && 'amount' in invoice) {
+                  const invoiceId = String(invoice.id);
+                  const invoiceAmount = typeof invoice.amount === 'number' ? invoice.amount : 0;
+                  notify.success(`Invoice ${invoiceId} generated for $${invoiceAmount.toFixed(2)}`);
+              } else {
+                  notify.success('Invoice generated successfully');
+              }
               setSelectedIds(new Set());
               localStorage.removeItem('billing-wip-draft');
           },

@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CalendarIntegrationEventDto {
   @ApiProperty({ description: 'Event title' })
   @IsString()
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Event description', required: false })
   @IsOptional()
@@ -13,11 +13,11 @@ export class CalendarIntegrationEventDto {
 
   @ApiProperty({ description: 'Event start time' })
   @IsDateString()
-  startTime: string;
+  startTime!: string;
 
   @ApiProperty({ description: 'Event end time' })
   @IsDateString()
-  endTime: string;
+  endTime!: string;
 
   @ApiProperty({ description: 'Event location', required: false })
   @IsOptional()
@@ -39,11 +39,11 @@ export class CalendarIntegrationEventDto {
 export class CalendarSyncDto {
   @ApiProperty({ description: 'Sync from date' })
   @IsDateString()
-  fromDate: string;
+  fromDate!: string;
 
   @ApiProperty({ description: 'Sync to date' })
   @IsDateString()
-  toDate: string;
+  toDate!: string;
 }
 
 export interface CalendarEvent {

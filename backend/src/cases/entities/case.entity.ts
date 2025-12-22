@@ -95,7 +95,7 @@ export class Case extends BaseEntity {
   leadAttorneyId?: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 
   @Column({ name: 'is_archived', type: 'boolean', default: false })
   isArchived!: boolean;

@@ -10,9 +10,9 @@ export const MOCK_DOCUMENTS: LegalDocument[] = [
         versions: [], status: 'Final', fileSize: '128 KB', 
         authorId: 'usr-admin-justin' as UserId,
         formFields: [
-            { id: 'f-1', type: 'text', x: 100, y: 150, value: 'TechCorp Industries' },
-            { id: 'f-2', type: 'date', x: 400, y: 150, value: '03/15/2024' },
-            { id: 'f-3', type: 'signature', x: 350, y: 500, value: '' }
+            { name: 'companyName', type: 'text', value: 'TechCorp Industries' },
+            { name: 'date', type: 'date', value: '03/15/2024' },
+            { name: 'signature', type: 'signature', value: '' }
         ]
     },
     {

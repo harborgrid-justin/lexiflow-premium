@@ -8,10 +8,8 @@ import {
   Param,
   Query,
   ParseUUIDPipe,
-  ParseBoolPipe,
   ParseIntPipe,
 } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiQuery , ApiResponse} from '@nestjs/swagger';
 import { ClausesService } from './clauses.service';
 import { CreateClauseDto } from './dto/create-clause.dto';

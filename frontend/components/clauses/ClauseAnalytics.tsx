@@ -16,11 +16,12 @@ export const ClauseAnalytics: React.FC = () => {
   const { theme } = useTheme();
   
   // Load clauses from IndexedDB via useQuery for accurate, cached data
-  const { data: clauses = [], isLoading } = useQuery(
+  const { data: clausesData = [], isLoading } = useQuery<Clause[]>(
     queryKeys.clauses.all(),
     () => DataService.clauses.getAll()
   );
 
+  const clauses = Array.isArray(clausesData) ? clausesData : [];
   const riskData = getRiskData(clauses);
   const usageData = getUsageData(clauses);
 

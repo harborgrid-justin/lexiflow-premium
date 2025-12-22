@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { RateTable } from './entities/rate-table.entity';
 import { CreateRateTableDto } from './dto/create-rate-table.dto';
 import { UpdateRateTableDto } from './dto/update-rate-table.dto';
@@ -65,7 +65,7 @@ export class RateTablesService {
         firmId,
         isDefault: true,
         isActive: true,
-        deletedAt: null,
+        deletedAt: IsNull(),
       },
     });
 
@@ -78,7 +78,7 @@ export class RateTablesService {
 
   async findOne(id: string): Promise<RateTable> {
     const rateTable = await this.rateTableRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!rateTable) {
@@ -146,7 +146,7 @@ export class RateTablesService {
 
     // If no user-specific rate found, return from default table
     const defaultTable = rateTables.find((t) => t.isDefault);
-    if (defaultTable && defaultTable.rates.length > 0) {
+    if (defaultTable && defaultTable.rates.length > 0 && defaultTable.rates[0]) {
       return { rate: defaultTable.rates[0].rate, rateTableId: defaultTable.id };
     }
 

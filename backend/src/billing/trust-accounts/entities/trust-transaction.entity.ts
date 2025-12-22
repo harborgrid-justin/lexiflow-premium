@@ -4,7 +4,6 @@ import {
   Index,
   ManyToOne,
   JoinColumn,
-  VersionColumn,
 } from 'typeorm';
 import { BaseEntity } from '../../../common/base/base.entity';
 import { Case } from '../../../cases/entities/case.entity';
@@ -120,7 +119,7 @@ export class TrustTransaction extends BaseEntity {
   documentPath!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 
   @Column({ name: 'created_by', type: 'uuid', nullable: true })
   createdBy!: string;

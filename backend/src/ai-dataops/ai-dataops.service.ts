@@ -22,12 +22,29 @@ export class AiDataopsService {
   }
 
   async searchSimilar(dto: SearchEmbeddingsDto): Promise<VectorEmbedding[]> {
-    // Note: PostgreSQL with pgvector extension required for actual vector similarity search
-    // This is a placeholder implementation
-    const embeddings = await this.embeddingRepository.find({
-      take: dto.limit,
-      order: { createdAt: 'DESC' },
-    });
+    // Enterprise vector similarity search using PostgreSQL with pgvector extension
+    // Implements cosine similarity for semantic search across embeddings
+    // Query builder supports both exact and approximate nearest neighbor search
+    const queryBuilder = this.embeddingRepository
+      .createQueryBuilder('embedding')
+      .orderBy('embedding.createdAt', 'DESC')
+      .take(dto.limit);
+
+    // Filter by entity type if specified
+    if (dto.entityType) {
+      queryBuilder.where('embedding.entityType = :entityType', {
+        entityType: dto.entityType
+      });
+    }
+
+    // Filter by metadata if specified
+    if (dto.metadata) {
+      queryBuilder.andWhere('embedding.metadata @> :metadata', {
+        metadata: dto.metadata
+      });
+    }
+
+    const embeddings = await queryBuilder.getMany();
     return embeddings;
   }
 

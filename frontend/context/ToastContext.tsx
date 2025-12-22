@@ -17,6 +17,13 @@ interface Toast {
 interface ToastContextType {
   addToast: (message: string, type: ToastType) => void;
   removeToast: (id: string) => void;
+  success: (message: string) => void;
+  error: (message: string) => void;
+  info: (message: string) => void;
+  warning: (message: string) => void;
+  // Legacy aliases
+  notifySuccess: (message: string) => void;
+  notifyError: (message: string) => void;
 }
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
@@ -125,8 +132,23 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   }, []);
 
+  // Helper methods
+  const success = useCallback((message: string) => addToast(message, 'success'), [addToast]);
+  const error = useCallback((message: string) => addToast(message, 'error'), [addToast]);
+  const info = useCallback((message: string) => addToast(message, 'info'), [addToast]);
+  const warning = useCallback((message: string) => addToast(message, 'warning'), [addToast]);
+
   return (
-    <ToastContext.Provider value={{ addToast, removeToast }}>
+    <ToastContext.Provider value={{
+      addToast,
+      removeToast,
+      success,
+      error,
+      info,
+      warning,
+      notifySuccess: success,
+      notifyError: error,
+    }}>
       {children}
       <div className="fixed bottom-4 right-4 z-[6000] flex flex-col gap-2 pointer-events-none">
         {toasts.map((toast) => (

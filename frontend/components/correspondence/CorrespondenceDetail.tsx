@@ -60,9 +60,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ corr
           invalidateKeys: [
               correspondenceQueryKeys.correspondence.lists(),
               correspondenceQueryKeys.serviceJobs.lists()
-          ],
-          retry: 3,
-          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000) // Exponential backoff
+          ]
       }
   );
 
@@ -82,9 +80,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ corr
               notify.error('Failed to update service job');
               console.error('Update error:', error);
           },
-          invalidateKeys: [correspondenceQueryKeys.serviceJobs.lists()],
-          retry: 2,
-          retryDelay: (attemptIndex) => 1000 * 2 ** attemptIndex
+          invalidateKeys: [correspondenceQueryKeys.serviceJobs.lists()]
       }
   );
 
@@ -292,7 +288,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ corr
                                     <select 
                                         className="w-full p-2 text-sm border rounded bg-white"
                                         value={newStatus}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewStatus(e.target.value as any)}
+                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewStatus(e.target.value as any)}
                                     >
                                         <option value="Out for Service">Out for Service</option>
                                         <option value="Served">Served / Delivered</option>
@@ -393,10 +389,10 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ corr
         <div className={cn("p-4 border-t flex flex-col gap-2", theme.border.default)}>
             {correspondenceItem.type === 'communication' ? (
                 <div className="grid grid-cols-2 gap-2">
-                    <Button variant="outline" size="sm" icon={Mail} onClick={() => onReply && onReply(item)}>Reply</Button>
+                    <Button variant="outline" size="sm" icon={Mail} onClick={() => onReply && onReply(correspondenceItem.item)}>Reply</Button>
                     <Button variant="secondary" size="sm" icon={CheckSquare} onClick={() => setIsTaskModalOpen(true)}>Create Task</Button>
                     <Button variant="secondary" size="sm" icon={Briefcase} onClick={handleSaveToCase}>Save to Case</Button>
-                    <Button variant="ghost" size="sm" icon={Archive} className="text-slate-500" onClick={() => archiveItem(item.id)}>Archive</Button>
+                    <Button variant="ghost" size="sm" icon={Archive} className="text-slate-500" onClick={() => archiveItem(correspondenceItem.item.id)}>Archive</Button>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 gap-2">

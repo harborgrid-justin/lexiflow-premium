@@ -137,6 +137,10 @@ export const tokens = {
             warning: '#f59e0b',
             danger: '#ef4444',
             neutral: '#64748b',
+            // Color aliases
+            blue: '#3b82f6',
+            purple: '#a855f7',
+            emerald: '#10b981',
         }
       },
 
@@ -230,6 +234,10 @@ export const tokens = {
             warning: '#f59e0b',
             danger: '#ef4444',
             neutral: '#94a3b8',
+            // Color aliases
+            blue: '#3b82f6',
+            purple: '#a855f7',
+            emerald: '#10b981',
         }
       },
 
@@ -280,3 +288,6 @@ export const tokens = {
     slow: 'transition-all duration-500 ease-in-out'
   }
 };
+
+// Export ThemeTokens type for type safety
+export type ThemeTokens = typeof tokens;

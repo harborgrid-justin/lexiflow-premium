@@ -11,7 +11,7 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Types
-import { ModuleDefinition } from '../types';
+import { ModuleDefinition } from '../../types';
 
 // ============================================================================
 // TYPES & INTERFACES

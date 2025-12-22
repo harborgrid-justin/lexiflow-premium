@@ -143,7 +143,7 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
                         title="Filter by category"
                         className={cn("px-3 py-2 rounded-lg border text-sm outline-none min-w-[140px]", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={selectedCategory}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSelectedCategory(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedCategory(e.target.value)}
                         disabled={isLoading}
                     >
                         {categories.map(c => <option key={c} value={c}>{c}</option>)}
@@ -152,7 +152,7 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
                         title="Filter by difficulty"
                         className={cn("px-3 py-2 rounded-lg border text-sm outline-none min-w-[140px]", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={selectedDifficulty}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSelectedDifficulty(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedDifficulty(e.target.value)}
                         disabled={isLoading}
                     >
                         <option value="All">All Difficulties</option>

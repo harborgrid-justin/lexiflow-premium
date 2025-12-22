@@ -227,7 +227,7 @@ export const VendorManagement: React.FC = () => {
                 id="vendor-service-type"
                 className={`w-full h-10 px-3 py-2 border rounded-md text-sm shadow-sm outline-none transition-all ${theme.surface.input} ${theme.border.default} ${theme.text.primary} ${theme.border.focused}`}
                 value={newVendor.serviceType || 'Court Reporting'}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewVendor(prev => ({ ...prev, serviceType: e.target.value as typeof SERVICE_TYPES[number]['value'] }))}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewVendor(prev => ({ ...prev, serviceType: e.target.value as typeof SERVICE_TYPES[number]['value'] }))}
               >
                 {SERVICE_TYPES.map(type => (
                   <option key={type.value} value={type.value}>{type.label}</option>

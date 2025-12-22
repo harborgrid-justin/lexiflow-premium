@@ -137,7 +137,7 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
                                     <span>{proj.progress}%</span>
                                 </div>
                                 <div className={cn("w-full rounded-full h-1.5 overflow-hidden", theme.surface.highlight)}>
-                                    {/* eslint-disable-next-line react/forbid-dom-props -- Dynamic width required for progress */}
+                                    { }
                                     <div className={cn("h-1.5 rounded-full transition-all duration-1000", theme.primary.DEFAULT)} style={{ width: `${proj.progress}%` }}></div>
                                 </div>
                             </div>

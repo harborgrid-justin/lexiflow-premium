@@ -19,7 +19,7 @@ const BASE_DELAY = 1000;
 type MutationHandler = (payload: unknown) => Promise<unknown>;
 
 // Registry of handlers to replay mutations
-// In a real app, these would likely import specific service methods directly
+// Maps mutation types to their corresponding DataService methods
 const MUTATION_HANDLERS: Record<string, MutationHandler> = {
     'CASE_CREATE': (p) => DataService.cases.add(p as Parameters<typeof DataService.cases.add>[0]),
     'CASE_UPDATE': (p) => {
@@ -33,8 +33,11 @@ const MUTATION_HANDLERS: Record<string, MutationHandler> = {
     },
     'DOC_UPLOAD': (p) => DataService.documents.add(p as Parameters<typeof DataService.documents.add>[0]),
     'BILLING_LOG': (p) => DataService.billing.addTimeEntry(p as Parameters<typeof DataService.billing.addTimeEntry>[0]),
-    // Default fallback for demo visualization
-    'DEFAULT': async () => new Promise(resolve => setTimeout(resolve, 1000))
+    // Default fallback handler for unknown mutation types
+    'DEFAULT': async () => {
+        console.warn('[SyncContext] Unknown mutation type encountered, using default handler');
+        return new Promise(resolve => setTimeout(resolve, 1000));
+    }
 };
 
 export const SyncProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

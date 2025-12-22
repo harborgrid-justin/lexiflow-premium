@@ -30,7 +30,7 @@ export class ConflictChecksService {
       requestedBy: dto.requestedBy,
       requestedByName: dto.requestedByName,
       checkType: dto.checkType,
-      targetName: dto.targetName,
+      targetName: dto.targetName ?? '',
       targetEntity: dto.targetEntity,
       conflicts,
       status: conflicts.length > 0 ? ConflictCheckStatus.CONFLICT_FOUND : ConflictCheckStatus.CLEAR,
@@ -130,7 +130,7 @@ export class ConflictChecksService {
 
   private async performConflictCheck(dto: RunConflictCheckDto): Promise<ConflictResult[]> {
     const conflicts: ConflictResult[] = [];
-    const targetNameLower = dto.targetName.toLowerCase();
+    const __targetNameLower = dto.targetName.toLowerCase();
 
     // Perform different types of checks based on checkType
     switch (dto.checkType) {
@@ -138,7 +138,7 @@ export class ConflictChecksService {
       case ConflictCheckType.CLIENT_VS_OPPOSING:
         // Name matching
         for (const client of this.existingClients) {
-          const matchScore = this.calculateNameMatch(dto.targetName, client.name);
+          const matchScore = this.calculateNameMatch(dto.targetName ?? '', client.name);
 
           if (matchScore > 0.7) {
             conflicts.push({
@@ -172,7 +172,7 @@ export class ConflictChecksService {
       case ConflictCheckType.PRIOR_REPRESENTATION:
         // Check for prior representation
         for (const client of this.existingClients) {
-          const matchScore = this.calculateNameMatch(dto.targetName, client.name);
+          const matchScore = this.calculateNameMatch(dto.targetName ?? '', client.name);
 
           if (matchScore > 0.8 && client.cases.length > 0) {
             conflicts.push({

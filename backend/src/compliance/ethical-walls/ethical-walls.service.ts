@@ -48,7 +48,7 @@ export class EthicalWallsService {
       walls = walls.filter((wall) => wall.status === query.status);
     }
     if (query.userId) {
-      walls = walls.filter((wall) => wall.restrictedUsers.includes(query.userId));
+      walls = walls.filter((wall) => wall.restrictedUsers.includes(query.userId || ''));
     }
     if (query.entityType && query.entityId) {
       walls = walls.filter((wall) =>
@@ -107,7 +107,7 @@ export class EthicalWallsService {
   }
 
   async remove(id: string): Promise<void> {
-    const wall = await this.findOne(id);
+    const // __wall = await this.findOne(id);
     this.ethicalWalls.delete(id);
   }
 

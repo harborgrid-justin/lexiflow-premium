@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { Custodian } from './entities/custodian.entity';
 import { CreateCustodianDto } from './dto/create-custodian.dto';
 import { UpdateCustodianDto } from './dto/update-custodian.dto';
@@ -91,7 +91,7 @@ export class CustodiansService {
 
   async findOne(id: string): Promise<Custodian> {
     const custodian = await this.custodianRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!custodian) {
@@ -118,7 +118,7 @@ export class CustodiansService {
 
   async getStatistics(caseId: string) {
     const custodians = await this.custodianRepository.find({
-      where: { caseId, deletedAt: null },
+      where: { caseId, deletedAt: IsNull() },
     });
 
     const stats = {

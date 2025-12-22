@@ -25,7 +25,7 @@
  * - Event-driven integration
  */
 
-import { WorkflowTask, CaseId, UserId } from '../../../types';
+import { WorkflowTask, CaseId, UserId, TaskStatusBackend, TaskPriorityBackend } from '../../../types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 import { isBackendApiEnabled } from '../../integration/apiConfig';
@@ -174,7 +174,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
         
         try {
             const tasks = await this.getByCaseId(caseId);
-            return tasks.filter(t => t.status !== 'Done' && t.status !== 'Completed').length;
+            return tasks.filter(t => t.status !== TaskStatusBackend.COMPLETED && t.status !== TaskStatusBackend.COMPLETED).length;
         } catch (error) {
             console.error('[TaskRepository.countByCaseId] Error:', error);
             throw new Error('Failed to count tasks by case ID');
@@ -266,11 +266,10 @@ export class TaskRepository extends Repository<WorkflowTask> {
         }
         
         // Integration Point: Publish event when task is completed
-        if (updates.status === 'completed' || updates.status === 'done' || updates.status === 'Done' || updates.status === 'Completed') {
+        if (updates.status === 'completed' || updates.status === 'done' || updates.status === TaskStatusBackend.COMPLETED || updates.status === TaskStatusBackend.COMPLETED) {
             try {
-                await IntegrationOrchestrator.publish(SystemEventType.TASK_COMPLETED, { 
-                    task: result,
-                    completedAt: new Date().toISOString()
+                await IntegrationOrchestrator.publish(SystemEventType.TASK_COMPLETED, {
+                    task: result
                 });
             } catch (eventError) {
                 console.warn('[TaskRepository] Failed to publish integration event', eventError);
@@ -330,9 +329,8 @@ export class TaskRepository extends Repository<WorkflowTask> {
 
             // Update task status
             const completed = await this.update(id, {
-                status: 'Completed',
-                completedAt: new Date().toISOString(),
-                progress: 100
+                status: TaskStatusBackend.COMPLETED,
+                completionPercentage: 100
             });
 
             return completed;
@@ -350,7 +348,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
      * @returns Promise<WorkflowTask> Updated task
      * @throws Error if validation fails or update fails
      */
-    async updateStatus(id: string, status: string): Promise<WorkflowTask> {
+    async updateStatus(id: string, status: TaskStatusBackend): Promise<WorkflowTask> {
         this.validateId(id, 'updateStatus');
 
         if (!status || typeof status !== 'string' || status.trim() === '') {
@@ -368,7 +366,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
         try {
             const updates: Partial<WorkflowTask> = { status };
             
-            if (status === 'completed' || status === 'Completed' || status === 'done' || status === 'Done') {
+            if (status === 'completed' || status === TaskStatusBackend.COMPLETED || status === 'done' || status === TaskStatusBackend.COMPLETED) {
                 updates.completedAt = new Date().toISOString();
                 updates.progress = 100;
             }
@@ -388,10 +386,10 @@ export class TaskRepository extends Repository<WorkflowTask> {
      * @returns Promise<WorkflowTask> Updated task
      * @throws Error if validation fails or update fails
      */
-    async updatePriority(id: string, priority: 'low' | 'medium' | 'high' | 'urgent'): Promise<WorkflowTask> {
+    async updatePriority(id: string, priority: TaskPriorityBackend): Promise<WorkflowTask> {
         this.validateId(id, 'updatePriority');
 
-        if (!priority || !['low', 'medium', 'high', 'urgent'].includes(priority)) {
+        if (!priority) {
             throw new Error('[TaskRepository.updatePriority] Invalid priority parameter');
         }
 
@@ -413,12 +411,11 @@ export class TaskRepository extends Repository<WorkflowTask> {
             throw new Error('[TaskRepository.updateProgress] Invalid progress parameter (must be 0-100)');
         }
 
-        const updates: Partial<WorkflowTask> = { progress };
+        const updates: Partial<WorkflowTask> = { completionPercentage: progress };
 
         // Auto-complete if progress reaches 100%
         if (progress === 100) {
-            updates.status = 'Completed';
-            updates.completedAt = new Date().toISOString();
+            updates.status = TaskStatusBackend.COMPLETED;
         }
 
         return await this.update(id, updates);
@@ -514,7 +511,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
             const now = new Date();
 
             return tasks.filter(task => {
-                if (!task.dueDate || task.status === 'Completed' || task.status === 'Done') return false;
+                if (!task.dueDate || task.status === TaskStatusBackend.COMPLETED || task.status === TaskStatusBackend.COMPLETED) return false;
                 return new Date(task.dueDate) < now;
             });
         } catch (error) {
@@ -537,7 +534,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
             const future = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
 
             return tasks.filter(task => {
-                if (!task.dueDate || task.status === 'Completed' || task.status === 'Done') return false;
+                if (!task.dueDate || task.status === TaskStatusBackend.COMPLETED || task.status === TaskStatusBackend.COMPLETED) return false;
                 const due = new Date(task.dueDate);
                 return due >= now && due <= future;
             });
@@ -671,7 +668,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
         avgProgress: number;
     }> {
         try {
-            let tasks = caseId ? await this.getByCaseId(caseId) : await this.getAll();
+            const tasks = caseId ? await this.getByCaseId(caseId) : await this.getAll();
             
             const byStatus: Record<string, number> = {};
             const byPriority: Record<string, number> = {};
@@ -685,7 +682,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
                 const priority = task.priority || 'medium';
                 byPriority[priority] = (byPriority[priority] || 0) + 1;
 
-                if (task.status === 'Completed' || task.status === 'Done') {
+                if (task.status === TaskStatusBackend.COMPLETED || task.status === TaskStatusBackend.COMPLETED) {
                     completed++;
                 }
 

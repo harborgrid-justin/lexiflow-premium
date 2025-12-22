@@ -54,7 +54,7 @@ export const FormatOptionsCard: React.FC<FormatOptionsCardProps> = ({
           </label>
           <select
             value={formatStyle}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onFormatStyleChange(e.target.value as CitationFormat)}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onFormatStyleChange(e.target.value as CitationFormat)}
             title="Select citation format style"
             className={cn(
               "w-full px-3 py-1.5 rounded border text-sm",

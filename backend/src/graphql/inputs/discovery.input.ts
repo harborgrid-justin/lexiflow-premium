@@ -3,34 +3,34 @@ import { InputType, Field, ID } from '@nestjs/graphql';
 @InputType()
 export class CreateDiscoveryRequestInput {
   @Field(() => ID)
-  caseId: string;
+  caseId!: string;
 
   @Field()
-  requestNumber: string;
+  requestNumber!: string;
 
   @Field()
-  type: string;
+  type!: string;
 
   @Field()
-  title: string;
+  title!: string;
 
   @Field({ nullable: true })
   description?: string;
 
   @Field()
-  requestingParty: string;
+  requestingParty!: string;
 
   @Field()
-  respondingParty: string;
+  respondingParty!: string;
 
   @Field(() => Date)
-  requestDate: Date;
+  requestDate!: Date;
 
   @Field(() => Date)
-  dueDate: Date;
+  dueDate!: Date;
 
   @Field(() => ID)
-  assignedTo: string;
+  assignedTo!: string;
 }
 
 @InputType()
@@ -57,13 +57,13 @@ export class UpdateDiscoveryRequestInput {
 @InputType()
 export class CreateDepositionInput {
   @Field(() => ID)
-  caseId: string;
+  caseId!: string;
 
   @Field()
-  deponentName: string;
+  deponentName!: string;
 
   @Field()
-  deponentRole: string;
+  deponentRole!: string;
 
   @Field({ nullable: true })
   location?: string;
@@ -72,7 +72,7 @@ export class CreateDepositionInput {
   videoConferenceLink?: string;
 
   @Field(() => Date)
-  scheduledDate: Date;
+  scheduledDate!: Date;
 
   @Field({ nullable: true })
   duration?: number;
@@ -123,46 +123,46 @@ export class UpdateDepositionInput {
 @InputType()
 export class CreateLegalHoldInput {
   @Field(() => ID)
-  caseId: string;
+  caseId!: string;
 
   @Field()
-  name: string;
+  name!: string;
 
   @Field({ nullable: true })
   description?: string;
 
   @Field(() => Date)
-  issuedDate: Date;
+  issuedDate!: Date;
 
   @Field(() => [String])
-  custodians: string[];
+  custodians!: string[];
 
   @Field(() => [String])
-  dataSources: string[];
+  dataSources!: string[];
 }
 
 @InputType()
 export class CreatePrivilegeLogEntryInput {
   @Field(() => ID)
-  caseId: string;
+  caseId!: string;
 
   @Field()
-  documentId: string;
+  documentId!: string;
 
   @Field()
-  privilegeType: string;
+  privilegeType!: string;
 
   @Field()
-  author: string;
+  author!: string;
 
   @Field()
-  recipient: string;
+  recipient!: string;
 
   @Field(() => Date)
-  documentDate: Date;
+  documentDate!: Date;
 
   @Field()
-  description: string;
+  description!: string;
 
   @Field({ nullable: true })
   batesNumber?: string;

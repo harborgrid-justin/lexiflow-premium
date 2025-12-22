@@ -17,8 +17,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 // CONSTANTS
 // ========================================
 // define options outside to maintain reference equality
-// Cast to any to avoid TS error about 'passive' property in strict environments
-const EVENT_OPTIONS = { passive: true } as any;
+const EVENT_OPTIONS: AddEventListenerOptions = { passive: true };
 
 // ========================================
 // HOOK

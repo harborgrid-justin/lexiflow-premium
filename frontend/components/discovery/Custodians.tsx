@@ -247,7 +247,7 @@ export const Custodians: React.FC = () => {
           <TextArea
             label="Notes"
             value={formData.notes || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, notes: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, notes: e.target.value})}
             placeholder="Additional notes about this custodian..."
             rows={3}
           />
@@ -290,7 +290,7 @@ export const Custodians: React.FC = () => {
               title="Select custodian status"
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.status || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, status: e.target.value as Custodian['status']})}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, status: e.target.value as Custodian['status']})}
             >
               <option value="Pending">Pending</option>
               <option value="Active">Active</option>
@@ -301,7 +301,7 @@ export const Custodians: React.FC = () => {
           <TextArea
             label="Notes"
             value={formData.notes || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, notes: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, notes: e.target.value})}
             rows={3}
           />
           <div className="flex justify-end gap-2 pt-4">

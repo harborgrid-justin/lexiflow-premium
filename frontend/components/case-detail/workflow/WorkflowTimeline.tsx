@@ -22,7 +22,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 
 // Types & Interfaces
-import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus } from '../../../types';
+import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus, TaskStatusBackend } from '../../../types';
 
 interface WorkflowTimelineProps {
   stages: WorkflowStage[];
@@ -75,10 +75,10 @@ return (
                                 <div key={task.id} className={cn("group relative p-4 rounded-lg border hover:shadow-md transition-all flex flex-col md:flex-row gap-4 items-start md:items-center hover:border-blue-500", theme.surface.default, theme.border.default)}>
                                     <button 
                                         onClick={() => onToggleTask(stage.id, task.id)}
-                                        title={task.status === 'Done' ? 'Mark as incomplete' : 'Mark as complete'}
+                                        title={task.status === TaskStatusBackend.COMPLETED ? 'Mark as incomplete' : 'Mark as complete'}
                                         className={cn(
                                             "shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors hover:border-blue-500",
-                                            task.status === 'Done' 
+                                            task.status === TaskStatusBackend.COMPLETED
                                             ? 'bg-green-500 border-green-500 text-white' 
                                             : 'border-slate-300 text-transparent'
                                         )}
@@ -88,10 +88,10 @@ return (
 
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <h5 className={cn("font-semibold text-sm", task.status === 'Done' ? "text-slate-400 line-through" : theme.text.primary)}>
+                                            <h5 className={cn("font-semibold text-sm", task.status === TaskStatusBackend.COMPLETED ? "text-slate-400 line-through" : theme.text.primary)}>
                                                 {task.title}
                                             </h5>
-                                            {task.priority === 'High' && task.status !== 'Done' && (
+                                            {task.priority === 'High' && task.status !== TaskStatusBackend.COMPLETED && (
                                                 <span className="bg-red-100 text-red-600 text-[10px] font-bold px-1.5 py-0.5 rounded border border-red-200">HIGH</span>
                                             )}
                                         </div>
@@ -100,7 +100,7 @@ return (
                                         )}
                                         <div className={cn("flex flex-wrap items-center gap-4 text-xs", theme.text.tertiary)}>
                                             <span className="flex items-center gap-1"><UserAvatar name={task.assignee} size="sm" className="w-4 h-4 text-[9px]"/> {task.assignee}</span>
-                                            <span className={`flex items-center gap-1 ${task.status !== 'Done' && new Date(task.dueDate as string) < new Date() ? 'text-red-500 font-bold' : ''}`}>
+                                            <span className={`flex items-center gap-1 ${task.status !== TaskStatusBackend.COMPLETED && new Date(task.dueDate as string) < new Date() ? 'text-red-500 font-bold' : ''}`}>
                                                 <Clock className="h-3 w-3"/> Due: {task.dueDate}
                                             </span>
                                         </div>

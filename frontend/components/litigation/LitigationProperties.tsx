@@ -61,7 +61,7 @@ export const LitigationProperties: React.FC<LitigationPropertiesProps> = ({
                 rows={4}
                 placeholder="Why are we filing this? What is the probability of success?"
                 value={selectedNode!.config.description || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateNode(selectedNode!.id, { config: { ...selectedNode!.config, description: e.target.value } })}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdateNode(selectedNode!.id, { config: { ...selectedNode!.config, description: e.target.value } })}
             />
         </div>
         <div className={cn("pt-4 mt-auto border-t flex flex-col gap-2", theme.border.default)}>

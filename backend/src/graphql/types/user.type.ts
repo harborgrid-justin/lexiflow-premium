@@ -23,25 +23,25 @@ registerEnumType(UserStatus, { name: 'UserStatus' });
 @ObjectType()
 export class UserType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  email: string;
+  email!: string;
 
   @Field()
-  firstName: string;
+  firstName!: string;
 
   @Field()
-  lastName: string;
+  lastName!: string;
 
   @Field()
-  fullName: string;
+  fullName!: string;
 
   @Field(() => UserRole)
-  role: UserRole;
+  role!: UserRole;
 
   @Field(() => UserStatus)
-  status: UserStatus;
+  status!: UserStatus;
 
   @Field({ nullable: true })
   barNumber?: string;
@@ -62,16 +62,16 @@ export class UserType {
   bio?: string;
 
   @Field(() => Boolean)
-  mfaEnabled: boolean;
+  mfaEnabled!: boolean;
 
   @Field(() => Date, { nullable: true })
   lastLoginAt?: Date;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 
   @Field(() => Date)
-  updatedAt: Date;
+  updatedAt!: Date;
 
   // Hidden fields (not exposed in GraphQL)
   @HideField()
@@ -84,28 +84,28 @@ export class UserType {
 @ObjectType()
 export class AuthPayload {
   @Field()
-  accessToken: string;
+  accessToken!: string;
 
   @Field()
-  refreshToken: string;
+  refreshToken!: string;
 
   @Field(() => UserType)
-  user: UserType;
+  user!: UserType;
 
   @Field()
-  expiresIn: number;
+  expiresIn!: number;
 }
 
 @ObjectType()
 export class UserPermission {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  resource: string;
+  resource!: string;
 
   @Field()
-  action: string;
+  action!: string;
 
   @Field({ nullable: true })
   conditions?: string;
@@ -114,7 +114,7 @@ export class UserPermission {
 @ObjectType()
 export class UserPreferences {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field({ nullable: true })
   theme?: string;

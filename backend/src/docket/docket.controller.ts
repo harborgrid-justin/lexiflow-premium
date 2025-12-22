@@ -10,8 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, _ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { DocketService } from './docket.service';
 import { CreateDocketEntryDto } from './dto/create-docket-entry.dto';
 import { UpdateDocketEntryDto } from './dto/update-docket-entry.dto';

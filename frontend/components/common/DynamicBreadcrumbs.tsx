@@ -89,10 +89,15 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
       const stored = localStorage.getItem('breadcrumb-recent-paths');
       if (stored) {
         const parsed = JSON.parse(stored);
-        const paths = parsed.map((p: unknown) => ({
-          ...p,
-          timestamp: new Date(p.timestamp)
-        }));
+        const paths = parsed.map((p: unknown) => {
+          if (typeof p === 'object' && p !== null && 'timestamp' in p) {
+            return {
+              ...p,
+              timestamp: new Date(p.timestamp as string)
+            };
+          }
+          return p;
+        });
         setRecentPaths(paths);
       }
     } catch (error) {
@@ -198,7 +203,7 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
   }, [items]);
 
   // Close dropdown when clicking outside
-  useClickOutside(dropdownRef, () => {
+  useClickOutside(dropdownRef as React.RefObject<HTMLElement>, () => {
     setActiveDropdown(null);
     setShowRecentDropdown(false);
   });

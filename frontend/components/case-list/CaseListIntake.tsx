@@ -74,7 +74,7 @@ export const CaseListIntake: React.FC = () => {
   const { mutate: addLead } = useMutation(
       async (leadData: unknown) => {
           const lead = {
-              ...leadData,
+              ...(leadData && typeof leadData === 'object' ? leadData : {}),
               id: crypto.randomUUID(),
               stage: 'New Lead',
               createdAt: new Date().toISOString(),
@@ -115,7 +115,13 @@ export const CaseListIntake: React.FC = () => {
   };
 
   const handleSaveLead = () => {
-      if (!newLead.name || !newLead.contactEmail) {
+      if (typeof newLead !== 'object' || newLead === null) {
+          notifyError('Invalid lead data');
+          return;
+      }
+      const hasName = 'name' in newLead && newLead.name;
+      const hasEmail = 'contactEmail' in newLead && newLead.contactEmail;
+      if (!hasName || !hasEmail) {
           notifyError('Name and email are required');
           return;
       }
@@ -133,15 +139,20 @@ export const CaseListIntake: React.FC = () => {
       </div>
       
       <KanbanBoard>
-        {stages.map((stage, idx) => (
-          <KanbanColumn 
-            key={stage} 
-            title={stage} 
-            count={leads.filter((l: unknown) => l.stage === stage).length}
+        {stages.map((stage, idx) => {
+          const stageLeads = leads.filter((l: unknown) => {
+            return typeof l === 'object' && l !== null && 'stage' in l && l.stage === stage;
+          });
+
+          return (
+          <KanbanColumn
+            key={stage}
+            title={stage}
+            count={stageLeads.length}
             isDragOver={dragOverStage === stage}
             onDrop={() => handleDrop(stage)}
             action={idx === 0 ? (
-              <button 
+              <button
                 onClick={handleAddLead}
                 className={cn(
                   "mt-3 w-full py-2 border-2 border-dashed rounded-lg text-xs font-bold transition-all flex items-center justify-center",
@@ -156,81 +167,91 @@ export const CaseListIntake: React.FC = () => {
               </button>
             ) : undefined}
           >
-            {leads.filter((l: unknown) => l.stage === stage).length === 0 ? (
+            {stageLeads.length === 0 ? (
               <div className={cn("text-center py-8 text-xs", theme.text.tertiary)}>
                 No leads in this stage
               </div>
             ) : (
-              leads.filter((l: unknown) => l.stage === stage).map((lead: unknown) => (
+              stageLeads.map((lead: unknown) => {
+                if (typeof lead !== 'object' || lead === null) return null;
+                const leadId = 'id' in lead ? String(lead.id) : '';
+                const leadClient = 'client' in lead && typeof lead.client === 'string' ? lead.client : '';
+                const leadTitle = 'title' in lead && typeof lead.title === 'string' ? lead.title : '';
+                const leadValue = 'value' in lead && typeof lead.value === 'string' ? lead.value : '$0';
+                const leadDate = 'date' in lead && typeof lead.date === 'string' ? lead.date : '';
+
+                return (
                 <KanbanCard
-                  key={lead.id}
-                  onDragStart={(e) => handleDragStart(e, lead.id)}
-                  isDragging={draggedLeadId === lead.id}
+                  key={leadId}
+                  onDragStart={(e) => handleDragStart(e, leadId)}
+                  isDragging={draggedLeadId === leadId}
                 >
                 <div className="flex justify-between items-start mb-1">
-                  <h4 className={cn("font-bold text-sm line-clamp-1 transition-colors", theme.text.primary, `group-hover:${theme.primary.text}`)}>{lead.client}</h4>
+                  <h4 className={cn("font-bold text-sm line-clamp-1 transition-colors", theme.text.primary, `group-hover:${theme.primary.text}`)}>{leadClient}</h4>
                 </div>
-                <p className={cn("text-xs mb-3 line-clamp-1", theme.text.secondary)}>{lead.title}</p>
+                <p className={cn("text-xs mb-3 line-clamp-1", theme.text.secondary)}>{leadTitle}</p>
                 <div className={cn("flex justify-between items-center text-xs pt-2 border-t", theme.border.default)}>
                   <span className={cn("font-mono font-medium flex items-center", theme.status.success.text)}>
                       <DollarSign className="h-3 w-3 mr-0.5"/>
-                      {lead.value.replace('$','')}
+                      {leadValue.replace('$','')}
                   </span>
                   <span className={cn("flex items-center gap-1", theme.text.tertiary)}>
-                    <Calendar className="h-3 w-3"/> {lead.date}
+                    <Calendar className="h-3 w-3"/> {leadDate}
                   </span>
                 </div>
               </KanbanCard>
-            ))
+                );
+              })
           )}
           </KanbanColumn>
-        ))}
+          );
+        })}
       </KanbanBoard>
 
       {/* Lead Intake Modal */}
       <Modal isOpen={leadModal.isOpen} onClose={leadModal.close} title="New Lead Intake">
         <div className="p-6 space-y-4">
-          <Input 
-            label="Client Name" 
-            placeholder="e.g., John Doe" 
-            value={newLead.name || ''} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead, name: e.target.value, client: e.target.value})} 
+          <Input
+            label="Client Name"
+            placeholder="e.g., John Doe"
+            value={typeof newLead === 'object' && newLead !== null && 'name' in newLead && typeof newLead.name === 'string' ? newLead.name : ''}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead as object, name: e.target.value, client: e.target.value})}
             required
           />
-          <Input 
-            label="Contact Email" 
+          <Input
+            label="Contact Email"
             type="email"
-            placeholder="client@example.com" 
-            value={newLead.contactEmail || ''} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead, contactEmail: e.target.value})} 
+            placeholder="client@example.com"
+            value={typeof newLead === 'object' && newLead !== null && 'contactEmail' in newLead && typeof newLead.contactEmail === 'string' ? newLead.contactEmail : ''}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead as object, contactEmail: e.target.value})}
             required
           />
-          <Input 
-            label="Phone" 
+          <Input
+            label="Phone"
             type="tel"
-            placeholder="(555) 123-4567" 
-            value={newLead.contactPhone || ''} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead, contactPhone: e.target.value})} 
+            placeholder="(555) 123-4567"
+            value={typeof newLead === 'object' && newLead !== null && 'contactPhone' in newLead && typeof newLead.contactPhone === 'string' ? newLead.contactPhone : ''}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead as object, contactPhone: e.target.value})}
           />
-          <Input 
-            label="Matter Title" 
-            placeholder="Brief description of matter" 
-            value={newLead.title || ''} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead, title: e.target.value})} 
+          <Input
+            label="Matter Title"
+            placeholder="Brief description of matter"
+            value={typeof newLead === 'object' && newLead !== null && 'title' in newLead && typeof newLead.title === 'string' ? newLead.title : ''}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead as object, title: e.target.value})}
           />
-          <Input 
-            label="Estimated Value" 
+          <Input
+            label="Estimated Value"
             type="number"
-            placeholder="50000" 
-            value={newLead.value?.replace(/[^0-9]/g, '') || ''} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead, value: `$${e.target.value}`})} 
+            placeholder="50000"
+            value={typeof newLead === 'object' && newLead !== null && 'value' in newLead && typeof newLead.value === 'string' ? newLead.value.replace(/[^0-9]/g, '') : ''}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead as object, value: `$${e.target.value}`})}
           />
-          <TextArea 
-            label="Notes" 
-            rows={4} 
-            placeholder="Initial consultation notes..." 
-            value={newLead.notes || ''} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewLead({...newLead, notes: e.target.value})} 
+          <TextArea
+            label="Notes"
+            rows={4}
+            placeholder="Initial consultation notes..."
+            value={typeof newLead === 'object' && newLead !== null && 'notes' in newLead && typeof newLead.notes === 'string' ? newLead.notes : ''}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewLead({...newLead as object, notes: e.target.value})}
           />
           <div className={cn("flex justify-end gap-2 pt-4 border-t", theme.border.default)}>
             <Button variant="ghost" onClick={leadModal.close}>Cancel</Button>

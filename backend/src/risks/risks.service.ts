@@ -4,7 +4,7 @@ import { Repository, FindOptionsWhere } from 'typeorm';
 import { Risk } from './entities/risk.entity';
 import { CreateRiskDto, RiskImpact, RiskProbability } from './dto/create-risk.dto';
 import { UpdateRiskDto } from './dto/update-risk.dto';
-import { validatePagination, validateSortField, validateSortOrder, validateEnum, applySafeSort } from '../common/utils/query-validation.util';
+import { validatePagination, validateSortField, validateSortOrder} from '../common/utils/query-validation.util';
 import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
 
 @Injectable()

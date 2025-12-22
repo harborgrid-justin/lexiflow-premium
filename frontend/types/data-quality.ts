@@ -1,7 +1,7 @@
 // types/data-quality.ts
 // Data Quality & Governance Types
 
-import { BaseEntity } from './primitives';
+import { BaseEntity, MetadataRecord } from './primitives';
 
 export type SqlCmd = 'SELECT' | 'INSERT' | 'UPDATE' | 'DELETE' | 'ALL';
 export type PermissionLevel = 'None' | 'Read' | 'Write' | 'Full' | 'Own';
@@ -38,7 +38,7 @@ export interface CleansingRule {
   name: string; 
   targetField: string; 
   operation: 'Trim' | 'Uppercase' | 'FormatPhone' | 'FormatDate' | 'RemoveSpecialChars' | 'CustomRegex' | 'Lowercase'; 
-  parameters?: unknown; 
+  parameters?: MetadataRecord; 
   isActive: boolean; 
 }
 

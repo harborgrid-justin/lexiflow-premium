@@ -2,7 +2,7 @@
 // Domain-specific types - split from compatibility.ts
 
 import {
-  BaseEntity, DocumentId, CaseId
+  BaseEntity, DocumentId, CaseId, MetadataRecord, JsonValue
 } from './primitives';
 
 
@@ -23,13 +23,13 @@ export interface Pleading extends Omit<BaseEntity, 'createdBy' | 'updatedBy'> {
   judge?: string; // Backend: varchar
   parties?: string[]; // Backend: simple-array
   summary?: string; // Backend: text
-  customFields?: Record<string, unknown>; // Backend: jsonb
+  customFields?: MetadataRecord; // Backend: jsonb
   tags?: string[]; // Backend: simple-array
   createdBy?: string; // Backend: uuid - overrides BaseEntity.createdBy
   updatedBy?: string; // Backend: uuid - overrides BaseEntity.updatedBy
 }
 
-export interface Clause extends Omit<BaseEntity, 'createdBy' | 'updatedBy'> { 
+export interface Clause extends Omit<BaseEntity, 'createdBy' | 'updatedBy'> {
   // Core fields (aligned with backend Clause entity)
   title: string; // Backend: varchar (required)
   name?: string; // Frontend legacy alias
@@ -37,19 +37,28 @@ export interface Clause extends Omit<BaseEntity, 'createdBy' | 'updatedBy'> {
   description?: string; // Backend: text, nullable
   category: 'general' | 'contract' | 'motion' | 'pleading' | 'discovery' | 'custom' | string; // Backend: enum ClauseCategory
   tags?: string[]; // Backend: simple-array
-  variables?: Record<string, unknown>; // Backend: jsonb
+  variables?: MetadataRecord; // Backend: jsonb
   isActive?: boolean; // Backend: boolean, default true
   usageCount: number; // Backend: int, default 0
   lastUsedAt?: string; // Backend: timestamp
   createdBy?: string; // Backend: uuid - overrides BaseEntity.createdBy
   updatedBy?: string; // Backend: uuid - overrides BaseEntity.updatedBy
-  metadata?: unknown; // Backend field
+  metadata?: MetadataRecord; // Backend field
   // Frontend legacy fields
   version?: number;
   lastUpdated?: string;
   riskRating?: string;
-  versions?: unknown[];
+  versions?: ClauseVersion[];
   embedding?: number[];
+}
+
+export interface ClauseVersion {
+  id?: string;
+  version: number;
+  content: string;
+  author: string;
+  updatedAt: string;
+  createdAt?: string;
 }
 
 export interface PlanSection { id: string; title: string; content: string; status: 'Agreed' | 'Disputed'; opposingComments?: string; }

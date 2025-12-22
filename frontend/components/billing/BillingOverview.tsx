@@ -72,7 +72,12 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
   const realizationData = Array.isArray(rawRealizationData) ? rawRealizationData : [];
   const topClients = Array.isArray(rawTopClients) ? rawTopClients : [];
 
-  const totalWip = wipData.reduce((acc: number, curr: unknown) => acc + (curr.wip || 0), 0);
+  const totalWip = wipData.reduce((acc: number, curr: unknown) => {
+    if (typeof curr === 'object' && curr !== null && 'wip' in curr) {
+      return acc + (typeof curr.wip === 'number' ? curr.wip : 0);
+    }
+    return acc;
+  }, 0);
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -163,9 +168,12 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
                             stroke="none"
                             isAnimationActive={true}
                         >
-                            {realizationData.map((e: unknown, index: number) => (
-                                <Cell key={`cell-${index}`} fill={e.name === 'Billed' ? chartTheme.colors.success : chartTheme.colors.danger} />
-                            ))}
+                            {realizationData.map((e: unknown, index: number) => {
+                                const name = typeof e === 'object' && e !== null && 'name' in e ? String(e.name) : '';
+                                return (
+                                    <Cell key={`cell-${index}`} fill={name === 'Billed' ? chartTheme.colors.success : chartTheme.colors.danger} />
+                                );
+                            })}
                         </Pie>
                         <Tooltip contentStyle={chartTheme.tooltipStyle}/>
                         <Legend verticalAlign="bottom" height={36} iconType="circle"/>
@@ -195,27 +203,35 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
             </h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x dark:divide-slate-700 divide-slate-200">
-             {topClients.map((client: unknown) => (
-                 <div 
-                    key={client.id} 
+             {topClients.map((client: unknown) => {
+                if (typeof client !== 'object' || client === null) return null;
+                const clientId = 'id' in client ? String(client.id) : '';
+                const clientName = 'name' in client && typeof client.name === 'string' ? client.name : '';
+                const clientIndustry = 'industry' in client && typeof client.industry === 'string' ? client.industry : '';
+                const clientTotalBilled = 'totalBilled' in client && typeof client.totalBilled === 'number' ? client.totalBilled : 0;
+
+                return (
+                 <div
+                    key={clientId}
                     className={cn("flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer")}
                     onClick={() => onNavigate && onNavigate('accounts')}
                  >
                     <div className="flex items-center gap-3">
                         <div className={cn("h-10 w-10 rounded-full flex items-center justify-center font-bold text-sm bg-blue-100 text-blue-700")}>
-                            {client.name.substring(0, 2)}
+                            {clientName.substring(0, 2)}
                         </div>
                         <div>
-                            <p className={cn("font-bold text-sm", theme.text.primary)}>{client.name}</p>
-                            <p className={cn("text-xs", theme.text.secondary)}>{client.industry}</p>
+                            <p className={cn("font-bold text-sm", theme.text.primary)}>{clientName}</p>
+                            <p className={cn("text-xs", theme.text.secondary)}>{clientIndustry}</p>
                         </div>
                     </div>
                     <div className="text-right">
-                        <p className={cn("font-mono font-bold text-sm", theme.text.primary)}><Currency value={client.totalBilled} hideSymbol={false}/></p>
+                        <p className={cn("font-mono font-bold text-sm", theme.text.primary)}><Currency value={clientTotalBilled} hideSymbol={false}/></p>
                         <span className={cn("text-[10px] font-bold text-green-600")}>Active</span>
                     </div>
                  </div>
-             ))}
+                );
+             })}
         </div>
       </div>
     </div>

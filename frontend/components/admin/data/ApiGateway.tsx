@@ -12,7 +12,7 @@ import { encodeHtmlEntities } from '../../../utils/sanitize';
 import { Badge } from '../../common/Badge';
 
 // Internal CodeBlock component for syntax highlighting
-function CodeBlock({ code }: { code: string }): JSX.Element {
+function CodeBlock({ code }: { code: string }): React.JSX.Element {
     const { theme, mode } = useTheme();
 
     // First encode HTML entities to prevent XSS, then apply syntax highlighting
@@ -75,7 +75,7 @@ function MethodCard({ method }: { method: ApiMethod }) {
     );
 }
 
-export function ApiGateway(): JSX.Element {
+export function ApiGateway(): React.JSX.Element {
     const { theme } = useTheme();
     const [selectedService, setSelectedService] = useState<ApiServiceSpec | null>(null);
 

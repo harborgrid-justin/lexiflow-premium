@@ -82,9 +82,6 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
           return { updatedItem, chainedLog };
       },
       {
-          // Exponential backoff retry: 3 attempts, max 30s delay
-          retry: 3,
-          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
           // Optimistic update: immediately show new event in UI
           onMutate: async (payload) => {
               // Cancel outgoing refetches
@@ -113,7 +110,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
                   onCustodyUpdate(enrichedEvent as unknown as ChainOfCustodyEvent); 
               }
               notify.success("Custody log updated and immutably recorded.");
-              setIsModalOpen(false);
+              custodyModal.close();
               setNewEvent({ date: new Date().toISOString().split('T')[0], action: CustodyActionType.TRANSFER_TO_STORAGE, actor: 'Current User' });
               setIsSigned(false);
           },
@@ -167,7 +164,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
           <h3 className={cn("font-bold", theme.text.primary)}>Chain of Custody Log</h3>
           <p className={cn("text-sm", theme.text.secondary)}>Immutable audit trail of evidence handling.</p>
         </div>
-        <Button variant="primary" icon={Plus} onClick={() => setIsModalOpen(true)}>Log New Event</Button>
+        <Button variant="primary" icon={Plus} onClick={custodyModal.open}>Log New Event</Button>
       </div>
 
       <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
@@ -201,7 +198,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
         </div>
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Log Custody Event" size="sm">
+      <Modal isOpen={custodyModal.isOpen} onClose={custodyModal.close} title="Log Custody Event" size="sm">
         <div className="p-6 space-y-4">
           <Input 
             label="Date of Event" 
@@ -224,7 +221,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
           <TextArea 
             label="Notes (Optional)" 
             value={newEvent.notes || ''} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({...newEvent, notes: e.target.value})} 
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewEvent({...newEvent, notes: e.target.value})} 
             rows={3}
             placeholder="Additional details regarding the transfer/event..."
           />
@@ -247,7 +244,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
           />
           
           <div className={cn("pt-4 flex justify-end gap-3 border-t mt-4", theme.border.default)}>
-            <Button variant="secondary" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+            <Button variant="secondary" onClick={custodyModal.close}>Cancel</Button>
             <Button variant="primary" onClick={handleSaveEvent} disabled={isUpdating || !isSigned}>
               {isUpdating ? 'Logging...' : 'Save Event'}
             </Button>

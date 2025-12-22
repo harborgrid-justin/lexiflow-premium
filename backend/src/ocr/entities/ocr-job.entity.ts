@@ -33,7 +33,7 @@ export class OCRJob {
   extractedText!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 
   @Column({ type: 'int', nullable: true })
   pageCount!: number;

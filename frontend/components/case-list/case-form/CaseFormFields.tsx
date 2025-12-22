@@ -62,7 +62,7 @@ export const CaseFormFields: React.FC<CaseFormFieldsProps> = ({ formData, setFor
           <select 
             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
             value={formData.matterType}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, matterType: e.target.value as MatterType})}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, matterType: e.target.value as MatterType})}
           >
             <option value="Litigation">Litigation</option>
             <option value="Appeal">Appeal</option>
@@ -101,7 +101,7 @@ export const CaseFormFields: React.FC<CaseFormFieldsProps> = ({ formData, setFor
           label="Case Summary / Description" 
           rows={isPreFiling ? 11 : 3}
           value={formData.description}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, description: e.target.value})}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, description: e.target.value})}
           placeholder="Brief overview of the matter..."
         />
       </div>

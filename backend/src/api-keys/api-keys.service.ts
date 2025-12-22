@@ -112,7 +112,7 @@ export class ApiKeysService {
    * Revoke (delete) an API key
    */
   async revoke(id: string, userId: string): Promise<void> {
-    const apiKey = await this.findOne(id, userId);
+    await this.findOne(id, userId);
     this.apiKeys.delete(id);
   }
 

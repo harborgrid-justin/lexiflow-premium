@@ -49,9 +49,9 @@ export const ClientDirectory: React.FC<ClientDirectoryProps> = ({ clients: propC
       : [];
 
   const filteredClients = useMemo(() => {
-    return clientsToRender.filter(c => 
-        c.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        c.industry.toLowerCase().includes(searchTerm.toLowerCase())
+    return clientsToRender.filter(c =>
+        (c.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (c.industry || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [clientsToRender, searchTerm]);
 
@@ -106,7 +106,7 @@ export const ClientDirectory: React.FC<ClientDirectoryProps> = ({ clients: propC
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <div className={cn("h-8 w-8 rounded-full flex items-center justify-center font-bold text-xs border", theme.primary.light, theme.primary.text, theme.primary.border)}>
-                      {client.name.substring(0, 2)}
+                      {(client.name || '').substring(0, 2)}
                     </div>
                     <span className={cn("font-medium", theme.text.primary)}>{client.name}</span>
                   </div>
@@ -115,7 +115,7 @@ export const ClientDirectory: React.FC<ClientDirectoryProps> = ({ clients: propC
                 <TableCell>
                   <Badge variant={client.status === 'Active' ? 'success' : 'neutral'}>{client.status}</Badge>
                 </TableCell>
-                <TableCell>{client.matters.length}</TableCell>
+                <TableCell>{(client.matters || []).length}</TableCell>
                 <TableCell><Currency value={client.totalBilled} /></TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">

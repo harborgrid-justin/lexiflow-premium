@@ -54,7 +54,7 @@ export class BillingRepository extends Repository<TimeEntry> {
          // Aggregate WIP by Client
          const caseToClientMap: Record<string, string> = {};
          clients.forEach(c => {
-             c.matters.forEach(m => {
+             (c.matters || []).forEach(m => {
                  caseToClientMap[m] = c.id;
              });
          });
@@ -70,15 +70,15 @@ export class BillingRepository extends Repository<TimeEntry> {
          const stats = Object.keys(wipMap).map(clientId => {
              const client = clients.find(c => c.id === clientId);
              return {
-                 name: client ? client.name.split(' ')[0] : 'Unknown',
+                 name: client ? (client.name || '').split(' ')[0] : 'Unknown',
                  wip: wipMap[clientId],
                  billed: client ? client.totalBilled : 0
              };
          });
          if (stats.length === 0) {
               return clients.slice(0, 3).map(c => ({
-                name: c.name.split(' ')[0],
-                wip: 0, 
+                name: (c.name || '').split(' ')[0],
+                wip: 0,
                 billed: c.totalBilled
              }));
          }
@@ -87,8 +87,8 @@ export class BillingRepository extends Repository<TimeEntry> {
     
     async getRealizationStats(): Promise<unknown> {
         const invoices = await this.getInvoices();
-        const totalBilled = invoices.reduce((acc, i) => acc + i.amount, 0);
-        const totalCollected = invoices.filter(i => i.status === 'Paid').reduce((acc, i) => acc + i.amount, 0);
+        const totalBilled = invoices.reduce((acc, i) => acc + (i.amount || 0), 0);
+        const totalCollected = invoices.filter(i => i.status === 'Paid').reduce((acc, i) => acc + (i.amount || 0), 0);
         
         const rate = totalBilled > 0 ? Math.round((totalCollected / totalBilled) * 100) : 0;
         return [

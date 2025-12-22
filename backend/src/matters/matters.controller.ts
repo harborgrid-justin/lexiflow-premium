@@ -6,13 +6,12 @@ import {
   Patch,
   Param,
   Delete,
-  Query,
-  UseGuards,
+  Query, UseGuards,
   ValidationPipe,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse }from '@nestjs/swagger';
+import { ApiResponse }from '@nestjs/swagger';
 import { MattersService } from './matters.service';
 import { CreateMatterDto } from './dto/create-matter.dto';
 import { UpdateMatterDto } from './dto/update-matter.dto';

@@ -161,3 +161,5 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
 };
 
 
+
+export default EntityDirector;

@@ -4,9 +4,6 @@ import {
   ManyToOne,
   JoinColumn,
   Index,
-  CreateDateColumn,
-  UpdateDateColumn,
-  VersionColumn,
 } from 'typeorm';
 import { BaseEntity } from '../../../common/base/base.entity';
 import { User } from '../../../users/entities/user.entity';
@@ -50,22 +47,22 @@ export class TimeEntry extends BaseEntity {
   date!: Date;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  duration: number; // in hours
+  duration!: number; // in hours
 
   @Column({ type: 'text' })
   description!: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  activity: string; // e.g., "Research", "Court Appearance", "Client Meeting"
+  activity!: string; // e.g., "Research", "Court Appearance", "Client Meeting"
 
   @Column({ type: 'varchar', length: 20, nullable: true })
-  ledesCode: string; // LEDES billing code
+  ledesCode!: string; // LEDES billing code
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  rate: number; // hourly rate
+  rate!: number; // hourly rate
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  total: number; // duration * rate
+  total!: number; // duration * rate
 
   @Column({
     type: 'enum',
@@ -80,7 +77,7 @@ export class TimeEntry extends BaseEntity {
 
   @Column({ name: 'invoice_id', type: 'uuid', nullable: true })
   @Index()
-  invoiceId: string; // Links time entry to invoice when billed
+  invoiceId!: string; // Links time entry to invoice when billed
 
   @Column({ name: 'rate_table_id', type: 'uuid', nullable: true })
   rateTableId!: string;
@@ -92,7 +89,7 @@ export class TimeEntry extends BaseEntity {
   taskCode!: string;
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  discount: number; // percentage
+  discount!: number; // percentage
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   discountedTotal!: number;

@@ -39,7 +39,7 @@ export const ColumnEditorModal: React.FC<ColumnEditorModalProps> = ({
                 <Input label="Column Name" value={data.name || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData({...data, name: e.target.value})} />
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Data Type</label>
-                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} value={data.type || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setData({...data, type: e.target.value})}>
+                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} value={data.type || ''} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setData({...data, type: e.target.value})}>
                         {dataTypes.map(dt => <option key={dt} value={dt}>{dt}</option>)}
                     </select>
                 </div>

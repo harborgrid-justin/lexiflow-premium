@@ -1,13 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable, Logger} from '@nestjs/common';
 import {
   OutcomePredictionDto,
   AnalyzeOutcomeDto,
   PredictedOutcome,
   ConfidenceLevel,
-  InfluencingFactor,
-  RiskFactor,
   SimilarCaseDto,
   PredictionAccuracyDto,
 } from './dto/outcome-predictions.dto';
@@ -153,7 +149,7 @@ export class OutcomePredictionsService {
    * Analyze case and generate new prediction
    */
   async analyzeCase(dto: AnalyzeOutcomeDto): Promise<OutcomePredictionDto> {
-    const { caseId, includeDetails, similarCasesLimit, additionalFactors } = dto;
+    const { caseId, includeDetails: _includeDetails, similarCasesLimit: _similarCasesLimit, additionalFactors: _additionalFactors } = dto;
 
     this.logger.log(`Analyzing case ${caseId} for outcome prediction`);
 
@@ -204,7 +200,7 @@ export class OutcomePredictionsService {
   /**
    * Get similar historical cases
    */
-  async getSimilarCases(caseId: string, limit: number = 10): Promise<SimilarCaseDto[]> {
+  async getSimilarCases(_caseId: string, _limit: number = 10): Promise<SimilarCaseDto[]> {
     try {
       // Mock implementation - would use cosine similarity or other ML techniques
       /*
@@ -363,47 +359,5 @@ export class OutcomePredictionsService {
       this.logger.error(`Error getting prediction accuracy: ${message}`, stack);
       throw error;
     }
-  }
-
-  /**
-   * Extract features from case for ML model
-   */
-  private extractFeatures(caseEntity: any, additionalFactors?: string[]): any {
-    // This would extract relevant features for the ML model
-    return {
-      caseAge: 120,
-      documentCount: 234,
-      motionCount: 12,
-      depositionCount: 5,
-      judgeSettlementRate: 0.65,
-      practiceArea: 'contract',
-      damages: 1000000,
-      additionalFactors: additionalFactors || [],
-    };
-  }
-
-  /**
-   * Find similar historical cases
-   */
-  private async findSimilarCases(caseEntity: any, limit: number): Promise<any[]> {
-    // This would use ML techniques to find similar cases
-    return [];
-  }
-
-  /**
-   * Run the prediction ML model
-   */
-  private async runPredictionModel(features: any, similarCases: any[]): Promise<any> {
-    // This would run the actual ML model
-    return {};
-  }
-
-  /**
-   * Check if cached prediction is still valid
-   */
-  private isCacheValid(prediction: any): boolean {
-    const cacheAge = Date.now() - prediction.createdAt.getTime();
-    const maxCacheAge = 7 * 24 * 60 * 60 * 1000; // 7 days
-    return cacheAge < maxCacheAge;
   }
 }

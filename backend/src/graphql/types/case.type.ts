@@ -26,13 +26,13 @@ registerEnumType(CaseCategory, { name: 'CaseCategory' });
 @ObjectType()
 export class PartyType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  name: string;
+  name!: string;
 
   @Field()
-  role: string;
+  role!: string;
 
   @Field({ nullable: true })
   email?: string;
@@ -41,118 +41,118 @@ export class PartyType {
   phone?: string;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 
   @Field(() => Date)
-  updatedAt: Date;
+  updatedAt!: Date;
 }
 
 @ObjectType()
 export class CaseTeamMemberType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field(() => UserType)
-  user: UserType;
+  user!: UserType;
 
   @Field()
-  role: string;
+  role!: string;
 
   @Field({ nullable: true })
   billable?: boolean;
 
   @Field(() => Date)
-  joinedAt: Date;
+  joinedAt!: Date;
 }
 
 @ObjectType()
 export class CasePhaseType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  name: string;
+  name!: string;
 
   @Field()
-  status: string;
+  status!: string;
 
   @Field({ nullable: true })
   description?: string;
 
   @Field(() => Date)
-  startDate: Date;
+  startDate!: Date;
 
   @Field(() => Date, { nullable: true })
   endDate?: Date;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 }
 
 @ObjectType()
 export class MotionType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  title: string;
+  title!: string;
 
   @Field()
-  type: string;
+  type!: string;
 
   @Field()
-  status: string;
+  status!: string;
 
   @Field({ nullable: true })
   description?: string;
 
   @Field(() => Date)
-  filedDate: Date;
+  filedDate!: Date;
 
   @Field(() => Date, { nullable: true })
   hearingDate?: Date;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 }
 
 @ObjectType()
 export class DocketEntryType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  entryNumber: string;
+  entryNumber!: string;
 
   @Field()
-  description: string;
+  description!: string;
 
   @Field(() => Date)
-  filedDate: Date;
+  filedDate!: Date;
 
   @Field({ nullable: true })
   filedBy?: string;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 }
 
 @ObjectType()
 export class CaseType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  caseNumber: string;
+  caseNumber!: string;
 
   @Field()
-  title: string;
+  title!: string;
 
   @Field(() => CaseCategory)
-  category: CaseCategory;
+  category!: CaseCategory;
 
   @Field(() => CaseStatus)
-  status: CaseStatus;
+  status!: CaseStatus;
 
   @Field({ nullable: true })
   description?: string;
@@ -188,72 +188,72 @@ export class CaseType {
   documents?: DocumentType[];
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 
   @Field(() => Date)
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Field(() => UserType)
-  createdBy: UserType;
+  createdBy!: UserType;
 }
 
 @ObjectType()
 export class CaseEdge {
   @Field(() => CaseType)
-  node: CaseType;
+  node!: CaseType;
 
   @Field()
-  cursor: string;
+  cursor!: string;
 }
 
 @ObjectType()
 export class CaseConnection {
   @Field(() => [CaseEdge])
-  edges: CaseEdge[];
+  edges!: CaseEdge[];
 
   @Field(() => PageInfo)
-  pageInfo: PageInfo;
+  pageInfo!: PageInfo;
 
   @Field()
-  totalCount: number;
+  totalCount!: number;
 }
 
 // Define metric classes first since they are used by CaseMetrics
 @ObjectType()
 export class CaseTypeMetric {
   @Field()
-  type: string;
+  type!: string;
 
   @Field()
-  count: number;
+  count!: number;
 }
 
 @ObjectType()
 export class CaseStatusMetric {
   @Field()
-  status: string;
+  status!: string;
 
   @Field()
-  count: number;
+  count!: number;
 }
 
 @ObjectType()
 export class CaseMetrics {
   @Field()
-  totalCases: number;
+  totalCases!: number;
 
   @Field()
-  activeCases: number;
+  activeCases!: number;
 
   @Field()
-  closedCases: number;
+  closedCases!: number;
 
   @Field()
-  pendingCases: number;
+  pendingCases!: number;
 
   @Field(() => [CaseTypeMetric])
-  byType: CaseTypeMetric[];
+  byType!: CaseTypeMetric[];
 
   @Field(() => [CaseStatusMetric])
-  byStatus: CaseStatusMetric[];
+  byStatus!: CaseStatusMetric[];
 }

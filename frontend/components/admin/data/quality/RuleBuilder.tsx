@@ -118,7 +118,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                 <div className="space-y-6 max-w-2xl">
                     <div className="grid grid-cols-1 gap-6">
                         <Input label="Rule Name" value={rule.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRule({...rule, name: e.target.value})} placeholder="e.g. Email Format Validation" />
-                        <TextArea label="Description" value={rule.description} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRule({...rule, description: e.target.value})} rows={2} placeholder="Describe the business logic..." />
+                        <TextArea label="Description" value={rule.description} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setRule({...rule, description: e.target.value})} rows={2} placeholder="Describe the business logic..." />
                         
                         <div className="grid grid-cols-2 gap-6">
                             <div>
@@ -145,7 +145,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                                 <select 
                                     className={cn("w-full p-2 border rounded-md text-sm outline-none", theme.border.default, theme.surface.default, theme.text.primary)}
                                     value={rule.action}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRule({...rule, action: e.target.value as any})}
+                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setRule({...rule, action: e.target.value as any})}
                                 >
                                     <option value="Block">Block Operation</option>
                                     <option value="Warn">Warning Only</option>
@@ -174,7 +174,7 @@ export const RuleBuilder: React.FC<RuleBuilderProps> = ({ initialRule, onSave, o
                                     <select 
                                         className={cn("w-32 p-2 text-sm border rounded", theme.border.default, theme.surface.default, theme.text.primary)}
                                         value={cond.operator}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateCondition(cond.id, 'operator', e.target.value)}
+                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => updateCondition(cond.id, 'operator', e.target.value)}
                                     >
                                         <option value="=">=</option>
                                         <option value="!=">!=</option>

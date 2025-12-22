@@ -1,6 +1,6 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like, In } from 'typeorm';
+import { Repository} from 'typeorm';
 import * as MasterConfig from '../config/master.config';
 import { KnowledgeArticle } from './entities/knowledge-article.entity';
 import { CreateKnowledgeArticleDto, UpdateKnowledgeArticleDto, QueryKnowledgeDto } from './dto';

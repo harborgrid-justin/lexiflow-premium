@@ -136,7 +136,7 @@ const BillingInvoicesComponent: React.FC = () => {
 
   const filteredInvoices = useMemo(() => {
       return invoices.filter(inv => {
-        const matchesSearch = inv.client.toLowerCase().includes(searchTerm.toLowerCase()) || inv.id.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesSearch = (inv.client || '').toLowerCase().includes(searchTerm.toLowerCase()) || inv.id.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesStatus = filterStatus === 'All' || inv.status === filterStatus;
         return matchesSearch && matchesStatus;
       });
@@ -162,7 +162,7 @@ const BillingInvoicesComponent: React.FC = () => {
                         <select 
                             className={cn("bg-transparent text-sm outline-none border-none cursor-pointer", theme.text.primary)}
                             value={filterStatus}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterStatus(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterStatus(e.target.value)}
                         >
                             <option value="All">All Statuses</option>
                             <option value="Draft">Draft</option>

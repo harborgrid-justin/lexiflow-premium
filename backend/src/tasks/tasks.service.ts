@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere, Like, In } from 'typeorm';
+import { Repository, FindOptionsWhere} from 'typeorm';
 import { Task } from './entities/task.entity';
 import { CreateTaskDto, TaskStatus } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
-import { validateSortField, validateSortOrder, sanitizeSearchQuery } from '../common/utils/query-validation.util';
+import { sanitizeSearchQuery } from '../common/utils/query-validation.util';
 
 @Injectable()
 export class TasksService {
@@ -51,7 +51,8 @@ export class TasksService {
     }
 
     Object.keys(where).forEach(key => {
-      queryBuilder.andWhere(`task.${key} = :${key}`, { [key]: where[key] });
+      const typedKey = key as keyof FindOptionsWhere<Task>;
+      queryBuilder.andWhere(`task.${key} = :${key}`, { [key]: where[typedKey] });
     });
 
     const [data, total] = await queryBuilder

@@ -98,7 +98,7 @@ export class Pleading extends BaseEntity {
   summary!: string;
 
   @Column({ name: 'custom_fields', type: 'jsonb', nullable: true })
-  customFields!: Record<string, any>;
+  customFields!: Record<string, unknown>;
 
   @Column({ type: 'simple-array', nullable: true })
   tags!: string[];

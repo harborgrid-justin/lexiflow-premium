@@ -38,8 +38,8 @@ export const ActiveWorkstreams: React.FC<ActiveWorkstreamsProps> = ({ activeProj
         </div>
         <div className="p-4 grid grid-cols-1 gap-3">
             {activeProjects.map(proj => {
-                const total = proj.tasks.length;
-                const done = proj.tasks.filter(t => t.status === 'Done').length;
+                const total = (proj.tasks || []).length;
+                const done = (proj.tasks || []).filter(t => t.status === 'Done').length;
                 const pct = total === 0 ? 0 : Math.round((done / total) * 100);
                 return (
                     <div key={proj.id} className={cn("flex items-center gap-4 p-3 border rounded-lg", theme.surface.default, theme.border.default)}>
@@ -56,7 +56,7 @@ export const ActiveWorkstreams: React.FC<ActiveWorkstreamsProps> = ({ activeProj
                                 aria-valuemax={100}
                                 aria-label={`Progress for ${proj.title}`}
                             >
-                                {/* eslint-disable-next-line react/forbid-dom-props -- Dynamic width required for progress */}
+                                { }
                                 <div className={cn("h-1.5 rounded-full", theme.primary.DEFAULT)} style={{ width: `${pct}%` }}></div>
                             </div>
                         </div>

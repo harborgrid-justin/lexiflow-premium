@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between, In } from 'typeorm';
+import { Repository, In, IsNull } from 'typeorm';
 import { TimeEntry, TimeEntryStatus } from './entities/time-entry.entity';
 import { CreateTimeEntryDto } from './dto/create-time-entry.dto';
 import { UpdateTimeEntryDto } from './dto/update-time-entry.dto';
@@ -126,7 +126,7 @@ export class TimeEntriesService {
 
   async findOne(id: string): Promise<TimeEntry> {
     const timeEntry = await this.timeEntryRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!timeEntry) {
@@ -138,14 +138,14 @@ export class TimeEntriesService {
 
   async findByCase(caseId: string): Promise<TimeEntry[]> {
     return await this.timeEntryRepository.find({
-      where: { caseId, deletedAt: null },
+      where: { caseId, deletedAt: IsNull() },
       order: { date: 'DESC' },
     });
   }
 
   async findByUser(userId: string): Promise<TimeEntry[]> {
     return await this.timeEntryRepository.find({
-      where: { userId, deletedAt: null },
+      where: { userId, deletedAt: IsNull() },
       order: { date: 'DESC' },
     });
   }
@@ -198,7 +198,7 @@ export class TimeEntriesService {
         caseId,
         status: In([TimeEntryStatus.APPROVED, TimeEntryStatus.SUBMITTED]),
         billable: true,
-        deletedAt: null,
+        deletedAt: IsNull(),
       },
       order: { date: 'ASC' },
     });
@@ -239,7 +239,7 @@ export class TimeEntriesService {
 
   async approveBulk(ids: string[], approvedBy: string): Promise<{ success: boolean; approved: number }> {
     const entries = await this.timeEntryRepository.find({
-      where: { id: In(ids), deletedAt: null },
+      where: { id: In(ids), deletedAt: IsNull() },
     });
 
     if (entries.length === 0) {
@@ -266,7 +266,7 @@ export class TimeEntriesService {
     billedBy: string,
   ): Promise<{ success: boolean; billed: number }> {
     const entries = await this.timeEntryRepository.find({
-      where: { id: In(ids), deletedAt: null },
+      where: { id: In(ids), deletedAt: IsNull() },
     });
 
     if (entries.length === 0) {
@@ -290,7 +290,7 @@ export class TimeEntriesService {
 
   async deleteBulk(ids: string[]): Promise<{ success: boolean; deleted: number }> {
     const entries = await this.timeEntryRepository.find({
-      where: { id: In(ids), deletedAt: null },
+      where: { id: In(ids), deletedAt: IsNull() },
     });
 
     if (entries.length === 0) {

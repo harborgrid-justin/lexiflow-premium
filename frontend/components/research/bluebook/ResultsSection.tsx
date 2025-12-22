@@ -47,7 +47,7 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({
           <Filter className="h-4 w-4 text-slate-500" />
           <select
             value={filters.type}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onFiltersChange({ ...filters, type: e.target.value as BluebookCitationType | 'ALL' })}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onFiltersChange({ ...filters, type: e.target.value as BluebookCitationType | 'ALL' })}
             title="Filter citations by type"
             className={cn(
               "px-3 py-1.5 rounded border text-sm",

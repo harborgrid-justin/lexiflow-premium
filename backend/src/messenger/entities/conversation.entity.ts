@@ -68,7 +68,7 @@ export class Conversation extends BaseEntity {
   description!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 
   @Column({ name: 'message_count', type: 'int', default: 0 })
   messageCount!: number;

@@ -42,14 +42,14 @@ export * from './data/repositories/WorkflowRepository';
 export * from './domain/AdminDomain';
 export * from './domain/AnalyticsDomain';
 export * from './domain/BackupDomain';
-export * from './domain/BillingDomain';
+// export * from './domain/BillingDomain';  // Removed - BillingRepository duplicate with ./data/repositories/BillingRepository, BILLING_QUERY_KEYS duplicate with ./api/billing-api
 export * from './domain/CaseDomain';
 export * from './domain/CommunicationDomain';
 export * from './domain/ComplianceDomain';
 export * from './domain/CRMDomain';
 export * from './domain/DataCatalogDomain';
 export * from './domain/DataQualityDomain';
-export * from './domain/DocketDomain';
+export { DocketEntryWithVersion, DocketRepository } from './domain/DocketDomain';  // Explicit export to avoid VersionConflictError duplicate with PleadingRepository
 export * from './domain/JurisdictionDomain';
 export * from './domain/KnowledgeDomain';
 export * from './domain/MarketingDomain';
@@ -60,8 +60,20 @@ export * from './domain/SecurityDomain';
 // ==================== BACKEND API SERVICES ====================
 // Consolidated backend API services (BACKEND-FIRST as of 2025-12-18)
 export * from './infrastructure/apiClient';
-export * from './api';
-export * from './integration/apiConfig';
+// NOTE: Commented out full API barrel export to avoid QUERY_KEYS duplicates, Notification type conflicts, Filter type conflicts, and CalendarEvent conflicts
+// Individual API services can be imported directly from '@/services/api' when needed
+// export * from './api';
+export { api } from './api';  // Export the consolidated api object
+export {
+  isBackendApiEnabled,
+  isIndexedDBMode,
+  getDataMode,
+  forceBackendMode,
+  enableLegacyIndexedDB,
+  isProduction,
+  getBackendUrl,
+  logApiConfig
+} from './integration/apiConfig';
 
 // ==================== INTEGRATION & ORCHESTRATION ====================
 export * from './integration/integrationOrchestrator';
@@ -85,7 +97,7 @@ export * from './infrastructure/collaborationService';
 // ==================== SEARCH SERVICES ====================
 export * from './search/searchService';
 export * from './search/searchWorker';
-export * from './search/graphValidationService';
+export { GraphValidationService } from './search/graphValidationService';  // Explicit export to avoid ValidationError conflict with bluebook types
 
 // ==================== WORKERS ====================
 export * from './workers/cryptoWorker';

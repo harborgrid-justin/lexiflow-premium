@@ -71,7 +71,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
       {
           key: 's',
           cmd: true,
-          callback: (e) => {
+          callback: (e: KeyboardEvent) => {
               e.preventDefault();
               if (isOpen) {
                   handleSend();
@@ -180,7 +180,6 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
           recipient: formData.recipient,
           preview: body.substring(0, 150) + (body.length > 150 ? '...' : ''),
           hasAttachment: attachments.length > 0,
-          attachmentIds: attachments.map(a => a.id),
           status: CommunicationStatus.SENT,
           isPrivileged: formData.isPrivileged || false
       };
@@ -189,7 +188,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
       const validation = validateCommunicationItemSafe(newMessage);
       if (!validation.success) {
           const errors: Record<string, string> = {};
-          validation.error.errors.forEach(err => {
+          validation.error.issues.forEach(err => {
               errors[err.path[0] as string] = err.message;
           });
           setValidationErrors(errors);
@@ -214,7 +213,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                         title="Select message type"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.type}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, type: e.target.value as CommunicationType})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, type: e.target.value as CommunicationType})}
                     >
                         <option value="Email">Email</option>
                         <option value="Letter">Formal Letter</option>
@@ -228,7 +227,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                         title="Select case reference"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.caseId || ''}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, caseId: e.target.value})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, caseId: e.target.value})}
                     >
                         <option value="">Select Case...</option>
                         {(Array.isArray(cases) ? cases : []).map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
@@ -260,7 +259,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                 <textarea 
                     className={cn("w-full p-4 border rounded-lg text-sm font-serif h-48 resize-none outline-none focus:ring-2 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                     value={body}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBody(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setBody(e.target.value)}
                     placeholder="Type your message here..."
                 />
             </div>

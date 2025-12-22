@@ -140,7 +140,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
             <select 
                 className={cn("text-sm border rounded-md px-2 py-1.5 outline-none flex-1 sm:flex-none", theme.surface.highlight, theme.border.default, theme.text.primary)}
                 value={groupBy}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroupBy(e.target.value as GroupByOption)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setGroupBy(e.target.value as GroupByOption)}
                 aria-label="Group parties by"
             >
                 <option value="none">No Grouping</option>
@@ -246,7 +246,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
               <div className="grid grid-cols-2 gap-4">
                   <div>
                       <label htmlFor="partyRole" className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Role</label>
-                      <select id="partyRole" aria-label="Party Role" className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} value={currentParty.role || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, role: e.target.value})}>
+                      <select id="partyRole" aria-label="Party Role" className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} value={currentParty.role || ''} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCurrentParty({...currentParty, role: e.target.value})}>
                           <option value="">Select Role...</option>
                           <option value="Plaintiff">Plaintiff</option>
                           <option value="Defendant">Defendant</option>
@@ -263,7 +263,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                         aria-label="Party Type"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={currentParty.type || 'Individual'}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, type: e.target.value as 'Individual' | 'Corporation' | 'Government'})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCurrentParty({...currentParty, type: e.target.value as 'Individual' | 'Corporation' | 'Government'})}
                       >
                           <option value="Individual">Individual</option>
                           <option value="Corporation">Corporation</option>
@@ -294,7 +294,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                         aria-label="Link to Organization"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} 
                         value={currentParty.linkedOrgId || ''} 
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, linkedOrgId: (e.target.value || undefined) as any})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCurrentParty({...currentParty, linkedOrgId: (e.target.value || undefined) as any})}
                       >
                           <option value="">No Link</option>
                           {orgs.map(org => (

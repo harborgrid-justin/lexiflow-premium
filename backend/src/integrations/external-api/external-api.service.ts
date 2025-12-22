@@ -29,7 +29,7 @@ export class ExternalApiService {
       {
         name: 'PACER',
         enabled: !!process.env.PACER_USERNAME,
-        status: !!process.env.PACER_USERNAME ? 'connected' : 'disconnected',
+        status: process.env.PACER_USERNAME ? 'connected' : 'disconnected',
         lastSync: new Date(),
         config: {
           baseUrl: process.env.PACER_BASE_URL,
@@ -39,7 +39,7 @@ export class ExternalApiService {
       {
         name: 'Google Calendar',
         enabled: !!process.env.GOOGLE_CALENDAR_API_KEY,
-        status: !!process.env.GOOGLE_CALENDAR_API_KEY ? 'connected' : 'disconnected',
+        status: process.env.GOOGLE_CALENDAR_API_KEY ? 'connected' : 'disconnected',
         config: {
           clientId: process.env.GOOGLE_CALENDAR_CLIENT_ID ? '***' : null,
         },
@@ -47,7 +47,7 @@ export class ExternalApiService {
       {
         name: 'Outlook Calendar',
         enabled: !!process.env.OUTLOOK_CLIENT_ID,
-        status: !!process.env.OUTLOOK_CLIENT_ID ? 'connected' : 'disconnected',
+        status: process.env.OUTLOOK_CLIENT_ID ? 'connected' : 'disconnected',
         config: {
           clientId: process.env.OUTLOOK_CLIENT_ID ? '***' : null,
         },
@@ -55,7 +55,7 @@ export class ExternalApiService {
       {
         name: 'AWS S3',
         enabled: !!process.env.AWS_ACCESS_KEY_ID,
-        status: !!process.env.AWS_ACCESS_KEY_ID ? 'connected' : 'disconnected',
+        status: process.env.AWS_ACCESS_KEY_ID ? 'connected' : 'disconnected',
         config: {
           region: process.env.AWS_REGION,
           bucket: process.env.AWS_S3_BUCKET,
@@ -64,7 +64,7 @@ export class ExternalApiService {
       {
         name: 'Elasticsearch',
         enabled: !!process.env.ELASTICSEARCH_NODE,
-        status: !!process.env.ELASTICSEARCH_NODE ? 'connected' : 'disconnected',
+        status: process.env.ELASTICSEARCH_NODE ? 'connected' : 'disconnected',
         config: {
           node: process.env.ELASTICSEARCH_NODE,
         },
@@ -72,7 +72,7 @@ export class ExternalApiService {
       {
         name: 'Redis',
         enabled: !!process.env.REDIS_HOST,
-        status: !!process.env.REDIS_HOST ? 'connected' : 'disconnected',
+        status: process.env.REDIS_HOST ? 'connected' : 'disconnected',
         config: {
           host: process.env.REDIS_HOST,
           port: process.env.REDIS_PORT,

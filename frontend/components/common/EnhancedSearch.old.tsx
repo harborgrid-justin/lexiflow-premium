@@ -349,7 +349,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
   }, []);
 
   // Close dropdown when clicking outside
-  useClickOutside(containerRef, () => setIsOpen(false));
+  useClickOutside(containerRef as React.RefObject<HTMLElement>, () => setIsOpen(false));
 
   return (
     <div ref={containerRef} className={cn("relative w-full", className)}>

@@ -53,7 +53,7 @@ export class DashboardChart {
   title!: string;
 
   @ApiProperty({ description: 'Chart type' })
-  type: 'line' | 'bar' | 'pie' | 'doughnut' | 'area';
+  type!: 'line' | 'bar' | 'pie' | 'doughnut' | 'area';
 
   @ApiProperty({ description: 'Chart data', type: ChartData })
   data!: ChartData;
@@ -64,7 +64,7 @@ export class QuickStat {
   label!: string;
 
   @ApiProperty({ description: 'Stat value' })
-  value: string | number;
+  value!: string | number;
 
   @ApiProperty({ description: 'Icon name' })
   icon?: string;
@@ -113,7 +113,7 @@ export class ActivityItem {
   id!: string;
 
   @ApiProperty({ description: 'Activity type' })
-  type: 'case' | 'document' | 'motion' | 'billing' | 'deadline' | 'message';
+  type!: 'case' | 'document' | 'motion' | 'billing' | 'deadline' | 'message';
 
   @ApiProperty({ description: 'Activity title' })
   title!: string;
@@ -154,13 +154,13 @@ export class KeyPerformanceIndicator {
   unit!: string;
 
   @ApiProperty({ description: 'Trend direction' })
-  trend: 'up' | 'down' | 'stable';
+  trend!: 'up' | 'down' | 'stable';
 
   @ApiProperty({ description: 'Change percentage' })
   changePercentage!: number;
 
   @ApiProperty({ description: 'Status indicator' })
-  status: 'good' | 'warning' | 'critical';
+  status!: 'good' | 'warning' | 'critical';
 
   @ApiProperty({ description: 'Description' })
   description?: string;
@@ -171,10 +171,10 @@ export class DashboardAlert {
   id!: string;
 
   @ApiProperty({ description: 'Alert type' })
-  type: 'deadline' | 'task' | 'billing' | 'compliance' | 'system';
+  type!: 'deadline' | 'task' | 'billing' | 'compliance' | 'system';
 
   @ApiProperty({ description: 'Severity level' })
-  severity: 'info' | 'warning' | 'error' | 'critical';
+  severity!: 'info' | 'warning' | 'error' | 'critical';
 
   @ApiProperty({ description: 'Alert title' })
   title!: string;
@@ -256,7 +256,7 @@ export class MyCasesSummaryDto {
   activeCases!: number;
 
   @ApiProperty({ description: 'Cases by status' })
-  casesByStatus: { [status: string]: number };
+  casesByStatus!: { [status: string]: number };
 
   @ApiProperty({ description: 'Recent cases', type: [CaseSummary] })
   recentCases!: CaseSummary[];
@@ -288,7 +288,7 @@ export class DeadlineItem {
   isOverdue!: boolean;
 
   @ApiProperty({ description: 'Priority level' })
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority!: 'low' | 'medium' | 'high' | 'critical';
 
   @ApiProperty({ description: 'Case ID' })
   caseId!: string;
@@ -297,10 +297,10 @@ export class DeadlineItem {
   caseNumber!: string;
 
   @ApiProperty({ description: 'Deadline type' })
-  type: 'filing' | 'hearing' | 'discovery' | 'payment' | 'other';
+  type!: 'filing' | 'hearing' | 'discovery' | 'payment' | 'other';
 
   @ApiProperty({ description: 'Status' })
-  status: 'pending' | 'in-progress' | 'completed' | 'overdue';
+  status!: 'pending' | 'in-progress' | 'completed' | 'overdue';
 }
 
 export class UpcomingDeadlinesDto {
@@ -334,10 +334,10 @@ export class TaskItem {
   dueDate?: Date;
 
   @ApiProperty({ description: 'Priority level' })
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  priority!: 'low' | 'medium' | 'high' | 'urgent';
 
   @ApiProperty({ description: 'Status' })
-  status: 'pending' | 'in-progress' | 'completed';
+  status!: 'pending' | 'in-progress' | 'completed';
 
   @ApiProperty({ description: 'Case ID' })
   caseId?: string;
@@ -395,7 +395,7 @@ export class InvoiceSummary {
   dueDate!: Date;
 
   @ApiProperty({ description: 'Status' })
-  status: 'draft' | 'sent' | 'partial' | 'paid' | 'overdue' | 'void';
+  status!: 'draft' | 'sent' | 'partial' | 'paid' | 'overdue' | 'void';
 }
 
 export class BillingSummaryDto {

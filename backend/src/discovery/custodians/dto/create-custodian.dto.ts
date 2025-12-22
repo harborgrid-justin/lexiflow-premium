@@ -1,6 +1,5 @@
 import {
-  IsString,
-  IsEnum,
+  IsString, IsEnum,
   IsOptional,
   IsDateString,
   IsArray,
@@ -9,7 +8,6 @@ import {
   IsEmail,
   MaxLength,
 } from 'class-validator';
-import { CustodianStatus } from '../entities/custodian.entity';
 
 export class CreateCustodianDto {
   @IsUUID()

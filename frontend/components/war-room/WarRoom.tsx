@@ -193,7 +193,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
   // ============================================================================
   const activeParentTab = useMemo(
     () =>
-      PARENT_TABS.find((p: any) => p.subTabs.some((s) => s.id === activeTab)) ||
+      PARENT_TABS.find((p: any) => p.subTabs.some((s: any) => s.id === activeTab)) ||
       PARENT_TABS[0],
     [activeTab],
   );
@@ -341,7 +341,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
           </p>
           <select
             value={currentCaseId}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentCaseId(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCurrentCaseId(e.target.value)}
             className={cn(
               "p-2 border rounded-md outline-none",
               theme.surface.default,
@@ -403,7 +403,7 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
                 <div className="relative group">
                   <select
                     value={currentCaseId || ""}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentCaseId(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCurrentCaseId(e.target.value)}
                     className={cn(
                       "appearance-none bg-transparent font-semibold text-sm pr-6 py-1 outline-none cursor-pointer border-b border-dashed transition-colors hover:border-solid max-w-[300px] md:max-w-[500px] truncate",
                       theme.text.secondary,
@@ -586,3 +586,5 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
     </div>
   );
 };
+
+export default WarRoom;

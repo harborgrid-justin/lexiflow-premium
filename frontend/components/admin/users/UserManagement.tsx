@@ -14,6 +14,7 @@ import { useSelection } from '../../../hooks/useSelectionState';
 import { getTodayString } from '../../../utils/dateUtils';
 import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
 import { DataService } from '../../../services/data/dataService';
+import { queryKeys } from '../../../utils/queryKeys';
 
 interface UserData {
   id: string;
@@ -208,7 +209,7 @@ export const UserManagement: React.FC = () => {
             <select
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.role || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, role: e.target.value as UserData['role']})}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, role: e.target.value as UserData['role']})}
               aria-label="Role"
             >
               <option value="">Select role...</option>
@@ -240,7 +241,7 @@ export const UserManagement: React.FC = () => {
               <select
                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                 value={formData.role || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, role: e.target.value as UserData['role']})}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, role: e.target.value as UserData['role']})}
                 aria-label="Role"
               >
                 <option value="Administrator">Administrator</option>
@@ -255,7 +256,7 @@ export const UserManagement: React.FC = () => {
               <select
                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                 value={formData.status || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, status: e.target.value as UserData['status']})}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, status: e.target.value as UserData['status']})}
                 aria-label="Status"
               >
                 <option value="Active">Active</option>

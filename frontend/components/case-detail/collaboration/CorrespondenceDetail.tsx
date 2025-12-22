@@ -238,7 +238,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                                         title="Select current status"
                                         className="w-full p-2 text-sm border rounded bg-white"
                                         value={newStatus}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewStatus(e.target.value as any)}
+                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewStatus(e.target.value as any)}
                                     >
                                         <option value="Out for Service">Out for Service</option>
                                         <option value="Served">Served / Delivered</option>

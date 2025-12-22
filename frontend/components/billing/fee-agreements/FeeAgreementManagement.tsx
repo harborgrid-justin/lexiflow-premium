@@ -221,7 +221,7 @@ export const FeeAgreementManagement: React.FC = () => {
               title="Select fee type"
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.type || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, type: e.target.value as FeeAgreement['type']})}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, type: e.target.value as FeeAgreement['type']})}
             >
               <option value="">Select fee type...</option>
               <option value="Hourly">Hourly</option>
@@ -247,7 +247,7 @@ export const FeeAgreementManagement: React.FC = () => {
 
           <Input label="Effective Date" type="date" value={formData.effectiveDate || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, effectiveDate: e.target.value})} />
 
-          <TextArea label="Terms & Conditions" value={formData.terms || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, terms: e.target.value})} rows={4} placeholder="Enter agreement terms..." />
+          <TextArea label="Terms & Conditions" value={formData.terms || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, terms: e.target.value})} rows={4} placeholder="Enter agreement terms..." />
 
           {editModal.isOpen && (
             <div>
@@ -256,7 +256,7 @@ export const FeeAgreementManagement: React.FC = () => {
                 title="Select agreement status"
                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                 value={formData.status || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, status: e.target.value as FeeAgreement['status']})}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, status: e.target.value as FeeAgreement['status']})}
               >
                 <option value="Draft">Draft</option>
                 <option value="Pending Signature">Pending Signature</option>

@@ -28,8 +28,59 @@ export const getNodeIconLocal = (type: NodeType) => {
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getNodeStyles = (type: NodeType, isSelected: boolean, theme: any) => {
+interface ThemeColors {
+  background: string;
+  surface: {
+    default: string;
+    raised: string;
+    highlight: string;
+  };
+  text: {
+    primary: string;
+    secondary: string;
+    tertiary: string;
+    inverse: string;
+    link: string;
+  };
+  border: {
+    default: string;
+    focused: string;
+  };
+  primary: {
+    DEFAULT: string;
+    text: string;
+    border: string;
+  };
+  status: {
+    success: {
+      bg: string;
+      text: string;
+      border: string;
+    };
+    error: {
+      bg: string;
+      text: string;
+      border: string;
+    };
+    warning: {
+      bg: string;
+      text: string;
+      border: string;
+    };
+    info: {
+      bg: string;
+      text: string;
+      border: string;
+    };
+  };
+  action: {
+    ghost: {
+      hover: string;
+    };
+  };
+}
+
+export const getNodeStyles = (type: NodeType, isSelected: boolean, theme: ThemeColors) => {
   const base = cn("absolute flex flex-col rounded-xl border-2 shadow-md cursor-pointer transition-all duration-200 select-none", `hover:shadow-xl hover:-translate-y-0.5`);
   const selected = isSelected ? "ring-4 ring-offset-2 z-20" : "z-10";
   // Dynamically injecting ring color class requires safelisting or careful construction. 

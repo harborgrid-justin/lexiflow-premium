@@ -1,16 +1,13 @@
 import {
-  IsString,
-  IsEnum,
+  IsString, IsEnum,
   IsOptional,
   IsDateString,
   IsNumber,
   IsArray,
   IsUUID,
   IsBoolean,
-  MaxLength,
-  ValidateNested,
+  MaxLength, ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export class CreateLegalHoldDto {
   @IsUUID()
@@ -43,7 +40,7 @@ export class CreateLegalHoldDto {
   expirationDate?: string;
 
   @IsArray()
-  custodians: Array<{
+  custodians!: Array<{
     custodianId: string;
     custodianName: string;
     email: string;

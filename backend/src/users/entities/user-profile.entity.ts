@@ -50,28 +50,28 @@ export class UserProfile extends BaseEntity {
   graduationYear!: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  certifications: Record<string, any>[];
+  certifications!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  languages: Record<string, any>[];
+  languages!: Record<string, unknown>[];
 
   @Column({ name: 'years_of_experience', type: 'integer', default: 0 })
   yearsOfExperience!: number;
 
   @Column({ name: 'previous_firms', type: 'jsonb', nullable: true })
-  previousFirms: Record<string, any>[];
+  previousFirms!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  publications: Record<string, any>[];
+  publications!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  awards: Record<string, any>[];
+  awards!: Record<string, unknown>[];
 
   @Column({ name: 'professional_memberships', type: 'jsonb', nullable: true })
-  professionalMemberships: Record<string, any>[];
+  professionalMemberships!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  references: Record<string, any>[];
+  references!: Record<string, unknown>[];
 
   @Column({ name: 'default_hourly_rate', type: 'decimal', precision: 10, scale: 2, nullable: true })
   defaultHourlyRate!: number;

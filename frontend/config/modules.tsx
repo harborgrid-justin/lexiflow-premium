@@ -9,46 +9,46 @@ type PreloadableComponent<T extends React.ComponentType<unknown>> = React.LazyEx
 };
 
 // Helper to attach preload capability to lazy imports
-function lazyWithPreload<T extends React.ComponentType<unknown>>(
+function lazyWithPreload<T extends React.ComponentType<any>>(
     factory: () => Promise<{ default: T }>
 ): PreloadableComponent<T> {
     const Component = React.lazy(factory) as PreloadableComponent<T>;
-    Component.preload = factory;
+    Component.preload = factory as () => Promise<unknown>;
     return Component;
 }
 
 // Lazy Imports with Strict Relative Paths
-const Dashboard = lazyWithPreload(() => import('../components/dashboard/Dashboard'));
-const CaseList = lazyWithPreload(() => import('../components/case-list/CaseList'));
+const Dashboard = lazyWithPreload(() => import('../components/dashboard/Dashboard') as Promise<{ default: React.ComponentType<any> }>);
+const CaseList = lazyWithPreload(() => import('../components/case-list/CaseList') as Promise<{ default: React.ComponentType<any> }>);
 // MatterModule consolidated into CaseList - matters and cases are the same entity
 const MatterModule = CaseList;
-const DocketManager = lazyWithPreload(() => import('../components/docket/DocketManager'));
-const CorrespondenceManager = lazyWithPreload(() => import('../components/correspondence/CorrespondenceManager'));
-const MasterWorkflow = lazyWithPreload(() => import('../components/workflow/MasterWorkflow').then(m => ({ default: m.MasterWorkflow })));
-const DocumentManager = lazyWithPreload(() => import('../components/documents/DocumentManager'));
-const WarRoom = lazyWithPreload(() => import('../components/war-room/WarRoom').then(m => ({ default: m.WarRoom })));
-const ExhibitManager = lazyWithPreload(() => import('../components/exhibits/ExhibitManager').then(m => ({ default: m.ExhibitManager })));
-const DiscoveryPlatform = lazyWithPreload(() => import('../components/discovery/DiscoveryPlatform'));
-const EvidenceVault = lazyWithPreload(() => import('../components/evidence/EvidenceVault').then(m => ({ default: m.EvidenceVault })));
-const ResearchTool = lazyWithPreload(() => import('../components/research/ResearchTool'));
-const FirmOperations = lazyWithPreload(() => import('../components/practice/FirmOperations').then(m => ({ default: m.FirmOperations })));
-const BillingDashboard = lazyWithPreload(() => import('../components/billing/BillingDashboard'));
-const ClientCRM = lazyWithPreload(() => import('../components/crm/ClientCRM'));
-const ComplianceDashboard = lazyWithPreload(() => import('../components/compliance/ComplianceDashboard'));
-const AdminPanel = lazyWithPreload(() => import('../components/admin/AdminPanel'));
-const SecureMessenger = lazyWithPreload(() => import('../components/messenger/SecureMessenger').then(m => ({ default: m.SecureMessenger })));
-const EntityDirector = lazyWithPreload(() => import('../components/entities/EntityDirector').then(m => ({ default: m.EntityDirector })));
-const AdminDatabaseControl = lazyWithPreload(() => import('../components/admin/data/AdminDatabaseControl').then(m => ({ default: m.AdminDatabaseControl })));
-const AnalyticsDashboard = lazyWithPreload(() => import('../components/analytics/AnalyticsDashboard'));
-const JurisdictionManager = lazyWithPreload(() => import('../components/jurisdiction/JurisdictionManager'));
-const CalendarView = lazyWithPreload(() => import('../components/calendar/CalendarView').then(m => ({ default: m.CalendarView })));
-const RulesPlatform = lazyWithPreload(() => import('../components/rules/RulesPlatform'));
-const UserProfileManager = lazyWithPreload(() => import('../components/profile/UserProfileManager'));
-const PleadingBuilder = lazyWithPreload(() => import('../components/pleading/PleadingBuilder').then(m => ({ default: m.default || m.PleadingBuilder })));
-const KnowledgeBase = lazyWithPreload(() => import('../components/knowledge/KnowledgeBase'));
-const LitigationBuilder = lazyWithPreload(() => import('../components/litigation/LitigationBuilder'));
-const ClauseLibrary = lazyWithPreload(() => import('../components/clauses/ClauseLibrary'));
-const CitationManager = lazyWithPreload(() => import('../components/citation/CitationManager'));
+const DocketManager = lazyWithPreload(() => import('../components/docket/DocketManager') as Promise<{ default: React.ComponentType<any> }>);
+const CorrespondenceManager = lazyWithPreload(() => import('../components/correspondence/CorrespondenceManager') as Promise<{ default: React.ComponentType<any> }>);
+const MasterWorkflow = lazyWithPreload(() => import('../components/workflow/MasterWorkflow') as Promise<{ default: React.ComponentType<any> }>);
+const DocumentManager = lazyWithPreload(() => import('../components/documents/DocumentManager') as Promise<{ default: React.ComponentType<any> }>);
+const WarRoom = lazyWithPreload(() => import('../components/war-room/WarRoom') as Promise<{ default: React.ComponentType<any> }>);
+const ExhibitManager = lazyWithPreload(() => import('../components/exhibits/ExhibitManager') as Promise<{ default: React.ComponentType<any> }>);
+const DiscoveryPlatform = lazyWithPreload(() => import('../components/discovery/DiscoveryPlatform') as Promise<{ default: React.ComponentType<any> }>);
+const EvidenceVault = lazyWithPreload(() => import('../components/evidence/EvidenceVault') as Promise<{ default: React.ComponentType<any> }>);
+const ResearchTool = lazyWithPreload(() => import('../components/research/ResearchTool') as Promise<{ default: React.ComponentType<any> }>);
+const FirmOperations = lazyWithPreload(() => import('../components/practice/FirmOperations') as Promise<{ default: React.ComponentType<any> }>);
+const BillingDashboard = lazyWithPreload(() => import('../components/billing/BillingDashboard') as Promise<{ default: React.ComponentType<any> }>);
+const ClientCRM = lazyWithPreload(() => import('../components/crm/ClientCRM') as Promise<{ default: React.ComponentType<any> }>);
+const ComplianceDashboard = lazyWithPreload(() => import('../components/compliance/ComplianceDashboard') as Promise<{ default: React.ComponentType<any> }>);
+const AdminPanel = lazyWithPreload(() => import('../components/admin/AdminPanel') as Promise<{ default: React.ComponentType<any> }>);
+const SecureMessenger = lazyWithPreload(() => import('../components/messenger/SecureMessenger') as Promise<{ default: React.ComponentType<any> }>);
+const EntityDirector = lazyWithPreload(() => import('../components/entities/EntityDirector') as Promise<{ default: React.ComponentType<any> }>);
+const AdminDatabaseControl = lazyWithPreload(() => import('../components/admin/data/AdminDatabaseControl') as Promise<{ default: React.ComponentType<any> }>);
+const AnalyticsDashboard = lazyWithPreload(() => import('../components/analytics/AnalyticsDashboard') as Promise<{ default: React.ComponentType<any> }>);
+const JurisdictionManager = lazyWithPreload(() => import('../components/jurisdiction/JurisdictionManager') as Promise<{ default: React.ComponentType<any> }>);
+const CalendarView = lazyWithPreload(() => import('../components/calendar/CalendarView') as Promise<{ default: React.ComponentType<any> }>);
+const RulesPlatform = lazyWithPreload(() => import('../components/rules/RulesPlatform') as Promise<{ default: React.ComponentType<any> }>);
+const UserProfileManager = lazyWithPreload(() => import('../components/profile/UserProfileManager') as Promise<{ default: React.ComponentType<any> }>);
+const PleadingBuilder = lazyWithPreload(() => import('../components/pleading/PleadingBuilder') as Promise<{ default: React.ComponentType<any> }>);
+const KnowledgeBase = lazyWithPreload(() => import('../components/knowledge/KnowledgeBase') as Promise<{ default: React.ComponentType<any> }>);
+const LitigationBuilder = lazyWithPreload(() => import('../components/litigation/LitigationBuilder') as Promise<{ default: React.ComponentType<any> }>);
+const ClauseLibrary = lazyWithPreload(() => import('../components/clauses/ClauseLibrary') as Promise<{ default: React.ComponentType<any> }>);
+const CitationManager = lazyWithPreload(() => import('../components/citation/CitationManager') as Promise<{ default: React.ComponentType<any> }>);
 
 const COMPONENT_MAP: Record<string, React.LazyExoticComponent<unknown>> = {
   [PATHS.DASHBOARD]: Dashboard,

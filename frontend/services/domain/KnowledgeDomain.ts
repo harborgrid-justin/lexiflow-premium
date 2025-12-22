@@ -414,7 +414,7 @@ export class KnowledgeRepository {
             const filtered = all.filter(item =>
                 item.question?.toLowerCase().includes(q) ||
                 item.answer?.toLowerCase().includes(q) ||
-                item.tags?.some(tag => tag.toLowerCase().includes(q))
+                item.tags?.some((tag: string) => tag.toLowerCase().includes(q))
             );
 
             return filtered;

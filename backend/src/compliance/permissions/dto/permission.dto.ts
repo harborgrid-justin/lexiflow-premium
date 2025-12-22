@@ -1,18 +1,18 @@
 export class PermissionDto {
-  id: string;
-  userId: string;
-  userName: string;
-  role: string;
-  resource: string;
+  id!: string;
+  userId!: string;
+  userName!: string;
+  role!: string;
+  resource!: string;
   resourceId?: string;
   actions!: PermissionAction[];
   scope!: PermissionScope;
   conditions?: PermissionCondition[];
-  grantedBy: string;
-  grantedByName: string;
+  grantedBy!: string;
+  grantedByName!: string;
   grantedAt!: Date;
   expiresAt?: Date;
-  organizationId: string;
+  organizationId!: string;
 }
 
 export enum PermissionAction {
@@ -41,24 +41,24 @@ export interface PermissionCondition {
 }
 
 export class GrantPermissionDto {
-  userId: string;
-  userName: string;
-  role: string;
-  resource: string;
+  userId!: string;
+  userName!: string;
+  role!: string;
+  resource!: string;
   resourceId?: string;
   actions!: PermissionAction[];
   scope!: PermissionScope;
   conditions?: PermissionCondition[];
-  grantedBy: string;
-  grantedByName: string;
+  grantedBy!: string;
+  grantedByName!: string;
   expiresAt?: Date;
-  organizationId: string;
+  organizationId!: string;
 }
 
 export class RevokePermissionDto {
   reason?: string;
-  revokedBy: string;
-  revokedByName: string;
+  revokedBy!: string;
+  revokedByName!: string;
 }
 
 export class QueryPermissionsDto {
@@ -73,15 +73,15 @@ export class QueryPermissionsDto {
 }
 
 export class CheckAccessDto {
-  userId: string;
-  resource: string;
+  userId!: string;
+  resource!: string;
   resourceId?: string;
   action!: PermissionAction;
   context?: Record<string, unknown>;
 }
 
 export class AccessCheckResult {
-  allowed: boolean;
+  allowed!: boolean;
   matchedPermissions!: PermissionDto[];
   reason?: string;
 }
@@ -92,6 +92,6 @@ export class AccessMatrixDto {
 }
 
 export class AccessMatrixResult {
-  userId: string;
-  matrix: Record<string, Record<string, boolean>>;
+  userId!: string;
+  matrix!: Record<string, Record<string, boolean>>;
 }

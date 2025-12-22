@@ -1,5 +1,4 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { Public } from '../../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,

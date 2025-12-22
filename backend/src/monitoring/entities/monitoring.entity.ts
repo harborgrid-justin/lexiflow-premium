@@ -43,10 +43,10 @@ export class MonitoringAlert {
   message!: string;
 
   @Column({ type: 'varchar', length: 20 })
-  severity: 'info' | 'warning' | 'error' | 'critical';
+  severity!: 'info' | 'warning' | 'error' | 'critical';
 
   @Column({ type: 'varchar', length: 20, default: 'active' })
-  status: 'active' | 'acknowledged' | 'resolved';
+  status!: 'active' | 'acknowledged' | 'resolved';
 
   @Column({ nullable: true })
   source!: string;

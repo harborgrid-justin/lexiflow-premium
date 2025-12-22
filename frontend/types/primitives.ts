@@ -29,6 +29,20 @@ export type JurorId = Brand<string, 'JurorId'>;
 export type WitnessId = Brand<string, 'WitnessId'>;
 export type ExhibitId = Brand<string, 'ExhibitId'>;
 
+/**
+ * Enterprise-grade JSON value types for type-safe metadata and dynamic fields
+ * Ensures all JSON-serializable values are properly typed
+ */
+export type JsonPrimitive = string | number | boolean | null;
+export type JsonArray = JsonValue[];
+export type JsonObject = { [key: string]: JsonValue };
+export type JsonValue = JsonPrimitive | JsonObject | JsonArray;
+
+/**
+ * Type-safe metadata record for extensible entities
+ */
+export type MetadataRecord = Record<string, JsonValue>;
+
 export interface Money {
   amount: number;
   currency: CurrencyCode;

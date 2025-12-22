@@ -43,7 +43,8 @@ export const WebhookManagement: React.FC = () => {
   // Fetch real webhooks from backend
   const { data: webhooks = [], isLoading, refetch } = useQuery(['webhooks'], async () => {
     const response = await webhooksApi.getAll();
-    return response.items.map((item: any) => ({
+    const items = Array.isArray(response) ? response : (response as any).items || [];
+    return items.map((item: any) => ({
       id: item.id,
       name: item.name,
       url: item.url,
@@ -270,7 +271,7 @@ export const WebhookManagement: React.FC = () => {
             </div>
           )}
           <div className="flex justify-end gap-2">
-            <Button variant="secondary" onClick={() => setIsTestModalOpen(false)}>Close</Button>
+            <Button variant="secondary" onClick={testModal.close}>Close</Button>
             <Button variant="primary" icon={Play} onClick={handleTest}>Send Test</Button>
           </div>
         </div>

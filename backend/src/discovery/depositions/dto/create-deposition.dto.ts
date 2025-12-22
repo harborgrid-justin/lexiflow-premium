@@ -5,12 +5,9 @@ import {
   IsDateString,
   IsNumber,
   IsArray,
-  IsUUID,
-  IsBoolean,
-  MaxLength,
-  ValidateNested,
+  IsUUID, IsBoolean,
+  MaxLength, ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 import { DepositionMethod } from '../entities/deposition.entity';
 
 export class CreateDepositionDto {

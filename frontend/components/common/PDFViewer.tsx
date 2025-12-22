@@ -182,22 +182,28 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
           if (onPageLoad) onPageLoad({ width: displayWidth, height: displayHeight });
       }
 
-      const transform = outputScale !== 1 
-        ? [outputScale, 0, 0, outputScale, 0, 0] 
+      const transform = outputScale !== 1
+        ? [outputScale, 0, 0, outputScale, 0, 0]
         : undefined;
 
-      const renderContext = {
-        canvasContext: context,
-        transform: transform,
-        viewport: viewport,
-      };
+      const renderContext: pdfjsLib.RenderParameters = transform
+        ? {
+            canvasContext: context,
+            transform: transform,
+            viewport: viewport,
+          }
+        : {
+            canvasContext: context,
+            viewport: viewport,
+          };
 
       const newTask = page.render(renderContext);
       renderTaskRef.current = newTask;
 
       await newTask.promise;
     } catch (err: unknown) {
-      if (err.name !== 'RenderingCancelledException') {
+      const errName = typeof err === 'object' && err !== null && 'name' in err ? String(err.name) : '';
+      if (errName !== 'RenderingCancelledException') {
         console.error("Render error:", err);
       }
     }

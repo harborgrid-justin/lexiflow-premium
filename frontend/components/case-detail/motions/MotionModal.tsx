@@ -25,7 +25,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 
 // Types & Interfaces
-import { Motion, MotionType, LegalDocument, MotionId, CaseId } from '../../../types';
+import { Motion, MotionType, LegalDocument, MotionId, CaseId, DocumentId } from '../../../types';
 
 interface MotionModalProps {
   isOpen: boolean;
@@ -74,10 +74,11 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
 
   const handleToggleDoc = (docId: string) => {
     const currentDocs = newMotion.documents || [];
-    if (currentDocs.includes(docId)) {
-        setNewMotion({ ...newMotion, documents: currentDocs.filter(d => d !== docId) });
+    const typedDocId = docId as DocumentId;
+    if (currentDocs.includes(typedDocId)) {
+        setNewMotion({ ...newMotion, documents: currentDocs.filter(d => d !== typedDocId) });
     } else {
-        setNewMotion({ ...newMotion, documents: [...currentDocs, docId] });
+        setNewMotion({ ...newMotion, documents: [...currentDocs, typedDocId] });
     }
   };
 
@@ -88,7 +89,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
           <select 
             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
             value={newMotion.type}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMotion({...newMotion, type: e.target.value as MotionType})}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewMotion({...newMotion, type: e.target.value as MotionType})}
             aria-label="Motion Type"
           >
             <option value="Dismiss">Motion to Dismiss</option>

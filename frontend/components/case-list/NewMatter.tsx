@@ -16,7 +16,7 @@ export const NewMatter: React.FC = () => {
 
   // ✅ Migrated to backend API with queryKeys (2025-12-21)
   const { data: existingMatters = [] } = useQuery<Matter[]>(
-    queryKeys.matters.all(),
+    queryKeys.cases.matters.all(),
     () => DataService.matters.getAll()
   );
 
@@ -24,9 +24,9 @@ export const NewMatter: React.FC = () => {
     (data: Matter) => DataService.matters.add(data),
     {
       onSuccess: (newMatter) => {
-        queryClient.invalidate(queryKeys.matters.all());
-        if (newMatter && newMatter.id) {
-          navigate(`${PATHS.MATTERS}/${newMatter.id}`);
+        queryClient.invalidate(queryKeys.cases.matters.all());
+        if (newMatter && (newMatter as any).id) {
+          navigate(`${PATHS.MATTERS}/${(newMatter as any).id}`);
         } else {
           navigate(PATHS.MATTERS);
         }

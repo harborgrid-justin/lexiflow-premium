@@ -182,12 +182,15 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <select
               id="matterType"
               value={formData.matterType || formData.type || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('matterType', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('matterType', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             >
-              {Object.values(MatterType).map(type => (
-                <option key={type} value={type}>{type.replace(/_/g, ' ')}</option>
-              ))}
+              {Object.values(MatterType).map((type: unknown) => {
+                const typeValue = typeof type === 'string' ? type : String(type);
+                return (
+                  <option key={typeValue} value={typeValue}>{typeValue.replace(/_/g, ' ')}</option>
+                );
+              })}
             </select>
           </div>
 
@@ -213,7 +216,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             </label>
             <textarea
               value={formData.description}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('description', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('description', e.target.value)}
               rows={3}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               placeholder="Detailed matter description"
@@ -227,7 +230,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <select
               id="status"
               value={formData.status}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('status', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('status', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             >
               {Object.values(MatterStatus).map(status => (
@@ -242,7 +245,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             </label>
             <select
               value={formData.priority}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('priority', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('priority', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             >
               {Object.values(MatterPriority).map(priority => (
@@ -257,7 +260,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             </label>
             <select
               value={formData.practiceArea}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('practiceArea', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('practiceArea', e.target.value)}
               className={`w-full px-3 py-2 bg-white dark:bg-slate-900 border rounded-lg text-slate-900 dark:text-slate-100 ${
                 errors.practiceArea ? 'border-rose-500' : 'border-slate-300 dark:border-slate-600'
               }`}
@@ -360,7 +363,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <select
               id="conflictCheckStatus"
               value={formData.conflictCheckStatus}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('conflictCheckStatus', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('conflictCheckStatus', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             >
               <option value="pending">Pending</option>
@@ -390,7 +393,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             </label>
             <textarea
               value={formData.conflictCheckNotes}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('conflictCheckNotes', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange('conflictCheckNotes', e.target.value)}
               rows={2}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               placeholder="Notes about conflict check results"
@@ -464,7 +467,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
             <select
               id="billingType"
               value={formData.billingType || formData.billingArrangement || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('billingType', e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange('billingType', e.target.value)}
               className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             >
               <option value="Hourly">Hourly</option>

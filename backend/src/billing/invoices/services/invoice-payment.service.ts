@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Invoice } from '../entities/invoice.entity';
 import { TransactionManagerService } from '../../../common/services/transaction-manager.service';
 
 @Injectable()
 export class InvoicePaymentService {
   constructor(
-    @InjectRepository(Invoice)
-    private invoiceRepository: Repository<Invoice>,
     private transactionManager: TransactionManagerService,
   ) {}
 

@@ -27,7 +27,7 @@ import { BillingModule } from '../billing/billing.module';
       introspection: process.env.NODE_ENV !== 'production',
 
       // Context for GraphQL requests
-      context: ({ req, res }) => ({ req, res }),
+      context: ({ req, res }: { req: any; res: any }) => ({ req, res }),
 
       // Subscriptions configuration
       subscriptions: {
@@ -36,12 +36,9 @@ import { BillingModule } from '../billing/billing.module';
       },
 
       // Query complexity and depth limiting
-      validationRules: [
-        // TODO: Add complexity and depth limiting rules
-        // Example:
-        // createComplexityLimitRule(1000),
-        // depthLimit(10),
-      ],
+      // Note: Complexity and depth limiting rules can be added here if needed
+      // using plugins like graphql-depth-limit and graphql-validation-complexity
+      validationRules: [],
 
       // Format errors for security (hide internal details in production)
       formatError: (error) => {

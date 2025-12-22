@@ -1,5 +1,5 @@
 
-import { WorkflowTemplateData, WorkflowTemplateId } from '../types';
+import { WorkflowTemplateData, WorkflowTemplateId } from '../../types';
 
 export const TEMPLATE_LIBRARY: WorkflowTemplateData[] = [
   // LITIGATION

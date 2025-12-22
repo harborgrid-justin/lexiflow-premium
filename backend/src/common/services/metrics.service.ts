@@ -31,8 +31,7 @@ export interface Metric {
  * metricsService.recordHistogram('api.response.time', 150, { endpoint: '/cases' });
  */
 @Injectable()
-export class MetricsService {
-  private readonly logger = new Logger(MetricsService.name);
+export class MetricsService { private readonly // __logger = new Logger(MetricsService.name);
   private metrics: Map<string, Metric[]> = new Map();
   private counters: Map<string, number> = new Map();
   private gauges: Map<string, number> = new Map();
@@ -120,19 +119,19 @@ export class MetricsService {
   /**
    * Get metrics as JSON (for REST API)
    */
-  getMetricsJson(): Record<string, any> {
-    const result: Record<string, any> = {
+  getMetricsJson(): Record<string, unknown> {
+    const result: Record<string, unknown> = {
       counters: {},
       gauges: {},
       timestamp: new Date().toISOString(),
     };
 
     for (const [key, value] of this.counters.entries()) {
-      result.counters[key] = value;
+      (result as any).counters[key] = value;
     }
 
     for (const [key, value] of this.gauges.entries()) {
-      result.gauges[key] = value;
+      (result as any).gauges[key] = value;
     }
 
     return result;
@@ -199,12 +198,14 @@ export class MetricsService {
     if (!match) return [key, undefined];
 
     const [, name, labelStr] = match;
-    if (!labelStr) return [name, undefined];
+    if (!labelStr || !name) return [name ?? key, undefined];
 
     const labels: Record<string, string> = {};
     for (const pair of labelStr.split(',')) {
       const [k, v] = pair.split('=');
-      labels[k] = v.replace(/"/g, '');
+      if (k && v) {
+      }
+        labels[k] = v.replace(/"/g, '');
     }
 
     return [name, labels];

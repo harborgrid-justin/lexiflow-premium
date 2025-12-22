@@ -47,7 +47,7 @@ export class CreateTableDto {
 
   @ApiProperty({ description: 'Table columns' })
   @IsNotEmpty()
-  columns: {
+  columns!: {
     name: string;
     type: string;
     pk?: boolean;

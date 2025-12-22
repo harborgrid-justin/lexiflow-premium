@@ -48,7 +48,7 @@ export const CaseContractReview: React.FC = () => {
           className={cn("flex-1 p-4 resize-none outline-none font-mono text-sm leading-relaxed", theme.text.primary, theme.surface.default)}
           placeholder="Paste contract text here for analysis..."
           value={text}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setText(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setText(e.target.value)}
         />
         <div className={cn("p-4 border-t", theme.border.default, theme.surface.highlight)}>
           <button 

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { Examination } from './entities/examination.entity';
 import { CreateExaminationDto } from './dto/create-examination.dto';
 import { UpdateExaminationDto } from './dto/update-examination.dto';
@@ -82,7 +82,7 @@ export class ExaminationsService {
 
   async findOne(id: string): Promise<Examination> {
     const examination = await this.examinationRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!examination) {
@@ -112,7 +112,7 @@ export class ExaminationsService {
 
   async getStatistics(caseId: string) {
     const examinations = await this.examinationRepository.find({
-      where: { caseId, deletedAt: null },
+      where: { caseId, deletedAt: IsNull() },
     });
 
     const stats = {

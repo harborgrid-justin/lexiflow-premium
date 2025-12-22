@@ -50,6 +50,8 @@ export interface ProgressIndicatorProps {
   error?: string;
   /** Success message */
   successMessage?: string;
+  /** Accessible label for screen readers */
+  label?: string;
   /** Size variant */
   size?: 'sm' | 'md' | 'lg';
   /** Color variant */

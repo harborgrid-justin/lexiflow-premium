@@ -60,7 +60,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
     const allFacts: CaseFact[] = [];
 
     // Add docket entries as facts
-    docketEntries.forEach((entry: unknown) => {
+    docketEntries.forEach((entry: any) => {
       allFacts.push({
         id: entry.id,
         content: `${entry.title || entry.description || 'Docket Entry'} - Filed on ${entry.filedDate ? new Date(entry.filedDate).toLocaleDateString() : 'N/A'}`,
@@ -70,7 +70,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
     });
 
     // Add evidence
-    evidence.forEach(item => {
+    evidence.forEach((item: any) => {
       allFacts.push({
         id: item.id,
         content: item.description || item.title || 'Evidence item',
@@ -80,7 +80,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
     });
 
     // Add case parties as witnesses
-    caseData?.parties?.forEach(party => {
+    caseData?.parties?.forEach((party: any) => {
       allFacts.push({
         id: `party-${party.id || party.name}`,
         content: `${party.name} - ${party.role}`,

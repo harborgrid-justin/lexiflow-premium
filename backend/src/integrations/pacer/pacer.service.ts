@@ -1,5 +1,4 @@
 import { Injectable, Logger, BadRequestException } from '@nestjs/common';
-import axios from 'axios';
 import { PacerSearchDto, PacerIntegrationSyncDto, PacerCase } from './dto';
 
 /**
@@ -17,9 +16,8 @@ interface PacerConfig {
 }
 
 @Injectable()
-export class PacerService {
-  private readonly logger = new Logger(PacerService.name);
-  private readonly pacerBaseUrl = process.env.PACER_BASE_URL || 'https://pacer.uscourts.gov';
+export class PacerService { private readonly logger = new Logger(PacerService.name);
+  private readonly _pacerBaseUrl = process.env.PACER_BASE_URL || 'https://pacer.uscourts.gov';
   private readonly pacerUsername = process.env.PACER_USERNAME;
   private readonly pacerPassword = process.env.PACER_PASSWORD;
   private config: PacerConfig = {
@@ -33,8 +31,7 @@ export class PacerService {
   /**
    * Search for cases in PACER
    */
-  async search(searchDto: PacerSearchDto): Promise<PacerCase[]> {
-    this.logger.log('Searching PACER with criteria:', searchDto);
+  async search(searchDto: PacerSearchDto): Promise<PacerCase[]> { this.logger.log('Searching PACER with criteria:', searchDto);
 
     try {
       // Mock PACER API integration
@@ -49,7 +46,7 @@ export class PacerService {
         {
           caseNumber: searchDto.caseNumber || '1:23-cv-12345',
           title: 'Smith v. Jones',
-          court: searchDto.court || 'USDC Northern District of California',
+          court: searchDto._court || 'USDC Northern District of California',
           filingDate: new Date('2023-06-15'),
           caseType: 'Civil',
           nature: 'Contract Dispute',
@@ -66,10 +63,9 @@ export class PacerService {
             },
           ],
         },
-        {
-          caseNumber: '2:24-cr-00987',
+        { caseNumber: '2:24-cr-00987',
           title: 'USA v. Doe',
-          court: searchDto.court || 'USDC Southern District of New York',
+          court: searchDto._court || 'USDC Southern District of New York',
           filingDate: new Date('2024-01-10'),
           caseType: 'Criminal',
           nature: 'Fraud',
@@ -92,8 +88,7 @@ export class PacerService {
   async sync(syncDto: PacerIntegrationSyncDto): Promise<PacerCase> {
     this.logger.log(`Syncing case ${syncDto.caseNumber} from PACER`);
 
-    try {
-      // Mock PACER API integration
+    try { // Mock PACER API integration
       // In production, this would use axios to call the PACER API
       
       // Simulate network delay
@@ -103,7 +98,7 @@ export class PacerService {
       return {
         caseNumber: syncDto.caseNumber,
         title: 'Sample Case from PACER (Synced)',
-        court: syncDto.court,
+        court: syncDto._court,
         filingDate: new Date(),
         caseType: 'Civil',
         nature: 'Contract Dispute',
@@ -150,15 +145,14 @@ export class PacerService {
    * Get docket sheet for a case
    */
   async getDocketSheet(caseNumber: string, court: string): Promise<any> {
-    this.logger.log(`Getting docket sheet for ${caseNumber} in ${court}`);
+    this.logger.log(`Getting docket sheet for ${caseNumber} in ${ _court}`);
 
     try {
       // Mock PACER API integration
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       return {
-        caseNumber,
-        court,
+        caseNumber, _court,
         entries: [
             { date: '2024-01-01', description: 'Case Filed', number: 1 },
             { date: '2024-01-02', description: 'Summons Issued', number: 2 },

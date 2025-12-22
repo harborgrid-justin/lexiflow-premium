@@ -168,7 +168,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
   };
 
   const filteredExhibits = combinedItems.filter((ex) => {
-      const matchesSearch = ex.title.toLowerCase().includes(searchTerm.toLowerCase()) || (ex.desc && ex.desc.toLowerCase().includes(searchTerm.toLowerCase()));
+      const matchesSearch = ex.title.toLowerCase().includes(searchQuery.toLowerCase()) || (ex.desc && ex.desc.toLowerCase().includes(searchQuery.toLowerCase()));
       if (!matchesSearch) return false;
 
       if (filter === 'All') return true;
@@ -182,7 +182,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
     <div className="space-y-6 animate-fade-in h-full flex flex-col">
         <div className="flex justify-between items-center gap-4 shrink-0">
             <div className="flex-1 relative">
-                <SearchToolbar value={searchTerm} onChange={handleSearch} placeholder="Search exhibits & filings..." className="w-full"/>
+                <SearchToolbar value={searchQuery} onChange={setSearchQuery} placeholder="Search exhibits & filings..." className="w-full"/>
                 {isPending && <div className="absolute right-12 top-1/2 -translate-y-1/2"><Loader2 className={cn("h-4 w-4 animate-spin", theme.primary.text)}/></div>}
             </div>
             

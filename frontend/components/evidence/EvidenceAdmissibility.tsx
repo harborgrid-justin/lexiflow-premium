@@ -36,16 +36,14 @@ export const EvidenceAdmissibility: React.FC<EvidenceAdmissibilityProps> = ({ se
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {isRuleModalOpen && (
-        <Modal isOpen={true} onClose={() => setIsRuleModalOpen(false)} title="Manage Applicable Rules">
-            <div className="p-6 space-y-4">
-                <RuleSelector selectedRules={rules} onRulesChange={setRules} />
-                <div className={cn("flex justify-end pt-4 border-t mt-4", theme.border.default)}>
-                    <Button onClick={() => setIsRuleModalOpen(false)}>Done</Button>
-                </div>
-            </div>
-        </Modal>
-      )}
+      <Modal isOpen={ruleModal.isOpen} onClose={ruleModal.close} title="Manage Applicable Rules">
+        <div className="p-6 space-y-4">
+          <RuleSelector selectedRules={rules} onRulesChange={setRules} />
+          <div className={cn("flex justify-end pt-4 border-t mt-4", theme.border.default)}>
+            <Button onClick={ruleModal.close}>Done</Button>
+          </div>
+        </div>
+      </Modal>
 
       <Card title="Admissibility Assessment">
         <div className={cn("border rounded-lg p-4 mb-6 flex items-start", theme.status.warning.bg, theme.status.warning.border)}>
@@ -63,8 +61,8 @@ export const EvidenceAdmissibility: React.FC<EvidenceAdmissibilityProps> = ({ se
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <h4 className={cn("font-bold text-sm", theme.text.primary)}>Rules of Evidence Checklist</h4>
-            <button 
-                onClick={() => setIsRuleModalOpen(true)} 
+            <button
+                onClick={ruleModal.open}
                 className={cn("text-xs hover:underline flex items-center", theme.primary.text)}
             >
                 <Plus className="h-3 w-3 mr-1"/> Add Rule

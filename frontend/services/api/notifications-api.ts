@@ -288,7 +288,7 @@ export class NotificationsApiService {
 
   /**
    * Get notifications by type
-   * 
+   *
    * @param type - Notification type
    * @returns Promise<Notification[]> Array of notifications of specified type
    * @throws Error if validation fails or fetch fails
@@ -298,5 +298,78 @@ export class NotificationsApiService {
       throw new Error('[NotificationsApiService.getByType] type is required');
     }
     return this.getAll({ type });
+  }
+
+  /**
+   * Get grouped notifications (for UI display)
+   *
+   * @returns Promise<Notification[]> Array of notifications
+   * @throws Error if fetch fails
+   */
+  async getGrouped(): Promise<Notification[]> {
+    // For now, return all notifications - grouping logic can be client-side
+    return this.getAll();
+  }
+
+  /**
+   * Remove/delete a notification (alias for delete)
+   *
+   * @param id - Notification ID
+   * @returns Promise<void>
+   * @throws Error if id is invalid or delete fails
+   */
+  async remove(id: string): Promise<void> {
+    return this.delete(id);
+  }
+
+  /**
+   * Clear all notifications
+   *
+   * @returns Promise<void>
+   * @throws Error if operation fails
+   */
+  async clearAll(): Promise<void> {
+    try {
+      await apiClient.post(`${this.baseUrl}/clear-all`, {});
+    } catch (error) {
+      console.error('[NotificationsApiService.clearAll] Error:', error);
+      throw new Error('Failed to clear all notifications');
+    }
+  }
+
+  // =============================================================================
+  // SUBSCRIPTIONS (Placeholder for WebSocket)
+  // =============================================================================
+
+  /**
+   * Subscribe to notification updates (placeholder for future WebSocket implementation)
+   *
+   * @param channel - Subscription channel
+   * @returns Promise<void>
+   */
+  async subscribe(channel: string): Promise<void> {
+    console.log(`[NotificationsApiService] subscribe(${channel}) - Not implemented (future WebSocket)`);
+    return Promise.resolve();
+  }
+
+  /**
+   * Unsubscribe from notification updates (placeholder for future WebSocket implementation)
+   *
+   * @param channel - Subscription channel
+   * @returns Promise<void>
+   */
+  async unsubscribe(channel: string): Promise<void> {
+    console.log(`[NotificationsApiService] unsubscribe(${channel}) - Not implemented (future WebSocket)`);
+    return Promise.resolve();
+  }
+
+  /**
+   * Add a notification (alias for create)
+   *
+   * @param data - Notification data
+   * @returns Promise<Notification> Created notification
+   */
+  async add(data: unknown): Promise<Notification> {
+    return this.create(data as Partial<Notification>);
   }
 }

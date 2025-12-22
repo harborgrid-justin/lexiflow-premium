@@ -165,9 +165,9 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
 
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar */}
-        <OppositionSidebar 
-            activeCategory={activeCategory} 
-            onSelectCategory={setActiveCategory}
+        <OppositionSidebar
+            activeCategory={category}
+            onSelectCategory={setCategory}
             counts={{
                 all: oppositionData.length,
                 counsel: oppositionData.filter(e => e.role.includes('Counsel')).length,
@@ -203,7 +203,7 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
               title="Filter by role"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterRole}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterRole(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterRole(e.target.value)}
             >
               <option value="all">All Roles</option>
               <option value="Lead Counsel">Lead Counsel</option>
@@ -219,7 +219,7 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
               title="Filter by firm"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterFirm}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterFirm(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterFirm(e.target.value)}
             >
               <option value="all">All Firms</option>
               <option value="Morrison & Foerster LLP">Morrison & Foerster LLP</option>
@@ -234,7 +234,7 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
               title="Filter by status"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterStatus}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilterStatus(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterStatus(e.target.value)}
             >
               <option value="all">All Statuses</option>
               <option value="Active">Active</option>

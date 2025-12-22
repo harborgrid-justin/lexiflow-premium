@@ -6,7 +6,6 @@ import {
   BatchFormatDto,
   ValidateCitationDto,
 } from './dto/format-citation.dto';
-import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('Bluebook Citation Formatter')
 @ApiBearerAuth('JWT-auth')

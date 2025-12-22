@@ -63,7 +63,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
   const exportMenuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
-  useClickOutside(exportMenuRef, () => setShowExportMenu(false));
+  useClickOutside(exportMenuRef as React.RefObject<HTMLElement>, () => setShowExportMenu(false));
 
   const handleSync = async () => {
     try {
@@ -205,7 +205,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
             <select 
               className={cn("bg-transparent text-sm font-medium outline-none border-none pr-4 cursor-pointer", theme.text.primary)}
               value={statusFilter}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStatusFilter(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setStatusFilter(e.target.value)}
               aria-label="Status Filter"
             >
               <option value="All">All Statuses</option>
@@ -218,7 +218,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
             <select 
               className={cn("bg-transparent text-sm font-medium outline-none border-none pr-4 cursor-pointer", theme.text.primary)}
               value={typeFilter}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTypeFilter(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTypeFilter(e.target.value)}
               aria-label="Type Filter"
             >
               <option value="All">All Types</option>

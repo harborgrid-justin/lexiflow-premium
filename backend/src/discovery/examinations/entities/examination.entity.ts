@@ -120,7 +120,7 @@ export class Examination {
   notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 
   @Column({ type: 'uuid', nullable: true })
   assignedAttorney!: string;

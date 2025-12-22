@@ -5,11 +5,9 @@ import {
   Put,
   Body,
   Param,
-  Query,
-  UseGuards,
+  Query, UseGuards,
   Request,
 } from '@nestjs/common';
-import { Public } from '../../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -50,7 +48,7 @@ export class ServiceJobsController {
   @ApiResponse({ status: 200, description: 'Returns paginated service jobs' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getServiceJobs(@Query() query: ServiceJobQueryDto, @Request() req) {
+  async getServiceJobs(@Query() query: ServiceJobQueryDto, @Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.serviceJobsService.findAll(query, userId);
   }
@@ -66,7 +64,7 @@ export class ServiceJobsController {
   @ApiParam({ name: 'id', description: 'Service job ID' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getServiceJobById(@Param('id') id: string, @Request() req) {
+  async getServiceJobById(@Param('id') id: string, @Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.serviceJobsService.findById(id, userId);
   }
@@ -82,7 +80,7 @@ export class ServiceJobsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createServiceJob(@Body() createDto: CreateServiceJobDto, @Request() req) {
+  async createServiceJob(@Body() createDto: CreateServiceJobDto, @Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.serviceJobsService.create(createDto, userId);
   }
@@ -102,7 +100,7 @@ export class ServiceJobsController {
   async updateServiceJob(
     @Param('id') id: string,
     @Body() updateDto: UpdateServiceJobDto,
-    @Request() req,
+    @Request() req: any,
   ) {
     const userId = req.user?.id || 'temp-user-id';
     return this.serviceJobsService.update(id, updateDto, userId);
@@ -124,7 +122,7 @@ export class ServiceJobsController {
   async completeService(
     @Param('id') id: string,
     @Body() completeDto: CompleteServiceDto,
-    @Request() req,
+    @Request() req: any,
   ) {
     const userId = req.user?.id || 'temp-user-id';
     return this.serviceJobsService.completeService(id, completeDto, userId);
@@ -146,7 +144,7 @@ export class ServiceJobsController {
   async assignProcessServer(
     @Param('id') id: string,
     @Body('processServerId') processServerId: string,
-    @Request() req,
+    @Request() req: any,
   ) {
     const userId = req.user?.id || 'temp-user-id';
     return this.serviceJobsService.assignProcessServer(id, processServerId, userId);
@@ -168,7 +166,7 @@ export class ServiceJobsController {
   async cancelServiceJob(
     @Param('id') id: string,
     @Body('reason') reason: string,
-    @Request() req,
+    @Request() req: any,
   ) {
     const userId = req.user?.id || 'temp-user-id';
     return this.serviceJobsService.cancel(id, reason, userId);

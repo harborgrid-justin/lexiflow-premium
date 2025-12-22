@@ -28,7 +28,7 @@ export class PermissionsService {
     return permission;
   }
 
-  async revoke(id: string, dto: RevokePermissionDto): Promise<void> {
+  async revoke(id: string, _dto: RevokePermissionDto): Promise<void> {
     const permission = this.permissions.get(id);
     if (!permission) {
       throw new Error(`Permission with ID ${id} not found`);
@@ -63,7 +63,7 @@ export class PermissionsService {
       perms = perms.filter((perm) => perm.resource === query.resource);
     }
     if (query.action) {
-      perms = perms.filter((perm) => perm.actions.includes(query.action));
+      perms = perms.filter((perm) => perm.actions.includes(query.action || '' as any));
     }
     if (query.scope) {
       perms = perms.filter((perm) => perm.scope === query.scope);
@@ -163,7 +163,7 @@ export class PermissionsService {
 
   private evaluateConditions(
     conditions: PermissionCondition[],
-    context: Record<string, any>,
+    context: Record<string, unknown>,
   ): boolean {
     return conditions.every((condition) => {
       const contextValue = context[condition.field];

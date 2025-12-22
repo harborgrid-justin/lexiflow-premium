@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { Production } from './entities/production.entity';
 import { CreateProductionDto } from './dto/create-production.dto';
 import { UpdateProductionDto } from './dto/update-production.dto';
@@ -82,7 +82,7 @@ export class ProductionsService {
 
   async findOne(id: string): Promise<Production> {
     const production = await this.productionRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!production) {
@@ -112,7 +112,7 @@ export class ProductionsService {
 
   async getStatistics(caseId: string) {
     const productions = await this.productionRepository.find({
-      where: { caseId, deletedAt: null },
+      where: { caseId, deletedAt: IsNull() },
     });
 
     const stats = {

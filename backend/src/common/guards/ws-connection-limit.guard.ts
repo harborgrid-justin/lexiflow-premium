@@ -75,7 +75,7 @@ export class WsConnectionLimitGuard implements CanActivate {
     });
 
     this.logger.debug(
-      `Connection allowed. Global: ${this.globalConnectionCount}/${this.maxGlobalConnections}, User ${userId}: ${this.userConnectionCounts.get(userId) || 0}/${this.maxConnectionsPerUser}`,
+      `Connection allowed. Global: ${this.globalConnectionCount}/${this.maxGlobalConnections}, User ${userId}: ${this.userConnectionCounts.get(userId || '') || 0}/${this.maxConnectionsPerUser}`,
     );
 
     return true;

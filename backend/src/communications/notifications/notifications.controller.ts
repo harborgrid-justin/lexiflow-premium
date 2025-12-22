@@ -1,16 +1,13 @@
 import {
   Controller,
-  Get,
-  Post,
+  Get, _Post,
   Put,
   Delete,
   Body,
   Param,
-  Query,
-  UseGuards,
+  Query, UseGuards,
   Request,
 } from '@nestjs/common';
-import { Public } from '../../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -20,7 +17,6 @@ import {
  }from '@nestjs/swagger';
 import { NotificationsService } from './notifications.service';
 import {
-  CreateNotificationDto,
   NotificationPreferencesDto,
   NotificationQueryDto,
 } from './dto';
@@ -50,7 +46,7 @@ export class NotificationsController {
   @ApiResponse({ status: 200, description: 'Returns paginated notifications' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getNotifications(@Request() req, @Query() query: NotificationQueryDto) {
+  async getNotifications(@Request() req: any, @Query() query: NotificationQueryDto) {
     const userId = req.user?.id || 'temp-user-id';
     return this.notificationsService.findAll(userId, query);
   }
@@ -64,7 +60,7 @@ export class NotificationsController {
   @ApiResponse({ status: 200, description: 'Returns unread count' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getUnreadCount(@Request() req) {
+  async getUnreadCount(@Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     const count = await this.notificationsService.getUnreadCount(userId);
     return { count };
@@ -82,7 +78,7 @@ export class NotificationsController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async markAsRead(@Param('id') id: string, @Request() req) {
+  async markAsRead(@Param('id') id: string, @Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.notificationsService.markAsRead(id, userId);
   }
@@ -97,7 +93,7 @@ export class NotificationsController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async markAllAsRead(@Request() req) {
+  async markAllAsRead(@Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.notificationsService.markAllAsRead(userId);
   }
@@ -113,7 +109,7 @@ export class NotificationsController {
   @ApiParam({ name: 'id', description: 'Notification ID' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async deleteNotification(@Param('id') id: string, @Request() req) {
+  async deleteNotification(@Param('id') id: string, @Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.notificationsService.delete(id, userId);
   }
@@ -127,7 +123,7 @@ export class NotificationsController {
   @ApiResponse({ status: 200, description: 'Returns user preferences' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getPreferences(@Request() req) {
+  async getPreferences(@Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.notificationsService.getPreferences(userId);
   }
@@ -144,7 +140,7 @@ export class NotificationsController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async updatePreferences(
     @Body() preferencesDto: NotificationPreferencesDto,
-    @Request() req,
+    @Request() req: any,
   ) {
     const userId = req.user?.id || 'temp-user-id';
     return this.notificationsService.updatePreferences(userId, preferencesDto);

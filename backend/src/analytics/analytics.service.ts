@@ -19,7 +19,11 @@ export class AnalyticsService {
       timestamp: new Date(),
     });
     const saved = await this.analyticsEventRepository.save(event);
-    return Array.isArray(saved) ? saved[0] : saved;
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) {
+      throw new Error('Failed to save analytics event');
+    }
+    return result;
   }
 
   async getEventsByType(eventType: string): Promise<AnalyticsEvent[]> {
@@ -57,7 +61,7 @@ export class AnalyticsService {
       where: { eventType: 'case_created' },
     });
 
-    const byStatus = events.reduce((acc: any[], event) => {
+    const byStatus = events.reduce((acc: Array<{status: string; count: number}>, event: AnalyticsEvent) => {
       const status = event.metadata?.status || 'Unknown';
       const existing = acc.find(item => item.status === status);
       if (existing) {
@@ -77,7 +81,7 @@ export class AnalyticsService {
       take: 1000,
     });
 
-    const userActivity = events.reduce((acc: any[], event) => {
+    const userActivity = events.reduce((acc: Array<{userId: string; count: number}>, event: AnalyticsEvent) => {
       const existing = acc.find(item => item.userId === event.userId);
       if (existing) {
         existing.count++;
@@ -90,7 +94,7 @@ export class AnalyticsService {
     return userActivity;
   }
 
-  async getTimeSeriesData(eventType: string, granularity: string, startDate: Date, endDate: Date): Promise<any[]> {
+  async getTimeSeriesData(eventType: string, _granularity: string, startDate: Date, endDate: Date): Promise<any[]> {
     const events = await this.analyticsEventRepository.find({
       where: {
         eventType,
@@ -99,7 +103,7 @@ export class AnalyticsService {
       order: { timestamp: 'ASC' },
     });
 
-    const timeSeries = events.map(event => ({
+    const timeSeries = events.map((event: AnalyticsEvent) => ({
       timestamp: event.timestamp,
       count: 1,
     }));
@@ -112,11 +116,11 @@ export class AnalyticsService {
       where: { eventType: 'time_logged' },
     });
 
-    const totalHours = billingEvents.reduce((sum, event) => {
+    const totalHours = billingEvents.reduce((sum: number, event: AnalyticsEvent) => {
       return sum + (event.metadata?.hours || 0);
     }, 0);
 
-    const totalBilled = billingEvents.reduce((sum, event) => {
+    const totalBilled = billingEvents.reduce((sum: number, event: AnalyticsEvent) => {
       return sum + (event.metadata?.amount || 0);
     }, 0);
 
@@ -141,7 +145,11 @@ export class AnalyticsService {
   async createDashboard(data: any): Promise<Dashboard> {
     const dashboard = this.dashboardRepository.create(data);
     const saved = await this.dashboardRepository.save(dashboard);
-    return Array.isArray(saved) ? saved[0] : saved;
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) {
+      throw new Error('Failed to save dashboard');
+    }
+    return result;
   }
 
   async updateDashboard(id: string, data: any): Promise<Dashboard> {

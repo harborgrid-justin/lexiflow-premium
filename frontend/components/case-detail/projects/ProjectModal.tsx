@@ -59,7 +59,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, onS
           rows={3} 
           placeholder="Objectives and scope..." 
           value={newProject.description}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewProject({...newProject, description: e.target.value})}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewProject({...newProject, description: e.target.value})}
         />
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -67,7 +67,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, onS
             <select 
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
               value={newProject.status}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewProject({...newProject, status: e.target.value as Project['status']})}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewProject({...newProject, status: e.target.value as Project['status']})}
               aria-label="Project status"
             >
               <option value="Not Started">Not Started</option>
@@ -82,7 +82,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, onS
             <select 
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
               value={newProject.priority}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewProject({...newProject, priority: e.target.value as Project['priority']})}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewProject({...newProject, priority: e.target.value as Project['priority']})}
               aria-label="Project priority"
             >
               <option value="Low">Low</option>

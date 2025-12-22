@@ -178,7 +178,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
                 title="Select conferral method"
                 className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
                 value={newSession.method}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({...newSession, method: e.target.value as any})}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewSession({...newSession, method: e.target.value as any})}
               >
                 <option>Phone</option>
                 <option>Email</option>
@@ -200,7 +200,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
             placeholder="Summary of what was discussed..."
             rows={4}
             value={newSession.notes || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({...newSession, notes: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewSession({...newSession, notes: e.target.value})}
           />
 
           <div className="grid grid-cols-2 gap-4">
@@ -210,7 +210,7 @@ export const ConferralLog: React.FC<ConferralLogProps> = ({ caseId }) => {
                 title="Select conferral outcome"
                 className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
                 value={newSession.result}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewSession({...newSession, result: e.target.value as any})}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewSession({...newSession, result: e.target.value as any})}
               >
                 <option value="Pending">Pending</option>
                 <option value="Agreed">Agreed</option>

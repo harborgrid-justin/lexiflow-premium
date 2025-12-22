@@ -6,11 +6,9 @@ import {
   Delete,
   Body,
   Param,
-  Query,
-  UseGuards,
+  Query, UseGuards,
   Request,
 } from '@nestjs/common';
-import { Public } from '../../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
@@ -50,7 +48,7 @@ export class MessagingController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async getConversations(
-    @Request() req,
+    @Request() req: any,
     @Query('page') page?: number,
     @Query('limit') limit?: number,
   ) {
@@ -69,7 +67,7 @@ export class MessagingController {
   @ApiParam({ name: 'id', description: 'Conversation ID' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getConversation(@Param('id') id: string, @Request() req) {
+  async getConversation(@Param('id') id: string, @Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.messagingService.findConversationById(id, userId);
   }
@@ -85,7 +83,7 @@ export class MessagingController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createConversation(@Body() createDto: CreateConversationDto, @Request() req) {
+  async createConversation(@Body() createDto: CreateConversationDto, @Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.messagingService.createConversation(createDto, userId);
   }
@@ -101,7 +99,7 @@ export class MessagingController {
   @ApiParam({ name: 'id', description: 'Conversation ID' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async deleteConversation(@Param('id') id: string, @Request() req) {
+  async deleteConversation(@Param('id') id: string, @Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.messagingService.deleteConversation(id, userId);
   }
@@ -120,7 +118,7 @@ export class MessagingController {
   async getMessages(
     @Param('id') conversationId: string,
     @Query() query: MessageQueryDto,
-    @Request() req,
+    @Request() req: any,
   ) {
     const userId = req.user?.id || 'temp-user-id';
     return this.messagingService.findMessages(conversationId, userId, query);
@@ -142,7 +140,7 @@ export class MessagingController {
   async sendMessage(
     @Param('id') conversationId: string,
     @Body() createDto: CreateMessageDto,
-    @Request() req,
+    @Request() req: any,
   ) {
     const userId = req.user?.id || 'temp-user-id';
     return this.messagingService.createMessage(conversationId, createDto, userId);
@@ -160,7 +158,7 @@ export class MessagingController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async markAsRead(@Param('id') messageId: string, @Request() req) {
+  async markAsRead(@Param('id') messageId: string, @Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.messagingService.markMessageAsRead(messageId, userId);
   }
@@ -176,7 +174,7 @@ export class MessagingController {
   @ApiParam({ name: 'id', description: 'Message ID' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async deleteMessage(@Param('id') messageId: string, @Request() req) {
+  async deleteMessage(@Param('id') messageId: string, @Request() req: any) {
     const userId = req.user?.id || 'temp-user-id';
     return this.messagingService.deleteMessage(messageId, userId);
   }

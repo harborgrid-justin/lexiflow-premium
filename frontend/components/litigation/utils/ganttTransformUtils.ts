@@ -6,7 +6,7 @@
  * @module components/litigation/utils/ganttTransformUtils
  */
 
-import { CasePhase, WorkflowTask, TaskId, CaseId } from '../../../types';
+import { CasePhase, WorkflowTask, TaskId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '../../../types';
 import { WorkflowNode, WorkflowConnection } from '../../workflow/builder/types';
 import { GANTT_ZOOM_SCALE, NODE_DURATION_MAP, CANVAS_CONSTANTS } from '../canvasConstants';
 import { DateCalculationService } from '../../../services/features/calculations/dateCalculationService';
@@ -80,9 +80,9 @@ export const transformNodesToGantt = (
         title: node.label,
         startDate: DateCalculationService.formatToISO(startDate),
         dueDate: DateCalculationService.formatToISO(dueDate),
-        status: 'Pending',
+        status: TaskStatusBackend.TODO,
         assignee: node.config.assignee || 'Unassigned',
-        priority: 'Medium',
+        priority: TaskPriorityBackend.MEDIUM,
         dependencies
       });
     }

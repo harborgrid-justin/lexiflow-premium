@@ -38,7 +38,12 @@ export class CaseTeamsService {
 
   async update(id: string, updateCaseTeamDto: UpdateCaseTeamDto): Promise<CaseTeamMember> {
     await this.findOne(id);
-    await this.caseTeamRepository.update(id, updateCaseTeamDto);
+    const { permissions, metadata, ...restDto } = updateCaseTeamDto;
+    await this.caseTeamRepository.update(id, {
+      ...restDto,
+      ...(permissions ? { permissions: JSON.stringify(permissions) } : {}),
+      ...(metadata ? { metadata: JSON.stringify(metadata) } : {})
+    });
     return this.findOne(id);
   }
 

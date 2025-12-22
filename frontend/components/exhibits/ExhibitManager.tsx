@@ -241,3 +241,5 @@ export const ExhibitManager: React.FC<ExhibitManagerProps> = ({ initialTab, case
   );
 };
 
+
+export default ExhibitManager;

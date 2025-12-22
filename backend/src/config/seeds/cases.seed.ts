@@ -37,7 +37,7 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
       const attorney = users[Math.floor(Math.random() * users.length)];
       const client = clients[Math.floor(Math.random() * clients.length)];
 
-      const statusMapping = {
+      const statusMapping: Record<string, string> = {
         OPEN: 'Open',
         IN_PROGRESS: 'Active',
         CLOSED: 'Closed',
@@ -54,7 +54,7 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
       await caseRepository.save(caseEntity);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const __stack = error instanceof Error ? error.stack : undefined;
       console.error(`Error seeding case ${caseData.caseNumber}:`, message);
     }
   }

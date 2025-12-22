@@ -8,11 +8,9 @@ import {
   Param,
   Query,
   HttpCode,
-  HttpStatus,
-  UseGuards,
+  HttpStatus, UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse }from '@nestjs/swagger';
-import { Public } from '../../common/decorators/public.decorator';
+import { ApiResponse }from '@nestjs/swagger';
 import { DiscoveryRequestsService } from './discovery-requests.service';
 import { CreateDiscoveryRequestDto } from './dto/create-discovery-request.dto';
 import { UpdateDiscoveryRequestDto } from './dto/update-discovery-request.dto';

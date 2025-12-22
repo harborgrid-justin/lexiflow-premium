@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsDate, IsOptional, IsBoolean, IsEnum, IsArray, Min } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsBoolean, IsEnum, IsArray, Min } from 'class-validator';
 import { ExpenseStatus, ExpenseCategory } from '../entities/expense.entity';
 
 export class CreateExpenseDto {

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere } from 'typeorm';
+import { Repository} from 'typeorm';
 import { Production, ProductionStatus } from '../discovery/productions/entities/production.entity';
 import { CreateProductionDto, UpdateProductionDto } from './dto';
 
@@ -52,7 +52,7 @@ export class ProductionService {
 
   async update(id: string, updateProductionDto: UpdateProductionDto): Promise<Production> {
     await this.findOne(id);
-    await this.productionRepository.update(id, updateProductionDto);
+    await this.productionRepository.update(id, { ...updateProductionDto, ...(updateProductionDto.metadata ? { metadata: JSON.stringify(updateProductionDto.metadata) } : {}) });
     return this.findOne(id);
   }
 
@@ -79,7 +79,7 @@ export class ProductionService {
         completed: 0,
         failed: 0,
         cancelled: 0,
-      },
+      } as Record<string, number>,
       totalDocuments: 0,
       totalPages: 0,
       totalSize: 0,

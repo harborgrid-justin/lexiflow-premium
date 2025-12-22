@@ -89,7 +89,7 @@ export class BillingMetricsDto {
   avgBillingRate!: number;
 
   @ApiProperty({ description: 'Revenue by practice area' })
-  revenueByPracticeArea: { [area: string]: number };
+  revenueByPracticeArea!: { [area: string]: number };
 
   @ApiProperty({ description: 'Revenue by attorney' })
   revenueByAttorney!: AttorneyRevenue[];
@@ -190,7 +190,7 @@ export class CaseWip {
   lastBilledDate?: Date;
 
   @ApiProperty({ description: 'Aging category' })
-  agingCategory: 'current' | '31-60' | '61-90' | '91-120' | 'over-120';
+  agingCategory!: 'current' | '31-60' | '61-90' | '91-120' | 'over-120';
 }
 
 export class ArAgingDto {
@@ -239,10 +239,10 @@ export class ClientAr {
   lastPaymentDate?: Date;
 
   @ApiProperty({ description: 'Aging category' })
-  agingCategory: 'current' | '31-60' | '61-90' | '91-120' | 'over-120';
+  agingCategory!: 'current' | '31-60' | '61-90' | '91-120' | 'over-120';
 
   @ApiProperty({ description: 'Collection risk level' })
-  riskLevel: 'low' | 'medium' | 'high';
+  riskLevel!: 'low' | 'medium' | 'high';
 }
 
 export class RealizationAnalysisDto {
@@ -256,14 +256,14 @@ export class RealizationAnalysisDto {
   byAttorney!: AttorneyRealization[];
 
   @ApiProperty({ description: 'Write-off analysis' })
-  writeOffAnalysis: {
+  writeOffAnalysis!: {
     totalWriteOffs: number;
     writeOffPercentage: number;
     topReasons: { [reason: string]: number };
   };
 
   @ApiProperty({ description: 'Discount analysis' })
-  discountAnalysis: {
+  discountAnalysis!: {
     totalDiscounts: number;
     discountPercentage: number;
     avgDiscountRate: number;

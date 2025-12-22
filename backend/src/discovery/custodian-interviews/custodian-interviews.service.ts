@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { CustodianInterview } from './entities/custodian-interview.entity';
 import { CreateCustodianInterviewDto } from './dto/create-custodian-interview.dto';
 import { UpdateCustodianInterviewDto } from './dto/update-custodian-interview.dto';
@@ -89,7 +89,7 @@ export class CustodianInterviewsService {
 
   async findOne(id: string): Promise<CustodianInterview> {
     const interview = await this.interviewRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!interview) {
@@ -119,14 +119,14 @@ export class CustodianInterviewsService {
 
   async getByCustodian(custodianId: string): Promise<CustodianInterview[]> {
     return await this.interviewRepository.find({
-      where: { custodianId, deletedAt: null },
+      where: { custodianId, deletedAt: IsNull() },
       order: { scheduledDate: 'DESC' },
     });
   }
 
   async getStatistics(caseId: string) {
     const interviews = await this.interviewRepository.find({
-      where: { caseId, deletedAt: null },
+      where: { caseId, deletedAt: IsNull() },
     });
 
     const stats = {

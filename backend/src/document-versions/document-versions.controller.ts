@@ -11,10 +11,8 @@ import {
   ParseIntPipe,
   Query,
 } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiConsumes, ApiBody, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
-import { Response } from 'express';
 import { DocumentVersionsService } from './document-versions.service';
 import { CreateVersionDto } from './dto/create-version.dto';
 

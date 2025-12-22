@@ -1,11 +1,11 @@
 export class ComplianceReportDto {
-  reportType: ReportType;
-  generatedAt: Date;
-  generatedBy: string;
-  dateRange: DateRange;
+  reportType!: ReportType;
+  generatedAt!: Date;
+  generatedBy!: string;
+  dateRange!: DateRange;
   data: any;
-  summary: ReportSummary;
-  organizationId: string;
+  summary!: ReportSummary;
+  organizationId!: string;
 }
 
 export enum ReportType {
@@ -32,18 +32,18 @@ export class GenerateAccessReportDto {
   userId?: string;
   resource?: string;
   includeDetails?: boolean;
-  organizationId: string;
-  generatedBy: string;
+  organizationId!: string;
+  generatedBy!: string;
 }
 
 export class AccessReportData {
-  totalAccessAttempts: number;
-  successfulAccesses: number;
-  deniedAccesses: number;
-  byUser: Record<string, number>;
-  byResource: Record<string, number>;
-  byAction: Record<string, number>;
-  timeline: TimelineEntry[];
+  totalAccessAttempts!: number;
+  successfulAccesses!: number;
+  deniedAccesses!: number;
+  byUser!: Record<string, number>;
+  byResource!: Record<string, number>;
+  byAction!: Record<string, number>;
+  timeline!: TimelineEntry[];
   details?: AccessDetail[];
 }
 
@@ -70,18 +70,18 @@ export class GenerateActivityReportDto {
   userId?: string;
   entityType?: string;
   action?: string;
-  organizationId: string;
-  generatedBy: string;
+  organizationId!: string;
+  generatedBy!: string;
 }
 
 export class ActivityReportData {
-  totalActivities: number;
-  byAction: Record<string, number>;
-  byEntityType: Record<string, number>;
-  byUser: Record<string, number>;
-  timeline: TimelineEntry[];
-  topUsers: UserActivity[];
-  recentActivities: unknown[];
+  totalActivities!: number;
+  byAction!: Record<string, number>;
+  byEntityType!: Record<string, number>;
+  byUser!: Record<string, number>;
+  timeline!: TimelineEntry[];
+  topUsers!: UserActivity[];
+  recentActivities!: unknown[];
 }
 
 export interface UserActivity {
@@ -96,19 +96,19 @@ export class GenerateConflictsReportDto {
   endDate?: Date;
   status?: string;
   checkType?: string;
-  organizationId: string;
-  generatedBy: string;
+  organizationId!: string;
+  generatedBy!: string;
 }
 
 export class ConflictsReportData {
-  totalChecks: number;
-  conflictsFound: number;
-  conflictsResolved: number;
-  conflictsWaived: number;
-  byCheckType: Record<string, number>;
-  byStatus: Record<string, number>;
-  timeline: TimelineEntry[];
-  criticalConflicts: unknown[];
+  totalChecks!: number;
+  conflictsFound!: number;
+  conflictsResolved!: number;
+  conflictsWaived!: number;
+  byCheckType!: Record<string, number>;
+  byStatus!: Record<string, number>;
+  timeline!: TimelineEntry[];
+  criticalConflicts!: unknown[];
 }
 
 export class GenerateEthicalWallsReportDto {
@@ -116,17 +116,17 @@ export class GenerateEthicalWallsReportDto {
   endDate?: Date;
   status?: string;
   userId?: string;
-  organizationId: string;
-  generatedBy: string;
+  organizationId!: string;
+  generatedBy!: string;
 }
 
 export class EthicalWallsReportData {
-  totalWalls: number;
-  activeWalls: number;
-  expiredWalls: number;
-  affectedUsers: number;
-  restrictedEntities: number;
-  byEntityType: Record<string, number>;
-  timeline: TimelineEntry[];
-  walls: unknown[];
+  totalWalls!: number;
+  activeWalls!: number;
+  expiredWalls!: number;
+  affectedUsers!: number;
+  restrictedEntities!: number;
+  byEntityType!: Record<string, number>;
+  timeline!: TimelineEntry[];
+  walls!: unknown[];
 }

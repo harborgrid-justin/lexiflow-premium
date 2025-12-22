@@ -5,12 +5,10 @@ import {
   Delete,
   Param,
   Body,
-  Query,
-  UseGuards,
+  Query, UseGuards,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,

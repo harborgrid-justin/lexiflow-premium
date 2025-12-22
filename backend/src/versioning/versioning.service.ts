@@ -13,7 +13,7 @@ export class VersioningService {
   async createVersion(data: {
     entityType: string;
     entityId: string;
-    data: Record<string, any>;
+    data: Record<string, unknown>;
     branch?: string;
     tag?: string;
     commitMessage?: string;

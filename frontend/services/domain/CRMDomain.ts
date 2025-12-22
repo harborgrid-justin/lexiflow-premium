@@ -134,10 +134,10 @@ export const CRMService = {
 
     getAnalytics: async () => {
         const leads = await adminApi.crm?.getLeads?.() || [];
-        
+
         // Dynamic Calculation based on DB state
-        const pipelineValue = leads.reduce((acc, l) => acc + (parseFloat(l.value.replace(/[^0-9.]/g, '')) || 0), 0);
-        const bySource = leads.reduce((acc, l) => {
+        const pipelineValue = leads.reduce((acc: number, l: any) => acc + (parseFloat(l.value.replace(/[^0-9.]/g, '')) || 0), 0);
+        const bySource = leads.reduce((acc: Record<string, number>, l: any) => {
             acc[l.source || 'Referral'] = (acc[l.source || 'Referral'] || 0) + 1;
             return acc;
         }, {} as Record<string, number>);

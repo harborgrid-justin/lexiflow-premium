@@ -80,7 +80,7 @@ export class FeeAgreement {
   fixedFeeAmount!: number;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
-  paymentSchedule: string; // e.g., "Monthly", "Upon Completion", "Milestone-based"
+  paymentSchedule!: string; // e.g., "Monthly", "Upon Completion", "Milestone-based"
 
   // Contingency fields
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
@@ -97,7 +97,7 @@ export class FeeAgreement {
   retainerRefundable!: boolean;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
-  retainerReplenishment: string; // e.g., "Monthly", "Quarterly", "As needed"
+  retainerReplenishment!: string; // e.g., "Monthly", "Quarterly", "As needed"
 
   // Subscription fields
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
@@ -114,7 +114,7 @@ export class FeeAgreement {
   expensesBillable!: boolean;
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  expenseMarkup: number; // percentage
+  expenseMarkup!: number; // percentage
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   expenseCap!: number;
@@ -124,10 +124,10 @@ export class FeeAgreement {
   paymentTermsDays!: number;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
-  billingFrequency: string; // e.g., "Monthly", "Bi-weekly", "Upon completion"
+  billingFrequency!: string; // e.g., "Monthly", "Bi-weekly", "Upon completion"
 
   @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
-  latePaymentRate: number; // percentage
+  latePaymentRate!: number; // percentage
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   discountPercentage!: number;

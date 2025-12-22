@@ -8,7 +8,7 @@ import {
 
 @ValidatorConstraint({ async: false })
 export class IsStrongPasswordConstraint implements ValidatorConstraintInterface {
-  validate(password: string, args: ValidationArguments) {
+  validate(password: string, _args: ValidationArguments) {
     if (!password) return false;
 
     const hasUpperCase = /[A-Z]/.test(password);
@@ -20,13 +20,13 @@ export class IsStrongPasswordConstraint implements ValidatorConstraintInterface 
     return hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar && isLongEnough;
   }
 
-  defaultMessage(args: ValidationArguments) {
+  defaultMessage(_args: ValidationArguments) {
     return 'Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character';
   }
 }
 
 export function IsStrongPassword(validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,

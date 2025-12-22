@@ -73,7 +73,7 @@ export class Custodian {
   relevance!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  dataSources: Array<{
+  dataSources!: Array<{
     sourceId: string;
     sourceName: string;
     sourceType: string;
@@ -96,7 +96,7 @@ export class Custodian {
   acknowledgedAt!: Date;
 
   @Column({ type: 'jsonb', nullable: true })
-  interviews: Array<{
+  interviews!: Array<{
     date: Date;
     interviewer: string;
     summary: string;
@@ -106,7 +106,7 @@ export class Custodian {
   notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 
   @Column({ type: 'uuid', nullable: true })
   assignedTo!: string;

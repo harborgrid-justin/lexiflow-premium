@@ -1,8 +1,8 @@
-import { Repository, FindManyOptions, FindOneOptions, DeepPartial } from 'typeorm';
+import { Repository, FindManyOptions, FindOneOptions, DeepPartial, ObjectLiteral } from 'typeorm';
 import { Logger } from '@nestjs/common';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
-export abstract class BaseRepository<T> {
+export abstract class BaseRepository<T extends ObjectLiteral> {
   protected readonly logger: Logger;
 
   constructor(
@@ -63,7 +63,11 @@ export abstract class BaseRepository<T> {
   async update(id: string | number, data: QueryDeepPartialEntity<T>): Promise<T> {
     this.logger.debug(`Updating entity with ID: ${id}`);
     await this.repository.update(id, data);
-    return this.findById(id);
+    const updated = await this.findById(id);
+    if (!updated) {
+      throw new Error(`Entity with ID ${id} not found after update`);
+    }
+    return updated;
   }
 
   /**
@@ -72,7 +76,7 @@ export abstract class BaseRepository<T> {
   async delete(id: string | number): Promise<boolean> {
     this.logger.debug(`Deleting entity with ID: ${id}`);
     const result = await this.repository.delete(id);
-    return result.affected > 0;
+    return (result.affected ?? 0) > 0;
   }
 
   /**
@@ -81,7 +85,7 @@ export abstract class BaseRepository<T> {
   async softDelete(id: string | number): Promise<boolean> {
     this.logger.debug(`Soft deleting entity with ID: ${id}`);
     const result = await this.repository.softDelete(id);
-    return result.affected > 0;
+    return (result.affected ?? 0) > 0;
   }
 
   /**

@@ -1,5 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import {
   CreateServiceJobDto,
@@ -31,10 +30,9 @@ export class ServiceJobsService {
   /**
    * Get all service jobs with filters
    */
-  async findAll(query: ServiceJobQueryDto, userId: string) {
-    const { page = 1, limit = 20, type, status, caseId, processServerId } = query;
+  async findAll(query: ServiceJobQueryDto, userId: string) { const { page = 1, limit = 20, _type, _status, _caseId, _processServerId } = query;
 
-    // Implementation will filter by type, status, caseId, processServerId
+    // Implementation will filter by type, _status, _caseId, processServerId
     return {
       data: [],
       pagination: {
@@ -66,15 +64,14 @@ export class ServiceJobsService {
   /**
    * Create new service job
    */
-  async create(createDto: CreateServiceJobDto, userId: string) {
-    // Create service job record
+  async create(createDto: CreateServiceJobDto, userId: string) { // Create service job record
     // Send notification to assigned process server if specified
     // Create audit log entry
 
     return {
       id: 'svc-' + Date.now(),
       ...createDto,
-      createdBy: userId,
+      createdBy: _userId,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -98,9 +95,8 @@ export class ServiceJobsService {
   /**
    * Complete service job
    */
-  async completeService(id: string, completeDto: CompleteServiceDto, userId: string) {
-    // Verify service job exists
-    // Update status to completed
+  async completeService(id: string, completeDto: CompleteServiceDto, userId: string) { // Verify service job exists
+    // Update _status to completed
     // Record completion details
     // Link proof of service documents
     // Notify case team
@@ -110,7 +106,7 @@ export class ServiceJobsService {
       id,
       status: ServiceJobStatus.COMPLETED,
       ...completeDto,
-      completedBy: userId,
+      completedBy: _userId,
       completedAt: new Date(),
     };
   }
@@ -118,27 +114,24 @@ export class ServiceJobsService {
   /**
    * Assign process server
    */
-  async assignProcessServer(id: string, processServerId: string, userId: string) {
-    // Update service job with process server
-    // Update status to 'assigned'
+  async assignProcessServer(id: string, processServerId: string, userId: string) { // Update service job with process server
+    // Update _status to 'assigned'
     // Notify process server
 
     return {
-      id,
-      processServerId,
+      id, _processServerId,
       status: ServiceJobStatus.ASSIGNED,
       assignedAt: new Date(),
-      assignedBy: userId,
+      assignedBy: _userId,
     };
   }
 
   /**
    * Get service jobs for a case
    */
-  async getJobsForCase(caseId: string, userId: string) {
-    // Get all service jobs for a case
+  async getJobsForCase(caseId: string, userId: string) { // Get all service jobs for a case
     return {
-      caseId,
+      _caseId,
       jobs: [],
       total: 0,
     };
@@ -147,10 +140,9 @@ export class ServiceJobsService {
   /**
    * Get service jobs assigned to a process server
    */
-  async getJobsForProcessServer(processServerId: string) {
-    // Get all jobs assigned to specific process server
+  async getJobsForProcessServer(processServerId: string) { // Get all jobs assigned to specific process server
     return {
-      processServerId,
+      _processServerId,
       jobs: [],
       total: 0,
     };
@@ -170,15 +162,14 @@ export class ServiceJobsService {
   /**
    * Cancel service job
    */
-  async cancel(id: string, reason: string, userId: string) {
-    // Update status to cancelled
+  async cancel(id: string, reason: string, userId: string) { // Update _status to cancelled
     // Record cancellation reason
     // Notify process server if assigned
 
     return {
       id,
       status: ServiceJobStatus.CANCELLED,
-      cancelledBy: userId,
+      cancelledBy: _userId,
       cancelledAt: new Date(),
       cancellationReason: reason,
     };

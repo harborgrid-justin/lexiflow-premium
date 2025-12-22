@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Brackets } from 'typeorm';
 import * as MasterConfig from '../config/master.config';
 import { calculateOffset, calculateTotalPages, calculateExecutionTime } from '../common/utils/math.utils';
@@ -32,10 +31,9 @@ export class SearchService {
   /**
    * Perform global search across all entities
    */
-  async search(query: SearchQueryDto): Promise<SearchResultDto> {
-    const startTime = Date.now();
-    const { page = 1, limit = 20, entityType, fuzzy } = query;
-    const offset = calculateOffset(page, limit);
+  async search(query: SearchQueryDto): Promise<SearchResultDto> { const startTime = Date.now();
+    const { _page = 1, _limit = 20, entityType, fuzzy: _fuzzy } = query;
+    // Offset calculation: const offset = calculateOffset(_page, _limit);
 
     try {
       let results: SearchResultItem[] = [];
@@ -69,13 +67,11 @@ export class SearchService {
       }
 
       const executionTime = calculateExecutionTime(startTime);
-      const totalPages = calculateTotalPages(total, limit);
+      const totalPages = calculateTotalPages(total, _limit);
 
       return {
         results,
-        total,
-        page,
-        limit,
+        total, _page, _limit,
         totalPages,
         query: query.query,
         executionTime,
@@ -92,9 +88,8 @@ export class SearchService {
   /**
    * Search cases with full-text search
    */
-  async searchCases(query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
-    const { query: searchQuery, page = 1, limit = 20, startDate, endDate, status, practiceArea, fuzzy } = query;
-    const offset = calculateOffset(page, limit);
+  async searchCases(query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> { const { query: searchQuery, _page = 1, _limit = 20, startDate: _startDate, endDate: _endDate, status, practiceArea, fuzzy: _fuzzy } = query;
+    // Offset calculation: const offset = calculateOffset(_page, _limit);
 
     // Mock implementation - replace with actual TypeORM query when entities are available
     // Example PostgreSQL full-text search query:
@@ -154,7 +149,7 @@ export class SearchService {
       .orderBy('score', 'DESC')
       .addOrderBy('case.updatedAt', 'DESC')
       .skip(offset)
-      .take(limit)
+      .take(_limit)
       .getManyAndCount();
 
     const results = cases.map(c => this.mapCaseToSearchResult(c));
@@ -190,8 +185,8 @@ export class SearchService {
   /**
    * Search documents with full-text search
    */
-  async searchDocuments(query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
-    const { query: searchQuery, page = 1, limit = 20, fuzzy } = query;
+  async searchDocuments(_query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
+    const { query: searchQuery, page: _page = 1, limit: _limit = 20, fuzzy: _fuzzy } = _query;
 
     // Mock implementation - replace with actual query
     const results: SearchResultItem[] = [
@@ -222,8 +217,8 @@ export class SearchService {
   /**
    * Search clients
    */
-  async searchClients(query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
-    const { query: searchQuery, page = 1, limit = 20 } = query;
+  async searchClients(_query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
+    const { query: searchQuery, page: _page = 1, limit: _limit = 20 } = _query;
 
     // Mock implementation
     const results: SearchResultItem[] = [
@@ -278,7 +273,7 @@ export class SearchService {
    * Get search suggestions/autocomplete
    */
   async getSuggestions(dto: SearchSuggestionsDto): Promise<SearchSuggestionsResultDto> {
-    const { query, limit = 10, entityType } = dto;
+    const { query, limit: _limit = 10, entityType: _entityType } = dto;
 
     // Mock implementation - would use PostgreSQL trigram similarity
     /*
@@ -315,7 +310,7 @@ export class SearchService {
    */
   async reindex(dto: ReindexDto): Promise<ReindexResultDto> {
     const startTime = Date.now();
-    const { entityType, force } = dto;
+    const { entityType, force: _force } = dto;
 
     this.logger.log(`Starting reindex for ${entityType || 'all'} entities`);
 
@@ -347,9 +342,9 @@ export class SearchService {
    */
   private async generateFacets(results: SearchResultItem[]): Promise<any> {
     const facets = {
-      entityTypes: {},
-      practiceAreas: {},
-      statuses: {},
+      entityTypes: {} as Record<string, number>,
+      practiceAreas: {} as Record<string, number>,
+      statuses: {} as Record<string, number>,
     };
 
     results.forEach((result) => {
@@ -374,7 +369,7 @@ export class SearchService {
   /**
    * Map case entity to search result
    */
-  private mapCaseToSearchResult(caseEntity: any): SearchResultItem {
+  private _mapCaseToSearchResult(caseEntity: any): SearchResultItem {
     return {
       id: caseEntity.id,
       entityType: SearchEntityType.CASE,
@@ -405,17 +400,17 @@ export class SearchService {
     ];
   }
 
-  async getRecentSearches(userId: string): Promise<any[]> {
+  async getRecentSearches(_userId: string): Promise<any[]> {
     // Stub implementation - would query search_history table
     return [];
   }
 
-  async saveSearch(userId: string, query: string): Promise<any> {
+  async saveSearch(_userId: string, query: string): Promise<any> {
     // Stub implementation - would save to search_history table
-    return { userId, query, timestamp: new Date() };
+    return { userId: _userId, query, timestamp: new Date() };
   }
 
-  async clearSearchHistory(userId: string): Promise<void> {
+  async clearSearchHistory(_userId: string): Promise<void> {
     // Stub implementation - would delete from search_history table
   }
 

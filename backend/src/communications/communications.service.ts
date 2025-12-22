@@ -8,13 +8,13 @@ import { Template } from './entities/template.entity';
 export class CommunicationsService {
   private readonly logger = new Logger(CommunicationsService.name);
 
-  scheduleMessage(scheduleMessage: any) {
+  _scheduleMessage(_scheduleMessage: any) {
     throw new Error('Method not implemented.');
   }
-  getScheduledMessages(getScheduledMessages: any) {
+  _getScheduledMessages(_getScheduledMessages: any) {
     throw new Error('Method not implemented.');
   }
-  getDeliveryStatus(getDeliveryStatus: any) {
+  _getDeliveryStatus(_getDeliveryStatus: any) {
     throw new Error('Method not implemented.');
   }
   
@@ -55,6 +55,9 @@ export class CommunicationsService {
     const communication = this.communicationRepository.create(data);
     const saved = await this.communicationRepository.save(communication);
     const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) {
+      throw new Error('Failed to save communication');
+    }
     this.logger.log(`Communication created successfully with ID: ${result.id}`);
     return result;
   }
@@ -67,6 +70,10 @@ export class CommunicationsService {
     communication.status = 'sent';
     communication.sentAt = new Date();
     const saved = await this.communicationRepository.save(communication);
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) {
+      throw new Error('Failed to save communication');
+    }
     return Array.isArray(saved) ? saved[0] : saved;
   }
 
@@ -136,14 +143,18 @@ export class CommunicationsService {
   async createTemplate(data: any): Promise<Template> {
     const template = this.templateRepository.create(data);
     const saved = await this.templateRepository.save(template);
-    return Array.isArray(saved) ? saved[0] : saved;
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) throw new Error('Failed to save template');
+    return result;
   }
 
   async updateTemplate(id: string, data: any): Promise<Template> {
     const template = await this.getTemplateById(id);
     Object.assign(template, data);
     const saved = await this.templateRepository.save(template);
-    return Array.isArray(saved) ? saved[0] : saved;
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) throw new Error('Failed to update template');
+    return result;
   }
 
   async deleteTemplate(id: string): Promise<void> {
@@ -193,6 +204,8 @@ export class CommunicationsService {
     });
 
     const saved = await this.communicationRepository.save(communication);
-    return Array.isArray(saved) ? saved[0] : saved;
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) throw new Error('Failed to create communication');
+    return result;
   }
 }

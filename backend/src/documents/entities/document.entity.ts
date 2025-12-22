@@ -83,7 +83,7 @@ export class Document extends BaseEntity {
   tags!: string[];
 
   @Column({ name: 'custom_fields', type: 'jsonb', nullable: true })
-  customFields!: Record<string, any>;
+  customFields!: Record<string, unknown>;
 
   @Column({ name: 'full_text_content', type: 'text', nullable: true })
   fullTextContent!: string;

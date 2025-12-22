@@ -240,7 +240,7 @@ export class AIValidationService {
   private static sanitizeAIResponse(response: unknown): any {
     return {
       nodes: response.nodes.map((node: unknown) => ({
-        ...node,
+        ...(node && typeof node === 'object' ? node : {}),
         id: this.sanitizeString(node.id),
         label: this.sanitizeString(node.label),
         type: this.sanitizeString(node.type),
@@ -249,7 +249,7 @@ export class AIValidationService {
         config: this.sanitizeConfig(node.config),
       })),
       connections: response.connections.map((conn: unknown) => ({
-        ...conn,
+        ...(conn && typeof conn === 'object' ? conn : {}),
         id: this.sanitizeString(conn.id),
         from: this.sanitizeString(conn.from),
         to: this.sanitizeString(conn.to),

@@ -65,15 +65,20 @@ export const CRMPipeline: React.FC<CRMPipelineProps> = ({ leads }) => {
   return (
     <div className="flex flex-col h-full">
       <KanbanBoard>
-        {stages.map((stage, idx) => (
-          <KanbanColumn 
-            key={stage} 
-            title={stage} 
-            count={leads.filter((l: unknown) => l.stage === stage).length}
+        {stages.map((stage, idx) => {
+          const stageLeads = leads.filter((l: unknown) => {
+            return typeof l === 'object' && l !== null && 'stage' in l && l.stage === stage;
+          });
+
+          return (
+          <KanbanColumn
+            key={stage}
+            title={stage}
+            count={stageLeads.length}
             isDragOver={dragOverStage === stage}
             onDrop={() => handleDrop(stage)}
             action={idx === 0 ? (
-              <button 
+              <button
                 onClick={handleAddLead}
                 className={cn(
                   "mt-3 w-full py-2 border-2 border-dashed rounded-lg text-xs font-bold transition-all flex items-center justify-center",
@@ -88,29 +93,39 @@ export const CRMPipeline: React.FC<CRMPipelineProps> = ({ leads }) => {
               </button>
             ) : undefined}
           >
-            {leads.filter((l: unknown) => l.stage === stage).map((lead: unknown) => (
+            {stageLeads.map((lead: unknown) => {
+              if (typeof lead !== 'object' || lead === null) return null;
+              const leadId = 'id' in lead ? String(lead.id) : '';
+              const leadClient = 'client' in lead && typeof lead.client === 'string' ? lead.client : '';
+              const leadTitle = 'title' in lead && typeof lead.title === 'string' ? lead.title : '';
+              const leadValue = 'value' in lead && typeof lead.value === 'string' ? lead.value : '$0';
+              const leadDate = 'date' in lead && typeof lead.date === 'string' ? lead.date : '';
+
+              return (
               <KanbanCard
-                key={lead.id}
-                onDragStart={(e) => handleDragStart(e, lead.id)}
-                isDragging={draggedLeadId === lead.id}
+                key={leadId}
+                onDragStart={(e) => handleDragStart(e, leadId)}
+                isDragging={draggedLeadId === leadId}
               >
                 <div className="flex justify-between items-start mb-1">
-                  <h4 className={cn("font-bold text-sm line-clamp-1 transition-colors", theme.text.primary, `group-hover:${theme.primary.text}`)}>{lead.client}</h4>
+                  <h4 className={cn("font-bold text-sm line-clamp-1 transition-colors", theme.text.primary, `group-hover:${theme.primary.text}`)}>{leadClient}</h4>
                 </div>
-                <p className={cn("text-xs mb-3 line-clamp-1", theme.text.secondary)}>{lead.title}</p>
+                <p className={cn("text-xs mb-3 line-clamp-1", theme.text.secondary)}>{leadTitle}</p>
                 <div className={cn("flex justify-between items-center text-xs pt-2 border-t", theme.border.default)}>
                   <span className={cn("font-mono font-medium flex items-center", theme.status.success.text)}>
                       <DollarSign className="h-3 w-3 mr-0.5"/>
-                      {lead.value.replace('$','')}
+                      {leadValue.replace('$','')}
                   </span>
                   <span className={cn("flex items-center gap-1", theme.text.tertiary)}>
-                    <Calendar className="h-3 w-3"/> {lead.date}
+                    <Calendar className="h-3 w-3"/> {leadDate}
                   </span>
                 </div>
               </KanbanCard>
-            ))}
+              );
+            })}
           </KanbanColumn>
-        ))}
+          );
+        })}
       </KanbanBoard>
     </div>
   );

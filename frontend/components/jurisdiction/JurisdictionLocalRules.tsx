@@ -152,7 +152,7 @@ export const JurisdictionLocalRules: React.FC = () => {
                         title="Select jurisdiction type"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={editingRule.type || 'Local'}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingRule({...editingRule, type: e.target.value as any})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setEditingRule({...editingRule, type: e.target.value as any})}
                       >
                           <option value="FRCP">Federal (FRCP)</option>
                           <option value="FRAP">Appellate (FRAP)</option>
@@ -173,7 +173,7 @@ export const JurisdictionLocalRules: React.FC = () => {
                 rows={4}
                 placeholder="Brief summary of the rule's requirement..."
                 value={editingRule.summary || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingRule({...editingRule, summary: e.target.value})}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditingRule({...editingRule, summary: e.target.value})}
               />
               <div className={cn("flex justify-end gap-2 pt-4 border-t mt-4", theme.border.default)}>
                   <Button variant="secondary" onClick={ruleModal.close}>Cancel</Button>

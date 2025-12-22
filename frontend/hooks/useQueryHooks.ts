@@ -44,7 +44,8 @@ export function useQuery<T>(
   return {
     ...state,
     isLoading: state.status === 'loading' || (state.isFetching && state.status === 'idle'),
-    refetch: () => queryClient.fetch(key, (sig) => fnRef.current(sig), 0) 
+    isError: state.status === 'error',
+    refetch: () => queryClient.fetch(key, (sig) => fnRef.current(sig), 0)
   };
 }
 
@@ -82,5 +83,9 @@ export function useMutation<T, V>(
     }
   }, [mutationFn, options]);
 
-  return { mutate, isLoading: loading };
+  return {
+    mutate,
+    mutateAsync: mutate, // Alias for compatibility with react-query-like APIs
+    isLoading: loading
+  };
 }

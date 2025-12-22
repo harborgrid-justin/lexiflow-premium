@@ -88,11 +88,11 @@ export const useGanttDrag = ({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions)
         
         if (daysDelta !== 0) {
             const task = tasks.find(t => t.id === taskId);
-            if (task) {
+            if (task && task.dueDate) {
                 // Default duration to 5 days if not calculable
                 const currentDue = new Date(task.dueDate);
-                const currentStart = task.startDate 
-                    ? new Date(task.startDate) 
+                const currentStart = task.startDate
+                    ? new Date(task.startDate)
                     : new Date(currentDue.getTime() - (5 * 24 * 60 * 60 * 1000));
                 
                 const newStart = new Date(currentStart);

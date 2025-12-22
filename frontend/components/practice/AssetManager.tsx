@@ -56,7 +56,7 @@ export const AssetManager: React.FC = () => {
   const [newAsset, setNewAsset] = useState<Partial<FirmAsset>>({});
 
   // Enterprise Data Access
-  const { data: rawAssets = [] } = useQuery<FirmAsset[]>(
+  const { data: rawAssets = [], refetch } = useQuery<FirmAsset[]>(
       ['assets', 'all'],
       DataService.assets.getAll
   );
@@ -204,7 +204,7 @@ export const AssetManager: React.FC = () => {
                         title="Select asset type"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={newAsset.type}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewAsset({...newAsset, type: e.target.value as any})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewAsset({...newAsset, type: e.target.value as any})}
                       >
                           <option value="Hardware">Hardware</option>
                           <option value="Software">Software</option>

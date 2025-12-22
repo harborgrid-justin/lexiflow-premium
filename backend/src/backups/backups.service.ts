@@ -65,8 +65,8 @@ export class BackupsService {
   }
 
   async restore(id: string, _target: string): Promise<{ jobId: string; status: string }> {
-    const _snapshot = await this.getSnapshot(id);
-    
+    await this.getSnapshot(id);
+
     // In production, trigger actual restore process
     const jobId = `restore-${Date.now()}`;
 

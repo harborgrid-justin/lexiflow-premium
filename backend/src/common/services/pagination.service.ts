@@ -59,6 +59,8 @@ export interface PaginationMeta {
  * );
  */
 @Injectable()
+import { ObjectLiteral } from 'typeorm';
+
 export class PaginationService {
   private readonly DEFAULT_LIMIT = MasterConfig.DEFAULT_PAGE_SIZE;
   private readonly MAX_LIMIT = MasterConfig.MAX_PAGE_SIZE;

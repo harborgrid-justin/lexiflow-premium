@@ -34,7 +34,7 @@ export class DocketIngestedHandler extends BaseEventHandler<SystemEventPayloads[
   }
   
   private async createResponseDeadline(entry: SystemEventPayloads[typeof SystemEventType.DOCKET_INGESTED]['entry']) {
-    const deadlineDate = new Date(new Date(entry.date).getTime() + (14 * 24 * 60 * 60 * 1000));
+    const deadlineDate = new Date(new Date(entry.date || entry.entryDate || entry.dateFiled).getTime() + (14 * 24 * 60 * 60 * 1000));
     
     const deadlineEvt: CalendarEventItem = {
       id: `cal-resp-${entry.id}`,

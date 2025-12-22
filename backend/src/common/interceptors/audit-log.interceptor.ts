@@ -63,7 +63,7 @@ export class AuditLogInterceptor implements NestInterceptor {
           });
         } catch (error) {
           const message = error instanceof Error ? error.message : 'Unknown error';
-          const __stack = error instanceof Error ? error.stack : undefined;
+          
           this.logger.error(`Failed to log audit: ${message}`);
         }
       }),

@@ -118,7 +118,7 @@ export class CasesApiService {
   // Transform case data from backend to frontend format
   private transformCase(backendCase: unknown): Case {
     return {
-      ...backendCase,
+      ...(backendCase && typeof backendCase === 'object' ? backendCase : {}),
       status: this.mapBackendStatusToFrontend(backendCase.status),
       matterType: backendCase.practiceArea || 'General',
     };
@@ -226,7 +226,7 @@ export class CasesApiService {
     };
 
     // Remove undefined values
-    Object.keys(createDto).forEach(key => {
+    Object.keys(createDto as Record<string, any>).forEach(key => {
       if ((createDto as any)[key] === undefined) {
         delete (createDto as any)[key];
       }

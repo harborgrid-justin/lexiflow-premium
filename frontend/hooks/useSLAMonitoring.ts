@@ -68,9 +68,9 @@ export const useSLAMonitoring = (options: UseSLAMonitoringOptions = {}) => {
       const items = tasks
         .filter((t: Task) => t.dueDate && t.status !== 'Done' && t.status !== 'Completed')
         .map((t: Task) => {
-          const dueTime = new Date(t.dueDate).getTime();
+          const dueTime = new Date(t.dueDate!).getTime();
           const { status, progress } = calculateSLAStatus(dueTime);
-          
+
           return {
             id: t.id,
             task: t.title,

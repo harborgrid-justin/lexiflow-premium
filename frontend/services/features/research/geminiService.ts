@@ -277,7 +277,7 @@
  */
 
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
-import { ParsedDocket, SearchResult } from "../types";
+import { ParsedDocket, SearchResult } from "../../../types";
 import { Prompts } from "../../ai/prompts";
 import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema, ShepardizeSchema, StrategyGraphSchema, LinterResultSchema } from "../../ai/schemas";
 import { safeParseJSON, withRetry } from "../../../utils/apiUtils";
@@ -456,7 +456,7 @@ export const GeminiService = {
                     model: 'gemini-2.5-flash',
                     contents: Prompts.Research(query),
                     config: {
-                        tools: [{googleSearch: {}}],
+                        tools: [{googleSearch: {}} as any],
                     }
                 });
                     

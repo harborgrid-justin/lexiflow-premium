@@ -67,7 +67,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   const [isQuickActionOpen, setIsQuickActionOpen] = useState(false);
   const quickActionRef = React.useRef<HTMLDivElement>(null);
   
-  useClickOutside(quickActionRef, () => setIsQuickActionOpen(false));
+  useClickOutside(quickActionRef as React.RefObject<HTMLElement>, () => setIsQuickActionOpen(false));
 
   // System Heartbeat Visual
   useInterval(() => setPulse(p => !p), 2000);

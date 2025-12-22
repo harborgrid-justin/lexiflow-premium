@@ -1,5 +1,4 @@
 import {
-  Controller,
   Get,
   Post,
   Put,
@@ -20,7 +19,9 @@ import { StandardResponseDto } from '../dto/standard-response.dto';
 import { DeepPartial } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
-export abstract class BaseController<T, CreateDto extends DeepPartial<T>, UpdateDto extends QueryDeepPartialEntity<T>, S extends BaseService<T, BaseRepository<T>>> {
+import { ObjectLiteral } from 'typeorm';
+
+export abstract class BaseController<T extends ObjectLiteral, CreateDto extends DeepPartial<T>, UpdateDto extends QueryDeepPartialEntity<T>, S extends BaseService<T, BaseRepository<T>>> {
   protected readonly resourceName: string;
 
   constructor(

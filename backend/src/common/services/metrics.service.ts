@@ -31,8 +31,7 @@ export interface Metric {
  * metricsService.recordHistogram('api.response.time', 150, { endpoint: '/cases' });
  */
 @Injectable()
-export class MetricsService {
-  private readonly __logger = new Logger(MetricsService.name);
+export class MetricsService { private readonly // __logger = new Logger(MetricsService.name);
   private metrics: Map<string, Metric[]> = new Map();
   private counters: Map<string, number> = new Map();
   private gauges: Map<string, number> = new Map();
@@ -128,11 +127,11 @@ export class MetricsService {
     };
 
     for (const [key, value] of this.counters.entries()) {
-      result.counters[key] = value;
+      (result as any).counters[key] = value;
     }
 
     for (const [key, value] of this.gauges.entries()) {
-      result.gauges[key] = value;
+      (result as any).gauges[key] = value;
     }
 
     return result;

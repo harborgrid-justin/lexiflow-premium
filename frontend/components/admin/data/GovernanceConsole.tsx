@@ -23,7 +23,7 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
   const [activeTab, setActiveTab] = useState(initialTab);
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
-  const [editingRule, setEditingRule] = useState<unknown>(null);
+  const [editingRule, setEditingRule] = useState<GovernanceRule | null>(null);
   
   const scanIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 

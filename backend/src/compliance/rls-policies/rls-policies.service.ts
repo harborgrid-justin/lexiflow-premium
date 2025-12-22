@@ -100,7 +100,7 @@ export class RlsPoliciesService {
   }
 
   async remove(id: string): Promise<void> {
-    const __policy = await this.findOne(id);
+    const // __policy = await this.findOne(id);
     this.rlsPolicies.delete(id);
   }
 

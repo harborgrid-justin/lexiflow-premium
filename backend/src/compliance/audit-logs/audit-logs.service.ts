@@ -3,8 +3,7 @@ import {
   AuditLogDto,
   CreateAuditLogDto,
   QueryAuditLogsDto,
-  ExportAuditLogsDto,
-  AuditAction,
+  ExportAuditLogsDto, AuditAction,
   AuditEntityType,
 } from './dto/audit-log.dto';
 
@@ -58,9 +57,9 @@ export class AuditLogsService {
       const aVal = a[sortBy];
       const bVal = b[sortBy];
       if (sortOrder === 'asc') {
-        return aVal > bVal ? 1 : -1;
+        return (aVal ?? 0) > (bVal ?? 0) ? 1 : -1;
       }
-      return aVal < bVal ? 1 : -1;
+      return (aVal ?? 0) < (bVal ?? 0) ? 1 : -1;
     });
 
     // Paginate

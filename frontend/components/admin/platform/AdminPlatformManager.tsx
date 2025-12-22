@@ -32,7 +32,7 @@ export const AdminPlatformManager: React.FC = () => {
   );
 
   const handleEdit = (item: unknown) => {
-    setEditingItem({ ...item });
+    setEditingItem(item && typeof item === 'object' ? { ...item } : {});
     setIsNewItem(false);
     setIsModalOpen(true);
   };

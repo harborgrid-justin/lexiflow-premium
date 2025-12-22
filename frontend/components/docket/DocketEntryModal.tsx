@@ -103,7 +103,7 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
             <CopyButton text={entry.description || entry.title} variant="ghost" size="sm" />
           </div>
           <p className={cn("text-sm leading-relaxed", theme.text.secondary)}>{renderLinkedText(entry.title)}</p>
-          {entry.description && <p className={cn("text-sm mt-2 italic", theme.text.tertiary)}>{renderLinkedText(entry.description)}</p>}
+          {entry.description && <p className={cn("text-sm mt-2 italic", theme.text.tertiary)}>{renderLinkedText(entry.description || '')}</p>}
         </div>
 
         {/* Auto-generated Tags or Rules */}

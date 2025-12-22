@@ -1,14 +1,12 @@
 import {
-  IsString,
-  IsEnum,
+  IsString, IsEnum,
   IsOptional,
   IsDateString,
   IsNumber,
   IsArray,
   IsUUID,
   IsBoolean,
-  MaxLength,
-  ValidateNested,
+  MaxLength, ValidateNested,
 } from 'class-validator';
 
 export class CreateLegalHoldDto {

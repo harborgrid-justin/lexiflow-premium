@@ -40,7 +40,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   }, [value]);
   
   const isNumeric = typeof normalizedValue === 'number';
-  const [displayValue, setDisplayValue] = useState<string | number>(isNumeric ? 0 : normalizedValue);
+  const [displayValue, setDisplayValue] = useState<string | number>(isNumeric ? 0 : (typeof normalizedValue === 'string' ? normalizedValue : ''));
   const prevValueRef = useRef(normalizedValue);
 
   // Animation effect for numeric values
@@ -68,7 +68,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
       };
       
       requestAnimationFrame(animate);
-    } else {
+    } else if (typeof normalizedValue === 'string') {
       setDisplayValue(normalizedValue);
     }
     prevValueRef.current = normalizedValue;

@@ -1,6 +1,6 @@
 // components/discovery/index.ts
 
-export * from './DiscoveryContentRenderer';
+export * from './DiscoveryContentRenderer';  // Re-exports: InitialDisclosureWizard, MotionToCompelBuilder, DiscoveryStipulations, RequestForAdmission, Examinations, TranscriptManager, VendorManagement, PerpetuateTestimony
 export * from './DiscoveryDepositions';
 export * from './DiscoveryDocumentViewer';
 export * from './DiscoveryESI';
@@ -11,16 +11,17 @@ export * from './DiscoveryProductions';
 export * from './DiscoveryRequests';
 export * from './DiscoveryResponse';
 export * from './DiscoveryResponseModal';
-export * from './DiscoveryStipulations';
-export * from './Examinations';
-export * from './InitialDisclosureWizard';
+// Removed duplicate exports - already exported by DiscoveryContentRenderer:
+// export * from './DiscoveryStipulations';
+// export * from './Examinations';
+// export * from './InitialDisclosureWizard';
+// export * from './MotionToCompelBuilder';
+// export * from './PerpetuateTestimony';
+// export * from './RequestForAdmission';
+// export * from './TranscriptManager';
+// export * from './VendorManagement';
 export * from './LegalHolds';
 export * from './MotionForSanctions';
-export * from './MotionToCompelBuilder';
-export * from './PerpetuateTestimony';
 export * from './PrivilegeLog';
-export * from './RequestForAdmission';
-export * from './TranscriptManager';
-export * from './VendorManagement';
 export * from './DiscoveryErrorBoundary';
 export * from './DiscoverySkeleton';

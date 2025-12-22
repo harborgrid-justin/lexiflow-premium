@@ -4,7 +4,9 @@ import { DeepPartial, FindManyOptions, FindOneOptions } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { EventBusService, DomainEvent } from '../services/event-bus.service';
 
-export abstract class BaseService<T, R extends BaseRepository<T>> {
+import { ObjectLiteral } from 'typeorm';
+
+export abstract class BaseService<T extends ObjectLiteral, R extends BaseRepository<T>> {
   protected readonly logger: Logger;
 
   constructor(

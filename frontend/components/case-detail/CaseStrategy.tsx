@@ -130,30 +130,30 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
     if (modalType === 'Citation') {
       itemToSave = { ...newItem, id, relevance: newItem.relevance || 'Medium' as const } as Citation;
       if (editingItem) {
-        setCitations(citations.map(c => c.id === id ? itemToSave : c));
+        setCitations(citations.map(c => c.id === id ? itemToSave as Citation : c));
       } else {
-        setCitations([...citations, itemToSave]);
+        setCitations([...citations, itemToSave as Citation]);
       }
     } else if (modalType === 'Argument') {
-      itemToSave = { 
-        ...newItem, 
-        id, 
-        strength: newItem.strength || 50, 
-        status: newItem.status || 'Draft' as const, 
-        relatedCitationIds: newItem.relatedCitationIds || [], 
-        relatedEvidenceIds: newItem.relatedEvidenceIds || [] 
-      };
+      itemToSave = {
+        ...newItem,
+        id,
+        strength: newItem.strength || 50,
+        status: newItem.status || 'Draft' as const,
+        relatedCitationIds: newItem.relatedCitationIds || [],
+        relatedEvidenceIds: newItem.relatedEvidenceIds || []
+      } as LegalArgument;
       if (editingItem) {
-        setArgs(args.map(a => a.id === id ? itemToSave : a));
+        setArgs(args.map(a => a.id === id ? itemToSave as LegalArgument : a));
       } else {
-        setArgs([...args, itemToSave]);
+        setArgs([...args, itemToSave as LegalArgument]);
       }
     } else {
-      itemToSave = { ...newItem, id, status: newItem.status || 'Asserted' as const, type: newItem.type || 'Affirmative' };
+      itemToSave = { ...newItem, id, status: newItem.status || 'Asserted' as const, type: newItem.type || 'Affirmative' } as Defense;
       if (editingItem) {
-        setDefenses(defenses.map(d => d.id === id ? itemToSave : d));
+        setDefenses(defenses.map(d => d.id === id ? itemToSave as Defense : d));
       } else {
-        setDefenses([...defenses, itemToSave]);
+        setDefenses([...defenses, itemToSave as Defense]);
       }
     }
 

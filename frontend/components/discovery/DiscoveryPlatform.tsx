@@ -90,15 +90,13 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
   const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
       DataService.discovery.syncDeadlines,
       {
-          retry: 3,
-          retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
           onSuccess: () => {
               notify.success("Synced discovery deadlines with court calendar.");
               queryClient.invalidate(queryKeys.discovery.all());
               queryClient.invalidate(queryKeys.calendar.events());
           },
           onError: (error) => {
-              notify.error('Failed to sync deadlines after 3 attempts. Please try again later.');
+              notify.error('Failed to sync deadlines. Please try again later.');
               console.error('Sync error:', error);
           }
       }

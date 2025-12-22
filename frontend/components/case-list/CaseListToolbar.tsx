@@ -63,7 +63,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
   const exportMenuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
-  useClickOutside(exportMenuRef, () => setShowExportMenu(false));
+  useClickOutside(exportMenuRef as React.RefObject<HTMLElement>, () => setShowExportMenu(false));
 
   const handleSync = async () => {
     try {

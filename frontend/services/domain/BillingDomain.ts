@@ -387,8 +387,7 @@ export class BillingRepository extends Repository<TimeEntry> {
                 const { SystemEventType } = await import('../../types/integration-types');
                 
                 await IntegrationOrchestrator.publish(SystemEventType.TIME_LOGGED, {
-                    entry: result,
-                    caseId: entry.caseId
+                    entry: result
                 });
             } catch (eventError) {
                 console.warn('[BillingRepository] Failed to publish integration event', eventError);

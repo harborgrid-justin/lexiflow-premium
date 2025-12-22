@@ -55,14 +55,20 @@ export const ResearchService = {
   
   add: async (item: unknown) => {
     if (isBackendApiEnabled()) {
-      return apiClient.post('/citations', { ...item, createdAt: new Date().toISOString() });
+      return apiClient.post('/citations', {
+        ...(item && typeof item === 'object' ? item : {}),
+        createdAt: new Date().toISOString()
+      });
     }
     throw new Error('[ResearchService] Backend API required for add operation');
   },
-  
+
   update: async (id: string, updates: unknown) => {
     if (isBackendApiEnabled()) {
-      return apiClient.patch(`/citations/${id}`, { ...updates, updatedAt: new Date().toISOString() });
+      return apiClient.patch(`/citations/${id}`, {
+        ...(updates && typeof updates === 'object' ? updates : {}),
+        updatedAt: new Date().toISOString()
+      });
     }
     throw new Error('[ResearchService] Backend API required for update operation');
   },

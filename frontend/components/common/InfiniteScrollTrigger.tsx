@@ -40,7 +40,7 @@ export const InfiniteScrollTrigger: React.FC<InfiniteScrollTriggerProps> = ({
   className 
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const entry = useIntersectionObserver(ref, { 
+  const entry = useIntersectionObserver(ref as React.RefObject<Element>, { 
       threshold: 0.1,
       rootMargin: '200px' // Pre-fetch before user hits absolute bottom
   });

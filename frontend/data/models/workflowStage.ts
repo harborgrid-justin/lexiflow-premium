@@ -1,5 +1,5 @@
 
-import { WorkflowStage, TaskId } from '../../types';
+import { WorkflowStage, TaskId, TaskStatusBackend, TaskPriorityBackend } from '../../types';
 
 export const MOCK_STAGES: WorkflowStage[] = [
     { 

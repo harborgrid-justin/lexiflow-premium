@@ -123,7 +123,7 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
 
   const handleNav = (caseId: string) => {
     if (onSelectCase && cases) {
-      const found = cases.find(c => c.id === caseId);
+      const found = cases.find((c: Case) => c.id === caseId);
       if (found) onSelectCase(found);
     }
   };

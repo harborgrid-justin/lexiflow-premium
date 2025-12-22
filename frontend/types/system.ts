@@ -285,3 +285,31 @@ export interface WebhookConfig extends BaseEntity {
   lastTriggered?: string;
   failureCount: number;
 }
+
+// Notification types (re-exported from services for type consistency)
+export interface Notification {
+  id: string;
+  userId: string;
+  type: 'info' | 'warning' | 'error' | 'success' | 'deadline' | 'system' | 'case_update' | 'document' | 'task';
+  title: string;
+  message: string;
+  read: boolean;
+  actionUrl?: string;
+  actionLabel?: string;
+  relatedEntityId?: string;
+  relatedEntityType?: 'case' | 'document' | 'task' | 'calendar' | 'evidence' | 'docket';
+  priority?: 'low' | 'medium' | 'high' | 'urgent';
+  expiresAt?: string;
+  metadata?: Record<string, any>;
+  createdAt: string;
+  updatedAt?: string;
+  readAt?: string;
+}
+
+export interface NotificationGroup {
+  groupKey: string;
+  notifications: Notification[];
+  count: number;
+  latestTimestamp: number;
+  collapsed: boolean;
+}

@@ -66,8 +66,8 @@ export const RiskList: React.FC<RiskListProps> = ({ risks, selectedId, onSelect 
             >
                 <div className="flex justify-between items-start mb-1">
                     <div className={cn("flex items-center gap-2 text-xs font-bold uppercase tracking-wider", theme.text.secondary)}>
-                        {getCategoryIcon(risk.category)}
-                        {risk.category}
+                        {getCategoryIcon(risk.category || 'Other')}
+                        {risk.category || 'Other'}
                     </div>
                     <Badge variant={risk.status === 'Mitigated' ? 'success' : risk.status === 'Accepted' ? 'neutral' : 'warning'}>
                         {risk.status}

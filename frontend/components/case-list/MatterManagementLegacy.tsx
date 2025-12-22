@@ -9,7 +9,7 @@ import {
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
-import { Matter, MatterStatus, MatterTypeEnum, MatterPriority } from '../../types';
+import { Matter, MatterStatus, MatterPriority } from '../../types';
 import { PATHS } from '../../config/paths.config';
 
 interface MatterStatistics {
@@ -28,12 +28,12 @@ const MatterManagement: React.FC = () => {
 
   // ✅ Migrated to backend API with queryKeys (2025-12-21)
   const { data: matters = [], isLoading: loading } = useQuery<Matter[]>(
-    queryKeys.matters.all(),
+    queryKeys.cases.matters.all(),
     () => DataService.matters.getAll()
   );
 
   const { data: statistics = null } = useQuery<MatterStatistics | null>(
-    queryKeys.matters.statistics(),
+    ['matters', 'statistics'],
     () => DataService.matters.getStatistics()
   );
 

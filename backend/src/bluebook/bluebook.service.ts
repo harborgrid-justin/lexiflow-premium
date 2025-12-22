@@ -18,14 +18,14 @@ export class BluebookService {
     if (caseMatch) {
       return {
         type: 'CASE',
-        party1: caseMatch[1].trim(),
-        party2: caseMatch[2].trim(),
-        volume: parseInt(caseMatch[3] || '0', 10),
-        reporter: caseMatch[4].trim(),
-        page: parseInt(caseMatch[5] || '0', 10),
+        party1: caseMatch[1]?.trim() ?? '',
+        party2: caseMatch[2]?.trim() ?? '',
+        volume: parseInt(caseMatch[3] ?? '0', 10),
+        reporter: caseMatch[4]?.trim() ?? '',
+        page: parseInt(caseMatch[5] ?? '0', 10),
         pinpoint: caseMatch[6],
         court: caseMatch[7]?.trim(),
-        year: parseInt(caseMatch[8] || '0', 10),
+        year: parseInt(caseMatch[8] ?? '0', 10),
         raw: rawCitation
       };
     }
@@ -37,9 +37,9 @@ export class BluebookService {
     if (statuteMatch) {
       return {
         type: 'STATUTE',
-        title: parseInt(statuteMatch[1] || '0', 10),
-        code: statuteMatch[2],
-        section: statuteMatch[3],
+        title: parseInt(statuteMatch[1] ?? '0', 10),
+        code: statuteMatch[2] ?? '',
+        section: statuteMatch[3] ?? '',
         year: statuteMatch[4] ? parseInt(statuteMatch[4], 10) : undefined,
         raw: rawCitation
       };
@@ -53,8 +53,8 @@ export class BluebookService {
       return {
         type: 'CONSTITUTION',
         jurisdiction: 'U.S.',
-        provision: constitutionMatch[2].includes('amend') ? 'amendment' : 'article',
-        number: constitutionMatch[3],
+        provision: constitutionMatch[2]?.includes('amend') ? 'amendment' : 'article',
+        number: constitutionMatch[3] ?? '',
         raw: rawCitation
       };
     }
@@ -66,8 +66,8 @@ export class BluebookService {
     if (regulationMatch) {
       return {
         type: 'REGULATION',
-        title: parseInt(regulationMatch[1] || '0', 10),
-        section: regulationMatch[2],
+        title: parseInt(regulationMatch[1] ?? '0', 10),
+        section: regulationMatch[2] ?? '',
         year: regulationMatch[3] ? parseInt(regulationMatch[3], 10) : undefined,
         raw: rawCitation
       };
@@ -85,7 +85,7 @@ export class BluebookService {
    * Format a parsed citation
    */
   formatCitation(parsed: any, options: any = {}): string {
-    const { italicizeCaseNames = true, _useSmallCaps = true } = options;
+    const { italicizeCaseNames = true } = options;
 
     switch (parsed.type) {
       case 'CASE':
@@ -291,7 +291,7 @@ export class BluebookService {
       if (!grouped[p.type]) {
         grouped[p.type] = [];
       }
-      grouped[p.type].push(p);
+      grouped[p.type]?.push(p);
     });
 
     let html = '<div class="table-of-authorities">';

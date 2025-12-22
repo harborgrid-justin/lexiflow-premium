@@ -96,19 +96,24 @@ class BluebookFormatterClass {
   format(citation: BluebookCitation, options: FormattingOptions = {}): string {
     const { italicizeCaseNames = true, useSmallCaps = false, format = 'full' } = options;
 
-    switch (citation.type) {
+    const citationType = typeof citation.type === 'string' ? citation.type.toUpperCase() : citation.type;
+    switch (citationType) {
+      case 'CASE':
       case 'case':
         return this.formatCase(citation, italicizeCaseNames, useSmallCaps, format);
-      
+
+      case 'STATUTE':
       case 'statute':
         return this.formatStatute(citation as any, format);
-      
+
+      case 'JOURNAL':
       case 'journal':
+      case 'BOOK':
       case 'book':
         return this.formatSecondary(citation, italicizeCaseNames, useSmallCaps);
-      
+
       default:
-        return citation.fullCitation || '';
+        return (citation as any).fullCitation || '';
     }
   }
 
@@ -121,32 +126,33 @@ class BluebookFormatterClass {
     smallCaps: boolean,
     format: 'full' | 'short' | 'id'
   ): string {
+    const cit = citation as any;
     if (format === 'id') {
-      return citation.shortCitation || 'Id.';
+      return cit.shortCitation || 'Id.';
     }
 
-    if (format === 'short' && citation.shortCitation) {
-      return citation.shortCitation;
+    if (format === 'short' && cit.shortCitation) {
+      return cit.shortCitation;
     }
 
     // Full citation format
-    const caseName = italicize ? `_${citation.caseName}_` : citation.caseName;
-    const volume = citation.reporters?.[0]?.volume || '';
-    const reporter = citation.reporters?.[0]?.reporter || '';
-    const page = citation.reporters?.[0]?.page || '';
-    const court = citation.court || '';
-    const year = citation.year || '';
+    const caseName = italicize ? `_${cit.caseName}_` : cit.caseName;
+    const volume = cit.reporters?.[0]?.volume || '';
+    const reporter = cit.reporters?.[0]?.reporter || '';
+    const page = cit.reporters?.[0]?.page || '';
+    const court = cit.court || '';
+    const year = cit.year || '';
 
     let formatted = `${caseName}, ${volume} ${reporter} ${page}`;
-    
+
     if (court && court !== 'U.S.') {
       formatted += ` (${court} ${year})`;
     } else if (year) {
       formatted += ` (${year})`;
     }
 
-    if (citation.pinpoint) {
-      formatted += `, ${citation.pinpoint}`;
+    if (cit.pinpoint) {
+      formatted += `, ${cit.pinpoint}`;
     }
 
     return formatted;

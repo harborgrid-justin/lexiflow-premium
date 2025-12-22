@@ -6,7 +6,6 @@
  */
 
 import { defineConfig } from 'cypress';
-import type { PluginEvents, PluginConfigOptions } from 'cypress';
 
 export default defineConfig({
   e2e: {
@@ -43,9 +42,9 @@ export default defineConfig({
 
     // Node event listeners and plugins
     setupNodeEvents(
-      on: PluginEvents,
-      config: PluginConfigOptions
-    ): PluginConfigOptions | void {
+      on: Cypress.PluginEvents,
+      config: Cypress.PluginConfigOptions
+    ): Cypress.PluginConfigOptions | void {
       // Environment-specific configuration
       const environment = config.env.ENVIRONMENT || 'development';
 

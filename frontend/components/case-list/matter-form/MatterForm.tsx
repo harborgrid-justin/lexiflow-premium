@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Save, X } from 'lucide-react';
-import type { UserId } from '../../../types';
+import type { UserId, Matter } from '../../../types';
 import { MatterType, MatterStatus, MatterPriority, PracticeArea } from '../../../types';
 import { BasicInfoSection } from './BasicInfoSection';
 import { ClientSection, AttorneySection, DatesSection, BillingSection } from './FormSections';
@@ -69,7 +69,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
       await onSave({
         ...formData,
         teamMembers: formData.teamMembers.map(id => id as UserId)
-      });
+      } as Partial<Matter>);
     } catch (error) {
       console.error('Failed to save matter:', error);
       setSubmitError('Failed to save matter. Please try again.');

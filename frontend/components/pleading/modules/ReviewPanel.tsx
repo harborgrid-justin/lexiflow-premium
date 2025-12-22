@@ -6,7 +6,7 @@ import { EmptyState } from '../../common/EmptyState';
 import { useTheme } from '../../../context/ThemeContext';
 import { cn } from '../../../utils/cn';
 import { DataService } from '../../../services/data/dataService';
-import { WorkflowTask, TaskId, CaseId, UserId } from '../../../types';
+import { WorkflowTask, TaskId, CaseId, UserId, TaskStatusBackend, TaskPriorityBackend } from '../../../types';
 
 interface ReviewPanelProps {
   comments: PleadingComment[];

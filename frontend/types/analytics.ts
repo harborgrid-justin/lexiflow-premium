@@ -62,6 +62,11 @@ export interface TimeSeriesData {
   metadata?: MetadataRecord;
 }
 
+export interface ChartDataPoint {
+  name: string;
+  count: number;
+}
+
 export interface CaseMetrics {
   totalCases: number;
   activeCases: number;

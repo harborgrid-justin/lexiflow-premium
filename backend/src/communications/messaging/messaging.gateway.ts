@@ -69,8 +69,8 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
         client.disconnect();
       }
     } catch (error) {
-      const __message = error instanceof Error ? error.message : 'Unknown error';
-      const __stack = error instanceof Error ? error.stack : undefined;
+      
+      
       this.logger.error(`Connection error for client ${client.id}:`, error);
       client.disconnect();
     }
@@ -283,7 +283,7 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
       return payload.sub;
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const __stack = error instanceof Error ? error.stack : undefined;
+      
       this.logger.error('JWT verification failed for WebSocket connection:', message);
       return null;
     }

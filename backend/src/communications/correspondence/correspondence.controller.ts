@@ -6,8 +6,7 @@ import {
   Delete,
   Body,
   Param,
-  Query,
-  UseGuards,
+  Query, UseGuards,
   Request,
 } from '@nestjs/common';
 import { Public } from '../../common/decorators/public.decorator';

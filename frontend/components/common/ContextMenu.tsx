@@ -43,7 +43,7 @@ interface ContextMenuProps {
 export const ContextMenu: React.FC<ContextMenuProps> = ({ x, y, items, onClose }) => {
   const { theme } = useTheme();
   const menuRef = useRef<HTMLDivElement>(null);
-  useClickOutside(menuRef, onClose);
+  useClickOutside(menuRef as React.RefObject<HTMLElement>, onClose);
 
   return (
     <div

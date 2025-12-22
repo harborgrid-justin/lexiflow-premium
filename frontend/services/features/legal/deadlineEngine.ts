@@ -206,7 +206,7 @@
  * - Notification integration: Auto-schedule reminders
  */
 
-import { DocketEntry, DocketEntryType } from '../types';
+import { DocketEntry, DocketEntryType } from '../../../types';
 
 // =============================================================================
 // TYPES & INTERFACES
@@ -514,7 +514,7 @@ export const DeadlineEngine = {
    */
   generateDeadlines(entry: DocketEntry, jurisdiction: 'Federal' | 'State' = 'Federal'): GeneratedDeadline[] {
     const deadlines: GeneratedDeadline[] = [];
-    const entryDate = new Date(entry.date);
+    const entryDate = new Date(entry.date || entry.entryDate || entry.dateFiled);
     
     // Find matching rules
     const matchingRules = DEADLINE_RULES.filter(rule => {

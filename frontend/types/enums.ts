@@ -20,7 +20,10 @@ export type NavCategory = 'Main' | 'Case Work' | 'Litigation Tools' | 'Operation
 export type AppView = string;
 
 export type UserRole = 'Senior Partner' | 'Associate' | 'Paralegal' | 'Administrator' | 'Client User' | 'Guest';
-export type MatterType = 'Litigation' | 'M&A' | 'IP' | 'Real Estate' | 'General' | 'Appeal';
+/**
+ * @deprecated Use the MatterType enum instead
+ */
+export type LegacyMatterType = 'Litigation' | 'M&A' | 'IP' | 'Real Estate' | 'General' | 'Appeal';
 export type BillingModel = 'Hourly' | 'Fixed' | 'Contingency' | 'Hybrid';
 export type OrganizationType = 'LawFirm' | 'Corporate' | 'Government' | 'Court' | 'Vendor';
 

@@ -52,11 +52,17 @@ export const OrganizationService = {
   getAll: async () => adminApi.organizations?.getAll?.() || [],
   getById: async (id: string) => adminApi.organizations?.getById?.(id) || null,
   add: async (item: unknown) => {
-    const org = { ...item, createdAt: new Date().toISOString() };
+    const org = {
+      ...(item && typeof item === 'object' ? item : {}),
+      createdAt: new Date().toISOString()
+    };
     return adminApi.organizations?.create?.(org) || org;
   },
   update: async (id: string, updates: unknown) => {
-    return adminApi.organizations?.update?.(id, updates) || { id, ...updates };
+    return adminApi.organizations?.update?.(id, updates) || {
+      id,
+      ...(updates && typeof updates === 'object' ? updates : {})
+    };
   },
   delete: async (id: string) => {
     await adminApi.organizations?.delete?.(id);
@@ -65,31 +71,31 @@ export const OrganizationService = {
   
   // Organization specific methods
   getOrganizations: async (filters?: { type?: string }): Promise<Organization[]> => {
-    let orgs = await db.getAll(STORES.ORGANIZATIONS);
-    
+    let orgs = await db.getAll<Organization>(STORES.ORGANIZATIONS);
+
     if (filters?.type) {
       orgs = orgs.filter((o: Organization) => o.type === filters.type);
     }
-    
+
     return orgs;
   },
-  
+
   getDepartments: async (orgId: string): Promise<Department[]> => {
     await delay(50);
-    const departments = await db.getAll(STORES.DEPARTMENTS);
+    const departments = await db.getAll<Department>(STORES.DEPARTMENTS);
     return departments.filter((d: Department) => d.orgId === orgId);
   },
-  
+
   getMembers: async (orgId: string, departmentId?: string): Promise<Member[]> => {
     await delay(50);
-    let members = await db.getAll(STORES.MEMBERS);
-    
+    let members = await db.getAll<Member>(STORES.MEMBERS);
+
     members = members.filter((m: Member) => m.orgId === orgId);
-    
+
     if (departmentId) {
       members = members.filter((m: Member) => m.departmentId === departmentId);
     }
-    
+
     return members;
   },
   

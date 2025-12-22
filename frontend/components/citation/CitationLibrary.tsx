@@ -85,7 +85,7 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
           <div className="flex-1 min-w-0 pr-4">
                <div className={cn("font-medium text-sm truncate", theme.text.primary)} title={cit.title}>{cit.title}</div>
           </div>
-          <div className="w-32 flex items-center gap-2">{getTypeIcon(cit.type, theme)}<span className="text-xs">{cit.type}</span></div>
+          <div className="w-32 flex items-center gap-2">{getTypeIcon(cit.type || '', theme)}<span className="text-xs">{cit.type || 'Unknown'}</span></div>
           <div className="w-24">
               <Badge variant={cit.relevance === 'High' ? 'success' : cit.relevance === 'Medium' ? 'info' : 'neutral'}>{cit.relevance}</Badge>
           </div>

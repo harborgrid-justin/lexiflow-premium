@@ -234,3 +234,17 @@ export interface PacerData {
   docket?: Array<{ date: string; number: string; description: string }>;
   metadata?: MetadataRecord;
 }
+
+/**
+ * Computed deadline from docket entry analysis
+ */
+export interface DeadlineComputation {
+  id: string;
+  docketEntryId: string;
+  description: string;
+  dueDate: string;
+  jurisdiction: string;
+  rule: string;
+  daysFromTrigger: number;
+  status: 'pending' | 'completed' | 'missed' | 'cancelled';
+}

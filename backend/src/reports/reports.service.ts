@@ -1,5 +1,4 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
 import {
   GenerateReportDto,
   ReportDto,
@@ -10,7 +9,7 @@ import {
   ReportFormat,
   DownloadReportDto,
 } from './dto/reports.dto';
-import { validatePagination, validateDateRange } from '../common/utils/query-validation.util';
+import { validatePagination } from '../common/utils/query-validation.util';
 
 @Injectable()
 export class ReportsService {
@@ -278,7 +277,7 @@ export class ReportsService {
     try {
       // Mock implementation
       /*
-      const _report = await this.reportRepository.findOne({
+      const report = await this.reportRepository.findOne({
         where: { id: reportId },
       });
 
@@ -368,7 +367,7 @@ export class ReportsService {
    * Get download URL for a report
    */
   async getDownloadUrl(reportId: string): Promise<DownloadReportDto> {
-    const _report = await this.getReportById(reportId);
+    const report = await this.getReportById(reportId);
 
     if (report.status !== ReportStatus.COMPLETED) {
       throw new Error('Report is not ready for download');
@@ -393,7 +392,7 @@ export class ReportsService {
   /**
    * Queue report generation job
    */
-  private async queueReportGeneration(report: ReportDto, dto: GenerateReportDto): Promise<void> {
+  private async queueReportGeneration(report: ReportDto, _dto: GenerateReportDto): Promise<void> {
     // This would queue a background job to generate the report
     this.logger.log(`Queued report generation job for report ${report.id}`);
 
@@ -445,7 +444,7 @@ export class ReportsService {
   }
 
   async findById(id: string): Promise<any> {
-    const _report = this.reports.get(id);
+    const report = this.reports.get(id);
     if (!report) {
       throw new NotFoundException(`Report with ID ${id} not found`);
     }
@@ -454,7 +453,7 @@ export class ReportsService {
 
   async generate(generateDto: any, userId: string): Promise<any> {
     const reportId = this.generateReportId();
-    const _report = {
+    const report = {
       id: reportId,
       ...generateDto,
       status: 'pending',
@@ -468,12 +467,13 @@ export class ReportsService {
   }
 
   async delete(id: string): Promise<void> {
-    const _report = await this.findById(id);
+    // Verify report exists before deleting
+    await this.findById(id);
     this.reports.delete(id);
   }
 
   async download(id: string): Promise<any> {
-    const _report = await this.findById(id);
+    const report = await this.findById(id);
     return {
       id: report.id,
       filePath: report.filePath || `/reports/${id}.pdf`,
@@ -501,23 +501,23 @@ export class ReportsService {
     return template;
   }
 
-  async createTemplate(createDto: any, userId: string): Promise<any> {
+  async createTemplate(createDto: any, _userId: string): Promise<any> {
     return { id: 'template-' + Date.now(), ...createDto };
   }
 
-  async scheduleReport(scheduleDto: any, userId?: string): Promise<any> {
-    return { 
-      scheduleId: 'schedule-' + Date.now(), 
+  async scheduleReport(scheduleDto: any, _userId?: string): Promise<any> {
+    return {
+      scheduleId: 'schedule-' + Date.now(),
       nextRun: new Date(Date.now() + 86400000),
-      ...scheduleDto 
+      ...scheduleDto
     };
   }
 
-  async getScheduledReports(userId: string): Promise<any[]> {
+  async getScheduledReports(_userId: string): Promise<any[]> {
     return [];
   }
 
-  async cancelScheduledReport(scheduleId: string, userId: string): Promise<any> {
+  async cancelScheduledReport(scheduleId: string, _userId: string): Promise<any> {
     return { id: scheduleId, status: 'cancelled', success: true };
   }
 

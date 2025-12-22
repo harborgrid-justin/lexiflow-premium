@@ -34,7 +34,7 @@ export const MatterManagement: React.FC = () => {
 
   // ✅ Migrated to backend API with queryKeys (2025-12-21)
   const { data: matters = [], isLoading: loading } = useQuery<Matter[]>(
-    queryKeys.matters.all(),
+    queryKeys.cases.matters.all(),
     () => DataService.matters.getAll()
   );
 

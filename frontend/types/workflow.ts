@@ -65,6 +65,10 @@ export interface WorkflowTask extends Omit<BaseEntity, 'createdBy'> {
   completion?: number; // Alias for completionPercentage
   slaId?: string; // Frontend extension
 }
+
+// Backward compatibility alias
+export type Task = WorkflowTask;
+
 export interface SLAConfig extends BaseEntity { name: string; targetHours: number; warningThresholdHours: number; businessHoursOnly: boolean; }
 export interface ApprovalChain extends BaseEntity { name: string; steps: { role: UserRole; userId?: UserId; order: number }[]; }
 export interface WorkflowStage { id: string; title: string; status: StageStatus | string; tasks: WorkflowTask[]; }

@@ -56,7 +56,7 @@ import { CASE_DETAIL_TABS } from './CaseDetailConfig';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case } from '../../types';
+import { Case, TimeEntry, LegalDocument } from '../../types';
 
 interface CaseDetailProps {
   caseData: Case;
@@ -121,12 +121,12 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({
   }, [setActiveTab]);
 
   // Handle adding time entry from overview
-  const handleTimeEntryAdded = useCallback((entry: unknown) => {
+  const handleTimeEntryAdded = useCallback((entry: TimeEntry) => {
     setBillingEntries(prev => [...(prev || []), entry]);
   }, [setBillingEntries]);
 
   // Handle document creation callback
-  const handleDocumentCreated = useCallback((doc: unknown) => {
+  const handleDocumentCreated = useCallback((doc: LegalDocument) => {
     setDocuments(prev => [...(prev || []), doc]);
   }, [setDocuments]);
 

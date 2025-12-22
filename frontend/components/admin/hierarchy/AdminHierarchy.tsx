@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Plus, Loader2, Users, CheckCircle } from 'lucide-react';
-import { Organization, Group, User as UserType, Case } from '../../../types';
+import { Organization, Group, User as UserType, Case, GroupId } from '../../../types';
 import { Button } from '../../common/Button';
 import { HierarchyColumn } from './HierarchyColumn';
 import { OrgListItem, GroupListItem, UserListItem } from './HierarchyRows';
@@ -42,7 +42,7 @@ export const AdminHierarchy: React.FC = () => {
   const displayedUsers = users.filter(user => {
     if (!selectedOrgId) return false;
     if (user.orgId !== selectedOrgId) return false;
-    if (selectedGroupId) return user.groupIds?.includes(selectedGroupId);
+    if (selectedGroupId) return user.groupIds?.includes(selectedGroupId as GroupId);
     return true; // Show all users in org if no group selected
   });
 

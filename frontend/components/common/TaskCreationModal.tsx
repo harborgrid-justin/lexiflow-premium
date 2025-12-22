@@ -33,7 +33,7 @@ import { RuleSelector } from './RuleSelector';
 import { UserSelect } from './UserSelect';
 
 // Types
-import { WorkflowTask, TaskId, ProjectId, CaseId, User, TaskStatusBackend } from '../../types';
+import { WorkflowTask, TaskId, ProjectId, CaseId, User, TaskStatusBackend, TaskPriorityBackend } from '../../types';
 
 // ============================================================================
 // TYPES & INTERFACES

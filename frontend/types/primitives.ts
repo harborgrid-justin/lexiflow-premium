@@ -19,6 +19,15 @@ export type DocketId = Brand<string, 'DocketId'>;
 export type ProjectId = Brand<string, 'ProjectId'>;
 export type WorkflowTemplateId = Brand<string, 'WorkflowTemplateId'>;
 export type MatterId = Brand<string, 'MatterId'>;
+export type ClientId = Brand<string, 'ClientId'>;
+export type InvoiceId = Brand<string, 'InvoiceId'>;
+export type RiskId = Brand<string, 'RiskId'>;
+export type TemplateId = Brand<string, 'TemplateId'>;
+export type RuleId = Brand<string, 'RuleId'>;
+export type AnalysisId = Brand<string, 'AnalysisId'>;
+export type JurorId = Brand<string, 'JurorId'>;
+export type WitnessId = Brand<string, 'WitnessId'>;
+export type ExhibitId = Brand<string, 'ExhibitId'>;
 
 export interface Money {
   amount: number;

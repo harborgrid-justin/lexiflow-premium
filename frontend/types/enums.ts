@@ -86,6 +86,94 @@ export type RiskCategory = 'Legal' | 'Financial' | 'Reputational' | 'Operational
 export type RiskLevel = 'Low' | 'Medium' | 'High';
 export type RiskStatus = 'Identified' | 'Mitigated' | 'Accepted' | 'Closed';
 
+// Billing & Time Entry Enums
+export enum TimeEntryStatus {
+  DRAFT = 'Draft',
+  SUBMITTED = 'Submitted',
+  APPROVED = 'Approved',
+  BILLED = 'Billed',
+  WRITTEN_OFF = 'Written Off'
+}
+
+export enum InvoiceStatus {
+  DRAFT = 'Draft',
+  SENT = 'Sent',
+  VIEWED = 'Viewed',
+  PARTIAL = 'Partial',
+  PAID = 'Paid',
+  OVERDUE = 'Overdue',
+  WRITTEN_OFF = 'Written Off'
+}
+
+export enum TrustTransactionType {
+  DEPOSIT = 'Deposit',
+  WITHDRAWAL = 'Withdrawal',
+  TRANSFER = 'Transfer'
+}
+
+// Workflow Enums
+export enum WorkflowStatus {
+  NOT_STARTED = 'Not Started',
+  IN_PROGRESS = 'In Progress',
+  ON_HOLD = 'On Hold',
+  COMPLETED = 'Completed',
+  CANCELLED = 'Cancelled'
+}
+
+export enum ProcessStatus {
+  ACTIVE = 'Active',
+  PAUSED = 'Paused',
+  COMPLETED = 'Completed',
+  ARCHIVED = 'Archived'
+}
+
+// Trial Enums
+export enum JurorStatus {
+  PANEL = 'Panel',
+  SEATED = 'Seated',
+  STRUCK = 'Struck',
+  ALTERNATE = 'Alternate',
+  DISMISSED = 'Dismissed'
+}
+
+export enum WitnessType {
+  FACT_WITNESS = 'fact_witness',
+  EXPERT_WITNESS = 'expert_witness',
+  CHARACTER_WITNESS = 'character_witness',
+  REBUTTAL_WITNESS = 'rebuttal_witness',
+  IMPEACHMENT_WITNESS = 'impeachment_witness'
+}
+
+export enum WitnessStatus {
+  IDENTIFIED = 'identified',
+  CONTACTED = 'contacted',
+  INTERVIEWED = 'interviewed',
+  SUBPOENAED = 'subpoenaed',
+  DEPOSED = 'deposed',
+  TESTIFYING = 'testifying',
+  TESTIFIED = 'testified',
+  UNAVAILABLE = 'unavailable',
+  WITHDRAWN = 'withdrawn'
+}
+
+// Template & Rule Enums
+export enum TemplateCategory {
+  PLEADING = 'Pleading',
+  MOTION = 'Motion',
+  DISCOVERY = 'Discovery',
+  CONTRACT = 'Contract',
+  CORRESPONDENCE = 'Correspondence',
+  WORKFLOW = 'Workflow',
+  OTHER = 'Other'
+}
+
+export enum TemplateStatus {
+  DRAFT = 'Draft',
+  ACTIVE = 'Active',
+  ARCHIVED = 'Archived',
+  DEPRECATED = 'Deprecated'
+}
+
 export type CommunicationType = 'Letter' | 'Email' | 'Fax' | 'Notice' | 'Memo';
 export type CommunicationDirection = 'Inbound' | 'Outbound';
 

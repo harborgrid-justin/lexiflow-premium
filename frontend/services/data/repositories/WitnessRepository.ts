@@ -167,7 +167,7 @@ export class WitnessRepository extends Repository<any> {
         await super.delete(id);
     }
 
-    async search(criteria: { caseId?: string; type?: string; status?: string; query?: string }): Promise<any[]> {
+    async search(criteria: { caseId?: string; type?: string; status?: string; query?: string }): Promise<Witness[]> {
         let witnesses = await this.getAll();
         if (criteria.caseId) witnesses = witnesses.filter(w => w.caseId === criteria.caseId);
         if (criteria.type) witnesses = witnesses.filter(w => w.witnessType === criteria.type);

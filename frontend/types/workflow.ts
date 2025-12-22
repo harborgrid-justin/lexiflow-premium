@@ -69,6 +69,148 @@ export interface SLAConfig extends BaseEntity { name: string; targetHours: numbe
 export interface ApprovalChain extends BaseEntity { name: string; steps: { role: UserRole; userId?: UserId; order: number }[]; }
 export interface WorkflowStage { id: string; title: string; status: StageStatus | string; tasks: WorkflowTask[]; }
 export interface WorkflowTemplateData extends BaseEntity { id: WorkflowTemplateId; title: string; category: string; complexity: 'Low' | 'Medium' | 'High'; duration: string; tags: string[]; auditReady: boolean; stages: string[]; }
+
+// Workflow Process Types
+export interface WorkflowProcess extends BaseEntity {
+  id: string;
+  name: string;
+  description?: string;
+  status: 'Active' | 'Paused' | 'Completed' | 'Archived';
+  templateId?: WorkflowTemplateId;
+  caseId?: CaseId;
+  projectId?: ProjectId;
+  startDate?: string;
+  dueDate?: string;
+  completedDate?: string;
+  completionPercentage: number;
+  priority?: 'Low' | 'Medium' | 'High' | 'Urgent';
+  assignedTo?: UserId[];
+  ownerId?: UserId;
+  stages?: WorkflowStage[];
+  tasks?: WorkflowTask[];
+  metadata?: Record<string, any>;
+}
+
+// Workflow Analytics Types
+// Task API Response Types
+export interface TaskStatistics {
+  total: number;
+  byStatus: Record<TaskStatusBackend, number>;
+  byPriority: Record<TaskPriorityBackend, number>;
+  overdue: number;
+  completedThisWeek: number;
+  completedThisMonth: number;
+  averageCompletionTime: number; // in hours
+  averageEstimateAccuracy: number; // percentage
+}
+
+export interface TaskFiltersExtended {
+  caseId?: string;
+  status?: TaskStatusBackend | TaskStatusBackend[];
+  priority?: TaskPriorityBackend | TaskPriorityBackend[];
+  assignedTo?: string | string[];
+  createdBy?: string;
+  parentTaskId?: string;
+  tags?: string[];
+  dueDateFrom?: string;
+  dueDateTo?: string;
+  overdue?: boolean;
+  hasSubtasks?: boolean;
+  search?: string;
+  sortBy?: 'dueDate' | 'priority' | 'status' | 'createdAt' | 'title';
+  sortOrder?: 'asc' | 'desc';
+  page?: number;
+  limit?: number;
+}
+
+export interface TaskBulkOperationResult {
+  success: number;
+  failed: number;
+  total: number;
+  errors?: Array<{ taskId: string; error: string }>;
+}
+
+export interface TaskAssignmentDto {
+  taskId: string;
+  assignedTo: string;
+  assignedBy?: string;
+  assignedAt?: string;
+  reason?: string;
+}
+
+export interface TaskRelationshipDto {
+  parentTaskId: string;
+  childTaskId: string;
+  relationshipType?: 'blocks' | 'depends_on' | 'related_to';
+}
+
+export interface TaskComment {
+  id: string;
+  taskId: string;
+  userId: string;
+  userName?: string;
+  content: string;
+  createdAt: string;
+  updatedAt?: string;
+  attachments?: string[];
+}
+
+export interface TaskAttachment {
+  id: string;
+  taskId: string;
+  fileName: string;
+  fileSize: number;
+  fileType: string;
+  uploadedBy: string;
+  uploadedAt: string;
+  url: string;
+}
+
+export interface TaskHistory {
+  id: string;
+  taskId: string;
+  userId: string;
+  userName?: string;
+  action: 'created' | 'updated' | 'status_changed' | 'assigned' | 'commented' | 'completed' | 'deleted';
+  previousValue?: any;
+  newValue?: any;
+  timestamp: string;
+  description?: string;
+}
+
+export interface WorkflowAnalytics {
+  totalProcesses: number;
+  activeProcesses: number;
+  completedThisMonth: number;
+  averageCompletionRate: number;
+  overdueTasks: number;
+  atRiskTasks: number;
+  tasksByStatus: Record<string, number>;
+  processByCategory: Record<string, number>;
+  completionTrend?: Array<{ date: string; count: number }>;
+}
+
+// Template with full schema
+export interface TemplateDocument extends BaseEntity {
+  id: string;
+  name: string;
+  description?: string;
+  category: string;
+  type: 'Workflow' | 'Pleading' | 'Motion' | 'Document' | 'Email' | 'Other';
+  content?: string;
+  variables?: Array<{ key: string; label: string; type: string; required?: boolean }>;
+  sections?: string[];
+  status: 'Draft' | 'Active' | 'Archived';
+  version?: string;
+  tags?: string[];
+  jurisdictions?: string[];
+  complexity?: 'Low' | 'Medium' | 'High';
+  estimatedDuration?: string;
+  createdBy?: UserId;
+  modifiedBy?: UserId;
+  usageCount?: number;
+  metadata?: Record<string, any>;
+}
 export interface Project extends BaseEntity { 
   id: ProjectId;
   // Core fields (aligned with backend Project entity)

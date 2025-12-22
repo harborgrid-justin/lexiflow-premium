@@ -21,10 +21,46 @@ export interface TrialExhibit extends BaseEntity {
   admissionDate?: string; // Backend: timestamp
   admittedBy?: string; // Backend: varchar
   
+  // Court proceedings & rulings
+  exhibitLabel?: string; // e.g., "Plaintiff's Exhibit A"
+  party?: 'Plaintiff' | 'Defense' | 'Joint' | 'Court';
+  dateIntroduced?: string;
+  dateAdmitted?: string;
+  judgeRuling?: string;
+  
+  // Objections & challenges
+  objections?: Array<{
+    party: string;
+    grounds: string;
+    date: string;
+    ruling?: 'Sustained' | 'Overruled' | 'Pending';
+  }>;
+  opposingObjections?: string[];
+  foundationEstablished?: boolean;
+  authenticity?: 'Verified' | 'Challenged' | 'Stipulated';
+  
+  // Relationships
+  linkedEvidenceIds?: EvidenceId[];
+  linkedWitnessIds?: string[];
+  relatedExhibits?: string[];
+  url?: string;
+  thumbnailUrl?: string;
+  
+  // Trial presentation
+  orderPresented?: number;
+  presentedBy?: string;
+  presentationNotes?: string;
+  examQuestions?: string[];
+  keyPages?: Array<{ page: number; note: string }>;
+  
+  // Metadata
+  fileSize?: number;
+  pageCount?: number;
+  metadata?: Record<string, any>;
+  
   // Frontend-specific (legacy)
   title?: string; // Alias for description
   dateMarked?: string;
-  party?: string;
   fileType?: string;
   witness?: string;
   uploadedBy?: string;

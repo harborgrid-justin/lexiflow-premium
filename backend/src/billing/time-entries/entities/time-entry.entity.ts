@@ -78,11 +78,11 @@ export class TimeEntry extends BaseEntity {
   @Column({ type: 'boolean', default: true })
   billable: boolean;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'invoice_id', type: 'uuid', nullable: true })
   @Index()
   invoiceId: string; // Links time entry to invoice when billed
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'rate_table_id', type: 'uuid', nullable: true })
   rateTableId: string;
 
   @Column({ type: 'text', nullable: true })

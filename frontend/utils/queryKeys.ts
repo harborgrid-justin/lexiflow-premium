@@ -367,6 +367,24 @@ export const queryKeys = {
     detail: (id: string) => ['groups', 'detail', id] as const,
     byOrganization: (orgId: string) => ['groups', 'byOrganization', orgId] as const,
   },
+
+  // Legal Entities
+  entities: {
+    all: () => ['entities', 'all'] as const,
+    lists: () => ['entities', 'list'] as const,
+    detail: (id: string) => ['entities', 'detail', id] as const,
+    byType: (entityType: string) => ['entities', 'byType', entityType] as const,
+    relationships: (id: string) => ['entities', 'relationships', id] as const,
+    stats: () => ['entities', 'stats'] as const,
+  },
+
+  // Beneficial Ownership (UBO)
+  ubo: {
+    all: () => ['ubo', 'all'] as const,
+    byEntity: (entityId: string) => ['ubo', 'byEntity', entityId] as const,
+    register: () => ['ubo', 'register'] as const,
+    stats: () => ['ubo', 'stats'] as const,
+  },
 } as const;
 
 /**

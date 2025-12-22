@@ -39,4 +39,8 @@ export class OutcomePredictionsApiService {
   async getById(id: string): Promise<OutcomePrediction> {
     return apiClient.get<OutcomePrediction>(`${this.baseUrl}/${id}`);
   }
+
+  async getPredictions(): Promise<OutcomePrediction[]> {
+    return apiClient.get<OutcomePrediction[]>(this.baseUrl);
+  }
 }

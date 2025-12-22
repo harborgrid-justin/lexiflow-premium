@@ -1,5 +1,5 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+// import { SnakeNamingStrategy } from 'typeorm-naming-strategies'; // DISABLED: DB uses camelCase columns
 import { config } from 'dotenv';
 
 config();
@@ -10,11 +10,11 @@ export const dataSourceOptions: DataSourceOptions = process.env.DATABASE_URL
       url: process.env.DATABASE_URL,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       migrations: [],
-      synchronize: true, // TEMPORARY: Auto-create tables with snake_case - DISABLE AFTER SETUP
+      synchronize: true, // TEMPORARY: Auto-create tables - matches existing camelCase schema
       migrationsRun: false,
       logging: process.env.DB_LOGGING === 'true' || process.env.NODE_ENV === 'development',
       maxQueryExecutionTime: 1000, // Log queries taking longer than 1 second
-      namingStrategy: new SnakeNamingStrategy(), // CRITICAL: Enforce snake_case for all columns/tables
+      // namingStrategy: new SnakeNamingStrategy(), // DISABLED: Database uses camelCase column names from migrations
       ssl: {
         rejectUnauthorized: false,
       },
@@ -35,11 +35,11 @@ export const dataSourceOptions: DataSourceOptions = process.env.DATABASE_URL
       database: process.env.DB_DATABASE || 'lexiflow_db',
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       migrations: [],
-      synchronize: true, // TEMPORARY: Auto-create tables with snake_case - DISABLE AFTER SETUP
+      synchronize: true, // TEMPORARY: Auto-create tables - matches existing camelCase schema
       migrationsRun: false,
       logging: process.env.DB_LOGGING === 'true' || process.env.NODE_ENV === 'development',
       maxQueryExecutionTime: 1000, // Log queries taking longer than 1 second
-      namingStrategy: new SnakeNamingStrategy(), // CRITICAL: Enforce snake_case for all columns/tables
+      // namingStrategy: new SnakeNamingStrategy(), // DISABLED: Database uses camelCase column names from migrations
       ssl: process.env.DB_SSL === 'true'
         ? {
             rejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false',

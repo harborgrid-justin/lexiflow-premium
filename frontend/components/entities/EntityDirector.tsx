@@ -19,6 +19,7 @@ import { Search, Plus } from 'lucide-react';
 // Services & Data
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
+import { queryKeys } from '../../utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
@@ -65,7 +66,7 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
 
   // Enterprise Data Access
   const { data: entities = [] } = useQuery<LegalEntity[]>(
-      ['entities', 'all'],
+      queryKeys.entities.all(),
       DataService.entities.getAll
   );
 

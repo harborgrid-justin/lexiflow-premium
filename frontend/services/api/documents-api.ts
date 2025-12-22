@@ -100,7 +100,7 @@ export class DocumentsApiService {
      * Validate and sanitize object parameter
      * @private
      */
-    private validateObject(obj: any, paramName: string, methodName: string): void {
+    private validateObject(obj: unknown, paramName: string, methodName: string): void {
         if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
             throw new Error(`[DocumentsApiService.${methodName}] Invalid ${paramName} parameter`);
         }
@@ -110,7 +110,7 @@ export class DocumentsApiService {
      * Validate and sanitize array parameter
      * @private
      */
-    private validateArray(arr: any[], paramName: string, methodName: string): void {
+    private validateArray(arr: unknown[], paramName: string, methodName: string): void {
         if (!arr || !Array.isArray(arr) || arr.length === 0) {
             throw new Error(`[DocumentsApiService.${methodName}] Invalid ${paramName} parameter`);
         }
@@ -412,7 +412,7 @@ export class DocumentsApiService {
         this.validateId(documentId, 'getVersions');
 
         try {
-            const response = await apiClient.get<PaginatedResponse<any>>(`/documents/${documentId}/versions`);
+            const response = await apiClient.get<PaginatedResponse<unknown>>(`/documents/${documentId}/versions`);
             return response.data;
         } catch (error) {
             console.error('[DocumentsApiService.getVersions] Error:', error);

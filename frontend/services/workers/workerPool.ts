@@ -82,7 +82,7 @@ interface WorkerTask<T = any> {
  * Validate worker factory parameter
  * @private
  */
-function validateFactory(factory: any, methodName: string): void {
+function validateFactory(factory: unknown, methodName: string): void {
   if (typeof factory !== 'function') {
     throw new Error(`[WorkerPool.${methodName}] Factory must be a function`);
   }
@@ -92,7 +92,7 @@ function validateFactory(factory: any, methodName: string): void {
  * Validate pool size parameter
  * @private
  */
-function validatePoolSize(size: any, methodName: string): void {
+function validatePoolSize(size: unknown, methodName: string): void {
   if (typeof size !== 'number' || size <= 0 || !Number.isInteger(size)) {
     throw new Error(`[WorkerPool.${methodName}] Pool size must be a positive integer`);
   }
@@ -102,7 +102,7 @@ function validatePoolSize(size: any, methodName: string): void {
  * Validate worker parameter
  * @private
  */
-function validateWorker(worker: any, methodName: string): void {
+function validateWorker(worker: unknown, methodName: string): void {
   if (!worker || !(worker instanceof Worker)) {
     throw new Error(`[WorkerPool.${methodName}] Invalid worker object`);
   }

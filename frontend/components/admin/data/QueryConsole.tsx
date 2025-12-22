@@ -28,7 +28,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
   const [isExecuting, setIsExecuting] = useState(false);
   
   const [shareModalOpen, setShareModalOpen] = useState(false);
-  const [explainPlan, setExplainPlan] = useState<any>(null);
+  const [explainPlan, setExplainPlan] = useState<unknown>(null);
   const [isFormatting, setIsFormatting] = useState(false);
 
   // Dynamic Schema Fetching from real backend
@@ -128,9 +128,9 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
     return null;
   }, [results]);
 
-  const renderResultRow = (row: any, index: number) => (
+  const renderResultRow = (row: unknown, index: number) => (
       <div key={index} className={cn("flex border-b transition-colors h-8", theme.border.default, `hover:${theme.surface.highlight}`)}>
-          {Object.values(row).map((v: any, j) => (
+          {Object.values(row).map((v: unknown, j) => (
               <div key={j} className={cn("flex-1 px-4 py-1.5 font-mono text-xs whitespace-nowrap overflow-hidden text-ellipsis border-r last:border-r-0", theme.border.default)}>
                   {String(v)}
               </div>

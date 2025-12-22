@@ -10,7 +10,7 @@ import { useQuery } from '../../hooks/useQueryHooks';
 import { DataService } from '../../services/data/dataService';
 
 interface RulesDashboardProps {
-    onNavigate: (view: any) => void;
+    onNavigate: (view: unknown) => void;
 }
 
 export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) => {

@@ -133,10 +133,10 @@ export abstract class BaseService<T, R extends BaseRepository<T>> {
   /**
    * Publish domain event
    */
-  protected async publishEvent(eventType: string, data: any): Promise<void> {
+  protected async publishEvent(eventType: string, data: Partial<T> & { id?: string | number }): Promise<void> {
     const event: DomainEvent = {
       eventType,
-      aggregateId: data.id || 'unknown',
+      aggregateId: String(data.id || 'unknown'),
       aggregateType: this.constructor.name.replace('Service', ''),
       timestamp: new Date(),
       data,

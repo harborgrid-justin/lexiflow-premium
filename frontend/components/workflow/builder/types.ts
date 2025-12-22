@@ -28,7 +28,7 @@ export const getNodeIconLocal = (type: NodeType) => {
   }
 };
 
-export const getNodeStyles = (type: NodeType, isSelected: boolean, theme: any) => {
+export const getNodeStyles = (type: NodeType, isSelected: boolean, theme: unknown) => {
   const base = cn("absolute flex flex-col rounded-xl border-2 shadow-md cursor-pointer transition-all duration-200 select-none", `hover:shadow-xl hover:-translate-y-0.5`);
   const selected = isSelected ? "ring-4 ring-offset-2 z-20" : "z-10";
   // Dynamically injecting ring color class requires safelisting or careful construction. 

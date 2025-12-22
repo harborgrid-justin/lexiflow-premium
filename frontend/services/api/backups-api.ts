@@ -32,7 +32,7 @@ export class BackupsApiService {
     return apiClient.post<Backup>(this.baseUrl, data);
   }
 
-  async restore(id: string): Promise<any> {
+  async restore(id: string): Promise<unknown> {
     return apiClient.post(`${this.baseUrl}/${id}/restore`, {});
   }
 

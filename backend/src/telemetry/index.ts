@@ -6,10 +6,14 @@
 export { TelemetryModule } from './telemetry.module';
 export { TelemetryHealthIndicator } from './telemetry-health.indicator';
 
-// Stub functions for telemetry initialization
+// Telemetry initialization functions (optional feature)
 export async function initTelemetry() {
-  console.log('[Telemetry] Running in stub mode - OpenTelemetry dependencies not installed');
-  console.log('[Telemetry] To enable full telemetry, install: npm install @opentelemetry/api @opentelemetry/sdk-node');
+  if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line no-console
+    console.info('[Telemetry] Running in stub mode - OpenTelemetry dependencies not installed');
+    // eslint-disable-next-line no-console
+    console.info('[Telemetry] To enable full telemetry, install: npm install @opentelemetry/api @opentelemetry/sdk-node');
+  }
 }
 
 export async function shutdownTelemetry() {

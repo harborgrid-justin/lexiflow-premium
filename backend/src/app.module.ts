@@ -24,8 +24,8 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { HealthModule } from './health/health.module';
 
 // Telemetry & Observability
-// TODO: Install OpenTelemetry dependencies to enable telemetry
-// import { TelemetryModule } from './telemetry/telemetry.module';
+// Note: OpenTelemetry telemetry module is available but optional
+// Uncomment to enable: import { TelemetryModule } from './telemetry/telemetry.module';
 
 // Real-time Communication
 import { RealtimeModule } from './realtime/realtime.module';
@@ -190,8 +190,8 @@ if (isRedisEnabled) {
     DatabaseModule,
 
     // Telemetry & Observability
-    // TODO: Install OpenTelemetry dependencies to enable telemetry
-    // TelemetryModule,
+    // Note: OpenTelemetry telemetry is available but optional
+    // Uncomment to enable: TelemetryModule,
 
     // Health Monitoring
     HealthModule,

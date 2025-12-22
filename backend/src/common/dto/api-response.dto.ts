@@ -1,5 +1,16 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
+/**
+ * Error details structure
+ */
+export interface ErrorDetails {
+  code?: string;
+  statusCode?: number;
+  message: string;
+  details?: Record<string, unknown>;
+  stack?: string;
+}
+
 export class ApiResponseDto<T> {
   @ApiProperty()
   success: boolean;
@@ -11,7 +22,7 @@ export class ApiResponseDto<T> {
   data?: T;
 
   @ApiPropertyOptional()
-  error?: any;
+  error?: ErrorDetails;
 
   @ApiPropertyOptional()
   timestamp?: string;
@@ -29,11 +40,17 @@ export class ApiResponseDto<T> {
     });
   }
 
-  static error<T>(error: any, message?: string): ApiResponseDto<T> {
+  static error<T>(error: ErrorDetails | Error | string, message?: string): ApiResponseDto<T> {
+    const errorDetails: ErrorDetails = typeof error === 'string'
+      ? { message: error }
+      : error instanceof Error
+      ? { message: error.message, stack: error.stack }
+      : error;
+
     return new ApiResponseDto({
       success: false,
       message,
-      error,
+      error: errorDetails,
     });
   }
 }

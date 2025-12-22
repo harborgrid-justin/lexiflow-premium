@@ -20,7 +20,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 
 export interface DraggableItem {
   id: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface UseDragToReorderOptions<T extends DraggableItem> {

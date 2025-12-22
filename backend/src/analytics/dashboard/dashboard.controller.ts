@@ -1,11 +1,10 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
-import { Public } from '../../common/decorators/public.decorator';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
- }from '@nestjs/swagger';
+} from '@nestjs/swagger';
 import { DashboardService } from './dashboard.service';
 import {
   DashboardQueryDto,
@@ -17,6 +16,7 @@ import {
 } from './dto/dashboard.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { JwtPayload } from '../../auth/interfaces/jwt-payload.interface';
 
 @ApiTags('Dashboard')
 
@@ -48,7 +48,7 @@ export class DashboardController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getMyCases(@CurrentUser() user: any): Promise<MyCasesSummaryDto> {
+  async getMyCases(@CurrentUser() user: JwtPayload): Promise<MyCasesSummaryDto> {
     return this.dashboardService.getMyCasesSummary(user.sub);
   }
 
@@ -61,7 +61,7 @@ export class DashboardController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getDeadlines(@CurrentUser() user: any): Promise<UpcomingDeadlinesDto> {
+  async getDeadlines(@CurrentUser() user: JwtPayload): Promise<UpcomingDeadlinesDto> {
     return this.dashboardService.getUpcomingDeadlines(user.sub);
   }
 
@@ -74,7 +74,7 @@ export class DashboardController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getTasks(@CurrentUser() user: any): Promise<PendingTasksDto> {
+  async getTasks(@CurrentUser() user: JwtPayload): Promise<PendingTasksDto> {
     return this.dashboardService.getPendingTasks(user.sub);
   }
 

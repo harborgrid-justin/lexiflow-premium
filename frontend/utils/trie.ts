@@ -13,7 +13,7 @@
 class TrieNode {
     children: Map<string, TrieNode>;
     isEndOfWord: boolean;
-    data: any;
+    data: unknown;
 
     constructor() {
         this.children = new Map();
@@ -32,7 +32,7 @@ export class Trie {
         this.root = new TrieNode();
     }
 
-    insert(key: string, data: any) {
+    insert(key: string, data: unknown) {
         let node = this.root;
         const lowerKey = key.toLowerCase();
         for (const char of lowerKey) {
@@ -45,7 +45,7 @@ export class Trie {
         node.data = data;
     }
 
-    search(prefix: string): any[] {
+    search(prefix: string): unknown[] {
         let node = this.root;
         const lowerPrefix = prefix.toLowerCase();
         for (const char of lowerPrefix) {
@@ -57,8 +57,8 @@ export class Trie {
         return this._collect(node);
     }
 
-    private _collect(node: TrieNode): any[] {
-        let results: any[] = [];
+    private _collect(node: TrieNode): unknown[] {
+        let results: unknown[] = [];
         if (node.isEndOfWord) {
             results.push(node.data);
         }

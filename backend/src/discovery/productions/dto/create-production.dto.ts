@@ -62,7 +62,7 @@ export class CreateProductionDto {
   includeRedactions?: boolean;
 
   @IsOptional()
-  searchCriteria?: Record<string, any>;
+  searchCriteria?: Record<string, unknown>;
 
   @IsOptional()
   @IsString()
@@ -78,7 +78,7 @@ export class CreateProductionDto {
   productionCost?: number;
 
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 
   @IsOptional()
   @IsUUID()

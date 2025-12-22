@@ -80,5 +80,5 @@ export class CreateCommunicationDto {
   @ApiProperty({ description: 'Metadata', required: false })
   @IsOptional()
   @IsObject()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

@@ -58,7 +58,7 @@ export class InvoiceStatusChangedHandler extends BaseEventHandler<SystemEventPay
         console.warn('[InvoiceHandler] No collection workflow template found');
         actions.push('Overdue invoice detected (no collection workflow available)');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('[InvoiceHandler] Failed to deploy collection workflow:', err);
       errors.push(`Collection workflow deployment failed: ${err.message}`);
     }

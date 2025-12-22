@@ -42,11 +42,11 @@ export class VersioningApiService {
     return apiClient.post<Version>(this.baseUrl, data);
   }
 
-  async compareVersions(version1Id: string, version2Id: string): Promise<any> {
+  async compareVersions(version1Id: string, version2Id: string): Promise<unknown> {
     return apiClient.get(`${this.baseUrl}/compare?v1=${version1Id}&v2=${version2Id}`);
   }
 
-  async revertToVersion(versionId: string): Promise<any> {
+  async revertToVersion(versionId: string): Promise<unknown> {
     return apiClient.post(`${this.baseUrl}/${versionId}/revert`, {});
   }
 }

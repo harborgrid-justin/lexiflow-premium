@@ -10,12 +10,12 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { WebhooksService } from './webhooks.service';
 import { CreateWebhookDto, UpdateWebhookDto } from './dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
 
 @ApiTags('Webhooks')
 
@@ -34,9 +34,9 @@ export class WebhooksController {
   @ApiResponse({ status: 409, description: 'Resource already exists' })
   async create(
     @Body() createWebhookDto: CreateWebhookDto,
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtPayload,
   ) {
-    const userId = user.id;
+    const userId = user.sub;
     return this.webhooksService.create(createWebhookDto, userId);
   }
 
@@ -46,9 +46,9 @@ export class WebhooksController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtPayload,
   ) {
-    const userId = user.id;
+    const userId = user.sub;
     return this.webhooksService.findAll(userId);
   }
 
@@ -60,9 +60,9 @@ export class WebhooksController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async findOne(
     @Param('id') id: string,
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtPayload,
   ) {
-    const userId = user.id;
+    const userId = user.sub;
     return this.webhooksService.findOne(id, userId);
   }
 
@@ -76,9 +76,9 @@ export class WebhooksController {
   async update(
     @Param('id') id: string,
     @Body() updateWebhookDto: UpdateWebhookDto,
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtPayload,
   ) {
-    const userId = user.id;
+    const userId = user.sub;
     return this.webhooksService.update(id, updateWebhookDto, userId);
   }
 
@@ -91,9 +91,9 @@ export class WebhooksController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async remove(
     @Param('id') id: string,
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtPayload,
   ) {
-    const userId = user.id;
+    const userId = user.sub;
     await this.webhooksService.remove(id, userId);
   }
 

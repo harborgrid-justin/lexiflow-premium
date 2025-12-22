@@ -43,5 +43,5 @@ export class UpdateDocumentDto {
   @ApiPropertyOptional({ description: 'Custom metadata fields' })
   @IsObject()
   @IsOptional()
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 }

@@ -38,7 +38,7 @@ interface EvidenceDetailProps {
   selectedItem: EvidenceItem;
   handleBack: () => void;
   activeTab: string;
-  setActiveTab: (tab: any) => void;
+  setActiveTab: (tab: unknown) => void;
   onNavigateToCase?: (caseId: string) => void;
   onCustodyUpdate?: (event: ChainOfCustodyEvent) => void;
 }

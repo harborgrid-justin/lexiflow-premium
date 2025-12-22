@@ -26,7 +26,7 @@ export abstract class BaseEventHandler<TPayload = any> {
       console.log(`[${this.eventType}] Processing event`, payload);
       const result = await this.handle(payload);
       return result;
-    } catch (error: any) {
+    } catch (error: unknown) {
       const errorMsg = error instanceof Error ? error.message : String(error);
       console.error(`[${this.eventType}] Error:`, errorMsg);
       errors.push(errorMsg);

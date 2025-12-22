@@ -1,16 +1,20 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards, Version } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiParam , ApiResponse} from '@nestjs/swagger';
+import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { BillingService } from './billing.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
+import { CreateInvoiceDto } from './dto/create-invoice.dto';
+import { UpdateInvoiceDto } from './dto/update-invoice.dto';
+import { CreateTimeEntryDto } from './time-entries/dto/create-time-entry.dto';
+import { UpdateTimeEntryDto } from './time-entries/dto/update-time-entry.dto';
+import { CreateExpenseDto } from './expenses/dto/create-expense.dto';
 
 @ApiTags('Billing')
 @ApiBearerAuth('JWT-auth')
 
-@Controller({ path: 'billing', version: '1' })
+@Controller('billing')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class BillingController {
   constructor(private readonly billingService: BillingService) {}
@@ -45,7 +49,7 @@ export class BillingController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createInvoice(@Body() createDto: any) {
+  async createInvoice(@Body() createDto: CreateInvoiceDto) {
     return this.billingService.createInvoice(createDto);
   }
 
@@ -58,7 +62,7 @@ export class BillingController {
   @ApiParam({ name: 'id', description: 'Invoice ID' })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async updateInvoice(@Param('id') id: string, @Body() updateDto: any) {
+  async updateInvoice(@Param('id') id: string, @Body() updateDto: UpdateInvoiceDto) {
     return this.billingService.updateInvoice(id, updateDto);
   }
 
@@ -131,7 +135,7 @@ export class BillingController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createTimeEntry(@Body() createDto: any) {
+  async createTimeEntry(@Body() createDto: CreateTimeEntryDto) {
     return this.billingService.createTimeEntry(createDto);
   }
 
@@ -144,7 +148,7 @@ export class BillingController {
   @ApiParam({ name: 'id', description: 'Time entry ID' })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async updateTimeEntry(@Param('id') id: string, @Body() updateDto: any) {
+  async updateTimeEntry(@Param('id') id: string, @Body() updateDto: UpdateTimeEntryDto) {
     return this.billingService.updateTimeEntry(id, updateDto);
   }
 
@@ -189,7 +193,7 @@ export class BillingController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createExpense(@Body() createDto: any) {
+  async createExpense(@Body() createDto: CreateExpenseDto) {
     return this.billingService.createExpense(createDto);
   }
 

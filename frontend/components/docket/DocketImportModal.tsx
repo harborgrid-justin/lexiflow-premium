@@ -32,7 +32,7 @@ import type { FallbackParseResult } from '../../services/features/discovery/fall
 interface DocketImportModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onImport: (data: any) => void;
+  onImport: (data: unknown) => void;
 }
 
 export const DocketImportModal: React.FC<DocketImportModalProps> = ({ isOpen, onClose, onImport }) => {
@@ -40,7 +40,7 @@ export const DocketImportModal: React.FC<DocketImportModalProps> = ({ isOpen, on
   const [mode, setMode] = useState<'text' | 'xml'>('text');
   const [rawText, setRawText] = useState('');
   const [isParsing, setIsParsing] = useState(false);
-  const [parsedData, setParsedData] = useState<any>(null);
+  const [parsedData, setParsedData] = useState<unknown>(null);
   const [parseConfidence, setParseConfidence] = useState<'high' | 'medium' | 'low' | null>(null);
   const [parseWarnings, setParseWarnings] = useState<string[]>([]);
   const notify = useNotify();

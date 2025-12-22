@@ -88,5 +88,5 @@ export class CreateProjectDto {
   }>;
 
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

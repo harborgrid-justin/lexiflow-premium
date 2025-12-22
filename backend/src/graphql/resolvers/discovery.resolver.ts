@@ -11,20 +11,20 @@ import {
 } from '../inputs/discovery.input';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from '../../auth/guards/gql-auth.guard';
+import { DiscoveryService } from '../../discovery/discovery.service';
+import { AuthenticatedUser } from '../../auth/interfaces/authenticated-user.interface';
 
 @Resolver(() => DiscoveryRequestType)
 export class DiscoveryResolver {
-  // Inject DiscoveryService here
-  // constructor(private discoveryService: DiscoveryService) {}
+  constructor(private discoveryService: DiscoveryService) {}
 
   @Query(() => [DiscoveryRequestType], { name: 'discoveryRequests' })
   @UseGuards(GqlAuthGuard)
   async getDiscoveryRequests(
     @Args('caseId', { type: () => ID }) caseId: string,
   ): Promise<DiscoveryRequestType[]> {
-    // TODO: Implement with DiscoveryService
-    // return this.discoveryService.findAllRequests(caseId);
-    return [];
+    const requests = await this.discoveryService.findRequestsByCaseId(caseId);
+    return requests as any[];
   }
 
   @Query(() => DiscoveryRequestType, { name: 'discoveryRequest', nullable: true })
@@ -32,20 +32,22 @@ export class DiscoveryResolver {
   async getDiscoveryRequest(
     @Args('id', { type: () => ID }) id: string,
   ): Promise<DiscoveryRequestType | null> {
-    // TODO: Implement with DiscoveryService
-    // return this.discoveryService.findOneRequest(id);
-    return null;
+    try {
+      const request = await this.discoveryService.findRequestById(id);
+      return request as any;
+    } catch (error) {
+      return null;
+    }
   }
 
   @Mutation(() => DiscoveryRequestType)
   @UseGuards(GqlAuthGuard)
   async createDiscoveryRequest(
     @Args('input') input: CreateDiscoveryRequestInput,
-    @CurrentUser() user: any,
+    @CurrentUser() user: AuthenticatedUser,
   ): Promise<DiscoveryRequestType> {
-    // TODO: Implement with DiscoveryService
-    // return this.discoveryService.createRequest(input, user);
-    throw new Error('Not implemented');
+    const request = await this.discoveryService.createRequest(input as any);
+    return request as any;
   }
 
   @Mutation(() => DiscoveryRequestType)
@@ -53,26 +55,24 @@ export class DiscoveryResolver {
   async updateDiscoveryRequest(
     @Args('id', { type: () => ID }) id: string,
     @Args('input') input: UpdateDiscoveryRequestInput,
-    @CurrentUser() user: any,
+    @CurrentUser() user: AuthenticatedUser,
   ): Promise<DiscoveryRequestType> {
-    // TODO: Implement with DiscoveryService
-    // return this.discoveryService.updateRequest(id, input, user);
-    throw new Error('Not implemented');
+    const request = await this.discoveryService.updateRequest(id, input as any);
+    return request as any;
   }
 
   @Query(() => [DepositionType], { name: 'depositions' })
   @UseGuards(GqlAuthGuard)
   async getDepositions(@Args('caseId', { type: () => ID }) caseId: string): Promise<DepositionType[]> {
-    // TODO: Implement with DiscoveryService
-    // return this.discoveryService.findAllDepositions(caseId);
+    // Note: Depositions are not directly implemented in the current DiscoveryService
+    // This would require a separate Depositions service or module
     return [];
   }
 
   @Query(() => DepositionType, { name: 'deposition', nullable: true })
   @UseGuards(GqlAuthGuard)
   async getDeposition(@Args('id', { type: () => ID }) id: string): Promise<DepositionType | null> {
-    // TODO: Implement with DiscoveryService
-    // return this.discoveryService.findOneDeposition(id);
+    // Note: Depositions are not directly implemented in the current DiscoveryService
     return null;
   }
 
@@ -80,11 +80,10 @@ export class DiscoveryResolver {
   @UseGuards(GqlAuthGuard)
   async createDeposition(
     @Args('input') input: CreateDepositionInput,
-    @CurrentUser() user: any,
+    @CurrentUser() user: AuthenticatedUser,
   ): Promise<DepositionType> {
-    // TODO: Implement with DiscoveryService
-    // return this.discoveryService.createDeposition(input, user);
-    throw new Error('Not implemented');
+    // Note: Depositions are not directly implemented in the current DiscoveryService
+    throw new Error('Deposition functionality requires additional service implementation');
   }
 
   @Mutation(() => DepositionType)
@@ -92,48 +91,44 @@ export class DiscoveryResolver {
   async updateDeposition(
     @Args('id', { type: () => ID }) id: string,
     @Args('input') input: UpdateDepositionInput,
-    @CurrentUser() user: any,
+    @CurrentUser() user: AuthenticatedUser,
   ): Promise<DepositionType> {
-    // TODO: Implement with DiscoveryService
-    // return this.discoveryService.updateDeposition(id, input, user);
-    throw new Error('Not implemented');
+    // Note: Depositions are not directly implemented in the current DiscoveryService
+    throw new Error('Deposition functionality requires additional service implementation');
   }
 
   @Query(() => [LegalHoldType], { name: 'legalHolds' })
   @UseGuards(GqlAuthGuard)
   async getLegalHolds(@Args('caseId', { type: () => ID }) caseId: string): Promise<LegalHoldType[]> {
-    // TODO: Implement with DiscoveryService
-    // return this.discoveryService.findAllLegalHolds(caseId);
-    return [];
+    const holds = await this.discoveryService.findHoldsByCaseId(caseId);
+    return holds as any[];
   }
 
   @Mutation(() => LegalHoldType)
   @UseGuards(GqlAuthGuard)
   async createLegalHold(
     @Args('input') input: CreateLegalHoldInput,
-    @CurrentUser() user: any,
+    @CurrentUser() user: AuthenticatedUser,
   ): Promise<LegalHoldType> {
-    // TODO: Implement with DiscoveryService
-    // return this.discoveryService.createLegalHold(input, user);
-    throw new Error('Not implemented');
+    const hold = await this.discoveryService.createHold(input as any);
+    return hold as any;
   }
 
   @Mutation(() => LegalHoldType)
   @UseGuards(GqlAuthGuard)
   async releaseLegalHold(
     @Args('id', { type: () => ID }) id: string,
-    @CurrentUser() user: any,
+    @CurrentUser() user: AuthenticatedUser,
   ): Promise<LegalHoldType> {
-    // TODO: Implement with DiscoveryService
-    // return this.discoveryService.releaseLegalHold(id, user);
-    throw new Error('Not implemented');
+    const hold = await this.discoveryService.releaseHold(id);
+    return hold as any;
   }
 
   @Query(() => [PrivilegeLogEntryType], { name: 'privilegeLog' })
   @UseGuards(GqlAuthGuard)
   async getPrivilegeLog(@Args('caseId', { type: () => ID }) caseId: string): Promise<PrivilegeLogEntryType[]> {
-    // TODO: Implement with DiscoveryService
-    // return this.discoveryService.findPrivilegeLog(caseId);
+    // Note: Privilege log is not directly implemented in the current DiscoveryService
+    // This would require additional service methods for full implementation
     return [];
   }
 
@@ -141,10 +136,9 @@ export class DiscoveryResolver {
   @UseGuards(GqlAuthGuard)
   async createPrivilegeLogEntry(
     @Args('input') input: CreatePrivilegeLogEntryInput,
-    @CurrentUser() user: any,
+    @CurrentUser() user: AuthenticatedUser,
   ): Promise<PrivilegeLogEntryType> {
-    // TODO: Implement with DiscoveryService
-    // return this.discoveryService.createPrivilegeLogEntry(input, user);
-    throw new Error('Not implemented');
+    // Note: Privilege log is not directly implemented in the current DiscoveryService
+    throw new Error('Privilege log functionality requires additional service implementation');
   }
 }

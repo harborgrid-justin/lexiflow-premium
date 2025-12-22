@@ -166,23 +166,28 @@ export class DiscoveryService {
 
   async getAllEvidence(query?: any): Promise<Evidence[]> {
     const whereClause: any = {};
-    
+
     if (query?.caseId) {
       whereClause.caseId = query.caseId;
     }
-    
+
     if (query?.type) {
       whereClause.type = query.type;
     }
-    
+
     if (query?.admissibilityStatus) {
       whereClause.admissibilityStatus = query.admissibilityStatus;
     }
-    
+
     return this.evidenceRepository.find({
       where: whereClause,
       order: { createdAt: 'DESC' },
     });
+  }
+
+  async createEvidence(createDto: any): Promise<Evidence> {
+    const evidence = this.evidenceRepository.create(createDto);
+    return this.evidenceRepository.save(evidence);
   }
 
   async getEvidenceByCaseId(caseId: string): Promise<Evidence[]> {

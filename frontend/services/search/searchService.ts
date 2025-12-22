@@ -95,7 +95,7 @@ export interface GlobalSearchResult {
   type: SearchResultType;
   title: string;
   subtitle: string;
-  data: any;
+  data: unknown;
   score?: number;
 }
 

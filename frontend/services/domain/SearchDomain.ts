@@ -26,7 +26,7 @@ interface SearchResult {
   title: string;
   snippet: string;
   score: number;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 const RECENT_SEARCHES_KEY = 'lexiflow_recent_searches';
@@ -35,8 +35,8 @@ const MAX_RECENT_SEARCHES = 10;
 export const SearchService = {
   getAll: async () => [], // Not applicable for search service
   getById: async (id: string) => null,
-  add: async (item: any) => item,
-  update: async (id: string, updates: any) => updates,
+  add: async (item: unknown) => item,
+  update: async (id: string, updates: unknown) => updates,
   delete: async (id: string) => true,
   
   /**
@@ -49,7 +49,7 @@ export const SearchService = {
   search: async (query: string, filters?: { types?: string[]; caseId?: string }): Promise<SearchResult[]> => {
     if (isBackendApiEnabled()) {
       try {
-        const params: any = { q: query };
+        const params: unknown = { q: query };
         if (filters?.types) params.types = filters.types.join(',');
         if (filters?.caseId) params.caseId = filters.caseId;
         

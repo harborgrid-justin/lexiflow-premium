@@ -5,6 +5,9 @@
  * This package ensures type consistency across the entire application
  */
 
+// Re-export all common types
+export * from './common';
+
 // Re-export all entities
 export * from './entities';
 

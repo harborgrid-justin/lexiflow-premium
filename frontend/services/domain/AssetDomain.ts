@@ -17,7 +17,7 @@ interface Asset {
   assignedTo?: string;
   status: 'available' | 'in-use' | 'maintenance' | 'retired';
   location?: string;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 interface MaintenanceRecord {
@@ -34,12 +34,12 @@ interface MaintenanceRecord {
 export const AssetService = {
   getAll: async () => db.getAll(STORES.ASSETS),
   getById: async (id: string) => db.get(STORES.ASSETS, id),
-  add: async (item: any) => db.put(STORES.ASSETS, { 
+  add: async (item: unknown) => db.put(STORES.ASSETS, { 
     ...item, 
     status: item.status || 'available',
     createdAt: new Date().toISOString() 
   }),
-  update: async (id: string, updates: any) => {
+  update: async (id: string, updates: unknown) => {
     const existing = await db.get(STORES.ASSETS, id);
     return db.put(STORES.ASSETS, { ...existing, ...updates });
   },

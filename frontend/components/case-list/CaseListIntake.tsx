@@ -40,7 +40,7 @@ export const CaseListIntake: React.FC = () => {
   const [draggedLeadId, setDraggedLeadId] = useState<string | null>(null);
   const [dragOverStage, setDragOverStage] = useState<string | null>(null);
   const leadModal = useModalState();
-  const [newLead, setNewLead] = useState<any>({});
+  const [newLead, setNewLead] = useState<unknown>({});
 
   // Performance Engine: useQuery for Caching & Stale-While-Revalidate
   const { data: leads = [], isLoading } = useQuery(
@@ -72,7 +72,7 @@ export const CaseListIntake: React.FC = () => {
 
   // Mutation for adding new leads
   const { mutate: addLead } = useMutation(
-      async (leadData: any) => {
+      async (leadData: unknown) => {
           const lead = {
               ...leadData,
               id: crypto.randomUUID(),
@@ -137,7 +137,7 @@ export const CaseListIntake: React.FC = () => {
           <KanbanColumn 
             key={stage} 
             title={stage} 
-            count={leads.filter((l: any) => l.stage === stage).length}
+            count={leads.filter((l: unknown) => l.stage === stage).length}
             isDragOver={dragOverStage === stage}
             onDrop={() => handleDrop(stage)}
             action={idx === 0 ? (
@@ -156,12 +156,12 @@ export const CaseListIntake: React.FC = () => {
               </button>
             ) : undefined}
           >
-            {leads.filter((l: any) => l.stage === stage).length === 0 ? (
+            {leads.filter((l: unknown) => l.stage === stage).length === 0 ? (
               <div className={cn("text-center py-8 text-xs", theme.text.tertiary)}>
                 No leads in this stage
               </div>
             ) : (
-              leads.filter((l: any) => l.stage === stage).map((lead: any) => (
+              leads.filter((l: unknown) => l.stage === stage).map((lead: unknown) => (
                 <KanbanCard
                   key={lead.id}
                   onDragStart={(e) => handleDragStart(e, lead.id)}

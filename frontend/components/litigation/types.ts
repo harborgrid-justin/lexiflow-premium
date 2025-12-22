@@ -69,7 +69,7 @@ export interface StrategyToolbarProps {
 }
 
 export interface AICommandBarProps {
-  onGenerate: (graph: { nodes: any[], connections: any[] }) => void;
+  onGenerate: (graph: { nodes: unknown[], connections: unknown[] }) => void;
 }
 
 export interface MinimapProps {

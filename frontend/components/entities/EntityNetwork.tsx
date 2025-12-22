@@ -90,7 +90,7 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
 
   if (isLoading) return <AdaptiveLoader contentType="dashboard" shimmer />;
 
-  const handleNodeClick = (node: any) => {
+  const handleNodeClick = (node: unknown) => {
     // Entity node interaction - can be extended for detailed entity profile viewing
   };
 

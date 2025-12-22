@@ -1,5 +1,6 @@
 import { BaseEntity, CaseId, ClientId, UserId } from './base.entity';
 import { CaseStatus, CaseType } from '../enums/case.enums';
+import { EntityMetadata } from '../common/json-value.types';
 
 /**
  * Case entity interface
@@ -21,7 +22,7 @@ export interface Case extends BaseEntity {
   assignedTeamId?: string;
   leadAttorneyId?: UserId;
   clientId: ClientId;
-  metadata?: Record<string, any>;
+  metadata?: EntityMetadata;
   isArchived?: boolean;
 }
 

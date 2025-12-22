@@ -1,5 +1,8 @@
 import DataLoader from 'dataloader';
 import { Injectable, Scope } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, In } from 'typeorm';
+import { Case } from '../../cases/entities/case.entity';
 
 /**
  * CaseLoader - DataLoader for batching and caching case queries
@@ -7,68 +10,89 @@ import { Injectable, Scope } from '@nestjs/common';
  */
 @Injectable({ scope: Scope.REQUEST })
 export class CaseLoader {
-  // Inject CaseRepository or CaseService here
-  // constructor(private caseRepository: CaseRepository) {}
+  constructor(
+    @InjectRepository(Case)
+    private caseRepository: Repository<Case>,
+  ) {}
 
   /**
    * Batch load cases by IDs
    */
   public readonly batchCases = new DataLoader(async (caseIds: readonly string[]) => {
-    // TODO: Implement batch loading logic
-    // const cases = await this.caseRepository.findByIds([...caseIds]);
-    // const caseMap = new Map(cases.map(c => [c.id, c]));
-    // return caseIds.map(id => caseMap.get(id) || null);
-
-    return caseIds.map(() => null);
+    const cases = await this.caseRepository.find({
+      where: { id: In([...caseIds]) },
+    });
+    const caseMap = new Map(cases.map(c => [c.id, c]));
+    return caseIds.map(id => caseMap.get(id) || null);
   });
 
   /**
    * Batch load parties by case IDs
+   * Note: Parties are embedded in case entity, so load cases with relations
    */
   public readonly batchPartiesByCaseId = new DataLoader(async (caseIds: readonly string[]) => {
-    // TODO: Implement batch loading logic for parties
-    // const parties = await this.partyRepository.findByCaseIds([...caseIds]);
-    // const partiesByCaseId = new Map();
-    // caseIds.forEach(id => partiesByCaseId.set(id, []));
-    // parties.forEach(party => {
-    //   const list = partiesByCaseId.get(party.caseId) || [];
-    //   list.push(party);
-    //   partiesByCaseId.set(party.caseId, list);
-    // });
-    // return caseIds.map(id => partiesByCaseId.get(id) || []);
-
-    return caseIds.map(() => []);
+    const cases = await this.caseRepository.find({
+      where: { id: In([...caseIds]) },
+      relations: ['parties'],
+    });
+    const partiesByCaseId = new Map();
+    caseIds.forEach(id => partiesByCaseId.set(id, []));
+    cases.forEach(caseItem => {
+      partiesByCaseId.set(caseItem.id, caseItem.parties || []);
+    });
+    return caseIds.map(id => partiesByCaseId.get(id) || []);
   });
 
   /**
    * Batch load team members by case IDs
+   * Note: Team members would need a separate entity/relation if not embedded
    */
   public readonly batchTeamMembersByCaseId = new DataLoader(async (caseIds: readonly string[]) => {
-    // TODO: Implement batch loading logic for team members
-    return caseIds.map(() => []);
+    const cases = await this.caseRepository.find({
+      where: { id: In([...caseIds]) },
+      relations: ['team'],
+    });
+    const teamByCaseId = new Map();
+    caseIds.forEach(id => teamByCaseId.set(id, []));
+    cases.forEach(caseItem => {
+      teamByCaseId.set(caseItem.id, caseItem.team || []);
+    });
+    return caseIds.map(id => teamByCaseId.get(id) || []);
   });
 
   /**
    * Batch load phases by case IDs
    */
   public readonly batchPhasesByCaseId = new DataLoader(async (caseIds: readonly string[]) => {
-    // TODO: Implement batch loading logic for phases
-    return caseIds.map(() => []);
+    const cases = await this.caseRepository.find({
+      where: { id: In([...caseIds]) },
+      relations: ['phases'],
+    });
+    const phasesByCaseId = new Map();
+    caseIds.forEach(id => phasesByCaseId.set(id, []));
+    cases.forEach(caseItem => {
+      phasesByCaseId.set(caseItem.id, caseItem.phases || []);
+    });
+    return caseIds.map(id => phasesByCaseId.get(id) || []);
   });
 
   /**
    * Batch load motions by case IDs
+   * Note: Motions would need a separate entity/repository for full implementation
    */
   public readonly batchMotionsByCaseId = new DataLoader(async (caseIds: readonly string[]) => {
-    // TODO: Implement batch loading logic for motions
+    // Motions may be stored in JSONB or separate table
+    // For now, return empty arrays as motions entity is not defined
     return caseIds.map(() => []);
   });
 
   /**
    * Batch load docket entries by case IDs
+   * Note: Docket entries would need a separate entity/repository for full implementation
    */
   public readonly batchDocketEntriesByCaseId = new DataLoader(async (caseIds: readonly string[]) => {
-    // TODO: Implement batch loading logic for docket entries
+    // Docket entries may be stored in JSONB or separate table
+    // For now, return empty arrays as docket entity is not defined
     return caseIds.map(() => []);
   });
 }

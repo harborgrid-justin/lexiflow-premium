@@ -48,7 +48,7 @@ export class AiOpsApiService {
   /**
    * Get vector embeddings
    */
-  async getEmbeddings(filters?: any): Promise<PaginatedResponse<VectorEmbedding>> {
+  async getEmbeddings(filters?: unknown): Promise<PaginatedResponse<VectorEmbedding>> {
     try {
       return await apiClient.get<PaginatedResponse<VectorEmbedding>>('/ai-ops/embeddings', filters);
     } catch (error) {
@@ -66,7 +66,7 @@ export class AiOpsApiService {
   /**
    * Search for similar embeddings (vector similarity search)
    */
-  async searchSimilar(embedding: number[], limit = 10): Promise<{ results: any[] }> {
+  async searchSimilar(embedding: number[], limit = 10): Promise<{ results: unknown[] }> {
     try {
       return await apiClient.post('/ai-ops/embeddings/search', { embedding, limit });
     } catch (error) {

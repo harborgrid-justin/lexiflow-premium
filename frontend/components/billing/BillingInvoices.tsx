@@ -87,7 +87,7 @@ const BillingInvoicesComponent: React.FC = () => {
           onSuccess: (_, id) => {
               notify.success(`Invoice ${id} sent successfully.`);
           },
-          onError: (error, id, context: any) => {
+          onError: (error, id, context: unknown) => {
             // Rollback on error
             if (context?.previousInvoices) {
               queryClient.setQueryData(billingQueryKeys.billing.invoices(), context.previousInvoices);
@@ -121,7 +121,7 @@ const BillingInvoicesComponent: React.FC = () => {
           onSuccess: () => {
               notify.success("Invoice marked as PAID. Transaction recorded in immutable ledger.");
           },
-          onError: (error, id, context: any) => {
+          onError: (error, id, context: unknown) => {
             // Rollback on error
             if (context?.previousInvoices) {
               queryClient.setQueryData(billingQueryKeys.billing.invoices(), context.previousInvoices);

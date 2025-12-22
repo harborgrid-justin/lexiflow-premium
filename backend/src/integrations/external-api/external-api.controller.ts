@@ -1,6 +1,5 @@
 import { Controller, Post, Get, Body, UseGuards } from '@nestjs/common';
-import { Public } from '../../common/decorators/public.decorator';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { ExternalApiService } from './external-api.service';
 import { PacerService } from '../pacer/pacer.service';
 import { CalendarService } from '../calendar/calendar.service';
@@ -8,6 +7,7 @@ import { PacerSearchDto, PacerIntegrationSyncDto } from '../pacer/dto';
 import { CalendarIntegrationEventDto, CalendarSyncDto } from '../calendar/dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { JwtPayload } from '../../auth/interfaces/jwt-payload.interface';
 
 @ApiTags('Integrations')
 
@@ -54,9 +54,9 @@ export class ExternalApiController {
   @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createCalendarEvent(
     @Body() createEventDto: CalendarIntegrationEventDto,
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtPayload,
   ) {
-    const userId = user.id;
+    const userId = user.sub;
     return this.calendarService.createEvent(createEventDto, userId);
   }
 
@@ -69,9 +69,9 @@ export class ExternalApiController {
   @ApiResponse({ status: 409, description: 'Resource already exists' })
   async syncCalendar(
     @Body() syncDto: CalendarSyncDto,
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtPayload,
   ) {
-    const userId = user.id;
+    const userId = user.sub;
     return this.calendarService.sync(syncDto, userId);
   }
 

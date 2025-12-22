@@ -35,7 +35,7 @@ export interface DocketValidationWarning {
 /**
  * Type guard to check if structured data is valid
  */
-export function isValidStructuredData(data: any): data is DocketEntryStructuredData {
+export function isValidStructuredData(data: unknown): data is DocketEntryStructuredData {
   if (!data || typeof data !== 'object') return false;
   
   // Required fields
@@ -80,7 +80,7 @@ export function isCompleteDocketEntry(entry: Partial<DocketEntry>): entry is Doc
 /**
  * Validate structured data with detailed error reporting
  */
-export function validateStructuredData(data: any): DocketValidationResult {
+export function validateStructuredData(data: unknown): DocketValidationResult {
   const errors: DocketValidationError[] = [];
   const warnings: DocketValidationWarning[] = [];
   

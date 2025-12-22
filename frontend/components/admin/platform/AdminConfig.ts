@@ -30,7 +30,7 @@ export const COLUMN_CONFIG: Record<Category, { header: string; key: string; type
   ]
 };
 
-export const EMPTY_TEMPLATES: any = {
+export const EMPTY_TEMPLATES: unknown = {
   users: { id: '', name: '', role: 'Associate', office: '' },
   cases: { id: '', title: '', client: '', status: 'Discovery', value: 0 },
   clients: { id: '', name: '', industry: '', status: 'Active', totalBilled: 0 },

@@ -89,7 +89,7 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
       const stored = localStorage.getItem('breadcrumb-recent-paths');
       if (stored) {
         const parsed = JSON.parse(stored);
-        const paths = parsed.map((p: any) => ({
+        const paths = parsed.map((p: unknown) => ({
           ...p,
           timestamp: new Date(p.timestamp)
         }));

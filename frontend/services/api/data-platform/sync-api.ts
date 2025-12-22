@@ -77,7 +77,7 @@ export class SyncApiService {
   /**
    * Get sync queue items
    */
-  async getQueue(filters?: any): Promise<PaginatedResponse<SyncQueueItem>> {
+  async getQueue(filters?: unknown): Promise<PaginatedResponse<SyncQueueItem>> {
     try {
       return await apiClient.get<PaginatedResponse<SyncQueueItem>>('/sync/queue', filters);
     } catch (error) {
@@ -88,7 +88,7 @@ export class SyncApiService {
   /**
    * Get sync conflicts
    */
-  async getConflicts(filters?: any): Promise<PaginatedResponse<SyncConflict>> {
+  async getConflicts(filters?: unknown): Promise<PaginatedResponse<SyncConflict>> {
     try {
       return await apiClient.get<PaginatedResponse<SyncConflict>>('/sync/conflicts', filters);
     } catch (error) {

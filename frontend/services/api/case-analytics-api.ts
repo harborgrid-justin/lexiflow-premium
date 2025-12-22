@@ -50,11 +50,11 @@ export class CaseAnalyticsApiService {
     return apiClient.get<CaseAnalytics>(`${this.baseUrl}/${caseId}`);
   }
 
-  async compare(caseIds: string[]): Promise<any> {
+  async compare(caseIds: string[]): Promise<unknown> {
     return apiClient.post(`${this.baseUrl}/compare`, { caseIds });
   }
 
-  async getTrends(filters?: { caseType?: string; practiceArea?: string }): Promise<any> {
+  async getTrends(filters?: { caseType?: string; practiceArea?: string }): Promise<unknown> {
     return apiClient.post(`${this.baseUrl}/trends`, filters);
   }
 }

@@ -11,7 +11,11 @@ export class StandardResponseDto<T> {
   data?: T;
 
   @ApiProperty({ example: null, description: 'Error details if any' })
-  error?: any;
+  error?: {
+    message: string;
+    code?: string;
+    details?: Record<string, unknown>;
+  };
 
   @ApiProperty({ example: 1639584000000, description: 'Timestamp' })
   timestamp: number;
@@ -23,7 +27,7 @@ export class StandardResponseDto<T> {
     success: boolean,
     message: string,
     data?: T,
-    error?: any,
+    error?: { message: string; code?: string; details?: Record<string, unknown> },
     requestId?: string,
   ) {
     this.success = success;

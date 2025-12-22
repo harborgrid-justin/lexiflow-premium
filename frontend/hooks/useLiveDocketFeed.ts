@@ -20,8 +20,8 @@ export interface LiveDocketFeedConfig {
   enabled?: boolean;
   reconnectAttempts?: number;
   reconnectDelay?: number;
-  onEntry?: (entry: any) => void;
-  onNewEntry?: (entry: any) => void;
+  onEntry?: (entry: unknown) => void;
+  onNewEntry?: (entry: unknown) => void;
   reconnectInterval?: number;
   maxReconnectAttempts?: number;
 }

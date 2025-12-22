@@ -48,15 +48,15 @@ export class BillingAnalyticsApiService {
     return apiClient.get<BillingAnalytics>(`${this.baseUrl}/overview?start=${startDate}&end=${endDate}`);
   }
 
-  async getByAttorney(userId: string, startDate: string, endDate: string): Promise<any> {
+  async getByAttorney(userId: string, startDate: string, endDate: string): Promise<unknown> {
     return apiClient.get(`${this.baseUrl}/attorney/${userId}?start=${startDate}&end=${endDate}`);
   }
 
-  async getByClient(clientId: string, startDate: string, endDate: string): Promise<any> {
+  async getByClient(clientId: string, startDate: string, endDate: string): Promise<unknown> {
     return apiClient.get(`${this.baseUrl}/client/${clientId}?start=${startDate}&end=${endDate}`);
   }
 
-  async getForecast(months: number): Promise<any> {
+  async getForecast(months: number): Promise<unknown> {
     return apiClient.get(`${this.baseUrl}/forecast?months=${months}`);
   }
 }

@@ -24,7 +24,7 @@ export const ClientAnalytics: React.FC = () => {
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: chartTheme.text, fontSize: 12}} />
                 <YAxis axisLine={false} tickLine={false} tick={{fill: chartTheme.text, fontSize: 12}} tickFormatter={(value) => `$${value/1000}k`} />
-                <Tooltip cursor={{fill: chartTheme.grid}} formatter={(value: any) => `$${value.toLocaleString()}`} contentStyle={chartTheme.tooltipStyle} />
+                <Tooltip cursor={{fill: chartTheme.grid}} formatter={(value: unknown) => `$${value.toLocaleString()}`} contentStyle={chartTheme.tooltipStyle} />
                 <Legend />
                 <Bar dataKey="retained" name="Retained Revenue" stackId="a" fill={chartTheme.colors.blue} radius={[0, 0, 4, 4]} />
                 <Bar dataKey="new" name="New Business" stackId="a" fill={chartTheme.colors.emerald} radius={[4, 4, 0, 0]} />

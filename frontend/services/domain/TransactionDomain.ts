@@ -19,7 +19,7 @@ interface Transaction {
   status: 'pending' | 'completed' | 'reconciled' | 'failed';
   paymentMethod?: string;
   reference?: string;
-  metadata?: any;
+  metadata?: unknown;
 }
 
 interface Balance {
@@ -33,7 +33,7 @@ export const TransactionService = {
   getAll: async () => api.billing?.transactions?.getAll?.() || [],
   getById: async (id: string) => api.billing?.transactions?.getById?.(id),
   
-  add: async (item: any) => {
+  add: async (item: unknown) => {
     const transaction = { 
       ...item, 
       createdAt: new Date().toISOString(),
@@ -42,7 +42,7 @@ export const TransactionService = {
     return api.billing?.transactions?.create?.(transaction) || transaction;
   },
   
-  update: async (id: string, updates: any) => {
+  update: async (id: string, updates: unknown) => {
     return api.billing?.transactions?.update?.(id, updates) || { id, ...updates };
   },
   

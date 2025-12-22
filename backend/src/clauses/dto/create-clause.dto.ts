@@ -40,7 +40,7 @@ export class CreateClauseDto {
   @ApiPropertyOptional({ description: 'Variables for template substitution' })
   @IsObject()
   @IsOptional()
-  variables?: Record<string, any>;
+  variables?: Record<string, unknown>;
 
   @ApiPropertyOptional({ description: 'Is clause active', default: true })
   @IsBoolean()

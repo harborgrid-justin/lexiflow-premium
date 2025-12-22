@@ -1,11 +1,14 @@
 import { Controller, Get, Post, Body, Param, Query, Head, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiParam , ApiResponse} from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { DiscoveryService } from './discovery.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
+import { CreateDiscoveryRequestDto } from './discovery-requests/dto/create-discovery-request.dto';
+import { QueryDiscoveryRequestDto } from './discovery-requests/dto/query-discovery-request.dto';
+import { CreateDiscoveryEvidenceDto } from './evidence/dto/create-evidence.dto';
+import { QueryEvidenceDto } from './evidence/dto/query-evidence.dto';
 
 @ApiTags('Discovery')
 @ApiBearerAuth('JWT-auth')
@@ -33,8 +36,21 @@ export class DiscoveryController {
   @ApiResponse({ status: 200, description: 'List of evidence items' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getAllEvidence(@Query() query?: any) {
+  async getAllEvidence(@Query() query?: QueryEvidenceDto) {
     return this.discoveryService.getAllEvidence(query);
+  }
+
+  @Post('evidence')
+  @HttpCode(HttpStatus.CREATED)
+  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @ApiOperation({ summary: 'Create discovery evidence item' })
+  @ApiResponse({ status: 201, description: 'Evidence item created' })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 409, description: 'Resource already exists' })
+  async createEvidence(@Body() createDto: CreateDiscoveryEvidenceDto) {
+    return this.discoveryService.createEvidence(createDto);
   }
 
   @Get()
@@ -43,7 +59,7 @@ export class DiscoveryController {
   @ApiResponse({ status: 200, description: 'List of discovery requests' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  findAll(@Query() query?: any) {
+  findAll(@Query() query?: QueryDiscoveryRequestDto) {
     return this.discoveryService.findAllRequests();
   }
 
@@ -67,7 +83,7 @@ export class DiscoveryController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  create(@Body() createDto: any) {
+  create(@Body() createDto: CreateDiscoveryRequestDto) {
     return this.discoveryService.createRequest(createDto);
   }
 }

@@ -1019,7 +1019,7 @@ Object.defineProperties(DataServiceBase, {
           return [];
         }
       },
-      add: async (rule: any) => {
+      add: async (rule: unknown) => {
         try {
           return await api.jurisdiction?.createRule?.(rule);
         } catch (error) {
@@ -1027,7 +1027,7 @@ Object.defineProperties(DataServiceBase, {
           throw error;
         }
       },
-      update: async (id: string, updates: any) => {
+      update: async (id: string, updates: unknown) => {
         try {
           return await api.jurisdiction?.updateRule?.(id, updates);
         } catch (error) {

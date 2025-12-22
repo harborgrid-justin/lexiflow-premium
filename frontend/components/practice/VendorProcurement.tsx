@@ -89,7 +89,7 @@ export const VendorProcurement: React.FC = () => {
                         <TableContainer>
                             <TableHeader><TableHead>Vendor</TableHead><TableHead>Category</TableHead><TableHead>Rating</TableHead><TableHead>Status</TableHead></TableHeader>
                             <TableBody>
-                                {directory.map((v: any) => (
+                                {directory.map((v: unknown) => (
                                     <TableRow key={v.id}>
                                         <TableCell className={cn("font-bold", theme.text.primary)}>{v.name}</TableCell>
                                         <TableCell>{v.category}</TableCell>

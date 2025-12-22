@@ -13,7 +13,7 @@ import { apiClient } from '../../infrastructure/apiClient';
  */
 export interface QueryResult {
   success: boolean;
-  data: any[];
+  data: unknown[];
   executionTimeMs: number;
   rowsAffected: number;
   error?: string;
@@ -75,7 +75,7 @@ export class QueryWorkbenchApiService {
   /**
    * Explain a SQL query (get execution plan)
    */
-  async explainQuery(query: string): Promise<{ success: boolean; plan?: any; error?: string }> {
+  async explainQuery(query: string): Promise<{ success: boolean; plan?: unknown; error?: string }> {
     try {
       return await apiClient.post('/query-workbench/explain', { query });
     } catch (error) {

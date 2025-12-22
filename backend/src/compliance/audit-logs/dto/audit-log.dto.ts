@@ -6,8 +6,8 @@ export class AuditLogDto {
   entityType: AuditEntityType;
   entityId: string;
   entityName?: string;
-  changes?: Record<string, any>;
-  metadata?: Record<string, any>;
+  changes?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
   ipAddress?: string;
   userAgent?: string;
   timestamp: Date;
@@ -60,8 +60,8 @@ export class CreateAuditLogDto {
   entityType: AuditEntityType;
   entityId: string;
   entityName?: string;
-  changes?: Record<string, any>;
-  metadata?: Record<string, any>;
+  changes?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
   ipAddress?: string;
   userAgent?: string;
   organizationId: string;

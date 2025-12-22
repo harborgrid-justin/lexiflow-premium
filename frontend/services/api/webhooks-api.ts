@@ -40,7 +40,7 @@ export class WebhooksApiService {
   }
 
   async getDeliveries(id: string, filters?: { page?: number; limit?: number }): Promise<any[]> {
-    const response = await apiClient.get<PaginatedResponse<any>>(`/webhooks/${id}/deliveries`, filters);
+    const response = await apiClient.get<PaginatedResponse<unknown>>(`/webhooks/${id}/deliveries`, filters);
     return response.data;
   }
 }

@@ -72,5 +72,5 @@ export class CreateMotionDto {
   }>;
 
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

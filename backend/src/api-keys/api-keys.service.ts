@@ -208,6 +208,34 @@ export class ApiKeysService {
   }
 
   /**
+   * Get available API key scopes
+   */
+  async getAvailableScopes(): Promise<{ id: string; label: string; description: string }[]> {
+    return [
+      {
+        id: ApiKeyScope.READ,
+        label: 'Read',
+        description: 'Read-only access to resources',
+      },
+      {
+        id: ApiKeyScope.WRITE,
+        label: 'Write',
+        description: 'Create and update resources',
+      },
+      {
+        id: ApiKeyScope.DELETE,
+        label: 'Delete',
+        description: 'Delete resources',
+      },
+      {
+        id: ApiKeyScope.ADMIN,
+        label: 'Admin',
+        description: 'Full administrative access',
+      },
+    ];
+  }
+
+  /**
    * Generate a unique ID
    */
   private generateId(): string {

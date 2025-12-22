@@ -14,7 +14,7 @@ interface DataSourceOption {
   value: DataSourceType;
   label: string;
   description: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<unknown>;
   requiresBackend: boolean;
 }
 

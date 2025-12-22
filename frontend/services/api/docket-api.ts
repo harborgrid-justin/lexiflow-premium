@@ -82,7 +82,7 @@ export class DocketApiService {
      * Validate and sanitize object parameter
      * @private
      */
-    private validateObject(obj: any, paramName: string, methodName: string): void {
+    private validateObject(obj: unknown, paramName: string, methodName: string): void {
         if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
             throw new Error(`[DocketApiService.${methodName}] Invalid ${paramName} parameter`);
         }

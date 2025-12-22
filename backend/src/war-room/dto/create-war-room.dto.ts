@@ -62,5 +62,5 @@ export class CreateWarRoomDto {
     description: 'Additional settings'
   })
   @IsOptional()
-  settings?: Record<string, any>;
+  settings?: Record<string, unknown>;
 }

@@ -33,7 +33,7 @@ export class HealthApiService {
     return apiClient.get(`${this.baseUrl}/redis`);
   }
 
-  async checkExternalServices(): Promise<any> {
+  async checkExternalServices(): Promise<unknown> {
     return apiClient.get(`${this.baseUrl}/external-services`);
   }
 }

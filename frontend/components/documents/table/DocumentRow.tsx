@@ -14,7 +14,7 @@ interface DocumentRowProps {
   setSelectedDocForHistory: (doc: LegalDocument) => void;
   setTaggingDoc: (doc: LegalDocument) => void;
   onRowClick?: (doc: LegalDocument) => void;
-  theme: any;
+  theme: unknown;
 }
 
 export const DocumentRow = React.memo<DocumentRowProps>(({ 

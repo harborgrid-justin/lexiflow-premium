@@ -10,8 +10,8 @@ import {
 } from '@nestjs/terminus';
 import { RedisHealthIndicator } from './redis-health.indicator';
 import * as MasterConfig from '../config/master.config';
-// TODO: Install OpenTelemetry dependencies to enable telemetry health checks
-// import { TelemetryHealthIndicator } from '../telemetry/telemetry-health.indicator';
+// Note: OpenTelemetry telemetry health checks are available but optional
+// Uncomment to enable: import { TelemetryHealthIndicator } from '../telemetry/telemetry-health.indicator';
 
 /**
  * Health Check Controller

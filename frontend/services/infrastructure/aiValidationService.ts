@@ -25,7 +25,7 @@ export interface AIValidationResult {
   isValid: boolean;
   errors: string[];
   sanitizedPrompt?: string;
-  sanitizedResponse?: any;
+  sanitizedResponse?: unknown;
 }
 
 /**
@@ -109,7 +109,7 @@ export class AIValidationService {
   /**
    * Validate AI-generated graph structure
    */
-  static validateAIResponse(response: any): AIValidationResult {
+  static validateAIResponse(response: unknown): AIValidationResult {
     const errors: string[] = [];
 
     // Check response structure
@@ -145,7 +145,7 @@ export class AIValidationService {
   /**
    * Validate nodes array from AI response
    */
-  private static validateNodesArray(nodes: any[], errors: string[]): void {
+  private static validateNodesArray(nodes: unknown[], errors: string[]): void {
     if (nodes.length === 0) {
       errors.push('AI response contains no nodes');
       return;
@@ -180,8 +180,8 @@ export class AIValidationService {
    * Validate connections array from AI response
    */
   private static validateConnectionsArray(
-    connections: any[],
-    nodes: any[],
+    connections: unknown[],
+    nodes: unknown[],
     errors: string[]
   ): void {
     if (connections.length > CANVAS_CONSTANTS.MAX_CONNECTIONS) {
@@ -208,7 +208,7 @@ export class AIValidationService {
   /**
    * Check if node structure is valid
    */
-  private static isValidNode(node: any): boolean {
+  private static isValidNode(node: unknown): boolean {
     return (
       node &&
       typeof node === 'object' &&
@@ -224,7 +224,7 @@ export class AIValidationService {
   /**
    * Check if connection structure is valid
    */
-  private static isValidConnection(conn: any): boolean {
+  private static isValidConnection(conn: unknown): boolean {
     return (
       conn &&
       typeof conn === 'object' &&
@@ -237,9 +237,9 @@ export class AIValidationService {
   /**
    * Sanitize AI response to ensure safe values
    */
-  private static sanitizeAIResponse(response: any): any {
+  private static sanitizeAIResponse(response: unknown): any {
     return {
-      nodes: response.nodes.map((node: any) => ({
+      nodes: response.nodes.map((node: unknown) => ({
         ...node,
         id: this.sanitizeString(node.id),
         label: this.sanitizeString(node.label),
@@ -248,7 +248,7 @@ export class AIValidationService {
         y: this.clamp(node.y, 0, 2000),
         config: this.sanitizeConfig(node.config),
       })),
-      connections: response.connections.map((conn: any) => ({
+      connections: response.connections.map((conn: unknown) => ({
         ...conn,
         id: this.sanitizeString(conn.id),
         from: this.sanitizeString(conn.from),
@@ -269,10 +269,10 @@ export class AIValidationService {
   /**
    * Sanitize config object
    */
-  private static sanitizeConfig(config: any): any {
+  private static sanitizeConfig(config: unknown): any {
     if (!config || typeof config !== 'object') return {};
 
-    const sanitized: any = {};
+    const sanitized: unknown = {};
     for (const key of Object.keys(config)) {
       const value = config[key];
       if (typeof value === 'string') {

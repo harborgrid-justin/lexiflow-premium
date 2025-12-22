@@ -13,11 +13,11 @@ import { PrivilegeType } from '../entities/privilege-log-entry.entity';
 
 export class CreatePrivilegeLogEntryDto {
   @IsUUID()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
   @MaxLength(100)
-  privilegeLogNumber: string;
+  privilegeLogNumber!: string;
 
   @IsOptional()
   @IsString()
@@ -30,11 +30,11 @@ export class CreatePrivilegeLogEntryDto {
   documentId?: string;
 
   @IsDateString()
-  documentDate: string;
+  documentDate!: string;
 
   @IsString()
   @MaxLength(300)
-  author: string;
+  author!: string;
 
   @IsOptional()
   @IsArray()
@@ -50,10 +50,10 @@ export class CreatePrivilegeLogEntryDto {
   documentType?: string;
 
   @IsString()
-  description: string;
+  description!: string;
 
   @IsEnum(PrivilegeType)
-  privilegeType: PrivilegeType;
+  privilegeType!: PrivilegeType;
 
   @IsOptional()
   @IsString()
@@ -97,5 +97,5 @@ export class CreatePrivilegeLogEntryDto {
   reviewedBy?: string;
 
   @IsUUID()
-  createdBy: string;
+  createdBy!: string;
 }

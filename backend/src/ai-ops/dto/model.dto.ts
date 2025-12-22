@@ -5,27 +5,27 @@ export class RegisterAiOpsModelDto {
   @ApiProperty({ description: 'Model name' })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'Model type' })
   @IsString()
   @IsNotEmpty()
-  type: string;
+  type!: string;
 
   @ApiProperty({ description: 'Model version' })
   @IsString()
   @IsNotEmpty()
-  version: string;
+  version!: string;
 
   @ApiProperty({ description: 'Model provider' })
   @IsString()
   @IsNotEmpty()
-  provider: string;
+  provider!: string;
 
   @ApiProperty({ description: 'Model configuration', type: Object })
   @IsObject()
   @IsNotEmpty()
-  configuration: Record<string, unknown>;
+  configuration!: Record<string, unknown>;
 }
 
 export class UpdateAiOpsModelDto {

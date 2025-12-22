@@ -3,44 +3,44 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity('pleading_templates')
 export class PleadingTemplate {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ nullable: true })
-  description: string;
+  description!: string;
 
   @Column()
-  category: string;
+  category!: string;
 
   @Column({ type: 'jsonb' })
-  defaultSections: any[];
+  defaultSections!: any[];
 
   @Column({ type: 'jsonb', nullable: true })
-  variables: any[];
+  variables!: any[];
 
   @Column({ type: 'jsonb', nullable: true })
   formattingRules: any;
 
   @Column({ nullable: true })
-  jurisdictionId: string;
+  jurisdictionId!: string;
 
   @Column({ default: true })
-  isActive: boolean;
+  isActive!: boolean;
 
   @Column({ default: 0 })
-  usageCount: number;
+  usageCount!: number;
 
   @Column({ nullable: true })
-  createdBy: string;
+  createdBy!: string;
 
   @Column({ nullable: true })
-  updatedBy: string;
+  updatedBy!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

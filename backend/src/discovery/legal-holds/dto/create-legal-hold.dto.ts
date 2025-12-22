@@ -14,11 +14,11 @@ import { Type } from 'class-transformer';
 
 export class CreateLegalHoldDto {
   @IsUUID()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
   @MaxLength(300)
-  holdName: string;
+  holdName!: string;
 
   @IsOptional()
   @IsString()
@@ -26,13 +26,13 @@ export class CreateLegalHoldDto {
   holdNumber?: string;
 
   @IsString()
-  description: string;
+  description!: string;
 
   @IsString()
-  holdInstructions: string;
+  holdInstructions!: string;
 
   @IsDateString()
-  issueDate: string;
+  issueDate!: string;
 
   @IsOptional()
   @IsDateString()
@@ -80,5 +80,5 @@ export class CreateLegalHoldDto {
   issuedBy?: string;
 
   @IsUUID()
-  createdBy: string;
+  createdBy!: string;
 }

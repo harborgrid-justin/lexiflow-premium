@@ -24,7 +24,7 @@ export enum RiskStatus {
 export class CreateRiskDto {
   @ApiProperty({ description: 'Risk title' })
   @IsString()
-  title: string;
+  title!: string;
 
   @ApiPropertyOptional({ description: 'Risk description' })
   @IsString()
@@ -33,15 +33,15 @@ export class CreateRiskDto {
 
   @ApiProperty({ enum: RiskImpact })
   @IsEnum(RiskImpact)
-  impact: RiskImpact;
+  impact!: RiskImpact;
 
   @ApiProperty({ enum: RiskProbability })
   @IsEnum(RiskProbability)
-  probability: RiskProbability;
+  probability!: RiskProbability;
 
   @ApiProperty({ enum: RiskStatus, default: RiskStatus.OPEN })
   @IsEnum(RiskStatus)
-  status: RiskStatus;
+  status!: RiskStatus;
 
   @ApiPropertyOptional({ description: 'Case ID' })
   @IsString()

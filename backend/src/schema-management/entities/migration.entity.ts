@@ -3,29 +3,29 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeor
 @Entity('schema_migrations')
 export class Migration {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ type: 'text' })
-  up: string;
+  up!: string;
 
   @Column({ type: 'text' })
-  down: string;
+  down!: string;
 
   @Column({ nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ type: 'boolean', default: false })
-  applied: boolean;
+  applied!: boolean;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  appliedAt: Date;
+  appliedAt!: Date;
 
   @Column({ nullable: true })
-  appliedBy: string;
+  appliedBy!: string;
 }

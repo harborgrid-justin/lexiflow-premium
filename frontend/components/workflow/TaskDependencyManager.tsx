@@ -45,7 +45,7 @@ export const TaskDependencyManager: React.FC = () => {
       // Fallback: Sort by due date and show as a sequence
       const sortedTasks = [...tasksArray]
         .filter(t => t.status !== 'Done' && t.status !== 'Completed')
-        .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+        .sort((a: any, b: any) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
         .slice(0, 5);
 
       return sortedTasks.map((t, idx) => {

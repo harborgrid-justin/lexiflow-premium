@@ -191,7 +191,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   });
 
   const sortedEntries = useMemo(() => {
-      return [...filteredEntries].sort((a, b) => {
+      return [...filteredEntries].sort((a: any, b: any) => {
           const dateA = a.date || a.entryDate || a.dateFiled;
           const dateB = b.date || b.entryDate || b.dateFiled;
           return new Date(dateB).getTime() - new Date(dateA).getTime();
@@ -204,7 +204,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
       <>
       {parts.map((part, i) => {
         if (part.match(/Docket #\d+/)) {
-          return <span key={i} className={cn("font-medium cursor-pointer hover:underline px-1 rounded mx-0.5", theme.primary.text, theme.primary.light)} onClick={(e) => { e.stopPropagation(); alert(`Navigating to ${part}`); }}>{part}</span>;
+          return <span key={i} className={cn("font-medium cursor-pointer hover:underline px-1 rounded mx-0.5", theme.primary.text, theme.primary.light)} onClick={(e: React.MouseEvent) => { e.stopPropagation(); alert(`Navigating to ${part}`); }}>{part}</span>;
         }
         if (['Motion', 'Order', 'Complaint', 'Exhibit', 'Answer'].includes(part)) {
           return <span key={i} className={cn("font-bold border-b border-dashed cursor-help", theme.text.primary, theme.border.default)} title={`Legal Concept: ${part}`}>{part}</span>;

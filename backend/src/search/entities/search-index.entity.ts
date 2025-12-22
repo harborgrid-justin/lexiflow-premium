@@ -6,7 +6,7 @@ import { Case } from '../../cases/entities/case.entity';
 @Index('search_content_idx', { synchronize: false }) // Full-text search index
 export class SearchIndex {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'varchar', length: 100 })
   @Index()
@@ -14,33 +14,33 @@ export class SearchIndex {
 
   @Column({ type: 'uuid' })
   @Index()
-  entityId: string;
+  entityId!: string;
 
   @Column({ type: 'text' })
-  title: string;
+  title!: string;
 
   @Column({ type: 'text' })
-  content: string;
+  content!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 
   @Column({ type: 'text', array: true, default: '{}' })
-  tags: string[];
+  tags!: string[];
 
   @Column({ type: 'uuid', nullable: true })
   @Index()
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'caseId' })
-  case: Case;
+  case!: Case;
 
   @Column({ type: 'uuid', nullable: true })
   @Index()
-  clientId: string;
+  clientId!: string;
 
   @CreateDateColumn()
   @Index()
-  indexedAt: Date;
+  indexedAt!: Date;
 }

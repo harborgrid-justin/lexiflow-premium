@@ -1,9 +1,28 @@
 // Global type declarations for ambient types
 
-declare const db: any;
-declare const STORES: any;
-declare const queryKeys: any;
+/**
+ * Database instance type (if using IndexedDB or similar)
+ */
+declare const db: unknown;
+
+/**
+ * Store definitions for state management
+ */
+declare const STORES: Record<string, unknown>;
+
+/**
+ * Query keys registry for data fetching
+ */
+declare const queryKeys: Record<string, string | string[]>;
+
+/**
+ * Debug API simulation delay in milliseconds
+ */
 declare const DEBUG_API_SIMULATION_DELAY_MS: number;
+
+/**
+ * Notification auto-dismiss duration in milliseconds
+ */
 declare const NOTIFICATION_AUTO_DISMISS_MS: number;
 
 // Process environment
@@ -21,10 +40,3 @@ declare namespace NodeJS {
 }
 
 declare const process: NodeJS.Process;
-
-// Common missing types
-type RateTable = any;
-type FeeAgreement = any;
-type Examination = any;
-type WebhookConfig = any;
-type AIValidationService = any;

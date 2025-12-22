@@ -21,11 +21,11 @@ export enum WebhookEvent {
 export class CreateWebhookDto {
   @ApiProperty({ description: 'Webhook name' })
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'Webhook URL endpoint' })
   @IsUrl()
-  url: string;
+  url!: string;
 
   @ApiProperty({
     description: 'Events to subscribe to',
@@ -34,7 +34,7 @@ export class CreateWebhookDto {
   })
   @IsArray()
   @IsEnum(WebhookEvent, { each: true })
-  events: WebhookEvent[];
+  events!: WebhookEvent[];
 
   @ApiProperty({ description: 'Secret for webhook signature verification', required: false })
   @IsOptional()

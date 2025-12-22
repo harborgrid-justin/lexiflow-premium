@@ -10,14 +10,14 @@ import { User } from '../../users/entities/user.entity';
 @Index(['entityId'])
 export class AuditLog extends BaseEntity {
   @Column({ name: 'user_id', type: 'uuid', nullable: true })
-  userId: string;
+  userId!: string;
 
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user!: User;
 
   @Column({ name: 'user_name', type: 'varchar', length: 255, nullable: true })
-  userName: string;
+  userName!: string;
 
   @Column({
     type: 'enum',
@@ -43,63 +43,63 @@ export class AuditLog extends BaseEntity {
       'other',
     ],
   })
-  action: string;
+  action!: string;
 
   @Column({ name: 'entity_type', type: 'varchar', length: 100 })
-  entityType: string;
+  entityType!: string;
 
   @Column({ name: 'entity_id', type: 'varchar', length: 100, nullable: true })
-  entityId: string;
+  entityId!: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  timestamp: Date;
+  timestamp!: Date;
 
   @Column({ name: 'ip_address', type: 'varchar', length: 100, nullable: true })
-  ipAddress: string;
+  ipAddress!: string;
 
   @Column({ name: 'user_agent', type: 'text', nullable: true })
-  userAgent: string;
+  userAgent!: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  method: string;
+  method!: string;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  endpoint: string;
+  endpoint!: string;
 
   @Column({ name: 'status_code', type: 'integer', nullable: true })
-  statusCode: number;
+  statusCode!: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  changes: Record<string, any>;
+  changes!: Record<string, any>;
 
   @Column({ name: 'old_values', type: 'jsonb', nullable: true })
-  oldValues: Record<string, any>;
+  oldValues!: Record<string, any>;
 
   @Column({ name: 'new_values', type: 'jsonb', nullable: true })
-  newValues: Record<string, any>;
+  newValues!: Record<string, any>;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ type: 'text', nullable: true })
-  details: string;
+  details!: string;
 
   @Column({
     type: 'enum',
     enum: ['success', 'failure', 'warning', 'info'],
     default: 'success',
   })
-  result: string;
+  result!: string;
 
   @Column({ name: 'error_message', type: 'text', nullable: true })
-  errorMessage: string;
+  errorMessage!: string;
 
   @Column({ name: 'stack_trace', type: 'text', nullable: true })
-  stackTrace: string;
+  stackTrace!: string;
 
   @Column({ type: 'integer', nullable: true })
-  duration: number;
+  duration!: number;
 
   @Column({ name: 'session_id', type: 'varchar', length: 100, nullable: true })
-  sessionId: string;
+  sessionId!: string;
 }

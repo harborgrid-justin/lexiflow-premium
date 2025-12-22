@@ -122,7 +122,7 @@ export const EntityList: React.FC<EntityListProps> = ({ activeCategory, items, o
 
         {/* Mobile Card View (Simple map) */}
         <div className="md:hidden space-y-3 p-4 overflow-y-auto">
-            {items.map((item) => (
+            {items.map((item: any) => (
             <div key={item.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
                 <div className="flex justify-between items-start mb-2">
                 <span className={cn("text-xs font-mono", theme.text.secondary)}>{item.id}</span>

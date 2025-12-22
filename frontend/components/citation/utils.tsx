@@ -38,7 +38,8 @@ export const getSignalIcon = (signal?: string): React.ReactNode => {
  * @param theme - Theme object for consistent styling
  * @returns React element with appropriate icon
  */
-export const getTypeIcon = (type: string, theme: unknown): React.ReactNode => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getTypeIcon = (type: string, theme: any): React.ReactNode => {
   if (type === 'Case Law') return <Scale className={cn("h-4 w-4", theme.text.secondary)}/>;
   if (type === 'Statute') return <FileText className={cn("h-4 w-4", theme.text.secondary)}/>;
   return <Book className={cn("h-4 w-4", theme.text.secondary)}/>;

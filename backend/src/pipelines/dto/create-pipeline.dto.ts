@@ -18,11 +18,11 @@ export enum PipelineStatus {
 export class CreatePipelineDto {
   @ApiProperty()
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty({ enum: PipelineType })
   @IsEnum(PipelineType)
-  type: PipelineType;
+  type!: PipelineType;
 
   @ApiPropertyOptional()
   @IsString()
@@ -31,15 +31,15 @@ export class CreatePipelineDto {
 
   @ApiProperty()
   @IsString()
-  sourceConnector: string;
+  sourceConnector!: string;
 
   @ApiProperty()
   @IsString()
-  targetConnector: string;
+  targetConnector!: string;
 
   @ApiProperty()
   @IsObject()
-  configuration: Record<string, unknown>;
+  configuration!: Record<string, unknown>;
 
   @ApiPropertyOptional()
   @IsString()

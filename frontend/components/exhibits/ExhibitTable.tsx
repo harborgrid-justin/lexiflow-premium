@@ -133,7 +133,7 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
                 <StatusBadge status={ex.status} />
             </div>
             <div className="flex gap-2 ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button onClick={(e) => { e.stopPropagation(); handleViewExhibit(ex); }} className={cn("hover:text-blue-600", theme.text.tertiary)}><Eye className="h-4 w-4"/></button>
+                <button onClick={(e: React.MouseEvent) => { e.stopPropagation(); handleViewExhibit(ex); }} className={cn("hover:text-blue-600", theme.text.tertiary)}><Eye className="h-4 w-4"/></button>
             </div>
       </div>
   );

@@ -21,15 +21,15 @@ export enum CommunicationStatus {
 export class CreateCommunicationDto {
   @ApiProperty({ description: 'Communication type', enum: CommunicationType })
   @IsEnum(CommunicationType)
-  type: CommunicationType;
+  type!: CommunicationType;
 
   @ApiProperty({ description: 'Subject' })
   @IsString()
-  subject: string;
+  subject!: string;
 
   @ApiProperty({ description: 'Body/Content' })
   @IsString()
-  body: string;
+  body!: string;
 
   @ApiProperty({ description: 'From (sender)', required: false })
   @IsOptional()
@@ -39,7 +39,7 @@ export class CreateCommunicationDto {
   @ApiProperty({ description: 'To (recipient)', isArray: true })
   @IsArray()
   @IsString({ each: true })
-  to: string[];
+  to!: string[];
 
   @ApiProperty({ description: 'CC recipients', required: false })
   @IsOptional()

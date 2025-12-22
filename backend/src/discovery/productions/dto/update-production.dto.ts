@@ -128,5 +128,5 @@ export class UpdateProductionDto {
   assignedTo?: string;
 
   @IsUUID()
-  updatedBy: string;
+  updatedBy!: string;
 }

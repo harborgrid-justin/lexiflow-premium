@@ -80,15 +80,17 @@ async function testConnection() {
     await dataSource.destroy();
     process.exit(0);
   } catch (error) {
-    console.error('❌ Connection failed:', error.message);
+    const message = error instanceof Error ? error.message : 'Unknown error';
+    const stack = error instanceof Error ? error.stack : undefined;
+    console.error('❌ Connection failed:', message);
     
-    if (error.message.includes('ENOTFOUND')) {
+    if (message.includes('ENOTFOUND')) {
       console.error('\n💡 DNS lookup failed. Check your internet connection and hostname.');
-    } else if (error.message.includes('authentication')) {
+    } else if (message.includes('authentication')) {
       console.error('\n💡 Authentication failed. Check your username and password.');
-    } else if (error.message.includes('ECONNREFUSED')) {
+    } else if (message.includes('ECONNREFUSED')) {
       console.error('\n💡 Connection refused. Check if the database server is running.');
-    } else if (error.message.includes('SSL')) {
+    } else if (message.includes('SSL')) {
       console.error('\n💡 SSL connection issue. Verify SSL settings.');
     }
     

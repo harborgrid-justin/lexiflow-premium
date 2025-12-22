@@ -17,7 +17,7 @@ export enum CalendarEventType {
 @Index(['eventType'])
 export class CalendarEvent extends BaseEntity {
   @Column()
-  title: string;
+  title!: string;
 
   @Column({
     name: 'event_type',
@@ -25,33 +25,33 @@ export class CalendarEvent extends BaseEntity {
     enum: CalendarEventType,
     default: CalendarEventType.REMINDER
   })
-  eventType: CalendarEventType;
+  eventType!: CalendarEventType;
 
   @Column({ name: 'start_date', type: 'timestamp' })
-  startDate: Date;
+  startDate!: Date;
 
   @Column({ name: 'end_date', type: 'timestamp' })
-  endDate: Date;
+  endDate!: Date;
 
   @Column({ nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ nullable: true })
-  location: string;
+  location!: string;
 
   @Column({ type: 'json', nullable: true })
-  attendees: string[];
+  attendees!: string[];
 
   @Column({ name: 'case_id', nullable: true })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ nullable: true })
-  reminder: string;
+  reminder!: string;
 
   @Column({ default: false })
-  completed: boolean;
+  completed!: boolean;
 }

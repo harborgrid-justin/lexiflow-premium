@@ -114,7 +114,7 @@ export const AdminSecurity: React.FC = () => {
                                 className="flex-1 p-2 text-sm border rounded"
                                 placeholder="Enter IP Address..."
                                 value={testIp}
-                                onChange={(e) => setTestIp(e.target.value)}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTestIp(e.target.value)}
                             />
                             <Button variant="primary" onClick={checkIp}>Verify</Button>
                         </div>

@@ -10,7 +10,7 @@ export class CreateProjectDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @IsString()
   @IsOptional()

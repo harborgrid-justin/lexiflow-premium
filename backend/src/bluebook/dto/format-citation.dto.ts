@@ -22,7 +22,7 @@ export enum CitationFormat {
 export class FormatCitationDto {
   @ApiProperty({ description: 'Raw citation text to format' })
   @IsString()
-  citation: string;
+  citation!: string;
 
   @ApiPropertyOptional({ enum: CitationFormat, default: CitationFormat.FULL })
   @IsOptional()
@@ -44,7 +44,7 @@ export class BatchFormatDto {
   @ApiProperty({ description: 'Array of citations to format', type: [String] })
   @IsArray()
   @IsString({ each: true })
-  citations: string[];
+  citations!: string[];
 
   @ApiPropertyOptional({ enum: CitationFormat, default: CitationFormat.FULL })
   @IsOptional()
@@ -70,7 +70,7 @@ export class BatchFormatDto {
 export class ValidateCitationDto {
   @ApiProperty({ description: 'Citation to validate' })
   @IsString()
-  citation: string;
+  citation!: string;
 
   @ApiPropertyOptional({ enum: BluebookCitationType })
   @IsOptional()

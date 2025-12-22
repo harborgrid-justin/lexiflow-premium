@@ -3,32 +3,32 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 @Entity('knowledge_articles')
 export class KnowledgeArticle {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  title: string;
+  title!: string;
 
   @Column({ type: 'text' })
-  content: string;
+  content!: string;
 
   @Column({ nullable: true })
-  category: string;
+  category!: string;
 
   @Column({ type: 'simple-array', nullable: true })
-  tags: string[];
+  tags!: string[];
 
   @Column({ default: 'draft' })
-  status: string;
+  status!: string;
 
   @Column({ nullable: true })
-  authorId: string;
+  authorId!: string;
 
   @Column({ type: 'int', default: 0 })
-  viewCount: number;
+  viewCount!: number;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

@@ -93,7 +93,7 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
             type="number"
             step="0.1"
             value={duration}
-            onChange={e => setDuration(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDuration(e.target.value)}
             className={cn(theme.surface.input, theme.border.default, theme.text.primary)}
           />
           <div>
@@ -110,7 +110,7 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
             label="Description"
             placeholder="e.g. Call with client re: settlement strategy..."
             value={desc}
-            onChange={e => setDesc(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDesc(e.target.value)}
             rows={4}
             className={cn("resize-none", theme.surface.input, theme.border.default, theme.text.primary)}
           />

@@ -66,14 +66,14 @@ export const IntakeStepUpload: React.FC<IntakeStepUploadProps> = ({
                                 Secured
                             </span>
                         </div>
-                        <Button variant="primary" className="mt-6" onClick={(e) => { e.stopPropagation(); onNext(); }}>Continue</Button>
+                        <Button variant="primary" className="mt-6" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onNext(); }}>Continue</Button>
                     </div>
                 ) : (
                     <>
                         <UploadCloud className={cn("h-12 w-12 mx-auto mb-4", theme.text.tertiary)}/>
                         <p className={cn("text-lg font-medium", theme.text.primary)}>Drop files here to upload</p>
                         <p className={cn("text-sm mt-2", theme.text.secondary)}>Supports PDF, DOCX, MSG, JPG (Max 500MB)</p>
-                        <Button variant="secondary" className="mt-6" onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}>Select Files</Button>
+                        <Button variant="secondary" className="mt-6" onClick={(e: React.MouseEvent) => { e.stopPropagation(); fileInputRef.current?.click(); }}>Select Files</Button>
                     </>
                 )}
             </div>

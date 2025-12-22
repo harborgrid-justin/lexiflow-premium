@@ -7,16 +7,16 @@ export class CreateChainOfCustodyDto {
   @ApiProperty({ description: 'Evidence item ID' })
   @IsString()
   @IsNotEmpty()
-  evidenceId: string;
+  evidenceId!: string;
 
   @ApiProperty({ enum: ChainOfCustodyAction, description: 'Action type' })
   @IsEnum(ChainOfCustodyAction)
-  action: ChainOfCustodyAction;
+  action!: ChainOfCustodyAction;
 
   @ApiProperty({ description: 'Person who handled the evidence' })
   @IsString()
   @IsNotEmpty()
-  handler: string;
+  handler!: string;
 
   @ApiPropertyOptional({ description: 'Handler user ID' })
   @IsOptional()

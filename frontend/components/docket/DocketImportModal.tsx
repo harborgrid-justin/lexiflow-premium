@@ -146,7 +146,7 @@ export const DocketImportModal: React.FC<DocketImportModalProps> = ({ isOpen, on
                 )}
                 placeholder={mode === 'xml' ? "<caseSummary>...</caseSummary>" : "Paste docket text here..."}
                 value={rawText}
-                onChange={(e) => setRawText(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRawText(e.target.value)}
               />
               <div className="flex justify-end pt-2">
                 <Button onClick={handleParse} disabled={isParsing || !rawText.trim()} icon={isParsing ? undefined : ArrowRight} isLoading={isParsing}>

@@ -3,13 +3,13 @@ import { FeeAgreementType, FeeAgreementStatus } from '../entities/fee-agreement.
 
 export class CreateFeeAgreementDto {
   @IsString()
-  agreementNumber: string;
+  agreementNumber!: string;
 
   @IsString()
-  clientId: string;
+  clientId!: string;
 
   @IsString()
-  clientName: string;
+  clientName!: string;
 
   @IsOptional()
   @IsString()
@@ -20,14 +20,14 @@ export class CreateFeeAgreementDto {
   matterDescription?: string;
 
   @IsEnum(FeeAgreementType)
-  agreementType: FeeAgreementType;
+  agreementType!: FeeAgreementType;
 
   @IsOptional()
   @IsEnum(FeeAgreementStatus)
   status?: FeeAgreementStatus;
 
   @IsString()
-  effectiveDate: string;
+  effectiveDate!: string;
 
   @IsOptional()
   @IsString()

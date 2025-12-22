@@ -51,10 +51,10 @@ export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
               <span className="text-xs">v{clause.version} • {clause.usageCount} uses</span>
           </div>
           <div className="w-48 text-right">
-              <Button size="sm" variant="ghost" onClick={(e) => handleCopy(clause.content, clause.id, e)}>
+              <Button size="sm" variant="ghost" onClick={(e: React.MouseEvent) => handleCopy(clause.content, clause.id, e)}>
                 {copiedId === clause.id ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4"/>}
               </Button>
-              <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); onSelectClause(clause); }}>
+              <Button size="sm" variant="ghost" onClick={(e: React.MouseEvent) => { e.stopPropagation(); onSelectClause(clause); }}>
                 <History className="h-4 w-4"/>
               </Button>
           </div>

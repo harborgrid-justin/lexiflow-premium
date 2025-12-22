@@ -10,16 +10,16 @@ export enum PipelineStatus {
 @Entity('etl_pipelines')
 export class ETLPipeline {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ type: 'enum', enum: PipelineStatus, default: PipelineStatus.DRAFT })
-  status: PipelineStatus;
+  status!: PipelineStatus;
 
   @Column({ type: 'jsonb' })
   config: {
@@ -30,23 +30,23 @@ export class ETLPipeline {
   };
 
   @Column({ type: 'int', default: 0 })
-  runsTotal: number;
+  runsTotal!: number;
 
   @Column({ type: 'int', default: 0 })
-  runsSuccessful: number;
+  runsSuccessful!: number;
 
   @Column({ type: 'int', default: 0 })
-  runsFailed: number;
+  runsFailed!: number;
 
   @Column({ type: 'timestamp', nullable: true })
-  lastRunAt: Date;
+  lastRunAt!: Date;
 
   @Column()
-  createdBy: string;
+  createdBy!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

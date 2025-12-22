@@ -19,7 +19,7 @@ export class SearchQueryDto {
     example: 'contract dispute',
   })
   @IsString()
-  query: string;
+  query!: string;
 
   @ApiPropertyOptional({
     description: 'Entity type to search',
@@ -109,7 +109,7 @@ export class SearchSuggestionsDto {
     example: 'cont',
   })
   @IsString()
-  query: string;
+  query!: string;
 
   @ApiPropertyOptional({
     description: 'Maximum number of suggestions',

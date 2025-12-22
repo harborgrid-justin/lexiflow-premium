@@ -117,7 +117,7 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
         }
       });
 
-      return items.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      return items.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }, [isLoading, motions, cases, docket]);
 
 

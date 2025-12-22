@@ -4,39 +4,39 @@ import { Case } from '../../cases/entities/case.entity';
 @Entity('citations')
 export class Citation {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  citation: string;
+  citation!: string;
 
   @Column()
-  court: string;
+  court!: string;
 
   @Column()
-  year: number;
+  year!: number;
 
   @Column({ nullable: true })
-  title: string;
+  title!: string;
 
   @Column({ nullable: true })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'caseId' })
-  case: Case;
+  case!: Case;
 
   @Column({ nullable: true })
-  documentId: string;
+  documentId!: string;
 
   @Column({ default: 'Valid' })
-  status: string;
+  status!: string;
 
   @Column({ type: 'json', nullable: true })
   shepards: any;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

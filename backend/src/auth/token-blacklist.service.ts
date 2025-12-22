@@ -92,7 +92,9 @@ export class TokenBlacklistService implements OnModuleInit {
       this.useRedis = true;
       this.logger.log('✅ Token blacklist using Redis storage');
     } catch (error) {
-      this.logger.warn('Failed to initialize Redis, using in-memory blacklist:', error.message);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.warn('Failed to initialize Redis, using in-memory blacklist:', message);
       this.useRedis = false;
       this.logger.log('⚠️  Token blacklist using in-memory storage (not suitable for production)');
     }
@@ -119,7 +121,9 @@ export class TokenBlacklistService implements OnModuleInit {
         await this.redisClient.setEx(key, ttlSeconds, 'blacklisted');
         this.logger.debug(`Blacklisted token ${jti} in Redis with TTL ${ttlSeconds}s`);
       } catch (error) {
-        this.logger.error('Redis blacklistToken failed, falling back to in-memory:', error.message);
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        const stack = error instanceof Error ? error.stack : undefined;
+        this.logger.error('Redis blacklistToken failed, falling back to in-memory:', message);
         this.inMemoryBlacklist.set(jti, expiresAt);
       }
     } else {
@@ -145,7 +149,9 @@ export class TokenBlacklistService implements OnModuleInit {
         const result = await this.redisClient.exists(key);
         return result === 1;
       } catch (error) {
-        this.logger.error('Redis isBlacklisted check failed, checking in-memory:', error.message);
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        const stack = error instanceof Error ? error.stack : undefined;
+        this.logger.error('Redis isBlacklisted check failed, checking in-memory:', message);
         return this.isBlacklistedInMemory(jti);
       }
     } else {
@@ -171,7 +177,9 @@ export class TokenBlacklistService implements OnModuleInit {
         await this.redisClient.setEx(key, 7 * 24 * 60 * 60, timestamp);
         this.logger.log(`Blacklisted all tokens for user ${userId}`);
       } catch (error) {
-        this.logger.error('Redis blacklistUserTokens failed, falling back to in-memory:', error.message);
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        const stack = error instanceof Error ? error.stack : undefined;
+        this.logger.error('Redis blacklistUserTokens failed, falling back to in-memory:', message);
         this.blacklistUserTokensInMemory(userId);
       }
     } else {
@@ -203,7 +211,9 @@ export class TokenBlacklistService implements OnModuleInit {
         // Token is blacklisted if it was issued before the blacklist timestamp
         return tokenIssuedAt * 1000 < parseInt(blacklistTimestamp, 10);
       } catch (error) {
-        this.logger.error('Redis isUserTokenBlacklisted check failed:', error.message);
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        const stack = error instanceof Error ? error.stack : undefined;
+        this.logger.error('Redis isUserTokenBlacklisted check failed:', message);
         return false;
       }
     } else {
@@ -253,7 +263,9 @@ export class TokenBlacklistService implements OnModuleInit {
           useRedis: true,
         };
       } catch (error) {
-        this.logger.error('Redis getStats failed:', error.message);
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        const stack = error instanceof Error ? error.stack : undefined;
+        this.logger.error('Redis getStats failed:', message);
       }
     }
 
@@ -302,7 +314,9 @@ export class TokenBlacklistService implements OnModuleInit {
         await this.redisClient.quit();
         this.logger.log('Redis client disconnected');
       } catch (error) {
-        this.logger.error('Error disconnecting Redis client:', error.message);
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        const stack = error instanceof Error ? error.stack : undefined;
+        this.logger.error('Error disconnecting Redis client:', message);
       }
     }
   }

@@ -79,7 +79,7 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
         return WorkflowRepository.deployStrategyToCase(payload.caseId, { phases: payload.phases, tasks: payload.tasks });
     },
     {
-        onSuccess: (_, variables) => {
+        onSuccess: (_data: unknown, variables: { caseId: string; phases: CasePhase[]; tasks: WorkflowTask[] }) => {
             notify.success('Strategy deployed to case plan!');
             setValidationErrors([]);
             navigateToCaseTab(variables.caseId, 'Planning');

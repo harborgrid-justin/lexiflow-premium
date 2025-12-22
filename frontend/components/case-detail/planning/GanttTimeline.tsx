@@ -113,7 +113,7 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
                                           onMouseDown={(e) => onMouseDown(e, task.id, 'move')}
                                           onMouseEnter={() => onHoverTask(task.id)}
                                           onMouseLeave={() => onHoverTask(null)}
-                                          onClick={(e) => {
+                                          onClick={(e: React.MouseEvent) => {
                                               if (e.defaultPrevented) return; // Don't open if dragged
                                               openWindow(`task-${task.id}`, `Task: ${task.title}`, <div className={cn("p-6 h-full", theme.surface.default)}><h2 className={cn("text-xl font-bold mb-2", theme.text.primary)}>{task.title}</h2><p className={cn("mb-4", theme.text.secondary)}>{task.description}</p><Badge variant="neutral">{task.status}</Badge></div>)
                                           }}

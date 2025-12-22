@@ -5,17 +5,17 @@ export class RegisterDataOpsModelDto {
   @ApiProperty({ description: 'Model name' })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'Model type (e.g., embedding, completion, classification)' })
   @IsString()
   @IsNotEmpty()
-  type: string;
+  type!: string;
 
   @ApiProperty({ description: 'Model version' })
   @IsString()
   @IsNotEmpty()
-  version: string;
+  version!: string;
 
   @ApiPropertyOptional({ description: 'Model endpoint URL' })
   @IsOptional()

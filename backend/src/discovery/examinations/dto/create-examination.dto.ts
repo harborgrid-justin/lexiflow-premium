@@ -13,14 +13,14 @@ import { ExaminationType } from '../entities/examination.entity';
 
 export class CreateExaminationDto {
   @IsUUID()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
   @MaxLength(300)
-  examinationTitle: string;
+  examinationTitle!: string;
 
   @IsEnum(ExaminationType)
-  type: ExaminationType;
+  type!: ExaminationType;
 
   @IsOptional()
   @IsString()
@@ -28,7 +28,7 @@ export class CreateExaminationDto {
 
   @IsString()
   @MaxLength(300)
-  examinee: string;
+  examinee!: string;
 
   @IsOptional()
   @IsString()
@@ -91,5 +91,5 @@ export class CreateExaminationDto {
   assignedAttorney?: string;
 
   @IsUUID()
-  createdBy: string;
+  createdBy!: string;
 }

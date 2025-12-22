@@ -5,12 +5,12 @@ export class PermissionDto {
   role: string;
   resource: string;
   resourceId?: string;
-  actions: PermissionAction[];
-  scope: PermissionScope;
+  actions!: PermissionAction[];
+  scope!: PermissionScope;
   conditions?: PermissionCondition[];
   grantedBy: string;
   grantedByName: string;
-  grantedAt: Date;
+  grantedAt!: Date;
   expiresAt?: Date;
   organizationId: string;
 }
@@ -46,8 +46,8 @@ export class GrantPermissionDto {
   role: string;
   resource: string;
   resourceId?: string;
-  actions: PermissionAction[];
-  scope: PermissionScope;
+  actions!: PermissionAction[];
+  scope!: PermissionScope;
   conditions?: PermissionCondition[];
   grantedBy: string;
   grantedByName: string;
@@ -76,19 +76,19 @@ export class CheckAccessDto {
   userId: string;
   resource: string;
   resourceId?: string;
-  action: PermissionAction;
+  action!: PermissionAction;
   context?: Record<string, unknown>;
 }
 
 export class AccessCheckResult {
   allowed: boolean;
-  matchedPermissions: PermissionDto[];
+  matchedPermissions!: PermissionDto[];
   reason?: string;
 }
 
 export class AccessMatrixDto {
   userId?: string;
-  resources: string[];
+  resources!: string[];
 }
 
 export class AccessMatrixResult {

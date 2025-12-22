@@ -120,7 +120,7 @@ const DiscoveryRequestsComponent: React.FC<DiscoveryRequestsProps> = ({ onNaviga
                 </Badge>
              </div>
              <div className="w-[10%] flex justify-end gap-2" onClick={e => e.stopPropagation()}>
-                 <Button size="sm" variant="ghost" className={theme.text.secondary} icon={CheckSquare} onClick={(e) => handleCreateTask(req, e)} title="Create Task" />
+                 <Button size="sm" variant="ghost" className={theme.text.secondary} icon={CheckSquare} onClick={(e: React.MouseEvent) => handleCreateTask(req, e)} title="Create Task" />
                  {req.type === 'Production' && (
                     <Button size="sm" variant="outline" icon={Upload} onClick={() => onNavigate('production_wizard', req.id)} title="Produce">
                     </Button>
@@ -187,7 +187,7 @@ const DiscoveryRequestsComponent: React.FC<DiscoveryRequestsProps> = ({ onNaviga
                         </div>
 
                         <div className="flex justify-end gap-2" onClick={e => e.stopPropagation()}>
-                            <Button size="sm" variant="ghost" icon={CheckSquare} onClick={(e) => handleCreateTask(req, e)}>Task</Button>
+                            <Button size="sm" variant="ghost" icon={CheckSquare} onClick={(e: React.MouseEvent) => handleCreateTask(req, e)}>Task</Button>
                             {req.type === 'Production' && (
                                 <Button size="sm" variant="outline" icon={Upload} onClick={() => onNavigate('production_wizard', req.id)}>
                                 Produce

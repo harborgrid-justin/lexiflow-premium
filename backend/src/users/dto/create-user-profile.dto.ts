@@ -21,7 +21,7 @@ export class CreateUserProfileDto {
   })
   @IsString()
   @IsNotEmpty()
-  userId: string;
+  userId!: string;
 
   @ApiPropertyOptional({ 
     description: 'Job title',

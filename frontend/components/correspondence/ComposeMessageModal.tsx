@@ -214,7 +214,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                         title="Select message type"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.type}
-                        onChange={(e) => setFormData({...formData, type: e.target.value as CommunicationType})}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, type: e.target.value as CommunicationType})}
                     >
                         <option value="Email">Email</option>
                         <option value="Letter">Formal Letter</option>
@@ -228,7 +228,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                         title="Select case reference"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.caseId || ''}
-                        onChange={(e) => setFormData({...formData, caseId: e.target.value})}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, caseId: e.target.value})}
                     >
                         <option value="">Select Case...</option>
                         {(Array.isArray(cases) ? cases : []).map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
@@ -240,14 +240,14 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                 label="Recipient" 
                 placeholder="e.g. Opposing Counsel, Client" 
                 value={formData.recipient || ''} 
-                onChange={(e) => setFormData({...formData, recipient: e.target.value})}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, recipient: e.target.value})}
             />
 
             <Input 
                 label="Subject" 
                 placeholder="Subject line..." 
                 value={formData.subject || ''} 
-                onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, subject: e.target.value})}
             />
 
             <div className="relative">
@@ -260,7 +260,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                 <textarea 
                     className={cn("w-full p-4 border rounded-lg text-sm font-serif h-48 resize-none outline-none focus:ring-2 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                     value={body}
-                    onChange={(e) => setBody(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBody(e.target.value)}
                     placeholder="Type your message here..."
                 />
             </div>
@@ -307,7 +307,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                             type="checkbox" 
                             className="mr-2 rounded text-blue-600" 
                             checked={formData.isPrivileged} 
-                            onChange={(e) => setFormData({...formData, isPrivileged: e.target.checked})}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, isPrivileged: e.target.checked})}
                         />
                         Mark Privileged
                     </label>

@@ -9,7 +9,7 @@ export class CreateUserDto {
     format: 'email'
   })
   @IsEmail()
-  email: string;
+  email!: string;
 
   @ApiProperty({
     description: 'User password (minimum 8 characters)',
@@ -19,7 +19,7 @@ export class CreateUserDto {
   })
   @IsString()
   @MinLength(8)
-  password: string;
+  password!: string;
 
   @ApiPropertyOptional({
     description: 'Full name (deprecated, use firstName and lastName)',
@@ -38,7 +38,7 @@ export class CreateUserDto {
   })
   @IsString()
   @MinLength(2)
-  firstName: string;
+  firstName!: string;
 
   @ApiProperty({
     description: 'Last name',
@@ -47,7 +47,7 @@ export class CreateUserDto {
   })
   @IsString()
   @MinLength(2)
-  lastName: string;
+  lastName!: string;
 
   @ApiProperty({
     description: 'User role',
@@ -55,7 +55,7 @@ export class CreateUserDto {
     example: Role.ASSOCIATE
   })
   @IsEnum(Role)
-  role: Role;
+  role!: Role;
 
   @ApiPropertyOptional({
     description: 'Whether the user account is active',

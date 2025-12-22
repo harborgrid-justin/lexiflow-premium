@@ -3,26 +3,26 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeor
 @Entity('query_history')
 export class QueryHistory {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'text' })
-  query: string;
+  query!: string;
 
   @Column()
-  userId: string;
+  userId!: string;
 
   @Column({ type: 'int', nullable: true })
-  executionTimeMs: number;
+  executionTimeMs!: number;
 
   @Column({ type: 'int', nullable: true })
-  rowsAffected: number;
+  rowsAffected!: number;
 
   @Column({ type: 'boolean', default: true })
-  successful: boolean;
+  successful!: boolean;
 
   @Column({ type: 'text', nullable: true })
-  error: string;
+  error!: string;
 
   @CreateDateColumn()
-  executedAt: Date;
+  executedAt!: Date;
 }

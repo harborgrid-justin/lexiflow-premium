@@ -45,44 +45,44 @@ export enum ExpenseCategory {
 export class Expense extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid', nullable: true })
   @Index()
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case)
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ name: 'user_id', type: 'uuid', nullable: true })
   @Index()
-  userId: string;
+  userId!: string;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: 'user_id' })
-  user: User;
+  user!: User;
 
   @Column({ name: 'expense_date', type: 'date' })
   @Index()
-  expenseDate: Date;
+  expenseDate!: Date;
 
   @Column({
     type: 'enum',
     enum: ExpenseCategory,
   })
-  category: ExpenseCategory;
+  category!: ExpenseCategory;
 
   @Column({ type: 'varchar', length: 500 })
-  description: string;
+  description!: string;
 
   @Column({ type: 'decimal', precision: 15, scale: 2 })
-  amount: number;
+  amount!: number;
 
   @Column({ type: 'varchar', length: 10, default: 'USD' })
-  currency: string;
+  currency!: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  quantity: number;
+  quantity!: number;
 
   @Column({ name: 'unit_price', type: 'decimal', precision: 10, scale: 2, nullable: true })
-  unitPrice: number;
+  unitPrice!: number;
 
   @Column({
     type: 'enum',
@@ -90,65 +90,65 @@ export class Expense extends BaseEntity {
     default: ExpenseStatus.DRAFT,
   })
   @Index()
-  status: ExpenseStatus;
+  status!: ExpenseStatus;
 
   @Column({ type: 'boolean', default: true })
-  billable: boolean;
+  billable!: boolean;
 
   @Column({ type: 'boolean', default: false })
-  reimbursable: boolean;
+  reimbursable!: boolean;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  vendor: string;
+  vendor!: string;
 
   @Column({ name: 'receipt_number', type: 'varchar', length: 100, nullable: true })
-  receiptNumber: string;
+  receiptNumber!: string;
 
   @Column({ name: 'payment_method', type: 'varchar', length: 100, nullable: true })
-  paymentMethod: string;
+  paymentMethod!: string;
 
   @Column({ name: 'approved_by', type: 'uuid', nullable: true })
-  approvedBy: string;
+  approvedBy!: string;
 
   @Column({ name: 'approved_at', type: 'timestamp', nullable: true })
-  approvedAt: Date;
+  approvedAt!: Date;
 
   @Column({ name: 'rejection_reason', type: 'text', nullable: true })
-  rejectionReason: string;
+  rejectionReason!: string;
 
   @Column({ name: 'invoice_id', type: 'uuid', nullable: true })
-  invoiceId: string;
+  invoiceId!: string;
 
   @Column({ name: 'receipt_path', type: 'varchar', length: 500, nullable: true })
-  receiptPath: string;
+  receiptPath!: string;
 
   @Column({ name: 'tax_amount', type: 'decimal', precision: 15, scale: 2, default: 0 })
-  taxAmount: number;
+  taxAmount!: number;
 
   @Column({ name: 'exchange_rate', type: 'decimal', precision: 10, scale: 6, default: 1 })
-  exchangeRate: number;
+  exchangeRate!: number;
 
   @Column({ name: 'amount_in_base_currency', type: 'decimal', precision: 15, scale: 2, nullable: true })
-  amountInBaseCurrency: number;
+  amountInBaseCurrency!: number;
 
   @Column({ name: 'markup', type: 'decimal', precision: 10, scale: 2, default: 0 })
-  markup: number;
+  markup!: number;
 
   @Column({ name: 'marked_up_amount', type: 'decimal', precision: 15, scale: 2, nullable: true })
-  markedUpAmount: number;
+  markedUpAmount!: number;
 
   @Column({ name: 'billed_by', type: 'uuid', nullable: true })
-  billedBy: string;
+  billedBy!: string;
 
   @Column({ name: 'billed_at', type: 'timestamp', nullable: true })
-  billedAt: Date;
+  billedAt!: Date;
 
   @Column({ name: 'reimbursed_by', type: 'uuid', nullable: true })
-  reimbursedBy: string;
+  reimbursedBy!: string;
 
   @Column({ name: 'reimbursed_at', type: 'timestamp', nullable: true })
-  reimbursedAt: Date;
+  reimbursedAt!: Date;
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 }

@@ -253,7 +253,7 @@ export const MatterManagement: React.FC = () => {
               type="text"
               placeholder="Search matters by title, number, client..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
             />
           </div>
@@ -280,7 +280,7 @@ export const MatterManagement: React.FC = () => {
               <select
                 id="status-filter"
                 value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value as MatterStatus | 'all')}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStatusFilter(e.target.value as MatterStatus | 'all')}
                 className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               >
                 <option value="all">All Statuses</option>
@@ -297,7 +297,7 @@ export const MatterManagement: React.FC = () => {
               <select
                 id="priority-filter"
                 value={priorityFilter}
-                onChange={(e) => setPriorityFilter(e.target.value as MatterPriority | 'all')}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPriorityFilter(e.target.value as MatterPriority | 'all')}
                 className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               >
                 <option value="all">All Priorities</option>
@@ -314,7 +314,7 @@ export const MatterManagement: React.FC = () => {
               <select
                 id="type-filter"
                 value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value as MatterType | 'all')}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTypeFilter(e.target.value as MatterType | 'all')}
                 className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               >
                 <option value="all">All Types</option>
@@ -331,7 +331,7 @@ export const MatterManagement: React.FC = () => {
               <select
                 id="practice-area-filter"
                 value={practiceAreaFilter}
-                onChange={(e) => setPracticeAreaFilter(e.target.value as PracticeArea | 'all')}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPracticeAreaFilter(e.target.value as PracticeArea | 'all')}
                 className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
               >
                 <option value="all">All Practice Areas</option>

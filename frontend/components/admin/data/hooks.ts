@@ -103,7 +103,7 @@ export function useDataSourceConnections() {
         }
       },
       onError: (error: unknown) => {
-        alert('Connection test error: ' + error.message);
+        alert('Connection test error: ' + (error instanceof Error ? error.message : String(error)));
       }
     }
   );

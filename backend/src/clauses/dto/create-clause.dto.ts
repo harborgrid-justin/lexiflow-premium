@@ -14,12 +14,12 @@ export class CreateClauseDto {
   @ApiProperty({ description: 'Clause title' })
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title!: string;
 
   @ApiProperty({ description: 'Clause content/text' })
   @IsString()
   @IsNotEmpty()
-  content: string;
+  content!: string;
 
   @ApiPropertyOptional({ description: 'Clause description' })
   @IsString()
@@ -29,7 +29,7 @@ export class CreateClauseDto {
   @ApiProperty({ enum: ClauseCategory, description: 'Clause category' })
   @IsEnum(ClauseCategory)
   @IsNotEmpty()
-  category: ClauseCategory;
+  category!: ClauseCategory;
 
   @ApiPropertyOptional({ description: 'Tags', type: [String] })
   @IsArray()

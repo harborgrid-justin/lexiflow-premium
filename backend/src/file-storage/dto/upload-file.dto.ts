@@ -11,16 +11,16 @@ export enum StorageProvider {
 export class UploadFileDto {
   @ApiProperty({ description: 'Original filename' })
   @IsString()
-  filename: string;
+  filename!: string;
 
   @ApiProperty({ description: 'File MIME type' })
   @IsString()
-  mimeType: string;
+  mimeType!: string;
 
   @ApiProperty({ description: 'File size in bytes' })
   @IsNumber()
   @Min(0)
-  size: number;
+  size!: number;
 
   @ApiProperty({ description: 'Storage path', required: false })
   @IsOptional()

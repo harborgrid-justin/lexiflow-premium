@@ -3,26 +3,26 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeor
 @Entity('schema_snapshots')
 export class Snapshot {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column({ nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ type: 'jsonb' })
   schema: any;
 
   @Column({ type: 'bigint' })
-  sizeBytes: number;
+  sizeBytes!: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  tables: string[];
+  tables!: string[];
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({ nullable: true })
-  createdBy: string;
+  createdBy!: string;
 }

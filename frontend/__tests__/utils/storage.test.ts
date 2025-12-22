@@ -43,8 +43,8 @@ describe('isStorageAvailable', () => {
 
   it('should return false when window is undefined', () => {
     const originalWindow = global.window;
-    // @ts-ignore
-    delete global.window;
+    // Temporarily remove window for SSR testing
+    delete (global as { window?: typeof window }).window;
 
     expect(isStorageAvailable()).toBe(false);
 
@@ -555,8 +555,8 @@ describe('Backwards compatibility functions', () => {
 describe('Server-side rendering safety', () => {
   it('should handle window being undefined', () => {
     const originalWindow = global.window;
-    // @ts-ignore
-    delete global.window;
+    // Temporarily remove window for SSR testing
+    delete (global as { window?: typeof window }).window;
 
     expect(isStorageAvailable()).toBe(false);
     expect(StorageUtils.get('key', 'default')).toBe('default');

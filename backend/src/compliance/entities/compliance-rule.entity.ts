@@ -3,29 +3,29 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Entity('compliance_rules')
 export class ComplianceRule {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column('text')
-  description: string;
+  description!: string;
 
   @Column()
-  category: string;
+  category!: string;
 
   @Column()
-  severity: string;
+  severity!: string;
 
   @Column({ default: true })
-  isActive: boolean;
+  isActive!: boolean;
 
   @Column('jsonb', { nullable: true })
   conditions: any;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

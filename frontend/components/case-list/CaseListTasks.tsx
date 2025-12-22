@@ -154,7 +154,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
             <select 
               className={cn("border text-sm rounded-md px-3 py-1.5 outline-none", theme.surface.default, theme.border.default, theme.text.primary)} 
               value={filter} 
-              onChange={e => setFilter(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilter(e.target.value)}
               aria-label="Filter Tasks"
             >
                 <option value="All">All Tasks</option>

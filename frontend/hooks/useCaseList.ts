@@ -274,7 +274,7 @@ export const useCaseList = () => {
       const sanitizedSearch = validateSearchTerm(debouncedSearchTerm);
       const lowerSearch = sanitizedSearch.toLowerCase();
 
-      return cases.filter(c => {
+      return cases.filter((c: Case) => {
         try {
           // Status filter: Exact match or 'All' bypass
           const matchesStatus = statusFilter === 'All' || c.status === statusFilter;

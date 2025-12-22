@@ -3,29 +3,29 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 @Entity('report_templates')
 export class ReportTemplate {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  name: string;
+  name!: string;
 
   @Column()
-  type: string;
+  type!: string;
 
   @Column('text', { nullable: true })
-  template: string;
+  template!: string;
 
   @Column('simple-json', { nullable: true })
   schema: any;
 
   @Column({ nullable: true })
-  createdBy: string;
+  createdBy!: string;
 
   @Column({ default: true })
-  isActive: boolean;
+  isActive!: boolean;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

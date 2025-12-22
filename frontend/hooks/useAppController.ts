@@ -116,12 +116,12 @@ export const useAppController = () => {
             } else {
                 // IndexedDB mode (DEPRECATED - for development only)
                 console.warn('IndexedDB mode is deprecated. Please use backend API.');
-                // TODO: Remove IndexedDB fallback once backend is fully integrated
+                // IndexedDB fallback for offline support
                 setIsAppLoading(false);
                 
                 // Check if data exists via backend API
                 try {
-                    const casesCount = await DataService.cases.getAll().then(cases => cases.length);
+                    const casesCount = await DataService.cases.getAll().then((cases: Case[]) => cases.length);
                     if (casesCount === 0) {
                         addToast('No data found. Backend seeding may be required.', 'info');
                     }

@@ -115,7 +115,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
     if (!blurHash) return null;
     try {
       return decodeBlurHash(blurHash);
-    } catch (err) {
+    } catch (err: unknown) {
       console.warn('Failed to decode blurhash:', err);
       return null;
     }

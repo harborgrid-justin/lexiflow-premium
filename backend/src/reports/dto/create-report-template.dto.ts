@@ -10,7 +10,7 @@ export class CreateReportTemplateDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @ApiProperty({ 
     description: 'Template type',
@@ -20,7 +20,7 @@ export class CreateReportTemplateDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(100)
-  type: string;
+  type!: string;
 
   @ApiPropertyOptional({ 
     description: 'Template content or structure'

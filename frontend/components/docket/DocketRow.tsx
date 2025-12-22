@@ -109,7 +109,7 @@ export const DocketRow: React.FC<DocketRowProps> = ({
                 <div className="w-32 shrink-0 px-2">
                      <span 
                         className={cn("text-xs hover:underline font-medium truncate block", theme.primary.text)} 
-                        onClick={(e) => { e.stopPropagation(); onSelectCaseId(entry.caseId); }}
+                        onClick={(e: React.MouseEvent) => { e.stopPropagation(); onSelectCaseId(entry.caseId); }}
                         title={entry.caseId}
                      >
                       {entry.caseId}
@@ -138,7 +138,7 @@ export const DocketRow: React.FC<DocketRowProps> = ({
                         size="sm" 
                         variant="ghost" 
                         className={cn("h-8 w-8 p-0", theme.text.tertiary, `hover:${theme.primary.text}`)}
-                        onClick={(e) => { e.stopPropagation(); onViewDoc(entry.documentId!); }}
+                        onClick={(e: React.MouseEvent) => { e.stopPropagation(); onViewDoc(entry.documentId!); }}
                     >
                         <Eye className="h-4 w-4"/>
                     </Button>
@@ -152,7 +152,7 @@ export const DocketRow: React.FC<DocketRowProps> = ({
                         size="xs" 
                         variant="ghost" 
                         icon={ExternalLink} 
-                        onClick={(e) => { e.stopPropagation(); onSelect(entry); }}
+                        onClick={(e: React.MouseEvent) => { e.stopPropagation(); onSelect(entry); }}
                         className={cn("text-slate-500 transition-colors", `hover:${theme.text.link}`)}
                     >
                         Details

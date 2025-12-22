@@ -13,32 +13,32 @@ export enum InvoiceStatus {
 class InvoiceLineItemDto {
   @ApiProperty({ description: 'Description of the item' })
   @IsString()
-  description: string;
+  description!: string;
 
   @ApiProperty({ description: 'Quantity' })
   @IsNumber()
   @Min(0)
-  quantity: number;
+  quantity!: number;
 
   @ApiProperty({ description: 'Unit rate' })
   @IsNumber()
   @Min(0)
-  rate: number;
+  rate!: number;
 
   @ApiProperty({ description: 'Total amount' })
   @IsNumber()
   @Min(0)
-  amount: number;
+  amount!: number;
 }
 
 export class CreateInvoiceDto {
   @ApiProperty({ description: 'Case ID' })
   @IsUUID()
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty({ description: 'Client ID' })
   @IsUUID()
-  clientId: string;
+  clientId!: string;
 
   @ApiProperty({ description: 'Invoice number', required: false })
   @IsOptional()
@@ -47,11 +47,11 @@ export class CreateInvoiceDto {
 
   @ApiProperty({ description: 'Issue date' })
   @IsDateString()
-  issueDate: string;
+  issueDate!: string;
 
   @ApiProperty({ description: 'Due date' })
   @IsDateString()
-  dueDate: string;
+  dueDate!: string;
 
   @ApiProperty({ 
     description: 'Invoice status',
@@ -66,12 +66,12 @@ export class CreateInvoiceDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => InvoiceLineItemDto)
-  lineItems: InvoiceLineItemDto[];
+  lineItems!: InvoiceLineItemDto[];
 
   @ApiProperty({ description: 'Subtotal amount' })
   @IsNumber()
   @Min(0)
-  subtotal: number;
+  subtotal!: number;
 
   @ApiProperty({ description: 'Tax amount', required: false })
   @IsOptional()
@@ -82,7 +82,7 @@ export class CreateInvoiceDto {
   @ApiProperty({ description: 'Total amount' })
   @IsNumber()
   @Min(0)
-  total: number;
+  total!: number;
 
   @ApiProperty({ description: 'Notes', required: false })
   @IsOptional()

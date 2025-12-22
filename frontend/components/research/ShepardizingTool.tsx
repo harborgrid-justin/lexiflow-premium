@@ -53,7 +53,7 @@ export const ShepardizingTool: React.FC = () => {
         <div className="flex gap-2 w-full md:w-auto">
             <input 
                 value={citation}
-                onChange={e => setCitation(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCitation(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleSearch()}
                 placeholder="e.g., 410 U.S. 113"
                 className={cn("flex-1 p-2 border rounded-md text-sm font-mono", theme.surface.highlight, theme.border.default)}

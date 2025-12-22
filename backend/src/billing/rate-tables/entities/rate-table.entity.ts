@@ -31,10 +31,10 @@ export class RateTable extends BaseEntity {
   firmId: string;
 
   @Column({ name: 'effective_date', type: 'date' })
-  effectiveDate: Date;
+  effectiveDate!: Date;
 
   @Column({ name: 'expiration_date', type: 'date', nullable: true })
-  expirationDate: Date;
+  expirationDate!: Date;
 
   @Column({ name: 'is_active', type: 'boolean', default: true })
   @Index()
@@ -44,7 +44,7 @@ export class RateTable extends BaseEntity {
   isDefault: boolean;
 
   @Column({ type: 'jsonb' })
-  rates: RateTableEntry[];
+  rates!: RateTableEntry[];
 
   @Column({ type: 'varchar', length: 3, default: 'USD' })
   currency: string;
@@ -71,5 +71,5 @@ export class RateTable extends BaseEntity {
   notes: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 }

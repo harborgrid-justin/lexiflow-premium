@@ -19,7 +19,7 @@ export class CreateMatterDto {
   @IsString()
   @MinLength(1)
   @MaxLength(100)
-  title: string;
+  title!: string;
 
   @IsString()
   @IsOptional()
@@ -125,7 +125,7 @@ export class CreateMatterDto {
   // Dates
   @IsDate()
   @Type(() => Date)
-  openedDate: Date;
+  openedDate!: Date;
 
   @IsDate()
   @IsOptional()

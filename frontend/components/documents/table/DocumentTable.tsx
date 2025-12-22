@@ -45,7 +45,7 @@ export const DocumentTable: React.FC<DocumentTableProps> = ({
   };
 
   const sortedDocuments = useMemo(() => {
-      return [...documents].sort((a, b) => {
+      return [...documents].sort((a: any, b: any) => {
         const aVal = a[sortField];
         const bVal = b[sortField];
         if (aVal === undefined || bVal === undefined) return 0;

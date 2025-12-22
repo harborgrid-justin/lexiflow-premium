@@ -53,7 +53,9 @@ export class DashboardService {
         quickStats,
       };
     } catch (error) {
-      this.logger.error(`Error getting dashboard data: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting dashboard data: ${message}`, stack);
       throw error;
     }
   }
@@ -328,7 +330,9 @@ export class DashboardService {
         myUtilizationRate: 88,
       };
     } catch (error) {
-      this.logger.error(`Error getting my cases summary: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting my cases summary: ${message}`, stack);
       throw error;
     }
   }
@@ -385,7 +389,9 @@ export class DashboardService {
         next30DaysCount: deadlines.filter(d => d.daysUntil <= 30).length,
       };
     } catch (error) {
-      this.logger.error(`Error getting upcoming deadlines: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting upcoming deadlines: ${message}`, stack);
       throw error;
     }
   }
@@ -431,7 +437,9 @@ export class DashboardService {
         overdueCount: tasks.filter(t => t.dueDate && t.dueDate < new Date()).length,
       };
     } catch (error) {
-      this.logger.error(`Error getting pending tasks: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting pending tasks: ${message}`, stack);
       throw error;
     }
   }
@@ -478,7 +486,9 @@ export class DashboardService {
         recentInvoices,
       };
     } catch (error) {
-      this.logger.error(`Error getting billing summary: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting billing summary: ${message}`, stack);
       throw error;
     }
   }

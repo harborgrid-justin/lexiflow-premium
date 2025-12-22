@@ -29,7 +29,7 @@ import { ModuleRegistry } from '../../services/infrastructure/moduleRegistry';
 import { PATHS } from '../../config/paths.config';
 
 // Types
-import { AppView, User } from '../../types';
+import { AppView, User, Case } from '../../types';
 
 // ========================================
 // LAZY LOADED COMPONENTS
@@ -44,8 +44,8 @@ const CaseDetail = lazy(() => import('../case-detail/CaseDetail').then(m => ({ d
 interface AppContentRendererProps {
   activeView: AppView;
   currentUser?: User;
-  selectedCase: unknown | null; 
-  handleSelectCase: (c: unknown) => void;
+  selectedCase: Case | null;
+  handleSelectCase: (c: Case) => void;
   handleSelectCaseById: (id: string) => void;
   navigateToCaseTab: (caseId: string, tab: string) => void;
   handleBackToMain: () => void;

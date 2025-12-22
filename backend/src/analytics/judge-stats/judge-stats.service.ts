@@ -79,7 +79,9 @@ export class JudgeStatsService {
 
       return judges;
     } catch (error) {
-      this.logger.error(`Error getting judge list: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting judge list: ${message}`, stack);
       throw error;
     }
   }
@@ -155,7 +157,9 @@ export class JudgeStatsService {
 
       return stats;
     } catch (error) {
-      this.logger.error(`Error getting judge stats: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting judge stats: ${message}`, stack);
       throw error;
     }
   }
@@ -184,7 +188,9 @@ export class JudgeStatsService {
 
       return stats;
     } catch (error) {
-      this.logger.error(`Error getting judge motion stats: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting judge motion stats: ${message}`, stack);
       throw error;
     }
   }
@@ -256,7 +262,9 @@ export class JudgeStatsService {
 
       return stats;
     } catch (error) {
-      this.logger.error(`Error getting judge case duration: ${error.message}`, error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error(`Error getting judge case duration: ${message}`, stack);
       throw error;
     }
   }

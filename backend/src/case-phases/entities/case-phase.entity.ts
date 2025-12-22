@@ -32,64 +32,64 @@ export enum PhaseStatus {
 @Index(['startDate'])
 export class CasePhase extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  name: string;
+  name!: string;
 
   @Column({
     type: 'enum',
     enum: PhaseType,
     nullable: true,
   })
-  type: PhaseType;
+  type!: PhaseType;
 
   @Column({
     type: 'enum',
     enum: PhaseStatus,
     default: PhaseStatus.NOT_STARTED,
   })
-  status: PhaseStatus;
+  status!: PhaseStatus;
 
   @Column({ type: 'text', nullable: true })
-  description: string;
+  description!: string;
 
   @Column({ name: 'start_date', type: 'date', nullable: true })
-  startDate: Date;
+  startDate!: Date;
 
   @Column({ name: 'end_date', type: 'date', nullable: true })
-  endDate: Date;
+  endDate!: Date;
 
   @Column({ name: 'expected_end_date', type: 'date', nullable: true })
   expectedEndDate?: Date;
 
   @Column({ name: 'order_index', type: 'int', default: 0 })
-  orderIndex: number;
+  orderIndex!: number;
 
   @Column({ name: 'completion_percentage', type: 'decimal', precision: 5, scale: 2, default: 0 })
-  completionPercentage: number;
+  completionPercentage!: number;
 
   @Column({ type: 'text', nullable: true })
-  objectives: string;
+  objectives!: string;
 
   @Column({ type: 'text', nullable: true })
-  deliverables: string;
+  deliverables!: string;
 
   @Column({ name: 'estimated_cost', type: 'decimal', precision: 15, scale: 2, default: 0 })
-  estimatedCost: number;
+  estimatedCost!: number;
 
   @Column({ name: 'actual_cost', type: 'decimal', precision: 15, scale: 2, default: 0 })
-  actualCost: number;
+  actualCost!: number;
 
   @Column({ name: 'estimated_hours', type: 'integer', default: 0 })
-  estimatedHours: number;
+  estimatedHours!: number;
 
   @Column({ name: 'actual_hours', type: 'integer', default: 0 })
-  actualHours: number;
+  actualHours!: number;
 
   @Column({ type: 'text', nullable: true })
   notes?: string;

@@ -26,8 +26,8 @@ export const AddStaffModal: React.FC<AddStaffModalProps> = ({ isOpen, onClose, o
   return (
       <Modal isOpen={isOpen} onClose={onClose} title="Add Staff Member">
           <div className="p-6 space-y-4">
-              <Input label="Full Name" value={newStaff.name || ''} onChange={e => setNewStaff({...newStaff, name: e.target.value})} placeholder="e.g. John Doe"/>
-              <Input label="Email" value={newStaff.email || ''} onChange={e => setNewStaff({...newStaff, email: e.target.value})} placeholder="email@firm.com"/>
+              <Input label="Full Name" value={newStaff.name || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewStaff({...newStaff, name: e.target.value})} placeholder="e.g. John Doe"/>
+              <Input label="Email" value={newStaff.email || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewStaff({...newStaff, email: e.target.value})} placeholder="email@firm.com"/>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -35,7 +35,7 @@ export const AddStaffModal: React.FC<AddStaffModalProps> = ({ isOpen, onClose, o
                     <select 
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={newStaff.role}
-                        onChange={e => setNewStaff({...newStaff, role: e.target.value as any})}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewStaff({...newStaff, role: e.target.value as any})}
                     >
                         <option value="Associate">Associate</option>
                         <option value="Paralegal">Paralegal</option>
@@ -43,12 +43,12 @@ export const AddStaffModal: React.FC<AddStaffModalProps> = ({ isOpen, onClose, o
                         <option value="Administrator">Administrator</option>
                     </select>
                 </div>
-                <Input label="Phone" value={newStaff.phone || ''} onChange={e => setNewStaff({...newStaff, phone: e.target.value})}/>
+                <Input label="Phone" value={newStaff.phone || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewStaff({...newStaff, phone: e.target.value})}/>
               </div>
               
               <div className="grid grid-cols-2 gap-4">
-                <Input label="Billable Target (Hrs)" type="number" value={newStaff.billableTarget || ''} onChange={e => setNewStaff({...newStaff, billableTarget: Number(e.target.value)})}/>
-                <Input label="Salary" type="number" value={newStaff.salary || ''} onChange={e => setNewStaff({...newStaff, salary: Number(e.target.value)})}/>
+                <Input label="Billable Target (Hrs)" type="number" value={newStaff.billableTarget || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewStaff({...newStaff, billableTarget: Number(e.target.value)})}/>
+                <Input label="Salary" type="number" value={newStaff.salary || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewStaff({...newStaff, salary: Number(e.target.value)})}/>
               </div>
 
               <div className={cn("pt-4 flex justify-end gap-2 border-t mt-4", theme.border.default)}>

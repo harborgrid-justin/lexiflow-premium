@@ -9,17 +9,17 @@ import { Conversation } from './conversation.entity';
 @Index(['messageType'])
 export class Message extends BaseEntity {
   @Column({ name: 'conversation_id', type: 'uuid' })
-  conversationId: string;
+  conversationId!: string;
 
   @ManyToOne(() => Conversation, (conversation) => conversation.messages, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'conversation_id' })
-  conversation: Conversation;
+  conversation!: Conversation;
 
   @Column({ name: 'sender_id', type: 'uuid' })
-  senderId: string;
+  senderId!: string;
 
   @Column({ type: 'text' })
-  content: string;
+  content!: string;
 
   @Column({
     name: 'message_type',
@@ -37,67 +37,67 @@ export class Message extends BaseEntity {
     ],
     default: 'text',
   })
-  messageType: string;
+  messageType!: string;
 
   @Column({ name: 'sent_at', type: 'timestamp' })
-  sentAt: Date;
+  sentAt!: Date;
 
   @Column({ name: 'edited_at', type: 'timestamp', nullable: true })
-  editedAt: Date;
+  editedAt!: Date;
 
   @Column({ name: 'deleted_at', type: 'timestamp', nullable: true })
-  deletedAt: Date;
+  deletedAt!: Date;
 
   @Column({ name: 'is_edited', type: 'boolean', default: false })
-  isEdited: boolean;
+  isEdited!: boolean;
 
   @Column({ name: 'is_deleted', type: 'boolean', default: false })
-  isDeleted: boolean;
+  isDeleted!: boolean;
 
   @Column({ name: 'read_by', type: 'jsonb', nullable: true })
   readBy: Record<string, any>[];
 
   @Column({ name: 'read_count', type: 'integer', default: 0 })
-  readCount: number;
+  readCount!: number;
 
   @Column({ name: 'reply_to_id', type: 'uuid', nullable: true })
-  replyToId: string;
+  replyToId!: string;
 
   @Column({ name: 'reply_to_content', type: 'text', nullable: true })
-  replyToContent: string;
+  replyToContent!: string;
 
   @Column({ name: 'forwarded_from_id', type: 'uuid', nullable: true })
-  forwardedFromId: string;
+  forwardedFromId!: string;
 
   @Column({ name: 'is_forwarded', type: 'boolean', default: false })
-  isForwarded: boolean;
+  isForwarded!: boolean;
 
   @Column({ type: 'jsonb', nullable: true })
   attachments: Record<string, any>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  mentions: string[];
+  mentions!: string[];
 
   @Column({ type: 'jsonb', nullable: true })
   reactions: Record<string, any>[];
 
   @Column({ name: 'is_pinned', type: 'boolean', default: false })
-  isPinned: boolean;
+  isPinned!: boolean;
 
   @Column({ name: 'pinned_at', type: 'timestamp', nullable: true })
-  pinnedAt: Date;
+  pinnedAt!: Date;
 
   @Column({ name: 'pinned_by', type: 'uuid', nullable: true })
-  pinnedBy: string;
+  pinnedBy!: string;
 
   @Column({ name: 'is_important', type: 'boolean', default: false })
-  isImportant: boolean;
+  isImportant!: boolean;
 
   @Column({ name: 'is_system_message', type: 'boolean', default: false })
-  isSystemMessage: boolean;
+  isSystemMessage!: boolean;
 
   @Column({ name: 'system_message_type', type: 'varchar', length: 100, nullable: true })
-  systemMessageType: string;
+  systemMessageType!: string;
 
   @Column({ name: 'link_previews', type: 'jsonb', nullable: true })
   linkPreviews: Record<string, any>[];

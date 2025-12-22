@@ -25,13 +25,13 @@ export class UpdateInvoiceDto extends PartialType(CreateInvoiceDto) {
 export class RecordPaymentDto {
   @IsNumber()
   @Min(0.01)
-  amount: number;
+  amount!: number;
 
   @IsString()
-  paymentDate: string;
+  paymentDate!: string;
 
   @IsString()
-  paymentMethod: string;
+  paymentMethod!: string;
 
   @IsOptional()
   @IsString()

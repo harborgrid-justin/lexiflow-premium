@@ -70,7 +70,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
       setIsSyncing(true);
       await queryClient.invalidate(queryKeys.cases.all());
       success('Cases synced successfully');
-    } catch (err) {
+    } catch (err: unknown) {
       notifyError('Failed to sync cases');
       console.error('Sync error:', err);
     } finally {
@@ -119,7 +119,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
       URL.revokeObjectURL(url); // Clean up blob URL
       
       success(`Exported ${filteredCases.length} case(s) to CSV`);
-    } catch (err) {
+    } catch (err: unknown) {
       notifyError('Failed to export cases');
       console.error('Export error:', err);
     } finally {
@@ -189,7 +189,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
       URL.revokeObjectURL(url);
       
       success(`Exported ${filteredCases.length} case(s) to Excel`);
-    } catch (err) {
+    } catch (err: unknown) {
       notifyError('Failed to export to Excel');
       console.error('Excel export error:', err);
     } finally {
@@ -205,7 +205,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
             <select 
               className={cn("bg-transparent text-sm font-medium outline-none border-none pr-4 cursor-pointer", theme.text.primary)}
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStatusFilter(e.target.value)}
               aria-label="Status Filter"
             >
               <option value="All">All Statuses</option>
@@ -218,7 +218,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
             <select 
               className={cn("bg-transparent text-sm font-medium outline-none border-none pr-4 cursor-pointer", theme.text.primary)}
               value={typeFilter}
-              onChange={(e) => setTypeFilter(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTypeFilter(e.target.value)}
               aria-label="Type Filter"
             >
               <option value="All">All Types</option>

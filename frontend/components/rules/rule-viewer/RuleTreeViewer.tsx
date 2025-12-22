@@ -10,7 +10,7 @@ interface RuleTreeViewerProps {
   toggleExpand: (id: string) => void;
   setSelectedRuleId: (id: string) => void;
   searchTerm: string;
-  theme: unknown;
+  theme: any;
 }
 
 export const RuleTreeViewer: React.FC<RuleTreeViewerProps> = ({

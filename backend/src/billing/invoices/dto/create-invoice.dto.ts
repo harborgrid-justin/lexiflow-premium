@@ -5,14 +5,14 @@ import { InvoiceItemType } from '../entities/invoice-item.entity';
 
 export class CreateInvoiceItemDto {
   @IsEnum(InvoiceItemType)
-  type: InvoiceItemType;
+  type!: InvoiceItemType;
 
   @IsOptional()
   @IsString()
   date?: string;
 
   @IsString()
-  description: string;
+  description!: string;
 
   @IsOptional()
   @IsNumber()
@@ -26,7 +26,7 @@ export class CreateInvoiceItemDto {
 
   @IsNumber()
   @Min(0)
-  amount: number;
+  amount!: number;
 
   @IsOptional()
   @IsString()
@@ -63,25 +63,25 @@ export class CreateInvoiceItemDto {
 
 export class CreateInvoiceDto {
   @IsString()
-  invoiceNumber: string;
+  invoiceNumber!: string;
 
   @IsString()
-  caseId: string;
+  caseId!: string;
 
   @IsString()
-  clientId: string;
+  clientId!: string;
 
   @IsString()
-  clientName: string;
+  clientName!: string;
 
   @IsString()
-  matterDescription: string;
+  matterDescription!: string;
 
   @IsString()
-  invoiceDate: string;
+  invoiceDate!: string;
 
   @IsString()
-  dueDate: string;
+  dueDate!: string;
 
   @IsOptional()
   @IsString()
@@ -92,7 +92,7 @@ export class CreateInvoiceDto {
   periodEnd?: string;
 
   @IsEnum(BillingModel)
-  billingModel: BillingModel;
+  billingModel!: BillingModel;
 
   @IsOptional()
   @IsEnum(InvoiceStatus)
@@ -100,7 +100,7 @@ export class CreateInvoiceDto {
 
   @IsNumber()
   @Min(0)
-  subtotal: number;
+  subtotal!: number;
 
   @IsOptional()
   @IsNumber()

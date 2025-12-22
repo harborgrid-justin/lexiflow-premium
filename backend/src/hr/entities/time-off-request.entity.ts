@@ -5,42 +5,42 @@ import { Employee } from './employee.entity';
 @Entity('time_off_requests')
 export class TimeOffRequest {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  employeeId: string;
+  employeeId!: string;
 
   @ManyToOne(() => Employee, employee => employee.timeOffRequests)
   @JoinColumn({ name: 'employeeId' })
-  employee: Employee;
+  employee!: Employee;
 
   @Column({ type: 'enum', enum: TimeOffType })
-  type: TimeOffType;
+  type!: TimeOffType;
 
   @Column({ type: 'timestamp' })
-  startDate: Date;
+  startDate!: Date;
 
   @Column({ type: 'timestamp' })
-  endDate: Date;
+  endDate!: Date;
 
   @Column({ type: 'text', nullable: true })
-  reason: string;
+  reason!: string;
 
   @Column({ type: 'enum', enum: TimeOffStatus, default: TimeOffStatus.PENDING })
-  status: TimeOffStatus;
+  status!: TimeOffStatus;
 
   @Column({ nullable: true })
-  approvedBy: string;
+  approvedBy!: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  approvedAt: Date;
+  approvedAt!: Date;
 
   @Column({ type: 'text', nullable: true })
-  denialReason: string;
+  denialReason!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

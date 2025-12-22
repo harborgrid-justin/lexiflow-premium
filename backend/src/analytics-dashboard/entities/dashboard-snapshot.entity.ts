@@ -5,28 +5,28 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 @Index(['snapshotType', 'createdAt'])
 export class DashboardSnapshot {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'uuid', nullable: true })
   @Index()
-  userId: string;
+  userId!: string;
 
   @Column({ type: 'varchar', length: 100 })
   snapshotType: string; // 'kpis', 'case_metrics', 'financial', 'productivity'
 
   @Column({ type: 'jsonb' })
-  data: Record<string, any>;
+  data!: Record<string, any>;
 
   @Column({ type: 'date' })
   @Index()
-  snapshotDate: string;
+  snapshotDate!: string;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
   period: string; // '1d', '7d', '30d', '90d', '365d'
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

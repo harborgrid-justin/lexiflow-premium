@@ -1,21 +1,21 @@
 import { MatterStatus, MatterType, MatterPriority } from '../entities/matter.entity';
 
 export class MatterResponseDto {
-  id: string;
-  matterNumber: string;
-  title: string;
+  id!: string;
+  matterNumber!: string;
+  title!: string;
   description?: string;
-  status: MatterStatus;
-  matterType: MatterType;
-  priority: MatterPriority;
+  status!: MatterStatus;
+  matterType!: MatterType;
+  priority!: MatterPriority;
   
   // Client Information
   clientId?: string;
   clientName?: string;
   
   // Assignment
-  leadAttorneyId: string;
-  leadAttorneyName: string;
+  leadAttorneyId!: string;
+  leadAttorneyName!: string;
   originatingAttorneyId?: string;
   originatingAttorneyName?: string;
   
@@ -33,7 +33,7 @@ export class MatterResponseDto {
   budgetAmount?: number;
   
   // Dates
-  openedDate: Date;
+  openedDate!: Date;
   targetCloseDate?: Date;
   closedDate?: Date;
   statute_of_limitations?: Date;
@@ -46,7 +46,7 @@ export class MatterResponseDto {
   opposingCounsel?: any;
   
   // Risk & Conflict
-  conflictCheckCompleted: boolean;
+  conflictCheckCompleted!: boolean;
   conflictCheckDate?: Date;
   conflictCheckNotes?: string;
   officeLocation?: string;
@@ -59,10 +59,10 @@ export class MatterResponseDto {
   customFields?: Record<string, unknown>;
   
   // Metadata
-  createdBy: string;
+  createdBy!: string;
   updatedBy?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt!: Date;
+  updatedAt!: Date;
 
   constructor(partial: Partial<MatterResponseDto>) {
     Object.assign(this, partial);
@@ -70,10 +70,10 @@ export class MatterResponseDto {
 }
 
 export class MatterListResponseDto {
-  matters: MatterResponseDto[];
-  total: number;
-  page: number;
-  pageSize: number;
+  matters!: MatterResponseDto[];
+  total!: number;
+  page!: number;
+  pageSize!: number;
 
   constructor(matters: MatterResponseDto[], total: number, page: number, pageSize: number) {
     this.matters = matters;

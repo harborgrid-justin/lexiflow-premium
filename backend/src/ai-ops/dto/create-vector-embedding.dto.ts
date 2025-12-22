@@ -22,18 +22,18 @@ export class CreateVectorEmbeddingDto {
   @ApiProperty({ description: 'Content that was embedded' })
   @IsString()
   @IsNotEmpty()
-  content: string;
+  content!: string;
 
   @ApiProperty({ description: 'Vector embedding values', type: [Number] })
   @IsArray()
   @IsNumber({}, { each: true })
   @IsNotEmpty()
-  embedding: number[];
+  embedding!: number[];
 
   @ApiProperty({ enum: EmbeddingModelType, description: 'Model used to generate embedding' })
   @IsEnum(EmbeddingModelType)
   @IsNotEmpty()
-  modelType: EmbeddingModelType;
+  modelType!: EmbeddingModelType;
 
   @ApiPropertyOptional({ description: 'Model version' })
   @IsString()

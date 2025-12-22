@@ -13,15 +13,15 @@ export enum TrialEventType {
 export class CreateTrialEventDto {
   @ApiProperty()
   @IsString()
-  title: string;
+  title!: string;
 
   @ApiProperty({ enum: TrialEventType })
   @IsEnum(TrialEventType)
-  type: TrialEventType;
+  type!: TrialEventType;
 
   @ApiProperty()
   @IsDateString()
-  date: string;
+  date!: string;
 
   @ApiPropertyOptional()
   @IsString()
@@ -30,7 +30,7 @@ export class CreateTrialEventDto {
 
   @ApiProperty()
   @IsString()
-  caseId: string;
+  caseId!: string;
 
   @ApiPropertyOptional()
   @IsString()

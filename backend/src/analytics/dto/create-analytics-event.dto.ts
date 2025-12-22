@@ -22,12 +22,12 @@ export class CreateAnalyticsEventDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(200)
-  eventName: string;
+  eventName!: string;
 
   @ApiProperty({ enum: AnalyticsEventCategory, description: 'Event category' })
   @IsEnum(AnalyticsEventCategory)
   @IsNotEmpty()
-  category: AnalyticsEventCategory;
+  category!: AnalyticsEventCategory;
 
   @ApiPropertyOptional({ description: 'Event description' })
   @IsString()

@@ -7,7 +7,7 @@
  * @module hooks/useStrategyCanvas
  */
 
-import { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { TypedWorkflowNode, createTypedNode, WorkflowConnection, NodeType } from '@/types/workflow-types';
 import { ContextMenuItem } from '../components/common/ContextMenu';
 import { CANVAS_CONSTANTS } from '@/types/canvas-constants';

@@ -7,28 +7,28 @@ export class CompleteServiceDto {
     example: '2024-12-15T14:30:00Z',
   })
   @IsDateString()
-  serviceDate: string;
+  serviceDate!: string;
 
   @ApiProperty({
     description: 'Person who received service',
     example: 'John Smith (in person)',
   })
   @IsString()
-  servedTo: string;
+  servedTo!: string;
 
   @ApiProperty({
     description: 'Location where service was completed',
     example: '123 Main St, City, State',
   })
   @IsString()
-  serviceLocation: string;
+  serviceLocation!: string;
 
   @ApiProperty({
     description: 'Method of service description',
     example: 'Personally served the defendant at their residence',
   })
   @IsString()
-  methodDescription: string;
+  methodDescription!: string;
 
   @ApiProperty({
     description: 'Process server notes',

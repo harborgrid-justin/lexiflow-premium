@@ -42,7 +42,9 @@ export class TransactionService {
       
       return result;
     } catch (error) {
-      this.logger.error('Transaction failed, rolling back', error.stack);
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      const stack = error instanceof Error ? error.stack : undefined;
+      this.logger.error('Transaction failed, rolling back', stack);
       await queryRunner.rollbackTransaction();
       throw error;
     } finally {
@@ -64,9 +66,11 @@ export class TransactionService {
       try {
         return await this.executeInTransaction(work);
       } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        const stack = error instanceof Error ? error.stack : undefined;
         lastError = error;
         this.logger.warn(
-          `Transaction attempt ${attempt} failed: ${error.message}`,
+          `Transaction attempt ${attempt} failed: ${message}`,
         );
 
         if (attempt < maxRetries) {

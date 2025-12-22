@@ -24,39 +24,39 @@ export class CreateServiceJobDto {
     example: ServiceJobType.PERSONAL_SERVICE,
   })
   @IsEnum(ServiceJobType)
-  type: ServiceJobType;
+  type!: ServiceJobType;
 
   @ApiProperty({
     description: 'Related case ID',
   })
   @IsString()
-  caseId: string;
+  caseId!: string;
 
   @ApiProperty({
     description: 'Document to be served ID',
   })
   @IsString()
-  documentId: string;
+  documentId!: string;
 
   @ApiProperty({
     description: 'Recipient party ID',
   })
   @IsString()
-  recipientPartyId: string;
+  recipientPartyId!: string;
 
   @ApiProperty({
     description: 'Recipient name',
     example: 'John Smith',
   })
   @IsString()
-  recipientName: string;
+  recipientName!: string;
 
   @ApiProperty({
     description: 'Service address',
     example: '123 Main St, City, State 12345',
   })
   @IsString()
-  serviceAddress: string;
+  serviceAddress!: string;
 
   @ApiProperty({
     description: 'Process server ID (if assigned)',

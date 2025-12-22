@@ -1,12 +1,12 @@
 import { CaseType, CaseStatus } from '../entities/case.entity';
 
 export class CaseResponseDto {
-  id: string;
-  title: string;
-  caseNumber: string;
+  id!: string;
+  title!: string;
+  caseNumber!: string;
   description?: string;
-  type: CaseType;
-  status: CaseStatus;
+  type!: CaseType;
+  status!: CaseStatus;
   practiceArea?: string;
   jurisdiction?: string;
   court?: string;
@@ -17,9 +17,9 @@ export class CaseResponseDto {
   assignedTeamId?: string;
   leadAttorneyId?: string;
   metadata?: Record<string, unknown>;
-  isArchived: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  isArchived!: boolean;
+  createdAt!: Date;
+  updatedAt!: Date;
   deletedAt?: Date;
   parties?: unknown[];
   team?: unknown[];
@@ -27,9 +27,9 @@ export class CaseResponseDto {
 }
 
 export class PaginatedCaseResponseDto {
-  data: CaseResponseDto[];
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
+  data!: CaseResponseDto[];
+  total!: number;
+  page!: number;
+  limit!: number;
+  totalPages!: number;
 }

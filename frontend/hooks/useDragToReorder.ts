@@ -12,7 +12,7 @@
  * - Touch support
  */
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, DragEvent, KeyboardEvent } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -50,17 +50,17 @@ export interface UseDragToReorderReturn<T extends DraggableItem> {
   /** Selected items for bulk reorder */
   selectedIds: Set<string>;
   /** Drag start handler */
-  handleDragStart: (id: string) => (e: React.DragEvent) => void;
+  handleDragStart: (id: string) => (e: DragEvent) => void;
   /** Drag over handler */
-  handleDragOver: (id: string) => (e: React.DragEvent) => void;
+  handleDragOver: (id: string) => (e: DragEvent) => void;
   /** Drag leave handler */
   handleDragLeave: () => void;
   /** Drop handler */
-  handleDrop: (id: string) => (e: React.DragEvent) => void;
+  handleDrop: (id: string) => (e: DragEvent) => void;
   /** Drag end handler */
   handleDragEnd: () => void;
   /** Keyboard handler for item */
-  handleKeyDown: (id: string) => (e: React.KeyboardEvent) => void;
+  handleKeyDown: (id: string) => (e: KeyboardEvent) => void;
   /** Toggle item selection */
   toggleSelection: (id: string) => void;
   /** Clear selection */

@@ -27,9 +27,38 @@ declare module "@google/genai" {
     propertyOrdering?: string[];
   }
 
+  export interface ContentPart {
+    text?: string;
+    inlineData?: {
+      mimeType: string;
+      data: string;
+    };
+    functionCall?: {
+      name: string;
+      args: Record<string, unknown>;
+    };
+    functionResponse?: {
+      name: string;
+      response: Record<string, unknown>;
+    };
+  }
+
+  export interface Content {
+    role?: string;
+    parts: ContentPart[];
+  }
+
+  export interface Tool {
+    functionDeclarations?: Array<{
+      name: string;
+      description: string;
+      parameters: Schema;
+    }>;
+  }
+
   export interface GenerateContentParameters {
       model: string;
-      contents: any; // Could be string or complex object
+      contents: string | Content | Content[];
       config?: {
           systemInstruction?: string;
           topK?: number;
@@ -37,23 +66,30 @@ declare module "@google/genai" {
           temperature?: number;
           responseMimeType?: string;
           responseSchema?: Schema;
-          tools?: any[];
+          tools?: Tool[];
           maxOutputTokens?: number;
           thinkingConfig?: { thinkingBudget: number };
           imageConfig?: { aspectRatio?: string; imageSize?: string };
       };
   }
-  
+
+  export interface GroundingChunk {
+    web?: {
+      uri: string;
+      title: string;
+    };
+  }
+
   export interface GenerateContentResponse {
     readonly text: string | undefined;
-    readonly functionCalls?: { name: string; args: any; }[];
-    readonly candidates?: {
+    readonly functionCalls?: Array<{ name: string; args: Record<string, unknown> }>;
+    readonly candidates?: Array<{
       content: {
-        parts: any[];
+        parts: ContentPart[];
       };
       groundingMetadata?: {
-        groundingChunks?: any[];
+        groundingChunks?: GroundingChunk[];
       };
-    }[];
+    }>;
   }
 }

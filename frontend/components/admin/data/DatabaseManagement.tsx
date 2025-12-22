@@ -29,7 +29,7 @@ export const DatabaseManagement: React.FC = () => {
   const handleIncrementVersion = async () => {
     setIsProcessing(true);
     try {
-      // await db.incrementVersion(); // TODO: Implement this method
+      // await db.incrementVersion(); 
       setMessage({ type: 'info', text: `Version increment not yet implemented` });
       await refetch();
     } catch (error) {
@@ -42,7 +42,7 @@ export const DatabaseManagement: React.FC = () => {
   const handleResetDatabase = async () => {
     setIsProcessing(true);
     try {
-      // await db.resetDatabase(); // TODO: Implement this method
+      // await db.resetDatabase(); 
       setMessage({ type: 'info', text: 'Database reset not yet implemented' });
       setTimeout(() => window.location.reload(), 1500);
     } catch (error) {

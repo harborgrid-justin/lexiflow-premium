@@ -9,23 +9,23 @@ import { Case } from '../../../cases/entities/case.entity';
 @Index(['requestedBy'])
 export class ConflictCheck extends BaseEntity {
   @Column({ name: 'case_id', type: 'uuid', nullable: true })
-  caseId: string;
+  caseId!: string;
 
   @ManyToOne(() => Case, { nullable: true })
   @JoinColumn({ name: 'case_id' })
-  case: Case;
+  case!: Case;
 
   @Column({ name: 'potential_client_id', type: 'uuid', nullable: true })
-  potentialClientId: string;
+  potentialClientId!: string;
 
   @Column({ name: 'potential_client_name', type: 'varchar', length: 255 })
-  potentialClientName: string;
+  potentialClientName!: string;
 
   @Column({ name: 'requested_by', type: 'uuid' })
-  requestedBy: string;
+  requestedBy!: string;
 
   @Column({ name: 'check_date', type: 'date' })
-  checkDate: Date;
+  checkDate!: Date;
 
   @Column({
     type: 'enum',
@@ -39,37 +39,37 @@ export class ConflictCheck extends BaseEntity {
     ],
     default: 'pending',
   })
-  status: string;
+  status!: string;
 
   @Column({ name: 'matter_description', type: 'text' })
-  matterDescription: string;
+  matterDescription!: string;
 
   @Column({ name: 'parties_involved', type: 'jsonb', nullable: true })
-  partiesInvolved: string[];
+  partiesInvolved!: string[];
 
   @Column({ name: 'related_entities', type: 'jsonb', nullable: true })
-  relatedEntities: string[];
+  relatedEntities!: string[];
 
   @Column({ name: 'opposing_parties', type: 'jsonb', nullable: true })
-  opposingParties: string[];
+  opposingParties!: string[];
 
   @Column({ name: 'opposing_counsel', type: 'jsonb', nullable: true })
-  opposingCounsel: string[];
+  opposingCounsel!: string[];
 
   @Column({ name: 'has_conflict', type: 'boolean', default: false })
-  hasConflict: boolean;
+  hasConflict!: boolean;
 
   @Column({ name: 'conflicting_cases', type: 'jsonb', nullable: true })
-  conflictingCases: string[];
+  conflictingCases!: string[];
 
   @Column({ name: 'conflicting_clients', type: 'jsonb', nullable: true })
-  conflictingClients: string[];
+  conflictingClients!: string[];
 
   @Column({ name: 'conflicting_entities', type: 'jsonb', nullable: true })
-  conflictingEntities: string[];
+  conflictingEntities!: string[];
 
   @Column({ name: 'conflict_description', type: 'text', nullable: true })
-  conflictDescription: string;
+  conflictDescription!: string;
 
   @Column({
     name: 'conflict_type',
@@ -86,7 +86,7 @@ export class ConflictCheck extends BaseEntity {
     ],
     nullable: true,
   })
-  conflictType: string;
+  conflictType!: string;
 
   @Column({
     name: 'conflict_severity',
@@ -94,35 +94,35 @@ export class ConflictCheck extends BaseEntity {
     enum: ['low', 'medium', 'high', 'critical'],
     nullable: true,
   })
-  conflictSeverity: string;
+  conflictSeverity!: string;
 
   @Column({ name: 'performed_by', type: 'uuid', nullable: true })
-  performedBy: string;
+  performedBy!: string;
 
   @Column({ name: 'completed_date', type: 'date', nullable: true })
-  completedDate: Date;
+  completedDate!: Date;
 
   @Column({ name: 'reviewed_by', type: 'uuid', nullable: true })
-  reviewedBy: string;
+  reviewedBy!: string;
 
   @Column({ name: 'review_notes', type: 'text', nullable: true })
-  reviewNotes: string;
+  reviewNotes!: string;
 
   @Column({ name: 'waiver_required', type: 'boolean', default: false })
-  waiverRequired: boolean;
+  waiverRequired!: boolean;
 
   @Column({ name: 'waiver_status', type: 'varchar', length: 50, nullable: true })
-  waiverStatus: string;
+  waiverStatus!: string;
 
   @Column({ name: 'waiver_date', type: 'date', nullable: true })
-  waiverDate: Date;
+  waiverDate!: Date;
 
   @Column({ name: 'waiver_document_id', type: 'uuid', nullable: true })
-  waiverDocumentId: string;
+  waiverDocumentId!: string;
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 }

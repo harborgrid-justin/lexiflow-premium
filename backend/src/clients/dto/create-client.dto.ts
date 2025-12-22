@@ -40,12 +40,12 @@ export class CreateClientDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @ApiProperty({ enum: ClientType, description: 'Client type' })
   @IsEnum(ClientType)
   @IsNotEmpty()
-  clientType: ClientType;
+  clientType!: ClientType;
 
   @ApiProperty({ enum: ClientStatus, default: ClientStatus.ACTIVE, description: 'Client status' })
   @IsEnum(ClientStatus)
@@ -55,7 +55,7 @@ export class CreateClientDto {
   @ApiProperty({ description: 'Primary email' })
   @IsEmail()
   @IsNotEmpty()
-  email: string;
+  email!: string;
 
   @ApiPropertyOptional({ description: 'Phone number', maxLength: 50 })
   @IsString()

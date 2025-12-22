@@ -95,16 +95,6 @@ export enum TimeEntryStatus {
   WRITTEN_OFF = 'Written Off'
 }
 
-export enum InvoiceStatus {
-  DRAFT = 'Draft',
-  SENT = 'Sent',
-  VIEWED = 'Viewed',
-  PARTIAL = 'Partial',
-  PAID = 'Paid',
-  OVERDUE = 'Overdue',
-  WRITTEN_OFF = 'Written Off'
-}
-
 export enum TrustTransactionType {
   DEPOSIT = 'Deposit',
   WITHDRAWAL = 'Withdrawal',
@@ -206,6 +196,7 @@ export const InvoiceStatusEnum = {
   DRAFT: 'Draft',
   PENDING: 'Pending',
   SENT: 'Sent',
+  VIEWED: 'Viewed',
   PARTIAL: 'Partial',
   PAID: 'Paid',
   OVERDUE: 'Overdue',

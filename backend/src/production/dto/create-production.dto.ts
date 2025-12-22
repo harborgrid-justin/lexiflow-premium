@@ -5,17 +5,17 @@ import { ProductionFormat } from '../../discovery/productions/entities/productio
 export class CreateProductionDto {
   @IsString()
   @MaxLength(255)
-  name: string;
+  name!: string;
 
   @IsUUID()
-  caseId: string;
+  caseId!: string;
 
   @IsEnum(ProductionFormat)
-  format: ProductionFormat;
+  format!: ProductionFormat;
 
   @IsString()
   @MaxLength(50)
-  productionNumber: string;
+  productionNumber!: string;
 
   @IsDate()
   @IsOptional()
@@ -71,5 +71,5 @@ export class CreateProductionDto {
   config?: Record<string, unknown>;
 
   @IsUUID()
-  createdBy: string;
+  createdBy!: string;
 }

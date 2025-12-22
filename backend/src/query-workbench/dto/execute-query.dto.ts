@@ -5,19 +5,19 @@ export class ExecuteQueryDto {
   @ApiProperty({ description: 'SQL query to execute' })
   @IsString()
   @IsNotEmpty()
-  query: string;
+  query!: string;
 }
 
 export class SaveQueryDto {
   @ApiProperty({ description: 'Query name' })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiProperty({ description: 'SQL query' })
   @IsString()
   @IsNotEmpty()
-  query: string;
+  query!: string;
 
   @ApiPropertyOptional({ description: 'Query description' })
   @IsString()

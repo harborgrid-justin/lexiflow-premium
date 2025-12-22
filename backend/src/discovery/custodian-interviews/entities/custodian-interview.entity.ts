@@ -24,44 +24,44 @@ export enum InterviewStatus {
 @Entity('custodian_interviews')
 export class CustodianInterview {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'uuid' })
-  caseId: string;
+  caseId!: string;
 
   @Column({ type: 'uuid' })
-  custodianId: string;
+  custodianId!: string;
 
   @Column({ type: 'varchar', length: 300 })
-  custodianName: string;
+  custodianName!: string;
 
   @Column({
     type: 'enum',
     enum: InterviewType,
   })
-  type: InterviewType;
+  type!: InterviewType;
 
   @Column({
     type: 'enum',
     enum: InterviewStatus,
     default: InterviewStatus.SCHEDULED,
   })
-  status: InterviewStatus;
+  status!: InterviewStatus;
 
   @Column({ type: 'timestamp' })
-  scheduledDate: Date;
+  scheduledDate!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  actualStartTime: Date;
+  actualStartTime!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  actualEndTime: Date;
+  actualEndTime!: Date;
 
   @Column({ type: 'int', nullable: true })
-  durationMinutes: number;
+  durationMinutes!: number;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  location: string;
+  location!: string;
 
   @Column({ type: 'jsonb', nullable: true })
   interviewers: Array<{
@@ -78,16 +78,16 @@ export class CustodianInterview {
   }>;
 
   @Column({ type: 'text', nullable: true })
-  purpose: string;
+  purpose!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  topics: string[];
+  topics!: string[];
 
   @Column({ type: 'text', nullable: true })
-  summary: string;
+  summary!: string;
 
   @Column({ type: 'text', nullable: true })
-  keyFindings: string;
+  keyFindings!: string;
 
   @Column({ type: 'jsonb', nullable: true })
   dataSourcesDiscussed: Array<{
@@ -113,38 +113,38 @@ export class CustodianInterview {
   }>;
 
   @Column({ type: 'boolean', default: false })
-  isRecorded: boolean;
+  isRecorded!: boolean;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  recordingPath: string;
+  recordingPath!: string;
 
   @Column({ type: 'boolean', default: false })
-  isTranscribed: boolean;
+  isTranscribed!: boolean;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  transcriptPath: string;
+  transcriptPath!: string;
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 
   @Column({ type: 'uuid', nullable: true })
-  conductedBy: string;
+  conductedBy!: string;
 
   @Column({ type: 'uuid' })
-  createdBy: string;
+  createdBy!: string;
 
   @Column({ type: 'uuid', nullable: true })
-  updatedBy: string;
+  updatedBy!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  deletedAt: Date;
+  deletedAt!: Date;
 }

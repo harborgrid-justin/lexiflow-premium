@@ -92,10 +92,10 @@ export const OppositionList: React.FC<OppositionListProps> = ({ entities, onSele
                                     <p className={cn("font-bold text-sm", theme.text.primary)}>{ent.name}</p>
                                     <div className="flex items-center gap-2 mt-0.5">
                                         {ent.email && (
-                                            <button className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)} onClick={(e) => { e.stopPropagation(); window.location.href=`mailto:${ent.email}`; }}><Mail className="h-3 w-3"/></button>
+                                            <button className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)} onClick={(e: React.MouseEvent) => { e.stopPropagation(); window.location.href=`mailto:${ent.email}`; }}><Mail className="h-3 w-3"/></button>
                                         )}
                                         {ent.phone && (
-                                            <button className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)} onClick={(e) => { e.stopPropagation(); }}><Phone className="h-3 w-3"/></button>
+                                            <button className={cn("p-1 rounded hover:bg-slate-200", theme.text.tertiary)} onClick={(e: React.MouseEvent) => { e.stopPropagation(); }}><Phone className="h-3 w-3"/></button>
                                         )}
                                     </div>
                                 </div>

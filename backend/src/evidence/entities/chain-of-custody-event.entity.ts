@@ -25,39 +25,39 @@ export enum ChainOfCustodyAction {
 @Index(['action'])
 export class ChainOfCustodyEvent extends BaseEntity {
   @Column({ name: 'evidence_id', type: 'uuid' })
-  evidenceId: string;
+  evidenceId!: string;
 
   @ManyToOne(() => EvidenceItem, evidence => evidence.chainOfCustodyEvents)
   @JoinColumn({ name: 'evidence_id' })
-  evidenceItem: EvidenceItem;
+  evidenceItem!: EvidenceItem;
 
   @Column({
     type: 'enum',
     enum: ChainOfCustodyAction,
   })
-  action: ChainOfCustodyAction;
+  action!: ChainOfCustodyAction;
 
   @Column({ name: 'event_date', type: 'timestamp' })
-  eventDate: Date;
+  eventDate!: Date;
 
   @Column({ type: 'varchar', length: 255 })
-  handler: string;
+  handler!: string;
 
   @Column({ name: 'handler_id', type: 'uuid', nullable: true })
-  handlerId: string;
+  handlerId!: string;
 
   @Column({ name: 'transferred_from', type: 'varchar', length: 255, nullable: true })
-  transferredFrom: string;
+  transferredFrom!: string;
 
   @Column({ name: 'transferred_to', type: 'varchar', length: 255, nullable: true })
-  transferredTo: string;
+  transferredTo!: string;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
-  location: string;
+  location!: string;
 
   @Column({ type: 'text', nullable: true })
-  notes: string;
+  notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: Record<string, any>;
+  metadata!: Record<string, any>;
 }

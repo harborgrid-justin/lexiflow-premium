@@ -74,7 +74,7 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
                         className="flex-1 bg-transparent border-none outline-none text-sm p-2 placeholder:text-slate-400"
                         placeholder="Generate a strategy (e.g., 'Standard breach of contract litigation plan')"
                         value={prompt}
-                        onChange={(e) => setPrompt(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrompt(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
                     />
                     <Button

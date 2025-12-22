@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { RisksService } from './risks.service';
 import { CreateRiskDto, RiskImpact, RiskProbability } from './dto/create-risk.dto';
 import { UpdateRiskDto } from './dto/update-risk.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Risks')
 @ApiBearerAuth('JWT-auth')
@@ -12,6 +13,17 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 @Controller('risks')
 export class RisksController {
   constructor(private readonly risksService: RisksService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'risks' };
+  }
+
   @Get()
   @ApiOperation({ summary: 'Get all risks with optional filters' })
   @ApiQuery({ name: 'impact', enum: RiskImpact, required: false })

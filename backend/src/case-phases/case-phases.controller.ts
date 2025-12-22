@@ -6,14 +6,16 @@ import {
   Delete,
   Body,
   Param,
+  Head,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiResponse }from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse }from '@nestjs/swagger';
 import { CasePhasesService } from './case-phases.service';
 import { CreateCasePhaseDto } from './dto/create-case-phase.dto';
 import { UpdateCasePhaseDto } from './dto/update-case-phase.dto';
 import { CasePhase } from './entities/case-phase.entity';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Case Phases')
 @ApiBearerAuth('JWT-auth')
@@ -21,6 +23,16 @@ import { CasePhase } from './entities/case-phase.entity';
 @Controller('case-phases')
 export class CasePhasesController {
   constructor(private readonly casePhasesService: CasePhasesService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'case-phases' };
+  }
 
   @Get('cases/:caseId/phases')
   @ApiResponse({ status: 401, description: 'Unauthorized' })

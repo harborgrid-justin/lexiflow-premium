@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { AnalyticsService } from './analytics.service';
 import { AnalyticsEvent } from './entities/analytics-event.entity';
 import { Dashboard } from './entities/dashboard.entity';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('analytics')
 @ApiBearerAuth()
@@ -11,6 +12,16 @@ import { Dashboard } from './entities/dashboard.entity';
 @Controller('analytics')
 export class AnalyticsController {
   constructor(private readonly analyticsService: AnalyticsService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'analytics' };
+  }
 
   @Post('events')
   @ApiOperation({ summary: 'Track an analytics event' })

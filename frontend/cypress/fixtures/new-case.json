@@ -1,0 +1,19 @@
+{
+  "caseNumber": "2024-CV-99999",
+  "title": "Test Case v. Defendant Corp",
+  "client": "Test Client",
+  "clientId": "client-test-001",
+  "status": "Active",
+  "type": "Civil Litigation",
+  "practiceArea": "Contract Dispute",
+  "jurisdiction": "Superior Court, San Diego County",
+  "leadAttorney": "Test Attorney",
+  "court": "San Diego Superior Court",
+  "judge": "Hon. Test Judge",
+  "filingDate": "2024-12-22",
+  "trialDate": "2025-06-15",
+  "billingModel": "Hourly",
+  "billingValue": 400,
+  "estimatedValue": 150000,
+  "description": "Test case for E2E testing"
+}

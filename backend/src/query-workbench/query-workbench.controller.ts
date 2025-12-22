@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Delete, Body, Param, Query, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards, Req } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { QueryWorkbenchService } from './query-workbench.service';
 import { ExecuteQueryDto, SaveQueryDto } from './dto/execute-query.dto';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Query Workbench')
 @ApiBearerAuth('JWT-auth')
@@ -11,6 +12,16 @@ import { ExecuteQueryDto, SaveQueryDto } from './dto/execute-query.dto';
 @Controller('query-workbench')
 export class QueryWorkbenchController {
   constructor(private readonly queryService: QueryWorkbenchService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'query-workbench' };
+  }
 
   @Post('execute')
   @ApiOperation({ summary: 'Execute a SQL query' })

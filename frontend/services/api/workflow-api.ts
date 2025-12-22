@@ -10,6 +10,7 @@
  * - Workflow pause/resume/cancel operations
  * - Workflow engine synchronization
  * - Event-driven workflow triggers
+ * - 10 Advanced Features: Conditional branching, parallel execution, versioning, SLA, approvals, rollback, analytics, AI, triggers
  * 
  * @security
  * - Input validation on all parameters
@@ -29,6 +30,28 @@
  */
 
 import { apiClient } from '../infrastructure/apiClient';
+import type {
+  EnhancedWorkflowInstance,
+  ConditionalBranchingConfig,
+  ParallelExecutionConfig,
+  WorkflowVersion,
+  WorkflowDiff,
+  WorkflowTemplate as EnhancedWorkflowTemplate,
+  SLAConfig,
+  SLAStatus,
+  ApprovalChain,
+  ApprovalInstance,
+  ApprovalDecision,
+  WorkflowSnapshot,
+  RollbackOperation,
+  WorkflowAnalytics,
+  AIWorkflowSuggestion,
+  AILearningFeedback,
+  ExternalTrigger,
+  TriggerEvent,
+  WorkflowQueryFilters,
+  WorkflowSortOptions,
+} from '../../types';
 
 export interface WorkflowTemplate {
   id: string;
@@ -460,6 +483,157 @@ export class WorkflowApiService {
         } catch (error) {
             console.error('[WorkflowApiService.syncEngine] Error:', error);
             throw new Error('Failed to synchronize workflow engine');
+        }
+    }
+
+    // =============================================================================
+    // ADVANCED FEATURES (10 Elite Features)
+    // =============================================================================
+
+    /**
+     * Get enhanced workflow instance with all advanced features
+     */
+    async getEnhanced(id: string): Promise<EnhancedWorkflowInstance> {
+        this.validateId(id, 'getEnhanced');
+        try {
+            return await apiClient.get<EnhancedWorkflowInstance>(`${this.baseUrl}/advanced/${id}`);
+        } catch (error) {
+            console.error('[WorkflowApiService.getEnhanced] Error:', error);
+            throw new Error(`Failed to fetch enhanced workflow instance with id: ${id}`);
+        }
+    }
+
+    /**
+     * Get workflow analytics for a specific workflow
+     */
+    async getAnalytics(id: string, params: { start: string; end: string }): Promise<WorkflowAnalytics> {
+        this.validateId(id, 'getAnalytics');
+        try {
+            return await apiClient.get<WorkflowAnalytics>(
+                `${this.baseUrl}/advanced/${id}/analytics?start=${params.start}&end=${params.end}`
+            );
+        } catch (error) {
+            console.error('[WorkflowApiService.getAnalytics] Error:', error);
+            throw new Error(`Failed to fetch workflow analytics for id: ${id}`);
+        }
+    }
+
+    /**
+     * Get AI-powered workflow suggestions
+     */
+    async getAISuggestions(id: string): Promise<AIWorkflowSuggestion[]> {
+        this.validateId(id, 'getAISuggestions');
+        try {
+            return await apiClient.get<AIWorkflowSuggestion[]>(`${this.baseUrl}/advanced/${id}/ai/suggestions`);
+        } catch (error) {
+            console.error('[WorkflowApiService.getAISuggestions] Error:', error);
+            throw new Error(`Failed to fetch AI suggestions for workflow id: ${id}`);
+        }
+    }
+
+    /**
+     * Apply an AI suggestion to a workflow
+     */
+    async applyAISuggestion(workflowId: string, suggestionId: string): Promise<EnhancedWorkflowInstance> {
+        this.validateId(workflowId, 'applyAISuggestion');
+        this.validateId(suggestionId, 'applyAISuggestion');
+        try {
+            return await apiClient.post<EnhancedWorkflowInstance>(
+                `${this.baseUrl}/advanced/${workflowId}/ai/suggestions/${suggestionId}/apply`,
+                {}
+            );
+        } catch (error) {
+            console.error('[WorkflowApiService.applyAISuggestion] Error:', error);
+            throw new Error('Failed to apply AI suggestion');
+        }
+    }
+
+    /**
+     * Create a workflow snapshot for rollback
+     */
+    async createSnapshot(workflowId: string, data: { type: string; label?: string }): Promise<WorkflowSnapshot> {
+        this.validateId(workflowId, 'createSnapshot');
+        try {
+            return await apiClient.post<WorkflowSnapshot>(
+                `${this.baseUrl}/advanced/${workflowId}/snapshots`,
+                data
+            );
+        } catch (error) {
+            console.error('[WorkflowApiService.createSnapshot] Error:', error);
+            throw new Error('Failed to create workflow snapshot');
+        }
+    }
+
+    /**
+     * Rollback workflow to a previous snapshot
+     */
+    async rollbackToSnapshot(workflowId: string, snapshotId: string): Promise<RollbackOperation> {
+        this.validateId(workflowId, 'rollbackToSnapshot');
+        this.validateId(snapshotId, 'rollbackToSnapshot');
+        try {
+            return await apiClient.post<RollbackOperation>(
+                `${this.baseUrl}/advanced/${workflowId}/rollback`,
+                { snapshotId }
+            );
+        } catch (error) {
+            console.error('[WorkflowApiService.rollbackToSnapshot] Error:', error);
+            throw new Error('Failed to rollback workflow');
+        }
+    }
+
+    /**
+     * Get workflow versions
+     */
+    async getVersions(workflowId: string): Promise<WorkflowVersion[]> {
+        this.validateId(workflowId, 'getVersions');
+        try {
+            return await apiClient.get<WorkflowVersion[]>(`${this.baseUrl}/advanced/${workflowId}/versions`);
+        } catch (error) {
+            console.error('[WorkflowApiService.getVersions] Error:', error);
+            throw new Error(`Failed to fetch workflow versions for id: ${workflowId}`);
+        }
+    }
+
+    /**
+     * Get SLA statuses for a workflow
+     */
+    async getSLAStatuses(workflowId: string): Promise<SLAStatus[]> {
+        this.validateId(workflowId, 'getSLAStatuses');
+        try {
+            return await apiClient.get<SLAStatus[]>(`${this.baseUrl}/advanced/${workflowId}/sla/statuses`);
+        } catch (error) {
+            console.error('[WorkflowApiService.getSLAStatuses] Error:', error);
+            throw new Error(`Failed to fetch SLA statuses for workflow id: ${workflowId}`);
+        }
+    }
+
+    /**
+     * Get external trigger for a workflow
+     */
+    async getExternalTrigger(workflowId: string): Promise<ExternalTrigger | null> {
+        this.validateId(workflowId, 'getExternalTrigger');
+        try {
+            return await apiClient.get<ExternalTrigger>(`${this.baseUrl}/advanced/${workflowId}/triggers/external`);
+        } catch (error) {
+            // Return null if not found instead of throwing
+            console.warn('[WorkflowApiService.getExternalTrigger] No external trigger found');
+            return null;
+        }
+    }
+
+    /**
+     * Create a webhook trigger for a workflow
+     */
+    async createWebhookTrigger(workflowId: string, config: { name: string; description?: string }): Promise<ExternalTrigger> {
+        this.validateId(workflowId, 'createWebhookTrigger');
+        try {
+            return await apiClient.post<ExternalTrigger>(
+                `${this.baseUrl}/advanced/${workflowId}/triggers/webhook`,
+                config
+            );
+        } catch (error) {
+            console.error('[WorkflowApiService.createWebhookTrigger] Error:', error);
+            throw new Error('Failed to create webhook trigger');
         }
     }
 }

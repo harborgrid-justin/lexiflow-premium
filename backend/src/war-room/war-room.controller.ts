@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { WarRoomService } from './war-room.service';
 import { CreateAdvisorDto, CreateExpertDto, UpdateStrategyDto } from './dto/war-room.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('War Room')
 @ApiBearerAuth('JWT-auth')
@@ -11,6 +12,17 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 @Controller('war-room')
 export class WarRoomController {
   constructor(private readonly warRoomService: WarRoomService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'war-room' };
+  }
+
   @Get('advisors')
   @ApiOperation({ summary: 'Get advisors' })
   @ApiResponse({ status: 200, description: 'Advisors retrieved' })

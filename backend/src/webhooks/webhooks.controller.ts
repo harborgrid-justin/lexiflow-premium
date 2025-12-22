@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  Head,
   UseGuards,
   HttpCode,
   HttpStatus,
@@ -16,6 +17,7 @@ import { CreateWebhookDto, UpdateWebhookDto } from './dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Webhooks')
 
@@ -24,6 +26,16 @@ import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
 @ApiBearerAuth()
 export class WebhooksController {
   constructor(private readonly webhooksService: WebhooksService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'webhooks' };
+  }
 
   @Post()
   @ApiOperation({ summary: 'Register a new webhook' })

@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Delete, Body, Param, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, Head, HttpCode, HttpStatus, UseGuards, Req } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { SchemaManagementService } from './schema-management.service';
 import { CreateMigrationDto, CreateSnapshotDto, CreateTableDto } from './dto/create-migration.dto';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Schema Management')
 @ApiBearerAuth('JWT-auth')
@@ -11,6 +12,16 @@ import { CreateMigrationDto, CreateSnapshotDto, CreateTableDto } from './dto/cre
 @Controller('schema')
 export class SchemaManagementController {
   constructor(private readonly schemaService: SchemaManagementService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'schema' };
+  }
 
   // ==================== SCHEMA INSPECTION ====================
 

@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation  , ApiResponse }from '@nestjs/swagger';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { BackupsService } from './backups.service';
+import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Backups')
 @ApiBearerAuth('JWT-auth')
@@ -10,6 +11,16 @@ import { BackupsService } from './backups.service';
 @Controller('backups')
 export class BackupsController {
   constructor(private readonly backupsService: BackupsService) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'backups' };
+  }
 
   @Get('snapshots')
   @ApiOperation({ summary: 'Get all snapshots' })

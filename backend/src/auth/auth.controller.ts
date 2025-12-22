@@ -4,6 +4,7 @@ import {
   Get,
   Put,
   Body,
+  Head,
   UseGuards,
   HttpCode,
   HttpStatus,
@@ -33,6 +34,16 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
   ) {}
+
+  @Public()
+  @Head('health')
+  @Get('health')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Health check' })
+  @ApiResponse({ status: 200, description: 'Service is healthy' })
+  health() {
+    return { status: 'ok', service: 'auth' };
+  }
 
   @Public()
   // Temporarily disabled for development

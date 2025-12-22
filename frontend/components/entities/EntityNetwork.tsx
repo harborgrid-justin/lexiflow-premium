@@ -54,7 +54,7 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
 
   const { data: relationships = [], isLoading } = useQuery<EntityRelationship[]>(
       ['relationships', 'all'],
-      () => DataService.entities.getRelationships('all') // Mocked to fetch all
+      () => DataService.entities.getAllRelationships()
   );
   
   const { nodes, links: _links, components } = useMemo(() => {

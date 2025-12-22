@@ -42,7 +42,9 @@ export class PrivilegeLogApiService {
     if (filters?.privilegeType) params.append('privilegeType', filters.privilegeType);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    return apiClient.get<PrivilegeLogEntry[]>(url);
+    const response = await apiClient.get<{ items: PrivilegeLogEntry[] }>(url);
+    // Backend returns paginated response {items, total, page, limit, totalPages}
+    return Array.isArray(response) ? response : response.items || [];
   }
 
   async getById(id: string): Promise<PrivilegeLogEntry> {

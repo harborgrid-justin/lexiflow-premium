@@ -20,16 +20,16 @@ export class Custodian {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ type: 'uuid' })
+  @Column({ name: 'case_id', type: 'uuid' })
   caseId!: string;
 
-  @Column({ type: 'varchar', length: 200 })
+  @Column({ name: 'first_name', type: 'varchar', length: 200 })
   firstName!: string;
 
-  @Column({ type: 'varchar', length: 200 })
+  @Column({ name: 'last_name', type: 'varchar', length: 200 })
   lastName!: string;
 
-  @Column({ type: 'varchar', length: 400 })
+  @Column({ name: 'full_name', type: 'varchar', length: 400 })
   fullName!: string;
 
   @Column({ type: 'varchar', length: 300, nullable: true })
@@ -54,25 +54,25 @@ export class Custodian {
   })
   status!: CustodianStatus;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'date_identified', type: 'date', nullable: true })
   dateIdentified!: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'date_notified', type: 'date', nullable: true })
   dateNotified!: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'date_interviewed', type: 'date', nullable: true })
   dateInterviewed!: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'data_collection_date', type: 'date', nullable: true })
   dataCollectionDate!: Date;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ name: 'is_key_player', type: 'boolean', default: false })
   isKeyPlayer!: boolean;
 
   @Column({ type: 'text', nullable: true })
   relevance!: string;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ name: 'data_sources', type: 'jsonb', nullable: true })
   dataSources!: Array<{
     sourceId: string;
     sourceName: string;
@@ -80,19 +80,19 @@ export class Custodian {
     status: string;
   }>;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ name: 'is_on_legal_hold', type: 'boolean', default: false })
   isOnLegalHold!: boolean;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'legal_hold_id', type: 'uuid', nullable: true })
   legalHoldId!: string;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'legal_hold_date', type: 'date', nullable: true })
   legalHoldDate!: Date;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ name: 'legal_hold_released_date', type: 'date', nullable: true })
   legalHoldReleasedDate!: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'acknowledged_at', type: 'timestamp', nullable: true })
   acknowledgedAt!: Date;
 
   @Column({ type: 'jsonb', nullable: true })
@@ -108,21 +108,21 @@ export class Custodian {
   @Column({ type: 'jsonb', nullable: true })
   metadata!: Record<string, unknown>;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'assigned_to', type: 'uuid', nullable: true })
   assignedTo!: string;
 
-  @Column({ type: 'uuid' })
+  @Column({ name: 'created_by', type: 'uuid' })
   createdBy!: string;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'updated_by', type: 'uuid', nullable: true })
   updatedBy!: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'deleted_at', type: 'timestamp', nullable: true })
   deletedAt!: Date;
 }

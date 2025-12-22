@@ -17,7 +17,7 @@ import { UpdatePrivilegeLogEntryDto } from './dto/update-privilege-log-entry.dto
 import { QueryPrivilegeLogEntryDto } from './dto/query-privilege-log-entry.dto';
 
 
-@Controller('discovery/privilege-log')
+@Controller('privilege-log')
 export class PrivilegeLogController {
   constructor(private readonly privilegeLogService: PrivilegeLogService) {}
 

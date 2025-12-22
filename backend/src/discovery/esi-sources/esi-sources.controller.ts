@@ -17,7 +17,7 @@ import { UpdateESISourceDto } from './dto/update-esi-source.dto';
 import { QueryESISourceDto } from './dto/query-esi-source.dto';
 
 
-@Controller('discovery/esi-sources')
+@Controller('esi-sources')
 export class ESISourcesController {
   constructor(private readonly esiSourcesService: ESISourcesService) {}
 

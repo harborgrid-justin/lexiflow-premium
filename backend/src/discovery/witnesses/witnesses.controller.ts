@@ -7,7 +7,7 @@ import { Witness, WitnessType, WitnessStatus } from './entities/witness.entity';
 @ApiTags('discovery/witnesses')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@Controller('discovery/witnesses')
+@Controller('witnesses')
 export class WitnessesController {
   constructor(private readonly witnessesService: WitnessesService) {}
 

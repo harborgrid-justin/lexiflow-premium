@@ -17,7 +17,7 @@ import { UpdateProductionDto } from './dto/update-production.dto';
 import { QueryProductionDto } from './dto/query-production.dto';
 
 
-@Controller('discovery/productions')
+@Controller('productions')
 export class ProductionsController {
   constructor(private readonly productionsService: ProductionsService) {}
 

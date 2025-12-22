@@ -17,7 +17,7 @@ import { UpdateCustodianInterviewDto } from './dto/update-custodian-interview.dt
 import { QueryCustodianInterviewDto } from './dto/query-custodian-interview.dto';
 
 
-@Controller('discovery/interviews')
+@Controller('custodian-interviews')
 export class CustodianInterviewsController {
   constructor(
     private readonly interviewsService: CustodianInterviewsService,

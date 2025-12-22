@@ -17,7 +17,7 @@ import { UpdateCustodianDto } from './dto/update-custodian.dto';
 import { QueryCustodianDto } from './dto/query-custodian.dto';
 
 
-@Controller('discovery/custodians')
+@Controller('custodians')
 export class CustodiansController {
   constructor(private readonly custodiansService: CustodiansService) {}
 

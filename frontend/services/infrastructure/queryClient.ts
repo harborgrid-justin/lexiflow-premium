@@ -40,9 +40,9 @@ import type { QueryKey, QueryFunction, QueryState } from './QueryTypes';
  * Manages query caching, subscriptions, and fetching lifecycle
  */
 class QueryClient {
-  private cache = new Map<string, QueryState<any>>();
-  private listeners = new Map<string, Set<(state: QueryState<any>) => void>>();
-  private inflight = new Map<string, Promise<any>>();
+  private cache = new Map<string, QueryState<unknown>>();
+  private listeners = new Map<string, Set<(state: QueryState<unknown>) => void>>();
+  private inflight = new Map<string, Promise<unknown>>();
   private globalListeners = new Set<(status: { isFetching: number }) => void>();
   private readonly DEFAULT_STALE_TIME = 30000; // 30 seconds
 
@@ -75,7 +75,7 @@ class QueryClient {
    * Validate query function parameter
    * @private
    */
-  private validateQueryFunction(fn: any, methodName: string): void {
+  private validateQueryFunction(fn: unknown, methodName: string): void {
     if (typeof fn !== 'function') {
       throw new Error(`[QueryClient.${methodName}] Query function must be a function`);
     }
@@ -126,7 +126,7 @@ class QueryClient {
    * @param listener - Callback receiving query state
    * @returns Unsubscribe function
    */
-  public subscribe(key: QueryKey, listener: (state: QueryState<any>) => void): () => void {
+  public subscribe<T = unknown>(key: QueryKey, listener: (state: QueryState<T>) => void): () => void {
     this.validateQueryKey(key, 'subscribe');
     if (typeof listener !== 'function') {
       throw new Error('[QueryClient.subscribe] Listener must be a function');
@@ -135,9 +135,9 @@ class QueryClient {
     if (!this.listeners.has(hashedKey)) {
       this.listeners.set(hashedKey, new Set());
     }
-    this.listeners.get(hashedKey)!.add(listener);
+    this.listeners.get(hashedKey)!.add(listener as (state: QueryState<unknown>) => void);
     return () => {
-      this.listeners.get(hashedKey)?.delete(listener);
+      this.listeners.get(hashedKey)?.delete(listener as (state: QueryState<unknown>) => void);
     };
   }
 
@@ -157,7 +157,7 @@ class QueryClient {
    * Notify query-specific listeners of state changes
    * @private
    */
-  private notify(hashedKey: string, state: QueryState<any>): void {
+  private notify<T>(hashedKey: string, state: QueryState<T>): void {
     this.listeners.get(hashedKey)?.forEach(l => l(state));
   }
 
@@ -173,7 +173,7 @@ class QueryClient {
    */
   public getQueryState<T>(key: QueryKey): QueryState<T> | undefined {
     this.validateQueryKey(key, 'getQueryState');
-    return this.cache.get(this.hashKey(key));
+    return this.cache.get(this.hashKey(key)) as QueryState<T> | undefined;
   }
 
   /**
@@ -187,8 +187,8 @@ class QueryClient {
     this.validateQueryKey(key, 'setQueryData');
     try {
       const hashedKey = this.hashKey(key);
-      const oldState = this.cache.get(hashedKey);
-      const newData = typeof data === 'function' ? (data as Function)(oldState?.data) : data;
+      const oldState = this.cache.get(hashedKey) as QueryState<T> | undefined;
+      const newData = typeof data === 'function' ? (data as (old: T | undefined) => T)(oldState?.data) : data;
 
       const newState: QueryState<T> = {
         data: newData,
@@ -230,7 +230,7 @@ class QueryClient {
     }
 
     const hashedKey = this.hashKey(key);
-    const cached = this.cache.get(hashedKey);
+    const cached = this.cache.get(hashedKey) as QueryState<T> | undefined;
     
     // Return cached data if fresh
     if (cached?.status === 'success' && (Date.now() - cached.dataUpdatedAt < staleTime)) {
@@ -239,12 +239,12 @@ class QueryClient {
 
     // Deduplicate in-flight requests
     if (this.inflight.has(hashedKey)) {
-      return this.inflight.get(hashedKey);
+      return this.inflight.get(hashedKey) as Promise<T>;
     }
 
     // Mark as fetching
     const fetchingState: QueryState<T> = {
-      ...(cached || { data: undefined, status: 'loading', error: null, dataUpdatedAt: 0 }),
+      ...(cached as QueryState<T> || { data: undefined, status: 'loading', error: null, dataUpdatedAt: 0 }),
       isFetching: true
     };
     this.cache.set(hashedKey, fetchingState);

@@ -52,7 +52,7 @@ export async function seedDocuments(dataSource: DataSource): Promise<void> {
         ...documentData,
         type: documentType,
         caseId,
-        creatorId: uploadedBy.id,
+        creatorId: uploadedBy?.id,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -60,7 +60,6 @@ export async function seedDocuments(dataSource: DataSource): Promise<void> {
       await documentRepository.save(document);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const __stack = error instanceof Error ? error.stack : undefined;
       console.error(`Error seeding document ${documentData.title}:`, message);
     }
   }

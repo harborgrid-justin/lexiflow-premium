@@ -5,6 +5,7 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
+import { RunCheckDto, GenerateReportDto, ExportAuditLogsDto } from './dto';
 
 @ApiTags('Compliance')
 @ApiBearerAuth('JWT-auth')
@@ -72,7 +73,7 @@ export class ComplianceController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async runCheck(@Body() checkDto: { caseId: string; type: string }) {
+  async runCheck(@Body() checkDto: RunCheckDto) {
     return this.complianceService.runComplianceCheck(checkDto.caseId);
   }
 
@@ -120,7 +121,7 @@ export class ComplianceController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async generateComplianceReport(@Body() reportDto: { caseId: string; format: string }) {
+  async generateComplianceReport(@Body() reportDto: GenerateReportDto) {
     try {
       const score = await this.complianceService.getComplianceScore(reportDto.caseId);
       return { report: score, format: reportDto.format };
@@ -139,7 +140,7 @@ export class ComplianceController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async exportAuditLogs(@Body() exportDto: { startDate: Date; endDate: Date; format: string }) {
+  async exportAuditLogs(@Body() exportDto: ExportAuditLogsDto) {
     return { exported: true, format: exportDto.format, count: 0, filePath: `/exports/audit-logs.${exportDto.format}` };
   }
 
@@ -173,8 +174,8 @@ export class ComplianceController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  create(@Body() createDto: any) {
-    return this.complianceService.create(createDto);
+  create(@Body() _createDto: any) {
+    throw new Error('Method not implemented.');
   }
 }
 

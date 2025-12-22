@@ -137,7 +137,6 @@ export class SchemaManagementService {
       return await this.migrationRepository.save(migration);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const __stack = error instanceof Error ? error.stack : undefined;
       throw new BadRequestException(`Migration failed: ${message}`);
     }
   }
@@ -157,12 +156,11 @@ export class SchemaManagementService {
       await this.dataSource.query(migration.down);
       
       migration.applied = false;
-      migration.appliedAt = null;
+      migration.appliedAt = undefined as any;
       
       return await this.migrationRepository.save(migration);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const __stack = error instanceof Error ? error.stack : undefined;
       throw new BadRequestException(`Revert failed: ${message}`);
     }
   }
@@ -172,7 +170,7 @@ export class SchemaManagementService {
   async createSnapshot(dto: CreateSnapshotDto, userId: string) {
     const tables = await this.getTables();
     const schemaData = {
-      tables: dto.tables ? tables.filter(t => dto.tables.includes(t.name)) : tables,
+      tables: dto.tables && dto.tables.length > 0 ? tables.filter(t => dto.tables!.includes(t.name)) : tables,
       timestamp: new Date().toISOString(),
     };
     
@@ -226,9 +224,11 @@ export class SchemaManagementService {
     
     // Add foreign keys separately
     for (const col of dto.columns.filter(c => c.fk)) {
-      const [refTable, refColumn] = col.fk.split('.');
-      const fkQuery = `ALTER TABLE ${dto.name} ADD CONSTRAINT fk_${dto.name}_${col.name} FOREIGN KEY (${col.name}) REFERENCES ${refTable}(${refColumn})`;
-      await this.dataSource.query(fkQuery);
+      if (col.fk) {
+        const [refTable, refColumn] = col.fk.split('.');
+        const fkQuery = `ALTER TABLE ${dto.name} ADD CONSTRAINT fk_${dto.name}_${col.name} FOREIGN KEY (${col.name}) REFERENCES ${refTable}(${refColumn})`;
+        await this.dataSource.query(fkQuery);
+      }
     }
     
     return { success: true, table: dto.name };

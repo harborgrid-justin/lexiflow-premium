@@ -85,14 +85,16 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
 
   constructor(
     private jwtService: JwtService,
-    private wsRateLimitGuard: WsRateLimitGuard,
+    // Guards available for WebSocket rate limiting if needed
+    protected _wsRateLimitGuard: WsRateLimitGuard,
     private wsRoomLimitGuard: WsRoomLimitGuard,
   ) {}
 
   async handleConnection(client: Socket) {
     try {
       // Authenticate client
-      const token = client.handshake.auth.token || client.handshake.headers.authorization?.split(' ')[1];
+      const token = (client.handshake.auth.token as string | undefined) || 
+                    (client.handshake.headers.authorization as string | undefined)?.split(' ')[1];
 
       if (!token) {
         this.logger.warn(`Client ${client.id} connection rejected: No token provided`);
@@ -100,8 +102,14 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
         return;
       }
 
-      const payload = await this.jwtService.verifyAsync(token);
+      const payload = await this.jwtService.verifyAsync<{ sub?: string; userId?: string }>(token);
       const userId = payload.sub || payload.userId;
+
+      if (!userId) {
+        this.logger.warn(`Client ${client.id} connection rejected: Invalid token payload`);
+        client.disconnect();
+        return;
+      }
 
       // Store client info
       this.connectedClients.set(client.id, {
@@ -125,7 +133,6 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const __stack = error instanceof Error ? error.stack : undefined;
       this.logger.error(`Authentication failed for client ${client.id}:`, message);
       client.disconnect();
     }
@@ -236,16 +243,20 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
       joinedAt: new Date(),
     };
 
-    this.rooms.get(room)!.add(participant);
+    const roomParticipantsSet = this.rooms.get(room);
+    if (roomParticipantsSet) {
+      roomParticipantsSet.add(participant);
+    }
 
     if (userId) {
       this.socketToUser.set(client.id, userId);
     }
 
+    const roomParticipants = this.rooms.get(room);
     this.server.to(room).emit(WSEvent.USER_JOINED, {
       socketId: client.id,
       userId: participant.userId,
-      participantCount: this.rooms.get(room)!.size,
+      participantCount: roomParticipants?.size ?? 0,
     });
 
     this.logger.log(`Client ${client.id} joined room: ${room}`);
@@ -291,7 +302,7 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
   @SubscribeMessage('send_message')
   handleMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: { room: string; message: any },
+    @MessageBody() data: { room: string; message: unknown },
   ): void {
     const { room, message } = data;
 
@@ -308,7 +319,7 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
   /**
    * Broadcast to all clients
    */
-  broadcastToAll(event: WSEvent | string, data: any): void {
+  broadcastToAll(event: WSEvent | string, data: Record<string, unknown>): void {
     this.server.emit(event, {
       ...data,
       timestamp: new Date().toISOString(),
@@ -318,7 +329,7 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
   /**
    * Broadcast to specific user
    */
-  broadcastToUser(userId: string, event: WSEvent | string, data: any): void {
+  broadcastToUser(userId: string, event: WSEvent | string, data: Record<string, unknown>): void {
     this.server.to(`user:${userId}`).emit(event, {
       ...data,
       timestamp: new Date().toISOString(),
@@ -328,7 +339,7 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
   /**
    * Broadcast to case room
    */
-  broadcastToCase(caseId: string, event: WSEvent | string, data: any): void {
+  broadcastToCase(caseId: string, event: WSEvent | string, data: Record<string, unknown>): void {
     this.server.to(`case:${caseId}`).emit(event, {
       ...data,
       caseId,
@@ -339,7 +350,7 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
   /**
    * Broadcast to multiple users
    */
-  broadcastToUsers(userIds: string[], event: WSEvent | string, data: any): void {
+  broadcastToUsers(userIds: string[], event: WSEvent | string, data: Record<string, unknown>): void {
     for (const userId of userIds) {
       this.broadcastToUser(userId, event, data);
     }
@@ -348,7 +359,7 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
   /**
    * Emit to specific room
    */
-  emitToRoom(room: string, event: string, data: any): void {
+  emitToRoom(room: string, event: string, data: Record<string, unknown>): void {
     this.server.to(room).emit(event, data);
     this.logger.debug(`Event ${event} emitted to room ${room}`);
   }
@@ -356,7 +367,7 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
   /**
    * Emit to user (alias for broadcastToUser, for backwards compatibility)
    */
-  emitToUser(userId: string, event: string, data: any): void {
+  emitToUser(userId: string, event: string, data: Record<string, unknown>): void {
     for (const [socketId, uid] of this.socketToUser) {
       if (uid === userId) {
         this.server.to(socketId).emit(event, data);
@@ -368,7 +379,7 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
   /**
    * Emit to all (alias for broadcastToAll, for backwards compatibility)
    */
-  emitToAll(event: string, data: any): void {
+  emitToAll(event: string, data: Record<string, unknown>): void {
     this.server.emit(event, data);
     this.logger.debug(`Event ${event} emitted to all clients`);
   }

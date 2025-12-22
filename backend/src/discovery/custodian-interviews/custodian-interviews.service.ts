@@ -131,8 +131,8 @@ export class CustodianInterviewsService {
 
     const stats = {
       total: interviews.length,
-      byType: {},
-      byStatus: {},
+      byType: {} as Record<string, number>,
+      byStatus: {} as Record<string, number>,
       completed: 0,
       scheduled: 0,
       recorded: 0,

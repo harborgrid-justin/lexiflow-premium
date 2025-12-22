@@ -117,8 +117,8 @@ export class ExaminationsService {
 
     const stats = {
       total: examinations.length,
-      byType: {},
-      byStatus: {},
+      byType: {} as Record<string, number>,
+      byStatus: {} as Record<string, number>,
       totalCost: 0,
       reportsReceived: 0,
       reportsPending: 0,

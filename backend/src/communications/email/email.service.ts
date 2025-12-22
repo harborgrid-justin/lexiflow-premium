@@ -51,7 +51,6 @@ export class EmailService {
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const __stack = error instanceof Error ? error.stack : undefined;
       this.logger.error(`Failed to send email: ${message}`);
       return {
         success: false,
@@ -85,7 +84,6 @@ export class EmailService {
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const __stack = error instanceof Error ? error.stack : undefined;
       this.logger.error(`Failed to send template email: ${message}`);
       return {
         success: false,
@@ -280,6 +278,8 @@ export class EmailService {
   /**
    * Validate email address
    */
+  // @ts-ignore - Reserved for future use
+   
   private _isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);

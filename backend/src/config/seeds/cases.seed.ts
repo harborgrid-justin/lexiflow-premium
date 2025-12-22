@@ -46,15 +46,14 @@ export async function seedCases(dataSource: DataSource): Promise<void> {
       const caseEntity = caseRepository.create({
         ...caseData,
         status: statusMapping[caseData.status] || 'Open',
-        assignedAttorneyId: attorney.id,
-        clientId: client.id,
+        assignedAttorneyId: attorney?.id,
+        clientId: client?.id,
         createdAt: new Date(caseData.filingDate || Date.now()),
         updatedAt: new Date(),
       });
       await caseRepository.save(caseEntity);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const __stack = error instanceof Error ? error.stack : undefined;
       console.error(`Error seeding case ${caseData.caseNumber}:`, message);
     }
   }

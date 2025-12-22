@@ -120,7 +120,7 @@ export class LegalHoldsService {
     legalHold.status = LegalHoldStatus.RELEASED;
     legalHold.releaseDate = new Date(releaseDto.releaseDate);
     legalHold.releaseReason = releaseDto.releaseReason;
-    legalHold.releaseNotes = releaseDto.releaseNotes;
+    legalHold.releaseNotes = releaseDto.releaseNotes || '';
     legalHold.releasedBy = releaseDto.releasedBy;
     legalHold.updatedAt = new Date();
 
@@ -140,7 +140,7 @@ export class LegalHoldsService {
 
     const stats = {
       total: holds.length,
-      byStatus: {},
+      byStatus: {} as Record<string, number>,
       totalCustodians: 0,
       totalAcknowledged: 0,
       totalPending: 0,

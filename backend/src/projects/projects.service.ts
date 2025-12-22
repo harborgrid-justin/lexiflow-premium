@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-
-import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
+import { Repository, QueryDeepPartialEntity } from 'typeorm';
 import { Project } from './entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -104,7 +103,12 @@ export class ProjectsService {
 
   async update(id: string, updateProjectDto: UpdateProjectDto): Promise<Project> {
     await this.findOne(id);
-    await this.projectRepository.update(id, { ...updateProjectDto, ...(updateProjectDto.metadata ? { metadata: JSON.stringify(updateProjectDto.metadata) } : {}) });
+    const { metadata, ...rest } = updateProjectDto;
+    const updateData = {
+      ...rest,
+      ...(metadata && { metadata: JSON.stringify(metadata) }),
+    } as QueryDeepPartialEntity<Project>;
+    await this.projectRepository.update(id, updateData);
     return this.findOne(id);
   }
 

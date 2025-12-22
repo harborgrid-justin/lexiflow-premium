@@ -58,9 +58,9 @@ export interface PaginationMeta {
  *   { cursor: 'abc123', limit: 10 }
  * );
  */
-@Injectable()
 import { ObjectLiteral } from 'typeorm';
 
+@Injectable()
 export class PaginationService {
   private readonly DEFAULT_LIMIT = MasterConfig.DEFAULT_PAGE_SIZE;
   private readonly MAX_LIMIT = MasterConfig.MAX_PAGE_SIZE;
@@ -69,7 +69,7 @@ export class PaginationService {
    * Offset-based pagination (traditional page/limit)
    * Best for: Small to medium datasets, UI with page numbers
    */
-  async paginateOffset<T>(
+  async paginateOffset<T extends ObjectLiteral>(
     repository: Repository<T>,
     dto: OffsetPaginationDto,
     options?: FindManyOptions<T>,
@@ -107,7 +107,7 @@ export class PaginationService {
    * Best for: Large datasets, infinite scroll, real-time data
    * Advantages: Consistent performance, handles insertions/deletions
    */
-  async paginateCursor<T>(
+  async paginateCursor<T extends ObjectLiteral>(
     queryBuilder: SelectQueryBuilder<T>,
     dto: CursorPaginationDto,
     cursorField: string = 'id',

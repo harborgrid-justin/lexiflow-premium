@@ -2,7 +2,7 @@ import {
   IsString,
   IsEnum,
   IsOptional,
-  IsDateString, _IsNumber,
+  IsDateString,
   IsArray,
   IsUUID,
   IsBoolean,

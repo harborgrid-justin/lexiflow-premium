@@ -9,7 +9,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, _ApiOperation , ApiResponse }from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { ConflictChecksService } from './conflict-checks.service';
 import {
   RunConflictCheckDto,

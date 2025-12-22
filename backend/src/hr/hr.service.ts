@@ -198,7 +198,7 @@ export class HRService {
     request.status = TimeOffStatus.DENIED;
     request.approvedBy = approverId;
     request.approvedAt = new Date();
-    request.denialReason = reason;
+    request.denialReason = reason || '';
 
     return await this.timeOffRepository.save(request);
   }

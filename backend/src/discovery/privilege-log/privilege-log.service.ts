@@ -126,8 +126,8 @@ export class PrivilegeLogService {
 
     const stats = {
       total: entries.length,
-      byPrivilegeType: {},
-      byStatus: {},
+      byPrivilegeType: {} as Record<string, number>,
+      byStatus: {} as Record<string, number>,
       challenged: 0,
       redacted: 0,
       totalPages: 0,

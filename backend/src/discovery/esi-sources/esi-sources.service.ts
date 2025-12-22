@@ -123,8 +123,8 @@ export class ESISourcesService {
 
     const stats = {
       total: sources.length,
-      byType: {},
-      byStatus: {},
+      byType: {} as Record<string, number>,
+      byStatus: {} as Record<string, number>,
       totalVolume: 0,
       totalCost: 0,
       encrypted: 0,

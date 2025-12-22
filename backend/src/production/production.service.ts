@@ -4,6 +4,14 @@ import { Repository} from 'typeorm';
 import { Production, ProductionStatus } from '../discovery/productions/entities/production.entity';
 import { CreateProductionDto, UpdateProductionDto } from './dto';
 
+export interface ProductionStatistics {
+  total: number;
+  byStatus: Record<string, number>;
+  totalDocuments: number;
+  totalPages: number;
+  totalSize: number;
+}
+
 @Injectable()
 export class ProductionService {
   private readonly logger = new Logger(ProductionService.name);
@@ -52,7 +60,15 @@ export class ProductionService {
 
   async update(id: string, updateProductionDto: UpdateProductionDto): Promise<Production> {
     await this.findOne(id);
-    await this.productionRepository.update(id, { ...updateProductionDto, ...(updateProductionDto.metadata ? { metadata: JSON.stringify(updateProductionDto.metadata) } : {}) });
+    const updateData: Partial<Production> = { ...updateProductionDto } as Partial<Production>;
+    if (updateProductionDto.metadata) {
+      updateData.metadata = updateProductionDto.metadata;
+    }
+    // Handle searchCriteria separately for TypeORM compatibility
+    if ('searchCriteria' in updateProductionDto) {
+      updateData.searchCriteria = updateProductionDto.searchCriteria as Record<string, unknown> | undefined;
+    }
+    await this.productionRepository.update(id, updateData);
     return this.findOne(id);
   }
 
@@ -68,7 +84,7 @@ export class ProductionService {
     return this.findOne(id);
   }
 
-  async getStatistics(caseId: string): Promise<any> {
+  async getStatistics(caseId: string): Promise<ProductionStatistics> {
     const productions = await this.findByCaseId(caseId);
     
     const stats = {
@@ -86,7 +102,10 @@ export class ProductionService {
     };
 
     productions.forEach(prod => {
-      stats.byStatus[prod.status]++;
+      if (!stats.byStatus[prod.status]) {
+        stats.byStatus[prod.status] = 0;
+      }
+      stats.byStatus[prod.status] = (stats.byStatus[prod.status] || 0) + 1;
       stats.totalDocuments += prod.totalDocuments;
       stats.totalPages += prod.totalPages;
       stats.totalSize += Number(prod.totalSize);

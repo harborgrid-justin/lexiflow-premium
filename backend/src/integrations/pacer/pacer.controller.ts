@@ -26,7 +26,14 @@ export class PacerController {
   @ApiResponse({ status: 200, description: 'Configuration retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getConfig() {
+  async getConfig(): Promise<{
+    username?: string;
+    password?: string;
+    courtId?: string;
+    autoSync?: boolean;
+    syncInterval?: number;
+    enabled?: boolean;
+  }> {
     return this.pacerService.getConfig();
   }
 
@@ -42,7 +49,18 @@ export class PacerController {
     courtId?: string;
     autoSync?: boolean;
     syncInterval?: number;
-  }) {
+  }): Promise<{
+    success: boolean;
+    message: string;
+    config: {
+      username?: string;
+      password?: string;
+      courtId?: string;
+      autoSync?: boolean;
+      syncInterval?: number;
+      enabled?: boolean;
+    };
+  }> {
     return this.pacerService.updateConfig(config);
   }
 

@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Repository, Brackets } from 'typeorm';
 import * as MasterConfig from '../config/master.config';
 import { calculateOffset, calculateTotalPages, calculateExecutionTime } from '../common/utils/math.utils';
 import {
@@ -15,6 +14,7 @@ import {
   SearchSuggestionsResultDto,
   SearchSuggestionItem,
   ReindexResultDto,
+  SearchFacets,
 } from './dto/search-result.dto';
 
 @Injectable()
@@ -31,47 +31,53 @@ export class SearchService {
   /**
    * Perform global search across all entities
    */
-  async search(query: SearchQueryDto): Promise<SearchResultDto> { const startTime = Date.now();
-    const { _page = 1, _limit = 20, entityType, fuzzy: _fuzzy } = query;
-    // Offset calculation: const offset = calculateOffset(_page, _limit);
+  async search(query: SearchQueryDto): Promise<SearchResultDto> {
+    const startTime = Date.now();
+    const { page = 1, limit = 20, entityType } = query;
 
     try {
       let results: SearchResultItem[] = [];
       let total = 0;
 
       switch (entityType) {
-        case SearchEntityType.CASE:
+        case SearchEntityType.CASE: {
           const caseResults = await this.searchCases(query);
           results = caseResults.results;
           total = caseResults.total;
           break;
+        }
 
-        case SearchEntityType.DOCUMENT:
+        case SearchEntityType.DOCUMENT: {
           const docResults = await this.searchDocuments(query);
           results = docResults.results;
           total = docResults.total;
           break;
+        }
 
-        case SearchEntityType.CLIENT:
+        case SearchEntityType.CLIENT: {
           const clientResults = await this.searchClients(query);
           results = clientResults.results;
           total = clientResults.total;
           break;
+        }
 
         case SearchEntityType.ALL:
-        default:
+        default: {
           const allResults = await this.searchAll(query);
           results = allResults.results;
           total = allResults.total;
           break;
+        }
       }
 
       const executionTime = calculateExecutionTime(startTime);
-      const totalPages = calculateTotalPages(total, _limit);
+      const totalPages = calculateTotalPages(total, limit);
 
       return {
         results,
-        total, _page, _limit,
+        total,
+        page,
+        limit,
         totalPages,
         query: query.query,
         executionTime,
@@ -88,8 +94,8 @@ export class SearchService {
   /**
    * Search cases with full-text search
    */
-  async searchCases(query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> { const { query: searchQuery, _page = 1, _limit = 20, startDate: _startDate, endDate: _endDate, status, practiceArea, fuzzy: _fuzzy } = query;
-    // Offset calculation: const offset = calculateOffset(_page, _limit);
+  async searchCases(query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
+    const { query: searchQuery } = query;
 
     // Mock implementation - replace with actual TypeORM query when entities are available
     // Example PostgreSQL full-text search query:
@@ -172,7 +178,7 @@ export class SearchService {
         metadata: {
           caseNumber: 'CV-2024-001',
           status: status || 'active',
-          practiceArea: practiceArea || 'Civil Litigation',
+          practiceArea: 'Civil Litigation',
         },
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -340,7 +346,7 @@ export class SearchService {
   /**
    * Generate facets for filtering
    */
-  private async generateFacets(results: SearchResultItem[]): Promise<any> {
+  private async generateFacets(results: SearchResultItem[]): Promise<SearchFacets> {
     const facets = {
       entityTypes: {} as Record<string, number>,
       practiceAreas: {} as Record<string, number>,
@@ -352,14 +358,15 @@ export class SearchService {
       facets.entityTypes[result.entityType] = (facets.entityTypes[result.entityType] || 0) + 1;
 
       // Count by practice area (if available)
-      if (result.metadata?.practiceArea) {
-        facets.practiceAreas[result.metadata.practiceArea] =
-          (facets.practiceAreas[result.metadata.practiceArea] || 0) + 1;
+      if (result.metadata?.practiceArea && typeof result.metadata.practiceArea === 'string') {
+        const area = result.metadata.practiceArea;
+        facets.practiceAreas[area] = (facets.practiceAreas[area] || 0) + 1;
       }
 
       // Count by status (if available)
-      if (result.metadata?.status) {
-        facets.statuses[result.metadata.status] = (facets.statuses[result.metadata.status] || 0) + 1;
+      if (result.metadata?.status && typeof result.metadata.status === 'string') {
+        const statusKey = result.metadata.status;
+        facets.statuses[statusKey] = (facets.statuses[statusKey] || 0) + 1;
       }
     });
 
@@ -369,11 +376,21 @@ export class SearchService {
   /**
    * Map case entity to search result
    */
-  private _mapCaseToSearchResult(caseEntity: any): SearchResultItem {
+  protected _mapCaseToSearchResult(caseEntity: {
+    id: string;
+    title?: string;
+    caseNumber?: string;
+    description?: string;
+    score?: number;
+    status?: string;
+    practiceArea?: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }): SearchResultItem {
     return {
       id: caseEntity.id,
       entityType: SearchEntityType.CASE,
-      title: caseEntity.title || caseEntity.caseNumber,
+      title: (caseEntity.title || caseEntity.caseNumber) ?? '',
       description: caseEntity.description,
       score: caseEntity.score || 0,
       highlights: this.generateHighlights(caseEntity),
@@ -390,28 +407,80 @@ export class SearchService {
   /**
    * Generate highlights for matched text
    */
-  private generateHighlights(entity: any): SearchHighlight[] {
-    // This would use PostgreSQL's ts_headline function
-    return [
-      {
+  private generateHighlights(entity: { 
+    title?: string; 
+    description?: string; 
+    caseNumber?: string;
+  }): SearchHighlight[] {
+    const highlights: SearchHighlight[] = [];
+
+    if (entity.title) {
+      highlights.push({
         field: 'title',
-        snippet: entity.title || '',
-      },
-    ];
+        snippet: this.truncateSnippet(entity.title, 150),
+      });
+    }
+
+    if (entity.description) {
+      highlights.push({
+        field: 'description',
+        snippet: this.truncateSnippet(entity.description, 200),
+      });
+    }
+
+    if (entity.caseNumber) {
+      highlights.push({
+        field: 'caseNumber',
+        snippet: entity.caseNumber,
+      });
+    }
+
+    return highlights;
   }
 
-  async getRecentSearches(_userId: string): Promise<any[]> {
-    // Stub implementation - would query search_history table
+  private truncateSnippet(text: string, maxLength: number): string {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return text.substring(0, maxLength).trim() + '...';
+  }
+
+  async getRecentSearches(userId: string): Promise<Array<{
+    id: string;
+    query: string;
+    entityType?: SearchEntityType;
+    timestamp: Date;
+  }>> {
+    // This would query a search_history table
+    // For now, return empty array since table doesn't exist yet
+    this.logger.debug(`Fetching recent searches for user ${userId}`);
     return [];
   }
 
-  async saveSearch(_userId: string, query: string): Promise<any> {
-    // Stub implementation - would save to search_history table
-    return { userId: _userId, query, timestamp: new Date() };
+  async saveSearch(userId: string, query: string, entityType?: SearchEntityType): Promise<{
+    id: string;
+    userId: string;
+    query: string;
+    entityType?: SearchEntityType;
+    timestamp: Date;
+  }> {
+    // This would insert into search_history table
+    // For now, return mock object since table doesn't exist yet
+    this.logger.debug(`Saving search for user ${userId}: "${query}"`);
+    
+    return {
+      id: `search_${Date.now()}`,
+      userId,
+      query,
+      entityType,
+      timestamp: new Date(),
+    };
   }
 
-  async clearSearchHistory(_userId: string): Promise<void> {
-    // Stub implementation - would delete from search_history table
+  async clearSearchHistory(userId: string): Promise<void> {
+    // This would delete from search_history table
+    // For now, just log since table doesn't exist yet
+    this.logger.log(`Clearing search history for user ${userId}`);
   }
 
   async getStats(): Promise<{

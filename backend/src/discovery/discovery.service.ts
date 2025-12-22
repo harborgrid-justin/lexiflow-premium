@@ -187,7 +187,7 @@ export class DiscoveryService {
 
   async createEvidence(createDto: any): Promise<Evidence> {
     const evidence = this.evidenceRepository.create(createDto);
-    return this.evidenceRepository.save(evidence);
+    return this.evidenceRepository.save(evidence) as any;
   }
 
   async getEvidenceByCaseId(caseId: string): Promise<Evidence[]> {

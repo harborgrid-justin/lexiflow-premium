@@ -5,8 +5,8 @@ import {
   IsDateString,
   IsNumber,
   IsArray,
-  IsUUID, IsBoolean,
-  MaxLength, ValidateNested,
+  IsUUID,
+  MaxLength,
 } from 'class-validator';
 import { DepositionMethod } from '../entities/deposition.entity';
 

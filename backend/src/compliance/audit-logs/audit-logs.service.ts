@@ -3,7 +3,7 @@ import {
   AuditLogDto,
   CreateAuditLogDto,
   QueryAuditLogsDto,
-  ExportAuditLogsDto, AuditAction,
+  ExportAuditLogsDto,
   AuditEntityType,
 } from './dto/audit-log.dto';
 
@@ -44,10 +44,10 @@ export class AuditLogsService {
       logs = logs.filter((log) => log.action === query.action);
     }
     if (query.startDate) {
-      logs = logs.filter((log) => log.timestamp >= query.startDate);
+      logs = logs.filter((log) => log.timestamp >= query.startDate!);
     }
     if (query.endDate) {
-      logs = logs.filter((log) => log.timestamp <= query.endDate);
+      logs = logs.filter((log) => log.timestamp <= query.endDate!);
     }
 
     // Sort

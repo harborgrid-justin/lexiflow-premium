@@ -1,12 +1,12 @@
 import {
   Controller,
-  Get, _Post,
+  Get,
   Param,
-  Query, _Body,
+  Query,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, _ApiOperation , ApiResponse }from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { AuditLogsService } from './audit-logs.service';
 import {
   QueryAuditLogsDto,

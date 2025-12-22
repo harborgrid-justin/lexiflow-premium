@@ -97,8 +97,8 @@ export function weightedAverage(values: number[], weights: number[]): number {
   let weightSum = 0;
 
   for (let i = 0; i < values.length; i++) {
-    sum += values[i] * weights[i];
-    weightSum += weights[i];
+    sum += values[i]! * weights[i]!;
+    weightSum += weights[i]!;
   }
 
   return weightSum === 0 ? 0 : sum / weightSum;

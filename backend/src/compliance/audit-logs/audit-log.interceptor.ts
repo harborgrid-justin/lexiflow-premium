@@ -94,7 +94,7 @@ export class AuditLogInterceptor implements NestInterceptor {
       motions: AuditEntityType.MOTION,
     };
 
-    const entityType = entityTypeMap[entityTypeStr];
+    const entityType = entityTypeStr ? entityTypeMap[entityTypeStr] : undefined;
     if (!entityType) return null;
 
     return {

@@ -207,7 +207,7 @@ export class ReportsService {
    * Get list of generated reports
    */
   async getReports(page?: number, limit?: number): Promise<ReportListDto> {
-    const { page: validPage, limit: validLimit } = validatePagination(page, limit, 50);
+    validatePagination(page, limit, 50);
     try {
       // Mock implementation
       /*
@@ -259,8 +259,8 @@ export class ReportsService {
       return {
         reports,
         total: reports.length,
-        page,
-        limit,
+        page: page || 1,
+        limit: limit || 50,
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';

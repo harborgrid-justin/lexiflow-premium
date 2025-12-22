@@ -63,7 +63,7 @@ export class QueryWorkbenchService {
       rowsAffected = Array.isArray(result) ? result.length : 0;
     } catch (err) {
       success = false;
-      error = err.message;
+      error = err instanceof Error ? err.message : String(err);
       result = null;
     }
 
@@ -76,7 +76,7 @@ export class QueryWorkbenchService {
       executionTimeMs: executionTime,
       rowsAffected,
       successful: success,
-      error,
+      error: error || undefined,
     });
     
     await this.historyRepository.save(history);
@@ -142,7 +142,7 @@ export class QueryWorkbenchService {
     } catch (err) {
       return {
         success: false,
-        error: err.message,
+        error: err instanceof Error ? err.message : String(err),
       };
     }
   }

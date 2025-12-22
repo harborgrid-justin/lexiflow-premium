@@ -163,12 +163,12 @@ export class MockFactory {
    * Generate multiple mock items
    */
   static createMany<T>(
-    factory: () => T,
+    factory: (overrides?: Partial<T>) => T,
     count: number,
     overrides?: Partial<T>[],
   ): T[] {
     return Array.from({ length: count }, (_, index) =>
-      factory.call(this, overrides?.[index]),
+      factory(overrides?.[index]),
     );
   }
 

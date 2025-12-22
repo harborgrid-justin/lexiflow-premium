@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 /**
  * Metric Types
@@ -31,7 +31,8 @@ export interface Metric {
  * metricsService.recordHistogram('api.response.time', 150, { endpoint: '/cases' });
  */
 @Injectable()
-export class MetricsService { private readonly // __logger = new Logger(MetricsService.name);
+export class MetricsService {
+  // private readonly logger = new Logger(MetricsService.name);
   private metrics: Map<string, Metric[]> = new Map();
   private counters: Map<string, number> = new Map();
   private gauges: Map<string, number> = new Map();
@@ -204,8 +205,8 @@ export class MetricsService { private readonly // __logger = new Logger(MetricsS
     for (const pair of labelStr.split(',')) {
       const [k, v] = pair.split('=');
       if (k && v) {
-      }
         labels[k] = v.replace(/"/g, '');
+      }
     }
 
     return [name, labels];

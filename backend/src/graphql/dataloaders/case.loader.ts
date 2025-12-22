@@ -48,15 +48,10 @@ export class CaseLoader {
    * Note: Team members would need a separate entity/relation if not embedded
    */
   public readonly batchTeamMembersByCaseId = new DataLoader(async (caseIds: readonly string[]) => {
-    const cases = await this.caseRepository.find({
-      where: { id: In([...caseIds]) },
-      relations: ['team'],
-    });
+    // Note: Case entity doesn't have a 'team' relation - this needs to be implemented
+    // or removed based on your schema design
     const teamByCaseId = new Map();
     caseIds.forEach(id => teamByCaseId.set(id, []));
-    cases.forEach(caseItem => {
-      teamByCaseId.set(caseItem.id, caseItem.team || []);
-    });
     return caseIds.map(id => teamByCaseId.get(id) || []);
   });
 
@@ -64,15 +59,10 @@ export class CaseLoader {
    * Batch load phases by case IDs
    */
   public readonly batchPhasesByCaseId = new DataLoader(async (caseIds: readonly string[]) => {
-    const cases = await this.caseRepository.find({
-      where: { id: In([...caseIds]) },
-      relations: ['phases'],
-    });
+    // Note: Case entity doesn't have a 'phases' relation - this needs to be implemented
+    // or removed based on your schema design
     const phasesByCaseId = new Map();
     caseIds.forEach(id => phasesByCaseId.set(id, []));
-    cases.forEach(caseItem => {
-      phasesByCaseId.set(caseItem.id, caseItem.phases || []);
-    });
     return caseIds.map(id => phasesByCaseId.get(id) || []);
   });
 

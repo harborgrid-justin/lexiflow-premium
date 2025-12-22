@@ -5,7 +5,7 @@ import {
   IsDateString,
   IsNumber,
   IsArray,
-  IsUUID, IsBoolean,
+  IsUUID,
   MaxLength,
 } from 'class-validator';
 import { ExaminationType } from '../entities/examination.entity';

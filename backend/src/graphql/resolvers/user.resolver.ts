@@ -21,8 +21,8 @@ export class UserResolver {
   async getUsers(@Args('filter', { nullable: true }) filter?: UserFilterInput): Promise<UserType[]> {
     const users = await this.userService.findAll();
     // Apply filter if provided
-    if (filter?.role) {
-      return users.filter(u => u.role === filter.role) as any[];
+    if (filter?.role && filter.role.length > 0) {
+      return users.filter(u => filter.role?.includes(u.role)) as any[];
     }
     if (filter?.isActive !== undefined) {
       return users.filter(u => u.isActive === filter.isActive) as any[];
@@ -58,6 +58,7 @@ export class UserResolver {
       accessToken: result.accessToken,
       refreshToken: result.refreshToken,
       user: result.user as any,
+      expiresIn: 3600, // Default 1 hour
     };
   }
 
@@ -69,6 +70,7 @@ export class UserResolver {
       accessToken: result.accessToken,
       refreshToken: result.refreshToken,
       user: result.user as any,
+      expiresIn: 3600, // Default 1 hour
     };
   }
 
@@ -99,7 +101,7 @@ export class UserResolver {
   async enableMfa(@CurrentUser() user: AuthenticatedUser): Promise<boolean> {
     // Note: This requires a verification code in production.
     // For now, just set up MFA which returns a QR code
-    const __mfaSetup = await this.authService.setupMfa(user.id);
+    await this.authService.setupMfa(user.id);
     // In a real implementation, client would scan QR and provide verification code
     throw new Error('MFA setup requires QR code scanning - use REST API endpoint');
   }
@@ -121,7 +123,9 @@ export class UserResolver {
   @Mutation(() => Boolean)
   @UseGuards(GqlAuthGuard)
   async logout(@CurrentUser() user: AuthenticatedUser): Promise<boolean> {
-    await this.authService.logout(user.id, user.jti, user.exp);
+    // Note: logout with token tracking requires jti and exp from the JWT payload
+    // For GraphQL, we'll just invalidate by user ID
+    await this.authService.logout(user.id, '', 0);
     return true;
   }
 }

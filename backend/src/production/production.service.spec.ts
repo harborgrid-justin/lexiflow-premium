@@ -2,7 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductionService } from './production.service';
-import { Production, ProductionStatus } from './entities/production.entity';
+import { Production } from './production.entity';
+import { ProductionStatus } from './production-status.enum';
 import { CreateProductionDto, UpdateProductionDto } from './dto';
 
 describe('ProductionService', () => {

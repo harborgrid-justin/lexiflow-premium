@@ -93,7 +93,9 @@ export class PleadingsService {
     const pleading = await this.findOne(id);
 
     Object.assign(pleading, updatePleadingDto);
-    pleading.updatedBy = userId;
+    if (userId) {
+      pleading.updatedBy = userId;
+    }
 
     const updatedPleading = await this.pleadingRepository.save(pleading);
     this.logger.log(`Pleading updated: ${id}`);
@@ -129,7 +131,9 @@ export class PleadingsService {
       pleading.courtName = filePleadingDto.courtName;
     }
 
-    pleading.updatedBy = userId;
+    if (userId) {
+      pleading.updatedBy = userId;
+    }
 
     const updatedPleading = await this.pleadingRepository.save(pleading);
     this.logger.log(`Pleading filed: ${id}`);

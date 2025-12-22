@@ -18,7 +18,6 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { PermissionsGuard } from '../common/guards/permissions.guard';
 import { Permissions } from '../auth/decorators/permissions.decorator';
-import { _Role } from '../common/enums/role.enum';
 import { Permission } from '../common/enums/permission.enum';
 
 @ApiTags('Users')

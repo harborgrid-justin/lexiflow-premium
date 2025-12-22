@@ -117,8 +117,8 @@ export class ProductionsService {
 
     const stats = {
       total: productions.length,
-      byStatus: {},
-      byFormat: {},
+      byStatus: {} as Record<string, number>,
+      byFormat: {} as Record<string, number>,
       totalDocuments: 0,
       totalPages: 0,
       totalCost: 0,

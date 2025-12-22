@@ -21,7 +21,7 @@ export interface EmailOptions {
 @Injectable()
 export class EmailService implements OnModuleInit {
   private readonly logger = new Logger(EmailService.name);
-  private transporter: Transporter;
+  private transporter: Transporter | null = null;
 
   constructor(private readonly configService: ConfigService) {}
 

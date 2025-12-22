@@ -162,8 +162,8 @@ export class CasesService {
     const { metadata, ...restDto } = updateCaseDto;
     await this.caseRepository.update(id, {
       ...restDto,
-      ...(metadata ? { metadata: JSON.stringify(metadata) } : {})
-    });
+      ...(metadata ? { metadata: JSON.stringify(metadata) as any } : {})
+    } as any);
     return this.findOne(id);
   }
 

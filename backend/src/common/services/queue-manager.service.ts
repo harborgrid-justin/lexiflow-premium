@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectQueue, Process, Processor } from '@nestjs/bull';
 import { Queue, Job } from 'bull';
 
 /**

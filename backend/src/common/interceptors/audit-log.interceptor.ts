@@ -14,6 +14,23 @@ import {
 } from '../decorators/audit-log.decorator';
 import { AuditLogService, AuditAction } from '../services/audit-log.service';
 
+interface RequestUser {
+  id: string;
+  email?: string;
+  role?: string;
+}
+
+interface AuditRequest {
+  user?: RequestUser;
+  ip?: string;
+  headers: Record<string, string | string[] | undefined>;
+  method: string;
+  url: string;
+  params?: Record<string, string>;
+  query?: Record<string, unknown>;
+  id?: string;
+}
+
 @Injectable()
 export class AuditLogInterceptor implements NestInterceptor {
   private readonly logger = new Logger(AuditLogInterceptor.name);
@@ -23,7 +40,7 @@ export class AuditLogInterceptor implements NestInterceptor {
     private readonly auditLogService: AuditLogService,
   ) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const auditOptions = this.reflector.get<AuditLogOptions>(
       AUDIT_LOG_KEY,
       context.getHandler(),
@@ -33,12 +50,12 @@ export class AuditLogInterceptor implements NestInterceptor {
       return next.handle();
     }
 
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<AuditRequest>();
     const user = request.user;
     const startTime = Date.now();
 
     return next.handle().pipe(
-      tap(async (_response) => {
+      tap(async (_response: unknown) => {
         const duration = Date.now() - startTime;
 
         try {
@@ -46,11 +63,11 @@ export class AuditLogInterceptor implements NestInterceptor {
             userId: user?.id || 'anonymous',
             action: auditOptions.action as AuditAction,
             resource: auditOptions.resource,
-            resourceId: request.params?.id || request.params?.[Object.keys(request.params || {})[0]] || 'unknown',
+            resourceId: this.extractResourceId(request),
             description:
               auditOptions.description || `${auditOptions.action} performed`,
-            ipAddress: request.ip,
-            userAgent: request.headers['user-agent'],
+            ipAddress: request.ip || 'unknown',
+            userAgent: this.extractUserAgent(request.headers),
             method: request.method,
             url: request.url,
             status: 'success',
@@ -67,7 +84,7 @@ export class AuditLogInterceptor implements NestInterceptor {
           this.logger.error(`Failed to log audit: ${message}`);
         }
       }),
-      catchError(async (error) => {
+      catchError(async (error: Error) => {
         const duration = Date.now() - startTime;
 
         try {
@@ -75,10 +92,10 @@ export class AuditLogInterceptor implements NestInterceptor {
             userId: user?.id || 'anonymous',
             action: auditOptions.action as AuditAction,
             resource: auditOptions.resource,
-            resourceId: request.params?.id || request.params?.[Object.keys(request.params || {})[0]] || 'unknown',
+            resourceId: this.extractResourceId(request),
             description: `Failed: ${auditOptions.action}`,
-            ipAddress: request.ip,
-            userAgent: request.headers['user-agent'],
+            ipAddress: request.ip || 'unknown',
+            userAgent: this.extractUserAgent(request.headers),
             method: request.method,
             url: request.url,
             status: 'failure',
@@ -89,11 +106,47 @@ export class AuditLogInterceptor implements NestInterceptor {
             },
           });
         } catch (logError) {
-          this.logger.error(`Failed to log audit: ${logError.message}`);
+          const logErrorMessage = logError instanceof Error ? logError.message : 'Unknown error';
+          this.logger.error(`Failed to log audit: ${logErrorMessage}`);
         }
 
         throw error;
       }),
     );
+  }
+
+  /**
+   * Extract resource ID from request params
+   */
+  private extractResourceId(request: AuditRequest): string {
+    if (request.params?.id) {
+      return request.params.id;
+    }
+    
+    if (request.params && Object.keys(request.params).length > 0) {
+      const firstKey = Object.keys(request.params)[0];
+      if (firstKey) {
+        const firstValue = request.params[firstKey];
+        if (firstValue) {
+          return firstValue;
+        }
+      }
+    }
+    
+    return 'unknown';
+  }
+
+  /**
+   * Extract user agent from headers
+   */
+  private extractUserAgent(headers: Record<string, string | string[] | undefined>): string {
+    const userAgent = headers['user-agent'];
+    if (typeof userAgent === 'string') {
+      return userAgent;
+    }
+    if (Array.isArray(userAgent) && userAgent.length > 0 && userAgent[0]) {
+      return userAgent[0];
+    }
+    return 'unknown';
   }
 }

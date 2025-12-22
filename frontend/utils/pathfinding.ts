@@ -40,10 +40,11 @@ export const Pathfinding = {
         const inDegree = new Map<string, number>();
         
         tasks.forEach(t => {
-            const start = t.startDate ? new Date(t.startDate) : new Date(t.dueDate);
-            const due = new Date(t.dueDate);
+            const dueDate = t.dueDate || new Date().toISOString();
+            const start = t.startDate ? new Date(t.startDate) : new Date(dueDate);
+            const due = new Date(dueDate);
             const durationDays = (due.getTime() - start.getTime()) / (1000 * 60 * 60 * 24) || 1;
-            
+
             durations.set(t.id, durationDays);
             inDegree.set(t.id, 0);
             if (!adj.has(t.id)) adj.set(t.id, []);

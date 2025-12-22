@@ -68,7 +68,7 @@ export class CaseResolver {
   @UseGuards(GqlAuthGuard)
   async createCase(
     @Args('input') input: CreateCaseInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.create(input as any);
     pubSub.publish('caseCreated', { caseCreated: caseEntity });
@@ -80,7 +80,7 @@ export class CaseResolver {
   async updateCase(
     @Args('id', { type: () => ID }) id: string,
     @Args('input') input: UpdateCaseInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.update(id, input as any);
     pubSub.publish('caseUpdated', { caseUpdated: caseEntity, id });
@@ -91,7 +91,7 @@ export class CaseResolver {
   @UseGuards(GqlAuthGuard)
   async deleteCase(
     @Args('id', { type: () => ID }) id: string,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<boolean> {
     await this.caseService.remove(id);
     return true;
@@ -101,7 +101,7 @@ export class CaseResolver {
   @UseGuards(GqlAuthGuard)
   async addParty(
     @Args('input') input: AddPartyInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
     // Note: Parties are typically managed through case updates in the REST API
@@ -113,7 +113,7 @@ export class CaseResolver {
   @UseGuards(GqlAuthGuard)
   async addTeamMember(
     @Args('input') input: AddTeamMemberInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
     // Note: Team members are typically managed through case updates in the REST API
@@ -125,7 +125,7 @@ export class CaseResolver {
   @UseGuards(GqlAuthGuard)
   async createMotion(
     @Args('input') input: CreateMotionInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
     // Note: Motions are typically managed through case updates or a separate motions service
@@ -137,7 +137,7 @@ export class CaseResolver {
   @UseGuards(GqlAuthGuard)
   async createDocketEntry(
     @Args('input') input: CreateDocketEntryInput,
-    @CurrentUser() user: AuthenticatedUser,
+    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<CaseType> {
     const caseEntity = await this.caseService.findOne(input.caseId);
     // Note: Docket entries are typically managed through case updates or a separate docket service
@@ -187,7 +187,7 @@ export class CaseResolver {
       return payload.id === variables.id;
     },
   })
-  caseUpdated(@Args('id', { type: () => ID }) id: string) {
+  caseUpdated(@Args('_id', { type: () => ID }) _id: string) {
     // @ts-ignore - PubSub asyncIterator exists at runtime
     return pubSub.asyncIterator('caseUpdated');
   }

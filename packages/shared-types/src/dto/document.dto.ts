@@ -108,6 +108,11 @@ export interface DocumentResponseDto {
 }
 
 /**
+ * File upload data type - compatible with both browser and Node.js
+ */
+export type FileUploadData = Blob | ArrayBuffer | Uint8Array;
+
+/**
  * Document upload request DTO
  */
 export interface DocumentUploadDto {
@@ -115,7 +120,7 @@ export interface DocumentUploadDto {
   description?: string;
   type: DocumentType;
   caseId: string;
-  file: File | Buffer;
+  file: FileUploadData;
   tags?: string[];
   accessLevel?: DocumentAccessLevel;
 }

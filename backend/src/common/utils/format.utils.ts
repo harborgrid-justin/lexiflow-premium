@@ -41,8 +41,8 @@ export function parseSize(sizeString: string): number {
     throw new Error(`Invalid size format: ${sizeString}`);
   }
 
-  const value = parseFloat(match[1]);
-  const unit = match[2].toUpperCase();
+  const value = parseFloat(match[1] || '0');
+  const unit = (match[2] || '').toUpperCase();
 
   if (!(unit in units)) {
     throw new Error(`Unknown unit: ${unit}`);
@@ -129,8 +129,8 @@ export function formatPath(filePath: string, maxLength: number = 50): string {
   const parts = filePath.split('/');
   if (parts.length <= 2) return truncate(filePath, maxLength);
 
-  const fileName = parts[parts.length - 1];
-  const firstPart = parts[0];
+  const fileName = parts[parts.length - 1] ?? '' || '';
+  const firstPart = parts[0] || '';
   const remainingLength = maxLength - fileName.length - firstPart.length - 6; // 6 for '/...//'
 
   if (remainingLength < 0) {

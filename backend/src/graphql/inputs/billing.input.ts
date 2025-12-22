@@ -4,16 +4,16 @@ import { DateRangeInput } from './pagination.input';
 @InputType()
 export class CreateTimeEntryInput {
   @Field()
-  description: string;
+  description!: string;
 
   @Field()
-  hours: number;
+  hours!: number;
 
   @Field()
-  rate: string; // Money scalar
+  rate!: string; // Money scalar
 
   @Field(() => Date)
-  entryDate: Date;
+  entryDate!: Date;
 
   @Field(() => ID, { nullable: true })
   caseId?: string;
@@ -25,7 +25,7 @@ export class CreateTimeEntryInput {
   activityCode?: string;
 
   @Field({ defaultValue: true })
-  billable: boolean;
+  billable!: boolean;
 }
 
 @InputType()
@@ -76,7 +76,7 @@ export class TimeEntryFilterInput {
 @InputType()
 export class CreateInvoiceInput {
   @Field()
-  invoiceNumber: string;
+  invoiceNumber!: string;
 
   @Field(() => ID, { nullable: true })
   caseId?: string;
@@ -85,13 +85,13 @@ export class CreateInvoiceInput {
   clientId?: string;
 
   @Field(() => Date)
-  invoiceDate: Date;
+  invoiceDate!: Date;
 
   @Field(() => Date)
-  dueDate: Date;
+  dueDate!: Date;
 
   @Field(() => [InvoiceLineItemInput])
-  lineItems: InvoiceLineItemInput[];
+  lineItems!: InvoiceLineItemInput[];
 
   @Field({ nullable: true })
   notes?: string;
@@ -106,13 +106,13 @@ export class CreateInvoiceInput {
 @InputType()
 export class InvoiceLineItemInput {
   @Field()
-  description: string;
+  description!: string;
 
   @Field()
-  quantity: number;
+  quantity!: number;
 
   @Field()
-  rate: string; // Money scalar
+  rate!: string; // Money scalar
 
   @Field(() => ID, { nullable: true })
   timeEntryId?: string;

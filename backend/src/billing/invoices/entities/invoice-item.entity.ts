@@ -4,11 +4,8 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
   Index,
 } from 'typeorm';
-import { Invoice } from './invoice.entity';
 
 export enum InvoiceItemType {
   TIME = 'Time',
@@ -41,7 +38,7 @@ export class InvoiceItem {
   description!: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  quantity: number; // hours for time, units for expenses
+  quantity!: number; // hours for time, units for expenses
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   rate!: number;

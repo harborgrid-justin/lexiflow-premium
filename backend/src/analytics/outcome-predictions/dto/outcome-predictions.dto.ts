@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEnum, IsArray, IsNumber, Min, Max } from 'class-validator';
+import { IsString, IsOptional, IsArray, IsNumber, Min, Max } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum PredictedOutcome {
@@ -34,7 +34,7 @@ export class OutcomePredictionDto {
   confidenceScore!: number;
 
   @ApiProperty({ description: 'Probability breakdown by outcome' })
-  probabilities: {
+  probabilities!: {
     [key in PredictedOutcome]: number;
   };
 
@@ -81,7 +81,7 @@ export class InfluencingFactor {
   weight!: number;
 
   @ApiProperty({ description: 'Impact direction' })
-  impact: 'positive' | 'negative' | 'neutral';
+  impact!: 'positive' | 'negative' | 'neutral';
 
   @ApiProperty({ description: 'Explanation' })
   explanation!: string;
@@ -92,7 +92,7 @@ export class RiskFactor {
   category!: string;
 
   @ApiProperty({ description: 'Risk level' })
-  level: 'low' | 'medium' | 'high' | 'critical';
+  level!: 'low' | 'medium' | 'high' | 'critical';
 
   @ApiProperty({ description: 'Risk description' })
   description!: string;
@@ -174,7 +174,7 @@ export class PredictionAccuracyDto {
   overallAccuracy!: number;
 
   @ApiProperty({ description: 'Accuracy by confidence level' })
-  accuracyByConfidence: {
+  accuracyByConfidence!: {
     [key in ConfidenceLevel]: {
       predictions: number;
       correct: number;
@@ -183,7 +183,7 @@ export class PredictionAccuracyDto {
   };
 
   @ApiProperty({ description: 'Accuracy by outcome type' })
-  accuracyByOutcome: {
+  accuracyByOutcome!: {
     [key in PredictedOutcome]: {
       predictions: number;
       correct: number;

@@ -64,14 +64,14 @@ export class CustodianInterview {
   location!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  interviewers: Array<{
+  interviewers!: Array<{
     userId: string;
     name: string;
     role: string;
   }>;
 
   @Column({ type: 'jsonb', nullable: true })
-  attendees: Array<{
+  attendees!: Array<{
     name: string;
     role: string;
     organization?: string;
@@ -90,7 +90,7 @@ export class CustodianInterview {
   keyFindings!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  dataSourcesDiscussed: Array<{
+  dataSourcesDiscussed!: Array<{
     sourceName: string;
     sourceType: string;
     location?: string;
@@ -98,14 +98,14 @@ export class CustodianInterview {
   }>;
 
   @Column({ type: 'jsonb', nullable: true })
-  documentsIdentified: Array<{
+  documentsIdentified!: Array<{
     description: string;
     location?: string;
     custodian?: string;
   }>;
 
   @Column({ type: 'jsonb', nullable: true })
-  followUpActions: Array<{
+  followUpActions!: Array<{
     action: string;
     assignedTo?: string;
     dueDate?: Date;
@@ -128,7 +128,7 @@ export class CustodianInterview {
   notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 
   @Column({ type: 'uuid', nullable: true })
   conductedBy!: string;

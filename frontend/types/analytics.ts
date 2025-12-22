@@ -1,7 +1,7 @@
 // types/analytics.ts
 // Analytics and Integrations types
 
-import { BaseEntity } from './primitives';
+import { BaseEntity, MetadataRecord } from './primitives';
 
 // ==================== ANALYTICS ====================
 
@@ -11,7 +11,7 @@ export interface AnalyticsEvent extends BaseEntity {
   entityId?: string;
   userId?: string;
   timestamp: string;
-  metadata?: Record<string, any>;
+  metadata?: MetadataRecord;
 }
 
 export interface Dashboard extends BaseEntity {
@@ -27,11 +27,11 @@ export interface DashboardWidget {
   id: string;
   type: 'chart' | 'metric' | 'table' | 'list' | 'calendar' | 'timeline';
   title: string;
-  config: Record<string, any>;
+  config: MetadataRecord;
   dataSource?: {
     type: string;
     query?: string;
-    filters?: Record<string, any>;
+    filters?: MetadataRecord;
   };
 }
 
@@ -53,13 +53,18 @@ export interface MetricData {
   timestamp: string;
   unit?: string;
   dimensions?: Record<string, string>;
-  metadata?: Record<string, any>;
+  metadata?: MetadataRecord;
 }
 
 export interface TimeSeriesData {
   timestamp: string;
   count: number;
-  metadata?: Record<string, any>;
+  metadata?: MetadataRecord;
+}
+
+export interface ChartDataPoint {
+  name: string;
+  count: number;
 }
 
 export interface CaseMetrics {
@@ -100,7 +105,7 @@ export interface Integration extends BaseEntity {
   type: string;
   provider: IntegrationProvider;
   status: IntegrationStatus;
-  config?: Record<string, any>;
+  config?: MetadataRecord;
   credentials?: {
     accessToken?: string;
     refreshToken?: string;
@@ -109,7 +114,7 @@ export interface Integration extends BaseEntity {
   };
   syncEnabled: boolean;
   lastSyncedAt?: string;
-  metadata?: Record<string, any>;
+  metadata?: MetadataRecord;
 }
 
 export type IntegrationProvider = 

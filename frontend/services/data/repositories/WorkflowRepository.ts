@@ -40,14 +40,15 @@ export const WorkflowRepository = {
         try {
             // Calculate real stats from tasks
             const tasks = await db.getAll<WorkflowTask>(STORES.TASKS);
-            const completed = tasks.filter(t => t.status === 'Done' || t.status === 'Completed').length;
+            const completed = tasks.filter(t => t.status === TaskStatusBackend.COMPLETED || t.status === TaskStatusBackend.COMPLETED).length;
             const total = tasks.length;
             
             // Calculate status distribution
             const now = new Date();
-            const overdue = tasks.filter(t => t.status !== 'Done' && t.status !== 'Completed' && new Date(t.dueDate) < now).length;
+            const overdue = tasks.filter(t => t.status !== TaskStatusBackend.COMPLETED && t.status !== TaskStatusBackend.COMPLETED && t.dueDate && new Date(t.dueDate) < now).length;
             const atRisk = tasks.filter(t => {
-                if (t.status === 'Done' || t.status === 'Completed') return false;
+                if (t.status === TaskStatusBackend.COMPLETED || t.status === TaskStatusBackend.COMPLETED) return false;
+                if (!t.dueDate) return false;
                 const due = new Date(t.dueDate);
                 const diffHours = (due.getTime() - now.getTime()) / (1000 * 60 * 60);
                 return diffHours > 0 && diffHours < 48; // Due within 48 hours
@@ -105,9 +106,9 @@ export const WorkflowRepository = {
                 title: t.title,
                 requester: t.assignee || 'System',
                 date: t.startDate || t.createdAt || new Date().toISOString().split('T')[0],
-                status: 'Pending',
+                status: TaskStatusBackend.TODO,
                 description: t.description || 'Approval required for this task.',
-                priority: t.priority === 'Critical' ? 'High' : (t.priority === 'High' ? 'High' : 'Medium')
+                priority: t.priority === TaskPriorityBackend.CRITICAL ? TaskPriorityBackend.HIGH : (t.priority === TaskPriorityBackend.HIGH ? TaskPriorityBackend.HIGH : TaskPriorityBackend.MEDIUM)
             }));
         } catch (error) {
             console.warn('[WorkflowRepository] Error fetching approvals:', error);
@@ -129,9 +130,9 @@ export const WorkflowRepository = {
                  const task: WorkflowTask = {
                      id: `t-auto-${Date.now()}-${idx}` as TaskId,
                      title: stage,
-                     status: 'Pending',
+                     status: TaskStatusBackend.TODO,
                      assignee: 'Unassigned',
-                     priority: 'Medium',
+                     priority: TaskPriorityBackend.MEDIUM,
                      dueDate: dueDate.toISOString().split('T')[0],
                      caseId: context?.caseId as CaseId || 'General' as CaseId,
                      description: `Automated task from template: ${template.title}`,
@@ -262,7 +263,7 @@ export const WorkflowRepository = {
             await delay(800); 
             console.log(`[API] Running automation scope: ${scope}`);
             const tasks = await db.getAll<unknown>(STORES.TASKS);
-            const overdue = tasks.filter(t => t.status !== 'Done' && new Date(t.dueDate) < new Date());
+            const overdue = tasks.filter(t => t.status !== TaskStatusBackend.COMPLETED && new Date(t.dueDate) < new Date());
             if (overdue.length > 0) {
                 const notif = {
                     id: `notif-auto-${Date.now()}`,
@@ -289,7 +290,7 @@ export const WorkflowRepository = {
             // For now, we'll aggregate data from tasks.
             const tasks = await db.getByIndex<WorkflowTask>(STORES.TASKS, 'caseId', id);
             const total = tasks.length;
-            const completed = tasks.filter(t => t.status === 'Done').length;
+            const completed = tasks.filter(t => t.status === TaskStatusBackend.COMPLETED).length;
             const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
             // Mock data for now, but derived from real tasks if available
             return {

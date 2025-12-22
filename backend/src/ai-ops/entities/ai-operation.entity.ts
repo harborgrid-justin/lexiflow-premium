@@ -36,10 +36,10 @@ export class AIOperation {
   model!: string;
 
   @Column({ type: 'jsonb' })
-  input!: Record<string, any>;
+  input!: Record<string, unknown>;
 
   @Column({ type: 'jsonb', nullable: true })
-  output?: Record<string, any>;
+  output?: Record<string, unknown>;
 
   @Column({
     type: 'enum',
@@ -58,7 +58,7 @@ export class AIOperation {
   error?: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 
   @CreateDateColumn()
   createdAt!: Date;

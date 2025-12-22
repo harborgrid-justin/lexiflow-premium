@@ -103,12 +103,12 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
             <CopyButton text={entry.description || entry.title} variant="ghost" size="sm" />
           </div>
           <p className={cn("text-sm leading-relaxed", theme.text.secondary)}>{renderLinkedText(entry.title)}</p>
-          {entry.description && <p className={cn("text-sm mt-2 italic", theme.text.tertiary)}>{renderLinkedText(entry.description)}</p>}
+          {entry.description && <p className={cn("text-sm mt-2 italic", theme.text.tertiary)}>{renderLinkedText(entry.description || '')}</p>}
         </div>
 
         {/* Auto-generated Tags or Rules */}
         <div className="mb-6 flex gap-2">
-            {entry.title.toLowerCase().includes('motion') && <span className={cn("text-xs border px-2 py-1 rounded flex items-center gap-1", theme.surface.highlight, theme.border.default)}><Tag className="h-3 w-3"/> Needs Response</span>}
+            {(entry.title || '').toLowerCase().includes('motion') && <span className={cn("text-xs border px-2 py-1 rounded flex items-center gap-1", theme.surface.highlight, theme.border.default)}><Tag className="h-3 w-3"/> Needs Response</span>}
             {entry.type === 'Order' && <span className={cn("text-xs border px-2 py-1 rounded flex items-center gap-1", theme.status.error.bg, theme.status.error.text, theme.status.error.border)}><Scale className="h-3 w-3"/> Ruling</span>}
         </div>
 

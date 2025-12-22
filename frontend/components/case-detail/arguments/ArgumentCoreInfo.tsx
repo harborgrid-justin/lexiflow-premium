@@ -40,7 +40,7 @@ export const ArgumentCoreInfo: React.FC<ArgumentCoreInfoProps> = ({ argument, on
             <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Argument Narrative</label>
             <TextArea 
                 value={argument.description} 
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ ...argument, description: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdate({ ...argument, description: e.target.value })}
                 rows={8}
                 className="font-serif text-base leading-relaxed"
                 placeholder="Detail the legal reasoning..."

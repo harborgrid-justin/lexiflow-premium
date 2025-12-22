@@ -42,7 +42,12 @@ export const CalendarSync: React.FC = () => {
       DataService.admin.getIntegrations
   );
 
-  const calendarIntegrations = integrations.filter((i: unknown) => i.type.includes('Calendar') || i.type.includes('Email'));
+  const calendarIntegrations = integrations.filter((i: unknown) => {
+    if (typeof i === 'object' && i !== null && 'type' in i && typeof i.type === 'string') {
+      return i.type.includes('Calendar') || i.type.includes('Email');
+    }
+    return false;
+  });
 
   if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
 

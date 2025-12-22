@@ -24,7 +24,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { cn } from '../../utils/cn';
 
 // Types & Interfaces
-import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus } from '../../types';
+import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus, TaskStatusBackend } from '../../types';
 
 interface CaseWorkflowProps {
   stages: WorkflowStage[];
@@ -41,24 +41,24 @@ export const CaseWorkflow: React.FC<CaseWorkflowProps> = ({ stages: initialStage
   const handleToggleTask = (stageId: string, taskId: string) => {
     setStages(prevStages => prevStages.map(stage => {
         if (stage.id !== stageId) return stage;
-        
-        const newTasks = stage.tasks.map(task => 
-            task.id === taskId ? { ...task, status: (task.status === 'Done' ? 'Pending' : 'Done') as TaskStatus } : task
+
+        const newTasks = stage.tasks.map(task =>
+            task.id === taskId ? { ...task, status: (task.status === TaskStatusBackend.COMPLETED ? TaskStatusBackend.TODO : TaskStatusBackend.COMPLETED) } : task
         );
-        
-        const allDone = newTasks.every(t => t.status === 'Done');
-        const anyInProgress = newTasks.some(t => t.status === 'In Progress');
-        
+
+        const allDone = newTasks.every(t => t.status === TaskStatusBackend.COMPLETED);
+        const anyInProgress = newTasks.some(t => t.status === TaskStatusBackend.IN_PROGRESS);
+
         let newStageStatus: StageStatus = stage.status as StageStatus;
         if (allDone) newStageStatus = 'Completed';
-        else if (anyInProgress || newTasks.some(t => t.status === 'Done')) newStageStatus = 'Active';
+        else if (anyInProgress || newTasks.some(t => t.status === TaskStatusBackend.COMPLETED)) newStageStatus = 'Active';
 
         return { ...stage, tasks: newTasks, status: newStageStatus };
     }));
   };
 
   const totalTasks = stages.reduce((acc: any, s) => acc + s.tasks.length, 0);
-  const completedTasks = stages.reduce((acc: any, s) => acc + s.tasks.filter(t => t.status === 'Done').length, 0);
+  const completedTasks = stages.reduce((acc: any, s) => acc + s.tasks.filter(t => t.status === TaskStatusBackend.COMPLETED).length, 0);
   const progress = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
   return (
@@ -72,7 +72,7 @@ export const CaseWorkflow: React.FC<CaseWorkflowProps> = ({ stages: initialStage
                   <span className={cn("font-bold", theme.text.link)}>{progress}%</span>
               </div>
               <div className={cn("w-full rounded-full h-2.5", theme.surface.highlight)}>
-                  {/* eslint-disable-next-line react/forbid-dom-props -- Dynamic width required for progress */}
+                  { }
                   <div className={cn("h-2.5 rounded-full transition-all duration-1000 ease-out", theme.action.primary.bg)} style={{ width: `${progress}%` }}></div>
               </div>
           </div>

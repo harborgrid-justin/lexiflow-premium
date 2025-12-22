@@ -3,9 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
+  UpdateDateColumn, _ManyToOne, _JoinColumn,
 } from 'typeorm';
 
 export enum MatterStatus {
@@ -165,7 +163,7 @@ export class Matter {
   internalNotes!: string;
 
   @Column({ name: 'customfields', type: 'jsonb', nullable: true })
-  customFields!: Record<string, any>;
+  customFields!: Record<string, unknown>;
 
   // Metadata
   @Column({ name: 'createdby' })

@@ -73,7 +73,7 @@ export class TokenBlacklistService implements OnModuleInit {
 
       this.redisClient = createClient(clientOptions);
 
-      this.redisClient.on('error', (err) => {
+      this.redisClient.on('error', (err: Error) => {
         this.logger.error('Redis client error:', err);
         this.useRedis = false;
       });
@@ -93,7 +93,6 @@ export class TokenBlacklistService implements OnModuleInit {
       this.logger.log('✅ Token blacklist using Redis storage');
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
       this.logger.warn('Failed to initialize Redis, using in-memory blacklist:', message);
       this.useRedis = false;
       this.logger.log('⚠️  Token blacklist using in-memory storage (not suitable for production)');
@@ -122,7 +121,6 @@ export class TokenBlacklistService implements OnModuleInit {
         this.logger.debug(`Blacklisted token ${jti} in Redis with TTL ${ttlSeconds}s`);
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
-        const stack = error instanceof Error ? error.stack : undefined;
         this.logger.error('Redis blacklistToken failed, falling back to in-memory:', message);
         this.inMemoryBlacklist.set(jti, expiresAt);
       }
@@ -150,7 +148,6 @@ export class TokenBlacklistService implements OnModuleInit {
         return result === 1;
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
-        const stack = error instanceof Error ? error.stack : undefined;
         this.logger.error('Redis isBlacklisted check failed, checking in-memory:', message);
         return this.isBlacklistedInMemory(jti);
       }
@@ -178,7 +175,6 @@ export class TokenBlacklistService implements OnModuleInit {
         this.logger.log(`Blacklisted all tokens for user ${userId}`);
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
-        const stack = error instanceof Error ? error.stack : undefined;
         this.logger.error('Redis blacklistUserTokens failed, falling back to in-memory:', message);
         this.blacklistUserTokensInMemory(userId);
       }
@@ -212,7 +208,6 @@ export class TokenBlacklistService implements OnModuleInit {
         return tokenIssuedAt * 1000 < parseInt(blacklistTimestamp, 10);
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
-        const stack = error instanceof Error ? error.stack : undefined;
         this.logger.error('Redis isUserTokenBlacklisted check failed:', message);
         return false;
       }
@@ -264,7 +259,6 @@ export class TokenBlacklistService implements OnModuleInit {
         };
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
-        const stack = error instanceof Error ? error.stack : undefined;
         this.logger.error('Redis getStats failed:', message);
       }
     }
@@ -315,7 +309,6 @@ export class TokenBlacklistService implements OnModuleInit {
         this.logger.log('Redis client disconnected');
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
-        const stack = error instanceof Error ? error.stack : undefined;
         this.logger.error('Error disconnecting Redis client:', message);
       }
     }

@@ -24,7 +24,7 @@ import { GanttHelpers } from '../../../utils/ganttHelpers';
 import { cn } from '../../../utils/cn';
 
 // Types & Interfaces
-import { WorkflowTask, CasePhase } from '../../../types';
+import { WorkflowTask, CasePhase, TaskStatusBackend } from '../../../types';
 
 interface GanttTimelineProps {
   phases: CasePhase[];
@@ -102,10 +102,10 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
                                     key={task.id} 
                                     className={cn("h-10 relative flex items-center transition-colors", activeTaskId === task.id ? cn(theme.primary.light, "bg-opacity-50") : "hover:bg-black/5 dark:hover:bg-white/5")}
                                   >
-                                      <div 
+                                      <div
                                           className={cn(
                                               "absolute h-6 rounded-full border shadow-sm flex items-center px-2 text-xs font-bold text-white cursor-pointer select-none group overflow-hidden",
-                                              task.status === 'Done' ? "bg-slate-400 border-slate-500" :
+                                              task.status === TaskStatusBackend.COMPLETED ? "bg-slate-400 border-slate-500" :
                                               task.priority === 'High' ? "bg-red-500 border-red-600" :
                                               cn(theme.action.primary.bg, theme.action.primary.border)
                                           )}

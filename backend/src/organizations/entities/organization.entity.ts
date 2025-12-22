@@ -102,16 +102,16 @@ export class Organization extends BaseEntity {
   generalCounsel!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  officers: Record<string, any>[];
+  officers!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  directors: Record<string, any>[];
+  directors!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  shareholders: Record<string, any>[];
+  shareholders!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  members: Record<string, any>[];
+  members!: Record<string, unknown>[];
 
   @Column({ name: 'registered_agent', type: 'varchar', length: 255, nullable: true })
   registeredAgent!: string;
@@ -126,10 +126,10 @@ export class Organization extends BaseEntity {
   parentOrganizationId!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  subsidiaries: Record<string, any>[];
+  subsidiaries!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  affiliates: Record<string, any>[];
+  affiliates!: Record<string, unknown>[];
 
   @Column({ name: 'number_of_employees', type: 'integer', nullable: true })
   numberOfEmployees!: number;
@@ -147,34 +147,34 @@ export class Organization extends BaseEntity {
   stockExchange!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  licenses: Record<string, any>[];
+  licenses!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  permits: Record<string, any>[];
+  permits!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  certifications: Record<string, any>[];
+  certifications!: Record<string, unknown>[];
 
   @Column({ name: 'bank_accounts', type: 'jsonb', nullable: true })
-  bankAccounts: Record<string, any>[];
+  bankAccounts!: Record<string, unknown>[];
 
   @Column({ name: 'banking_info', type: 'text', nullable: true })
   bankingInfo!: string;
 
   @Column({ name: 'insurance_policies', type: 'jsonb', nullable: true })
-  insurancePolicies: Record<string, any>[];
+  insurancePolicies!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  properties: Record<string, any>[];
+  properties!: Record<string, unknown>[];
 
   @Column({ name: 'intellectual_property', type: 'jsonb', nullable: true })
-  intellectualProperty: Record<string, any>[];
+  intellectualProperty!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  contracts: Record<string, any>[];
+  contracts!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  litigation: Record<string, any>[];
+  litigation!: Record<string, unknown>[];
 
   @Column({ name: 'has_active_litigation', type: 'boolean', default: false })
   hasActiveLitigation!: boolean;
@@ -183,14 +183,14 @@ export class Organization extends BaseEntity {
   litigationSummary!: string;
 
   @Column({ name: 'regulatory_filings', type: 'jsonb', nullable: true })
-  regulatoryFilings: Record<string, any>[];
+  regulatoryFilings!: Record<string, unknown>[];
 
   @Column({ name: 'compliance_requirements', type: 'jsonb', nullable: true })
-  complianceRequirements: Record<string, any>[];
+  complianceRequirements!: Record<string, unknown>[];
 
   @Column({ type: 'text', nullable: true })
   notes!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 }

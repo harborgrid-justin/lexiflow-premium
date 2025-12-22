@@ -30,19 +30,19 @@ export class WipStatsResponse {
   totalWip!: number;
   unbilledTime!: number;
   unbilledExpenses!: number;
-  wipByCase: Array<{
+  wipByCase!: Array<{
     caseId: string;
     caseName: string;
     wipAmount: number;
     ageInDays: number;
   }>;
-  wipByAttorney: Array<{
+  wipByAttorney!: Array<{
     userId: string;
     userName: string;
     wipAmount: number;
     hours: number;
   }>;
-  wipAging: {
+  wipAging!: {
     current: number;    // 0-30 days
     days30: number;     // 31-60 days
     days60: number;     // 61-90 days
@@ -52,25 +52,25 @@ export class WipStatsResponse {
 }
 
 export class RealizationResponse {
-  realizationRate: number;        // Overall realization %
-  standardAmount: number;          // Standard/billed amount
-  collectedAmount: number;         // Actually collected
-  writeOffs: number;               // Write-offs
-  discounts: number;               // Discounts given
-  byAttorney: Array<{
+  realizationRate!: number;        // Overall realization %
+  standardAmount!: number;          // Standard/billed amount
+  collectedAmount!: number;         // Actually collected
+  writeOffs!: number;               // Write-offs
+  discounts!: number;               // Discounts given
+  byAttorney!: Array<{
     userId: string;
     userName: string;
     realizationRate: number;
     standardAmount: number;
     collectedAmount: number;
   }>;
-  byPracticeArea: Array<{
+  byPracticeArea!: Array<{
     area: string;
     realizationRate: number;
     standardAmount: number;
     collectedAmount: number;
   }>;
-  trend: Array<{
+  trend!: Array<{
     month: string;
     realizationRate: number;
   }>;
@@ -85,12 +85,12 @@ export class OperatingSummaryResponse {
   activeMatters!: number;
   billableHours!: number;
   averageHourlyRate!: number;
-  revenueByMonth: Array<{
+  revenueByMonth!: Array<{
     month: string;
     revenue: number;
     expenses: number;
   }>;
-  topClients: Array<{
+  topClients!: Array<{
     clientId: string;
     clientName: string;
     revenue: number;
@@ -100,12 +100,12 @@ export class OperatingSummaryResponse {
 
 export class ArAgingResponse {
   totalAR!: number;
-  current: number;        // Not yet due
-  days30: number;         // 1-30 days overdue
-  days60: number;         // 31-60 days overdue
-  days90: number;         // 61-90 days overdue
-  over90: number;         // 90+ days overdue
-  byClient: Array<{
+  current!: number;        // Not yet due
+  days30!: number;         // 1-30 days overdue
+  days60!: number;         // 31-60 days overdue
+  days90!: number;         // 61-90 days overdue
+  over90!: number;         // 90+ days overdue
+  byClient!: Array<{
     clientId: string;
     clientName: string;
     totalDue: number;

@@ -153,7 +153,7 @@ export const BillingSection: React.FC<BillingSectionProps> = ({ formData, onChan
         <select
           id="billingType"
           value={formData.billingType}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange('billingType', e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onChange('billingType', e.target.value)}
           className="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-slate-900 dark:text-slate-100"
         >
           <option value="Hourly">Hourly</option>

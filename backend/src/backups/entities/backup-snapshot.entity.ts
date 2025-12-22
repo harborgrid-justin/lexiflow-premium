@@ -12,19 +12,19 @@ export class BackupSnapshot {
   description!: string;
 
   @Column()
-  type: string; // 'full', 'incremental', 'differential'
+  type!: string; // 'full', 'incremental', 'differential'
 
   @Column('bigint')
-  size: number; // in bytes
+  size!: number; // in bytes
 
   @Column()
-  location: string; // S3 path or file path
+  location!: string; // S3 path or file path
 
   @Column({ default: 'completed' })
-  status: string; // 'pending', 'in_progress', 'completed', 'failed'
+  status!: string; // 'pending', 'in_progress', 'completed', 'failed'
 
   @Column('jsonb', { nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 
   @Column({ nullable: true })
   createdBy!: string;

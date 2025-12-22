@@ -41,7 +41,7 @@ export class DocumentVersion extends BaseEntity {
   changeDescription!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata!: Record<string, any>;
+  metadata!: Record<string, unknown>;
 
   @Column({ name: 'full_text_content', type: 'text', nullable: true })
   fullTextContent!: string;
@@ -62,7 +62,7 @@ export class DocumentVersion extends BaseEntity {
   isCurrentVersion!: boolean;
 
   @Column({ name: 'comparison_data', type: 'jsonb', nullable: true })
-  comparisonData!: Record<string, any>;
+  comparisonData!: Record<string, unknown>;
 
   @Column({ name: 'previous_version_id', type: 'uuid', nullable: true })
   previousVersionId!: string;

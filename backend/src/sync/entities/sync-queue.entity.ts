@@ -14,7 +14,7 @@ export class SyncQueue {
   id!: string;
 
   @Column()
-  operation: string; // 'create', 'update', 'delete'
+  operation!: string; // 'create', 'update', 'delete'
 
   @Column()
   entityType!: string;
@@ -23,7 +23,7 @@ export class SyncQueue {
   entityId!: string;
 
   @Column('jsonb')
-  payload!: Record<string, any>;
+  payload!: Record<string, unknown>;
 
   @Column({
     type: 'enum',

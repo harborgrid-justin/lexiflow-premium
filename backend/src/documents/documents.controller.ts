@@ -15,7 +15,6 @@ import {
   ParseUUIDPipe,
   Inject,
 } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiConsumes, ApiBody, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
 import { Response } from 'express';
@@ -152,7 +151,7 @@ export class DocumentsController {
     @Body() ocrRequestDto: OcrRequestDto,
   ) {
     // Verify document exists
-    const document = await this.documentsService.findOne(id);
+    const _document = await this.documentsService.findOne(id);
 
     // Create OCR processing job
     const job = await this.processingJobsService.createJob(
@@ -181,7 +180,7 @@ export class DocumentsController {
     @Body() redactionParams: any,
   ) {
     // Verify document exists
-    const document = await this.documentsService.findOne(id);
+    const _document = await this.documentsService.findOne(id);
 
     // Create redaction processing job
     const job = await this.processingJobsService.createJob(

@@ -1,9 +1,12 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards, Request } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { MessengerService } from './messenger.service';
 import { MessengerConversationDto, MessengerMessageDto, UpdateConversationDto } from './dto/messenger.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { GetContactsDto } from './dto/get-contacts.dto';
+import { GetConversationsDto } from './dto/get-conversations.dto';
+import { GetMessagesDto } from './dto/get-messages.dto';
 
 @ApiTags('Messenger')
 @ApiBearerAuth('JWT-auth')
@@ -27,8 +30,8 @@ export class MessengerController {
   @ApiResponse({ status: 200, description: 'Contacts retrieved' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getContacts(@Request() req, @Query() query?: any) {
-    return { contacts: [], total: 0 }; // Placeholder - implement as needed
+  async getContacts(@CurrentUser('id') userId: string, @Query() query: GetContactsDto) {
+    return this.messengerService.getContacts(userId, query);
   }
 
   @Get('conversations')
@@ -36,9 +39,8 @@ export class MessengerController {
   @ApiResponse({ status: 200, description: 'Conversations retrieved' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getConversations(@Request() req, @Query() query?: any) {
-    const userId = req.user?.id || 'system';
-    return await this.messengerService.findAllConversations(userId, query || {});
+  async getConversations(@CurrentUser('id') userId: string, @Query() query: GetConversationsDto) {
+    return await this.messengerService.findAllConversations(userId, query);
   }
 
   @Get('conversations/:id')
@@ -57,7 +59,7 @@ export class MessengerController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async getMessages(@Param('id') id: string, @Query() query: any) {
+  async getMessages(@Param('id') id: string, @Query() query: GetMessagesDto) {
     return await this.messengerService.getMessages(id, query);
   }
 
@@ -66,8 +68,7 @@ export class MessengerController {
   @ApiResponse({ status: 200, description: 'Unread count retrieved' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getUnreadCount(@Request() req) {
-    const userId = req.user?.id || 'system';
+  async getUnreadCount(@CurrentUser('id') userId: string) {
     const count = await this.messengerService.getUnreadCount(userId);
     return { count };
   }
@@ -92,8 +93,7 @@ export class MessengerController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async sendMessage(@Request() req, @Body() messageDto: MessengerMessageDto) {
-    const userId = req.user?.id || 'system';
+  async sendMessage(@CurrentUser('id') userId: string, @Body() messageDto: MessengerMessageDto) {
     return await this.messengerService.sendMessage(messageDto, userId);
   }
 
@@ -105,8 +105,7 @@ export class MessengerController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async markRead(@Request() req, @Param('id') id: string) {
-    const userId = req.user?.id || 'system';
+  async markRead(@CurrentUser('id') userId: string, @Param('id') id: string) {
     return await this.messengerService.markAsRead(id, userId);
   }
 

@@ -81,10 +81,10 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                 />
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Target Table</label>
-                    <select 
+                    <select
                         className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.table}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, table: e.target.value})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, table: e.target.value})}
                     >
                         {tables.map(t => <option key={t} value={t}>{t}</option>)}
                     </select>
@@ -94,10 +94,10 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
             <div className="grid grid-cols-2 gap-6">
                  <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Command Type</label>
-                    <select 
+                    <select
                         className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.cmd}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, cmd: e.target.value as SqlCmd})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, cmd: e.target.value as SqlCmd})}
                     >
                         <option value="ALL">ALL</option>
                         <option value="SELECT">SELECT</option>
@@ -132,11 +132,11 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                     <Code className="h-3 w-3"/> SQL Expression (USING)
                 </label>
                 <div className="relative">
-                    <textarea 
+                    <textarea
                         className={cn("w-full p-4 rounded-lg font-mono text-xs leading-relaxed h-32 border focus:ring-2 focus:ring-blue-500 outline-none resize-none", theme.surface.highlight, theme.border.default, theme.text.primary)}
                         placeholder="e.g. org_id = current_setting('app.current_org_id')::uuid"
                         value={formData.using || ''}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, using: e.target.value})}
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, using: e.target.value})}
                     />
                 </div>
                 <p className={cn("text-xs mt-1 italic", theme.text.tertiary)}>Boolean expression checked for existing rows.</p>
@@ -148,11 +148,11 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
                         <Shield className="h-3 w-3"/> Check Expression (WITH CHECK)
                     </label>
                     <div className="relative">
-                        <textarea 
+                        <textarea
                             className={cn("w-full p-4 rounded-lg font-mono text-xs leading-relaxed h-24 border focus:ring-2 focus:ring-blue-500 outline-none resize-none", theme.surface.highlight, theme.border.default, theme.text.primary)}
                             placeholder="Optional. e.g. status != 'Closed' OR role = 'Admin'"
                             value={formData.withCheck || ''}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, withCheck: e.target.value})}
+                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, withCheck: e.target.value})}
                         />
                     </div>
                     <p className={cn("text-xs mt-1 italic", theme.text.tertiary)}>Ensures new/updated rows meet criteria.</p>

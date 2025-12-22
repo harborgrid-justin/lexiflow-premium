@@ -1,5 +1,4 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CreateConversationDto, CreateMessageDto, MessageQueryDto } from './dto';
 import { validatePagination } from '../../common/utils/query-validation.util';
@@ -44,11 +43,10 @@ export class MessagingService {
   /**
    * Get a specific conversation by ID
    */
-  async findConversationById(conversationId: string, userId: string) {
-    // Verify user has access to this conversation
+  async findConversationById(conversationId: string, userId: string) { // Verify user has access to this conversation
     // Implementation will query conversation repository
     return {
-      id: conversationId,
+      id: _conversationId,
       title: 'Sample Conversation',
       type: 'direct',
       participants: [],
@@ -83,10 +81,9 @@ export class MessagingService {
   /**
    * Get messages for a conversation
    */
-  async findMessages(conversationId: string, userId: string, query: MessageQueryDto) {
-    // Verify user has access to conversation
+  async findMessages(conversationId: string, userId: string, query: MessageQueryDto) { // Verify user has access to conversation
     // Fetch messages with pagination
-    const { page = 1, limit = 50, afterDate, beforeDate } = query;
+    const { page = 1, limit = 50, _afterDate, _beforeDate } = query;
 
     return {
       data: [],
@@ -111,8 +108,7 @@ export class MessagingService {
     // Create and save message
     // Trigger WebSocket event for real-time delivery
     return {
-      id: 'msg-' + Date.now(),
-      conversationId,
+      id: 'msg-' + Date.now(), _conversationId,
       ...createDto,
       senderId,
       createdAt: new Date(),
@@ -123,11 +119,10 @@ export class MessagingService {
   /**
    * Mark a message as read
    */
-  async markMessageAsRead(messageId: string, userId: string) {
-    // Update message read status
+  async markMessageAsRead(messageId: string, userId: string) { // Update message read status
     // Trigger read receipt event via WebSocket
     return {
-      messageId,
+      _messageId,
       readBy: [userId],
       readAt: new Date(),
     };
@@ -145,7 +140,7 @@ export class MessagingService {
   /**
    * Get unread message count for user
    */
-  async getUnreadCount(userId: string): Promise<number> {
+  async getUnreadCount(_userId: string): Promise<number> {
     // Count unread messages across all conversations
     return 0;
   }

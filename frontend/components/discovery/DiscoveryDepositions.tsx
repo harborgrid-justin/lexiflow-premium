@@ -88,7 +88,7 @@ export const DiscoveryDepositions: React.FC = () => {
                     <Input label="Location" value={newDepo.location || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDepo({...newDepo, location: e.target.value})} placeholder="e.g. Remote (Zoom)"/>
                 </div>
                 <Input label="Court Reporter / Vendor" value={newDepo.courtReporter || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDepo({...newDepo, courtReporter: e.target.value})} placeholder="e.g. Veritext"/>
-                <TextArea label="Prep Notes" value={newDepo.prepNotes || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDepo({...newDepo, prepNotes: e.target.value})} placeholder="Key topics to cover..."/>
+                <TextArea label="Prep Notes" value={newDepo.prepNotes || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewDepo({...newDepo, prepNotes: e.target.value})} placeholder="Key topics to cover..."/>
                 <div className="flex justify-end pt-4">
                     <Button variant="primary" onClick={handleSchedule}>Save Schedule</Button>
                 </div>

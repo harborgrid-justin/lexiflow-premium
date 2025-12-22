@@ -31,7 +31,7 @@ import { DeadlineEngine } from '../../services/features/deadlines/deadlineEngine
 import { IdGenerator } from '../../utils/idGenerator';
 
 // Types & Interfaces
-import { DocketEntry, DocketEntryType, WorkflowTask, TaskId, CaseId } from '../../types';
+import { DocketEntry, DocketEntryType, WorkflowTask, TaskId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '../../types';
 
 interface DocketEntryBuilderProps {
   initialData?: Partial<DocketEntry>;
@@ -40,11 +40,14 @@ interface DocketEntryBuilderProps {
   onCancel: () => void;
 }
 
-export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({ 
-  initialData, caseParties = [], onSave, onCancel 
+export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
+  initialData, caseParties = [], onSave, onCancel
 }) => {
   const { theme } = useTheme();
   const { success: notifySuccess, error: notifyError } = useNotify();
+
+  // TODO: Fetch case data if needed for jurisdiction-based deadline calculation
+  const caseData = undefined;
 
   // Core Data
   const [date, setDate] = useState(initialData?.date || getTodayString());
@@ -136,10 +139,10 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
         const task: WorkflowTask = {
             id: IdGenerator.generic('task') as TaskId,
             title: `Review Docket Entry: ${entry.title}`,
-            status: 'Pending',
+            status: TaskStatusBackend.TODO,
             assignee: 'Current User',
             dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            priority: 'High',
+            priority: TaskPriorityBackend.HIGH,
             caseId: initialData.caseId as CaseId,
             description: `Review newly filed docket entry: ${previewText}`,
             relatedModule: 'Motions',
@@ -178,7 +181,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
                   <select 
                       className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                       value={entryType}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEntryType(e.target.value as DocketEntryType)}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setEntryType(e.target.value as DocketEntryType)}
                   >
                       <option value="Filing">Filing</option>
                       <option value="Order">Order</option>
@@ -207,7 +210,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
                  <select 
                     className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                     value={structActionType}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStructActionType(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setStructActionType(e.target.value)}
                  >
                      <option>Motion</option>
                      <option>Order</option>
@@ -231,7 +234,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
                  <select 
                     className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                     value={structVerb}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStructVerb(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setStructVerb(e.target.value)}
                  >
                      <option value="filed">filed</option>
                      <option value="granting">granting</option>
@@ -266,7 +269,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
              <TextArea 
                 rows={2} 
                 value={structAdditional} 
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStructAdditional(e.target.value)} 
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setStructAdditional(e.target.value)} 
                 placeholder="Details, exhibits attached, etc."
              />
           </div>

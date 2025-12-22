@@ -36,7 +36,8 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
 
   const updateItem = (setter: unknown, list: unknown[], index: number, field: string, value: string) => {
       const newList = [...list];
-      newList[index] = { ...newList[index], [field]: value };
+      const currentItem = newList[index];
+      newList[index] = currentItem && typeof currentItem === 'object' ? { ...currentItem, [field]: value } : { [field]: value };
       setter(newList);
   };
 
@@ -116,7 +117,7 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
                              <Input label="Category" value={dmg.category} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setDamages, damages, idx, 'category', e.target.value)} placeholder="e.g. Lost Profits" />
                              <Input label="Claimed Amount" value={dmg.amount} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setDamages, damages, idx, 'amount', e.target.value)} placeholder="$0.00" />
                         </div>
-                        <TextArea label="Basis of Computation" value={dmg.computation} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setDamages, damages, idx, 'computation', e.target.value)} rows={2} />
+                        <TextArea label="Basis of Computation" value={dmg.computation} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => updateItem(setDamages, damages, idx, 'computation', e.target.value)} rows={2} />
                     </div>
                 ))}
                 <Button variant="secondary" onClick={addDamage} className="w-full">Add Damage Category</Button>

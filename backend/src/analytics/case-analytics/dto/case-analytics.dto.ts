@@ -1,5 +1,4 @@
-import { IsOptional, IsDateString, IsEnum, IsString, IsInt, Min } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsOptional, IsDateString, IsEnum, IsString} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum MetricPeriod {
@@ -85,10 +84,10 @@ export class CaseMetricsDto {
   totalRevenue!: number;
 
   @ApiProperty({ description: 'Cases by status breakdown' })
-  casesByStatus: { [status: string]: number };
+  casesByStatus!: { [status: string]: number };
 
   @ApiProperty({ description: 'Cases by practice area breakdown' })
-  casesByPracticeArea: { [area: string]: number };
+  casesByPracticeArea!: { [area: string]: number };
 
   @ApiProperty({ description: 'Monthly trend data' })
   trends?: CaseTrendDataPoint[];

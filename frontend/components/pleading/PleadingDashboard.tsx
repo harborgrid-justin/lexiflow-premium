@@ -125,7 +125,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
                             title="Select related case"
                             className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={newDocData.caseId}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDocData({...newDocData, caseId: e.target.value})}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewDocData({...newDocData, caseId: e.target.value})}
                         >
                             <option value="">Select Case...</option>
                             {cases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}

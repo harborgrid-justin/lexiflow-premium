@@ -10,7 +10,6 @@ import {
   HttpStatus,
   Head,
 } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth  , ApiResponse }from '@nestjs/swagger';
 import { MotionsService } from './motions.service';
 import { CreateMotionDto } from './dto/create-motion.dto';

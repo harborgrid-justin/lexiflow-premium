@@ -1,24 +1,27 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Put, 
-  Delete, 
-  Body, 
-  Param, 
-  Query, 
+import {
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  Query,
   UseGuards,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
+import { ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { BaseService } from './base.service';
 import { BaseRepository } from './base.repository';
 import { QueryPaginationDto } from '../dto/query-pagination.dto';
 import { StandardResponseDto } from '../dto/standard-response.dto';
+import { DeepPartial } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
-export abstract class BaseController<T, CreateDto, UpdateDto, S extends BaseService<T, BaseRepository<T>>> {
+import { ObjectLiteral } from 'typeorm';
+
+export abstract class BaseController<T extends ObjectLiteral, CreateDto extends DeepPartial<T>, UpdateDto extends QueryDeepPartialEntity<T>, S extends BaseService<T, BaseRepository<T>>> {
   protected readonly resourceName: string;
 
   constructor(

@@ -2,7 +2,7 @@
 // Domain-specific types - split from compatibility.ts
 
 import {
-  BaseEntity, DocumentId, EvidenceId, CaseId, UUID
+  BaseEntity, DocumentId, EvidenceId, CaseId, UUID, MetadataRecord
 } from './primitives';
 import { EvidenceType, AdmissibilityStatus } from './enums';
 import type { FileChunk } from './motion-docket';
@@ -56,7 +56,7 @@ export interface TrialExhibit extends BaseEntity {
   // Metadata
   fileSize?: number;
   pageCount?: number;
-  metadata?: Record<string, any>;
+  metadata?: MetadataRecord;
   
   // Frontend-specific (legacy)
   title?: string; // Alias for description

@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
-import { Public } from '../common/decorators/public.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { MonitoringService } from './monitoring.service';
 import { GetMetricsQueryDto, RecordMetricDto, GetAlertsQueryDto, CreateAlertDto, AcknowledgeAlertDto } from './dto/monitoring.dto';

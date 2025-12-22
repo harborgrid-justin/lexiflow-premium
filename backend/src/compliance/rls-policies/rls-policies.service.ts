@@ -50,7 +50,7 @@ export class RlsPoliciesService {
     }
     if (query.role) {
       policies = policies.filter((policy) =>
-        policy.roles.includes(query.role),
+        policy.roles.includes(query.role || ''),
       );
     }
     if (query.enabled !== undefined) {
@@ -100,7 +100,7 @@ export class RlsPoliciesService {
   }
 
   async remove(id: string): Promise<void> {
-    const policy = await this.findOne(id);
+    const // __policy = await this.findOne(id);
     this.rlsPolicies.delete(id);
   }
 
@@ -151,7 +151,7 @@ export class RlsPoliciesService {
 
   private interpolateCondition(
     condition: string,
-    context: Record<string, any>,
+    context: Record<string, unknown>,
   ): string {
     let result = condition;
 

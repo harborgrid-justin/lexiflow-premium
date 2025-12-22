@@ -82,13 +82,13 @@ export class JudgeStatsDto {
   motionGrantRates!: MotionGrantRate[];
 
   @ApiProperty({ description: 'Cases by outcome' })
-  casesByOutcome: { [outcome: string]: number };
+  casesByOutcome!: { [outcome: string]: number };
 
   @ApiProperty({ description: 'Average days to ruling on motions' })
   avgDaysToRuling!: number;
 
   @ApiProperty({ description: 'Disposition methods breakdown' })
-  dispositionMethods: { [method: string]: number };
+  dispositionMethods!: { [method: string]: number };
 }
 
 export class MotionGrantRate {
@@ -177,7 +177,7 @@ export class JudgeCaseDurationDto {
   durationByType!: DurationByType[];
 
   @ApiProperty({ description: 'Duration percentiles' })
-  percentiles: {
+  percentiles!: {
     p25: number;
     p50: number;
     p75: number;

@@ -35,7 +35,7 @@ export const AddStaffModal: React.FC<AddStaffModalProps> = ({ isOpen, onClose, o
                     <select 
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={newStaff.role}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewStaff({...newStaff, role: e.target.value as any})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewStaff({...newStaff, role: e.target.value as any})}
                     >
                         <option value="Associate">Associate</option>
                         <option value="Paralegal">Paralegal</option>

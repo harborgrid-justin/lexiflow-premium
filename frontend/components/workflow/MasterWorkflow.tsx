@@ -371,4 +371,5 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   );
 };
 
+export default MasterWorkflow;
 

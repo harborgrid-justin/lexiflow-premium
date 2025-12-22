@@ -123,7 +123,7 @@ export const SecurityService = {
                     return s.signature;
                 }
                 return null;
-            }).filter((s): s is string => s !== null && s.trim() !== '');
+            }).filter((s): s is string => s !== null && s !== undefined && (s as string).trim() !== '');
 
             console.log(`[SecurityService] Retrieved ${signatures.length} malware signatures`);
 

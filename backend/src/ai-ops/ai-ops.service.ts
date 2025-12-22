@@ -19,7 +19,7 @@ export class AiOpsService {
     embedding: number[];
     model: string;
     content: string;
-    metadata?: Record<string, any>;
+    metadata?: Record<string, unknown>;
   }): Promise<VectorEmbedding> {
     const embedding = this.embeddingRepository.create(data);
     return await this.embeddingRepository.save(embedding);
@@ -58,13 +58,53 @@ export class AiOpsService {
     };
   }
 
-  async searchSimilar(embedding: number[], limit: number = 10) {
-    // In production, use pgvector or similar for efficient similarity search
-    // For now, return mock results
+  async searchSimilar(queryEmbedding: number[], resultLimit: number = 10) {
+    // Use cosine similarity for vector search
+    // Get all embeddings for comparison (in production, use pgvector for efficiency)
+    const allEmbeddings = await this.embeddingRepository.find({
+      take: 1000, // Limit for performance
+    });
+
+    // Calculate cosine similarity for each embedding
+    const similarities = allEmbeddings.map((doc: VectorEmbedding) => {
+      const similarity = this.cosineSimilarity(queryEmbedding, doc.embedding);
+      return { doc, similarity };
+    });
+
+    // Sort by similarity (highest first) and take top results
+    const topResults = similarities
+      .sort((a: {doc: VectorEmbedding; similarity: number}, b: {doc: VectorEmbedding; similarity: number}) =>
+        b.similarity - a.similarity
+      )
+      .slice(0, resultLimit)
+      .map(({ doc, similarity }) => ({
+        ...doc,
+        similarityScore: similarity,
+      }));
+
     return {
-      results: [],
-      message: 'Vector similarity search requires pgvector extension',
+      results: topResults,
+      count: topResults.length,
     };
+  }
+
+  /**
+   * Calculate cosine similarity between two vectors
+   */
+  private cosineSimilarity(vecA: number[], vecB: number[]): number {
+    if (vecA.length !== vecB.length) {
+      throw new Error('Vectors must have same length');
+    }
+
+    const dotProduct = vecA.reduce((sum, a, idx) => sum + a * (vecB[idx] ?? 0), 0);
+    const magnitudeA = Math.sqrt(vecA.reduce((sum, a) => sum + a * a, 0));
+    const magnitudeB = Math.sqrt(vecB.reduce((sum, b) => sum + b * b, 0));
+
+    if (magnitudeA === 0 || magnitudeB === 0) {
+      return 0;
+    }
+
+    return dotProduct / (magnitudeA * magnitudeB);
   }
 
   async getModels() {
@@ -78,7 +118,7 @@ export class AiOpsService {
     type: string;
     provider: string;
     version: string;
-    configuration: Record<string, any>;
+    configuration: Record<string, unknown>;
   }): Promise<AIModel> {
     const model = this.modelRepository.create(data);
     return await this.modelRepository.save(model);

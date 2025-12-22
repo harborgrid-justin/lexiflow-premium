@@ -37,7 +37,7 @@ export class Jurisdiction {
   type!: JurisdictionType;
 
   @Column({ type: 'varchar', length: 255, nullable: true, name: 'region' })
-  region: string; // Circuit, State, Country, etc.
+  region!: string; // Circuit, State, Country, etc.
 
   @Column({ type: 'text', nullable: true, name: 'description' })
   description!: string;
@@ -49,10 +49,10 @@ export class Jurisdiction {
   rulesUrl?: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true, name: 'code' })
-  code: string; // e.g., "9th Cir.", "N.D. Cal"
+  code!: string; // e.g., "9th Cir.", "N.D. Cal"
 
   @Column({ type: 'simple-json', nullable: true, name: 'metadata' })
-  metadata: {
+  metadata!: {
     iconColor?: string;
     parties?: number; // For treaties
     status?: string; // For treaties/regulatory

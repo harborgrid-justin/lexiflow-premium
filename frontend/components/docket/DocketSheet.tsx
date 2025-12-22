@@ -108,7 +108,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
       onNewEntry: (entry) => {
           // Use type-safe ID generation
           const entryWithId = {
-              ...entry,
+              ...(entry && typeof entry === 'object' ? entry : {}),
               id: IdGenerator.docket(),
               sequenceNumber: docketEntries.length + 100
           };

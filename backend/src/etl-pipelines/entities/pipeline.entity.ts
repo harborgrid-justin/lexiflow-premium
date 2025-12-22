@@ -22,7 +22,7 @@ export class ETLPipeline {
   status!: PipelineStatus;
 
   @Column({ type: 'jsonb' })
-  config: {
+  config!: {
     source: { type: string; config: any };
     transformations: any[];
     destination: { type: string; config: any };

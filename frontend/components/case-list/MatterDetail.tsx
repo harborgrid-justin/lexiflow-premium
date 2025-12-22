@@ -36,7 +36,7 @@ export const MatterDetail: React.FC = () => {
 
   // ✅ Migrated to backend API with queryKeys (2025-12-21)
   const { data: matter, isLoading: loading, error } = useQuery<Matter | null>(
-    queryKeys.matters.byId(matterId!),
+    queryKeys.cases.matters.detail(matterId!),
     () => DataService.matters.getById(matterId!),
     { enabled: !!matterId }
   );
@@ -45,8 +45,8 @@ export const MatterDetail: React.FC = () => {
     (data: Partial<Matter>) => DataService.matters.update(matterId!, data),
     {
       onSuccess: () => {
-        queryClient.invalidate(queryKeys.matters.byId(matterId!));
-        queryClient.invalidate(queryKeys.matters.all());
+        queryClient.invalidate(queryKeys.cases.matters.detail(matterId!));
+        queryClient.invalidate(queryKeys.cases.matters.all());
         setEditing(false);
       }
     }

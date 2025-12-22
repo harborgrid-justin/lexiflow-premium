@@ -53,7 +53,7 @@ export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   
-  useClickOutside(searchRef, () => setShowResults(false));
+  useClickOutside(searchRef as React.RefObject<HTMLElement>, () => setShowResults(false));
   
   useEffect(() => {
     const performSearch = async () => {

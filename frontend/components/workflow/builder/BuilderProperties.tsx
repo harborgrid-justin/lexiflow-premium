@@ -82,7 +82,7 @@ export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
                     <select 
                       className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary, "focus:ring-2 focus:ring-blue-500")}
                       value={selectedNode.config.assignee || ''}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateNode(selectedNode.id, { config: { ...selectedNode.config, assignee: e.target.value } })}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onUpdateNode(selectedNode.id, { config: { ...selectedNode.config, assignee: e.target.value } })}
                     >
                       <option value="">Select Role...</option>
                       <option value="Senior Partner">Senior Partner</option>
@@ -109,7 +109,7 @@ export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
                 rows={4}
                 placeholder="Describe what needs to happen in this step..."
                 value={selectedNode.config.description || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateNode(selectedNode.id, { config: { ...selectedNode.config, description: e.target.value } })}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdateNode(selectedNode.id, { config: { ...selectedNode.config, description: e.target.value } })}
               />
 
               <div className={cn("pt-4 border-t", theme.border.default)}>

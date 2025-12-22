@@ -63,6 +63,9 @@ export interface ComplianceEthicalWall {
   updatedAt?: string;
 }
 
+// Alias export for backward compatibility
+export type EthicalWall = ComplianceEthicalWall;
+
 /**
  * Query keys for React Query integration
  * Use these constants for cache invalidation and refetching

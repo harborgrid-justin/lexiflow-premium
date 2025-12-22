@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere } from 'typeorm';
+import { Repository} from 'typeorm';
 import { TrialExhibit, ExhibitStatus } from './entities/trial-exhibit.entity';
 import { CreateExhibitDto } from './dto/create-exhibit.dto';
 import { UpdateExhibitDto } from './dto/update-exhibit.dto';

@@ -144,9 +144,9 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
                   title: node.label,
                   startDate: DateCalculationService.formatToISO(startDate),
                   dueDate: DateCalculationService.formatToISO(dueDate),
-                  status: 'Pending',
+                  status: TaskStatusBackend.TODO,
                   assignee: node.config.assignee || 'Unassigned',
-                  priority: 'Medium',
+                  priority: TaskPriorityBackend.MEDIUM,
                   dependencies: connections.filter(c => c.to === node.id).map(c => c.from as TaskId)
               });
           }

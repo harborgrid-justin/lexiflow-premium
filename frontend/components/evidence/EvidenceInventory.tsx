@@ -179,7 +179,7 @@ const EvidenceInventoryComponent: React.FC<EvidenceInventoryProps> = ({
              <input className={cn("p-2 border rounded text-sm w-full outline-none", theme.border.default, theme.surface.default)} placeholder="Search..." value={filters.search} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFilterChange('search', e.target.value)} />
              {isSearching && <div className="absolute right-3 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-blue-500"/></div>}
           </div>
-          <select className={cn("p-2 border rounded text-sm w-full outline-none", theme.border.default, theme.surface.default)} value={filters.type} onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFilterChange('type', e.target.value)}>
+          <select className={cn("p-2 border rounded text-sm w-full outline-none", theme.border.default, theme.surface.default)} value={filters.type} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleFilterChange('type', e.target.value)}>
               <option value="">All Types</option>
               <option value="Physical">Physical</option>
               <option value="Digital">Digital</option>

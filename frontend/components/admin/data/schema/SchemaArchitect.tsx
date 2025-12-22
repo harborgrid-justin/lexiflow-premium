@@ -181,7 +181,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
                 <Input label="Column Name" value={editingColumn?.data.name || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, name: e.target.value}} : null)} />
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Data Type</label>
-                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} value={editingColumn?.data.type || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, type: e.target.value}} : null)}>
+                    <select className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)} value={editingColumn?.data.type || ''} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setEditingColumn(prev => prev ? {...prev, data: {...prev.data, type: e.target.value}} : null)}>
                         {dataTypes.map(dt => <option key={dt} value={dt}>{dt}</option>)}
                     </select>
                 </div>

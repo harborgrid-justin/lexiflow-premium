@@ -46,7 +46,7 @@ export class CreateETLPipelineDto {
   })
   @IsObject()
   @IsNotEmpty()
-  config: {
+  config!: {
     source: { type: string; config: any };
     transformations: unknown[];
     destination: { type: string; config: any };

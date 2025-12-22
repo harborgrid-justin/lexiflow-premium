@@ -1,7 +1,7 @@
 // types/system.ts
 // System Configuration & Infrastructure Types
 
-import { BaseEntity, UserId, OrgId, GroupId, EntityId } from './primitives';
+import { BaseEntity, UserId, OrgId, GroupId, EntityId, MetadataRecord, JsonValue } from './primitives';
 import { UserRole, OrganizationType } from './enums';
 
 export interface TenantConfig {
@@ -143,7 +143,7 @@ export interface Organization extends BaseEntity {
   stockSymbol?: string; // Backend: stock_symbol varchar(20)
   parentOrganizationId?: string; // Backend: parent_organization_id uuid
   notes?: string; // Backend: text
-  metadata?: Record<string, any>; // Backend: jsonb
+  metadata?: MetadataRecord; // Backend: jsonb
   
   // Legacy aliases for backward compatibility
   type?: OrganizationType; // Deprecated - use organizationType
@@ -203,7 +203,7 @@ export interface Group extends BaseEntity {
 export interface FeatureFlag extends BaseEntity { 
   key: string; 
   enabled: boolean; 
-  rules?: unknown; 
+  rules?: Array<{ id: string; name: string; content: string }>; 
   description: string; 
 }
 
@@ -221,7 +221,7 @@ export type AccessScope = 'Global' | 'Region' | 'Office' | 'Personal';
 export interface AccessCondition {
   type: 'Time' | 'Location' | 'Device' | 'Network';
   operator: 'Equals' | 'NotEquals' | 'Between' | 'Includes';
-  value: unknown;
+  value: JsonValue;
 }
 
 export interface GranularPermission {
@@ -274,4 +274,42 @@ export interface ExtendedUserProfile extends User {
   security: UserSecurityProfile;
   skills: string[];
   barAdmissions: { state: string; number: string; status: 'Active' | 'Inactive' }[];
+}
+
+export interface WebhookConfig extends BaseEntity {
+  name: string;
+  url: string;
+  events: string[];
+  status: 'Active' | 'Inactive' | 'Error';
+  secret?: string;
+  lastTriggered?: string;
+  failureCount: number;
+}
+
+// Notification types (re-exported from services for type consistency)
+export interface Notification {
+  id: string;
+  userId: string;
+  type: 'info' | 'warning' | 'error' | 'success' | 'deadline' | 'system' | 'case_update' | 'document' | 'task';
+  title: string;
+  message: string;
+  read: boolean;
+  actionUrl?: string;
+  actionLabel?: string;
+  relatedEntityId?: string;
+  relatedEntityType?: 'case' | 'document' | 'task' | 'calendar' | 'evidence' | 'docket';
+  priority?: 'low' | 'medium' | 'high' | 'urgent';
+  expiresAt?: string;
+  metadata?: Record<string, any>;
+  createdAt: string;
+  updatedAt?: string;
+  readAt?: string;
+}
+
+export interface NotificationGroup {
+  groupKey: string;
+  notifications: Notification[];
+  count: number;
+  latestTimestamp: number;
+  collapsed: boolean;
 }

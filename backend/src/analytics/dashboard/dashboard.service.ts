@@ -1,6 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import {
   DashboardQueryDto,
   DashboardDataDto,
@@ -63,7 +61,7 @@ export class DashboardService {
   /**
    * Get dashboard summary statistics
    */
-  private async getDashboardSummary(query: DashboardQueryDto): Promise<DashboardSummary> {
+  private async getDashboardSummary(_query: DashboardQueryDto): Promise<DashboardSummary> {
     return {
       activeCases: 85,
       casesWon: 12,
@@ -81,7 +79,7 @@ export class DashboardService {
   /**
    * Get recent activity feed
    */
-  private async getRecentActivity(query: DashboardQueryDto): Promise<ActivityItem[]> {
+  private async getRecentActivity(_query: DashboardQueryDto): Promise<ActivityItem[]> {
     return [
       {
         id: '1',
@@ -125,7 +123,7 @@ export class DashboardService {
   /**
    * Get key performance indicators
    */
-  private async getKPIs(query: DashboardQueryDto): Promise<KeyPerformanceIndicator[]> {
+  private async getKPIs(_query: DashboardQueryDto): Promise<KeyPerformanceIndicator[]> {
     return [
       {
         name: 'Realization Rate',
@@ -173,7 +171,7 @@ export class DashboardService {
   /**
    * Get dashboard alerts
    */
-  private async getAlerts(query: DashboardQueryDto): Promise<DashboardAlert[]> {
+  private async getAlerts(_query: DashboardQueryDto): Promise<DashboardAlert[]> {
     return [
       {
         id: '1',
@@ -213,7 +211,7 @@ export class DashboardService {
   /**
    * Get dashboard charts data
    */
-  private async getCharts(query: DashboardQueryDto): Promise<DashboardChart[]> {
+  private async getCharts(_query: DashboardQueryDto): Promise<DashboardChart[]> {
     return [
       {
         id: 'revenue-trend',
@@ -251,7 +249,7 @@ export class DashboardService {
   /**
    * Get quick statistics
    */
-  private async getQuickStats(query: DashboardQueryDto): Promise<QuickStat[]> {
+  private async getQuickStats(_query: DashboardQueryDto): Promise<QuickStat[]> {
     return [
       {
         label: 'Active Cases',
@@ -287,7 +285,7 @@ export class DashboardService {
   /**
    * Get user's cases summary
    */
-  async getMyCasesSummary(userId: string): Promise<MyCasesSummaryDto> {
+  async getMyCasesSummary(_userId: string): Promise<MyCasesSummaryDto> {
     try {
       const recentCases: CaseSummary[] = [
         {
@@ -340,7 +338,7 @@ export class DashboardService {
   /**
    * Get upcoming deadlines
    */
-  async getUpcomingDeadlines(userId?: string): Promise<UpcomingDeadlinesDto> {
+  async getUpcomingDeadlines(_userId?: string): Promise<UpcomingDeadlinesDto> {
     try {
       const deadlines: DeadlineItem[] = [
         {
@@ -399,7 +397,7 @@ export class DashboardService {
   /**
    * Get pending tasks
    */
-  async getPendingTasks(userId?: string): Promise<PendingTasksDto> {
+  async getPendingTasks(_userId?: string): Promise<PendingTasksDto> {
     try {
       const tasks: TaskItem[] = [
         {
@@ -447,7 +445,7 @@ export class DashboardService {
   /**
    * Get billing summary
    */
-  async getBillingSummary(userId?: string): Promise<BillingSummaryDto> {
+  async getBillingSummary(_userId?: string): Promise<BillingSummaryDto> {
     try {
       const recentInvoices: InvoiceSummary[] = [
         {

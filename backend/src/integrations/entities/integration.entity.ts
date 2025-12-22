@@ -12,7 +12,7 @@ export class Integration {
   type!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  config!: Record<string, any>;
+  config!: Record<string, unknown>;
 
   @Column({ default: true })
   enabled!: boolean;

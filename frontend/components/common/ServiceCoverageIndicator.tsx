@@ -124,7 +124,7 @@ const ServiceCoverageBadge: React.FC<ServiceCoverageProps> = ({ className = '', 
   }
   
   // Group services by category
-  const categories = SERVICE_COVERAGE.reduce((acc: any, service) => {
+  const categories = SERVICE_COVERAGE.reduce((acc: Record<string, { total: number; backend: number }>, service) => {
     if (!acc[service.category]) {
       acc[service.category] = { total: 0, backend: 0 };
     }
@@ -216,7 +216,7 @@ export const ServiceCoverageIndicator: React.FC<{
             </h3>
             
             {Object.entries(
-              SERVICE_COVERAGE.reduce((acc: any, service) => {
+              SERVICE_COVERAGE.reduce((acc: Record<string, ServiceInfo[]>, service) => {
                 if (!acc[service.category]) acc[service.category] = [];
                 acc[service.category].push(service);
                 return acc;

@@ -12,7 +12,6 @@ import {
   HttpStatus,
   Head,
 } from '@nestjs/common';
-import { Public } from '../../common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth  , ApiResponse }from '@nestjs/swagger';
 import { EvidenceService } from './evidence.service';
 import { CreateDiscoveryEvidenceDto } from './dto/create-evidence.dto';

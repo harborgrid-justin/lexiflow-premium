@@ -59,7 +59,7 @@ export class LegalHold extends BaseEntity {
   expirationDate!: Date;
 
   @Column({ type: 'jsonb' })
-  custodians: Array<{
+  custodians!: Array<{
     custodianId: string;
     custodianName: string;
     email: string;
@@ -78,14 +78,14 @@ export class LegalHold extends BaseEntity {
   pendingCount!: number;
 
   @Column({ name: 'data_sources_to_preserve', type: 'jsonb', nullable: true })
-  dataSourcesToPreserve: Array<{
+  dataSourcesToPreserve!: Array<{
     sourceType: string;
     description: string;
     location?: string;
   }>;
 
   @Column({ type: 'jsonb', nullable: true })
-  notifications: Array<{
+  notifications!: Array<{
     date: Date;
     type: string;
     recipients: string[];

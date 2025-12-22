@@ -87,7 +87,7 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
                   <textarea
                     className="w-full resize-none overflow-hidden bg-transparent outline-none font-serif text-base leading-relaxed h-auto min-h-[4rem]"
                     value={section.content}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                         onUpdateSection(section.id, { content: e.target.value });
                         // Auto-grow
                         e.target.style.height = 'auto';

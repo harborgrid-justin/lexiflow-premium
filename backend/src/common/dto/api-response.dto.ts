@@ -13,7 +13,7 @@ export interface ErrorDetails {
 
 export class ApiResponseDto<T> {
   @ApiProperty()
-  success: boolean;
+  success!: boolean;
 
   @ApiPropertyOptional()
   message?: string;

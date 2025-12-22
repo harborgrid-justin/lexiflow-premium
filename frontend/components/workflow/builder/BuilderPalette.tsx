@@ -34,12 +34,12 @@ export const BuilderPalette: React.FC<BuilderPaletteProps> = ({ isOpen, onClose,
         
         <div className="space-y-3 flex-1 overflow-y-auto">
           {[
-            { type: 'Task', desc: 'Action or Assignment' }, 
-            { type: 'Decision', desc: 'Conditional Branch' }, 
-            { type: 'Delay', desc: 'Time-based Wait' }, 
-            { type: 'Parallel', desc: 'Split Execution' }, 
+            { type: 'Task', desc: 'Action or Assignment' },
+            { type: 'Decision', desc: 'Conditional Branch' },
+            { type: 'Delay', desc: 'Time-based Wait' },
+            { type: 'Parallel', desc: 'Split Execution' },
             { type: 'End', desc: 'Terminate Flow' }
-          ].map((item: any) => (
+          ].map((item: { type: string; desc: string }) => (
             <div 
               key={item.type}
               draggable

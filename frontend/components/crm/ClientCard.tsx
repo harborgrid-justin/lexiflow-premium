@@ -20,7 +20,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onGenerateToken 
         <div className={cn("p-6 rounded-lg border shadow-sm transition-all hover:shadow-md group", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between items-start mb-4">
             <div className={cn("h-12 w-12 rounded-full flex items-center justify-center font-bold text-lg border", theme.primary.light, theme.primary.text, theme.primary.border)}>
-                {client.name.substring(0, 2)}
+                {(client.name || '').substring(0, 2)}
             </div>
             <Badge variant={client.status === 'Active' ? 'success' : 'neutral'}>{client.status}</Badge>
             </div>
@@ -37,7 +37,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onGenerateToken 
             </div>
             <div>
                 <p className={cn("text-[10px] uppercase font-bold", theme.text.tertiary)}>Active Matters</p>
-                <p className={cn("font-bold", theme.text.primary)}>{client.matters.length}</p>
+                <p className={cn("font-bold", theme.text.primary)}>{(client.matters || []).length}</p>
             </div>
             </div>
 

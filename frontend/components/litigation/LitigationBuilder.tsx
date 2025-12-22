@@ -52,7 +52,7 @@ export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateTo
         <div className="flex gap-2 items-center">
             <select
                 value={selectedCaseId || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSelectedCaseId(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedCaseId(e.target.value)}
                 className={cn("p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
             >
                 <option value="">Select a Case to Deploy To...</option>

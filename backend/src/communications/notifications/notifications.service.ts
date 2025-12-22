@@ -1,5 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import {
   CreateNotificationDto,
@@ -29,8 +28,7 @@ export class NotificationsService {
   /**
    * Get all notifications for a user
    */
-  async findAll(userId: string, query: NotificationQueryDto) {
-    const { page = 1, limit = 20, unreadOnly, type } = query;
+  async findAll(userId: string, query: NotificationQueryDto) { const { page = 1, limit = 20, _unreadOnly, _type } = query;
 
     // Implementation will filter by userId, read status, and type
     return {
@@ -70,11 +68,10 @@ export class NotificationsService {
   /**
    * Mark notification as read
    */
-  async markAsRead(notificationId: string, userId: string) {
-    // Verify notification belongs to user
+  async markAsRead(notificationId: string, userId: string) { // Verify notification belongs to user
     // Update read status
     return {
-      id: notificationId,
+      id: _notificationId,
       read: true,
       readAt: new Date(),
     };
@@ -83,7 +80,7 @@ export class NotificationsService {
   /**
    * Mark all notifications as read
    */
-  async markAllAsRead(userId: string) {
+  async markAllAsRead(_userId: string) {
     // Update all unread notifications for user
     return {
       updated: 0,
@@ -121,10 +118,9 @@ export class NotificationsService {
   /**
    * Update notification preferences
    */
-  async updatePreferences(userId: string, preferencesDto: NotificationPreferencesDto) {
-    // Update user's notification preferences
+  async updatePreferences(userId: string, preferencesDto: NotificationPreferencesDto) { // Update user's notification preferences
     return {
-      userId,
+      _userId,
       ...preferencesDto,
       updatedAt: new Date(),
     };
@@ -134,10 +130,9 @@ export class NotificationsService {
    * Send bulk notifications
    * Used for system-wide alerts or team notifications
    */
-  async sendBulk(userIds: string[], createDto: Omit<CreateNotificationDto, 'userId'>) {
-    const notifications = userIds.map(userId => ({
+  async sendBulk(userIds: string[], createDto: Omit<CreateNotificationDto, 'userId'>) { const notifications = userIds.map(_userId => ({
       ...createDto,
-      userId,
+      _userId,
     }));
 
     // Bulk create notifications

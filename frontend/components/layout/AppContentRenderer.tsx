@@ -108,14 +108,14 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
     if (initialTab) {
         dynamicProps.initialTab = initialTab;
     }
-    
+
     if (activeView === PATHS.CASES || activeView === PATHS.PLEADING_BUILDER) {
       dynamicProps.onSelectCase = handleSelectCase;
     } else if (([PATHS.DASHBOARD, PATHS.WORKFLOWS, PATHS.EVIDENCE, PATHS.EXHIBITS] as string[]).includes(activeView)) {
       dynamicProps.onSelectCase = handleSelectCaseById;
       dynamicProps.onNavigateToCase = handleSelectCaseById;
     }
-    
+
     if (activeView === PATHS.LITIGATION_BUILDER) {
         dynamicProps.navigateToCaseTab = navigateToCaseTab;
     }
@@ -123,7 +123,7 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
     if (activeView === PATHS.BILLING) {
       dynamicProps.navigateTo = (v: string) => setActiveView(v as AppView);
     }
-    
+
     if (activeView === PATHS.DOCUMENTS || activeView === PATHS.JURISDICTION) {
       dynamicProps.currentUser = currentUser;
       dynamicProps.currentUserRole = currentUser?.role;
@@ -131,7 +131,7 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
 
     return (
       <Suspense fallback={<LazyLoader message={`Loading ${moduleDef.label}...`} />}>
-        <Component {...dynamicProps} />
+        <Component {...(dynamicProps && typeof dynamicProps === 'object' ? dynamicProps : {})} />
       </Suspense>
     );
   }

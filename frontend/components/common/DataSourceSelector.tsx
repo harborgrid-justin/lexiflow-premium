@@ -14,7 +14,7 @@ interface DataSourceOption {
   value: DataSourceType;
   label: string;
   description: string;
-  icon: React.ComponentType<unknown>;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   requiresBackend: boolean;
 }
 

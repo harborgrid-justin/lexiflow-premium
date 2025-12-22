@@ -8,7 +8,7 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Logger, UnauthorizedException } from '@nestjs/common';
+import { Logger} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from '../../auth/interfaces/jwt-payload.interface';
@@ -34,7 +34,7 @@ import { JwtPayload } from '../../auth/interfaces/jwt-payload.interface';
 })
 export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
-  server: Server;
+  server!: Server;
 
   private logger = new Logger('MessagingGateway');
   private userSockets = new Map<string, string>(); // userId -> socketId
@@ -69,8 +69,8 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
         client.disconnect();
       }
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      
+      
       this.logger.error(`Connection error for client ${client.id}:`, error);
       client.disconnect();
     }
@@ -283,7 +283,7 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
       return payload.sub;
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      
       this.logger.error('JWT verification failed for WebSocket connection:', message);
       return null;
     }

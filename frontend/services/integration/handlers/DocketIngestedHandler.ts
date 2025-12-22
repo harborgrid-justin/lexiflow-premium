@@ -17,15 +17,15 @@ export class DocketIngestedHandler extends BaseEventHandler<SystemEventPayloads[
   async handle(payload: SystemEventPayloads[typeof SystemEventType.DOCKET_INGESTED]): Promise<IntegrationResult> {
     const actions: string[] = [];
     const { entry } = payload;
-    
+
     // Rule: Motion filings trigger response deadline
-    if (entry.title.toLowerCase().includes('motion')) {
+    if ((entry.title || '').toLowerCase().includes('motion')) {
       await this.createResponseDeadline(entry);
       actions.push('Calculated Response Deadline per Local Rules');
     }
-    
+
     // Rule: Hearings sync to calendar
-    if (entry.type === 'Hearing' || entry.title.toLowerCase().includes('hearing')) {
+    if (entry.type === 'Hearing' || (entry.title || '').toLowerCase().includes('hearing')) {
       await this.createHearingEvent(entry);
       actions.push('Synced Hearing to Master Calendar');
     }
@@ -34,7 +34,7 @@ export class DocketIngestedHandler extends BaseEventHandler<SystemEventPayloads[
   }
   
   private async createResponseDeadline(entry: SystemEventPayloads[typeof SystemEventType.DOCKET_INGESTED]['entry']) {
-    const deadlineDate = new Date(new Date(entry.date).getTime() + (14 * 24 * 60 * 60 * 1000));
+    const deadlineDate = new Date(new Date(entry.date || entry.entryDate || entry.dateFiled).getTime() + (14 * 24 * 60 * 60 * 1000));
     
     const deadlineEvt: CalendarEventItem = {
       id: `cal-resp-${entry.id}`,

@@ -207,14 +207,14 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
           />
           <div>
               <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Status</label>
-              <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} value={statusFilter} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStatusFilter(e.target.value)} aria-label="Status Filter">
+              <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} value={statusFilter} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setStatusFilter(e.target.value)} aria-label="Status Filter">
                   <option value="All">All Statuses</option>
                   {Object.values(CaseStatus).map(s => <option key={s} value={s}>{s}</option>)}
               </select>
           </div>
           <div>
               <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
-              <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} value={typeFilter} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTypeFilter(e.target.value)} aria-label="Type Filter">
+              <select className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} value={typeFilter} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTypeFilter(e.target.value)} aria-label="Type Filter">
                   <option value="All">All Types</option>
                   <option value="Litigation">Litigation</option>
                   <option value="Appeal">Appeal</option>

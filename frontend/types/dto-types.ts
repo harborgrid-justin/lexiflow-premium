@@ -1,9 +1,9 @@
 /**
  * Data Transfer Object (DTO) Types
- * 
+ *
  * Type definitions for creating and updating entities via API.
  * These DTOs align with backend validation requirements.
- * 
+ *
  * @module DTOTypes
  */
 
@@ -28,6 +28,7 @@ import type {
   RiskProbability,
   RiskStatusEnum,
 } from './compliance-risk';
+import type { MetadataRecord } from './primitives';
 import type {
   OrganizationTypeEnum,
   OrganizationStatusEnum,
@@ -196,7 +197,7 @@ export interface CreateJurorDTO {
     maritalStatus?: string;
     zipCode?: string;
   };
-  questionnaire?: Record<string, unknown>;
+  questionnaire?: MetadataRecord;
   notes?: string;
 }
 
@@ -358,7 +359,7 @@ export interface UpdateOrganizationDTO {
   primaryContactEmail?: string;
   primaryContactPhone?: string;
   notes?: string;
-  metadata?: Record<string, unknown>;
+  metadata?: MetadataRecord;
 }
 
 // =============================================================================

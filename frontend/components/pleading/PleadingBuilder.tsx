@@ -227,7 +227,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
                         id="case-select"
                         className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={newDocData.caseId}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDocData({...newDocData, caseId: e.target.value})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewDocData({...newDocData, caseId: e.target.value})}
                     >
                         <option value="">Select Case...</option>
                         {Array.isArray(cases) && cases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
@@ -240,7 +240,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
                         id="template-select"
                         className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={newDocData.templateId}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDocData({...newDocData, templateId: e.target.value})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewDocData({...newDocData, templateId: e.target.value})}
                     >
                         <option value="">Select Template...</option>
                         {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}

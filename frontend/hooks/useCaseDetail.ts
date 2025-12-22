@@ -57,11 +57,10 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
   // Local state for parties (as they are often edited locally before save)
   const [parties, setParties] = useState<Party[]>(caseData.parties || []);
 
-  // Derived Stages from Tasks (Simulating workflow engine)
+  // Derived Stages from Tasks
+  // Groups tasks into Active and Completed stages for workflow visualization
   const stages = useMemo(() => {
     if (!Array.isArray(allTasks) || allTasks.length === 0) return [];
-    // In a real app, stages would be their own entity. 
-    // Here we map a mock stage structure
     return [
         { id: 's1', title: 'Active Tasks', status: 'Active', tasks: allTasks.filter(t => t.status !== 'Done') },
         { id: 's2', title: 'Completed', status: 'Completed', tasks: allTasks.filter(t => t.status === 'Done') }
@@ -165,9 +164,30 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
       queryClient.invalidate(queryKeys.tasks.byCaseId(caseData.id));
   };
 
-  const updateProjectTaskStatus = (projectId: string, taskId: string) => {
-      // Logic placeholder
-      console.log("Update task status", projectId, taskId);
+  const updateProjectTaskStatus = async (projectId: string, taskId: string) => {
+      try {
+          // Find the task in the current tasks list
+          const task = allTasks.find(t => t.id === taskId);
+          if (!task) {
+              console.warn(`Task ${taskId} not found`);
+              return;
+          }
+
+          // Toggle task status between Done and Pending
+          const newStatus = task.status === 'Done' ? 'Pending' : 'Done';
+
+          // Update via DataService
+          await DataService.tasks.update(taskId, { status: newStatus });
+
+          // Invalidate queries to refresh the UI
+          queryClient.invalidate(queryKeys.projects.byCaseId(caseData.id));
+          queryClient.invalidate(queryKeys.tasks.byCaseId(caseData.id));
+
+          notify.success(`Task status updated to ${newStatus}`);
+      } catch (error) {
+          console.error("Failed to update task status", error);
+          notify.error("Failed to update task status");
+      }
   };
 
   return {

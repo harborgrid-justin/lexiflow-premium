@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { Invoice, InvoiceStatus } from './entities/invoice.entity';
 import { InvoiceItem } from './entities/invoice-item.entity';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
@@ -121,7 +121,7 @@ export class InvoicesService {
 
   async findOne(id: string): Promise<Invoice> {
     const invoice = await this.invoiceRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!invoice) {
@@ -168,11 +168,13 @@ export class InvoicesService {
     await this.invoiceRepository.save(invoice);
   }
 
-  async send(id: string, sentBy: string): Promise<Invoice> {
+  async send(id: string, sentBy?: string): Promise<Invoice> {
     const invoice = await this.findOne(id);
     invoice.status = InvoiceStatus.SENT;
     invoice.sentAt = new Date();
-    invoice.sentBy = sentBy;
+    if (sentBy) {
+      invoice.sentBy = sentBy;
+    }
     return await this.invoiceRepository.save(invoice);
   }
 
@@ -184,8 +186,18 @@ export class InvoicesService {
 
     invoice.paidAmount = newPaidAmount;
     invoice.balanceDue = balanceDue;
-    invoice.paymentMethod = paymentDto.paymentMethod;
-    invoice.paymentReference = paymentDto.paymentReference;
+    if (paymentDto.paymentMethod) {
+      invoice.paymentMethod = paymentDto.paymentMethod;
+    }
+    if (paymentDto.paymentReference) {
+      invoice.paymentReference = paymentDto.paymentReference;
+    }
+    if (paymentDto.paymentMethod) {
+      invoice.paymentMethod = paymentDto.paymentMethod;
+    }
+    if (paymentDto.paymentReference) {
+      invoice.paymentReference = paymentDto.paymentReference;
+    }
 
     if (balanceDue <= 0) {
       invoice.status = InvoiceStatus.PAID;
@@ -239,7 +251,7 @@ export class InvoicesService {
   }> {
     const today = new Date();
     const invoices = await this.invoiceRepository.find({
-      where: { deletedAt: null },
+      where: { deletedAt: IsNull() },
     });
 
     const unpaidInvoices = invoices.filter(

@@ -167,19 +167,23 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
                                     <FileText className="h-3 w-3 mr-2"/> Live Logs
                                 </div>
                                 <div className={cn("flex-1 p-4 overflow-y-auto font-mono text-xs leading-relaxed", theme.surface.default, theme.text.primary)}>
-                                    {selectedJob.logs.map((log) => {
+                                    {(selectedJob.logs || []).map((log, idx) => {
                                             let logClass = theme.status.success.text;
-                                            if (log.includes('[ERROR]')) {
+                                            const logMessage = typeof log === 'string' ? log : log.message;
+                                            const logLevel = typeof log === 'string' ? 'INFO' : log.level;
+                                            const logTimestamp = typeof log === 'string' ? new Date().toLocaleTimeString() : new Date(log.timestamp).toLocaleTimeString();
+
+                                            if (logLevel === 'ERROR' || logMessage.includes('[ERROR]')) {
                                                 logClass = theme.status.error.text;
-                                            } else if (log.includes('[WARN]')) {
+                                            } else if (logLevel === 'WARN' || logMessage.includes('[WARN]')) {
                                                 logClass = theme.status.warning.text;
                                             }
-                                            
+
                                             return (
-                                            <div key={`${log}-${Math.random()}`} className="mb-1 border-l-2 border-transparent hover:border-slate-600 pl-2">
-                                                <span className={cn("mr-2", theme.text.tertiary)}>{new Date().toLocaleTimeString()}</span>
+                                            <div key={`log-${idx}-${logTimestamp}`} className="mb-1 border-l-2 border-transparent hover:border-slate-600 pl-2">
+                                                <span className={cn("mr-2", theme.text.tertiary)}>{logTimestamp}</span>
                                                 <span className={cn(logClass)}>
-                                                    {log}
+                                                    {logMessage}
                                                 </span>
                                             </div>
                                         );

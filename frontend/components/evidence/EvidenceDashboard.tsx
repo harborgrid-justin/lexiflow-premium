@@ -42,15 +42,15 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
   // Calculate stats from live data
   const stats = React.useMemo(() => ({
     total: evidence.length,
-    digital: evidence.filter(e => e.type === 'Digital').length,
-    physical: evidence.filter(e => e.type === 'Physical').length,
-    challenged: evidence.filter(e => e.admissibility === 'Challenged').length
+    digital: evidence.filter((e: EvidenceItem) => e.type === 'Digital').length,
+    physical: evidence.filter((e: EvidenceItem) => e.type === 'Physical').length,
+    challenged: evidence.filter((e: EvidenceItem) => e.admissibility === 'Challenged').length
   }), [evidence]);
-  
+
   // Calculate recent events from live data
   const recentEvents = React.useMemo(() => {
-    return evidence.flatMap(e => 
-      e.chainOfCustody.map(c => ({ ...c, itemTitle: e.title, itemId: e.id }))
+    return evidence.flatMap((e: EvidenceItem) =>
+      e.chainOfCustody.map((c: any) => ({ ...c, itemTitle: e.title, itemId: e.id }))
     ).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
   }, [evidence]);
 
@@ -117,7 +117,7 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
         {/* Recent Activity */}
         <Card title="Recent Custody Transfers">
           <div className="space-y-4">
-            {recentEvents.map((evt, idx) => (
+            {recentEvents.map((evt: any, idx: number) => (
               <div key={idx} className={cn("flex items-start pb-3 border-b last:border-0 last:pb-0", theme.border.default)}>
                 <div className={cn("p-2 rounded-full mr-3 shrink-0", theme.primary.light)}>
                   <Activity className={cn("h-4 w-4", theme.primary.text)} />

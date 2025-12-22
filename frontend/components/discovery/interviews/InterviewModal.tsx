@@ -42,7 +42,7 @@ export const InterviewModal: React.FC<InterviewModalProps> = ({ isOpen, onClose,
         <TextArea 
           label="Notes / Agenda" 
           value={interview.notes || ''} 
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInterview({...interview, notes: e.target.value})} 
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInterview({...interview, notes: e.target.value})} 
           placeholder="Topics to discuss..."
         />
         <div className="flex justify-end pt-4">

@@ -9,10 +9,10 @@ registerEnumType(DocumentAccessLevel, { name: 'DocumentAccessLevel' });
 @ObjectType()
 export class PageInfo {
   @Field()
-  hasNextPage: boolean;
+  hasNextPage!: boolean;
 
   @Field()
-  hasPreviousPage: boolean;
+  hasPreviousPage!: boolean;
 
   @Field({ nullable: true })
   startCursor?: string;
@@ -24,19 +24,19 @@ export class PageInfo {
 @ObjectType()
 export class DocumentVersionType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  versionNumber: number;
+  versionNumber!: number;
 
   @Field()
-  fileName: string;
+  fileName!: string;
 
   @Field()
-  fileSize: number;
+  fileSize!: number;
 
   @Field()
-  mimeType: string;
+  mimeType!: string;
 
   @Field({ nullable: true })
   storageKey?: string;
@@ -45,46 +45,46 @@ export class DocumentVersionType {
   changeDescription?: string;
 
   @Field(() => UserType)
-  createdBy: UserType;
+  createdBy!: UserType;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 }
 
 @ObjectType()
 export class ClauseType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  title: string;
+  title!: string;
 
   @Field()
-  content: string;
+  content!: string;
 
   @Field({ nullable: true })
   category?: string;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 }
 
 @ObjectType()
 export class DocumentType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  title: string;
+  title!: string;
 
   @Field()
-  documentType: string;
+  documentType!: string;
 
   @Field(() => DocumentStatus)
-  status: DocumentStatus;
+  status!: DocumentStatus;
 
   @Field(() => DocumentAccessLevel)
-  accessLevel: DocumentAccessLevel;
+  accessLevel!: DocumentAccessLevel;
 
   @Field({ nullable: true })
   description?: string;
@@ -120,32 +120,32 @@ export class DocumentType {
   clauses?: ClauseType[];
 
   @Field(() => UserType)
-  createdBy: UserType;
+  createdBy!: UserType;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 
   @Field(() => Date)
-  updatedAt: Date;
+  updatedAt!: Date;
 }
 
 @ObjectType()
 export class DocumentEdge {
   @Field(() => DocumentType)
-  node: DocumentType;
+  node!: DocumentType;
 
   @Field()
-  cursor: string;
+  cursor!: string;
 }
 
 @ObjectType()
 export class DocumentConnection {
   @Field(() => [DocumentEdge])
-  edges: DocumentEdge[];
+  edges!: DocumentEdge[];
 
   @Field(() => PageInfo)
-  pageInfo: PageInfo;
+  pageInfo!: PageInfo;
 
   @Field()
-  totalCount: number;
+  totalCount!: number;
 }

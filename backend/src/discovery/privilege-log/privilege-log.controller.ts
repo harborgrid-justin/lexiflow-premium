@@ -10,8 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse }from '@nestjs/swagger';
-import { Public } from '../../common/decorators/public.decorator';
+import { ApiResponse }from '@nestjs/swagger';
 import { PrivilegeLogService } from './privilege-log.service';
 import { CreatePrivilegeLogEntryDto } from './dto/create-privilege-log-entry.dto';
 import { UpdatePrivilegeLogEntryDto } from './dto/update-privilege-log-entry.dto';

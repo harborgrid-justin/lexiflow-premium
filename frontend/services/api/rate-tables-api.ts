@@ -4,14 +4,15 @@
  */
 
 import { apiClient, type PaginatedResponse } from '../infrastructure/apiClient';
-import type { 
-  Case, 
-  DocketEntry, 
-  LegalDocument, 
+import type {
+  Case,
+  DocketEntry,
+  LegalDocument,
   EvidenceItem,
   TimeEntry,
   User,
 } from '../../types';
+import type { RateTable } from '../../types/financial';
 
 export class RateTablesApiService {
   async getAll(): Promise<RateTable[]> {

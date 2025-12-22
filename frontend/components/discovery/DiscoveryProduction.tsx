@@ -11,7 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Upload, FileText, Check, Settings, ShieldCheck, Database, Printer, HardDrive } from 'lucide-react';
 
 // ============================================================================
@@ -151,7 +151,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
                         
                         <div>
                             <label className={cn("block text-xs font-semibold uppercase mb-1", theme.text.secondary)}>Format</label>
-                            <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={config.format} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({...config, format: e.target.value})}>
+                            <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={config.format} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setConfig({...config, format: e.target.value})}>
                                 <option value="PDF">PDF + Text</option>
                                 <option value="Native">Native Only</option>
                                 <option value="TIFF">TIFF (Single Page)</option>
@@ -171,7 +171,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
 
                         <div>
                             <label className={cn("block text-xs font-semibold uppercase mb-1", theme.text.secondary)}>Confidentiality Stamp</label>
-                            <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={config.stampConfidential} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfig({...config, stampConfidential: e.target.value})}>
+                            <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={config.stampConfidential} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setConfig({...config, stampConfidential: e.target.value})}>
                                 <option value="None">None</option>
                                 <option value="CONFIDENTIAL">CONFIDENTIAL</option>
                                 <option value="ATTORNEY EYES ONLY">ATTORNEY EYES ONLY</option>

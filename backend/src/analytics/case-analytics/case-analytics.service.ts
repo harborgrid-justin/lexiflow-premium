@@ -1,12 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between } from 'typeorm';
+import { Injectable, Logger} from '@nestjs/common';
 import {
   CaseMetricsQueryDto,
   CaseMetricsDto,
   CaseTrendDataPoint,
   CaseSpecificMetricsDto,
-  ActivityDataPoint,
   PracticeAreaBreakdownDto,
   MetricPeriod,
 } from './dto/case-analytics.dto';
@@ -25,7 +22,7 @@ export class CaseAnalyticsService {
    * Get overall case metrics
    */
   async getCaseMetrics(query: CaseMetricsQueryDto): Promise<CaseMetricsDto> {
-    const { startDate, endDate, practiceArea, status, period } = query;
+    // Query filters available but not used in mock implementation
 
     try {
       // Mock implementation - replace with actual database queries
@@ -178,7 +175,7 @@ export class CaseAnalyticsService {
    * Get case trends over time
    */
   async getCaseTrends(query: CaseMetricsQueryDto): Promise<CaseTrendDataPoint[]> {
-    const { period = MetricPeriod.MONTH } = query;
+    const { period: _period = MetricPeriod.MONTH } = query;
 
     // Mock implementation - would use PostgreSQL date_trunc
     /*
@@ -233,7 +230,7 @@ export class CaseAnalyticsService {
   /**
    * Get practice area breakdown
    */
-  async getPracticeAreaBreakdown(query: CaseMetricsQueryDto): Promise<PracticeAreaBreakdownDto[]> {
+  async getPracticeAreaBreakdown(_query: CaseMetricsQueryDto): Promise<PracticeAreaBreakdownDto[]> {
     try {
       // Mock implementation
       /*

@@ -10,8 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { Public } from '../../common/decorators/public.decorator';
-import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, _ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { EthicalWallsService } from './ethical-walls.service';
 import {
   CreateEthicalWallDto,

@@ -1,17 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import {
   DiscoveryAnalyticsQueryDto,
   DiscoveryFunnelDto,
-  FunnelStage,
   DiscoveryTimelineDto,
   TimelineEvent,
   Milestone,
   CaseDiscoveryMetricsDto,
   DiscoveryProductionVolumeDto,
-  DateRangeVolume,
-  ProductionBatch,
 } from './dto/discovery-analytics.dto';
 
 @Injectable()
@@ -27,7 +22,7 @@ export class DiscoveryAnalyticsService {
   /**
    * Get discovery funnel analytics
    */
-  async getDiscoveryFunnel(query: DiscoveryAnalyticsQueryDto): Promise<DiscoveryFunnelDto> {
+  async getDiscoveryFunnel(_query: DiscoveryAnalyticsQueryDto): Promise<DiscoveryFunnelDto> {
     try {
       // Mock implementation
       /*
@@ -116,7 +111,7 @@ export class DiscoveryAnalyticsService {
   /**
    * Get discovery timeline
    */
-  async getDiscoveryTimeline(query: DiscoveryAnalyticsQueryDto): Promise<DiscoveryTimelineDto> {
+  async getDiscoveryTimeline(_query: DiscoveryAnalyticsQueryDto): Promise<DiscoveryTimelineDto> {
     try {
       const events: TimelineEvent[] = [
         {
@@ -225,7 +220,7 @@ export class DiscoveryAnalyticsService {
   /**
    * Get discovery production volume analytics
    */
-  async getProductionVolume(query: DiscoveryAnalyticsQueryDto): Promise<DiscoveryProductionVolumeDto> {
+  async getProductionVolume(_query: DiscoveryAnalyticsQueryDto): Promise<DiscoveryProductionVolumeDto> {
     try {
       const volume: DiscoveryProductionVolumeDto = {
         totalDocuments: 45230,

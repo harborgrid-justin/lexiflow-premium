@@ -282,7 +282,7 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Types
-import { Citation, Party, Case } from '../types';
+import { Citation, Party, Case } from '../../../types';
 
 // =============================================================================
 // TYPES & INTERFACES
@@ -355,7 +355,7 @@ export const AnalysisEngine = {
 
       // Build Index
       allCases.forEach(c => {
-          c.parties?.forEach(p => {
+          c.parties?.forEach((p: any) => {
               const name = p.name.toLowerCase();
               if (!partiesMap.has(name)) partiesMap.set(name, []);
               partiesMap.get(name)?.push({ caseId: c.id, caseTitle: c.title, role: p.role });

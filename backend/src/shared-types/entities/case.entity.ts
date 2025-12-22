@@ -21,7 +21,7 @@ export interface Case extends BaseEntity {
   assignedTeamId?: string;
   leadAttorneyId?: UserId;
   clientId: ClientId;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   isArchived?: boolean;
 }
 

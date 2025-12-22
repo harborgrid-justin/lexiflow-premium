@@ -387,8 +387,7 @@ export class BillingRepository extends Repository<TimeEntry> {
                 const { SystemEventType } = await import('../../types/integration-types');
                 
                 await IntegrationOrchestrator.publish(SystemEventType.TIME_LOGGED, {
-                    entry: result,
-                    caseId: entry.caseId
+                    entry: result
                 });
             } catch (eventError) {
                 console.warn('[BillingRepository] Failed to publish integration event', eventError);
@@ -427,8 +426,8 @@ export class BillingRepository extends Repository<TimeEntry> {
             ]);
             
             return clients.slice(0, 3).map(c => ({
-                name: c.name.split(' ')[0],
-                wip: Math.floor(Math.random() * 50000), 
+                name: (c.name || '').split(' ')[0],
+                wip: Math.floor(Math.random() * 50000),
                 billed: c.totalBilled
             }));
         } catch (error) {

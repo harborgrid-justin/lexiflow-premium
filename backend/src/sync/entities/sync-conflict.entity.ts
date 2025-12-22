@@ -12,19 +12,19 @@ export class SyncConflict {
   entityId!: string;
 
   @Column('jsonb')
-  localVersion!: Record<string, any>;
+  localVersion!: Record<string, unknown>;
 
   @Column('jsonb')
-  remoteVersion!: Record<string, any>;
+  remoteVersion!: Record<string, unknown>;
 
   @Column()
-  conflictType: string; // 'update', 'delete', 'concurrent'
+  conflictType!: string; // 'update', 'delete', 'concurrent'
 
   @Column({ default: false })
   resolved!: boolean;
 
   @Column({ nullable: true })
-  resolution: string; // 'local', 'remote', 'merge'
+  resolution!: string; // 'local', 'remote', 'merge'
 
   @Column({ nullable: true })
   resolvedBy!: string;

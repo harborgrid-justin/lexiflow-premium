@@ -1,6 +1,7 @@
 {
   "name": "lexiflow-backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "LexiFlow Enterprise Backend - Document Management System",
   "main": "dist/src/main.js",
   "scripts": {
@@ -144,6 +145,6 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.50.0"
+    "typescript-eslint": "^8.50.1"
   }
 }

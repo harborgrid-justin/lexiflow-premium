@@ -23,6 +23,18 @@ export interface KeyboardShortcutHandlers {
   onSave?: () => void;
 }
 
+export interface ShortcutConfig {
+  key: string;
+  cmd?: boolean;
+  ctrl?: boolean;
+  ctrlOrCmd?: boolean;
+  shift?: boolean;
+  alt?: boolean;
+  callback?: () => void;
+  action?: () => void;
+  description?: string;
+}
+
 /**
  * Check if keyboard shortcut matches
  */
@@ -51,7 +63,7 @@ function matchesShortcut(event: KeyboardEvent, shortcut: string): boolean {
  * Hook for keyboard shortcuts
  */
 export function useKeyboardShortcuts(
-    handlers: { "mod+s": () => void; "mod+g": () => void; escape: () => void },
+    handlers: KeyboardShortcutHandlers | Record<string, () => void> | ShortcutConfig[],
     enabled: boolean = true
 ): void {
   const handleKeyDown = useCallback(
@@ -148,6 +160,37 @@ export function useKeyboardShortcuts(
         event.preventDefault();
         handlers.onSave();
         return;
+      }
+
+      // Handle array-based shortcuts
+      if (Array.isArray(handlers)) {
+        for (const config of handlers) {
+          const modifierMatch =
+            (!config.cmd || (event.ctrlKey || event.metaKey)) &&
+            (!config.ctrl || event.ctrlKey) &&
+            (!config.ctrlOrCmd || (event.ctrlKey || event.metaKey)) &&
+            (!config.shift || event.shiftKey) &&
+            (!config.alt || event.altKey);
+
+          const keyMatch = event.key.toLowerCase() === config.key.toLowerCase();
+
+          if (modifierMatch && keyMatch) {
+            event.preventDefault();
+            const handler = config.callback || config.action;
+            if (handler) handler();
+            return;
+          }
+        }
+      } else {
+        // Handle arbitrary string-based shortcuts
+        const typedHandlers = handlers as Record<string, () => void>;
+        for (const [shortcut, handler] of Object.entries(typedHandlers)) {
+          if (typeof handler === 'function' && matchesShortcut(event, shortcut)) {
+            event.preventDefault();
+            handler();
+            return;
+          }
+        }
       }
     },
     [handlers, enabled]

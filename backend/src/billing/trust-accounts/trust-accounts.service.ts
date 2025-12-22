@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { TrustAccount, TrustAccountStatus } from './entities/trust-account.entity';
 import { TrustTransaction, TransactionType } from './entities/trust-transaction.entity';
 import { CreateTrustAccountDto } from './dto/create-trust-account.dto';
@@ -46,7 +46,7 @@ export class TrustAccountsService {
 
   async findOne(id: string): Promise<TrustAccount> {
     const trustAccount = await this.trustAccountRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!trustAccount) {

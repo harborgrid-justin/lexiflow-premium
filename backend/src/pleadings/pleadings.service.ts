@@ -201,7 +201,9 @@ export class PleadingsService {
    */
   async attachDocument(id: string, documentId: string): Promise<Pleading> {
     const pleading = await this.findOne(id);
-    pleading.documentId = documentId;
+    if (documentId) {
+          pleading.documentId = documentId;
+    }
     return await this.pleadingRepository.save(pleading);
   }
 

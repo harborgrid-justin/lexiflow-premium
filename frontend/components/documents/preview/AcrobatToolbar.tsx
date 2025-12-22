@@ -67,20 +67,20 @@ export const AcrobatToolbar: React.FC<AcrobatToolbarProps> = ({
       {/* View Controls */}
       <div className="flex items-center gap-4">
         <div className={cn("flex items-center rounded-lg p-1", theme.surface.highlight)}>
-            <button onClick={() => setPageNum(prev => Math.max(1, prev - 1))} className={cn("p-1.5 rounded shadow-sm disabled:opacity-30", theme.surface.default, theme.text.secondary, `hover:${theme.text.primary}`)}><ChevronLeft className="h-4 w-4"/></button>
+            <button onClick={() => setPageNum((prev: number) => Math.max(1, prev - 1))} className={cn("p-1.5 rounded shadow-sm disabled:opacity-30", theme.surface.default, theme.text.secondary, `hover:${theme.text.primary}`)}><ChevronLeft className="h-4 w-4"/></button>
             <span className={cn("text-xs font-mono w-16 text-center", theme.text.secondary)}>{pageNum} / {totalPages || '-'}</span>
-            <button onClick={() => setPageNum(prev => prev + 1)} className={cn("p-1.5 rounded shadow-sm disabled:opacity-30", theme.surface.default, theme.text.secondary, `hover:${theme.text.primary}`)}><ChevronRight className="h-4 w-4"/></button>
+            <button onClick={() => setPageNum((prev: number) => prev + 1)} className={cn("p-1.5 rounded shadow-sm disabled:opacity-30", theme.surface.default, theme.text.secondary, `hover:${theme.text.primary}`)}><ChevronRight className="h-4 w-4"/></button>
         </div>
 
         <div className={cn("flex items-center gap-1")}>
-            <button onClick={() => setRotation(prev => (prev - 90) % 360)} className={cn("p-2 rounded", theme.text.tertiary, `hover:${theme.surface.highlight}`)}><RotateCcw className="h-4 w-4"/></button>
-            <button onClick={() => setRotation(prev => (prev + 90) % 360)} className={cn("p-2 rounded", theme.text.tertiary, `hover:${theme.surface.highlight}`)}><RotateCw className="h-4 w-4"/></button>
+            <button onClick={() => setRotation((prev: number) => (prev - 90) % 360)} className={cn("p-2 rounded", theme.text.tertiary, `hover:${theme.surface.highlight}`)}><RotateCcw className="h-4 w-4"/></button>
+            <button onClick={() => setRotation((prev: number) => (prev + 90) % 360)} className={cn("p-2 rounded", theme.text.tertiary, `hover:${theme.surface.highlight}`)}><RotateCw className="h-4 w-4"/></button>
         </div>
 
         <div className={cn("flex items-center rounded-lg p-1", theme.surface.highlight)}>
-            <button onClick={() => setScale(prev => Math.max(0.5, prev - 0.1))} className={cn("p-1.5 rounded shadow-sm", theme.surface.default, theme.text.secondary, `hover:${theme.text.primary}`)}><ZoomOut className="h-4 w-4"/></button>
+            <button onClick={() => setScale((prev: number) => Math.max(0.5, prev - 0.1))} className={cn("p-1.5 rounded shadow-sm", theme.surface.default, theme.text.secondary, `hover:${theme.text.primary}`)}><ZoomOut className="h-4 w-4"/></button>
             <span className={cn("text-xs font-mono w-12 text-center", theme.text.secondary)}>{Math.round(scale * 100)}%</span>
-            <button onClick={() => setScale(prev => Math.min(3, prev + 0.1))} className={cn("p-1.5 rounded shadow-sm", theme.surface.default, theme.text.secondary, `hover:${theme.text.primary}`)}><ZoomIn className="h-4 w-4"/></button>
+            <button onClick={() => setScale((prev: number) => Math.min(3, prev + 0.1))} className={cn("p-1.5 rounded shadow-sm", theme.surface.default, theme.text.secondary, `hover:${theme.text.primary}`)}><ZoomIn className="h-4 w-4"/></button>
         </div>
       </div>
     </div>

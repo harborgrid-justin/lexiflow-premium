@@ -91,8 +91,8 @@ export class TransactionManagerService {
       await queryRunner.query(`RELEASE SAVEPOINT ${savepointName}`);
       return result;
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      
+      
       await queryRunner.query(`ROLLBACK TO SAVEPOINT ${savepointName}`);
       throw error;
     }

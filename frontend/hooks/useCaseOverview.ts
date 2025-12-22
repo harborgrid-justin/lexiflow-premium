@@ -24,7 +24,7 @@ import { DataService } from '../services/data/dataService';
 import { useSync } from './useSync';
 
 // Types
-import { Case, TimeEntry, TimeEntryPayload, UserId, UUID, CaseId } from '../types';
+import { Case, TimeEntry, TimeEntryPayload, UserId, UUID, CaseId, CaseStatus } from '../types';
 
 // ============================================================================
 // HOOK
@@ -75,7 +75,7 @@ export const useCaseOverview = (caseData: Case, onTimeEntryAdded: (entry: TimeEn
             id: `APP-${Date.now()}` as CaseId,
             title: `Appeal: ${caseData.title}`,
             matterType: 'Appeal',
-            status: 'Appeal' as any,
+            status: CaseStatus.Appeal,
             jurisdiction: 'Appellate Court',
             court: 'Circuit Court of Appeals',
             filingDate: new Date().toISOString().split('T')[0],

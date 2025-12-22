@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+
 import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
 import { Project } from './entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -104,7 +104,7 @@ export class ProjectsService {
 
   async update(id: string, updateProjectDto: UpdateProjectDto): Promise<Project> {
     await this.findOne(id);
-    await this.projectRepository.update(id, updateProjectDto);
+    await this.projectRepository.update(id, { ...updateProjectDto, ...(updateProjectDto.metadata ? { metadata: JSON.stringify(updateProjectDto.metadata) } : {}) });
     return this.findOne(id);
   }
 

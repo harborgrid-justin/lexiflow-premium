@@ -24,25 +24,25 @@ registerEnumType(InvoiceStatus, { name: 'InvoiceStatus' });
 @ObjectType()
 export class TimeEntryType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  description: string;
+  description!: string;
 
   @Field()
-  hours: number;
+  hours!: number;
 
   @Field()
-  rate: string; // Money scalar
+  rate!: string; // Money scalar
 
   @Field()
-  amount: string; // Money scalar
+  amount!: string; // Money scalar
 
   @Field(() => TimeEntryStatus)
-  status: TimeEntryStatus;
+  status!: TimeEntryStatus;
 
   @Field(() => Date)
-  entryDate: Date;
+  entryDate!: Date;
 
   @Field({ nullable: true })
   caseId?: string;
@@ -54,34 +54,34 @@ export class TimeEntryType {
   activityCode?: string;
 
   @Field(() => Boolean)
-  billable: boolean;
+  billable!: boolean;
 
   @Field(() => UserType)
-  user: UserType;
+  user!: UserType;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 
   @Field(() => Date)
-  updatedAt: Date;
+  updatedAt!: Date;
 }
 
 @ObjectType()
 export class InvoiceLineItemType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  description: string;
+  description!: string;
 
   @Field()
-  quantity: number;
+  quantity!: number;
 
   @Field()
-  rate: string; // Money scalar
+  rate!: string; // Money scalar
 
   @Field()
-  amount: string; // Money scalar
+  amount!: string; // Money scalar
 
   @Field({ nullable: true })
   timeEntryId?: string;
@@ -90,31 +90,31 @@ export class InvoiceLineItemType {
 @ObjectType()
 export class InvoiceType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  invoiceNumber: string;
+  invoiceNumber!: string;
 
   @Field(() => InvoiceStatus)
-  status: InvoiceStatus;
+  status!: InvoiceStatus;
 
   @Field()
-  subtotal: string; // Money scalar
+  subtotal!: string; // Money scalar
 
   @Field()
-  tax: string; // Money scalar
+  tax!: string; // Money scalar
 
   @Field()
-  total: string; // Money scalar
+  total!: string; // Money scalar
 
   @Field({ nullable: true })
   discount?: string; // Money scalar
 
   @Field(() => Date)
-  invoiceDate: Date;
+  invoiceDate!: Date;
 
   @Field(() => Date)
-  dueDate: Date;
+  dueDate!: Date;
 
   @Field(() => Date, { nullable: true })
   paidDate?: Date;
@@ -129,31 +129,31 @@ export class InvoiceType {
   notes?: string;
 
   @Field(() => [InvoiceLineItemType])
-  lineItems: InvoiceLineItemType[];
+  lineItems!: InvoiceLineItemType[];
 
   @Field(() => UserType)
-  createdBy: UserType;
+  createdBy!: UserType;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 
   @Field(() => Date)
-  updatedAt: Date;
+  updatedAt!: Date;
 }
 
 @ObjectType()
 export class RateTableType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  name: string;
+  name!: string;
 
   @Field()
-  role: string;
+  role!: string;
 
   @Field()
-  rate: string; // Money scalar
+  rate!: string; // Money scalar
 
   @Field({ nullable: true })
   effectiveDate?: Date;
@@ -162,16 +162,16 @@ export class RateTableType {
   expirationDate?: Date;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 }
 
 @ObjectType()
 export class FeeAgreementType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  type: string;
+  type!: string;
 
   @Field({ nullable: true })
   rate?: string; // Money scalar
@@ -186,7 +186,7 @@ export class FeeAgreementType {
   retainer?: string; // Money scalar
 
   @Field(() => Date)
-  effectiveDate: Date;
+  effectiveDate!: Date;
 
   @Field(() => Date, { nullable: true })
   expirationDate?: Date;
@@ -195,22 +195,22 @@ export class FeeAgreementType {
   terms?: string;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 }
 
 @ObjectType()
 export class TrustTransactionType {
   @Field(() => ID)
-  id: string;
+  id!: string;
 
   @Field()
-  type: string;
+  type!: string;
 
   @Field()
-  amount: string; // Money scalar
+  amount!: string; // Money scalar
 
   @Field()
-  balance: string; // Money scalar
+  balance!: string; // Money scalar
 
   @Field({ nullable: true })
   description?: string;
@@ -219,11 +219,11 @@ export class TrustTransactionType {
   reference?: string;
 
   @Field(() => Date)
-  transactionDate: Date;
+  transactionDate!: Date;
 
   @Field(() => UserType)
-  createdBy: UserType;
+  createdBy!: UserType;
 
   @Field(() => Date)
-  createdAt: Date;
+  createdAt!: Date;
 }

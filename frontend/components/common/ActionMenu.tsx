@@ -42,7 +42,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
 
-  useClickOutside(menuRef, () => setIsOpen(false));
+  useClickOutside(menuRef as React.RefObject<HTMLElement>, () => setIsOpen(false));
 
   return (
     <div className="relative inline-block text-left" ref={menuRef}>

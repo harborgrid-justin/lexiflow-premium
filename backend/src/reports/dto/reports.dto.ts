@@ -206,7 +206,7 @@ export class FilterDefinition {
   label!: string;
 
   @ApiProperty({ description: 'Filter type' })
-  type: 'text' | 'date' | 'select' | 'multiselect' | 'number';
+  type!: 'text' | 'date' | 'select' | 'multiselect' | 'number';
 
   @ApiProperty({ description: 'Filter options (for select types)' })
   options?: { value: string; label: string }[];
@@ -226,7 +226,7 @@ export class ParameterDefinition {
   label!: string;
 
   @ApiProperty({ description: 'Parameter type' })
-  type: 'boolean' | 'text' | 'number' | 'select';
+  type!: 'boolean' | 'text' | 'number' | 'select';
 
   @ApiProperty({ description: 'Parameter options (for select type)' })
   options?: { value: string; label: string }[];
@@ -240,7 +240,7 @@ export class ParameterDefinition {
 
 export class CaseSummaryReportData {
   @ApiProperty({ description: 'Case information' })
-  caseInfo: {
+  caseInfo!: {
     caseNumber: string;
     title: string;
     status: string;
@@ -250,14 +250,14 @@ export class CaseSummaryReportData {
   };
 
   @ApiProperty({ description: 'Client information' })
-  clientInfo: {
+  clientInfo!: {
     name: string;
     contactPerson: string;
     email: string;
   };
 
   @ApiProperty({ description: 'Case team members' })
-  teamMembers: {
+  teamMembers!: {
     name: string;
     role: string;
     hours: number;
@@ -265,7 +265,7 @@ export class CaseSummaryReportData {
   }[];
 
   @ApiProperty({ description: 'Financial summary' })
-  financialSummary: {
+  financialSummary!: {
     totalBilled: number;
     totalCollected: number;
     wipValue: number;
@@ -273,14 +273,14 @@ export class CaseSummaryReportData {
   };
 
   @ApiProperty({ description: 'Key events timeline' })
-  timeline: {
+  timeline!: {
     date: Date;
     event: string;
     description: string;
   }[];
 
   @ApiProperty({ description: 'Document statistics' })
-  documentStats: {
+  documentStats!: {
     totalDocuments: number;
     byType: { [type: string]: number };
   };
@@ -288,14 +288,14 @@ export class CaseSummaryReportData {
 
 export class BillingReportData {
   @ApiProperty({ description: 'Period information' })
-  period: {
+  period!: {
     startDate: Date;
     endDate: Date;
     label: string;
   };
 
   @ApiProperty({ description: 'Summary metrics' })
-  summary: {
+  summary!: {
     totalBilled: number;
     totalCollected: number;
     totalHours: number;
@@ -304,7 +304,7 @@ export class BillingReportData {
   };
 
   @ApiProperty({ description: 'Billing by attorney' })
-  byAttorney: {
+  byAttorney!: {
     name: string;
     hours: number;
     amount: number;
@@ -312,14 +312,14 @@ export class BillingReportData {
   }[];
 
   @ApiProperty({ description: 'Billing by practice area' })
-  byPracticeArea: {
+  byPracticeArea!: {
     practiceArea: string;
     hours: number;
     amount: number;
   }[];
 
   @ApiProperty({ description: 'Billing by client' })
-  byClient: {
+  byClient!: {
     clientName: string;
     hours: number;
     amount: number;

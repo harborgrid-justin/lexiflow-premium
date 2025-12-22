@@ -1,13 +1,12 @@
 /**
- * Migration helper file for backend
- * Re-exports shared types that are now local to the backend
+ * Shared Type Definitions for Backend
  *
- * This file allows the backend to use shared types alongside TypeORM decorators.
- * The shared types provide the interface contract, while TypeORM entities extend them.
+ * This file defines enterprise-grade shared types that ensure type safety
+ * and consistency across the backend application. These types align with
+ * frontend API contracts to maintain consistency across the full stack.
+ *
+ * @module SharedTypes
  */
-
-// Re-export all shared types from local copy
-export * from '../../shared-types';
 
 /**
  * Helper type for converting shared entity interfaces to TypeORM entities
@@ -22,3 +21,68 @@ export type TypeORMEntity<T> = T & {
   updatedAt: Date;
   deletedAt?: Date;
 };
+
+/**
+ * Generic API Response wrapper for consistent response format
+ */
+export interface ApiResponse<T = unknown> {
+  success: boolean;
+  data?: T;
+  error?: ApiError;
+  metadata?: ResponseMetadata;
+}
+
+/**
+ * API Error structure
+ */
+export interface ApiError {
+  code: string;
+  message: string;
+  details?: Record<string, unknown>;
+  statusCode?: number;
+  timestamp?: string;
+  path?: string;
+  requestId?: string;
+}
+
+/**
+ * Response metadata for tracking and debugging
+ */
+export interface ResponseMetadata {
+  timestamp: string;
+  requestId?: string;
+  version?: string;
+}
+
+/**
+ * Paginated response structure
+ */
+export interface PaginatedResponse<T = unknown> {
+  success: boolean;
+  data: T[];
+  pagination: PaginationMetadata;
+  error?: ApiError;
+}
+
+/**
+ * Pagination metadata
+ */
+export interface PaginationMetadata {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+}
+
+/**
+ * Base filter parameters for list endpoints
+ */
+export interface BaseFilters {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+  search?: string;
+}

@@ -10,8 +10,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse }from '@nestjs/swagger';
-import { Public } from '../../common/decorators/public.decorator';
+import { ApiResponse }from '@nestjs/swagger';
 import { ProductionsService } from './productions.service';
 import { CreateProductionDto } from './dto/create-production.dto';
 import { UpdateProductionDto } from './dto/update-production.dto';

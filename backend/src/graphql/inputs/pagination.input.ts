@@ -30,10 +30,10 @@ export class PaginationInput {
 @InputType()
 export class SortInput {
   @Field()
-  field: string;
+  field!: string;
 
   @Field({ defaultValue: 'ASC' })
-  direction: 'ASC' | 'DESC';
+  direction!: 'ASC' | 'DESC';
 }
 
 @InputType()

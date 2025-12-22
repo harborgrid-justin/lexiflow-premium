@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsDateString, IsEnum, IsUUID, IsInt, Min } from 'class-validator';
+import { IsOptional, IsDateString, IsEnum, IsUUID, IsInt, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { EventType } from './track-event.dto';

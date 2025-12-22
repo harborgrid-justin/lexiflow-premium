@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServiceJobsController } from './service-jobs.controller';
 import { ServiceJobsService } from './service-jobs.service';
 

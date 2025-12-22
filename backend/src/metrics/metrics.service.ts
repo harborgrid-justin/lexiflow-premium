@@ -51,8 +51,8 @@ export class MetricsService {
     return Array.from(this.metrics.values());
   }
 
-  getMetricsJson(): Record<string, any> {
-    const result: Record<string, any> = {};
+  getMetricsJson(): Record<string, unknown> {
+    const result: Record<string, unknown> = {};
     
     for (const [key, metric] of this.metrics) {
       result[key] = {

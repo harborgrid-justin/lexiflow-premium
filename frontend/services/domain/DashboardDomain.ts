@@ -6,6 +6,7 @@
 
 import { analyticsApi } from '../api/domains/analytics.api';
 import { delay } from '../../utils/async';
+import { STORES, db } from '../data/db';
 
 interface DashboardWidget {
   id: string;
@@ -31,7 +32,11 @@ export const DashboardService = {
   add: async (item: unknown) => db.put(STORES.DASHBOARDS, item),
   update: async (id: string, updates: unknown) => {
     const existing = await db.get(STORES.DASHBOARDS, id);
-    return db.put(STORES.DASHBOARDS, { ...existing, ...updates, updatedAt: new Date().toISOString() });
+    return db.put(STORES.DASHBOARDS, {
+      ...(existing && typeof existing === 'object' ? existing : {}),
+      ...(updates && typeof updates === 'object' ? updates : {}),
+      updatedAt: new Date().toISOString()
+    });
   },
   delete: async (id: string) => db.delete(STORES.DASHBOARDS, id),
   
@@ -52,7 +57,10 @@ export const DashboardService = {
       config: widget.config || {},
     };
     const updatedWidgets = [...(dashboard.widgets || []), newWidget];
-    await db.put(STORES.DASHBOARDS, { ...dashboard, widgets: updatedWidgets });
+    await db.put(STORES.DASHBOARDS, {
+      ...(dashboard && typeof dashboard === 'object' ? dashboard : {}),
+      widgets: updatedWidgets
+    });
     return newWidget;
   },
   
@@ -61,7 +69,10 @@ export const DashboardService = {
     for (const dashboard of dashboards) {
       if (dashboard.widgets?.some((w: DashboardWidget) => w.id === widgetId)) {
         const updatedWidgets = dashboard.widgets.filter((w: DashboardWidget) => w.id !== widgetId);
-        await db.put(STORES.DASHBOARDS, { ...dashboard, widgets: updatedWidgets });
+        await db.put(STORES.DASHBOARDS, {
+          ...(dashboard && typeof dashboard === 'object' ? dashboard : {}),
+          widgets: updatedWidgets
+        });
         return true;
       }
     }
@@ -70,7 +81,11 @@ export const DashboardService = {
   
   updateLayout: async (dashboardId: string, layout: unknown): Promise<unknown> => {
     const dashboard = await db.get(STORES.DASHBOARDS, dashboardId);
-    const updated = { ...dashboard, layout, updatedAt: new Date().toISOString() };
+    const updated = {
+      ...(dashboard && typeof dashboard === 'object' ? dashboard : {}),
+      layout,
+      updatedAt: new Date().toISOString()
+    };
     await db.put(STORES.DASHBOARDS, updated);
     return updated;
   },

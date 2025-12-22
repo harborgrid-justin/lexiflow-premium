@@ -38,7 +38,11 @@ export class CasePhasesService {
 
   async update(id: string, updateCasePhaseDto: UpdateCasePhaseDto): Promise<CasePhase> {
     await this.findOne(id);
-    await this.casePhaseRepository.update(id, updateCasePhaseDto);
+    const { metadata, ...restDto } = updateCasePhaseDto;
+    await this.casePhaseRepository.update(id, {
+      ...restDto,
+      ...(metadata ? { metadata: JSON.stringify(metadata) } : {})
+    });
     return this.findOne(id);
   }
 

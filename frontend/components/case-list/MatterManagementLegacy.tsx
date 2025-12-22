@@ -9,7 +9,7 @@ import {
 import { DataService } from '../../services/data/dataService';
 import { useQuery } from '../../hooks/useQueryHooks';
 import { queryKeys } from '../../utils/queryKeys';
-import { Matter, MatterStatus, MatterTypeEnum, MatterPriority } from '../../types';
+import { Matter, MatterStatus, MatterPriority } from '../../types';
 import { PATHS } from '../../config/paths.config';
 
 interface MatterStatistics {
@@ -28,12 +28,12 @@ const MatterManagement: React.FC = () => {
 
   // ✅ Migrated to backend API with queryKeys (2025-12-21)
   const { data: matters = [], isLoading: loading } = useQuery<Matter[]>(
-    queryKeys.matters.all(),
+    queryKeys.cases.matters.all(),
     () => DataService.matters.getAll()
   );
 
   const { data: statistics = null } = useQuery<MatterStatistics | null>(
-    queryKeys.matters.statistics(),
+    ['matters', 'statistics'],
     () => DataService.matters.getStatistics()
   );
 
@@ -45,7 +45,7 @@ const MatterManagement: React.FC = () => {
       filtered = filtered.filter(matter =>
         matter.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         matter.matterNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        matter.clientName.toLowerCase().includes(searchTerm.toLowerCase())
+        (matter.clientName || '').toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
@@ -197,7 +197,7 @@ const MatterManagement: React.FC = () => {
               <Filter className="h-5 w-5 text-gray-400" />
               <select
                 value={selectedStatus}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSelectedStatus(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedStatus(e.target.value)}
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="all">All Status</option>
@@ -211,7 +211,7 @@ const MatterManagement: React.FC = () => {
 
             <select
               value={selectedPriority}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSelectedPriority(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedPriority(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="all">All Priority</option>

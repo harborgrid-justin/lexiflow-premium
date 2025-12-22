@@ -1,4 +1,4 @@
-import { IsString, IsUUID, IsEnum, IsOptional, IsDateString, IsArray, IsBoolean, IsNumber, Min } from 'class-validator';
+import { IsString, IsUUID, IsEnum, IsOptional, IsDateString, IsArray, IsNumber, Min } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export enum DiscoveryType {

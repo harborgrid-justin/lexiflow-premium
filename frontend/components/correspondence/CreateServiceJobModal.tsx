@@ -76,11 +76,11 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
       const validation = validateServiceJobSafe(newJob);
       if (!validation.success) {
           const errors: Record<string, string> = {};
-          validation.error.errors.forEach(err => {
+          validation.error.issues.forEach(err => {
               errors[err.path[0] as string] = err.message;
           });
           setValidationErrors(errors);
-          notify.error('Validation failed: ' + validation.error.errors[0].message);
+          notify.error('Validation failed: ' + validation.error.issues[0].message);
           return;
       }
       
@@ -115,7 +115,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                         aria-label="Select case"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.caseId || ''}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, caseId: e.target.value as any})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, caseId: e.target.value as any})}
                     >
                         <option value="">Select Case...</option>
                         {(Array.isArray(cases) ? cases : []).map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
@@ -125,15 +125,20 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                 <div>
                     <label htmlFor="document-select" className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Document to Serve</label>
                     {formData.caseId ? (
-                        <select 
+                        <select
                             id="document-select"
                             aria-label="Select document to serve"
                             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={formData.documentTitle || ''}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, documentTitle: e.target.value})}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, documentTitle: e.target.value})}
                         >
                             <option value="">Select Document...</option>
-                            {docs.map(d => <option key={d.id} value={d.title}>{d.title}</option>)}
+                            {docs.map((d: unknown) => {
+                              if (typeof d !== 'object' || d === null) return null;
+                              const docId = 'id' in d ? String(d.id) : '';
+                              const docTitle = 'title' in d && typeof d.title === 'string' ? d.title : '';
+                              return <option key={docId} value={docTitle}>{docTitle}</option>;
+                            })}
                         </select>
                     ) : (
                         <Input 
@@ -155,7 +160,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                                     aria-label="Select mail service"
                                     className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                     value={formData.mailType || ''}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, mailType: e.target.value as any, serverName: e.target.value.includes('FedEx') ? 'FedEx' : e.target.value.includes('UPS') ? 'UPS' : 'USPS'})}
+                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, mailType: e.target.value as any, serverName: e.target.value.includes('FedEx') ? 'FedEx' : e.target.value.includes('UPS') ? 'UPS' : 'USPS'})}
                                 >
                                     <option value="">Select Service...</option>
                                     <option value="USPS Certified RR">USPS Certified w/ Return Receipt</option>
@@ -226,7 +231,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                     rows={3} 
                     placeholder={formData.method === 'Mail' ? "Notes on enclosure..." : "e.g. Best time to serve is morning..."}
                     value={formData.notes || ''}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, notes: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, notes: e.target.value})}
                 />
             </div>
 

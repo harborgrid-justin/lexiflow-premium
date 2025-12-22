@@ -1,10 +1,9 @@
 import {
   Injectable,
-  NotFoundException,
-  BadRequestException,
+  NotFoundException, BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ILike } from 'typeorm';
+import { Repository, IsNull} from 'typeorm';
 import { DiscoveryRequest } from './entities/discovery-request.entity';
 import { CreateDiscoveryRequestDto } from './dto/create-discovery-request.dto';
 import { UpdateDiscoveryRequestDto } from './dto/update-discovery-request.dto';
@@ -88,7 +87,7 @@ export class DiscoveryRequestsService {
 
   async findOne(id: string): Promise<DiscoveryRequest> {
     const discoveryRequest = await this.discoveryRequestRepository.findOne({
-      where: { id, deletedAt: null },
+      where: { id, deletedAt: IsNull() },
     });
 
     if (!discoveryRequest) {
@@ -120,7 +119,7 @@ export class DiscoveryRequestsService {
 
   async getStatistics(caseId: string) {
     const requests = await this.discoveryRequestRepository.find({
-      where: { caseId, deletedAt: null },
+      where: { caseId, deletedAt: IsNull() },
     });
 
     const stats = {

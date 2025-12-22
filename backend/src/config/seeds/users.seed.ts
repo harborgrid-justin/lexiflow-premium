@@ -22,7 +22,7 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
   // Insert users
   for (const userData of usersData) {
     try {
-      const roleMapping = {
+      const roleMapping: Record<string, string> = {
         ADMIN: 'admin',
         ATTORNEY: 'senior_associate',
         PARALEGAL: 'paralegal',
@@ -40,7 +40,7 @@ export async function seedUsers(dataSource: DataSource): Promise<void> {
       await userRepository.save(user);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
+      const __stack = error instanceof Error ? error.stack : undefined;
       console.error(`Error seeding user ${userData.email}:`, message);
     }
   }

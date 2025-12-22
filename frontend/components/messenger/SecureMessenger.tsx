@@ -187,3 +187,4 @@ export const SecureMessenger: React.FC<SecureMessengerProps> = ({ initialTab }) 
     </div>
   );
 };
+export default SecureMessenger;

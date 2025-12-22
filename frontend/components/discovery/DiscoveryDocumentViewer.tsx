@@ -76,7 +76,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
             
             {/* Document Canvas */}
             <div className={cn("flex-1 overflow-auto relative flex justify-center p-8", theme.surface.highlight)}>
-                {/* eslint-disable-next-line react/forbid-dom-props -- Dynamic transform scale required for zoom */}
+                { }
                 <div 
                     className={cn("shadow-2xl min-h-[1100px] w-full max-w-4xl transition-transform origin-top duration-200 ease-out", theme.surface.default)}
                     style={{ transform: `scale(${scale / 100})` }}

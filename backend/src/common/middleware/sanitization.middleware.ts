@@ -8,7 +8,7 @@ import { Request, Response, NextFunction } from 'express';
  */
 @Injectable()
 export class SanitizationMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
+  use(req: Request, _res: Response, next: NextFunction) {
     // Sanitize body
     if (req.body && typeof req.body === 'object') {
       req.body = this.sanitizeObject(req.body);
@@ -35,31 +35,31 @@ export class SanitizationMiddleware implements NestMiddleware {
     next();
   }
 
-  private sanitizeObject(obj: any): any {
+  private sanitizeObject<T = unknown>(obj: T): T {
     if (Array.isArray(obj)) {
-      return obj.map((item) => this.sanitizeValue(item));
+      return obj.map((item) => this.sanitizeValue(item)) as T;
     }
 
     if (obj !== null && typeof obj === 'object') {
-      const sanitized: any = {};
+      const sanitized: Record<string, unknown> = {};
       for (const key in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
-          sanitized[key] = this.sanitizeValue(obj[key]);
+          sanitized[key] = this.sanitizeValue((obj as Record<string, unknown>)[key]);
         }
       }
-      return sanitized;
+      return sanitized as T;
     }
 
-    return this.sanitizeValue(obj);
+    return this.sanitizeValue(obj) as T;
   }
 
-  private sanitizeValue(value: any): any {
+  private sanitizeValue<T = unknown>(value: T): T {
     if (typeof value === 'string') {
-      return this.sanitizeString(value);
+      return this.sanitizeString(value) as T;
     }
 
     if (Array.isArray(value)) {
-      return value.map((item) => this.sanitizeValue(item));
+      return value.map((item) => this.sanitizeValue(item)) as T;
     }
 
     if (value !== null && typeof value === 'object') {

@@ -6,6 +6,7 @@
 
 import { dataPlatformApi } from '../api/domains/data-platform.api';
 import { delay } from '../../utils/async';
+import { STORES, db } from '../data/db';
 
 interface DataSource {
   id: string;
@@ -30,29 +31,32 @@ interface ConnectionStatus {
 export const DataSourceService = {
   getAll: async () => db.getAll(STORES.DATA_SOURCES),
   getById: async (id: string) => db.get(STORES.DATA_SOURCES, id),
-  add: async (item: unknown) => db.put(STORES.DATA_SOURCES, { 
-    ...item, 
+  add: async (item: unknown) => db.put(STORES.DATA_SOURCES, {
+    ...(item && typeof item === 'object' ? item : {}),
     connected: false,
-    createdAt: new Date().toISOString() 
+    createdAt: new Date().toISOString()
   }),
   update: async (id: string, updates: unknown) => {
     const existing = await db.get(STORES.DATA_SOURCES, id);
-    return db.put(STORES.DATA_SOURCES, { ...existing, ...updates });
+    return db.put(STORES.DATA_SOURCES, {
+      ...(existing && typeof existing === 'object' ? existing : {}),
+      ...(updates && typeof updates === 'object' ? updates : {})
+    });
   },
   delete: async (id: string) => db.delete(STORES.DATA_SOURCES, id),
   
   // Data source specific methods
   getDataSources: async (filters?: { type?: string; connected?: boolean }): Promise<DataSource[]> => {
-    let sources = await db.getAll(STORES.DATA_SOURCES);
-    
+    let sources = await db.getAll<DataSource>(STORES.DATA_SOURCES);
+
     if (filters?.type) {
       sources = sources.filter((s: DataSource) => s.type === filters.type);
     }
-    
+
     if (filters?.connected !== undefined) {
       sources = sources.filter((s: DataSource) => s.connected === filters.connected);
     }
-    
+
     return sources;
   },
   

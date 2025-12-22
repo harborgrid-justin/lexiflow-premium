@@ -76,7 +76,7 @@ export const IndexedDBDataTable: React.FC<IndexedDBDataTableProps> = ({
                     {editingId === item.id ? (
                       <textarea
                         value={JSON.stringify(editingData, null, 2)}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                           try {
                             setEditingData(JSON.parse(e.target.value));
                           } catch {

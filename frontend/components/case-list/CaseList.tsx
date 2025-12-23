@@ -31,7 +31,7 @@ import { CaseListResources } from './CaseListResources';
 import { CaseListTrust } from './CaseListTrust';
 import { CaseListClosing } from './CaseListClosing';
 import { CaseListArchived } from './CaseListArchived';
-import { CreateCaseModal } from './CreateCaseModal';
+// DEPRECATED: CreateCaseModal removed - use full-page CreateCase component via navigation
 
 // Hooks
 import { useCaseList } from '../../hooks/useCaseList';
@@ -44,13 +44,14 @@ import { CASE_LIST_TAB_CONFIG } from '../../config/tabs.config';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case } from '../../types';
+import { Case, AppView } from '../../types';
 
 export type CaseListView = 'active' | 'intake' | 'docket' | 'tasks' | 'conflicts' | 'resources' | 'trust' | 'closing' | 'archived';
 
 interface CaseListProps {
   onSelectCase: (caseData: Case) => void;
   initialTab?: CaseListView;
+  setActiveView?: (view: AppView) => void;
 }
 
 // ============================================================================
@@ -67,7 +68,7 @@ interface CaseListProps {
  * - Create case modal integration
  * - Export functionality
  */
-export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) => {
+export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab, setActiveView }) => {
   // ==========================================================================
   // HOOKS - State & Transitions
   // ==========================================================================
@@ -76,9 +77,6 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
   
   const caseListData = useCaseList();
   const { 
-    isModalOpen, 
-    openModal, 
-    closeModal, 
     statusFilter, 
     setStatusFilter, 
     typeFilter, 
@@ -103,10 +101,16 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
     });
   };
 
-  const handleCreateCase = (newCase: Case) => {
-    closeModal();
-    // Case is created via DataService in the modal's onSave handler
-    // Query invalidation happens automatically
+  /**
+   * Navigate to full-page CreateCase component
+   * WHY: Replaced modal with dedicated route for better UX and type safety
+   */
+  const handleCreateCase = () => {
+    if (setActiveView) {
+      setActiveView('cases/create' as AppView);
+    } else {
+      console.warn('setActiveView not provided to CaseList - cannot navigate to create case page');
+    }
   };
 
   // ==========================================================================
@@ -167,20 +171,17 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
   };
 
   return (
-    <>
-      {isModalOpen && <CreateCaseModal isOpen={isModalOpen} onClose={closeModal} onSave={handleCreateCase} />}
-      
-      <TabbedPageLayout
-        pageTitle="Matter Management"
-        pageSubtitle="Centralized case oversight, intake pipeline, and resource coordination."
-        pageActions={
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" icon={Download}>Export</Button>
-            <Button variant="primary" size="sm" icon={Plus} onClick={openModal}>
-              New Case
-            </Button>
-          </div>
-        }
+    <TabbedPageLayout
+      pageTitle="Matter Management"
+      pageSubtitle="Centralized case oversight, intake pipeline, and resource coordination."
+      pageActions={
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" icon={Download}>Export</Button>
+          <Button variant="primary" size="sm" icon={Plus} onClick={handleCreateCase}>
+            New Case
+          </Button>
+        </div>
+      }
         tabConfig={CASE_LIST_TAB_CONFIG}
         activeTabId={activeTab}
         onTabChange={setActiveTab}
@@ -191,7 +192,6 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab }) 
           </div>
         </Suspense>
       </TabbedPageLayout>
-    </>
   );
 };
 

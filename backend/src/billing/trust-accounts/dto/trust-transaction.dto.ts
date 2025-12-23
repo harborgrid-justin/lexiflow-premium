@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsEnum, IsArray, Min } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsEnum, IsArray, Min, IsBoolean } from 'class-validator';
 import { TransactionType } from '../entities/trust-transaction.entity';
 
 export class CreateTransactionDto {
@@ -50,6 +50,43 @@ export class CreateTransactionDto {
   @IsOptional()
   @IsArray()
   attachments?: string[];
+
+  // COMPLIANCE FIELDS
+  @IsOptional()
+  @IsString()
+  fundsReceivedDate?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isAdvancedFee?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isEarnedFee?: boolean;
+
+  @IsOptional()
+  @IsString()
+  transactionSource?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isOperatingFundTransfer?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  checkVoided?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  clientNotified?: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  disputedAmount?: number;
+
+  @IsOptional()
+  @IsString()
+  disputeReason?: string;
 }
 
 export class DepositDto {
@@ -78,6 +115,15 @@ export class DepositDto {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  // COMPLIANCE FIELDS
+  @IsOptional()
+  @IsString()
+  fundsReceivedDate?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isAdvancedFee?: boolean;
 }
 
 export class WithdrawalDto {
@@ -106,4 +152,17 @@ export class WithdrawalDto {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  // COMPLIANCE FIELDS
+  @IsOptional()
+  @IsBoolean()
+  isEarnedFee?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isOperatingFundTransfer?: boolean;
+
+  @IsOptional()
+  @IsString()
+  paymentMethod?: string;
 }

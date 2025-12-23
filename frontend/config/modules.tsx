@@ -2,6 +2,7 @@ import React from 'react';
 import { ModuleRegistry } from '../services/infrastructure/moduleRegistry';
 import { NAVIGATION_ITEMS } from './nav.config';
 import { PATHS } from './paths.config';
+import { FilePlus } from 'lucide-react';
 
 // Advanced Factory Type that includes a preload method
 type PreloadableComponent<T extends React.ComponentType<unknown>> = React.LazyExoticComponent<T> & {
@@ -20,6 +21,7 @@ function lazyWithPreload<T extends React.ComponentType<any>>(
 // Lazy Imports with Strict Relative Paths
 const Dashboard = lazyWithPreload(() => import('../components/dashboard/Dashboard') as Promise<{ default: React.ComponentType<any> }>);
 const CaseList = lazyWithPreload(() => import('../components/case-list/CaseList') as Promise<{ default: React.ComponentType<any> }>);
+const CreateCase = lazyWithPreload(() => import('../components/case-list/CreateCase') as Promise<{ default: React.ComponentType<any> }>);
 // MatterModule consolidated into CaseList - matters and cases are the same entity
 const MatterModule = CaseList;
 const DocketManager = lazyWithPreload(() => import('../components/docket/DocketManager') as Promise<{ default: React.ComponentType<any> }>);
@@ -53,6 +55,7 @@ const CitationManager = lazyWithPreload(() => import('../components/citation/Cit
 const COMPONENT_MAP: Record<string, React.LazyExoticComponent<unknown>> = {
   [PATHS.DASHBOARD]: Dashboard,
   [PATHS.CASES]: CaseList,
+  [PATHS.CREATE_CASE]: CreateCase,
   [PATHS.MATTERS]: MatterModule,
   [PATHS.DOCKET]: DocketManager,
   [PATHS.CORRESPONDENCE]: CorrespondenceManager,
@@ -90,5 +93,14 @@ export const initializeModules = () => {
     })).filter(m => m.component !== undefined);
 
     ModuleRegistry.registerBatch(modules);
+    
+    // Register non-navigation routes (pages without sidebar items)
+    ModuleRegistry.register({
+        id: PATHS.CREATE_CASE,
+        label: 'Create Case',
+        icon: FilePlus,
+        category: 'Case Work',
+        component: CreateCase
+    });
 };
 

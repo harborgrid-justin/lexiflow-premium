@@ -21,8 +21,6 @@ import {
   Matches,
   IsUrl,
   IsEmail,
-  ArrayMinSize,
-  ArrayMaxSize,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -218,6 +216,14 @@ export class CreateParallelExecutionDto {
   @ApiProperty({ enum: ['round_robin', 'least_loaded', 'random', 'priority'] })
   @IsEnum(['round_robin', 'least_loaded', 'random', 'priority'])
   loadBalancing!: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsObject()
+  errorHandling?: {
+    strategy: 'fail_all' | 'continue' | 'compensating_transaction';
+    compensationWorkflow?: string;
+  };
 }
 
 // ============================================================================
@@ -1002,4 +1008,296 @@ export class WorkflowQueryDto {
   @IsOptional()
   @IsEnum(['asc', 'desc'])
   sortOrder?: string;
+}
+
+// ============================================================================
+// TYPE ALIASES FOR SERVICE LAYER
+// ============================================================================
+
+// Conditional Branching Types
+export type ConditionalBranchingConfig = CreateConditionalBranchingDto;
+
+// Parallel Execution Types
+export type ParallelExecutionConfig = CreateParallelExecutionDto;
+
+// Versioning Types
+export interface WorkflowVersion {
+  id: string;
+  workflowId: string;
+  version: string;
+  major: number;
+  minor: number;
+  patch: number;
+  commitMessage: string;
+  author: string;
+  tag?: string;
+  branchName?: string;
+  nodes: any[];
+  connections: any[];
+  config: Record<string, any>;
+  checksum: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+}
+
+export interface WorkflowDiff {
+  versionA: string;
+  versionB: string;
+  addedNodes: any[];
+  removedNodes: any[];
+  modifiedNodes: any[];
+  addedConnections: any[];
+  removedConnections: any[];
+  nodesAdded: any[];
+  nodesRemoved: any[];
+  nodesModified: any[];
+  connectionsAdded: any[];
+  connectionsRemoved: any[];
+  configChanges: any[];
+  breakingChanges: boolean;
+  migrationRequired: boolean;
+}
+
+// Template Types (using Create DTO as base)
+export type WorkflowTemplate = CreateWorkflowTemplateDto;
+
+// SLA Types
+export interface SLAConfig {
+  id: string;
+  name: string;
+  description?: string;
+  targetDuration: number;
+  warningThreshold: number;
+  criticalThreshold: number;
+  businessHoursOnly: boolean;
+  businessHours?: BusinessHoursDto;
+  escalationLevels: EscalationLevelDto[];
+  escalationPolicy: {
+    levels: EscalationLevelDto[];
+  };
+}
+
+export interface SLAStatus {
+  nodeId: string;
+  slaConfigId: string;
+  status: 'on_track' | 'at_risk' | 'breached';
+  startTime: string;
+  targetTime: string;
+  currentTime: string;
+  elapsedTime: number;
+  remainingTime: number;
+  percentageUsed: number;
+  pauseDuration: number;
+  escalations: Array<{
+    level: number;
+    triggeredAt: string;
+    resolved: boolean;
+  }>;
+}
+
+// Approval Chain Types
+export interface ApprovalChain {
+  id: string;
+  name: string;
+  description?: string;
+  levels: Array<ApprovalLevelDto & {
+    onApprove?: any[];
+    onReject?: any[];
+  }>;
+  requireSequential: boolean;
+  allowParallel: boolean;
+  timeoutAction: 'auto_approve' | 'auto_reject' | 'escalate' | 'extend';
+  timeoutDuration?: number;
+}
+
+export interface ApprovalInstance {
+  id: string;
+  chainId: string;
+  workflowInstanceId: string;
+  currentLevel: number;
+  status: 'pending' | 'approved' | 'rejected' | 'timeout';
+  decisions: Array<{
+    level: number;
+    approverId: string;
+    decision: 'approve' | 'reject' | 'abstain';
+    comments?: string;
+    timestamp: Date | string;
+    weight?: number;
+  }>;
+  startedAt: Date;
+  completedAt?: Date | string;
+}
+
+export type ApprovalDecision = ApprovalDecisionDto;
+
+// Rollback Types
+export interface WorkflowSnapshot {
+  id: string;
+  workflowInstanceId: string;
+  version: number;
+  type: 'manual' | 'milestone' | 'scheduled' | 'auto';
+  label?: string;
+  description?: string;
+  state: WorkflowState;
+  capturedAt: Date;
+  createdAt: string;
+  createdBy: string;
+  checksum: string;
+  compressed: boolean;
+  sizeBytes: number;
+  retentionPolicy: 'permanent' | 'temporary' | 'time_based';
+  expiresAt?: Date;
+  restoreCount: number;
+}
+
+export interface WorkflowState {
+  currentNodeId: string;
+  nodes: any[];
+  connections: any[];
+  variables: Record<string, any>;
+  completedNodes: string[];
+  pendingNodes: string[];
+  currentNodes: string[];
+  context: Record<string, any>;
+  approvals: any[];
+  slaStatuses: any[];
+  parallelExecutions: any[];
+  conditionalBranches: any[];
+  externalTriggers: any[];
+}
+
+export interface RollbackOperation {
+  id: string;
+  snapshotId: string;
+  workflowInstanceId: string;
+  initiatedBy: string;
+  initiatedAt: string;
+  strategy: 'full' | 'partial' | 'compensating';
+  affectedNodes?: string[];
+  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  startedAt: Date;
+  completedAt?: Date | string;
+  dryRun: boolean;
+  error?: string;
+  compensatingActions?: any[];
+}
+
+// Analytics Types
+export interface WorkflowAnalytics {
+  workflowId: string;
+  period: {
+    start: Date | string;
+    end: Date | string;
+  };
+  summary: any;
+  totalExecutions: number;
+  successfulExecutions: number;
+  failedExecutions: number;
+  averageDuration: number;
+  medianDuration: number;
+  nodeMetrics: Array<{
+    nodeId: string;
+    averageDuration: number;
+    failureRate: number;
+    executionCount: number;
+  }>;
+  bottlenecks?: WorkflowBottleneck[];
+  suggestions?: OptimizationSuggestion[];
+  optimizationSuggestions: OptimizationSuggestion[];
+  trends: any[];
+  comparisons: any[];
+}
+
+export interface WorkflowBottleneck {
+  nodeId: string;
+  type: 'duration' | 'failure_rate' | 'wait_time';
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  impact: number;
+  description: string;
+}
+
+export interface OptimizationSuggestion {
+  id: string;
+  type: 'parallel' | 'caching' | 'simplification' | 'automation' | 'resource_allocation';
+  targetNodeIds: string[];
+  description: string;
+  estimatedImprovement: number;
+  confidence: number;
+  implementationComplexity: 'low' | 'medium' | 'high';
+}
+
+// AI Suggestions Types
+export interface AIWorkflowSuggestion {
+  id: string;
+  workflowId: string;
+  type: 'optimization' | 'structure' | 'automation' | 'compliance' | 'best_practice' | 'parallelization';
+  title: string;
+  description: string;
+  rationale: string;
+  confidence: number;
+  impact: 'low' | 'medium' | 'high';
+  implementation: {
+    steps: string[];
+    estimatedEffort: string;
+    affectedNodes: string[];
+  };
+  dataPoints: any[];
+  changes: any[];
+  implementationDifficulty: 'easy' | 'medium' | 'hard';
+  autoApply: boolean;
+  status: 'pending' | 'applied' | 'rejected';
+  createdAt: Date | string;
+  updatedAt: string;
+  userId: string;
+}
+
+// External Trigger Types
+export interface ExternalTrigger {
+  id: string;
+  name: string;
+  description?: string;
+  type: 'webhook' | 'api_poll' | 'email' | 'file_watch' | 'database' | 'queue' | 'custom';
+  enabled: boolean;
+  config: Record<string, any>;
+  filters?: any[];
+  transformation?: any;
+  authentication?: any;
+  workflowId: string;
+}
+
+export interface TriggerEvent {
+  id: string;
+  triggerId: string;
+  timestamp: string;
+  payload: Record<string, any>;
+  receivedAt: Date;
+  processedAt?: Date | string;
+  status: 'pending' | 'processed' | 'failed' | 'ignored' | 'completed';
+  workflowInstanceId?: string;
+  error?: string;
+}
+
+// Enhanced Workflow Instance
+export interface EnhancedWorkflowInstance {
+  id: string;
+  templateId: string;
+  name: string;
+  description?: string;
+  status: string;
+  nodes: any[];
+  connections: any[];
+  variables: Record<string, any>;
+  context: Record<string, any>;
+  completedNodes: string[];
+  currentNodes: string[];
+  currentNodeId?: string;
+  startedAt: Date;
+  completedAt?: Date;
+  createdBy: string;
+  assignedTo?: string;
+  snapshots: any[];
+  approvalInstances: any[];
+  slaStatuses: any[];
 }

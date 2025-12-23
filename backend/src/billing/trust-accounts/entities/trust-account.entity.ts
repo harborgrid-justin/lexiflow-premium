@@ -17,8 +17,8 @@ export enum TrustAccountType {
 export enum TrustAccountStatus {
   ACTIVE = 'Active',
   INACTIVE = 'Inactive',
-  FROZEN = 'Frozen',
   CLOSED = 'Closed',
+  SUSPENDED = 'Suspended',
 }
 
 @Entity('trust_accounts')
@@ -93,6 +93,51 @@ export class TrustAccount {
 
   @Column({ type: 'text', nullable: true })
   notes!: string;
+
+  // COMPLIANCE: Account Setup and Structure
+  @Column({ name: 'state_bar_approved', type: 'boolean', default: false, nullable: true })
+  stateBarApproved?: boolean;
+
+  @Column({ type: 'varchar', length: 10, nullable: true })
+  jurisdiction?: string;
+
+  @Column({ name: 'iolta_program_id', type: 'varchar', length: 100, nullable: true })
+  ioltaProgramId?: string;
+
+  @Column({ name: 'overdraft_reporting_enabled', type: 'boolean', default: false, nullable: true })
+  overdraftReportingEnabled?: boolean;
+
+  @Column({ name: 'account_title_compliant', type: 'boolean', default: false, nullable: true })
+  accountTitleCompliant?: boolean;
+
+  @Column({ name: 'client_consent_for_location', type: 'boolean', default: false, nullable: true })
+  clientConsentForLocation?: boolean;
+
+  // COMPLIANCE: Recordkeeping and Documentation
+  @Column({ name: 'last_reconciled_date', type: 'date', nullable: true })
+  lastReconciledDate?: string;
+
+  @Column({ name: 'reconciliation_status', type: 'varchar', length: 50, nullable: true })
+  reconciliationStatus?: string;
+
+  @Column({ name: 'next_reconciliation_due', type: 'date', nullable: true })
+  nextReconciliationDue?: string;
+
+  @Column({ name: 'record_retention_years', type: 'int', default: 7, nullable: true })
+  recordRetentionYears?: number;
+
+  @Column({ name: 'check_number_range_start', type: 'int', nullable: true })
+  checkNumberRangeStart?: number;
+
+  @Column({ name: 'check_number_range_current', type: 'int', nullable: true })
+  checkNumberRangeCurrent?: number;
+
+  // COMPLIANCE: Signatory Control
+  @Column({ name: 'authorized_signatories', type: 'simple-array', nullable: true })
+  authorizedSignatories?: string[];
+
+  @Column({ name: 'primary_signatory', type: 'uuid', nullable: true })
+  primarySignatory?: string;
 
   @VersionColumn()
   version!: number;

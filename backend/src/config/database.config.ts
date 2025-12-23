@@ -1,12 +1,13 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import * as MasterConfig from './master.config';
+import { CacheType } from 'typeorm/cache/types/CacheType';
 
 export const getDatabaseConfig = (
   configService: ConfigService,
 ): TypeOrmModuleOptions => {
-  const databaseUrl = configService.get('database.url');
-  const useSqliteFallback = configService.get('database.fallbackSqlite') || process.env.DB_FALLBACK_SQLITE === 'true';
+  const databaseUrl = configService.get<string>('database.url');
+  const useSqliteFallback = configService.get<boolean>('database.fallbackSqlite') || process.env.DB_FALLBACK_SQLITE === 'true';
   const isDemoMode = process.env.DEMO_MODE === 'true';
 
   // In demo mode or when SQLite fallback is enabled, use SQLite
@@ -46,7 +47,7 @@ export const getDatabaseConfig = (
       poolSize: MasterConfig.DB_POOL_MAX,
       cache: {
         duration: MasterConfig.DB_CACHE_DURATION,
-        type: MasterConfig.DB_CACHE_TYPE as any,
+        type: MasterConfig.DB_CACHE_TYPE as CacheType,
       },
     };
   }
@@ -79,7 +80,7 @@ export const getDatabaseConfig = (
     poolSize: MasterConfig.DB_POOL_MAX,
     cache: {
       duration: MasterConfig.DB_CACHE_DURATION,
-      type: MasterConfig.DB_CACHE_TYPE as any,
+      type: MasterConfig.DB_CACHE_TYPE as CacheType,
     },
   };
 };

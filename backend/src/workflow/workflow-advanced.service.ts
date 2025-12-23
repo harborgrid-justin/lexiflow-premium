@@ -14,7 +14,6 @@ import {
   ParallelExecutionConfig,
   WorkflowVersion,
   WorkflowDiff,
-  WorkflowTemplate as AdvancedWorkflowTemplate,
   SLAConfig,
   SLAStatus,
   ApprovalChain,
@@ -30,6 +29,9 @@ import {
   ExternalTrigger,
   TriggerEvent,
   EnhancedWorkflowInstance,
+  ConditionalBranchDto,
+  ConditionalRuleDto,
+  ParallelBranchDto,
 } from './dto/workflow-advanced.dto';
 
 @Injectable()
@@ -73,8 +75,9 @@ export class WorkflowAdvancedService {
         matched: result.matched,
         evaluationTime,
       };
-    } catch (error) {
-      this.logger.error(`Conditional branching evaluation error: ${error.message}`);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Conditional branching evaluation error: ${errorMessage}`);
       
       if (config.defaultBranchId) {
         return {
@@ -84,7 +87,7 @@ export class WorkflowAdvancedService {
         };
       }
       
-      throw new BadRequestException(`Conditional branching failed: ${error.message}`);
+      throw new BadRequestException(`Conditional branching failed: ${errorMessage}`);
     }
   }
 
@@ -92,10 +95,10 @@ export class WorkflowAdvancedService {
     config: ConditionalBranchingConfig,
     context: Record<string, any>,
   ): Promise<{ branchId: string; matched: boolean }> {
-    const sortedBranches = config.branches.sort((a, b) => a.priority - b.priority);
+    const sortedBranches = config.branches.sort((a: ConditionalBranchDto, b: ConditionalBranchDto) => a.priority - b.priority);
 
     for (const branch of sortedBranches) {
-      const ruleResults = branch.rules.map(rule => this._evaluateRule(rule, context));
+      const ruleResults = branch.rules.map((rule: ConditionalRuleDto) => this._evaluateRule(rule, context));
       const branchMatches = this._applyLogic(ruleResults, branch.logic as any);
 
       if (branchMatches) {
@@ -164,8 +167,9 @@ export class WorkflowAdvancedService {
       // Sandboxed evaluation with limited scope
       const func = new Function('context', `return ${expression}`);
       return Boolean(func(context));
-    } catch (error) {
-      this.logger.warn(`Custom expression evaluation failed: ${error.message}`);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.warn(`Custom expression evaluation failed: ${errorMessage}`);
       return false;
     }
   }
@@ -189,7 +193,7 @@ export class WorkflowAdvancedService {
     const startTime = Date.now();
     this.logger.log(`Executing parallel branches for node ${config.nodeId}`);
 
-    const branchExecutions = config.branches.map(branch =>
+    const branchExecutions = config.branches.map((branch: ParallelBranchDto) =>
       this._executeBranchWithRetry(branch, context, config),
     );
 
@@ -202,7 +206,8 @@ export class WorkflowAdvancedService {
       
       const failedBranches = results
         .filter(r => r.status === 'rejected')
-        .map((r, idx) => config.branches[idx].id);
+        .map((_r, idx) => config.branches[idx]?.id)
+        .filter((id): id is string => id !== undefined);
 
       const executionTime = Date.now() - startTime;
       
@@ -219,10 +224,11 @@ export class WorkflowAdvancedService {
           successRate: (completedBranches.length / config.branches.length) * 100,
         },
       };
-    } catch (error) {
-      this.logger.error(`Parallel execution error: ${error.message}`);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Parallel execution error: ${errorMessage}`);
       
-      if (config.errorHandling.strategy === 'compensating_transaction') {
+      if (config.errorHandling?.strategy === 'compensating_transaction') {
         await this._executeCompensatingWorkflow(config.errorHandling.compensationWorkflow);
       }
       
@@ -246,12 +252,13 @@ export class WorkflowAdvancedService {
 
         const result = await this._executeBranchNodes(branch.nodeIds, context);
         return { branchId: branch.id, result };
-      } catch (error) {
-        lastError = error;
-        this.logger.warn(`Branch ${branch.id} attempt ${attempt + 1} failed: ${error.message}`);
+      } catch (error: unknown) {
+        lastError = error instanceof Error ? error : new Error('Unknown error');
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        this.logger.warn(`Branch ${branch.id} attempt ${attempt + 1} failed: ${errorMessage}`);
 
         if (branch.onError === 'fallback' && branch.fallbackBranchId) {
-          const fallbackBranch = config.branches.find(b => b.id === branch.fallbackBranchId);
+          const fallbackBranch = config.branches.find((b: ParallelBranchDto) => b.id === branch.fallbackBranchId);
           if (fallbackBranch) {
             return this._executeBranchWithRetry(fallbackBranch, context, config);
           }
@@ -316,7 +323,7 @@ export class WorkflowAdvancedService {
     return results;
   }
 
-  private async _executeBranchNodes(nodeIds: string[], context: Record<string, any>): Promise<any> {
+  private async _executeBranchNodes(nodeIds: string[], _context: Record<string, any>): Promise<any> {
     // Simulate node execution
     await this._delay(Math.random() * 1000);
     return { success: true, nodeIds };
@@ -356,9 +363,9 @@ export class WorkflowAdvancedService {
       id: `${workflowId}-v${versionData.version}`,
       workflowId,
       version: versionData.version || '1.0.0',
-      major,
-      minor,
-      patch,
+      major: major || 0,
+      minor: minor || 0,
+      patch: patch || 0,
       commitMessage: versionData.commitMessage || 'Version update',
       author: versionData.author || 'system',
       nodes: versionData.nodes || [],
@@ -390,6 +397,11 @@ export class WorkflowAdvancedService {
     const diff: WorkflowDiff = {
       versionA,
       versionB,
+      addedNodes: this._findAddedNodes(vA.nodes, vB.nodes),
+      removedNodes: this._findRemovedNodes(vA.nodes, vB.nodes),
+      modifiedNodes: this._findModifiedNodes(vA.nodes, vB.nodes),
+      addedConnections: this._findAddedConnections(vA.connections, vB.connections),
+      removedConnections: this._findRemovedConnections(vA.connections, vB.connections),
       nodesAdded: this._findAddedNodes(vA.nodes, vB.nodes),
       nodesRemoved: this._findRemovedNodes(vA.nodes, vB.nodes),
       nodesModified: this._findModifiedNodes(vA.nodes, vB.nodes),
@@ -408,7 +420,7 @@ export class WorkflowAdvancedService {
     return crypto.createHash('sha256').update(JSON.stringify(data)).digest('hex');
   }
 
-  private async _getWorkflowVersion(workflowId: string, version: string): Promise<WorkflowVersion> {
+  private async _getWorkflowVersion(_workflowId: string, _version: string): Promise<WorkflowVersion> {
     // Retrieve from version storage
     return {} as WorkflowVersion; // Placeholder
   }
@@ -423,20 +435,20 @@ export class WorkflowAdvancedService {
     return nodesA.filter(n => !idsB.has(n.id));
   }
 
-  private _findModifiedNodes(nodesA: any[], nodesB: any[]): any[] {
+  private _findModifiedNodes(_nodesA: any[], _nodesB: any[]): any[] {
     // Implementation for detecting modifications
     return [];
   }
 
-  private _findAddedConnections(connsA: any[], connsB: any[]): any[] {
+  private _findAddedConnections(_connsA: any[], _connsB: any[]): any[] {
     return [];
   }
 
-  private _findRemovedConnections(connsA: any[], connsB: any[]): any[] {
+  private _findRemovedConnections(_connsA: any[], _connsB: any[]): any[] {
     return [];
   }
 
-  private _findConfigChanges(configA: any, configB: any): any[] {
+  private _findConfigChanges(_configA: any, _configB: any): any[] {
     return [];
   }
 
@@ -515,7 +527,7 @@ export class WorkflowAdvancedService {
     return slaStatus;
   }
 
-  private _calculateBusinessHoursElapsed(start: Date, end: Date, businessHours: any): number {
+  private _calculateBusinessHoursElapsed(start: Date, end: Date, _businessHours: any): number {
     // Sophisticated business hours calculation
     return end.getTime() - start.getTime(); // Simplified
   }
@@ -573,18 +585,18 @@ export class WorkflowAdvancedService {
     const chain: ApprovalChain = await this._getApprovalChain(instance.chainId);
 
     // Validate approver authorization
-    const currentLevel = chain.levels.find(l => l.level === instance.currentLevel);
+    const currentLevel = chain.levels.find((l) => l.level === instance.currentLevel);
     if (!currentLevel) {
       throw new BadRequestException('Invalid approval level');
     }
 
     // Record decision
-    instance.decisions.push(decision);
+    instance.decisions.push(decision as any);
 
     // Check if level requirements met
-    const levelDecisions = instance.decisions.filter(d => d.level === instance.currentLevel);
-    const approvals = levelDecisions.filter(d => d.decision === 'approve').length;
-    const weightedApprovals = levelDecisions.reduce((sum, d) => sum + (d.weight || 1), 0);
+    const levelDecisions = instance.decisions.filter((d) => d.level === instance.currentLevel);
+    const approvals = levelDecisions.filter((d) => d.decision === 'approve').length;
+    const weightedApprovals = levelDecisions.reduce((sum: number, d) => sum + (d.weight || 1), 0);
 
     const levelComplete = chain.requireSequential
       ? approvals >= currentLevel.requiredApprovals
@@ -623,15 +635,15 @@ export class WorkflowAdvancedService {
     return { approved: false, chainComplete: false };
   }
 
-  private async _getApprovalInstance(id: string): Promise<ApprovalInstance> {
+  private async _getApprovalInstance(_id: string): Promise<ApprovalInstance> {
     return {} as ApprovalInstance; // Placeholder
   }
 
-  private async _getApprovalChain(id: string): Promise<ApprovalChain> {
+  private async _getApprovalChain(_id: string): Promise<ApprovalChain> {
     return {} as ApprovalChain; // Placeholder
   }
 
-  private async _executeWorkflowAction(action: any, context: any): Promise<void> {
+  private async _executeWorkflowAction(action: any, _context: any): Promise<void> {
     this.logger.log(`Executing workflow action: ${action.type}`);
   }
 
@@ -653,8 +665,11 @@ export class WorkflowAdvancedService {
 
     const state: WorkflowState = {
       currentNodeId: instance.currentNodeId || '',
+      nodes: instance.nodes,
+      connections: instance.connections,
       completedNodes: instance.completedNodes,
-      pendingNodes: instance.nodes.filter(n => !instance.completedNodes.includes(n.id)).map(n => n.id),
+      pendingNodes: instance.nodes.filter((n: any) => !instance.completedNodes.includes(n.id)).map((n: any) => n.id),
+      currentNodes: instance.currentNodes,
       variables: instance.variables,
       context: instance.context,
       approvals: instance.approvalInstances,
@@ -671,6 +686,7 @@ export class WorkflowAdvancedService {
       type,
       label,
       createdAt: new Date().toISOString(),
+      capturedAt: new Date(),
       createdBy: instance.createdBy,
       state,
       checksum: this._calculateChecksum(state),
@@ -704,6 +720,7 @@ export class WorkflowAdvancedService {
       snapshotId,
       initiatedBy: 'system',
       initiatedAt: new Date().toISOString(),
+      startedAt: new Date(),
       status: 'in_progress',
       strategy,
       affectedNodes: this._calculateAffectedNodes(instance, snapshot.state),
@@ -727,21 +744,21 @@ export class WorkflowAdvancedService {
         operation.completedAt = new Date().toISOString();
         
         this.logger.log(`Rollback ${operation.id} completed successfully`);
-      } catch (error) {
+      } catch (error: unknown) {
         operation.status = 'failed';
-        operation.error = error.message;
-        this.logger.error(`Rollback failed: ${error.message}`);
+        operation.error = error instanceof Error ? error.message : 'Unknown error';
+        this.logger.error(`Rollback failed: ${operation.error}`);
       }
     }
 
     return operation;
   }
 
-  private async _getSnapshot(id: string): Promise<WorkflowSnapshot> {
+  private async _getSnapshot(_id: string): Promise<WorkflowSnapshot> {
     return {} as WorkflowSnapshot; // Placeholder
   }
 
-  private async _getWorkflowInstance(id: string): Promise<EnhancedWorkflowInstance> {
+  private async _getWorkflowInstance(_id: string): Promise<EnhancedWorkflowInstance> {
     return {} as EnhancedWorkflowInstance; // Placeholder
   }
 
@@ -749,12 +766,12 @@ export class WorkflowAdvancedService {
     const currentCompleted = new Set(instance.completedNodes);
     const targetCompleted = new Set(targetState.completedNodes);
     
-    return Array.from(currentCompleted).filter(id => !targetCompleted.has(id));
+    return Array.from(currentCompleted).filter((id: string) => !targetCompleted.has(id));
   }
 
   private async _generateCompensatingActions(
-    instance: EnhancedWorkflowInstance,
-    targetState: WorkflowState,
+    _instance: EnhancedWorkflowInstance,
+    _targetState: WorkflowState,
   ): Promise<any[]> {
     return [];
   }
@@ -788,37 +805,43 @@ export class WorkflowAdvancedService {
         end: endDate.toISOString(),
       },
       summary,
+      totalExecutions: summary.totalExecutions,
+      successfulExecutions: summary.successfulExecutions,
+      failedExecutions: summary.failedExecutions,
+      averageDuration: summary.averageDuration,
+      medianDuration: summary.averageDuration,
       nodeMetrics,
       bottlenecks,
+      suggestions,
       optimizationSuggestions: suggestions,
       trends: [],
       comparisons: [],
     };
   }
 
-  private async _getWorkflowExecutions(workflowId: string, start: Date, end: Date): Promise<any[]> {
+  private async _getWorkflowExecutions(_workflowId: string, _start: Date, _end: Date): Promise<any[]> {
     return []; // Fetch from database
   }
 
-  private _calculatePerformanceSummary(executions: any[]): any {
+  private _calculatePerformanceSummary(_executions: any[]): any {
     return {
-      totalExecutions: executions.length,
-      successfulExecutions: executions.filter(e => e.status === 'completed').length,
-      failedExecutions: executions.filter(e => e.status === 'failed').length,
+      totalExecutions: _executions.length,
+      successfulExecutions: _executions.filter((e: any) => e.status === 'completed').length,
+      failedExecutions: _executions.filter((e: any) => e.status === 'failed').length,
       averageDuration: 3600000,
       successRate: 95,
     };
   }
 
-  private _calculateNodeMetrics(executions: any[]): any[] {
+  private _calculateNodeMetrics(_executions: any[]): any[] {
     return [];
   }
 
-  private _detectBottlenecks(nodeMetrics: any[]): WorkflowBottleneck[] {
+  private _detectBottlenecks(_nodeMetrics: any[]): WorkflowBottleneck[] {
     return [];
   }
 
-  private _generateOptimizationSuggestions(bottlenecks: any[], nodeMetrics: any[]): OptimizationSuggestion[] {
+  private _generateOptimizationSuggestions(_bottlenecks: any[], _nodeMetrics: any[]): OptimizationSuggestion[] {
     return [];
   }
 
@@ -832,7 +855,8 @@ export class WorkflowAdvancedService {
   async generateAISuggestions(workflowId: string): Promise<AIWorkflowSuggestion[]> {
     this.logger.log(`Generating AI suggestions for workflow ${workflowId}`);
 
-    const analytics = await this.generateWorkflowAnalytics(workflowId, new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), new Date());
+    // Fetch analytics for context
+    await this.generateWorkflowAnalytics(workflowId, new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), new Date());
 
     const suggestions: AIWorkflowSuggestion[] = [
       {
@@ -845,9 +869,11 @@ export class WorkflowAdvancedService {
         rationale: 'No dependencies detected between these tasks. Parallelization could reduce duration by 40%',
         dataPoints: [],
         changes: [],
-        impact: {
-          durationReduction: 0.4,
-          costSavings: 5000,
+        impact: 'high',
+        implementation: {
+          steps: ['Identify parallel tasks', 'Configure parallel execution', 'Test workflow'],
+          estimatedEffort: '2 hours',
+          affectedNodes: [],
         },
         implementationDifficulty: 'easy',
         autoApply: false,
@@ -894,13 +920,14 @@ export class WorkflowAdvancedService {
     const trigger: ExternalTrigger = await this._getTrigger(triggerId);
 
     // Apply filters
-    const passesFilters = this._applyTriggerFilters(payload, trigger.filters);
+    const passesFilters = this._applyTriggerFilters(payload, trigger.filters || []);
     if (!passesFilters) {
       this.logger.log(`Event filtered out for trigger ${triggerId}`);
       return {
         id: `event-${Date.now()}`,
         triggerId,
         timestamp: new Date().toISOString(),
+        receivedAt: new Date(),
         payload,
         status: 'ignored',
       };
@@ -919,6 +946,7 @@ export class WorkflowAdvancedService {
       id: `event-${Date.now()}`,
       triggerId,
       timestamp: new Date().toISOString(),
+      receivedAt: new Date(),
       payload: transformedPayload,
       workflowInstanceId,
       status: 'completed',
@@ -926,19 +954,19 @@ export class WorkflowAdvancedService {
     };
   }
 
-  private async _getTrigger(id: string): Promise<ExternalTrigger> {
+  private async _getTrigger(_id: string): Promise<ExternalTrigger> {
     return {} as ExternalTrigger; // Placeholder
   }
 
-  private _applyTriggerFilters(payload: any, filters: any[]): boolean {
+  private _applyTriggerFilters(_payload: any, _filters: any[]): boolean {
     return true; // Simplified
   }
 
-  private _applyTransformation(payload: any, transformation: any): any {
+  private _applyTransformation(payload: any, _transformation: any): any {
     return payload; // Simplified
   }
 
-  private async _startWorkflowFromTrigger(trigger: ExternalTrigger, payload: any): Promise<string> {
+  private async _startWorkflowFromTrigger(trigger: ExternalTrigger, _payload: any): Promise<string> {
     this.logger.log(`Starting workflow from trigger ${trigger.id}`);
     return `workflow-instance-${Date.now()}`;
   }

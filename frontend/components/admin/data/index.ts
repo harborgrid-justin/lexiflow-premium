@@ -1,21 +1,21 @@
 // Data sub-module exports
 export { AdminDataRegistry } from './AdminDataRegistry';
-export { AdminDatabaseControl } from './AdminDatabaseControl';
+export { default as AdminDatabaseControl } from './AdminDatabaseControl';
 export { DataPlatformSidebar } from './DataPlatformSidebar';
-export { PlatformOverview } from './PlatformOverview';
-export { GovernanceConsole } from './GovernanceConsole';
-export { PipelineMonitor } from './PipelineMonitor';
-export { BackupVault } from './BackupVault';
-export { QueryConsole } from './QueryConsole';
-export { SecurityMatrix } from './SecurityMatrix';
-export { DataCatalog } from './DataCatalog';
-export { ApiGateway } from './ApiGateway';
-export { DataQualityStudio } from './DataQualityStudio';
-export { ReplicationManager } from './ReplicationManager';
-export { LineageGraph } from './LineageGraph';
-export { CostFinOps } from './CostFinOps';
-export { DataLakeExplorer } from './DataLakeExplorer';
-export { ShardingVisualizer } from './ShardingVisualizer';
+export { default as PlatformOverview } from './PlatformOverview';
+export { default as GovernanceConsole } from './GovernanceConsole';
+export { default as PipelineMonitor } from './PipelineMonitor';
+export { default as BackupVault } from './BackupVault';
+export { default as QueryConsole } from './QueryConsole';
+export { default as SecurityMatrix } from './SecurityMatrix';
+export { default as DataCatalog } from './DataCatalog';
+export { default as ApiGateway } from './ApiGateway';
+export { default as DataQualityStudio } from './DataQualityStudio';
+export { default as ReplicationManager } from './ReplicationManager';
+export { default as LineageGraph } from './LineageGraph';
+export { default as CostFinOps } from './CostFinOps';
+export { default as DataLakeExplorer } from './DataLakeExplorer';
+export { default as ShardingVisualizer } from './ShardingVisualizer';
 export { RealtimeStreams } from './RealtimeStreams';
 export { EventBusManager } from './EventBusManager';
 export { VersionControl } from './VersionControl';
@@ -26,7 +26,7 @@ export { Configuration } from './Configuration';
 // ============================================================================
 
 // Components
-export { DataSourcesManager } from './DataSourcesManager';
+export { default as DataSourcesManager } from './DataSourcesManager';
 export { ConnectionCard } from './ConnectionCard';
 export { ServiceCoverageIndicator } from './ServiceCoverageIndicator';
 

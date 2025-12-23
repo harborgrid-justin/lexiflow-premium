@@ -91,6 +91,26 @@ export class CreateCaseDto {
   judge?: string;
 
   @ApiPropertyOptional({ 
+    description: 'Referred magistrate judge',
+    example: 'Hon. John Doe',
+    maxLength: 100
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(100)
+  referredJudge?: string;
+
+  @ApiPropertyOptional({ 
+    description: 'Magistrate judge name',
+    example: 'Hon. Emily Brown',
+    maxLength: 100
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(100)
+  magistrateJudge?: string;
+
+  @ApiPropertyOptional({ 
     description: 'Filing date',
     example: '2025-01-15T00:00:00Z'
   })
@@ -108,6 +128,62 @@ export class CreateCaseDto {
   @Type(() => Date)
   @IsOptional()
   closeDate?: Date;
+
+  @ApiPropertyOptional({ 
+    description: 'Date case was terminated',
+    example: '2025-12-31T00:00:00Z'
+  })
+  @IsDate()
+  @Type(() => Date)
+  @IsOptional()
+  dateTerminated?: Date;
+
+  @ApiPropertyOptional({ 
+    description: 'Jury demand type',
+    example: 'None',
+    maxLength: 50
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(50)
+  juryDemand?: string;
+
+  @ApiPropertyOptional({ 
+    description: 'Cause of action (e.g., 28:0158 Bankruptcy Appeal from Judgment/Order)',
+    example: '28:0158 Bankruptcy Appeal from Judgment/Order',
+    maxLength: 500
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(500)
+  causeOfAction?: string;
+
+  @ApiPropertyOptional({ 
+    description: 'Nature of suit description',
+    example: 'Bankruptcy Appeal',
+    maxLength: 255
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(255)
+  natureOfSuit?: string;
+
+  @ApiPropertyOptional({ 
+    description: 'Nature of suit code',
+    example: '422',
+    maxLength: 10
+  })
+  @IsString()
+  @IsOptional()
+  @MaxLength(10)
+  natureOfSuitCode?: string;
+
+  @ApiPropertyOptional({ 
+    description: 'Related cases in other courts',
+    example: [{ court: '4th Circuit', caseNumber: '24-02160' }]
+  })
+  @IsOptional()
+  relatedCases?: { court: string; caseNumber: string; relationship?: string }[];
 
   @IsUUID()
   @IsOptional()

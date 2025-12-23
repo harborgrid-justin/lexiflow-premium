@@ -82,6 +82,18 @@ export class CreateDocketEntryDto {
   @MaxLength(100)
   pacerDocumentNumber?: string;
 
+  @ApiPropertyOptional({ description: 'ECF document number (e.g., 1, 2, 10)' })
+  @IsString()
+  @IsOptional()
+  @MaxLength(50)
+  ecfDocumentNumber?: string;
+
+  @ApiPropertyOptional({ description: 'ECF document URL (e.g., https://ecf.vaed.uscourts.gov/doc1/...)' })
+  @IsString()
+  @IsOptional()
+  @MaxLength(2048)
+  ecfUrl?: string;
+
   @ApiPropertyOptional({ description: 'Is sealed document' })
   @IsBoolean()
   @IsOptional()
@@ -92,17 +104,49 @@ export class CreateDocketEntryDto {
   @IsOptional()
   isRestricted?: boolean;
 
+  @ApiPropertyOptional({ description: 'Filing fee amount' })
+  @IsOptional()
+  filingFee?: number;
+
+  @ApiPropertyOptional({ description: 'Fee receipt number' })
+  @IsString()
+  @IsOptional()
+  @MaxLength(100)
+  feeReceiptNumber?: string;
+
+  @ApiPropertyOptional({ description: 'Judge name (for orders)' })
+  @IsString()
+  @IsOptional()
+  @MaxLength(255)
+  judgeName?: string;
+
+  @ApiPropertyOptional({ description: 'Signed by (e.g., District Judge Leonie M. Brinkema)' })
+  @IsString()
+  @IsOptional()
+  @MaxLength(255)
+  signedBy?: string;
+
+  @ApiPropertyOptional({ description: 'Docket clerk initials (e.g., dvanm, swil)' })
+  @IsString()
+  @IsOptional()
+  @MaxLength(10)
+  docketClerkInitials?: string;
+
+  @ApiPropertyOptional({ description: 'Related docket numbers' })
+  @IsOptional()
+  relatedDocketNumbers?: string[];
+
   @ApiPropertyOptional({ description: 'Additional notes' })
   @IsString()
   @IsOptional()
   notes?: string;
 
-  @ApiPropertyOptional({ description: 'Attachments' })
+  @ApiPropertyOptional({ description: 'Attachments with ECF document numbers and URLs' })
   @IsOptional()
   attachments?: Array<{
-    id: string;
-    name: string;
-    documentNumber?: string;
+    number: number;
+    url: string;
+    description?: string;
   }>;
 
   @ApiPropertyOptional({ description: 'Additional metadata' })

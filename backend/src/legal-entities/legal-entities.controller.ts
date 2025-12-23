@@ -24,6 +24,12 @@ export class LegalEntitiesController {
     return await this.legalEntitiesService.getStats();
   }
 
+  @Get('relationships')
+  @ApiOperation({ summary: 'Get all entity relationships' })
+  async getAllRelationships() {
+    return await this.legalEntitiesService.getAllRelationships();
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get legal entity by ID' })
   @ApiResponse({ status: 404, description: 'Entity not found' })

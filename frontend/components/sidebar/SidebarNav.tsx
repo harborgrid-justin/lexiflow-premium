@@ -25,7 +25,6 @@ import { useHoverIntent } from '../../hooks/useHoverIntent';
 
 // Utils & Constants
 import { cn } from '../../utils/cn';
-import { PATHS } from '../../config/paths.config';
 import { PREFETCH_MAP } from '../../config/prefetchConfig';
 import { Scheduler } from '../../utils/scheduler';
 
@@ -61,7 +60,9 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
   const visibleItems = useMemo(() => {
     const isAuthorizedAdmin = currentUserRole === 'Administrator' || currentUserRole === 'Senior Partner';
     return modules.filter(item => {
-      if (item.id === PATHS.PROFILE) return false;
+      // Filter out hidden routes (accessed via other pages, not directly in sidebar)
+      if (item.hidden) return false;
+      // Filter out admin-only routes for non-admin users
       if (item.requiresAdmin && !isAuthorizedAdmin) return false;
       return true;
     });

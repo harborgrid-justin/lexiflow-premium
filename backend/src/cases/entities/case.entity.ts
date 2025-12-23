@@ -76,8 +76,26 @@ export class Case extends BaseEntity {
   @Column({ type: 'varchar', length: 255, nullable: true })
   court?: string;
 
+  @Column({ name: 'cause_of_action', type: 'varchar', length: 500, nullable: true })
+  causeOfAction?: string;
+
+  @Column({ name: 'nature_of_suit', type: 'varchar', length: 255, nullable: true })
+  natureOfSuit?: string;
+
+  @Column({ name: 'nature_of_suit_code', type: 'varchar', length: 10, nullable: true })
+  natureOfSuitCode?: string;
+
+  @Column({ name: 'related_cases', type: 'jsonb', nullable: true })
+  relatedCases?: { court: string; caseNumber: string; relationship?: string }[];
+
   @Column({ type: 'varchar', length: 100, nullable: true })
   judge?: string;
+
+  @Column({ name: 'referred_judge', type: 'varchar', length: 100, nullable: true })
+  referredJudge?: string;
+
+  @Column({ name: 'magistrate_judge', type: 'varchar', length: 100, nullable: true })
+  magistrateJudge?: string;
 
   @Column({ name: 'filing_date', type: 'date', nullable: true })
   filingDate?: Date;
@@ -87,6 +105,12 @@ export class Case extends BaseEntity {
 
   @Column({ name: 'close_date', type: 'date', nullable: true })
   closeDate?: Date;
+
+  @Column({ name: 'date_terminated', type: 'date', nullable: true })
+  dateTerminated?: Date;
+
+  @Column({ name: 'jury_demand', type: 'varchar', length: 50, nullable: true })
+  juryDemand?: string;
 
   @Column({ name: 'assigned_team_id', type: 'uuid', nullable: true })
   assignedTeamId?: string;

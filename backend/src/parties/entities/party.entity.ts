@@ -53,6 +53,9 @@ export class Party extends BaseEntity {
   @Column({ type: 'varchar', length: 255 })
   name!: string;
 
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  description?: string;
+
   @Column({
     type: 'enum',
     enum: PartyType,
@@ -105,8 +108,32 @@ export class Party extends BaseEntity {
   @Column({ name: 'attorney_name', type: 'varchar', length: 255, nullable: true })
   attorneyName?: string;
 
+  @Column({ name: 'attorney_firm', type: 'varchar', length: 255, nullable: true })
+  attorneyFirm?: string;
+
   @Column({ name: 'attorney_bar_number', type: 'varchar', length: 50, nullable: true })
   attorneyBarNumber?: string;
+
+  @Column({ name: 'attorney_email', type: 'varchar', length: 255, nullable: true })
+  attorneyEmail?: string;
+
+  @Column({ name: 'attorney_phone', type: 'varchar', length: 50, nullable: true })
+  attorneyPhone?: string;
+
+  @Column({ name: 'attorney_address', type: 'text', nullable: true })
+  attorneyAddress?: string;
+
+  @Column({ name: 'attorney_fax', type: 'varchar', length: 50, nullable: true })
+  attorneyFax?: string;
+
+  @Column({ name: 'is_lead_attorney', type: 'boolean', default: false })
+  isLeadAttorney?: boolean;
+
+  @Column({ name: 'is_attorney_to_be_noticed', type: 'boolean', default: false })
+  isAttorneyToBeNoticed?: boolean;
+
+  @Column({ name: 'is_pro_se', type: 'boolean', default: false })
+  isProSe?: boolean;
 
   @Column({ type: 'text', nullable: true })
   notes?: string;

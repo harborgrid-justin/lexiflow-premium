@@ -15,7 +15,7 @@
  * 4. Compliance validation logic lives in hook, not in UI
  */
 
-import { useQuery, useMutation, useQueryClient, type UseQueryResult } from '../services/queryClient';
+import { useQuery, useMutation, useQueryClient, type UseQueryResult } from '../services/infrastructure/queryClient';
 import { trustAccountsApi } from '../services/api/trust-accounts-api';
 import type {
   TrustAccount,

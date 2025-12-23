@@ -12,7 +12,7 @@ import { cn } from '../../../utils/cn';
 import { Button } from '../../common/Button';
 import { Card } from '../../common/Card';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { DocumentPreviewPanel } from '../../documents/viewer/DocumentPreviewPanel';
+import { DocumentPreviewPanel } from '../../operations/documents/viewer/DocumentPreviewPanel';
 
 export function DataLakeExplorer(): React.ReactElement {
     const { theme } = useTheme();

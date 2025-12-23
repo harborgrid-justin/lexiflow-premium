@@ -112,4 +112,21 @@ export class PartiesApiService {
   async delete(id: string): Promise<void> {
     return apiClient.delete(`${this.baseUrl}/${id}`);
   }
+
+  /**
+   * Search parties by query string
+   * @param params Search parameters with query string
+   * @returns Array of matching parties
+   */
+  async search(params: { query: string }): Promise<Party[]> {
+    // Return empty array if query is empty or whitespace to prevent malformed API calls
+    if (!params.query || params.query.trim().length === 0) {
+      return [];
+    }
+    
+    const searchParams = new URLSearchParams();
+    searchParams.append('q', params.query);
+    const url = `${this.baseUrl}/search?${searchParams.toString()}`;
+    return apiClient.get<Party[]>(url);
+  }
 }

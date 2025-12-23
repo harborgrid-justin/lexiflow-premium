@@ -7,9 +7,10 @@
 
 export const PATHS = {
   DASHBOARD: 'dashboard',
-  CASES: 'cases',
-  CREATE_CASE: 'cases/create',
-  MATTERS: 'cases', // Consolidated: matters and cases are the same
+  CASES: 'matters',
+  CREATE_CASE: 'matters/create',
+  CASE_MANAGEMENT: 'matters', // Redirect to main matters page
+  MATTERS: 'matters', // Primary matter management
   DOCKET: 'docket',
   WORKFLOWS: 'workflows',
   MESSAGES: 'messages',

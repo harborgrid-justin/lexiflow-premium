@@ -11,6 +11,11 @@ export class CreatePartyDto {
   @MaxLength(255)
   name!: string;
 
+  @IsString()
+  @IsOptional()
+  @MaxLength(500)
+  description?: string;
+
   @IsEnum(PartyType)
   @IsNotEmpty()
   type!: PartyType;
@@ -78,8 +83,49 @@ export class CreatePartyDto {
   primaryContactPhone?: string;
 
   @IsString()
+  @IsOptional()  @MaxLength(255)
+  attorneyName?: string;
+
+  @IsString()
   @IsOptional()
-  notes?: string;
+  @MaxLength(255)
+  attorneyFirm?: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(50)
+  attorneyBarNumber?: string;
+
+  @IsEmail()
+  @IsOptional()
+  @MaxLength(255)
+  attorneyEmail?: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(50)
+  attorneyPhone?: string;
+
+  @IsString()
+  @IsOptional()
+  attorneyAddress?: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(50)
+  attorneyFax?: string;
+
+  @IsOptional()
+  isLeadAttorney?: boolean;
+
+  @IsOptional()
+  isAttorneyToBeNoticed?: boolean;
+
+  @IsOptional()
+  isProSe?: boolean;
+
+  @IsString()
+  @IsOptional()  notes?: string;
 
   @IsOptional()
   metadata?: Record<string, unknown>;

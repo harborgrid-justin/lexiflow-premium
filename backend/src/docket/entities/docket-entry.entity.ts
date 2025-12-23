@@ -46,6 +46,9 @@ export class DocketEntry extends BaseEntity {
   @Column({ name: 'docket_number', type: 'varchar', length: 100, nullable: true })
   docketNumber!: string;
 
+  @Column({ name: 'ecf_document_number', type: 'varchar', length: 50, nullable: true })
+  ecfDocumentNumber?: string;
+
   @Column({ name: 'date_filed', type: 'date', nullable: true })
   dateFiled!: Date;
 
@@ -73,6 +76,33 @@ export class DocketEntry extends BaseEntity {
 
   @Column({ name: 'document_url', type: 'varchar', length: 2048, nullable: true })
   documentUrl!: string;
+
+  @Column({ name: 'ecf_url', type: 'varchar', length: 2048, nullable: true })
+  ecfUrl?: string;
+
+  @Column({ name: 'attachments', type: 'jsonb', nullable: true })
+  attachments?: { number: number; url: string; description?: string }[];
+
+  @Column({ name: 'filing_fee', type: 'decimal', precision: 10, scale: 2, nullable: true })
+  filingFee?: number;
+
+  @Column({ name: 'fee_receipt_number', type: 'varchar', length: 100, nullable: true })
+  feeReceiptNumber?: string;
+
+  @Column({ name: 'judge_name', type: 'varchar', length: 255, nullable: true })
+  judgeName?: string;
+
+  @Column({ name: 'signed_by', type: 'varchar', length: 255, nullable: true })
+  signedBy?: string;
+
+  @Column({ name: 'docket_clerk_initials', type: 'varchar', length: 10, nullable: true })
+  docketClerkInitials?: string;
+
+  @Column({ name: 'is_restricted', type: 'boolean', default: false })
+  isRestricted?: boolean;
+
+  @Column({ name: 'related_docket_numbers', type: 'simple-array', nullable: true })
+  relatedDocketNumbers?: string[];
 
   @Column({ name: 'document_id', type: 'uuid', nullable: true })
   documentId!: string;

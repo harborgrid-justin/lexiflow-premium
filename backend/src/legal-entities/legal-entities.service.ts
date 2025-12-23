@@ -88,6 +88,19 @@ export class LegalEntitiesService {
     return entity.relationships || [];
   }
 
+  async getAllRelationships() {
+    // Get all entities and aggregate their relationships
+    const entities = await this.legalEntityRepository.find();
+    const allRelationships = entities.flatMap(entity => 
+      (entity.relationships || []).map(rel => ({
+        ...rel,
+        sourceEntityId: entity.id,
+        sourceEntityName: entity.name
+      }))
+    );
+    return allRelationships;
+  }
+
   async getStats() {
     const total = await this.legalEntityRepository.count();
     const active = await this.legalEntityRepository.count({ where: { status: 'active' as any } });

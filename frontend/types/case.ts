@@ -35,9 +35,13 @@ export interface Case extends BaseEntity {
   jurisdictionConfig?: JurisdictionObject;
   court?: string;
   judge?: string;
+  referredJudge?: string; // Backend: referred_judge
+  magistrateJudge?: string; // Backend: magistrate_judge
   filingDate: string; // Backend: Date
   trialDate?: string; // Backend field
   closeDate?: string; // Backend field
+  dateTerminated?: string; // Backend: date_terminated
+  juryDemand?: string; // Backend: jury_demand
   
   // Team & ownership
   assignedTeamId?: string; // Backend field
@@ -68,7 +72,10 @@ export interface Case extends BaseEntity {
   origJudgmentDate?: string;
   noticeOfAppealDate?: string;
   dateTerminated?: string;
-  natureOfSuit?: string;
+  causeOfAction?: string; // Backend: cause_of_action (e.g., '28:0158 Bankruptcy Appeal')
+  natureOfSuit?: string; // Backend: nature_of_suit
+  natureOfSuitCode?: string; // Backend: nature_of_suit_code (e.g., '422')
+  relatedCases?: { court: string; caseNumber: string; relationship?: string }[]; // Backend: jsonb
   
   // Financial
   value?: number;
@@ -97,6 +104,7 @@ export interface Party extends BaseEntity {
   // Core fields (aligned with backend Party entity)
   caseId: CaseId; // Backend: uuid (required), FK to cases
   name: string; // Backend: varchar(255)
+  description?: string; // Backend: varchar(500) - e.g., 'A Community Association'
   type: 'Plaintiff' | 'Defendant' | 'Petitioner' | 'Respondent' | 'Appellant' | 'Appellee' | 'Third Party' | 'Witness' | 'Expert Witness' | 'Other' | 'Individual' | 'Corporation' | 'Government'; // Backend: enum PartyType
   role: 'Primary' | 'Co-Party' | 'Interested Party' | 'Guardian' | 'Representative' | string; // Backend: enum PartyRole
   
@@ -114,6 +122,16 @@ export interface Party extends BaseEntity {
   
   // Legal representation
   counsel?: string; // Backend: varchar(255)
+  attorneyName?: string; // Backend: attorney_name
+  attorneyFirm?: string; // Backend: attorney_firm
+  attorneyBarNumber?: string; // Backend: attorney_bar_number
+  attorneyEmail?: string; // Backend: attorney_email
+  attorneyPhone?: string; // Backend: attorney_phone
+  attorneyAddress?: string; // Backend: attorney_address (text)
+  attorneyFax?: string; // Backend: attorney_fax
+  isLeadAttorney?: boolean; // Backend: is_lead_attorney (default: false)
+  isAttorneyToBeNoticed?: boolean; // Backend: is_attorney_to_be_noticed (default: false)
+  isProSe?: boolean; // Backend: is_pro_se (default: false)
   
   // Additional data
   notes?: string; // Backend: text

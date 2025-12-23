@@ -36,7 +36,7 @@ import { AppView, User, Case } from '../../types';
 // ========================================
 // OPTIMIZATION: Lazy load CaseDetail to prevent it from being bundled in the main chunk.
 // FIX: Handle named export from CaseDetail
-const CaseDetail = lazy(() => import('../case-detail/CaseDetail').then(m => ({ default: m.CaseDetail })));
+const CaseDetail = lazy(() => import('../matters/detail/CaseDetail').then(m => ({ default: m.CaseDetail })));
 
 // ========================================
 // TYPES & INTERFACES
@@ -139,9 +139,11 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
     }
 
     return (
-      <Suspense fallback={<LazyLoader message={`Loading ${moduleDef.label}...`} />}>
-        <Component {...(dynamicProps && typeof dynamicProps === 'object' ? dynamicProps : {})} />
-      </Suspense>
+      <div className="h-full">
+        <Suspense fallback={<LazyLoader message={`Loading ${moduleDef.label}...`} />}>
+          <Component {...(dynamicProps && typeof dynamicProps === 'object' ? dynamicProps : {})} />
+        </Suspense>
+      </div>
     );
   }
 

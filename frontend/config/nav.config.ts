@@ -25,51 +25,65 @@ export interface NavItemConfig {
 /**
  * Centralized Navigation Configuration
  * Defines all navigation items for the application sidebar
+ * 
+ * Categories:
+ * - Main: Core application functions (Dashboard, Calendar, Messenger)
+ * - Case Work: Matter management, documents, filings, and case workflows
+ * - Litigation Tools: Discovery, evidence, research, and trial preparation
+ * - Operations: Firm management, billing, CRM, and data platforms
+ * - Knowledge: Reference materials, templates, and rule engines
+ * - Admin: System administration (admin-only access)
  */
 export const NAVIGATION_ITEMS: NavItemConfig[] = [
-  // MAIN
+  // ============================================================================
+  // MAIN - Core Application Functions
+  // ============================================================================
   { id: PATHS.DASHBOARD, label: 'Dashboard', icon: LayoutDashboard, category: 'Main' },
   { id: PATHS.CALENDAR, label: 'Master Calendar', icon: Calendar, category: 'Main' },
   { id: PATHS.MESSAGES, label: 'Secure Messenger', icon: MessageSquare, category: 'Main' },
 
-  // CASE WORK
-  { id: PATHS.CASES, label: 'Case Management', icon: Briefcase, category: 'Case Work' },
-  // Matter Management consolidated into Case Management - same entity
-  { id: PATHS.LITIGATION_BUILDER, label: 'Litigation Strategy', icon: Milestone, category: 'Case Work' },
-  { id: PATHS.PLEADING_BUILDER, label: 'Pleading Builder', icon: PenTool, category: 'Case Work' },
-  { id: PATHS.DOCKET, label: 'Master Docket', icon: BookOpen, category: 'Case Work' },
-  { id: PATHS.DOCUMENTS, label: 'Documents', icon: FileText, category: 'Case Work' },
+  // ============================================================================
+  // CASE WORK - Matter Management & Documents
+  // ============================================================================
+  { id: PATHS.CASES, label: 'Matter Management', icon: Briefcase, category: 'Case Work' },
+  { id: PATHS.DOCKET, label: 'Docket & Filings', icon: BookOpen, category: 'Case Work' },
+  { id: PATHS.DOCUMENTS, label: 'Document Manager', icon: FileText, category: 'Case Work' },
   { id: PATHS.CORRESPONDENCE, label: 'Correspondence', icon: Send, category: 'Case Work' },
-  { id: PATHS.WORKFLOWS, label: 'Workflows', icon: GitBranch, category: 'Case Work' },
+  { id: PATHS.PLEADING_BUILDER, label: 'Pleading Builder', icon: PenTool, category: 'Case Work' },
+  { id: PATHS.LITIGATION_BUILDER, label: 'Litigation Strategy', icon: Milestone, category: 'Case Work' },
+  { id: PATHS.WORKFLOWS, label: 'Case Workflows', icon: GitBranch, category: 'Case Work' },
 
-  // LITIGATION TOOLS
+  // ============================================================================
+  // LITIGATION TOOLS - Discovery, Evidence & Trial Prep
+  // ============================================================================
   { id: PATHS.RESEARCH, label: 'Research', icon: Search, category: 'Litigation Tools' },
-  { id: PATHS.CITATIONS, label: 'Citations', icon: BookOpen, category: 'Litigation Tools' },
+  { id: PATHS.CITATIONS, label: 'Citations', icon: ScrollText, category: 'Litigation Tools' },
   { id: PATHS.WAR_ROOM, label: 'War Room', icon: Target, category: 'Litigation Tools' },
   { id: PATHS.DISCOVERY, label: 'Discovery Center', icon: FileQuestion, category: 'Litigation Tools' },
   { id: PATHS.EVIDENCE, label: 'Evidence Vault', icon: Fingerprint, category: 'Litigation Tools' },
   { id: PATHS.EXHIBITS, label: 'Exhibit Pro', icon: StickyNote, category: 'Litigation Tools' },
   
-  // OPERATIONS
+  // ============================================================================
+  // OPERATIONS - Firm Management & Business
+  // ============================================================================
   { id: PATHS.DATA_PLATFORM, label: 'Data Platform', icon: Database, category: 'Operations' },
   { id: PATHS.ENTITIES, label: 'Entity Director', icon: Network, category: 'Operations' },
   { id: PATHS.PRACTICE, label: 'Firm Operations', icon: Building2, category: 'Operations' },
   { id: PATHS.BILLING, label: 'Billing & Finance', icon: DollarSign, category: 'Operations' },
   { id: PATHS.CRM, label: 'Client CRM', icon: Users, category: 'Operations' },
-
-  // KNOWLEDGE
-  { id: PATHS.LIBRARY, label: 'Knowledge Base', icon: Library, category: 'Knowledge' },
-  { id: PATHS.CLAUSES, label: 'Clause Library', icon: ScrollText, category: 'Knowledge' },
-  { id: PATHS.JURISDICTION, label: 'Jurisdictions', icon: Globe, category: 'Knowledge' },
-  { id: PATHS.RULES_ENGINE, label: 'Rules Engine', icon: Scale, category: 'Knowledge' },
-
-  // ANALYTICS
   { id: PATHS.ANALYTICS, label: 'Analytics', icon: BarChart3, category: 'Operations' },
 
-  // ADMIN
+  // ============================================================================
+  // KNOWLEDGE - Reference & Templates
+  // ============================================================================
+  { id: PATHS.LIBRARY, label: 'Knowledge Base', icon: Library, category: 'Knowledge' },
+  { id: PATHS.CLAUSES, label: 'Clause Library', icon: Book, category: 'Knowledge' },
+  { id: PATHS.JURISDICTION, label: 'Jurisdictions', icon: Globe, category: 'Knowledge' },
+  { id: PATHS.RULES_ENGINE, label: 'Rules Engine', icon: Gavel, category: 'Knowledge' },
+
+  // ============================================================================
+  // ADMIN - System Administration (Admin-Only)
+  // ============================================================================
   { id: PATHS.COMPLIANCE, label: 'Compliance', icon: ShieldCheck, category: 'Admin', requiresAdmin: true },
   { id: PATHS.ADMIN, label: 'Admin Console', icon: Settings, category: 'Admin', requiresAdmin: true },
-  
-  // PROFILE
-  { id: PATHS.PROFILE, label: 'My Profile', icon: UserCircle, category: 'Main' },
 ];

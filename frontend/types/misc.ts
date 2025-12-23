@@ -256,6 +256,7 @@ export interface ModuleDefinition {
   label: string;
   component: LazyExoticComponent<unknown>;
   requiresAdmin?: boolean;
+  hidden?: boolean; // If true, don't show in sidebar navigation (e.g., Create Case)
   intentMatcher?: (intent: string, context: unknown) => boolean;
   category: NavCategory;
   icon?: unknown;

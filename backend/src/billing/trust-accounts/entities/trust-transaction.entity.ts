@@ -109,6 +109,57 @@ export class TrustTransaction extends BaseEntity {
   @Column({ name: 'reconciled_by', type: 'uuid', nullable: true })
   reconciledBy!: string;
 
+  // COMPLIANCE: Additional reconciliation fields
+  @Column({ name: 'bank_statement_date', type: 'date', nullable: true })
+  bankStatementDate?: Date;
+
+  @Column({ name: 'cleared_date', type: 'date', nullable: true })
+  clearedDate?: Date;
+
+  // COMPLIANCE: Deposit and Withdrawal Rules
+  @Column({ name: 'funds_received_date', type: 'timestamp', nullable: true })
+  fundsReceivedDate?: Date;
+
+  @Column({ name: 'prompt_deposit_compliant', type: 'boolean', nullable: true })
+  promptDepositCompliant?: boolean;
+
+  @Column({ name: 'is_advanced_fee', type: 'boolean', default: false })
+  isAdvancedFee!: boolean;
+
+  @Column({ name: 'is_earned_fee', type: 'boolean', default: false })
+  isEarnedFee!: boolean;
+
+  @Column({ name: 'transaction_source', type: 'varchar', length: 50, nullable: true })
+  transactionSource?: string; // 'client' | 'firm' | 'third_party'
+
+  @Column({ name: 'is_operating_fund_transfer', type: 'boolean', default: false })
+  isOperatingFundTransfer!: boolean;
+
+  @Column({ name: 'check_voided', type: 'boolean', default: false })
+  checkVoided!: boolean;
+
+  @Column({ name: 'payment_method_compliant', type: 'boolean', default: true })
+  paymentMethodCompliant!: boolean;
+
+  @Column({ name: 'signatory_authorized', type: 'boolean', nullable: true })
+  signatoryAuthorized?: boolean;
+
+  // COMPLIANCE: Communication and Disputed Funds
+  @Column({ name: 'client_notified', type: 'boolean', default: false })
+  clientNotified!: boolean;
+
+  @Column({ name: 'client_notified_date', type: 'timestamp', nullable: true })
+  clientNotifiedDate?: Date;
+
+  @Column({ name: 'disputed_amount', type: 'decimal', precision: 15, scale: 2, nullable: true })
+  disputedAmount?: number;
+
+  @Column({ name: 'dispute_reason', type: 'text', nullable: true })
+  disputeReason?: string;
+
+  @Column({ name: 'dispute_resolved_date', type: 'date', nullable: true })
+  disputeResolvedDate?: Date;
+
   @Column({ type: 'text', nullable: true })
   notes!: string;
 
@@ -121,9 +172,16 @@ export class TrustTransaction extends BaseEntity {
   @Column({ type: 'jsonb', nullable: true })
   metadata!: Record<string, unknown>;
 
+  // COMPLIANCE: Record Retention
+  @Column({ name: 'retention_expiry_date', type: 'date', nullable: true })
+  retentionExpiryDate?: Date;
+
   @Column({ name: 'created_by', type: 'uuid', nullable: true })
   createdBy!: string;
 
   @Column({ name: 'updated_by', type: 'uuid', nullable: true })
   updatedBy!: string;
+
+  @Column({ name: 'deleted_at', type: 'timestamp', nullable: true })
+  deletedAt?: Date;
 }

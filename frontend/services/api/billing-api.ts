@@ -36,6 +36,14 @@ import type {
   EvidenceItem,
   TimeEntry,
   User,
+  TrustAccount,
+  TrustTransactionEntity,
+  CreateTrustAccountDto,
+  UpdateTrustAccountDto,
+  TrustAccountStatus,
+  CreateTrustTransactionDto,
+  DepositDto,
+  WithdrawalDto,
 } from '../../types';
 
 /**
@@ -449,16 +457,172 @@ export class BillingApiService {
      * Gracefully handles endpoint unavailability
      * 
      * @param filters - Optional filters for clientId and status
-     * @returns Promise<any[]> Array of trust accounts
+     * @returns Promise<TrustAccount[]> Array of trust accounts with full type safety
      */
-    async getTrustAccounts(filters?: { clientId?: string; status?: string }): Promise<any[]> {
+    async getTrustAccounts(filters?: { clientId?: string; status?: TrustAccountStatus }): Promise<TrustAccount[]> {
         try {
             // Backend returns array directly, not paginated
-            const response = await apiClient.get<any[]>('/billing/trust-accounts', filters);
+            const response = await apiClient.get<TrustAccount[]>('/billing/trust-accounts', filters);
             return Array.isArray(response) ? response : [];
         } catch (error) {
             // Fallback to empty array if endpoint doesn't exist yet
             console.warn('[BillingApiService.getTrustAccounts] Trust accounts endpoint not available, returning empty array');
+            return [];
+        }
+    }
+
+    /**
+     * Get single trust account by ID
+     * 
+     * @param id - Trust account UUID
+     * @returns Promise<TrustAccount> Trust account details
+     */
+    async getTrustAccount(id: string): Promise<TrustAccount> {
+        this.validateId(id, 'getTrustAccount');
+        return await apiClient.get<TrustAccount>(`/billing/trust-accounts/${id}`);
+    }
+
+    /**
+     * Create new trust account
+     * 
+     * @param data - Trust account creation data
+     * @returns Promise<TrustAccount> Created trust account
+     */
+    async createTrustAccount(data: CreateTrustAccountDto): Promise<TrustAccount> {
+        return await apiClient.post<TrustAccount>('/billing/trust-accounts', data);
+    }
+
+    /**
+     * Update existing trust account
+     * 
+     * @param id - Trust account UUID
+     * @param data - Partial trust account update data
+     * @returns Promise<TrustAccount> Updated trust account
+     */
+    async updateTrustAccount(id: string, data: UpdateTrustAccountDto): Promise<TrustAccount> {
+        this.validateId(id, 'updateTrustAccount');
+        return await apiClient.patch<TrustAccount>(`/billing/trust-accounts/${id}`, data);
+    }
+
+    /**
+     * Soft delete trust account
+     * 
+     * @param id - Trust account UUID
+     * @returns Promise<void>
+     */
+    async deleteTrustAccount(id: string): Promise<void> {
+        this.validateId(id, 'deleteTrustAccount');
+        await apiClient.delete(`/billing/trust-accounts/${id}`);
+    }
+
+    /**
+     * Get trust transactions for account
+     * 
+     * @param accountId - Trust account UUID
+     * @param filters - Optional date range and status filters
+     * @returns Promise<TrustTransactionEntity[]> Array of transactions
+     */
+    async getTrustTransactions(
+        accountId: string, 
+        filters?: { startDate?: string; endDate?: string; status?: string }
+    ): Promise<TrustTransactionEntity[]> {
+        this.validateId(accountId, 'getTrustTransactions');
+        try {
+            const response = await apiClient.get<TrustTransactionEntity[]>(
+                `/billing/trust-accounts/${accountId}/transactions`, 
+                filters
+            );
+            return Array.isArray(response) ? response : [];
+        } catch (error) {
+            console.warn('[BillingApiService.getTrustTransactions] Transactions endpoint not available, returning empty array');
+            return [];
+        }
+    }
+
+    /**
+     * Create a trust transaction (generic)
+     * 
+     * @param accountId - Trust account UUID
+     * @param data - Transaction creation data
+     * @param createdBy - Optional user ID of creator
+     * @returns Promise<TrustTransactionEntity> Created transaction
+     */
+    async createTrustTransaction(
+        accountId: string,
+        data: CreateTrustTransactionDto,
+        createdBy?: string
+    ): Promise<TrustTransactionEntity> {
+        this.validateId(accountId, 'createTrustTransaction');
+        return await apiClient.post<TrustTransactionEntity>(
+            `/billing/trust-accounts/${accountId}/transaction`,
+            { ...data, createdBy }
+        );
+    }
+
+    /**
+     * Deposit funds into trust account
+     * 
+     * @param accountId - Trust account UUID
+     * @param data - Deposit data
+     * @param createdBy - Optional user ID of creator
+     * @returns Promise<TrustTransactionEntity> Created deposit transaction
+     */
+    async depositTrustFunds(
+        accountId: string,
+        data: DepositDto,
+        createdBy?: string
+    ): Promise<TrustTransactionEntity> {
+        this.validateId(accountId, 'depositTrustFunds');
+        return await apiClient.post<TrustTransactionEntity>(
+            `/billing/trust-accounts/${accountId}/deposit`,
+            { ...data, createdBy }
+        );
+    }
+
+    /**
+     * Withdraw funds from trust account
+     * 
+     * @param accountId - Trust account UUID
+     * @param data - Withdrawal data
+     * @param createdBy - Optional user ID of creator
+     * @returns Promise<TrustTransactionEntity> Created withdrawal transaction
+     */
+    async withdrawTrustFunds(
+        accountId: string,
+        data: WithdrawalDto,
+        createdBy?: string
+    ): Promise<TrustTransactionEntity> {
+        this.validateId(accountId, 'withdrawTrustFunds');
+        return await apiClient.post<TrustTransactionEntity>(
+            `/billing/trust-accounts/${accountId}/withdraw`,
+            { ...data, createdBy }
+        );
+    }
+
+    /**
+     * Get trust account balance
+     * 
+     * @param accountId - Trust account UUID
+     * @returns Promise with balance and currency
+     */
+    async getTrustAccountBalance(accountId: string): Promise<{ balance: number; currency: string }> {
+        this.validateId(accountId, 'getTrustAccountBalance');
+        return await apiClient.get<{ balance: number; currency: string }>(
+            `/billing/trust-accounts/${accountId}/balance`
+        );
+    }
+
+    /**
+     * Get low-balance trust accounts
+     * 
+     * @param threshold - Balance threshold (default 1000)
+     * @returns Promise<TrustAccount[]> Accounts below threshold
+     */
+    async getLowBalanceTrustAccounts(threshold?: number): Promise<TrustAccount[]> {
+        try {
+            return await apiClient.get<TrustAccount[]>('/billing/trust-accounts/low-balance', { threshold });
+        } catch (error) {
+            console.warn('[BillingApiService.getLowBalanceTrustAccounts] Endpoint not available, returning empty array');
             return [];
         }
     }

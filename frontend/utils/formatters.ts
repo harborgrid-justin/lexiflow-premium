@@ -77,19 +77,22 @@ const MAX_STRING_LENGTH = 100_000;
  * Validate numeric input for formatters
  * @private
  */
-const validateNumber = (value: number | string | undefined, methodName: string): number => {
-  if (value === undefined || value === null) {
-    throw new Error(`[FormattersService.${methodName}] Value is required`);
+const validateNumber = (value: number | string | undefined | null, methodName: string, defaultValue: number = 0): number => {
+  // Return default for null/undefined without throwing
+  if (value === undefined || value === null || value === '') {
+    return defaultValue;
   }
 
   const num = Number(value);
 
   if (isNaN(num)) {
-    throw new Error(`[FormattersService.${methodName}] Value must be a valid number, got: ${value}`);
+    console.warn(`[FormattersService.${methodName}] Value must be a valid number, got: ${value}, using default: ${defaultValue}`);
+    return defaultValue;
   }
 
   if (!isFinite(num)) {
-    throw new Error(`[FormattersService.${methodName}] Value must be finite, got: ${num}`);
+    console.warn(`[FormattersService.${methodName}] Value must be finite, got: ${num}, using default: ${defaultValue}`);
+    return defaultValue;
   }
 
   return num;
@@ -181,12 +184,12 @@ export const FormattersService = {
    * - Safe number formatting (no code injection)
    */
   currency: (
-    amount: number | string | undefined,
+    amount: number | string | undefined | null,
     currency: string = DEFAULT_CURRENCY,
     locale: string = DEFAULT_LOCALE
   ): string => {
     try {
-      const num = validateNumber(amount, 'currency');
+      const num = validateNumber(amount, 'currency', 0);
       const validCurrency = validateCurrency(currency);
 
       return new Intl.NumberFormat(locale, {
@@ -211,9 +214,9 @@ export const FormattersService = {
    * @example
    * FormattersService.currencyValue(1299.99);    // "1,299.99"
    */
-  currencyValue: (amount: number | string | undefined, decimals: number = 2): string => {
+  currencyValue: (amount: number | string | undefined | null, decimals: number = 2): string => {
     try {
-      const num = validateNumber(amount, 'currencyValue');
+      const num = validateNumber(amount, 'currencyValue', 0);
 
       return new Intl.NumberFormat(DEFAULT_LOCALE, {
         minimumFractionDigits: decimals,

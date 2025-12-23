@@ -82,9 +82,43 @@ export interface Invoice extends BaseEntity {
   items?: string[];
   taxJurisdiction?: string; // Alias for jurisdiction
 }
-export interface TrustTransaction extends BaseEntity { accountId: string; type: 'Deposit' | 'Withdrawal'; amount: Money; date: string; checkNumber?: string; clearedDate?: string; description: string; }
-export interface FirmExpense extends BaseEntity { date: string; category: string; description: string; amount: number; status: 'Paid' | 'Pending'; vendor: string; }
-export interface TrustSubLedger { id: string; name: string; balance: Money; lastReconciled: string; accountId?: string; }
+
+/**
+ * @deprecated Moved to types/trust-accounts.ts for full backend synchronization
+ * Use TrustTransactionEntity from types/trust-accounts.ts instead
+ * Legacy simple version kept for backward compatibility
+ */
+export interface TrustTransaction extends BaseEntity { 
+  accountId: string; 
+  type: 'Deposit' | 'Withdrawal'; 
+  amount: Money; 
+  date: string; 
+  checkNumber?: string; 
+  clearedDate?: string; 
+  description: string; 
+}
+
+export interface FirmExpense extends BaseEntity { 
+  date: string; 
+  category: string; 
+  description: string; 
+  amount: number; 
+  status: 'Paid' | 'Pending'; 
+  vendor: string; 
+}
+
+/**
+ * @deprecated Moved to types/trust-accounts.ts for full backend synchronization
+ * Use TrustSubLedger from types/trust-accounts.ts instead
+ * Legacy version kept for backward compatibility
+ */
+export interface TrustSubLedger { 
+  id: string; 
+  name: string; 
+  balance: Money; 
+  lastReconciled: string; 
+  accountId?: string; 
+}
 
 // Ledger Transaction with Receipt Support
 export interface LedgerTransaction extends BaseEntity {

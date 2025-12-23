@@ -1,6 +1,25 @@
 /**
  * CreateCaseModal.tsx
  * 
+ * @deprecated This modal component is deprecated as of 2025-12-22.
+ * Use the full-page CreateCase component instead (navigate to PATHS.CREATE_CASE).
+ * This file is kept for backward compatibility only.
+ * 
+ * MIGRATION GUIDE:
+ * Instead of:
+ *   <CreateCaseModal isOpen={true} onClose={...} onSave={...} />
+ * 
+ * Use navigation:
+ *   setActiveView(PATHS.CREATE_CASE)
+ *   // Component will call onBack() to return to case list
+ * 
+ * WHY DEPRECATED:
+ * - Modal UX constrains form complexity and validation feedback
+ * - Full-page allows better keyboard navigation and accessibility
+ * - Dedicated route enables deep linking and browser history
+ * - Type safety improved with explicit prop contracts
+ * - Better separation of concerns (routing vs presentation)
+ * 
  * Modal dialog for creating new cases with jurisdiction selection,
  * matter type configuration, and pre-filing vs filed case toggles.
  * 

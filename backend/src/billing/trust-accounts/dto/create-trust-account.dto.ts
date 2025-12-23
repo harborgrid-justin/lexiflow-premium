@@ -70,4 +70,60 @@ export class CreateTrustAccountDto {
   @IsOptional()
   @IsString()
   responsibleAttorney?: string;
+
+  // COMPLIANCE FIELDS
+  @IsOptional()
+  @IsBoolean()
+  stateBarApproved?: boolean;
+
+  @IsOptional()
+  @IsString()
+  jurisdiction?: string;
+
+  @IsOptional()
+  @IsString()
+  ioltaProgramId?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  overdraftReportingEnabled?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  accountTitleCompliant?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  clientConsentForLocation?: boolean;
+
+  @IsOptional()
+  @IsString()
+  lastReconciledDate?: string;
+
+  @IsOptional()
+  @IsString()
+  reconciliationStatus?: string;
+
+  @IsOptional()
+  @IsString()
+  nextReconciliationDue?: string;
+
+  @IsOptional()
+  @IsNumber()
+  recordRetentionYears?: number;
+
+  @IsOptional()
+  @IsNumber()
+  checkNumberRangeStart?: number;
+
+  @IsOptional()
+  @IsNumber()
+  checkNumberRangeCurrent?: number;
+
+  @IsOptional()
+  authorizedSignatories?: string[];
+
+  @IsOptional()
+  @IsString()
+  primarySignatory?: string;
 }

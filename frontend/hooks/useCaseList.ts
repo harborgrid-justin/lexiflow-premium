@@ -7,11 +7,13 @@
  * @description Manages comprehensive case list operations including:
  * - Multi-criteria filtering (status, type, search, date range)
  * - Debounced search for optimal performance
- * - Modal state management for case creation/editing
  * - Backend API integration with React Query
  * - Pagination support (array or paginated response)
  * - Type-safe operations throughout
  * - Cache management and invalidation
+ * 
+ * @deprecated Modal state management removed as of 2025-12-22.
+ * Use navigation to PATHS.CREATE_CASE for case creation.
  * 
  * @security
  * - Input sanitization on search terms
@@ -70,7 +72,6 @@ import { queryKeys } from '../utils/queryKeys';
 
 // Hooks
 import { useDebounce } from './useDebounce';
-import { useModalState } from './useModalState';
 
 // Types
 import { Case } from '../types';
@@ -150,9 +151,6 @@ export const useCaseList = () => {
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================
-  
-  /** Modal state for case creation/editing */
-  const modal = useModalState();
   
   /** Status filter state */
   const [statusFilter, setStatusFilter] = useState<string>('All');
@@ -391,10 +389,9 @@ export const useCaseList = () => {
    * Return comprehensive case list management interface
    * All handlers are memoized for optimal performance
    * 
+   * @deprecated Modal state management removed as of 2025-12-22.
+   * 
    * @returns {Object} Case list management interface
-   * @property {boolean} isModalOpen - Modal open state
-   * @property {Function} openModal - Open modal handler
-   * @property {Function} closeModal - Close modal handler
    * @property {string} statusFilter - Current status filter
    * @property {Function} setStatusFilter - Status filter setter (safe)
    * @property {string} typeFilter - Current type filter
@@ -411,9 +408,6 @@ export const useCaseList = () => {
    * @property {boolean} isError - Error state indicator
    */
   return {
-    isModalOpen: modal.isOpen,
-    openModal: modal.open,
-    closeModal: modal.close,
     statusFilter,
     setStatusFilter: setStatusFilterSafe,
     typeFilter,

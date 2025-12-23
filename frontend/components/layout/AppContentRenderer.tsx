@@ -111,6 +111,7 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
 
     if (activeView === PATHS.CASES || activeView === PATHS.PLEADING_BUILDER) {
       dynamicProps.onSelectCase = handleSelectCase;
+      dynamicProps.setActiveView = setActiveView;
     } else if (([PATHS.DASHBOARD, PATHS.WORKFLOWS, PATHS.EVIDENCE, PATHS.EXHIBITS] as string[]).includes(activeView)) {
       dynamicProps.onSelectCase = handleSelectCaseById;
       dynamicProps.onNavigateToCase = handleSelectCaseById;
@@ -122,6 +123,14 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
 
     if (activeView === PATHS.BILLING) {
       dynamicProps.navigateTo = (v: string) => setActiveView(v as AppView);
+    }
+
+    if (activeView === PATHS.CREATE_CASE) {
+      dynamicProps.onBack = () => setActiveView(PATHS.CASES);
+      dynamicProps.onSuccess = (newCase: Case) => {
+        // Navigate back to cases after successful creation
+        setActiveView(PATHS.CASES);
+      };
     }
 
     if (activeView === PATHS.DOCUMENTS || activeView === PATHS.JURISDICTION) {

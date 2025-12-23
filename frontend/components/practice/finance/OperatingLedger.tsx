@@ -27,20 +27,25 @@ export const OperatingLedger: React.FC<OperatingLedgerProps> = ({ expenses: prop
   // Ensure expenses is always an array
   const expenses = Array.isArray(propExpenses) ? propExpenses : [];
 
+  // Safe defaults for summary values
+  const balance = summary?.balance ?? 0;
+  const expensesMtd = summary?.expensesMtd ?? 0;
+  const cashFlowMtd = summary?.cashFlowMtd ?? 0;
+
   return (
     <div className="space-y-6">
         <div className={cn("rounded-lg p-6 shadow-lg border grid grid-cols-1 md:grid-cols-3 gap-6", mode === 'dark' ? "bg-slate-800 border-slate-700" : "bg-white border-slate-200")}>
             <div className={cn("border-r pr-6", theme.border.default)}>
                 <p className={cn("text-xs font-bold uppercase tracking-wider mb-1", theme.text.secondary)}>Operating Balance</p>
-                <p className={cn("text-3xl font-mono font-bold mt-1 tracking-tight", theme.text.primary)}>{Formatters.currency(summary?.balance)}</p>
+                <p className={cn("text-3xl font-mono font-bold mt-1 tracking-tight", theme.text.primary)}>{Formatters.currency(balance)}</p>
             </div>
             <div className={cn("border-r pr-6", theme.border.default)}>
                 <p className={cn("text-xs font-bold uppercase tracking-wider mb-1", theme.text.secondary)}>Expenses (MTD)</p>
-                <p className={cn("text-2xl font-mono font-bold flex items-center", theme.status.error.text)}><ArrowDownLeft className="h-5 w-5 mr-1"/> {Formatters.currency(summary?.expensesMtd)}</p>
+                <p className={cn("text-2xl font-mono font-bold flex items-center", theme.status.error.text)}><ArrowDownLeft className="h-5 w-5 mr-1"/> {Formatters.currency(expensesMtd)}</p>
             </div>
             <div>
                 <p className={cn("text-xs font-bold uppercase tracking-wider mb-1", theme.text.secondary)}>Cash Flow (MTD)</p>
-                <p className={cn("text-2xl font-mono font-bold flex items-center", theme.status.success.text)}><ArrowUpRight className="h-5 w-5 mr-1"/> {Formatters.currency(summary?.cashFlowMtd)}</p>
+                <p className={cn("text-2xl font-mono font-bold flex items-center", theme.status.success.text)}><ArrowUpRight className="h-5 w-5 mr-1"/> {Formatters.currency(cashFlowMtd)}</p>
             </div>
         </div>
 

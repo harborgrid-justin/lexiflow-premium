@@ -17,13 +17,36 @@ export class TrustAccountsService {
   ) {}
 
   async create(createTrustAccountDto: CreateTrustAccountDto): Promise<TrustAccount> {
+    // COMPLIANCE: Validate account title includes "Trust Account" or "Escrow Account"
+    const accountTitleCompliant =
+      createTrustAccountDto.accountName.toLowerCase().includes('trust account') ||
+      createTrustAccountDto.accountName.toLowerCase().includes('escrow account');
+
+    if (!accountTitleCompliant) {
+      throw new BadRequestException(
+        'Account name must include "Trust Account" or "Escrow Account" for compliance',
+      );
+    }
+
     const trustAccount = this.trustAccountRepository.create({
       ...createTrustAccountDto,
       balance: createTrustAccountDto.balance || 0,
       status: createTrustAccountDto.status || TrustAccountStatus.ACTIVE,
+      accountTitleCompliant,
+      recordRetentionYears: createTrustAccountDto.recordRetentionYears || 7,
+      reconciliationStatus: 'pending',
+      // Set next reconciliation due to first of next month
+      nextReconciliationDue: this.getNextMonthFirstDay(),
     });
 
     return await this.trustAccountRepository.save(trustAccount);
+  }
+
+  private getNextMonthFirstDay(): string {
+    const now = new Date();
+    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const isoString = nextMonth.toISOString().split('T')[0];
+    return isoString || '';
   }
 
   async findAll(clientId?: string, status?: TrustAccountStatus): Promise<TrustAccount[]> {
@@ -111,6 +134,25 @@ export class TrustAccountsService {
 
     const newBalance = Number(account.balance) + Number(depositDto.amount);
 
+    // COMPLIANCE: Calculate prompt deposit compliance (24-48 hours)
+    let promptDepositCompliant = true;
+    if (depositDto.fundsReceivedDate) {
+      const fundsReceived = new Date(depositDto.fundsReceivedDate);
+      const transactionDate = new Date(depositDto.transactionDate);
+      const hoursElapsed = (transactionDate.getTime() - fundsReceived.getTime()) / (1000 * 60 * 60);
+      promptDepositCompliant = hoursElapsed <= 48;
+    }
+
+    // COMPLIANCE: Validate payment method (no cash/ATM)
+    const paymentMethodCompliant = 
+      !depositDto.paymentMethod ||
+      (depositDto.paymentMethod.toLowerCase() !== 'cash' && 
+       depositDto.paymentMethod.toLowerCase() !== 'atm');
+
+    if (!paymentMethodCompliant) {
+      throw new BadRequestException('Cash/ATM deposits are not allowed for trust accounts');
+    }
+
     const transaction = this.transactionRepository.create({
       trustAccountId: accountId,
       transactionType: TransactionType.DEPOSIT,
@@ -120,9 +162,15 @@ export class TrustAccountsService {
       description: depositDto.description,
       payor: depositDto.payor,
       referenceNumber: depositDto.referenceNumber,
-      paymentMethod: depositDto.paymentMethod,
+      paymentMethod: depositDto['paymentMethod'],
       notes: depositDto.notes,
       createdBy,
+      promptDepositCompliant,
+      paymentMethodCompliant,
+      fundsReceivedDate: depositDto.fundsReceivedDate ? new Date(depositDto.fundsReceivedDate) : undefined,
+      transactionSource: 'client',
+      isAdvancedFee: Boolean(depositDto.isAdvancedFee),
+      clientNotified: false, // Will be updated by notification system
     });
 
     await this.transactionRepository.save(transaction);
@@ -140,8 +188,32 @@ export class TrustAccountsService {
       throw new BadRequestException('Cannot withdraw from inactive trust account');
     }
 
+    // COMPLIANCE: Zero balance principle - prevent negative balances
     if (Number(account.balance) < Number(withdrawalDto.amount)) {
       throw new BadRequestException('Insufficient funds in trust account');
+    }
+
+    // COMPLIANCE: Validate payment method (no cash/ATM for withdrawals)
+    const paymentMethod = withdrawalDto.paymentMethod?.toLowerCase();
+    if (paymentMethod === 'cash' || paymentMethod === 'atm') {
+      throw new BadRequestException(
+        'Cash/ATM withdrawals are prohibited for trust accounts per state bar rules',
+      );
+    }                             
+
+    // COMPLIANCE: Check number required for checks
+    if (paymentMethod === 'check' && !withdrawalDto.checkNumber) {
+      throw new BadRequestException('Check number is required for check withdrawals');
+    }
+
+    // COMPLIANCE: Validate signatory authorization (if provided)
+    const signatoryAuthorized: boolean = !createdBy || 
+      (Array.isArray(account.authorizedSignatories) && 
+       typeof createdBy === 'string' && 
+       (account.authorizedSignatories as string[]).includes(createdBy));
+
+    if (!signatoryAuthorized) {
+      throw new BadRequestException('User does not have signatory authority for this trust account');
     }
 
     const newBalance = Number(account.balance) - Number(withdrawalDto.amount);
@@ -158,9 +230,23 @@ export class TrustAccountsService {
       relatedInvoiceId: withdrawalDto.relatedInvoiceId,
       notes: withdrawalDto.notes,
       createdBy,
+      paymentMethod: withdrawalDto.paymentMethod as string | undefined,
+      paymentMethodCompliant: paymentMethod !== 'cash' && paymentMethod !== 'atm',
+      signatoryAuthorized,
+      transactionSource: 'client',
+      isEarnedFee: Boolean(withdrawalDto.isEarnedFee),
+      isOperatingFundTransfer: Boolean(withdrawalDto.isOperatingFundTransfer),
     });
 
     await this.transactionRepository.save(transaction);
+
+    // COMPLIANCE: Update check number sequence
+    if (withdrawalDto.checkNumber && paymentMethod === 'check') {
+      const checkNum = parseInt(withdrawalDto.checkNumber);
+      if (!isNaN(checkNum)) {
+        account.checkNumberRangeCurrent = checkNum;
+      }
+    }
 
     account.balance = newBalance;
     await this.trustAccountRepository.save(account);

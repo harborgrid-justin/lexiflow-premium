@@ -22,4 +22,5 @@ export { MatterModule } from './MatterModule';
 export { MatterManagement } from './MatterManagement';
 export { MatterDetail } from './MatterDetail';
 export { MatterForm } from './matter-form/MatterForm';
-export { NewMatter } from './NewMatter';
+// Note: NewMatter has been deprecated and replaced by NewMatterPage in ../create/
+// export { NewMatter } from './NewMatter'; // ❌ REMOVED - use NewMatterPage instead

@@ -26,6 +26,7 @@ export type DocView = 'browse' | 'recent' | 'favorites' | 'templates' | 'drafts'
 export type KnowledgeView = 'wiki' | 'precedents' | 'qa' | 'analytics' | 'cle';
 export type RulesView = 'dashboard' | 'federal_evidence' | 'federal_civil' | 'local' | 'standing_orders' | 'compare' | 'search';
 export type BillingView = 'dashboard' | 'timekeeper' | 'reports' | 'trust' | 'settings' | 'analytics';
+export type MatterView = 'all' | 'active' | 'intake' | 'calendar' | 'financials' | 'team' | 'analytics';
 
 export type MenuItem = {
   id: PlatformView;
@@ -189,6 +190,35 @@ export const CRM_TAB_CONFIG: TabConfigItem[] = [
       { id: 'directory', label: 'Clients', icon: Users },
       { id: 'pipeline', label: 'Pipeline', icon: GitPullRequest },
       { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    ]
+  }
+];
+
+// =============================================================================
+// MATTER MANAGEMENT MODULE TABS
+// =============================================================================
+
+export const MATTER_MANAGEMENT_TAB_CONFIG: TabConfigItem[] = [
+  {
+    id: 'matters_group', label: 'Matters', icon: Briefcase,
+    subTabs: [
+      { id: 'all', label: 'All Matters', icon: Folder },
+      { id: 'active', label: 'Active', icon: Activity },
+      { id: 'intake', label: 'Intake Pipeline', icon: Plus },
+    ]
+  },
+  {
+    id: 'ops_group', label: 'Operations', icon: Settings,
+    subTabs: [
+      { id: 'calendar', label: 'Matter Calendar', icon: Clock },
+      { id: 'financials', label: 'Financials', icon: DollarSign },
+      { id: 'team', label: 'Team Assignment', icon: Users },
+    ]
+  },
+  {
+    id: 'insights_group', label: 'Insights', icon: BarChart3,
+    subTabs: [
+      { id: 'analytics', label: 'Analytics', icon: TrendingUp },
     ]
   }
 ];

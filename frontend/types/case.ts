@@ -197,16 +197,24 @@ export interface Matter extends BaseEntity {
   
   // Tags & Opposing Party
   tags?: string[]; // Backend: jsonb
+  opposingPartyName?: string; // Backend: opposingpartyname varchar (from DTO)
   opposingCounsel?: JsonValue; // Backend: opposingcounsel jsonb
+  opposingCounselFirm?: string; // Backend: opposingcounselfirm varchar (from DTO)
   
   // Conflict Check (backend exact fields)
   conflictCheckCompleted: boolean; // Backend: conflictcheckcompleted boolean (default: false)
   conflictCheckDate?: string; // Backend: conflictcheckdate date
   conflictCheckNotes?: string; // Backend: conflictchecknotes text
   
+  // Risk Management (from CreateMatterDto)
+  riskLevel?: string; // Backend DTO: riskLevel varchar
+  riskNotes?: string; // Backend DTO: riskNotes text (max 5000)
+  
   // Resources & Location
   officeLocation?: string; // Backend: officelocation varchar
   relatedMatterIds?: JsonValue; // Backend: relatedmatterids jsonb
+  linkedCaseIds?: string[]; // Backend DTO: linkedCaseIds string array
+  linkedDocumentIds?: string[]; // Backend DTO: linkedDocumentIds string array
   
   // Notes & Custom Fields
   internalNotes?: string; // Backend: internalnotes text

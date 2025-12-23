@@ -64,6 +64,8 @@ export class MattersApiService {
       priority: matter.priority?.toUpperCase(), // Convert to uppercase for backend enum
       clientId: matter.clientId || null,
       clientName: matter.clientName || null,
+      clientEmail: matter.clientEmail || null,
+      clientPhone: matter.clientPhone || null,
       // Use exact backend field names
       leadAttorneyId: matter.leadAttorneyId || matter.responsibleAttorneyId || null,
       leadAttorneyName: matter.leadAttorneyName || matter.responsibleAttorneyName || null,
@@ -84,19 +86,31 @@ export class MattersApiService {
       statute_of_limitations: matter.statute_of_limitations,
       practiceArea: matter.practiceArea,
       tags: matter.tags,
-      // DTO expects opposingCounsel as string, not array
+      // Backend accepts opposingPartyName, opposingCounsel as string, opposingCounselFirm
+      opposingPartyName: matter.opposingPartyName,
       opposingCounsel: Array.isArray(matter.opposingCounsel) 
         ? matter.opposingCounsel.join(', ') 
         : matter.opposingCounsel,
-      // Backend uses boolean conflictCheckCompleted, but DTO also accepts conflictCheckStatus string
+      opposingCounselFirm: matter.opposingCounselFirm,
+      // Backend uses boolean conflictCheckCompleted and optional conflictCheckDate
+      conflictCheckCompleted: matter.conflictCheckCompleted || false,
+      conflictCheckDate: matter.conflictCheckDate || null,
       conflictCheckStatus: matter.conflictCheckCompleted 
         ? 'completed' 
         : matter.conflictCheckStatus || 'pending',
       conflictCheckNotes: matter.conflictCheckNotes,
+      // Risk management fields
+      riskLevel: matter.riskLevel,
+      riskNotes: matter.riskNotes,
+      // Linked resources
+      linkedCaseIds: matter.linkedCaseIds || [],
+      linkedDocumentIds: matter.linkedDocumentIds || [],
+      // Notes and custom fields
       internalNotes: matter.internalNotes,
       customFields: matter.customFields,
       // Use system UUID for userId
       userId: matter.userId || matter.createdBy || '00000000-0000-0000-0000-000000000000',
+      isArchived: matter.isArchived || false,
     };
 
     const response = await apiClient.post<unknown>(this.baseUrl, createDto);
@@ -118,6 +132,8 @@ export class MattersApiService {
       priority: matter.priority?.toUpperCase(),
       clientId: matter.clientId,
       clientName: matter.clientName,
+      clientEmail: matter.clientEmail,
+      clientPhone: matter.clientPhone,
       // Use exact backend field names
       leadAttorneyId: matter.leadAttorneyId || matter.responsibleAttorneyId,
       leadAttorneyName: matter.leadAttorneyName || matter.responsibleAttorneyName,
@@ -138,15 +154,24 @@ export class MattersApiService {
       statute_of_limitations: matter.statute_of_limitations,
       practiceArea: matter.practiceArea,
       tags: matter.tags,
+      opposingPartyName: matter.opposingPartyName,
       opposingCounsel: Array.isArray(matter.opposingCounsel) 
         ? matter.opposingCounsel.join(', ') 
         : matter.opposingCounsel,
+      opposingCounselFirm: matter.opposingCounselFirm,
+      conflictCheckCompleted: matter.conflictCheckCompleted,
+      conflictCheckDate: matter.conflictCheckDate,
       conflictCheckStatus: matter.conflictCheckCompleted 
         ? 'completed' 
         : matter.conflictCheckStatus,
       conflictCheckNotes: matter.conflictCheckNotes,
+      riskLevel: matter.riskLevel,
+      riskNotes: matter.riskNotes,
+      linkedCaseIds: matter.linkedCaseIds,
+      linkedDocumentIds: matter.linkedDocumentIds,
       internalNotes: matter.internalNotes,
       customFields: matter.customFields,
+      isArchived: matter.isArchived,
     };
 
     const response = await apiClient.patch<unknown>(`${this.baseUrl}/${id}`, updateDto);
@@ -165,6 +190,64 @@ export class MattersApiService {
    */
   async getStatistics(): Promise<MatterStatistics> {
     return apiClient.get<MatterStatistics>(`${this.baseUrl}/statistics`);
+  }
+
+  /**
+   * Get matter KPIs (Key Performance Indicators)
+   */
+  async getKPIs(dateRange?: string): Promise<any> {
+    const url = dateRange ? `${this.baseUrl}/kpis?dateRange=${dateRange}` : `${this.baseUrl}/kpis`;
+    const response = await apiClient.get<any>(url);
+    return response.data || response;
+  }
+
+  /**
+   * Get intake pipeline stages
+   */
+  async getPipeline(dateRange?: string): Promise<any> {
+    const url = dateRange ? `${this.baseUrl}/pipeline?dateRange=${dateRange}` : `${this.baseUrl}/pipeline`;
+    const response = await apiClient.get<any>(url);
+    return response.data || response;
+  }
+
+  /**
+   * Get calendar events
+   */
+  async getCalendarEvents(startDate: string, endDate?: string, matterIds?: string[]): Promise<any> {
+    const params = new URLSearchParams({ startDate });
+    if (endDate) params.append('endDate', endDate);
+    if (matterIds?.length) params.append('matterIds', matterIds.join(','));
+    const response = await apiClient.get<any>(`${this.baseUrl}/calendar/events?${params.toString()}`);
+    return response.data || response;
+  }
+
+  /**
+   * Get revenue analytics
+   */
+  async getRevenueAnalytics(dateRange?: string): Promise<any> {
+    const url = dateRange ? `${this.baseUrl}/analytics/revenue?dateRange=${dateRange}` : `${this.baseUrl}/analytics/revenue`;
+    const response = await apiClient.get<any>(url);
+    return response.data || response;
+  }
+
+  /**
+   * Get risk insights
+   */
+  async getRiskInsights(matterIds?: string[]): Promise<any> {
+    const url = matterIds?.length 
+      ? `${this.baseUrl}/insights/risk?matterIds=${matterIds.join(',')}`
+      : `${this.baseUrl}/insights/risk`;
+    const response = await apiClient.get<any>(url);
+    return response.data || response;
+  }
+
+  /**
+   * Get financial overview
+   */
+  async getFinancialOverview(dateRange?: string): Promise<any> {
+    const url = dateRange ? `${this.baseUrl}/financials/overview?dateRange=${dateRange}` : `${this.baseUrl}/financials/overview`;
+    const response = await apiClient.get<any>(url);
+    return response.data || response;
   }
 
   /**

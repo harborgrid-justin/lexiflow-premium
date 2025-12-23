@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { FileSignature, Search, Send, Plus, CheckCircle, Clock, Loader2 } from 'lucide-react';
 import { LegalDocument } from '../../../../types';
@@ -7,16 +6,15 @@ import { useQuery, queryClient } from '../../../../hooks/useQueryHooks';
 import { queryKeys } from '../../../../utils/queryKeys';
 import { DocumentService } from '../../../../services/features/documents/documentService';
 import { PDFViewer } from '../../../common/PDFViewer';
-import { AcrobatToolbar, PDFTool } from '../../preview/AcrobatToolbar';
-import { InteractiveOverlay, Field } from '../../preview/InteractiveOverlay';
+import { AcrobatToolbar, PDFTool } from "../preview/AcrobatToolbar";
+import { InteractiveOverlay, Field } from "../preview/InteractiveOverlay";
 import { Modal } from '../../../common/Modal';
 import { SignaturePad } from '../../../common/SignaturePad';
 import { Button } from '../../../common/Button';
 import { useTheme } from '../../../../context/ThemeContext';
 import { cn } from '../../../../utils/cn';
 import { useNotify } from '../../../../hooks/useNotify';
-import { useModalState } from '../../../../hooks';
-import { useSingleSelection } from '../../../../hooks/useMultiSelection';
+import { useModalState } from '../../../../hooks/useModalState';
 import { ErrorState } from '../../../common/ErrorState';
 
 type FormStatus = 'Draft' | 'Sent' | 'Signed';
@@ -25,7 +23,7 @@ type FilterCategory = FormStatus | 'Templates' | 'Out for Signature' | 'Complete
 export const FormsSigningView: React.FC = () => {
     const { theme } = useTheme();
     const notify = useNotify();
-    const documentSelection = useSingleSelection<LegalDocument>(null, (a, b) => a.id === b.id);
+    const [selectedDocument, setSelectedDocument] = useState<LegalDocument | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [activeList, setActiveList] = useState<FilterCategory>('Templates');
     const [searchTerm, setSearchTerm] = useState('');
@@ -54,17 +52,17 @@ export const FormsSigningView: React.FC = () => {
 
     // Select first template when documents load
     useEffect(() => {
-        if (documents.length > 0 && !documentSelection.selected) {
+        if (documents.length > 0 && !selectedDocument) {
             const firstTemplate = documents.find(d => d.tags.includes('Template'));
-            documentSelection.select(firstTemplate || documents[0]);
+            setSelectedDocument(firstTemplate || documents[0]);
         }
-    }, [documents, documentSelection.selected]);
+    }, [documents, selectedDocument]);
 
     useEffect(() => {
-        if (documentSelection.selected) {
+        if (selectedDocument) {
             const loadUrl = async () => {
-                if (documentSelection.selected.tags.includes('Local')) {
-                    const url = await DocumentService.getDocumentUrl(documentSelection.selected.id);
+                if (selectedDocument.tags.includes('Local')) {
+                    const url = await DocumentService.getDocumentUrl(selectedDocument.id);
                     setPreviewUrl(url);
                 } else {
                     setPreviewUrl(null); 
@@ -73,7 +71,7 @@ export const FormsSigningView: React.FC = () => {
             loadUrl();
         }
         return () => { if (previewUrl) URL.revokeObjectURL(previewUrl); };
-    }, [documentSelection.selected]);
+    }, [selectedDocument, previewUrl]);
 
     const filteredDocuments = useMemo(() => {
         return documents.filter(doc => {
@@ -96,14 +94,14 @@ export const FormsSigningView: React.FC = () => {
     };
 
     const handleSignatureSave = async (signed: boolean) => {
-        if (signed && activeField && documentSelection.selected) {
+        if (signed && activeField && selectedDocument) {
             const updatedDoc = {
-                ...documentSelection.selected,
-                formFields: (documentSelection.selected.formFields || []).map((f: Field) => f.id === activeField.id ? {...f, value: "Signed by User"} : f)
+                ...selectedDocument,
+                formFields: (selectedDocument.formFields || []).map((f: Field) => f.id === activeField.id ? {...f, value: "Signed by User"} : f)
             };
-            await DataService.documents.update(documentSelection.selected.id, updatedDoc);
+            await DataService.documents.update(selectedDocument.id, updatedDoc);
             queryClient.invalidate(queryKeys.documents.all());
-            documentSelection.select(updatedDoc);
+            setSelectedDocument(updatedDoc);
             signModal.close();
             setActiveField(null);
             notify.success("Document Signed");
@@ -111,22 +109,22 @@ export const FormsSigningView: React.FC = () => {
     };
     
     const handleFieldsUpdate = async (updatedFields: Field[]) => {
-        if (documentSelection.selected) {
-            const updatedDoc = { ...documentSelection.selected, formFields: updatedFields };
-            await DataService.documents.update(documentSelection.selected.id, updatedDoc);
+        if (selectedDocument) {
+            const updatedDoc = { ...selectedDocument, formFields: updatedFields };
+            await DataService.documents.update(selectedDocument.id, updatedDoc);
             queryClient.invalidate(queryKeys.documents.all());
-            documentSelection.select(updatedDoc);
+            setSelectedDocument(updatedDoc);
         }
     };
 
     const handleSend = async () => {
-        if (documentSelection.selected) {
-            const updatedDoc = { ...documentSelection.selected, status: 'Sent' as any };
-            await DataService.documents.update(documentSelection.selected.id, updatedDoc);
+        if (selectedDocument) {
+            const updatedDoc = { ...selectedDocument, status: 'Sent' as any };
+            await DataService.documents.update(selectedDocument.id, updatedDoc);
             queryClient.invalidate(queryKeys.documents.all());
-            documentSelection.select(updatedDoc);
+            setSelectedDocument(updatedDoc);
             sendModal.close();
-            notify.success(`'${documentSelection.selected.title}' sent for signature.`);
+            notify.success(`'${selectedDocument.title}' sent for signature.`);
         }
     };
 
@@ -168,13 +166,13 @@ export const FormsSigningView: React.FC = () => {
                 </div>
                 <div className="flex-1 overflow-y-auto p-2">
                     {isLoading ? <Loader2 className="animate-spin m-4"/> : filteredDocuments.map(doc => (
-                        <button key={doc.id} onClick={() => documentSelection.select(doc)} className={cn(
+                        <button key={doc.id} onClick={() => setSelectedDocument(doc)} className={cn(
                             "w-full text-left p-3 border-b text-sm transition-colors",
                             theme.border.default,
-                            documentSelection.selected?.id === doc.id ? cn(theme.primary.light, theme.primary.text) : `hover:${theme.surface.default}`
+                            selectedDocument?.id === doc.id ? cn(theme.primary.light, theme.primary.text) : `hover:${theme.surface.default}`
                         )}>
                             <div className="font-medium truncate">{doc.title}</div>
-                            <div className={cn("text-xs opacity-70 flex items-center mt-1", documentSelection.selected?.id === doc.id ? "" : theme.text.secondary)}>
+                            <div className={cn("text-xs opacity-70 flex items-center mt-1", selectedDocument?.id === doc.id ? "" : theme.text.secondary)}>
                                 {doc.status === 'Signed' ? <CheckCircle className="h-3 w-3 mr-1 text-green-500"/> : <Clock className="h-3 w-3 mr-1"/>}
                                 {doc.status || 'Template'} • {doc.lastModified}
                             </div>
@@ -187,7 +185,7 @@ export const FormsSigningView: React.FC = () => {
             </div>
             {/* Editor */}
             <div className={cn("flex-1 flex flex-col", theme.surface.default)}>
-                {documentSelection.selected ? (
+                {selectedDocument ? (
                     <>
                         <AcrobatToolbar 
                             activeTool={activeTool} setActiveTool={setActiveTool}
@@ -202,7 +200,7 @@ export const FormsSigningView: React.FC = () => {
                                     activeTool={activeTool} 
                                     dimensions={pageDims} 
                                     onFieldClick={handleFieldClick} 
-                                    existingFields={documentSelection.selected.formFields || []}
+                                    existingFields={selectedDocument.formFields || []}
                                     onFieldsUpdate={handleFieldsUpdate}
                                 />
                             </PDFViewer>

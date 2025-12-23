@@ -2,77 +2,70 @@
 
 # Production Management - SECONDARY FLOW
 
-##  Operational Objective
-Automated document production with Bates numbering, privilege review, and load file generation.
+## Operational Objective
+Execute the technical production of discoverable documents following the "Review" phase. This workflow transforms reviewed documents into a deliverable format (TIFF/PDF/Native) with Bates numbering, confidentiality endorsements, and industry-standard load files, ensuring strict adherence to the ESI protocol.
 
-##  DETAILED WORKFLOW
+## DETAILED WORKFLOW
 
 ```mermaid
 graph TB
-    Start([Production Request]) --> ReviewSets[Select Review Sets]
-    ReviewSets --> ResponsiveDocs[Filter Responsive Docs]
-    ResponsiveDocs --> PrivilegeReview[Privilege Review]
+    Start([Production Request]) --> DefineSet[Define Production Set]
+    DefineSet --> FilterCriteria[Filter: Responsive + Not Privileged]
+    FilterCriteria --> ReviewQC[Review QC Check]
     
-    PrivilegeReview --> PrivilegeLog[Generate Privilege Log]
-    PrivilegeLog --> BatesNumbering[Apply Bates Numbering]
-    BatesNumbering --> BatesFormat{Bates<br/>Format}
+    ReviewQC --> QCCheck{Review<br/>Complete?}
+    QCCheck -->|No| ReturnToReview[Return to Review Team]
+    QCCheck -->|Yes| LockSet[Lock Production Set]
     
-    BatesFormat -->|Prefix| ApplyPrefix[Apply Prefix]
-    BatesFormat -->|Suffix| ApplySuffix[Apply Suffix]
-    BatesFormat -->|Custom| CustomFormat[Custom Format]
+    LockSet --> Endorsements[Apply Endorsements]
+    Endorsements --> Stamps[Confidentiality/Attorney Eyes Only]
     
-    ApplyPrefix --> RedactionReview[Redaction Review]
-    ApplySuffix --> RedactionReview
-    CustomFormat --> RedactionReview
+    Stamps --> BatesNumbering[Apply Bates Numbering]
+    BatesNumbering --> Imaging[Imaging & Conversion]
     
-    RedactionReview --> ApplyRedactions[Apply Redactions]
-    ApplyRedactions --> ProductionFormat{Production<br/>Format}
+    Imaging --> FormatCheck{Format<br/>Type}
+    FormatCheck -->|Standard| ConvertToImage[Convert to TIFF/PDF]
+    FormatCheck -->|Native/Excel| SlipSheet[Generate Slip Sheet]
+    FormatCheck -->|Privileged| PrivSlipSheet[Privilege Slip Sheet]
     
-    ProductionFormat -->|Native| NativeFiles[Native Files]
-    ProductionFormat -->|TIFF| TIFFConversion[TIFF Conversion]
-    ProductionFormat -->|PDF| PDFConversion[PDF Conversion]
+    ConvertToImage --> BurnRedactions[Burn-in Redactions]
+    SlipSheet --> Placeholders[Insert Placeholders]
     
-    NativeFiles --> LoadFiles[Generate Load Files]
-    TIFFConversion --> LoadFiles
-    PDFConversion --> LoadFiles
+    BurnRedactions --> LoadFiles[Generate Load Files]
+    Placeholders --> LoadFiles
+    PrivSlipSheet --> LoadFiles
     
-    LoadFiles --> DATFile[DAT File]
-    LoadFiles --> OPTFile[OPT File]
-    LoadFiles --> LFPFile[LFP File]
+    LoadFiles --> TechQC[Production QC]
+    TechQC --> TechCheck{Technical<br/>Pass?}
     
-    DATFile --> QualityControl[QC Review]
-    OPTFile --> QualityControl
-    LFPFile --> QualityControl
+    TechCheck -->|No| FixTech[Fix Broken Links/Images]
+    FixTech --> TechQC
+    TechCheck -->|Yes| Package[Package Production]
     
-    QualityControl --> QCPassed{QC<br/>Passed?}
-    QCPassed -->|No| FixIssues[Fix Issues]
-    QCPassed -->|Yes| PackageProduction[Package Production]
-    FixIssues --> QualityControl
+    Package --> Delivery[Secure Delivery]
+    Delivery --> SecurePortal[Secure Portal Upload]
+    Delivery --> PhysicalMedia[Encrypted Physical Media]
     
-    PackageProduction --> DeliveryMethod{Delivery<br/>Method}
-    DeliveryMethod -->|Secure Upload| SecurePortal[Secure Portal]
-    DeliveryMethod -->|Physical| PhysicalMedia[Physical Media]
-    DeliveryMethod -->|Email| EncryptedEmail[Encrypted Email]
+    SecurePortal --> AuditLog[Generate Production Log]
+    PhysicalMedia --> AuditLog
     
-    SecurePortal --> ProductionLog[Log Production]
-    PhysicalMedia --> ProductionLog
-    EncryptedEmail --> ProductionLog
-    
-    ProductionLog --> NotifyOpposing[Notify Opposing Counsel]
-    NotifyOpposing --> End([Production Delivered])
-    
+    AuditLog --> Notify[Notify Opposing Counsel]
+    Notify --> End([Production Complete])
+
     style Start fill:#4f46e5,stroke:#312e81,stroke-width:3px,color:#fff
     style BatesNumbering fill:#10b981,stroke:#065f46,stroke-width:2px,color:#fff
     style LoadFiles fill:#f59e0b,stroke:#92400e,stroke-width:2px,color:#fff
     style End fill:#6366f1,stroke:#312e81,stroke-width:3px,color:#fff
 ```
 
-##  TERTIARY WORKFLOWS
-- **T1:** Bates Stamping Engine (customizable formats, OCR-aware placement)
-- **T2:** Load File Generator (Concordance DAT, IPRO OPT, Summation LFP)
-- **T3:** Automated Redaction (AI-powered PII detection)
+## TERTIARY WORKFLOWS
+- **T1: Bates Stamping Engine:** Sequential numbering across document families, handling gaps and prefixes.
+- **T2: Endorsement & Redaction Burn-in:** Permanently applying "CONFIDENTIAL" stamps and burning in redaction boxes so text is unrecoverable in images.
+- **T3: Load File Generator:** Creating Concordance (DAT/OPT/LFP) and EDRM XML deliverables.
+- **T4: Slip Sheet Generation:** Automatically creating placeholder pages for native files (e.g., Excel spreadsheets) or withheld privileged documents.
 
-##  METRICS
-- Production Turnaround: <48 hours
-- QC Error Rate: <1%
-- Load File Accuracy: 99.9%
+## METRICS
+- **Production Turnaround:** < 24 hours from "Set Locked" to "Delivered".
+- **Bates Continuity:** 100% (Zero gaps or duplicates).
+- **Load File Integrity:** 100% (No broken links between DAT and images).
+- **Redaction Safety:** 100% (Zero text bleed-through on burned images).

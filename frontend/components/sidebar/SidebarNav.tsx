@@ -113,22 +113,50 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
                 if (!item.icon) return null;
                 const Icon = item.icon;
                 const isActive = activeView === item.id;
+                const isChildActive = item.children?.some(child => child.id === activeView);
+                
                 return (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveView(item.id)}
-                    {...hoverHandlers(item)}
-                    className={cn(
-                      "w-full flex items-center space-x-3 px-3 h-9 rounded-lg text-sm font-medium transition-all duration-200 group relative",
-                      isActive 
-                        ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300" 
-                        : cn(theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.text.primary}`)
+                  <div key={item.id}>
+                    <button
+                      onClick={() => setActiveView(item.id)}
+                      {...hoverHandlers(item)}
+                      className={cn(
+                        "w-full flex items-center space-x-3 px-3 h-9 rounded-lg text-sm font-medium transition-all duration-200 group relative",
+                        isActive || isChildActive
+                          ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300" 
+                          : cn(theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.text.primary}`)
+                      )}
+                    >
+                      <Icon className={cn("h-4 w-4 shrink-0 transition-colors", isActive || isChildActive ? "text-blue-600 dark:text-blue-400" : "opacity-70 group-hover:opacity-100")} />
+                      <span className="truncate">{item.label}</span>
+                      {(isActive || isChildActive) && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-blue-600 rounded-r-full"></div>}
+                    </button>
+                    
+                    {/* Submenu for children */}
+                    {item.children && item.children.length > 0 && (isActive || isChildActive) && (
+                      <div className="ml-4 mt-1 space-y-0.5 border-l-2 border-slate-200 dark:border-slate-700 pl-2">
+                        {item.children.map(child => {
+                          const ChildIcon = child.icon;
+                          const isChildItemActive = activeView === child.id;
+                          return (
+                            <button
+                              key={child.id}
+                              onClick={() => setActiveView(child.id)}
+                              className={cn(
+                                "w-full flex items-center space-x-2 px-2 h-8 rounded text-xs font-medium transition-all duration-200 group",
+                                isChildItemActive 
+                                  ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300" 
+                                  : cn(theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.text.primary}`)
+                              )}
+                            >
+                              <ChildIcon className={cn("h-3.5 w-3.5 shrink-0", isChildItemActive ? "text-blue-600 dark:text-blue-400" : "opacity-60")} />
+                              <span className="truncate">{child.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     )}
-                  >
-                    <Icon className={cn("h-4 w-4 shrink-0 transition-colors", isActive ? "text-blue-600 dark:text-blue-400" : "opacity-70 group-hover:opacity-100")} />
-                    <span className="truncate">{item.label}</span>
-                    {isActive && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-blue-600 rounded-r-full"></div>}
-                  </button>
+                  </div>
                 );
               })}
             </div>
@@ -138,4 +166,3 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
     </nav>
   );
 };
-

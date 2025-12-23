@@ -208,4 +208,101 @@ export class MattersService {
       },
     };
   }
+
+  async getKPIs(dateRange?: string): Promise<any> {
+    // TODO: Implement date range filtering
+    const matters = await this.mattersRepository.find();
+    const activeMatters = matters.filter(m => m.status === 'ACTIVE');
+    const intakeMatters = matters.filter(m => m.status === 'INTAKE');
+
+    return {
+      totalActive: activeMatters.length,
+      intakePipeline: intakeMatters.length,
+      upcomingDeadlines: 0, // TODO: Calculate from deadlines
+      atRisk: activeMatters.filter(m => m.priority === 'HIGH').length,
+      totalValue: matters.reduce((sum, m) => sum + (m.estimatedValue || 0), 0),
+      utilizationRate: 78.5, // TODO: Calculate from time entries
+      averageAge: 45, // TODO: Calculate from dates
+      conversionRate: 82.3, // TODO: Calculate conversions
+    };
+  }
+
+  async getPipeline(dateRange?: string): Promise<any> {
+    // TODO: Implement actual pipeline analytics from matter status transitions
+    return [
+      { stage: 'Initial Contact', count: 15, value: 450000, avgDaysInStage: 2, conversionRate: 95 },
+      { stage: 'Conflict Check', count: 12, value: 380000, avgDaysInStage: 3, conversionRate: 90 },
+      { stage: 'Engagement Review', count: 8, value: 280000, avgDaysInStage: 5, conversionRate: 85 },
+      { stage: 'Contract Pending', count: 5, value: 175000, avgDaysInStage: 4, conversionRate: 80 },
+    ];
+  }
+
+  async getCalendarEvents(startDate: string, endDate?: string, matterIds?: string): Promise<any> {
+    // TODO: Implement calendar events from matter deadlines and hearings
+    const matterIdArray = matterIds ? matterIds.split(',') : undefined;
+    
+    return [
+      {
+        id: 'evt1',
+        matterId: 'm1',
+        matterTitle: 'Sample Matter',
+        title: 'Deadline',
+        type: 'deadline',
+        startTime: new Date().toISOString(),
+        priority: 'high',
+        status: 'scheduled',
+      },
+    ];
+  }
+
+  async getRevenueAnalytics(dateRange?: string): Promise<any> {
+    // TODO: Integrate with billing/time entries for actual revenue data
+    const matters = await this.mattersRepository.find();
+    
+    return {
+      totalRevenue: matters.reduce((sum, m) => sum + (m.estimatedValue || 0), 0),
+      byPracticeArea: {},
+      byMatterType: {},
+      trend: [],
+    };
+  }
+
+  async getRiskInsights(matterIds?: string): Promise<any> {
+    // TODO: Implement risk scoring algorithm
+    const matterIdArray = matterIds ? matterIds.split(',') : undefined;
+    let matters = [];
+    
+    if (matterIdArray) {
+      matters = await this.mattersRepository.findByIds(matterIdArray);
+    } else {
+      matters = await this.mattersRepository.find({ take: 10 });
+    }
+
+    return matters.map(matter => ({
+      matterId: matter.id,
+      matterTitle: matter.title,
+      riskScore: Math.random() * 10, // TODO: Calculate actual risk score
+      riskLevel: matter.priority === 'HIGH' ? 'high' : 'medium',
+      factors: ['Budget tracking', 'Timeline adherence'],
+    }));
+  }
+
+  async getFinancialOverview(dateRange?: string): Promise<any> {
+    // TODO: Integrate with billing module for actual financial data
+    const matters = await this.mattersRepository.find();
+    
+    return {
+      totalRevenue: matters.reduce((sum, m) => sum + (m.estimatedValue || 0), 0),
+      billableHours: 0, // TODO: From time entries
+      realizationRate: 92.3,
+      outstandingAR: 0, // TODO: From invoices
+      budgetPerformance: matters.map(m => ({
+        matterId: m.id,
+        matterTitle: m.title,
+        budget: m.budgetAmount || 0,
+        spent: 0, // TODO: From time/expense entries
+        variance: 0,
+      })),
+    };
+  }
 }

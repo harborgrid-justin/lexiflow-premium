@@ -9,7 +9,8 @@ import {
   LayoutDashboard, Briefcase, FileText, Search, ShieldCheck, Scale,
   Calendar, Book, DollarSign, Users, BarChart3, Settings,
   FileQuestion, Fingerprint, MessageSquare, Globe, GitBranch,
-  ScrollText, BookOpen, Building2, Target, StickyNote, Send, Library, Gavel, Network, Database, UserCircle, PenTool, Milestone, LucideIcon
+  ScrollText, BookOpen, Building2, Target, StickyNote, Send, Library, Gavel, Network, Database, UserCircle, PenTool, Milestone, LucideIcon,
+  Lightbulb, TrendingUp, LayoutGrid, ClipboardCheck, Wallet, FolderKanban
 } from 'lucide-react';
 import { AppView, NavCategory } from '../types';
 import { PATHS } from './paths.config';
@@ -20,6 +21,7 @@ export interface NavItemConfig {
   icon: LucideIcon;
   category: NavCategory;
   requiresAdmin?: boolean;
+  children?: { id: AppView; label: string; icon: LucideIcon }[];
 }
 
 /**
@@ -45,7 +47,21 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
   // ============================================================================
   // CASE WORK - Matter Management & Documents
   // ============================================================================
-  { id: PATHS.CASES, label: 'Matter Management', icon: Briefcase, category: 'Case Work' },
+  { 
+    id: PATHS.CASES, 
+    label: 'Matter Management', 
+    icon: Briefcase, 
+    category: 'Case Work',
+    children: [
+      { id: PATHS.MATTERS_OVERVIEW, label: 'Overview Dashboard', icon: LayoutGrid },
+      { id: PATHS.MATTERS_OPERATIONS, label: 'Operations Center', icon: FolderKanban },
+      { id: PATHS.MATTERS_INSIGHTS, label: 'Insights & Risk', icon: Lightbulb },
+      { id: PATHS.MATTERS_CALENDAR, label: 'Matter Calendar', icon: Calendar },
+      { id: PATHS.MATTERS_ANALYTICS, label: 'Analytics', icon: TrendingUp },
+      { id: PATHS.MATTERS_FINANCIALS, label: 'Financials', icon: Wallet },
+      { id: PATHS.MATTERS_INTAKE, label: 'New Matter Intake', icon: ClipboardCheck },
+    ]
+  },
   { id: PATHS.DOCKET, label: 'Docket & Filings', icon: BookOpen, category: 'Case Work' },
   { id: PATHS.DOCUMENTS, label: 'Document Manager', icon: FileText, category: 'Case Work' },
   { id: PATHS.CORRESPONDENCE, label: 'Correspondence', icon: Send, category: 'Case Work' },

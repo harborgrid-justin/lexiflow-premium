@@ -11,6 +11,16 @@ export const PATHS = {
   CREATE_CASE: 'matters/create',
   CASE_MANAGEMENT: 'matters', // Redirect to main matters page
   MATTERS: 'matters', // Primary matter management
+  
+  // Matter Management Enterprise Suite
+  MATTERS_OVERVIEW: 'matters/overview',
+  MATTERS_CALENDAR: 'matters/calendar-view',
+  MATTERS_ANALYTICS: 'matters/analytics',
+  MATTERS_INTAKE: 'matters/intake',
+  MATTERS_OPERATIONS: 'matters/operations',
+  MATTERS_INSIGHTS: 'matters/insights',
+  MATTERS_FINANCIALS: 'matters/financials',
+  
   DOCKET: 'docket',
   WORKFLOWS: 'workflows',
   MESSAGES: 'messages',

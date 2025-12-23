@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MatterManagement } from './MatterManagement';
 import { MatterDetail } from './MatterDetail';
-import { NewMatter } from './NewMatter';
+import NewMatter from '../create/NewMatter';
 
 /**
  * Matter Module Router
@@ -52,7 +52,7 @@ export const MatterModule: React.FC = () => {
   };
 
   if (route === 'new') {
-    return <NewMatter />;
+    return <NewMatter onBack={() => navigate('matters')} />;
   }
 
   if (route === 'detail' && matterId) {

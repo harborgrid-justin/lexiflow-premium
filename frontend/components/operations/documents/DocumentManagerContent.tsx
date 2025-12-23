@@ -1,4 +1,3 @@
-
 import React, { lazy } from 'react';
 import { DocView } from '../../../config/tabs.config';
 import { UserRole } from '../../../types';
@@ -8,7 +7,8 @@ const DocumentTemplates = lazy(() => import('./DocumentTemplates').then(m => ({ 
 const RecentFiles = lazy(() => import('./RecentFiles').then(m => ({ default: m.RecentFiles })));
 const PDFEditorView = lazy(() => import('./pdf/PDFEditorView').then(m => ({ default: m.PDFEditorView })));
 const RedactionStudioView = lazy(() => import('./pdf/RedactionStudioView').then(m => ({ default: m.RedactionStudioView })));
-const FormsSigningView = lazy(() => import('./pdf/FormsSigningView').then(m => ({ default: m.FormsSigningView })));
+// Temporarily disabled - debugging Vite 500 error
+// const FormsSigningView = lazy(() => import('./pdf/FormsSigningView').then(m => ({ default: m.FormsSigningView })));
 const BatchProcessingView = lazy(() => import('./pdf/BatchProcessingView').then(m => ({ default: m.BatchProcessingView })));
 
 interface DocumentManagerContentProps {
@@ -25,7 +25,7 @@ export const DocumentManagerContent: React.FC<DocumentManagerContentProps> = ({ 
         case 'drafts': return <DocumentExplorer currentUserRole={currentUserRole} />;
         case 'editor': return <PDFEditorView />;
         case 'redaction': return <RedactionStudioView />;
-        case 'signing': return <FormsSigningView />;
+        case 'signing': return <div className="p-8 text-center text-slate-600">Forms & Signing temporarily unavailable</div>;
         case 'batch': return <BatchProcessingView />;
         default: return <DocumentExplorer currentUserRole={currentUserRole} />;
     }

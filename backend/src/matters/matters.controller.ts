@@ -74,6 +74,52 @@ export class MattersController {
     return this.mattersService.getStatistics(userId);
   }
 
+  @Get('kpis')
+  @ApiResponse({ status: 200, description: 'Matter KPIs' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getKPIs(@Query('dateRange') dateRange?: string): Promise<any> {
+    return this.mattersService.getKPIs(dateRange);
+  }
+
+  @Get('pipeline')
+  @ApiResponse({ status: 200, description: 'Intake pipeline stages' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getPipeline(@Query('dateRange') dateRange?: string): Promise<any> {
+    return this.mattersService.getPipeline(dateRange);
+  }
+
+  @Get('calendar/events')
+  @ApiResponse({ status: 200, description: 'Calendar events' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getCalendarEvents(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate?: string,
+    @Query('matterIds') matterIds?: string,
+  ): Promise<any> {
+    return this.mattersService.getCalendarEvents(startDate, endDate, matterIds);
+  }
+
+  @Get('analytics/revenue')
+  @ApiResponse({ status: 200, description: 'Revenue analytics' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getRevenueAnalytics(@Query('dateRange') dateRange?: string): Promise<any> {
+    return this.mattersService.getRevenueAnalytics(dateRange);
+  }
+
+  @Get('insights/risk')
+  @ApiResponse({ status: 200, description: 'Risk assessment data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getRiskInsights(@Query('matterIds') matterIds?: string): Promise<any> {
+    return this.mattersService.getRiskInsights(matterIds);
+  }
+
+  @Get('financials/overview')
+  @ApiResponse({ status: 200, description: 'Financial overview' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getFinancialOverview(@Query('dateRange') dateRange?: string): Promise<any> {
+    return this.mattersService.getFinancialOverview(dateRange);
+  }
+
   @Get(':id')
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })

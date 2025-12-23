@@ -112,7 +112,11 @@ export default () => {
         validatedEnv.NODE_ENV === 'production'
           ? validatedEnv.CORS_ORIGINS.split(',')
           : (origin: any, callback: any) => {
-              if (!origin || /^http:\/\/localhost:(3[0-9]{3})$/.test(origin)) {
+              // Allow localhost on common dev ports:
+              // - 3000-3999 (Vite, React, etc.)
+              // - 5000-5999 (Backend, Flask, etc.)
+              // - 6000-6999 (Storybook, etc.)
+              if (!origin || /^http:\/\/localhost:([3-6][0-9]{3})$/.test(origin)) {
                 callback(null, true);
               } else {
                 callback(new Error('Not allowed by CORS'));

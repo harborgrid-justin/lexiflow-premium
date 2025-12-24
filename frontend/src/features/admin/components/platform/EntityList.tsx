@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { Badge } from '../../components/atoms/Badge';
+import { Badge } from '@/components/atoms/Badge';
 import { Edit2, Trash2 } from 'lucide-react';
 import { Category } from './EntitySidebar';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { VirtualList } from '../../components/organisms/VirtualList';
+import { VirtualList } from '@/components/organisms/VirtualList';
 
 // Generic interface to cover the varying shapes of entities in the list
 interface GenericRecord {

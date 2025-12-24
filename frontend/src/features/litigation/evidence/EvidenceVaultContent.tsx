@@ -10,7 +10,7 @@ import React, { lazy } from 'react';
 
 // Types
 import { ViewMode, EvidenceFilters } from '@/hooks/useEvidenceVault';
-import { EvidenceItem } from '../../../types';
+import { EvidenceItem } from '@/types';
 
 // Lazy Loaded Components
 const EvidenceDashboard = lazy(() => import('./EvidenceDashboard').then(m => ({ default: m.EvidenceDashboard })));

@@ -101,7 +101,7 @@
 //                          CORE DEPENDENCIES
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { DocketEntry, DeadlineComputation } from '../../../types';
+import { DocketEntry, DeadlineComputation } from '@/types';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                            TYPE DEFINITIONS

@@ -21,14 +21,14 @@ import { CheckCircle, XCircle, FileText, PieChart as PieIcon } from 'lucide-reac
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { MetricCard } from '../../components/atoms';
-import { Card } from '../../components/molecules/Card';
+import { MetricCard } from '@/components/molecules/MetricCard';
+import { Card } from '@/components/molecules/Card';
 
 // Types
-import { TrialExhibit } from '../../../types';
+import { TrialExhibit } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

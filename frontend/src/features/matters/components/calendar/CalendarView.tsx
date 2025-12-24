@@ -20,9 +20,9 @@ import { Download, Plus, Calendar, Clock, Users, Gavel, AlertTriangle, Settings,
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { Button } from '../../components/atoms/Button';
-import { TabbedPageLayout, TabConfigItem } from '../../components/templates/TabbedPageLayout';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { Button } from '@/components/atoms/Button';
+import { TabbedPageLayout, TabConfigItem } from '@/components/templates/TabbedPageLayout';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 
 // Utils & Config
 import { cn } from '@/utils/cn';

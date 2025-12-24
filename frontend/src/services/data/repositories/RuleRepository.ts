@@ -3,7 +3,7 @@
  * Enterprise-grade repository for legal rule management with backend API integration
  */
 
-import { LegalRule } from '../../../types';
+import { LegalRule } from '@/types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';

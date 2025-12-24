@@ -10,7 +10,7 @@
 
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { SystemEventType } from '@/types/integration-types';
-import type { Case, DocketEntry, LegalDocument, TimeEntry } from '../../../types';
+import type { Case, DocketEntry, LegalDocument, TimeEntry } from '@/types';
 
 /**
  * Centralized event publisher for data layer integration events

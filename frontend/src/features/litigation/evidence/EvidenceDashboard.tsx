@@ -11,19 +11,19 @@ import { ShieldCheck, AlertTriangle, HardDrive, Box, Activity } from 'lucide-rea
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 // Common Components
-import { Card } from '../../components/molecules/Card';
-import { Button } from '../../components/atoms/Button';
-import { MetricCard } from '../../components/atoms';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
+import { MetricCard } from '@/components/molecules/MetricCard';
 
 // Context & Utils
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { EvidenceItem } from '../../../types';
+import { EvidenceItem } from '@/types';
 import { ViewMode } from '@/hooks/useEvidenceVault';
 
 interface EvidenceDashboardProps {

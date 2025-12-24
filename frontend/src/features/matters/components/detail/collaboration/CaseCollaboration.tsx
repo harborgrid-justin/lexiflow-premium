@@ -15,11 +15,11 @@ import { Users, FileText, CalendarClock, PenTool, Loader2 } from 'lucide-react';
 // Internal Dependencies - Components
 import { ConferralLog } from './ConferralLog';
 import { DiscoveryPlanBuilder } from './DiscoveryPlanBuilder';
-import { Card } from '../../../components/molecules/Card';
-import { Button } from '../../../components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
@@ -28,7 +28,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { StipulationRequest } from '../../../../types';
+import { StipulationRequest } from '@/types';
 
 interface CaseCollaborationProps {
   caseId: string;

@@ -9,20 +9,20 @@ import React from 'react';
 import { Filter, ThumbsUp, ThumbsDown, Scale, Wand2 } from 'lucide-react';
 
 // Common Components
-import { Card } from '../../../components/molecules/Card';
-import { Button } from '../../../components/atoms/Button';
-import { Badge } from '../../../components/atoms/Badge';
-import { RiskMeter } from '../../../common/RiskMeter';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { RiskMeter } from '@/components/organisms/RiskMeter';
 
 // Context & Utils
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { EvidenceItem } from '../../../../types';
+import { EvidenceItem } from '@/types';
 
 export const RelevanceAnalysis: React.FC = () => {
     const { theme } = useTheme();

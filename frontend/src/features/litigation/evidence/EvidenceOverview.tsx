@@ -21,7 +21,7 @@ import { EvidenceLocation } from './overview/EvidenceLocation';
 import { EvidenceFRCPStatus } from './overview/EvidenceFRCPStatus';
 
 // Types
-import { EvidenceItem } from '../../../types';
+import { EvidenceItem } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

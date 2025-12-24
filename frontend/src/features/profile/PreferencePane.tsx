@@ -22,7 +22,7 @@ import { Bell, Moon, Sun, Monitor, Globe, Grid } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { Card } from '../components/molecules/Card';
+import { Card } from '@/components/molecules/Card';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -31,7 +31,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Types
-import { ExtendedUserProfile } from '../../types';
+import { ExtendedUserProfile } from '@/types';
 
 
 // ========================================

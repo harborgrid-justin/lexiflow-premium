@@ -31,7 +31,7 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Citation } from '../../../types';
+import { Citation } from '@/types';
 import { CitationManagerProps } from './types';
 
 const CitationLibrary = lazy(() => import('./CitationLibrary').then(m => ({ default: m.CitationLibrary })));

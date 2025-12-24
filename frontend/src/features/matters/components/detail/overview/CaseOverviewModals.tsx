@@ -13,18 +13,18 @@ import React from 'react';
 import { AlertCircle, ArrowRightLeft, Plus } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TimeEntryModal } from '../../../common/TimeEntryModal';
-import { Modal } from '../../../components/molecules/Modal';
-import { Button } from '../../../components/atoms/Button';
+import { TimeEntryModal } from '@/components/organisms/TimeEntryModal';
+import { Modal } from '@/components/molecules/Modal';
+import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Case, TimeEntry } from '../../../../types';
+import { Case, TimeEntry } from '@/types';
 
 interface CaseOverviewModalsProps {
   caseData: Case;

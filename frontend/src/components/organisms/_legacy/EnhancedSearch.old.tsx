@@ -18,8 +18,8 @@ import { Search, Clock, X, Command, TrendingUp, Hash, Calendar, Tag } from 'luci
 import { useTheme } from '@/providers/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { cn } from '@/utils/cn';
-import { sanitizeHtml } from '../../utils/sanitize';
-import { SEARCH_DEBOUNCE_MS } from '../../config/master.config';
+import { sanitizeHtml } from '@/utils/sanitize';
+import { SEARCH_DEBOUNCE_MS } from '@/config/master.config';
 
 // ============================================================================
 // TYPES & INTERFACES

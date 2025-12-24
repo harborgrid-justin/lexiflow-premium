@@ -14,7 +14,7 @@ import React, { useState } from 'react';
 import { ProjectCard } from './ProjectCard';
 
 // Types & Interfaces
-import { Project, WorkflowTask } from '../../../../types';
+import { Project, WorkflowTask } from '@/types';
 
 interface ProjectListProps {
   projects: Project[];

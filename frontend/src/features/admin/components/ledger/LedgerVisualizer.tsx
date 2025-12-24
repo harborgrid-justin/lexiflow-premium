@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { ChainedLogEntry, IntegrityReport } from '@/services/infrastructure/chainService';
 import { Link, ShieldCheck, AlertOctagon, ArrowRight, Box, X, Terminal } from 'lucide-react';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface LedgerVisualizerProps {

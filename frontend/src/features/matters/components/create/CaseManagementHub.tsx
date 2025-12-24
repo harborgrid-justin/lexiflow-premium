@@ -41,7 +41,7 @@ import {
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { Case, CaseStatus, MatterType } from '../../../types';
+import { Case, CaseStatus, MatterType } from '@/types';
 
 type ViewMode = 'grid' | 'list';
 type FilterPanel = 'none' | 'simple' | 'advanced';

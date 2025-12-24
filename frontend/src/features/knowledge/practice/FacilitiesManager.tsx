@@ -23,14 +23,14 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Tabs } from '../../components/molecules/Tabs';
-import { Card } from '../../components/molecules/Card';
-import { MetricTile, ActionRow } from '../../common/RefactoredCommon';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { Badge } from '../../components/atoms/Badge';
+import { Tabs } from '@/components/molecules/Tabs';
+import { Card } from '@/components/molecules/Card';
+import { MetricTile, ActionRow } from '@/components/organisms/_legacy/RefactoredCommon';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Badge } from '@/components/atoms/Badge';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

@@ -13,8 +13,8 @@ import React from 'react';
 import { Loader2, FolderOpen } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { EvidenceInventory } from '../../litigation/evidence/EvidenceInventory';
-import { EmptyState } from '../../components/molecules/EmptyState';
+import { EvidenceInventory } from '@/features/litigation/evidence/EvidenceInventory';
+import { EmptyState } from '@/components/molecules/EmptyState';
 
 // Internal Dependencies - Hooks & Context
 import { useEvidenceVault } from '@/hooks/useEvidenceVault'; 

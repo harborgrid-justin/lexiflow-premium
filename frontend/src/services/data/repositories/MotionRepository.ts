@@ -23,7 +23,7 @@
  * - Type-safe operations
  */
 
-import { Motion } from '../../../types';
+import { Motion } from '@/types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';

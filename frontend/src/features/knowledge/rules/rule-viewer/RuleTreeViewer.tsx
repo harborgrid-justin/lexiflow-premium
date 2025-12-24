@@ -1,5 +1,5 @@
 import React from 'react';
-import { LegalRule } from '../../../../types';
+import { LegalRule } from '@/types';
 import { ChevronRight, ChevronDown, Book } from 'lucide-react';
 import { cn } from '@/utils/cn';
 

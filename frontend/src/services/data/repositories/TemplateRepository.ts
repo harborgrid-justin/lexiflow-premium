@@ -3,7 +3,7 @@
  * Enterprise-grade repository for workflow template management
  */
 
-import { WorkflowTemplateData } from '../../../types';
+import { WorkflowTemplateData } from '@/types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';

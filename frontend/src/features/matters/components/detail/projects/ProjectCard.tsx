@@ -12,16 +12,16 @@ import React from 'react';
 import { Calendar, CheckCircle, ChevronDown, ChevronUp, Plus } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Badge } from '../../../components/atoms/Badge';
+import { Badge } from '@/components/atoms/Badge';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Project } from '../../../../types';
+import { Project } from '@/types';
 
 interface ProjectCardProps {
     project: Project;

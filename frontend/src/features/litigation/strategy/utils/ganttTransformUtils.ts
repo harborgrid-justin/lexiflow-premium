@@ -6,8 +6,8 @@
  * @module components/litigation/utils/ganttTransformUtils
  */
 
-import { CasePhase, WorkflowTask, TaskId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '../../../../types';
-import { WorkflowNode, WorkflowConnection } from '../../../matters/workflow/builder/types';
+import { CasePhase, WorkflowTask, TaskId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
+import { WorkflowNode, WorkflowConnection } from '@/features/matters/components/workflow/builder/types';
 import { GANTT_ZOOM_SCALE, NODE_DURATION_MAP, CANVAS_CONSTANTS } from '../canvasConstants';
 import { DateCalculationService } from '@/services/features/calculations/dateCalculationService';
 

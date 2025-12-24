@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
-import { Card } from '../../../components/molecules/Card';
-import { UserAvatar } from '../../../components/atoms/UserAvatar';
-import { Button } from '../../../components/atoms/Button';
-import { SearchInputBar, MetricTile } from '../../../common/RefactoredCommon';
+import { Card } from '@/components/molecules/Card';
+import { UserAvatar } from '@/components/atoms/UserAvatar';
+import { Button } from '@/components/atoms/Button';
+import { SearchInputBar, MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
 import { Briefcase, Building, Mail, Linkedin, GraduationCap, Network } from 'lucide-react';
-import { LegalEntity } from '../../../../types';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { LegalEntity } from '@/types';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';

@@ -19,21 +19,22 @@ import { CheckSquare, Calendar, Link, Briefcase } from 'lucide-react';
 // Services & Data
 import { DataService } from '@/services/data/dataService';
 import { queryClient } from '@/hooks/useQueryHooks';
-import { queryKeys } from '../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
 import { useNotify } from '@/hooks/useNotify';
 
 // Components
-import { Modal } from './Modal';
-import { Input, TextArea } from './Inputs';
-import { Button } from './Button';
-import { RuleSelector } from './RuleSelector';
-import { UserSelect } from './UserSelect';
+import { Modal } from '@/components/molecules/Modal';
+import { Input } from '@/components/atoms/Input';
+import { TextArea } from '@/components/atoms/TextArea';
+import { Button } from '@/components/atoms/Button';
+import { RuleSelector } from '@/components/molecules/RuleSelector';
+import { UserSelect } from '@/components/molecules/UserSelect';
 
 // Types
-import { WorkflowTask, TaskId, ProjectId, CaseId, User, TaskStatusBackend, TaskPriorityBackend } from '../../types';
+import { WorkflowTask, TaskId, ProjectId, CaseId, User, TaskStatusBackend, TaskPriorityBackend } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

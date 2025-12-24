@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Shield, CheckCircle, XCircle, Info, Lock } from 'lucide-react';
-import { RolePermission, PermissionLevel } from '../../../../types';
+import { RolePermission, PermissionLevel } from '@/types';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DataService } from '@/services/data/dataService';

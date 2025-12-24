@@ -3,7 +3,7 @@
  * Enterprise-grade repository for legal analysis management with backend API integration
  */
 
-import { BriefAnalysisSession, JudgeProfile } from '../../../types';
+import { BriefAnalysisSession, JudgeProfile } from '@/types';
 import { delay } from '@/utils/async';
 import { Repository } from '../../core/Repository';
 import { STORES, db } from '../db';

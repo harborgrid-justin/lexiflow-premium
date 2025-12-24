@@ -18,10 +18,10 @@ import { ShieldAlert, Search, AlertCircle, ArrowRight, Loader2 } from 'lucide-re
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
@@ -32,7 +32,7 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case, ConflictCheck } from '../../../types';
+import { Case, ConflictCheck } from '@/types';
 
 interface CaseListConflictsProps {
   onSelectCase?: (c: Case) => void;

@@ -9,7 +9,7 @@ import React, { useMemo, useCallback } from 'react';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { Matter } from '../../../types';
+import { Matter } from '@/types';
 import { BarChart3, TrendingUp, DollarSign, Users, Briefcase, AlertCircle, RefreshCw } from 'lucide-react';
 
 export const MatterAnalyticsView: React.FC = React.memo(() => {

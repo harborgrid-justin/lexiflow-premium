@@ -42,12 +42,12 @@ import {
   MatterPriority, 
   MatterType, 
   PracticeArea 
-} from '../../../types';
-import { PATHS } from '../../../config/paths.config';
-import { Button } from '../../components/atoms/Button';
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Breadcrumbs } from '../../components/molecules/Breadcrumbs';
-import { useTheme } from '../../../providers/ThemeContext';
+} from '@/types';
+import { PATHS } from '@/config/paths.config';
+import { Button } from '@/components/atoms/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { Breadcrumbs } from '@/components/molecules/Breadcrumbs';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/utils/cn';
 

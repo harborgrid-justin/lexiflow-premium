@@ -105,7 +105,7 @@
  */
 
 import { EventEmitter } from 'events';
-import { WS_URL, WS_RECONNECT_DELAY_MS, WS_RECONNECT_ATTEMPTS } from '../../config/master.config';
+import { WS_URL, WS_RECONNECT_DELAY_MS, WS_RECONNECT_ATTEMPTS } from '@/config/master.config';
 
 // Memory Management: Max pending edits before eviction
 const MAX_PENDING_EDITS = 1000;

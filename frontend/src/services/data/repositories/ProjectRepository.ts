@@ -1,4 +1,4 @@
-import { Project } from '../../../types';
+import { Project } from '@/types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 

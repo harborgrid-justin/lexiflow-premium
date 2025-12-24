@@ -13,17 +13,17 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, User, Building, Gavel, Link, Layers, MapPin, Phone, Mail, Briefcase } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { Button } from '../../components/atoms/Button';
-import { Modal } from '../../components/molecules/Modal';
-import { Input } from '../../components/atoms';
-import { Badge } from '../../components/atoms/Badge';
-import { ConfirmDialog } from '../../components/molecules/ConfirmDialog';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules/Modal';
+import { Input } from '@/components/atoms';
+import { Badge } from '@/components/atoms/Badge';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useModalState } from '../../../hooks';
+import { useModalState } from '@/hooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -32,7 +32,7 @@ import { Scheduler } from '@/utils/scheduler';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Party, PartyId, Organization, CaseId } from '../../../types';
+import { Party, PartyId, Organization, CaseId } from '@/types';
 
 interface CasePartiesProps {
   parties?: Party[];

@@ -1,21 +1,21 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Modal } from '../../../components/molecules/Modal';
-import { ConfirmDialog } from '../../../components/molecules/ConfirmDialog';
-import { AdaptiveLoader } from '../../../components/molecules/AdaptiveLoader';
+import { Modal } from '@/components/molecules/Modal';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 import { useModalState } from '@/hooks/useModalState';
 import { SchemaCodeEditor } from './SchemaCodeEditor';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaSnapshots } from './SchemaSnapshots';
 import { SchemaVisualizer } from './SchemaVisualizer';
-import { Button } from '../../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { TableData, TableColumn } from './schemaTypes';
 import { SchemaToolbar } from './SchemaToolbar';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { dataPlatformApi } from '@/api/data-platform-api';
 import { Loader2 } from 'lucide-react';
-import { Input, TextArea } from '../../../components/atoms';
+import { Input, TextArea } from '@/components/atoms';
 
 interface SchemaArchitectProps {
   initialTab?: string;

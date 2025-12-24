@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { Cpu } from 'lucide-react';
-import { EmptyState } from '../../../components/molecules/EmptyState';
-import { Button } from '../../../components/atoms/Button';
+import { EmptyState } from '@/components/molecules/EmptyState';
+import { Button } from '@/components/atoms/Button';
 
 export const BatchProcessingView: React.FC = () => {
     return (

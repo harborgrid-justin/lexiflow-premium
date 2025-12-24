@@ -13,14 +13,14 @@ import React from 'react';
 import { FileText, Wand2, CheckSquare, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../../components/atoms/Button';
-import { TagList } from '../../../components/atoms';
+import { Button } from '@/components/atoms/Button';
+import { TagList } from '@/components/molecules/TagList';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { LegalDocument } from '../../../../types';
+import { LegalDocument } from '@/types';
 import type { ThemeTokens } from '../../../../theme/tokens';
 
 interface CaseDocumentItemProps {

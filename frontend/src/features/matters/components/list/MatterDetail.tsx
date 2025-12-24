@@ -3,8 +3,8 @@ import { DataService } from '@/services/data/dataService';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { queryClient } from '@/services/infrastructure/queryClient';
-import { Matter, MatterStatus, MatterPriority } from '../../../types';
-import { ConfirmDialog } from '../../components/molecules/ConfirmDialog';
+import { Matter, MatterStatus, MatterPriority } from '@/types';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
 import { useModalState } from '@/hooks/useModalState';
 import { 
   ArrowLeft, 
@@ -21,7 +21,7 @@ import {
   Clock
 } from 'lucide-react';
 import { MatterForm } from './matter-form';
-import { PATHS } from '../../../config/paths.config';
+import { PATHS } from '@/config/paths.config';
 
 export const MatterDetail: React.FC = () => {
   // Extract matterId from hash

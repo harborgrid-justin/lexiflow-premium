@@ -3,7 +3,7 @@
  * Enterprise-grade repository for trial management with backend API integration
  */
 
-import { Juror, Witness, TrialExhibit, Fact, Case } from '../../../types';
+import { Juror, Witness, TrialExhibit, Fact, Case } from '@/types';
 import { Repository } from '../../core/Repository';
 import { STORES, db } from '../db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';

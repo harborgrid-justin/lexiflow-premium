@@ -17,23 +17,23 @@ import { Loader2, Radio } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Modal } from '../../components/molecules/Modal';
-import { ConfirmDialog } from '../../components/molecules/ConfirmDialog';
+import { Modal } from '@/components/molecules/Modal';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
 import { DocketStats } from './DocketStats';
 import { DocketFilterPanel } from './DocketFilterPanel';
 import { DocketEntryModal } from './DocketEntryModal';
 import { DocketEntryBuilder } from './DocketEntryBuilder';
 import { DocketTable } from './DocketTable';
 import { DocketToolbar } from './DocketToolbar';
-import { DocketTableSkeleton } from '../../common/DocketSkeleton';
+import { DocketTableSkeleton } from '@/components/organisms/DocketSkeleton';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
-import { useWindow } from '../../../providers/WindowContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { useWindow } from '@/providers/WindowContext';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 import { useLiveDocketFeed } from '@/hooks/useLiveDocketFeed';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
-import { useModalState } from '../../../hooks';
+import { useModalState } from '@/hooks';
 import { useToggle } from '@/hooks/useToggle';
 
 // Internal Dependencies - Services & Utils
@@ -44,7 +44,7 @@ import { queryKeys } from '@/utils/queryKeys';
 import { IdGenerator } from '@/utils/idGenerator';
 
 // Types & Interfaces
-import { DocketEntry, Case, DocketId, CaseId } from '../../../types';
+import { DocketEntry, Case, DocketId, CaseId } from '@/types';
 
 interface DocketSheetProps {
   filterType: 'all' | 'filings' | 'orders';

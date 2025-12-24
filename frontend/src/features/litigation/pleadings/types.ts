@@ -1,4 +1,4 @@
-import { Case, PleadingDocument, PleadingTemplate, FormattingRule, PleadingSection } from '../../../types';
+import { Case, PleadingDocument, PleadingTemplate, FormattingRule, PleadingSection } from '@/types';
 
 export type ViewMode = 'write' | 'logic' | 'preview';
 

@@ -18,15 +18,15 @@ import { Plus, FileText, Scale, Box, Gavel, ArrowRight } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '../../components/atoms/Badge';
-import { TaskCreationModal } from '../../common/TaskCreationModal';
-import { VirtualList } from '../../components/organisms/VirtualList';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { Badge } from '@/components/atoms/Badge';
+import { TaskCreationModal } from '@/components/organisms/TaskCreationModal';
+import { VirtualList } from '@/components/organisms/VirtualList';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { useModalState } from '../../../hooks';
+import { useModalState } from '@/hooks';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -37,7 +37,7 @@ import { queryKeys } from '@/utils/queryKeys';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { WorkflowTask, Case, TaskStatusBackend } from '../../../types';
+import { WorkflowTask, Case, TaskStatusBackend } from '@/types';
 
 interface CaseListTasksProps {
   onSelectCase?: (c: Case) => void;

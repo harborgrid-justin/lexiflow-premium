@@ -1,4 +1,4 @@
-import { DiscoveryRequest } from '../../../types';
+import { DiscoveryRequest } from '@/types';
 
 export type DiscoveryView = 
   | 'dashboard'

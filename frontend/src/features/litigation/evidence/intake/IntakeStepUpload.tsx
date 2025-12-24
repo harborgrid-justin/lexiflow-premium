@@ -10,10 +10,10 @@ import React from 'react';
 import { UploadCloud, CheckCircle, Loader2, Link, ShieldCheck } from 'lucide-react';
 
 // Common Components
-import { Button } from '../../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Context & Utils
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services

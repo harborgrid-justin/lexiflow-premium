@@ -13,20 +13,20 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Briefcase } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../../components/atoms/Button';
-import { TaskCreationModal } from '../../../common/TaskCreationModal';
+import { Button } from '@/components/atoms/Button';
+import { TaskCreationModal } from '@/components/organisms/TaskCreationModal';
 import { ProjectList } from './ProjectList';
 import { ProjectModal } from './ProjectModal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Project, WorkflowTask, ProjectId, CaseId } from '../../../../types';
+import { Project, WorkflowTask, ProjectId, CaseId } from '@/types';
 
 interface CaseProjectsProps {
   projects: Project[]; // These come from parent initially, but we will fetch internal as well

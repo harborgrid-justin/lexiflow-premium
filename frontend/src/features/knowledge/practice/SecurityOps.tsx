@@ -23,12 +23,12 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 
 // Components
-import { Card } from '../../components/molecules/Card';
-import { Button } from '../../components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Modal } from '../../components/molecules/Modal';
-import { Button } from '../../components/atoms/Button';
-import { Input, TextArea } from '../../components/atoms';
-import { UserSelect } from '../../components/molecules/UserSelect';
+import { Modal } from '@/components/molecules/Modal';
+import { Button } from '@/components/atoms/Button';
+import { Input, TextArea } from '@/components/atoms';
+import { UserSelect } from '@/components/molecules/UserSelect';
 import { Send, Paperclip, Wand2, X } from 'lucide-react';
-import { CommunicationItem, CommunicationType, UserId, User } from '../../../types';
-import { useTheme } from '../../../providers/ThemeContext';
+import { CommunicationItem, CommunicationType, UserId, User } from '@/types';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';

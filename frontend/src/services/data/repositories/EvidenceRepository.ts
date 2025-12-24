@@ -26,7 +26,7 @@
  * - Event-driven integration
  */
 
-import { EvidenceItem, CaseId } from '../../../types';
+import { EvidenceItem, CaseId } from '@/types';
 import { delay } from '@/utils/async';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';

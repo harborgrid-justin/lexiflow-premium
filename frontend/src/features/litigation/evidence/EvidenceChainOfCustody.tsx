@@ -14,16 +14,16 @@ import React, { useState } from 'react';
 import { User, Layers, Plus, ShieldCheck, AlertOctagon, Link } from 'lucide-react';
 
 // Common Components
-import { Button } from '../../components/atoms/Button';
-import { Modal } from '../../components/molecules/Modal';
-import { Input, TextArea } from '../../components/atoms';
-import { SignaturePad } from '../../components/organisms/SignaturePad';
+import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules/Modal';
+import { Input, TextArea } from '@/components/atoms';
+import { SignaturePad } from '@/components/organisms/SignaturePad';
 
 // Context & Utils
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useNotify } from '@/hooks/useNotify';
-import { useModalState } from '../../../hooks';
+import { useModalState } from '@/hooks';
 import { getTodayString } from '@/utils/dateUtils';
 
 // Services & Types
@@ -31,7 +31,7 @@ import { ChainService } from '@/services/infrastructure/chainService';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { DataService } from '@/services/data/dataService';
-import { EvidenceItem, ChainOfCustodyEvent, UserId } from '../../../types';
+import { EvidenceItem, ChainOfCustodyEvent, UserId } from '@/types';
 import { evidenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { validateCustodyEventSafe, CustodyActionType } from '@/services/validation/evidenceSchemas';
 

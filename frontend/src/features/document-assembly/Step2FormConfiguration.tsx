@@ -8,7 +8,7 @@ import React from 'react';
 import { Sparkles, Calendar, User, FileText } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { getTodayString } from '../../utils/dateUtils';
+import { getTodayString } from '@/utils/dateUtils';
 
 interface Step2FormConfigurationProps {
   template: string;

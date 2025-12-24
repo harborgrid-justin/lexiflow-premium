@@ -23,10 +23,10 @@ import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { OperatingLedger } from './finance/OperatingLedger';
 import { TrustLedger } from './finance/TrustLedger';
 

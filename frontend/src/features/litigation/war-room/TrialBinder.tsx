@@ -19,16 +19,16 @@ import { Folder, FileText, ChevronRight, Gavel, BookOpen, Plus, File, Scale, Mor
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import type { WarRoomData, LegalDocument } from '../../../types';
+import type { WarRoomData, LegalDocument } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

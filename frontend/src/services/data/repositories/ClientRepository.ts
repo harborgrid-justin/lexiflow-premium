@@ -26,7 +26,7 @@
  * - Event-driven integration
  */
 
-import { Client, ClientId } from '../../../types';
+import { Client, ClientId } from '@/types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';

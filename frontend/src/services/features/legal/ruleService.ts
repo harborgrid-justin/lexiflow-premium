@@ -36,7 +36,7 @@ import { queryKeys } from '@/utils/queryKeys';
 import { queryClient } from '../../infrastructure/queryClient';
 
 // Types
-import { LegalRule } from '../../../types';
+import { LegalRule } from '@/types';
 import type { JurisdictionRule, CreateJurisdictionRuleDto } from '@/api/jurisdiction-api';
 
 // ============================================================================

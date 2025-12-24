@@ -6,8 +6,8 @@
 
 import React, { Component, ReactNode, ErrorInfo } from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
-import { Button } from '../../components/atoms/Button';
-import { useTheme } from '../../../providers/ThemeContext';
+import { Button } from '@/components/atoms/Button';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface Props {

@@ -1,11 +1,11 @@
 
 import React, { useState, useMemo } from 'react';
 import { Database, Plus, Key, Link as LinkIcon, Edit2, Trash2 } from 'lucide-react';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useCanvasDrag } from '@/hooks/useCanvasDrag';
 import { TableData, TableColumn, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes';
-import { ContextMenu } from '../../../components/molecules/ContextMenu';
+import { ContextMenu } from '@/components/molecules/ContextMenu';
 
 interface SchemaVisualizerProps {
     tables: TableData[];

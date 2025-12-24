@@ -44,14 +44,14 @@ import {
 import { DataService } from "@/services";
 import { useQuery } from "@hooks/useQueryHooks.ts";
 import { STORES } from "@/services";
-import { queryKeys } from "../../../utils/queryKeys";
+import { queryKeys } from "@/utils/queryKeys";
 
 // Hooks & Context
 import { useTheme } from "@/providers";
 
 // Components
-import { Button } from '../../components/atoms/Button';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 
 // Utils & Constants
 import { cn } from "@/utils";

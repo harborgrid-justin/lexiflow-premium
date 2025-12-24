@@ -3,7 +3,7 @@
  * Enterprise-grade repository for legal entity management with backend API integration
  */
 
-import { LegalEntity } from '../../../types';
+import { LegalEntity } from '@/types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';

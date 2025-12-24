@@ -23,20 +23,20 @@ import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
-import { useWindow } from '../../../providers/WindowContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Button } from '../../components/atoms/Button';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { EntityNavigation, DirectorView, getEntityParentTab, getEntityFirstTab } from './layout/EntityNavigation';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { LegalEntity, EntityId } from '../../../types';
+import { LegalEntity, EntityId } from '@/types';
 
 // Sub-components
 const EntityGrid = React.lazy(() => import('./EntityGrid').then(m => ({ default: m.EntityGrid })));

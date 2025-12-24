@@ -18,14 +18,14 @@ import { RefreshCcw, Plus, Calendar, AlertTriangle, Link, ArrowRight } from 'luc
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../components/atoms/Button';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { Badge } from '../../components/atoms/Badge';
-import { VirtualList } from '../../components/organisms/VirtualList';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { Button } from '@/components/atoms/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Badge } from '@/components/atoms/Badge';
+import { VirtualList } from '@/components/organisms/VirtualList';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
@@ -37,7 +37,7 @@ import { queryKeys } from '@/utils/queryKeys';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case } from '../../../types';
+import { Case } from '@/types';
 
 interface CaseListDocketProps {
   onSelectCase?: (c: Case) => void;

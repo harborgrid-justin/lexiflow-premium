@@ -13,16 +13,16 @@ import React, { useState, useMemo } from 'react';
 import { Layers, Plus, TrendingUp } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../components/atoms/Button';
-import { TaskCreationModal } from '../../common/TaskCreationModal';
+import { Button } from '@/components/atoms/Button';
+import { TaskCreationModal } from '@/components/organisms/TaskCreationModal';
 import { PlanningSidebar } from './planning/PlanningSidebar';
 import { GanttTimeline } from './planning/GanttTimeline';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
-import { useModalState } from '../../../hooks';
+import { useModalState } from '@/hooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -31,7 +31,7 @@ import { Pathfinding } from '@/utils/pathfinding';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Case, CasePhase, WorkflowTask } from '../../../types';
+import { Case, CasePhase, WorkflowTask } from '@/types';
 
 interface CasePlanningProps {
   caseData: Case;

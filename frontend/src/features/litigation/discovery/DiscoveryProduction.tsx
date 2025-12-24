@@ -18,11 +18,11 @@ import { ArrowLeft, Upload, FileText, Check, Settings, ShieldCheck, Database, Pr
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../components/atoms/Button';
-import { Card } from '../../components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery, queryClient } from '@/hooks/useQueryHooks';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
@@ -40,7 +40,7 @@ const loadDocumentService = async () => {
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { DiscoveryRequest } from '../../../types';
+import { DiscoveryRequest } from '@/types';
 import { DiscoveryProductionProps } from './types';
 
 export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ request, onBack }) => {

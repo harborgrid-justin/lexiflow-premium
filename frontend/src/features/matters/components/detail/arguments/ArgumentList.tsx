@@ -13,17 +13,17 @@ import React from 'react';
 import { Scale, Fingerprint, ChevronRight, BookOpen } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { RiskMeter } from '../../../common/RiskMeter';
-import { Badge } from '../../../components/atoms/Badge';
+import { RiskMeter } from '@/components/organisms/RiskMeter';
+import { Badge } from '@/components/atoms/Badge';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { LegalArgument } from '../../../../types';
+import { LegalArgument } from '@/types';
 
 interface ArgumentListProps {
   argumentsList: LegalArgument[];

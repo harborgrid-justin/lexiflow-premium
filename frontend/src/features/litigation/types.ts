@@ -6,7 +6,7 @@
  * @module components/litigation/types
  */
 
-import { WorkflowNode, WorkflowConnection, NodeType } from '../matters/workflow/builder/types';
+import { WorkflowNode, WorkflowConnection, NodeType } from '@/features/matters/components/workflow/builder/types';
 import { Playbook } from '@/api/data/mockLitigationPlaybooks';
 
 export type ZoomLevel = 'Quarter' | 'Month' | 'Week' | 'Day';

@@ -23,14 +23,14 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Tabs } from '../../components/molecules/Tabs';
-import { MetricTile } from '../../common/RefactoredCommon';
-import { KanbanBoard, KanbanColumn, KanbanCard } from '../../components/organisms/Kanban';
-import { Card } from '../../components/molecules/Card';
-import { ProgressBar } from '../../components/atoms/ProgressBar';
+import { Tabs } from '@/components/molecules/Tabs';
+import { MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
+import { KanbanBoard, KanbanColumn, KanbanCard } from '@/components/organisms/Kanban';
+import { Card } from '@/components/molecules/Card';
+import { ProgressBar } from '@/components/atoms/ProgressBar';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

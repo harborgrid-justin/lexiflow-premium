@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 import { ShieldAlert, Upload, FileText, Cpu, AlertTriangle } from 'lucide-react';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';

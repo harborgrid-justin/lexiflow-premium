@@ -13,7 +13,7 @@ import React, { useState, useMemo } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
@@ -32,7 +32,7 @@ import {
 } from './docketCalendar.utils';
 
 // Types & Interfaces
-import { DocketEntry } from '../../../types';
+import { DocketEntry } from '@/types';
 
 export const DocketCalendar: React.FC = () => {
   const { theme } = useTheme();

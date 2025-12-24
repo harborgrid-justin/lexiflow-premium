@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { Settings, X, Move, Trash2 } from 'lucide-react';
-import { Input, TextArea } from '../../../components/atoms';
-import { Button } from '../../../components/atoms/Button';
-import { ConfirmDialog } from '../../../components/molecules/ConfirmDialog';
-import { useModalState } from '../../../../hooks';
+import { Input, TextArea } from '@/components/atoms';
+import { Button } from '@/components/atoms/Button';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { useModalState } from '@/hooks';
 import { WorkflowNode, getNodeIcon } from './types';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface BuilderPropertiesProps {

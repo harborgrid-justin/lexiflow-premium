@@ -130,7 +130,7 @@ import {
     Deposition, ESISource, ProductionSet, CustodianInterview, 
     DiscoveryRequest, PrivilegeLogEntry, LegalHold, 
     Examination, Vendor, Transcript, SanctionMotion, StipulationRequest 
-} from '../../../types';
+} from '@/types';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                       DISCOVERY SERVICE PUBLIC API

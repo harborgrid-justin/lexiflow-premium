@@ -22,19 +22,19 @@ import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { NexusGraph } from '../../visual/NexusGraph';
-import { Card } from '../../components/molecules/Card';
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
+import { NexusGraph } from '@/features/visual/NexusGraph';
+import { Card } from '@/components/molecules/Card';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 import { DisjointSet } from '@/utils/datastructures/disjointSet';
 
 // Types
-import { LegalEntity, EntityRelationship } from '../../../types';
+import { LegalEntity, EntityRelationship } from '@/types';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================

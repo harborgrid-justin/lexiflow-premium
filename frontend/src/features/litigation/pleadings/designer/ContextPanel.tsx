@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Search, Fingerprint, Scale, FileText, ArrowRight, Link, Loader2 } from 'lucide-react';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Tabs } from '../../../components/molecules/Tabs';
+import { Tabs } from '@/components/molecules/Tabs';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
-import { CaseId } from '../../../../types';
+import { CaseId } from '@/types';
 
 interface ContextPanelProps {
     caseId: CaseId;

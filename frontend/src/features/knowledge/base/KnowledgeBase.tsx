@@ -20,14 +20,14 @@ import { Plus } from 'lucide-react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { TabbedPageLayout } from '../../components/templates/TabbedPageLayout';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { KnowledgeContent } from './KnowledgeContent';
-import { Button } from '../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Config
 import { cn } from '@/utils/cn';
-import { KNOWLEDGE_BASE_TABS, KnowledgeView } from '../../../config/tabs.config';
+import { KNOWLEDGE_BASE_TABS, KnowledgeView } from '@/config/tabs.config';
 
 // ============================================================================
 // TYPES & INTERFACES

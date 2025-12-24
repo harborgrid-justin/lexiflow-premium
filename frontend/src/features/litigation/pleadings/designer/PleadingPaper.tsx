@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { FormattingRule } from '../../../../types';
+import { FormattingRule } from '@/types';
 import { cn } from '@/utils/cn';
-import { PleadingPaperProps } from '../../types';
+import { PleadingPaperProps } from '@/types';
 
 const PleadingPaper: React.FC<PleadingPaperProps> = ({ rules, children, className }) => {
     const contentRef = useRef<HTMLDivElement>(null);

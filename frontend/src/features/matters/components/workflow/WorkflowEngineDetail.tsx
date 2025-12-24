@@ -1,22 +1,22 @@
 
 import React, { useState } from 'react';
 import { ArrowLeft, Settings, Play, Pause, AlertTriangle, CheckCircle, GitBranch, Clock, Loader2, RefreshCw } from 'lucide-react';
-import { Button } from '../../components/atoms/Button';
-import { Card } from '../../components/molecules/Card';
-import { Badge } from '../../components/atoms/Badge';
-import { MetricCard } from '../../components/atoms';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Badge } from '@/components/atoms/Badge';
+import { MetricCard } from '@/components/molecules/MetricCard';
 import { TaskDependencyManager } from './TaskDependencyManager';
 import { ParallelTasksManager } from './ParallelTasksManager';
 import { SLAMonitor } from './SLAMonitor';
 import { AuditTrailViewer } from './AuditTrailViewer';
-import { Tabs } from '../../components/molecules/Tabs';
-import { useTheme } from '../../../providers/ThemeContext';
+import { Tabs } from '@/components/molecules/Tabs';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { ErrorState } from '../../components/molecules/ErrorState';
+import { ErrorState } from '@/components/molecules/ErrorState';
 
 interface WorkflowEngineDetailProps {
   id: string;

@@ -31,7 +31,7 @@ import {
     DiscoveryRequest, PrivilegeLogEntry, LegalHold, 
     Examination, Vendor, Transcript, SanctionMotion, StipulationRequest,
     ReviewBatch, ProcessingJob, CalendarEventItem, LegalDocument, CaseId
-} from '../../../types';
+} from '@/types';
 import { db, STORES } from '../db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { discoveryApi } from '@/api/domains/discovery.api';

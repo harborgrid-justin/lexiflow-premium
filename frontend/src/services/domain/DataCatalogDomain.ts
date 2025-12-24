@@ -1,4 +1,4 @@
-import { DataDictionaryItem, SchemaTable, DataLakeItem, LineageNode, LineageLink } from '../../types';
+import { DataDictionaryItem, SchemaTable, DataLakeItem, LineageNode, LineageLink } from '@/types';
 /**
  * ? Migrated to backend API (2025-12-21)
  */

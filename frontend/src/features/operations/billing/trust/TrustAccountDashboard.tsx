@@ -18,8 +18,8 @@
 
 import React, { useMemo, useCallback, useState } from 'react';
 import { Landmark, AlertCircle, CheckCircle, Clock, TrendingUp, Users, FileText } from 'lucide-react';
-import { Card } from '../../../components/molecules/Card';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { Card } from '@/components/molecules/Card';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Formatters } from '@/utils/formatters';
 import { useTrustAccounts } from '@/hooks/useTrustAccounts';

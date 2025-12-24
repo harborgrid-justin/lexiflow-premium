@@ -1,8 +1,8 @@
 
 import React, { useMemo } from 'react';
 import { JurisdictionGeoMap } from '../jurisdiction/JurisdictionGeoMap';
-import { Card } from '../../components/molecules/Card';
-import { useTheme } from '../../../providers/ThemeContext';
+import { Card } from '@/components/molecules/Card';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { MapPin, Book, Loader2 } from 'lucide-react';
 import { groupJurisdictionsByState } from './localRulesMap.utils';

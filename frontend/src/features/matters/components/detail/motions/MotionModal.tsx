@@ -13,19 +13,19 @@ import React, { useState, useEffect } from 'react';
 import { Wand2, ArrowRight, CheckSquare, Clock } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Modal } from '../../../components/molecules/Modal';
-import { Input } from '../../../components/atoms';
-import { Button } from '../../../components/atoms/Button';
-import { RuleSelector } from '../../../components/molecules/RuleSelector';
+import { Modal } from '@/components/molecules/Modal';
+import { Input } from '@/components/atoms';
+import { Button } from '@/components/atoms/Button';
+import { RuleSelector } from '@/components/molecules/RuleSelector';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Motion, MotionType, LegalDocument, MotionId, CaseId, DocumentId } from '../../../../types';
+import { Motion, MotionType, LegalDocument, MotionId, CaseId, DocumentId } from '@/types';
 
 interface MotionModalProps {
   isOpen: boolean;

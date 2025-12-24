@@ -12,11 +12,11 @@
 import React, { useRef } from 'react';
 
 // Internal Dependencies - Components
-import { Badge } from '../../../components/atoms/Badge';
+import { Badge } from '@/components/atoms/Badge';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
-import { useWindow } from '../../../../providers/WindowContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { useWindow } from '@/providers/WindowContext';
 import { useGanttDrag } from '@/hooks/useGanttDrag';
 
 // Internal Dependencies - Services & Utils
@@ -24,7 +24,7 @@ import { GanttHelpers } from '@/utils/ganttHelpers';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { WorkflowTask, CasePhase, TaskStatusBackend } from '../../../../types';
+import { WorkflowTask, CasePhase, TaskStatusBackend } from '@/types';
 
 interface GanttTimelineProps {
   phases: CasePhase[];

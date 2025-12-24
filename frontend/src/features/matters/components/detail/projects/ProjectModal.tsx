@@ -11,18 +11,18 @@
 import React, { useState } from 'react';
 
 // Internal Dependencies - Components
-import { Modal } from '../../../components/molecules/Modal';
-import { Input, TextArea } from '../../../components/atoms';
-import { Button } from '../../../components/atoms/Button';
+import { Modal } from '@/components/molecules/Modal';
+import { Input, TextArea } from '@/components/atoms';
+import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Project } from '../../../../types';
+import { Project } from '@/types';
 
 interface ProjectModalProps {
   isOpen: boolean;

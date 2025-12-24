@@ -1,6 +1,6 @@
 import React, { lazy } from 'react';
-import { RulesView } from '../../../config/tabs.config';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { RulesView } from '@/config/tabs.config';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 
 // Sub-components
 const RulesDashboard = lazy(() => import('./RulesDashboard').then(m => ({ default: m.RulesDashboard })));

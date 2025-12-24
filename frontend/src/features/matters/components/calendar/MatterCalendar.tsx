@@ -25,13 +25,13 @@ import {
 } from 'lucide-react';
 import { useQuery, queryClient } from '@/hooks/useQueryHooks';
 import { api } from '@api';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../components/atoms/Button';
-import { Card } from '../../components/molecules/Card';
-import { Badge } from '../../components/atoms/Badge';
-import { Modal } from '../../components/molecules/Modal';
-import type { Matter } from '../../../types';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Badge } from '@/components/atoms/Badge';
+import { Modal } from '@/components/molecules/Modal';
+import type { Matter } from '@/types';
 
 type CalendarView = 'month' | 'week' | 'day' | 'agenda';
 

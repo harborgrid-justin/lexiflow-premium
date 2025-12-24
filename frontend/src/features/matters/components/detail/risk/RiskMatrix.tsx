@@ -11,13 +11,13 @@
 import React from 'react';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { RiskLevel } from '../../../../types';
+import { RiskLevel } from '@/types';
 
 interface RiskMatrixProps {
   probability: RiskLevel;

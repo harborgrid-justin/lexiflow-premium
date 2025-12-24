@@ -84,7 +84,7 @@
  * - Analytics calculated from backend data
  */
 
-import { Client, Case, EntityId, CaseId, UserId } from '../../types';
+import { Client, Case, EntityId, CaseId, UserId } from '@/types';
 import { adminApi } from "@/api/domains/admin.api";
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { SystemEventType } from "@/types/integration-types";

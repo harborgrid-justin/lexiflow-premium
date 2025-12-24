@@ -5,7 +5,7 @@
  */
 
 import { addMinutes, differenceInMinutes, isWithinInterval, format, addDays } from 'date-fns';
-import { SEARCH_PREVIEW_RESULTS } from '../../../config/features/search.config';
+import { SEARCH_PREVIEW_RESULTS } from '@/config/features/search.config';
 
 /**
  * Calendar event definition

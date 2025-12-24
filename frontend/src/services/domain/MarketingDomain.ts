@@ -1,5 +1,5 @@
 
-import { MarketingMetric, MarketingCampaign } from '../../types';
+import { MarketingMetric, MarketingCampaign } from '@/types';
 import { delay } from '@/utils/async';
 import { MOCK_METRICS } from "@/api/data/marketingMetric";
 export const MarketingService = {

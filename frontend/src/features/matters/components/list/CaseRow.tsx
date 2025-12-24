@@ -18,11 +18,11 @@ import { User, Eye } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { StatusBadge } from '../../components/atoms/StatusBadge';
-import { Currency } from '../../components/atoms';
+import { StatusBadge } from '@/components/atoms/StatusBadge';
+import { Currency } from '@/components/atoms';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Utils
 import { cn } from '@/utils/cn';
@@ -30,7 +30,7 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case } from '../../../types';
+import { Case } from '@/types';
 
 interface CaseRowProps {
     caseData: Case;

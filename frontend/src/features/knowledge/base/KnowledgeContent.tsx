@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { KnowledgeView } from '../../../config/tabs.config';
+import { KnowledgeView } from '@/config/tabs.config';
 
 // Lazy load all sub-views for the Knowledge Base
 const WikiView = lazy(() => import('./WikiView').then(m => ({ default: m.WikiView })));

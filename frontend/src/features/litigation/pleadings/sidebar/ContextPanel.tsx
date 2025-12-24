@@ -1,15 +1,15 @@
 import React, { useState, useMemo } from 'react';
 import { FileText, Plus, Search, BookOpen, Users, Scale, ChevronRight, Loader2 } from 'lucide-react';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 import { useDebounce } from '@/hooks/useDebounce';
-import { DocketEntry } from '../../../../types';
-import { SEARCH_DEBOUNCE_MS } from '../../../../config/master.config';
+import { DocketEntry } from '@/types';
+import { SEARCH_DEBOUNCE_MS } from '@/config/master.config';
 
 interface ContextPanelProps {
   caseId: string;

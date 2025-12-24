@@ -1,22 +1,22 @@
 
 import React, { useState, useEffect } from 'react';
-import { LegalDocument } from '../../../../types';
+import { LegalDocument } from '@/types';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DocumentService } from '@/services/features/documents/documentService';
-import { PDFViewer } from '../../../components/organisms/PDFViewer';
-import { AcrobatToolbar, PDFTool } from '../../preview/AcrobatToolbar';
-import { InteractiveOverlay } from '../../preview/InteractiveOverlay';
-import { Modal } from '../../../components/molecules/Modal';
-import { SignaturePad } from '../../../components/organisms/SignaturePad';
-import { Button } from '../../../components/atoms/Button';
+import { PDFViewer } from '@/components/organisms/PDFViewer';
+import { AcrobatToolbar, PDFTool } from '../preview/AcrobatToolbar';
+import { InteractiveOverlay } from '../preview/InteractiveOverlay';
+import { Modal } from '@/components/molecules/Modal';
+import { SignaturePad } from '@/components/organisms/SignaturePad';
+import { Button } from '@/components/atoms/Button';
 import { FileText, Loader2 } from 'lucide-react';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
-import { ErrorState } from '../../../components/molecules/ErrorState';
+import { ErrorState } from '@/components/molecules/ErrorState';
 
 export const PDFEditorView: React.FC = () => {
     const { theme } = useTheme();

@@ -19,19 +19,19 @@ import { FileText, ArrowLeft, Plus, Link as LinkIcon } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
-import { useModalState } from '../../../hooks';
+import { useTheme } from '@/providers/ThemeContext';
+import { useModalState } from '@/hooks';
 
 // Components
-import { Card } from '../../components/molecules/Card';
-import { UserAvatar } from '../../components/atoms/UserAvatar';
-import { Button } from '../../components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { UserAvatar } from '@/components/atoms/UserAvatar';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import type { WarRoomData } from '../../../types';
+import type { WarRoomData } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -13,18 +13,18 @@ import React, { useState, useMemo } from 'react';
 import { FileText, CheckCircle, DollarSign, Flag, Briefcase, Gavel, Calendar, BookOpen, List, Filter } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TimelineItem } from '../../components/molecules/TimelineItem';
+import { TimelineItem } from '@/components/molecules/TimelineItem';
 import { StoryModeTimeline } from './timeline/StoryModeTimeline';
-import { VirtualList } from '../../components/organisms/VirtualList';
+import { VirtualList } from '@/components/organisms/VirtualList';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { TimelineEvent } from '../../../types';
+import { TimelineEvent } from '@/types';
 
 interface CaseTimelineProps {
   events: TimelineEvent[];

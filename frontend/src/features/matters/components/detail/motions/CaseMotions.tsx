@@ -13,16 +13,16 @@ import React, { useState } from 'react';
 import { Plus, RefreshCw } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../../components/atoms/Button';
-import { TaskCreationModal } from '../../../common/TaskCreationModal';
+import { Button } from '@/components/atoms/Button';
+import { TaskCreationModal } from '@/components/organisms/TaskCreationModal';
 import { MotionList } from './MotionList';
 import { MotionModal } from './MotionModal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '../../../../providers/WindowContext';
+import { useWindow } from '@/providers/WindowContext';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -30,7 +30,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Motion, MotionStatus, MotionType, LegalDocument, MotionId, CaseId } from '../../../../types';
+import { Motion, MotionStatus, MotionType, LegalDocument, MotionId, CaseId } from '@/types';
 
 interface CaseMotionsProps {
   caseId: string;

@@ -13,12 +13,12 @@ import React, { useState } from 'react';
 import { FileText, CheckCircle, AlertCircle, Edit2, Save, Download, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Card } from '../../../components/molecules/Card';
-import { Button } from '../../../components/atoms/Button';
-import { Badge } from '../../../components/atoms/Badge';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
@@ -27,7 +27,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { JointPlan, PlanSection } from '../../../../types';
+import { JointPlan, PlanSection } from '@/types';
 
 interface DiscoveryPlanBuilderProps {
   caseId: string;

@@ -12,19 +12,19 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { Plus, TrendingUp } from 'lucide-react';
 
 // Internal Components
-import { PlanningSidebar } from '../../matters/detail/planning/PlanningSidebar';
-import { GanttTimeline } from '../../matters/detail/planning/GanttTimeline';
-import { Button } from '../../components/atoms/Button';
+import { PlanningSidebar } from '@/features/matters/components/detail/planning/PlanningSidebar';
+import { GanttTimeline } from '@/features/matters/components/detail/planning/GanttTimeline';
+import { Button } from '@/components/atoms/Button';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Utils
 import { cn } from '@/utils/cn';
 import { Pathfinding } from '@/utils/pathfinding';
 
 // Types
-import { CasePhase, WorkflowTask, TaskId, CaseId } from '../../../types';
+import { CasePhase, WorkflowTask, TaskId, CaseId } from '@/types';
 import { LitigationGanttViewProps, ZoomLevel } from './types';
 import { transformNodesToGantt, calculatePixelsPerDay, calculateNodePositionFromDate } from './utils';
 

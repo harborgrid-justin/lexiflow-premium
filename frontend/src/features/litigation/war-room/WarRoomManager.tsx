@@ -7,13 +7,13 @@
 
 import React, { useState, useMemo } from 'react';
 import { Target, Search, AlertCircle, Briefcase, Clock, Shield } from 'lucide-react';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
-import { Case } from '../../../types';
-import { Button } from '../../components/atoms/Button';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { Case } from '@/types';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 
 interface WarRoomManagerProps {
   onSelectCase: (caseId: string) => void;

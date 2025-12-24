@@ -22,15 +22,15 @@ import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useToggle } from '@/hooks/useToggle';
 import { useModalState } from '@/hooks/useModalState';
 import { useSelection } from '@/hooks/useSelectionState';
 
 // Components
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Button } from '../../components/atoms/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { Button } from '@/components/atoms/Button';
 import { CommunicationLog } from './CommunicationLog';
 import { ServiceTracker } from './ServiceTracker';
 import { CorrespondenceDetail } from './CorrespondenceDetail';
@@ -43,7 +43,7 @@ import { CommunicationLogSkeleton, ServiceTrackerSkeleton, CorrespondenceDetailS
 import { cn } from '@/utils/cn';
 
 // Types
-import { CommunicationItem, ServiceJob } from '../../../types';
+import { CommunicationItem, ServiceJob } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

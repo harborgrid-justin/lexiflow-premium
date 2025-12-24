@@ -1,7 +1,7 @@
 // services/repositories/MatterRepository.ts
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
-import { Matter, MatterId, MatterStatus } from '../../../types';
+import { Matter, MatterId, MatterStatus } from '@/types';
 import { mattersApi } from '@/api/matters-api';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 

@@ -7,7 +7,7 @@
  */
 
 import { DiscoveryRequestStatusEnum, ESICollectionStatusEnum, LegalHoldStatusEnum, PrivilegeBasisEnum } from '@/types/enums';
-import type { DiscoveryRequest, PrivilegeLogEntry, LegalHold } from '../../types';
+import type { DiscoveryRequest, PrivilegeLogEntry, LegalHold } from '@/types';
 
 // XSS Prevention: Sanitize HTML/script tags
 const sanitizeString = (str: string): string => {

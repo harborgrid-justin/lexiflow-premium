@@ -13,13 +13,13 @@ import React, { useState, useRef, lazy, Suspense } from 'react';
 import { FileText, Plus, Wand2, Cpu, Loader2, ShieldCheck, Eye } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TaskCreationModal } from '../../common/TaskCreationModal';
+import { TaskCreationModal } from '@/components/organisms/TaskCreationModal';
 import { CaseDocumentItem } from './documents/CaseDocumentItem';
-import { Button } from '../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
-import { useWindow } from '../../../providers/WindowContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { useWindow } from '@/providers/WindowContext';
 import { useNotify } from '@/hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
@@ -32,10 +32,10 @@ import { IntegrationOrchestrator } from '@/services/integration/integrationOrche
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { LegalDocument, EvidenceItem, WorkflowTask, CaseId, EvidenceId } from '../../../types';
+import { LegalDocument, EvidenceItem, WorkflowTask, CaseId, EvidenceId } from '@/types';
 import { SystemEventType } from '@/types/integration-types';
 
-const DocumentAssembly = lazy(() => import('../../operations/documents/DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
+const DocumentAssembly = lazy(() => import('@/features/operations/documents/DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
 
 interface CaseDocumentsProps {
   documents: LegalDocument[];

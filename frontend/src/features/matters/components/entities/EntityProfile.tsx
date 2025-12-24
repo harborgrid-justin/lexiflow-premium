@@ -22,18 +22,18 @@ import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '../../components/atoms/Button';
-import { Tabs } from '../../components/molecules/Tabs';
-import { EmptyState } from '../../components/molecules/EmptyState';
+import { Button } from '@/components/atoms/Button';
+import { Tabs } from '@/components/molecules/Tabs';
+import { EmptyState } from '@/components/molecules/EmptyState';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { LegalEntity, EntityRelationship } from '../../../types';
+import { LegalEntity, EntityRelationship } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

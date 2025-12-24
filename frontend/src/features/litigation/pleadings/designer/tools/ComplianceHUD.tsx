@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import { FormattingRule, PleadingSection } from '../../../../../types';
+import { FormattingRule, PleadingSection } from '@/types';
 import { CheckCircle, AlertOctagon, Info, Zap, Settings, BookOpen, AlertTriangle } from 'lucide-react';
-import { useTheme } from '../../../../../providers/ThemeContext';
-import { cn } from '../../../../../utils/cn';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 
 interface ComplianceHUDProps {
     rules: FormattingRule;

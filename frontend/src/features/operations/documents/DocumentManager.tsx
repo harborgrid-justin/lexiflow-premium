@@ -23,17 +23,17 @@ import {
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { Button } from '../../components/atoms/Button';
-import { TabbedPageLayout, TabConfigItem } from '../../components/templates/TabbedPageLayout';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { Button } from '@/components/atoms/Button';
+import { TabbedPageLayout, TabConfigItem } from '@/components/templates/TabbedPageLayout';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { DocumentManagerContent } from './DocumentManagerContent';
 
 // Utils & Config
 import { cn } from '@/utils/cn';
-import { DOCUMENT_MANAGER_TAB_CONFIG, DocView } from '../../../config/tabs.config';
+import { DOCUMENT_MANAGER_TAB_CONFIG, DocView } from '@/config/tabs.config';
 
 // Types
-import { UserRole } from '../../../types';
+import { UserRole } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

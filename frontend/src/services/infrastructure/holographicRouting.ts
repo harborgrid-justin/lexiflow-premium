@@ -94,7 +94,7 @@
  * @usage
  * ```typescript
  * import { HolographicRouting } from './holographicRouting';
- * import { PATHS } from '../../config/paths.config';
+ * import { PATHS } from '@/config/paths.config';
  * 
  * // Resolve tab for CASES module with "docket" context
  * const tab = HolographicRouting.resolveTab(PATHS.CASES, 'show me the docket');
@@ -145,7 +145,7 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Utils & Constants
-import { PATHS } from '../../config/paths.config';
+import { PATHS } from '@/config/paths.config';
 
 // =============================================================================
 // PATTERN REGISTRY (Private)

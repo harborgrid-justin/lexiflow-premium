@@ -18,17 +18,17 @@ import { Calendar, Plus, DollarSign, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { KanbanBoard, KanbanColumn, KanbanCard } from '../../components/organisms/Kanban';
-import { Modal } from '../../components/molecules/Modal';
-import { Input, TextArea } from '../../components/atoms';
-import { Button } from '../../components/atoms/Button';
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
+import { KanbanBoard, KanbanColumn, KanbanCard } from '@/components/organisms/Kanban';
+import { Modal } from '@/components/molecules/Modal';
+import { Input, TextArea } from '@/components/atoms';
+import { Button } from '@/components/atoms/Button';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
-import { useModalState } from '../../../hooks';
+import { useModalState } from '@/hooks';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';

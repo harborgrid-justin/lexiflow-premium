@@ -17,7 +17,7 @@
  * - Proper error handling and logging
  */
 
-import { Clause } from '../../../types';
+import { Clause } from '@/types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';

@@ -17,15 +17,15 @@ import { Send, Clock, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 
 // Components
-import { Button } from '../../components/atoms/Button';
-import { Badge } from '../../components/atoms/Badge';
-import { EmptyState } from '../../components/molecules/EmptyState';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { EmptyState } from '@/components/molecules/EmptyState';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -33,7 +33,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types
-import { PleadingDocument } from '../../../types';
+import { PleadingDocument } from '@/types';
 
 // ============================================================================
 // COMPONENT

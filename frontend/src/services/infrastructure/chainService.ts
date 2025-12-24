@@ -172,7 +172,7 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Types
-import { AuditLogEntry, UUID } from '../../types';
+import { AuditLogEntry, UUID } from '@/types';
 
 // =============================================================================
 // TYPES & INTERFACES

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { FileText, Download, Eye } from 'lucide-react';
 

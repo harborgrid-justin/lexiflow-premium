@@ -26,11 +26,11 @@ import {
   TrendingUp,
   Database,
 } from 'lucide-react';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../components/atoms/Button';
-import { Tabs } from '../../components/molecules/Tabs';
-import { Card } from '../../components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
+import { Tabs } from '@/components/molecules/Tabs';
+import { Card } from '@/components/molecules/Card';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';
@@ -45,7 +45,7 @@ import type {
   WorkflowAnalytics,
   AIWorkflowSuggestion,
   ExternalTrigger,
-} from '../../../types';
+} from '@/types';
 
 interface AdvancedWorkflowDesignerProps {
   workflowId?: string;

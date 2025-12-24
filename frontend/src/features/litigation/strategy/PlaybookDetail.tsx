@@ -10,13 +10,13 @@
 import React, { useState } from 'react';
 import { CheckCircle, Clock, BookOpen, Target, Shield, Layers, Scale, FileText, ExternalLink } from 'lucide-react';
 
-import { useTheme } from '../../../providers/ThemeContext';
-import { useWindow } from '../../../providers/WindowContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { useWindow } from '@/providers/WindowContext';
 import { cn } from '@/utils/cn';
 
-import { Button } from '../../components/atoms/Button';
-import { Tabs } from '../../components/molecules/Tabs';
-import { ResearchTool } from '../../knowledge/research/ResearchTool';
+import { Button } from '@/components/atoms/Button';
+import { Tabs } from '@/components/molecules/Tabs';
+import { ResearchTool } from '@/features/knowledge/research/ResearchTool';
 import { WarRoom } from '../war-room/WarRoom';
 import { PlaybookDetailProps } from './types';
 

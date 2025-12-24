@@ -17,15 +17,15 @@ import { Archive, FolderInput, CheckSquare, Download, Upload, RefreshCw } from '
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 
 // Components
-import { Button } from '../../components/atoms/Button';
-import { Card } from '../../components/molecules/Card';
-import { Tabs } from '../../components/molecules/Tabs';
-import { MetricCard } from '../../components/atoms';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Tabs } from '@/components/molecules/Tabs';
+import { MetricCard } from '@/components/molecules/MetricCard';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -33,7 +33,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types
-import { Case } from '../../../types';
+import { Case } from '@/types';
 
 // ============================================================================
 // COMPONENT

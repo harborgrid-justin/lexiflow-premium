@@ -20,10 +20,10 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '../../components/molecules/Card';
+import { Card } from '@/components/molecules/Card';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
@@ -33,7 +33,7 @@ import { aggregateFilingActivity, aggregateJudgeRulings } from './docketAnalytic
 import { queryKeys } from '@/utils/queryKeys';
 
 // Types & Interfaces
-import { DocketEntry } from '../../../types';
+import { DocketEntry } from '@/types';
 
 export const DocketAnalytics: React.FC = () => {
   const { theme } = useTheme();

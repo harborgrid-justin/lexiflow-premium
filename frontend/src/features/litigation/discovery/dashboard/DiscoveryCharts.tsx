@@ -1,9 +1,9 @@
 
 import React from 'react';
-import { Card } from '../../../components/molecules/Card';
+import { Card } from '@/components/molecules/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { useTheme } from '../../../../providers/ThemeContext';
-import { useChartTheme } from '../../../components/organisms/ChartHelpers';
+import { useTheme } from '@/providers/ThemeContext';
+import { useChartTheme } from '@/components/organisms/ChartHelpers';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)

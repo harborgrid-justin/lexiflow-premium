@@ -17,10 +17,10 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Input, TextArea } from '../../../components/atoms';
+import { Input, TextArea } from '@/components/atoms';
 
 // Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Utils
 import { cn } from '@/utils/cn';
@@ -28,7 +28,7 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case, MatterType } from '../../../../types';
+import { Case, MatterType } from '@/types';
 
 interface CaseFormFieldsProps {
   formData: Partial<Case>;

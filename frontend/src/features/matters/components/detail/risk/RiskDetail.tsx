@@ -13,20 +13,20 @@ import React, { useState } from 'react';
 import { X, Save, Trash2, Wand2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../../components/atoms/Button';
-import { Input, TextArea } from '../../../components/atoms';
+import { Button } from '@/components/atoms/Button';
+import { Input, TextArea } from '@/components/atoms';
 import { RiskMatrix } from './RiskMatrix';
-import { Modal } from '../../../components/molecules/Modal';
+import { Modal } from '@/components/molecules/Modal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Risk, RiskLevel, RiskCategory, RiskStatus } from '../../../../types';
+import { Risk, RiskLevel, RiskCategory, RiskStatus } from '@/types';
 
 interface RiskDetailProps {
   risk: Risk;

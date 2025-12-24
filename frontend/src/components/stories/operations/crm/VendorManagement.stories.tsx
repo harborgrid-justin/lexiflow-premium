@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { VendorManagement } from '../../../../features/litigation/discovery/VendorManagement';
-import { ThemeProvider } from '../../../providers/ThemeContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 import React from 'react';
 

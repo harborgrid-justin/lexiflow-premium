@@ -17,21 +17,21 @@ import { FileText, Gavel, Clock, Bell, Lock, Hash } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { VirtualList } from '../../components/organisms/VirtualList';
-import { InfiniteScrollTrigger } from '../../common/InfiniteScrollTrigger';
+import { VirtualList } from '@/components/organisms/VirtualList';
+import { InfiniteScrollTrigger } from '@/components/organisms/InfiniteScrollTrigger';
 import { DocketRow } from './DocketRow';
-import { Badge } from '../../components/atoms/Badge';
-import { Button } from '../../components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useListNavigation } from '@/hooks/useListNavigation';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { DocketEntry, DocketEntryType } from '../../../types';
+import { DocketEntry, DocketEntryType } from '@/types';
 
 interface DocketTableProps {
   entries: DocketEntry[];

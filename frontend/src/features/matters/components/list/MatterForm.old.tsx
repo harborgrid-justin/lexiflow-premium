@@ -7,7 +7,7 @@ import {
   PracticeArea,
   BillingArrangement,
   UserId 
-} from '../../../types';
+} from '@/types';
 import { Save, X, Calendar, DollarSign, Users, FileText, Building2 } from 'lucide-react';
 
 interface MatterFormProps {

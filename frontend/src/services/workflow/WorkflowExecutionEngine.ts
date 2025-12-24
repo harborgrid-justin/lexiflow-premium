@@ -16,7 +16,7 @@ import type {
   ApprovalChain,
   WorkflowState,
   WorkflowSnapshot,
-} from '../../types';
+} from '@/types';
 
 export type WorkflowExecutionEvent =
   | 'started'

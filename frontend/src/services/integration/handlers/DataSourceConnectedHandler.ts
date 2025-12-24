@@ -8,7 +8,7 @@
 import { BaseEventHandler } from './BaseEventHandler';
 import { db } from '@services/data/db';
 import type { SystemEventPayloads } from '@/types/integration-types';
-import type { UserId } from '../../../types';
+import type { UserId } from '@/types';
 import { SystemEventType } from '@/types/integration-types';
 
 export class DataSourceConnectedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.DATA_SOURCE_CONNECTED]> {

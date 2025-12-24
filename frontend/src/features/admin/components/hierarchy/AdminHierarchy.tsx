@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Plus, Loader2, Users, CheckCircle } from 'lucide-react';
-import { Organization, Group, User as UserType, Case, GroupId } from '../../../types';
-import { Button } from '../../components/atoms/Button';
+import { Organization, Group, User as UserType, Case, GroupId } from '@/types';
+import { Button } from '@/components/atoms/Button';
 import { HierarchyColumn } from './HierarchyColumn';
 import { OrgListItem, GroupListItem, UserListItem } from './HierarchyRows';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

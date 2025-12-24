@@ -22,12 +22,12 @@ import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { Badge } from '../../components/atoms/Badge';
-import { DateText } from '../../components/atoms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Badge } from '@/components/atoms/Badge';
+import { DateText } from '@/components/atoms';
 
 // Types
-import { CalendarEventItem } from '../../../types';
+import { CalendarEventItem } from '@/types';
 
 // ============================================================================
 // COMPONENT

@@ -16,16 +16,16 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { JurisdictionGeoMap } from '../../knowledge/jurisdiction/JurisdictionGeoMap';
+import { JurisdictionGeoMap } from '@/features/knowledge/jurisdiction/JurisdictionGeoMap';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { LegalEntity } from '../../../types';
+import { LegalEntity } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

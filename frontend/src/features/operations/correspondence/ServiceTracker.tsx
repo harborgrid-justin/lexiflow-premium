@@ -17,18 +17,18 @@ import { MapPin, User, Truck } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '../../components/molecules/Card';
-import { Badge } from '../../components/atoms/Badge';
+import { Card } from '@/components/molecules/Card';
+import { Badge } from '@/components/atoms/Badge';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 import { ServiceStatus } from '@/types/enums';
 
 // Types
-import { ServiceJob } from '../../../types';
+import { ServiceJob } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

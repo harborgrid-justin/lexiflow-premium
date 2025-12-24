@@ -17,16 +17,16 @@ import { Plus, Filter, CheckSquare, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../components/atoms/Button';
-import { Badge } from '../../components/atoms/Badge';
-import { TaskCreationModal } from '../../common/TaskCreationModal';
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
-import { EvidenceTypeIcon } from '../../components/atoms/EvidenceTypeIcon';
-import { FilterPanel } from '../../common/FilterPanel';
-import { VirtualList } from '../../components/organisms/VirtualList';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { TaskCreationModal } from '@/components/organisms/TaskCreationModal';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { EvidenceTypeIcon } from '@/components/atoms/EvidenceTypeIcon';
+import { FilterPanel } from '@/components/organisms/FilterPanel';
+import { VirtualList } from '@/components/organisms/VirtualList';
 
 // Context & Utils
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useToggle } from '@/hooks/useToggle';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
@@ -35,7 +35,7 @@ import { EvidenceFilters } from '@/hooks/useEvidenceVault';
 import { AdmissibilityStatusEnum } from '@/types/enums';
 
 // Types
-import { EvidenceItem } from '../../../types';
+import { EvidenceItem } from '@/types';
 
 interface EvidenceInventoryProps {
   items: EvidenceItem[];

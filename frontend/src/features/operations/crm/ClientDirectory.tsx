@@ -1,13 +1,13 @@
 
 import React, { useState, useMemo } from 'react';
-import { Client } from '../../../types';
-import { SearchToolbar } from '../../components/organisms/SearchToolbar';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { Badge } from '../../components/atoms/Badge';
-import { Button } from '../../components/atoms/Button';
-import { Currency } from '../../components/atoms';
+import { Client } from '@/types';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { Currency } from '@/components/atoms';
 import { Lock, MoreVertical } from 'lucide-react';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

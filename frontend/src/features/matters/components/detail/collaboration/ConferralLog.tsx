@@ -13,16 +13,16 @@ import React, { useState, useCallback } from 'react';
 import { Phone, Mail, Users, Video, Plus, CheckCircle, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../../components/atoms/Button';
-import { Badge } from '../../../components/atoms/Badge';
-import { Input, TextArea } from '../../../components/atoms';
-import { Modal } from '../../../components/molecules/Modal';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { Input, TextArea } from '@/components/atoms';
+import { Modal } from '@/components/molecules/Modal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
-import { useToast } from '../../../../../providers/ToastContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { useToast } from '@/providers/ToastContext';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { useModalState } from '../../../../hooks';
+import { useModalState } from '@/hooks';
 import { getTodayString } from '@/utils/dateUtils';
 
 // Internal Dependencies - Services & Utils
@@ -31,7 +31,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { ConferralSession, ConferralResult, ConferralMethod, UUID, CaseId, UserId } from '../../../../types';
+import { ConferralSession, ConferralResult, ConferralMethod, UUID, CaseId, UserId } from '@/types';
 
 interface ConferralLogProps {
   caseId: string;

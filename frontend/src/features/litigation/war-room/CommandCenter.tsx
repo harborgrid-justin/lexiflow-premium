@@ -26,17 +26,17 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '../../components/molecules/Card';
-import { MetricCard } from '../../components/atoms';
+import { Card } from '@/components/molecules/Card';
+import { MetricCard } from '@/components/molecules/MetricCard';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import type { WarRoomData, SanctionMotion } from '../../../types';
+import type { WarRoomData, SanctionMotion } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -46,7 +46,7 @@
  * @modified 2025-12-22
  */
 
-import { BackupSnapshot, ArchiveStats, SnapshotType } from '../../types';
+import { BackupSnapshot, ArchiveStats, SnapshotType } from '@/types';
 import { delay } from '@/utils/async';
 import { BackupsApiService } from '@/api/backups-api';
 

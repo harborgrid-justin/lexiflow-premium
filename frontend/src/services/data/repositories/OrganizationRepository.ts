@@ -3,7 +3,7 @@
  * Enterprise-grade repository for organization management with backend API integration
  */
 
-import { Organization } from '../../../types';
+import { Organization } from '@/types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';

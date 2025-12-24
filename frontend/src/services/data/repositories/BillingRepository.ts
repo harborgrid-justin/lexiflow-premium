@@ -1,5 +1,5 @@
 
-import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData, UserId, FirmExpense } from '../../../types';
+import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData, UserId, FirmExpense } from '@/types';
 import { delay } from '@/utils/async';
 import { Repository } from '../../core/Repository';
 import { STORES, db } from '../db';

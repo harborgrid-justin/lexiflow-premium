@@ -1,11 +1,11 @@
-import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, UUID, PermissionLevel, TenantConfig, Connector, GovernanceRule, GovernancePolicy, ApiServiceSpec } from '../../types';
+import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, UUID, PermissionLevel, TenantConfig, Connector, GovernanceRule, GovernancePolicy, ApiServiceSpec } from '@/types';
 /**
  * ? Migrated to backend API (2025-12-21)
  */
 import { adminApi } from "@/api/domains/admin.api";
 import { ChainService } from '../infrastructure/chainService';
 import { MOCK_API_SPEC } from '@/api/data/mockApiSpec';
-import { API_PREFIX } from '../../config/network/api.config';
+import { API_PREFIX } from '@/config/network/api.config';
 import { delay } from '@/utils/async';
 
 export const AdminService = {

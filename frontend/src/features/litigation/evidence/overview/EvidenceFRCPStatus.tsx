@@ -9,10 +9,10 @@ import React from 'react';
 import { CheckCircle } from 'lucide-react';
 
 // Common Components
-import { Card } from '../../../components/molecules/Card';
+import { Card } from '@/components/molecules/Card';
 
 // Context & Utils
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 export const EvidenceFRCPStatus: React.FC = () => {

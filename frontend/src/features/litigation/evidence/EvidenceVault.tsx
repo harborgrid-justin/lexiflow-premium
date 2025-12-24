@@ -17,22 +17,22 @@ import { Plus, Search } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Button } from '../../components/atoms/Button';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { EvidenceVaultContent } from './EvidenceVaultContent';
 import { EvidenceErrorBoundary } from './EvidenceErrorBoundary';
 import { EvidenceInventorySkeleton, EvidenceDetailSkeleton } from './EvidenceSkeleton';
 
 // Context & Utils
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useEvidenceVault, ViewMode } from '@/hooks/useEvidenceVault';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Config & Types
-import { EVIDENCE_PARENT_TABS } from '../../../config/tabs.config';
-import { EvidenceItem } from '../../../types';
+import { EVIDENCE_PARENT_TABS } from '@/config/tabs.config';
+import { EvidenceItem } from '@/types';
 
 const EvidenceDetail = lazy(() => import('./EvidenceDetail').then(m => ({ default: m.EvidenceDetail })));
 

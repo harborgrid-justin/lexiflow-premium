@@ -9,19 +9,19 @@ import React from 'react';
 import { Copy, CheckCircle, AlertTriangle, FileText, Plus } from 'lucide-react';
 
 // Common Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/organisms/Table';
-import { Badge } from '../../../components/atoms/Badge';
-import { Button } from '../../../components/atoms/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
 
 // Context & Utils
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { EvidenceItem } from '../../../../types';
+import { EvidenceItem } from '@/types';
 
 export const OriginalsManager: React.FC = () => {
     const { theme } = useTheme();

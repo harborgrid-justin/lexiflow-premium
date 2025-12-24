@@ -12,7 +12,7 @@
  */
 
 
-import { API_BASE_URL, API_PREFIX } from '../../config/network/api.config';
+import { API_BASE_URL, API_PREFIX } from '@/config/network/api.config';
 
 const DEPRECATION_WARNING = `
 ЩЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЭЛ

@@ -18,11 +18,11 @@ import { Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { UserAvatar } from '../../components/atoms/UserAvatar';
-import { ProgressBar } from '../../components/atoms/ProgressBar';
+import { UserAvatar } from '@/components/atoms/UserAvatar';
+import { ProgressBar } from '@/components/atoms/ProgressBar';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils

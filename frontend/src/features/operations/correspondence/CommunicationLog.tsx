@@ -17,19 +17,19 @@ import { Mail, ArrowUpRight, ArrowDownLeft, Paperclip, Shield } from 'lucide-rea
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Components
-import { Badge } from '../../components/atoms/Badge';
-import { VirtualList } from '../../components/organisms/VirtualList';
+import { Badge } from '@/components/atoms/Badge';
+import { VirtualList } from '@/components/organisms/VirtualList';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 import { CommunicationStatus } from '@/types/enums';
 
 // Types
-import { CommunicationItem } from '../../../types';
+import { CommunicationItem } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

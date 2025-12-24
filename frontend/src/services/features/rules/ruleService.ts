@@ -4,7 +4,7 @@
  * @description Production-ready legal rules service for searching and managing procedural rules
  */
 
-import { LegalRule } from '../../../types';
+import { LegalRule } from '@/types';
 
 /**
  * In-memory rules database for common legal rules

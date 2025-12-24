@@ -18,13 +18,13 @@ import { Wand2, Plus, Shield, Mail } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../components/atoms/Button';
-import { Badge } from '../../components/atoms/Badge';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
@@ -37,7 +37,7 @@ import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { PrivilegeLogEntry } from '../../../types';
+import { PrivilegeLogEntry } from '@/types';
 
 export const PrivilegeLog: React.FC = () => {
   const { theme } = useTheme();

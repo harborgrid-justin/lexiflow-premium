@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TabbedPageLayout, TabConfigItem } from '../../../components/components/templates/TabbedPageLayout';
 import { Button } from '../../../components/common/Button';
-import { ThemeProvider } from '../../../providers/ThemeContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 import React, { useState, Suspense } from 'react';
 import { Briefcase, Folder, Activity, Plus, Settings, Clock, DollarSign, Users, BarChart3, TrendingUp, Eye, Lightbulb } from 'lucide-react';

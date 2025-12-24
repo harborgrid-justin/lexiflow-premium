@@ -10,18 +10,18 @@ import React, { useState, useMemo } from 'react';
 import { Search, Filter, Download } from 'lucide-react';
 
 // Common Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { Button } from '../../components/atoms/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Button } from '@/components/atoms/Button';
 
 // Context & Utils
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { EvidenceItem } from '../../../types';
+import { EvidenceItem } from '@/types';
 
 export const EvidenceCustodyLog: React.FC = () => {
   const { theme } = useTheme();

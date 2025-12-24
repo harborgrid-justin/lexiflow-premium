@@ -12,7 +12,7 @@
  * ```
  */
 
-import { BaseEntity } from '../../types';
+import { BaseEntity } from '@/types';
 import { Repository } from './Repository';
 
 /**

@@ -13,13 +13,13 @@ import React, { useState } from 'react';
 import { ArrowRight, FileCode, Sparkles } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Modal } from '../../components/molecules/Modal';
-import { Button } from '../../components/atoms/Button';
+import { Modal } from '@/components/molecules/Modal';
+import { Button } from '@/components/atoms/Button';
 import { ParsedDocketPreview } from './ParsedDocketPreview';
-import { Stepper } from '../../components/molecules/Stepper';
+import { Stepper } from '@/components/molecules/Stepper';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 
 // Internal Dependencies - Services & Utils

@@ -189,7 +189,7 @@ import type {
   DocketEntry,
   LegalDocument,
   TimeEntry
-} from '../../types';
+} from '@/types';
 
 import { MOCK_JUDGES } from '@/api/data/judgeProfile';
 

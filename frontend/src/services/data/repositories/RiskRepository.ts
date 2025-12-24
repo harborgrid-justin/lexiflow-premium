@@ -3,7 +3,7 @@
  * Enterprise-grade repository for risk management with backend API integration
  */
 
-import { Risk } from '../../../types';
+import { Risk } from '@/types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';

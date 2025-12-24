@@ -24,14 +24,14 @@ import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
-import { useWindow } from '../../../../providers/WindowContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { useWindow } from '@/providers/WindowContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 
 // Components
-import { TagList } from '../../../components/atoms';
-import { Button } from '../../../components/atoms/Button';
+import { TagList } from '@/components/molecules/TagList';
+import { Button } from '@/components/atoms/Button';
 import { PreviewHeader } from '../preview/PreviewHeader';
 import { PreviewContent } from '../preview/PreviewContent';
 import { PIIPanel } from '../preview/PIIPanel';
@@ -40,7 +40,7 @@ import { PIIPanel } from '../preview/PIIPanel';
 import { cn } from '@/utils/cn';
 
 // Types
-import { LegalDocument, UserRole } from '../../../../types';
+import { LegalDocument, UserRole } from '@/types';
 
 interface DocumentPreviewPanelProps {
   document: LegalDocument | null;

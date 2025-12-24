@@ -21,7 +21,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { Button } from '@/components';
 import { Badge } from '@/components';
 import { TaskCreationModal } from '@/components';
-import { Modal } from '../../components/molecules/Modal';
+import { Modal } from '@/components/molecules/Modal';
 import { Input, TextArea } from '@/components';
 
 // Hooks & Context

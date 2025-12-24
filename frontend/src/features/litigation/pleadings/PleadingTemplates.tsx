@@ -17,16 +17,16 @@ import { LayoutTemplate, ArrowRight, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { VirtualGrid } from '../../components/organisms/VirtualGrid';
+import { VirtualGrid } from '@/components/organisms/VirtualGrid';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { PleadingTemplate } from '../../../types';
+import { PleadingTemplate } from '@/types';
 import { PleadingTemplatesProps } from './types';
 
 // ============================================================================

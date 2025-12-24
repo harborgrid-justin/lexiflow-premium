@@ -22,26 +22,26 @@ import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
-import { useModalState } from '../../../hooks';
+import { useModalState } from '@/hooks';
 import { getTodayString } from '@/utils/dateUtils';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { Button } from '../../components/atoms/Button';
-import { Badge } from '../../components/atoms/Badge';
-import { ConfirmDialog } from '../../components/molecules/ConfirmDialog';
-import { SearchToolbar } from '../../components/organisms/SearchToolbar';
-import { Modal } from '../../components/molecules/Modal';
-import { Input } from '../../components/atoms';
-import { VirtualList } from '../../components/organisms/VirtualList';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { Modal } from '@/components/molecules/Modal';
+import { Input } from '@/components/atoms';
+import { VirtualList } from '@/components/organisms/VirtualList';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { FirmAsset } from '../../../types';
+import { FirmAsset } from '@/types';
 
 // ============================================================================
 // COMPONENT

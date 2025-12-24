@@ -53,7 +53,7 @@ export class CitationSavedHandler extends BaseEventHandler<SystemEventPayloads[t
   private async createPleadingSuggestions(
     citation: SystemEventPayloads[typeof SystemEventType.CITATION_SAVED]['citation']
   ): Promise<number> {
-    const { DataService } = await import('@/api/data/dataService');
+    const { DataService } = await import('@/services/data/dataService');
 
     const activePleadings = await DataService.pleadings.getByIndex('status', 'Draft');
     const casePleadings = activePleadings.filter((pl: any) => pl.caseId === citation.caseId);

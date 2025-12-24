@@ -61,9 +61,9 @@ export * from './domain/SecurityDomain';
 // Consolidated backend API services (BACKEND-FIRST as of 2025-12-18)
 export * from './infrastructure/apiClient';
 // NOTE: Commented out full API barrel export to avoid QUERY_KEYS duplicates, Notification type conflicts, Filter type conflicts, and CalendarEvent conflicts
-// Individual API services can be imported directly from '@api' when needed
-// export * from '@api';
-export { api } from '@api';  // Export the consolidated api object
+// Individual API services can be imported directly from '@/api' when needed
+// export * from '@/api';
+export { api } from '@/api';  // Export the consolidated api object
 export {
   isBackendApiEnabled,
   isIndexedDBMode,

@@ -11,8 +11,8 @@ import type {
   EvidenceItem,
   TimeEntry,
   User,
-} from '../../types';
-import type { RateTable } from '../../types/financial';
+} from '@/types';
+import type { RateTable } from '@/types/financial';
 
 export class RateTablesApiService {
   async getAll(): Promise<RateTable[]> {

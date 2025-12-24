@@ -21,7 +21,7 @@ import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { LegalDocument } from '@/types';
-import type { ThemeTokens } from '../../../../theme/tokens';
+import type { ThemeTokens } from '@/components/theme/tokens';
 
 interface CaseDocumentItemProps {
   doc: LegalDocument;

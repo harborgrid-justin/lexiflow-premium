@@ -10,7 +10,7 @@ import {
   BatchFormatResult,
   FormattedCitation,
   CitationFormat
-} from '../../types/bluebook';
+} from '@/types/bluebook';
 
 export interface CitationValidation {
   citation: string;

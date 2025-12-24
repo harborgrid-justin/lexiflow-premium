@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { CaseId, Witness, Expert, Advisor, CaseStrategy, TrialExhibit } from '../../../../frontend/types';
+import type { CaseId, Witness, Expert, Advisor, CaseStrategy, TrialExhibit } from '@/types';
 import { WarRoom } from '../../../../features/litigation/war-room/WarRoom';
 import { CommandCenter } from '../../../../features/litigation/war-room/CommandCenter';
 import { EvidenceWall } from '../../../../features/litigation/war-room/EvidenceWall';
@@ -7,8 +7,8 @@ import { AdvisoryBoard } from '../../../../features/litigation/war-room/Advisory
 import { OppositionManager } from '../../../../features/litigation/war-room/OppositionManager';
 import { WitnessPrep } from '../../../../features/litigation/war-room/WitnessPrep';
 import { TrialBinder } from '../../../../features/litigation/war-room/TrialBinder';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
-import { ToastProvider } from '../../../../frontend/providers/ToastContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
+import { ToastProvider } from '@/providers/ToastContext';
 import React from 'react';
 
 /**

@@ -29,7 +29,7 @@
  */
 
 import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
-import type { User, UserRole } from '../../types';
+import type { User, UserRole } from '@/types';
 
 // DTOs for user operations
 export interface CreateUserDto {

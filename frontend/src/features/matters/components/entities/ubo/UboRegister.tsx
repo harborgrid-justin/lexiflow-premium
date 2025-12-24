@@ -10,7 +10,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { api } from '@api';
+import { api } from '@/api';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 import { ErrorState } from '@/components/molecules/ErrorState';
 

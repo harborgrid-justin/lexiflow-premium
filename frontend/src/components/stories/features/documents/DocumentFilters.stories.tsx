@@ -8,7 +8,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentFilters } from '../../../../features/operations/documents/DocumentFilters';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
 
 const meta: Meta<typeof DocumentFilters> = {
   title: 'Documents/Document Filters',

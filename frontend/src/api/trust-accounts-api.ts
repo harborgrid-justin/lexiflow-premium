@@ -21,7 +21,7 @@ import type {
   TrustAccountFilters,
   TrustAccountComplianceReport,
   ClientTrustLedgerStatement,
-} from '../../types/trust-accounts';
+} from '@/types/trust-accounts';
 
 /**
  * Trust Accounts API Service Class

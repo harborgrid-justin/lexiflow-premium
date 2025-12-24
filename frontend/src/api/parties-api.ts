@@ -8,7 +8,7 @@
  */
 
 import { apiClient } from '@services/infrastructure/apiClient';
-import type { Party } from '../../types'; // Use centralized type definition
+import type { Party } from '@/types'; // Use centralized type definition
 
 // Backend PartyType enum values
 export type PartyTypeBackend = 

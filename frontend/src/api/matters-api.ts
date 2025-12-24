@@ -4,7 +4,7 @@
  */
 
 import { apiClient } from '@services/infrastructure/apiClient';
-import { Matter, MatterId } from '../../types';
+import { Matter, MatterId } from '@/types';
 
 export interface MatterFilters {
   status?: string;

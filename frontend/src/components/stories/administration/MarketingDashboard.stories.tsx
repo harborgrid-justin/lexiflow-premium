@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { MarketingDashboard } from '../../../../frontend/components/knowledge/practice/MarketingDashboard';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
-import { ToastProvider } from '../../../../frontend/providers/ToastContext';
+import { MarketingDashboard } from '@/features/knowledge/practice/MarketingDashboard';
+import { ThemeProvider } from '@/providers/ThemeContext';
+import { ToastProvider } from '@/providers/ToastContext';
 import React from 'react';
 
 /**

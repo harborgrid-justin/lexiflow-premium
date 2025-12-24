@@ -28,9 +28,9 @@
  */
 
 import { apiClient } from '@services/infrastructure/apiClient';
-import type { 
-  WorkflowTask, 
-  TaskStatusBackend, 
+import type {
+  WorkflowTask,
+  TaskStatusBackend,
   TaskPriorityBackend,
   TaskStatistics,
   TaskFiltersExtended,
@@ -40,7 +40,7 @@ import type {
   TaskComment,
   TaskAttachment,
   TaskHistory
-} from '../../types';
+} from '@/types';
 
 // Re-export types for consumer convenience
 export type { 

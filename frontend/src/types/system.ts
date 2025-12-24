@@ -276,7 +276,8 @@ export interface ExtendedUserProfile extends User {
   barAdmissions: { state: string; number: string; status: 'Active' | 'Inactive' }[];
 }
 
-export interface WebhookConfig extends BaseEntity {
+// Renamed to avoid conflict with workflow-advanced-types WebhookConfig
+export interface SystemWebhookConfig extends BaseEntity {
   name: string;
   url: string;
   events: string[];

@@ -34,6 +34,7 @@ import {cn} from '@/utils';
 
 // Types
 import type {User, WorkflowTask, CalendarEventItem} from '@/types';
+import { TaskStatusBackend } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -66,7 +67,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({activeTab, 
     const safeAllTasks = Array.isArray(allTasks) ? allTasks : [];
     const safeAllEvents = Array.isArray(allEvents) ? allEvents : [];
 
-    const myTasks = safeAllTasks.filter(t => t.assignee === currentUser?.name && !(t.status === 'completed'));
+    const myTasks = safeAllTasks.filter(t => t.assignee === currentUser?.name && !(t.status === TaskStatusBackend.COMPLETED));
     const myMeetings = safeAllEvents.filter(e => e.type === 'hearing' || e.type === 'task'); // Simple filter for demo
 
     const isLoading = tasksLoading || eventsLoading;

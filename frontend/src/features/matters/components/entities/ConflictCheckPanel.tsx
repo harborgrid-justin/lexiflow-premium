@@ -46,10 +46,12 @@ export const ConflictCheckPanel: React.FC<ConflictCheckPanelProps> = ({ entities
       if (!query) return;
       startTransition(() => {
           // Simulate heavy search logic (e.g., fuzzy matching, cross-referencing)
-          const hits = entities.filter(e => 
+          const hits = entities.filter(e =>
               e.name.toLowerCase().includes(query.toLowerCase()) ||
               e.roles.some(r => r.toLowerCase().includes(query.toLowerCase())) ||
-              (e.externalIds && Object.values(e.externalIds).some((id: unknown) => id.includes(query)))
+              (e.externalIds && Object.values(e.externalIds).some((id: unknown) =>
+                  typeof id === 'string' && id.includes(query)
+              ))
           );
           setResults(hits);
           setHasSearched(true);

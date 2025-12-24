@@ -59,7 +59,6 @@ const metaPlatform = {
       },
     },
   },
-  tags: ['autodocs'],
   decorators: [
     (Story: React.ComponentType) => (
       <ThemeProvider>

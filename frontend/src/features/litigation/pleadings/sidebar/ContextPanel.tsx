@@ -80,21 +80,23 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
     });
 
     // Add case parties as witnesses
-    caseData?.parties?.forEach((party: any) => {
-      allFacts.push({
-        id: `party-${party.id || party.name}`,
-        content: `${party.name} - ${party.role}`,
-        source: 'Party List',
-        category: 'witness'
+    if (caseData && typeof caseData === 'object' && 'parties' in caseData && Array.isArray(caseData.parties)) {
+      caseData.parties.forEach((party: any) => {
+        allFacts.push({
+          id: `party-${party.id || party.name}`,
+          content: `${party.name} - ${party.role}`,
+          source: 'Party List',
+          category: 'witness'
+        });
       });
-    });
+    }
 
     // Legal standards - ready for Gemini legal research API integration
     // Future: Integrate with legal research database
-    if (caseData?.description) {
+    if (caseData && typeof caseData === 'object' && 'description' in caseData && caseData.description) {
       allFacts.push({
         id: 'legal-case-summary',
-        content: caseData.description,
+        content: String(caseData.description),
         source: 'Case Summary',
         category: 'legal'
       });

@@ -35,15 +35,24 @@ import { MetricCard } from '@/components/molecules/MetricCard';
 import { cn } from '@/utils/cn';
 
 // ============================================================================
+// TYPES
+// ============================================================================
+
+interface KnowledgeAnalyticsData {
+  usage: Array<{ name: string; views: number }>;
+  topics: Array<{ name: string; value: number; color: string }>;
+}
+
+// ============================================================================
 // COMPONENT
 // ============================================================================
 
 export const KnowledgeAnalytics: React.FC = () => {
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
-  
+
   // Enterprise Data Access
-  const { data: analytics = { usage: [], topics: [] } } = useQuery(
+  const { data: analytics = { usage: [], topics: [] } } = useQuery<KnowledgeAnalyticsData>(
       ['qa', 'analytics'],
       DataService.knowledge.getAnalytics
   );
@@ -106,7 +115,7 @@ export const KnowledgeAnalytics: React.FC = () => {
                                 paddingAngle={5} 
                                 dataKey="value"
                             >
-                                {analytics.topics.map((entry: unknown, index: number) => (
+                                {analytics.topics.map((entry, index: number) => (
                                     <Cell key={`cell-${index}`} fill={entry.color} />
                                 ))}
                             </Pie>

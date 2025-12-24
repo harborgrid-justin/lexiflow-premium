@@ -14,11 +14,11 @@ interface AcrobatToolbarProps {
   activeTool: PDFTool;
   setActiveTool: (tool: PDFTool) => void;
   scale: number;
-  setScale: (scale: number) => void;
+  setScale: React.Dispatch<React.SetStateAction<number>>;
   rotation: number;
-  setRotation: (rot: number) => void;
+  setRotation: React.Dispatch<React.SetStateAction<number>>;
   pageNum: number;
-  setPageNum: (page: number) => void;
+  setPageNum: React.Dispatch<React.SetStateAction<number>>;
   totalPages: number;
 }
 

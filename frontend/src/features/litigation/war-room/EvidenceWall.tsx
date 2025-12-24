@@ -44,7 +44,7 @@ interface EvidenceWallProps {
   warRoomData: WarRoomData;
 }
 
-interface WallItem {
+interface WallItem extends Record<string, unknown> {
     id: string;
     title: string;
     type: string;
@@ -118,7 +118,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
   // ============================================================================
   // FILTER & SEARCH
   // ============================================================================
-  const { filteredItems: combinedItems, searchQuery, setSearchQuery, category: filter, setCategory: setFilter } = useFilterAndSearch({
+  const { filteredItems: combinedItems, searchQuery, setSearchQuery, category: filter, setCategory: setFilter } = useFilterAndSearch<WallItem>({
     items: allItems,
     config: {
       categoryField: 'type',

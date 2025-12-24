@@ -119,29 +119,40 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
   );
 
   const handleSave = () => {
-    if (!newItem.title && !newItem.citation) {
-      notifyError('Title/Citation is required');
-      return;
-    }
-
     const id = editingItem?.id || crypto.randomUUID();
     let itemToSave: Citation | LegalArgument | Defense;
 
     if (modalType === 'Citation') {
-      itemToSave = { ...newItem, id, relevance: newItem.relevance || 'Medium' as const } as Citation;
+      const citationItem = newItem as Partial<Citation>;
+      if (!citationItem.title && !citationItem.citation) {
+        notifyError('Title/Citation is required');
+        return;
+      }
+      itemToSave = {
+        ...citationItem,
+        id,
+        citation: citationItem.citation || citationItem.title || '',
+        relevance: citationItem.relevance || 'Medium' as const
+      } as Citation;
       if (editingItem) {
         setCitations(citations.map(c => c.id === id ? itemToSave as Citation : c));
       } else {
         setCitations([...citations, itemToSave as Citation]);
       }
     } else if (modalType === 'Argument') {
+      const argItem = newItem as Partial<LegalArgument>;
+      if (!argItem.title) {
+        notifyError('Title is required');
+        return;
+      }
       itemToSave = {
-        ...newItem,
+        ...argItem,
         id,
-        strength: newItem.strength || 50,
-        status: newItem.status || 'Draft' as const,
-        relatedCitationIds: newItem.relatedCitationIds || [],
-        relatedEvidenceIds: newItem.relatedEvidenceIds || []
+        title: argItem.title,
+        strength: argItem.strength || 50,
+        status: argItem.status || 'Draft' as const,
+        relatedCitationIds: argItem.relatedCitationIds || [],
+        relatedEvidenceIds: argItem.relatedEvidenceIds || []
       } as LegalArgument;
       if (editingItem) {
         setArgs(args.map(a => a.id === id ? itemToSave as LegalArgument : a));
@@ -149,7 +160,18 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
         setArgs([...args, itemToSave as LegalArgument]);
       }
     } else {
-      itemToSave = { ...newItem, id, status: newItem.status || 'Asserted' as const, type: newItem.type || 'Affirmative' } as Defense;
+      const defenseItem = newItem as Partial<Defense>;
+      if (!defenseItem.title) {
+        notifyError('Title is required');
+        return;
+      }
+      itemToSave = {
+        ...defenseItem,
+        id,
+        title: defenseItem.title,
+        status: defenseItem.status || 'Asserted' as const,
+        type: defenseItem.type || 'Affirmative'
+      } as Defense;
       if (editingItem) {
         setDefenses(defenses.map(d => d.id === id ? itemToSave as Defense : d));
       } else {
@@ -159,7 +181,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
 
     // Persist to DataService
     saveStrategyItem({ type: modalType, item: itemToSave });
-    
+
     strategyModal.close();
     setNewItem({});
     setEditingItem(null);

@@ -48,7 +48,7 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
             }
 
             if (responseValidation.sanitizedResponse) {
-                onGenerate(responseValidation.sanitizedResponse);
+                onGenerate(responseValidation.sanitizedResponse as { nodes: unknown[]; connections: unknown[] });
                 notify.success('AI generated strategy map!');
                 setPrompt('');
                 setRemainingRequests(AIValidationService.getRemainingRequests());

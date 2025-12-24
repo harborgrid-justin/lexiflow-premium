@@ -235,7 +235,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
 
         if (this.useBackend) {
             try {
-                return await this.pleadingsApi.update(id, updates) as any;
+                return await this.pleadingsApi.update(id, updates as any) as any;
             } catch (error) {
                 console.warn('[PleadingRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -469,7 +469,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
                     marginRight: '1in',
                     showLineNumbers: true,
                     paperSize: 'Letter',
-                    captionStyle: 'Standard'
+                    captionStyle: 'Plain' as const
                 };
             }
 
@@ -555,7 +555,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
             }
 
             if (criteria.type) {
-                pleadings = pleadings.filter(p => p.type === criteria.type);
+                pleadings = pleadings.filter(p => (p as any).type === criteria.type);
             }
 
             if (criteria.status) {

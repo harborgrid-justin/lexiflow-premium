@@ -12,24 +12,24 @@ import type {
   TimeEntry,
   User,
 } from '@/types';
-import type { WebhookConfig } from '@/types/system';
+import type { SystemWebhookConfig } from '@/types/system';
 
 export class WebhooksApiService {
-  async getAll(filters?: { status?: string; page?: number; limit?: number }): Promise<WebhookConfig[]> {
-    const response = await apiClient.get<PaginatedResponse<WebhookConfig>>('/webhooks', filters);
+  async getAll(filters?: { status?: string; page?: number; limit?: number }): Promise<SystemWebhookConfig[]> {
+    const response = await apiClient.get<PaginatedResponse<SystemWebhookConfig>>('/webhooks', filters);
     return response.data;
   }
 
-  async getById(id: string): Promise<WebhookConfig> {
-    return apiClient.get<WebhookConfig>(`/webhooks/${id}`);
+  async getById(id: string): Promise<SystemWebhookConfig> {
+    return apiClient.get<SystemWebhookConfig>(`/webhooks/${id}`);
   }
 
-  async create(webhook: Omit<WebhookConfig, 'id' | 'createdAt' | 'lastTriggered' | 'failureCount' | 'status'>): Promise<WebhookConfig> {
-    return apiClient.post<WebhookConfig>('/webhooks', webhook);
+  async create(webhook: Omit<SystemWebhookConfig, 'id' | 'createdAt' | 'lastTriggered' | 'failureCount' | 'status'>): Promise<SystemWebhookConfig> {
+    return apiClient.post<SystemWebhookConfig>('/webhooks', webhook);
   }
 
-  async update(id: string, webhook: Partial<WebhookConfig>): Promise<WebhookConfig> {
-    return apiClient.put<WebhookConfig>(`/webhooks/${id}`, webhook);
+  async update(id: string, webhook: Partial<SystemWebhookConfig>): Promise<SystemWebhookConfig> {
+    return apiClient.put<SystemWebhookConfig>(`/webhooks/${id}`, webhook);
   }
 
   async delete(id: string): Promise<void> {

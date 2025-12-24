@@ -79,9 +79,9 @@ export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
                 <>
                   <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Assignee Role</label>
-                    <select 
+                    <select
                       className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary, "focus:ring-2 focus:ring-blue-500")}
-                      value={selectedNode.config.assignee || ''}
+                      value={String(selectedNode.config.assignee || '')}
                       onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onUpdateNode(selectedNode.id, { config: { ...selectedNode.config, assignee: e.target.value } })}
                     >
                       <option value="">Select Role...</option>
@@ -92,23 +92,23 @@ export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
                       <option value="System">System (Automated)</option>
                     </select>
                   </div>
-                  
+
                   <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>SLA (Hours)</label>
-                    <Input 
+                    <Input
                       type="number"
-                      value={selectedNode.config.sla || ''}
+                      value={String(selectedNode.config.sla || '')}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateNode(selectedNode.id, { config: { ...selectedNode.config, sla: e.target.value } })}
                     />
                   </div>
                 </>
               )}
 
-              <TextArea 
-                label="Description / Logic Instructions" 
+              <TextArea
+                label="Description / Logic Instructions"
                 rows={4}
                 placeholder="Describe what needs to happen in this step..."
-                value={selectedNode.config.description || ''}
+                value={String(selectedNode.config.description || '')}
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdateNode(selectedNode.id, { config: { ...selectedNode.config, description: e.target.value } })}
               />
 

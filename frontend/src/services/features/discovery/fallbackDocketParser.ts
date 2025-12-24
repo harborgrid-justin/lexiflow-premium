@@ -5,7 +5,7 @@
  * Provides basic parsing with quality indicators
  */
 
-import { DocketEntry, DocketEntryType, Case, Party, CaseId, PartyId, DocketId } from '@/types';
+import { DocketEntry, DocketEntryType, Case, Party, CaseId, PartyId, DocketId, MatterType } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -149,7 +149,7 @@ function extractCaseInfo(text: string): { caseInfo: Partial<Case>; confidence: n
   }
   
   info.status = 'Discovery' as any;
-  info.matterType = 'Litigation';
+  info.matterType = MatterType.LITIGATION;
   info.jurisdiction = info.court?.toLowerCase().includes('federal') ? 'Federal' : 'State';
   info.filingDate = new Date().toISOString().split('T')[0];
   
@@ -159,10 +159,10 @@ function extractCaseInfo(text: string): { caseInfo: Partial<Case>; confidence: n
 /**
  * Extract parties
  */
-function extractParties(text: string): { parties: Party[]; confidence: number } {
+function extractParties(text: string, caseId: CaseId): { parties: Party[]; confidence: number } {
   const parties: Party[] = [];
   let confidence = 0;
-  
+
   // Extract plaintiff
   const plaintiffMatch = text.match(PATTERNS.plaintiff);
   if (plaintiffMatch) {
@@ -171,6 +171,7 @@ function extractParties(text: string): { parties: Party[]; confidence: number } 
       if (name) {
         parties.push({
           id: `plaintiff-${idx}` as PartyId,
+          caseId: caseId,
           name: name,
           role: 'Plaintiff',
           type: name.toLowerCase().includes('inc') || name.toLowerCase().includes('corp') ? 'Corporation' : 'Individual',
@@ -180,7 +181,7 @@ function extractParties(text: string): { parties: Party[]; confidence: number } 
     });
     confidence += 40;
   }
-  
+
   // Extract defendant
   const defendantMatch = text.match(PATTERNS.defendant);
   if (defendantMatch) {
@@ -189,6 +190,7 @@ function extractParties(text: string): { parties: Party[]; confidence: number } 
       if (name) {
         parties.push({
           id: `defendant-${idx}` as PartyId,
+          caseId: caseId,
           name: name,
           role: 'Defendant',
           type: name.toLowerCase().includes('inc') || name.toLowerCase().includes('corp') ? 'Corporation' : 'Individual',
@@ -198,7 +200,7 @@ function extractParties(text: string): { parties: Party[]; confidence: number } 
     });
     confidence += 40;
   }
-  
+
   return { parties, confidence };
 }
 
@@ -221,37 +223,44 @@ function extractDocketEntries(text: string, caseId: CaseId): { entries: DocketEn
     const match = trimmed.match(PATTERNS.docketLine);
     if (match) {
       const [, seqStr, dateStr, description] = match;
-      
+      const normalizedDate = normalizeDate(dateStr);
+
       entries.push({
         id: `dk-fallback-${Date.now()}-${entryNumber}` as DocketId,
         sequenceNumber: parseInt(seqStr) || entryNumber,
         caseId: caseId,
-        date: normalizeDate(dateStr),
+        date: normalizedDate,
+        dateFiled: normalizedDate,
+        entryDate: normalizedDate,
         type: determineEntryType(description),
         title: description.substring(0, 100),
         description: description,
         filedBy: 'Unknown',
         isSealed: false
       });
-      
+
       entryNumber++;
       confidence += 5;
     } else {
       // Try loose matching: any line with a date
       const dateMatch = trimmed.match(PATTERNS.date);
       if (dateMatch && trimmed.length > 20) {
+        const normalizedDate = normalizeDate(dateMatch[1]);
+
         entries.push({
           id: `dk-fallback-${Date.now()}-${entryNumber}` as DocketId,
           sequenceNumber: entryNumber,
           caseId: caseId,
-          date: normalizeDate(dateMatch[1]),
+          date: normalizedDate,
+          dateFiled: normalizedDate,
+          entryDate: normalizedDate,
           type: determineEntryType(trimmed),
           title: trimmed.substring(0, 100),
           description: trimmed,
           filedBy: 'Unknown',
           isSealed: false
         });
-        
+
         entryNumber++;
         confidence += 2;
       }
@@ -278,13 +287,13 @@ export const FallbackDocketParser = {
     
     // Extract case info
     const { caseInfo, confidence: caseConfidence } = extractCaseInfo(text);
-    
+
     // Extract parties
-    const { parties, confidence: partiesConfidence } = extractParties(text);
+    const { parties, confidence: partiesConfidence } = extractParties(text, caseInfo.id!);
     if (parties.length === 0) {
       warnings.push('No parties found - may need manual entry');
     }
-    
+
     // Extract docket entries
     const { entries, confidence: entriesConfidence } = extractDocketEntries(text, caseInfo.id!);
     if (entries.length === 0) {

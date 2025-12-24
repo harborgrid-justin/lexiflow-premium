@@ -96,8 +96,9 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
         const sessions = await this.getAll();
         const lowerQuery = query.toLowerCase();
         return sessions.filter(s =>
-            s.title?.toLowerCase().includes(lowerQuery) ||
-            s.caseId?.toLowerCase().includes(lowerQuery)
+            s.id?.toLowerCase().includes(lowerQuery) ||
+            (s as any).title?.toLowerCase().includes(lowerQuery) ||
+            (s as any).caseId?.toLowerCase().includes(lowerQuery)
         );
     }
 }

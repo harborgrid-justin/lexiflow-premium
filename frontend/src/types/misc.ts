@@ -237,7 +237,7 @@ export interface AnalysisSession extends BaseEntity {
   metadata?: MetadataRecord;
 }
 
-export interface LegalEntity extends BaseEntity { id: EntityId; name: string; type: EntityType; roles: EntityRole[]; email?: string; phone?: string; website?: string; address?: string; city?: string; state?: string; country?: string; taxId?: string; company?: string; title?: string; barNumber?: string; jurisdiction?: string; status: 'Active' | 'Inactive' | 'Prospect' | 'Blacklisted' | 'Deceased'; riskScore: number; tags: string[]; notes?: string; linkedUserId?: UserId; avatar?: string; externalIds?: Record<string, string>; aliases?: string[]; }
+export interface LegalEntity extends BaseEntity { id: EntityId; name: string; type: EntityType; roles: EntityRole[]; email?: string; phone?: string; website?: string; address?: string; city?: string; state?: string; country?: string; taxId?: string; company?: string; title?: string; barNumber?: string; jurisdiction?: string; status: 'Active' | 'Inactive' | 'Prospect' | 'Blacklisted' | 'Deceased'; riskScore: number; tags: string[]; notes?: string; linkedUserId?: UserId; avatar?: string; externalIds?: Record<string, string>; aliases?: string[]; metadata?: MetadataRecord; }
 
 export interface Message extends BaseEntity { 
   conversationId?: string;
@@ -254,12 +254,13 @@ export interface Message extends BaseEntity {
 export interface ModuleDefinition {
   id: string;
   label: string;
-  component: LazyExoticComponent<unknown>;
+  component: LazyExoticComponent<React.ComponentType<any>>;
   requiresAdmin?: boolean;
   hidden?: boolean; // If true, don't show in sidebar navigation (e.g., Create Case)
   intentMatcher?: (intent: string, context: unknown) => boolean;
   category: NavCategory;
-  icon?: unknown;
+  icon?: React.ComponentType<{ className?: string }>;
+  children?: ModuleDefinition[];
 }
 
 export interface NexusNodeData { 

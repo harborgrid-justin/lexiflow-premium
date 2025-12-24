@@ -5,7 +5,7 @@ import { Card } from '@/components/molecules/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { MapPin, Book, Loader2 } from 'lucide-react';
-import { groupJurisdictionsByState } from './localRulesMap.utils';
+import { groupJurisdictionsByState, StateGroup, CourtLevel } from './localRulesMap.utils';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
@@ -39,14 +39,14 @@ export const LocalRulesMap: React.FC = () => {
                          <div className="flex justify-center p-8"><Loader2 className="animate-spin text-blue-600"/></div>
                     ) : (
                         <div className="space-y-4">
-                            {stateGroups.map((state: unknown) => (
+                            {stateGroups.map((state: StateGroup) => (
                                 <div key={state.id} className="border rounded-lg p-3 hover:shadow-md transition-all cursor-pointer group">
                                     <div className="flex items-center gap-3 mb-2">
                                         <div className="p-2 bg-green-100 rounded-full text-green-700"><MapPin className="h-4 w-4"/></div>
                                         <h4 className={cn("font-bold", theme.text.primary)}>{state.name}</h4>
                                     </div>
                                     <div className="pl-11 space-y-1">
-                                        {state.levels.slice(0,2).map((lvl: unknown, i: number) => (
+                                        {state.levels.slice(0,2).map((lvl: CourtLevel, i: number) => (
                                             <div key={i} className="text-xs text-slate-600 flex items-center gap-2">
                                                 <Book className="h-3 w-3 opacity-50"/>
                                                 {lvl.name} Rules

@@ -1,9 +1,18 @@
 import React, { useMemo, useCallback } from 'react';
-import { PleadingDocument, FormattingRule, PleadingSection, Case } from '@/types';
+import { PleadingDocument, FormattingRule, PleadingSection, Case, Party } from '@/types';
 import { GripVertical } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { sanitizeHtml } from '@/utils/sanitize';
-import { ViewMode, PleadingCanvasProps } from '@/types';
+import { ViewMode } from '../types';
+
+interface PleadingCanvasProps {
+    document: PleadingDocument;
+    rules: FormattingRule;
+    readOnly?: boolean;
+    viewMode?: ViewMode;
+    onUpdateSection: (sectionId: string, updates: Partial<PleadingSection>) => void;
+    relatedCase?: Case;
+}
 
 const PleadingCanvas: React.FC<PleadingCanvasProps> = ({ 
     document, rules, readOnly, viewMode, onUpdateSection, relatedCase 
@@ -14,13 +23,13 @@ const PleadingCanvas: React.FC<PleadingCanvasProps> = ({
     }, [document.sections]);
 
     // Memoize plaintiff and defendant names
-    const plaintiffName = useMemo(() => 
-        relatedCase?.parties?.filter(p => p.role.includes('Plaintiff') || p.role.includes('Appellant')).map(p => p.name).join(', ') || 'PLAINTIFF NAME',
+    const plaintiffName = useMemo(() =>
+        relatedCase?.parties?.filter((p: Party) => p.role.includes('Plaintiff') || p.role.includes('Appellant')).map((p: Party) => p.name).join(', ') || 'PLAINTIFF NAME',
         [relatedCase?.parties]
     );
 
-    const defendantName = useMemo(() => 
-        relatedCase?.parties?.filter(p => p.role.includes('Defendant') || p.role.includes('Appellee')).map(p => p.name).join(', ') || 'DEFENDANT NAME',
+    const defendantName = useMemo(() =>
+        relatedCase?.parties?.filter((p: Party) => p.role.includes('Defendant') || p.role.includes('Appellee')).map((p: Party) => p.name).join(', ') || 'DEFENDANT NAME',
         [relatedCase?.parties]
     );
 

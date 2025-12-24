@@ -23,7 +23,7 @@ const meta: Meta<typeof IconButton> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'outline', 'ghost', 'danger'],
+      options: ['primary', 'secondary', 'success', 'warning', 'danger', 'ghost'],
       description: 'Visual style',
     },
     size: {
@@ -31,9 +31,17 @@ const meta: Meta<typeof IconButton> = {
       options: ['sm', 'md', 'lg'],
       description: 'Button size',
     },
-    label: {
+    'aria-label': {
       control: 'text',
-      description: 'Accessible label (aria-label)',
+      description: 'Accessible label (required for screen readers)',
+    },
+    tooltip: {
+      control: 'text',
+      description: 'Tooltip text on hover',
+    },
+    rounded: {
+      control: 'boolean',
+      description: 'Make button circular',
     },
     disabled: {
       control: 'boolean',
@@ -58,11 +66,11 @@ type Story = StoryObj<typeof meta>;
 export const AllVariants: Story = {
   render: () => (
     <div className="flex gap-4">
-      <IconButton icon={Plus} label="Add" />
-      <IconButton icon={Edit} label="Edit" variant="secondary" />
-      <IconButton icon={Download} label="Download" variant="outline" />
-      <IconButton icon={Share2} label="Share" variant="ghost" />
-      <IconButton icon={Trash2} label="Delete" variant="danger" />
+      <IconButton icon={Plus} aria-label="Add" />
+      <IconButton icon={Edit} aria-label="Edit" variant="secondary" />
+      <IconButton icon={Download} aria-label="Download" variant="success" />
+      <IconButton icon={Share2} aria-label="Share" variant="ghost" />
+      <IconButton icon={Trash2} aria-label="Delete" variant="danger" />
     </div>
   ),
 };
@@ -70,9 +78,9 @@ export const AllVariants: Story = {
 export const Sizes: Story = {
   render: () => (
     <div className="flex items-center gap-4">
-      <IconButton icon={Plus} label="Small" size="sm" />
-      <IconButton icon={Plus} label="Medium" size="md" />
-      <IconButton icon={Plus} label="Large" size="lg" />
+      <IconButton icon={Plus} aria-label="Small" size="sm" />
+      <IconButton icon={Plus} aria-label="Medium" size="md" />
+      <IconButton icon={Plus} aria-label="Large" size="lg" />
     </div>
   ),
 };
@@ -80,7 +88,7 @@ export const Sizes: Story = {
 export const Playground: Story = {
   args: {
     icon: Plus,
-    label: 'Add Item',
+    'aria-label': 'Add Item',
     variant: 'primary',
     size: 'md',
     disabled: false,

@@ -116,8 +116,8 @@ function validateEventId(id: unknown, methodName: string): void {
  */
 function validateEventType(type: unknown, methodName: string): void {
   const validTypes = ['deadline', 'hearing', 'meeting', 'task', 'reminder'];
-  
-  if (type && !validTypes.includes(type)) {
+
+  if (type && typeof type === 'string' && !validTypes.includes(type)) {
     throw new Error(`[CalendarService.${methodName}] Invalid event type. Must be: ${validTypes.join(', ')}`);
   }
 }
@@ -186,7 +186,10 @@ export const CalendarService = {
    */
   getAll: async (): Promise<CalendarEvent[]> => {
     try {
-      return await integrationsApi.calendar?.getAll?.() || [];
+      // Note: calendar API is not yet available in integrationsApi
+      // This will need to be updated when the API is added
+      console.warn('[CalendarService.getAll] Calendar API not yet available');
+      return [];
     } catch (error) {
       console.error('[CalendarService.getAll] Error:', error);
       throw error;
@@ -206,7 +209,9 @@ export const CalendarService = {
   getById: async (id: string): Promise<CalendarEvent | null> => {
     try {
       validateEventId(id, 'getById');
-      return await integrationsApi.calendar?.getById?.(id) || null;
+      // Note: calendar API is not yet available in integrationsApi
+      console.warn('[CalendarService.getById] Calendar API not yet available');
+      return null;
     } catch (error) {
       console.error('[CalendarService.getById] Error:', error);
       throw error;
@@ -230,13 +235,18 @@ export const CalendarService = {
   add: async (item: Partial<CalendarEvent>): Promise<CalendarEvent> => {
     try {
       validateEventData(item, 'add');
-      
-      const event = { 
-        ...item, 
-        createdAt: new Date().toISOString() 
+
+      const event: CalendarEvent = {
+        id: `event-${Date.now()}`,
+        title: item.title || 'New Event',
+        startDate: item.startDate || new Date().toISOString(),
+        type: item.type || 'reminder',
+        ...item,
       };
-      
-      return await integrationsApi.calendar?.create?.(event) || event as CalendarEvent;
+
+      // Note: calendar API is not yet available in integrationsApi
+      console.warn('[CalendarService.add] Calendar API not yet available');
+      return event;
     } catch (error) {
       console.error('[CalendarService.add] Error:', error);
       throw error;
@@ -261,8 +271,16 @@ export const CalendarService = {
     try {
       validateEventId(id, 'update');
       validateEventData(updates, 'update');
-      
-      return await integrationsApi.calendar?.update?.(id, updates) || { id, ...updates } as CalendarEvent;
+
+      // Note: calendar API is not yet available in integrationsApi
+      console.warn('[CalendarService.update] Calendar API not yet available');
+      return {
+        id,
+        title: updates.title || 'Event',
+        startDate: updates.startDate || new Date().toISOString(),
+        type: updates.type || 'reminder',
+        ...updates
+      } as CalendarEvent;
     } catch (error) {
       console.error('[CalendarService.update] Error:', error);
       throw error;
@@ -282,7 +300,8 @@ export const CalendarService = {
   delete: async (id: string): Promise<boolean> => {
     try {
       validateEventId(id, 'delete');
-      await integrationsApi.calendar?.delete?.(id);
+      // Note: calendar API is not yet available in integrationsApi
+      console.warn('[CalendarService.delete] Calendar API not yet available');
       return true;
     } catch (error) {
       console.error('[CalendarService.delete] Error:', error);
@@ -318,41 +337,43 @@ export const CalendarService = {
    * - Filtering: O(n) where n = total events
    * - Sorting: O(n log n) by start date
    */
-  getEvents: async (filters?: { 
-    startDate?: string; 
-    endDate?: string; 
-    caseId?: string; 
-    type?: string 
+  getEvents: async (filters?: {
+    startDate?: string;
+    endDate?: string;
+    caseId?: string;
+    type?: string
   }): Promise<CalendarEvent[]> => {
     try {
       if (filters?.type) {
         validateEventType(filters.type, 'getEvents');
       }
-      
-      let events = await integrationsApi.calendar?.getAll?.() || [];
-      
+
+      // Note: calendar API is not yet available in integrationsApi
+      console.warn('[CalendarService.getEvents] Calendar API not yet available');
+      const events: CalendarEvent[] = [];
+
       // Filter by date range
       if (filters?.startDate || filters?.endDate) {
-        events = events.filter((e: CalendarEvent) => {
+        events.filter((e: CalendarEvent) => {
           const eventStart = new Date(e.startDate);
           const rangeStart = filters.startDate ? new Date(filters.startDate) : new Date(0);
           const rangeEnd = filters.endDate ? new Date(filters.endDate) : new Date('2100-01-01');
           return eventStart >= rangeStart && eventStart <= rangeEnd;
         });
       }
-      
+
       // Filter by case
       if (filters?.caseId) {
-        events = events.filter((e: CalendarEvent) => e.caseId === filters.caseId);
+        events.filter((e: CalendarEvent) => e.caseId === filters.caseId);
       }
-      
+
       // Filter by type
       if (filters?.type) {
-        events = events.filter((e: CalendarEvent) => e.type === filters.type);
+        events.filter((e: CalendarEvent) => e.type === filters.type);
       }
-      
+
       // Sort by start date (ascending)
-      return events.sort((a: CalendarEvent, b: CalendarEvent) => 
+      return events.sort((a: CalendarEvent, b: CalendarEvent) =>
         new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
       );
     } catch (error) {

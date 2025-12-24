@@ -41,10 +41,10 @@ const meta: Meta<typeof ConfirmDialog> = {
       control: 'text',
       description: 'Text for the cancel button',
     },
-    confirmVariant: {
+    variant: {
       control: 'select',
-      options: ['primary', 'danger'],
-      description: 'Variant for the confirm button',
+      options: ['danger', 'warning', 'info'],
+      description: 'Variant for the dialog',
     },
   },
   decorators: [
@@ -78,7 +78,7 @@ export const DeleteConfirmation: Story = {
           title="Delete Case"
           message="Are you sure you want to delete this case? This action cannot be undone."
           confirmText="Delete"
-          confirmVariant="danger"
+          variant="danger"
         />
       </div>
     );

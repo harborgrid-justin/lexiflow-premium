@@ -7,17 +7,18 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import type { JudgeProfile } from '@/types';
 
 export const StandingOrders: React.FC = () => {
   const { theme } = useTheme();
-  
+
   // Using Mock Judges for now
-  const { data: judges = [] } = useQuery(['analysis', 'judges'], () => DataService.analysis.getJudgeProfiles());
+  const { data: judges = [] } = useQuery<JudgeProfile[]>(['analysis', 'judges'], () => DataService.analysis.getJudgeProfiles());
 
   return (
     <div className="space-y-6 animate-fade-in">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {judges.map((judge: any) => (
+            {judges.map((judge) => (
                 <Card key={judge.id} className="flex flex-col h-full">
                     <div className="flex items-start gap-4 mb-4">
                         <div className={cn("p-3 rounded-full", theme.surface.highlight, theme.text.secondary)}><Gavel className="h-6 w-6"/></div>

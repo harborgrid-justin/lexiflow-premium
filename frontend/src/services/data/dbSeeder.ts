@@ -109,8 +109,8 @@ export const Seeder = {
       };
       
       MOCK_USERS.forEach(u => addEntity({ ...u, id: u.id as any, type: 'Individual', roles: [u.role as any], status: 'Active', riskScore: 10, tags: ['Internal'] }));
-      MOCK_CLIENTS.forEach(c => addEntity({ id: `ent-cli-${c.id}` as EntityId, name: c.name, type: 'Corporation', roles: ['Client'], status: c.status as any, riskScore: 30, tags: [c.industry] }));
-      MOCK_CASES.forEach(c => c.parties?.forEach(p => addEntity({ id: `ent-pty-${p.id}` as EntityId, name: p.name, type: p.type, roles: [p.role as any, 'Party'], status: 'Active', riskScore: 50, tags: [] })));
+      MOCK_CLIENTS.forEach(c => addEntity({ id: `ent-cli-${c.id}` as EntityId, name: c.name ?? 'Unknown', type: 'Corporation', roles: ['Client'], status: c.status as any, riskScore: 30, tags: [c.industry ?? 'Unknown'] }));
+      MOCK_CASES.forEach(c => c.parties?.forEach(p => addEntity({ id: `ent-pty-${p.id}` as EntityId, name: p.name, type: p.type as any, roles: [p.role as any, 'Party'], status: 'Active', riskScore: 50, tags: [] })));
       MOCK_JUDGES.forEach(j => addEntity({ id: `ent-jdg-${j.id}` as EntityId, name: j.name, type: 'Individual', roles: ['Judge'], status: 'Active', riskScore: 5, tags: [j.court] }));
       MOCK_COUNSEL.forEach(c => addEntity({ id: `ent-cnsl-${c.id}` as EntityId, name: c.name, type: 'Law Firm', roles: ['Opposing Counsel'], status: 'Active', riskScore: 60, tags: [] }));
 

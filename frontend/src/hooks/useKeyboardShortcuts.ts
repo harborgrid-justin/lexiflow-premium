@@ -80,88 +80,6 @@ export function useKeyboardShortcuts(
         return;
       }
 
-      // Undo
-      if (matchesShortcut(event, KEYBOARD_SHORTCUTS.UNDO) && handlers.onUndo) {
-        event.preventDefault();
-        handlers.onUndo();
-        return;
-      }
-
-      // Redo
-      if (matchesShortcut(event, KEYBOARD_SHORTCUTS.REDO) && handlers.onRedo) {
-        event.preventDefault();
-        handlers.onRedo();
-        return;
-      }
-
-      // Delete
-      if (
-        (event.key === 'Delete' || event.key === 'Backspace') &&
-        handlers.onDelete &&
-        !event.ctrlKey &&
-        !event.metaKey
-      ) {
-        event.preventDefault();
-        handlers.onDelete();
-        return;
-      }
-
-      // Copy
-      if (matchesShortcut(event, KEYBOARD_SHORTCUTS.COPY) && handlers.onCopy) {
-        event.preventDefault();
-        handlers.onCopy();
-        return;
-      }
-
-      // Paste
-      if (matchesShortcut(event, KEYBOARD_SHORTCUTS.PASTE) && handlers.onPaste) {
-        event.preventDefault();
-        handlers.onPaste();
-        return;
-      }
-
-      // Duplicate
-      if (matchesShortcut(event, KEYBOARD_SHORTCUTS.DUPLICATE) && handlers.onDuplicate) {
-        event.preventDefault();
-        handlers.onDuplicate();
-        return;
-      }
-
-      // Select All
-      if (matchesShortcut(event, KEYBOARD_SHORTCUTS.SELECT_ALL) && handlers.onSelectAll) {
-        event.preventDefault();
-        handlers.onSelectAll();
-        return;
-      }
-
-      // Zoom In
-      if (matchesShortcut(event, KEYBOARD_SHORTCUTS.ZOOM_IN) && handlers.onZoomIn) {
-        event.preventDefault();
-        handlers.onZoomIn();
-        return;
-      }
-
-      // Zoom Out
-      if (matchesShortcut(event, KEYBOARD_SHORTCUTS.ZOOM_OUT) && handlers.onZoomOut) {
-        event.preventDefault();
-        handlers.onZoomOut();
-        return;
-      }
-
-      // Zoom Reset
-      if (matchesShortcut(event, KEYBOARD_SHORTCUTS.ZOOM_RESET) && handlers.onZoomReset) {
-        event.preventDefault();
-        handlers.onZoomReset();
-        return;
-      }
-
-      // Save
-      if (matchesShortcut(event, KEYBOARD_SHORTCUTS.SAVE) && handlers.onSave) {
-        event.preventDefault();
-        handlers.onSave();
-        return;
-      }
-
       // Handle array-based shortcuts
       if (Array.isArray(handlers)) {
         for (const config of handlers) {
@@ -181,9 +99,101 @@ export function useKeyboardShortcuts(
             return;
           }
         }
-      } else {
-        // Handle arbitrary string-based shortcuts
-        const typedHandlers = handlers as Record<string, () => void>;
+        return;
+      }
+
+      // Check if handlers has KeyboardShortcutHandlers interface properties
+      const hasHandlerMethods = (h: unknown): h is KeyboardShortcutHandlers => {
+        return typeof h === 'object' && h !== null && !Array.isArray(h);
+      };
+
+      if (hasHandlerMethods(handlers)) {
+        // Undo
+        if (matchesShortcut(event, KEYBOARD_SHORTCUTS.UNDO) && handlers.onUndo) {
+          event.preventDefault();
+          handlers.onUndo();
+          return;
+        }
+
+        // Redo
+        if (matchesShortcut(event, KEYBOARD_SHORTCUTS.REDO) && handlers.onRedo) {
+          event.preventDefault();
+          handlers.onRedo();
+          return;
+        }
+
+        // Delete
+        if (
+          (event.key === 'Delete' || event.key === 'Backspace') &&
+          handlers.onDelete &&
+          !event.ctrlKey &&
+          !event.metaKey
+        ) {
+          event.preventDefault();
+          handlers.onDelete();
+          return;
+        }
+
+        // Copy
+        if (matchesShortcut(event, KEYBOARD_SHORTCUTS.COPY) && handlers.onCopy) {
+          event.preventDefault();
+          handlers.onCopy();
+          return;
+        }
+
+        // Paste
+        if (matchesShortcut(event, KEYBOARD_SHORTCUTS.PASTE) && handlers.onPaste) {
+          event.preventDefault();
+          handlers.onPaste();
+          return;
+        }
+
+        // Duplicate
+        if (matchesShortcut(event, KEYBOARD_SHORTCUTS.DUPLICATE) && handlers.onDuplicate) {
+          event.preventDefault();
+          handlers.onDuplicate();
+          return;
+        }
+
+        // Select All
+        if (matchesShortcut(event, KEYBOARD_SHORTCUTS.SELECT_ALL) && handlers.onSelectAll) {
+          event.preventDefault();
+          handlers.onSelectAll();
+          return;
+        }
+
+        // Zoom In
+        if (matchesShortcut(event, KEYBOARD_SHORTCUTS.ZOOM_IN) && handlers.onZoomIn) {
+          event.preventDefault();
+          handlers.onZoomIn();
+          return;
+        }
+
+        // Zoom Out
+        if (matchesShortcut(event, KEYBOARD_SHORTCUTS.ZOOM_OUT) && handlers.onZoomOut) {
+          event.preventDefault();
+          handlers.onZoomOut();
+          return;
+        }
+
+        // Zoom Reset
+        if (matchesShortcut(event, KEYBOARD_SHORTCUTS.ZOOM_RESET) && handlers.onZoomReset) {
+          event.preventDefault();
+          handlers.onZoomReset();
+          return;
+        }
+
+        // Save
+        if (matchesShortcut(event, KEYBOARD_SHORTCUTS.SAVE) && handlers.onSave) {
+          event.preventDefault();
+          handlers.onSave();
+          return;
+        }
+      }
+
+      // Handle arbitrary string-based shortcuts (Record<string, () => void>)
+      if (typeof handlers === 'object' && handlers !== null && !Array.isArray(handlers)) {
+        const typedHandlers = handlers as Record<string, unknown>;
         for (const [shortcut, handler] of Object.entries(typedHandlers)) {
           if (typeof handler === 'function' && matchesShortcut(event, shortcut)) {
             event.preventDefault();

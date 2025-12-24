@@ -52,13 +52,13 @@ export class DocketIngestedHandler extends BaseEventHandler<SystemEventPayloads[
   private async createHearingEvent(entry: SystemEventPayloads[typeof SystemEventType.DOCKET_INGESTED]['entry']) {
     const hearingEvt: CalendarEventItem = {
       id: `cal-hear-${entry.id}`,
-      title: entry.title,
-      date: entry.date,
+      title: entry.title || 'Hearing',
+      date: entry.date || entry.entryDate || entry.dateFiled || new Date().toISOString().split('T')[0],
       type: 'hearing',
       priority: 'Critical',
       description: `Court Appearance Required. Docket #${entry.sequenceNumber}`
     };
-    
+
     await db.put('calendarEvents', hearingEvt);
   }
 }

@@ -43,6 +43,13 @@ import { InvoiceStatusEnum } from '@/types/enums';
 import { Invoice } from '@/types';
 
 // ============================================================================
+// TYPES
+// ============================================================================
+interface MutationContext {
+  previousInvoices?: Invoice[];
+}
+
+// ============================================================================
 // COMPONENT
 // ============================================================================
 const BillingInvoicesComponent: React.FC = () => {
@@ -87,7 +94,7 @@ const BillingInvoicesComponent: React.FC = () => {
           onSuccess: (_, id) => {
               notify.success(`Invoice ${id} sent successfully.`);
           },
-          onError: (error, id, context: unknown) => {
+          onError: (error, id, context?: MutationContext) => {
             // Rollback on error
             if (context?.previousInvoices) {
               queryClient.setQueryData(billingQueryKeys.billing.invoices(), context.previousInvoices);
@@ -121,7 +128,7 @@ const BillingInvoicesComponent: React.FC = () => {
           onSuccess: () => {
               notify.success("Invoice marked as PAID. Transaction recorded in immutable ledger.");
           },
-          onError: (error, id, context: unknown) => {
+          onError: (error, id, context?: MutationContext) => {
             // Rollback on error
             if (context?.previousInvoices) {
               queryClient.setQueryData(billingQueryKeys.billing.invoices(), context.previousInvoices);

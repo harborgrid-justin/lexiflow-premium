@@ -64,9 +64,10 @@ export const useSLAMonitoring = (options: UseSLAMonitoringOptions = {}) => {
 
   // Initialize SLAs from tasks
   useEffect(() => {
-    if (tasks.length > 0) {
-      const items = tasks
-        .filter((t: Task) => t.dueDate && t.status !== 'Done' && t.status !== 'Completed')
+    const taskList = (tasks || []) as Task[];
+    if (taskList.length > 0) {
+      const items = taskList
+        .filter((t: Task) => t.dueDate && t.status !== 'Completed')
         .map((t: Task) => {
           const dueTime = new Date(t.dueDate!).getTime();
           const { status, progress } = calculateSLAStatus(dueTime);
@@ -80,7 +81,7 @@ export const useSLAMonitoring = (options: UseSLAMonitoringOptions = {}) => {
           };
         })
         .slice(0, maxItems);
-      
+
       setSLAs(items);
     }
   }, [tasks, maxItems, calculateSLAStatus]);

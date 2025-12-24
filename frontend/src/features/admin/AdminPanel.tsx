@@ -1,1 +1,2 @@
-// Obsolete file - Content moved to components/admin/AdminPanel.tsx
+// Re-export from new location
+export { AdminPanel, default } from './components/AdminPanel';

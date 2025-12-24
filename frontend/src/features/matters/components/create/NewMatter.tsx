@@ -260,13 +260,10 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved }) => {
       if (!id) return Promise.resolve(null);
       return DataService.matters.getById(id).catch(() => DataService.cases.getById(id));
     },
-    { 
-      staleTime: 30000, // Cache for 30 seconds
-      enabled: !!id // Only fetch if id exists
-    },
     {
-      enabled: !!id,
-      onSuccess: (data) => {
+      staleTime: 30000, // Cache for 30 seconds
+      enabled: !!id, // Only fetch if id exists
+      onSuccess: (data: Matter | Case | null) => {
         if (data) {
           loadFormData(data);
         }

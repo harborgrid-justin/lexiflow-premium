@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { Client } from '@/types';
+import { Client, ClientStatus } from '@/types';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
 import { Badge } from '@/components/atoms/Badge';
@@ -113,7 +113,7 @@ export const ClientDirectory: React.FC<ClientDirectoryProps> = ({ clients: propC
                 </TableCell>
                 <TableCell>{client.industry}</TableCell>
                 <TableCell>
-                  <Badge variant={client.status === 'Active' ? 'success' : 'neutral'}>{client.status}</Badge>
+                  <Badge variant={client.status === ClientStatus.ACTIVE ? 'success' : 'neutral'}>{client.status}</Badge>
                 </TableCell>
                 <TableCell>{(client.matters || []).length}</TableCell>
                 <TableCell><Currency value={client.totalBilled} /></TableCell>

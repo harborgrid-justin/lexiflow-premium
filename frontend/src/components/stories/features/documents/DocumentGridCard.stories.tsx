@@ -193,7 +193,7 @@ export const GridLayout: Story = {
         </div>
         <div className="w-full h-64">
           <DocumentGridCard
-            doc={{ ...mockDocument, id: '2', title: 'Brief.pdf' }}
+            doc={{ ...mockDocument, id: '2' as any, title: 'Brief.pdf' }}
             isSelected={true}
             onToggleSelection={fn()}
             onPreview={fn()}
@@ -201,7 +201,7 @@ export const GridLayout: Story = {
         </div>
         <div className="w-full h-64">
           <DocumentGridCard
-            doc={{ ...mockDocument, id: '3', title: 'Evidence.pdf' }}
+            doc={{ ...mockDocument, id: '3' as any, title: 'Evidence.pdf' }}
             isSelected={false}
             onToggleSelection={fn()}
             onPreview={fn()}

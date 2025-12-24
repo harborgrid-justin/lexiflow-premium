@@ -321,11 +321,11 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             
             const item = await this.getById(id);
             
-            return { 
-                verified: true, 
+            return {
+                verified: true,
                 timestamp: new Date().toISOString(),
-                chainIntact: item?.chainOfCustodyIntact ?? true,
-                lastCustodian: item?.currentCustodian
+                chainIntact: (item as any)?.chainOfCustodyIntact ?? true,
+                lastCustodian: (item as any)?.currentCustodian ?? item?.custodian
             };
         } catch (error) {
             console.error('[EvidenceRepository.verifyIntegrity] Error:', error);
@@ -351,7 +351,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             throw new Error('[EvidenceRepository.updateAdmissibility] Invalid status parameter');
         }
 
-        return await this.update(id, { admissibility: status } as Partial<EvidenceItem>);
+        return await this.update(id, { admissibility: status } as any as Partial<EvidenceItem>);
     }
 
     /**
@@ -444,7 +444,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
 
             items.forEach(item => {
                 // Count by type
-                const type = item.type || item.evidenceType || 'Unknown';
+                const type = item.type || (item as any).evidenceType || 'Unknown';
                 byType[type] = (byType[type] || 0) + 1;
 
                 // Count by status
@@ -452,9 +452,9 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
                 byStatus[status] = (byStatus[status] || 0) + 1;
 
                 // Count admissibility
-                if (item.admissibility === 'admissible' || item.isAdmitted) {
+                if (item.admissibility?.toString() === 'ADMISSIBLE' || item.admissibility?.toString() === 'admissible' || (item as any).isAdmitted) {
                     admitted++;
-                } else if (item.admissibility === 'pending') {
+                } else if (item.admissibility?.toString() === 'PENDING' || item.admissibility?.toString() === 'pending') {
                     pending++;
                 }
             });
@@ -498,27 +498,29 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
                 items = items.filter(item =>
                     item.title?.toLowerCase().includes(lowerQuery) ||
                     item.description?.toLowerCase().includes(lowerQuery) ||
-                    item.evidenceNumber?.toLowerCase().includes(lowerQuery) ||
-                    item.batesNumber?.toLowerCase().includes(lowerQuery)
+                    (item as any).evidenceNumber?.toLowerCase().includes(lowerQuery) ||
+                    (item as any).batesNumber?.toLowerCase().includes(lowerQuery)
                 );
             }
 
             if (criteria.type) {
-                items = items.filter(item => 
-                    item.type === criteria.type || 
-                    item.evidenceType === criteria.type
+                items = items.filter(item =>
+                    item.type === criteria.type ||
+                    (item as any).evidenceType === criteria.type
                 );
             }
 
             if (criteria.admissibility) {
-                items = items.filter(item => 
-                    item.admissibility === criteria.admissibility
+                const admissibility = criteria.admissibility;
+                items = items.filter(item =>
+                    item.admissibility?.toString() === admissibility ||
+                    item.admissibility?.toString().toLowerCase() === admissibility.toLowerCase()
                 );
             }
 
             if (criteria.custodian) {
-                items = items.filter(item => 
-                    item.currentCustodian === criteria.custodian ||
+                items = items.filter(item =>
+                    (item as any).currentCustodian === criteria.custodian ||
                     item.custodian === criteria.custodian
                 );
             }

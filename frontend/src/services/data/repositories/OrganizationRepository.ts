@@ -75,7 +75,7 @@ export class OrganizationRepository extends Repository<Organization> {
         this.validateId(id, 'update');
         if (this.useBackend) {
             try {
-                return await this.orgsApi.update(id, updates) as any;
+                return await this.orgsApi.update(id, updates as any) as any;
             } catch (error) {
                 console.warn('[OrganizationRepository] Backend API unavailable', error);
             }

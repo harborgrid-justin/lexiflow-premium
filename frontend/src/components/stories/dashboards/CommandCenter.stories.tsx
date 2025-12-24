@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CommandCenter } from '../../../features/litigation/war-room/CommandCenter';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
+import { CaseStatus, MatterType } from '@/types/enums';
 import React from 'react';
 
 /**
@@ -50,25 +51,27 @@ type Story = StoryObj<typeof meta>;
 
 // Mock data for stories
 const mockWarRoomData = {
-  caseId: 'case-123',
-  caseName: 'Smith v. Johnson Corp.',
-  status: 'active',
-  nextHearing: '2024-03-15',
-  teamMembers: [],
-  recentActivity: [],
-  deadlines: [],
-  documents: [],
-  motions: [],
   case: {
-    id: 'case-123',
+    id: 'case-123' as any,
     caseNumber: 'CV-2024-001',
     title: 'Smith v. Johnson Corp.',
-    status: 'active',
+    status: CaseStatus.Active,
     jurisdiction: 'Federal',
-    courtName: 'US District Court',
+    court: 'US District Court',
     filingDate: '2024-01-15',
+    client: 'Smith',
+    parties: [],
+    citations: [],
+    arguments: [],
+    defenses: [],
+    matterType: MatterType.LITIGATION,
+    isArchived: false,
+    createdAt: '2024-01-15',
+    updatedAt: '2024-01-15',
   },
   witnesses: [],
+  documents: [],
+  motions: [],
   docket: [],
   evidence: [],
   tasks: [],

@@ -61,12 +61,10 @@ const LitigationBuilder = lazyWithPreload(() => import('../features/litigation/s
 const ClauseLibrary = lazyWithPreload(() => import('../features/knowledge/clauses/ClauseLibrary') as Promise<{ default: React.ComponentType<any> }>);
 const CitationManager = lazyWithPreload(() => import('../features/knowledge/citation/CitationManager') as Promise<{ default: React.ComponentType<any> }>);
 
-const COMPONENT_MAP: Record<string, React.LazyExoticComponent<unknown>> = {
+const COMPONENT_MAP: Record<string, React.LazyExoticComponent<React.ComponentType<any>>> = {
   [PATHS.DASHBOARD]: Dashboard,
-  [PATHS.CASES]: CaseList,
   [PATHS.CREATE_CASE]: NewMatterPage, // ✅ Unified matter creation page
-  [PATHS.CASE_MANAGEMENT]: CaseList, // Redirect to CaseList
-  [PATHS.MATTERS]: MatterModule, // ✅ Primary matter management with routing
+  [PATHS.MATTERS]: MatterModule, // ✅ Primary matter management with routing (CASE_MANAGEMENT redirects here)
   
   // Matter Management Enterprise Suite
   [PATHS.MATTERS_OVERVIEW]: MatterOverviewDashboard,
@@ -108,14 +106,15 @@ const COMPONENT_MAP: Record<string, React.LazyExoticComponent<unknown>> = {
 
 export const initializeModules = () => {
     const modules = NAVIGATION_ITEMS.flatMap(item => {
+        const { children, ...itemWithoutChildren } = item;
         const mainModule = {
-            ...item,
+            ...itemWithoutChildren,
             component: COMPONENT_MAP[item.id]
         };
-        
+
         // If item has children, also register them as modules
-        if (item.children && item.children.length > 0) {
-            const childModules = item.children.map(child => ({
+        if (children && children.length > 0) {
+            const childModules = children.map(child => ({
                 id: child.id,
                 label: child.label,
                 icon: child.icon,
@@ -125,7 +124,7 @@ export const initializeModules = () => {
             }));
             return [mainModule, ...childModules];
         }
-        
+
         return [mainModule];
     }).filter(m => m.component !== undefined);
 

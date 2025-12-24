@@ -41,8 +41,10 @@ export const RedactionStudioView: React.FC = () => {
     useEffect(() => {
         if (documentSelection.selected) {
             const loadUrl = async () => {
-                const url = await DocumentService.getDocumentUrl(documentSelection.selected.id);
-                setPreviewUrl(url);
+                if (documentSelection.selected) {
+                    const url = await DocumentService.getDocumentUrl(documentSelection.selected.id);
+                    setPreviewUrl(url);
+                }
             };
             loadUrl();
         }

@@ -4,25 +4,27 @@ import { Clock, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useSLAMonitoring, SLAItem } from '@/hooks/useSLAMonitoring';
-import type { ThemeTokens } from '@/components/theme/tokens';
+import { tokens } from '@/components/theme/tokens';
 
 // ============================================================================
 // TYPES
 // ============================================================================
+type ThemeColors = typeof tokens.colors.light;
+
 interface SLAHeaderProps {
-  theme: ThemeTokens;
+  theme: ThemeColors;
 }
 
 interface SLAListProps {
   slas: SLAItem[];
   formatDeadline: (dueTime: number) => string;
-  theme: ThemeTokens;
+  theme: ThemeColors;
 }
 
 interface SLAItemCardProps {
   sla: SLAItem;
   formatDeadline: (dueTime: number) => string;
-  theme: ThemeTokens;
+  theme: ThemeColors;
 }
 
 // ============================================================================

@@ -50,7 +50,6 @@ const metaVault = {
       },
     },
   },
-  tags: ['autodocs'],
   decorators: [
     (Story: React.ComponentType) => (
       <ThemeProvider>
@@ -104,8 +103,13 @@ export const Inventory: StoryObj<Meta<typeof EvidenceInventory>> = {
     <ThemeProvider>
       <ToastProvider>
         <div className="min-h-screen bg-slate-50">
-          <EvidenceInventory 
-            onViewEvidence={(id) => console.log('View evidence:', id)}
+          <EvidenceInventory
+            items={[]}
+            filteredItems={[]}
+            filters={{ search: '', type: '', admissibility: '', caseId: '', custodian: '', dateFrom: '', dateTo: '', location: '', tags: '', collectedBy: '', hasBlockchain: false }}
+            setFilters={() => {}}
+            onItemClick={(item) => console.log('View evidence:', item.id)}
+            onIntakeClick={() => console.log('Open intake')}
           />
         </div>
       </ToastProvider>
@@ -129,10 +133,9 @@ export const Intake: StoryObj<Meta<typeof EvidenceIntake>> = {
     <ThemeProvider>
       <ToastProvider>
         <div className="min-h-screen bg-slate-50 p-6">
-          <EvidenceIntake 
-            caseId="case-123"
+          <EvidenceIntake
+            handleBack={() => console.log('Back clicked')}
             onComplete={() => console.log('Intake complete')}
-            onCancel={() => console.log('Intake cancelled')}
           />
         </div>
       </ToastProvider>
@@ -152,15 +155,39 @@ export const Intake: StoryObj<Meta<typeof EvidenceIntake>> = {
 // ============================================================================
 
 export const ChainOfCustody: StoryObj<Meta<typeof EvidenceChainOfCustody>> = {
-  render: () => (
-    <ThemeProvider>
-      <ToastProvider>
-        <div className="min-h-screen bg-slate-50 p-6">
-          <EvidenceChainOfCustody evidenceId="evidence-123" />
-        </div>
-      </ToastProvider>
-    </ThemeProvider>
-  ),
+  render: () => {
+    const mockEvidence = {
+      id: 'evidence-123' as any,
+      trackingUuid: 'uuid-123' as any,
+      caseId: 'case-123' as any,
+      title: 'Sample Evidence',
+      type: 'Document' as any,
+      description: 'Sample evidence item',
+      collectionDate: '2024-01-15',
+      collectedBy: 'John Doe',
+      custodian: 'Evidence Locker',
+      location: 'Building A',
+      admissibility: 'Pending' as any,
+      tags: [],
+      chainOfCustody: [],
+      createdAt: '',
+      updatedAt: '',
+      userId: 'user-1' as any,
+    };
+
+    return (
+      <ThemeProvider>
+        <ToastProvider>
+          <div className="min-h-screen bg-slate-50 p-6">
+            <EvidenceChainOfCustody
+              selectedItem={mockEvidence}
+              onCustodyUpdate={() => console.log('Custody updated')}
+            />
+          </div>
+        </ToastProvider>
+      </ThemeProvider>
+    );
+  },
   parameters: {
     docs: {
       description: {
@@ -175,18 +202,39 @@ export const ChainOfCustody: StoryObj<Meta<typeof EvidenceChainOfCustody>> = {
 // ============================================================================
 
 export const Admissibility: StoryObj<Meta<typeof EvidenceAdmissibility>> = {
-  render: () => (
-    <ThemeProvider>
-      <ToastProvider>
-        <div className="min-h-screen bg-slate-50 p-6">
-          <EvidenceAdmissibility 
-            caseId="case-123"
-            evidenceId="evidence-123"
-          />
-        </div>
-      </ToastProvider>
-    </ThemeProvider>
-  ),
+  render: () => {
+    const mockEvidence = {
+      id: 'evidence-123' as any,
+      trackingUuid: 'uuid-123' as any,
+      caseId: 'case-123' as any,
+      title: 'Sample Evidence',
+      type: 'Document' as any,
+      description: 'Sample evidence item',
+      collectionDate: '2024-01-15',
+      collectedBy: 'John Doe',
+      custodian: 'Evidence Locker',
+      location: 'Building A',
+      admissibility: 'Challenged' as any,
+      tags: [],
+      chainOfCustody: [],
+      linkedRules: ['FRE 401', 'FRE 901'],
+      createdAt: '',
+      updatedAt: '',
+      userId: 'user-1' as any,
+    };
+
+    return (
+      <ThemeProvider>
+        <ToastProvider>
+          <div className="min-h-screen bg-slate-50 p-6">
+            <EvidenceAdmissibility
+              selectedItem={mockEvidence}
+            />
+          </div>
+        </ToastProvider>
+      </ThemeProvider>
+    );
+  },
   parameters: {
     docs: {
       description: {
@@ -201,18 +249,41 @@ export const Admissibility: StoryObj<Meta<typeof EvidenceAdmissibility>> = {
 // ============================================================================
 
 export const Forensics: StoryObj<Meta<typeof EvidenceForensics>> = {
-  render: () => (
-    <ThemeProvider>
-      <ToastProvider>
-        <div className="min-h-screen bg-slate-50 p-6">
-          <EvidenceForensics 
-            caseId="case-123"
-            evidenceId="evidence-123"
-          />
-        </div>
-      </ToastProvider>
-    </ThemeProvider>
-  ),
+  render: () => {
+    const mockEvidence = {
+      id: 'evidence-123' as any,
+      trackingUuid: 'uuid-123' as any,
+      caseId: 'case-123' as any,
+      title: 'Sample Digital Evidence.pdf',
+      type: 'Digital' as any,
+      description: 'Sample evidence item for forensics',
+      collectionDate: '2024-01-15',
+      collectedBy: 'John Doe',
+      custodian: 'Evidence Locker',
+      location: 'Digital Storage',
+      admissibility: 'Pending' as any,
+      tags: [],
+      chainOfCustody: [],
+      blockchainHash: 'abc123def456789abc123def456789abc123def456789abc123def456789',
+      fileSize: '2,405 KB',
+      fileType: 'application/pdf',
+      createdAt: '',
+      updatedAt: '',
+      userId: 'user-1' as any,
+    };
+
+    return (
+      <ThemeProvider>
+        <ToastProvider>
+          <div className="min-h-screen bg-slate-50 p-6">
+            <EvidenceForensics
+              selectedItem={mockEvidence}
+            />
+          </div>
+        </ToastProvider>
+      </ThemeProvider>
+    );
+  },
   parameters: {
     docs: {
       description: {
@@ -227,18 +298,42 @@ export const Forensics: StoryObj<Meta<typeof EvidenceForensics>> = {
 // ============================================================================
 
 export const Detail: StoryObj<Meta<typeof EvidenceDetail>> = {
-  render: () => (
-    <ThemeProvider>
-      <ToastProvider>
-        <div className="min-h-screen bg-slate-50 p-6">
-          <EvidenceDetail 
-            evidenceId="evidence-123"
-            onClose={() => console.log('Close detail')}
-          />
-        </div>
-      </ToastProvider>
-    </ThemeProvider>
-  ),
+  render: () => {
+    const mockEvidence = {
+      id: 'evidence-123' as any,
+      trackingUuid: 'uuid-123' as any,
+      caseId: 'case-123' as any,
+      title: 'Sample Evidence',
+      type: 'Document' as any,
+      description: 'Sample evidence item',
+      collectionDate: '2024-01-15',
+      collectedBy: 'John Doe',
+      custodian: 'Evidence Locker',
+      location: 'Building A',
+      admissibility: 'Pending' as any,
+      tags: [],
+      chainOfCustody: [],
+      createdAt: '',
+      updatedAt: '',
+      userId: 'user-1' as any,
+    };
+
+    return (
+      <ThemeProvider>
+        <ToastProvider>
+          <div className="min-h-screen bg-slate-50 p-6">
+            <EvidenceDetail
+              selectedItem={mockEvidence}
+              handleBack={() => console.log('Back clicked')}
+              activeTab="overview"
+              setActiveTab={(tab) => console.log('Tab changed:', tab)}
+              onNavigateToCase={(caseId) => console.log('Navigate to case:', caseId)}
+            />
+          </div>
+        </ToastProvider>
+      </ThemeProvider>
+    );
+  },
   parameters: {
     docs: {
       description: {

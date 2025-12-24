@@ -111,7 +111,7 @@ export class MotionRepository extends Repository<Motion> {
         this.validateId(id, 'update');
         if (this.useBackend) {
             try {
-                return await this.motionsApi.update(id, updates) as any;
+                return await this.motionsApi.update(id, updates as any) as any;
             } catch (error) {
                 console.warn('[MotionRepository] Backend API unavailable', error);
             }
@@ -149,7 +149,7 @@ export class MotionRepository extends Repository<Motion> {
             const lowerQuery = criteria.query.toLowerCase();
             motions = motions.filter(m =>
                 m.title?.toLowerCase().includes(lowerQuery) ||
-                m.notes?.toLowerCase().includes(lowerQuery)
+                (m as any).notes?.toLowerCase().includes(lowerQuery)
             );
         }
         return motions;

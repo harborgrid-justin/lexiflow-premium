@@ -163,13 +163,13 @@ const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDo
         <main className="flex-1 overflow-auto p-8 relative">
           <Suspense fallback={<div className="p-4"><Loader2 className="animate-spin" /></div>}>
             <PleadingPaper rules={formattingRules}>
-                <PleadingCanvas 
-                    document={document} 
+                <PleadingCanvas
+                    document={document}
                     rules={formattingRules}
-                    readOnly={viewMode === 'preview'} 
+                    readOnly={viewMode === 'preview'}
                     viewMode={viewMode}
                     onUpdateSection={handleUpdateSection}
-                    relatedCase={caseData || null}
+                    relatedCase={caseData}
                 />
                 {viewMode === 'logic' && <LogicOverlay document={document} />}
             </PleadingPaper>

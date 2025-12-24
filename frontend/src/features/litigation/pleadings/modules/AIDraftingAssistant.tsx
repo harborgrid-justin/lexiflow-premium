@@ -6,8 +6,15 @@ import { TextArea } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { AIDraftingAssistantProps } from '@/types';
 import { retryWithBackoff, RetryError } from '@/utils/retryWithBackoff';
+
+interface AIDraftingAssistantProps {
+    onInsert: (text: string) => void;
+    caseContext: {
+        title: string;
+        summary?: string;
+    };
+}
 
 export const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInsert, caseContext }) => {
   const { theme } = useTheme();

@@ -34,11 +34,11 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
     onComplete();
   };
 
-  const updateItem = (setter: unknown, list: unknown[], index: number, field: string, value: string) => {
+  const updateItem = <T extends Record<string, any>>(setter: (list: T[]) => void, list: T[], index: number, field: string, value: string) => {
       const newList = [...list];
       const currentItem = newList[index];
-      newList[index] = currentItem && typeof currentItem === 'object' ? { ...currentItem, [field]: value } : { [field]: value };
-      setter(newList);
+      newList[index] = currentItem && typeof currentItem === 'object' ? { ...currentItem, [field]: value } : { [field]: value } as T;
+      setter(newList as T[]);
   };
 
   return (

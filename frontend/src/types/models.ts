@@ -16,6 +16,7 @@ export * from './case';
 
 // Re-export financial & billing types
 export * from './financial';
+export * from './trust-accounts';
 
 // Re-export documents & discovery types
 export * from './documents';

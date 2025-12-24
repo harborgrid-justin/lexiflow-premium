@@ -12,26 +12,26 @@ import { LegalRule } from '@/types';
  */
 const RULES_DATABASE: LegalRule[] = [
   // Federal Rules of Civil Procedure
-  { id: 'frcp-26f', code: 'FRCP 26(f)', name: 'Conference of the Parties; Planning for Discovery', jurisdiction: 'Federal', category: 'Discovery' },
-  { id: 'frcp-12b', code: 'FRCP 12(b)', name: 'How to Present Defenses', jurisdiction: 'Federal', category: 'Pleadings' },
-  { id: 'frcp-16', code: 'FRCP 16', name: 'Pretrial Conferences; Scheduling; Management', jurisdiction: 'Federal', category: 'Trial' },
-  { id: 'frcp-26a', code: 'FRCP 26(a)', name: 'Required Disclosures', jurisdiction: 'Federal', category: 'Discovery' },
-  { id: 'frcp-30', code: 'FRCP 30', name: 'Depositions by Oral Examination', jurisdiction: 'Federal', category: 'Discovery' },
-  { id: 'frcp-33', code: 'FRCP 33', name: 'Interrogatories to Parties', jurisdiction: 'Federal', category: 'Discovery' },
-  { id: 'frcp-34', code: 'FRCP 34', name: 'Producing Documents, Electronically Stored Information, and Tangible Things', jurisdiction: 'Federal', category: 'Discovery' },
-  { id: 'frcp-36', code: 'FRCP 36', name: 'Requests for Admission', jurisdiction: 'Federal', category: 'Discovery' },
-  { id: 'frcp-56', code: 'FRCP 56', name: 'Summary Judgment', jurisdiction: 'Federal', category: 'Motions' },
+  { id: 'frcp-26f', code: 'FRCP 26(f)', name: 'Conference of the Parties; Planning for Discovery', type: 'FRCP', jurisdiction: 'Federal', category: 'Discovery' },
+  { id: 'frcp-12b', code: 'FRCP 12(b)', name: 'How to Present Defenses', type: 'FRCP', jurisdiction: 'Federal', category: 'Pleadings' },
+  { id: 'frcp-16', code: 'FRCP 16', name: 'Pretrial Conferences; Scheduling; Management', type: 'FRCP', jurisdiction: 'Federal', category: 'Trial' },
+  { id: 'frcp-26a', code: 'FRCP 26(a)', name: 'Required Disclosures', type: 'FRCP', jurisdiction: 'Federal', category: 'Discovery' },
+  { id: 'frcp-30', code: 'FRCP 30', name: 'Depositions by Oral Examination', type: 'FRCP', jurisdiction: 'Federal', category: 'Discovery' },
+  { id: 'frcp-33', code: 'FRCP 33', name: 'Interrogatories to Parties', type: 'FRCP', jurisdiction: 'Federal', category: 'Discovery' },
+  { id: 'frcp-34', code: 'FRCP 34', name: 'Producing Documents, Electronically Stored Information, and Tangible Things', type: 'FRCP', jurisdiction: 'Federal', category: 'Discovery' },
+  { id: 'frcp-36', code: 'FRCP 36', name: 'Requests for Admission', type: 'FRCP', jurisdiction: 'Federal', category: 'Discovery' },
+  { id: 'frcp-56', code: 'FRCP 56', name: 'Summary Judgment', type: 'FRCP', jurisdiction: 'Federal', category: 'Motions' },
 
   // Federal Rules of Evidence
-  { id: 'fre-401', code: 'FRE 401', name: 'Test for Relevant Evidence', jurisdiction: 'Federal', category: 'Evidence' },
-  { id: 'fre-402', code: 'FRE 402', name: 'General Admissibility of Relevant Evidence', jurisdiction: 'Federal', category: 'Evidence' },
-  { id: 'fre-403', code: 'FRE 403', name: 'Excluding Relevant Evidence for Prejudice, Confusion, or Other Reasons', jurisdiction: 'Federal', category: 'Evidence' },
-  { id: 'fre-801', code: 'FRE 801', name: 'Definitions That Apply to This Article; Exclusions from Hearsay', jurisdiction: 'Federal', category: 'Evidence' },
-  { id: 'fre-802', code: 'FRE 802', name: 'The Rule Against Hearsay', jurisdiction: 'Federal', category: 'Evidence' },
+  { id: 'fre-401', code: 'FRE 401', name: 'Test for Relevant Evidence', type: 'FRE', jurisdiction: 'Federal', category: 'Evidence' },
+  { id: 'fre-402', code: 'FRE 402', name: 'General Admissibility of Relevant Evidence', type: 'FRE', jurisdiction: 'Federal', category: 'Evidence' },
+  { id: 'fre-403', code: 'FRE 403', name: 'Excluding Relevant Evidence for Prejudice, Confusion, or Other Reasons', type: 'FRE', jurisdiction: 'Federal', category: 'Evidence' },
+  { id: 'fre-801', code: 'FRE 801', name: 'Definitions That Apply to This Article; Exclusions from Hearsay', type: 'FRE', jurisdiction: 'Federal', category: 'Evidence' },
+  { id: 'fre-802', code: 'FRE 802', name: 'The Rule Against Hearsay', type: 'FRE', jurisdiction: 'Federal', category: 'Evidence' },
 
   // Federal Rules of Appellate Procedure
-  { id: 'frap-4', code: 'FRAP 4', name: 'Appeal as of Right—When Taken', jurisdiction: 'Federal', category: 'Appeals' },
-  { id: 'frap-28', code: 'FRAP 28', name: 'Appellant\'s Brief', jurisdiction: 'Federal', category: 'Appeals' },
+  { id: 'frap-4', code: 'FRAP 4', name: 'Appeal as of Right—When Taken', type: 'FRAP', jurisdiction: 'Federal', category: 'Appeals' },
+  { id: 'frap-28', code: 'FRAP 28', name: 'Appellant\'s Brief', type: 'FRAP', jurisdiction: 'Federal', category: 'Appeals' },
 ];
 
 class RuleServiceClass {
@@ -47,9 +47,9 @@ class RuleServiceClass {
 
     const lowerQuery = query.toLowerCase();
     
-    return RULES_DATABASE.filter(rule => 
+    return RULES_DATABASE.filter(rule =>
       rule.code.toLowerCase().includes(lowerQuery) ||
-      rule.title.toLowerCase().includes(lowerQuery) ||
+      rule.name.toLowerCase().includes(lowerQuery) ||
       rule.category?.toLowerCase().includes(lowerQuery)
     ).slice(0, 20); // Limit to 20 results for performance
   }

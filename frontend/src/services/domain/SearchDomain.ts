@@ -49,16 +49,16 @@ export const SearchService = {
   search: async (query: string, filters?: { types?: string[]; caseId?: string }): Promise<SearchResult[]> => {
     if (isBackendApiEnabled()) {
       try {
-        const params: unknown = { q: query };
+        const params: Record<string, any> = { q: query };
         if (filters?.types) params.types = filters.types.join(',');
         if (filters?.caseId) params.caseId = filters.caseId;
-        
+
         return await apiClient.get<SearchResult[]>('/search', params);
       } catch (error) {
         console.error('[SearchService.search] Backend error:', error);
       }
     }
-    
+
     // Fallback: Return empty results when backend unavailable
     console.warn('[SearchService] Backend search unavailable, returning empty results');
     return [];

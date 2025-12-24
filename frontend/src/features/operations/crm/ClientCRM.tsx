@@ -1,6 +1,6 @@
 
 import React, { useState, Suspense, lazy, useTransition } from 'react';
-import { Client, EntityId } from '@/types';
+import { Client, EntityId, ClientStatus, PaymentTerms } from '@/types';
 import {
   UserPlus, LayoutDashboard, List, GitPullRequest,
   BarChart3, Users, TrendingUp
@@ -41,8 +41,22 @@ export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
 
   const handleAddClient = async (clientName: string) => {
       const newClient: Client = {
-          id: `cli-${Date.now()}` as EntityId, name: clientName, industry: 'General',
-          status: 'Prospect', totalBilled: 0, matters: []
+          id: `cli-${Date.now()}` as EntityId,
+          clientNumber: `CLT-${Date.now()}`,
+          name: clientName,
+          industry: 'General',
+          status: ClientStatus.PROSPECTIVE,
+          paymentTerms: PaymentTerms.NET_30,
+          creditLimit: 0,
+          currentBalance: 0,
+          totalBilled: 0,
+          totalPaid: 0,
+          totalCases: 0,
+          activeCases: 0,
+          isVip: false,
+          requiresConflictCheck: false,
+          hasRetainer: false,
+          matters: []
       };
       await DataService.clients.add(newClient);
       refetch();

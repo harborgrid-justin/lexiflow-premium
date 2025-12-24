@@ -8,17 +8,19 @@ import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
+import type { JudgeProfile } from '@/types';
+import { RulesView } from '@/config/tabs.config';
 
 interface RulesDashboardProps {
-    onNavigate: (view: unknown) => void;
+    onNavigate: (view: RulesView) => void;
 }
 
 export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) => {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery
-  const { data: judges = [], isLoading } = useQuery(
-      ['analytics', 'judges'], 
+  const { data: judges = [], isLoading } = useQuery<JudgeProfile[]>(
+      ['analytics', 'judges'],
       DataService.analysis.getJudgeProfiles
   );
 

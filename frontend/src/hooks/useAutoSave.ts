@@ -66,7 +66,7 @@ export function useAutoSave<T>(options: UseAutoSaveOptions<T>) {
     }
   }, [onSave, data, onSuccess, onError]);
 
-  const debouncedSave = useDebouncedCallback(performSave, delay);
+  const debouncedSave = useDebouncedCallback(performSave as (...args: unknown[]) => void, delay);
 
   useEffect(() => {
     if (!enabled) return;

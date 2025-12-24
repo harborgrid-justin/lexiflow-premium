@@ -49,7 +49,22 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
 
   useEffect(() => {
       if (fetchedTables.length > 0) {
-          setTables(fetchedTables as TableData[]);
+          // Map SchemaTable to TableData format
+          const mappedTables: TableData[] = fetchedTables.map((table: any) => ({
+              name: table.name,
+              x: table.x || 0,
+              y: table.y || 0,
+              columns: table.columns.map((col: any) => ({
+                  name: col.name,
+                  type: col.type,
+                  pk: col.pk,
+                  notNull: col.notNull !== undefined ? col.notNull : !col.nullable,
+                  unique: col.unique,
+                  fk: col.fk,
+                  index: col.index
+              }))
+          }));
+          setTables(mappedTables);
       }
   }, [fetchedTables]);
   

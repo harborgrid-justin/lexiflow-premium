@@ -40,7 +40,10 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
   // Calculate UBO metrics (mock for now until UBO endpoint is implemented)
   const metrics = useMemo(() => ({
     entitiesTracked: stats?.corporations || corporations.length,
-    ubosIdentified: corporations.reduce((sum, corp) => sum + (corp.relationships?.length || 0), 0),
+    ubosIdentified: corporations.reduce((sum, corp) => {
+      const apiCorp = corp as any;
+      return sum + (apiCorp.relationships?.length || 0);
+    }, 0),
     verificationPending: corporations.filter(corp => corp.status !== 'active').length,
   }), [corporations, stats]);
 
@@ -98,7 +101,8 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
           </TableHeader>
           <TableBody>
               {corporations.map(corp => {
-                const firstRelationship = corp.relationships?.[0];
+                const apiCorp = corp as any;
+                const firstRelationship = apiCorp.relationships?.[0];
                 const ownershipPct = firstRelationship?.metadata?.ownershipPercentage as number || 0;
                 const controlType = firstRelationship?.relationshipType || 'Senior Officer';
                 const isVerified = corp.status === 'active';
@@ -107,8 +111,8 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
                   <TableRow key={corp.id} onClick={() => onSelect(corp as any)} className="cursor-pointer">
                       <TableCell className={cn("font-bold", theme.text.primary)}>
                           <div className="flex items-center gap-2">
-                              <Building className="h-4 w-4 text-blue-500"/> 
-                              {corp.fullLegalName || corp.name}
+                              <Building className="h-4 w-4 text-blue-500"/>
+                              {apiCorp.fullLegalName || corp.name}
                           </div>
                       </TableCell>
                       <TableCell>

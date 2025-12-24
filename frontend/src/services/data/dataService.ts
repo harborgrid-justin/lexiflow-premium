@@ -205,17 +205,17 @@ import { MOCK_JUDGES } from '@/api/data/judgeProfile';
 
 const IntegratedCaseRepository = createIntegratedRepository(
   CaseRepository,
-  (item: Case) => IntegrationEventPublisher.publishCaseCreated(item)
+  async (item: unknown) => await IntegrationEventPublisher.publishCaseCreated(item as Case)
 );
 
 const IntegratedDocketRepository = createIntegratedRepository(
   DocketRepository,
-  (item: DocketEntry) => IntegrationEventPublisher.publishDocketIngested(item)
+  async (item: unknown) => await IntegrationEventPublisher.publishDocketIngested(item as DocketEntry)
 );
 
 const IntegratedDocumentRepository = createIntegratedRepository(
   DocumentRepository,
-  (item: LegalDocument) => IntegrationEventPublisher.publishDocumentUploaded(item)
+  async (item: unknown) => await IntegrationEventPublisher.publishDocumentUploaded(item as LegalDocument)
 );
 
 class IntegratedBillingRepository extends BillingRepository {
@@ -1030,7 +1030,7 @@ Object.defineProperties(DataServiceBase, {
       },
       add: async (rule: unknown) => {
         try {
-          return await api.jurisdiction?.createRule?.(rule);
+          return await api.jurisdiction?.createRule?.(rule as any);
         } catch (error) {
           console.error('[DataService.rules] Failed to create rule:', error);
           throw error;
@@ -1038,7 +1038,7 @@ Object.defineProperties(DataServiceBase, {
       },
       update: async (id: string, updates: unknown) => {
         try {
-          return await api.jurisdiction?.updateRule?.(id, updates);
+          return await api.jurisdiction?.updateRule?.(id, updates as any);
         } catch (error) {
           console.error('[DataService.rules] Failed to update rule:', error);
           throw error;

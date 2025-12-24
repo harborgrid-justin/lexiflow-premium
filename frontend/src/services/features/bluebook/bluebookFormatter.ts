@@ -65,9 +65,11 @@
 
 import {
   BluebookCitation,
+  BluebookCitationType,
   CaseCitation,
   StatuteCitation,
-  PeriodicalCitation
+  PeriodicalCitation,
+  BookCitation
 } from '@/types/bluebook';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -166,19 +168,25 @@ class BluebookFormatterClass {
       return 'Id.';
     }
 
-    const title = citation.title || '';
-    const code = citation.code || 'U.S.C.';
-    const section = citation.section || '';
-    const subsection = citation.subsection || '';
+    if (!citation || typeof citation !== 'object') {
+      return '';
+    }
+
+    const stat = citation as Partial<StatuteCitation>;
+    const title = stat.title || '';
+    const code = stat.code || 'U.S.C.';
+    const section = stat.section || '';
+    const subsections = stat.subsections || [];
+    const subsection = subsections.length > 0 ? subsections[0] : '';
 
     let formatted = `${title} ${code} § ${section}`;
-    
+
     if (subsection) {
       formatted += `(${subsection})`;
     }
 
-    if (citation.year) {
-      formatted += ` (${citation.year})`;
+    if (stat.year) {
+      formatted += ` (${stat.year})`;
     }
 
     return formatted;
@@ -192,14 +200,26 @@ class BluebookFormatterClass {
     italicize: boolean,
     smallCaps: boolean
   ): string {
-    const author = smallCaps ? this.toSmallCaps(citation.author || '') : citation.author || '';
-    const title = italicize ? `_${citation.title}_` : citation.title;
-    const volume = citation.volume || '';
-    const journal = citation.journalName || citation.publicationTitle || '';
-    const page = citation.page || '';
-    const year = citation.year || '';
+    // Try to cast to PeriodicalCitation or BookCitation for accessing specific properties
+    const periodical = citation as Partial<PeriodicalCitation>;
+    const book = citation as Partial<BookCitation>;
 
-    if (citation.type === 'journal') {
+    // Get author - handle both arrays and strings
+    let authorStr = '';
+    if (periodical.authors && Array.isArray(periodical.authors) && periodical.authors.length > 0) {
+      authorStr = periodical.authors[0].fullName;
+    } else if (book.authors && Array.isArray(book.authors) && book.authors.length > 0) {
+      authorStr = book.authors[0].fullName;
+    }
+    const author = smallCaps ? this.toSmallCaps(authorStr) : authorStr;
+
+    const title = italicize ? `_${periodical.title || book.title || ''}_` : (periodical.title || book.title || '');
+    const volume = periodical.volume || book.volume || '';
+    const journal = periodical.publication || '';
+    const page = periodical.page || book.pageNumbers || '';
+    const year = periodical.year || book.year || '';
+
+    if (citation.type === BluebookCitationType.JOURNAL || citation.type === BluebookCitationType.LAW_REVIEW) {
       return `${author}, ${title}, ${volume} ${journal} ${page} (${year})`;
     }
 
@@ -241,10 +261,25 @@ class BluebookFormatterClass {
 
     citations.forEach(citation => {
       const formatted = this.format(citation);
-      const page = citation.page ? parseInt(citation.page, 10) : 1;
+
+      // Try to extract page number from different citation types
+      let page = 1;
+      const caseCit = citation as Partial<CaseCitation>;
+      const periodicalCit = citation as Partial<PeriodicalCitation>;
+      const bookCit = citation as Partial<BookCitation>;
+
+      if (typeof caseCit.page === 'number') {
+        page = caseCit.page;
+      } else if (typeof periodicalCit.page === 'number') {
+        page = periodicalCit.page;
+      } else if (typeof bookCit.pageNumbers === 'string') {
+        const parsed = parseInt(bookCit.pageNumbers, 10);
+        if (!isNaN(parsed)) page = parsed;
+      }
 
       switch (citation.type) {
-        case 'case':
+        case BluebookCitationType.CASE:
+        case BluebookCitationType.UNPUBLISHED_OPINION:
           const existingCase = toa.cases.find(c => c.citation === formatted);
           if (existingCase) {
             if (!existingCase.pages.includes(page)) {
@@ -255,8 +290,8 @@ class BluebookFormatterClass {
           }
           break;
 
-        case 'statute':
-        case 'regulation':
+        case BluebookCitationType.STATUTE:
+        case BluebookCitationType.REGULATION:
           const existingStatute = toa.statutes.find(s => s.citation === formatted);
           if (existingStatute) {
             if (!existingStatute.pages.includes(page)) {
@@ -304,16 +339,17 @@ class BluebookFormatterClass {
       errors.push('Citation type is required');
     }
 
-    if (citation.type === 'case') {
-      if (!citation.caseName) errors.push('Case name is required');
-      if (!citation.reporters || citation.reporters.length === 0) {
+    if (citation.type === BluebookCitationType.CASE) {
+      const caseCit = citation as CaseCitation;
+      if (!caseCit.caseName) errors.push('Case name is required');
+      if (!caseCit.reporter) {
         errors.push('At least one reporter is required');
       }
-      if (!citation.year) errors.push('Year is required');
+      if (!caseCit.year) errors.push('Year is required');
     }
 
-    if (citation.type === 'statute') {
-      const statute = citation as any;
+    if (citation.type === BluebookCitationType.STATUTE) {
+      const statute = citation as StatuteCitation;
       if (!statute.section) errors.push('Statute section is required');
     }
 

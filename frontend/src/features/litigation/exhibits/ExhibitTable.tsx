@@ -66,7 +66,7 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
              <DocumentPreviewPanel
                 document={{
                     id: ex.id as DocumentId,
-                    title: ex.title,
+                    title: ex.title || 'Untitled',
                     type: ex.fileType || '',
                     content: ex.description || '',
                     uploadDate: ex.dateMarked || '',
@@ -91,8 +91,8 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
               {exhibits.map(ex => (
                   <div key={ex.id} className={cn("group rounded-lg border shadow-sm overflow-hidden hover:shadow-md transition-all", theme.surface.default, theme.border.default)}>
                       <div className={cn("aspect-square flex items-center justify-center relative border-b", theme.surface.highlight, theme.border.default)}>
-                          <FileIcon type={ex.fileType || ''} className="h-16 w-16 opacity-30"/>
-                          <div className={cn("absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold border", getPartyColor(ex.party))}>
+                          <FileIcon type={ex.fileType ?? ''} className="h-16 w-16 opacity-30"/>
+                          <div className={cn("absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold border", getPartyColor(ex.party ?? ''))}>
                               {ex.exhibitNumber}
                           </div>
                           <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-2 transition-opacity">
@@ -115,12 +115,12 @@ export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }
   const renderRow = (ex: TrialExhibit) => (
       <div key={ex.id} className={cn("flex items-center h-[60px] border-b px-6 transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
             <div className="w-[15%]">
-                <span className={cn("font-mono font-bold text-sm px-2 py-1 rounded border", getPartyColor(ex.party))}>
+                <span className={cn("font-mono font-bold text-sm px-2 py-1 rounded border", getPartyColor(ex.party ?? ''))}>
                     {ex.exhibitNumber}
                 </span>
             </div>
             <div className="w-[30%] flex items-center gap-2">
-                <FileIcon type={ex.fileType || ''} className="h-4 w-4 opacity-70 shrink-0"/>
+                <FileIcon type={ex.fileType ?? ''} className="h-4 w-4 opacity-70 shrink-0"/>
                 <div className="min-w-0">
                     <p className={cn("font-medium text-sm truncate", theme.text.primary)}>{ex.title}</p>
                     <p className={cn("text-xs truncate max-w-[200px]", theme.text.tertiary)}>{ex.description}</p>

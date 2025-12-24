@@ -208,10 +208,10 @@ export const WarRoom: React.FC<WarRoomProps> = ({ initialTab, caseId }) => {
     }
   }, []);
 
-  const handleNavigate = (tab: string, context?: never) => {
+  const handleNavigate = (tab: string, context?: Record<string, unknown>) => {
     setActiveTab(tab as WarRoomView);
     if (tab === "witnesses" && context?.witnessId) {
-      setSelectedWitnessId(context.witnessId);
+      setSelectedWitnessId(context.witnessId as string);
     }
   };
 

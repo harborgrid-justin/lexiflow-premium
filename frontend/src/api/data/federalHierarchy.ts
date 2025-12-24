@@ -78,15 +78,15 @@ export interface StateJurisdiction {
   levels: StateJurisdictionLevel[];
 }
 
-const stateCourts = MOCK_JURISDICTIONS.filter(j => j.system === 'State');
+const stateCourts = MOCK_JURISDICTIONS.filter((j) => j.system === 'State');
 const stateNames: Record<string, string> = {
     VA: 'Virginia',
     CA: 'California',
     NY: 'New York',
 };
 
-export const STATE_JURISDICTIONS: Record<string, StateJurisdiction> = stateCourts.reduce((acc, court) => {
-    const stateId = court.region;
+export const STATE_JURISDICTIONS: Record<string, StateJurisdiction> = stateCourts.reduce((acc: Record<string, StateJurisdiction>, court: typeof MOCK_JURISDICTIONS[number]) => {
+    const stateId = court.region as string;
     if (!acc[stateId]) {
         acc[stateId] = {
             id: stateId,
@@ -94,7 +94,7 @@ export const STATE_JURISDICTIONS: Record<string, StateJurisdiction> = stateCourt
             levels: []
         };
     }
-    let level = acc[stateId].levels.find(l => l.name === court.type);
+    let level = acc[stateId].levels.find((l) => l.name === court.type);
     if (!level) {
         level = { name: court.type, courts: [] };
         acc[stateId].levels.push(level);

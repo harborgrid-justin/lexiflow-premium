@@ -7,14 +7,22 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Formatters } from '@/utils/formatters';
 
+interface TrustLedgerAccount {
+    client: string;
+    matterId: string;
+    matter: string;
+    lastTransaction: string;
+    balance: number;
+}
+
 interface TrustLedgerProps {
-    trustAccounts: unknown[];
+    trustAccounts: TrustLedgerAccount[];
 }
 
 export const TrustLedger: React.FC<TrustLedgerProps> = ({ trustAccounts }) => {
   const { theme } = useTheme();
-  
-  const totalLiability = trustAccounts.reduce((acc: any, curr) => acc + curr.balance, 0);
+
+  const totalLiability = trustAccounts.reduce((acc: number, curr) => acc + curr.balance, 0);
 
   return (
     <div className="space-y-6">

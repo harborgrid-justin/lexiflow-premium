@@ -223,7 +223,7 @@ export class CollaborationService extends EventEmitter {
     if (!edit || typeof edit !== 'object') {
       throw new Error(`[CollaborationService.${methodName}] Invalid edit parameter`);
     }
-    if (!edit.type || !['insert', 'delete', 'replace'].includes(edit.type as string)) {
+    if (!('type' in edit) || !edit.type || !['insert', 'delete', 'replace'].includes(edit.type as string)) {
       throw new Error(`[CollaborationService.${methodName}] Invalid edit type`);
     }
   }

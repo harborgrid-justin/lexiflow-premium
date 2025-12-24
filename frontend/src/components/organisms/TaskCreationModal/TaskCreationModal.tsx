@@ -67,7 +67,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
     status: TaskStatusBackend.TODO,
     assignee: 'James Doe',
     dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    projectId: '',
+    projectId: '' as ProjectId,
     linkedRules: []
   });
 

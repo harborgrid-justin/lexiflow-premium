@@ -219,10 +219,12 @@ const processedCache = new LinearHash<string, CacheEntry>();
  * ```
  */
 const createPatch = (oldData: unknown, newData: unknown) => {
-    const patch: unknown = {};
-    for (const key in newData) {
-        if (JSON.stringify(oldData[key]) !== JSON.stringify(newData[key])) {
-            patch[key] = newData[key];
+    const patch: Record<string, unknown> = {};
+    if (newData && typeof newData === 'object' && oldData && typeof oldData === 'object') {
+        for (const key in newData) {
+            if (JSON.stringify((oldData as Record<string, unknown>)[key]) !== JSON.stringify((newData as Record<string, unknown>)[key])) {
+                patch[key] = (newData as Record<string, unknown>)[key];
+            }
         }
     }
     return patch;
@@ -363,11 +365,12 @@ const processMutation = async (mutation: Mutation): Promise<boolean> => {
     const entityType = mutation.type.split('_')[0].toLowerCase();
 
     // Prepare backend payload
+    const payloadObj = mutation.payload && typeof mutation.payload === 'object' ? mutation.payload as Record<string, unknown> : {};
     const backendPayload = {
       id: mutation.id,
       operation,
       entityType,
-      entityId: mutation.payload.id || mutation.payload._id || mutation.id,
+      entityId: payloadObj.id || payloadObj._id || mutation.id,
       payload: mutation.patch || mutation.payload, // Prefer patch for efficiency
       timestamp: mutation.timestamp,
       retryCount: mutation.retryCount
@@ -380,7 +383,7 @@ const processMutation = async (mutation: Mutation): Promise<boolean> => {
     return true;
 
   } catch (error: unknown) {
-    const errorMessage = error?.message || 'Unknown error';
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     console.error(`[SyncEngine] Failed to sync mutation ${mutation.id}:`, errorMessage);
     
     // Check if we should retry
@@ -870,30 +873,34 @@ export const SyncEngine = {
 
     try {
       // Fetch backend sync status
-      const response = await apiClient.get<unknown>('/sync/queue', {
+      const response = await apiClient.get<{ data: unknown[] }>('/sync/queue', {
         params: { status: 'pending', limit: 100 }
       });
 
-      const backendQueue = response.data || [];
+      const backendQueue = Array.isArray(response.data) ? response.data : [];
       const localQueue = SyncEngine.getQueue();
       const localIds = new Set(localQueue.map(m => m.id));
 
       // Add backend mutations that aren't in local queue
       let added = 0;
       for (const item of backendQueue) {
-        if (!localIds.has(item.id)) {
-          const mutation: Mutation = {
-            id: item.id,
-            type: `${item.entityType.toUpperCase()}_${item.operation.toUpperCase()}`,
-            payload: item.payload,
-            patch: undefined,
-            timestamp: new Date(item.createdAt).getTime(),
-            status: item.status || 'pending',
-            retryCount: item.retryCount || 0,
-            lastError: item.error
-          };
-          localQueue.push(mutation);
-          added++;
+        if (item && typeof item === 'object') {
+          const itemObj = item as Record<string, unknown>;
+          const itemId = typeof itemObj.id === 'string' ? itemObj.id : '';
+          if (itemId && !localIds.has(itemId)) {
+            const mutation: Mutation = {
+              id: itemId,
+              type: `${String(itemObj.entityType || '').toUpperCase()}_${String(itemObj.operation || '').toUpperCase()}`,
+              payload: itemObj.payload,
+              patch: undefined,
+              timestamp: itemObj.createdAt ? new Date(String(itemObj.createdAt)).getTime() : Date.now(),
+              status: (itemObj.status === 'pending' || itemObj.status === 'syncing' || itemObj.status === 'failed') ? itemObj.status : 'pending',
+              retryCount: typeof itemObj.retryCount === 'number' ? itemObj.retryCount : 0,
+              lastError: typeof itemObj.error === 'string' ? itemObj.error : undefined
+            };
+            localQueue.push(mutation);
+            added++;
+          }
         }
       }
 
@@ -903,7 +910,7 @@ export const SyncEngine = {
       }
 
     } catch (error: unknown) {
-      console.error('[SyncEngine] Failed to sync from backend:', error?.message);
+      console.error('[SyncEngine] Failed to sync from backend:', error instanceof Error ? error.message : 'Unknown error');
     }
   },
 
@@ -929,8 +936,9 @@ export const SyncEngine = {
     try {
       return await apiClient.get('/sync/status');
     } catch (error: unknown) {
-      console.error('[SyncEngine] Failed to get backend status:', error?.message);
-      return { pending: 0, conflicts: 0, isHealthy: false, error: error?.message };
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('[SyncEngine] Failed to get backend status:', errorMessage);
+      return { pending: 0, conflicts: 0, isHealthy: false, error: errorMessage };
     }
   },
 

@@ -24,12 +24,21 @@ export const CitationAssistant: React.FC<CitationAssistantProps> = ({ onInsertCi
     DataService.citations.getAll
   );
 
-  const { filteredItems: filtered, searchQuery, setSearchQuery } = useFilterAndSearch({
+  const { filteredItems: filtered, searchQuery, setSearchQuery } = useFilterAndSearch<Citation>({
     items: citations,
     config: {
       searchFields: ['citation', 'title', 'description']
     }
   });
+
+  // Helper to map citation status to SignalChecker status
+  const getSignalStatus = (citation: Citation): 'Positive' | 'Caution' | 'Negative' | 'Unknown' => {
+    const status = (citation.shepardsSignal || citation.status || '').toLowerCase();
+    if (status.includes('positive') || status.includes('valid') || status.includes('good')) return 'Positive';
+    if (status.includes('caution') || status.includes('warning') || status.includes('distinguished')) return 'Caution';
+    if (status.includes('negative') || status.includes('overruled') || status.includes('reversed')) return 'Negative';
+    return 'Unknown';
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -53,7 +62,7 @@ export const CitationAssistant: React.FC<CitationAssistantProps> = ({ onInsertCi
             <div key={c.id} className={cn("p-3 rounded-lg border group", theme.surface.default, theme.border.default)}>
                 <div className="flex justify-between items-start mb-1">
                     <span className={cn("font-mono text-xs font-bold hover:underline cursor-pointer", theme.primary.text)}>{c.citation}</span>
-                    <SignalChecker citation={c.citation} status={c.shepardsSignal as any || 'Unknown'} />
+                    <SignalChecker citation={c.citation} status={getSignalStatus(c)} />
                 </div>
                 <p className={cn("text-xs font-medium mb-1", theme.text.primary)}>{c.title}</p>
                 <p className={cn("text-[10px] line-clamp-2 italic mb-2", theme.text.secondary)}>{c.description}</p>

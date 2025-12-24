@@ -38,7 +38,7 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
             >
                 <div className="flex items-center gap-3">
                 <div className={cn("p-2 rounded border shadow-sm transition-all", theme.surface.default, theme.border.default, `group-hover:shadow-md`)}>
-                    {getProcessIcon(bp.name)}
+                    {getProcessIcon(bp.name) as React.ReactNode}
                 </div>
                 <div>
                     <h4 className={cn("font-bold text-sm transition-colors", theme.text.primary, `group-hover:${theme.primary.text}`)}>{bp.name}</h4>

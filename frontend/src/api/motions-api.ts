@@ -52,9 +52,9 @@ export class MotionsApiService {
     return Array.isArray(result) ? result : [];
   }
 
-  async create(data: Partial<Motion>): Promise<Motion> {
+  async create(data: Partial<Motion> & { filedBy?: string }): Promise<Motion> {
     // Transform frontend Motion to backend CreateMotionDto
-    const createDto = {
+    const createDto: Record<string, any> = {
       caseId: data.caseId,
       title: data.title,
       type: data.type, // Should match backend MotionType enum
@@ -69,14 +69,14 @@ export class MotionsApiService {
       notes: data.notes,
       metadata: data.metadata,
     };
-    
+
     // Remove undefined values
     Object.keys(createDto).forEach(key => {
-      if ((createDto as any)[key] === undefined) {
-        delete (createDto as any)[key];
+      if (createDto[key] === undefined) {
+        delete createDto[key];
       }
     });
-    
+
     return apiClient.post<Motion>(this.baseUrl, createDto);
   }
 

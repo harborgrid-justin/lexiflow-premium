@@ -62,8 +62,8 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
   const stages = useMemo(() => {
     if (!Array.isArray(allTasks) || allTasks.length === 0) return [];
     return [
-        { id: 's1', title: 'Active Tasks', status: 'Active', tasks: allTasks.filter(t => t.status !== 'Done') },
-        { id: 's2', title: 'Completed', status: 'Completed', tasks: allTasks.filter(t => t.status === 'Done') }
+        { id: 's1', title: 'Active Tasks', status: 'Active', tasks: allTasks.filter(t => t.status?.toString() !== 'COMPLETED' && t.status?.toString() !== 'Done') },
+        { id: 's2', title: 'Completed', status: 'Completed', tasks: allTasks.filter(t => t.status?.toString() === 'COMPLETED' || t.status?.toString() === 'Done') }
     ] as WorkflowStage[];
   }, [allTasks]);
 
@@ -174,7 +174,7 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
           }
 
           // Toggle task status between Done and Pending
-          const newStatus = task.status === 'Done' ? 'Pending' : 'Done';
+          const newStatus = task.status?.toString() === 'COMPLETED' || task.status?.toString() === 'Done' ? 'Pending' : 'Done';
 
           // Update via DataService
           await DataService.tasks.update(taskId, { status: newStatus });

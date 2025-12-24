@@ -73,9 +73,9 @@ export class IntegrationEventPublisher {
    */
   static async publish(
     eventType: SystemEventType,
-    payload: Record<string, any>
+    payload: { caseData: Case } | { matter: unknown } | { leadId: string; stage: string; clientName: string; value: string } | { entry: DocketEntry; caseId: string } | { task: unknown } | { document: LegalDocument } | { entry: TimeEntry } | { invoice: unknown } | { connectionId: string; provider: string; name: string } | { citation: unknown; queryContext: string } | Record<string, unknown>
   ): Promise<void> {
-    await IntegrationOrchestrator.publish(eventType, payload);
+    await IntegrationOrchestrator.publish(eventType, payload as any);
   }
 }
 
@@ -94,13 +94,17 @@ export class IntegrationEventPublisher {
  * ) {}
  * ```
  */
-export function createIntegratedRepository<TBase extends new (...args: unknown[]) => any>(
+export function createIntegratedRepository<TBase extends new (...args: any[]) => any>(
   Repository: TBase,
   publishAdd?: (item: unknown) => Promise<void>,
   publishUpdate?: (id: string, item: unknown) => Promise<void>,
   publishDelete?: (id: string) => Promise<void>
 ) {
-  return class extends Repository {
+  return class IntegratedRepository extends Repository {
+    constructor(...args: any[]) {
+      super(...args);
+    }
+
     async add(item: unknown): Promise<unknown> {
       const result = await super.add(item);
       if (publishAdd) {

@@ -173,70 +173,77 @@ const custodyActions = Object.values(CustodyActionType);
  */
 const validateEvidenceItem = (data: unknown): ValidationResult<Partial<EvidenceItem>> => {
   const errors: Array<{ path: string; message: string }> = [];
-  
-  if (!data.id || typeof data.id !== 'string') {
+
+  // Type guard - ensure data is an object
+  if (!data || typeof data !== 'object') {
+    return { success: false, error: { errors: [{ path: 'root', message: 'Data must be an object' }] } };
+  }
+
+  const record = data as Record<string, unknown>;
+
+  if (!record.id || typeof record.id !== 'string') {
     errors.push({ path: 'id', message: 'Evidence ID is required' });
   }
-  
-  if (!data.trackingUuid || !isValidUUID(data.trackingUuid)) {
+
+  if (!record.trackingUuid || typeof record.trackingUuid !== 'string' || !isValidUUID(record.trackingUuid)) {
     errors.push({ path: 'trackingUuid', message: 'Invalid UUID format' });
   }
-  
-  if (!data.caseId || typeof data.caseId !== 'string') {
+
+  if (!record.caseId || typeof record.caseId !== 'string') {
     errors.push({ path: 'caseId', message: 'Case ID is required' });
   }
-  
-  const title = data.title ? sanitizeString(data.title) : '';
+
+  const title = record.title && typeof record.title === 'string' ? sanitizeString(record.title) : '';
   if (!title) {
     errors.push({ path: 'title', message: 'Title is required' });
   } else if (title.length > 500) {
     errors.push({ path: 'title', message: 'Title too long' });
   }
-  
-  if (!evidenceTypes.includes(data.type)) {
+
+  if (!evidenceTypes.includes(record.type as any)) {
     errors.push({ path: 'type', message: 'Invalid evidence type' });
   }
-  
-  const description = data.description ? sanitizeString(data.description) : '';
+
+  const description = record.description && typeof record.description === 'string' ? sanitizeString(record.description) : '';
   if (description.length > 5000) {
     errors.push({ path: 'description', message: 'Description too long' });
   }
-  
-  if (!data.collectionDate || !isValidDate(data.collectionDate)) {
+
+  if (!record.collectionDate || typeof record.collectionDate !== 'string' || !isValidDate(record.collectionDate)) {
     errors.push({ path: 'collectionDate', message: 'Invalid date format (YYYY-MM-DD)' });
   }
-  
-  const collectedBy = data.collectedBy ? sanitizeString(data.collectedBy) : '';
+
+  const collectedBy = record.collectedBy && typeof record.collectedBy === 'string' ? sanitizeString(record.collectedBy) : '';
   if (!collectedBy) {
     errors.push({ path: 'collectedBy', message: 'Collector name is required' });
   } else if (collectedBy.length > 200) {
     errors.push({ path: 'collectedBy', message: 'Collector name too long' });
   }
-  
-  const custodian = data.custodian ? sanitizeString(data.custodian) : '';
+
+  const custodian = record.custodian && typeof record.custodian === 'string' ? sanitizeString(record.custodian) : '';
   if (!custodian) {
     errors.push({ path: 'custodian', message: 'Custodian is required' });
   } else if (custodian.length > 200) {
     errors.push({ path: 'custodian', message: 'Custodian name too long' });
   }
-  
-  const location = data.location ? sanitizeString(data.location) : '';
+
+  const location = record.location && typeof record.location === 'string' ? sanitizeString(record.location) : '';
   if (location.length > 500) {
     errors.push({ path: 'location', message: 'Location too long' });
   }
-  
-  if (!admissibilityStatuses.includes(data.admissibility)) {
+
+  if (!admissibilityStatuses.includes(record.admissibility as any)) {
     errors.push({ path: 'admissibility', message: 'Invalid admissibility status' });
   }
-  
-  if (data.tags && (!Array.isArray(data.tags) || data.tags.length > 20)) {
+
+  if (record.tags && (!Array.isArray(record.tags) || record.tags.length > 20)) {
     errors.push({ path: 'tags', message: 'Too many tags (max 20)' });
   }
-  
-  if (data.blockchainHash && !isValidHash(data.blockchainHash)) {
+
+  if (record.blockchainHash && typeof record.blockchainHash === 'string' && !isValidHash(record.blockchainHash)) {
     errors.push({ path: 'blockchainHash', message: 'Invalid hash format' });
   }
-  
+
   if (errors.length > 0) {
     return { success: false, error: { errors } };
   }
@@ -244,7 +251,7 @@ const validateEvidenceItem = (data: unknown): ValidationResult<Partial<EvidenceI
   return {
     success: true,
     data: {
-      ...(data && typeof data === 'object' ? data : {}),
+      ...data,
       title,
       description,
       collectedBy,
@@ -260,32 +267,39 @@ const validateEvidenceItem = (data: unknown): ValidationResult<Partial<EvidenceI
  */
 const validateCustodyEvent = (data: unknown): ValidationResult<ChainOfCustodyEvent> => {
   const errors: Array<{ path: string; message: string }> = [];
-  
-  if (!data.id || typeof data.id !== 'string') {
+
+  // Type guard - ensure data is an object
+  if (!data || typeof data !== 'object') {
+    return { success: false, error: { errors: [{ path: 'root', message: 'Data must be an object' }] } };
+  }
+
+  const record = data as Record<string, unknown>;
+
+  if (!record.id || typeof record.id !== 'string') {
     errors.push({ path: 'id', message: 'Event ID is required' });
   }
-  
+
   const dateRegex = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d{3})?Z)?$/;
-  if (!data.date || !dateRegex.test(data.date)) {
+  if (!record.date || typeof record.date !== 'string' || !dateRegex.test(record.date)) {
     errors.push({ path: 'date', message: 'Invalid date format' });
   }
-  
-  if (!custodyActions.includes(data.action)) {
+
+  if (!custodyActions.includes(record.action as any)) {
     errors.push({ path: 'action', message: 'Invalid custody action' });
   }
-  
-  const actor = data.actor ? sanitizeString(data.actor) : '';
+
+  const actor = record.actor && typeof record.actor === 'string' ? sanitizeString(record.actor) : '';
   if (!actor) {
     errors.push({ path: 'actor', message: 'Actor name is required' });
   } else if (actor.length > 200) {
     errors.push({ path: 'actor', message: 'Actor name too long' });
   }
-  
-  const notes = data.notes ? sanitizeString(data.notes) : undefined;
+
+  const notes = record.notes && typeof record.notes === 'string' ? sanitizeString(record.notes) : undefined;
   if (notes && notes.length > 2000) {
     errors.push({ path: 'notes', message: 'Notes too long' });
   }
-  
+
   if (errors.length > 0) {
     return { success: false, error: { errors } };
   }
@@ -293,10 +307,10 @@ const validateCustodyEvent = (data: unknown): ValidationResult<ChainOfCustodyEve
   return {
     success: true,
     data: {
-      ...(data && typeof data === 'object' ? data : {}),
+      ...data,
       actor,
       notes
-    }
+    } as ChainOfCustodyEvent
   };
 };
 

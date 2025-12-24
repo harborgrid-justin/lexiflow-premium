@@ -144,15 +144,16 @@ export function useBackendHealth() {
       return initialStatus;
     } catch (error) {
       console.error('[useBackendHealth] Error initializing status:', error);
-      // Fallback to default offline status
-      return {
+      // Fallback to default offline status - explicit BackendStatus type
+      const fallbackStatus: BackendStatus = {
         available: false,
         healthy: false,
-        lastChecked: new Date().toISOString(),
-        latency: null,
-        version: null,
+        lastChecked: new Date(),
+        latency: undefined,
+        version: undefined,
         error: 'Failed to initialize backend health monitoring'
       };
+      return fallbackStatus;
     }
   });
 

@@ -38,7 +38,6 @@ export const MATTER_TYPE_TO_CASE_TYPE: Record<MatterType, BackendCaseType> = {
   [MatterType.INTELLECTUAL_PROPERTY]: BackendCaseType.INTELLECTUAL_PROPERTY,
   [MatterType.REAL_ESTATE]: BackendCaseType.REAL_ESTATE,
   [MatterType.ADVISORY]: BackendCaseType.CIVIL,
-  [MatterType.COMPLIANCE]: BackendCaseType.CORPORATE,
   [MatterType.EMPLOYMENT]: BackendCaseType.LABOR,
   [MatterType.CORPORATE]: BackendCaseType.CORPORATE,
   [MatterType.OTHER]: BackendCaseType.CIVIL,
@@ -76,7 +75,7 @@ export function matterTypeToCaseType(matterType: MatterType): BackendCaseType {
 export function caseTypeToMatterType(caseType: BackendCaseType | string): MatterType {
   // Handle string values from backend
   const mappedType = CASE_TYPE_TO_MATTER_TYPE[caseType as BackendCaseType];
-  return mappedType || 'General'; // Default to 'General' if no mapping found
+  return mappedType || MatterType.OTHER; // Default to OTHER if no mapping found
 }
 
 /**
@@ -90,7 +89,17 @@ export function isBackendCaseType(value: unknown): value is BackendCaseType {
  * Type guard to check if a value is a valid MatterType
  */
 export function isMatterType(value: unknown): value is MatterType {
-  const validTypes: MatterType[] = ['Litigation', 'M&A', 'IP', 'Real Estate', 'General', 'Appeal'];
+  const validTypes: MatterType[] = [
+    MatterType.LITIGATION,
+    MatterType.TRANSACTIONAL,
+    MatterType.ADVISORY,
+    MatterType.COMPLIANCE,
+    MatterType.INTELLECTUAL_PROPERTY,
+    MatterType.EMPLOYMENT,
+    MatterType.REAL_ESTATE,
+    MatterType.CORPORATE,
+    MatterType.OTHER
+  ];
   return typeof value === 'string' && validTypes.includes(value as MatterType);
 }
 

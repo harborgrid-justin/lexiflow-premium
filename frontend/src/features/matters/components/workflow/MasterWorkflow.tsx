@@ -3,7 +3,7 @@ import React, { useState, useMemo, useCallback, useEffect, useTransition } from 
 import { Plus, RefreshCw, Play, Loader2, AlertTriangle } from 'lucide-react';
 import { PageHeader } from '../../common/PageHeader';
 import { Button } from '../../common/Button';
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 import { ErrorBoundary } from '../../common/ErrorBoundary';
 import { EmptyState } from '../../common/EmptyState';
 
@@ -31,13 +31,13 @@ interface FirmProcess {
 }
 
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { getTodayString } from '../../../utils/dateUtils';
+import { cn } from '@/utils/cn';
+import { getTodayString } from '@/utils/dateUtils';
 import { WORKFLOW_TABS } from './WorkflowTabs';
 import { Case } from '../../../types';
-import { useQuery, useMutation } from '../../../hooks/useQueryHooks';
-import { useNotify } from '../../../hooks/useNotify';
-import { WorkflowRepository } from '../../../services/data/repositories/WorkflowRepository';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
+import { WorkflowRepository } from '@/services/data/repositories/WorkflowRepository';
 // ✅ Migrated to backend API (2025-12-21)
 import { WorkflowView } from './types';
 

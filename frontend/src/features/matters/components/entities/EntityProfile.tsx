@@ -17,8 +17,8 @@ import { X, MapPin, Mail, ShieldAlert, Link, Briefcase, GitBranch } from 'lucide
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
@@ -30,7 +30,7 @@ import { Tabs } from '../../common/Tabs';
 import { EmptyState } from '../../common/EmptyState';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { LegalEntity, EntityRelationship } from '../../../types';

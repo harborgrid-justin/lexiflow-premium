@@ -3,12 +3,12 @@ import { PageHeader } from '../../common/PageHeader';
 import { Button } from '../../common/Button';
 import { Plus, FileText, LayoutTemplate, Clock } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { useModalState } from '../../../hooks';
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 import { PleadingDocument, PleadingTemplate, PleadingSection } from '../../../types/pleading-types';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 import { VirtualGrid } from '../../common/VirtualGrid';
 import { Modal } from '../../common/Modal';

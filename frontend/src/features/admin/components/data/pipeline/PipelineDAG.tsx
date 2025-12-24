@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { Database, Server, FileText, ArrowRight, Layers, Box, CheckCircle, Play, Settings } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 
 export const PipelineDAG: React.FC = () => {
     const { theme, mode } = useTheme();

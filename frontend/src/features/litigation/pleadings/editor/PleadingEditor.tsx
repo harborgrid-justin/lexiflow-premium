@@ -4,15 +4,15 @@ import { ArrowLeft, Save, LayoutTemplate, Link, BookOpen, MessageSquare, UploadC
 import jsPDF from 'jspdf';
 import { Button } from '../../../common/Button';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { PleadingDocument, PleadingSection, PleadingComment, PleadingVariable } from '../../../../types/pleading-types';
 import { DocumentCanvas } from './DocumentCanvas';
 import { PropertyPanel } from './PropertyPanel';
-import { DataService } from '../../../../services/data/dataService';
-import { useNotify } from '../../../../hooks/useNotify';
-import { useMutation, queryClient } from '../../../../hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { useNotify } from '@/hooks/useNotify';
+import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Module Imports
 import { TemplateArchitect } from '../../modules/TemplateArchitect';

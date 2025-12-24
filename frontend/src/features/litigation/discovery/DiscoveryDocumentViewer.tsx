@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Printer, Download, FileText, ZoomIn, ZoomOut, Tag } from 'lucide-react';
 import { Button } from '../../common/Button';
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 import { CodingPanel } from './viewer/CodingPanel';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { DiscoveryDocumentViewerProps, ViewerDocumentState } from './types';
 
 export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = ({ docId, onBack }) => {

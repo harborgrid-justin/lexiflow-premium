@@ -23,7 +23,7 @@ import { useTheme } from '../../../../context/ThemeContext';
 import { FileIcon } from '../../../common/Primitives';
 
 // Utils & Constants
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

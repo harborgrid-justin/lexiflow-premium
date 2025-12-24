@@ -4,10 +4,10 @@ import { CheckCircle, XCircle, Clock, User, Shield } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { Card } from '../../common/Card';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 import { ApprovalRequest } from './types';
 
 interface ApprovalWorkflowProps {

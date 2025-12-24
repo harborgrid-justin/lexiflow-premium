@@ -6,7 +6,7 @@ import { Badge } from '../../../common/Badge';
 import { Star, TrendingUp, DollarSign, Scale } from 'lucide-react';
 import { LegalEntity } from '../../../../types';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface PerformanceScorecardsProps {
   entities: LegalEntity[];

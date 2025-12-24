@@ -2,8 +2,8 @@
 import React from 'react';
 import { Clock, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useSLAMonitoring, SLAItem } from '../../../hooks/useSLAMonitoring';
+import { cn } from '@/utils/cn';
+import { useSLAMonitoring, SLAItem } from '@/hooks/useSLAMonitoring';
 import type { ThemeTokens } from '../../../theme/tokens';
 
 // ============================================================================

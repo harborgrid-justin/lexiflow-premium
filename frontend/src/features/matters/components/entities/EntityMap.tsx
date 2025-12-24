@@ -22,7 +22,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { JurisdictionGeoMap } from '../../knowledge/jurisdiction/JurisdictionGeoMap';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { LegalEntity } from '../../../types';

@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { directionClasses, spacingClasses, alignClasses, justifyClasses } from './Stack.styles';
 
 interface StackProps extends React.HTMLAttributes<HTMLDivElement> {

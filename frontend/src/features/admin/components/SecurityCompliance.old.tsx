@@ -25,7 +25,7 @@ import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 import { Input } from '../common/Inputs';
 import { BloomFilter } from '../../utils/bloomFilter';
-import { useNotify } from '../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 
 // ========================================
 // TYPES

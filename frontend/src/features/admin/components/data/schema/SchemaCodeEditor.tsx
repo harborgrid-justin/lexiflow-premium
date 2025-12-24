@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { encodeHtmlEntities } from '../../../../utils/sanitize';
+import { cn } from '@/utils/cn';
+import { encodeHtmlEntities } from '@/utils/sanitize';
 import { CopyButton } from '../../../common/CopyButton';
 
 interface SchemaCodeEditorProps {

@@ -11,9 +11,9 @@
 **Fix Required**:
 ```tsx
 // Add at top of component
-import { useQuery, useMutation, queryClient } from '../../services/queryClient';
-import { DataService } from '../../services/dataService';
-import { STORES } from '../../services/db';
+import { useQuery, useMutation, queryClient } from '@/services/queryClient';
+import { DataService } from '@/services/dataService';
+import { STORES } from '@/services/db';
 
 // Replace useState with useQuery
 const { data: citations = [], isLoading: citationsLoading } = useQuery(

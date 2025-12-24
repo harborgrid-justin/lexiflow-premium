@@ -15,19 +15,19 @@ import { Button } from '../../common/Button';
 
 // Context & Utils
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Services & Types
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 import { EvidenceItem } from '../../../types';
-import { evidenceQueryKeys } from '../../../services/infrastructure/queryKeys';
-import { queryClient } from '../../../hooks/useQueryHooks';
+import { evidenceQueryKeys } from '@/services/infrastructure/queryKeys';
+import { queryClient } from '@/hooks/useQueryHooks';
 
 // Lazy-loaded ChainService for blockchain operations (reduces bundle size ~80KB)
 let ChainServiceModule: unknown = null;
 const loadChainService = async () => {
   if (!ChainServiceModule) {
-    ChainServiceModule = await import('../../../services/infrastructure/chainService');
+    ChainServiceModule = await import('@/services/infrastructure/chainService');
   }
   return ChainServiceModule.ChainService;
 };

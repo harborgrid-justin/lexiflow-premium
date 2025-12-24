@@ -4,12 +4,12 @@ import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
 import { CheckSquare, Plus, AlertTriangle } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/data/dataService';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services/data/dataService';
 import { DiscoveryRequest } from '../../../types';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 
 export const RequestForAdmission: React.FC = () => {
   const { theme } = useTheme();

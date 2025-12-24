@@ -1,7 +1,7 @@
 import React from 'react';
 import { Settings } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { CitationFormat } from '../../../../types/bluebook';
 import type { FormatOptions } from './types';
 

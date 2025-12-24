@@ -23,17 +23,17 @@ import { Card } from '../../common/Card';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useQuery, queryClient } from '../../../hooks/useQueryHooks';
-import { useKeyboardShortcuts } from '../../../hooks/useKeyboardShortcuts';
+import { useQuery, queryClient } from '@/hooks/useQueryHooks';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Services & Utils
-import { cn } from '../../../utils/cn';
-import { discoveryQueryKeys } from '../../../services/infrastructure/queryKeys';
-import { validateProductionConfigSafe } from '../../../services/validation/discoverySchemas';
+import { cn } from '@/utils/cn';
+import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
+import { validateProductionConfigSafe } from '@/services/validation/discoverySchemas';
 
 // Lazy load DocumentService for bundle optimization
 const loadDocumentService = async () => {
-  const { DocumentService } = await import('../../../services/features/documents/documentService');
+  const { DocumentService } = await import('@/services/features/documents/documentService');
   return DocumentService;
 };
 

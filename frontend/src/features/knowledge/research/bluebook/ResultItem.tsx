@@ -2,7 +2,7 @@ import React from 'react';
 import { Copy, Eye, EyeOff, Trash2, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { Badge } from '../../../common/Badge';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { ValidationSeverity } from '../../../../types/bluebook';
 import type { FormattingResult } from './types';
 

@@ -30,7 +30,7 @@ import { DocumentPreviewPanel } from '../../operations/documents/viewer/Document
 import { StatusBadge, EmptyListState } from '../../common/RefactoredCommon';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { TrialExhibit, DocumentId } from '../../../types';

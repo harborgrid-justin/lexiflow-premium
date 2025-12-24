@@ -2,11 +2,11 @@
 import React from 'react';
 import { SearchToolbar } from '../../common/SearchToolbar';
 import { FileAttachment } from '../../common/FileAttachment';
-import { Attachment } from '../../../hooks/useSecureMessenger';
+import { Attachment } from '@/hooks/useSecureMessenger';
 import { EmptyState } from '../../common/EmptyState';
 import { FolderOpen } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface MessengerFilesProps {
   files: Attachment[];

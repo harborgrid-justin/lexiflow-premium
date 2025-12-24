@@ -38,9 +38,9 @@ import {
   Trash2,
   Archive
 } from 'lucide-react';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 import { Case, CaseStatus, MatterType } from '../../../types';
 
 type ViewMode = 'grid' | 'list';

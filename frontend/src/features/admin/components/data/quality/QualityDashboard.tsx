@@ -2,16 +2,16 @@
 import React from 'react';
 import { Card } from '../../../common/Card';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { VirtualList } from '../../../common/VirtualList';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { DataAnomaly, QualityMetricHistory } from '../../../../types';
 import { CheckCircle2, AlertOctagon, RefreshCw, Check } from 'lucide-react';
 import { Button } from '../../../common/Button';
-import { useMutation, queryClient } from '../../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../../utils/queryKeys';
-import { DataService } from '../../../../services/data/dataService';
-import { useNotify } from '../../../../hooks/useNotify';
+import { useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useNotify } from '@/hooks/useNotify';
 
 interface QualityDashboardProps {
     anomalies: DataAnomaly[];

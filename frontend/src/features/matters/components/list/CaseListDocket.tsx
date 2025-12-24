@@ -26,13 +26,13 @@ import { LazyLoader } from '../../common/LazyLoader';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
-import { DataService } from '../../../services/data/dataService';
-import { cn } from '../../../utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 
 // ============================================================================
 // TYPES & INTERFACES

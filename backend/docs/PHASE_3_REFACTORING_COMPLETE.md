@@ -47,7 +47,7 @@ Successfully refactored 20+ components in the LexiFlow legal management system t
 ### ConfirmDialog API Pattern
 ```typescript
 import { ConfirmDialog } from '../common/ConfirmDialog';
-import { useModalState } from '../../hooks/useModalState';
+import { useModalState } from '@/hooks/useModalState';
 
 const deleteModal = useModalState();
 const [deleteItemId, setDeleteItemId] = useState<string | null>(null);
@@ -89,7 +89,7 @@ const confirmDelete = () => {
 
 ### Hook Usage Pattern
 ```typescript
-import { useClickOutside } from '../../hooks/useClickOutside';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 const ref = useRef<HTMLDivElement>(null);
 
@@ -127,7 +127,7 @@ useClickOutside(ref, () => {
 
 ### Hook Usage Pattern
 ```typescript
-import { useFilterAndSearch } from '../../hooks/useFilterAndSearch';
+import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 const { filteredItems, searchQuery, setSearchQuery, category, setCategory } = useFilterAndSearch({
   items: allItems,

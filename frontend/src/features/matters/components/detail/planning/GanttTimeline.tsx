@@ -17,11 +17,11 @@ import { Badge } from '../../../common/Badge';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../../context/ThemeContext';
 import { useWindow } from '../../../../context/WindowContext';
-import { useGanttDrag } from '../../../../hooks/useGanttDrag';
+import { useGanttDrag } from '@/hooks/useGanttDrag';
 
 // Internal Dependencies - Services & Utils
-import { GanttHelpers } from '../../../../utils/ganttHelpers';
-import { cn } from '../../../../utils/cn';
+import { GanttHelpers } from '@/utils/ganttHelpers';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { WorkflowTask, CasePhase, TaskStatusBackend } from '../../../../types';

@@ -21,7 +21,7 @@ import { VirtualList } from '../../common/VirtualList';
 import { useTheme } from '../../../context/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { TimelineEvent } from '../../../types';

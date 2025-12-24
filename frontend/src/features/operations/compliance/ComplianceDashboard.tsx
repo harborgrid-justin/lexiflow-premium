@@ -17,7 +17,7 @@ import { Download } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useSessionStorage } from '../../../hooks/useSessionStorage';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
 import { Button } from '../../common/Button';
@@ -26,7 +26,7 @@ import { LazyLoader } from '../../common/LazyLoader';
 import { ComplianceDashboardContent } from './ComplianceDashboardContent';
 
 // Utils & Config
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { COMPLIANCE_TAB_CONFIG } from '../../../config/tabs.config';
 
 // ============================================================================

@@ -19,7 +19,7 @@ import { Button } from '../../../common/Button';
 import { useTheme } from '../../../../context/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface EvidenceLocationProps {
   location: string;

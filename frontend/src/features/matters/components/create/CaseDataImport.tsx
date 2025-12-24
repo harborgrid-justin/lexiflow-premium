@@ -9,10 +9,10 @@ import { FileText, FileCode, Sparkles, ArrowRight, CheckCircle, Loader2 } from '
 import { useTheme } from '../../../context/ThemeContext';
 import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
-import { cn } from '../../../utils/cn';
-import { GeminiService } from '../../../services/features/research/geminiService';
-import { XmlDocketParser } from '../../../services/features/documents/xmlDocketParser';
-import { useNotify } from '../../../hooks/useNotify';
+import { cn } from '@/utils/cn';
+import { GeminiService } from '@/services/features/research/geminiService';
+import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';
+import { useNotify } from '@/hooks/useNotify';
 import type { Case, Party, DocketEntry } from '../../../types';
 
 interface ParsedCaseData {

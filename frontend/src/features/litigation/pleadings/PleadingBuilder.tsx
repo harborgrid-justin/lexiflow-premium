@@ -17,15 +17,15 @@ import { Plus, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { DataService } from '../../../services/data/dataService';
-import { queryKeys } from '../../../utils/queryKeys';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API with queryKeys (2025-12-21)
 
 // Hooks & Context
-import { useSessionStorage } from '../../../hooks/useSessionStorage';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from '../../../context/ThemeContext';
-import { useNotify } from '../../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '../../../hooks';
 
 // Components
@@ -36,10 +36,10 @@ import { Input } from '../../common/Inputs';
 import { LazyLoader } from '../../common/LazyLoader';
 
 // Utils & Config
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { PLEADING_BUILDER_TAB_CONFIG } from '../../../config/tabs.config';
-import { IdGenerator } from '../../../utils/idGenerator';
-import { validateTemplate } from '../../../utils/validation';
+import { IdGenerator } from '@/utils/idGenerator';
+import { validateTemplate } from '@/utils/validation';
 
 // Types
 import { Case, PleadingDocument, PleadingTemplate, PleadingSection, CaseId, UserId } from '../../../types';

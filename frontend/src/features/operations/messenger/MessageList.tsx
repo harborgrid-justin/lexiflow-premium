@@ -17,14 +17,14 @@ import React, { useRef, useEffect, memo } from 'react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { Conversation } from '../../../hooks/useSecureMessenger';
+import { Conversation } from '@/hooks/useSecureMessenger';
 
 // Components
 import { FileAttachment } from '../../common/FileAttachment';
 import { ChatBubble } from '../../common/ChatBubble';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

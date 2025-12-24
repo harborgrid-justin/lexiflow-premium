@@ -11,11 +11,11 @@ import { SLAMonitor } from './SLAMonitor';
 import { AuditTrailViewer } from './AuditTrailViewer';
 import { Tabs } from '../../common/Tabs';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { useNotify } from '@/hooks/useNotify';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 import { ErrorState } from '../../common/ErrorState';
 
 interface WorkflowEngineDetailProps {

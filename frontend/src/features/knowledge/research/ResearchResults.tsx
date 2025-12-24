@@ -4,7 +4,7 @@ import { Bookmark, Share2, ThumbsUp, ThumbsDown, BookOpen } from 'lucide-react';
 import { ResearchSession } from '../../../types';
 import { Card } from '../../common/Card';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { ResearchResultCard } from './ResearchResultCard';
 
 interface ResearchResultsProps {

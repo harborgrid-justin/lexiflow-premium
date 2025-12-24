@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { DataService } from '../../../services/data/dataService';
-import { useMutation, useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
-import { queryClient } from '../../../services/infrastructure/queryClient';
+import { DataService } from '@/services/data/dataService';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { queryClient } from '@/services/infrastructure/queryClient';
 import { Matter } from '../../../types';
 import { ArrowLeft } from 'lucide-react';
 import { MatterForm } from './matter-form/MatterForm';

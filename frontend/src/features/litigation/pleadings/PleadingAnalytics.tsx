@@ -19,16 +19,16 @@ import { TrendingUp, Clock, FileText, CheckCircle } from 'lucide-react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 // Components
 import { Card } from '../../common/Card';
 import { MetricCard } from '../../common/Primitives';
 
 // Services & Utils
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { PleadingDocument } from '../../../types';

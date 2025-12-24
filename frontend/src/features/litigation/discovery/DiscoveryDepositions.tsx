@@ -33,7 +33,7 @@ import { useWindow } from '@/providers';
 import { DataService } from '@/services';
 import { cn } from '@/utils';
 import { STORES } from '@/services';
-import { queryKeys } from '../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 
 // ============================================================================
 // TYPES & INTERFACES

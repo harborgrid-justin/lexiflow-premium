@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { LegalDocument } from '../../../../types';
-import { DataService } from '../../../../services/data/dataService';
-import { useQuery } from '../../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../../utils/queryKeys';
-import { DocumentService } from '../../../../services/features/documents/documentService';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { DocumentService } from '@/services/features/documents/documentService';
 import { PDFViewer } from '../../../common/PDFViewer';
 import { AcrobatToolbar, PDFTool } from '../../preview/AcrobatToolbar';
 import { InteractiveOverlay } from '../../preview/InteractiveOverlay';
@@ -13,9 +13,9 @@ import { SignaturePad } from '../../../common/SignaturePad';
 import { Button } from '../../../common/Button';
 import { FileText, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { useBlobRegistry } from '../../../../hooks/useBlobRegistry';
-import { useSingleSelection } from '../../../../hooks/useMultiSelection';
+import { cn } from '@/utils/cn';
+import { useBlobRegistry } from '@/hooks/useBlobRegistry';
+import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { ErrorState } from '../../../common/ErrorState';
 
 export const PDFEditorView: React.FC = () => {

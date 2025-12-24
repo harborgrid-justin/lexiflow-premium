@@ -34,11 +34,11 @@ import { CaseListArchived } from './CaseListArchived';
 // DEPRECATED: CreateCaseModal removed - use full-page CreateCase component via navigation
 
 // Hooks
-import { useCaseList } from '../../../hooks/useCaseList';
-import { useSessionStorage } from '../../../hooks/useSessionStorage';
+import { useCaseList } from '@/hooks/useCaseList';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Utils & Config
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { CASE_LIST_TAB_CONFIG } from '../../../config/tabs.config';
 
 // ============================================================================

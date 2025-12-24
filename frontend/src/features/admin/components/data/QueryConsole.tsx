@@ -2,17 +2,17 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Play, Download, AlignLeft, Bot } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Tabs } from '../../common/Tabs';
 import { Modal } from '../../common/Modal';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { CopyButton } from '../../common/CopyButton';
 import { Button } from '../../common/Button';
 import { VirtualList } from '../../common/VirtualList';
-import { SqlHelpers } from '../../../utils/sqlHelpers';
+import { SqlHelpers } from '@/utils/sqlHelpers';
 import { QuerySidebar } from './query/QuerySidebar';
-import { dataPlatformApi } from '../../../services/api/data-platform-api';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { dataPlatformApi } from '@/services/api/data-platform-api';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 interface QueryConsoleProps {
     initialTab?: string;

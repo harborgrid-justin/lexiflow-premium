@@ -3,7 +3,7 @@ import React from 'react';
 import { X, Plus, GripVertical } from 'lucide-react';
 import { NodeType, getNodeIcon } from './types';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface BuilderPaletteProps {
   isOpen: boolean;

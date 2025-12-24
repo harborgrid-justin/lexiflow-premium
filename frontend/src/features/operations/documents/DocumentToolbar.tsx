@@ -2,7 +2,7 @@
 import React from 'react';
 import { Search, Split, Wand2, MoreHorizontal, List, Grid, Filter, Layout } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { useWindow } from '../../../context/WindowContext';
 import { DiffViewer } from '../../common/DiffViewer';
 

@@ -5,18 +5,18 @@ import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
 import { Landmark, ArrowUpRight, ArrowDownLeft, Plus, FileText } from 'lucide-react';
 import { FirmExpense } from '../../../types';
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { cn } from '@/utils/cn';
+import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 import { useWindow } from '../../../context/WindowContext';
-import { Formatters } from '../../../utils/formatters';
-import { getTodayString } from '../../../utils/dateUtils';
+import { Formatters } from '@/utils/formatters';
+import { getTodayString } from '@/utils/dateUtils';
 import { OperatingLedger } from '../../knowledge/practice/finance/OperatingLedger';
 import { TrustLedger } from '../../knowledge/practice/finance/TrustLedger';
-import { useNotify } from '../../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 
 export const BillingLedger: React.FC = () => {
   const { theme, mode } = useTheme();

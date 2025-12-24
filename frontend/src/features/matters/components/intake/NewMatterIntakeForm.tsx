@@ -21,10 +21,10 @@ import {
   User, Briefcase, DollarSign, Users, FileText, Shield, CheckCircle,
   AlertTriangle, ArrowRight, ArrowLeft, Save, Send
 } from 'lucide-react';
-import { useQuery } from '../../../../hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '../../../../api';
 import { useTheme } from '../../../../providers/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Button } from '../../../../components/atoms/Button';
 import { Card } from '../../../../components/molecules/Card';
 import { Badge } from '../../../../components/atoms/Badge';

@@ -18,7 +18,7 @@ import { FilePlus, Scale } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Utils
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface CaseTypeToggleProps {
   isPreFiling: boolean;

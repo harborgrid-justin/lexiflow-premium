@@ -6,9 +6,9 @@ import { Stepper } from '../../common/Stepper';
 import { Input, TextArea } from '../../common/Inputs';
 import { Users, FileText, Calculator, ShieldCheck } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useNotify } from '../../../hooks/useNotify';
-import { useWizard } from '../../../hooks/useWizard';
+import { cn } from '@/utils/cn';
+import { useNotify } from '@/hooks/useNotify';
+import { useWizard } from '@/hooks/useWizard';
 import { InitialDisclosureWizardProps } from './types';
 
 export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = ({ onComplete }) => {

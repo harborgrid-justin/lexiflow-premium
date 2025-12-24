@@ -19,16 +19,16 @@ import { Filter, Layout, Plus, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useToggle } from '../../../hooks/useToggle';
-import { useSingleSelection } from '../../../hooks/useMultiSelection';
-import { useFilterAndSearch } from '../../../hooks/useFilterAndSearch';
+import { useToggle } from '@/hooks/useToggle';
+import { useSingleSelection } from '@/hooks/useMultiSelection';
+import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
 import { Button } from '../../common/Button';
@@ -41,7 +41,7 @@ import { Modal } from '../../common/Modal';
 import { ErrorState } from '../../common/ErrorState';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

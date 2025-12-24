@@ -13,7 +13,7 @@ import { Card } from '../../../common/Card';
 
 // Context & Utils
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 export const EvidenceFRCPStatus: React.FC = () => {
   const { theme } = useTheme();

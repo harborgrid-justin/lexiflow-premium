@@ -5,9 +5,9 @@ import { Modal } from '../../common/Modal';
 import { Button } from '../../common/Button';
 import { Input } from '../../common/Inputs';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/data/dataService';
-import { useDebounce } from '../../../hooks/useDebounce';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { useDebounce } from '@/hooks/useDebounce';
 import { SEARCH_DEBOUNCE_MS } from '../../../config/master.config';
 
 interface ClientIntakeModalProps {

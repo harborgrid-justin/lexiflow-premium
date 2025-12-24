@@ -5,7 +5,7 @@ import { LegalDocument } from '../../../../types';
 import { Badge } from '../../../common/Badge';
 import { FileIcon, TagList } from '../../../common/Primitives';
 import { TableRow, TableCell } from '../../../common/Table';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface DocumentRowProps {
   doc: LegalDocument;

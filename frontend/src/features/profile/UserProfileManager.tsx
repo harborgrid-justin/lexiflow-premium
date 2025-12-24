@@ -29,11 +29,11 @@ import { PreferencePane } from './PreferencePane';
 import { LazyLoader } from '../common/LazyLoader';
 
 // Services & Data
-import { DataService } from '../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
-import { useQuery } from '../../hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

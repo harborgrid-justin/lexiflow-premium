@@ -17,9 +17,9 @@ import { Search, Globe, CheckCircle, Layers } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
@@ -30,7 +30,7 @@ import { VirtualGrid } from '../../common/VirtualGrid';
 import { PlaybookDetail } from './PlaybookDetail';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Playbook } from '../../../data/mockLitigationPlaybooks';
 import { filterPlaybooks, extractCategories, getDifficultyColor, getDifficultyBorderColor } from './utils';
 

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Calendar, Plus, DollarSign, Loader2 } from 'lucide-react';
-import { useModalState } from '../../../hooks/useModalState';
+import { useModalState } from '@/hooks/useModalState';
 import { KanbanBoard, KanbanColumn, KanbanCard } from '../../common/Kanban';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { useNotify } from '../../../hooks/useNotify';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
 
 interface CRMPipelineProps {
   leads: unknown[];

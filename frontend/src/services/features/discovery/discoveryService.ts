@@ -123,7 +123,7 @@
 
 // Backend API Integration
 import { api } from '../../api';
-import { delay } from '../../../utils/async';
+import { delay } from '@/utils/async';
 
 // Type Definitions
 import { 

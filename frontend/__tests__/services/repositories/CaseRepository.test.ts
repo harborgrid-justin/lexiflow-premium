@@ -32,7 +32,7 @@ jest.mock('@services/core/microORM', () => ({
   })),
 }));
 
-jest.mock('../../../utils/errorHandler', () => ({
+jest.mock('@/utils/errorHandler', () => ({
   errorHandler: {
     logError: jest.fn(),
   },

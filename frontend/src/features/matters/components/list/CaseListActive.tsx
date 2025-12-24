@@ -29,17 +29,17 @@ import { ActiveCaseTable } from './ActiveCaseTable';
 import { ConfirmDialog } from '../../common/ConfirmDialog';
 
 // Hooks & Context
-import { useSort } from '../../../hooks/useSort';
+import { useSort } from '@/hooks/useSort';
 import { useTheme } from '../../../context/ThemeContext';
-import { useNotify } from '../../../hooks/useNotify';
-import { useToggle } from '../../../hooks/useToggle';
-import { UseCaseListReturn } from '../../../hooks/useCaseList';
-import { useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { useModalState } from '../../../hooks/useModalState';
+import { useNotify } from '@/hooks/useNotify';
+import { useToggle } from '@/hooks/useToggle';
+import { UseCaseListReturn } from '@/hooks/useCaseList';
+import { useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useModalState } from '@/hooks/useModalState';
 
 // Services & Utils
-import { DataService } from '../../../services/data/dataService';
-import { cn } from '../../../utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================

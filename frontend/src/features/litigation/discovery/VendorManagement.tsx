@@ -44,11 +44,11 @@ import { useTheme } from '../../../context/ThemeContext';
 import { useModalState } from '../../../hooks';
 
 // Services & Utils
-import { DataService } from '../../../services/data/dataService';
-import { cn } from '../../../utils/cn';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 
 // ============================================================================
 // TYPES & INTERFACES

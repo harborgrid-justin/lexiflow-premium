@@ -2,7 +2,7 @@ import React from 'react';
 import { TrendingUp, Activity } from 'lucide-react';
 import { Card } from '../../common/Card';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import type { SecurityMetric } from './types';
 
 interface SecurityMetricsProps {

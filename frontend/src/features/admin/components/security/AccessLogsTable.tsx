@@ -4,7 +4,7 @@ import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import type { AccessLogEntry } from './types';
 
 interface AccessLogsTableProps {

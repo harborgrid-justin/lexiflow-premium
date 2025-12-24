@@ -1,14 +1,14 @@
 
 import React, { useState, useMemo } from 'react';
 import { Clause } from '../../../types';
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 import { Button } from '../../common/Button';
 import { SearchToolbar } from '../../common/SearchToolbar';
 import { Book, Copy, History, Loader2, BookOpen, Check } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { filterClauses } from './clauseList.utils';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { VirtualList } from '../../common/VirtualList';
 import { EmptyState } from '../../common/EmptyState';

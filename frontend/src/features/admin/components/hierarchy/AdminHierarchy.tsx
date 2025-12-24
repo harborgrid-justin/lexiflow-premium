@@ -5,10 +5,10 @@ import { Button } from '../../common/Button';
 import { HierarchyColumn } from './HierarchyColumn';
 import { OrgListItem, GroupListItem, UserListItem } from './HierarchyRows';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { DataService } from '../../../services/data/dataService';
-import { queryKeys } from '../../../utils/queryKeys';
+import { cn } from '@/utils/cn';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { queryKeys } from '@/utils/queryKeys';
 
 export const AdminHierarchy: React.FC = () => {
   const { theme } = useTheme();

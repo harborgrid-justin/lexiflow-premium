@@ -26,7 +26,7 @@ import { Badge } from '../../../common/Badge';
 import { Button } from '../../../common/Button';
 
 // Utils & Constants
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

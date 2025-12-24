@@ -17,7 +17,7 @@
 
 import React, { lazy, Suspense } from 'react';
 import { DiscoveryRequest } from '../../../types';
-import { DiscoveryView } from '../../../hooks/useDiscoveryPlatform';
+import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
 import { LazyLoader } from '../../common/LazyLoader';
 
 // Lazy load components ensuring named exports are handled correctly

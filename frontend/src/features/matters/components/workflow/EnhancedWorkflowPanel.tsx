@@ -8,7 +8,7 @@ import { TimeTrackingPanel } from './TimeTrackingPanel';
 import { ApprovalWorkflow } from './ApprovalWorkflow';
 import { Tabs } from '../../common/Tabs';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import type { ThemeTokens } from '../../../theme/tokens';
 
 // ============================================================================

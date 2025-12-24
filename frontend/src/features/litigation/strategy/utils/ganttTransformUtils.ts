@@ -9,7 +9,7 @@
 import { CasePhase, WorkflowTask, TaskId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '../../../../types';
 import { WorkflowNode, WorkflowConnection } from '../../../matters/workflow/builder/types';
 import { GANTT_ZOOM_SCALE, NODE_DURATION_MAP, CANVAS_CONSTANTS } from '../canvasConstants';
-import { DateCalculationService } from '../../../../services/features/calculations/dateCalculationService';
+import { DateCalculationService } from '@/services/features/calculations/dateCalculationService';
 
 export interface TransformedGanttData {
   phases: CasePhase[];

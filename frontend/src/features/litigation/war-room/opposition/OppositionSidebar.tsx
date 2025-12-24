@@ -20,7 +20,7 @@ import { Users, Briefcase, Gavel, Microscope, AlertTriangle } from 'lucide-react
 import { useTheme } from '../../../../context/ThemeContext';
 
 // Utils & Constants
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

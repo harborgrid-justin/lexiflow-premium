@@ -25,10 +25,10 @@ import { Button } from '../../common/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useListNavigation } from '../../../hooks/useListNavigation';
+import { useListNavigation } from '@/hooks/useListNavigation';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { DocketEntry, DocketEntryType } from '../../../types';

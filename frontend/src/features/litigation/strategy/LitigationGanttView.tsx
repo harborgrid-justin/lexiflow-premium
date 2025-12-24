@@ -20,8 +20,8 @@ import { Button } from '../../common/Button';
 import { useTheme } from '../../../context/ThemeContext';
 
 // Utils
-import { cn } from '../../../utils/cn';
-import { Pathfinding } from '../../../utils/pathfinding';
+import { cn } from '@/utils/cn';
+import { Pathfinding } from '@/utils/pathfinding';
 
 // Types
 import { CasePhase, WorkflowTask, TaskId, CaseId } from '../../../types';

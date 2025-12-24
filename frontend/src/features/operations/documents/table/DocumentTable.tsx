@@ -7,7 +7,7 @@ import { RuleSelector } from '../../../common/RuleSelector';
 import { Button } from '../../../common/Button';
 import { DocumentRow } from './DocumentRow';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { VirtualList } from '../../../common/VirtualList';
 
 interface DocumentTableProps {

@@ -22,10 +22,10 @@ import {
   DollarSign, TrendingUp, Clock, FileText, PieChart, BarChart3,
   Download, Filter, Calendar, CreditCard, Receipt, Wallet
 } from 'lucide-react';
-import { useQuery } from '../../../../hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '../../../../api';
 import { useTheme } from '../../../../providers/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Button } from '../../../../components/atoms/Button';
 import { Card } from '../../../../components/molecules/Card';
 import { Badge } from '../../../../components/atoms/Badge';

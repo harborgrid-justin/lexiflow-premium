@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery, useMutation } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
-import { queryClient } from '../../../services/infrastructure/queryClient';
+import { DataService } from '@/services/data/dataService';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { queryClient } from '@/services/infrastructure/queryClient';
 import { Matter, MatterStatus, MatterPriority } from '../../../types';
 import { ConfirmDialog } from '../../common/ConfirmDialog';
-import { useModalState } from '../../../hooks/useModalState';
+import { useModalState } from '@/hooks/useModalState';
 import { 
   ArrowLeft, 
   Edit, 

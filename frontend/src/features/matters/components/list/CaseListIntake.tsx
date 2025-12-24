@@ -26,13 +26,13 @@ import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { useNotify } from '../../../hooks/useNotify';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '../../../hooks';
 
 // Services & Utils
-import { DataService } from '../../../services/data/dataService';
-import { cn } from '../../../utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
 
 export const CaseListIntake: React.FC = () => {
   const { theme } = useTheme();

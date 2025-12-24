@@ -25,23 +25,23 @@ import { EvidenceCustodyLog } from '../evidence/EvidenceCustodyLog';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { useNotify } from '../../../hooks/useNotify';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '../../../context/WindowContext';
 
 // Config
 import { DEBUG_API_SIMULATION_DELAY_MS } from '../../../config/master.config';
 
 // Services & Utils
-import { DataService } from '../../../services/data/dataService';
-import { cn } from '../../../utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
 import { ESISource } from '../../../types';
-import { discoveryQueryKeys } from '../../../services/infrastructure/queryKeys';
+import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
 import { ESICollectionStatusEnum } from '../../../types/enums';
 
 /**

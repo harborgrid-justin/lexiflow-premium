@@ -22,8 +22,8 @@ import { Modal } from '../../../common/Modal';
 import { useTheme } from '../../../../context/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { GeminiService } from '../../../../services/features/research/geminiService';
-import { cn } from '../../../../utils/cn';
+import { GeminiService } from '@/services/features/research/geminiService';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { Risk, RiskLevel, RiskCategory, RiskStatus } from '../../../../types';

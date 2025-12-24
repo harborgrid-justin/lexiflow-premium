@@ -3,11 +3,11 @@ import React, { useMemo } from 'react';
 import { JurisdictionGeoMap } from '../jurisdiction/JurisdictionGeoMap';
 import { Card } from '../../common/Card';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { MapPin, Book, Loader2 } from 'lucide-react';
 import { groupJurisdictionsByState } from './localRulesMap.utils';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { DataService } from '../../../services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 export const LocalRulesMap: React.FC = () => {

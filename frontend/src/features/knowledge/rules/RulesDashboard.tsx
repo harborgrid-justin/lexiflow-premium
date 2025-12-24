@@ -4,10 +4,10 @@ import { Card } from '../../common/Card';
 import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 import { BookOpen, Gavel, AlertTriangle, Clock, ArrowRight, Scale, MapPin, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Button } from '../../common/Button';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { DataService } from '../../../services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 
 interface RulesDashboardProps {
     onNavigate: (view: unknown) => void;

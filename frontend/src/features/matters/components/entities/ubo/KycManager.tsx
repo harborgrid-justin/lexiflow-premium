@@ -7,7 +7,7 @@ import { Badge } from '../../../common/Badge';
 import { UploadCloud, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { LegalEntity } from '../../../../types';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface KycManagerProps {
   entities: LegalEntity[];

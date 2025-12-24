@@ -23,11 +23,11 @@ import { ProgressBar } from '../../common/ProgressBar';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
-import { DataService } from '../../../services/data/dataService';
-import { cn } from '../../../utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
 
 export const CaseListResources: React.FC = () => {
   const { theme } = useTheme();

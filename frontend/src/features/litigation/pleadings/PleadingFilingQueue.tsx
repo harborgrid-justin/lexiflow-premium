@@ -18,8 +18,8 @@ import { Send, Clock, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useNotify } from '../../../hooks/useNotify';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 
 // Components
 import { Button } from '../../common/Button';
@@ -28,9 +28,9 @@ import { EmptyState } from '../../common/EmptyState';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
 
 // Services & Utils
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { PleadingDocument } from '../../../types';

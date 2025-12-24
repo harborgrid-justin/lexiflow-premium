@@ -1,16 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
-import { MetricCard } from '../../common/Primitives';
-import { Card } from '../../common/Card';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { Card } from '@/components/molecules/Card/Card';
 import { Database, Activity, HardDrive, Server } from 'lucide-react';
 import { AreaChart, Area, ResponsiveContainer, Tooltip } from 'recharts';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useChartTheme } from '../../common/ChartHelpers';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { DataService } from '../../../services/data/dataService';
-import { TenantConfig } from '../../../types';
-import { useInterval } from '../../../hooks/useInterval';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { TenantConfig } from '@/types';
+import { useInterval } from '@/hooks/useInterval';
 
 export const PlatformOverview: React.FC = () => {
   const { theme } = useTheme();

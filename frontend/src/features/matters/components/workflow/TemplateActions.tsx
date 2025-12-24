@@ -2,7 +2,7 @@
 import React from 'react';
 import { Copy, Edit3, Trash2, MoreHorizontal } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 export const TemplateActions: React.FC = () => {
   const { theme } = useTheme();

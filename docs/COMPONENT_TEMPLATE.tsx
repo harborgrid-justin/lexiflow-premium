@@ -38,12 +38,12 @@ import {
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/dataService';
-import { queryClient } from '../../services/queryClient';
-import { IntegrationOrchestrator } from '../../services/integrationOrchestrator';
+import { DataService } from '@/services/dataService';
+import { queryClient } from '@/services/queryClient';
+import { IntegrationOrchestrator } from '@/services/integrationOrchestrator';
 
 // Hooks & Context
-import { useQuery } from '../../services/queryClient';
+import { useQuery } from '@/services/queryClient';
 import { useTheme } from '@/providers/ThemeContext';
 import { useToast } from '../../context/ToastContext';
 

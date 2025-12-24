@@ -29,9 +29,9 @@
 import { PleadingDocument, PleadingTemplate, FormattingRule, PleadingSection, Case, CaseId, UserId } from '../../../types';
 import { Repository } from '../../core/Repository';
 import { STORES, db } from '../db';
-import { IdGenerator } from '../../../utils/idGenerator';
-import { createTemplateContext, hydrateTemplateSections } from '../../../utils/templateEngine';
-import { validateTemplate } from '../../../utils/validation';
+import { IdGenerator } from '@/utils/idGenerator';
+import { createTemplateContext, hydrateTemplateSections } from '@/utils/templateEngine';
+import { validateTemplate } from '@/utils/validation';
 import { isBackendApiEnabled } from '../../integration/apiConfig';
 import { PleadingsApiService } from '../../api/pleadings-api';
 

@@ -17,7 +17,7 @@ import { Users, TrendingUp, Building2, Briefcase, Laptop, Wallet, BookOpen, Shie
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useSessionStorage } from '../../../hooks/useSessionStorage';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
 import { Button } from '../../common/Button';

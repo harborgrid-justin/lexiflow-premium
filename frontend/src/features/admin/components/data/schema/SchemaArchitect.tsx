@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Modal } from '../../../common/Modal';
 import { ConfirmDialog } from '../../../common/ConfirmDialog';
 import { AdaptiveLoader } from '../../../common/AdaptiveLoader';
-import { useModalState } from '../../../../hooks/useModalState';
+import { useModalState } from '@/hooks/useModalState';
 import { SchemaCodeEditor } from './SchemaCodeEditor';
 import { MigrationHistory } from './MigrationHistory';
 import { SchemaSnapshots } from './SchemaSnapshots';
@@ -12,8 +12,8 @@ import { SchemaVisualizer } from './SchemaVisualizer';
 import { Button } from '../../../common/Button';
 import { TableData, TableColumn } from './schemaTypes';
 import { SchemaToolbar } from './SchemaToolbar';
-import { useQuery } from '../../../../hooks/useQueryHooks';
-import { dataPlatformApi } from '../../../../services/api/data-platform-api';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { dataPlatformApi } from '@/services/api/data-platform-api';
 import { Loader2 } from 'lucide-react';
 import { Input, TextArea } from '../../../common/Inputs';
 

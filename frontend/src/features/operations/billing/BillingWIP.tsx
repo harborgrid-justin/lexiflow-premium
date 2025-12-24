@@ -17,15 +17,15 @@ import { CheckSquare, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../../services/data/dataService';
-import { useQuery, useMutation } from '../../../hooks/useQueryHooks';
-import { STORES } from '../../../services/data/db';
+import { DataService } from '@/services/data/dataService';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
+import { STORES } from '@/services/data/db';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useNotify } from '../../../hooks/useNotify';
-import { useAutoSave } from '../../../hooks/useAutoSave';
-import { useKeyboardShortcuts } from '../../../hooks/useKeyboardShortcuts';
+import { useNotify } from '@/hooks/useNotify';
+import { useAutoSave } from '@/hooks/useAutoSave';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useCallback } from 'react';
 
 // Components
@@ -34,9 +34,9 @@ import { Button } from '../../common/Button';
 import { SearchToolbar } from '../../common/SearchToolbar';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
-import { billingQueryKeys } from '../../../services/infrastructure/queryKeys';
-import { validateTimeEntrySafe } from '../../../services/validation/billingSchemas';
+import { cn } from '@/utils/cn';
+import { billingQueryKeys } from '@/services/infrastructure/queryKeys';
+import { validateTimeEntrySafe } from '@/services/validation/billingSchemas';
 import { WIPStatusEnum } from '../../../types/enums';
 
 // Types

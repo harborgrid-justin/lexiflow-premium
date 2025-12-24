@@ -4,7 +4,7 @@ import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
 import { Input } from '../../common/Inputs';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import type { ThreatCheckResult } from './types';
 
 interface ThreatDetectionPanelProps {

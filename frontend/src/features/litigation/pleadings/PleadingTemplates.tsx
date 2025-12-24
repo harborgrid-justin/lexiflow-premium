@@ -23,7 +23,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { VirtualGrid } from '../../common/VirtualGrid';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { PleadingTemplate } from '../../../types';

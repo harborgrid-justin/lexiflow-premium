@@ -31,7 +31,7 @@ import { DocketSettings } from './DocketSettings';
 import { useTheme } from '../../../context/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 type DocketView = 'all' | 'filings' | 'orders' | 'calendar' | 'upcoming' | 'stats' | 'sync';
 

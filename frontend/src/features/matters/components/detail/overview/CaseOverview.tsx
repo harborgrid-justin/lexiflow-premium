@@ -23,13 +23,13 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../../context/ThemeContext';
-import { useQuery } from '../../../../hooks/useQueryHooks';
-import { useCaseOverview } from '../../../../hooks/useCaseOverview';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useCaseOverview } from '@/hooks/useCaseOverview';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { Case, TimeEntry, Party } from '../../../../types';

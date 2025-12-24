@@ -24,7 +24,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { UserAvatar } from '../../common/UserAvatar';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { WorkflowStage, WorkflowTask } from '../../../types';

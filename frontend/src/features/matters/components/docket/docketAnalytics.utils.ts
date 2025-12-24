@@ -1,5 +1,5 @@
 import { DocketEntry } from '../../../types';
-import { cacheRegistry } from '../../../utils/cacheManager';
+import { cacheRegistry } from '@/utils/cacheManager';
 
 // Initialize caches with 10-minute TTL
 const filingActivityCache = cacheRegistry.get<string, any>('docket-filing-activity', {

@@ -23,7 +23,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { Badge } from '../../common/Badge';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { WorkflowTemplateData } from '../../../types';

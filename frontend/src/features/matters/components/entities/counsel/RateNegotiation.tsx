@@ -5,7 +5,7 @@ import { Button } from '../../../common/Button';
 import { Download, TrendingDown, Clock, CheckCircle } from 'lucide-react';
 import { LegalEntity } from '../../../../types';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface RateNegotiationProps {
   entities: LegalEntity[];

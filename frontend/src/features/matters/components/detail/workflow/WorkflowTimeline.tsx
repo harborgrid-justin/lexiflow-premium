@@ -19,7 +19,7 @@ import { UserAvatar } from '../../../common/UserAvatar';
 import { useTheme } from '../../../../context/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus, TaskStatusBackend } from '../../../../types';

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Radio, Activity, Zap, AlertCircle, CheckCircle, Users, Plus } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Card } from '../../common/Card';
 import { Badge } from '../../common/Badge';
 import { Tabs } from '../../common/Tabs';
 import { Button } from '../../common/Button';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { DataService } from '../../../services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 
 interface DataStream {
   id: string;

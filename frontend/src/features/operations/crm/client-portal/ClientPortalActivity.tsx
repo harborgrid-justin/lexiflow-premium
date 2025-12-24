@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Activity } from 'lucide-react';
 
 export const ClientPortalActivity: React.FC = () => {

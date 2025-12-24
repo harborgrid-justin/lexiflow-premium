@@ -4,8 +4,8 @@ import { Card } from '../../../common/Card';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { useTheme } from '../../../../context/ThemeContext';
 import { useChartTheme } from '../../../common/ChartHelpers';
-import { useQuery } from '../../../../hooks/useQueryHooks';
-import { DataService } from '../../../../services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 import { Loader2 } from 'lucide-react';
 

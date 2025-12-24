@@ -16,15 +16,15 @@ import { TagInput } from '../../common/TagInput';
 
 // Context & Utils
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useWizard } from '../../../hooks/useWizard';
-import { useNotify } from '../../../hooks/useNotify';
-import { useAutoSave } from '../../../hooks/useAutoSave';
+import { cn } from '@/utils/cn';
+import { useWizard } from '@/hooks/useWizard';
+import { useNotify } from '@/hooks/useNotify';
+import { useAutoSave } from '@/hooks/useAutoSave';
 
 // Services & Types
-import { DocumentService } from '../../../services/features/documents/documentService';
+import { DocumentService } from '@/services/features/documents/documentService';
 import { EvidenceItem, EvidenceId, CaseId, UUID } from '../../../types';
-import { validateEvidenceItemSafe } from '../../../services/validation/evidenceSchemas';
+import { validateEvidenceItemSafe } from '@/services/validation/evidenceSchemas';
 import { AdmissibilityStatusEnum } from '../../../types/enums';
 
 interface EvidenceIntakeProps {

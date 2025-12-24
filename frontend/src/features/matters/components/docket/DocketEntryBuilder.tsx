@@ -20,15 +20,15 @@ import { UserSelect } from '../../common/UserSelect';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useNotify } from '../../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '../../../utils/cn';
-import { getTodayString } from '../../../utils/dateUtils';
-import { DataService } from '../../../services/data/dataService';
-import { validateDocketEntry, validateStructuredData, sanitizeDocketEntry } from '../../../utils/docketValidation';
-import { DeadlineEngine } from '../../../services/features/deadlines/deadlineEngine';
-import { IdGenerator } from '../../../utils/idGenerator';
+import { cn } from '@/utils/cn';
+import { getTodayString } from '@/utils/dateUtils';
+import { DataService } from '@/services/data/dataService';
+import { validateDocketEntry, validateStructuredData, sanitizeDocketEntry } from '@/utils/docketValidation';
+import { DeadlineEngine } from '@/services/features/deadlines/deadlineEngine';
+import { IdGenerator } from '@/utils/idGenerator';
 
 // Types & Interfaces
 import { DocketEntry, DocketEntryType, WorkflowTask, TaskId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '../../../types';

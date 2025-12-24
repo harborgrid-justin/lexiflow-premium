@@ -21,14 +21,14 @@ import { Modal } from '../../../common/Modal';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../../context/ThemeContext';
 import { useToast } from '../../../../context/ToastContext';
-import { useQuery, useMutation, queryClient } from '../../../../hooks/useQueryHooks';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useModalState } from '../../../../hooks';
-import { getTodayString } from '../../../../utils/dateUtils';
+import { getTodayString } from '@/utils/dateUtils';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { ConferralSession, ConferralResult, ConferralMethod, UUID, CaseId, UserId } from '../../../../types';

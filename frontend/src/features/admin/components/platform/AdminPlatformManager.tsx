@@ -7,11 +7,11 @@ import { EntitySidebar, Category } from './EntitySidebar';
 import { EntityList } from './EntityList';
 import { TableContainer } from '../../common/Table';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { useAdminData } from './useAdminData';
 import { EMPTY_TEMPLATES } from './AdminConfig';
 import { ConfirmDialog } from '../../common/ConfirmDialog';
-import { useModalState } from '../../../hooks/useModalState';
+import { useModalState } from '@/hooks/useModalState';
 
 export const AdminPlatformManager: React.FC = () => {
   const { theme } = useTheme();

@@ -25,7 +25,7 @@ import { UserAvatar } from '../../../common/UserAvatar';
 import { Button } from '../../../common/Button';
 
 // Utils & Constants
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

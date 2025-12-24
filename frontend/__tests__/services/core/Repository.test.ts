@@ -9,7 +9,7 @@ import { BaseEntity } from '@/types';
 
 // Mock the MicroORM
 jest.mock('@services/core/microORM');
-jest.mock('../../../utils/errorHandler', () => ({
+jest.mock('@/utils/errorHandler', () => ({
   errorHandler: {
     logError: jest.fn(),
   },

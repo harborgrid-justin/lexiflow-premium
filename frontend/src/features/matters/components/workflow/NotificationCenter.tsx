@@ -1,13 +1,13 @@
 
 import React from 'react';
 import { Bell, Check, X, BellOff } from 'lucide-react';
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 import { EmptyState } from '../../common/EmptyState';
 import { SystemNotification } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { cn } from '@/utils/cn';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
 export const NotificationCenter: React.FC = () => {

@@ -7,10 +7,10 @@ import { SearchInputBar, MetricTile } from '../../../common/RefactoredCommon';
 import { Briefcase, Building, Mail, Linkedin, GraduationCap, Network } from 'lucide-react';
 import { LegalEntity } from '../../../../types';
 import { useTheme } from '../../../../context/ThemeContext';
-import { useQuery } from '../../../../hooks/useQueryHooks';
-import { DataService } from '../../../../services/data/dataService';
-import { queryKeys } from '../../../../utils/queryKeys';
-import { cn } from '../../../../utils/cn';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { queryKeys } from '@/utils/queryKeys';
+import { cn } from '@/utils/cn';
 
 interface AlumniDirectoryProps {
   entities: LegalEntity[];

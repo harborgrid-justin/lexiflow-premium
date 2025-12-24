@@ -18,10 +18,10 @@ import { ErrorBoundary } from '../../common/ErrorBoundary';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useLitigationBuilder } from '../../../hooks/useLitigationBuilder';
+import { useLitigationBuilder } from '@/hooks/useLitigationBuilder';
 
 // Utils
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Constants & Types
 import { LITIGATION_TABS } from './constants';

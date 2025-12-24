@@ -6,11 +6,11 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { FinancialPerformance } from '../../../components/dashboard/FinancialPerformance';
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 import { ThemeProvider } from '../../../context/ThemeContext';
 
 // Mock the DataService
-jest.mock('../../../services/data/dataService', () => ({
+jest.mock('@/services/data/dataService', () => ({
   DataService: {
     billing: {
       getFinancialPerformance: jest.fn()
@@ -19,7 +19,7 @@ jest.mock('../../../services/data/dataService', () => ({
 }));
 
 // Mock useQuery hook
-jest.mock('../../../hooks/useQueryHooks', () => ({
+jest.mock('@/hooks/useQueryHooks', () => ({
   useQuery: (key: any, fn: any) => {
     const [data, setData] = React.useState(null);
     React.useEffect(() => {

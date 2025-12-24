@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { History, GitBranch, Tag, Clock, User, FileText, Plus } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Card } from '../../common/Card';
 import { Badge } from '../../common/Badge';
 import { Tabs } from '../../common/Tabs';
 import { Button } from '../../common/Button';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 interface HistoryEntry {
   id: string;

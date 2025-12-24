@@ -18,12 +18,12 @@ import { TaskCreationModal } from '../../../common/TaskCreationModal';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../../context/ThemeContext';
-import { useNotify } from '../../../../hooks/useNotify';
-import { useMutation } from '../../../../hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
+import { useMutation } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../../../services/data/dataService';
-import { cn } from '../../../../utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { CommunicationItem, ServiceJob, LegalDocument, DocketEntry, EvidenceItem, WorkflowTask, DocumentId, CaseId, DocketId, EvidenceId, UUID } from '../../../../types';

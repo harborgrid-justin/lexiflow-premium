@@ -5,7 +5,7 @@ import { Badge } from '../../common/Badge';
 import { Case, WorkflowTask } from '../../../types';
 import { WorkflowQuickActions } from './WorkflowQuickActions';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { EmptyState } from '../../common/EmptyState';
 import { getCaseProgress, getNextTask } from './utils';
 

@@ -14,10 +14,10 @@ import { Clock, Link, ArrowRightLeft, Plus, BarChart3, ExternalLink } from 'luci
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../../context/ThemeContext';
-import { useNotify } from '../../../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { Case } from '../../../../types';

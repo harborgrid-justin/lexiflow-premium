@@ -28,15 +28,15 @@ import { RiskMeter } from '../../common/RiskMeter';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useQuery, useMutation } from '../../../hooks/useQueryHooks';
-import { useNotify } from '../../../hooks/useNotify';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '../../../context/WindowContext';
 
 // Services & Utils
-import { DataService } from '../../../services/data/dataService';
-import { GeminiService, BriefCritique } from '../../../services/features/research/geminiService';
-import { AnalysisEngine, ConflictResult } from '../../../services/features/analysis/analysisEngine';
-import { cn } from '../../../utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { GeminiService, BriefCritique } from '@/services/features/research/geminiService';
+import { AnalysisEngine, ConflictResult } from '@/services/features/analysis/analysisEngine';
+import { cn } from '@/utils/cn';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================

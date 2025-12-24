@@ -22,11 +22,11 @@ import { Button } from '../../common/Button';
 import { LazyLoader } from '../../common/LazyLoader';
 
 // Hooks
-import { useSessionStorage } from '../../../hooks/useSessionStorage';
-import { useSelection } from '../../../hooks/useSelectionState';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { useSelection } from '@/hooks/useSelectionState';
 
 // Utils
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

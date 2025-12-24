@@ -17,16 +17,16 @@ import { Mail, MapPin, Plus, Filter, Send, Inbox, ShieldCheck } from 'lucide-rea
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../../services/data/dataService';
-import { useQuery, useMutation } from '../../../hooks/useQueryHooks';
-import { correspondenceQueryKeys } from '../../../services/infrastructure/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
+import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useKeyboardShortcuts } from '../../../hooks/useKeyboardShortcuts';
-import { useToggle } from '../../../hooks/useToggle';
-import { useModalState } from '../../../hooks/useModalState';
-import { useSelection } from '../../../hooks/useSelectionState';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useToggle } from '@/hooks/useToggle';
+import { useModalState } from '@/hooks/useModalState';
+import { useSelection } from '@/hooks/useSelectionState';
 
 // Components
 import { PageHeader } from '../../common/PageHeader';
@@ -40,7 +40,7 @@ import { CorrespondenceErrorBoundary } from './CorrespondenceErrorBoundary';
 import { CommunicationLogSkeleton, ServiceTrackerSkeleton, CorrespondenceDetailSkeleton } from './CorrespondenceSkeleton';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { CommunicationItem, ServiceJob } from '../../../types';

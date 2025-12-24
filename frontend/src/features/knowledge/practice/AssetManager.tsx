@@ -17,15 +17,15 @@ import { Laptop, Monitor, Smartphone, Plus, RefreshCw, Edit2, Trash2, Loader2 } 
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../../services/data/dataService';
-import { useQuery, useMutation } from '../../../hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useWorkerSearch } from '../../../hooks/useWorkerSearch';
+import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 import { useModalState } from '../../../hooks';
-import { getTodayString } from '../../../utils/dateUtils';
+import { getTodayString } from '@/utils/dateUtils';
 
 // Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
@@ -38,7 +38,7 @@ import { Input } from '../../common/Inputs';
 import { VirtualList } from '../../common/VirtualList';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { FirmAsset } from '../../../types';

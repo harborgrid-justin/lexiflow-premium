@@ -7,7 +7,7 @@ import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
 import { SearchToolbar } from '../../common/SearchToolbar';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface Contact {
   id: string;

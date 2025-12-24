@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { FileSignature, Search, Send, Plus, CheckCircle, Clock, Loader2 } from 'lucide-react';
 import { LegalDocument } from '../../../../types';
-import { DataService } from '../../../../services/data/dataService';
-import { useQuery, queryClient } from '../../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../../utils/queryKeys';
-import { DocumentService } from '../../../../services/features/documents/documentService';
+import { DataService } from '@/services/data/dataService';
+import { useQuery, queryClient } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { DocumentService } from '@/services/features/documents/documentService';
 import { PDFViewer } from '../../../common/PDFViewer';
 import { AcrobatToolbar, PDFTool } from "../preview/AcrobatToolbar";
 import { InteractiveOverlay, Field } from "../preview/InteractiveOverlay";
@@ -12,9 +12,9 @@ import { Modal } from '../../../common/Modal';
 import { SignaturePad } from '../../../common/SignaturePad';
 import { Button } from '../../../common/Button';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { useNotify } from '../../../../hooks/useNotify';
-import { useModalState } from '../../../../hooks/useModalState';
+import { cn } from '@/utils/cn';
+import { useNotify } from '@/hooks/useNotify';
+import { useModalState } from '@/hooks/useModalState';
 import { ErrorState } from '../../../common/ErrorState';
 
 type FormStatus = 'Draft' | 'Sent' | 'Signed';

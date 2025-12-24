@@ -18,14 +18,14 @@ import { Mail, ArrowUpRight, ArrowDownLeft, Paperclip, Shield } from 'lucide-rea
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useKeyboardShortcuts } from '../../../hooks/useKeyboardShortcuts';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Components
 import { Badge } from '../../common/Badge';
 import { VirtualList } from '../../common/VirtualList';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { CommunicationStatus } from '../../../types/enums';
 
 // Types

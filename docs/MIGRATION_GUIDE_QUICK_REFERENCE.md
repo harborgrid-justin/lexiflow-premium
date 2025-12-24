@@ -17,7 +17,7 @@ const [items, setItems] = useState<Item[]>(mockItems);
 ```typescript
 // ✅ NEW PATTERN - Backend API
 import { useQuery } from 'react-query';
-import { queryKeys } from '../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 
 const { data: items = [], refetch, isLoading, error } = useQuery(
   queryKeys.domain.all(),  // Use appropriate query key
@@ -121,10 +121,10 @@ Add these imports to your component:
 
 ```typescript
 import { useQuery } from 'react-query';
-import { queryKeys } from '../../../utils/queryKeys';
-import { useNotify } from '../../../hooks/useNotify';
-import { useModalState } from '../../../hooks/useModalState';
-import { DataService } from '../../../services/dataService';  // For later backend integration
+import { queryKeys } from '@/utils/queryKeys';
+import { useNotify } from '@/hooks/useNotify';
+import { useModalState } from '@/hooks/useModalState';
+import { DataService } from '@/services/dataService';  // For later backend integration
 ```
 
 ---
@@ -247,9 +247,9 @@ const MyComponent = () => {
 ```typescript
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
-import { queryKeys } from '../../../utils/queryKeys';
-import { useNotify } from '../../../hooks/useNotify';
-import { useModalState } from '../../../hooks/useModalState';
+import { queryKeys } from '@/utils/queryKeys';
+import { useNotify } from '@/hooks/useNotify';
+import { useModalState } from '@/hooks/useModalState';
 import { Loader } from 'lucide-react';
 
 const MyComponent = () => {

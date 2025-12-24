@@ -1,8 +1,8 @@
 import React from 'react';
 import { Play, Pause, StopCircle, Clock } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useTimeTracker } from '../../../hooks/useTimeTracker';
+import { cn } from '@/utils/cn';
+import { useTimeTracker } from '@/hooks/useTimeTracker';
 
 // ============================================================================
 // TYPES

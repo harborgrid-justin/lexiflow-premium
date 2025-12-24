@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { Users, Plus, Edit, Trash2, Shield, Mail, Search } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
 import { PageHeader } from '../../common/PageHeader';
 import { Modal } from '../../common/Modal';
 import { Input } from '../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { useNotify } from '../../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '../../../hooks';
-import { useSelection } from '../../../hooks/useSelectionState';
-import { getTodayString } from '../../../utils/dateUtils';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { DataService } from '../../../services/data/dataService';
-import { queryKeys } from '../../../utils/queryKeys';
+import { useSelection } from '@/hooks/useSelectionState';
+import { getTodayString } from '@/utils/dateUtils';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { queryKeys } from '@/utils/queryKeys';
 
 interface UserData {
   id: string;

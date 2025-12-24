@@ -1,14 +1,14 @@
 
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { Card } from '../../../common/Card';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { useChartTheme } from '../../../common/ChartHelpers';
+import { Card } from '@/components/molecules/Card/Card';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 import { Hash, AlignLeft, Calendar, CheckCircle2, AlertTriangle, Loader2 } from 'lucide-react';
-import { DataService } from '../../../../services/data/dataService';
-import { useQuery } from '../../../../hooks/useQueryHooks';
-import { DataProfile } from '../../../../types';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataProfile } from '@/types';
 
 export const DataProfiler: React.FC = () => {
   const { theme } = useTheme();

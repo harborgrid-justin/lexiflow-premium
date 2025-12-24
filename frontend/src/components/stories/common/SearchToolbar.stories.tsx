@@ -28,9 +28,13 @@ const meta: Meta<typeof SearchToolbar> = {
       control: 'text',
       description: 'Input placeholder text',
     },
-    showFilters: {
-      control: 'boolean',
-      description: 'Show filter button',
+    actions: {
+      control: 'object',
+      description: 'Additional action buttons or elements',
+    },
+    className: {
+      control: 'text',
+      description: 'Additional CSS classes',
     },
     onChange: {
       action: 'change',
@@ -65,15 +69,24 @@ export const Default: Story = {
   },
 };
 
-export const WithFilters: Story = {
+export const WithActions: Story = {
   render: () => {
     const [query, setQuery] = useState('');
     return (
       <SearchToolbar
         value={query}
         onChange={setQuery}
-        placeholder="Search with filters..."
-        showFilters={true}
+        placeholder="Search with actions..."
+        actions={
+          <>
+            <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+              Filter
+            </button>
+            <button className="px-4 py-2 bg-slate-600 text-white rounded-md hover:bg-slate-700">
+              Export
+            </button>
+          </>
+        }
       />
     );
   },

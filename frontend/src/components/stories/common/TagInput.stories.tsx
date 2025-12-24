@@ -28,9 +28,13 @@ const meta: Meta<typeof TagInput> = {
       control: 'text',
       description: 'Input placeholder',
     },
-    onChange: {
-      action: 'change',
-      description: 'Callback when tags change',
+    onAdd: {
+      action: 'add',
+      description: 'Callback when tag is added',
+    },
+    onRemove: {
+      action: 'remove',
+      description: 'Callback when tag is removed',
     },
   },
   decorators: [
@@ -54,7 +58,8 @@ export const Default: Story = {
     return (
       <TagInput
         tags={tags}
-        onChange={setTags}
+        onAdd={(tag) => setTags([...tags, tag])}
+        onRemove={(tag) => setTags(tags.filter(t => t !== tag))}
         placeholder="Add tags..."
       />
     );
@@ -67,7 +72,8 @@ export const Empty: Story = {
     return (
       <TagInput
         tags={tags}
-        onChange={setTags}
+        onAdd={(tag) => setTags([...tags, tag])}
+        onRemove={(tag) => setTags(tags.filter(t => t !== tag))}
         placeholder="Type to add tags..."
       />
     );

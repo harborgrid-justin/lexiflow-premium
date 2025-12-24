@@ -38,14 +38,15 @@ import type {
   EnhancedWorkflowInstance,
   ConditionalBranchingConfig,
   ParallelExecutionConfig,
-  SLAConfig,
-  ApprovalChain,
   WorkflowVersion,
   WorkflowSnapshot,
   WorkflowAnalytics,
   AIWorkflowSuggestion,
   ExternalTrigger,
-} from '@/types';
+  WebhookConfig,
+  SLAConfig,
+  ApprovalChain,
+} from '@/types/workflow-advanced-types';
 
 interface AdvancedWorkflowDesignerProps {
   workflowId?: string;
@@ -174,7 +175,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
       DataService.workflow.createVersion(workflowId!, versionData),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['workflow', 'versions', workflowId]);
+        queryClient.invalidate(['workflow', 'versions', workflowId]);
         notify.success('New version created successfully');
       },
       onError: () => notify.error('Failed to create version'),
@@ -184,12 +185,13 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
   const handleCreateVersion = useCallback((message: string) => {
     if (!workflow) return;
 
-    const currentVersion = versions[0]?.version || '0.0.0';
-    const [major, minor, patch] = currentVersion.split('.').map(Number);
+    const currentVersion = versions[0]?.semanticVersion || '0.0.0';
+    const versionParts = typeof currentVersion === 'string' ? currentVersion.split('.').map(Number) : [0, 0, 0];
+    const [major, minor, patch] = versionParts;
     const newVersion = `${major}.${minor}.${patch + 1}`;
 
     createVersionMutation.mutate({
-      version: newVersion,
+      semanticVersion: newVersion,
       commitMessage: message,
       nodes: workflow.nodes,
       connections: workflow.connections,
@@ -212,7 +214,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
     {
       onSuccess: () => {
         notify.success('SLA monitoring enabled');
-        queryClient.invalidateQueries(['workflow', 'sla', workflowId]);
+        queryClient.invalidate(['workflow', 'sla', workflowId]);
       },
     },
   );
@@ -223,7 +225,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
       return;
     }
 
-    const config: Partial<SLAConfig> = {
+    const config = {
       name: 'Node SLA',
       targetDuration: 86400000, // 24 hours
       warningThreshold: 80,
@@ -236,7 +238,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
         notifyOnEscalation: true,
         notifyOnResolution: true,
       },
-    };
+    } as Partial<SLAConfig>;
 
     createSLAMutation.mutate(config);
     setActiveTab('sla');
@@ -253,13 +255,13 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
     {
       onSuccess: () => {
         notify.success('Approval chain created');
-        queryClient.invalidateQueries(['workflow', 'approvals', workflowId]);
+        queryClient.invalidate(['workflow', 'approvals', workflowId]);
       },
     },
   );
 
   const handleAddApprovalChain = useCallback(() => {
-    const chain: Partial<ApprovalChain> = {
+    const chain = {
       name: 'New Approval Chain',
       levels: [
         {
@@ -278,7 +280,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
       defaultAction: 'none',
       timeoutAction: 'escalate',
       notificationStrategy: 'immediate',
-    };
+    } as Partial<ApprovalChain>;
 
     createApprovalChainMutation.mutate(chain);
     setActiveTab('approvals');
@@ -289,12 +291,12 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
   // ============================================================================
 
   const createSnapshotMutation = useMutation(
-    (type: 'manual' | 'milestone') => 
+    (type: 'manual' | 'milestone') =>
       DataService.workflow.createSnapshot(workflowId!, { type, label: `${type} snapshot` }),
     {
       onSuccess: () => {
         notify.success('Snapshot created');
-        queryClient.invalidateQueries(['workflow', 'snapshots', workflowId]);
+        queryClient.invalidate(['workflow', 'snapshots', workflowId]);
       },
     },
   );
@@ -304,7 +306,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
     {
       onSuccess: () => {
         notify.success('Workflow rolled back successfully');
-        queryClient.invalidateQueries(['workflow', 'enhanced', workflowId]);
+        queryClient.invalidate(['workflow', 'enhanced', workflowId]);
       },
       onError: () => notify.error('Rollback failed'),
     },
@@ -323,8 +325,8 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
     {
       onSuccess: () => {
         notify.success('AI suggestion applied');
-        queryClient.invalidateQueries(['workflow', 'enhanced', workflowId]);
-        queryClient.invalidateQueries(['workflow', 'ai-suggestions', workflowId]);
+        queryClient.invalidate(['workflow', 'enhanced', workflowId]);
+        queryClient.invalidate(['workflow', 'ai-suggestions', workflowId]);
       },
     },
   );
@@ -338,23 +340,29 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
   const createTriggerMutation = useMutation(
     (config: Partial<ExternalTrigger>) => DataService.workflow.createExternalTrigger(workflowId!, config),
     {
-      onSuccess: (trigger) => {
-        notify.success(`Webhook created: ${trigger.config.url}`);
+      onSuccess: (trigger: ExternalTrigger) => {
+        const webhookConfig = trigger.type === 'webhook' && trigger.config.type === 'webhook'
+          ? trigger.config
+          : null;
+        notify.success(`Webhook created: ${webhookConfig?.url || 'URL pending'}`);
         setExternalTrigger(trigger);
-        queryClient.invalidateQueries(['workflow', 'triggers', workflowId]);
+        queryClient.invalidate(['workflow', 'triggers', workflowId]);
       },
     },
   );
 
   const handleCreateWebhook = useCallback(() => {
+    const webhookConfig: WebhookConfig = {
+      type: 'webhook',
+      url: '',
+      method: 'POST',
+    };
+
     const trigger: Partial<ExternalTrigger> = {
       name: 'Webhook Trigger',
       type: 'webhook',
       enabled: true,
-      config: {
-        type: 'webhook',
-        method: 'POST',
-      },
+      config: webhookConfig,
       filters: [],
     };
 
@@ -494,7 +502,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
       <div className="flex-1 overflow-y-auto p-6">
         {activeTab === 'designer' && (
           <div className="space-y-6">
-            <Card title="Visual Workflow Canvas" icon={Layers}>
+            <Card title="Visual Workflow Canvas">
               <div className={cn("h-96 rounded-lg border-2 border-dashed flex items-center justify-center", theme.border.default)}>
                 <div className="text-center">
                   <Layers className="h-16 w-16 mx-auto mb-4 text-slate-400" />
@@ -533,7 +541,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
 
         {activeTab === 'conditional' && (
           <div className="space-y-4">
-            <Card title="Conditional Branching Engine" icon={GitBranch}>
+            <Card title="Conditional Branching Engine">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
@@ -576,7 +584,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
         )}
 
         {activeTab === 'parallel' && (
-          <Card title="Parallel Execution System" icon={Boxes}>
+          <Card title="Parallel Execution System">
             <div className="space-y-4">
               <div className={cn("grid grid-cols-3 gap-4 p-4 rounded-lg", theme.surface.highlight)}>
                 <div>
@@ -607,7 +615,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
         )}
 
         {activeTab === 'versions' && (
-          <Card title="Workflow Version Control" icon={GitCompare}>
+          <Card title="Workflow Version Control">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <p className={cn("text-sm", theme.text.secondary)}>
@@ -655,7 +663,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
         )}
 
         {activeTab === 'sla' && (
-          <Card title="SLA Monitoring Dashboard" icon={Clock}>
+          <Card title="SLA Monitoring Dashboard">
             <div className="space-y-4">
               <div className="grid grid-cols-3 gap-4">
                 <div className={cn("p-4 rounded-lg border", theme.surface.highlight, theme.border.default)}>
@@ -705,7 +713,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
         )}
 
         {activeTab === 'approvals' && (
-          <Card title="Multi-Level Approval Chains" icon={UserCheck}>
+          <Card title="Multi-Level Approval Chains">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <p className={cn("text-sm", theme.text.secondary)}>
@@ -739,7 +747,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
         )}
 
         {activeTab === 'rollback' && (
-          <Card title="State Snapshots & Rollback" icon={Undo2}>
+          <Card title="State Snapshots & Rollback">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <p className={cn("text-sm", theme.text.secondary)}>
@@ -791,31 +799,31 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
         )}
 
         {activeTab === 'analytics' && analytics && (
-          <Card title="Workflow Analytics & Bottleneck Detection" icon={LineChart}>
+          <Card title="Workflow Analytics & Bottleneck Detection">
             <div className="space-y-6">
               <div className="grid grid-cols-4 gap-4">
                 <div className={cn("p-4 rounded-lg", theme.surface.highlight)}>
                   <p className={cn("text-xs", theme.text.tertiary)}>Total Executions</p>
                   <p className={cn("text-2xl font-bold mt-1", theme.text.primary)}>
-                    {analytics.summary.totalExecutions}
+                    {analytics?.summary?.totalExecutions || 0}
                   </p>
                 </div>
                 <div className={cn("p-4 rounded-lg", theme.surface.highlight)}>
                   <p className={cn("text-xs", theme.text.tertiary)}>Success Rate</p>
                   <p className={cn("text-2xl font-bold mt-1 text-green-600")}>
-                    {analytics.summary.successRate.toFixed(1)}%
+                    {(analytics?.summary?.successRate || 0).toFixed(1)}%
                   </p>
                 </div>
                 <div className={cn("p-4 rounded-lg", theme.surface.highlight)}>
                   <p className={cn("text-xs", theme.text.tertiary)}>Avg Duration</p>
                   <p className={cn("text-2xl font-bold mt-1", theme.text.primary)}>
-                    {(analytics.summary.averageDuration / 3600000).toFixed(1)}h
+                    {((analytics?.summary?.averageDuration || 0) / 3600000).toFixed(1)}h
                   </p>
                 </div>
                 <div className={cn("p-4 rounded-lg", theme.surface.highlight)}>
                   <p className={cn("text-xs", theme.text.tertiary)}>SLA Compliance</p>
                   <p className={cn("text-2xl font-bold mt-1 text-blue-600")}>
-                    {analytics.summary.slaComplianceRate.toFixed(1)}%
+                    {(analytics?.summary?.slaComplianceRate || 0).toFixed(1)}%
                   </p>
                 </div>
               </div>
@@ -825,7 +833,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                   Detected Bottlenecks
                 </h4>
                 <div className="space-y-2">
-                  {analytics.bottlenecks.map(bottleneck => (
+                  {analytics?.bottlenecks?.map((bottleneck: any) => (
                     <div 
                       key={bottleneck.id}
                       className={cn("p-4 rounded-lg border-l-4", theme.surface.default, theme.border.default,
@@ -873,7 +881,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                   Optimization Suggestions
                 </h4>
                 <div className="space-y-2">
-                  {analytics.optimizationSuggestions.map(suggestion => (
+                  {analytics?.optimizationSuggestions?.map((suggestion: any) => (
                     <div 
                       key={suggestion.id}
                       className={cn("p-4 rounded-lg border", theme.surface.default, theme.border.default)}
@@ -910,7 +918,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
         )}
 
         {activeTab === 'ai' && (
-          <Card title="AI-Powered Workflow Optimization" icon={Sparkles}>
+          <Card title="AI-Powered Workflow Optimization">
             <div className="space-y-4">
               <div className={cn("p-4 rounded-lg border", theme.surface.highlight, theme.border.default)}>
                 <div className="flex items-center gap-3">
@@ -991,7 +999,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
         )}
 
         {activeTab === 'triggers' && (
-          <Card title="External System Triggers" icon={Webhook}>
+          <Card title="External System Triggers">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <p className={cn("text-sm", theme.text.secondary)}>
@@ -1018,7 +1026,9 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                   </div>
 
                   <div className={cn("p-3 rounded font-mono text-xs break-all", theme.surface.highlight)}>
-                    {externalTrigger.config.url || 'Generating webhook URL...'}
+                    {externalTrigger.type === 'webhook' && externalTrigger.config.type === 'webhook'
+                      ? externalTrigger.config.url || 'Generating webhook URL...'
+                      : 'Generating webhook URL...'}
                   </div>
 
                   <div className="mt-3 grid grid-cols-3 gap-3 text-xs">

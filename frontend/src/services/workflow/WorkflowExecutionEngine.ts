@@ -6,17 +6,18 @@
  */
 
 import { EventEmitter } from 'events';
+import type { WorkflowNode, WorkflowConnection } from '@/types/workflow-types';
 import type {
   EnhancedWorkflowInstance,
-  WorkflowNode,
-  WorkflowConnection,
   ConditionalBranchingConfig,
+  ConditionalBranch,
   ParallelExecutionConfig,
+  ParallelBranch,
   SLAConfig,
   ApprovalChain,
   WorkflowState,
   WorkflowSnapshot,
-} from '@/types';
+} from '@/types/workflow-advanced-types';
 
 export type WorkflowExecutionEvent =
   | 'started'
@@ -104,7 +105,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
     this.state = 'idle';
     this.currentNode = null;
     this.visitedNodes = new Set();
-    this.nodeMap = new Map(workflow.nodes.map(n => [n.id, n]));
+    this.nodeMap = new Map(workflow.nodes.map((n: WorkflowNode) => [n.id, n]));
     this.connectionMap = new Map();
     this.slaTimers = new Map();
     this.parallelExecutions = new Map();
@@ -125,7 +126,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
       this.emit('started', this.context);
 
       // Find start node
-      const startNode = this.workflow.nodes.find(n => n.type === 'Start');
+      const startNode = this.workflow.nodes.find((n: WorkflowNode) => n.type === 'Start');
       if (!startNode) {
         throw new Error('No start node found in workflow');
       }
@@ -210,8 +211,8 @@ export class WorkflowExecutionEngine extends EventEmitter {
       currentNodeId: this.currentNode?.id || '',
       completedNodes: Array.from(this.visitedNodes),
       pendingNodes: this.workflow.nodes
-        .filter(n => !this.visitedNodes.has(n.id))
-        .map(n => n.id),
+        .filter((n: WorkflowNode) => !this.visitedNodes.has(n.id))
+        .map((n: WorkflowNode) => n.id),
       variables: this.context.variables,
       context: this.context.data,
       approvals: [],
@@ -344,7 +345,8 @@ export class WorkflowExecutionEngine extends EventEmitter {
     }
 
     // Simulate task execution
-    await this._delay(node.config.estimatedDuration || 1000);
+    const estimatedDuration = typeof node.config.estimatedDuration === 'number' ? node.config.estimatedDuration : 1000;
+    await this._delay(estimatedDuration);
 
     return {
       type: 'task',
@@ -358,8 +360,8 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Execute decision node (conditional branching)
    */
   private async _executeDecisionNode(node: WorkflowNode): Promise<any> {
-    const conditionalConfig = this.workflow.conditionalConfigs.find(c => c.nodeId === node.id);
-    
+    const conditionalConfig = this.workflow.conditionalConfigs.find((c: ConditionalBranchingConfig) => c.nodeId === node.id);
+
     if (!conditionalConfig) {
       throw new Error(`No conditional config found for decision node ${node.id}`);
     }
@@ -374,7 +376,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
     });
 
     // Find target node based on selected branch
-    const branch = conditionalConfig.branches.find(b => b.id === evaluation.branchId);
+    const branch = conditionalConfig.branches.find((b: ConditionalBranch) => b.id === evaluation.branchId);
     if (!branch) {
       throw new Error(`Branch ${evaluation.branchId} not found`);
     }
@@ -391,15 +393,15 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Execute parallel node
    */
   private async _executeParallelNode(node: WorkflowNode): Promise<any> {
-    const parallelConfig = this.workflow.parallelConfigs.find(c => c.nodeId === node.id);
-    
+    const parallelConfig = this.workflow.parallelConfigs.find((c: ParallelExecutionConfig) => c.nodeId === node.id);
+
     if (!parallelConfig) {
       throw new Error(`No parallel config found for node ${node.id}`);
     }
 
     this.emit('parallel_started', { node, config: parallelConfig });
 
-    const branchPromises = parallelConfig.branches.map(branch =>
+    const branchPromises = parallelConfig.branches.map((branch: ParallelBranch) =>
       this._executeParallelBranch(branch),
     );
 
@@ -427,9 +429,9 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Execute delay node
    */
   private async _executeDelayNode(node: WorkflowNode): Promise<any> {
-    const delay = node.config.delayMs || 1000;
+    const delay = typeof node.config.delayMs === 'number' ? node.config.delayMs : 1000;
     await this._delay(delay);
-    
+
     return {
       type: 'delay',
       delayMs: delay,
@@ -451,7 +453,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute parallel branch
    */
-  private async _executeParallelBranch(branch: any): Promise<any> {
+  private async _executeParallelBranch(branch: ParallelBranch): Promise<any> {
     const results = [];
     
     for (const nodeId of branch.nodeIds) {
@@ -497,7 +499,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Build connection map for efficient node traversal
    */
   private _buildConnectionMap(): void {
-    this.workflow.connections.forEach(conn => {
+    this.workflow.connections.forEach((conn: WorkflowConnection) => {
       if (!this.connectionMap.has(conn.from)) {
         this.connectionMap.set(conn.from, []);
       }
@@ -522,9 +524,9 @@ export class WorkflowExecutionEngine extends EventEmitter {
     config: ConditionalBranchingConfig,
   ): Promise<{ branchId: string; matched: boolean; evaluationTime: number }> {
     const startTime = Date.now();
-    
+
     // Simple evaluation logic (in production, use backend API)
-    for (const branch of config.branches.sort((a, b) => a.priority - b.priority)) {
+    for (const branch of config.branches.sort((a: ConditionalBranch, b: ConditionalBranch) => a.priority - b.priority)) {
       const matched = this._evaluateRules(branch.rules, this.context);
       if (matched) {
         return {
@@ -579,7 +581,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
    * Setup SLA monitoring for node
    */
   private _setupSLAMonitoring(node: WorkflowNode): void {
-    const slaConfig = this.workflow.slaConfigs.find(c => c.id === node.id);
+    const slaConfig = this.workflow.slaConfigs.find((c: SLAConfig) => c.id === node.id);
     if (!slaConfig) return;
 
     const warningTime = slaConfig.targetDuration * (slaConfig.warningThreshold / 100);
@@ -627,14 +629,14 @@ export class WorkflowExecutionEngine extends EventEmitter {
    */
   private _createSnapshot(type: 'auto' | 'manual' | 'milestone'): WorkflowSnapshot {
     const state = this.getState();
-    
+
     return {
       id: `snapshot-${Date.now()}`,
       workflowInstanceId: this.context.instanceId,
       version: 1,
       type,
       createdAt: new Date().toISOString(),
-      createdBy: this.context.userId,
+      createdBy: this.context.userId as import('@/types/primitives').UserId,
       state,
       checksum: JSON.stringify(state),
       compressed: false,

@@ -85,11 +85,11 @@ export function isCompleteDocketEntry(entry: Partial<DocketEntry>): entry is Doc
 export function validateStructuredData(data: unknown): DocketValidationResult {
   const errors: DocketValidationError[] = [];
   const warnings: DocketValidationWarning[] = [];
-  
+
   if (!data) {
     return { isValid: true, errors, warnings }; // Structured data is optional
   }
-  
+
   if (typeof data !== 'object') {
     errors.push({
       field: 'structuredData',
@@ -98,71 +98,73 @@ export function validateStructuredData(data: unknown): DocketValidationResult {
     });
     return { isValid: false, errors, warnings };
   }
-  
+
+  const record = data as Record<string, unknown>;
+
   // Validate actionType
-  if (!data.actionType || typeof data.actionType !== 'string') {
+  if (!record.actionType || typeof record.actionType !== 'string') {
     errors.push({
       field: 'structuredData.actionType',
       message: 'Action type is required and must be a string',
       code: 'MISSING_REQUIRED_FIELD'
     });
-  } else if (!data.actionType.trim()) {
+  } else if (!record.actionType.trim()) {
     errors.push({
       field: 'structuredData.actionType',
       message: 'Action type cannot be empty',
       code: 'EMPTY_FIELD'
     });
   }
-  
+
   // Validate actionVerb
-  if (!data.actionVerb || typeof data.actionVerb !== 'string') {
+  if (!record.actionVerb || typeof record.actionVerb !== 'string') {
     errors.push({
       field: 'structuredData.actionVerb',
       message: 'Action verb is required and must be a string',
       code: 'MISSING_REQUIRED_FIELD'
     });
-  } else if (!data.actionVerb.trim()) {
+  } else if (!record.actionVerb.trim()) {
     errors.push({
       field: 'structuredData.actionVerb',
       message: 'Action verb cannot be empty',
       code: 'EMPTY_FIELD'
     });
   }
-  
+
   // Validate optional fields
-  if (data.documentTitle !== undefined && typeof data.documentTitle !== 'string') {
+  if (record.documentTitle !== undefined && typeof record.documentTitle !== 'string') {
     errors.push({
       field: 'structuredData.documentTitle',
       message: 'Document title must be a string',
       code: 'INVALID_TYPE'
     });
   }
-  
-  if (data.filer !== undefined && typeof data.filer !== 'string') {
+
+  if (record.filer !== undefined && typeof record.filer !== 'string') {
     errors.push({
       field: 'structuredData.filer',
       message: 'Filer must be a string',
       code: 'INVALID_TYPE'
     });
   }
-  
-  if (data.additionalText !== undefined && typeof data.additionalText !== 'string') {
+
+  if (record.additionalText !== undefined && typeof record.additionalText !== 'string') {
     errors.push({
       field: 'structuredData.additionalText',
       message: 'Additional text must be a string',
       code: 'INVALID_TYPE'
     });
   }
-  
+
   // Warnings for missing optional but recommended fields
-  if (!data.filer) {
+  if (!record.filer) {
     warnings.push({
       field: 'structuredData.filer',
       message: 'Filer information is missing',
       suggestion: 'Adding filer information improves docket clarity'
     });
   }
-  
+
   return { isValid: errors.length === 0, errors, warnings };
 }
 

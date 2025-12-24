@@ -35,11 +35,14 @@ interface MaintenanceRecord {
 export const AssetService = {
   getAll: async () => db.getAll(STORES.ASSETS),
   getById: async (id: string) => db.get(STORES.ASSETS, id),
-  add: async (item: unknown) => db.put(STORES.ASSETS, {
-    ...(item && typeof item === 'object' ? item : {}),
-    status: item.status || 'available',
-    createdAt: new Date().toISOString()
-  }),
+  add: async (item: unknown) => {
+    const itemObj = item && typeof item === 'object' ? item as any : {};
+    return db.put(STORES.ASSETS, {
+      ...itemObj,
+      status: itemObj.status || 'available',
+      createdAt: new Date().toISOString()
+    });
+  },
   update: async (id: string, updates: unknown) => {
     const existing = await db.get(STORES.ASSETS, id);
     return db.put(STORES.ASSETS, {
@@ -75,20 +78,20 @@ export const AssetService = {
   assignAsset: async (assetId: string, userId: string): Promise<boolean> => {
     await delay(100);
     try {
-      const asset = await db.get(STORES.ASSETS, assetId);
+      const asset = await db.get<Asset>(STORES.ASSETS, assetId);
       if (!asset) return false;
-      
+
       if (asset.assignedTo && asset.assignedTo !== userId) {
         console.warn(`[AssetService] Asset ${assetId} already assigned to ${asset.assignedTo}`);
       }
-      
+
       await db.put(STORES.ASSETS, {
         ...asset,
         assignedTo: userId,
-        status: 'in-use',
+        status: 'in-use' as const,
         assignedAt: new Date().toISOString(),
       });
-      
+
       console.log(`[AssetService] Assigned asset ${assetId} to user ${userId}`);
       return true;
     } catch {
@@ -118,7 +121,8 @@ export const AssetService = {
   
   getMaintenanceHistory: async (assetId: string): Promise<MaintenanceRecord[]> => {
     await delay(50);
-    const records = await db.getAll<MaintenanceRecord>(STORES.MAINTENANCE_RECORDS);
+    // Note: Using MAINTENANCE_TICKETS instead of MAINTENANCE_RECORDS
+    const records = await db.getAll<MaintenanceRecord>(STORES.MAINTENANCE_TICKETS);
     return records
       .filter((r: MaintenanceRecord) => r.assetId === assetId)
       .sort((a: MaintenanceRecord, b: MaintenanceRecord) =>
@@ -137,18 +141,19 @@ export const AssetService = {
       cost: schedule.cost,
       nextMaintenanceDate: schedule.nextMaintenanceDate,
     };
-    
-    await db.put(STORES.MAINTENANCE_RECORDS, record);
-    
+
+    // Note: Using MAINTENANCE_TICKETS instead of MAINTENANCE_RECORDS
+    await db.put(STORES.MAINTENANCE_TICKETS, record);
+
     // Update asset status
     const asset = await db.get(STORES.ASSETS, assetId);
     if (asset) {
       await db.put(STORES.ASSETS, {
         ...asset,
-        status: 'maintenance',
+        status: 'maintenance' as const,
       });
     }
-    
+
     return record;
   },
 };

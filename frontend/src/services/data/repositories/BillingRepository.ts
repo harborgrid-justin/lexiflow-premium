@@ -110,14 +110,26 @@ export class BillingRepository extends Repository<TimeEntry> {
         dueDate.setDate(now.getDate() + 30);
         const invoice: Invoice = {
             id: `INV-${Date.now()}` as UUID,
-            client: clientName,
-            matter: caseId,
-            caseId: caseId as any,
-            date: now.toISOString().split('T')[0],
+            invoiceNumber: `INV-${Date.now()}`,
+            caseId: caseId as CaseId,
+            clientId: `client-${Date.now()}`,
+            clientName: clientName,
+            matterDescription: caseId,
+            invoiceDate: now.toISOString().split('T')[0],
             dueDate: dueDate.toISOString().split('T')[0],
-            amount: totalAmount,
+            billingModel: 'Hourly',
             status: 'Draft',
-            items: entries.map(e => e.id)
+            subtotal: totalAmount,
+            taxAmount: 0,
+            discountAmount: 0,
+            totalAmount: totalAmount,
+            paidAmount: 0,
+            balanceDue: totalAmount,
+            timeCharges: totalAmount,
+            expenseCharges: 0,
+            currency: 'USD',
+            createdAt: now.toISOString(),
+            updatedAt: now.toISOString()
         };
         await db.put(STORES.INVOICES, invoice);
         for (const entry of entries) {

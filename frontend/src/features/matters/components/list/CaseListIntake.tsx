@@ -140,7 +140,7 @@ export const CaseListIntake: React.FC = () => {
       
       <KanbanBoard>
         {stages.map((stage, idx) => {
-          const stageLeads = leads.filter((l: unknown) => {
+          const stageLeads = (Array.isArray(leads) ? leads : []).filter((l: unknown) => {
             return typeof l === 'object' && l !== null && 'stage' in l && l.stage === stage;
           });
 

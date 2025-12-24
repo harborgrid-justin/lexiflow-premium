@@ -27,7 +27,7 @@ interface CorrespondenceDetailProps {
 export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ correspondenceItem, onClose, onReply }) => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const { getBlob } = useBlobRegistry();
+  const { register, revoke } = useBlobRegistry();
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   
   // State for service job updates with discriminated union type narrowing
@@ -37,8 +37,8 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ corr
   const [deliveryDate, setDeliveryDate] = useState(
     correspondenceItem.type === 'service' ? correspondenceItem.item.servedDate || '' : ''
   );
-  const [newStatus, setNewStatus] = useState(
-    correspondenceItem.type === 'service' ? correspondenceItem.item.status : ServiceStatus.OUT_FOR_SERVICE
+  const [newStatus, setNewStatus] = useState<keyof typeof ServiceStatus>(
+    correspondenceItem.type === 'service' ? correspondenceItem.item.status : 'OUT_FOR_SERVICE'
   );
 
   // Optimistic mutation for archiving with exponential backoff retry
@@ -119,13 +119,16 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ corr
 
   const handleLinkDocket = async () => {
       if (correspondenceItem.type !== 'service') return;
-      
+
       const serviceItem = correspondenceItem.item;
+      const todayDate = new Date().toISOString().split('T')[0];
       const entry: DocketEntry = {
           id: `dk-${Date.now()}` as DocketId,
-          sequenceNumber: 999, 
+          sequenceNumber: 999,
           caseId: serviceItem.caseId,
-          date: new Date().toISOString().split('T')[0],
+          dateFiled: todayDate,
+          entryDate: todayDate,
+          date: todayDate,
           type: 'Filing',
           title: `Proof of Service - ${serviceItem.documentTitle}`,
           description: `Service on ${serviceItem.targetPerson} at ${serviceItem.targetAddress}. Status: ${serviceItem.status}. Server: ${serviceItem.serverName}. Signed by: ${signerName || 'N/A'}`,
@@ -144,7 +147,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ corr
 
   const handleUpdateServiceStatus = () => {
      if (correspondenceItem.type !== 'service') return;
-     
+
      const serviceItem = correspondenceItem.item;
      updateServiceJob({
          id: serviceItem.id,
@@ -285,15 +288,15 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ corr
                             <div className="grid grid-cols-2 gap-2">
                                 <div>
                                     <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Current Status</label>
-                                    <select 
+                                    <select
                                         className="w-full p-2 text-sm border rounded bg-white"
                                         value={newStatus}
-                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewStatus(e.target.value as any)}
+                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewStatus(e.target.value as keyof typeof ServiceStatus)}
                                     >
-                                        <option value="Out for Service">Out for Service</option>
-                                        <option value="Served">Served / Delivered</option>
-                                        <option value="Attempted">Attempted</option>
-                                        <option value="Non-Est">Non-Est / Return to Sender</option>
+                                        <option value="OUT_FOR_SERVICE">Out for Service</option>
+                                        <option value="SERVED">Served / Delivered</option>
+                                        <option value="ATTEMPTED">Attempted</option>
+                                        <option value="NON_EST">Non-Est / Return to Sender</option>
                                     </select>
                                 </div>
                                 <div>

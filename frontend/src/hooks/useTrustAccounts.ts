@@ -15,7 +15,8 @@
  * 4. Compliance validation logic lives in hook, not in UI
  */
 
-import { useQuery, useMutation, useQueryClient, type UseQueryResult } from '../services/infrastructure/queryClient';
+import { useQuery, useMutation, queryClient } from './useQueryHooks';
+import type { UseQueryResult } from '../services/infrastructure/queryTypes';
 import { trustAccountsApi } from '../api/trust-accounts-api';
 import type {
   TrustAccount,
@@ -29,7 +30,7 @@ import type {
   TrustAccountValidationResult,
   TrustAccountComplianceReport,
 } from '../types/trust-accounts';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { TrustAccountStatus, PaymentMethod } from '../types/trust-accounts';
 
 /**
@@ -82,7 +83,6 @@ interface UseTrustAccountsResult {
  * @returns Typed result with accounts and computed values
  */
 export function useTrustAccounts(filters?: TrustAccountFilters): UseTrustAccountsResult {
-  const queryClient = useQueryClient();
 
   // Primary data fetching with React Query
   const {
@@ -124,20 +124,20 @@ export function useTrustAccounts(filters?: TrustAccountFilters): UseTrustAccount
    */
   
   const totalBalance = useMemo(() => {
-    return accounts.reduce((sum, account) => sum + account.balance, 0);
+    return accounts.reduce((sum: number, account: TrustAccount) => sum + account.balance, 0);
   }, [accounts]);
 
   const ioltaAccounts = useMemo(() => {
-    return accounts.filter((acc) => acc.accountType === 'iolta');
+    return accounts.filter((acc: TrustAccount) => acc.accountType === 'iolta');
   }, [accounts]);
 
   const activeAccounts = useMemo(() => {
-    return accounts.filter((acc) => acc.status === TrustAccountStatus.ACTIVE);
+    return accounts.filter((acc: TrustAccount) => acc.status === TrustAccountStatus.ACTIVE);
   }, [accounts]);
 
   const accountsNeedingReconciliation = useMemo(() => {
     const now = new Date();
-    return accounts.filter((acc) => {
+    return accounts.filter((acc: TrustAccount) => {
       if (!acc.nextReconciliationDue) return false;
       const dueDate = new Date(acc.nextReconciliationDue);
       return dueDate <= now;
@@ -151,7 +151,7 @@ export function useTrustAccounts(filters?: TrustAccountFilters): UseTrustAccount
   const complianceIssues = useMemo(() => {
     const issues: Array<{ accountId: string; issue: string; severity: 'warning' | 'error' }> = [];
 
-    accounts.forEach((account) => {
+    accounts.forEach((account: TrustAccount) => {
       // Negative balance check (zero balance principle violation)
       if (account.balance < 0) {
         issues.push({
@@ -293,31 +293,31 @@ export function useTrustAccountDetail(accountId: string): UseTrustAccountDetailR
   // Computed transaction summaries
   const totalDeposits = useMemo(() => {
     return transactions
-      .filter((tx) => tx.transactionType === 'deposit')
-      .reduce((sum, tx) => sum + tx.amount, 0);
+      .filter((tx: TrustTransactionEntity) => tx.transactionType === 'deposit')
+      .reduce((sum: number, tx: TrustTransactionEntity) => sum + tx.amount, 0);
   }, [transactions]);
 
   const totalWithdrawals = useMemo(() => {
     return transactions
-      .filter((tx) => tx.transactionType === 'withdrawal')
-      .reduce((sum, tx) => sum + tx.amount, 0);
+      .filter((tx: TrustTransactionEntity) => tx.transactionType === 'withdrawal')
+      .reduce((sum: number, tx: TrustTransactionEntity) => sum + tx.amount, 0);
   }, [transactions]);
 
   const pendingTransactions = useMemo(() => {
-    return transactions.filter((tx) => tx.status === 'pending');
+    return transactions.filter((tx: TrustTransactionEntity) => tx.status === 'pending');
   }, [transactions]);
 
   const lastReconciliationDate = useMemo(() => {
-    const reconciledTransactions = transactions.filter((tx) => tx.reconciled);
+    const reconciledTransactions = transactions.filter((tx: TrustTransactionEntity) => tx.reconciled);
     if (reconciledTransactions.length === 0) return null;
-    
-    const latest = reconciledTransactions.reduce((latest, tx) => {
+
+    const latest = reconciledTransactions.reduce((latest: string | null, tx: TrustTransactionEntity) => {
       if (!tx.reconciledDate) return latest;
       return !latest || new Date(tx.reconciledDate) > new Date(latest)
         ? tx.reconciledDate
         : latest;
     }, null as string | null);
-    
+
     return latest;
   }, [transactions]);
 
@@ -347,26 +347,24 @@ interface UseCreateTrustAccountResult {
 }
 
 export function useCreateTrustAccount(): UseCreateTrustAccountResult {
-  const queryClient = useQueryClient();
+  const [error, setError] = useState<TrustAccountError | null>(null);
 
-  const mutation = useMutation<TrustAccount, Error, CreateTrustAccountDto>(
-    (data) => trustAccountsApi.create(data),
+  const mutation = useMutation<TrustAccount, CreateTrustAccountDto>(
+    (data: CreateTrustAccountDto) => trustAccountsApi.create(data),
     {
       onSuccess: () => {
         // Invalidate all account lists to trigger refetch
-        queryClient.invalidateQueries(trustKeys.lists());
+        queryClient.invalidate(trustKeys.lists());
+        setError(null);
+      },
+      onError: (err: Error) => {
+        setError({
+          code: 'API_ERROR',
+          message: err.message || 'Failed to create trust account',
+        });
       },
     }
   );
-
-  const error: TrustAccountError | null = useMemo(() => {
-    if (!mutation.error) return null;
-    
-    return {
-      code: 'API_ERROR',
-      message: mutation.error.message || 'Failed to create trust account',
-    };
-  }, [mutation.error]);
 
   return {
     createAccount: mutation.mutateAsync,
@@ -382,32 +380,29 @@ interface UseDepositFundsResult {
 }
 
 export function useDepositFunds(): UseDepositFundsResult {
-  const queryClient = useQueryClient();
+  const [error, setError] = useState<TrustAccountError | null>(null);
 
   const mutation = useMutation<
     TrustTransactionEntity,
-    Error,
     { accountId: string; data: DepositDto }
   >(
-    ({ accountId, data }) => trustAccountsApi.deposit(accountId, data),
+    ({ accountId, data }: { accountId: string; data: DepositDto }) => trustAccountsApi.deposit(accountId, data),
     {
-      onSuccess: (_, variables) => {
+      onSuccess: (_: TrustTransactionEntity, variables: { accountId: string; data: DepositDto }) => {
         // Invalidate account detail and transactions
-        queryClient.invalidateQueries(trustKeys.detail(variables.accountId));
-        queryClient.invalidateQueries(trustKeys.transactions(variables.accountId));
-        queryClient.invalidateQueries(trustKeys.lists());
+        queryClient.invalidate(trustKeys.detail(variables.accountId));
+        queryClient.invalidate(trustKeys.transactions(variables.accountId));
+        queryClient.invalidate(trustKeys.lists());
+        setError(null);
+      },
+      onError: (err: Error) => {
+        setError({
+          code: 'COMPLIANCE_ERROR',
+          message: err.message || 'Failed to deposit funds',
+        });
       },
     }
   );
-
-  const error: TrustAccountError | null = useMemo(() => {
-    if (!mutation.error) return null;
-    
-    return {
-      code: 'COMPLIANCE_ERROR',
-      message: mutation.error.message || 'Failed to deposit funds',
-    };
-  }, [mutation.error]);
 
   const deposit = useCallback(
     async (accountId: string, data: DepositDto) => {
@@ -430,31 +425,28 @@ interface UseWithdrawFundsResult {
 }
 
 export function useWithdrawFunds(): UseWithdrawFundsResult {
-  const queryClient = useQueryClient();
+  const [error, setError] = useState<TrustAccountError | null>(null);
 
   const mutation = useMutation<
     TrustTransactionEntity,
-    Error,
     { accountId: string; data: WithdrawalDto }
   >(
-    ({ accountId, data }) => trustAccountsApi.withdraw(accountId, data),
+    ({ accountId, data }: { accountId: string; data: WithdrawalDto }) => trustAccountsApi.withdraw(accountId, data),
     {
-      onSuccess: (_, variables) => {
-        queryClient.invalidateQueries(trustKeys.detail(variables.accountId));
-        queryClient.invalidateQueries(trustKeys.transactions(variables.accountId));
-        queryClient.invalidateQueries(trustKeys.lists());
+      onSuccess: (_: TrustTransactionEntity, variables: { accountId: string; data: WithdrawalDto }) => {
+        queryClient.invalidate(trustKeys.detail(variables.accountId));
+        queryClient.invalidate(trustKeys.transactions(variables.accountId));
+        queryClient.invalidate(trustKeys.lists());
+        setError(null);
+      },
+      onError: (err: Error) => {
+        setError({
+          code: 'COMPLIANCE_ERROR',
+          message: err.message || 'Failed to withdraw funds',
+        });
       },
     }
   );
-
-  const error: TrustAccountError | null = useMemo(() => {
-    if (!mutation.error) return null;
-    
-    return {
-      code: 'COMPLIANCE_ERROR',
-      message: mutation.error.message || 'Failed to withdraw funds',
-    };
-  }, [mutation.error]);
 
   const withdraw = useCallback(
     async (accountId: string, data: WithdrawalDto) => {
@@ -477,31 +469,28 @@ interface UseReconcileAccountResult {
 }
 
 export function useReconcileAccount(): UseReconcileAccountResult {
-  const queryClient = useQueryClient();
+  const [error, setError] = useState<TrustAccountError | null>(null);
 
   const mutation = useMutation<
     void,
-    Error,
     { accountId: string; data: ThreeWayReconciliationDto }
   >(
-    ({ accountId, data }) => trustAccountsApi.reconcile(accountId, data),
+    ({ accountId, data }: { accountId: string; data: ThreeWayReconciliationDto }) => trustAccountsApi.reconcile(accountId, data),
     {
-      onSuccess: (_, variables) => {
-        queryClient.invalidateQueries(trustKeys.detail(variables.accountId));
-        queryClient.invalidateQueries(trustKeys.transactions(variables.accountId));
-        queryClient.invalidateQueries(trustKeys.lists());
+      onSuccess: (_: void, variables: { accountId: string; data: ThreeWayReconciliationDto }) => {
+        queryClient.invalidate(trustKeys.detail(variables.accountId));
+        queryClient.invalidate(trustKeys.transactions(variables.accountId));
+        queryClient.invalidate(trustKeys.lists());
+        setError(null);
+      },
+      onError: (err: Error) => {
+        setError({
+          code: 'COMPLIANCE_ERROR',
+          message: err.message || 'Reconciliation failed',
+        });
       },
     }
   );
-
-  const error: TrustAccountError | null = useMemo(() => {
-    if (!mutation.error) return null;
-    
-    return {
-      code: 'COMPLIANCE_ERROR',
-      message: mutation.error.message || 'Reconciliation failed',
-    };
-  }, [mutation.error]);
 
   const reconcile = useCallback(
     async (accountId: string, data: ThreeWayReconciliationDto) => {

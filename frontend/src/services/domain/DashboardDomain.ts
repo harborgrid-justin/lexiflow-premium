@@ -42,12 +42,12 @@ export const DashboardService = {
   
   // Dashboard specific methods
   getWidgets: async (dashboardId: string): Promise<DashboardWidget[]> => {
-    const dashboard = await db.get(STORES.DASHBOARDS, dashboardId);
+    const dashboard = await db.get<{ widgets?: DashboardWidget[] }>(STORES.DASHBOARDS, dashboardId);
     return dashboard?.widgets || [];
   },
   
   addWidget: async (dashboardId: string, widget: Partial<DashboardWidget>): Promise<DashboardWidget> => {
-    const dashboard = await db.get(STORES.DASHBOARDS, dashboardId);
+    const dashboard = await db.get<{ widgets?: DashboardWidget[] }>(STORES.DASHBOARDS, dashboardId);
     const newWidget: DashboardWidget = {
       id: `widget-${Date.now()}`,
       dashboardId,
@@ -56,7 +56,7 @@ export const DashboardService = {
       position: widget.position || { x: 0, y: 0, w: 4, h: 2 },
       config: widget.config || {},
     };
-    const updatedWidgets = [...(dashboard.widgets || []), newWidget];
+    const updatedWidgets = [...(dashboard?.widgets || []), newWidget];
     await db.put(STORES.DASHBOARDS, {
       ...(dashboard && typeof dashboard === 'object' ? dashboard : {}),
       widgets: updatedWidgets
@@ -65,9 +65,9 @@ export const DashboardService = {
   },
   
   removeWidget: async (widgetId: string): Promise<boolean> => {
-    const dashboards = await db.getAll(STORES.DASHBOARDS);
+    const dashboards = await db.getAll<{ id: string; widgets?: DashboardWidget[] }>(STORES.DASHBOARDS);
     for (const dashboard of dashboards) {
-      if (dashboard.widgets?.some((w: DashboardWidget) => w.id === widgetId)) {
+      if (dashboard?.widgets?.some((w: DashboardWidget) => w.id === widgetId)) {
         const updatedWidgets = dashboard.widgets.filter((w: DashboardWidget) => w.id !== widgetId);
         await db.put(STORES.DASHBOARDS, {
           ...(dashboard && typeof dashboard === 'object' ? dashboard : {}),
@@ -92,19 +92,20 @@ export const DashboardService = {
   
   getMetrics: async (): Promise<DashboardMetrics> => {
     await delay(100); // Simulate calculation time
-    const cases = await db.getAll(STORES.CASES);
-    const tasks = await db.getAll(STORES.TASKS);
-    const timeEntries = await db.getAll(STORES.TIME_ENTRIES);
-    
+    const cases = await db.getAll<{ status?: string; upcomingDeadlines?: any[] }>(STORES.CASES);
+    const tasks = await db.getAll<{ status?: string }>(STORES.TASKS);
+    const timeEntries = await db.getAll<{ date?: string }>(STORES.TIME_ENTRIES);
+
     return {
-      activeCases: cases.filter((c: unknown) => c.status === 'Active').length,
-      upcomingDeadlines: cases.reduce((sum: number, c: unknown) => sum + (c.upcomingDeadlines?.length || 0), 0),
-      recentActivity: timeEntries.filter((t: unknown) => {
+      activeCases: cases.filter((c) => c?.status === 'Active').length,
+      upcomingDeadlines: cases.reduce((sum: number, c) => sum + (c?.upcomingDeadlines?.length || 0), 0),
+      recentActivity: timeEntries.filter((t) => {
+        if (!t?.date) return false;
         const date = new Date(t.date);
         const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
         return date > dayAgo;
       }).length,
-      pendingTasks: tasks.filter((t: unknown) => t.status === 'Pending').length,
+      pendingTasks: tasks.filter((t) => t?.status === 'Pending').length,
       utilizationRate: 0.78, // Mock calculation
       revenueThisMonth: 125000, // Mock calculation
     };

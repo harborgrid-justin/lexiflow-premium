@@ -59,8 +59,8 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
   const [containerWidth, setContainerWidth] = useState<number>(0);
 
   // Refs for tracking async state
-  const renderTaskRef = useRef<unknown>(null);
-  const loadingTaskRef = useRef<unknown>(null);
+  const renderTaskRef = useRef<pdfjsLib.RenderTask | null>(null);
+  const loadingTaskRef = useRef<pdfjsLib.PDFDocumentLoadingTask | null>(null);
   const isMounted = useRef(false);
   const resizeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -144,7 +144,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
     // Cancel any pending render
     if (renderTaskRef.current) {
       try {
-          await renderTaskRef.current.cancel();
+          renderTaskRef.current.cancel();
       } catch (e) {
           // Ignore cancellation errors
       }
@@ -186,7 +186,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
         ? [outputScale, 0, 0, outputScale, 0, 0]
         : undefined;
 
-      const renderContext: pdfjsLib.RenderParameters = transform
+      const renderContext = transform
         ? {
             canvasContext: context,
             transform: transform,
@@ -197,7 +197,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
             viewport: viewport,
           };
 
-      const newTask = page.render(renderContext);
+      const newTask = page.render(renderContext as any);
       renderTaskRef.current = newTask;
 
       await newTask.promise;

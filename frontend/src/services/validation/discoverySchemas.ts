@@ -90,12 +90,12 @@ const validateDiscoveryRequest = (data: unknown): ValidationResult<Partial<Disco
   }
 
   const dataServiceDate = 'serviceDate' in data ? data.serviceDate : undefined;
-  if (dataServiceDate && !isValidDate(dataServiceDate)) {
+  if (dataServiceDate && typeof dataServiceDate === 'string' && !isValidDate(dataServiceDate)) {
     errors.push({ path: 'serviceDate', message: 'Invalid service date format (YYYY-MM-DD)' });
   }
 
   const dataDueDate = 'dueDate' in data ? data.dueDate : undefined;
-  if (!dataDueDate || !isValidDate(dataDueDate)) {
+  if (!dataDueDate || typeof dataDueDate !== 'string' || !isValidDate(dataDueDate)) {
     errors.push({ path: 'dueDate', message: 'Invalid due date format (YYYY-MM-DD)' });
   }
 
@@ -142,7 +142,7 @@ const validatePrivilegeLogEntry = (data: unknown): ValidationResult<Partial<Priv
   }
 
   const dataDate = 'date' in data ? data.date : undefined;
-  if (!dataDate || !isValidDate(dataDate)) {
+  if (!dataDate || typeof dataDate !== 'string' || !isValidDate(dataDate)) {
     errors.push({ path: 'date', message: 'Invalid date format (YYYY-MM-DD)' });
   }
 
@@ -166,8 +166,9 @@ const validatePrivilegeLogEntry = (data: unknown): ValidationResult<Partial<Priv
   } else if (recipient.length > 200) {
     errors.push({ path: 'recipient', message: 'Recipient name too long' });
   }
-  
-  const desc = data.desc ? sanitizeString(data.desc) : '';
+
+  const dataDesc = 'desc' in data && typeof data.desc === 'string' ? data.desc : '';
+  const desc = dataDesc ? sanitizeString(dataDesc) : '';
   if (!desc) {
     errors.push({ path: 'desc', message: 'Description is required per FRCP 26(b)(5)' });
   } else if (desc.length < 20) {
@@ -197,31 +198,38 @@ const validatePrivilegeLogEntry = (data: unknown): ValidationResult<Partial<Priv
  */
 const validateLegalHold = (data: unknown): ValidationResult<Partial<LegalHold>> => {
   const errors: Array<{ path: string; message: string }> = [];
-  
-  if (!data.id || typeof data.id !== 'string') {
+
+  // Type guard - ensure data is an object
+  if (!data || typeof data !== 'object') {
+    return { success: false, error: { errors: [{ path: 'root', message: 'Data must be an object' }] } };
+  }
+
+  const record = data as Record<string, unknown>;
+
+  if (!record.id || typeof record.id !== 'string') {
     errors.push({ path: 'id', message: 'Hold ID is required' });
   }
-  
-  const custodian = data.custodian ? sanitizeString(data.custodian) : '';
+
+  const custodian = record.custodian && typeof record.custodian === 'string' ? sanitizeString(record.custodian) : '';
   if (!custodian) {
     errors.push({ path: 'custodian', message: 'Custodian is required' });
   } else if (custodian.length > 200) {
     errors.push({ path: 'custodian', message: 'Custodian name too long' });
   }
-  
-  const dept = data.dept ? sanitizeString(data.dept) : '';
+
+  const dept = record.dept && typeof record.dept === 'string' ? sanitizeString(record.dept) : '';
   if (dept.length > 200) {
     errors.push({ path: 'dept', message: 'Department name too long' });
   }
-  
-  if (!data.issued || !isValidDate(data.issued)) {
+
+  if (!record.issued || typeof record.issued !== 'string' || !isValidDate(record.issued)) {
     errors.push({ path: 'issued', message: 'Invalid issue date format (YYYY-MM-DD)' });
   }
-  
-  if (!legalHoldStatuses.includes(data.status)) {
+
+  if (!legalHoldStatuses.includes(record.status as any)) {
     errors.push({ path: 'status', message: 'Invalid status' });
   }
-  
+
   if (errors.length > 0) {
     return { success: false, error: { errors } };
   }
@@ -229,7 +237,7 @@ const validateLegalHold = (data: unknown): ValidationResult<Partial<LegalHold>> 
   return {
     success: true,
     data: {
-      ...(data && typeof data === 'object' ? data : {}),
+      ...data,
       custodian,
       dept
     }
@@ -297,24 +305,24 @@ const validateESISource = (data: unknown): ValidationResult<ESISource> => {
   }
   
   const input = data as Record<string, unknown>;
-  
+
   const name = input.name && typeof input.name === 'string' ? sanitizeString(input.name) : '';
   if (!name) {
     errors.push({ path: 'name', message: 'Source name is required' });
   } else if (name.length > 200) {
     errors.push({ path: 'name', message: 'Source name too long' });
   }
-  
+
   const validTypes = ['Email', 'Slack', 'Device', 'SharePoint', 'OneDrive', 'Database'];
-  if (!validTypes.includes(data.type)) {
+  if (!validTypes.includes(input.type as any)) {
     errors.push({ path: 'type', message: 'Invalid source type' });
   }
-  
-  if (!esiCollectionStatuses.includes(data.status)) {
+
+  if (!esiCollectionStatuses.includes(input.status as any)) {
     errors.push({ path: 'status', message: 'Invalid status' });
   }
-  
-  const custodian = data.custodian ? sanitizeString(data.custodian) : '';
+
+  const custodian = input.custodian && typeof input.custodian === 'string' ? sanitizeString(input.custodian) : '';
   if (custodian.length > 200) {
     errors.push({ path: 'custodian', message: 'Custodian name too long' });
   }
@@ -339,27 +347,52 @@ const validateESISource = (data: unknown): ValidationResult<ESISource> => {
  */
 const validateDiscoveryFilters = (data: unknown): ValidationResult<DiscoveryFilters> => {
   const errors: Array<{ path: string; message: string }> = [];
-  
-  if (data.search && typeof data.search === 'string') {
-    const search = sanitizeString(data.search);
+  const filters: DiscoveryFilters = {};
+
+  if (!data || typeof data !== 'object') {
+    return { success: true, data: filters }; // Return empty filters if invalid data
+  }
+
+  const input = data as Record<string, unknown>;
+
+  if (input.search && typeof input.search === 'string') {
+    const search = sanitizeString(input.search);
     if (search.length > 200) {
       errors.push({ path: 'search', message: 'Search query too long' });
+    } else {
+      filters.search = search;
     }
   }
-  
-  if (data.dateFrom && !isValidDate(data.dateFrom) && data.dateFrom !== '') {
-    errors.push({ path: 'dateFrom', message: 'Invalid date format' });
+
+  if (input.dateFrom && typeof input.dateFrom === 'string') {
+    if (!isValidDate(input.dateFrom) && input.dateFrom !== '') {
+      errors.push({ path: 'dateFrom', message: 'Invalid date format' });
+    } else {
+      filters.dateFrom = input.dateFrom;
+    }
   }
-  
-  if (data.dateTo && !isValidDate(data.dateTo) && data.dateTo !== '') {
-    errors.push({ path: 'dateTo', message: 'Invalid date format' });
+
+  if (input.dateTo && typeof input.dateTo === 'string') {
+    if (!isValidDate(input.dateTo) && input.dateTo !== '') {
+      errors.push({ path: 'dateTo', message: 'Invalid date format' });
+    } else {
+      filters.dateTo = input.dateTo;
+    }
   }
-  
+
+  // Copy other filter properties
+  if (input.status && typeof input.status === 'string') {
+    filters.status = input.status;
+  }
+  if (input.type && typeof input.type === 'string') {
+    filters.type = input.type;
+  }
+
   if (errors.length > 0) {
     return { success: false, error: { errors } };
   }
-  
-  return { success: true, data };
+
+  return { success: true, data: filters };
 };
 
 /**

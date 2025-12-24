@@ -121,7 +121,7 @@ function validateId(id: unknown): void {
  * Validate idKey parameter
  * @private
  */
-function validateIdKey(items: unknown[], idKey: string | symbol): void {
+function validateIdKey<T extends Record<string, unknown>>(items: T[], idKey: keyof T): void {
   if (items.length > 0 && !(idKey in items[0])) {
     throw new Error(`[useSelection] idKey "${String(idKey)}" not found in items`);
   }

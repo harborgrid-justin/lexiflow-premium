@@ -22,9 +22,10 @@ import { DataService } from '@/services/data/dataService';
 import { EvidenceItem } from '@/types';
 import { evidenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { queryClient } from '@/hooks/useQueryHooks';
+import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/master.config';
 
 // Lazy-loaded ChainService for blockchain operations (reduces bundle size ~80KB)
-let ChainServiceModule: unknown = null;
+let ChainServiceModule: any = null;
 const loadChainService = async () => {
   if (!ChainServiceModule) {
     ChainServiceModule = await import('@/services/infrastructure/chainService');
@@ -36,7 +37,7 @@ const loadChainService = async () => {
 interface VerificationJob {
   evidenceId: string;
   hash: string;
-  resolve: (result: unknown) => void;
+  resolve: (result: {timestamp: string, verified: boolean, blockHeight?: string}) => void;
   reject: (error: unknown) => void;
 }
 
@@ -105,12 +106,12 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
   // Check cache on mount
   useEffect(() => {
     const checkCache = async () => {
-      const cached = queryClient.getQueryData<unknown>(
+      const cached = queryClient.getQueryState(
         evidenceQueryKeys.evidence.verification(selectedItem.id)
       );
-      
-      if (cached && cached.expiresAt > Date.now()) {
-        setVerifyData(cached.data);
+
+      if (cached?.data && (cached.data as any).expiresAt > Date.now()) {
+        setVerifyData((cached.data as any).data);
         setVerificationStatus('verified');
       }
     };
@@ -124,7 +125,7 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
       setVerificationStatus('verifying');
       try {
           // Use queue to prevent overwhelming blockchain RPC
-          const result = await new Promise<unknown>((resolve, reject) => {
+          const result = await new Promise<{timestamp: string, verified: boolean, blockHeight?: string}>((resolve, reject) => {
             verificationQueue.add({
               evidenceId: selectedItem.id,
               hash: selectedItem.blockchainHash || '',
@@ -132,7 +133,7 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
               reject
             });
           });
-          
+
           setVerifyData(result);
           setVerificationStatus('verified');
           

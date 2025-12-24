@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Table } from '@/components/organisms/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import React from 'react';
 
@@ -7,9 +7,30 @@ import React from 'react';
  * Table component for displaying tabular data.
  */
 
-const meta: Meta<typeof Table> = {
+const TableDemo = ({ data, columns, selectable, onRowClick }: any) => {
+  return (
+    <TableContainer>
+      <TableHeader>
+        {columns.map((col: any) => (
+          <TableHead key={col.key}>{col.header}</TableHead>
+        ))}
+      </TableHeader>
+      <TableBody>
+        {data.map((row: any) => (
+          <TableRow key={row.id} onClick={onRowClick ? () => onRowClick(row) : undefined}>
+            {columns.map((col: any) => (
+              <TableCell key={col.key}>{row[col.key]}</TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableBody>
+    </TableContainer>
+  );
+};
+
+const meta: Meta<typeof TableDemo> = {
   title: 'Common/Table',
-  component: Table,
+  component: TableDemo,
   parameters: {
     layout: 'padded',
     docs: {
@@ -50,7 +71,7 @@ const meta: Meta<typeof Table> = {
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof TableDemo>;
 
 const sampleData = [
   { id: '1', caseName: 'Smith v. Jones', status: 'Active', date: '2024-01-15' },

@@ -14,7 +14,7 @@
 import { yieldToMain } from '@/utils/apiUtils';
 
 // Types
-import { CaseStatus, DocketEntry, DocketEntryType, Party, Case, CaseId, PartyId, DocketId } from '@/types';
+import { CaseStatus, DocketEntry, DocketEntryType, Party, Case, CaseId, PartyId, DocketId, MatterType } from '@/types';
 import { PacerCase, PacerParty, PacerJurisdictionType } from "../../../types/pacer";
 
 // ============================================================================
@@ -79,7 +79,7 @@ export const XmlDocketParser = {
         filingDate: pacerData.dateFiled || "",
         court: pacerData.courtId || "Federal Court",
         status: pacerData.caseStatus === 'C' ? CaseStatus.Closed : CaseStatus.Discovery,
-        matterType: pacerData.jurisdictionType === 'ap' ? 'Appeal' : 'Litigation',
+        matterType: MatterType.LITIGATION, // Both appeals and litigation map to LITIGATION
         description: `Imported via XML. NOS: ${pacerData.natureOfSuit}`,
         jurisdiction: "Federal",
         dateTerminated: stub.getAttribute("dateTerminated") || undefined,
@@ -94,7 +94,7 @@ export const XmlDocketParser = {
         filingDate: new Date().toISOString(),
         court: "Unknown Court",
         status: CaseStatus.Active,
-        matterType: 'Litigation',
+        matterType: MatterType.LITIGATION,
         description: `Case info extraction failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         jurisdiction: "Federal"
       };
@@ -129,7 +129,7 @@ export const XmlDocketParser = {
             type: type,
             counsel: attorney ? `${attorney.getAttribute("firstName") || ''} ${attorney.getAttribute("lastName") || ''}`.trim() : undefined,
             partyGroup: p.getAttribute("prisonerNumber") ? "Prisoner" : undefined,
-            pacerData: pacerParty as PacerParty
+            pacerData: pacerParty as any
           });
 
           // Yield every 50 parties to avoid blocking

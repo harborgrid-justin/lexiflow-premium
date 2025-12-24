@@ -11,7 +11,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/utils/cn';
 import { validateServiceJobSafe } from '@/services/validation/correspondenceSchemas';
-import { ServiceStatus } from '@/types/enums';
+import { ServiceStatus, ServiceStatusType } from '@/types/enums';
 
 interface CreateServiceJobModalProps {
   isOpen: boolean;
@@ -23,7 +23,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
   const { theme } = useTheme();
   const notify = useNotify();
   const [formData, setFormData] = useState<Partial<ServiceJob>>({
-    status: 'DRAFT' as ServiceStatus,
+    status: 'DRAFT',
     attempts: 0,
     method: 'Process Server'
   });
@@ -66,7 +66,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
           mailType: formData.mailType,
           trackingNumber: formData.trackingNumber,
           addressedTo: formData.addressedTo,
-          status: ServiceStatus.OUT_FOR_SERVICE,
+          status: 'OUT_FOR_SERVICE',
           dueDate: formData.dueDate,
           attempts: 0,
           notes: formData.notes
@@ -83,9 +83,9 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
           notify.error('Validation failed: ' + validation.error.issues[0].message);
           return;
       }
-      
+
       onSave(newJob);
-      setFormData({ status: 'DRAFT' as ServiceStatus, attempts: 0, method: 'Process Server' });
+      setFormData({ status: 'DRAFT', attempts: 0, method: 'Process Server' });
       setValidationErrors({});
   };
 
@@ -133,7 +133,7 @@ export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ is
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, documentTitle: e.target.value})}
                         >
                             <option value="">Select Document...</option>
-                            {docs.map((d: unknown) => {
+                            {(Array.isArray(docs) ? docs : []).map((d) => {
                               if (typeof d !== 'object' || d === null) return null;
                               const docId = 'id' in d ? String(d.id) : '';
                               const docTitle = 'title' in d && typeof d.title === 'string' ? d.title : '';

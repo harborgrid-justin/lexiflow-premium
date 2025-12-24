@@ -1,7 +1,7 @@
 import { BUSINESS_PROCESSES } from "@/api/data/firmProcess";
 import { delay } from '@/utils/async';
 import { TEMPLATE_LIBRARY } from '@/api/data/workflowTemplates';
-import { WorkflowTask, TaskId, WorkflowTemplateData, CaseId, ProjectId, CasePhase } from '@/types';
+import { WorkflowTask, TaskId, WorkflowTemplateData, CaseId, ProjectId, CasePhase, TaskStatusBackend, TaskPriorityBackend } from '@/types';
 import { db, STORES } from '../db';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { SystemEventType } from '@/types/integration-types';
@@ -40,14 +40,14 @@ export const WorkflowRepository = {
         try {
             // Calculate real stats from tasks
             const tasks = await db.getAll<WorkflowTask>(STORES.TASKS);
-            const completed = tasks.filter(t => t.status === TaskStatusBackend.COMPLETED || t.status === TaskStatusBackend.COMPLETED).length;
+            const completed = tasks.filter(t => t.status === TaskStatusBackend.COMPLETED).length;
             const total = tasks.length;
-            
+
             // Calculate status distribution
             const now = new Date();
-            const overdue = tasks.filter(t => t.status !== TaskStatusBackend.COMPLETED && t.status !== TaskStatusBackend.COMPLETED && t.dueDate && new Date(t.dueDate) < now).length;
+            const overdue = tasks.filter(t => t.status !== TaskStatusBackend.COMPLETED && t.dueDate && new Date(t.dueDate) < now).length;
             const atRisk = tasks.filter(t => {
-                if (t.status === TaskStatusBackend.COMPLETED || t.status === TaskStatusBackend.COMPLETED) return false;
+                if (t.status === TaskStatusBackend.COMPLETED) return false;
                 if (!t.dueDate) return false;
                 const due = new Date(t.dueDate);
                 const diffHours = (due.getTime() - now.getTime()) / (1000 * 60 * 60);
@@ -100,7 +100,8 @@ export const WorkflowRepository = {
     getApprovals: async () => {
         try {
             const tasks = await db.getAll<WorkflowTask>(STORES.TASKS);
-            const reviewTasks = tasks.filter(t => t.status === 'Review');
+            // Filter tasks that need review (using BLOCKED status or IN_PROGRESS as proxy for review)
+            const reviewTasks = tasks.filter(t => t.status === TaskStatusBackend.BLOCKED);
             return reviewTasks.map(t => ({
                 id: t.id,
                 title: t.title,
@@ -258,12 +259,12 @@ export const WorkflowRepository = {
             };
         }
     },
-    runAutomation: async (scope: string) => { 
+    runAutomation: async (scope: string) => {
         try {
-            await delay(800); 
+            await delay(800);
             console.log(`[API] Running automation scope: ${scope}`);
-            const tasks = await db.getAll<unknown>(STORES.TASKS);
-            const overdue = tasks.filter(t => t.status !== TaskStatusBackend.COMPLETED && new Date(t.dueDate) < new Date());
+            const tasks = await db.getAll<WorkflowTask>(STORES.TASKS);
+            const overdue = tasks.filter((t: WorkflowTask) => t.status !== TaskStatusBackend.COMPLETED && t.dueDate && new Date(t.dueDate) < new Date());
             if (overdue.length > 0) {
                 const notif = {
                     id: `notif-auto-${Date.now()}`,

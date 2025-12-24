@@ -381,7 +381,12 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
    */
   const setDocuments = useCallback((newDocs: LegalDocument[] | ((prev: LegalDocument[]) => LegalDocument[])) => {
     try {
-      queryClient.setQueryData(queryKeys.documents.all(), newDocs);
+      queryClient.setQueryData(queryKeys.documents.all(), (old: LegalDocument[] | undefined) => {
+        if (typeof newDocs === 'function') {
+          return newDocs(old || []);
+        }
+        return newDocs;
+      });
     } catch (error) {
       console.error('[useDocumentManager.setDocuments] Error:', error);
     }

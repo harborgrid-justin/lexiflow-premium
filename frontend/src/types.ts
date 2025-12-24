@@ -8,7 +8,6 @@ export * from './types/pacer';
 export * from './types/result';
 export * from './types/parser';
 export * from './types/workflow-types';
-export * from './types/workflow-advanced-types';
 export * from './types/canvas-constants';
 export * from './types/financial';
 export * from './types/legal-research';
@@ -19,7 +18,6 @@ export * from './types/compliance-risk';
 export * from './types/query-keys';
 export * from './types/api-responses';
 export * from './types/dto-types';
-export * from './types/trust-accounts';
 
 export interface PaginatedResponse<T> {
   data: T[];

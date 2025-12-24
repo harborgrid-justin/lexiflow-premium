@@ -9,18 +9,26 @@ import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { useNotify } from '@/hooks/useNotify';
 
+interface WorkflowSetting {
+  label: string;
+  enabled: boolean;
+}
+
 export const WorkflowConfig: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  
+
   // Load settings from IndexedDB via useQuery for accurate, cached data
   const { data: settings = [], isLoading: loading } = useQuery(
     queryKeys.workflowsExtended.settings(),
-    () => DataService.workflow.getSettings()
+    async () => {
+      const result = await DataService.workflow.getSettings();
+      return result as WorkflowSetting[];
+    }
   );
 
   const { mutate: updateSettings } = useMutation(
-    async (newSettings: unknown[]) => DataService.workflow.updateSettings(newSettings),
+    async (newSettings: WorkflowSetting[]) => DataService.workflow.updateSettings(newSettings),
     {
       onSuccess: (_, variables) => {
         queryClient.invalidate(queryKeys.workflowsExtended.settings());
@@ -32,7 +40,7 @@ export const WorkflowConfig: React.FC = () => {
   );
 
   const toggleSetting = (index: number) => {
-      const newSettings = [...settings];
+      const newSettings: WorkflowSetting[] = [...settings];
       newSettings[index].enabled = !newSettings[index].enabled;
       updateSettings(newSettings);
   };
@@ -50,7 +58,7 @@ export const WorkflowConfig: React.FC = () => {
   return (
     <Card title="Workflow Automation Settings">
       <div className="space-y-4">
-        {settings.map((setting: any, i: number) => (
+        {settings.map((setting, i: number) => (
           <div key={i} className={cn("flex items-center justify-between p-3 border-b last:border-0", theme.border.default)}>
             <span className={cn("text-sm font-medium", theme.text.primary)}>{setting.label}</span>
             <button

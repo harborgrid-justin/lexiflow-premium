@@ -68,9 +68,9 @@ export const DocketImportModal: React.FC<DocketImportModalProps> = ({ isOpen, on
             } catch (aiError) {
                 // Fallback to regex parser if AI fails
                 console.warn('AI parsing failed, falling back to regex parser:', aiError);
-                const fallbackResult: FallbackParseResult = FallbackDocketParser.parse(rawText);
-                
-                if (fallbackResult.entries.length === 0) {
+                const fallbackResult = FallbackDocketParser.parse(rawText);
+
+                if (!fallbackResult || !fallbackResult.docketEntries || fallbackResult.docketEntries.length === 0) {
                     throw new Error('No docket entries found in text');
                 }
                 
@@ -160,7 +160,7 @@ export const DocketImportModal: React.FC<DocketImportModalProps> = ({ isOpen, on
             </div>
           )}
 
-          {step === 2 && parsedData && (
+          {step === 2 && parsedData !== null && (
             <div className="animate-fade-in space-y-4">
               {/* Parse Quality Indicator */}
               {parseConfidence && (

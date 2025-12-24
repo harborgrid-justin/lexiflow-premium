@@ -188,7 +188,7 @@ export function useAdaptiveLoading<T = any>(
     if (cacheKey && requestCache.has(cacheKey)) {
       const timeSinceLastFetch = Date.now() - lastFetchRef.current;
       if (timeSinceLastFetch < dedupingInterval) {
-        return requestCache.get(cacheKey)!;
+        return requestCache.get(cacheKey)! as T;
       }
     }
 

@@ -102,8 +102,8 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
       );
     }
 
-    const Component = moduleDef.component;
-    const dynamicProps: unknown = { currentUser };
+    const Component = moduleDef.component as unknown as React.ComponentType<any>;
+    const dynamicProps: Record<string, any> = { currentUser };
 
     if (initialTab) {
         dynamicProps.initialTab = initialTab;
@@ -141,7 +141,7 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
     return (
       <div className="h-full">
         <Suspense fallback={<LazyLoader message={`Loading ${moduleDef.label}...`} />}>
-          <Component {...(dynamicProps && typeof dynamicProps === 'object' ? dynamicProps : {})} />
+          <Component {...dynamicProps} />
         </Suspense>
       </div>
     );

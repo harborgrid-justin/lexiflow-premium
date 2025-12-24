@@ -203,7 +203,7 @@ export const NotificationCenter: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <h4 className={cn("font-bold", theme.text.primary)}>{notification.title}</h4>
-                    <Badge variant={getTypeBadgeVariant(notification.type)} size="sm">
+                    <Badge variant={getTypeBadgeVariant(notification.type)}>
                       {notification.type}
                     </Badge>
                   </div>

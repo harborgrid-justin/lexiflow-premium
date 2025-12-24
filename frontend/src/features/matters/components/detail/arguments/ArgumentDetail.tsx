@@ -59,13 +59,22 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
   };
 
   const toggleLink = (id: string, type: 'evidence' | 'citation') => {
-      const key = type === 'evidence' ? 'relatedEvidenceIds' : 'relatedCitationIds';
-      const current = argument[key] || [];
-      const typedId = type === 'evidence' ? (id as EvidenceId) : id;
-      const updated = current.includes(typedId)
-          ? current.filter((i: string) => i !== typedId)
-          : [...current, typedId];
-      onUpdate({ ...argument, [key]: updated });
+      if (type === 'evidence') {
+          const key = 'relatedEvidenceIds';
+          const current = argument[key] || [];
+          const typedId = id as EvidenceId;
+          const updated = current.includes(typedId)
+              ? current.filter((i: EvidenceId) => i !== typedId)
+              : [...current, typedId];
+          onUpdate({ ...argument, [key]: updated });
+      } else {
+          const key = 'relatedCitationIds';
+          const current = argument[key] || [];
+          const updated = current.includes(id)
+              ? current.filter((i: string) => i !== id)
+              : [...current, id];
+          onUpdate({ ...argument, [key]: updated });
+      }
   };
 
   return (

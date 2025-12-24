@@ -195,9 +195,9 @@ export function stableStringify(obj: unknown, seen: WeakSet<object> = new WeakSe
     // Handle objects with sorted keys for stability
     const keys = Object.keys(obj).sort();
     const parts: string[] = [];
-    
+
     for (const key of keys) {
-      const val = obj[key];
+      const val = (obj as Record<string, unknown>)[key];
       
       // Skip functions and undefined values
       if (typeof val === 'function' || val === undefined) {

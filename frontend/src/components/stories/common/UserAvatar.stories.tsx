@@ -24,14 +24,15 @@ const meta: Meta<typeof UserAvatar> = {
       control: 'text',
       description: 'User name (used for initials)',
     },
-    src: {
-      control: 'text',
-      description: 'Image source URL',
-    },
     size: {
       control: 'select',
       options: ['xs', 'sm', 'md', 'lg', 'xl'],
       description: 'Avatar size',
+    },
+    indicatorStatus: {
+      control: 'select',
+      options: ['online', 'offline', 'away', 'busy'],
+      description: 'Status indicator',
     },
   },
   decorators: [

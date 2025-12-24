@@ -21,9 +21,9 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact }) => 
 
     const { data: caseData, isLoading } = useQuery(queryKeys.cases.detail(caseId), () => DataService.cases.getById(caseId));
 
-    const facts = (caseData?.arguments || []).map((arg: any) => ({ id: arg.id, type: 'Argument', text: arg.title, source: 'Case Strategy' }));
+    const facts = ((caseData as any)?.arguments || []).map((arg: any) => ({ id: arg.id, type: 'Argument', text: arg.title, source: 'Case Strategy' }));
     const evidence = (caseData as any)?.evidence?.map((ev: any) => ({ id: ev.id, type: 'Evidence', text: ev.title, source: 'Evidence Vault' })) || [];
-    const law = (caseData?.citations || []).map((cit: any) => ({ id: cit.id, type: 'Citation', text: cit.citation, source: 'Authority Library' }));
+    const law = ((caseData as any)?.citations || []).map((cit: any) => ({ id: cit.id, type: 'Citation', text: cit.citation, source: 'Authority Library' }));
     
     const items = [...facts, ...evidence, ...law];
 

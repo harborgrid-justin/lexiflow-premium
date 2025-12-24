@@ -100,8 +100,8 @@ const matterManagementTabs: ParentTabItem[] = [
  * Default two-level tab navigation showing Matter Management structure.
  * Parent tabs use underline style, sub-tabs use pill style.
  */
-export const Default: Story = {
-  render: (args) => {
+export const Default = {
+  render: (args: React.ComponentProps<typeof TabsV2>) => {
     const [activeTab, setActiveTab] = useState('overview');
 
     return (
@@ -112,7 +112,7 @@ export const Default: Story = {
           activeTabId={activeTab}
           onChange={setActiveTab}
         />
-        
+
         <div className="p-6 bg-slate-50 dark:bg-slate-800 rounded-lg">
           <h3 className="text-lg font-semibold mb-2">Active Tab: {activeTab}</h3>
           <p className="text-slate-600 dark:text-slate-400">
@@ -127,7 +127,7 @@ export const Default: Story = {
 /**
  * Small size variant with more compact spacing and smaller text.
  */
-export const SmallSize: Story = {
+export const SmallSize = {
   render: () => {
     const [activeTab, setActiveTab] = useState('overview');
 
@@ -145,7 +145,7 @@ export const SmallSize: Story = {
 /**
  * Large size variant with more prominent spacing and larger text.
  */
-export const LargeSize: Story = {
+export const LargeSize = {
   render: () => {
     const [activeTab, setActiveTab] = useState('overview');
 
@@ -164,7 +164,7 @@ export const LargeSize: Story = {
  * Compact mode without the background container on sub-tabs.
  * Useful for tighter layouts.
  */
-export const CompactSubTabs: Story = {
+export const CompactSubTabs = {
   render: () => {
     const [activeTab, setActiveTab] = useState('overview');
 
@@ -182,7 +182,7 @@ export const CompactSubTabs: Story = {
 /**
  * Demonstrates disabled parent tabs and sub-tabs.
  */
-export const WithDisabledTabs: Story = {
+export const WithDisabledTabs = {
   render: () => {
     const [activeTab, setActiveTab] = useState('overview');
 
@@ -230,7 +230,7 @@ export const WithDisabledTabs: Story = {
 /**
  * Shows badge support on sub-tabs for notifications or counts.
  */
-export const WithBadges: Story = {
+export const WithBadges = {
   render: () => {
     const [activeTab, setActiveTab] = useState('overview');
 
@@ -269,7 +269,7 @@ export const WithBadges: Story = {
 /**
  * Mobile-friendly responsive view with overflow scrolling.
  */
-export const ResponsiveView: Story = {
+export const ResponsiveView = {
   render: () => {
     const [activeTab, setActiveTab] = useState('overview');
 
@@ -293,7 +293,7 @@ export const ResponsiveView: Story = {
 /**
  * Dark mode variant.
  */
-export const DarkMode: Story = {
+export const DarkMode = {
   render: () => {
     const [activeTab, setActiveTab] = useState('overview');
 
@@ -315,7 +315,7 @@ export const DarkMode: Story = {
 /**
  * Minimal tab structure with single parent.
  */
-export const SimpleStructure: Story = {
+export const SimpleStructure = {
   render: () => {
     const [activeTab, setActiveTab] = useState('all');
 
@@ -345,7 +345,7 @@ export const SimpleStructure: Story = {
 /**
  * Complex hierarchy with many sub-tabs demonstrating overflow scrolling.
  */
-export const ManySubTabs: Story = {
+export const ManySubTabs = {
   render: () => {
     const [activeTab, setActiveTab] = useState('overview');
 

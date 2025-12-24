@@ -46,18 +46,37 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({
   const notify = useNotify();
   const [draftResponse, setDraftResponse] = useState("");
   const [isDrafting, setIsDrafting] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [, setValidationErrors] = useState<
     Array<{ path: string; message: string }>
   >([]);
 
+  // Define handleGenerateResponse before useEffect
+  const handleGenerateResponse = useCallback(async () => {
+    if (!request) return;
+    setIsDrafting(true);
+    const draft = await GeminiService.generateDraft(
+      `Draft a legal response to this discovery request pursuant to FRCP 34/33: "${request.title}: ${request.description}".
+      Include standard objections (overly broad, undue burden, vague/ambiguous).
+      Format as a formal legal pleading.`,
+      "Discovery Response",
+    );
+    setDraftResponse(draft);
+    setIsDrafting(false);
+  }, [request]);
+
   // Auto-save with 2s debounce
-  const { isSaving, lastSaved } = useAutoSave(
-    draftResponse,
-    request
-      ? `discovery-response-draft-${request.id}`
-      : "discovery-response-draft",
-    2000,
-  );
+  const { isSaving } = useAutoSave({
+    data: draftResponse,
+    onSave: async (data: string) => {
+      if (request) {
+        localStorage.setItem(`discovery-response-draft-${request.id}`, data);
+        setLastSaved(new Date());
+      }
+    },
+    delay: 2000,
+    enabled: !!request
+  });
 
   useEffect(() => {
     // Restore draft from localStorage on mount
@@ -108,19 +127,6 @@ export const DiscoveryResponse: React.FC<DiscoveryResponseProps> = ({
     localStorage.removeItem(`discovery-response-draft-${request.id}`);
     notify.success("Response saved successfully");
   };
-
-  const handleGenerateResponse = useCallback(async () => {
-    if (!request) return;
-    setIsDrafting(true);
-    const draft = await GeminiService.generateDraft(
-      `Draft a legal response to this discovery request pursuant to FRCP 34/33: "${request.title}: ${request.description}". 
-      Include standard objections (overly broad, undue burden, vague/ambiguous). 
-      Format as a formal legal pleading.`,
-      "Discovery Response",
-    );
-    setDraftResponse(draft);
-    setIsDrafting(false);
-  });
 
   if (!request) return <div>No request selected.</div>;
 

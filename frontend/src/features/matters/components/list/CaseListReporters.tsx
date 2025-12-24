@@ -45,7 +45,7 @@ export const CaseListReporters: React.FC = () => {
        </div>
 
        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-           {reporters.map((r: unknown) => {
+           {(Array.isArray(reporters) ? reporters : []).map((r: unknown) => {
                if (typeof r !== 'object' || r === null) return null;
                const reporterId = 'id' in r ? String(r.id) : '';
                const reporterName = 'name' in r && typeof r.name === 'string' ? r.name : '';

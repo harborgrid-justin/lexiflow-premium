@@ -62,7 +62,7 @@ export const LegalHolds: React.FC = () => {
               await queryClient.cancelQueries(discoveryQueryKeys.discovery.holds.all);
               
               // Snapshot previous value
-              const previousHolds = queryClient.getQueryData<LegalHold[]>(discoveryQueryKeys.discovery.holds.all);
+              const previousHolds = queryClient.getQueryState<LegalHold[]>(discoveryQueryKeys.discovery.holds.all)?.data;
               
               // Optimistically update
               if (previousHolds) {

@@ -9,9 +9,23 @@ import { Bell, X, Check, Clock, AlertCircle, AlertTriangle, CheckCircle, Info } 
 import { useModalState } from '@/hooks/useModalState';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import type { Notification, NotificationGroup } from '@/types';
+import type { NotificationGroup } from '@/types';
 import { NotificationService } from '@/services/domain/NotificationDomain';
 import { formatDistanceToNow } from 'date-fns';
+
+// Use the Notification type from NotificationDomain service
+interface Notification {
+  id: string;
+  type: 'info' | 'warning' | 'error' | 'success';
+  title: string;
+  message: string;
+  read: boolean;
+  timestamp?: string;
+  createdAt: string;
+  actionUrl?: string;
+  actionLabel?: string;
+  priority?: 'low' | 'medium' | 'high' | 'urgent';
+}
 
 export const NotificationPanel: React.FC = () => {
   const { theme } = useTheme();
@@ -20,27 +34,52 @@ export const NotificationPanel: React.FC = () => {
   const [groupedNotifications, setGroupedNotifications] = useState<(Notification | NotificationGroup)[]>([]);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
 
-  // Subscribe to notifications
+  // Load notifications
   useEffect(() => {
-    let unsubscribe: (() => void) | undefined;
-
-    // Subscribe with a subscriber ID and callback
-    const subscriberId = 'notification-panel';
-    NotificationService.subscribe(subscriberId, (notifications: Notification[]) => {
-      setNotifications(notifications);
-      setGroupedNotifications(NotificationService.getGrouped());
-    }).then((unsub) => {
-      unsubscribe = unsub as unknown as (() => void);
-    });
-
-    return () => {
-      if (unsubscribe) {
-        unsubscribe();
-      }
+    const loadNotifications = async () => {
+      const allNotifications = (await NotificationService.getNotifications()) as Notification[];
+      setNotifications(allNotifications);
+      // Group notifications by similar titles
+      const grouped = allNotifications.reduce((acc: (Notification | any)[], notification) => {
+        const existing = acc.find(item => 'notifications' in item && item.notifications[0].title === notification.title);
+        if (existing && 'notifications' in existing) {
+          existing.notifications.push(notification);
+          existing.count++;
+          const notifDate = notification.createdAt || notification.timestamp;
+          if (notifDate && new Date(notifDate).getTime() > existing.latestTimestamp) {
+            existing.latestTimestamp = new Date(notifDate).getTime();
+          }
+        } else if (acc.some(item => !('notifications' in item) && item.title === notification.title)) {
+          // Convert single notification to group
+          const single = acc.find(item => !('notifications' in item) && item.title === notification.title) as Notification;
+          const groupIndex = acc.indexOf(single);
+          const singleDate = single.createdAt || single.timestamp || new Date().toISOString();
+          const notifDate = notification.createdAt || notification.timestamp || new Date().toISOString();
+          acc[groupIndex] = {
+            groupKey: notification.title,
+            notifications: [single, notification],
+            count: 2,
+            latestTimestamp: Math.max(new Date(singleDate).getTime(), new Date(notifDate).getTime()),
+            collapsed: false,
+          };
+        } else {
+          acc.push(notification);
+        }
+        return acc;
+      }, []);
+      setGroupedNotifications(grouped);
     };
+
+    loadNotifications();
+    const interval = setInterval(loadNotifications, 30000); // Refresh every 30s
+    return () => clearInterval(interval);
   }, []);
 
-  const unreadCount = NotificationService.getUnreadCount();
+  const [unreadCount, setUnreadCount] = React.useState(0);
+
+  useEffect(() => {
+    NotificationService.getUnreadCount().then(setUnreadCount);
+  }, [notifications]);
 
   /**
    * Get notification icon
@@ -104,7 +143,9 @@ export const NotificationPanel: React.FC = () => {
             <button
               onClick={(e: React.MouseEvent) => {
                 e.stopPropagation();
-                NotificationService.remove(notification.id);
+                NotificationService.delete(notification.id).then(() => {
+                  setNotifications(prev => prev.filter(n => n.id !== notification.id));
+                });
               }}
               className={cn(
                 "flex-shrink-0 p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700",
@@ -125,10 +166,10 @@ export const NotificationPanel: React.FC = () => {
           <div className="flex items-center gap-2 mt-2">
             <span className={cn("text-xs flex items-center gap-1", theme.text.tertiary)}>
               <Clock className="h-3 w-3" />
-              {formatDistanceToNow(notification.timestamp, { addSuffix: true })}
+              {formatDistanceToNow(new Date(notification.createdAt || notification.timestamp || new Date()), { addSuffix: true })}
             </span>
 
-            {notification.priority !== 'normal' && (
+            {notification.priority && notification.priority !== 'low' && (
               <span className={cn(
                 "text-xs px-2 py-0.5 rounded-full font-medium",
                 notification.priority === 'urgent' && "bg-rose-100 text-rose-700 dark:bg-rose-900 dark:text-rose-300",
@@ -139,27 +180,22 @@ export const NotificationPanel: React.FC = () => {
             )}
           </div>
 
-          {/* Action Buttons */}
-          {notification.actions && notification.actions.length > 0 && (
+          {/* Action Button - Navigate to action URL if available */}
+          {notification.actionUrl && notification.actionLabel && (
             <div className="flex items-center gap-2 mt-3">
-              {notification.actions.map((action: any, idx: number) => (
-                <button
-                  key={idx}
-                  onClick={(e: React.MouseEvent) => {
-                    e.stopPropagation();
-                    action.onClick();
-                    NotificationService.remove(notification.id);
-                  }}
-                  className={cn(
-                    "px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
-                    action.variant === 'primary' && cn(theme.primary.DEFAULT, 'text-white'),
-                    action.variant === 'danger' && "bg-rose-500 text-white hover:bg-rose-600",
-                    !action.variant && cn(theme.surface.input, theme.text.primary, "hover:bg-slate-200 dark:hover:bg-slate-700")
-                  )}
-                >
-                  {action.label}
-                </button>
-              ))}
+              <button
+                onClick={(e: React.MouseEvent) => {
+                  e.stopPropagation();
+                  window.location.href = notification.actionUrl!;
+                  NotificationService.delete(notification.id);
+                }}
+                className={cn(
+                  "px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
+                  theme.primary.DEFAULT, 'text-white'
+                )}
+              >
+                {notification.actionLabel}
+              </button>
             </div>
           )}
         </div>
@@ -170,7 +206,7 @@ export const NotificationPanel: React.FC = () => {
   /**
    * Render notification group
    */
-  const renderGroup = (group: NotificationGroup) => {
+  const renderGroup = (group: any) => {
     const isExpanded = expandedGroups.has(group.groupKey);
 
     return (
@@ -196,7 +232,7 @@ export const NotificationPanel: React.FC = () => {
                 {group.notifications[0].title}
               </p>
               <p className={cn("text-xs", theme.text.tertiary)}>
-                {formatDistanceToNow(group.latestTimestamp, { addSuffix: true })}
+                {formatDistanceToNow(new Date(group.latestTimestamp), { addSuffix: true })}
               </p>
             </div>
           </div>
@@ -210,7 +246,7 @@ export const NotificationPanel: React.FC = () => {
 
         {isExpanded && (
           <div className="pl-4">
-            {group.notifications.map(renderNotification)}
+            {group.notifications.map((n: Notification) => renderNotification(n))}
           </div>
         )}
       </div>
@@ -267,7 +303,11 @@ export const NotificationPanel: React.FC = () => {
               <div className="flex items-center gap-2">
                 {unreadCount > 0 && (
                   <button
-                    onClick={() => NotificationService.markAllAsRead()}
+                    onClick={async () => {
+                      await NotificationService.markAllAsRead();
+                      const updated = (await NotificationService.getNotifications()) as Notification[];
+                      setNotifications(updated);
+                    }}
                     className={cn(
                       "text-xs font-medium px-2 py-1 rounded transition-colors",
                       theme.primary.text,
@@ -319,8 +359,10 @@ export const NotificationPanel: React.FC = () => {
                 theme.border.default
               )}>
                 <button
-                  onClick={() => {
-                    NotificationService.clearAll();
+                  onClick={async () => {
+                    await Promise.all(notifications.map(n => NotificationService.delete(n.id)));
+                    setNotifications([]);
+                    setGroupedNotifications([]);
                     panel.close();
                   }}
                   className={cn(

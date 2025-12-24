@@ -25,14 +25,13 @@ const meta: Meta<typeof Drawer> = {
       control: 'boolean',
       description: 'Whether the drawer is open',
     },
-    side: {
-      control: 'select',
-      options: ['left', 'right'],
-      description: 'Side from which the drawer slides in',
-    },
     title: {
       control: 'text',
       description: 'Drawer title',
+    },
+    width: {
+      control: 'text',
+      description: 'Drawer width (Tailwind max-width class)',
     },
     children: {
       control: 'text',
@@ -54,7 +53,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Right: Story = {
+export const Default: Story = {
   render: () => {
     const [isOpen, setIsOpen] = useState(false);
     return (
@@ -64,7 +63,6 @@ export const Right: Story = {
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           title="Case Details"
-          side="right"
         >
           <div className="space-y-4">
             <p>This is a drawer panel from the right side.</p>
@@ -76,20 +74,21 @@ export const Right: Story = {
   },
 };
 
-export const Left: Story = {
+export const Wide: Story = {
   render: () => {
     const [isOpen, setIsOpen] = useState(false);
     return (
       <div>
-        <Button onClick={() => setIsOpen(true)}>Open Left Drawer</Button>
+        <Button onClick={() => setIsOpen(true)}>Open Wide Drawer</Button>
         <Drawer
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
           title="Filters"
-          side="left"
+          width="max-w-2xl"
         >
           <div className="space-y-4">
-            <p>This drawer slides from the left.</p>
+            <p>This is a wider drawer panel.</p>
+            <p>Great for more complex content.</p>
           </div>
         </Drawer>
       </div>

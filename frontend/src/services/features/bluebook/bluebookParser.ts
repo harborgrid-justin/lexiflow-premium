@@ -17,9 +17,10 @@ import {
   ValidationError,
   ValidationSeverity,
   CourtLevel,
-  CitationSignal
-} from '@types/bluebook';
-import { IdGenerator } from '@utils/idGenerator';
+  CitationSignal,
+  Author
+} from '@/types/bluebook';
+import { IdGenerator } from '@/utils/idGenerator';
 
 /**
  * Citation parser class with regex-based pattern matching
@@ -325,9 +326,9 @@ export class BluebookParser {
   /**
    * Parse multiple authors from string
    */
-  private static parseAuthors(authorString: string): unknown[] {
+  private static parseAuthors(authorString: string): Author[] {
     const authors = authorString.split(/\s*[&,]\s*(?:and\s+)?/i);
-    return authors.map(name => {
+    return authors.map((name): Author => {
       const parts = name.trim().split(/\s+/);
       if (parts.length === 1) {
         return { firstName: '', lastName: parts[0], fullName: parts[0] };

@@ -44,7 +44,6 @@ const metaManager = {
       },
     },
   },
-  tags: ['autodocs'],
   decorators: [
     (Story: React.ComponentType) => (
       <ThemeProvider>

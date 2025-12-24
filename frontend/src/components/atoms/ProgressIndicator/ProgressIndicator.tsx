@@ -126,6 +126,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
   onCancel,
   error,
   successMessage = 'Complete!',
+  label,
   size = 'md',
   variant = 'primary',
 }) => {

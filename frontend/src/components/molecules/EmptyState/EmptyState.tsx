@@ -43,7 +43,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({ icon: Icon, title, descr
   return (
     <Box
       flex
-      direction="vertical"
+      direction="col"
       align="center"
       justify="center"
       spacing="lg"

@@ -50,6 +50,7 @@ interface FormState extends Partial<CreateTrustAccountDto> {
   recordRetentionYears?: number;
   authorizedSignatories?: string[];
   primarySignatory?: string;
+  ioltalProgramId?: string;
 }
 
 /**
@@ -349,8 +350,8 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
           placeholder={placeholder}
           className={cn(
             'w-full px-3 py-2 rounded-lg border transition-colors',
-            error ? 'border-rose-600' : theme.border.primary,
-            theme.bg.tertiary,
+            error ? 'border-rose-600' : theme.border.default,
+            theme.surface.default,
             theme.text.primary
           )}
         />
@@ -404,8 +405,8 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
                 onChange={(e) => updateField('accountType', e.target.value as TrustAccountType)}
                 className={cn(
                   'w-full px-3 py-2 rounded-lg border',
-                  theme.border.primary,
-                  theme.bg.tertiary,
+                  theme.border.default,
+                  theme.surface.default,
                   theme.text.primary
                 )}
               >
@@ -553,8 +554,8 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
                 onChange={(e) => updateField('recordRetentionYears', parseInt(e.target.value))}
                 className={cn(
                   'w-full px-3 py-2 rounded-lg border',
-                  theme.border.primary,
-                  theme.bg.tertiary,
+                  theme.border.default,
+                  theme.surface.default,
                   theme.text.primary
                 )}
               >
@@ -599,8 +600,8 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
                 rows={3}
                 className={cn(
                   'w-full px-3 py-2 rounded-lg border',
-                  theme.border.primary,
-                  theme.bg.tertiary,
+                  theme.border.default,
+                  theme.surface.default,
                   theme.text.primary
                 )}
               />
@@ -619,7 +620,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
             </h3>
             
             <div className="space-y-4">
-              <div className={cn('p-4 rounded-lg border', theme.bg.tertiary, theme.border.primary)}>
+              <div className={cn('p-4 rounded-lg border', theme.surface.default, theme.border.default)}>
                 <h4 className={cn('font-medium mb-2', theme.text.primary)}>Account Information</h4>
                 <dl className="space-y-1">
                   <div className="flex justify-between">
@@ -640,8 +641,8 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
                   </div>
                 </dl>
               </div>
-              
-              <div className={cn('p-4 rounded-lg border', theme.bg.tertiary, theme.border.primary)}>
+
+              <div className={cn('p-4 rounded-lg border', theme.surface.default, theme.border.default)}>
                 <h4 className={cn('font-medium mb-2', theme.text.primary)}>Bank Details</h4>
                 <dl className="space-y-1">
                   <div className="flex justify-between">
@@ -654,8 +655,8 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
                   </div>
                 </dl>
               </div>
-              
-              <div className={cn('p-4 rounded-lg border', theme.bg.tertiary, theme.border.primary)}>
+
+              <div className={cn('p-4 rounded-lg border', theme.surface.default, theme.border.default)}>
                 <h4 className={cn('font-medium mb-2', theme.text.primary)}>Compliance</h4>
                 <dl className="space-y-1">
                   <div className="flex justify-between">

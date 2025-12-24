@@ -13,20 +13,9 @@ import { useSelection } from '@/hooks/useSelectionState';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { ErrorState } from '@/components/molecules/ErrorState';
 import { WebhooksApiService } from '@/api/webhooks-api';
+import type { SystemWebhookConfig } from '@/types/system';
 
 const webhooksApi = new WebhooksApiService();
-
-interface WebhookConfig {
-  id: string;
-  name: string;
-  url: string;
-  events: string[];
-  status: 'Active' | 'Inactive' | 'Error';
-  secret?: string;
-  lastTriggered?: string;
-  failureCount: number;
-  createdAt: string;
-}
 
 const availableEvents = [
   'case.created', 'case.updated', 'case.closed',
@@ -54,15 +43,15 @@ export const WebhookManagement: React.FC = () => {
       lastTriggered: item.lastTriggered,
       failureCount: item.failureCount || 0,
       createdAt: item.createdAt,
-    })) as WebhookConfig[];
+    })) as SystemWebhookConfig[];
   });
 
   const createModal = useModalState();
   const editModal = useModalState();
   const deleteModal = useModalState();
   const testModal = useModalState();
-  const webhookSelection = useSelection<WebhookConfig>();
-  const [formData, setFormData] = useState<Partial<WebhookConfig>>({ events: [] });
+  const webhookSelection = useSelection<SystemWebhookConfig>();
+  const [formData, setFormData] = useState<Partial<SystemWebhookConfig>>({ events: [] });
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
 
   const handleCreate = async () => {
@@ -132,13 +121,13 @@ export const WebhookManagement: React.FC = () => {
     }
   };
 
-  const openEditModal = (webhook: WebhookConfig) => {
+  const openEditModal = (webhook: SystemWebhookConfig) => {
     webhookSelection.select(webhook);
     setFormData(webhook);
     editModal.open();
   };
 
-  const openTestModal = (webhook: WebhookConfig) => {
+  const openTestModal = (webhook: SystemWebhookConfig) => {
     webhookSelection.select(webhook);
     setTestResult(null);
     testModal.open();

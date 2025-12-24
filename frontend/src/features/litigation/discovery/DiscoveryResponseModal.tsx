@@ -23,7 +23,7 @@ export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ 
   const [draftResponse, setDraftResponse] = useState('');
   const [isDrafting, setIsDrafting] = useState(false);
   const { theme } = useTheme();
-  const { notifySuccess, notifyError } = useNotify();
+  const { success, error } = useNotify();
 
   const handleGenerateResponse = async () => {
     if (!request) return;
@@ -58,11 +58,11 @@ export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ 
     {
       onSuccess: () => {
         queryClient.invalidate(queryKeys.pleadings.all());
-        notifySuccess('Response saved to drafts successfully.');
+        success('Response saved to drafts successfully.');
         onClose();
       },
       onError: () => {
-        notifyError('Failed to save response. Please try again.');
+        error('Failed to save response. Please try again.');
       }
     }
   );
@@ -120,9 +120,9 @@ export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ 
 
         <div className={cn("flex justify-end gap-3 pt-4 border-t border-slate-100", theme.border.default)}>
            <Button variant="secondary" onClick={onClose}>Discard</Button>
-           <Button 
-             variant="primary" 
-             onClick={() => saveDraftMutation.mutate()}
+           <Button
+             variant="primary"
+             onClick={() => saveDraftMutation.mutate(undefined as any)}
              disabled={saveDraftMutation.isLoading || !draftResponse}
            >
              {saveDraftMutation.isLoading ? 'Saving...' : 'Save to Matter File'}

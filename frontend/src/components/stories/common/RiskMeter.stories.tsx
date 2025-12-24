@@ -20,14 +20,18 @@ const meta: Meta<typeof RiskMeter> = {
   },
   tags: ['autodocs'],
   argTypes: {
-    level: {
-      control: 'select',
-      options: ['low', 'medium', 'high', 'critical'],
-      description: 'Risk level',
+    value: {
+      control: { type: 'range', min: 0, max: 100 },
+      description: 'Risk/strength value (0-100)',
     },
     label: {
       control: 'text',
       description: 'Label text',
+    },
+    type: {
+      control: 'select',
+      options: ['strength', 'risk'],
+      description: 'Meter type (affects color interpretation)',
     },
   },
   decorators: [
@@ -45,30 +49,34 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Low: Story = {
+export const LowRisk: Story = {
   args: {
-    level: 'low',
+    value: 25,
     label: 'Low Risk',
+    type: 'risk',
   },
 };
 
-export const Medium: Story = {
+export const MediumRisk: Story = {
   args: {
-    level: 'medium',
+    value: 55,
     label: 'Medium Risk',
+    type: 'risk',
   },
 };
 
-export const High: Story = {
+export const HighRisk: Story = {
   args: {
-    level: 'high',
+    value: 85,
     label: 'High Risk',
+    type: 'risk',
   },
 };
 
-export const Critical: Story = {
+export const StrengthMeter: Story = {
   args: {
-    level: 'critical',
-    label: 'Critical Risk',
+    value: 75,
+    label: 'Password Strength',
+    type: 'strength',
   },
 };

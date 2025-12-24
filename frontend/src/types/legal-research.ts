@@ -9,7 +9,7 @@ import {
   } from './enums';
 import { SearchResult } from '@/api/search/search-api';
 
-export interface Citation extends BaseEntity {
+export interface Citation extends BaseEntity, Record<string, unknown> {
   // Backend: citations table
   citation: string; // Backend: varchar (required) - the actual citation text
   court: string; // Backend: varchar (required)
@@ -20,7 +20,7 @@ export interface Citation extends BaseEntity {
   status: string; // Backend: varchar (default: 'Valid')
   shepards?: JsonValue; // Backend: json
   signal?: string; // Signal indicator (e.g., 'positive', 'negative', 'warning')
-  
+
   // Frontend-specific (legacy)
   type?: string; // Deprecated
   description?: string; // Deprecated

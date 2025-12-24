@@ -370,8 +370,8 @@ export class BillingRepository extends Repository<TimeEntry> {
             throw new Error('[BillingRepository.addTimeEntry] Time entry must have a caseId');
         }
 
-        if (typeof entry.hours !== 'number' || entry.hours <= 0) {
-            throw new Error('[BillingRepository.addTimeEntry] Invalid hours value');
+        if (typeof entry.duration !== 'number' || entry.duration <= 0) {
+            throw new Error('[BillingRepository.addTimeEntry] Invalid duration value');
         }
 
         try {
@@ -451,7 +451,7 @@ export class BillingRepository extends Repository<TimeEntry> {
                 ;
             }
 
-            const stats = await db.get<unknown>(STORES.REALIZATION_STATS, 'realization-main');
+            const stats = await db.get<{ data?: any }>(STORES.REALIZATION_STATS, 'realization-main');
             return stats?.data || [];
         } catch (error) {
             console.error('[BillingRepository.getRealizationStats] Error:', error);
@@ -521,13 +521,31 @@ export class BillingRepository extends Repository<TimeEntry> {
 
             const invoice: Invoice = {
                 id: `INV-${Date.now()}` as UUID,
+                createdAt: now.toISOString(),
+                updatedAt: now.toISOString(),
+                invoiceNumber: `INV-${Date.now()}`,
+                caseId: caseId as CaseId,
+                clientId: `client-${Date.now()}`,
+                clientName: clientName,
+                matterDescription: caseId,
+                invoiceDate: now.toISOString().split('T')[0],
+                dueDate: dueDate.toISOString().split('T')[0],
+                billingModel: 'Hourly',
+                status: 'Draft',
+                subtotal: totalAmount,
+                taxAmount: 0,
+                discountAmount: 0,
+                totalAmount: totalAmount,
+                paidAmount: 0,
+                balanceDue: totalAmount,
+                timeCharges: totalAmount,
+                expenseCharges: 0,
+                currency: 'USD',
+                // Frontend-specific (legacy)
                 client: clientName,
                 matter: caseId,
-                caseId: caseId as any,
                 date: now.toISOString().split('T')[0],
-                dueDate: dueDate.toISOString().split('T')[0],
                 amount: totalAmount,
-                status: 'Draft',
                 items: entries.map(e => e.id)
             };
 
@@ -547,11 +565,9 @@ export class BillingRepository extends Repository<TimeEntry> {
             try {
                 const { IntegrationOrchestrator } = await import('@/services/integration/integrationOrchestrator');
                 const { SystemEventType } = await import('@/types/integration-types');
-                
-                await IntegrationOrchestrator.publish(SystemEventType.INVOICE_GENERATED, {
-                    invoice,
-                    entryCount: entries.length,
-                    totalAmount
+
+                await IntegrationOrchestrator.publish(SystemEventType.INVOICE_STATUS_CHANGED, {
+                    invoice
                 });
             } catch (eventError) {
                 console.warn('[BillingRepository] Failed to publish integration event', eventError);

@@ -45,7 +45,11 @@ export const formatDeadline = (dueTime: number): string => {
 export const getCaseProgress = (caseId: string, tasks: WorkflowTask[]): number => {
   const caseTasks = tasks.filter(t => t.caseId === caseId);
   if (caseTasks.length === 0) return 0;
-  const completed = caseTasks.filter(t => t.status === 'Done' || t.status === 'Completed').length;
+  const completed = caseTasks.filter(t =>
+    t.status === 'COMPLETED' as any ||
+    t.status === 'Completed' as any ||
+    t.status === 'Done' as any
+  ).length;
   return Math.round((completed / caseTasks.length) * 100);
 };
 
@@ -56,7 +60,12 @@ export const getCaseProgress = (caseId: string, tasks: WorkflowTask[]): number =
  * @returns Description of next task or completion message
  */
 export const getNextTask = (caseId: string, tasks: WorkflowTask[]): string => {
-  const caseTasks = tasks.filter(t => t.caseId === caseId && t.status !== 'Done' && t.status !== 'Completed');
+  const caseTasks = tasks.filter(t =>
+    t.caseId === caseId &&
+    t.status !== 'Done' as any &&
+    t.status !== 'Completed' as any &&
+    t.status !== 'COMPLETED' as any
+  );
   if (caseTasks.length === 0) return "All tasks completed";
   // Sort by due date
   caseTasks.sort((a: WorkflowTask, b: WorkflowTask) => {

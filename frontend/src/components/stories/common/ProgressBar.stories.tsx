@@ -20,13 +20,21 @@ const meta: Meta<typeof ProgressBar> = {
   },
   tags: ['autodocs'],
   argTypes: {
+    label: {
+      control: 'text',
+      description: 'Progress bar label',
+    },
     value: {
       control: { type: 'range', min: 0, max: 100 },
-      description: 'Current progress value',
+      description: 'Current progress value (0-100)',
     },
-    max: {
-      control: 'number',
-      description: 'Maximum value',
+    colorClass: {
+      control: 'text',
+      description: 'Custom color class for the progress bar',
+    },
+    showValue: {
+      control: 'boolean',
+      description: 'Show percentage value',
     },
   },
   decorators: [
@@ -46,28 +54,28 @@ type Story = StoryObj<typeof meta>;
 
 export const Low: Story = {
   args: {
+    label: 'Upload Progress',
     value: 25,
-    max: 100,
   },
 };
 
 export const Medium: Story = {
   args: {
+    label: 'Processing Documents',
     value: 50,
-    max: 100,
   },
 };
 
 export const High: Story = {
   args: {
+    label: 'Case Analysis',
     value: 75,
-    max: 100,
   },
 };
 
 export const Complete: Story = {
   args: {
+    label: 'Completed',
     value: 100,
-    max: 100,
   },
 };

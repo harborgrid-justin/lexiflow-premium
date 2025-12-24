@@ -25,7 +25,7 @@
  * - Data transformation layer for frontend/backend mapping
  */
 
-import { apiClient, type PaginatedResponse } from '../infrastructure/apiClient';
+import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
 import type { Case } from '../../types';
 
 /**

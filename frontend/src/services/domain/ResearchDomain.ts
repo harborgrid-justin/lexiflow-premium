@@ -1,8 +1,8 @@
 /**
  * +---------------------------------------------------------------------------+
- * ¦                    LEXIFLOW RESEARCH DOMAIN SERVICE                       ¦
- * ¦                   Enterprise Legal Research Layer v2.0                    ¦
- * ¦                       PhD-Level Systems Architecture                      ¦
+ * ï¿½                    LEXIFLOW RESEARCH DOMAIN SERVICE                       ï¿½
+ * ï¿½                   Enterprise Legal Research Layer v2.0                    ï¿½
+ * ï¿½                       PhD-Level Systems Architecture                      ï¿½
  * +---------------------------------------------------------------------------+
  * 
  * @module services/domain/ResearchDomain
@@ -15,10 +15,10 @@
  * backend API integration for legal databases.
  */
 
-import { analyticsApi } from '../api/domains/analytics.api';
-import { delay } from '../../utils/async';
-import { isBackendApiEnabled } from '../api';
-import { apiClient } from '../infrastructure/apiClient';
+import { analyticsApi } from '@/api/domains/analytics.api';
+import { delay } from '@/utils/async';
+import { isBackendApiEnabled } from '@/api';
+import { apiClient } from '@/services/infrastructure/apiClient';
 
 interface ResearchResult {
   id: string;

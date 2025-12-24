@@ -18,7 +18,7 @@ import { Search, FileText, Plus, Tag, Filter, BookOpen } from 'lucide-react';
 // ============================================================================
 // Types
 import { Clause } from '../../../types';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';

@@ -19,7 +19,7 @@ import { RuleSelector } from '../../common/RuleSelector';
 import { UserSelect } from '../../common/UserSelect';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 
 // Internal Dependencies - Services & Utils

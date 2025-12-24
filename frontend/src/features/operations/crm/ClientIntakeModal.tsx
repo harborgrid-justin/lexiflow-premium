@@ -4,7 +4,7 @@ import { ShieldCheck, Plus, UserPlus, AlertTriangle, Loader2 } from 'lucide-reac
 import { Modal } from '../../common/Modal';
 import { Button } from '../../common/Button';
 import { Input } from '../../common/Inputs';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useDebounce } from '@/hooks/useDebounce';

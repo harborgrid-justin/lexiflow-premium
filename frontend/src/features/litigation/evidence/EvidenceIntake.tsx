@@ -15,7 +15,7 @@ import { Stepper } from '../../common/Stepper';
 import { TagInput } from '../../common/TagInput';
 
 // Context & Utils
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useWizard } from '@/hooks/useWizard';
 import { useNotify } from '@/hooks/useNotify';
@@ -25,7 +25,7 @@ import { useAutoSave } from '@/hooks/useAutoSave';
 import { DocumentService } from '@/services/features/documents/documentService';
 import { EvidenceItem, EvidenceId, CaseId, UUID } from '../../../types';
 import { validateEvidenceItemSafe } from '@/services/validation/evidenceSchemas';
-import { AdmissibilityStatusEnum } from '../../../types/enums';
+import { AdmissibilityStatusEnum } from '@/types/enums';
 
 interface EvidenceIntakeProps {
   handleBack: () => void;

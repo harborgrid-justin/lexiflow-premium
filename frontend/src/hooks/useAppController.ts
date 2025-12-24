@@ -24,11 +24,11 @@ import { queryClient } from '../services/infrastructure/queryClient';
 import { GlobalSearchResult } from '../services/search/searchService';
 import { IntentResult } from '../services/features/research/geminiService';
 import { apiClient } from '../services/infrastructure/apiClient';
-import { isBackendApiEnabled } from '../services/api';
+import { isBackendApiEnabled } from '@api';
 
 // Hooks & Context
 import { useSessionStorage } from './useSessionStorage';
-import { useToast } from '../context/ToastContext';
+import { useToast } from '@providers/ToastContext';
 import { useUsers } from './useDomainData';
 
 // Utils & Constants

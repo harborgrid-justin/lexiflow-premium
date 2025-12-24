@@ -57,7 +57,7 @@ import { getTodayString } from '@/utils/dateUtils';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import type { Case, MatterType, JurisdictionObject, CaseId } from '../../../types';import { MatterType as MatterTypeEnum } from '../../../types/enums';import { CaseStatus } from '../../../types';
+import type { Case, MatterType, JurisdictionObject, CaseId } from '../../../types';import { MatterType as MatterTypeEnum } from '@/types/enums';import { CaseStatus } from '../../../types';
 
 /**
  * Form state type with discriminated union for pre-filing vs filed cases

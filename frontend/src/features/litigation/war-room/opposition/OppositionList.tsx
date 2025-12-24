@@ -17,7 +17,7 @@ import { Phone, Mail, MoreHorizontal, TrendingUp, Flame } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 
 // Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../common/Table';

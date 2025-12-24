@@ -24,7 +24,7 @@ import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useListNavigation } from '@/hooks/useListNavigation';
 
 // Internal Dependencies - Services & Utils

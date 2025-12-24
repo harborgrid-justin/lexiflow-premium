@@ -47,7 +47,7 @@ import { PATHS } from '../../../config/paths.config';
 import { Button } from '../../common/Button';
 import { PageHeader } from '../../common/PageHeader';
 import { Breadcrumbs } from '../../common/Breadcrumbs';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/utils/cn';
 

@@ -252,7 +252,7 @@ useEffect(() => {
 
 ### 6.1 API Mode Detection
 ```typescript
-import { isBackendApiEnabled } from '../api';
+import { isBackendApiEnabled } from '@api';
 
 export const DataService = {
   users: {
@@ -268,7 +268,7 @@ export const DataService = {
 **File:** `/frontend/services/api/index.ts`
 
 ```typescript
-export { isBackendApiEnabled } from '../integration/apiConfig';
+export { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
 // Domain APIs
 export * from './domains/auth.api';

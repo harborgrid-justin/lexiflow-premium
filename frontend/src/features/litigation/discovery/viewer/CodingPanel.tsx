@@ -2,7 +2,7 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../../../common/Button';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 export const CodingPanel: React.FC = () => {

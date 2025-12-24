@@ -17,7 +17,7 @@ import { UploadCloud, FileSpreadsheet, CheckCircle, RefreshCw, Link, AlertTriang
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
 import { Card } from '../../common/Card';

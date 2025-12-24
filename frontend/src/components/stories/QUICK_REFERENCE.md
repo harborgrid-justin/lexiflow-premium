@@ -44,7 +44,7 @@ Filing/             # 1 filing component
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ComponentName } from '../components/path';
 import { ThemeProvider } from '../context/ThemeContext';
-import { ToastProvider } from '../context/ToastContext';
+import { ToastProvider } from '@providers/ToastContext';
 import React from 'react';
 
 const meta = {
@@ -83,7 +83,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { ComponentName } from '../components/path';
 import { ThemeProvider } from '../context/ThemeContext';
-import { ToastProvider } from '../context/ToastContext';
+import { ToastProvider } from '@providers/ToastContext';
 import React from 'react';
 
 const meta = {
@@ -139,7 +139,7 @@ import { fn } from '@storybook/test';
 ### Required for All Stories
 ```typescript
 import { ThemeProvider } from '../context/ThemeContext';
-import { ToastProvider } from '../context/ToastContext';
+import { ToastProvider } from '@providers/ToastContext';
 import React from 'react';
 ```
 

@@ -3,7 +3,7 @@
  * Compliance and regulatory reporting
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface ComplianceReport {
   id: string;

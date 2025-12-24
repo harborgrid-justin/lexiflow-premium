@@ -1,7 +1,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { Play, Download, AlignLeft, Bot } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Tabs } from '../../common/Tabs';
 import { Modal } from '../../common/Modal';

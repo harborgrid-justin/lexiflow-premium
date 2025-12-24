@@ -96,13 +96,13 @@
 
 import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData } from '../../types';
 import { Repository } from '../core/Repository';
-import { STORES, db } from '../data/db';
-import { delay } from '../../utils/async';
-import { isBackendApiEnabled } from '../integration/apiConfig';
+import { STORES, db } from '@/services/data/db';
+import { delay } from '@/utils/async';
+import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
 // Backend API Integration (Primary Data Source)
-import { BillingApiService } from '../api/billing-api';
-import { apiClient } from '../infrastructure/apiClient';
+import { BillingApiService } from '@/api/billing-api';
+import { apiClient } from '@/services/infrastructure/apiClient';
 
 /**
  * Query keys for React Query integration
@@ -383,8 +383,8 @@ export class BillingRepository extends Repository<TimeEntry> {
 
             // Publish integration event for time tracking
             try {
-                const { IntegrationOrchestrator } = await import('../integration/integrationOrchestrator');
-                const { SystemEventType } = await import('../../types/integration-types');
+                const { IntegrationOrchestrator } = await import('@/services/integration/integrationOrchestrator');
+                const { SystemEventType } = await import('@/types/integration-types');
                 
                 await IntegrationOrchestrator.publish(SystemEventType.TIME_LOGGED, {
                     entry: result
@@ -545,8 +545,8 @@ export class BillingRepository extends Repository<TimeEntry> {
 
             // Publish integration event
             try {
-                const { IntegrationOrchestrator } = await import('../integration/integrationOrchestrator');
-                const { SystemEventType } = await import('../../types/integration-types');
+                const { IntegrationOrchestrator } = await import('@/services/integration/integrationOrchestrator');
+                const { SystemEventType } = await import('@/types/integration-types');
                 
                 await IntegrationOrchestrator.publish(SystemEventType.INVOICE_GENERATED, {
                     invoice,

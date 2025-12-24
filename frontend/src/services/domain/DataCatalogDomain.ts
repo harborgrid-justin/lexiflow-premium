@@ -2,9 +2,9 @@ import { DataDictionaryItem, SchemaTable, DataLakeItem, LineageNode, LineageLink
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { dataPlatformApi } from '../api/domains/data-platform.api';
-import { MOCK_DATA_DICTIONARY } from '../../data/models/dataDictionary';
-import { delay } from '../../utils/async';
+import { dataPlatformApi } from "@/api/domains/data-platform.api";
+import { MOCK_DATA_DICTIONARY } from '@/api/data/dataDictionary';
+import { delay } from '@/utils/async';
 
 export const DataCatalogService = {
     getDictionary: async (): Promise<DataDictionaryItem[]> => { 

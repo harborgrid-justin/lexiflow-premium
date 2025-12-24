@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { QualityDashboard } from '../../../../frontend/components/admin/data/quality/QualityDashboard';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
-import { ToastProvider } from '../../../../frontend/context/ToastContext';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { ToastProvider } from '../../../../frontend/providers/ToastContext';
 import React from 'react';
 import type { DataAnomaly, QualityMetricHistory } from '../../../../frontend/types';
 

@@ -23,7 +23,7 @@ import { EvidenceForensics } from './EvidenceForensics';
 import { EvidenceChainOfCustody } from './EvidenceChainOfCustody';
 
 // Context & Utils
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';

@@ -26,7 +26,7 @@
  * - Document integration for attachments
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface Correspondence {
   id: string;

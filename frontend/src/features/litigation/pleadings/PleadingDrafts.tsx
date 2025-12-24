@@ -17,7 +17,7 @@ import { FileText, Clock, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
 import { VirtualGrid } from '../../common/VirtualGrid';

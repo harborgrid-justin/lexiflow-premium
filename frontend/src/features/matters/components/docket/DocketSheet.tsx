@@ -28,8 +28,8 @@ import { DocketToolbar } from './DocketToolbar';
 import { DocketTableSkeleton } from '../../common/DocketSkeleton';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
-import { useWindow } from '../../../context/WindowContext';
+import { useTheme } from '../../../providers/ThemeContext';
+import { useWindow } from '../../../providers/WindowContext';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 import { useLiveDocketFeed } from '@/hooks/useLiveDocketFeed';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';

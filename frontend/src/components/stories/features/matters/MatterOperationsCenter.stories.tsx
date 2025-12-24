@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { MatterOperationsCenter } from '../../../../frontend/components/matters/operations/MatterOperationsCenter';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
-import { ToastProvider } from '../../../../frontend/context/ToastContext';
+import { MatterOperationsCenter } from '../../../../features/matters/components/operations/MatterOperationsCenter';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { ToastProvider } from '../../../../frontend/providers/ToastContext';
 import React from 'react';
 
 /**

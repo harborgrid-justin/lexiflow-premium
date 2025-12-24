@@ -6,7 +6,7 @@
  * Ensures FRCP compliance for discovery requests, privilege logs, and legal holds
  */
 
-import { DiscoveryRequestStatusEnum, ESICollectionStatusEnum, LegalHoldStatusEnum, PrivilegeBasisEnum } from '../../types/enums';
+import { DiscoveryRequestStatusEnum, ESICollectionStatusEnum, LegalHoldStatusEnum, PrivilegeBasisEnum } from '@/types/enums';
 import type { DiscoveryRequest, PrivilegeLogEntry, LegalHold } from '../../types';
 
 // XSS Prevention: Sanitize HTML/script tags

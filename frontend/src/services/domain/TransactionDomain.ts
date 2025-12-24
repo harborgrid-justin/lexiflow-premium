@@ -4,8 +4,8 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { api } from '../api';
-import { delay } from '../../utils/async';
+import { api } from '@/api';
+import { delay } from '@/utils/async';
 
 interface Transaction {
   id: string;

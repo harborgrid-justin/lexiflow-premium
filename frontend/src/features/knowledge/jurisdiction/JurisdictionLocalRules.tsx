@@ -9,7 +9,7 @@ import { DataService } from '@/services/data/dataService';
 import { ConfirmDialog } from '../../common/ConfirmDialog';
 import { LegalRule } from '../../../types';
 import { Badge } from '../../common/Badge';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useModalState } from '../../../hooks';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';

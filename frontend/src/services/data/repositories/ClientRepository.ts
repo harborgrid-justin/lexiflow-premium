@@ -29,8 +29,8 @@
 import { Client, ClientId } from '../../../types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
-import { isBackendApiEnabled } from '../../integration/apiConfig';
-import { ClientsApiService } from '../../api/clients-api';
+import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { ClientsApiService } from '@/api/clients-api';
 
 /**
  * Query keys for React Query integration

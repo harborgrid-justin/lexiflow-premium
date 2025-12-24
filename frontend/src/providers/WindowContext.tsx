@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Minus, Maximize2 } from 'lucide-react';
-import { ErrorBoundary } from '../components/common/ErrorBoundary';
+import { ErrorBoundary } from "../components/organisms/ErrorBoundary/ErrorBoundary";
 
 export interface WindowInstance {
   id: string;

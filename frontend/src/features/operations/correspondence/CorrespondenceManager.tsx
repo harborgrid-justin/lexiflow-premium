@@ -22,7 +22,7 @@ import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useToggle } from '@/hooks/useToggle';
 import { useModalState } from '@/hooks/useModalState';

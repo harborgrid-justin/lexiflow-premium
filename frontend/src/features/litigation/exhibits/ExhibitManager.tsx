@@ -28,7 +28,7 @@ import { ExhibitStats } from './ExhibitStats';
 import { ErrorState } from '../../common/ErrorState';
 
 // Context & Utils
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useToggle } from '@/hooks/useToggle';
 

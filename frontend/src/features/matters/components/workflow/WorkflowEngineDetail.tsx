@@ -10,7 +10,7 @@ import { ParallelTasksManager } from './ParallelTasksManager';
 import { SLAMonitor } from './SLAMonitor';
 import { AuditTrailViewer } from './AuditTrailViewer';
 import { Tabs } from '../../common/Tabs';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { DataService } from '@/services/data/dataService';

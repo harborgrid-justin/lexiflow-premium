@@ -209,7 +209,7 @@ export class MattersService {
     };
   }
 
-  async getKPIs(dateRange?: string): Promise<any> {
+  async getKPIs(_dateRange?: string): Promise<any> {
     // TODO: Implement date range filtering
     const matters = await this.mattersRepository.find();
     const activeMatters = matters.filter(m => m.status === 'ACTIVE');
@@ -227,7 +227,7 @@ export class MattersService {
     };
   }
 
-  async getPipeline(dateRange?: string): Promise<any> {
+  async getPipeline(_dateRange?: string): Promise<any> {
     // TODO: Implement actual pipeline analytics from matter status transitions
     return [
       { stage: 'Initial Contact', count: 15, value: 450000, avgDaysInStage: 2, conversionRate: 95 },
@@ -237,9 +237,8 @@ export class MattersService {
     ];
   }
 
-  async getCalendarEvents(startDate: string, endDate?: string, matterIds?: string): Promise<any> {
+  async getCalendarEvents(_startDate: string, _endDate?: string, _matterIds?: string): Promise<any> {
     // TODO: Implement calendar events from matter deadlines and hearings
-    const matterIdArray = matterIds ? matterIds.split(',') : undefined;
     
     return [
       {
@@ -255,7 +254,7 @@ export class MattersService {
     ];
   }
 
-  async getRevenueAnalytics(dateRange?: string): Promise<any> {
+  async getRevenueAnalytics(_dateRange?: string): Promise<any> {
     // TODO: Integrate with billing/time entries for actual revenue data
     const matters = await this.mattersRepository.find();
     
@@ -287,7 +286,7 @@ export class MattersService {
     }));
   }
 
-  async getFinancialOverview(dateRange?: string): Promise<any> {
+  async getFinancialOverview(_dateRange?: string): Promise<any> {
     // TODO: Integrate with billing module for actual financial data
     const matters = await this.mattersRepository.find();
     

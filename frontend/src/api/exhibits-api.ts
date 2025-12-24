@@ -3,7 +3,7 @@
  * Manages trial exhibits
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface Exhibit {
   id: string;

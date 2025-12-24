@@ -17,7 +17,7 @@ import { RuleSelector } from '../../common/RuleSelector';
 import { Modal } from '../../common/Modal';
 
 // Context & Utils
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useModalState } from '../../../hooks';
 

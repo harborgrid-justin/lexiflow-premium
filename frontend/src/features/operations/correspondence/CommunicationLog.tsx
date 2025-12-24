@@ -17,7 +17,7 @@ import { Mail, ArrowUpRight, ArrowDownLeft, Paperclip, Shield } from 'lucide-rea
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Components
@@ -26,7 +26,7 @@ import { VirtualList } from '../../common/VirtualList';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
-import { CommunicationStatus } from '../../../types/enums';
+import { CommunicationStatus } from '@/types/enums';
 
 // Types
 import { CommunicationItem } from '../../../types';

@@ -22,8 +22,8 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
-import { useWindow } from '../../../context/WindowContext';
+import { useTheme } from '../../../providers/ThemeContext';
+import { useWindow } from '../../../providers/WindowContext';
 
 // Components
 import { VirtualGrid } from '../../common/VirtualGrid';
@@ -31,7 +31,7 @@ import { PlaybookDetail } from './PlaybookDetail';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
-import { Playbook } from '../../../data/mockLitigationPlaybooks';
+import { Playbook } from '@/api/data/mockLitigationPlaybooks';
 import { filterPlaybooks, extractCategories, getDifficultyColor, getDifficultyBorderColor } from './utils';
 
 // Types

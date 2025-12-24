@@ -5,7 +5,7 @@
  * Broken down from 967 LOC monolith into focused modules
  */
 
-export { DataSourcesManager as default } from '../DataSourcesManager';
+export { DataSourcesManager as default } from '@/api/dataSourcesManager';
 export { ConnectionCard } from './ConnectionCard';
 export { ConnectionForm } from './ConnectionForm';
 export { CloudDatabaseContent } from './CloudDatabaseContent';

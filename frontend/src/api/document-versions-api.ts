@@ -3,7 +3,7 @@
  * Document version control and history
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface DocumentVersion {
   id: string;

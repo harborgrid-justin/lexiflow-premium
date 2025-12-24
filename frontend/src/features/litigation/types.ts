@@ -7,7 +7,7 @@
  */
 
 import { WorkflowNode, WorkflowConnection, NodeType } from '../matters/workflow/builder/types';
-import { Playbook } from '../../data/mockLitigationPlaybooks';
+import { Playbook } from '@/api/data/mockLitigationPlaybooks';
 
 export type ZoomLevel = 'Quarter' | 'Month' | 'Week' | 'Day';
 

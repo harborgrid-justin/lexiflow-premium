@@ -3,7 +3,7 @@
  * Tracks all system activities and changes
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface AuditLog {
   id: string;

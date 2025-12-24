@@ -27,7 +27,7 @@
  * - DTO-based data transformation
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 import type { 
   WorkflowTask, 
   TaskStatusBackend, 

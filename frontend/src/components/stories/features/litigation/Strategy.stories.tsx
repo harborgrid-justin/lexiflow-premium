@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CaseId } from '../../../../frontend/types';
-import { StrategyCanvas } from '../../../../frontend/components/litigation/strategy/StrategyCanvas';
-import { LitigationBuilder } from '../../../../frontend/components/litigation/strategy/LitigationBuilder';
-import { LitigationGanttView } from '../../../../frontend/components/litigation/strategy/LitigationGanttView';
-import { OutcomeSimulator } from '../../../../frontend/components/litigation/strategy/OutcomeSimulator';
-import { PlaybookLibrary } from '../../../../frontend/components/litigation/strategy/PlaybookLibrary';
-import { PlaybookDetail } from '../../../../frontend/components/litigation/strategy/PlaybookDetail';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
-import { ToastProvider } from '../../../../frontend/context/ToastContext';
+import { StrategyCanvas } from '../../../../features/litigation/strategy/StrategyCanvas';
+import { LitigationBuilder } from '../../../../features/litigation/strategy/LitigationBuilder';
+import { LitigationGanttView } from '../../../../features/litigation/strategy/LitigationGanttView';
+import { OutcomeSimulator } from '../../../../features/litigation/strategy/OutcomeSimulator';
+import { PlaybookLibrary } from '../../../../features/litigation/strategy/PlaybookLibrary';
+import { PlaybookDetail } from '../../../../features/litigation/strategy/PlaybookDetail';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { ToastProvider } from '../../../../frontend/providers/ToastContext';
 import React, { useState } from 'react';
-import type { WorkflowNode, WorkflowConnection, NodeType } from '../../../../frontend/components/matters/workflow/builder/types';
+import type { WorkflowNode, WorkflowConnection, NodeType } from '../../../../features/matters/components/workflow/builder/types';
 
 /**
  * Litigation Strategy components provide visual strategy planning tools including

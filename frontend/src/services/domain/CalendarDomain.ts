@@ -55,8 +55,8 @@
  * @modified 2025-12-22
  */
 
-import { integrationsApi } from '../api/domains/integrations.api';
-import { delay } from '../../utils/async';
+import { integrationsApi } from "@/api/domains/integrations.api";
+import { delay } from '@/utils/async';
 
 // =============================================================================
 // REACT QUERY KEYS

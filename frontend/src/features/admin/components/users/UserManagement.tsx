@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Users, Plus, Edit, Trash2, Shield, Mail, Search } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';

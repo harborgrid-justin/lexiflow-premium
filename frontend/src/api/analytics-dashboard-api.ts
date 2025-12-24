@@ -3,7 +3,7 @@
  * Pre-built analytics dashboards
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface AnalyticsDashboard {
   id: string;

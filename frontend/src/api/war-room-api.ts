@@ -4,7 +4,7 @@
  * Trial war room collaboration - advisors, experts, and case strategy
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 import type { Advisor, Expert, CaseStrategy, ExpertType } from '../../types';
 
 // DTOs matching backend war-room.dto.ts

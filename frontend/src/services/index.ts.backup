@@ -78,5 +78,5 @@ export * from './repositories/WorkflowRepository';
 // ==================== BACKEND API SERVICES ====================
 // Consolidated backend API services (BACKEND-FIRST as of 2025-12-18)
 export * from './apiClient';
-export * from './api';
+export * from '@api';
 export * from './apiConfig';

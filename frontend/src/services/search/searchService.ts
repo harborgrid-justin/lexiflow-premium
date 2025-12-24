@@ -67,7 +67,7 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../data/dataService';
+import { DataService } from '@/services/data/dataService';
 import { SearchWorker } from './searchWorker';
 
 // Utils & Constants

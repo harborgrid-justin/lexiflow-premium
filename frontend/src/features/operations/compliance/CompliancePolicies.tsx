@@ -5,13 +5,13 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
-import { useWindow } from '../../../context/WindowContext';
+import { useWindow } from '../../../providers/WindowContext';
 import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
 import { ActionRow } from '../../common/RefactoredCommon';
 

@@ -13,7 +13,7 @@ import { UploadCloud, CheckCircle, Loader2, Link, ShieldCheck } from 'lucide-rea
 import { Button } from '../../../common/Button';
 
 // Context & Utils
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services

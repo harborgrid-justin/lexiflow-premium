@@ -3,7 +3,7 @@
  * AI-powered case outcome predictions
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface OutcomePrediction {
   id: string;

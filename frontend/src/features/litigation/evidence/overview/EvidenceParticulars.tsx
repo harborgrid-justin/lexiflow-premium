@@ -15,7 +15,7 @@ import { Badge } from '../../../common/Badge';
 import { EvidenceTypeIcon } from '../../../common/EvidenceTypeIcon';
 
 // Context & Utils
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services

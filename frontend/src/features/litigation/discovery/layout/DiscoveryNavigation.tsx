@@ -1,7 +1,7 @@
 // components/discovery/layout/DiscoveryNavigation.tsx
 import React from 'react';
 import { Scale, Database, ClipboardList, Lock, MessageCircle, Package, Shield, Mic2, Users, FileText } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { DiscoveryView } from '@/utils/discoveryNavigation';
 import { getParentTabForView, getFirstTabOfParent } from '@/utils/discoveryNavigation';

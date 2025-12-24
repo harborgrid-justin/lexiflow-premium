@@ -25,7 +25,7 @@ import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useToggle } from '@/hooks/useToggle';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';

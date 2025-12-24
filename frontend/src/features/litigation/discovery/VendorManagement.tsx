@@ -40,7 +40,7 @@ import { Modal } from '../../common/Modal';
 import { Input } from '../../common/Inputs';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useModalState } from '../../../hooks';
 
 // Services & Utils

@@ -7,9 +7,9 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DiscoveryPlatform } from '../../../../frontend/components/litigation/discovery/DiscoveryPlatform';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
-import { ToastProvider } from '../../../../frontend/context/ToastContext';
+import { DiscoveryPlatform } from '../../../../features/litigation/discovery/DiscoveryPlatform';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { ToastProvider } from '../../../../frontend/providers/ToastContext';
 
 const meta: Meta<typeof DiscoveryPlatform> = {
   title: 'Pages/Discovery Platform',

@@ -7,10 +7,10 @@
  * @module components/litigation/canvasConstants
  */
 
-export * from '../../../types/canvas-constants';
+export * from '@/types/canvas-constants';
 
 // Import for use in component-specific constants below
-import { CANVAS_CONSTANTS } from '../../../types/canvas-constants';
+import { CANVAS_CONSTANTS } from '@/types/canvas-constants';
 
 // Component-specific constants can be added below
 /** @deprecated Use CANVAS_CONSTANTS instead */

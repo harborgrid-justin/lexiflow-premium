@@ -103,7 +103,7 @@ services/api/
 ```
 
 **Benefits**:
-- Single import: `import { api } from './api'`
+- Single import: `import { api } from '@api'`
 - Zero duplicates in new code
 - 100% coverage for migrated services
 - Clear domain organization

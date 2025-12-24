@@ -1,11 +1,11 @@
 import { ExtendedUserProfile, GranularPermission, UserId, EntityId } from '../../types';
-import { delay } from '../../utils/async';
+import { delay } from '@/utils/async';
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { authApi } from '../api/domains/auth.api';
-import { IntegrationOrchestrator } from '../integration/integrationOrchestrator';
-import { STORES, db } from '../data/db';
+import { authApi } from '@/api/domains/auth.api';
+import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { STORES, db } from '@/services/data/db';
 
 const CURRENT_USER_ID = 'usr-admin-justin';
 export const ProfileDomain = {

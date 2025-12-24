@@ -19,7 +19,7 @@ import { Badge } from '../../common/Badge';
 import { CopyButton } from '../../common/CopyButton';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';

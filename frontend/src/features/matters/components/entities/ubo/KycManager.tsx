@@ -6,7 +6,7 @@ import { FileIcon } from '../../../common/Primitives';
 import { Badge } from '../../../common/Badge';
 import { UploadCloud, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { LegalEntity } from '../../../../types';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface KycManagerProps {

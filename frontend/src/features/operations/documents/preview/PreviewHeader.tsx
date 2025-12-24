@@ -3,7 +3,7 @@ import React from 'react';
 import { Lock, Unlock, CheckCircle2, ChevronDown } from 'lucide-react';
 import { FileIcon } from '../../../common/Primitives';
 import { LegalDocument } from '../../../../types';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface PreviewHeaderProps {

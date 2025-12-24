@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Shield, CheckCircle, XCircle, Info, Lock } from 'lucide-react';
 import { RolePermission, PermissionLevel } from '../../../../types';

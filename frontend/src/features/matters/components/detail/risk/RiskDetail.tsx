@@ -19,7 +19,7 @@ import { RiskMatrix } from './RiskMatrix';
 import { Modal } from '../../../common/Modal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';

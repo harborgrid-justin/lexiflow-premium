@@ -5,7 +5,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { Badge } from '../../../common/Badge';
 import { Card } from '../../../common/Card';
 import { Landmark, ArrowUpRight, ArrowDownLeft, PieChart, CreditCard } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

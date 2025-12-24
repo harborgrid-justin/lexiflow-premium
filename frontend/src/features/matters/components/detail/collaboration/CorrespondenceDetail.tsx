@@ -17,7 +17,7 @@ import { Button } from '../../../common/Button';
 import { TaskCreationModal } from '../../../common/TaskCreationModal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
 

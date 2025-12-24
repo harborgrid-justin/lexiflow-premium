@@ -3,7 +3,7 @@
  * API service split from apiServices.ts
  */
 
-import { apiClient, type PaginatedResponse } from '../infrastructure/apiClient';
+import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
 import type { 
   Case, 
   DocketEntry, 

@@ -1,18 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TabbedPageLayout, TabConfigItem } from '../../../components/layout/TabbedPageLayout';
 import { Button } from '../../../components/common/Button';
-import { ThemeProvider } from '../../../context/ThemeContext';
-import { ToastProvider } from '../../../context/ToastContext';
+import { ThemeProvider } from '../../../providers/ThemeContext';
+import { ToastProvider } from '@providers/ToastContext';
 import React, { useState, Suspense } from 'react';
 import { Briefcase, Folder, Activity, Plus, Settings, Clock, DollarSign, Users, BarChart3, TrendingUp, Eye, Lightbulb } from 'lucide-react';
 
 // Import actual Matter Management components
-import { MatterOverviewDashboard } from '../../../components/matters/overview/MatterOverviewDashboard';
-import { MatterOperationsCenter } from '../../../components/matters/operations/MatterOperationsCenter';
-import { MatterCalendar } from '../../../components/matters/calendar/MatterCalendar';
-import { MatterFinancialsCenter } from '../../../components/matters/financials/MatterFinancialsCenter';
-import { MatterAnalyticsDashboard } from '../../../components/matters/analytics/MatterAnalyticsDashboard';
-import { MatterInsightsDashboard } from '../../../components/matters/insights/MatterInsightsDashboard';
+import { MatterOverviewDashboard } from '../../../../features/matters/components/overview/MatterOverviewDashboard';
+import { MatterOperationsCenter } from '../../../../features/matters/components/operations/MatterOperationsCenter';
+import { MatterCalendar } from '../../../../features/matters/components/calendar/MatterCalendar';
+import { MatterFinancialsCenter } from '../../../../features/matters/components/financials/MatterFinancialsCenter';
+import { MatterAnalyticsDashboard } from '../../../../features/matters/components/analytics/MatterAnalyticsDashboard';
+import { MatterInsightsDashboard } from '../../../../features/matters/components/insights/MatterInsightsDashboard';
 import { NewMatterIntakeForm } from '../../../components/matters/intake/NewMatterIntakeForm';
 
 /**

@@ -19,7 +19,7 @@ import { Input, TextArea } from '../../common/Inputs';
 import { StrategySection } from './strategy/StrategySection';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '../../../hooks';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';

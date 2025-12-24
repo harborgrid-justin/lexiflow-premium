@@ -25,7 +25,7 @@ import { Button } from '../../common/Button';
 import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '../../../hooks';

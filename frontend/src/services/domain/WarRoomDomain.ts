@@ -3,7 +3,7 @@
  * @updated 2025-12-19
  */
 
-import { api } from '../api';
+import { api } from '@/api';
 
 export const WarRoomService = {
   getAll: async () => {

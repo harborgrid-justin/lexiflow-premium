@@ -4,7 +4,7 @@ import { GitBranch, Users, ChevronRight, CheckCircle, Clock, Settings, Search } 
 import { Badge } from '../../common/Badge';
 import { Case, WorkflowTask } from '../../../types';
 import { WorkflowQuickActions } from './WorkflowQuickActions';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { EmptyState } from '../../common/EmptyState';
 import { getCaseProgress, getNextTask } from './utils';

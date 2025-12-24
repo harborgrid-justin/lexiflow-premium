@@ -12,7 +12,7 @@ import { Modal } from '../../../common/Modal';
 import { SignaturePad } from '../../../common/SignaturePad';
 import { Button } from '../../../common/Button';
 import { FileText, Loader2 } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useSingleSelection } from '@/hooks/useMultiSelection';

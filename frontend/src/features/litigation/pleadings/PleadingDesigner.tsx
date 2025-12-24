@@ -3,7 +3,7 @@ import React, { useState, useEffect, Suspense, lazy, useCallback } from 'react';
 import { PleadingDocument, FormattingRule, Case, PleadingSection } from '../../../types';
 import { ArrowLeft, Save, Eye, PenTool, GitMerge, Loader2, Undo2, Redo2 } from 'lucide-react';
 import { Button } from '../../common/Button';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';

@@ -14,7 +14,7 @@ import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
 
 // Context & Utils
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types

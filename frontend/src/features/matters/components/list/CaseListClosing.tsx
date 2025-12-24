@@ -21,7 +21,7 @@ import { FileCheck, ArrowRight, Wand2, Loader2 } from 'lucide-react';
 import { Button } from '../../common/Button';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 
 // Services & Utils

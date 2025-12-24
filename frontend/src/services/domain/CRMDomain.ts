@@ -85,14 +85,14 @@
  */
 
 import { Client, Case, EntityId, CaseId, UserId } from '../../types';
-import { adminApi } from '../api/domains/admin.api';
-import { IntegrationOrchestrator } from '../integration/integrationOrchestrator';
-import { SystemEventType } from "../../types/integration-types";
-import { delay } from '../../utils/async';
+import { adminApi } from "@/api/domains/admin.api";
+import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { SystemEventType } from "@/types/integration-types";
+import { delay } from '@/utils/async';
 
 // Backend API Services
-import { ClientsApiService } from '../api/clients-api';
-import { CasesApiService } from '../api/cases-api';
+import { ClientsApiService } from '@/api/clients-api';
+import { CasesApiService } from '@/api/cases-api';
 
 // =============================================================================
 // VALIDATION (Private)

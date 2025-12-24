@@ -3,7 +3,7 @@
  * Manages custodian interviews for discovery
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface CustodianInterview {
   id: string;

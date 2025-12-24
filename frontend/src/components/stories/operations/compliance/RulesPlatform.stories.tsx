@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { RulesPlatform } from '../../../components/knowledge/rules/RulesPlatform';
-import { ThemeProvider } from '../../../context/ThemeContext';
-import { ToastProvider } from '../../../context/ToastContext';
+import { RulesPlatform } from '../../../../features/knowledge/rules/RulesPlatform';
+import { ThemeProvider } from '../../../providers/ThemeContext';
+import { ToastProvider } from '@providers/ToastContext';
 import React from 'react';
 
 /**

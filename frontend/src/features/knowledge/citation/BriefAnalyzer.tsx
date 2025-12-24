@@ -27,10 +27,10 @@ import { Tabs } from '../../common/Tabs';
 import { RiskMeter } from '../../common/RiskMeter';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '../../../context/WindowContext';
+import { useWindow } from '../../../providers/WindowContext';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';

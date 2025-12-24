@@ -27,7 +27,7 @@
  * - Date parsing and normalization
  */
 
-import { apiClient, type PaginatedResponse } from '../infrastructure/apiClient';
+import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
 import type { 
   Case, 
   DocketEntry, 

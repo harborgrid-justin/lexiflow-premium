@@ -6,9 +6,9 @@
  */
 
 import { BaseEventHandler } from './BaseEventHandler';
-import type { SystemEventPayloads, IntegrationResult } from '../../../types/integration-types';
+import type { SystemEventPayloads, IntegrationResult } from '@/types/integration-types';
 import type { EvidenceItem, EvidenceId, UUID } from '../../../types';
-import { SystemEventType } from '../../../types/integration-types';
+import { SystemEventType } from '@/types/integration-types';
 
 export class DocumentUploadedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.DOCUMENT_UPLOADED]> {
   readonly eventType = SystemEventType.DOCUMENT_UPLOADED;
@@ -23,7 +23,7 @@ export class DocumentUploadedHandler extends BaseEventHandler<SystemEventPayload
     }
     
     // Dynamic import to avoid circular dependency
-    const { DataService } = await import('../../data/dataService');
+    const { DataService } = await import('@/api/data/dataService');
     
     const evidenceItem: EvidenceItem = {
       id: `ev-auto-${Date.now()}` as EvidenceId,

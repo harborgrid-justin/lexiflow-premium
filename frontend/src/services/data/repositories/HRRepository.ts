@@ -1,7 +1,7 @@
 import { StaffMember, TimeEntry } from '../../../types';
 import { db, STORES } from '../db';
-import { IntegrationOrchestrator } from '../../integration/integrationOrchestrator';
-import { SystemEventType } from "../../../types/integration-types";
+import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { SystemEventType } from "@/types/integration-types";
 
 export const HRRepository = {
     getStaff: async () => {

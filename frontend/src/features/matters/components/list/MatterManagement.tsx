@@ -14,7 +14,7 @@
 import React, { Suspense, lazy, useTransition, useMemo, useState, useCallback } from 'react';
 import { Plus, Clock, BarChart3, Briefcase, Settings, Eye, Activity, DollarSign, Lightbulb, TrendingUp, RefreshCw } from 'lucide-react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/services/api';
 import { PageHeader } from '../../common/PageHeader';

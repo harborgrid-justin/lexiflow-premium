@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TabNavigation } from '../../../../frontend/components/common/TabNavigation';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
 import React, { useState } from 'react';
 import { FileText, Users, Calendar, BarChart3 } from 'lucide-react';
 

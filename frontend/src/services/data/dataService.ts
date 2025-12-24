@@ -104,7 +104,7 @@ import { IntegrationEventPublisher, createIntegratedRepository } from './integra
 import { RepositoryRegistry } from './repositories/RepositoryRegistry';
 
 // Backend API Layer (Primary Data Source)
-import { api, isBackendApiEnabled } from '../api';
+import { api, isBackendApiEnabled } from '../../api';
 
 // Legacy Database (Fallback Only - DEPRECATED)
 import { STORES } from './db';
@@ -191,7 +191,7 @@ import type {
   TimeEntry
 } from '../../types';
 
-import { MOCK_JUDGES } from '../../data/models/judgeProfile';
+import { MOCK_JUDGES } from '@/api/data/judgeProfile';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                      INTEGRATED REPOSITORIES
@@ -311,7 +311,7 @@ const getWitnessesRepository = () =>
 //                     LEGACY INTEGRATION (Deprecated)
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { analyticsApi } from '../api/domains/analytics.api';
+import { analyticsApi } from '@/api/domains/analytics.api';
 import { repositoryRegistry as legacyRepositoryRegistry } from '../core/RepositoryFactory';
 
 // ═══════════════════════════════════════════════════════════════════════════

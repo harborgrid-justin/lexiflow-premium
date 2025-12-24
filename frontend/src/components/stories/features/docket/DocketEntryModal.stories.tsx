@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocketEntryModal } from '../../../../frontend/components/matters/docket/DocketEntryModal';
 import { DocketEntry, DocketEntryType } from '../../../../frontend/types';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
 import React from 'react';
 
 /**

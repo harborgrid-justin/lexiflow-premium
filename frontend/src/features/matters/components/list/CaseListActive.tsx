@@ -30,7 +30,7 @@ import { ConfirmDialog } from '../../common/ConfirmDialog';
 
 // Hooks & Context
 import { useSort } from '@/hooks/useSort';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useToggle } from '@/hooks/useToggle';
 import { UseCaseListReturn } from '@/hooks/useCaseList';

@@ -6,7 +6,7 @@
  * @responsibility Validate time entry data with audit requirements
  */
 
-import { WIPStatusEnum } from '../../../types/enums';
+import { WIPStatusEnum } from '@/types/enums';
 import type { CaseId, UserId } from '../../../types';
 import { isValidDate, isFutureDate, isValidStringLength, isValidEnum } from '../validators/common-validators';
 import { isValidDuration, isValidRate, FINANCIAL_CONSTRAINTS } from '../validators/financial-validators';

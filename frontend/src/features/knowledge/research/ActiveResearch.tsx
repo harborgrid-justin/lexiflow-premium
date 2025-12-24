@@ -7,10 +7,10 @@ import { DataService } from '@/services/data/dataService';
 import { ResearchSidebar } from './ResearchSidebar';
 import { ResearchResults } from './ResearchResults';
 import { ResearchInput } from './ResearchInput';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { performSearch } from './research.utils';
-import { useWindow } from '../../../context/WindowContext';
+import { useWindow } from '../../../providers/WindowContext';
 import { queryClient } from '@/services/infrastructure/queryClient';
 
 export const ActiveResearch: React.FC = () => {

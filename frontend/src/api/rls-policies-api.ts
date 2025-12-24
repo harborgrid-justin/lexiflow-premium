@@ -3,7 +3,7 @@
  * Row-level security policy management
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface RLSPolicy {
   id: string;

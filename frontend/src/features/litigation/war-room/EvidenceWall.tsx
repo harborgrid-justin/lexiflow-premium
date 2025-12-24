@@ -19,8 +19,8 @@ import { Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
-import { useWindow } from '../../../context/WindowContext';
+import { useTheme } from '../../../providers/ThemeContext';
+import { useWindow } from '../../../providers/WindowContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components

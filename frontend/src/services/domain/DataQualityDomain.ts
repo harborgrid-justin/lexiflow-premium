@@ -3,10 +3,10 @@ import { DataAnomaly, DedupeCluster, CleansingRule, QualityMetricHistory, DataPr
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { dataPlatformApi } from '../api/domains/data-platform.api';
+import { dataPlatformApi } from '@/api/domains/data-platform.api';
 import { yieldToMain } from '../../utils/apiUtils';
-import { delay } from '../../utils/async';
-import { STORES, db } from '../data/db';
+import { delay } from '@/utils/async';
+import { STORES, db } from '@/services/data/db';
 
 export class DataQualityService {
     async getAnomalies(): Promise<DataAnomaly[]> { 

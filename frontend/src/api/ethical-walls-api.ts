@@ -3,7 +3,7 @@
  * Ethical wall and information barrier management
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface EthicalWall {
   id: string;

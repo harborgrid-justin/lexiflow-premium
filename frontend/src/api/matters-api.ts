@@ -3,7 +3,7 @@
  * Backend API client for Matter Management
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 import { Matter, MatterId } from '../../types';
 
 export interface MatterFilters {

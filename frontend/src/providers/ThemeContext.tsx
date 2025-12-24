@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
-import { tokens, ThemeMode } from '../theme/tokens';
+import { tokens, ThemeMode } from '../components/theme/tokens';
 import { DEFAULT_THEME, THEME_STORAGE_KEY } from '../config/master.config';
 
 export interface ThemeContextType {

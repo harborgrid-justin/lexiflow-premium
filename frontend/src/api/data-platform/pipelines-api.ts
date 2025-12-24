@@ -6,7 +6,7 @@
  * @responsibility Manage data integration pipelines
  */
 
-import { apiClient, type PaginatedResponse } from '../../infrastructure/apiClient';
+import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
 
 /**
  * Pipeline interface

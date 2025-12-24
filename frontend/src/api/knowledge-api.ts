@@ -3,7 +3,7 @@
  * Knowledge base and FAQ management
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface KnowledgeArticle {
   id: string;

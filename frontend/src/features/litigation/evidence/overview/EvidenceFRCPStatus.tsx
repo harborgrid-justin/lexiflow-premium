@@ -12,7 +12,7 @@ import { CheckCircle } from 'lucide-react';
 import { Card } from '../../../common/Card';
 
 // Context & Utils
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 export const EvidenceFRCPStatus: React.FC = () => {

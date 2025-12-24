@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { MatterAnalyticsDashboard } from '../../../../frontend/components/matters/analytics/MatterAnalyticsDashboard';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
-import { ToastProvider } from '../../../../frontend/context/ToastContext';
+import { MatterAnalyticsDashboard } from '../../../../features/matters/components/analytics/MatterAnalyticsDashboard';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { ToastProvider } from '../../../../frontend/providers/ToastContext';
 import React from 'react';
 
 /**

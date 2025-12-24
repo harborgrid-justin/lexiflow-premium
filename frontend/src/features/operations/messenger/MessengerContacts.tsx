@@ -6,7 +6,7 @@ import { UserAvatar } from '../../common/UserAvatar';
 import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
 import { SearchToolbar } from '../../common/SearchToolbar';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface Contact {

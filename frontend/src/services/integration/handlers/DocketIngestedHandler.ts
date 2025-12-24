@@ -6,10 +6,10 @@
  */
 
 import { BaseEventHandler } from './BaseEventHandler';
-import { db } from '../../data/db';
-import type { SystemEventPayloads, IntegrationResult } from '../../../types/integration-types';
+import { db } from '@services/data/db';
+import type { SystemEventPayloads, IntegrationResult } from '@/types/integration-types';
 import type { CalendarEventItem } from '../../../types';
-import { SystemEventType } from '../../../types/integration-types';
+import { SystemEventType } from '@/types/integration-types';
 
 export class DocketIngestedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.DOCKET_INGESTED]> {
   readonly eventType = SystemEventType.DOCKET_INGESTED;

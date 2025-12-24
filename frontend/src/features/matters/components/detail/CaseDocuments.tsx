@@ -18,8 +18,8 @@ import { CaseDocumentItem } from './documents/CaseDocumentItem';
 import { Button } from '../../common/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
-import { useWindow } from '../../../context/WindowContext';
+import { useTheme } from '../../../providers/ThemeContext';
+import { useWindow } from '../../../providers/WindowContext';
 import { useNotify } from '@/hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
@@ -33,7 +33,7 @@ import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { LegalDocument, EvidenceItem, WorkflowTask, CaseId, EvidenceId } from '../../../types';
-import { SystemEventType } from '../../../types/integration-types';
+import { SystemEventType } from '@/types/integration-types';
 
 const DocumentAssembly = lazy(() => import('../../operations/documents/DocumentAssembly').then(m => ({ default: m.DocumentAssembly })));
 

@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { CheckCircle, AlertTriangle, XCircle, ChevronDown, ChevronUp, FileText, Ruler } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { FormattingRule, PleadingSection } from '../../../../types';
 

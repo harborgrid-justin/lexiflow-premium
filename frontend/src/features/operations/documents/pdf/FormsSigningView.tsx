@@ -11,7 +11,7 @@ import { InteractiveOverlay, Field } from "../preview/InteractiveOverlay";
 import { Modal } from '../../../common/Modal';
 import { SignaturePad } from '../../../common/SignaturePad';
 import { Button } from '../../../common/Button';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/useModalState';

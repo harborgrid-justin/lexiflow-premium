@@ -3,7 +3,7 @@ import { MetricCard } from '../../common/Primitives';
 import { Card } from '../../common/Card';
 import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 import { BookOpen, Gavel, AlertTriangle, Clock, ArrowRight, Scale, MapPin, Loader2 } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '../../common/Button';
 import { useQuery } from '@/hooks/useQueryHooks';

@@ -3,7 +3,7 @@
  * Manages case lifecycle phases
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface CasePhase {
   id: string;

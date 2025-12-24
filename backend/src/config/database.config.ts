@@ -1,7 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import * as MasterConfig from './master.config';
-import { CacheType } from 'typeorm/cache/types/CacheType';
 
 export const getDatabaseConfig = (
   configService: ConfigService,
@@ -30,7 +29,7 @@ export const getDatabaseConfig = (
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       synchronize: MasterConfig.DB_SYNCHRONIZE,
       logging: configService.get('database.logging') || MasterConfig.DB_LOGGING,
-      migrations: [__dirname + '/../database/migrations/**/*{.ts,.js}'],
+      migrations: [__dirname + '/@/api/database/migrations/**/*{.ts,.js}'],
       migrationsRun: MasterConfig.DB_MIGRATIONS_RUN,
       ssl: MasterConfig.DB_SSL
         ? { rejectUnauthorized: MasterConfig.DB_SSL_REJECT_UNAUTHORIZED }
@@ -47,7 +46,7 @@ export const getDatabaseConfig = (
       poolSize: MasterConfig.DB_POOL_MAX,
       cache: {
         duration: MasterConfig.DB_CACHE_DURATION,
-        type: MasterConfig.DB_CACHE_TYPE as CacheType,
+        type: MasterConfig.DB_CACHE_TYPE as any,
       },
     };
   }
@@ -63,7 +62,7 @@ export const getDatabaseConfig = (
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
     synchronize: MasterConfig.DB_SYNCHRONIZE,
     logging: MasterConfig.DB_LOGGING,
-    migrations: [__dirname + '/../database/migrations/**/*{.ts,.js}'],
+    migrations: [__dirname + '/@/api/database/migrations/**/*{.ts,.js}'],
     migrationsRun: MasterConfig.DB_MIGRATIONS_RUN,
     ssl: MasterConfig.DB_SSL
       ? { rejectUnauthorized: MasterConfig.DB_SSL_REJECT_UNAUTHORIZED }
@@ -80,7 +79,7 @@ export const getDatabaseConfig = (
     poolSize: MasterConfig.DB_POOL_MAX,
     cache: {
       duration: MasterConfig.DB_CACHE_DURATION,
-      type: MasterConfig.DB_CACHE_TYPE as CacheType,
+      type: MasterConfig.DB_CACHE_TYPE as any,
     },
   };
 };

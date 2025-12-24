@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/services/api';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '../../common/Button';
 import { Card } from '../../common/Card';

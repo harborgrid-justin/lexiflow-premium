@@ -6,10 +6,10 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DocumentExplorer } from '../../../../frontend/components/operations/documents/DocumentExplorer';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
-import { ToastProvider } from '../../../../frontend/context/ToastContext';
-import { WindowProvider } from '../../../../frontend/context/WindowContext';
+import { DocumentExplorer } from '../../../../features/operations/documents/DocumentExplorer';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { ToastProvider } from '../../../../frontend/providers/ToastContext';
+import { WindowProvider } from '../../../../frontend/providers/WindowContext';
 
 const meta: Meta<typeof DocumentExplorer> = {
   title: 'Documents/Document Explorer',

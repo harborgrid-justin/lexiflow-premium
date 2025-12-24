@@ -26,7 +26,7 @@
  * - Multi-phase trial workflow support
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface Trial {
   id: string;

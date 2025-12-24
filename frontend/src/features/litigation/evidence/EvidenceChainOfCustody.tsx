@@ -20,7 +20,7 @@ import { Input, TextArea } from '../../common/Inputs';
 import { SignaturePad } from '../../common/SignaturePad';
 
 // Context & Utils
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '../../../hooks';

@@ -6,7 +6,7 @@ import { Button } from '../../../common/Button';
 import { SearchInputBar, ActionRow, MetricTile } from '../../../common/RefactoredCommon';
 import { Building, User, AlertTriangle, ShieldCheck, Network, Download, Plus } from 'lucide-react';
 import { LegalEntity } from '../../../../types';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';

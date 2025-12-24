@@ -9,7 +9,7 @@ import { DocumentDragOverlay } from './DocumentDragOverlay';
 import { DocumentPreviewPanel } from './viewer/DocumentPreviewPanel';
 import { TagManagementModal } from './TagManagementModal';
 import { useSelection } from '@/hooks/useSelection';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';

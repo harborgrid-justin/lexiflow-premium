@@ -4,7 +4,7 @@ import { Modal } from '../../../common/Modal';
 import { Button } from '../../../common/Button';
 import { Input } from '../../../common/Inputs';
 import { StaffMember } from '../../../../types';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface AddStaffModalProps {

@@ -17,7 +17,7 @@ import { Archive, FolderInput, CheckSquare, Download, Upload, RefreshCw } from '
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 

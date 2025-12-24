@@ -2,9 +2,9 @@ import { CommunicationItem, ServiceJob, DocketEntry, DocketId, DocumentId, Evide
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { communicationsApi } from '../api/domains/communications.api';
-import { IntegrationOrchestrator } from '../integration/integrationOrchestrator';
-import { SystemEventType } from "../../types/integration-types";
+import { communicationsApi } from "@/api/domains/communications.api";
+import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { SystemEventType } from "@/types/integration-types";
 
 export const CorrespondenceService = {
     getCommunications: async () => communicationsApi.correspondence?.getAll?.() || [],

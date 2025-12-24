@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CaseId, DiscoveryRequest, DiscoveryType, DiscoveryStatus } from '../../../../frontend/types';
-import { DiscoveryPlatform } from '../../../../frontend/components/litigation/discovery/DiscoveryPlatform';
-import { DiscoveryRequests } from '../../../../frontend/components/litigation/discovery/DiscoveryRequests';
-import { DiscoveryProductions } from '../../../../frontend/components/litigation/discovery/DiscoveryProductions';
-import { DiscoveryESI } from '../../../../frontend/components/litigation/discovery/DiscoveryESI';
-import { DiscoveryDepositions } from '../../../../frontend/components/litigation/discovery/DiscoveryDepositions';
-import { DiscoveryInterviews } from '../../../../frontend/components/litigation/discovery/DiscoveryInterviews';
-import { DiscoveryStipulations } from '../../../../frontend/components/litigation/discovery/DiscoveryStipulations';
-import { LegalHolds } from '../../../../frontend/components/litigation/discovery/LegalHolds';
-import { PrivilegeLog } from '../../../../frontend/components/litigation/discovery/PrivilegeLog';
+import { DiscoveryPlatform } from '../../../../features/litigation/discovery/DiscoveryPlatform';
+import { DiscoveryRequests } from '../../../../features/litigation/discovery/DiscoveryRequests';
+import { DiscoveryProductions } from '../../../../features/litigation/discovery/DiscoveryProductions';
+import { DiscoveryESI } from '../../../../features/litigation/discovery/DiscoveryESI';
+import { DiscoveryDepositions } from '../../../../features/litigation/discovery/DiscoveryDepositions';
+import { DiscoveryInterviews } from '../../../../features/litigation/discovery/DiscoveryInterviews';
+import { DiscoveryStipulations } from '../../../../features/litigation/discovery/DiscoveryStipulations';
+import { LegalHolds } from '../../../../features/litigation/discovery/LegalHolds';
+import { PrivilegeLog } from '../../../../features/litigation/discovery/PrivilegeLog';
 import { Custodians } from '../../../../frontend/components/litigation/discovery/Custodians';
 import { VendorManagement } from '../../../../frontend/components/litigation/discovery/VendorManagement';
 import { InitialDisclosureWizard } from '../../../../frontend/components/litigation/discovery/InitialDisclosureWizard';
@@ -17,8 +17,8 @@ import { MotionForSanctions } from '../../../../frontend/components/litigation/d
 import { RequestForAdmission } from '../../../../frontend/components/litigation/discovery/RequestForAdmission';
 import { PerpetuateTestimony } from '../../../../frontend/components/litigation/discovery/PerpetuateTestimony';
 import { TranscriptManager } from '../../../../frontend/components/litigation/discovery/TranscriptManager';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
-import { ToastProvider } from '../../../../frontend/context/ToastContext';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { ToastProvider } from '../../../../frontend/providers/ToastContext';
 import React from 'react';
 
 /**

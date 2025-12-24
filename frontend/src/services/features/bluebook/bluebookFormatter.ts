@@ -68,7 +68,7 @@ import {
   CaseCitation,
   StatuteCitation,
   PeriodicalCitation
-} from '../../../types/bluebook';
+} from '@/types/bluebook';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                            TYPE DEFINITIONS

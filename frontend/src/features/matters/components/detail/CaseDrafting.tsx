@@ -17,7 +17,7 @@ import { AdvancedEditor } from '../../operations/documents/AdvancedEditor';
 import { ClauseList as ClausePanel } from '../../knowledge/clauses/ClauseList';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils

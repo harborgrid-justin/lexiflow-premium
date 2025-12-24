@@ -3,7 +3,7 @@ import { Shield, CheckCircle, XCircle } from 'lucide-react';
 import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
 import { Input } from '../../common/Inputs';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { ThreatCheckResult } from './types';
 

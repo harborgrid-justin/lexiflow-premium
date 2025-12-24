@@ -6,7 +6,7 @@ import { Modal } from '../../../common/Modal';
 import { RuleSelector } from '../../../common/RuleSelector';
 import { Button } from '../../../common/Button';
 import { DocumentRow } from './DocumentRow';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { VirtualList } from '../../../common/VirtualList';
 

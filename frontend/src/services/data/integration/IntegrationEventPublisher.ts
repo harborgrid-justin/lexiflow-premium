@@ -8,8 +8,8 @@
  * repositories to trigger cross-domain workflows without tight coupling.
  */
 
-import { IntegrationOrchestrator } from '../../integration/integrationOrchestrator';
-import { SystemEventType } from '../../../types/integration-types';
+import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { SystemEventType } from '@/types/integration-types';
 import type { Case, DocketEntry, LegalDocument, TimeEntry } from '../../../types';
 
 /**

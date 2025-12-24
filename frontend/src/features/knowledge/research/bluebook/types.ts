@@ -2,7 +2,7 @@
  * Type definitions for Bluebook Formatter
  */
 
-import { BluebookCitation, BluebookCitationType, CitationFormat } from '../../../types/bluebook';
+import { BluebookCitation, BluebookCitationType, CitationFormat } from '@/types/bluebook';
 
 export interface FormattingResult {
   id: string;

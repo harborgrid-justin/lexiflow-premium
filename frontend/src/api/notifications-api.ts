@@ -27,7 +27,7 @@
  * - Real-time updates via WebSocket (future enhancement)
  */
 
-import { apiClient, type PaginatedResponse } from '../infrastructure/apiClient';
+import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
 
 export interface Notification {
   id: string;

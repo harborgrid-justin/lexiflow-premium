@@ -2,7 +2,7 @@ import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { ErrorBoundary } from './components/common/ErrorBoundary';
+import { ErrorBoundary } from './components/organisms/ErrorBoundary/ErrorBoundary';
 
 /**
  * Entry point for the React 18 application.

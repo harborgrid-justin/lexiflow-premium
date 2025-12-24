@@ -12,6 +12,7 @@ export enum MatterStatus {
   ON_HOLD = 'ON_HOLD',
   CLOSED = 'CLOSED',
   ARCHIVED = 'ARCHIVED',
+  INTAKE = 'INTAKE',
 }
 
 export enum MatterType {

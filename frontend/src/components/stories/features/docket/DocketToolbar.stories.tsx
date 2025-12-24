@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocketToolbar } from '../../../../frontend/components/matters/docket/DocketToolbar';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
 import React from 'react';
 
 /**

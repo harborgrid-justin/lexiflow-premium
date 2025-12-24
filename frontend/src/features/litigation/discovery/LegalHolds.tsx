@@ -24,7 +24,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -34,7 +34,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 // ✅ Migrated to backend API (2025-12-21)
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
-import { LegalHoldStatusEnum } from '../../../types/enums';
+import { LegalHoldStatusEnum } from '@/types/enums';
 
 // ============================================================================
 // TYPES & INTERFACES

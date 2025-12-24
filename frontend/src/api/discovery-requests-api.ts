@@ -3,7 +3,7 @@
  * Manages discovery requests (interrogatories, RFPs, RFAs)
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface DiscoveryRequest {
   id: string;

@@ -22,7 +22,7 @@ import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 
 // Components

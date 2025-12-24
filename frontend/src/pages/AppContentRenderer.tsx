@@ -20,7 +20,7 @@ import { HelpCircle, Lock } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { LazyLoader } from '@/components/common/LazyLoader';
+import { LazyLoader } from '@components/molecules/LazyLoader';
 
 // Services & Data
 import { ModuleRegistry } from '@/services/infrastructure/moduleRegistry';

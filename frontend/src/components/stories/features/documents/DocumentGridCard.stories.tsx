@@ -7,8 +7,8 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { DocumentGridCard } from '../../../../frontend/components/operations/documents/DocumentGridCard';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
+import { DocumentGridCard } from '../../../../features/operations/documents/DocumentGridCard';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
 import { LegalDocument } from '../../../../frontend/types';
 
 const meta: Meta<typeof DocumentGridCard> = {

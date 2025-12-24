@@ -15,8 +15,8 @@ import React, { useRef } from 'react';
 import { Badge } from '../../../common/Badge';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../context/ThemeContext';
-import { useWindow } from '../../../../context/WindowContext';
+import { useTheme } from '../../../../providers/ThemeContext';
+import { useWindow } from '../../../../providers/WindowContext';
 import { useGanttDrag } from '@/hooks/useGanttDrag';
 
 // Internal Dependencies - Services & Utils

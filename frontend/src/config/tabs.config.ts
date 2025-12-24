@@ -15,7 +15,7 @@ import {
   ShieldCheck, Link, Server, Bookmark, Building2, Eye, Lightbulb, LucideIcon
 } from 'lucide-react';
 import { TabConfigItem } from '../components/layout/TabbedPageLayout';
-import { PlatformView } from '../components/admin/data/AdminDatabaseControl';
+import { PlatformView } from '../features/admin/components/data/AdminDatabaseControl';
 
 // =============================================================================
 // TYPE DEFINITIONS

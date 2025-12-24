@@ -6,7 +6,7 @@
  * @responsibility Manage database schema operations
  */
 
-import { apiClient } from '../../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 /**
  * Schema table interface

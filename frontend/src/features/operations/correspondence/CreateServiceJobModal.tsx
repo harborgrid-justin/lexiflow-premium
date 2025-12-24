@@ -7,11 +7,11 @@ import { ServiceJob, UserId } from '../../../types';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/utils/cn';
 import { validateServiceJobSafe } from '@/services/validation/correspondenceSchemas';
-import { ServiceStatus } from '../../../types/enums';
+import { ServiceStatus } from '@/types/enums';
 
 interface CreateServiceJobModalProps {
   isOpen: boolean;

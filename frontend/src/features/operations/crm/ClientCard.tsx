@@ -5,7 +5,7 @@ import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
 import { Currency } from '../../common/Primitives';
 import { Lock, PieChart, Building } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface ClientCardProps {

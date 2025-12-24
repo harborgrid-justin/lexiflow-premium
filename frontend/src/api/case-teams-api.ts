@@ -3,7 +3,7 @@
  * Manages case team member assignments and roles
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface CaseTeamMember {
   id: string;

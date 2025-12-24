@@ -18,7 +18,7 @@ import { CheckCircle, ChevronUp, ChevronDown, Clock, User, ArrowRight } from 'lu
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
 import { UserAvatar } from '../../common/UserAvatar';

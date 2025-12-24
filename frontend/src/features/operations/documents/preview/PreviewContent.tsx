@@ -7,7 +7,7 @@ import { InteractiveOverlay, Field } from './InteractiveOverlay';
 import { Modal } from '../../../common/Modal';
 import { SignaturePad } from '../../../common/SignaturePad';
 import { Button } from '../../../common/Button';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { LegalDocument } from '../../../../types';
 

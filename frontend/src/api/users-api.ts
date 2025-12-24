@@ -28,7 +28,7 @@
  * - Audit logging for security-sensitive operations
  */
 
-import { apiClient, type PaginatedResponse } from '../infrastructure/apiClient';
+import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
 import type { User, UserRole } from '../../types';
 
 // DTOs for user operations

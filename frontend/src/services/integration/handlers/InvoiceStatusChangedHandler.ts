@@ -7,9 +7,9 @@
 
 import { BaseEventHandler } from './BaseEventHandler';
 import { ChainService } from '../../infrastructure/chainService';
-import type { SystemEventPayloads, IntegrationResult } from '../../../types/integration-types';
+import type { SystemEventPayloads, IntegrationResult } from '@/types/integration-types';
 import type { UserId } from '../../../types';
-import { SystemEventType } from '../../../types/integration-types';
+import { SystemEventType } from '@/types/integration-types';
 
 export class InvoiceStatusChangedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.INVOICE_STATUS_CHANGED]> {
   readonly eventType = SystemEventType.INVOICE_STATUS_CHANGED;
@@ -39,7 +39,7 @@ export class InvoiceStatusChangedHandler extends BaseEventHandler<SystemEventPay
     actions: string[],
     errors: string[]
   ): Promise<void> {
-    const { DataService } = await import('../../data/dataService');
+    const { DataService } = await import('@/api/data/dataService');
     
     // Check if workflow services are available
     if (!DataService.playbooks || !DataService.workflow || typeof DataService.workflow.deploy !== 'function') {

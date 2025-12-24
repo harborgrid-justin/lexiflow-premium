@@ -10,7 +10,7 @@
 import React, { useState } from 'react';
 import { Sparkles, Wand2, AlertCircle } from 'lucide-react';
 
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '../../common/Button';
 import { GeminiService } from '@/services/features/research/geminiService';

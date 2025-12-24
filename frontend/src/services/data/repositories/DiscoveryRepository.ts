@@ -33,8 +33,8 @@ import {
     ReviewBatch, ProcessingJob, CalendarEventItem, LegalDocument, CaseId
 } from '../../../types';
 import { db, STORES } from '../db';
-import { isBackendApiEnabled } from '../../integration/apiConfig';
-import { discoveryApi } from '../../api/domains/discovery.api';
+import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { discoveryApi } from '@/api/domains/discovery.api';
 
 /**
  * Query keys for React Query integration

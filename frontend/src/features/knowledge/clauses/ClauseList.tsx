@@ -5,7 +5,7 @@ import { DataService } from '@/services/data/dataService';
 import { Button } from '../../common/Button';
 import { SearchToolbar } from '../../common/SearchToolbar';
 import { Book, Copy, History, Loader2, BookOpen, Check } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { filterClauses } from './clauseList.utils';
 import { useQuery } from '@/hooks/useQueryHooks';

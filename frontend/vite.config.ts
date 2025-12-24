@@ -57,16 +57,18 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     // Module resolution configuration
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
-        '@types': path.resolve(__dirname, 'types'),
-        '@utils': path.resolve(__dirname, 'utils'),
-        '@hooks': path.resolve(__dirname, 'hooks'),
-        '@components': path.resolve(__dirname, 'components'),
-        '@context': path.resolve(__dirname, 'context'),
-        '@config': path.resolve(__dirname, 'config'),
-        '@data': path.resolve(__dirname, 'data'),
-        '@theme': path.resolve(__dirname, 'theme'),
-        '@services': path.resolve(__dirname, 'services'),
+        '@': path.resolve(__dirname, 'src'),
+        '@types': path.resolve(__dirname, 'src/types'),
+        '@utils': path.resolve(__dirname, 'src/utils'),
+        '@hooks': path.resolve(__dirname, 'src/hooks'),
+        '@components': path.resolve(__dirname, 'src/components'),
+        '@features': path.resolve(__dirname, 'src/features'),
+        '@providers': path.resolve(__dirname, 'src/providers'),
+        '@config': path.resolve(__dirname, 'src/config'),
+        '@data': path.resolve(__dirname, 'src/api/data'),
+        '@theme': path.resolve(__dirname, 'src/components/theme'),
+        '@services': path.resolve(__dirname, 'src/services'),
+        '@api': path.resolve(__dirname, 'src/api'),
       },
     },
 

@@ -20,21 +20,23 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
       "@/*": ["./*"],
       "@types/*": ["types/*"],
       "@utils/*": ["utils/*"],
       "@hooks/*": ["hooks/*"],
       "@components/*": ["components/*"],
-      "@context/*": ["context/*"],
+      "@features/*": ["features/*"],
+      "@providers/*": ["providers/*"],
       "@config/*": ["config/*"],
-      "@data/*": ["data/*"],
-      "@theme/*": ["theme/*"],
+      "@data/*": ["api/data/*"],
+      "@theme/*": ["components/theme/*"],
       "@services/*": ["services/*"],
+      "@api/*": ["api/*"],
       "@constants/*": ["constants/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "__tests__", "**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx", "archived", "cypress"]
 }

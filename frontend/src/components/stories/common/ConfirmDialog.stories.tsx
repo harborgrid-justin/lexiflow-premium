@@ -1,0 +1,108 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { ConfirmDialog } from '../../components/common/ConfirmDialog';
+import { ThemeProvider } from '../../context/ThemeContext';
+import { Button } from '../../components/common/Button';
+import React, { useState } from 'react';
+
+/**
+ * ConfirmDialog component for confirmation prompts.
+ */
+
+const meta: Meta<typeof ConfirmDialog> = {
+  title: 'Common/ConfirmDialog',
+  component: ConfirmDialog,
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component: 'Confirmation dialog for destructive or important actions.',
+      },
+    },
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    isOpen: {
+      control: 'boolean',
+      description: 'Whether the dialog is open',
+    },
+    title: {
+      control: 'text',
+      description: 'Dialog title',
+    },
+    message: {
+      control: 'text',
+      description: 'Dialog message',
+    },
+    confirmText: {
+      control: 'text',
+      description: 'Text for the confirm button',
+    },
+    cancelText: {
+      control: 'text',
+      description: 'Text for the cancel button',
+    },
+    confirmVariant: {
+      control: 'select',
+      options: ['primary', 'danger'],
+      description: 'Variant for the confirm button',
+    },
+  },
+  decorators: [
+    (Story: React.ComponentType) => (
+      <ThemeProvider>
+        <div className="p-8">
+          <Story />
+        </div>
+      </ThemeProvider>
+    ),
+  ],
+};
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const DeleteConfirmation: Story = {
+  render: () => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+      <div>
+        <Button variant="danger" onClick={() => setIsOpen(true)}>Delete Case</Button>
+        <ConfirmDialog
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          onConfirm={() => {
+            console.log('Confirmed');
+            setIsOpen(false);
+          }}
+          title="Delete Case"
+          message="Are you sure you want to delete this case? This action cannot be undone."
+          confirmText="Delete"
+          confirmVariant="danger"
+        />
+      </div>
+    );
+  },
+};
+
+export const BasicConfirmation: Story = {
+  render: () => {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+      <div>
+        <Button onClick={() => setIsOpen(true)}>Submit Form</Button>
+        <ConfirmDialog
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          onConfirm={() => {
+            console.log('Confirmed');
+            setIsOpen(false);
+          }}
+          title="Confirm Submission"
+          message="Are you ready to submit this form?"
+          confirmText="Submit"
+        />
+      </div>
+    );
+  },
+};

@@ -51,7 +51,7 @@ import type {
   TriggerEvent,
   WorkflowQueryFilters,
   WorkflowSortOptions,
-} from '../../types';
+} from '@/types';
 
 export interface WorkflowTemplate {
   id: string;

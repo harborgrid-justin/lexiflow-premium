@@ -6,28 +6,28 @@
  */
 
 // Overview Dashboard
-export { MatterOverviewDashboard } from './overview/MatterOverviewDashboard';
+export { MatterOverviewDashboard } from './components/overview/MatterOverviewDashboard';
 
 // Analytics & Reports
-export { MatterAnalyticsDashboard } from './analytics/MatterAnalyticsDashboard';
+export { MatterAnalyticsDashboard } from './components/analytics/MatterAnalyticsDashboard';
 
 // Intake & Onboarding
-export { NewMatterIntakeForm } from './intake/NewMatterIntakeForm';
+export { NewMatterIntakeForm } from './components/intake/NewMatterIntakeForm';
 
 // Operations & Task Management
-export { MatterOperationsCenter } from './operations/MatterOperationsCenter';
+export { MatterOperationsCenter } from './components/operations/MatterOperationsCenter';
 
 // Strategic Insights
-export { MatterInsightsDashboard } from './insights/MatterInsightsDashboard';
+export { MatterInsightsDashboard } from './components/insights/MatterInsightsDashboard';
 
 // Financial Management
-export { MatterFinancialsCenter } from './financials/MatterFinancialsCenter';
+export { MatterFinancialsCenter } from './components/financials/MatterFinancialsCenter';
 
 // Re-export existing components for backward compatibility
-export * from './list';
-export * from './detail';
-export * from './create';
-export * from './docket';
-export * from './entities';
-export * from './workflow';
-export * from './calendar';
+export * from './components/list';
+export * from './components/detail';
+export * from './components/create';
+export * from './components/docket';
+export * from './components/entities';
+export * from './components/workflow';
+export * from './components/calendar';

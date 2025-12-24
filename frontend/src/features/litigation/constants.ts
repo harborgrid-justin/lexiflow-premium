@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 // Re-export canvas constants for backward compatibility
-export * from './canvasConstants';
+export * from './strategy/canvasConstants';
 
 export const LITIGATION_TABS = [
   {

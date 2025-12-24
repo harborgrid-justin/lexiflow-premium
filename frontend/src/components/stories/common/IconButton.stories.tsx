@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { IconButton } from '../../components/common/IconButton';
+import { IconButton } from '@/components/atoms/IconButton';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { Plus, Edit, Trash2, Download, Share2 } from 'lucide-react';
 import React from 'react';

@@ -15,11 +15,11 @@ import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Module Imports
-import { TemplateArchitect } from '../../modules/TemplateArchitect';
-import { FactIntegrator } from '../../modules/FactIntegrator';
-import { CitationAssistant } from '../../modules/CitationAssistant';
-import { ReviewPanel } from '../../modules/ReviewPanel';
-import { FilingCenter } from '../../modules/FilingCenter';
+import { TemplateArchitect } from '../modules/TemplateArchitect';
+import { FactIntegrator } from '../modules/FactIntegrator';
+import { CitationAssistant } from '../modules/CitationAssistant';
+import { ReviewPanel } from '../modules/ReviewPanel';
+import { FilingCenter } from '../modules/FilingCenter';
 
 interface PleadingEditorProps {
   document: PleadingDocument;

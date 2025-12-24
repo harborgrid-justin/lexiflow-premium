@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CopyButton } from '../../components/common/CopyButton';
+import { CopyButton } from '@/components/atoms/CopyButton';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import React from 'react';
 

@@ -1,12 +1,12 @@
 /**
  * minimapUtils.ts
- * 
+ *
  * Utility functions for minimap viewport calculations and transformations.
- * 
+ *
  * @module components/litigation/utils/minimapUtils
  */
 
-import { WorkflowNode } from '../../workflow/builder/types';
+import { WorkflowNode } from '@/types/workflow-types';
 
 export interface MinimapBounds {
   minX: number;

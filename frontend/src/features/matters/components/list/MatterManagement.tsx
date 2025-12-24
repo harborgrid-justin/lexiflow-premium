@@ -16,7 +16,7 @@ import { Plus, Clock, BarChart3, Briefcase, Settings, Eye, Activity, DollarSign,
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { api } from '@api';
+import { api } from '@/api';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { Button } from '@/components/atoms/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader';

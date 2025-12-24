@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { DocketTable } from '../../../../frontend/components/matters/docket/DocketTable';
-import { DocketEntry, DocketEntryType, CaseId, DocumentId, DocketId } from '../../../../frontend/types';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { DocketTable } from '@/features/matters/components/docket/DocketTable';
+import { DocketEntry, DocketEntryType, CaseId, DocumentId, DocketId } from '@/types';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import React from 'react';
 
 /**

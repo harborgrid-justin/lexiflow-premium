@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Tabs } from '../../../../frontend/components/common/Tabs';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { Tabs } from '@/components/molecules/Tabs';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import React, { useState } from 'react';
 
 /**

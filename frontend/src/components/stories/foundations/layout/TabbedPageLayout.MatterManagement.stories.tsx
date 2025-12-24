@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TabbedPageLayout, TabConfigItem } from '../../../components/components/templates/TabbedPageLayout';
-import { Button } from '../../../components/common/Button';
+import { TabbedPageLayout, TabConfigItem } from '@/components/templates/TabbedPageLayout';
+import { Button } from '@/components/atoms/Button';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 import React, { useState, Suspense } from 'react';
@@ -13,7 +13,7 @@ import { MatterCalendar } from '../../../../features/matters/components/calendar
 import { MatterFinancialsCenter } from '../../../../features/matters/components/financials/MatterFinancialsCenter';
 import { MatterAnalyticsDashboard } from '../../../../features/matters/components/analytics/MatterAnalyticsDashboard';
 import { MatterInsightsDashboard } from '../../../../features/matters/components/insights/MatterInsightsDashboard';
-import { NewMatterIntakeForm } from '../../../components/matters/intake/NewMatterIntakeForm';
+import { NewMatterIntakeForm } from '@/features/matters/components/intake/NewMatterIntakeForm';
 
 /**
  * TabbedPageLayout with Actions - Matter Management pattern

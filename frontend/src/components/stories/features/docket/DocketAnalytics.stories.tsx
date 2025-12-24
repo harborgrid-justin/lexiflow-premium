@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DocketAnalytics } from '../../../../frontend/components/matters/docket/DocketAnalytics';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { DocketAnalytics } from '@/features/matters/components/docket/DocketAnalytics';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import React from 'react';
 
 

@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { CaseId } from '../../../../frontend/types';
+import type { CaseId } from '@/types';
 import { StrategyCanvas } from '../../../../features/litigation/strategy/StrategyCanvas';
 import { LitigationBuilder } from '../../../../features/litigation/strategy/LitigationBuilder';
 import { LitigationGanttView } from '../../../../features/litigation/strategy/LitigationGanttView';
 import { OutcomeSimulator } from '../../../../features/litigation/strategy/OutcomeSimulator';
 import { PlaybookLibrary } from '../../../../features/litigation/strategy/PlaybookLibrary';
 import { PlaybookDetail } from '../../../../features/litigation/strategy/PlaybookDetail';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
-import { ToastProvider } from '../../../../frontend/providers/ToastContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
+import { ToastProvider } from '@/providers/ToastContext';
 import React, { useState } from 'react';
 import type { WorkflowNode, WorkflowConnection, NodeType } from '../../../../features/matters/components/workflow/builder/types';
 

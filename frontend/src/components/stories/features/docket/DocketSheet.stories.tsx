@@ -1,8 +1,8 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DocketSheet } from '../../../../frontend/components/matters/docket/DocketSheet';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
-import { WindowProvider } from '../../../../frontend/providers/WindowContext';
+import { DocketSheet } from '@/features/matters/components/docket/DocketSheet';
+import { ThemeProvider } from '@/providers/ThemeContext';
+import { WindowProvider } from '@/providers/WindowContext';
 
 /**
  * DocketSheet is the main docket view component that integrates filtering,

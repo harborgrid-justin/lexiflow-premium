@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { CaseId, DiscoveryRequest, DiscoveryType, DiscoveryStatus } from '../../../../frontend/types';
+import type { CaseId, DiscoveryRequest, DiscoveryType, DiscoveryStatus } from '@/types';
 import { DiscoveryPlatform } from '../../../../features/litigation/discovery/DiscoveryPlatform';
 import { DiscoveryRequests } from '../../../../features/litigation/discovery/DiscoveryRequests';
 import { DiscoveryProductions } from '../../../../features/litigation/discovery/DiscoveryProductions';
@@ -9,16 +9,16 @@ import { DiscoveryInterviews } from '../../../../features/litigation/discovery/D
 import { DiscoveryStipulations } from '../../../../features/litigation/discovery/DiscoveryStipulations';
 import { LegalHolds } from '../../../../features/litigation/discovery/LegalHolds';
 import { PrivilegeLog } from '../../../../features/litigation/discovery/PrivilegeLog';
-import { Custodians } from '../../../../frontend/components/litigation/discovery/Custodians';
-import { VendorManagement } from '../../../../frontend/components/litigation/discovery/VendorManagement';
-import { InitialDisclosureWizard } from '../../../../frontend/components/litigation/discovery/InitialDisclosureWizard';
-import { MotionToCompelBuilder } from '../../../../frontend/components/litigation/discovery/MotionToCompelBuilder';
-import { MotionForSanctions } from '../../../../frontend/components/litigation/discovery/MotionForSanctions';
-import { RequestForAdmission } from '../../../../frontend/components/litigation/discovery/RequestForAdmission';
-import { PerpetuateTestimony } from '../../../../frontend/components/litigation/discovery/PerpetuateTestimony';
-import { TranscriptManager } from '../../../../frontend/components/litigation/discovery/TranscriptManager';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
-import { ToastProvider } from '../../../../frontend/providers/ToastContext';
+import { Custodians } from '@/features/litigation/discovery/Custodians';
+import { VendorManagement } from '@/features/litigation/discovery/VendorManagement';
+import { InitialDisclosureWizard } from '@/features/litigation/discovery/InitialDisclosureWizard';
+import { MotionToCompelBuilder } from '@/features/litigation/discovery/MotionToCompelBuilder';
+import { MotionForSanctions } from '@/features/litigation/discovery/MotionForSanctions';
+import { RequestForAdmission } from '@/features/litigation/discovery/RequestForAdmission';
+import { PerpetuateTestimony } from '@/features/litigation/discovery/PerpetuateTestimony';
+import { TranscriptManager } from '@/features/litigation/discovery/TranscriptManager';
+import { ThemeProvider } from '@/providers/ThemeContext';
+import { ToastProvider } from '@/providers/ToastContext';
 import React from 'react';
 
 /**

@@ -55,9 +55,9 @@ export function DataLakeExplorer(): React.ReactElement {
                 `preview-${file.id}`,
                 `Preview: ${file.name}`,
                 <div className={cn("h-full", theme.surface.default)}>
-                    <DocumentPreviewPanel 
+                    <DocumentPreviewPanel
                         document={{
-                            id: file.id as unknown as import('../../../types').DocumentId,
+                            id: file.id as unknown as import('@/types').DocumentId,
                             title: file.name,
                             type: file.format ?? 'File',
                             content: `Preview of raw data object: ${file.name}`,
@@ -65,7 +65,7 @@ export function DataLakeExplorer(): React.ReactElement {
                             lastModified: file.modified,
                             tags: [file.tier, 'Data Lake'],
                             versions: [],
-                            caseId: 'system-data-lake' as import('../../../types').CaseId
+                            caseId: 'system-data-lake' as import('@/types').CaseId
                         }}
                         onViewHistory={() => {}}
                         isOrbital

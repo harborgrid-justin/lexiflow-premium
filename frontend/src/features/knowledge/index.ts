@@ -1,8 +1,8 @@
 // components/knowledge/index.ts
 
-export * from './KnowledgeAnalytics';
-export * from './KnowledgeBase';
-export * from './KnowledgeContent';
-export * from './PrecedentsView';
-export * from './QAView';
-export * from './WikiView';
+export * from './base/KnowledgeAnalytics';
+export * from './base/KnowledgeBase';
+export * from './base/KnowledgeContent';
+export * from './base/PrecedentsView';
+export * from './base/QAView';
+export * from './base/WikiView';

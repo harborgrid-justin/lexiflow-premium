@@ -8,9 +8,9 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentRow } from '../../../../features/operations/documents/table/DocumentRow';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
-import { useTheme } from '../../../../frontend/providers/ThemeContext';
-import { LegalDocument, UserId, CaseId, DocumentId } from '../../../../frontend/types';
+import { ThemeProvider } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { LegalDocument, UserId, CaseId, DocumentId } from '@/types';
 
 // Wrapper to provide theme to DocumentRow
 const DocumentRowWrapper = (props: React.ComponentProps<typeof DocumentRow>) => {

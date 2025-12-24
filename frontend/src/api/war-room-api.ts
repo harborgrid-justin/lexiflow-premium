@@ -5,7 +5,7 @@
  */
 
 import { apiClient } from '@services/infrastructure/apiClient';
-import type { Advisor, Expert, CaseStrategy, ExpertType } from '../../types';
+import type { Advisor, Expert, CaseStrategy, ExpertType } from '@/types';
 
 // DTOs matching backend war-room.dto.ts
 export interface CreateAdvisorDto {

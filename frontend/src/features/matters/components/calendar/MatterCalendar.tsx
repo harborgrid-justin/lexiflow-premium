@@ -24,7 +24,7 @@ import {
   Briefcase, Scale, List, Grid, Maximize2, Check, X
 } from 'lucide-react';
 import { useQuery, queryClient } from '@/hooks/useQueryHooks';
-import { api } from '@api';
+import { api } from '@/api';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms/Button';

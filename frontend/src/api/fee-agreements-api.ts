@@ -11,8 +11,8 @@ import type {
   EvidenceItem,
   TimeEntry,
   User,
-} from '../../types';
-import type { FeeAgreement } from '../../types/financial';
+} from '@/types';
+import type { FeeAgreement } from '@/types/financial';
 
 export class FeeAgreementsApiService {
   async getAll(filters?: { status?: string; clientName?: string }): Promise<FeeAgreement[]> {

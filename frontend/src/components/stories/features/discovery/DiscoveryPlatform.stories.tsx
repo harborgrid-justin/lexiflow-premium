@@ -8,8 +8,8 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DiscoveryPlatform } from '../../../../features/litigation/discovery/DiscoveryPlatform';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
-import { ToastProvider } from '../../../../frontend/providers/ToastContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
+import { ToastProvider } from '@/providers/ToastContext';
 
 const meta: Meta<typeof DiscoveryPlatform> = {
   title: 'Pages/Discovery Platform',

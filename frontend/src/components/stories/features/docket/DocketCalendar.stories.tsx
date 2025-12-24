@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DocketCalendar } from '../../../../frontend/components/matters/docket/DocketCalendar';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { DocketCalendar } from '@/features/matters/components/docket/DocketCalendar';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import React from 'react';
 
 

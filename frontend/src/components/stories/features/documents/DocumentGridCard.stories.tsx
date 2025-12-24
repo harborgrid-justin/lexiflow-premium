@@ -8,8 +8,8 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentGridCard } from '../../../../features/operations/documents/DocumentGridCard';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
-import { LegalDocument } from '../../../../frontend/types';
+import { ThemeProvider } from '@/providers/ThemeContext';
+import { LegalDocument } from '@/types';
 
 const meta: Meta<typeof DocumentGridCard> = {
   title: 'Documents/Document Grid Card',

@@ -1,6 +1,6 @@
 // data/mockApiSpec.ts
 import { API_PREFIX } from '../../config/network/api.config';
-import { ApiServiceSpec } from '../types';
+import { ApiServiceSpec } from '@/types';
 
 export const MOCK_API_SPEC: ApiServiceSpec[] = [
   {

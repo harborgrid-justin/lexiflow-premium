@@ -29,10 +29,10 @@
  */
 
 import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
-import type { 
-  Case, 
-  DocketEntry, 
-  LegalDocument, 
+import type {
+  Case,
+  DocketEntry,
+  LegalDocument,
   EvidenceItem,
   TimeEntry,
   User,
@@ -44,7 +44,7 @@ import type {
   CreateTrustTransactionDto,
   DepositDto,
   WithdrawalDto,
-} from '../../types';
+} from '@/types';
 
 /**
  * Query keys for React Query integration

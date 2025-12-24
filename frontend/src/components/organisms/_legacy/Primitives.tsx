@@ -16,15 +16,15 @@
  * import { StatusDot, Currency } from './components/components/atoms';
  */
 
-export { StatusDot, type StatusDotProps } from './primitives/StatusDot';
-export { Currency, type CurrencyProps } from './primitives/Currency';
-export { DateText, type DateTextProps } from './primitives/DateText';
-export { FileIcon, type FileIconProps } from './primitives/FileIcon';
-export { LoadingSpinner, type LoadingSpinnerProps } from './primitives/LoadingSpinner';
-export { TagList, type TagListProps } from './primitives/TagList';
-export { SectionHeader, type SectionHeaderProps } from './primitives/SectionHeader';
-export { TruncatedText, type TruncatedTextProps } from './primitives/TruncatedText';
-export { MetricCard, type MetricCardProps } from './primitives/MetricCard';
-export { Box, type BoxProps } from './primitives/Box';
-export { Text, type TextProps } from './primitives/Text';
-export { Stack, type StackProps } from './primitives/Stack';
+export { StatusDot, type StatusDotProps } from '../../atoms/StatusDot';
+export { Currency, type CurrencyProps } from '../../atoms/Currency';
+export { DateText, type DateTextProps } from '../../atoms/DateText';
+export { FileIcon, type FileIconProps } from '../../atoms/FileIcon';
+export { LoadingSpinner, type LoadingSpinnerProps } from '../../atoms/LoadingSpinner';
+export { TagList, type TagListProps } from '../../molecules/TagList';
+export { SectionHeader, type SectionHeaderProps } from '../../atoms/SectionHeader';
+export { TruncatedText, type TruncatedTextProps } from '../../atoms/TruncatedText';
+export { MetricCard, type MetricCardProps } from '../../molecules/MetricCard';
+export { Box, type BoxProps } from '../../atoms/Box';
+export { Text, type TextProps } from '../../atoms/Text';
+export { Stack, type StackProps } from '../../atoms/Stack';

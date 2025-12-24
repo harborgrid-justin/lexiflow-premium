@@ -24,7 +24,7 @@ import { queryClient } from '../services/infrastructure/queryClient';
 import { GlobalSearchResult } from '../services/search/searchService';
 import { IntentResult } from '../services/features/research/geminiService';
 import { apiClient } from '../services/infrastructure/apiClient';
-import { isBackendApiEnabled } from '@api';
+import { isBackendApiEnabled } from '@/api';
 
 // Hooks & Context
 import { useSessionStorage } from './useSessionStorage';

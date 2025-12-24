@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from 'storybook/react-vite';
-import { TabbedPageLayout, TabConfigItem } from '../../../../frontend/components/components/templates/TabbedPageLayout';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import type { Meta, StoryObj } from '@storybook/react';
+import { TabbedPageLayout, TabConfigItem } from '@/components/templates/TabbedPageLayout';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import React, { useState } from 'react';
 import { 
   Layers,
@@ -16,8 +16,8 @@ import {
   Users,
   Calendar
 } from 'lucide-react';
-import { Button } from '../../../../frontend/components/common/Button';
-import { cn } from '../../../../frontend/utils/cn';
+import { Button } from '@/components/atoms/Button';
+import { cn } from '@/utils/cn';
 
 /**
  * Exhibit Pro demonstrates the complete trial exhibit management interface.

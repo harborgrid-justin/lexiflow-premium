@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MotionToCompelBuilder } from '../../../../features/litigation/discovery/MotionToCompelBuilder';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
-import { ToastProvider } from '../../../../frontend/providers/ToastContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
+import { ToastProvider } from '@/providers/ToastContext';
 import React from 'react';
-import { CaseId } from '../../../../frontend/types';
+import { CaseId } from '@/types';
 
 const meta = {
   title: 'Pages/Motion to Compel Builder',

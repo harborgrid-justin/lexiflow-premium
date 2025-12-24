@@ -11,8 +11,8 @@ import type {
   EvidenceItem,
   TimeEntry,
   User,
-} from '../../types';
-import type { Examination } from '../../types/discovery';
+} from '@/types';
+import type { Examination } from '@/types/discovery';
 
 export class ExaminationsApiService {
   async getAll(filters?: { caseId?: string; status?: string; type?: string }): Promise<Examination[]> {

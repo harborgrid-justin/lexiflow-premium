@@ -56,7 +56,7 @@ import { CASE_DETAIL_TABS } from '../features/matters/components/detail/CaseDeta
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case, TimeEntry, LegalDocument } from '../../../types';
+import { Case, TimeEntry, LegalDocument } from '@/types';
 
 interface CaseDetailProps {
   caseData: Case;

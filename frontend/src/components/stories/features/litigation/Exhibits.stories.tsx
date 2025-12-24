@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { CaseId, ExhibitId, TrialExhibit, ExhibitStatus, ExhibitParty } from '../../../../frontend/types';
+import type { CaseId, ExhibitId, TrialExhibit, ExhibitStatus, ExhibitParty } from '@/types';
 import { ExhibitManager } from '../../../../features/litigation/exhibits/ExhibitManager';
 import { ExhibitTable } from '../../../../features/litigation/exhibits/ExhibitTable';
 import { StickerDesigner } from '../../../../features/litigation/exhibits/StickerDesigner';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
-import { ToastProvider } from '../../../../frontend/providers/ToastContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
+import { ToastProvider } from '@/providers/ToastContext';
 import React from 'react';
 
 /**

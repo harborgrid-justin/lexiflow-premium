@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { CaseId, EvidenceId, EvidenceItem, EvidenceType, AdmissibilityStatus } from '../../../../frontend/types';
+import type { CaseId, EvidenceId, EvidenceItem, EvidenceType, AdmissibilityStatus } from '@/types';
 import { EvidenceDashboard } from '../../../../features/litigation/evidence/EvidenceDashboard';
 import { EvidenceVault } from '../../../../features/litigation/evidence/EvidenceVault';
 import { EvidenceInventory } from '../../../../features/litigation/evidence/EvidenceInventory';
@@ -8,8 +8,8 @@ import { EvidenceChainOfCustody } from '../../../../features/litigation/evidence
 import { EvidenceAdmissibility } from '../../../../features/litigation/evidence/EvidenceAdmissibility';
 import { EvidenceForensics } from '../../../../features/litigation/evidence/EvidenceForensics';
 import { EvidenceDetail } from '../../../../features/litigation/evidence/EvidenceDetail';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
-import { ToastProvider } from '../../../../frontend/providers/ToastContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
+import { ToastProvider } from '@/providers/ToastContext';
 import React from 'react';
 
 /**

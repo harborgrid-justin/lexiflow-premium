@@ -37,8 +37,8 @@
  * - Minimal memory footprint with streaming uploads
  */
 
-import { API_BASE_URL, API_PREFIX } from '../../config/master.config';
-import { keysToCamel } from '../../utils/caseConverter';
+import { API_BASE_URL, API_PREFIX } from '@/config/master.config';
+import { keysToCamel } from '@/utils/caseConverter';
 
 const BASE_URL = `${API_BASE_URL}${API_PREFIX}`;
 

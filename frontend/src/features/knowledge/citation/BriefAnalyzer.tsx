@@ -21,16 +21,16 @@ import {
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../components/atoms/Button';
-import { Card } from '../../components/molecules/Card';
-import { Tabs } from '../../components/molecules/Tabs';
-import { RiskMeter } from '../../common/RiskMeter';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Tabs } from '@/components/molecules/Tabs';
+import { RiskMeter } from '@/components/organisms/RiskMeter';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '../../../providers/WindowContext';
+import { useWindow } from '@/providers/WindowContext';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -42,7 +42,7 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Citation, Case } from '../../../types';
+import { Citation, Case } from '@/types';
 import { sanitizeHtml } from './utils';
 
 export const BriefAnalyzer: React.FC = () => {

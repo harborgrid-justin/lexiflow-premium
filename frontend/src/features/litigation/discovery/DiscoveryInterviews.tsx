@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { CustodianInterview, CaseId } from '../../../types';
+import { CustodianInterview, CaseId } from '@/types';
 import { DataService } from '@/services/data/dataService';
-import { Button } from '../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { MessageSquare, Plus } from 'lucide-react';
 import { InterviewList } from './interviews/InterviewList';
 import { InterviewModal } from './interviews/InterviewModal';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
-import { useModalState } from '../../../hooks';
+import { useModalState } from '@/hooks';
 
 export const DiscoveryInterviews: React.FC = () => {
   const { theme } = useTheme();

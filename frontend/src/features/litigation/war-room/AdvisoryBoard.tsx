@@ -25,20 +25,20 @@ import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useToggle } from '@/hooks/useToggle';
 
 // Components
-import { Button } from '../../components/atoms/Button';
-import { SearchToolbar } from '../../components/organisms/SearchToolbar';
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
+import { Button } from '@/components/atoms/Button';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 import { AdvisorySidebar } from './advisory/AdvisorySidebar';
 import { AdvisorList, Advisor } from './advisory/AdvisorList';
 import { AdvisorDetail } from './advisory/AdvisorDetail';
-import { Modal } from '../../components/molecules/Modal';
-import { ErrorState } from '../../components/molecules/ErrorState';
+import { Modal } from '@/components/molecules/Modal';
+import { ErrorState } from '@/components/molecules/ErrorState';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

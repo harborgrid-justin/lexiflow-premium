@@ -71,10 +71,10 @@ import { DataService } from '@/services/data/dataService';
 import { SearchWorker } from './searchWorker';
 
 // Utils & Constants
-import { StorageUtils } from '../../utils/storage';
+import { StorageUtils } from '@/utils/storage';
 
 // Types
-import { Case, Client, WorkflowTask, EvidenceItem, User, LegalDocument, DocketEntry, Motion, Clause, LegalRule } from '../../types';
+import { Case, Client, WorkflowTask, EvidenceItem, User, LegalDocument, DocketEntry, Motion, Clause, LegalRule } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

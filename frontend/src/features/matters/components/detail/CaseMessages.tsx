@@ -13,11 +13,11 @@ import React from 'react';
 import { Send, Paperclip, Lock, Shield, FileText, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../components/atoms/Button';
-import { UserAvatar } from '../../components/atoms/UserAvatar';
+import { Button } from '@/components/atoms/Button';
+import { UserAvatar } from '@/components/atoms/UserAvatar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
@@ -27,7 +27,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Case, Conversation, Message, User } from '../../../types';
+import { Case, Conversation, Message, User } from '@/types';
 
 interface CaseMessagesProps {
   caseData: Case;

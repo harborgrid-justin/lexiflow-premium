@@ -13,14 +13,14 @@ import React from 'react';
 import { Clock, Link, ArrowRightLeft, Plus, BarChart3, ExternalLink } from 'lucide-react';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Case } from '../../../../types';
+import { Case } from '@/types';
 
 interface OverviewSidebarProps {
   caseData: Case;

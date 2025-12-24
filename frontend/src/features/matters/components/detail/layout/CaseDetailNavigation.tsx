@@ -12,11 +12,11 @@
 import React, { useMemo } from 'react';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
-import { CASE_DETAIL_TABS } from '../../CaseDetailConfig';
+import { CASE_DETAIL_TABS } from '../CaseDetailConfig';
 
 interface CaseDetailNavigationProps {
   activeTab: string;

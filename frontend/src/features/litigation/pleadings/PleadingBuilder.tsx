@@ -24,31 +24,31 @@ import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
-import { useModalState } from '../../../hooks';
+import { useModalState } from '@/hooks';
 
 // Components
-import { TabbedPageLayout } from '../../components/templates/TabbedPageLayout';
-import { Button } from '../../components/atoms/Button';
-import { Modal } from '../../components/molecules/Modal';
-import { Input } from '../../components/atoms';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout';
+import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules/Modal';
+import { Input } from '@/components/atoms';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 
 // Utils & Config
 import { cn } from '@/utils/cn';
-import { PLEADING_BUILDER_TAB_CONFIG } from '../../../config/tabs.config';
+import { PLEADING_BUILDER_TAB_CONFIG } from '@/config/tabs.config';
 import { IdGenerator } from '@/utils/idGenerator';
 import { validateTemplate } from '@/utils/validation';
 
 // Types
-import { Case, PleadingDocument, PleadingTemplate, PleadingSection, CaseId, UserId } from '../../../types';
+import { Case, PleadingDocument, PleadingTemplate, PleadingSection, CaseId, UserId } from '@/types';
 
 // Lazy imports with named export handling
 const PleadingDesigner = lazy(() => import('./PleadingDesigner')); // Export default exists
 const PleadingDrafts = lazy(() => import('./PleadingDrafts').then(m => ({ default: m.PleadingDrafts })));
 const PleadingTemplates = lazy(() => import('./PleadingTemplates').then(m => ({ default: m.PleadingTemplates })));
-const ClauseLibrary = lazy(() => import('../../knowledge/clauses/ClauseLibrary')); // Export default exists
+const ClauseLibrary = lazy(() => import('@/features/knowledge/clauses/ClauseLibrary')); // Export default exists
 const PleadingFilingQueue = lazy(() => import('./PleadingFilingQueue').then(m => ({ default: m.PleadingFilingQueue })));
 const PleadingAnalytics = lazy(() => import('./PleadingAnalytics').then(m => ({ default: m.PleadingAnalytics })));
 

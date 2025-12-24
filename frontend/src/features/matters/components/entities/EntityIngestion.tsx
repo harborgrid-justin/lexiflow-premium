@@ -17,11 +17,11 @@ import { UploadCloud, FileSpreadsheet, CheckCircle, RefreshCw, Link, AlertTriang
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '../../components/molecules/Card';
-import { Button } from '../../components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

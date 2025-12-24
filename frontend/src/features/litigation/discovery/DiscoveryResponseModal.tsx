@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
-import { Modal } from '../../components/molecules/Modal';
-import { Button } from '../../components/atoms/Button';
-import { Badge } from '../../components/atoms/Badge';
+import { Modal } from '@/components/molecules/Modal';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
 import { Wand2 } from 'lucide-react';
-import { DiscoveryRequest } from '../../../types';
+import { DiscoveryRequest } from '@/types';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { History, GitBranch, Tag, Clock, User, FileText, Plus } from 'lucide-react';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Card } from '../../components/molecules/Card';
-import { Badge } from '../../components/atoms/Badge';
-import { Tabs } from '../../components/molecules/Tabs';
-import { Button } from '../../components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Badge } from '@/components/atoms/Badge';
+import { Tabs } from '@/components/molecules/Tabs';
+import { Button } from '@/components/atoms/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 interface HistoryEntry {

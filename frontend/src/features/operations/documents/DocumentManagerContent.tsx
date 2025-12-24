@@ -1,6 +1,6 @@
 import React, { lazy } from 'react';
-import { DocView } from '../../../config/tabs.config';
-import { UserRole } from '../../../types';
+import { DocView } from '@/config/tabs.config';
+import { UserRole } from '@/types';
 
 const DocumentExplorer = lazy(() => import('./DocumentExplorer').then(m => ({ default: m.DocumentExplorer })));
 const DocumentTemplates = lazy(() => import('./DocumentTemplates').then(m => ({ default: m.DocumentTemplates })));

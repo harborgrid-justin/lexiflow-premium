@@ -16,7 +16,7 @@ export class WallErectedHandler extends BaseEventHandler<SystemEventPayloads[typ
     const actions: string[] = [];
     const { wall } = payload;
     
-    const { DataService } = await import('@/api/data/dataService');
+    const { DataService } = await import('@/services/data/dataService');
     
     // Generate RLS policy for ethical wall
     const policyName = `wall_enforce_${wall.caseId}`;

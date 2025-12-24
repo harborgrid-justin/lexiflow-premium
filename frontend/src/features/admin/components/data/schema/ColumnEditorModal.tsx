@@ -1,9 +1,9 @@
 
 import React from 'react';
-import { Modal } from '../../../components/molecules/Modal';
-import { Input } from '../../../components/atoms';
-import { Button } from '../../../components/atoms/Button';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { Modal } from '@/components/molecules/Modal';
+import { Input } from '@/components/atoms';
+import { Button } from '@/components/atoms/Button';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface ColumnData {

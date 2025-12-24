@@ -14,15 +14,15 @@
 import React, { Suspense, lazy, useTransition, useMemo, useState, useCallback } from 'react';
 import { Plus, Clock, BarChart3, Briefcase, Settings, Eye, Activity, DollarSign, Lightbulb, TrendingUp, RefreshCw } from 'lucide-react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@api';
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Button } from '../../components/atoms/Button';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { MatterManagerContent } from './MatterManagerContent';
 import { cn } from '@/utils/cn';
-import { MatterView } from '../../../config/tabs.config';
+import { MatterView } from '@/config/tabs.config';
 
 // Two-level tab configuration
 const MATTER_TABS = [

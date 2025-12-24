@@ -1,9 +1,9 @@
 
 import React from 'react';
-import { Card } from '../../components/molecules/Card';
-import { Button } from '../../components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
 import { Clock, Loader2 } from 'lucide-react';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

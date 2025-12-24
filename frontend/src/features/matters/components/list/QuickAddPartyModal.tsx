@@ -14,7 +14,7 @@
 import React, { useState, useCallback } from 'react';
 import { X, User, Building2, Gavel } from 'lucide-react';
 import { CreatePartyDto, PartyTypeBackend, PartyRoleBackend } from '@/api/parties-api';
-import { CreateComponentProps } from '../../components/molecules/AutocompleteSelect';
+import { CreateComponentProps } from '@/components/molecules/AutocompleteSelect';
 
 // Type aliases for cleaner code
 type PartyType = PartyTypeBackend;

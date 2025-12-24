@@ -1,6 +1,6 @@
 
 import React, { lazy } from 'react';
-import { Clause } from '../../../types';
+import { Clause } from '@/types';
 
 const ActiveResearch = lazy(() => import('./ActiveResearch').then(m => ({ default: m.ActiveResearch })));
 const ResearchHistory = lazy(() => import('./ResearchHistory').then(m => ({ default: m.ResearchHistory })));

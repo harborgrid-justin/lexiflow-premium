@@ -17,12 +17,12 @@ import { ArrowLeft, Phone, Video, Info, Lock, AlertTriangle } from 'lucide-react
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { Conversation } from '@/hooks/useSecureMessenger';
 
 // Components
-import { UserAvatar } from '../../components/atoms/UserAvatar';
-import { Button } from '../../components/atoms/Button';
+import { UserAvatar } from '@/components/atoms/UserAvatar';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

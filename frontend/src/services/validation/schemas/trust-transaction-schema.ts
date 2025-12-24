@@ -7,7 +7,7 @@
  * @compliance Trust accounts require strict audit trail and balance validation
  */
 
-import type { CaseId } from '../../../types';
+import type { CaseId } from '@/types';
 import { isValidDate, isValidStringLength } from '../validators/common-validators';
 import { isValidAmount, FINANCIAL_CONSTRAINTS } from '../validators/financial-validators';
 import { sanitizeString } from '../sanitizers/input-sanitizer';

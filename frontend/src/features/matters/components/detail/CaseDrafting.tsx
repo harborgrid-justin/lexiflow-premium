@@ -13,11 +13,11 @@ import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { Cpu, Book, AlertTriangle, Check, Wand2, Search, History, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { AdvancedEditor } from '../../operations/documents/AdvancedEditor';
-import { ClauseList as ClausePanel } from '../../knowledge/clauses/ClauseList';
+import { AdvancedEditor } from '@/features/operations/documents/AdvancedEditor';
+import { ClauseList as ClausePanel } from '@/features/knowledge/clauses/ClauseList';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
@@ -27,9 +27,9 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Clause } from '../../../types';
+import { Clause } from '@/types';
 
-const ClauseHistoryModal = lazy(() => import('../../knowledge/clauses/ClauseHistoryModal').then(m => ({ default: m.ClauseHistoryModal })));
+const ClauseHistoryModal = lazy(() => import('@/features/knowledge/clauses/ClauseHistoryModal').then(m => ({ default: m.ClauseHistoryModal })));
 
 interface CaseDraftingProps {
   caseTitle: string;

@@ -22,11 +22,11 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { EmptyState } from '../../components/molecules/EmptyState';
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
+import { EmptyState } from '@/components/molecules/EmptyState';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

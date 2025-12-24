@@ -20,20 +20,20 @@ import {
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Button } from '../../components/atoms/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { Button } from '@/components/atoms/Button';
 import { ExhibitTable } from './ExhibitTable';
 import { StickerDesigner } from './StickerDesigner';
 import { ExhibitStats } from './ExhibitStats';
-import { ErrorState } from '../../components/molecules/ErrorState';
+import { ErrorState } from '@/components/molecules/ErrorState';
 
 // Context & Utils
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useToggle } from '@/hooks/useToggle';
 
 // Data & Types
-import { CaseId, TrialExhibit } from '../../../types';
+import { CaseId, TrialExhibit } from '@/types';
 import { DataService } from '@/services/data/dataService';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)

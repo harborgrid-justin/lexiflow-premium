@@ -19,20 +19,20 @@ import { Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
-import { useWindow } from '../../../providers/WindowContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { useWindow } from '@/providers/WindowContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
-import { SearchToolbar } from '../../components/organisms/SearchToolbar';
-import { DocumentPreviewPanel } from '../../operations/documents/viewer/DocumentPreviewPanel';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { DocumentPreviewPanel } from '@/features/operations/documents/viewer/DocumentPreviewPanel';
 import { WallItemCard } from './cards/WallItemCard';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import type { WarRoomData, LegalDocument, EvidenceItem, Motion, DocumentId, CaseId } from '../../../types';
+import type { WarRoomData, LegalDocument, EvidenceItem, Motion, DocumentId, CaseId } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

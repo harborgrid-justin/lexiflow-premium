@@ -13,13 +13,13 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Calculator, RefreshCw, TrendingUp } from 'lucide-react';
 
 // Internal Components
-import { Card } from '../../components/molecules/Card';
-import { Input } from '../../components/atoms';
-import { Button } from '../../components/atoms/Button';
-import { useChartTheme } from '../../components/organisms/ChartHelpers';
+import { Card } from '@/components/molecules/Card';
+import { Input } from '@/components/atoms';
+import { Button } from '@/components/atoms/Button';
+import { useChartTheme } from '@/components/organisms/ChartHelpers';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Utils
 import { cn } from '@/utils/cn';

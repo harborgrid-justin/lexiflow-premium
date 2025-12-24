@@ -1,16 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { ShieldAlert, FileText, AlertTriangle, CheckCircle, Activity } from 'lucide-react';
-import { MetricCard } from '../../components/atoms';
-import { Card } from '../../components/molecules/Card';
-import { useTheme } from '../../../providers/ThemeContext';
+import { MetricCard } from '@/components/molecules/MetricCard';
+import { Card } from '@/components/molecules/Card';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { DataService } from '@/services/data/dataService';
-import { useChartTheme } from '../../components/organisms/ChartHelpers';
+import { useChartTheme } from '@/components/organisms/ChartHelpers';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { Loader2 } from 'lucide-react';
-import { ComplianceMetrics } from '../../../types';
+import { ComplianceMetrics } from '@/types';
 
 interface RiskChartData {
     name: string;

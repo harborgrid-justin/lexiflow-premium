@@ -28,14 +28,14 @@ import {
 } from 'lucide-react';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@api';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../components/atoms/Button';
-import { Card } from '../../components/molecules/Card';
-import { Badge } from '../../components/atoms/Badge';
-import { ErrorState } from '../../components/molecules/ErrorState';
-import { EmptyState } from '../../components/molecules/EmptyState';
-import type { Matter, MatterStatus } from '../../../types';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Badge } from '@/components/atoms/Badge';
+import { ErrorState } from '@/components/molecules/ErrorState';
+import { EmptyState } from '@/components/molecules/EmptyState';
+import type { Matter, MatterStatus } from '@/types';
 
 interface MatterKPIs {
   totalActive: number;

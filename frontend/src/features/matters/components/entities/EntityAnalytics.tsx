@@ -18,14 +18,14 @@ import { Users, Building2, ShieldAlert, Globe } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { MetricCard } from '../../components/atoms';
-import { Card } from '../../components/molecules/Card';
+import { MetricCard } from '@/components/molecules/MetricCard';
+import { Card } from '@/components/molecules/Card';
 
 // Types
-import { LegalEntity } from '../../../types';
+import { LegalEntity } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

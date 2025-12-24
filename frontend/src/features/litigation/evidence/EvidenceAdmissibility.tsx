@@ -10,19 +10,19 @@ import React, { useState } from 'react';
 import { ShieldAlert, CheckCircle, Scale, Plus } from 'lucide-react';
 
 // Common Components
-import { Card } from '../../components/molecules/Card';
-import { Badge } from '../../components/atoms/Badge';
-import { Button } from '../../components/atoms/Button';
-import { RuleSelector } from '../../components/molecules/RuleSelector';
-import { Modal } from '../../components/molecules/Modal';
+import { Card } from '@/components/molecules/Card';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { RuleSelector } from '@/components/molecules/RuleSelector';
+import { Modal } from '@/components/molecules/Modal';
 
 // Context & Utils
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { useModalState } from '../../../hooks';
+import { useModalState } from '@/hooks';
 
 // Types
-import { EvidenceItem } from '../../../types';
+import { EvidenceItem } from '@/types';
 
 interface EvidenceAdmissibilityProps {
   selectedItem: EvidenceItem;

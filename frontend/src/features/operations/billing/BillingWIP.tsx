@@ -22,16 +22,16 @@ import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { STORES } from '@/services/data/db';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useCallback } from 'react';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { Button } from '../../components/atoms/Button';
-import { SearchToolbar } from '../../components/organisms/SearchToolbar';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Button } from '@/components/atoms/Button';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -40,7 +40,7 @@ import { validateTimeEntrySafe } from '@/services/validation/billingSchemas';
 import { WIPStatusEnum } from '@/types/enums';
 
 // Types
-import { TimeEntry } from '../../../types';
+import { TimeEntry } from '@/types';
 
 // ============================================================================
 // INVOICE GENERATION QUEUE

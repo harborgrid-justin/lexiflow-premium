@@ -1,17 +1,17 @@
 
 import React from 'react';
 import { Bookmark, FileText, Scale, BookmarkMinus } from 'lucide-react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { EmptyState } from '../../components/molecules/EmptyState';
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
-import { Badge } from '../../components/atoms/Badge';
-import { Button } from '../../components/atoms/Button';
-import { useTheme } from '../../../providers/ThemeContext';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { EmptyState } from '@/components/molecules/EmptyState';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { Citation } from '../../../types';
+import { Citation } from '@/types';
 
 export const SavedAuthorities: React.FC = () => {
   const { theme } = useTheme();

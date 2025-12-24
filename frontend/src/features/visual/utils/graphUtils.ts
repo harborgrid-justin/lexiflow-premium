@@ -6,7 +6,7 @@
  * @module components/visual/utils/graphUtils
  */
 
-import { Case, Party, EvidenceItem, NexusNodeData } from '../../../types';
+import { Case, Party, EvidenceItem, NexusNodeData } from '@/types';
 
 export interface GraphLink {
   sourceIndex: number;

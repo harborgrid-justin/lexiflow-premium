@@ -18,18 +18,18 @@ import React, { useRef, useState, useEffect, useMemo } from 'react';
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 import { useNexusGraph } from '@/hooks/useNexusGraph';
-import { useChartTheme } from '../components/organisms/ChartHelpers';
+import { useChartTheme } from '@/components/organisms/ChartHelpers';
 
 // Components
 import { GraphOverlay } from './GraphOverlay';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
-import { NODE_STRIDE } from '../../utils/nexusPhysics';
+import { NODE_STRIDE } from '@/utils/nexusPhysics';
 import { buildGraphData, getNodeStrokeColor, getNodeRadius, getNodeLabelYOffset } from './utils';
 
 // Types
-import { Case, Party, EvidenceItem, NexusNodeData } from '../../types';
+import { Case, Party, EvidenceItem, NexusNodeData } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

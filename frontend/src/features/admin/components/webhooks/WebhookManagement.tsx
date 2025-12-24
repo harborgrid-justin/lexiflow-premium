@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { Webhook, Plus, Edit, Trash2, Play, AlertCircle, CheckCircle } from 'lucide-react';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../components/atoms/Button';
-import { Badge } from '../../components/atoms/Badge';
-import { Modal } from '../../components/molecules/Modal';
-import { Input, TextArea } from '../../components/atoms';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { Modal } from '@/components/molecules/Modal';
+import { Input, TextArea } from '@/components/atoms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
 import { useNotify } from '@/hooks/useNotify';
-import { useModalState } from '../../../hooks';
+import { useModalState } from '@/hooks';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { ErrorState } from '../../components/molecules/ErrorState';
+import { ErrorState } from '@/components/molecules/ErrorState';
 import { WebhooksApiService } from '@/api/webhooks-api';
 
 const webhooksApi = new WebhooksApiService();

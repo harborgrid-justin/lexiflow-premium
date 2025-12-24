@@ -7,7 +7,7 @@
  */
 
 import { ExpenseStatusEnum } from '@/types/enums';
-import type { CaseId, UserId } from '../../../types';
+import type { CaseId, UserId } from '@/types';
 import { isValidDate, isFutureDate, isValidStringLength, isValidEnum } from '../validators/common-validators';
 import { isValidAmount, requiresReceipt, FINANCIAL_CONSTRAINTS } from '../validators/financial-validators';
 import { sanitizeString } from '../sanitizers/input-sanitizer';

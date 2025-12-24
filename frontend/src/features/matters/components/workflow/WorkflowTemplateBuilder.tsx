@@ -1,18 +1,18 @@
 
 import React, { useState, useRef, useCallback } from 'react';
-import { WorkflowTemplateData, WorkflowTemplateId } from '../../../types';
+import { WorkflowTemplateData, WorkflowTemplateId } from '@/types';
 import { NodeType } from './builder/types';
 import { BuilderToolbar } from './builder/BuilderToolbar';
 import { BuilderPalette } from './builder/BuilderPalette';
 import { BuilderCanvas } from './builder/BuilderCanvas';
 import { BuilderProperties } from './builder/BuilderProperties';
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Button } from '../../components/atoms/Button';
-import { useTheme } from '../../../providers/ThemeContext';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { Button } from '@/components/atoms/Button';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Save, Rocket, ArrowLeft, Loader2 } from 'lucide-react';
 import { useWorkflowBuilder } from '@/hooks/useWorkflowBuilder';
-import { ErrorBoundary } from '../../../../components/organisms/ErrorBoundary/ErrorBoundary';
+import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
 import { useToggle } from '@/hooks/useToggle';
 import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';

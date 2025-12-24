@@ -17,10 +17,10 @@ import { Gavel, FileText, Bookmark, Eye, ArrowUpRight, CheckCircle, AlertTriangl
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { FileIcon } from '../../../components/atoms';
+import { FileIcon } from '@/components/atoms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

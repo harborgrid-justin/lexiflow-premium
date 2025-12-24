@@ -18,16 +18,16 @@ import { CheckCircle, ChevronUp, ChevronDown, Clock, User, ArrowRight } from 'lu
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { UserAvatar } from '../../components/atoms/UserAvatar';
+import { UserAvatar } from '@/components/atoms/UserAvatar';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { WorkflowStage, WorkflowTask } from '../../../types';
+import { WorkflowStage, WorkflowTask } from '@/types';
 
 interface WorkflowTimelineProps {
   stages: WorkflowStage[];

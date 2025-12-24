@@ -23,18 +23,18 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
-import { Badge } from '../../components/atoms/Badge';
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
+import { Badge } from '@/components/atoms/Badge';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { WikiArticle } from '../../../types';
+import { WikiArticle } from '@/types';
 
 // ============================================================================
 // HELPER FUNCTIONS

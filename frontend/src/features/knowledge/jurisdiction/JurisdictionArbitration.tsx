@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
-import { Card } from '../../components/molecules/Card';
-import { Button } from '../../components/atoms/Button';
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
-import { useTheme } from '../../../providers/ThemeContext';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';

@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
 import { Wand2, Sparkles, AlertCircle, Play, RefreshCw, FileText, WifiOff } from 'lucide-react';
-import { Button } from '../../../components/atoms/Button';
-import { TextArea } from '../../../components/atoms';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { Button } from '@/components/atoms/Button';
+import { TextArea } from '@/components/atoms';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { GeminiService } from '@/services/features/research/geminiService';
-import { AIDraftingAssistantProps } from '../../types';
+import { AIDraftingAssistantProps } from '@/types';
 import { retryWithBackoff, RetryError } from '@/utils/retryWithBackoff';
 
 export const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInsert, caseContext }) => {

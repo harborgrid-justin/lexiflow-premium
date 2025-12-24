@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card } from '../../../components/molecules/Card';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { Card } from '@/components/molecules/Card';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { FormatStats } from './types';
 

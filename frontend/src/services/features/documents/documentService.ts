@@ -20,7 +20,7 @@ import { CryptoService } from '../../infrastructure/cryptoService';
 import { Formatters } from '@/utils/formatters';
 
 // Types
-import { EvidenceItem, FileChunk, LegalDocument, DocumentId, CaseId } from '../../../types';
+import { EvidenceItem, FileChunk, LegalDocument, DocumentId, CaseId } from '@/types';
 
 // ============================================================================
 // HELPER FUNCTIONS

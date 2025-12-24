@@ -17,17 +17,17 @@ import { Plus, Filter } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Button } from '../../components/atoms/Button';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { Button } from '@/components/atoms/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { RulesPlatformContent } from './RulesPlatformContent';
 
 // Utils & Config
 import { cn } from '@/utils/cn';
-import { RULES_PLATFORM_TABS, RulesView } from '../../../config/tabs.config';
+import { RULES_PLATFORM_TABS, RulesView } from '@/config/tabs.config';
 
 // ============================================================================
 // TYPES & INTERFACES

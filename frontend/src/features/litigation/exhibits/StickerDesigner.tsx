@@ -18,12 +18,12 @@ import { Palette, Type, Layout, Save, RefreshCw, ExternalLink } from 'lucide-rea
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
-import { useWindow } from '../../../providers/WindowContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { Card } from '../../components/molecules/Card';
-import { Button } from '../../components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

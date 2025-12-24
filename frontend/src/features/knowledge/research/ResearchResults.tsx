@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Bookmark, Share2, ThumbsUp, ThumbsDown, BookOpen } from 'lucide-react';
-import { ResearchSession } from '../../../types';
-import { Card } from '../../components/molecules/Card';
-import { useTheme } from '../../../providers/ThemeContext';
+import { ResearchSession } from '@/types';
+import { Card } from '@/components/molecules/Card';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { ResearchResultCard } from './ResearchResultCard';
 

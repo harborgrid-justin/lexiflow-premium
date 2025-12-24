@@ -22,22 +22,22 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
 import { TemplatePreview } from './TemplatePreview';
-import { EmptyState } from '../../components/molecules/EmptyState';
-import { Button } from '../../components/atoms/Button';
-import { LoadingState } from '../../components/molecules/LoadingState';
-import { ErrorState } from '../../components/molecules/ErrorState';
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
+import { EmptyState } from '@/components/molecules/EmptyState';
+import { Button } from '@/components/atoms/Button';
+import { LoadingState } from '@/components/molecules/LoadingState';
+import { ErrorState } from '@/components/molecules/ErrorState';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { WorkflowTemplateData } from '../../../types';
+import { WorkflowTemplateData } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -18,19 +18,20 @@ import { Filter } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { VirtualList } from '../../components/organisms/VirtualList';
-import { SwipeableItem } from '../../common/SwipeableItem';
-import { Button } from '../../components/atoms/Button';
-import { FilterPanel } from '../../common/FilterPanel';
-import { SearchInput, Input } from '../../components/atoms';
-import { Badge } from '../../components/atoms/Badge';
-import { Currency } from '../../components/atoms';
+import { VirtualList } from '@/components/organisms/VirtualList';
+import { SwipeableItem } from '@/components/organisms/SwipeableItem';
+import { Button } from '@/components/atoms/Button';
+import { FilterPanel } from '@/components/organisms/FilterPanel';
+import { SearchInput } from '@/components/molecules/SearchInput';
+import { Input } from '@/components/atoms/Input';
+import { Badge } from '@/components/atoms/Badge';
+import { Currency } from '@/components/atoms/Currency';
 import { ActiveCaseTable } from './ActiveCaseTable';
-import { ConfirmDialog } from '../../components/molecules/ConfirmDialog';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
 
 // Hooks & Context
 import { useSort } from '@/hooks/useSort';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useToggle } from '@/hooks/useToggle';
 import { UseCaseListReturn } from '@/hooks/useCaseList';
@@ -45,7 +46,7 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case, CaseStatus } from '../../../types';
+import { Case, CaseStatus } from '@/types';
 
 type CaseListActiveProps = Omit<UseCaseListReturn, 'isModalOpen' | 'setIsModalOpen' | 'isLoading' | 'isError'> & {
   onSelectCase: (c: Case) => void;

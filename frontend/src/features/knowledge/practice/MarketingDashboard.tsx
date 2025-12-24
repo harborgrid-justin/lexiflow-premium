@@ -22,16 +22,16 @@ import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '../../components/molecules/Card';
+import { Card } from '@/components/molecules/Card';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { MarketingMetric, MarketingCampaign } from '../../../types';
+import { MarketingMetric, MarketingCampaign } from '@/types';
 
 // ============================================================================
 // COMPONENT

@@ -13,21 +13,21 @@ import React, { useState } from 'react';
 import { X, Save, Trash2, Wand2, Plus, Fingerprint, Scale, AlertTriangle } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../../components/atoms/Button';
-import { Badge } from '../../../components/atoms/Badge';
-import { Input } from '../../../components/atoms';
-import { Tabs } from '../../../components/molecules/Tabs';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { Input } from '@/components/atoms';
+import { Tabs } from '@/components/molecules/Tabs';
 import { ArgumentCoreInfo } from './ArgumentCoreInfo';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { LegalArgument, EvidenceItem, Citation, EvidenceId } from '../../../../types';
+import { LegalArgument, EvidenceItem, Citation, EvidenceId } from '@/types';
 
 interface ArgumentDetailProps {
   argument: LegalArgument;

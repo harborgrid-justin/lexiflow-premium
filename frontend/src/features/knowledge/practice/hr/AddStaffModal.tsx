@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
-import { Modal } from '../../../components/molecules/Modal';
-import { Button } from '../../../components/atoms/Button';
-import { Input } from '../../../components/atoms';
-import { StaffMember } from '../../../../types';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { Modal } from '@/components/molecules/Modal';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms';
+import { StaffMember } from '@/types';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface AddStaffModalProps {

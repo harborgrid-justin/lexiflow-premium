@@ -3,7 +3,7 @@
  * Extracted from individual component files for better organization and reusability
  */
 
-import { Citation } from '../../../types';
+import { Citation } from '@/types';
 
 export type CitationView = 'library' | 'analyzer';
 

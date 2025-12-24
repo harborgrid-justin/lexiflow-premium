@@ -22,16 +22,16 @@ import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { STORES } from '@/services/data/db';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useCallback } from 'react';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { Button } from '../../components/atoms/Button';
-import { Badge } from '../../components/atoms/Badge';
-import { SearchToolbar } from '../../components/organisms/SearchToolbar';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -40,7 +40,7 @@ import { billingQueryKeys } from '@/services/infrastructure/queryKeys';
 import { InvoiceStatusEnum } from '@/types/enums';
 
 // Types
-import { Invoice } from '../../../types';
+import { Invoice } from '@/types';
 
 // ============================================================================
 // COMPONENT

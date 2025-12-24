@@ -282,7 +282,7 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Types
-import { Citation, Party, Case } from '../../../types';
+import { Citation, Party, Case } from '@/types';
 
 // =============================================================================
 // TYPES & INTERFACES

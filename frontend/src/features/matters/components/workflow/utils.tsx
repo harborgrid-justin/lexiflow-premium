@@ -6,7 +6,7 @@
  * For ProcessIcon component, import from './ProcessIcon' instead.
  */
 
-import { WorkflowTask } from '../../../types';
+import { WorkflowTask } from '@/types';
 
 /**
  * @deprecated Use ProcessIcon component instead

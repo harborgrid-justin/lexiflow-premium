@@ -1,10 +1,10 @@
 
 import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/organisms/Table';
-import { Button } from '../../../components/atoms/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Button } from '@/components/atoms/Button';
 import { Download, TrendingDown, Clock, CheckCircle } from 'lucide-react';
-import { LegalEntity } from '../../../../types';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { LegalEntity } from '@/types';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface RateNegotiationProps {

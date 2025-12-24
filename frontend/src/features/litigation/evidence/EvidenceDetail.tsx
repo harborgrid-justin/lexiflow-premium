@@ -12,8 +12,8 @@ import React from 'react';
 import { ArrowLeft, FileSearch, Lock, ExternalLink, Stamp } from 'lucide-react';
 
 // Common Components
-import { Button } from '../../components/atoms/Button';
-import { Tabs } from '../../components/molecules/Tabs';
+import { Button } from '@/components/atoms/Button';
+import { Tabs } from '@/components/molecules/Tabs';
 
 // Sub-components
 import { EvidenceOverview } from './EvidenceOverview';
@@ -23,7 +23,7 @@ import { EvidenceForensics } from './EvidenceForensics';
 import { EvidenceChainOfCustody } from './EvidenceChainOfCustody';
 
 // Context & Utils
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -32,7 +32,7 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { DataService } from '@/services/data/dataService';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { EvidenceItem, ChainOfCustodyEvent, TrialExhibit } from '../../../types';
+import { EvidenceItem, ChainOfCustodyEvent, TrialExhibit } from '@/types';
 
 interface EvidenceDetailProps {
   selectedItem: EvidenceItem;

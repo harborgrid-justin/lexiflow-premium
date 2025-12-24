@@ -12,16 +12,16 @@ import React from 'react';
 import { Filter } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { SearchToolbar } from '../../components/organisms/SearchToolbar';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Case } from '../../../types';
+import { Case } from '@/types';
 
 interface DocketFilterPanelProps {
   searchTerm: string;

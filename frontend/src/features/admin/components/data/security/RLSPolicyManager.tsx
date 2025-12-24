@@ -1,16 +1,16 @@
 
 import React, { useState } from 'react';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { Plus, Edit2, Trash2, Shield, Lock, Play, Pause } from 'lucide-react';
-import { RLSPolicy } from '../../../../types';
+import { RLSPolicy } from '@/types';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';
 import { PolicyEditorModal } from './PolicyEditorModal';
-import { EmptyListState } from '../../../common/RefactoredCommon';
+import { EmptyListState } from '@/components/organisms/_legacy/RefactoredCommon';
 
 export const RLSPolicyManager: React.FC = () => {
   const { theme } = useTheme();

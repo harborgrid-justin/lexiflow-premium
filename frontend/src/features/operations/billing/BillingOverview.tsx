@@ -22,18 +22,19 @@ import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
-import { useChartTheme } from '../../components/organisms/ChartHelpers';
+import { useTheme } from '@/providers/ThemeContext';
+import { useChartTheme } from '@/components/organisms/ChartHelpers';
 
 // Components
-import { Card } from '../../components/molecules/Card';
-import { MetricCard, Currency } from '../../components/atoms';
+import { Card } from '@/components/molecules/Card';
+import { Currency } from '@/components/atoms';
+import { MetricCard } from '@/components/molecules/MetricCard';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { WIPStat } from '../../../types';
+import { WIPStat } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

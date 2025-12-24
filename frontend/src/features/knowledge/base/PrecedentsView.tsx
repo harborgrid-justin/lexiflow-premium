@@ -23,16 +23,16 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { Precedent } from '../../../types';
+import { Precedent } from '@/types';
 
 // ============================================================================
 // COMPONENT

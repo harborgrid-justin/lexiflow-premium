@@ -29,7 +29,7 @@
 import { 
     LegalDocument, DocumentId, CaseId, DocumentVersion, 
     FileChunk, EvidenceItem 
-} from '../../../types';
+} from '@/types';
 import { db, STORES } from '../db';
 import { Repository } from '../../core/Repository';
 import { BlobManager } from '../../infrastructure/blobManager';

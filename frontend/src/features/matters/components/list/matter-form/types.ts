@@ -1,4 +1,4 @@
-import type { Matter, MatterStatus, MatterType, MatterPriority } from '../../../types';
+import type { Matter, MatterStatus, MatterType, MatterPriority } from '@/types';
 
 export interface MatterFormProps {
   matter?: Matter;

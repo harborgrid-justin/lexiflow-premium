@@ -5,7 +5,7 @@
  * Provides basic parsing with quality indicators
  */
 
-import { DocketEntry, DocketEntryType, Case, Party, CaseId, PartyId, DocketId } from '../../../types';
+import { DocketEntry, DocketEntryType, Case, Party, CaseId, PartyId, DocketId } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

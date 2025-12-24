@@ -17,7 +17,7 @@ import { MessageSquare, Users, FileText, Archive } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useSecureMessenger } from '@/hooks/useSecureMessenger';
 
 // Components
@@ -25,7 +25,7 @@ import { MessengerInbox } from './MessengerInbox';
 import { MessengerContacts } from './MessengerContacts';
 import { MessengerFiles } from './MessengerFiles';
 import { MessengerArchived } from './MessengerArchived';
-import { PageHeader } from '../../components/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

@@ -13,18 +13,18 @@ import React, { useState } from 'react';
 import { Cpu, Sparkles, BookOpen } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { WorkflowTimeline } from './workflow/WorkflowTimeline';
 import { WorkflowAutomations } from './workflow/WorkflowAutomations';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus, TaskStatusBackend } from '../../../types';
+import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus, TaskStatusBackend } from '@/types';
 
 interface CaseWorkflowProps {
   stages: WorkflowStage[];

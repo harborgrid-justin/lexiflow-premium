@@ -13,11 +13,11 @@ import React, { useState } from 'react';
 import { X, Mail, MapPin, User, Calendar, FileText, Download, Navigation, CheckSquare, Archive, Briefcase, BookOpen, Truck, Package, PenTool, UploadCloud } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../../components/atoms/Button';
-import { TaskCreationModal } from '../../../common/TaskCreationModal';
+import { Button } from '@/components/atoms/Button';
+import { TaskCreationModal } from '@/components/organisms/TaskCreationModal';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
 
@@ -26,7 +26,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { CommunicationItem, ServiceJob, LegalDocument, DocketEntry, EvidenceItem, WorkflowTask, DocumentId, CaseId, DocketId, EvidenceId, UUID } from '../../../../types';
+import { CommunicationItem, ServiceJob, LegalDocument, DocketEntry, EvidenceItem, WorkflowTask, DocumentId, CaseId, DocketId, EvidenceId, UUID } from '@/types';
 
 interface CorrespondenceDetailProps {
   item: CommunicationItem | ServiceJob;

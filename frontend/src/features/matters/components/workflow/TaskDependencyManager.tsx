@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { CheckSquare, Lock, Loader2 } from 'lucide-react';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DataService } from '@/services/data/dataService';
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 // ✅ Migrated to backend API (2025-12-21)
 
 export const TaskDependencyManager: React.FC = () => {

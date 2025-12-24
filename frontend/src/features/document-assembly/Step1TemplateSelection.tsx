@@ -9,7 +9,7 @@ import { FileText, Mail, FileSignature, Scale, Building2, Users, BookOpen, Gavel
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { queryKeys } from '../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 import { api } from '@api';
 
 interface Step1TemplateSelectionProps {

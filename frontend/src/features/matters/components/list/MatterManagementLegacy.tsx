@@ -9,8 +9,8 @@ import {
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { Matter, MatterStatus, MatterPriority } from '../../../types';
-import { PATHS } from '../../../config/paths.config';
+import { Matter, MatterStatus, MatterPriority } from '@/types';
+import { PATHS } from '@/config/paths.config';
 
 interface MatterStatistics {
   total: number;

@@ -25,7 +25,7 @@
  * - Event-driven integration
  */
 
-import { WorkflowTask, CaseId, UserId, TaskStatusBackend, TaskPriorityBackend } from '../../../types';
+import { WorkflowTask, CaseId, UserId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';

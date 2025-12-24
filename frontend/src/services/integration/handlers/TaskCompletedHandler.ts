@@ -7,7 +7,7 @@
 
 import { BaseEventHandler } from './BaseEventHandler';
 import type { SystemEventPayloads, IntegrationResult } from '@/types/integration-types';
-import type { TimeEntry, UUID, CaseId, UserId } from '../../../types';
+import type { TimeEntry, UUID, CaseId, UserId } from '@/types';
 import { SystemEventType } from '@/types/integration-types';
 
 export class TaskCompletedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.TASK_COMPLETED]> {
@@ -23,7 +23,7 @@ export class TaskCompletedHandler extends BaseEventHandler<SystemEventPayloads[t
     }
     
     // Dynamic import to avoid circular dependency
-    const { DataService } = await import('@/api/data/dataService');
+    const { DataService } = await import('@/services/data/dataService');
     
     const draftTimeEntry: TimeEntry = {
       id: `time-auto-${Date.now()}` as UUID,

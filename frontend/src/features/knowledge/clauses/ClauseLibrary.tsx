@@ -17,16 +17,16 @@ import { Search, FileText, Plus, Tag, Filter, BookOpen } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Types
-import { Clause } from '../../../types';
-import { useTheme } from '../../../providers/ThemeContext';
+import { Clause } from '@/types';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Card } from '../../components/molecules/Card';
-import { Button } from '../../components/atoms/Button';
-import { Input } from '../../components/atoms';
-import { Badge } from '../../components/atoms/Badge';
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
-import { ErrorState } from '../../components/molecules/ErrorState';
-import { EmptyState } from '../../components/molecules/EmptyState';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms';
+import { Badge } from '@/components/atoms/Badge';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { ErrorState } from '@/components/molecules/ErrorState';
+import { EmptyState } from '@/components/molecules/EmptyState';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 

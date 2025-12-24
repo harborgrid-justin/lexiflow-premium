@@ -13,13 +13,13 @@ import React, { useState, useEffect } from 'react';
 import { FileText, Save, CheckSquare } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Input, TextArea } from '../../components/atoms';
-import { Button } from '../../components/atoms/Button';
-import { RuleSelector } from '../../components/molecules/RuleSelector';
-import { UserSelect } from '../../components/molecules/UserSelect';
+import { Input, TextArea } from '@/components/atoms';
+import { Button } from '@/components/atoms/Button';
+import { RuleSelector } from '@/components/molecules/RuleSelector';
+import { UserSelect } from '@/components/molecules/UserSelect';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
@@ -31,7 +31,7 @@ import { DeadlineEngine } from '@/services/features/deadlines/deadlineEngine';
 import { IdGenerator } from '@/utils/idGenerator';
 
 // Types & Interfaces
-import { DocketEntry, DocketEntryType, WorkflowTask, TaskId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '../../../types';
+import { DocketEntry, DocketEntryType, WorkflowTask, TaskId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
 
 interface DocketEntryBuilderProps {
   initialData?: Partial<DocketEntry>;

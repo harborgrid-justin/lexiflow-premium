@@ -1,7 +1,7 @@
 import React from 'react';
 import { FileText, Book, Scale, Flag, FileCode } from 'lucide-react';
-import { Card } from '../../../components/molecules/Card';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { Card } from '@/components/molecules/Card';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 export const HelpSection: React.FC = () => {

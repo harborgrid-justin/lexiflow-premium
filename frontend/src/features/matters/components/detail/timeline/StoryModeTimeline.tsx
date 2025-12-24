@@ -13,16 +13,16 @@ import React from 'react';
 import { Calendar, Flag, Gavel, FileText, ArrowRight } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Card } from '../../../components/molecules/Card';
+import { Card } from '@/components/molecules/Card';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { TimelineEvent } from '../../../../types';
+import { TimelineEvent } from '@/types';
 
 interface StoryModeTimelineProps {
   events: TimelineEvent[];

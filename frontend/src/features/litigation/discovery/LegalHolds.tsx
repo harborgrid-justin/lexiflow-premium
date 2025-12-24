@@ -18,13 +18,13 @@ import { AlertCircle, Plus, User, Building2, Calendar, Loader2 } from 'lucide-re
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../components/atoms/Button';
-import { Badge } from '../../components/atoms/Badge';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -39,7 +39,7 @@ import { LegalHoldStatusEnum } from '@/types/enums';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { LegalHold } from '../../../types';
+import { LegalHold } from '@/types';
 
 export const LegalHolds: React.FC = () => {
   const { theme } = useTheme();

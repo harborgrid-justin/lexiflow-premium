@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from '../../../components/atoms/Button';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { Button } from '@/components/atoms/Button';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 export const CodingPanel: React.FC = () => {

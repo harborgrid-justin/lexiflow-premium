@@ -1,21 +1,21 @@
 
 import React, { useState, Suspense, lazy, useTransition } from 'react';
-import { Client, EntityId } from '../../../types';
+import { Client, EntityId } from '@/types';
 import {
   UserPlus, LayoutDashboard, List, GitPullRequest,
   BarChart3, Users, TrendingUp
 } from 'lucide-react';
 import { ClientIntakeModal } from './ClientIntakeModal';
 import { ClientPortalModal } from './ClientPortalModal';
-import { Button } from '../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { TabbedPageLayout, TabConfigItem } from '../../components/templates/TabbedPageLayout';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { TabbedPageLayout, TabConfigItem } from '@/components/templates/TabbedPageLayout';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/utils/cn';
-import { CRM_TAB_CONFIG, CRMView } from '../../../config/tabs.config';
+import { CRM_TAB_CONFIG, CRMView } from '@/config/tabs.config';
 import { ClientCRMContent } from './ClientCRMContent';
 
 interface ClientCRMProps {

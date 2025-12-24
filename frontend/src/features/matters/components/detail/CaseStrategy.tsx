@@ -13,15 +13,15 @@ import React, { useState } from 'react';
 import { Target, Shield, Plus, Scale } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../components/atoms/Button';
-import { Modal } from '../../components/molecules/Modal';
-import { Input, TextArea } from '../../components/atoms';
+import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules/Modal';
+import { Input, TextArea } from '@/components/atoms';
 import { StrategySection } from './strategy/StrategySection';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
-import { useModalState } from '../../../hooks';
+import { useModalState } from '@/hooks';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
@@ -30,7 +30,7 @@ import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Types & Interfaces
-import { Citation, LegalArgument, Defense, EvidenceItem } from '../../../types';
+import { Citation, LegalArgument, Defense, EvidenceItem } from '@/types';
 
 interface CaseStrategyProps {
   caseId: string;

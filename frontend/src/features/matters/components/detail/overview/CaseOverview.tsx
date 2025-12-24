@@ -13,16 +13,16 @@ import React from 'react';
 import { Users } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { MatterInfo } from './MatterInfo';
 import { ActiveWorkstreams } from './ActiveWorkstreams';
 import { OverviewSidebar } from './OverviewSidebar';
 import { CaseOverviewStats } from './CaseOverviewStats';
 import { CaseOverviewModals } from './CaseOverviewModals';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/organisms/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useCaseOverview } from '@/hooks/useCaseOverview';
 
@@ -32,7 +32,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Case, TimeEntry, Party } from '../../../../types';
+import { Case, TimeEntry, Party } from '@/types';
 
 interface CaseOverviewProps {
   caseData: Case;

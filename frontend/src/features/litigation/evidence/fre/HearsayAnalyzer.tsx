@@ -9,11 +9,11 @@ import React from 'react';
 import { FileWarning, FileText, CheckCircle, AlertTriangle, Wand2 } from 'lucide-react';
 
 // Common Components
-import { Card } from '../../../components/molecules/Card';
-import { Button } from '../../../components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
 
 // Context & Utils
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types
@@ -21,7 +21,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
-import { EvidenceItem } from '../../../../types';
+import { EvidenceItem } from '@/types';
 
 export const HearsayAnalyzer: React.FC = () => {
     const { theme } = useTheme();

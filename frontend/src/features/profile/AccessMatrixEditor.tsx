@@ -22,12 +22,12 @@ import { Plus, Trash2, Edit2, Shield, Globe, Lock, Clock } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/organisms/Table';
-import { Button } from '../components/atoms/Button';
-import { Badge } from '../components/atoms/Badge';
-import { Modal } from '../components/molecules/Modal';
-import { ConfirmDialog } from '../components/molecules/ConfirmDialog';
-import { Input } from '../components/atoms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { Modal } from '@/components/molecules/Modal';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { Input } from '@/components/atoms';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -37,7 +37,7 @@ import { useModalState } from '../../hooks';
 import { cn } from '@/utils/cn';
 
 // Types
-import { ExtendedUserProfile, GranularPermission, AccessEffect } from '../../types';
+import { ExtendedUserProfile, GranularPermission, AccessEffect } from '@/types';
 
 
 // ========================================

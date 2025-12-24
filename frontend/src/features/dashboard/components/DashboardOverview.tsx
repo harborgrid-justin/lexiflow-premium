@@ -24,14 +24,14 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DashboardMetrics } from './DashboardMetrics';
 import { DashboardAnalytics } from './DashboardAnalytics';
 import { DashboardSidebar } from './DashboardSidebar';
-import { LazyLoader } from '../components/molecules/LazyLoader';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 
 // Utils & Constants
-import { Scheduler } from '../../utils/scheduler';
+import { Scheduler } from '@/utils/scheduler';
 
 // Types
-import type { WorkflowTask, ChartDataPoint, TaskId, CaseId } from '../../types';
-import { TaskStatusBackend } from '../../types';
+import type { WorkflowTask, ChartDataPoint, TaskId, CaseId } from '@/types';
+import { TaskStatusBackend } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { FileSignature, Search, Send, Plus, CheckCircle, Clock, Loader2 } from 'lucide-react';
-import { LegalDocument } from '../../../../types';
+import { LegalDocument } from '@/types';
 import { DataService } from '@/services/data/dataService';
 import { useQuery, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DocumentService } from '@/services/features/documents/documentService';
-import { PDFViewer } from '../../../components/organisms/PDFViewer';
+import { PDFViewer } from '@/components/organisms/PDFViewer';
 import { AcrobatToolbar, PDFTool } from "../preview/AcrobatToolbar";
 import { InteractiveOverlay, Field } from "../preview/InteractiveOverlay";
-import { Modal } from '../../../components/molecules/Modal';
-import { SignaturePad } from '../../../components/organisms/SignaturePad';
-import { Button } from '../../../components/atoms/Button';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { Modal } from '@/components/molecules/Modal';
+import { SignaturePad } from '@/components/organisms/SignaturePad';
+import { Button } from '@/components/atoms/Button';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/useModalState';
-import { ErrorState } from '../../../components/molecules/ErrorState';
+import { ErrorState } from '@/components/molecules/ErrorState';
 
 type FormStatus = 'Draft' | 'Sent' | 'Signed';
 type FilterCategory = FormStatus | 'Templates' | 'Out for Signature' | 'Completed';

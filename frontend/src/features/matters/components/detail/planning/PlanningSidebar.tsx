@@ -13,16 +13,16 @@ import React from 'react';
 import { ChevronRight, ChevronDown, GripVertical, AlertCircle, Plus } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Badge } from '../../../components/atoms/Badge';
+import { Badge } from '@/components/atoms/Badge';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { CasePhase, WorkflowTask } from '../../../../types';
+import { CasePhase, WorkflowTask } from '@/types';
 
 interface PlanningSidebarProps {
   phases: CasePhase[];

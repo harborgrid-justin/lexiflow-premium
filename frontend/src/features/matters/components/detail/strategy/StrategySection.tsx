@@ -13,19 +13,19 @@ import React from 'react';
 import { ExternalLink, BookOpen, CheckCircle, Box, AlertTriangle, X } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Card } from '../../../components/molecules/Card';
-import { Badge } from '../../../components/atoms/Badge';
-import { RiskMeter } from '../../../common/RiskMeter';
-import { Button } from '../../../components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Badge } from '@/components/atoms/Badge';
+import { RiskMeter } from '@/components/organisms/RiskMeter';
+import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { LegalArgument, Defense, Citation, EvidenceItem } from '../../../../types';
+import { LegalArgument, Defense, Citation, EvidenceItem } from '@/types';
 
 interface StrategySectionProps {
   title: string;

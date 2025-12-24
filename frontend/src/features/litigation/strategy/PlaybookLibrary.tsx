@@ -22,11 +22,11 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
-import { useWindow } from '../../../providers/WindowContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { VirtualGrid } from '../../components/organisms/VirtualGrid';
+import { VirtualGrid } from '@/components/organisms/VirtualGrid';
 import { PlaybookDetail } from './PlaybookDetail';
 
 // Utils & Constants

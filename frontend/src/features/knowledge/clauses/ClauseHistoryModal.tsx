@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
-import { Clause, ClauseVersion } from '../../../types';
+import { Clause, ClauseVersion } from '@/types';
 import { History, ArrowLeftRight, X } from 'lucide-react';
-import { DiffViewer } from '../../components/organisms/DiffViewer';
-import { useTheme } from '../../../providers/ThemeContext';
+import { DiffViewer } from '@/components/organisms/DiffViewer';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface ClauseHistoryModalProps {

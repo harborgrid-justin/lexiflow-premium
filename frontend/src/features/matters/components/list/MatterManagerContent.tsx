@@ -5,7 +5,7 @@
  */
 
 import React, { lazy, Suspense } from 'react';
-import { MatterView } from '../../../config/tabs.config';
+import { MatterView } from '@/config/tabs.config';
 
 // Lazy load tab content components - from Matter Management Suite
 const MatterOverviewDashboard = lazy(() => import('../overview/MatterOverviewDashboard').then(m => ({ default: m.MatterOverviewDashboard })));

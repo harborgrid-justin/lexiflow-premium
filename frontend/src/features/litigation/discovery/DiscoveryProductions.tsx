@@ -23,21 +23,21 @@ import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '../../../providers/WindowContext';
+import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { Badge } from '../../components/atoms/Badge';
-import { Button } from '../../components/atoms/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
 import { DiscoveryProduction } from './DiscoveryProduction';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { ProductionSet } from '../../../types';
+import { ProductionSet } from '@/types';
 import { DiscoveryProductionsProps } from './types';
 
 // ============================================================================

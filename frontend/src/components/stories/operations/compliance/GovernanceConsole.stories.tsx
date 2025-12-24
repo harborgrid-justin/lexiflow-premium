@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { GovernanceConsole } from '../../../../features/admin/components/data/GovernanceConsole';
-import { ThemeProvider } from '../../../providers/ThemeContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 import React from 'react';
 

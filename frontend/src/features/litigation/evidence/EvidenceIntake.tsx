@@ -9,13 +9,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, UploadCloud, CheckCircle, Loader2, Link, ShieldCheck, Save } from 'lucide-react';
 
 // Common Components
-import { Card } from '../../components/molecules/Card';
-import { Button } from '../../components/atoms/Button';
-import { Stepper } from '../../components/molecules/Stepper';
-import { TagInput } from '../../components/molecules/TagInput';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
+import { Stepper } from '@/components/molecules/Stepper';
+import { TagInput } from '@/components/molecules/TagInput';
 
 // Context & Utils
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useWizard } from '@/hooks/useWizard';
 import { useNotify } from '@/hooks/useNotify';
@@ -23,7 +23,7 @@ import { useAutoSave } from '@/hooks/useAutoSave';
 
 // Services & Types
 import { DocumentService } from '@/services/features/documents/documentService';
-import { EvidenceItem, EvidenceId, CaseId, UUID } from '../../../types';
+import { EvidenceItem, EvidenceId, CaseId, UUID } from '@/types';
 import { validateEvidenceItemSafe } from '@/services/validation/evidenceSchemas';
 import { AdmissibilityStatusEnum } from '@/types/enums';
 

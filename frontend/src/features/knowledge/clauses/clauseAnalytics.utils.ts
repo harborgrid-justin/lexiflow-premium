@@ -1,4 +1,4 @@
-import { Clause } from '../../../types';
+import { Clause } from '@/types';
 
 export const getRiskData = (clauses: Clause[]) => [
   { name: 'Low Risk', value: clauses.filter(c => c.riskRating === 'Low').length, color: '#10b981' },

@@ -21,8 +21,8 @@ import { Smartphone, Monitor, Globe, LogOut, Key, ShieldCheck, Clock } from 'luc
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { Card } from '../components/molecules/Card';
-import { Button } from '../components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -31,7 +31,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Types
-import { ExtendedUserProfile } from '../../types';
+import { ExtendedUserProfile } from '@/types';
 
 // ========================================
 // TYPES & INTERFACES

@@ -1,13 +1,13 @@
 
 import React from 'react';
-import { Card } from '../../../components/molecules/Card';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { Card } from '@/components/molecules/Card';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { VirtualList } from '../../../components/organisms/VirtualList';
+import { VirtualList } from '@/components/organisms/VirtualList';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { DataAnomaly, QualityMetricHistory } from '../../../../types';
+import { DataAnomaly, QualityMetricHistory } from '@/types';
 import { CheckCircle2, AlertOctagon, RefreshCw, Check } from 'lucide-react';
-import { Button } from '../../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DataService } from '@/services/data/dataService';

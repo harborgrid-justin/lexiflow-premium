@@ -12,7 +12,7 @@
 import React from 'react';
 
 // Internal Dependencies - Components
-import { DiscoveryPlatform } from '../../litigation/discovery/DiscoveryPlatform';
+import { DiscoveryPlatform } from '@/features/litigation/discovery/DiscoveryPlatform';
 
 interface CaseDiscoveryProps {
   caseId: string;

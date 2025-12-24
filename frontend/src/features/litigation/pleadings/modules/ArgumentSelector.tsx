@@ -5,8 +5,8 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
-import { Case, LegalArgument } from '../../../../types';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { Case, LegalArgument } from '@/types';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface ArgumentSelectorProps {

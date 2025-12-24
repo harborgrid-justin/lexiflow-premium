@@ -1,5 +1,5 @@
 import React from 'react';
-import { LegalRule } from '../../../../types';
+import { LegalRule } from '@/types';
 import { cn } from '@/utils/cn';
 import { History, FileText, Scale } from 'lucide-react';
 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Printer, Download, FileText, ZoomIn, ZoomOut, Tag } from 'lucide-react';
-import { Button } from '../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { DataService } from '@/services/data/dataService';
 import { CodingPanel } from './viewer/CodingPanel';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DiscoveryDocumentViewerProps, ViewerDocumentState } from './types';
 

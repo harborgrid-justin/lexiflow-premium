@@ -9,13 +9,13 @@ import React from 'react';
 import { Fingerprint, CheckCircle, MessageSquare, AlertTriangle, Send } from 'lucide-react';
 
 // Common Components
-import { MetricCard } from '../../../components/atoms';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/organisms/Table';
-import { Badge } from '../../../components/atoms/Badge';
-import { Button } from '../../../components/atoms/Button';
+import { MetricCard } from '@/components/molecules/MetricCard';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
 
 // Context & Utils
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types
@@ -23,7 +23,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
-import { EvidenceItem } from '../../../../types';
+import { EvidenceItem } from '@/types';
 
 export const AuthenticationManager: React.FC = () => {
     const { theme } = useTheme();

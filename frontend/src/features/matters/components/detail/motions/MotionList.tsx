@@ -13,18 +13,18 @@ import React from 'react';
 import { Gavel, Calendar, FileText, MessageSquare, GitBranch, Users } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/organisms/Table';
-import { Badge } from '../../../components/atoms/Badge';
-import { Button } from '../../../components/atoms/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Motion } from '../../../../types';
+import { Motion } from '@/types';
 
 interface MotionListProps {
   motions: Motion[];

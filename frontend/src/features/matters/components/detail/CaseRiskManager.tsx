@@ -13,14 +13,14 @@ import React from 'react';
 import { ShieldAlert, Plus, AlertTriangle, TrendingUp, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../components/atoms/Button';
-import { MetricCard } from '../../components/atoms';
+import { Button } from '@/components/atoms/Button';
+import { MetricCard } from '@/components/molecules/MetricCard';
 import { RiskList } from './risk/RiskList';
 import { RiskDetail } from './risk/RiskDetail';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
-import { useWindow } from '../../../providers/WindowContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { useWindow } from '@/providers/WindowContext';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
@@ -29,7 +29,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Case, Risk, RiskImpact, RiskProbability, RiskStatusEnum } from '../../../types';
+import { Case, Risk, RiskImpact, RiskProbability, RiskStatusEnum } from '@/types';
 
 interface CaseRiskManagerProps {
   caseData: Case;

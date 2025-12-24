@@ -24,7 +24,7 @@ export class StaffHiredHandler extends BaseEventHandler<SystemEventPayloads[type
       return this.createError(errors);
     }
     
-    const { DataService } = await import('@/api/data/dataService');
+    const { DataService } = await import('@/services/data/dataService');
     
     // Verify user service is available
     if (!DataService.users || typeof DataService.users.add !== 'function') {

@@ -17,16 +17,16 @@ import { AlertTriangle, CheckCircle, Shield, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { LegalEntity } from '../../../types';
+import { LegalEntity } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

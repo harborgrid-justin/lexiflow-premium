@@ -18,12 +18,12 @@ import { ArrowUp, ArrowDown, Briefcase } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { VirtualList } from '../../components/organisms/VirtualList';
-import { EmptyListState } from '../../common/RefactoredCommon';
+import { VirtualList } from '@/components/organisms/VirtualList';
+import { EmptyListState } from '@/components/organisms/_legacy/RefactoredCommon';
 import { CaseRow } from './CaseRow';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Utils
 import { cn } from '@/utils/cn';
@@ -31,7 +31,7 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case } from '../../../types';
+import { Case } from '@/types';
 
 interface ActiveCaseTableProps {
   filteredCases: Case[];

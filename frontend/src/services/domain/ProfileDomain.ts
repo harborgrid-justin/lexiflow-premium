@@ -1,4 +1,4 @@
-import { ExtendedUserProfile, GranularPermission, UserId, EntityId } from '../../types';
+import { ExtendedUserProfile, GranularPermission, UserId, EntityId } from '@/types';
 import { delay } from '@/utils/async';
 /**
  * ? Migrated to backend API (2025-12-21)

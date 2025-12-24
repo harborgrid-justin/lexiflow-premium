@@ -6,7 +6,7 @@
  * @responsibility Validate billing filter inputs for queries
  */
 
-import type { CaseId, UserId } from '../../../types';
+import type { CaseId, UserId } from '@/types';
 import { isValidDate, isValidDateRange } from '../validators/common-validators';
 import { sanitizeString } from '../sanitizers/input-sanitizer';
 

@@ -18,12 +18,12 @@ import { TrendingUp, Clock, FileText, CheckCircle } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Components
-import { Card } from '../../components/molecules/Card';
-import { MetricCard } from '../../components/atoms';
+import { Card } from '@/components/molecules/Card';
+import { MetricCard } from '@/components/molecules/MetricCard';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -31,7 +31,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types
-import { PleadingDocument } from '../../../types';
+import { PleadingDocument } from '@/types';
 
 // ============================================================================
 // COMPONENT

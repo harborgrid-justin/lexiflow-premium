@@ -12,11 +12,11 @@ import React from 'react';
 import { Settings, X, BookOpen } from 'lucide-react';
 
 // Internal Components
-import { Button } from '../../components/atoms/Button';
-import { Input, TextArea } from '../../components/atoms';
+import { Button } from '@/components/atoms/Button';
+import { Input, TextArea } from '@/components/atoms';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Utils
 import { cn } from '@/utils/cn';

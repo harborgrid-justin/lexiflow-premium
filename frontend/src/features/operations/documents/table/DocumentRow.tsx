@@ -1,10 +1,11 @@
 
 import React from 'react';
 import { Download, Eye, MoreVertical, Clock, CheckSquare, Book, Tag } from 'lucide-react';
-import { LegalDocument } from '../../../../types';
-import { Badge } from '../../../components/atoms/Badge';
-import { FileIcon, TagList } from '../../../components/atoms';
-import { TableRow, TableCell } from '../../../components/organisms/Table';
+import { LegalDocument } from '@/types';
+import { Badge } from '@/components/atoms/Badge';
+import { FileIcon } from '@/components/atoms';
+import { TagList } from '@/components/molecules/TagList';
+import { TableRow, TableCell } from '@/components/organisms/Table';
 import { cn } from '@/utils/cn';
 
 interface DocumentRowProps {

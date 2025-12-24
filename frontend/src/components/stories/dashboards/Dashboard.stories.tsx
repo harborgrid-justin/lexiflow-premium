@@ -11,7 +11,7 @@ import { fn, expect, userEvent, within } from 'storybook/test';
 import { Dashboard } from '../../../features/dashboard/components/Dashboard';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
-import type { User, UserId } from '../../types';
+import type { User, UserId } from '@/types';
 
 const meta: Meta<typeof Dashboard> = {
   title: 'Pages/Dashboard',

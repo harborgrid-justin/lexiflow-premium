@@ -4,7 +4,7 @@
  * Does NOT automatically switch - user controls data source selection
  */
 
-import { API_BASE_URL } from '../../config/master.config';
+import { API_BASE_URL } from '@/config/master.config';
 
 export interface BackendStatus {
   available: boolean;

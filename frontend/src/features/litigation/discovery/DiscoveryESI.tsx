@@ -17,20 +17,20 @@ import { Database, HardDrive, Mail, Server, Shield, Play, CheckCircle, Plus, Loa
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Card } from '../../components/molecules/Card';
-import { Button } from '../../components/atoms/Button';
-import { Badge } from '../../components/atoms/Badge';
-import { ProgressBar } from '../../components/atoms/ProgressBar';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { ProgressBar } from '@/components/atoms/ProgressBar';
 import { EvidenceCustodyLog } from '../evidence/EvidenceCustodyLog';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '../../../providers/WindowContext';
+import { useWindow } from '@/providers/WindowContext';
 
 // Config
-import { DEBUG_API_SIMULATION_DELAY_MS } from '../../../config/master.config';
+import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/master.config';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -40,7 +40,7 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { ESISource } from '../../../types';
+import { ESISource } from '@/types';
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
 import { ESICollectionStatusEnum } from '@/types/enums';
 

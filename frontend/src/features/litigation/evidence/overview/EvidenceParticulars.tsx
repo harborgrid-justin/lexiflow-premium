@@ -10,19 +10,19 @@ import React, { useState } from 'react';
 import { User, Activity, Link, Sparkles } from 'lucide-react';
 
 // Common Components
-import { Card } from '../../../components/molecules/Card';
-import { Badge } from '../../../components/atoms/Badge';
-import { EvidenceTypeIcon } from '../../../components/atoms/EvidenceTypeIcon';
+import { Card } from '@/components/molecules/Card';
+import { Badge } from '@/components/atoms/Badge';
+import { EvidenceTypeIcon } from '@/components/atoms/EvidenceTypeIcon';
 
 // Context & Utils
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services
 import { GeminiService } from '@/services/features/research/geminiService';
 
 // Types
-import { EvidenceItem } from '../../../../types';
+import { EvidenceItem } from '@/types';
 
 interface EvidenceParticularsProps {
   selectedItem: EvidenceItem;

@@ -18,10 +18,10 @@ import { X, BookOpen, ExternalLink, CheckCircle, AlertTriangle, Link, Wand2, Loa
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
@@ -34,7 +34,7 @@ import { sanitizeHtml } from '@/utils/sanitize';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Citation, Case } from '../../../types';
+import { Citation, Case } from '@/types';
 import { CitationDetailProps } from './types';
 
 export const CitationDetail: React.FC<CitationDetailProps> = ({ citation, onClose }) => {

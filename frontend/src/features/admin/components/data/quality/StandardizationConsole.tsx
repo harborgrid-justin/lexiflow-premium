@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { Card } from '../../../components/molecules/Card';
-import { Button } from '../../../components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
 import { Wand2, Play, CheckCircle, Hash, Phone, Calendar, Type, MoreHorizontal, Plus, Loader2 } from 'lucide-react';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { CleansingRule } from '../../../../types';
+import { CleansingRule } from '@/types';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';

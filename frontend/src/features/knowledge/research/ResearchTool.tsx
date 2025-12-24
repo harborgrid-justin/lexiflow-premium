@@ -22,20 +22,20 @@ import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 
 // Components
-import { LazyLoader } from '../../components/molecules/LazyLoader';
-import { TabbedPageLayout } from '../../components/templates/TabbedPageLayout';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
+import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout';
 import { ResearchToolContent } from './ResearchToolContent';
 
 // Utils & Config
 import { cn } from '@/utils/cn';
-import { RESEARCH_TAB_CONFIG } from '../../../config/tabs.config';
+import { RESEARCH_TAB_CONFIG } from '@/config/tabs.config';
 
 // Types
-import { JudgeProfile, Clause } from '../../../types';
+import { JudgeProfile, Clause } from '@/types';
 
 const ClauseHistoryModal = lazy(async () => {
   const module = await import('../clauses/ClauseHistoryModal');

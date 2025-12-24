@@ -1,11 +1,11 @@
 
 import React, { useState } from 'react';
-import { DiscoveryRequest } from '../../../types';
-import { Card } from '../../components/molecules/Card';
-import { Button } from '../../components/atoms/Button';
-import { Badge } from '../../components/atoms/Badge';
+import { DiscoveryRequest } from '@/types';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
 import { AlertTriangle, Gavel, CheckSquare, MessageSquare, Wand2, ArrowLeft } from 'lucide-react';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { sanitizeHtml } from '@/utils/sanitize';
 import { GeminiService } from '@/services/features/research/geminiService';

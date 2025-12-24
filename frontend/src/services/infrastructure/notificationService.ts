@@ -59,7 +59,7 @@ function generateId(): string {
   return `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
 
-import { NOTIFICATION_MAX_DISPLAY } from '../../config/master.config';
+import { NOTIFICATION_MAX_DISPLAY } from '@/config/master.config';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -591,7 +591,7 @@ export const NotificationService = new NotificationServiceClass();
 // CONVENIENCE FUNCTIONS
 // ============================================================================
 
-import { NOTIFICATION_SUCCESS_DISMISS_MS, NOTIFICATION_AUTO_DISMISS_MS } from '../../config/master.config';
+import { NOTIFICATION_SUCCESS_DISMISS_MS, NOTIFICATION_AUTO_DISMISS_MS } from '@/config/master.config';
 
 /**
  * Convenience functions for common notification patterns

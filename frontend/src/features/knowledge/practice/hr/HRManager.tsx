@@ -1,22 +1,22 @@
 import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/organisms/Table';
-import { UserAvatar } from '../../../components/atoms/UserAvatar';
-import { Badge } from '../../../components/atoms/Badge';
-import { Button } from '../../../components/atoms/Button';
-import { ConfirmDialog } from '../../../components/molecules/ConfirmDialog';
-import { MetricCard } from '../../../components/atoms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { UserAvatar } from '@/components/atoms/UserAvatar';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { MetricCard } from '@/components/molecules/MetricCard';
 import { Plus, User, Award, TrendingUp, MoreHorizontal, Trash2, Loader2, AlertCircle, Users } from 'lucide-react';
-import { StaffMember, UserId } from '../../../../types';
+import { StaffMember, UserId } from '@/types';
 
 type StaffRole = 'Associate' | 'Paralegal' | 'Senior Partner' | 'Administrator';
 import { DataService } from '@/services/data/dataService';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { AddStaffModal } from './AddStaffModal';
 import { useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { useStaff } from '@/hooks/useDomainData';
-import { useModalState } from '../../../../hooks';
+import { useModalState } from '@/hooks';
 import { useNotify } from '@/hooks/useNotify';
 import { getTodayString } from '@/utils/dateUtils';
 import { IdGenerator } from '@/utils/idGenerator';

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Card } from '../../../components/molecules/Card';
-import { Button } from '../../../components/atoms/Button';
-import { Badge } from '../../../components/atoms/Badge';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
 import { ArrowRight, Database, FileText, CheckCircle, Scale, AlertTriangle } from 'lucide-react';
 import { DataService } from '@/services/data/dataService';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
@@ -12,7 +12,7 @@ import { queryKeys } from '@/utils/queryKeys';
 import DiscoveryMetrics from './DiscoveryMetrics';
 import DiscoveryCharts from './DiscoveryCharts';
 import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
-import { LegalHold, PrivilegeLogEntry, DiscoveryRequest } from '../../../../types';
+import { LegalHold, PrivilegeLogEntry, DiscoveryRequest } from '@/types';
 
 interface DiscoveryDashboardProps {
     onNavigate: (view: DiscoveryView, id?: string) => void;

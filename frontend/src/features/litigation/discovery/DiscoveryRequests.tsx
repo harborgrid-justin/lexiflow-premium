@@ -17,16 +17,16 @@ import { Wand2, Upload, CheckSquare } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../components/atoms/Button';
-import { Badge } from '../../components/atoms/Badge';
-import { TableContainer, TableHeader, TableHead } from '../../components/organisms/Table';
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
-import { TaskCreationModal } from '../../common/TaskCreationModal';
-import { VirtualList } from '../../components/organisms/VirtualList';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { TableContainer, TableHeader, TableHead } from '@/components/organisms/Table';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { TaskCreationModal } from '@/components/organisms/TaskCreationModal';
+import { VirtualList } from '@/components/organisms/VirtualList';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
-import { useWindow } from '../../../providers/WindowContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { useWindow } from '@/providers/WindowContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useToggle } from '@/hooks/useToggle';
 
@@ -37,7 +37,7 @@ import { DiscoveryRequestStatusEnum } from '@/types/enums';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { DiscoveryRequest } from '../../../types';
+import { DiscoveryRequest } from '@/types';
 import { DiscoveryRequestsProps } from './types';
 
 const DiscoveryRequestsComponent: React.FC<DiscoveryRequestsProps> = ({ onNavigate, items = [] }) => {

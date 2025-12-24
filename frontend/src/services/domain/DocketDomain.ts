@@ -44,13 +44,13 @@
 //                          CORE DEPENDENCIES
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { DocketEntry, DocketId, CaseId } from '../../types';
+import { DocketEntry, DocketId, CaseId } from '@/types';
 import { Repository } from '../core/Repository';
 import { STORES } from '@/services/data/db';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { SystemEventType } from "@/types/integration-types";
-import { IdGenerator } from '../../utils/idGenerator';
-import { retryWithBackoff, RetryError } from '../../utils/retryWithBackoff';
+import { IdGenerator } from '@/utils/idGenerator';
+import { retryWithBackoff, RetryError } from '@/utils/retryWithBackoff';
 import { delay } from '@/utils/async';
 
 // Backend API Integration (Primary Data Source)

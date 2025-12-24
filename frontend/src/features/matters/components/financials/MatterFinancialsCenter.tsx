@@ -24,11 +24,11 @@ import {
 } from 'lucide-react';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@api';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../../../components/atoms/Button';
-import { Card } from '../../../../components/molecules/Card';
-import { Badge } from '../../../../components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { Badge } from '@/components/atoms/Badge';
 
 export const MatterFinancialsCenter: React.FC = () => {
   const { theme } = useTheme();

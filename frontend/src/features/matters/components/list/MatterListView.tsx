@@ -9,7 +9,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { Matter, MatterStatus, MatterPriority, MatterType, PracticeArea } from '../../../types';
+import { Matter, MatterStatus, MatterPriority, MatterType, PracticeArea } from '@/types';
 import { 
   Plus, 
   Search, 
@@ -26,7 +26,7 @@ import {
   Building2,
   RefreshCw
 } from 'lucide-react';
-import { PATHS } from '../../../config/paths.config';
+import { PATHS } from '@/config/paths.config';
 import { cn } from '@/utils/cn';
 
 interface MatterListViewProps {

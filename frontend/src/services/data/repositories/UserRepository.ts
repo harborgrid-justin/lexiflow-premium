@@ -3,7 +3,7 @@
  * Enterprise-grade repository for user management with backend API integration
  */
 
-import { User } from '../../../types';
+import { User } from '@/types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';

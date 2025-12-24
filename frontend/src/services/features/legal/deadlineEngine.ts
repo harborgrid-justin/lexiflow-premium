@@ -206,7 +206,7 @@
  * - Notification integration: Auto-schedule reminders
  */
 
-import { DocketEntry, DocketEntryType } from '../../../types';
+import { DocketEntry, DocketEntryType } from '@/types';
 
 // =============================================================================
 // TYPES & INTERFACES

@@ -32,7 +32,7 @@
  * - Error boundaries via promise rejection
  */
 
-import { hashQueryKey } from '../utils/queryUtils';
+import { hashQueryKey } from '@/services/utils/queryUtils';
 import type { QueryKey, QueryFunction, QueryState } from './queryTypes';
 
 /**

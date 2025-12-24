@@ -1,4 +1,4 @@
-import { CommunicationItem, ServiceJob, DocketEntry, DocketId, DocumentId, EvidenceItem, EvidenceId, UUID } from '../../types';
+import { CommunicationItem, ServiceJob, DocketEntry, DocketId, DocumentId, EvidenceItem, EvidenceId, UUID } from '@/types';
 /**
  * ? Migrated to backend API (2025-12-21)
  */

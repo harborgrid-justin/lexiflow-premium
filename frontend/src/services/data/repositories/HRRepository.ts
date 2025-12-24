@@ -1,4 +1,4 @@
-import { StaffMember, TimeEntry } from '../../../types';
+import { StaffMember, TimeEntry } from '@/types';
 import { db, STORES } from '../db';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { SystemEventType } from "@/types/integration-types";

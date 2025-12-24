@@ -3,7 +3,7 @@
  */
 import { api } from '@/api';
 import { delay } from '@/utils/async';
-import { CostMetric, CostForecast } from '../../types';
+import { CostMetric, CostForecast } from '@/types';
 
 export const OperationsService = {
     // Operations data - all from backend API

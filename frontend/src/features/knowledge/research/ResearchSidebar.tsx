@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { ResearchSession } from '../../../types';
-import { useTheme } from '../../../providers/ThemeContext';
+import { ResearchSession } from '@/types';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface ResearchSidebarProps {

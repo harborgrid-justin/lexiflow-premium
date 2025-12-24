@@ -11,13 +11,13 @@ import React, { useState, Suspense, lazy } from 'react';
 import { Save, Rocket, Loader2 } from 'lucide-react';
 
 // Internal Components
-import { LazyLoader } from '../../components/molecules/LazyLoader';
-import { TabbedPageLayout } from '../../components/templates/TabbedPageLayout';
-import { Button } from '../../components/atoms/Button';
-import { ErrorBoundary } from '../../../components/organisms/ErrorBoundary/ErrorBoundary';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
+import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout';
+import { Button } from '@/components/atoms/Button';
+import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useLitigationBuilder } from '@/hooks/useLitigationBuilder';
 
 // Utils

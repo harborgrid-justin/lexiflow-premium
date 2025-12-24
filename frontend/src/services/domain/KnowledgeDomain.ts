@@ -30,7 +30,7 @@
  * @migrated Backend API integration completed 2025-12-21
  */
 
-import { WikiArticle, Precedent, QAItem } from '../../types';
+import { WikiArticle, Precedent, QAItem } from '@/types';
 import { delay } from '@/utils/async';
 import { analyticsApi } from "@/api/domains/analytics.api";
 

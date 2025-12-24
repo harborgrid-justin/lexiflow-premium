@@ -18,17 +18,17 @@ import { ExternalLink, Loader2, BookOpen } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '../../components/atoms/Badge';
-import { Button } from '../../components/atoms/Button';
-import { SearchToolbar } from '../../components/organisms/SearchToolbar';
-import { VirtualList } from '../../components/organisms/VirtualList';
+import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms/Button';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { VirtualList } from '@/components/organisms/VirtualList';
 import { CitationDetail } from './CitationDetail';
-import { EmptyState } from '../../components/molecules/EmptyState';
+import { EmptyState } from '@/components/molecules/EmptyState';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useWindow } from '../../../providers/WindowContext';
+import { useWindow } from '@/providers/WindowContext';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 // Services & Utils
@@ -39,7 +39,7 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Citation } from '../../../types';
+import { Citation } from '@/types';
 import { CitationLibraryProps } from './types';
 import { getSignalIcon, getTypeIcon } from './utils';
 

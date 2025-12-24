@@ -13,16 +13,16 @@ import React, { useState } from 'react';
 import { CheckCircle, ChevronUp, ChevronDown, Clock, User, ArrowRight } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { UserAvatar } from '../../../components/atoms/UserAvatar';
+import { UserAvatar } from '@/components/atoms/UserAvatar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus, TaskStatusBackend } from '../../../../types';
+import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus, TaskStatusBackend } from '@/types';
 
 interface WorkflowTimelineProps {
   stages: WorkflowStage[];

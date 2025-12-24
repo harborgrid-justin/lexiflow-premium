@@ -26,17 +26,17 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Components
-import { Button } from '../../components/atoms/Button';
-import { PeriodSelector } from '../../components/molecules/PeriodSelector';
-import { ExportMenu } from '../../common/ExportMenu';
-import { TabbedPageLayout, TabConfigItem } from '../../components/templates/TabbedPageLayout';
-import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { Button } from '@/components/atoms/Button';
+import { PeriodSelector } from '@/components/molecules/PeriodSelector';
+import { ExportMenu } from '@/components/organisms/ExportMenu';
+import { TabbedPageLayout, TabConfigItem } from '@/components/templates/TabbedPageLayout';
+import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { BillingDashboardContent } from './BillingDashboardContent';
 import { BillingErrorBoundary } from './BillingErrorBoundary';
 
 // Utils & Config
 import { cn } from '@/utils/cn';
-import { BILLING_TAB_CONFIG, BillingView } from '../../../config/tabs.config';
+import { BILLING_TAB_CONFIG, BillingView } from '@/config/tabs.config';
 
 // ============================================================================
 // TYPES & INTERFACES

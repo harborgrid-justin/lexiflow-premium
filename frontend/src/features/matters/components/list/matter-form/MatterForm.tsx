@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Save, X } from 'lucide-react';
-import type { UserId, Matter } from '../../../../types';
-import { MatterType, MatterStatus, MatterPriority, PracticeArea } from '../../../../types';
+import type { UserId, Matter } from '@/types';
+import { MatterType, MatterStatus, MatterPriority, PracticeArea } from '@/types';
 import { BasicInfoSection } from './BasicInfoSection';
 import { ClientSection, AttorneySection, DatesSection, BillingSection } from './FormSections';
 import { useFormValidation } from './useFormValidation';

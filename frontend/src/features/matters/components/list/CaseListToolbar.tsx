@@ -17,20 +17,20 @@ import { Filter, SlidersHorizontal, Download, RefreshCcw, ChevronDown, FileSprea
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Components
-import { Button } from '../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { CaseStatus } from '../../../types';
+import { CaseStatus } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

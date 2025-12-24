@@ -123,7 +123,7 @@
  */
 
 import { AdmissibilityStatusEnum, CustodyActionType } from '@/types/enums';
-import type { EvidenceItem, ChainOfCustodyEvent } from '../../types';
+import type { EvidenceItem, ChainOfCustodyEvent } from '@/types';
 
 // =============================================================================
 // XSS PREVENTION (Private)

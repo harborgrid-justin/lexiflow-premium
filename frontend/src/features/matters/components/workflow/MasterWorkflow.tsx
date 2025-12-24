@@ -1,11 +1,11 @@
 
 import React, { useState, useMemo, useCallback, useEffect, useTransition } from 'react';
 import { Plus, RefreshCw, Play, Loader2, AlertTriangle } from 'lucide-react';
-import { PageHeader } from '../../components/organisms/PageHeader';
-import { Button } from '../../components/atoms/Button';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { Button } from '@/components/atoms/Button';
 import { DataService } from '@/services/data/dataService';
-import { ErrorBoundary } from '../../../../components/organisms/ErrorBoundary/ErrorBoundary';
-import { EmptyState } from '../../components/molecules/EmptyState';
+import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
+import { EmptyState } from '@/components/molecules/EmptyState';
 
 // Direct Imports to optimize Tree-Shaking and HMR
 import { CaseWorkflowList } from './CaseWorkflowList';
@@ -17,7 +17,7 @@ import { WorkflowConfig } from './WorkflowConfig';
 import { WorkflowEngineDetail } from './WorkflowEngineDetail';
 import { FirmProcessDetail } from './FirmProcessDetail';
 import { WorkflowLibrary } from './WorkflowLibrary';
-import { WorkflowTemplateData, WorkflowTask, TaskStatusBackend } from '../../../types';
+import { WorkflowTemplateData, WorkflowTask, TaskStatusBackend } from '@/types';
 
 // Type derived from BUSINESS_PROCESSES data model
 interface FirmProcess {
@@ -30,11 +30,11 @@ interface FirmProcess {
   owner: string;
 }
 
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { getTodayString } from '@/utils/dateUtils';
 import { WORKFLOW_TABS } from './WorkflowTabs';
-import { Case } from '../../../types';
+import { Case } from '@/types';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
 import { WorkflowRepository } from '@/services/data/repositories/WorkflowRepository';

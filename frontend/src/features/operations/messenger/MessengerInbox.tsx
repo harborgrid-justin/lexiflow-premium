@@ -21,7 +21,7 @@ import { useSecureMessenger } from '@/hooks/useSecureMessenger';
 // Components
 import { MessengerChatList } from './MessengerChatList';
 import { MessengerChatWindow } from './MessengerChatWindow';
-import { SplitView } from '../../components/organisms/SplitView';
+import { SplitView } from '@/components/organisms/SplitView';
 
 // ============================================================================
 // COMPONENT

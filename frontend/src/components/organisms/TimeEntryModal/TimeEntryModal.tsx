@@ -23,16 +23,17 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Modal } from './Modal';
-import { Button } from './Button';
-import { Input, TextArea } from './Inputs';
+import { Modal } from '@/components/molecules/Modal';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms/Input';
+import { TextArea } from '@/components/atoms/TextArea';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
-import { getTodayString } from '../../utils/dateUtils';
+import { getTodayString } from '@/utils/dateUtils';
 
 // Types
-import { TimeEntryPayload, CaseId } from '../../types';
+import { TimeEntryPayload, CaseId } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

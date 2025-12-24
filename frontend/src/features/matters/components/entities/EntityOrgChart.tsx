@@ -22,16 +22,16 @@ import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
+import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { LegalEntity } from '../../../types';
+import { LegalEntity } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

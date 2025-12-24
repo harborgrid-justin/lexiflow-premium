@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, Book } from 'lucide-react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { Button } from '../../components/atoms/Button';
-import { Modal } from '../../components/molecules/Modal';
-import { Input, TextArea } from '../../components/atoms';
-import { SearchToolbar } from '../../components/organisms/SearchToolbar';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules/Modal';
+import { Input, TextArea } from '@/components/atoms';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { DataService } from '@/services/data/dataService';
-import { ConfirmDialog } from '../../components/molecules/ConfirmDialog';
-import { LegalRule } from '../../../types';
-import { Badge } from '../../components/atoms/Badge';
-import { useTheme } from '../../../providers/ThemeContext';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { LegalRule } from '@/types';
+import { Badge } from '@/components/atoms/Badge';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { useModalState } from '../../../hooks';
+import { useModalState } from '@/hooks';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';

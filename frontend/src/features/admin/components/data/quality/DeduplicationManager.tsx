@@ -1,15 +1,15 @@
 
 import React, { useState } from 'react';
 import { Users, GitMerge, XCircle, CheckCircle, ArrowRight, Layers } from 'lucide-react';
-import { Card } from '../../../components/molecules/Card';
-import { Button } from '../../../components/atoms/Button';
-import { Badge } from '../../../components/atoms/Badge';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { DedupeCluster } from '../../../../types';
+import { DedupeCluster } from '@/types';
 import { useNotify } from '@/hooks/useNotify';
 
 export const DeduplicationManager: React.FC = () => {

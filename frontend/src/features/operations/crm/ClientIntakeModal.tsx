@@ -1,14 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, Plus, UserPlus, AlertTriangle, Loader2 } from 'lucide-react';
-import { Modal } from '../../components/molecules/Modal';
-import { Button } from '../../components/atoms/Button';
-import { Input } from '../../components/atoms';
-import { useTheme } from '../../../providers/ThemeContext';
+import { Modal } from '@/components/molecules/Modal';
+import { Button } from '@/components/atoms/Button';
+import { Input } from '@/components/atoms';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useDebounce } from '@/hooks/useDebounce';
-import { SEARCH_DEBOUNCE_MS } from '../../../config/master.config';
+import { SEARCH_DEBOUNCE_MS } from '@/config/master.config';
 
 interface ClientIntakeModalProps {
   onClose: () => void;

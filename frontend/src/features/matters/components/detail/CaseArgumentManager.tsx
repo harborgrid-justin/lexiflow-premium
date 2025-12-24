@@ -13,19 +13,19 @@ import React, { useState } from 'react';
 import { Target, Plus, Filter } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../components/atoms/Button';
+import { Button } from '@/components/atoms/Button';
 import { ArgumentList } from './arguments/ArgumentList';
 import { ArgumentDetail } from './arguments/ArgumentDetail';
-import { SearchToolbar } from '../../components/organisms/SearchToolbar';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Case, LegalArgument, EvidenceItem } from '../../../types';
+import { Case, LegalArgument, EvidenceItem } from '@/types';
 
 interface CaseArgumentManagerProps {
   caseData: Case;

@@ -96,7 +96,7 @@
  * @example Integration with DataService
  * ```typescript
  * // Access via centralized DataService facade
- * import { DataService } from '@/api/data/dataService';
+ * import { DataService } from '@/services/data/dataService';
  * 
  * const cases = await DataService.cases.getAll();
  * const phases = await DataService.phases.getByCaseId(caseId);
@@ -109,7 +109,7 @@
 //                          CORE DEPENDENCIES
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { Case, CasePhase, Party, CaseId } from '../../types';
+import { Case, CasePhase, Party, CaseId } from '@/types';
 import { Repository } from '../core/Repository';
 import { STORES, db } from '@/services/data/db';
 import { delay } from '@/utils/async';

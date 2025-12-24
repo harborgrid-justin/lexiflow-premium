@@ -33,15 +33,15 @@ import { Briefcase, Phone, Mail, Star, Plus } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
-import { Button } from '../../components/atoms/Button';
-import { Badge } from '../../components/atoms/Badge';
-import { Modal } from '../../components/molecules/Modal';
-import { Input } from '../../components/atoms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms/Badge';
+import { Modal } from '@/components/molecules/Modal';
+import { Input } from '@/components/atoms';
 
 // Hooks & Context
-import { useTheme } from '../../../providers/ThemeContext';
-import { useModalState } from '../../../hooks';
+import { useTheme } from '@/providers/ThemeContext';
+import { useModalState } from '@/hooks';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -53,7 +53,7 @@ import { queryKeys } from '@/utils/queryKeys';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Vendor } from '../../../types';
+import { Vendor } from '@/types';
 
 // ============================================================================
 // CONSTANTS

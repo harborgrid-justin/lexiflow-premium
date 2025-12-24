@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { Card } from '../../../components/molecules/Card';
-import { RiskMeter } from '../../../common/RiskMeter';
-import { Badge } from '../../../components/atoms/Badge';
+import { Card } from '@/components/molecules/Card';
+import { RiskMeter } from '@/components/organisms/RiskMeter';
+import { Badge } from '@/components/atoms/Badge';
 import { Star, TrendingUp, DollarSign, Scale } from 'lucide-react';
-import { LegalEntity } from '../../../../types';
-import { useTheme } from '../../../../providers/ThemeContext';
+import { LegalEntity } from '@/types';
+import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface PerformanceScorecardsProps {

@@ -1,10 +1,10 @@
 
 import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { Button } from '../../common/Button';
-import { AdaptiveLoader } from '../../common/AdaptiveLoader';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
+import { Button } from '../../components/atoms/Button';
+import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
 import { ExternalLink, Clock } from 'lucide-react';
-import { SearchToolbar } from '../../common/SearchToolbar';
+import { SearchToolbar } from '../../components/organisms/SearchToolbar';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';

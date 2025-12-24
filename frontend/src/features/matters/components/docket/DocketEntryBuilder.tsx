@@ -13,10 +13,10 @@ import React, { useState, useEffect } from 'react';
 import { FileText, Save, CheckSquare } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Input, TextArea } from '../../common/Inputs';
-import { Button } from '../../common/Button';
-import { RuleSelector } from '../../common/RuleSelector';
-import { UserSelect } from '../../common/UserSelect';
+import { Input, TextArea } from '../../components/atoms';
+import { Button } from '../../components/atoms/Button';
+import { RuleSelector } from '../../components/molecules/RuleSelector';
+import { UserSelect } from '../../components/molecules/UserSelect';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

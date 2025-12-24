@@ -31,14 +31,14 @@ import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
-import { Button } from '../../common/Button';
-import { SearchToolbar } from '../../common/SearchToolbar';
-import { AdaptiveLoader } from '../../common/AdaptiveLoader';
+import { Button } from '../../components/atoms/Button';
+import { SearchToolbar } from '../../components/organisms/SearchToolbar';
+import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
 import { OppositionSidebar } from './opposition/OppositionSidebar';
 import { OppositionList, OppositionEntity } from './opposition/OppositionList';
 import { OppositionDetail } from './opposition/OppositionDetail';
-import { Modal } from '../../common/Modal';
-import { ErrorState } from '../../common/ErrorState';
+import { Modal } from '../../components/molecules/Modal';
+import { ErrorState } from '../../components/molecules/ErrorState';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

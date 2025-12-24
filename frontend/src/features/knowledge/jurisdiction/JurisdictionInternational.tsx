@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { Globe, Plane, Loader2 } from 'lucide-react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { AdaptiveLoader } from '../../common/AdaptiveLoader';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
+import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';

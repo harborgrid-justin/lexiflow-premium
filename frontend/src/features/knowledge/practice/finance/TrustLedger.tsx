@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../common/Table';
-import { Card } from '../../../common/Card';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/organisms/Table';
+import { Card } from '../../../components/molecules/Card';
 import { Landmark, FileText } from 'lucide-react';
 import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';

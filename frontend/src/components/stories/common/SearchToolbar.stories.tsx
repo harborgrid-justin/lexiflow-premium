@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { SearchToolbar } from '../../components/common/SearchToolbar';
+import { SearchToolbar } from '../../components/components/organisms/SearchToolbar';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import React, { useState } from 'react';
 

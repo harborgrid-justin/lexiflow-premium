@@ -26,8 +26,8 @@ import { useTheme } from '../../../providers/ThemeContext';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 
 // Components
-import { LazyLoader } from '../../common/LazyLoader';
-import { TabbedPageLayout } from '../../layout/TabbedPageLayout';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { TabbedPageLayout } from '../../components/templates/TabbedPageLayout';
 import { ResearchToolContent } from './ResearchToolContent';
 
 // Utils & Config

@@ -7,12 +7,12 @@ import {
 } from 'lucide-react';
 import { ClientIntakeModal } from './ClientIntakeModal';
 import { ClientPortalModal } from './ClientPortalModal';
-import { Button } from '../../common/Button';
+import { Button } from '../../components/atoms/Button';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { TabbedPageLayout, TabConfigItem } from '../../layout/TabbedPageLayout';
-import { LazyLoader } from '../../common/LazyLoader';
+import { TabbedPageLayout, TabConfigItem } from '../../components/templates/TabbedPageLayout';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/utils/cn';
 import { CRM_TAB_CONFIG, CRMView } from '../../../config/tabs.config';

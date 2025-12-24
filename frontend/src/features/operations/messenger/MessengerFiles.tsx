@@ -1,9 +1,9 @@
 
 import React from 'react';
-import { SearchToolbar } from '../../common/SearchToolbar';
-import { FileAttachment } from '../../common/FileAttachment';
+import { SearchToolbar } from '../../components/organisms/SearchToolbar';
+import { FileAttachment } from '../../components/molecules/FileAttachment';
 import { Attachment } from '@/hooks/useSecureMessenger';
-import { EmptyState } from '../../common/EmptyState';
+import { EmptyState } from '../../components/molecules/EmptyState';
 import { FolderOpen } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';

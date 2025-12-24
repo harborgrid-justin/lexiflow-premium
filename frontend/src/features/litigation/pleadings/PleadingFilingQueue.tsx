@@ -22,10 +22,10 @@ import { useNotify } from '@/hooks/useNotify';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 
 // Components
-import { Button } from '../../common/Button';
-import { Badge } from '../../common/Badge';
-import { EmptyState } from '../../common/EmptyState';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
+import { Button } from '../../components/atoms/Button';
+import { Badge } from '../../components/atoms/Badge';
+import { EmptyState } from '../../components/molecules/EmptyState';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';

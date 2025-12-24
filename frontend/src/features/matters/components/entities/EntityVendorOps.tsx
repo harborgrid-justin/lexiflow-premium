@@ -20,8 +20,8 @@ import { Star, DollarSign, TrendingDown, Briefcase } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
-import { Card } from '../../common/Card';
-import { Button } from '../../common/Button';
+import { Card } from '../../components/molecules/Card';
+import { Button } from '../../components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

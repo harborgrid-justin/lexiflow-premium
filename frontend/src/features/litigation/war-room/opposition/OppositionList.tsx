@@ -20,9 +20,9 @@ import { Phone, Mail, MoreHorizontal, TrendingUp, Flame } from 'lucide-react';
 import { useTheme } from '../../../../providers/ThemeContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../common/Table';
-import { UserAvatar } from '../../../common/UserAvatar';
-import { Button } from '../../../common/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/organisms/Table';
+import { UserAvatar } from '../../../components/atoms/UserAvatar';
+import { Button } from '../../../components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

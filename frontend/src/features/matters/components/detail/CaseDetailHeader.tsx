@@ -13,8 +13,8 @@ import React from 'react';
 import { ArrowLeft, MapPin, ArrowUpRight, Calendar, Users, CheckSquare, MessageCircle } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../common/Button';
-import { Badge } from '../../common/Badge';
+import { Button } from '../../components/atoms/Button';
+import { Badge } from '../../components/atoms/Badge';
 import { ClientPortalModal } from '../../operations/crm/ClientPortalModal';
 
 // Internal Dependencies - Hooks & Context

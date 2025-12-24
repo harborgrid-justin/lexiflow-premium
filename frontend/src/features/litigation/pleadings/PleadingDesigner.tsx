@@ -2,7 +2,7 @@
 import React, { useState, useEffect, Suspense, lazy, useCallback } from 'react';
 import { PleadingDocument, FormattingRule, Case, PleadingSection } from '../../../types';
 import { ArrowLeft, Save, Eye, PenTool, GitMerge, Loader2, Undo2, Redo2 } from 'lucide-react';
-import { Button } from '../../common/Button';
+import { Button } from '../../components/atoms/Button';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
@@ -10,13 +10,13 @@ import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
 import { useNotify } from '@/hooks/useNotify';
-import { LazyLoader } from '../../common/LazyLoader';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
 import { ViewMode, PleadingDesignerProps } from './types';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useHistory } from '@/hooks/useHistory';
 import { VersionConflictError } from '@/services/data/repositories/PleadingRepository';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
-import { ErrorState } from '../../common/ErrorState';
+import { ErrorState } from '../../components/molecules/ErrorState';
 
 // Lazy load new designer components with corrected relative paths
 const PleadingPaper = lazy(() => import('./designer/PleadingPaper'));

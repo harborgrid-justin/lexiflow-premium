@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Card } from '../../common/Card';
-import { Button } from '../../common/Button';
+import { Card } from '../../components/molecules/Card';
+import { Button } from '../../components/atoms/Button';
 import { Download, ExternalLink, Gavel } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';

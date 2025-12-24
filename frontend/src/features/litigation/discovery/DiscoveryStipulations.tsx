@@ -33,11 +33,11 @@ import { Plus, FileText, CheckCircle, XCircle, FileQuestion, AlertCircle, Loader
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { Button } from '../../common/Button';
-import { Badge } from '../../common/Badge';
-import { Modal } from '../../common/Modal';
-import { Input, TextArea } from '../../common/Inputs';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
+import { Button } from '../../components/atoms/Button';
+import { Badge } from '../../components/atoms/Badge';
+import { Modal } from '../../components/molecules/Modal';
+import { Input, TextArea } from '../../components/atoms';
 
 // Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

@@ -26,13 +26,13 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
-import { Tabs } from '../../common/Tabs';
+import { Tabs } from '../../components/molecules/Tabs';
 import { WikiView } from '../base/WikiView';
 import { PrecedentsView } from '../base/PrecedentsView';
 import { QAView } from '../base/QAView';
 import { KnowledgeAnalytics } from '../base/KnowledgeAnalytics';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { Badge } from '../../common/Badge';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
+import { Badge } from '../../components/atoms/Badge';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

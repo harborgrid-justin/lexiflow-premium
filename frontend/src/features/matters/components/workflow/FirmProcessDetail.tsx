@@ -1,16 +1,16 @@
 
 import React, { useState } from 'react';
 import { ArrowLeft, Play, Loader2, AlertTriangle, RefreshCw } from 'lucide-react';
-import { Button } from '../../common/Button';
-import { Card } from '../../common/Card';
-import { Tabs } from '../../common/Tabs';
+import { Button } from '../../components/atoms/Button';
+import { Card } from '../../components/molecules/Card';
+import { Tabs } from '../../components/molecules/Tabs';
 import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
 import { WorkflowAnalyticsDashboard } from './WorkflowAnalyticsDashboard';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { ErrorState } from '../../common/ErrorState';
+import { ErrorState } from '../../components/molecules/ErrorState';
 
 interface FirmProcessDetailProps {
   processId: string;

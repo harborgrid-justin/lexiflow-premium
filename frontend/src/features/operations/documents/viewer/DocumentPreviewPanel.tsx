@@ -30,8 +30,8 @@ import { useNotify } from '@/hooks/useNotify';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 
 // Components
-import { TagList } from '../../../common/Primitives';
-import { Button } from '../../../common/Button';
+import { TagList } from '../../../components/atoms';
+import { Button } from '../../../components/atoms/Button';
 import { PreviewHeader } from '../preview/PreviewHeader';
 import { PreviewContent } from '../preview/PreviewContent';
 import { PIIPanel } from '../preview/PIIPanel';

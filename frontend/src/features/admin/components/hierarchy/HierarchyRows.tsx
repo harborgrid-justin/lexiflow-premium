@@ -4,7 +4,7 @@ import { Building2, Globe, Shield, MoreVertical } from 'lucide-react';
 import { Organization, Group, User as UserType } from '../../../types';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { UserAvatar } from '../../common/UserAvatar';
+import { UserAvatar } from '../../components/atoms/UserAvatar';
 
 interface OrgListItemProps {
     org: Organization;

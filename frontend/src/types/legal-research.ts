@@ -5,15 +5,9 @@ import {
   BaseEntity, UserId, DocumentId, EvidenceId, MetadataRecord, JsonValue
   } from './primitives';
 import {
-
-
-
-
-
-
   LegalRuleType
   } from './enums';
-import { SearchResult } from '@/services/api/search/search-api';
+import { SearchResult } from '@/api/search/search-api';
 
 export interface Citation extends BaseEntity {
   // Backend: citations table

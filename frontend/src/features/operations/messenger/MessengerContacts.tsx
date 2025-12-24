@@ -1,11 +1,11 @@
 
 import React from 'react';
 import { MessageSquare } from 'lucide-react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { UserAvatar } from '../../common/UserAvatar';
-import { Badge } from '../../common/Badge';
-import { Button } from '../../common/Button';
-import { SearchToolbar } from '../../common/SearchToolbar';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
+import { UserAvatar } from '../../components/atoms/UserAvatar';
+import { Badge } from '../../components/atoms/Badge';
+import { Button } from '../../components/atoms/Button';
+import { SearchToolbar } from '../../components/organisms/SearchToolbar';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 

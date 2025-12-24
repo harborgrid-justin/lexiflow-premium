@@ -27,8 +27,8 @@ import { useTheme } from '../../../providers/ThemeContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
-import { Badge } from '../../common/Badge';
-import { AdaptiveLoader } from '../../common/AdaptiveLoader';
+import { Badge } from '../../components/atoms/Badge';
+import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

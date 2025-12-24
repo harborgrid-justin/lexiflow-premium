@@ -5,18 +5,18 @@ import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DocumentService } from '@/services/features/documents/documentService';
-import { PDFViewer } from '../../../common/PDFViewer';
+import { PDFViewer } from '../../../components/organisms/PDFViewer';
 import { AcrobatToolbar, PDFTool } from '../../preview/AcrobatToolbar';
 import { InteractiveOverlay } from '../../preview/InteractiveOverlay';
-import { Modal } from '../../../common/Modal';
-import { SignaturePad } from '../../../common/SignaturePad';
-import { Button } from '../../../common/Button';
+import { Modal } from '../../../components/molecules/Modal';
+import { SignaturePad } from '../../../components/organisms/SignaturePad';
+import { Button } from '../../../components/atoms/Button';
 import { FileText, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
-import { ErrorState } from '../../../common/ErrorState';
+import { ErrorState } from '../../../components/molecules/ErrorState';
 
 export const PDFEditorView: React.FC = () => {
     const { theme } = useTheme();

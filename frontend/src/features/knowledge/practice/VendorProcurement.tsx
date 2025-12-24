@@ -26,12 +26,12 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
-import { Tabs } from '../../common/Tabs';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { Badge } from '../../common/Badge';
-import { Button } from '../../common/Button';
-import { SearchToolbar } from '../../common/SearchToolbar';
-import { KanbanBoard, KanbanColumn, KanbanCard } from '../../common/Kanban';
+import { Tabs } from '../../components/molecules/Tabs';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
+import { Badge } from '../../components/atoms/Badge';
+import { Button } from '../../components/atoms/Button';
+import { SearchToolbar } from '../../components/organisms/SearchToolbar';
+import { KanbanBoard, KanbanColumn, KanbanCard } from '../../components/organisms/Kanban';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

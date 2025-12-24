@@ -27,14 +27,14 @@ import {
   CheckCircle, Circle, AlertCircle, XCircle, ChevronRight, Loader2
 } from 'lucide-react';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { api } from '@/services/api';
+import { api } from '@api';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../common/Button';
-import { Card } from '../../common/Card';
-import { Badge } from '../../common/Badge';
-import { ErrorState } from '../../common/ErrorState';
-import { EmptyState } from '../../common/EmptyState';
+import { Button } from '../../components/atoms/Button';
+import { Card } from '../../components/molecules/Card';
+import { Badge } from '../../components/atoms/Badge';
+import { ErrorState } from '../../components/molecules/ErrorState';
+import { EmptyState } from '../../components/molecules/EmptyState';
 import type { Matter, MatterStatus } from '../../../types';
 
 interface MatterKPIs {

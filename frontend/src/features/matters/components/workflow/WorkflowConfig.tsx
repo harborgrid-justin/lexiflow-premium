@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Card } from '../../common/Card';
+import { Card } from '../../components/molecules/Card';
 import { ToggleLeft, ToggleRight, Settings, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';

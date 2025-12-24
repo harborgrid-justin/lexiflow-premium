@@ -20,10 +20,10 @@ import { Plus } from 'lucide-react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { TabbedPageLayout } from '../../layout/TabbedPageLayout';
-import { LazyLoader } from '../../common/LazyLoader';
+import { TabbedPageLayout } from '../../components/templates/TabbedPageLayout';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
 import { KnowledgeContent } from './KnowledgeContent';
-import { Button } from '../../common/Button';
+import { Button } from '../../components/atoms/Button';
 
 // Utils & Config
 import { cn } from '@/utils/cn';

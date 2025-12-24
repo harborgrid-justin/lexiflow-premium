@@ -15,7 +15,7 @@ import { FileText, Plus, Wand2, Cpu, Loader2, ShieldCheck, Eye } from 'lucide-re
 // Internal Dependencies - Components
 import { TaskCreationModal } from '../../common/TaskCreationModal';
 import { CaseDocumentItem } from './documents/CaseDocumentItem';
-import { Button } from '../../common/Button';
+import { Button } from '../../components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

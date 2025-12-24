@@ -13,8 +13,8 @@ import React from 'react';
 import { Send, Paperclip, Lock, Shield, FileText, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../common/Button';
-import { UserAvatar } from '../../common/UserAvatar';
+import { Button } from '../../components/atoms/Button';
+import { UserAvatar } from '../../components/atoms/UserAvatar';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

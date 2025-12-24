@@ -14,7 +14,7 @@ import { Loader2, FolderOpen } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { EvidenceInventory } from '../../litigation/evidence/EvidenceInventory';
-import { EmptyState } from '../../common/EmptyState';
+import { EmptyState } from '../../components/molecules/EmptyState';
 
 // Internal Dependencies - Hooks & Context
 import { useEvidenceVault } from '@/hooks/useEvidenceVault'; 

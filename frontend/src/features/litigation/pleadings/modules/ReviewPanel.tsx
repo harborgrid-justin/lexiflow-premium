@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { MessageSquare, CheckCircle, User, Clock, Send, MessagesSquare } from 'lucide-react';
 import { PleadingComment } from '../../../../types/pleading-types';
-import { EmptyState } from '../../../common/EmptyState';
+import { EmptyState } from '../../../components/molecules/EmptyState';
 import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';

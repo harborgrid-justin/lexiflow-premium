@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { Button } from '../../common/Button';
-import { Badge } from '../../common/Badge';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
+import { Button } from '../../components/atoms/Button';
+import { Badge } from '../../components/atoms/Badge';
 import { Users, Plus, Mail, Building2, Trash2, Edit } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Modal } from '../../common/Modal';
-import { Input, TextArea } from '../../common/Inputs';
+import { Modal } from '../../components/molecules/Modal';
+import { Input, TextArea } from '../../components/atoms';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '../../../hooks';
 import { useSelection } from '@/hooks/useSelectionState';

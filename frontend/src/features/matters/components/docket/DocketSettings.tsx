@@ -12,8 +12,8 @@ import React, { useState } from 'react';
 import { RefreshCw, CheckCircle, AlertTriangle, Key } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Card } from '../../common/Card';
-import { Button } from '../../common/Button';
+import { Card } from '../../components/molecules/Card';
+import { Button } from '../../components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

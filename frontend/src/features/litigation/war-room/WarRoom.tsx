@@ -50,8 +50,8 @@ import { queryKeys } from "../../../utils/queryKeys";
 import { useTheme } from "@/providers";
 
 // Components
-import { Button } from "../../common/Button";
-import { LazyLoader } from "../../common/LazyLoader";
+import { Button } from '../../components/atoms/Button';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
 
 // Utils & Constants
 import { cn } from "@/utils";

@@ -12,7 +12,7 @@ import { Menu, ZoomIn, ZoomOut, Download } from 'lucide-react';
 
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../common/Button';
+import { Button } from '../../components/atoms/Button';
 import { StrategyToolbarProps } from './types';
 
 export const StrategyToolbar: React.FC<StrategyToolbarProps> = ({

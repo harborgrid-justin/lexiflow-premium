@@ -13,8 +13,8 @@ import React from 'react';
 import { FileText, Wand2, CheckSquare, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../../common/Button';
-import { TagList } from '../../../common/Primitives';
+import { Button } from '../../../components/atoms/Button';
+import { TagList } from '../../../components/atoms';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';

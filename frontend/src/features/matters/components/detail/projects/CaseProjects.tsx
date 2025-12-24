@@ -13,7 +13,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Briefcase } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../../common/Button';
+import { Button } from '../../../components/atoms/Button';
 import { TaskCreationModal } from '../../../common/TaskCreationModal';
 import { ProjectList } from './ProjectList';
 import { ProjectModal } from './ProjectModal';

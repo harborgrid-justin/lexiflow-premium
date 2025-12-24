@@ -2,7 +2,7 @@
 import React from 'react';
 import { Bell, Check, X, BellOff } from 'lucide-react';
 import { DataService } from '@/services/data/dataService';
-import { EmptyState } from '../../common/EmptyState';
+import { EmptyState } from '../../components/molecules/EmptyState';
 import { SystemNotification } from '../../../types';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';

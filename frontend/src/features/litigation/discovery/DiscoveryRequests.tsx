@@ -17,12 +17,12 @@ import { Wand2, Upload, CheckSquare } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../common/Button';
-import { Badge } from '../../common/Badge';
-import { TableContainer, TableHeader, TableHead } from '../../common/Table';
-import { AdaptiveLoader } from '../../common/AdaptiveLoader';
+import { Button } from '../../components/atoms/Button';
+import { Badge } from '../../components/atoms/Badge';
+import { TableContainer, TableHeader, TableHead } from '../../components/organisms/Table';
+import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
 import { TaskCreationModal } from '../../common/TaskCreationModal';
-import { VirtualList } from '../../common/VirtualList';
+import { VirtualList } from '../../components/organisms/VirtualList';
 
 // Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

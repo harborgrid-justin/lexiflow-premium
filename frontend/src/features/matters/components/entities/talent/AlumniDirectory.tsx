@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { Card } from '../../../common/Card';
-import { UserAvatar } from '../../../common/UserAvatar';
-import { Button } from '../../../common/Button';
+import { Card } from '../../../components/molecules/Card';
+import { UserAvatar } from '../../../components/atoms/UserAvatar';
+import { Button } from '../../../components/atoms/Button';
 import { SearchInputBar, MetricTile } from '../../../common/RefactoredCommon';
 import { Briefcase, Building, Mail, Linkedin, GraduationCap, Network } from 'lucide-react';
 import { LegalEntity } from '../../../../types';

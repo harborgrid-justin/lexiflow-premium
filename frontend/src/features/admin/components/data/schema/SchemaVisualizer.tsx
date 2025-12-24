@@ -5,7 +5,7 @@ import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useCanvasDrag } from '@/hooks/useCanvasDrag';
 import { TableData, TableColumn, ContextMenuItem, ContextMenuType, ContextData } from './schemaTypes';
-import { ContextMenu } from '../../../common/ContextMenu';
+import { ContextMenu } from '../../../components/molecules/ContextMenu';
 
 interface SchemaVisualizerProps {
     tables: TableData[];

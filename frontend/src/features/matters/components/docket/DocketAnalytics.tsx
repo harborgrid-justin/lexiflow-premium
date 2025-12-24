@@ -23,7 +23,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
-import { Card } from '../../common/Card';
+import { Card } from '../../components/molecules/Card';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';

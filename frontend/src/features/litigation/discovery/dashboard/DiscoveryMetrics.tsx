@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MetricCard } from '../../../common/Primitives';
+import { MetricCard } from '../../../components/atoms';
 
 interface DiscoveryMetricsProps {
   stats: {

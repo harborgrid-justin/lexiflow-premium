@@ -20,9 +20,9 @@ import { Users, TrendingUp, Building2, Briefcase, Laptop, Wallet, BookOpen, Shie
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { Button } from '../../common/Button';
-import { TabbedPageLayout, TabConfigItem } from '../../layout/TabbedPageLayout';
-import { LazyLoader } from '../../common/LazyLoader';
+import { Button } from '../../components/atoms/Button';
+import { TabbedPageLayout, TabConfigItem } from '../../components/templates/TabbedPageLayout';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
 
 // Sub-components
 const HRManager = lazy(() => import('./hr/HRManager').then(m => ({ default: m.HRManager })));

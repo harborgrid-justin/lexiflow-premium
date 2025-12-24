@@ -18,12 +18,12 @@ import { ExternalLink, Loader2, BookOpen } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '../../common/Badge';
-import { Button } from '../../common/Button';
-import { SearchToolbar } from '../../common/SearchToolbar';
-import { VirtualList } from '../../common/VirtualList';
+import { Badge } from '../../components/atoms/Badge';
+import { Button } from '../../components/atoms/Button';
+import { SearchToolbar } from '../../components/organisms/SearchToolbar';
+import { VirtualList } from '../../components/organisms/VirtualList';
 import { CitationDetail } from './CitationDetail';
-import { EmptyState } from '../../common/EmptyState';
+import { EmptyState } from '../../components/molecules/EmptyState';
 
 // Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

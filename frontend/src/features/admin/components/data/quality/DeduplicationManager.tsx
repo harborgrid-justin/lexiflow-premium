@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import { Users, GitMerge, XCircle, CheckCircle, ArrowRight, Layers } from 'lucide-react';
-import { Card } from '../../../common/Card';
-import { Button } from '../../../common/Button';
-import { Badge } from '../../../common/Badge';
+import { Card } from '../../../components/molecules/Card';
+import { Button } from '../../../components/atoms/Button';
+import { Badge } from '../../../components/atoms/Badge';
 import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';

@@ -24,7 +24,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DashboardMetrics } from './DashboardMetrics';
 import { DashboardAnalytics } from './DashboardAnalytics';
 import { DashboardSidebar } from './DashboardSidebar';
-import { LazyLoader } from '../common/LazyLoader';
+import { LazyLoader } from '../components/molecules/LazyLoader';
 
 // Utils & Constants
 import { Scheduler } from '../../utils/scheduler';

@@ -1,9 +1,9 @@
 
 import React from 'react';
-import { Card } from '../../../common/Card';
-import { Button } from '../../../common/Button';
-import { FileIcon } from '../../../common/Primitives';
-import { Badge } from '../../../common/Badge';
+import { Card } from '../../../components/molecules/Card';
+import { Button } from '../../../components/atoms/Button';
+import { FileIcon } from '../../../components/atoms';
+import { Badge } from '../../../components/atoms/Badge';
 import { UploadCloud, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 import { LegalEntity } from '../../../../types';
 import { useTheme } from '../../../../providers/ThemeContext';

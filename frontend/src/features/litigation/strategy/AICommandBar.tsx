@@ -12,7 +12,7 @@ import { Sparkles, Wand2, AlertCircle } from 'lucide-react';
 
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../common/Button';
+import { Button } from '../../components/atoms/Button';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { useNotify } from '@/hooks/useNotify';
 import { AIValidationService } from '@/services/infrastructure/aiValidationService';

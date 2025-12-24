@@ -17,11 +17,11 @@ import { FileText, Gavel, Clock, Bell, Lock, Hash } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { VirtualList } from '../../common/VirtualList';
+import { VirtualList } from '../../components/organisms/VirtualList';
 import { InfiniteScrollTrigger } from '../../common/InfiniteScrollTrigger';
 import { DocketRow } from './DocketRow';
-import { Badge } from '../../common/Badge';
-import { Button } from '../../common/Button';
+import { Badge } from '../../components/atoms/Badge';
+import { Button } from '../../components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

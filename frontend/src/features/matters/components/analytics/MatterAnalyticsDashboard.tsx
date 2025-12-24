@@ -23,12 +23,12 @@ import {
   PieChart, LineChart, Download, Filter, Calendar, ArrowUp, ArrowDown
 } from 'lucide-react';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { api } from '@/services/api';
+import { api } from '@api';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../common/Button';
-import { Card } from '../../common/Card';
-import { Badge } from '../../common/Badge';
+import { Button } from '../../components/atoms/Button';
+import { Card } from '../../components/molecules/Card';
+import { Badge } from '../../components/atoms/Badge';
 
 export const MatterAnalyticsDashboard: React.FC = () => {
   const { theme } = useTheme();

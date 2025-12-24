@@ -20,12 +20,12 @@ import {
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '../../common/PageHeader';
-import { Button } from '../../common/Button';
+import { PageHeader } from '../../components/organisms/PageHeader';
+import { Button } from '../../components/atoms/Button';
 import { ExhibitTable } from './ExhibitTable';
 import { StickerDesigner } from './StickerDesigner';
 import { ExhibitStats } from './ExhibitStats';
-import { ErrorState } from '../../common/ErrorState';
+import { ErrorState } from '../../components/molecules/ErrorState';
 
 // Context & Utils
 import { useTheme } from '../../../providers/ThemeContext';

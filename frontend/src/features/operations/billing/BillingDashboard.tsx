@@ -26,11 +26,11 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Components
-import { Button } from '../../common/Button';
-import { PeriodSelector } from '../../common/PeriodSelector';
+import { Button } from '../../components/atoms/Button';
+import { PeriodSelector } from '../../components/molecules/PeriodSelector';
 import { ExportMenu } from '../../common/ExportMenu';
-import { TabbedPageLayout, TabConfigItem } from '../../layout/TabbedPageLayout';
-import { LazyLoader } from '../../common/LazyLoader';
+import { TabbedPageLayout, TabConfigItem } from '../../components/templates/TabbedPageLayout';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
 import { BillingDashboardContent } from './BillingDashboardContent';
 import { BillingErrorBoundary } from './BillingErrorBoundary';
 

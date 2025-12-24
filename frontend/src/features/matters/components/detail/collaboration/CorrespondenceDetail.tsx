@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 import { X, Mail, MapPin, User, Calendar, FileText, Download, Navigation, CheckSquare, Archive, Briefcase, BookOpen, Truck, Package, PenTool, UploadCloud } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../../common/Button';
+import { Button } from '../../../components/atoms/Button';
 import { TaskCreationModal } from '../../../common/TaskCreationModal';
 
 // Internal Dependencies - Hooks & Context

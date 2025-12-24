@@ -25,8 +25,8 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
-import { MetricCard } from '../../common/Primitives';
-import { Card } from '../../common/Card';
+import { MetricCard } from '../../components/atoms';
+import { Card } from '../../components/molecules/Card';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

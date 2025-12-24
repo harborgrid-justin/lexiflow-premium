@@ -13,8 +13,8 @@ import React from 'react';
 import { Briefcase, Users, Calendar, FileText, CheckCircle, ExternalLink, Hash } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../common/Button';
-import { Card } from '../../common/Card';
+import { Button } from '../../components/atoms/Button';
+import { Card } from '../../components/molecules/Card';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

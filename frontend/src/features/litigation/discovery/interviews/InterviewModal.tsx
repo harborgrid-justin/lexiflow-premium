@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Modal } from '../../../common/Modal';
-import { Input, TextArea } from '../../../common/Inputs';
-import { Button } from '../../../common/Button';
+import { Modal } from '../../../components/molecules/Modal';
+import { Input, TextArea } from '../../../components/atoms';
+import { Button } from '../../../components/atoms/Button';
 import { CustodianInterview } from '../../../../types';
 
 interface InterviewModalProps {

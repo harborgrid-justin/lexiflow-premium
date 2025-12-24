@@ -2,9 +2,9 @@
 import React from 'react';
 import { Download, Eye, MoreVertical, Clock, CheckSquare, Book, Tag } from 'lucide-react';
 import { LegalDocument } from '../../../../types';
-import { Badge } from '../../../common/Badge';
-import { FileIcon, TagList } from '../../../common/Primitives';
-import { TableRow, TableCell } from '../../../common/Table';
+import { Badge } from '../../../components/atoms/Badge';
+import { FileIcon, TagList } from '../../../components/atoms';
+import { TableRow, TableCell } from '../../../components/organisms/Table';
 import { cn } from '@/utils/cn';
 
 interface DocumentRowProps {

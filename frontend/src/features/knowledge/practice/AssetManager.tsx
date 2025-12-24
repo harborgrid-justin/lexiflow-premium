@@ -28,14 +28,14 @@ import { useModalState } from '../../../hooks';
 import { getTodayString } from '@/utils/dateUtils';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { Button } from '../../common/Button';
-import { Badge } from '../../common/Badge';
-import { ConfirmDialog } from '../../common/ConfirmDialog';
-import { SearchToolbar } from '../../common/SearchToolbar';
-import { Modal } from '../../common/Modal';
-import { Input } from '../../common/Inputs';
-import { VirtualList } from '../../common/VirtualList';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
+import { Button } from '../../components/atoms/Button';
+import { Badge } from '../../components/atoms/Badge';
+import { ConfirmDialog } from '../../components/molecules/ConfirmDialog';
+import { SearchToolbar } from '../../components/organisms/SearchToolbar';
+import { Modal } from '../../components/molecules/Modal';
+import { Input } from '../../components/atoms';
+import { VirtualList } from '../../components/organisms/VirtualList';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

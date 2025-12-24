@@ -2,13 +2,13 @@
 import React, { useState, useMemo, useCallback, useTransition } from 'react';
 import { Download, Eye, MoreVertical, ArrowUp, ArrowDown } from 'lucide-react';
 import { LegalDocument } from '../../../../types';
-import { Modal } from '../../../common/Modal';
-import { RuleSelector } from '../../../common/RuleSelector';
-import { Button } from '../../../common/Button';
+import { Modal } from '../../../components/molecules/Modal';
+import { RuleSelector } from '../../../components/molecules/RuleSelector';
+import { Button } from '../../../components/atoms/Button';
 import { DocumentRow } from './DocumentRow';
 import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { VirtualList } from '../../../common/VirtualList';
+import { VirtualList } from '../../../components/organisms/VirtualList';
 
 interface DocumentTableProps {
   documents: LegalDocument[];

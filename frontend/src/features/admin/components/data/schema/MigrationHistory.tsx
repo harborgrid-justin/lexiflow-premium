@@ -3,7 +3,7 @@ import React from 'react';
 import { Clock, CheckCircle, XCircle, RotateCcw, FileCode } from 'lucide-react';
 import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../../common/Button';
+import { Button } from '../../../components/atoms/Button';
 
 export const MigrationHistory: React.FC = () => {
     const { theme } = useTheme();

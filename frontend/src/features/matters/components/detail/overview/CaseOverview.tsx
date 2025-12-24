@@ -13,13 +13,13 @@ import React from 'react';
 import { Users } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../../common/Button';
+import { Button } from '../../../components/atoms/Button';
 import { MatterInfo } from './MatterInfo';
 import { ActiveWorkstreams } from './ActiveWorkstreams';
 import { OverviewSidebar } from './OverviewSidebar';
 import { CaseOverviewStats } from './CaseOverviewStats';
 import { CaseOverviewModals } from './CaseOverviewModals';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../common/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/organisms/Table';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../../providers/ThemeContext';

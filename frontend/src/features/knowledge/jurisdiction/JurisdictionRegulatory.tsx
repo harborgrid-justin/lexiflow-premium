@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { Card } from '../../common/Card';
+import { Card } from '../../components/molecules/Card';
 import { Scale, AlertTriangle, FileText, Loader2 } from 'lucide-react';
-import { AdaptiveLoader } from '../../common/AdaptiveLoader';
+import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';

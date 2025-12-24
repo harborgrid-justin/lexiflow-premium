@@ -17,7 +17,7 @@ export const AdminPlatformManager: React.FC = () => {
   const { theme } = useTheme();
   const [activeCategory, setActiveCategory] = useState<Category>('users');
   const [searchTerm, setSearchTerm] = useState('');
-  const [editingItem, setEditingItem] = useState<unknown>(null);
+  const [editingItem, setEditingItem] = useState<Record<string, any> | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNewItem, setIsNewItem] = useState(false);
   const deleteModal = useModalState();
@@ -25,14 +25,14 @@ export const AdminPlatformManager: React.FC = () => {
 
   const { items, counts, saveItem, deleteItem } = useAdminData(activeCategory);
 
-  const filteredItems = items.filter(item => 
-    Object.values(item).some(val => 
+  const filteredItems = items.filter(item =>
+    Object.values(item).some(val =>
       String(val).toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
 
   const handleEdit = (item: unknown) => {
-    setEditingItem(item && typeof item === 'object' ? { ...item } : {});
+    setEditingItem(item && typeof item === 'object' ? { ...(item as Record<string, any>) } : {});
     setIsNewItem(false);
     setIsModalOpen(true);
   };
@@ -55,18 +55,18 @@ export const AdminPlatformManager: React.FC = () => {
     }
   };
 
-  const handleSave = (formData: unknown) => {
+  const handleSave = (formData: Record<string, any>) => {
     saveItem({ category: activeCategory, item: formData, isNew: isNewItem });
     setIsModalOpen(false);
   };
 
   return (
     <div className={cn("flex flex-col h-full rounded-lg overflow-hidden border", theme.surface.default, theme.border.default)}>
-      <RecordModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+      <RecordModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
         title={isNewItem ? 'Create Record' : 'Edit Record'}
-        item={editingItem}
+        item={editingItem || {}}
         onSave={handleSave}
       />
 

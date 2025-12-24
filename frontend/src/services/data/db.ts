@@ -260,8 +260,12 @@ export class DatabaseManager {
 
   private async buildIndices() {
       setTimeout(async () => {
-        const cases = await this.getAll<unknown>(STORES.CASES);
-        cases.forEach(c => this.titleIndex.insert(c.title.toLowerCase(), c.id));
+        const cases = await this.getAll<{ id: string; title: string }>(STORES.CASES);
+        cases.forEach(c => {
+          if (c && typeof c === 'object' && 'title' in c && 'id' in c) {
+            this.titleIndex.insert(c.title.toLowerCase(), c.id);
+          }
+        });
         console.log("B-Tree index for case titles built.");
       }, 500);
   }
@@ -307,7 +311,7 @@ export class DatabaseManager {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
           const items = StorageUtils.get<T[]>(storeName, []);
-          return items.find((i: unknown) => i.id === id);
+          return items.find((i: unknown) => (i as { id: string }).id === id);
       }
       return new Promise((resolve, reject) => {
           const transaction = this.db!.transaction([storeName], 'readonly');
@@ -340,7 +344,7 @@ export class DatabaseManager {
         const store = transaction.objectStore(op.store);
         try {
             if (op.type === 'put') store.put(op.item);
-            else if (op.type === 'delete') store.delete(op.item);
+            else if (op.type === 'delete') store.delete(op.item as IDBValidKey);
         } catch(e) {
             console.error("Coalesced Write Error", e);
         }
@@ -351,7 +355,7 @@ export class DatabaseManager {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
           const items = StorageUtils.get<T[]>(storeName, []);
-          const idx = items.findIndex((i: unknown) => i.id === (item as any).id);
+          const idx = items.findIndex((i: any) => i.id === (item as any).id);
           if (idx >= 0) items[idx] = item;
           else items.push(item);
           StorageUtils.set(storeName, items);
@@ -386,7 +390,7 @@ export class DatabaseManager {
           const currentItems = StorageUtils.get<T[]>(storeName, []);
           const newItems = [...currentItems];
           items.forEach(item => {
-             const idx = newItems.findIndex((i: unknown) => i.id === (item as any).id);
+             const idx = newItems.findIndex((i: any) => i.id === (item as any).id);
              if (idx >= 0) newItems[idx] = item;
              else newItems.push(item);
           });
@@ -442,8 +446,8 @@ export class DatabaseManager {
       if (this.mode === 'LocalStorage' || !this.db) {
           const items = StorageUtils.get<T[]>(storeName, []);
           const key = Array.isArray(value) ? indexName.split('_')[0] : indexName;
-          const val = Array.isArray(value) ? value[0] : value; 
-          return items.filter((i: unknown) => i[key] === val);
+          const val = Array.isArray(value) ? value[0] : value;
+          return items.filter((i: unknown) => (i as Record<string, unknown>)[key] === val);
       }
       return new Promise((resolve, reject) => {
           const transaction = this.db!.transaction([storeName], 'readonly');
@@ -451,13 +455,13 @@ export class DatabaseManager {
           if (!store.indexNames.contains(indexName)) {
                const request = store.getAll();
                request.onsuccess = () => {
-                   const all = request.result as any[];
-                   resolve(all.filter(i => i[indexName] === value)); 
+                   const all = request.result as Record<string, unknown>[];
+                   resolve(all.filter(i => i[indexName] === value) as T[]);
                };
                return;
           }
           const index = store.index(indexName);
-          const request = index.getAll(value);
+          const request = index.getAll(value as IDBValidKey | IDBKeyRange);
           request.onsuccess = () => resolve(request.result as T[]);
           request.onerror = () => reject(request.error);
       });

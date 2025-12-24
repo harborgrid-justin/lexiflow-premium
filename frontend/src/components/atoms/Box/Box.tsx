@@ -19,7 +19,7 @@ import {
   gapClasses 
 } from './Box.styles';
 
-interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Spacing preset from design system */
   spacing?: 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   /** Background color preset */

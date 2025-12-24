@@ -12,18 +12,12 @@ export const useAdminData = (activeCategory: Category) => {
   const clausesQuery = useQuery(['clauses', 'all'], () => DataService.clauses.getAll());
   const docsQuery = useQuery(['documents', 'all'], () => DataService.documents.getAll());
 
-  const dataMap: {
-      users: any[];
-      cases: any[];
-      clients: any[];
-      clauses: any[];
-      documents: any[];
-  } = {
-      users: usersQuery.data || [],
-      cases: casesQuery.data || [],
-      clients: clientsQuery.data || [],
-      clauses: clausesQuery.data || [],
-      documents: docsQuery.data || []
+  const dataMap: Record<Category, any[]> = {
+      users: (usersQuery.data as any[]) || [],
+      cases: (casesQuery.data as any[]) || [],
+      clients: (clientsQuery.data as any[]) || [],
+      clauses: (clausesQuery.data as any[]) || [],
+      documents: (docsQuery.data as any[]) || []
   };
 
   // Generic Mutation Handler
@@ -63,8 +57,8 @@ export const useAdminData = (activeCategory: Category) => {
       {
           onSuccess: (id, variables) => {
             const key = [
-                variables.category === 'users' ? 'users' : 
-                variables.category === 'cases' ? 'cases' : 
+                variables.category === 'users' ? 'users' :
+                variables.category === 'cases' ? 'cases' :
                 variables.category === 'clients' ? 'clients' :
                 variables.category === 'clauses' ? 'clauses' : 'documents',
                 'all'
@@ -76,7 +70,7 @@ export const useAdminData = (activeCategory: Category) => {
   );
 
   return {
-      items: dataMap[activeCategory] as any[],
+      items: dataMap[activeCategory],
       counts: {
         users: dataMap.users.length,
         cases: dataMap.cases.length,

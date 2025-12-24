@@ -61,9 +61,8 @@ export const transformNodesToGantt = (
       });
     } else if (node.type !== 'Comment' && node.type !== 'Start' && node.type !== 'End') {
       const startDate = DateCalculationService.calculateStartDateFromPosition(
-        node.x,
+        node.x - minX,
         CANVAS_CONSTANTS.PIXELS_PER_DAY,
-        minX,
         today
       );
       
@@ -81,7 +80,7 @@ export const transformNodesToGantt = (
         startDate: DateCalculationService.formatToISO(startDate),
         dueDate: DateCalculationService.formatToISO(dueDate),
         status: TaskStatusBackend.TODO,
-        assignee: node.config.assignee || 'Unassigned',
+        assignee: String(node.config.assignee || 'Unassigned'),
         priority: TaskPriorityBackend.MEDIUM,
         dependencies
       });
@@ -95,14 +94,13 @@ export const transformNodesToGantt = (
  * Updates node position based on Gantt task date changes
  */
 export const calculateNodePositionFromDate = (
-  startDateStr: string, 
+  startDateStr: string,
   referenceDate: Date = new Date()
 ): number => {
   const startDate = DateCalculationService.parseFromISO(startDateStr);
   return DateCalculationService.calculatePositionFromDate(
     startDate,
-    referenceDate,
     CANVAS_CONSTANTS.PIXELS_PER_DAY,
-    50
+    referenceDate
   );
 };

@@ -274,7 +274,12 @@ export function useListNavigation<T>({
   }, [focusedIndex, containerRef, mode]);
 
   // Get props for focusable items (full mode only)
-  const getFocusProps = useCallback((index: number) => {
+  const getFocusProps = useCallback((index: number): {
+    tabIndex: number;
+    'data-index': number;
+    'aria-selected': boolean;
+    onKeyDown: (e: React.KeyboardEvent) => void;
+  } | undefined => {
     if (mode !== 'full') return undefined;
 
     return {
@@ -292,7 +297,12 @@ export function useListNavigation<T>({
   };
 
   if (mode === 'full') {
-    result.getFocusProps = getFocusProps as NonNullable<typeof getFocusProps>;
+    result.getFocusProps = getFocusProps as (index: number) => {
+      tabIndex: number;
+      'data-index': number;
+      'aria-selected': boolean;
+      onKeyDown: (e: React.KeyboardEvent) => void;
+    };
   }
 
   return result;

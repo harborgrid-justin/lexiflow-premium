@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { CaseId, Witness, Expert, Advisor, CaseStrategy, TrialExhibit } from '@/types';
+import type { CaseId, Witness, Expert, Advisor, CaseStrategy, TrialExhibit, WarRoomData } from '@/types';
+import { CaseStatus, MatterType } from '@/types';
 import { WarRoom } from '../../../../features/litigation/war-room/WarRoom';
 import { CommandCenter } from '../../../../features/litigation/war-room/CommandCenter';
 import { EvidenceWall } from '../../../../features/litigation/war-room/EvidenceWall';
@@ -10,6 +11,40 @@ import { TrialBinder } from '../../../../features/litigation/war-room/TrialBinde
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
 import React from 'react';
+
+// ============================================================================
+// MOCK DATA
+// ============================================================================
+const mockWarRoomData: WarRoomData = {
+  case: {
+    id: 'case-123' as CaseId,
+    caseNumber: 'CV-2024-001',
+    title: 'Smith v. Johnson Corp.',
+    status: CaseStatus.Active,
+    jurisdiction: 'Federal',
+    court: 'US District Court',
+    filingDate: '2024-01-15',
+    client: 'Smith',
+    parties: [],
+    citations: [],
+    arguments: [],
+    defenses: [],
+    matterType: MatterType.LITIGATION,
+    isArchived: false,
+    createdAt: '2024-01-15',
+    updatedAt: '2024-01-15',
+  },
+  witnesses: [],
+  documents: [],
+  motions: [],
+  docket: [],
+  evidence: [],
+  tasks: [],
+};
+
+const mockOnNavigate = (view: string, context?: Record<string, unknown>) => {
+  console.log('Navigate to:', view, context);
+};
 
 /**
  * War Room components provide trial preparation and command center functionality
@@ -50,7 +85,6 @@ const metaWarRoom = {
       },
     },
   },
-  tags: ['autodocs'],
   decorators: [
     (Story: React.ComponentType) => (
       <ThemeProvider>
@@ -79,7 +113,7 @@ export const HighStakesCase: Story = {
     <ThemeProvider>
       <ToastProvider>
         <div className="min-h-screen bg-slate-900">
-          <CommandCenter caseId="case-123" />
+          <CommandCenter caseId="case-123" warRoomData={mockWarRoomData} onNavigate={mockOnNavigate} />
         </div>
       </ToastProvider>
     </ThemeProvider>
@@ -102,7 +136,7 @@ export const Wall: StoryObj<Meta<typeof EvidenceWall>> = {
     <ThemeProvider>
       <ToastProvider>
         <div className="min-h-screen bg-slate-900">
-          <EvidenceWall caseId="case-123" />
+          <EvidenceWall caseId="case-123" warRoomData={mockWarRoomData} />
         </div>
       </ToastProvider>
     </ThemeProvider>
@@ -171,7 +205,7 @@ export const WitnessPreparation: StoryObj<Meta<typeof WitnessPrep>> = {
     <ThemeProvider>
       <ToastProvider>
         <div className="min-h-screen bg-slate-50 p-6">
-          <WitnessPrep caseId="case-123" />
+          <WitnessPrep caseId="case-123" warRoomData={mockWarRoomData} />
         </div>
       </ToastProvider>
     </ThemeProvider>
@@ -194,7 +228,7 @@ export const Binder: StoryObj<Meta<typeof TrialBinder>> = {
     <ThemeProvider>
       <ToastProvider>
         <div className="min-h-screen bg-slate-50 p-6">
-          <TrialBinder caseId="case-123" />
+          <TrialBinder caseId="case-123" warRoomData={mockWarRoomData} />
         </div>
       </ToastProvider>
     </ThemeProvider>

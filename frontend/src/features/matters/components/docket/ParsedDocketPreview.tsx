@@ -22,8 +22,51 @@ import { useTheme } from '@/providers/ThemeContext';
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 
+// Type Definitions for Parsed Docket Data
+interface ParsedParty {
+  name: string;
+  role: string;
+  counsel?: string;
+}
+
+interface ParsedDeadline {
+  date: string;
+  title: string;
+}
+
+interface ParsedDocketEntry {
+  pacerSequenceNumber?: number;
+  sequenceNumber?: number;
+  entryNumber?: number;
+  date: string;
+  type?: string;
+  description?: string;
+  title?: string;
+  docLink?: string;
+  structuredData?: {
+    actionType: string;
+    actionVerb: string;
+  };
+}
+
+interface ParsedCaseInfo {
+  title?: string;
+  id?: string;
+  caseNumber?: string;
+  court?: string;
+  judge?: string;
+  matterType?: string;
+}
+
+interface ParsedDocketData {
+  caseInfo?: ParsedCaseInfo;
+  parties?: ParsedParty[];
+  deadlines?: ParsedDeadline[];
+  docketEntries?: ParsedDocketEntry[];
+}
+
 interface ParsedDocketPreviewProps {
-  parsedData: unknown;
+  parsedData: ParsedDocketData | unknown;
   setStep: (step: number) => void;
   handleFinish: () => void;
 }
@@ -41,18 +84,21 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
     );
   }
 
+  // Type assertion for parsedData
+  const data = parsedData as ParsedDocketData;
+
   return (
     <div className="space-y-6">
         <Card noPadding className={cn("border", theme.surface.highlight, theme.border.default)}>
             <div className="p-4 flex items-start gap-4">
                 <div className={cn("p-2 rounded-full", theme.surface.highlight)}><Briefcase className={cn("h-6 w-6", theme.text.link)}/></div>
                 <div>
-                    <h4 className={cn("font-bold text-lg", theme.text.link)}>{parsedData.caseInfo?.title || 'Unknown Case'}</h4>
+                    <h4 className={cn("font-bold text-lg", theme.text.link)}>{data.caseInfo?.title || 'Unknown Case'}</h4>
                     <div className={cn("flex flex-wrap gap-4 text-xs mt-1", theme.text.link)}>
-                        <span className={cn("font-mono px-1 rounded", theme.surface.highlight)}>{parsedData.caseInfo?.id || parsedData.caseInfo?.caseNumber || 'No ID'}</span>
-                        <span>{parsedData.caseInfo?.court || 'Court N/A'}</span>
-                        {parsedData.caseInfo?.judge && <span>Judge: {parsedData.caseInfo?.judge}</span>}
-                        <span className="bg-white border px-1 rounded">{parsedData.caseInfo?.matterType || 'General'}</span>
+                        <span className={cn("font-mono px-1 rounded", theme.surface.highlight)}>{data.caseInfo?.id || data.caseInfo?.caseNumber || 'No ID'}</span>
+                        <span>{data.caseInfo?.court || 'Court N/A'}</span>
+                        {data.caseInfo?.judge && <span>Judge: {data.caseInfo?.judge}</span>}
+                        <span className="bg-white border px-1 rounded">{data.caseInfo?.matterType || 'General'}</span>
                     </div>
                 </div>
             </div>
@@ -62,10 +108,10 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
             <div className={cn("border rounded-lg overflow-hidden", theme.border.default)}>
                 <div className={cn("p-3 border-b flex items-center", theme.surface.highlight, theme.border.default)}>
                     <Users className={cn("h-4 w-4 mr-2", theme.text.secondary)}/>
-                    <span className={cn("font-bold text-xs uppercase", theme.text.secondary)}>Parties Found ({parsedData.parties?.length || 0})</span>
+                    <span className={cn("font-bold text-xs uppercase", theme.text.secondary)}>Parties Found ({data.parties?.length || 0})</span>
                 </div>
                 <div className="max-h-40 overflow-y-auto p-2 space-y-2">
-                    {parsedData.parties?.map((p: unknown, i: number) => (
+                    {data.parties?.map((p: ParsedParty, i: number) => (
                     <div key={i} className={cn("flex flex-col text-sm p-2 rounded border", theme.surface.default, theme.border.default)}>
                         <div className="flex justify-between">
                             <span className={cn("font-medium", theme.text.primary)}>{p.name || 'Unknown Party'}</span>
@@ -74,7 +120,7 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
                         {p.counsel && <span className={cn("text-xs mt-1", theme.text.tertiary)}>Counsel: {p.counsel}</span>}
                     </div>
                     ))}
-                    {(!parsedData.parties || parsedData.parties.length === 0) && (
+                    {(!data.parties || data.parties.length === 0) && (
                          <div className={cn("p-4 text-center text-xs", theme.text.tertiary)}>No parties extracted.</div>
                     )}
                 </div>
@@ -83,10 +129,10 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
             <div className={cn("border rounded-lg overflow-hidden", theme.border.default)}>
                 <div className={cn("p-3 border-b flex items-center", theme.surface.highlight, theme.border.default)}>
                     <Calendar className={cn("h-4 w-4 mr-2", theme.text.secondary)}/>
-                    <span className={cn("font-bold text-xs uppercase", theme.text.secondary)}>Events / Deadlines ({parsedData.deadlines?.length || 0})</span>
+                    <span className={cn("font-bold text-xs uppercase", theme.text.secondary)}>Events / Deadlines ({data.deadlines?.length ?? 0})</span>
                 </div>
                 <div className="max-h-40 overflow-y-auto p-2 space-y-2">
-                    {parsedData.deadlines?.length > 0 ? parsedData.deadlines.map((d: unknown, i: number) => (
+                    {(data.deadlines?.length ?? 0) > 0 ? data.deadlines!.map((d: ParsedDeadline, i: number) => (
                     <div key={i} className={cn("flex justify-between items-center text-sm p-2 rounded border", theme.surface.default, theme.border.default)}>
                         <span className="text-red-600 font-medium">{d.date}</span>
                         <span className={cn("text-xs", theme.text.secondary)}>{d.title}</span>
@@ -99,10 +145,10 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
         <div className={cn("border rounded-lg overflow-hidden", theme.border.default)}>
             <div className={cn("p-3 border-b flex items-center", theme.surface.highlight, theme.border.default)}>
                 <FileText className={cn("h-4 w-4 mr-2", theme.text.secondary)}/>
-                <span className={cn("font-bold text-xs uppercase", theme.text.secondary)}>Recent Docket Entries ({parsedData.docketEntries?.length || 0})</span>
+                <span className={cn("font-bold text-xs uppercase", theme.text.secondary)}>Recent Docket Entries ({data.docketEntries?.length || 0})</span>
             </div>
             <div className="max-h-64 overflow-y-auto p-2 space-y-2">
-                {parsedData.docketEntries?.slice().reverse().slice(0, 8).map((e: unknown, i: number) => (
+                {(data.docketEntries && data.docketEntries.length > 0) ? data.docketEntries.slice().reverse().slice(0, 8).map((e: ParsedDocketEntry, i: number) => (
                 <div key={i} className={cn("text-sm p-2 rounded border group", theme.surface.default, theme.border.default)}>
                     <div className="flex gap-2 mb-1 justify-between">
                         <div className="flex gap-2">
@@ -123,11 +169,11 @@ export const ParsedDocketPreview: React.FC<ParsedDocketPreviewProps> = ({ parsed
                         <p className={cn("text-xs leading-relaxed truncate", theme.text.secondary)}>{e.description || e.title}</p>
                     </div>
                 </div>
-                ))}
-                {(parsedData.docketEntries?.length || 0) > 8 && (
-                <p className={cn("text-xs text-center italic pt-2", theme.text.tertiary)}>...and {parsedData.docketEntries.length - 8} earlier entries</p>
+                )) : null}
+                {(data.docketEntries?.length ?? 0) > 8 && (
+                <p className={cn("text-xs text-center italic pt-2", theme.text.tertiary)}>...and {data.docketEntries!.length - 8} earlier entries</p>
                 )}
-                {(!parsedData.docketEntries || parsedData.docketEntries.length === 0) && (
+                {(!data.docketEntries || data.docketEntries.length === 0) && (
                      <div className={cn("p-4 text-center text-xs", theme.text.tertiary)}>No docket entries found.</div>
                 )}
             </div>

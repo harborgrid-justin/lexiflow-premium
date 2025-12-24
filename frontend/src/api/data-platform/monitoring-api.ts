@@ -98,7 +98,7 @@ export class MonitoringApiService {
   /**
    * Get system alerts
    */
-  async getAlerts(filters?: unknown): Promise<PaginatedResponse<SystemAlert>> {
+  async getAlerts(filters?: Record<string, any>): Promise<PaginatedResponse<SystemAlert>> {
     try {
       return await apiClient.get<PaginatedResponse<SystemAlert>>('/monitoring/alerts', filters);
     } catch (error) {

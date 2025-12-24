@@ -51,7 +51,8 @@ export class RiskRepository extends Repository<Risk> {
         this.validateId(caseId, 'getByCaseId');
         if (this.useBackend) {
             try {
-                return await this.risksApi.getByCaseId(caseId) as any;
+                const risks = await this.risksApi.getAll({ caseId });
+                return risks as any;
             } catch (error) {
                 console.warn('[RiskRepository] Backend API unavailable', error);
             }

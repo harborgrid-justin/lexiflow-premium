@@ -48,7 +48,7 @@ export class AiOpsApiService {
   /**
    * Get vector embeddings
    */
-  async getEmbeddings(filters?: unknown): Promise<PaginatedResponse<VectorEmbedding>> {
+  async getEmbeddings(filters?: Record<string, any>): Promise<PaginatedResponse<VectorEmbedding>> {
     try {
       return await apiClient.get<PaginatedResponse<VectorEmbedding>>('/ai-ops/embeddings', filters);
     } catch (error) {

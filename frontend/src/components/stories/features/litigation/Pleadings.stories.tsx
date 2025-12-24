@@ -50,7 +50,6 @@ const metaBuilder = {
       },
     },
   },
-  tags: ['autodocs'],
   decorators: [
     (Story: React.ComponentType) => (
       <ThemeProvider>
@@ -102,17 +101,33 @@ export const WithTemplate: Story = {
 // ============================================================================
 
 export const Designer: StoryObj<Meta<typeof PleadingDesigner>> = {
-  render: () => (
-    <ThemeProvider>
-      <ToastProvider>
-        <div className="min-h-screen bg-slate-50">
-          <PleadingDesigner 
-            pleadingId="pleading-123"
-          />
-        </div>
-      </ToastProvider>
-    </ThemeProvider>
-  ),
+  render: () => {
+    const mockPleading: PleadingDocument = {
+      id: 'pleading-123' as any,
+      caseId: 'case-123' as any,
+      title: 'Motion to Dismiss',
+      status: 'Draft',
+      filingStatus: 'Pre-Filing',
+      sections: [],
+      jurisdictionRulesId: 'default-rules',
+      version: 1,
+      createdAt: '2024-01-15T10:00:00Z',
+      updatedAt: '2024-01-15T10:00:00Z',
+    };
+
+    return (
+      <ThemeProvider>
+        <ToastProvider>
+          <div className="min-h-screen bg-slate-50">
+            <PleadingDesigner
+              pleading={mockPleading}
+              onBack={() => console.log('Back clicked')}
+            />
+          </div>
+        </ToastProvider>
+      </ThemeProvider>
+    );
+  },
   parameters: {
     docs: {
       description: {
@@ -131,8 +146,10 @@ export const Templates: StoryObj<Meta<typeof PleadingTemplates>> = {
     <ThemeProvider>
       <ToastProvider>
         <div className="min-h-screen bg-slate-50 p-6">
-          <PleadingTemplates 
-            onSelectTemplate={(template: Pleading) => console.log('Selected:', template)}
+          <PleadingTemplates
+            templates={[]}
+            onCreateFromTemplate={(template) => console.log('Create from template:', template)}
+            isLoading={false}
           />
         </div>
       </ToastProvider>
@@ -156,8 +173,10 @@ export const Drafts: StoryObj<Meta<typeof PleadingDrafts>> = {
     <ThemeProvider>
       <ToastProvider>
         <div className="min-h-screen bg-slate-50 p-6">
-          <PleadingDrafts 
-            onOpenDraft={(id: string) => console.log('Open draft:', id)}
+          <PleadingDrafts
+            pleadings={[]}
+            onEdit={(doc) => console.log('Edit draft:', doc)}
+            isLoading={false}
           />
         </div>
       </ToastProvider>

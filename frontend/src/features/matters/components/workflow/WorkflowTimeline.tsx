@@ -27,7 +27,7 @@ import { UserAvatar } from '@/components/atoms/UserAvatar';
 import { cn } from '@/utils/cn';
 
 // Types
-import { WorkflowStage, WorkflowTask } from '@/types';
+import { WorkflowStage, WorkflowTask, TaskStatusBackend } from '@/types';
 
 interface WorkflowTimelineProps {
   stages: WorkflowStage[];
@@ -78,11 +78,11 @@ export const WorkflowTimeline: React.FC<WorkflowTimelineProps> = ({ stages, onTo
                             <div className="h-2"></div>
                             {stage.tasks.map((task) => (
                                 <div key={task.id} className={cn("group relative p-4 rounded-lg border hover:shadow-md transition-all flex flex-col md:flex-row gap-4 items-start md:items-center", theme.surface.default, theme.border.default, "hover:border-blue-300")}>
-                                    <button 
+                                    <button
                                         onClick={() => onToggleTask(stage.id, task.id)}
                                         className={`shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
-                                            task.status === 'Done' 
-                                            ? 'bg-green-500 border-green-500 text-white' 
+                                            task.status === TaskStatusBackend.COMPLETED
+                                            ? 'bg-green-500 border-green-500 text-white'
                                             : `border-slate-300 hover:border-blue-500 text-transparent`
                                         }`}
                                     >
@@ -91,10 +91,10 @@ export const WorkflowTimeline: React.FC<WorkflowTimelineProps> = ({ stages, onTo
 
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 mb-1">
-                                            <h5 className={cn("font-semibold text-sm", task.status === 'Done' ? "text-slate-400 line-through" : theme.text.primary)}>
+                                            <h5 className={cn("font-semibold text-sm", task.status === TaskStatusBackend.COMPLETED ? "text-slate-400 line-through" : theme.text.primary)}>
                                                 {task.title}
                                             </h5>
-                                            {task.priority === 'High' && task.status !== 'Done' && (
+                                            {task.priority === 'High' && task.status !== TaskStatusBackend.COMPLETED && (
                                                 <span className="bg-red-100 text-red-600 text-[10px] font-bold px-1.5 py-0.5 rounded border border-red-200">HIGH</span>
                                             )}
                                         </div>
@@ -102,10 +102,12 @@ export const WorkflowTimeline: React.FC<WorkflowTimelineProps> = ({ stages, onTo
                                             <p className={cn("text-xs mb-2 line-clamp-1", theme.text.secondary)}>{task.description}</p>
                                         )}
                                         <div className={cn("flex flex-wrap items-center gap-4 text-xs", theme.text.tertiary)}>
-                                            <span className="flex items-center gap-1"><UserAvatar name={task.assignee} size="sm" className="w-4 h-4 text-[9px]"/> {task.assignee}</span>
-                                            <span className={`flex items-center gap-1 ${task.status !== 'Done' && new Date(task.dueDate as string) < new Date() ? 'text-red-500 font-bold' : ''}`}>
-                                                <Clock className="h-3 w-3"/> Due: {task.dueDate}
-                                            </span>
+                                            <span className="flex items-center gap-1"><UserAvatar name={task.assignee || 'Unassigned'} size="sm" className="w-4 h-4 text-[9px]"/> {task.assignee || 'Unassigned'}</span>
+                                            {task.dueDate && (
+                                                <span className={`flex items-center gap-1 ${task.status !== TaskStatusBackend.COMPLETED && new Date(task.dueDate) < new Date() ? 'text-red-500 font-bold' : ''}`}>
+                                                    <Clock className="h-3 w-3"/> Due: {task.dueDate}
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
 

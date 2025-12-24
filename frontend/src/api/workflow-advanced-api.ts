@@ -27,7 +27,7 @@ import type {
   TriggerEvent,
   WorkflowQueryFilters,
   WorkflowSortOptions,
-} from '@/types';
+} from '@/types/workflow-advanced-types';
 
 /**
  * Advanced Workflow API Service

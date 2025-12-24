@@ -41,6 +41,7 @@ import { useModalState } from '@/hooks/useModalState';
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
+import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
@@ -104,7 +105,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
   const archiveModal = useModalState();
   const [archiveCaseData, setArchiveCaseData] = React.useState<Case | null>(null);
   
-  const { items: sortedCases, requestSort, sortConfig } = useSort<Case>(filteredCases, 'filingDate', 'desc');
+  const { items: sortedCases, requestSort, sortConfig } = useSort(filteredCases as unknown as Record<string, unknown>[], 'filingDate', 'desc');
 
   // ==========================================================================
   // HOOKS - Mutations
@@ -227,19 +228,19 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
           <Input type="date" label="Filed Before" value={dateTo} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDateTo(e.target.value)} />
       </FilterPanel>
 
-      <ActiveCaseTable 
+      <ActiveCaseTable
         filteredCases={filteredCases}
-        sortedCases={sortedCases}
+        sortedCases={sortedCases as unknown as Case[]}
         requestSort={requestSort}
-        sortConfig={sortConfig}
+        sortConfig={sortConfig as { key: keyof Case; direction: 'asc' | 'desc' }}
         onSelectCase={onSelectCase}
         prefetchCaseDetails={prefetchCaseDetails}
       />
 
       {/* Mobile Virtualized Card View */}
       <div className="md:hidden flex-1 min-h-0 relative -mx-2">
-         <VirtualList 
-            items={sortedCases}
+         <VirtualList
+            items={sortedCases as unknown as Case[]}
             height="100%"
             itemHeight={120}
             renderItem={renderMobileRow}

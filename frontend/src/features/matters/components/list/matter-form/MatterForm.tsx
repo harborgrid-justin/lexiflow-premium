@@ -19,7 +19,7 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
     matterNumber: matter?.matterNumber || '',
     title: matter?.title || '',
     description: matter?.description || '',
-    matterType: matter?.matterType || (matter as LegacyMatter)?.type || MatterType.LITIGATION,
+    matterType: (matter?.matterType || (matter as LegacyMatter)?.type || MatterType.LITIGATION) as MatterType,
     status: matter?.status || MatterStatus.ACTIVE,
     priority: matter?.priority || MatterPriority.MEDIUM,
     practiceArea: matter?.practiceArea || PracticeArea.CIVIL_LITIGATION,
@@ -44,14 +44,19 @@ export const MatterForm: React.FC<MatterFormProps> = ({ matter, onSave, onCancel
     hourlyRate: matter?.hourlyRate,
     flatFee: matter?.flatFee,
     contingencyPercentage: matter?.contingencyPercentage,
-    tags: matter?.tags || [] as string[],
-    jurisdictions: matter?.jurisdictions || [] as string[],
+    tags: matter?.tags || ([] as string[]),
+    jurisdictions: matter?.jurisdictions || ([] as string[]),
     courtName: matter?.courtName || '',
     judgeAssigned: matter?.judgeAssigned || '',
-    opposingCounsel: matter?.opposingCounsel || [] as string[],
+    opposingCounsel: ((): string[] => {
+      const counsel = matter?.opposingCounsel;
+      if (Array.isArray(counsel)) {
+        return counsel.filter((c): c is string => typeof c === 'string');
+      }
+      return [];
+    })(),
     teamMembers: matter?.teamMembers || [] as string[],
-    customFields: matter?.customFields || {} as Record<string, unknown>,
-    ...(matter || {})
+    customFields: matter?.customFields || {} as Record<string, unknown>
   });
 
   const [loading, setLoading] = useState(false);

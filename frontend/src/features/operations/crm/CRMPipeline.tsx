@@ -14,7 +14,7 @@ interface CRMPipelineProps {
 
 export const CRMPipeline: React.FC<CRMPipelineProps> = ({ leads }) => {
   const { theme } = useTheme();
-  const { notifySuccess } = useNotify();
+  const { success: notifySuccess } = useNotify();
   const [draggedLeadId, setDraggedLeadId] = useState<string | null>(null);
   const [dragOverStage, setDragOverStage] = useState<string | null>(null);
   const intakeModal = useModalState();

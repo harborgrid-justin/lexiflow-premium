@@ -75,15 +75,15 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
   // DATA FETCHING
   // ============================================================================
   const { data: oppositionData = [], isLoading, error, refetch } = useQuery<OppositionEntity[]>(
-      queryKeys.warRoom.opposition(caseId),
-      () => DataService.warRoom.getOpposition(caseId)
+      queryKeys.warRoom.opposition(caseId || ''),
+      () => DataService.warRoom.getOpposition(caseId || '')
   );
 
   // ============================================================================
   // FILTER & SEARCH
   // ============================================================================
-  const { filteredItems: baseFiltered, searchQuery, setSearchQuery, category, setCategory } = useFilterAndSearch({
-    items: oppositionData,
+  const { filteredItems: baseFiltered, searchQuery, setSearchQuery, category, setCategory } = useFilterAndSearch<OppositionEntity & Record<string, unknown>>({
+    items: oppositionData as (OppositionEntity & Record<string, unknown>)[],
     config: {
       categoryField: 'role',
       searchFields: ['name', 'firm'],

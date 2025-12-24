@@ -28,26 +28,28 @@ interface ConnectionStatus {
   version?: string;
 }
 
+const DATA_SOURCES_STORE = 'data_sources';
+
 export const DataSourceService = {
-  getAll: async () => db.getAll(STORES.DATA_SOURCES),
-  getById: async (id: string) => db.get(STORES.DATA_SOURCES, id),
-  add: async (item: unknown) => db.put(STORES.DATA_SOURCES, {
+  getAll: async () => db.getAll(DATA_SOURCES_STORE),
+  getById: async (id: string) => db.get(DATA_SOURCES_STORE, id),
+  add: async (item: unknown) => db.put(DATA_SOURCES_STORE, {
     ...(item && typeof item === 'object' ? item : {}),
     connected: false,
     createdAt: new Date().toISOString()
   }),
   update: async (id: string, updates: unknown) => {
-    const existing = await db.get(STORES.DATA_SOURCES, id);
-    return db.put(STORES.DATA_SOURCES, {
+    const existing = await db.get(DATA_SOURCES_STORE, id);
+    return db.put(DATA_SOURCES_STORE, {
       ...(existing && typeof existing === 'object' ? existing : {}),
       ...(updates && typeof updates === 'object' ? updates : {})
     });
   },
-  delete: async (id: string) => db.delete(STORES.DATA_SOURCES, id),
-  
+  delete: async (id: string) => db.delete(DATA_SOURCES_STORE, id),
+
   // Data source specific methods
   getDataSources: async (filters?: { type?: string; connected?: boolean }): Promise<DataSource[]> => {
-    let sources = await db.getAll<DataSource>(STORES.DATA_SOURCES);
+    let sources = await db.getAll<DataSource>(DATA_SOURCES_STORE);
 
     if (filters?.type) {
       sources = sources.filter((s: DataSource) => s.type === filters.type);
@@ -63,16 +65,16 @@ export const DataSourceService = {
   connect: async (sourceId: string, credentials: unknown): Promise<boolean> => {
     await delay(300); // Simulate connection
     try {
-      const source = await db.get(STORES.DATA_SOURCES, sourceId);
+      const source = await db.get<DataSource>(DATA_SOURCES_STORE, sourceId);
       if (!source) throw new Error('Source not found');
-      
+
       // In production, this would establish real database connection
-      await db.put(STORES.DATA_SOURCES, { 
-        ...source, 
+      await db.put(DATA_SOURCES_STORE, {
+        ...source,
         connected: true,
-        lastSync: new Date().toISOString() 
+        lastSync: new Date().toISOString()
       });
-      
+
       console.log(`[DataSourceService] Connected to ${source.name}`);
       return true;
     } catch (err) {
@@ -80,39 +82,39 @@ export const DataSourceService = {
       return false;
     }
   },
-  
+
   disconnect: async (sourceId: string): Promise<boolean> => {
     await delay(100);
     try {
-      const source = await db.get(STORES.DATA_SOURCES, sourceId);
+      const source = await db.get<DataSource>(DATA_SOURCES_STORE, sourceId);
       if (!source) return false;
-      
-      await db.put(STORES.DATA_SOURCES, { 
-        ...source, 
-        connected: false 
+
+      await db.put(DATA_SOURCES_STORE, {
+        ...source,
+        connected: false
       });
-      
+
       console.log(`[DataSourceService] Disconnected from ${source.name}`);
       return true;
     } catch {
       return false;
     }
   },
-  
+
   sync: async (sourceId: string, options?: { fullSync?: boolean }): Promise<boolean> => {
     await delay(500); // Simulate sync operation
     try {
-      const source = await db.get(STORES.DATA_SOURCES, sourceId);
+      const source = await db.get<DataSource>(DATA_SOURCES_STORE, sourceId);
       if (!source || !source.connected) {
         throw new Error('Source not connected');
       }
-      
+
       // In production, this would pull data from external source
-      await db.put(STORES.DATA_SOURCES, {
+      await db.put(DATA_SOURCES_STORE, {
         ...source,
         lastSync: new Date().toISOString()
       });
-      
+
       console.log(`[DataSourceService] Synced ${source.name} (${options?.fullSync ? 'full' : 'incremental'})`);
       return true;
     } catch (err) {
@@ -120,11 +122,11 @@ export const DataSourceService = {
       return false;
     }
   },
-  
+
   testConnection: async (sourceId: string): Promise<ConnectionStatus> => {
     await delay(200);
     try {
-      const source = await db.get(STORES.DATA_SOURCES, sourceId);
+      const source = await db.get<DataSource>(DATA_SOURCES_STORE, sourceId);
       if (!source) {
         return { connected: false, error: 'Source not found' };
       }

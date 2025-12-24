@@ -9,7 +9,6 @@ import { ApprovalWorkflow } from './ApprovalWorkflow';
 import { Tabs } from '@/components/molecules/Tabs';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import type { ThemeTokens } from '@/components/theme/tokens';
 
 // ============================================================================
 // TYPES
@@ -17,14 +16,13 @@ import type { ThemeTokens } from '@/components/theme/tokens';
 type WorkflowTab = 'tasks' | 'dependencies' | 'approvals' | 'history';
 
 interface KPIDashboardProps {
-  theme: ThemeTokens;
+  // No props needed
 }
 
 interface WorkflowContentProps {
   activeTab: WorkflowTab;
   onApprove: (id: string) => void;
   onReject: (id: string) => void;
-  theme: ThemeTokens;
 }
 
 // ============================================================================
@@ -32,7 +30,7 @@ interface WorkflowContentProps {
 // ============================================================================
 const WORKFLOW_TABS: WorkflowTab[] = ['tasks', 'dependencies', 'approvals', 'history'];
 
-const TAB_COMPONENTS: Record<WorkflowTab, React.FC<Record<string, unknown>>> = {
+const TAB_COMPONENTS: Record<WorkflowTab, React.FC<any>> = {
   tasks: ParallelTasksManager,
   dependencies: TaskDependencyManager,
   approvals: ApprovalWorkflow,
@@ -91,23 +89,22 @@ export const EnhancedWorkflowPanel: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col space-y-6">
-      <KPIDashboard theme={theme} />
+      <KPIDashboard />
 
       <div className={cn("rounded-lg border shadow-sm flex flex-col flex-1 overflow-hidden", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b", theme.border.default)}>
-          <Tabs 
-            tabs={WORKFLOW_TABS} 
-            activeTab={activeTab} 
-            onChange={handleTabChange} 
+          <Tabs
+            tabs={WORKFLOW_TABS}
+            activeTab={activeTab}
+            onChange={handleTabChange}
           />
         </div>
-        
+
         <div className={cn("p-6 overflow-y-auto flex-1", theme.surface.highlight)}>
-          <WorkflowContent 
-            activeTab={activeTab} 
-            onApprove={handleApprove} 
+          <WorkflowContent
+            activeTab={activeTab}
+            onApprove={handleApprove}
             onReject={handleReject}
-            theme={theme}
           />
         </div>
       </div>

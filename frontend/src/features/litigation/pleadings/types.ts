@@ -41,8 +41,8 @@ export interface PleadingPaperProps {
 export interface PleadingCanvasProps {
     document: PleadingDocument;
     rules: FormattingRule;
-    readOnly: boolean;
-    viewMode: ViewMode;
+    readOnly?: boolean;
+    viewMode?: ViewMode;
     onUpdateSection: (id: string, updates: Partial<PleadingSection>) => void;
-    relatedCase: Case | null;
+    relatedCase?: Case;
 }

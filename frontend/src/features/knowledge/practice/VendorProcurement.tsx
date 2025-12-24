@@ -37,6 +37,34 @@ import { KanbanBoard, KanbanColumn, KanbanCard } from '@/components/organisms/Ka
 import { cn } from '@/utils/cn';
 
 // ============================================================================
+// TYPES
+// ============================================================================
+
+interface VendorDirectory {
+    id: string;
+    name: string;
+    category: string;
+    rating: number;
+    status: string;
+}
+
+interface VendorContract {
+    id: string;
+    vendor: string;
+    type: string;
+    value: string;
+    renewal: string;
+    status: string;
+}
+
+interface RFP {
+    id: string;
+    title: string;
+    budget: string;
+    stage: string;
+}
+
+// ============================================================================
 // COMPONENT
 // ============================================================================
 
@@ -44,17 +72,17 @@ export const VendorProcurement: React.FC = () => {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('directory');
 
-    const { data: contracts = [], isLoading: contractsLoading } = useQuery<any[]>(
+    const { data: contracts = [], isLoading: contractsLoading } = useQuery<VendorContract[]>(
         ['vendor-contracts', 'all'],
         DataService.operations.getVendorContracts
     );
-    
-    const { data: rfps = [], isLoading: rfpsLoading } = useQuery<any[]>(
+
+    const { data: rfps = [], isLoading: rfpsLoading } = useQuery<RFP[]>(
         ['rfps', 'all'],
         DataService.operations.getRfps
     );
 
-    const { data: directory = [], isLoading: directoryLoading } = useQuery<any[]>(
+    const { data: directory = [], isLoading: directoryLoading } = useQuery<VendorDirectory[]>(
         ['vendor-directory', 'all'],
         DataService.operations.getVendorDirectory
     );
@@ -89,7 +117,7 @@ export const VendorProcurement: React.FC = () => {
                         <TableContainer>
                             <TableHeader><TableHead>Vendor</TableHead><TableHead>Category</TableHead><TableHead>Rating</TableHead><TableHead>Status</TableHead></TableHeader>
                             <TableBody>
-                                {directory.map((v: unknown) => (
+                                {directory.map((v) => (
                                     <TableRow key={v.id}>
                                         <TableCell className={cn("font-bold", theme.text.primary)}>{v.name}</TableCell>
                                         <TableCell>{v.category}</TableCell>

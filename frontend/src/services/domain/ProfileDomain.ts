@@ -11,8 +11,17 @@ const CURRENT_USER_ID = 'usr-admin-justin';
 export const ProfileDomain = {
     getCurrentProfile: async (): Promise<ExtendedUserProfile> => {
         // Get user from backend API
-        const user = await authApi.users?.getCurrent?.();
-        
+        // Note: getCurrent doesn't exist on UsersApiService, fallback to mock data
+        let user: any = null;
+        try {
+            // Attempt to get user if method exists
+            if (authApi.users && typeof (authApi.users as any).getCurrent === 'function') {
+                user = await (authApi.users as any).getCurrent();
+            }
+        } catch (error) {
+            console.warn('[ProfileDomain] Could not fetch current user:', error);
+        }
+
         // Fallback if backend unavailable
         if (!user) {
              return {
@@ -118,14 +127,14 @@ export const ProfileDomain = {
     },
     getAuditLog: async (userId: string) => {
         // Fetch real audit logs for this user
-        const logs = await db.getByIndex<unknown>(STORES.LOGS, 'userId', userId);
+        const logs = await db.getByIndex<any>(STORES.LOGS, 'userId', userId);
         if (logs.length === 0) {
              return [
                 { id: 'log-1', action: 'Login', timestamp: new Date().toISOString(), ip: '192.168.1.55', device: 'MacBook Pro' },
                 { id: 'log-2', action: 'View Case', resource: 'Martinez v. TechCorp', timestamp: new Date(Date.now() - 3600000).toISOString() },
             ];
         }
-        return logs.sort((a,b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 50);
+        return logs.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 50);
     }
 };
 

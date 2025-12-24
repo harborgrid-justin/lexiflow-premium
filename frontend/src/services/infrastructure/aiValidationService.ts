@@ -118,18 +118,21 @@ export class AIValidationService {
       return { isValid: false, errors };
     }
 
+    const responseObj = response as Record<string, unknown>;
+
     // Validate nodes array
-    if (!Array.isArray(response.nodes)) {
+    if (!Array.isArray(responseObj.nodes)) {
       errors.push('AI response missing valid nodes array');
     } else {
-      this.validateNodesArray(response.nodes, errors);
+      this.validateNodesArray(responseObj.nodes, errors);
     }
 
     // Validate connections array
-    if (!Array.isArray(response.connections)) {
+    if (!Array.isArray(responseObj.connections)) {
       errors.push('AI response missing valid connections array');
     } else {
-      this.validateConnectionsArray(response.connections, response.nodes || [], errors);
+      const nodes = Array.isArray(responseObj.nodes) ? responseObj.nodes : [];
+      this.validateConnectionsArray(responseObj.connections, nodes, errors);
     }
 
     // Sanitize response
@@ -164,8 +167,20 @@ export class AIValidationService {
     }
 
     // Check for required node types
-    const hasStart = nodes.some(n => n.type === 'Start');
-    const hasEnd = nodes.some(n => n.type === 'End');
+    const hasStart = nodes.some(n => {
+      if (n && typeof n === 'object') {
+        const nodeObj = n as Record<string, unknown>;
+        return nodeObj.type === 'Start';
+      }
+      return false;
+    });
+    const hasEnd = nodes.some(n => {
+      if (n && typeof n === 'object') {
+        const nodeObj = n as Record<string, unknown>;
+        return nodeObj.type === 'End';
+      }
+      return false;
+    });
 
     if (!hasStart) {
       errors.push('AI response missing Start node');
@@ -188,7 +203,15 @@ export class AIValidationService {
       errors.push(`AI generated too many connections (max: ${CANVAS_CONSTANTS.MAX_CONNECTIONS})`);
     }
 
-    const nodeIds = new Set(nodes.map(n => n.id));
+    const nodeIds = new Set<string>();
+    nodes.forEach(n => {
+      if (n && typeof n === 'object') {
+        const nodeObj = n as Record<string, unknown>;
+        if (typeof nodeObj.id === 'string') {
+          nodeIds.add(nodeObj.id);
+        }
+      }
+    });
 
     for (let i = 0; i < Math.min(connections.length, 20); i++) {
       const conn = connections[i];
@@ -199,8 +222,13 @@ export class AIValidationService {
       }
 
       // Validate connection references existing nodes
-      if (!nodeIds.has(conn.from) || !nodeIds.has(conn.to)) {
-        errors.push(`Connection ${i} references non-existent nodes`);
+      if (conn && typeof conn === 'object') {
+        const connObj = conn as Record<string, unknown>;
+        const fromId = typeof connObj.from === 'string' ? connObj.from : '';
+        const toId = typeof connObj.to === 'string' ? connObj.to : '';
+        if (!nodeIds.has(fromId) || !nodeIds.has(toId)) {
+          errors.push(`Connection ${i} references non-existent nodes`);
+        }
       }
     }
   }
@@ -208,53 +236,67 @@ export class AIValidationService {
   /**
    * Check if node structure is valid
    */
-  private static isValidNode(node: unknown): boolean {
+  private static isValidNode(node: unknown): node is Record<string, unknown> {
+    if (!node || typeof node !== 'object') return false;
+    const nodeObj = node as Record<string, unknown>;
     return (
-      node &&
-      typeof node === 'object' &&
-      typeof node.id === 'string' &&
-      typeof node.type === 'string' &&
-      typeof node.label === 'string' &&
-      typeof node.x === 'number' &&
-      typeof node.y === 'number' &&
-      typeof node.config === 'object'
+      typeof nodeObj.id === 'string' &&
+      typeof nodeObj.type === 'string' &&
+      typeof nodeObj.label === 'string' &&
+      typeof nodeObj.x === 'number' &&
+      typeof nodeObj.y === 'number' &&
+      (nodeObj.config === undefined || nodeObj.config === null || typeof nodeObj.config === 'object')
     );
   }
 
   /**
    * Check if connection structure is valid
    */
-  private static isValidConnection(conn: unknown): boolean {
+  private static isValidConnection(conn: unknown): conn is Record<string, unknown> {
+    if (!conn || typeof conn !== 'object') return false;
+    const connObj = conn as Record<string, unknown>;
     return (
-      conn &&
-      typeof conn === 'object' &&
-      typeof conn.id === 'string' &&
-      typeof conn.from === 'string' &&
-      typeof conn.to === 'string'
+      typeof connObj.id === 'string' &&
+      typeof connObj.from === 'string' &&
+      typeof connObj.to === 'string'
     );
   }
 
   /**
    * Sanitize AI response to ensure safe values
    */
-  private static sanitizeAIResponse(response: unknown): any {
+  private static sanitizeAIResponse(response: unknown): Record<string, unknown> {
+    if (!response || typeof response !== 'object') {
+      return { nodes: [], connections: [] };
+    }
+
+    const responseObj = response as Record<string, unknown>;
+    const nodes = Array.isArray(responseObj.nodes) ? responseObj.nodes : [];
+    const connections = Array.isArray(responseObj.connections) ? responseObj.connections : [];
+
     return {
-      nodes: response.nodes.map((node: unknown) => ({
-        ...(node && typeof node === 'object' ? node : {}),
-        id: this.sanitizeString(node.id),
-        label: this.sanitizeString(node.label),
-        type: this.sanitizeString(node.type),
-        x: this.clamp(node.x, 0, 2000),
-        y: this.clamp(node.y, 0, 2000),
-        config: this.sanitizeConfig(node.config),
-      })),
-      connections: response.connections.map((conn: unknown) => ({
-        ...(conn && typeof conn === 'object' ? conn : {}),
-        id: this.sanitizeString(conn.id),
-        from: this.sanitizeString(conn.from),
-        to: this.sanitizeString(conn.to),
-        label: conn.label ? this.sanitizeString(conn.label) : undefined,
-      })),
+      nodes: nodes.map((node: unknown) => {
+        const nodeObj = node && typeof node === 'object' ? node as Record<string, unknown> : {};
+        return {
+          ...nodeObj,
+          id: this.sanitizeString(typeof nodeObj.id === 'string' ? nodeObj.id : ''),
+          label: this.sanitizeString(typeof nodeObj.label === 'string' ? nodeObj.label : ''),
+          type: this.sanitizeString(typeof nodeObj.type === 'string' ? nodeObj.type : ''),
+          x: this.clamp(typeof nodeObj.x === 'number' ? nodeObj.x : 0, 0, 2000),
+          y: this.clamp(typeof nodeObj.y === 'number' ? nodeObj.y : 0, 0, 2000),
+          config: this.sanitizeConfig(nodeObj.config),
+        };
+      }),
+      connections: connections.map((conn: unknown) => {
+        const connObj = conn && typeof conn === 'object' ? conn as Record<string, unknown> : {};
+        return {
+          ...connObj,
+          id: this.sanitizeString(typeof connObj.id === 'string' ? connObj.id : ''),
+          from: this.sanitizeString(typeof connObj.from === 'string' ? connObj.from : ''),
+          to: this.sanitizeString(typeof connObj.to === 'string' ? connObj.to : ''),
+          label: connObj.label && typeof connObj.label === 'string' ? this.sanitizeString(connObj.label) : undefined,
+        };
+      }),
     };
   }
 
@@ -269,12 +311,13 @@ export class AIValidationService {
   /**
    * Sanitize config object
    */
-  private static sanitizeConfig(config: unknown): any {
+  private static sanitizeConfig(config: unknown): Record<string, unknown> {
     if (!config || typeof config !== 'object') return {};
 
-    const sanitized: unknown = {};
-    for (const key of Object.keys(config)) {
-      const value = config[key];
+    const sanitized: Record<string, unknown> = {};
+    const configObj = config as Record<string, unknown>;
+    for (const key of Object.keys(configObj)) {
+      const value = configObj[key];
       if (typeof value === 'string') {
         sanitized[key] = this.sanitizeString(value);
       } else if (typeof value === 'number') {

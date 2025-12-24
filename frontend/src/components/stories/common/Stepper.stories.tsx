@@ -46,10 +46,10 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const steps = [
-  { id: '1', label: 'Case Information', description: 'Enter basic details' },
-  { id: '2', label: 'Parties', description: 'Add involved parties' },
-  { id: '3', label: 'Documents', description: 'Upload documents' },
-  { id: '4', label: 'Review', description: 'Confirm and submit' },
+  'Case Information',
+  'Parties',
+  'Documents',
+  'Review',
 ];
 
 export const FirstStep: Story = {

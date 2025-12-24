@@ -100,9 +100,11 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
       
       const entry: DocketEntry = {
           id: `dk-${Date.now()}` as DocketId,
-          sequenceNumber: 999, 
+          sequenceNumber: 999,
           caseId: item.caseId,
           date: new Date().toISOString().split('T')[0],
+          dateFiled: new Date().toISOString(),
+          entryDate: new Date().toISOString(),
           type: 'Filing',
           title: `Proof of Service - ${item.documentTitle}`,
           description: `Service on ${item.targetPerson} at ${item.targetAddress}. Status: ${item.status}. Server: ${item.serverName}. Signed by: ${signerName || 'N/A'}`,

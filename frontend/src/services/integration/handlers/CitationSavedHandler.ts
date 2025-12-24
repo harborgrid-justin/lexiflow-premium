@@ -22,7 +22,7 @@ export class CitationSavedHandler extends BaseEventHandler<SystemEventPayloads[t
     actions.push('Updated Pleading Builder Context Cache');
     
     // Create suggestions for high-relevance citations
-    if (citation.relevance && citation.relevance >= 8) {
+    if (citation.relevance && Number(citation.relevance) >= 8) {
       const suggestionCount = await this.createPleadingSuggestions(citation);
       if (suggestionCount > 0) {
         actions.push(`Created citation suggestions for ${suggestionCount} active pleading(s)`);

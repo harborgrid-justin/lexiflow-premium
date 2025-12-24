@@ -23,6 +23,7 @@ import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { MatterManagerContent } from './MatterManagerContent';
 import { cn } from '@/utils/cn';
 import { MatterView } from '@/config/tabs.config';
+import { MatterStatus } from '@/types';
 
 // Two-level tab configuration
 const MATTER_TABS = [
@@ -87,11 +88,11 @@ export const MatterManagement: React.FC = () => {
   const { data: invoices } = useQuery(['billing', 'invoices'], () => api.billing.getInvoices());
 
   const metrics = useMemo(() => {
-    const activeMatters = matters?.filter(m => m.status === 'ACTIVE').length || 0;
-    const intakePipeline = matters?.filter(m => m.status === 'INTAKE').length || 0;
+    const activeMatters = matters?.filter(m => m.status === MatterStatus.ACTIVE).length || 0;
+    const intakePipeline = matters?.filter(m => m.status === MatterStatus.INTAKE).length || 0;
     const upcomingDeadlines = matters?.filter(m => {
-      if (!m.nextDeadline) return false;
-      const deadline = new Date(m.nextDeadline);
+      if (!m.targetCloseDate) return false;
+      const deadline = new Date(m.targetCloseDate);
       const daysUntil = (deadline.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
       return daysUntil >= 0 && daysUntil <= 7;
     }).length || 0;

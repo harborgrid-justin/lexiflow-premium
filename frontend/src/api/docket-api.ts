@@ -146,7 +146,7 @@ export class DocketApiService {
      *   description: 'Complaint Filed'
      * });
      */
-    async add(entry: Omit<DocketEntry, 'id' | 'createdAt' | 'updatedAt'>): Promise<DocketEntry> {
+    async add(entry: Omit<DocketEntry, 'id' | 'createdAt' | 'updatedAt'> & { party?: string; summary?: string; url?: string }): Promise<DocketEntry> {
         this.validateObject(entry, 'entry', 'add');
 
         if (!entry.caseId) {
@@ -155,7 +155,7 @@ export class DocketApiService {
 
         try {
             // Transform frontend DocketEntry to backend CreateDocketEntryDto
-            const createDto = {
+            const createDto: Record<string, any> = {
                 caseId: entry.caseId,
                 sequenceNumber: entry.sequenceNumber,
                 docketNumber: entry.docketNumber,
@@ -175,14 +175,14 @@ export class DocketApiService {
                 notes: entry.notes,
                 attachments: entry.attachments,
             };
-            
+
             // Remove undefined values
             Object.keys(createDto).forEach(key => {
-                if ((createDto as any)[key] === undefined) {
-                    delete (createDto as any)[key];
+                if (createDto[key] === undefined) {
+                    delete createDto[key];
                 }
             });
-            
+
             return await apiClient.post<DocketEntry>('/docket', createDto);
         } catch (error) {
             console.error('[DocketApiService.add] Error:', error);

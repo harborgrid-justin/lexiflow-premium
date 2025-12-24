@@ -74,9 +74,11 @@ export class RuleRepository extends Repository<LegalRule> {
         const rules = await this.getAll();
         const lowerQuery = query.toLowerCase();
         return rules.filter(r =>
-            r.title?.toLowerCase().includes(lowerQuery) ||
+            (r as any).title?.toLowerCase().includes(lowerQuery) ||
             r.description?.toLowerCase().includes(lowerQuery) ||
-            r.ruleNumber?.toLowerCase().includes(lowerQuery)
+            (r as any).ruleNumber?.toLowerCase().includes(lowerQuery) ||
+            r.code?.toLowerCase().includes(lowerQuery) ||
+            r.name?.toLowerCase().includes(lowerQuery)
         );
     }
 }

@@ -24,9 +24,19 @@ const meta: Meta<typeof CopyButton> = {
       control: 'text',
       description: 'Text to copy',
     },
-    className: {
+    label: {
       control: 'text',
-      description: 'Additional CSS classes',
+      description: 'Button label text',
+    },
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary', 'ghost', 'outline'],
+      description: 'Visual style variant',
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'md'],
+      description: 'Button size',
     },
   },
   decorators: [

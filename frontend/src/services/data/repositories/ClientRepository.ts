@@ -114,7 +114,7 @@ export class ClientRepository extends Repository<Client> {
     override async getAll(): Promise<Client[]> {
         if (this.useBackend) {
             try {
-                return await this.clientsApi.getAll();
+                return await this.clientsApi.getAll() as any;
             } catch (error) {
                 console.warn('[ClientRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -140,7 +140,7 @@ export class ClientRepository extends Repository<Client> {
 
         if (this.useBackend) {
             try {
-                return await this.clientsApi.getById(id);
+                return await this.clientsApi.getById(id) as any;
             } catch (error) {
                 console.warn('[ClientRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -177,7 +177,7 @@ export class ClientRepository extends Repository<Client> {
 
         if (this.useBackend) {
             try {
-                return await this.clientsApi.add(item as any);
+                return await this.clientsApi.create(item as any) as any;
             } catch (error) {
                 console.warn('[ClientRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -218,7 +218,7 @@ export class ClientRepository extends Repository<Client> {
 
         if (this.useBackend) {
             try {
-                return await this.clientsApi.update(id, updates);
+                return await this.clientsApi.update(id, updates as any) as any;
             } catch (error) {
                 console.warn('[ClientRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -365,9 +365,8 @@ export class ClientRepository extends Repository<Client> {
     async getActive(): Promise<Client[]> {
         try {
             const clients = await this.getAll();
-            return clients.filter(client => 
-                client.status === 'active' || 
-                client.status === 'Active' ||
+            return clients.filter(client =>
+                client.status?.toString().toLowerCase() === 'active' ||
                 !client.status
             );
         } catch (error) {
@@ -385,9 +384,8 @@ export class ClientRepository extends Repository<Client> {
     async getInactive(): Promise<Client[]> {
         try {
             const clients = await this.getAll();
-            return clients.filter(client => 
-                client.status === 'inactive' || 
-                client.status === 'Inactive'
+            return clients.filter(client =>
+                client.status?.toString().toLowerCase() === 'inactive'
             );
         } catch (error) {
             console.error('[ClientRepository.getInactive] Error:', error);
@@ -409,8 +407,8 @@ export class ClientRepository extends Repository<Client> {
 
         try {
             const clients = await this.getAll();
-            return clients.filter(client => 
-                client.type === type || 
+            return clients.filter(client =>
+                (client as any).type === type ||
                 client.clientType === type
             );
         } catch (error) {
@@ -439,10 +437,10 @@ export class ClientRepository extends Repository<Client> {
             return clients.filter(client =>
                 client.name?.toLowerCase().includes(lowerQuery) ||
                 client.email?.toLowerCase().includes(lowerQuery) ||
-                client.company?.toLowerCase().includes(lowerQuery) ||
+                (client as any).company?.toLowerCase().includes(lowerQuery) ||
                 client.notes?.toLowerCase().includes(lowerQuery) ||
-                client.firstName?.toLowerCase().includes(lowerQuery) ||
-                client.lastName?.toLowerCase().includes(lowerQuery) ||
+                (client as any).firstName?.toLowerCase().includes(lowerQuery) ||
+                (client as any).lastName?.toLowerCase().includes(lowerQuery) ||
                 client.phone?.includes(query)
             );
         } catch (error) {
@@ -501,14 +499,15 @@ export class ClientRepository extends Repository<Client> {
 
             clients.forEach(client => {
                 // Count by status
-                if (client.status === 'active' || client.status === 'Active' || !client.status) {
+                const statusStr = client.status?.toString().toLowerCase();
+                if (statusStr === 'active' || !client.status) {
                     active++;
-                } else if (client.status === 'inactive' || client.status === 'Inactive') {
+                } else if (statusStr === 'inactive') {
                     inactive++;
                 }
 
                 // Count by type
-                const type = client.type || client.clientType || 'Unknown';
+                const type = (client as any).type || client.clientType || 'Unknown';
                 byType[type] = (byType[type] || 0) + 1;
 
                 // Count recently added

@@ -132,23 +132,23 @@ export class DocumentRepository extends Repository<LegalDocument> {
      * const allDocs = await repo.getAll();
      * const caseDocs = await repo.getAll({ caseId: 'case-123' });
      */
-    async getAll(filters?: { caseId?: string; type?: string; status?: string }): Promise<LegalDocument[]> {
-        if (this.useBackend) {
+    override async getAll(options?: { caseId?: string; type?: string; status?: string; includeDeleted?: boolean; limit?: number; cursor?: string }): Promise<LegalDocument[]> {
+        if (this.useBackend && options && (options.caseId || options.type || options.status)) {
             try {
-                return await this.documentsApi.getAll(filters);
+                return await this.documentsApi.getAll(options);
             } catch (error) {
                 console.warn('[DocumentRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
         }
 
         try {
-            const docs = await super.getAll();
-            if (!filters) return docs;
+            const docs = await super.getAll(options);
+            if (!options || (!options.caseId && !options.type && !options.status)) return docs;
 
             return docs.filter(doc => {
-                if (filters.caseId && doc.caseId !== filters.caseId) return false;
-                if (filters.type && doc.type !== filters.type) return false;
-                if (filters.status && doc.status !== filters.status) return false;
+                if (options.caseId && doc.caseId !== options.caseId) return false;
+                if (options.type && doc.type !== options.type) return false;
+                if (options.status && doc.status !== options.status) return false;
                 return true;
             });
         } catch (error) {

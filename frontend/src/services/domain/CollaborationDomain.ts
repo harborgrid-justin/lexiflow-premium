@@ -46,26 +46,34 @@ interface Share {
   sharedAt: string;
 }
 
+// Define local store names for collaboration features
+const WORKSPACES_STORE = 'workspaces';
+const COMMENTS_STORE = 'comments';
+const SHARES_STORE = 'shares';
+
 export const CollaborationService = {
-  getAll: async () => db.getAll(STORES.WORKSPACES),
-  getById: async (id: string) => db.get(STORES.WORKSPACES, id),
-  add: async (item: unknown) => db.put(STORES.WORKSPACES, {
-    ...(item && typeof item === 'object' ? item : {}),
-    createdAt: new Date().toISOString(),
-    members: item.members || []
-  }),
+  getAll: async () => db.getAll(WORKSPACES_STORE),
+  getById: async (id: string) => db.get(WORKSPACES_STORE, id),
+  add: async (item: unknown) => {
+    const itemObj = item && typeof item === 'object' ? item as Record<string, unknown> : {};
+    return db.put(WORKSPACES_STORE, {
+      ...itemObj,
+      createdAt: new Date().toISOString(),
+      members: Array.isArray(itemObj.members) ? itemObj.members : []
+    });
+  },
   update: async (id: string, updates: unknown) => {
-    const existing = await db.get(STORES.WORKSPACES, id);
-    return db.put(STORES.WORKSPACES, {
+    const existing = await db.get(WORKSPACES_STORE, id);
+    return db.put(WORKSPACES_STORE, {
       ...(existing && typeof existing === 'object' ? existing : {}),
       ...(updates && typeof updates === 'object' ? updates : {})
     });
   },
-  delete: async (id: string) => db.delete(STORES.WORKSPACES, id),
-  
+  delete: async (id: string) => db.delete(WORKSPACES_STORE, id),
+
   // Collaboration specific methods
   getWorkspaces: async (userId?: string): Promise<Workspace[]> => {
-    const workspaces = await db.getAll<Workspace>(STORES.WORKSPACES);
+    const workspaces = await db.getAll<Workspace>(WORKSPACES_STORE);
 
     if (userId) {
       return workspaces.filter((w: Workspace) =>
@@ -86,32 +94,32 @@ export const CollaborationService = {
       createdAt: new Date().toISOString(),
       settings: workspace.settings || { visibility: 'private' },
     };
-    
-    await db.put(STORES.WORKSPACES, newWorkspace);
+
+    await db.put(WORKSPACES_STORE, newWorkspace);
     return newWorkspace;
   },
-  
+
   inviteUser: async (workspaceId: string, userId: string): Promise<boolean> => {
     await delay(100);
     try {
-      const workspace = await db.get(STORES.WORKSPACES, workspaceId);
+      const workspace = await db.get<Workspace>(WORKSPACES_STORE, workspaceId);
       if (!workspace) return false;
-      
+
       if (!workspace.members.includes(userId)) {
         workspace.members.push(userId);
-        await db.put(STORES.WORKSPACES, workspace);
+        await db.put(WORKSPACES_STORE, workspace);
       }
-      
+
       console.log(`[CollaborationService] Invited user ${userId} to workspace ${workspaceId}`);
       return true;
     } catch {
       return false;
     }
   },
-  
+
   getComments: async (resourceId: string): Promise<Comment[]> => {
     await delay(50);
-    const comments = await db.getAll<Comment>(STORES.COMMENTS);
+    const comments = await db.getAll<Comment>(COMMENTS_STORE);
     return comments
       .filter((c: Comment) => c.resourceId === resourceId)
       .sort((a: Comment, b: Comment) =>
@@ -130,14 +138,14 @@ export const CollaborationService = {
       createdAt: new Date().toISOString(),
       mentions: comment.mentions,
     };
-    
-    await db.put(STORES.COMMENTS, newComment);
+
+    await db.put(COMMENTS_STORE, newComment);
     return newComment;
   },
-  
+
   shareResource: async (
-    resourceId: string, 
-    userId: string, 
+    resourceId: string,
+    userId: string,
     options?: { permissions?: 'view' | 'edit' | 'admin'; resourceType?: string }
   ): Promise<boolean> => {
     await delay(100);
@@ -151,8 +159,8 @@ export const CollaborationService = {
         sharedBy: 'current-user', // In production, get from auth context
         sharedAt: new Date().toISOString(),
       };
-      
-      await db.put(STORES.SHARES, share);
+
+      await db.put(SHARES_STORE, share);
       console.log(`[CollaborationService] Shared ${resourceId} with ${userId}`);
       return true;
     } catch {

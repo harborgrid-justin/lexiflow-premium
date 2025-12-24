@@ -94,7 +94,7 @@ export const RateTableManagement: React.FC = () => {
       await DataService.rateTables.delete(tableSelection.selected.id);
       await refetch();
       deleteModal.close();
-      tableSelection.clearSelection();
+      tableSelection.deselect();
       notify.success('Rate table deleted successfully');
     } catch (error) {
       notify.error('Failed to delete rate table');

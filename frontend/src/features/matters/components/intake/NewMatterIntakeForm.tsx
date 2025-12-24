@@ -28,11 +28,12 @@ import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card';
 import { Badge } from '@/components/atoms/Badge';
+import type { Matter } from '@/types';
 
 type IntakeStep = 'client' | 'matter' | 'conflicts' | 'team' | 'financial' | 'review';
 
 export const NewMatterIntakeForm: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   const [currentStep, setCurrentStep] = useState<IntakeStep>('client');
   const [formData, setFormData] = useState({
     // Client Info
@@ -72,12 +73,12 @@ export const NewMatterIntakeForm: React.FC = () => {
   // Check for conflicts
   const conflictCheck = useMemo(() => {
     if (!existingMatters || !formData.clientName) return { hasConflict: false, conflicts: [] };
-    
-    const conflicts = existingMatters.filter(m => 
+
+    const conflicts = existingMatters.filter(m =>
       m.clientName?.toLowerCase().includes(formData.clientName.toLowerCase()) ||
-      m.opposingParty?.toLowerCase().includes(formData.clientName.toLowerCase())
+      m.opposingPartyName?.toLowerCase().includes(formData.clientName.toLowerCase())
     );
-    
+
     return {
       hasConflict: conflicts.length > 0,
       conflicts,
@@ -109,25 +110,25 @@ export const NewMatterIntakeForm: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-      const newMatter = {
+      const newMatter: Partial<Matter> = {
         title: formData.matterTitle,
         matterNumber: `M-${Date.now()}`,
         clientName: formData.clientName,
         clientEmail: formData.clientEmail,
         clientPhone: formData.clientPhone,
-        matterType: formData.matterType,
-        practiceArea: formData.practiceArea,
+        matterType: formData.matterType as any,
+        practiceArea: formData.practiceArea as any,
         description: formData.description,
         jurisdiction: formData.jurisdiction,
-        priority: formData.priority.toUpperCase(),
-        status: 'INTAKE',
-        assignedAttorneyId: formData.leadAttorneyId,
-        teamMemberIds: formData.supportTeam,
+        priority: formData.priority.toUpperCase() as any,
+        status: 'INTAKE' as any,
+        leadAttorneyId: formData.leadAttorneyId as any,
+        teamMembers: formData.supportTeam as any,
         billingType: formData.billingType,
         estimatedValue: parseFloat(formData.estimatedValue) || 0,
         retainerAmount: parseFloat(formData.retainerAmount) || 0,
       };
-      
+
       await api.matters.create(newMatter);
       
       // Show success message and redirect
@@ -140,9 +141,9 @@ export const NewMatterIntakeForm: React.FC = () => {
   };
 
   return (
-    <div className={cn('h-full flex flex-col', theme === 'dark' ? 'bg-slate-900' : 'bg-slate-50')}>
+    <div className={cn('h-full flex flex-col', mode === 'dark' ? 'bg-slate-900' : 'bg-slate-50')}>
       {/* Progress Stepper */}
-      <div className={cn('border-b px-6 py-4', theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
+      <div className={cn('border-b px-6 py-4', mode === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
         <div className="flex items-center justify-between max-w-4xl mx-auto">
           {steps.map((step, index) => {
             const Icon = step.icon;
@@ -158,7 +159,7 @@ export const NewMatterIntakeForm: React.FC = () => {
                       ? 'bg-blue-500 text-white'
                       : isCompleted
                       ? 'bg-emerald-500 text-white'
-                      : theme === 'dark'
+                      : mode === 'dark'
                       ? 'bg-slate-700 text-slate-400'
                       : 'bg-slate-200 text-slate-600'
                   )}>
@@ -167,8 +168,8 @@ export const NewMatterIntakeForm: React.FC = () => {
                   <span className={cn(
                     'text-xs text-center',
                     isActive
-                      ? theme === 'dark' ? 'text-slate-100 font-semibold' : 'text-slate-900 font-semibold'
-                      : theme === 'dark' ? 'text-slate-400' : 'text-slate-600'
+                      ? mode === 'dark' ? 'text-slate-100 font-semibold' : 'text-slate-900 font-semibold'
+                      : mode === 'dark' ? 'text-slate-400' : 'text-slate-600'
                   )}>
                     {step.title}
                   </span>
@@ -178,7 +179,7 @@ export const NewMatterIntakeForm: React.FC = () => {
                     'h-0.5 flex-1 mx-2',
                     index < currentStepIndex
                       ? 'bg-emerald-500'
-                      : theme === 'dark' ? 'bg-slate-700' : 'bg-slate-200'
+                      : mode === 'dark' ? 'bg-slate-700' : 'bg-slate-200'
                   )} />
                 )}
               </div>
@@ -190,17 +191,17 @@ export const NewMatterIntakeForm: React.FC = () => {
       {/* Form Content */}
       <div className="flex-1 overflow-auto p-6">
         <Card className="max-w-3xl mx-auto p-8">
-          {currentStep === 'client' && <ClientInfoStep formData={formData} setFormData={setFormData} theme={theme} />}
-          {currentStep === 'matter' && <MatterDetailsStep formData={formData} setFormData={setFormData} theme={theme} />}
-          {currentStep === 'conflicts' && <ConflictCheckStep conflictCheck={conflictCheck} theme={theme} />}
-          {currentStep === 'team' && <TeamAssignmentStep formData={formData} setFormData={setFormData} users={users} theme={theme} />}
-          {currentStep === 'financial' && <FinancialSetupStep formData={formData} setFormData={setFormData} theme={theme} />}
-          {currentStep === 'review' && <ReviewStep formData={formData} theme={theme} />}
+          {currentStep === 'client' && <ClientInfoStep formData={formData} setFormData={setFormData} />}
+          {currentStep === 'matter' && <MatterDetailsStep formData={formData} setFormData={setFormData} />}
+          {currentStep === 'conflicts' && <ConflictCheckStep conflictCheck={conflictCheck} />}
+          {currentStep === 'team' && <TeamAssignmentStep formData={formData} setFormData={setFormData} users={users} />}
+          {currentStep === 'financial' && <FinancialSetupStep formData={formData} setFormData={setFormData} />}
+          {currentStep === 'review' && <ReviewStep formData={formData} />}
         </Card>
       </div>
 
       {/* Navigation Footer */}
-      <div className={cn('border-t px-6 py-4', theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
+      <div className={cn('border-t px-6 py-4', mode === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <Button
             variant="outline"
@@ -234,14 +235,16 @@ export const NewMatterIntakeForm: React.FC = () => {
 };
 
 // Step Components
-const ClientInfoStep: React.FC<any> = ({ formData, setFormData, theme }) => (
+const ClientInfoStep: React.FC<any> = ({ formData, setFormData }) => {
+  const { mode } = useTheme();
+  return (
   <div className="space-y-6">
-    <h2 className={cn('text-xl font-semibold mb-4', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+    <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
       Client Information
     </h2>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
-        <label className={cn('block text-sm font-medium mb-2', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
           Client Name *
         </label>
         <input
@@ -250,14 +253,14 @@ const ClientInfoStep: React.FC<any> = ({ formData, setFormData, theme }) => (
           onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
           className={cn(
             'w-full px-3 py-2 rounded-lg border',
-            theme === 'dark'
+            mode === 'dark'
               ? 'bg-slate-700 border-slate-600 text-slate-100'
               : 'bg-white border-slate-300 text-slate-900'
           )}
         />
       </div>
       <div>
-        <label className={cn('block text-sm font-medium mb-2', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
           Client Type *
         </label>
         <select
@@ -265,7 +268,7 @@ const ClientInfoStep: React.FC<any> = ({ formData, setFormData, theme }) => (
           onChange={(e) => setFormData({ ...formData, clientType: e.target.value })}
           className={cn(
             'w-full px-3 py-2 rounded-lg border',
-            theme === 'dark'
+            mode === 'dark'
               ? 'bg-slate-700 border-slate-600 text-slate-100'
               : 'bg-white border-slate-300 text-slate-900'
           )}
@@ -277,7 +280,7 @@ const ClientInfoStep: React.FC<any> = ({ formData, setFormData, theme }) => (
         </select>
       </div>
       <div>
-        <label className={cn('block text-sm font-medium mb-2', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
           Email *
         </label>
         <input
@@ -286,14 +289,14 @@ const ClientInfoStep: React.FC<any> = ({ formData, setFormData, theme }) => (
           onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
           className={cn(
             'w-full px-3 py-2 rounded-lg border',
-            theme === 'dark'
+            mode === 'dark'
               ? 'bg-slate-700 border-slate-600 text-slate-100'
               : 'bg-white border-slate-300 text-slate-900'
           )}
         />
       </div>
       <div>
-        <label className={cn('block text-sm font-medium mb-2', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
           Phone
         </label>
         <input
@@ -302,7 +305,7 @@ const ClientInfoStep: React.FC<any> = ({ formData, setFormData, theme }) => (
           onChange={(e) => setFormData({ ...formData, clientPhone: e.target.value })}
           className={cn(
             'w-full px-3 py-2 rounded-lg border',
-            theme === 'dark'
+            mode === 'dark'
               ? 'bg-slate-700 border-slate-600 text-slate-100'
               : 'bg-white border-slate-300 text-slate-900'
           )}
@@ -310,16 +313,19 @@ const ClientInfoStep: React.FC<any> = ({ formData, setFormData, theme }) => (
       </div>
     </div>
   </div>
-);
+  );
+};
 
-const MatterDetailsStep: React.FC<any> = ({ formData, setFormData, theme }) => (
+const MatterDetailsStep: React.FC<any> = ({ formData, setFormData }) => {
+  const { mode } = useTheme();
+  return (
   <div className="space-y-6">
-    <h2 className={cn('text-xl font-semibold mb-4', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+    <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
       Matter Details
     </h2>
     <div className="space-y-4">
       <div>
-        <label className={cn('block text-sm font-medium mb-2', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
           Matter Title *
         </label>
         <input
@@ -328,7 +334,7 @@ const MatterDetailsStep: React.FC<any> = ({ formData, setFormData, theme }) => (
           onChange={(e) => setFormData({ ...formData, matterTitle: e.target.value })}
           className={cn(
             'w-full px-3 py-2 rounded-lg border',
-            theme === 'dark'
+            mode === 'dark'
               ? 'bg-slate-700 border-slate-600 text-slate-100'
               : 'bg-white border-slate-300 text-slate-900'
           )}
@@ -336,7 +342,7 @@ const MatterDetailsStep: React.FC<any> = ({ formData, setFormData, theme }) => (
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className={cn('block text-sm font-medium mb-2', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+          <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
             Matter Type *
           </label>
           <select
@@ -344,7 +350,7 @@ const MatterDetailsStep: React.FC<any> = ({ formData, setFormData, theme }) => (
             onChange={(e) => setFormData({ ...formData, matterType: e.target.value })}
             className={cn(
               'w-full px-3 py-2 rounded-lg border',
-              theme === 'dark'
+              mode === 'dark'
                 ? 'bg-slate-700 border-slate-600 text-slate-100'
                 : 'bg-white border-slate-300 text-slate-900'
             )}
@@ -357,7 +363,7 @@ const MatterDetailsStep: React.FC<any> = ({ formData, setFormData, theme }) => (
           </select>
         </div>
         <div>
-          <label className={cn('block text-sm font-medium mb-2', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+          <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
             Practice Area *
           </label>
           <select
@@ -365,7 +371,7 @@ const MatterDetailsStep: React.FC<any> = ({ formData, setFormData, theme }) => (
             onChange={(e) => setFormData({ ...formData, practiceArea: e.target.value })}
             className={cn(
               'w-full px-3 py-2 rounded-lg border',
-              theme === 'dark'
+              mode === 'dark'
                 ? 'bg-slate-700 border-slate-600 text-slate-100'
                 : 'bg-white border-slate-300 text-slate-900'
             )}
@@ -379,7 +385,7 @@ const MatterDetailsStep: React.FC<any> = ({ formData, setFormData, theme }) => (
         </div>
       </div>
       <div>
-        <label className={cn('block text-sm font-medium mb-2', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
           Description
         </label>
         <textarea
@@ -388,7 +394,7 @@ const MatterDetailsStep: React.FC<any> = ({ formData, setFormData, theme }) => (
           rows={4}
           className={cn(
             'w-full px-3 py-2 rounded-lg border',
-            theme === 'dark'
+            mode === 'dark'
               ? 'bg-slate-700 border-slate-600 text-slate-100'
               : 'bg-white border-slate-300 text-slate-900'
           )}
@@ -396,45 +402,48 @@ const MatterDetailsStep: React.FC<any> = ({ formData, setFormData, theme }) => (
       </div>
     </div>
   </div>
-);
+  );
+};
 
-const ConflictCheckStep: React.FC<any> = ({ conflictCheck, theme }) => (
+const ConflictCheckStep: React.FC<any> = ({ conflictCheck }) => {
+  const { mode } = useTheme();
+  return (
   <div className="space-y-6">
-    <h2 className={cn('text-xl font-semibold mb-4', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+    <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
       Conflict Check
     </h2>
     {!conflictCheck.hasConflict ? (
-      <div className={cn('p-6 rounded-lg border', theme === 'dark' ? 'bg-emerald-900/20 border-emerald-700' : 'bg-emerald-50 border-emerald-200')}>
+      <div className={cn('p-6 rounded-lg border', mode === 'dark' ? 'bg-emerald-900/20 border-emerald-700' : 'bg-emerald-50 border-emerald-200')}>
         <div className="flex items-center gap-3">
           <CheckCircle className="w-6 h-6 text-emerald-500" />
           <div>
-            <div className={cn('font-semibold', theme === 'dark' ? 'text-emerald-400' : 'text-emerald-700')}>
+            <div className={cn('font-semibold', mode === 'dark' ? 'text-emerald-400' : 'text-emerald-700')}>
               No Conflicts Detected
             </div>
-            <div className={cn('text-sm mt-1', theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+            <div className={cn('text-sm mt-1', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
               Automated conflict check completed successfully. No conflicts found with existing matters or clients.
             </div>
           </div>
         </div>
       </div>
     ) : (
-      <div className={cn('p-6 rounded-lg border', theme === 'dark' ? 'bg-amber-900/20 border-amber-700' : 'bg-amber-50 border-amber-200')}>
+      <div className={cn('p-6 rounded-lg border', mode === 'dark' ? 'bg-amber-900/20 border-amber-700' : 'bg-amber-50 border-amber-200')}>
         <div className="flex items-start gap-3">
           <AlertTriangle className="w-6 h-6 text-amber-500" />
           <div className="flex-1">
-            <div className={cn('font-semibold', theme === 'dark' ? 'text-amber-400' : 'text-amber-700')}>
+            <div className={cn('font-semibold', mode === 'dark' ? 'text-amber-400' : 'text-amber-700')}>
               Potential Conflicts Found
             </div>
-            <div className={cn('text-sm mt-1', theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+            <div className={cn('text-sm mt-1', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
               {conflictCheck.conflicts.length} potential conflict(s) detected. Please review before proceeding.
             </div>
             <div className="mt-4 space-y-2">
               {conflictCheck.conflicts.map((matter: any) => (
-                <div key={matter.id} className={cn('p-3 rounded border text-sm', theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
-                  <div className={cn('font-medium', theme === 'dark' ? 'text-slate-200' : 'text-slate-800')}>
+                <div key={matter.id} className={cn('p-3 rounded border text-sm', mode === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
+                  <div className={cn('font-medium', mode === 'dark' ? 'text-slate-200' : 'text-slate-800')}>
                     {matter.title}
                   </div>
-                  <div className={cn('text-xs mt-1', theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+                  <div className={cn('text-xs mt-1', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
                     Client: {matter.clientName}
                   </div>
                 </div>
@@ -445,15 +454,18 @@ const ConflictCheckStep: React.FC<any> = ({ conflictCheck, theme }) => (
       </div>
     )}
   </div>
-);
+  );
+};
 
-const TeamAssignmentStep: React.FC<any> = ({ formData, setFormData, users, theme }) => (
+const TeamAssignmentStep: React.FC<any> = ({ formData, setFormData, users }) => {
+  const { mode } = useTheme();
+  return (
   <div className="space-y-6">
-    <h2 className={cn('text-xl font-semibold mb-4', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+    <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
       Team Assignment
     </h2>
     <div>
-      <label className={cn('block text-sm font-medium mb-2', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+      <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
         Lead Attorney *
       </label>
       <select
@@ -461,13 +473,13 @@ const TeamAssignmentStep: React.FC<any> = ({ formData, setFormData, users, theme
         onChange={(e) => setFormData({ ...formData, leadAttorneyId: e.target.value })}
         className={cn(
           'w-full px-3 py-2 rounded-lg border',
-          theme === 'dark'
+          mode === 'dark'
             ? 'bg-slate-700 border-slate-600 text-slate-100'
             : 'bg-white border-slate-300 text-slate-900'
         )}
       >
         <option value="">Select attorney...</option>
-        {users?.filter(u => u.role === 'ATTORNEY' || u.role === 'PARTNER').map(user => (
+        {users?.filter((u: any) => u.role === 'ATTORNEY' || u.role === 'PARTNER').map((user: any) => (
           <option key={user.id} value={user.id}>
             {user.name || user.email} {user.role ? `- ${user.role}` : ''}
           </option>
@@ -475,16 +487,19 @@ const TeamAssignmentStep: React.FC<any> = ({ formData, setFormData, users, theme
       </select>
     </div>
   </div>
-);
+  );
+};
 
-const FinancialSetupStep: React.FC<any> = ({ formData, setFormData, theme }) => (
+const FinancialSetupStep: React.FC<any> = ({ formData, setFormData }) => {
+  const { mode } = useTheme();
+  return (
   <div className="space-y-6">
-    <h2 className={cn('text-xl font-semibold mb-4', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+    <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
       Financial Setup
     </h2>
     <div className="grid grid-cols-2 gap-4">
       <div>
-        <label className={cn('block text-sm font-medium mb-2', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
           Billing Type *
         </label>
         <select
@@ -492,7 +507,7 @@ const FinancialSetupStep: React.FC<any> = ({ formData, setFormData, theme }) => 
           onChange={(e) => setFormData({ ...formData, billingType: e.target.value })}
           className={cn(
             'w-full px-3 py-2 rounded-lg border',
-            theme === 'dark'
+            mode === 'dark'
               ? 'bg-slate-700 border-slate-600 text-slate-100'
               : 'bg-white border-slate-300 text-slate-900'
           )}
@@ -504,7 +519,7 @@ const FinancialSetupStep: React.FC<any> = ({ formData, setFormData, theme }) => 
         </select>
       </div>
       <div>
-        <label className={cn('block text-sm font-medium mb-2', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
           Hourly Rate
         </label>
         <input
@@ -513,7 +528,7 @@ const FinancialSetupStep: React.FC<any> = ({ formData, setFormData, theme }) => 
           onChange={(e) => setFormData({ ...formData, hourlyRate: e.target.value })}
           className={cn(
             'w-full px-3 py-2 rounded-lg border',
-            theme === 'dark'
+            mode === 'dark'
               ? 'bg-slate-700 border-slate-600 text-slate-100'
               : 'bg-white border-slate-300 text-slate-900'
           )}
@@ -521,30 +536,34 @@ const FinancialSetupStep: React.FC<any> = ({ formData, setFormData, theme }) => 
       </div>
     </div>
   </div>
-);
+  );
+};
 
-const ReviewStep: React.FC<any> = ({ formData, theme }) => (
+const ReviewStep: React.FC<any> = ({ formData }) => {
+  const { mode } = useTheme();
+  return (
   <div className="space-y-6">
-    <h2 className={cn('text-xl font-semibold mb-4', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+    <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
       Review & Submit
     </h2>
     <div className="space-y-4">
       <div>
-        <h3 className={cn('font-semibold mb-2', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+        <h3 className={cn('font-semibold mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
           Client Information
         </h3>
-        <div className={cn('text-sm', theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+        <div className={cn('text-sm', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
           {formData.clientName} • {formData.clientType} • {formData.clientEmail}
         </div>
       </div>
       <div>
-        <h3 className={cn('font-semibold mb-2', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+        <h3 className={cn('font-semibold mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
           Matter Details
         </h3>
-        <div className={cn('text-sm', theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+        <div className={cn('text-sm', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
           {formData.matterTitle} • {formData.matterType} • {formData.practiceArea}
         </div>
       </div>
     </div>
   </div>
-);
+  );
+};

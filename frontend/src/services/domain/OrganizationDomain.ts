@@ -49,29 +49,40 @@ interface Member {
 }
 
 export const OrganizationService = {
-  getAll: async () => adminApi.organizations?.getAll?.() || [],
-  getById: async (id: string) => adminApi.organizations?.getById?.(id) || null,
+  getAll: async () => {
+    // Organizations are managed separately, not via adminApi
+    const orgs = await db.getAll<Organization>(STORES.ORGS);
+    return orgs;
+  },
+  getById: async (id: string) => {
+    const org = await db.get<Organization>(STORES.ORGS, id);
+    return org || null;
+  },
   add: async (item: unknown) => {
     const org = {
       ...(item && typeof item === 'object' ? item : {}),
       createdAt: new Date().toISOString()
     };
-    return adminApi.organizations?.create?.(org) || org;
+    await db.put(STORES.ORGS, org);
+    return org;
   },
   update: async (id: string, updates: unknown) => {
-    return adminApi.organizations?.update?.(id, updates) || {
-      id,
+    const existing = await db.get<Organization>(STORES.ORGS, id);
+    const updated = {
+      ...(existing && typeof existing === 'object' ? existing : {}),
       ...(updates && typeof updates === 'object' ? updates : {})
     };
+    await db.put(STORES.ORGS, updated);
+    return updated;
   },
   delete: async (id: string) => {
-    await adminApi.organizations?.delete?.(id);
+    await db.delete(STORES.ORGS, id);
     return true;
   },
   
   // Organization specific methods
   getOrganizations: async (filters?: { type?: string }): Promise<Organization[]> => {
-    let orgs = await db.getAll<Organization>(STORES.ORGANIZATIONS);
+    let orgs = await db.getAll<Organization>(STORES.ORGS);
 
     if (filters?.type) {
       orgs = orgs.filter((o: Organization) => o.type === filters.type);
@@ -82,13 +93,13 @@ export const OrganizationService = {
 
   getDepartments: async (orgId: string): Promise<Department[]> => {
     await delay(50);
-    const departments = await db.getAll<Department>(STORES.DEPARTMENTS);
+    const departments = await db.getAll<Department>('departments');
     return departments.filter((d: Department) => d.orgId === orgId);
   },
 
   getMembers: async (orgId: string, departmentId?: string): Promise<Member[]> => {
     await delay(50);
-    let members = await db.getAll<Member>(STORES.MEMBERS);
+    let members = await db.getAll<Member>('org_members');
 
     members = members.filter((m: Member) => m.orgId === orgId);
 
@@ -98,22 +109,22 @@ export const OrganizationService = {
 
     return members;
   },
-  
+
   updateSettings: async (orgId: string, settings: Partial<OrgSettings>): Promise<OrgSettings> => {
     await delay(100);
-    const org = await db.get(STORES.ORGANIZATIONS, orgId);
+    const org = await db.get<Organization>(STORES.ORGS, orgId);
     if (!org) throw new Error('Organization not found');
-    
-    const updatedSettings = { ...org.settings, ...settings };
-    
-    await db.put(STORES.ORGANIZATIONS, {
+
+    const updatedSettings = { ...(org.settings || {}), ...settings };
+
+    await db.put(STORES.ORGS, {
       ...org,
       settings: updatedSettings,
     });
-    
+
     return updatedSettings;
   },
-  
+
   createDepartment: async (department: Partial<Department>): Promise<Department> => {
     const newDept: Department = {
       id: `dept-${Date.now()}`,
@@ -124,11 +135,11 @@ export const OrganizationService = {
       description: department.description,
       memberCount: 0,
     };
-    
-    await db.put(STORES.DEPARTMENTS, newDept);
+
+    await db.put('departments', newDept);
     return newDept;
   },
-  
+
   addMember: async (member: Partial<Member>): Promise<Member> => {
     const newMember: Member = {
       id: `member-${Date.now()}`,
@@ -139,8 +150,8 @@ export const OrganizationService = {
       title: member.title,
       joinedAt: new Date().toISOString(),
     };
-    
-    await db.put(STORES.MEMBERS, newMember);
+
+    await db.put('org_members', newMember);
     return newMember;
   },
 };

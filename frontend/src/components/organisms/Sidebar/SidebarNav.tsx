@@ -90,7 +90,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
         const prefetchConfig = PREFETCH_MAP[item.id];
         if (prefetchConfig) {
             // Using a longer stale time for hover-prefetches (2 mins) to avoid redundant DB hits
-            queryClient.fetch(prefetchConfig.key, prefetchConfig.fn, 120000);
+            queryClient.fetch(prefetchConfig.key as readonly (string | number | Record<string, unknown> | undefined)[], prefetchConfig.fn, 120000);
         }
       }, 'background');
     },
@@ -136,7 +136,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
                     {item.children && item.children.length > 0 && (isActive || isChildActive) && (
                       <div className="ml-4 mt-1 space-y-0.5 border-l-2 border-slate-200 dark:border-slate-700 pl-2">
                         {item.children.map(child => {
-                          const ChildIcon = child.icon;
+                          const ChildIcon = child.icon as React.ComponentType<{ className?: string }>;
                           const isChildItemActive = activeView === child.id;
                           return (
                             <button
@@ -144,12 +144,12 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
                               onClick={() => setActiveView(child.id)}
                               className={cn(
                                 "w-full flex items-center space-x-2 px-2 h-8 rounded text-xs font-medium transition-all duration-200 group",
-                                isChildItemActive 
-                                  ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300" 
+                                isChildItemActive
+                                  ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
                                   : cn(theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.text.primary}`)
                               )}
                             >
-                              <ChildIcon className={cn("h-3.5 w-3.5 shrink-0", isChildItemActive ? "text-blue-600 dark:text-blue-400" : "opacity-60")} />
+                              {ChildIcon && <ChildIcon className={cn("h-3.5 w-3.5 shrink-0", isChildItemActive ? "text-blue-600 dark:text-blue-400" : "opacity-60")} />}
                               <span className="truncate">{child.label}</span>
                             </button>
                           );

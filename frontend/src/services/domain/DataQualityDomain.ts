@@ -30,7 +30,7 @@ export class DataQualityService {
     
     // Optimized Profiler with single-pass aggregation and yielding
     async getProfiles(): Promise<DataProfile[]> {
-        const cases = await db.getAll<unknown>(STORES.CASES);
+        const cases = await db.getAll<Case>(STORES.CASES);
         const total = cases.length;
 
         // Initialize accumulators
@@ -44,9 +44,11 @@ export class DataQualityService {
         // Single pass loop
         for (let i = 0; i < total; i++) {
             const c = cases[i];
-            
+
             // Status Profile
-            statusCounts[c.status] = (statusCounts[c.status] || 0) + 1;
+            if (c.status) {
+                statusCounts[c.status] = (statusCounts[c.status] || 0) + 1;
+            }
 
             // Value Profile
             if (c.value === undefined || c.value === null) {

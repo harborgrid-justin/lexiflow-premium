@@ -65,13 +65,11 @@ export interface Case extends BaseEntity {
   // Litigation details
   arguments: LegalArgument[];
   defenses: Defense[];
-  magistrateJudge?: string;
   opposingCounsel?: string;
   origCaseNumber?: string;
   origCourt?: string;
   origJudgmentDate?: string;
   noticeOfAppealDate?: string;
-  dateTerminated?: string;
   causeOfAction?: string; // Backend: cause_of_action (e.g., '28:0158 Bankruptcy Appeal')
   natureOfSuit?: string; // Backend: nature_of_suit
   natureOfSuitCode?: string; // Backend: nature_of_suit_code (e.g., '422')
@@ -223,7 +221,8 @@ export interface Matter extends BaseEntity {
   // Metadata (backend exact fields)
   createdBy: UserId; // Backend: createdby varchar (required)
   updatedBy?: UserId; // Backend: updatedby varchar
-  
+  isArchived?: boolean; // Backend: isarchived boolean (default: false)
+
   // Legacy aliases for backward compatibility
   type?: MatterType; // Alias for matterType
   responsibleAttorneyId?: string; // Alias for leadAttorneyId
@@ -231,7 +230,7 @@ export interface Matter extends BaseEntity {
   billingArrangement?: BillingArrangement; // Alias for billingType
   intakeDate?: string; // Alias for openedDate
   userId?: UserId; // Deprecated - use createdBy
-  
+
   // Frontend-only fields (not in backend)
   clientContact?: string;
   clientEmail?: string;

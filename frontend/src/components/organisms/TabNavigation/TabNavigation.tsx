@@ -25,14 +25,14 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-export interface TabItem {
+export interface TabNavigationItem {
   id: string;
   label: string;
   icon?: LucideIcon;
 }
 
 interface TabNavigationProps {
-  tabs: TabItem[];
+  tabs: TabNavigationItem[];
   activeTab: string;
   onTabChange: (id: string) => void;
   className?: string;

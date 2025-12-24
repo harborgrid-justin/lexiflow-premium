@@ -34,27 +34,29 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
   const { theme, mode } = useTheme();
   
   // Load evidence from IndexedDB via useQuery for accurate, cached data
-  const { data: evidence = [], isLoading } = useQuery(
+  const { data, isLoading } = useQuery(
     queryKeys.evidence.all(),
     () => DataService.evidence.getAll()
   );
-  
+
+  const evidence = (data as EvidenceItem[]) || [];
+
   // Calculate stats from live data
   const stats = React.useMemo(() => ({
     total: evidence.length,
-    digital: evidence.filter((e: EvidenceItem) => e.type === 'Digital').length,
-    physical: evidence.filter((e: EvidenceItem) => e.type === 'Physical').length,
-    challenged: evidence.filter((e: EvidenceItem) => e.admissibility === 'Challenged').length
+    digital: evidence.filter((e) => e.type === 'Digital').length,
+    physical: evidence.filter((e) => e.type === 'Physical').length,
+    challenged: evidence.filter((e) => e.admissibility === 'Challenged').length
   }), [evidence]);
 
   // Calculate recent events from live data
   const recentEvents = React.useMemo(() => {
-    return evidence.flatMap((e: EvidenceItem) =>
+    return evidence.flatMap((e) =>
       e.chainOfCustody.map((c: any) => ({ ...c, itemTitle: e.title, itemId: e.id }))
     ).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
   }, [evidence]);
 
-  const data = [
+  const chartData = [
     { name: 'Physical', value: stats.physical, color: theme.chart.colors.warning },
     { name: 'Digital', value: stats.digital, color: theme.chart.colors.primary },
     { name: 'Document', value: stats.total - stats.digital - stats.physical, color: theme.chart.colors.neutral },
@@ -96,7 +98,7 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
           <ResponsiveContainer width="100%" height={256}>
             <PieChart>
               <Pie
-                data={data}
+                data={chartData}
                 cx="50%"
                 cy="50%"
                 innerRadius={60}
@@ -104,7 +106,7 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
                 paddingAngle={5}
                 dataKey="value"
               >
-                {data.map((entry, index) => (
+                {chartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>

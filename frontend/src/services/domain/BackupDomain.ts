@@ -74,9 +74,9 @@ export const BACKUP_QUERY_KEYS = {
  * @private
  */
 function validateSnapshotType(type: unknown, methodName: string): void {
-  const validTypes: SnapshotType[] = ['Full', 'Incremental', 'Differential'];
-  
-  if (!type || !validTypes.includes(type)) {
+  const validTypes: SnapshotType[] = ['Full', 'Incremental'];
+
+  if (!type || !validTypes.includes(type as any)) {
     throw new Error(`[BackupService.${methodName}] Invalid snapshot type. Must be: ${validTypes.join(', ')}`);
   }
 }
@@ -160,10 +160,10 @@ export const BackupService = {
       return backups.map((backup): BackupSnapshot => ({
         id: backup.id,
         name: backup.name,
-        type: backup.type === 'full' ? 'Full' : backup.type === 'incremental' ? 'Incremental' : 'Differential',
+        type: backup.type === 'full' ? 'Full' : 'Incremental',
         created: backup.startedAt,
         size: backup.size ? `${(backup.size / (1024 * 1024 * 1024)).toFixed(2)} GB` : 'Unknown',
-        status: backup.status === 'completed' ? 'Completed' : backup.status === 'in_progress' ? 'In Progress' : 'Failed'
+        status: backup.status === 'completed' ? 'Completed' : backup.status === 'in_progress' ? 'Running' : 'Failed'
       })).sort((a, b) =>
         new Date(b.created).getTime() - new Date(a.created).getTime()
       );
@@ -239,7 +239,7 @@ export const BackupService = {
         created: backup.startedAt,
         size: backup.size ? `${(backup.size / (1024 * 1024 * 1024)).toFixed(2)} GB` :
                type === 'Full' ? '452 GB' : type === 'Incremental' ? '150 MB' : '2.8 GB',
-        status: backup.status === 'completed' ? 'Completed' : 'In Progress'
+        status: backup.status === 'completed' ? 'Completed' : 'Running'
       };
 
       console.log(`[BackupService] Created ${type} snapshot: ${newSnap.id}`);

@@ -25,13 +25,16 @@
  * - Event-driven integration
  */
 
-import { WorkflowTask, CaseId, UserId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
+import { WorkflowTask, CaseId, UserId, TaskStatusBackend, TaskPriorityBackend, BaseEntity } from '@/types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { TasksApiService } from '@/api/tasks-api';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { SystemEventType } from '@/types/integration-types';
+
+// Type alias to satisfy Repository constraint
+type WorkflowTaskEntity = WorkflowTask & { createdBy?: UserId };
 
 /**
  * Query keys for React Query integration
@@ -56,7 +59,7 @@ export const TASK_QUERY_KEYS = {
  * Task Repository Class
  * Implements backend-first pattern with IndexedDB fallback
  */
-export class TaskRepository extends Repository<WorkflowTask> {
+export class TaskRepository extends Repository<WorkflowTaskEntity> {
     private useBackend: boolean;
     private tasksApi: TasksApiService;
 
@@ -112,17 +115,17 @@ export class TaskRepository extends Repository<WorkflowTask> {
 
     /**
      * Get all tasks
-     * 
+     *
      * @returns Promise<WorkflowTask[]> Array of tasks
      * @throws Error if fetch fails
-     * 
+     *
      * @example
      * const allTasks = await repo.getAll();
      */
-    override async getAll(): Promise<WorkflowTask[]> {
+    override async getAll(): Promise<WorkflowTaskEntity[]> {
         if (this.useBackend) {
             try {
-                return await this.tasksApi.getAll() as WorkflowTask[];
+                return await this.tasksApi.getAll() as WorkflowTaskEntity[];
             } catch (error) {
                 console.warn('[TaskRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -138,17 +141,17 @@ export class TaskRepository extends Repository<WorkflowTask> {
 
     /**
      * Get tasks by case ID
-     * 
+     *
      * @param caseId - Case ID
      * @returns Promise<WorkflowTask[]> Array of tasks
      * @throws Error if caseId is invalid or fetch fails
      */
-    getByCaseId = async (caseId: CaseId): Promise<WorkflowTask[]> => {
+    override async getByCaseId(caseId: CaseId): Promise<WorkflowTaskEntity[]> {
         this.validateCaseId(caseId, 'getByCaseId');
 
         if (this.useBackend) {
             try {
-                return await this.tasksApi.getByCase(caseId) as WorkflowTask[];
+                return await this.tasksApi.getAll({ caseId }) as WorkflowTaskEntity[];
             } catch (error) {
                 console.warn('[TaskRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -171,10 +174,10 @@ export class TaskRepository extends Repository<WorkflowTask> {
      */
     async countByCaseId(caseId: string): Promise<number> {
         this.validateCaseId(caseId, 'countByCaseId');
-        
+
         try {
-            const tasks = await this.getByCaseId(caseId);
-            return tasks.filter(t => t.status !== TaskStatusBackend.COMPLETED && t.status !== TaskStatusBackend.COMPLETED).length;
+            const tasks = await this.getByCaseId(caseId as CaseId);
+            return tasks.filter(t => t.status !== TaskStatusBackend.COMPLETED).length;
         } catch (error) {
             console.error('[TaskRepository.countByCaseId] Error:', error);
             throw new Error('Failed to count tasks by case ID');
@@ -183,17 +186,17 @@ export class TaskRepository extends Repository<WorkflowTask> {
 
     /**
      * Get task by ID
-     * 
+     *
      * @param id - Task ID
      * @returns Promise<WorkflowTask | undefined> Task or undefined
      * @throws Error if id is invalid or fetch fails
      */
-    override async getById(id: string): Promise<WorkflowTask | undefined> {
+    override async getById(id: string): Promise<WorkflowTaskEntity | undefined> {
         this.validateId(id, 'getById');
 
         if (this.useBackend) {
             try {
-                return await this.tasksApi.getById(id) as WorkflowTask;
+                return await this.tasksApi.getById(id) as WorkflowTaskEntity;
             } catch (error) {
                 console.warn('[TaskRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -209,19 +212,19 @@ export class TaskRepository extends Repository<WorkflowTask> {
 
     /**
      * Add a new task
-     * 
+     *
      * @param item - Task data
      * @returns Promise<WorkflowTask> Created task
      * @throws Error if validation fails or create fails
      */
-    override async add(item: WorkflowTask): Promise<WorkflowTask> {
+    override async add(item: WorkflowTaskEntity): Promise<WorkflowTaskEntity> {
         if (!item || typeof item !== 'object') {
             throw new Error('[TaskRepository.add] Invalid task data');
         }
 
         if (this.useBackend) {
             try {
-                return await this.tasksApi.add(item as any) as WorkflowTask;
+                return await this.tasksApi.create(item as any) as WorkflowTaskEntity;
             } catch (error) {
                 console.warn('[TaskRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -239,24 +242,24 @@ export class TaskRepository extends Repository<WorkflowTask> {
     /**
      * Update an existing task
      * Publishes integration event when task is completed
-     * 
+     *
      * @param id - Task ID
      * @param updates - Partial task updates
      * @returns Promise<WorkflowTask> Updated task
      * @throws Error if validation fails or update fails
      */
-    override async update(id: string, updates: Partial<WorkflowTask>): Promise<WorkflowTask> {
+    override async update(id: string, updates: Partial<WorkflowTaskEntity>): Promise<WorkflowTaskEntity> {
         this.validateId(id, 'update');
 
         if (!updates || typeof updates !== 'object') {
             throw new Error('[TaskRepository.update] Invalid updates data');
         }
 
-        let result: WorkflowTask;
+        let result: WorkflowTaskEntity;
 
         if (this.useBackend) {
             try {
-                result = await this.tasksApi.update(id, updates) as WorkflowTask;
+                result = await this.tasksApi.update(id, updates) as WorkflowTaskEntity;
             } catch (error) {
                 console.warn('[TaskRepository] Backend API unavailable, falling back to IndexedDB', error);
                 result = await super.update(id, updates);
@@ -266,7 +269,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
         }
         
         // Integration Point: Publish event when task is completed
-        if (updates.status === 'completed' || updates.status === 'done' || updates.status === TaskStatusBackend.COMPLETED || updates.status === TaskStatusBackend.COMPLETED) {
+        if (updates.status === TaskStatusBackend.COMPLETED) {
             try {
                 await IntegrationOrchestrator.publish(SystemEventType.TASK_COMPLETED, {
                     task: result
@@ -318,7 +321,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
      * @returns Promise<WorkflowTask> Completed task
      * @throws Error if id is invalid or update fails
      */
-    completeTask = async (id: string): Promise<WorkflowTask> => {
+    completeTask = async (id: string): Promise<WorkflowTaskEntity> => {
         this.validateId(id, 'completeTask');
 
         try {
@@ -348,7 +351,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
      * @returns Promise<WorkflowTask> Updated task
      * @throws Error if validation fails or update fails
      */
-    async updateStatus(id: string, status: TaskStatusBackend): Promise<WorkflowTask> {
+    async updateStatus(id: string, status: TaskStatusBackend): Promise<WorkflowTaskEntity> {
         this.validateId(id, 'updateStatus');
 
         if (!status || typeof status !== 'string' || status.trim() === '') {
@@ -357,18 +360,17 @@ export class TaskRepository extends Repository<WorkflowTask> {
 
         if (this.useBackend) {
             try {
-                return await this.tasksApi.updateStatus(id, status) as WorkflowTask;
+                return await this.tasksApi.updateStatus(id, status) as WorkflowTaskEntity;
             } catch (error) {
                 console.warn('[TaskRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
         }
 
         try {
-            const updates: Partial<WorkflowTask> = { status };
-            
-            if (status === 'completed' || status === TaskStatusBackend.COMPLETED || status === 'done' || status === TaskStatusBackend.COMPLETED) {
-                updates.completedAt = new Date().toISOString();
-                updates.progress = 100;
+            const updates: Partial<WorkflowTaskEntity> = { status };
+
+            if (status === TaskStatusBackend.COMPLETED) {
+                updates.completionPercentage = 100;
             }
 
             return await this.update(id, updates);
@@ -386,7 +388,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
      * @returns Promise<WorkflowTask> Updated task
      * @throws Error if validation fails or update fails
      */
-    async updatePriority(id: string, priority: TaskPriorityBackend): Promise<WorkflowTask> {
+    async updatePriority(id: string, priority: TaskPriorityBackend): Promise<WorkflowTaskEntity> {
         this.validateId(id, 'updatePriority');
 
         if (!priority) {
@@ -404,14 +406,14 @@ export class TaskRepository extends Repository<WorkflowTask> {
      * @returns Promise<WorkflowTask> Updated task
      * @throws Error if validation fails or update fails
      */
-    async updateProgress(id: string, progress: number): Promise<WorkflowTask> {
+    async updateProgress(id: string, progress: number): Promise<WorkflowTaskEntity> {
         this.validateId(id, 'updateProgress');
 
         if (typeof progress !== 'number' || progress < 0 || progress > 100) {
             throw new Error('[TaskRepository.updateProgress] Invalid progress parameter (must be 0-100)');
         }
 
-        const updates: Partial<WorkflowTask> = { completionPercentage: progress };
+        const updates: Partial<WorkflowTaskEntity> = { completionPercentage: progress };
 
         // Auto-complete if progress reaches 100%
         if (progress === 100) {
@@ -433,13 +435,13 @@ export class TaskRepository extends Repository<WorkflowTask> {
      * @returns Promise<WorkflowTask> Updated task
      * @throws Error if validation fails or update fails
      */
-    async assignToUser(id: string, userId: UserId): Promise<WorkflowTask> {
+    async assignToUser(id: string, userId: UserId): Promise<WorkflowTaskEntity> {
         this.validateId(id, 'assignToUser');
         this.validateUserId(userId, 'assignToUser');
 
         if (this.useBackend) {
             try {
-                return await this.tasksApi.assign(id, userId) as WorkflowTask;
+                return await this.tasksApi.patch(id, { assignedTo: userId }) as WorkflowTaskEntity;
             } catch (error) {
                 console.warn('[TaskRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -455,12 +457,12 @@ export class TaskRepository extends Repository<WorkflowTask> {
      * @returns Promise<WorkflowTask> Updated task
      * @throws Error if id is invalid or update fails
      */
-    async unassignTask(id: string): Promise<WorkflowTask> {
+    async unassignTask(id: string): Promise<WorkflowTaskEntity> {
         this.validateId(id, 'unassignTask');
 
         if (this.useBackend) {
             try {
-                return await this.tasksApi.unassign(id) as WorkflowTask;
+                return await this.tasksApi.patch(id, { assignedTo: undefined }) as WorkflowTaskEntity;
             } catch (error) {
                 console.warn('[TaskRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -476,12 +478,12 @@ export class TaskRepository extends Repository<WorkflowTask> {
      * @returns Promise<WorkflowTask[]> Array of assigned tasks
      * @throws Error if userId is invalid or fetch fails
      */
-    async getByAssignee(userId: UserId): Promise<WorkflowTask[]> {
+    async getByAssignee(userId: UserId): Promise<WorkflowTaskEntity[]> {
         this.validateUserId(userId, 'getByAssignee');
 
         if (this.useBackend) {
             try {
-                return await this.tasksApi.getByAssignee(userId) as WorkflowTask[];
+                return await this.tasksApi.getAll({ assignedTo: userId }) as WorkflowTaskEntity[];
             } catch (error) {
                 console.warn('[TaskRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -505,13 +507,13 @@ export class TaskRepository extends Repository<WorkflowTask> {
      * @returns Promise<WorkflowTask[]> Array of overdue tasks
      * @throws Error if fetch fails
      */
-    async getOverdue(): Promise<WorkflowTask[]> {
+    async getOverdue(): Promise<WorkflowTaskEntity[]> {
         try {
             const tasks = await this.getAll();
             const now = new Date();
 
             return tasks.filter(task => {
-                if (!task.dueDate || task.status === TaskStatusBackend.COMPLETED || task.status === TaskStatusBackend.COMPLETED) return false;
+                if (!task.dueDate || task.status === TaskStatusBackend.COMPLETED) return false;
                 return new Date(task.dueDate) < now;
             });
         } catch (error) {
@@ -527,14 +529,14 @@ export class TaskRepository extends Repository<WorkflowTask> {
      * @returns Promise<WorkflowTask[]> Array of upcoming tasks
      * @throws Error if fetch fails
      */
-    async getUpcoming(days: number = 7): Promise<WorkflowTask[]> {
+    async getUpcoming(days: number = 7): Promise<WorkflowTaskEntity[]> {
         try {
             const tasks = await this.getAll();
             const now = new Date();
             const future = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
 
             return tasks.filter(task => {
-                if (!task.dueDate || task.status === TaskStatusBackend.COMPLETED || task.status === TaskStatusBackend.COMPLETED) return false;
+                if (!task.dueDate || task.status === TaskStatusBackend.COMPLETED) return false;
                 const due = new Date(task.dueDate);
                 return due >= now && due <= future;
             });
@@ -551,14 +553,14 @@ export class TaskRepository extends Repository<WorkflowTask> {
      * @returns Promise<WorkflowTask[]> Array of tasks with status
      * @throws Error if status is invalid or fetch fails
      */
-    async getByStatus(status: string): Promise<WorkflowTask[]> {
+    async getByStatus(status: string): Promise<WorkflowTaskEntity[]> {
         if (!status || typeof status !== 'string' || status.trim() === '') {
             throw new Error('[TaskRepository.getByStatus] Invalid status parameter');
         }
 
         if (this.useBackend) {
             try {
-                return await this.tasksApi.getByStatus(status) as WorkflowTask[];
+                return await this.tasksApi.getAll({ status: status as TaskStatusBackend }) as WorkflowTaskEntity[];
             } catch (error) {
                 console.warn('[TaskRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -579,14 +581,14 @@ export class TaskRepository extends Repository<WorkflowTask> {
      * @returns Promise<WorkflowTask[]> Array of tasks with priority
      * @throws Error if priority is invalid or fetch fails
      */
-    async getByPriority(priority: string): Promise<WorkflowTask[]> {
+    async getByPriority(priority: string): Promise<WorkflowTaskEntity[]> {
         if (!priority || typeof priority !== 'string' || priority.trim() === '') {
             throw new Error('[TaskRepository.getByPriority] Invalid priority parameter');
         }
 
         if (this.useBackend) {
             try {
-                return await this.tasksApi.getByPriority(priority) as WorkflowTask[];
+                return await this.tasksApi.getAll({ priority: priority as TaskPriorityBackend }) as WorkflowTaskEntity[];
             } catch (error) {
                 console.warn('[TaskRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -613,7 +615,7 @@ export class TaskRepository extends Repository<WorkflowTask> {
         status?: string;
         priority?: string;
         query?: string;
-    }): Promise<WorkflowTask[]> {
+    }): Promise<WorkflowTaskEntity[]> {
         try {
             let tasks = await this.getAll();
 
@@ -668,8 +670,8 @@ export class TaskRepository extends Repository<WorkflowTask> {
         avgProgress: number;
     }> {
         try {
-            const tasks = caseId ? await this.getByCaseId(caseId) : await this.getAll();
-            
+            const tasks = caseId ? await this.getByCaseId(caseId as CaseId) : await this.getAll();
+
             const byStatus: Record<string, number> = {};
             const byPriority: Record<string, number> = {};
             let completed = 0;
@@ -682,11 +684,11 @@ export class TaskRepository extends Repository<WorkflowTask> {
                 const priority = task.priority || 'medium';
                 byPriority[priority] = (byPriority[priority] || 0) + 1;
 
-                if (task.status === TaskStatusBackend.COMPLETED || task.status === TaskStatusBackend.COMPLETED) {
+                if (task.status === TaskStatusBackend.COMPLETED) {
                     completed++;
                 }
 
-                totalProgress += task.progress || 0;
+                totalProgress += task.completionPercentage || 0;
             });
 
             const overdueTasks = await this.getOverdue();

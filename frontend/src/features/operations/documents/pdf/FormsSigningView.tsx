@@ -95,9 +95,13 @@ export const FormsSigningView: React.FC = () => {
 
     const handleSignatureSave = async (signed: boolean) => {
         if (signed && activeField && selectedDocument) {
-            const updatedDoc = {
+            const updatedDoc: LegalDocument = {
                 ...selectedDocument,
-                formFields: (selectedDocument.formFields || []).map((f: Field) => f.id === activeField.id ? {...f, value: "Signed by User"} : f)
+                formFields: (selectedDocument.formFields || []).map((f) =>
+                    (f as { name: string; type: string; value: any }).name === activeField.id
+                        ? {...f, value: "Signed by User"}
+                        : f
+                )
             };
             await DataService.documents.update(selectedDocument.id, updatedDoc);
             queryClient.invalidate(queryKeys.documents.all());
@@ -110,7 +114,10 @@ export const FormsSigningView: React.FC = () => {
     
     const handleFieldsUpdate = async (updatedFields: Field[]) => {
         if (selectedDocument) {
-            const updatedDoc = { ...selectedDocument, formFields: updatedFields };
+            const updatedDoc: LegalDocument = {
+                ...selectedDocument,
+                formFields: updatedFields.map(f => ({ name: f.id, type: f.type, value: f.value || '' }))
+            };
             await DataService.documents.update(selectedDocument.id, updatedDoc);
             queryClient.invalidate(queryKeys.documents.all());
             setSelectedDocument(updatedDoc);
@@ -196,11 +203,17 @@ export const FormsSigningView: React.FC = () => {
                         />
                         <div className={cn("flex-1 relative overflow-auto", theme.surface.highlight)}>
                             <PDFViewer url={previewUrl} scale={scale} rotation={rotation} onPageLoad={setPageDims}>
-                                <InteractiveOverlay 
-                                    activeTool={activeTool} 
-                                    dimensions={pageDims} 
-                                    onFieldClick={handleFieldClick} 
-                                    existingFields={selectedDocument.formFields || []}
+                                <InteractiveOverlay
+                                    activeTool={activeTool}
+                                    dimensions={pageDims}
+                                    onFieldClick={handleFieldClick}
+                                    existingFields={(selectedDocument.formFields || []).map((f, idx) => ({
+                                        id: (f as { name: string }).name || `field-${idx}`,
+                                        type: ((f as { type: string }).type as Field['type']) || 'text',
+                                        x: 0,
+                                        y: 0,
+                                        value: (f as { value: any }).value as string
+                                    }))}
                                     onFieldsUpdate={handleFieldsUpdate}
                                 />
                             </PDFViewer>

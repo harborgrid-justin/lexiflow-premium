@@ -86,11 +86,11 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
           onMutate: async (payload) => {
               // Cancel outgoing refetches
               await queryClient.cancelQueries(evidenceQueryKeys.evidence.detail(payload.item.id));
-              
+
               // Snapshot previous value for rollback
-              const previousEvidence = queryClient.getQueryData<EvidenceItem[]>(
+              const previousEvidence = queryClient.getQueryState(
                   evidenceQueryKeys.evidence.all
-              );
+              )?.data as EvidenceItem[] | undefined;
               
               // Optimistically update cache
               queryClient.setQueryData<EvidenceItem[]>(
@@ -114,7 +114,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
               setNewEvent({ date: new Date().toISOString().split('T')[0], action: CustodyActionType.TRANSFER_TO_STORAGE, actor: 'Current User' });
               setIsSigned(false);
           },
-          onError: (error, variables, context: unknown) => {
+          onError: (error, variables, context: { previousEvidence?: EvidenceItem[] }) => {
               // Rollback optimistic update on error
               if (context?.previousEvidence) {
                   queryClient.setQueryData(

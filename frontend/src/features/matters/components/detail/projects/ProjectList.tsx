@@ -24,7 +24,7 @@ interface ProjectListProps {
 }
 
 export const ProjectList: React.FC<ProjectListProps> = ({ projects, onAddTask, onUpdateTaskStatus, onNavigateToModule }) => {
-  const [expandedProject, setExpandedProject] = useState<string | null>(projects.find(p => p.status === 'Active')?.id || null);
+  const [expandedProject, setExpandedProject] = useState<string | null>(projects.find(p => p.status === 'In Progress')?.id || null);
 
   return (
     <div className="space-y-6">

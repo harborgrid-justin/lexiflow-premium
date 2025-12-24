@@ -7,7 +7,7 @@ import { queryKeys } from '@/utils/queryKeys';
 import { DocumentService } from '@/services/features/documents/documentService';
 import { PDFViewer } from '@/components/organisms/PDFViewer';
 import { AcrobatToolbar, PDFTool } from '../preview/AcrobatToolbar';
-import { InteractiveOverlay } from '../preview/InteractiveOverlay';
+import { InteractiveOverlay, Field } from '../preview/InteractiveOverlay';
 import { Modal } from '@/components/molecules/Modal';
 import { SignaturePad } from '@/components/organisms/SignaturePad';
 import { Button } from '@/components/atoms/Button';
@@ -45,7 +45,7 @@ export const PDFEditorView: React.FC = () => {
     const [pageNum, setPageNum] = useState(1);
     const [pageDims, setPageDims] = useState({ width: 0, height: 0 });
     const [signModalOpen, setSignModalOpen] = useState(false);
-    const [activeField, setActiveField] = useState<unknown>(null);
+    const [activeField, setActiveField] = useState<Field | null>(null);
 
     // Select first PDF document when documents load
     useEffect(() => {
@@ -58,7 +58,7 @@ export const PDFEditorView: React.FC = () => {
         let isMounted = true;
         if (documentSelection.selected) {
             const loadUrl = async () => {
-                const blob = await DataService.documents.getFile(documentSelection.selected.id);
+                const blob = await DataService.documents.getFile(documentSelection.selected!.id);
                 if (isMounted && blob) {
                     const url = register(blob);
                     setPreviewUrl(url);
@@ -73,7 +73,7 @@ export const PDFEditorView: React.FC = () => {
         return () => { isMounted = false; };
     }, [documentSelection.selected, register]);
     
-    const handleFieldClick = (field: unknown) => {
+    const handleFieldClick = (field: Field) => {
         if (field.type === 'signature' || field.type === 'initials') {
             setActiveField(field);
             setSignModalOpen(true);

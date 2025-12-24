@@ -69,7 +69,7 @@ export const RiskList: React.FC<RiskListProps> = ({ risks, selectedId, onSelect 
                         {getCategoryIcon(risk.category || 'Other')}
                         {risk.category || 'Other'}
                     </div>
-                    <Badge variant={risk.status === 'Mitigated' ? 'success' : risk.status === 'Accepted' ? 'neutral' : 'warning'}>
+                    <Badge variant={risk.status === 'Mitigated' ? 'success' : 'warning'}>
                         {risk.status}
                     </Badge>
                 </div>

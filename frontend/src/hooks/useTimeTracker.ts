@@ -371,7 +371,8 @@ export const useTimeTracker = (options: UseTimeTrackerOptions = {}) => {
         description: 'General Administrative Task (Auto-Logged)',
         rate,
         total: totalCost,
-        status: 'Unbilled'
+        status: 'Unbilled',
+        billable: true
       };
 
       console.log(`[useTimeTracker] Creating time entry:`, entry);

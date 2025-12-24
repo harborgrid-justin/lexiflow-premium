@@ -166,14 +166,10 @@ export const AnalyticsService = {
      */
     getCounselProfiles: async (): Promise<OpposingCounselProfile[]> => {
         try {
-            const profiles = await analyticsApi.counsel?.getProfiles?.();
-            
-            if (!profiles || !Array.isArray(profiles)) {
-                console.warn('[AnalyticsService] Invalid counsel profiles data, returning empty array');
-                return [];
-            }
-
-            return profiles;
+            // Note: counsel API endpoint not yet available in analyticsApi
+            // This will need to be updated when the API is added
+            console.warn('[AnalyticsService.getCounselProfiles] Counsel profiles API not yet available');
+            return [];
         } catch (error) {
             console.error('[AnalyticsService.getCounselProfiles] Error:', error);
             throw new Error('Failed to fetch opposing counsel profiles');
@@ -210,19 +206,19 @@ export const AnalyticsService = {
      */
     getJudgeMotionStats: async (): Promise<JudgeMotionStat[]> => {
         try {
-            const stats = await analyticsApi.judges?.getMotionStats?.();
-            
+            const stats = await analyticsApi.judgeStats?.getAll?.();
+
             if (!stats || !Array.isArray(stats) || stats.length === 0) {
                 console.warn('[AnalyticsService] Backend judge stats unavailable, using default data');
                 return DEFAULT_JUDGE_MOTION_STATS;
             }
 
             // Validate stat structure
-            const validStats = stats.every(stat => 
-                stat && 
-                typeof stat === 'object' && 
-                'name' in stat && 
-                'grant' in stat && 
+            const validStats = stats.every(stat =>
+                stat &&
+                typeof stat === 'object' &&
+                'name' in stat &&
+                'grant' in stat &&
                 'deny' in stat &&
                 typeof stat.grant === 'number' &&
                 typeof stat.deny === 'number'
@@ -233,7 +229,7 @@ export const AnalyticsService = {
                 return DEFAULT_JUDGE_MOTION_STATS;
             }
 
-            return stats;
+            return stats as unknown as JudgeMotionStat[];
         } catch (error) {
             console.error('[AnalyticsService.getJudgeMotionStats] Error:', error);
             console.warn('[AnalyticsService] Falling back to default judge motion stats');
@@ -273,14 +269,14 @@ export const AnalyticsService = {
      */
     getOutcomePredictions: async (): Promise<OutcomePredictionData[]> => {
         try {
-            const predictions = await analyticsApi.outcomes?.getPredictions?.();
-            
+            const predictions = await analyticsApi.outcomePredictions?.getPredictions?.();
+
             if (!predictions || !Array.isArray(predictions)) {
                 console.warn('[AnalyticsService] Invalid outcome predictions data, returning empty array');
                 return [];
             }
 
-            return predictions;
+            return predictions as unknown as OutcomePredictionData[];
         } catch (error) {
             console.error('[AnalyticsService.getOutcomePredictions] Error:', error);
             throw new Error('Failed to fetch outcome predictions');
@@ -304,14 +300,12 @@ export const AnalyticsService = {
     validateHealth: async (): Promise<boolean> => {
         try {
             // Test each analytics endpoint
-            const [counselCheck, judgeCheck, outcomeCheck] = await Promise.allSettled([
-                analyticsApi.counsel?.getProfiles?.().then(() => true).catch(() => false),
-                analyticsApi.judges?.getMotionStats?.().then(() => true).catch(() => false),
-                analyticsApi.outcomes?.getPredictions?.().then(() => true).catch(() => false),
+            const [judgeCheck, outcomeCheck] = await Promise.allSettled([
+                analyticsApi.judgeStats?.getAll?.().then(() => true).catch(() => false),
+                analyticsApi.outcomePredictions?.getPredictions?.().then(() => true).catch(() => false),
             ]);
 
             const healthResults = [
-                counselCheck.status === 'fulfilled' && counselCheck.value,
                 judgeCheck.status === 'fulfilled' && judgeCheck.value,
                 outcomeCheck.status === 'fulfilled' && outcomeCheck.value,
             ];

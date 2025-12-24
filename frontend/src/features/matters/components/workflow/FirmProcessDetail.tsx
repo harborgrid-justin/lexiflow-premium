@@ -12,6 +12,15 @@ import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { ErrorState } from '@/components/molecules/ErrorState';
 
+interface ProcessDetails {
+  id: string;
+  name: string;
+  description?: string;
+  owner: string;
+  triggers?: string;
+  sla?: string;
+}
+
 interface FirmProcessDetailProps {
   processId: string;
   onBack: () => void;
@@ -21,7 +30,7 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'overview' | 'designer' | 'instances' | 'analytics'>('overview');
 
-  const { data: process, isLoading, isError, refetch } = useQuery(
+  const { data: process, isLoading, isError, refetch } = useQuery<ProcessDetails>(
     ['process', processId],
     () => DataService.workflow.getProcessDetails(processId)
   );

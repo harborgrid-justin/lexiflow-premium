@@ -26,7 +26,7 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Risk, RiskLevel, RiskCategory, RiskStatus } from '@/types';
+import { Risk, RiskLevel, RiskCategory, RiskStatus, RiskStatusEnum, RiskProbability, RiskImpact } from '@/types';
 
 interface RiskDetailProps {
   risk: Risk;
@@ -90,16 +90,17 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                     </div>
                     <div>
                         <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Status</label>
-                        <select 
+                        <select
                             title="Select risk status"
                             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={risk.status}
-                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onUpdate({ ...risk, status: e.target.value as RiskStatus })}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onUpdate({ ...risk, status: e.target.value as RiskStatusEnum })}
                         >
-                            <option value="Identified">Identified</option>
-                            <option value="Mitigated">Mitigated</option>
-                            <option value="Accepted">Accepted</option>
-                            <option value="Closed">Closed</option>
+                            <option value={RiskStatusEnum.IDENTIFIED}>Identified</option>
+                            <option value={RiskStatusEnum.OPEN}>Open</option>
+                            <option value={RiskStatusEnum.MONITORING}>Monitoring</option>
+                            <option value={RiskStatusEnum.MITIGATED}>Mitigated</option>
+                            <option value={RiskStatusEnum.CLOSED}>Closed</option>
                         </select>
                     </div>
                 </div>
@@ -117,14 +118,14 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                     <div>
                         <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Probability</label>
                         <div className="flex gap-2">
-                            {['Low', 'Medium', 'High'].map(lvl => (
+                            {[RiskProbability.LOW, RiskProbability.MEDIUM, RiskProbability.HIGH].map(lvl => (
                                 <button
                                     key={lvl}
-                                    onClick={() => onUpdate({ ...risk, probability: lvl as RiskLevel })}
+                                    onClick={() => onUpdate({ ...risk, probability: lvl })}
                                     className={cn(
                                         "flex-1 py-2 text-xs font-bold rounded border transition-all",
-                                        risk.probability === lvl 
-                                            ? cn(theme.action.primary.bg, "text-white", theme.action.primary.border, "shadow-md") 
+                                        risk.probability === lvl
+                                            ? cn(theme.action.primary.bg, "text-white", theme.action.primary.border, "shadow-md")
                                             : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`)
                                     )}
                                 >
@@ -136,14 +137,14 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                     <div>
                         <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Impact</label>
                         <div className="flex gap-2">
-                            {['Low', 'Medium', 'High'].map(lvl => (
+                            {[RiskImpact.LOW, RiskImpact.MEDIUM, RiskImpact.HIGH].map(lvl => (
                                 <button
                                     key={lvl}
-                                    onClick={() => onUpdate({ ...risk, impact: lvl as RiskLevel })}
+                                    onClick={() => onUpdate({ ...risk, impact: lvl })}
                                     className={cn(
                                         "flex-1 py-2 text-xs font-bold rounded border transition-all",
-                                        risk.impact === lvl 
-                                            ? cn(theme.action.primary.bg, "text-white", theme.action.primary.border, "shadow-md") 
+                                        risk.impact === lvl
+                                            ? cn(theme.action.primary.bg, "text-white", theme.action.primary.border, "shadow-md")
                                             : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`)
                                     )}
                                 >
@@ -155,7 +156,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                 </div>
 
                 <div className={cn("flex justify-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
-                    <RiskMatrix probability={risk.probability} impact={risk.impact} />
+                    <RiskMatrix probability={risk.probability as RiskLevel} impact={risk.impact as RiskLevel} />
                 </div>
             </div>
 

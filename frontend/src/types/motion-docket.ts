@@ -111,7 +111,7 @@ export interface DocketEntry extends BaseEntity {
   // Frontend-specific fields
   title?: string; // Alias for description
   structuredData?: DocketEntryStructuredData;
-  triggersDeadlines?: Array<{ type: string; date: string; description?: string }>;
+  triggersDeadlines?: Array<{ id: string; type: string; date: string; title: string; status: string; ruleReference: string; description?: string }>;
   docLink?: string; // Alias for documentUrl
   syncMetadata?: { pacerId: string; lastPolled: string; checksum: string };
 }

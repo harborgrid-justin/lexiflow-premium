@@ -100,10 +100,10 @@ export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
         <div className={cn("p-4 rounded-lg border mb-6", theme.surface.highlight, theme.border.default)}>
           <div className="flex justify-between items-center mb-2">
             <h4 className={cn("text-sm font-bold", theme.text.primary)}>Full Text</h4>
-            <CopyButton text={entry.description || entry.title} variant="ghost" size="sm" />
+            <CopyButton text={entry.description || entry.title || ''} variant="ghost" size="sm" />
           </div>
-          <p className={cn("text-sm leading-relaxed", theme.text.secondary)}>{renderLinkedText(entry.title)}</p>
-          {entry.description && <p className={cn("text-sm mt-2 italic", theme.text.tertiary)}>{renderLinkedText(entry.description || '')}</p>}
+          <p className={cn("text-sm leading-relaxed", theme.text.secondary)}>{renderLinkedText(entry.title || '')}</p>
+          {entry.description && <p className={cn("text-sm mt-2 italic", theme.text.tertiary)}>{renderLinkedText(entry.description)}</p>}
         </div>
 
         {/* Auto-generated Tags or Rules */}

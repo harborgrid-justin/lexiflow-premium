@@ -36,19 +36,25 @@ export class MattersApiService {
     if (filters?.search) params.append('search', filters.search);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    
-    const response = await apiClient.get<unknown>(url);
+
+    const response = await apiClient.get<{ data?: { matters?: Matter[] }; matters?: Matter[] } | Matter[]>(url);
     // Backend returns { success, data: { matters, total }, meta }
+    if (Array.isArray(response)) {
+      return response;
+    }
     const data = response.data || response;
-    return Array.isArray(data) ? data : data.matters || [];
+    return Array.isArray(data) ? data : (data as { matters?: Matter[] }).matters || [];
   }
 
   /**
    * Get matter by ID
    */
   async getById(id: MatterId): Promise<Matter> {
-    const response = await apiClient.get<unknown>(`${this.baseUrl}/${id}`);
-    return response.data || response;
+    const response = await apiClient.get<{ data?: Matter } | Matter>(`${this.baseUrl}/${id}`);
+    if ('data' in response && response.data) {
+      return response.data;
+    }
+    return response as Matter;
   }
 
   /**
@@ -113,9 +119,12 @@ export class MattersApiService {
       isArchived: matter.isArchived || false,
     };
 
-    const response = await apiClient.post<unknown>(this.baseUrl, createDto);
+    const response = await apiClient.post<{ data?: Matter } | Matter>(this.baseUrl, createDto);
     // Backend returns { success, data, meta } - extract the matter from data
-    return response.data || response;
+    if ('data' in response && response.data) {
+      return response.data;
+    }
+    return response as Matter;
   }
 
   /**
@@ -174,8 +183,11 @@ export class MattersApiService {
       isArchived: matter.isArchived,
     };
 
-    const response = await apiClient.patch<unknown>(`${this.baseUrl}/${id}`, updateDto);
-    return response.data || response;
+    const response = await apiClient.patch<{ data?: Matter } | Matter>(`${this.baseUrl}/${id}`, updateDto);
+    if ('data' in response && response.data) {
+      return response.data;
+    }
+    return response as Matter;
   }
 
   /**

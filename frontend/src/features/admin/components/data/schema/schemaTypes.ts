@@ -1,4 +1,4 @@
-import React from 'react';
+import { LucideIcon } from 'lucide-react';
 
 export interface TableColumn {
   name: string;
@@ -19,7 +19,7 @@ export interface TableData {
 
 export interface ContextMenuItem {
     label: string;
-    icon?: React.ElementType;
+    icon?: LucideIcon;
     action: () => void;
     danger?: boolean;
 }

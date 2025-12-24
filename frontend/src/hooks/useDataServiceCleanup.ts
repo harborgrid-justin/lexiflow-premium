@@ -90,14 +90,33 @@ export function useDataServiceMemoryStats(refreshInterval: number = 5000) {
   }));
 
   React.useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined;
+
     // Dynamically import to avoid circular dependency
     import('../services/data/dataService').then(({ getDataServiceMemoryStats }) => {
-      const updateStats = () => setStats(getDataServiceMemoryStats());
+      const updateStats = () => {
+        const memStats = getDataServiceMemoryStats();
+        setStats({
+          repositoryCount: (memStats as any).repositoryCount || 0,
+          totalListeners: memStats.totalListeners || 0,
+          refactoredSingletons: memStats.refactoredSingletons || 0,
+          legacyRepositories: memStats.legacyRepositories || 0,
+          totalRepositories: memStats.totalRepositories || 0,
+          estimatedMemoryKB: (memStats as any).estimatedMemoryKB || 0,
+          repositories: (memStats as any).repositories || [],
+          refactoredKeys: memStats.refactoredKeys || [],
+        });
+      };
       updateStats(); // Initial load
-      
-      const intervalId = setInterval(updateStats, refreshInterval);
-      return () => clearInterval(intervalId);
+
+      intervalId = setInterval(updateStats, refreshInterval);
     });
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
   }, [refreshInterval]);
 
   return stats;

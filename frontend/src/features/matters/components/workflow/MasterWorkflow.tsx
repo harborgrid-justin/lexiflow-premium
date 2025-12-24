@@ -145,14 +145,17 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
       DataService.cases.getAll
   );
 
-  const { 
-    data: firmProcesses = [], 
-    isLoading: procsLoading, 
-    status: procsStatus, 
-    refetch: refetchProcesses 
+  const {
+    data: firmProcesses = [],
+    isLoading: procsLoading,
+    status: procsStatus,
+    refetch: refetchProcesses
   } = useQuery<FirmProcess[]>(
       ['processes', 'all'],
-      () => WorkflowRepository.getProcesses()
+      async () => {
+        const result = await WorkflowRepository.getProcesses();
+        return result as FirmProcess[];
+      }
   );
 
   const { 

@@ -143,7 +143,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({
         return <CaseTimeline events={timelineEvents} onEventClick={(e) => console.log('Event clicked:', e)} />;
       
       case 'Research':
-        return <CaseStrategy caseData={caseData} evidence={[]} />;
+        return <CaseStrategy caseId={caseData.id} evidence={[]} />;
       
       case 'Arguments':
         return <CaseArgumentManager caseData={caseData} evidence={[]} />;
@@ -152,7 +152,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({
         return <CaseRiskManager caseData={caseData} />;
       
       case 'Strategy':
-        return <CaseStrategy caseData={caseData} evidence={[]} />;
+        return <CaseStrategy caseId={caseData.id} evidence={[]} />;
       
       case 'Planning':
         return <CasePlanning caseData={caseData} />;
@@ -178,7 +178,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({
         );
       
       case 'Collaboration':
-        return <CaseCollaboration caseData={caseData} />;
+        return <CaseCollaboration caseId={caseData.id} />;
       
       case 'Motions':
         return <CaseMotions caseId={caseData.id} caseTitle={caseData.title} />;
@@ -219,9 +219,9 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({
       
       case 'Billing':
         return (
-          <CaseBilling 
-            billingModel={caseData.billingModel || 'hourly'}
-            value={caseData.billingValue}
+          <CaseBilling
+            billingModel={caseData.billingModel || 'Hourly'}
+            value={caseData.billingValue || 0}
             entries={billingEntries}
           />
         );
@@ -254,7 +254,7 @@ export const CaseDetail: React.FC<CaseDetailProps> = ({
         client={caseData.client}
         clientId={caseData.clientId || caseData.id}
         jurisdiction={caseData.jurisdiction}
-        onBack={onBack}
+        onBack={onBack || (() => {})}
         onShowTimeline={() => setShowTimelineOverlay(true)}
       />
 

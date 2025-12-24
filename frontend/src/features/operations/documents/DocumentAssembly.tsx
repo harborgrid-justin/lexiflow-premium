@@ -53,8 +53,9 @@ export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, cas
       DataService.documents.add,
       {
           onSuccess: (newDoc) => {
-              notify.success(`Draft saved to case file: ${newDoc.title}`);
-              if (onSave) onSave(newDoc);
+              const doc = newDoc as LegalDocument;
+              notify.success(`Draft saved to case file: ${doc.title}`);
+              if (onSave) onSave(doc);
               queryClient.invalidate(queryKeys.documents.all());
               onClose();
           },

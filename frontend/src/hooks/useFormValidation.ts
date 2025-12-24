@@ -164,20 +164,6 @@ export function useFormValidation<T extends Record<string, any>>({
   // Debounced validation functions per field
   const debouncedValidators = useRef<Map<keyof T, ReturnType<typeof debounce>>>(new Map());
 
-  // Initialize debounced validators
-  useEffect(() => {
-    Object.keys(schema).forEach(fieldKey => {
-      const field = fieldKey as keyof T;
-      if (!debouncedValidators.current.has(field)) {
-        const validator = debounce(
-          (value: T[keyof T]) => validateFieldImmediate(field, value),
-          debounceDelay
-        );
-        debouncedValidators.current.set(field, validator);
-      }
-    });
-  }, [schema, debounceDelay]);
-
   /**
    * Validate field immediately (without debounce)
    */
@@ -216,8 +202,9 @@ export function useFormValidation<T extends Record<string, any>>({
     // Check interdependencies
     if (!firstError && interdependencyValidator) {
       const interdependencyErrors = interdependencyValidator(values);
-      if (interdependencyErrors[field as string]) {
-        firstError = interdependencyErrors[field as string];
+      const fieldKey = field as string;
+      if (interdependencyErrors[fieldKey]) {
+        firstError = interdependencyErrors[fieldKey];
       }
     }
 
@@ -235,6 +222,20 @@ export function useFormValidation<T extends Record<string, any>>({
 
     return !firstError;
   }, [values, schema, interdependencyValidator]);
+
+  // Initialize debounced validators
+  useEffect(() => {
+    Object.keys(schema).forEach(fieldKey => {
+      const field = fieldKey as keyof T;
+      if (!debouncedValidators.current.has(field)) {
+        const validator = debounce(
+          ((value: T[keyof T]) => validateFieldImmediate(field, value)) as (...args: unknown[]) => any,
+          debounceDelay
+        );
+        debouncedValidators.current.set(field, validator);
+      }
+    });
+  }, [schema, debounceDelay, validateFieldImmediate]);
 
   /**
    * Validate field (debounced)

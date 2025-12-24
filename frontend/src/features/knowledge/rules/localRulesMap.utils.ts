@@ -1,13 +1,29 @@
+export interface Jurisdiction {
+    region: string;
+    type: string;
+    name: string;
+}
 
-export const groupJurisdictionsByState = (jurisdictions: unknown[]): unknown[] => {
-    const groups: Record<string, any> = {};
+export interface CourtLevel {
+    name: string;
+    courts: string[];
+}
+
+export interface StateGroup {
+    id: string;
+    name: string;
+    levels: CourtLevel[];
+}
+
+export const groupJurisdictionsByState = (jurisdictions: Jurisdiction[]): StateGroup[] => {
+    const groups: Record<string, StateGroup> = {};
     const stateNames: Record<string, string> = { VA: 'Virginia', CA: 'California', NY: 'New York' }; // Lookup for demo names
-    
+
     jurisdictions.forEach(j => {
         if (!groups[j.region]) {
             groups[j.region] = { id: j.region, name: stateNames[j.region] || j.region, levels: [] };
         }
-        let level = groups[j.region].levels.find((l: unknown) => l.name === j.type);
+        let level = groups[j.region].levels.find((l: CourtLevel) => l.name === j.type);
         if (!level) {
             level = { name: j.type, courts: [] };
             groups[j.region].levels.push(level);

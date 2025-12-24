@@ -56,12 +56,14 @@ export const WikiView: React.FC = () => {
     DataService.knowledge.getWikiArticles
   );
 
-  const { filteredItems: filteredArticles, searchQuery, setSearchQuery } = useFilterAndSearch({
-    items: articles,
+  const { filteredItems, searchQuery, setSearchQuery } = useFilterAndSearch({
+    items: articles as unknown as Record<string, unknown>[],
     config: {
       searchFields: ['title', 'category']
     }
   });
+
+  const filteredArticles = filteredItems as unknown as WikiArticle[];
 
   const activeArticle = articles.find(a => a.id === activeArticleId);
 

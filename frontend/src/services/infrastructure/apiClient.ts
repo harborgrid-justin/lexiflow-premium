@@ -619,7 +619,7 @@ class ApiClient {
       return {
         status: 'offline',
         lastChecked,
-        error: error.message || 'Network error',
+        error: (error as Error).message || 'Network error',
       };
     }
   }

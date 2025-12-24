@@ -52,15 +52,19 @@ interface Recommendation {
 export const StrategyService = {
   getAll: async () => {
     if (isBackendApiEnabled()) {
-      return litigationApi.strategies?.getAll?.() || [];
+      // TODO: Strategy API service is not yet implemented in litigationApi
+      console.warn('[StrategyService] Strategy API service not available, returning empty array');
+      return [];
     }
     console.warn('[StrategyService] Backend API disabled, returning empty array');
     return [];
   },
-  
+
   getById: async (id: string) => {
     if (isBackendApiEnabled()) {
-      return litigationApi.strategies?.getById?.(id) || null;
+      // TODO: Strategy API service is not yet implemented in litigationApi
+      console.warn('[StrategyService] Strategy API service not available');
+      return null;
     }
     console.warn('[StrategyService] Backend API disabled');
     return null;
@@ -126,14 +130,13 @@ export const StrategyService = {
         console.error('[StrategyService.analyzeRisks] Backend error:', error);
       }
     }
-    
+
     // Fallback to mock analysis
     await delay(200);
     const strategy = await StrategyService.getById(strategyId);
-    if (!strategy) return [];
-    
+
     // Return existing risks plus generate some AI-suggested risks
-    const existingRisks = strategy.risks || [];
+    const existingRisks: Risk[] = (strategy && Array.isArray((strategy as any).risks)) ? (strategy as any).risks : [];
     const suggestedRisks: Risk[] = [
       {
         id: `risk-${Date.now()}-1`,
@@ -150,7 +153,7 @@ export const StrategyService = {
         mitigation: 'Corroborate testimony with documentary evidence',
       },
     ];
-    
+
     return [...existingRisks, ...suggestedRisks];
   },
   

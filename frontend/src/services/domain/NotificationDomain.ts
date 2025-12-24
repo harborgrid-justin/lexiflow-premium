@@ -25,17 +25,26 @@ export const NotificationService = {
   getAll: async () => communicationsApi.notifications?.getAll?.() || [],
   getById: async (id: string) => communicationsApi.notifications?.getById?.(id) || null,
   add: async (item: unknown) => {
+    const itemObj = item && typeof item === 'object' ? item as any : {};
     const notification = {
-      ...(item && typeof item === 'object' ? item : {}),
-      timestamp: item.timestamp || new Date().toISOString(),
+      ...itemObj,
+      timestamp: itemObj.timestamp || new Date().toISOString(),
       read: false
     };
     return communicationsApi.notifications?.create?.(notification) || notification;
   },
   update: async (id: string, updates: unknown) => {
-    return communicationsApi.notifications?.update?.(id, updates) || {
+    // NotificationsApiService doesn't have update method, use markAsRead instead
+    const updatesObj = updates && typeof updates === 'object' ? updates as any : {};
+    if (updatesObj.read === true) {
+      return communicationsApi.notifications?.markAsRead?.(id) || {
+        id,
+        ...updatesObj
+      };
+    }
+    return {
       id,
-      ...(updates && typeof updates === 'object' ? updates : {})
+      ...updatesObj
     };
   },
   delete: async (id: string) => {
@@ -45,7 +54,8 @@ export const NotificationService = {
   
   // Notification specific methods
   getNotifications: async (filters?: { read?: boolean; type?: string; limit?: number }): Promise<Notification[]> => {
-    let notifications = (await communicationsApi.notifications?.getAll?.() || []) as Notification[];
+    const rawNotifications = await communicationsApi.notifications?.getAll?.() || [];
+    let notifications = rawNotifications as unknown as Notification[];
 
     // Apply filters
     if (filters?.read !== undefined) {
@@ -80,12 +90,13 @@ export const NotificationService = {
   
   markAllAsRead: async (): Promise<boolean> => {
     try {
-      const notifications = (await communicationsApi.notifications?.getAll?.() || []) as Notification[];
+      const rawNotifications = await communicationsApi.notifications?.getAll?.() || [];
+      const notifications = rawNotifications as unknown as Notification[];
       const unread = notifications.filter((n: Notification) => !n.read);
 
       await Promise.all(
         unread.map((n: Notification) =>
-          communicationsApi.notifications?.update?.(n.id, { read: true })
+          communicationsApi.notifications?.markAsRead?.(n.id)
         )
       );
 
@@ -96,7 +107,8 @@ export const NotificationService = {
   },
   
   getUnreadCount: async (): Promise<number> => {
-    const notifications = (await communicationsApi.notifications?.getAll?.() || []) as Notification[];
+    const rawNotifications = await communicationsApi.notifications?.getAll?.() || [];
+    const notifications = rawNotifications as unknown as Notification[];
     return notifications.filter((n: Notification) => !n.read).length;
   },
   

@@ -107,27 +107,10 @@ export const SecurityService = {
      */
     getMalwareSignatures: async (): Promise<string[]> => {
         try {
-            const sigs = await adminApi.security?.getMalwareSignatures?.();
-            
-            if (!sigs || !Array.isArray(sigs)) {
-                console.warn('[SecurityService] Invalid malware signatures data, returning empty array');
-                return [];
-            }
-
-            // Normalize signatures to string array
-            const signatures = sigs.map((s: unknown) => {
-                if (typeof s === 'string') {
-                    return s;
-                }
-                if (s && typeof s === 'object' && 'signature' in s) {
-                    return s.signature;
-                }
-                return null;
-            }).filter((s): s is string => s !== null && s !== undefined && (s as string).trim() !== '');
-
-            console.log(`[SecurityService] Retrieved ${signatures.length} malware signatures`);
-
-            return signatures;
+            // TODO: Security API service is not yet implemented in adminApi
+            // Returning empty array until SecurityApiService is added
+            console.warn('[SecurityService] Security API service not available, returning empty malware signatures');
+            return [];
         } catch (error) {
             console.error('[SecurityService.getMalwareSignatures] Error:', error);
             throw new Error('Failed to fetch malware signatures');

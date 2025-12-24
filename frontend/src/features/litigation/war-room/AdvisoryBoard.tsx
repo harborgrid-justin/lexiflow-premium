@@ -75,15 +75,15 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   // DATA FETCHING
   // ============================================================================
   const { data: advisors = [], isLoading, error, refetch } = useQuery<Advisor[]>(
-      queryKeys.warRoom.advisors(caseId),
-      () => DataService.warRoom.getAdvisors(caseId)
+      queryKeys.warRoom.advisors(caseId || ''),
+      () => DataService.warRoom.getAdvisors(caseId || '')
   );
 
   // ============================================================================
   // FILTER & SEARCH
   // ============================================================================
   const { filteredItems: baseFiltered, searchQuery, setSearchQuery, category, setCategory } = useFilterAndSearch({
-    items: advisors,
+    items: advisors as unknown as Record<string, unknown>[],
     config: {
       categoryField: 'specialty',
       searchFields: ['name', 'specialty'],
@@ -94,7 +94,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
 
   // Apply additional filters and category logic
   const filteredAdvisors = React.useMemo(() => {
-    let result = baseFiltered;
+    let result = baseFiltered as unknown as Advisor[];
 
     // Map category to role/specialty logic
     if (category !== 'All') {

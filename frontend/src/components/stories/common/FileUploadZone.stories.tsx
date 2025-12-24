@@ -20,21 +20,25 @@ const meta: Meta<typeof FileUploadZone> = {
   },
   tags: ['autodocs'],
   argTypes: {
-    accept: {
+    file: {
+      control: 'object',
+      description: 'Selected file object',
+    },
+    processing: {
+      control: 'boolean',
+      description: 'Whether file is being processed',
+    },
+    processStage: {
       control: 'text',
-      description: 'Accepted file types (e.g. .pdf,.jpg)',
+      description: 'Current processing stage message',
     },
     multiple: {
       control: 'boolean',
       description: 'Allow multiple file selection',
     },
-    description: {
+    generatedHash: {
       control: 'text',
-      description: 'Helper text displayed in the zone',
-    },
-    onUpload: {
-      action: 'upload',
-      description: 'Callback when files are dropped or selected',
+      description: 'Generated hash for uploaded file',
     },
   },
   decorators: [
@@ -53,23 +57,73 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {
-    onUpload: (files) => console.log('Uploaded files:', files),
+  render: () => {
+    const [file, setFile] = React.useState<File | null>(null);
+    const [processing, setProcessing] = React.useState(false);
+
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const selectedFile = e.target.files?.[0];
+      if (selectedFile) {
+        setProcessing(true);
+        setTimeout(() => {
+          setFile(selectedFile);
+          setProcessing(false);
+        }, 2000);
+      }
+    };
+
+    return (
+      <FileUploadZone
+        file={file}
+        processing={processing}
+        onFileSelect={handleFileSelect}
+      />
+    );
   },
 };
 
-export const WithAcceptedTypes: Story = {
-  args: {
-    onUpload: (files) => console.log('Uploaded files:', files),
-    accept: '.pdf,.doc,.docx',
-    description: 'PDF and Word documents only',
+export const Processing: Story = {
+  render: () => {
+    const [file, setFile] = React.useState<File | null>(null);
+    const [processing, setProcessing] = React.useState(true);
+    const [processStage, setProcessStage] = React.useState('Uploading file...');
+
+    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const selectedFile = e.target.files?.[0];
+      if (selectedFile) {
+        setProcessing(true);
+        setProcessStage('Uploading file...');
+        setTimeout(() => {
+          setProcessStage('Generating hash...');
+          setTimeout(() => {
+            setFile(selectedFile);
+            setProcessing(false);
+          }, 1500);
+        }, 1500);
+      }
+    };
+
+    return (
+      <FileUploadZone
+        file={file}
+        processing={processing}
+        processStage={processStage}
+        onFileSelect={handleFileSelect}
+      />
+    );
   },
 };
 
-export const MultipleFiles: Story = {
-  args: {
-    onUpload: (files) => console.log('Uploaded files:', files),
-    multiple: true,
-    description: 'Upload multiple files at once',
+export const WithHash: Story = {
+  render: () => {
+    const mockFile = new File(['test'], 'document.pdf', { type: 'application/pdf' });
+    return (
+      <FileUploadZone
+        file={mockFile}
+        processing={false}
+        onFileSelect={() => {}}
+        generatedHash="a1b2c3d4e5f6"
+      />
+    );
   },
 };

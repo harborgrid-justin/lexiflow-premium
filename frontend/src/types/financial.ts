@@ -7,6 +7,7 @@ import {
   CaseId, Money, MetadataRecord} from './primitives';
 import {
   BillingModel,  LedesActivityCode} from './enums';
+import { TrustSubLedger } from './trust-accounts';
 
 // --- CLUSTER 3: FINANCIAL & BILLING ---
 export interface FeeAgreement { type: BillingModel; rate?: Money; contingencyPercent?: number; retainerRequired?: Money; splitRules?: SplitBillingRule[]; }
@@ -86,17 +87,18 @@ export interface Invoice extends BaseEntity {
 /**
  * @deprecated Moved to types/trust-accounts.ts for full backend synchronization
  * Use TrustTransactionEntity from types/trust-accounts.ts instead
- * Legacy simple version kept for backward compatibility
+ * Legacy simple version removed to avoid duplicate export with trust-accounts.ts
+ * Import from trust-accounts.ts instead
  */
-export interface TrustTransaction extends BaseEntity { 
-  accountId: string; 
-  type: 'Deposit' | 'Withdrawal'; 
-  amount: Money; 
-  date: string; 
-  checkNumber?: string; 
-  clearedDate?: string; 
-  description: string; 
-}
+// export interface TrustTransaction extends BaseEntity {
+//   accountId: string;
+//   type: 'Deposit' | 'Withdrawal';
+//   amount: Money;
+//   date: string;
+//   checkNumber?: string;
+//   clearedDate?: string;
+//   description: string;
+// }
 
 export interface FirmExpense extends BaseEntity { 
   date: string; 
@@ -110,15 +112,16 @@ export interface FirmExpense extends BaseEntity {
 /**
  * @deprecated Moved to types/trust-accounts.ts for full backend synchronization
  * Use TrustSubLedger from types/trust-accounts.ts instead
- * Legacy version kept for backward compatibility
+ * Legacy version removed to avoid duplicate export with trust-accounts.ts
+ * Import from trust-accounts.ts instead
  */
-export interface TrustSubLedger { 
-  id: string; 
-  name: string; 
-  balance: Money; 
-  lastReconciled: string; 
-  accountId?: string; 
-}
+// export interface TrustSubLedger {
+//   id: string;
+//   name: string;
+//   balance: Money;
+//   lastReconciled: string;
+//   accountId?: string;
+// }
 
 // Ledger Transaction with Receipt Support
 export interface LedgerTransaction extends BaseEntity {

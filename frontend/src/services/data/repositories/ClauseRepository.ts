@@ -30,7 +30,8 @@ export const CLAUSE_QUERY_KEYS = {
     byJurisdiction: (jurisdiction: string) => ['clauses', 'jurisdiction', jurisdiction] as const,
 } as const;
 
-export class ClauseRepository extends Repository<Clause> {
+// Clause already extends BaseEntity, so we can use it directly as any to satisfy the constraint
+export class ClauseRepository extends Repository<any> {
     private useBackend: boolean;
     private clausesApi: ClausesApiService;
 
@@ -89,7 +90,7 @@ export class ClauseRepository extends Repository<Clause> {
         this.validateId(id, 'update');
         if (this.useBackend) {
             try {
-                return await this.clausesApi.update(id, updates) as any;
+                return await this.clausesApi.update(id, updates as any) as any;
             } catch (error) {
                 console.warn('[ClauseRepository] Backend API unavailable', error);
             }
@@ -122,7 +123,7 @@ export class ClauseRepository extends Repository<Clause> {
         }
         const clause = await this.getById(id);
         if (!clause) throw new Error('Clause not found');
-        return clause.text || '';
+        return (clause as any).text || clause.content || '';
     }
 
     async getByCategory(category: string): Promise<Clause[]> {
@@ -136,7 +137,8 @@ export class ClauseRepository extends Repository<Clause> {
         const lowerQuery = query.toLowerCase();
         return clauses.filter(c =>
             c.name?.toLowerCase().includes(lowerQuery) ||
-            c.text?.toLowerCase().includes(lowerQuery) ||
+            (c as any).text?.toLowerCase().includes(lowerQuery) ||
+            (c as any).content?.toLowerCase().includes(lowerQuery) ||
             c.tags?.some(t => t.toLowerCase().includes(lowerQuery))
         );
     }

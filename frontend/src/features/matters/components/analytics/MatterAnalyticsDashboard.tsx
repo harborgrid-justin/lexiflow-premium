@@ -31,7 +31,7 @@ import { Card } from '@/components/molecules/Card';
 import { Badge } from '@/components/atoms/Badge';
 
 export const MatterAnalyticsDashboard: React.FC = () => {
-  const { theme } = useTheme();
+  const { mode, isDark } = useTheme();
   const [dateRange, setDateRange] = useState<'7d' | '30d' | '90d' | 'ytd' | 'all'>('30d');
   const [practiceAreaFilter, setPracticeAreaFilter] = useState('all');
 
@@ -64,25 +64,26 @@ export const MatterAnalyticsDashboard: React.FC = () => {
     else if (dateRange === '90d') cutoffDate.setDate(now.getDate() - 90);
     else if (dateRange === 'ytd') cutoffDate.setMonth(0, 1);
     
-    const filteredMatters = matters.filter(m => 
-      new Date(m.createdAt) >= cutoffDate &&
+    const filteredMatters = matters.filter(m =>
+      m.createdAt && new Date(m.createdAt) >= cutoffDate &&
       (practiceAreaFilter === 'all' || m.practiceArea === practiceAreaFilter)
     );
-    
-    const totalRevenue = invoices?.filter(inv => 
-      new Date(inv.createdAt) >= cutoffDate
+
+    const totalRevenue = invoices?.filter(inv =>
+      inv.createdAt && new Date(inv.createdAt) >= cutoffDate
     ).reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0;
-    
+
     const closedMatters = filteredMatters.filter(m => m.status === 'CLOSED');
     const avgResolution = closedMatters.length > 0
       ? Math.round(closedMatters.reduce((sum, m) => {
+          if (!m.createdAt || !m.updatedAt) return sum;
           const created = new Date(m.createdAt);
           const closed = new Date(m.updatedAt);
           return sum + (closed.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
         }, 0) / closedMatters.length)
       : 0;
     
-    const totalHours = timeEntries?.reduce((sum, t) => sum + (t.hours || 0), 0) || 0;
+    const totalHours = timeEntries?.reduce((sum, t) => sum + (t.duration || 0), 0) || 0;
     const capacity = 180 * (timeEntries?.length || 1); // Assuming 180h/month per person
     const utilization = capacity > 0 ? (totalHours / capacity) * 100 : 0;
     
@@ -95,15 +96,15 @@ export const MatterAnalyticsDashboard: React.FC = () => {
   }, [matters, timeEntries, invoices, dateRange, practiceAreaFilter]);
 
   return (
-    <div className={cn('h-full flex flex-col', theme === 'dark' ? 'bg-slate-900' : 'bg-slate-50')}>
-      <div className={cn('border-b px-6 py-4', theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
+    <div className={cn('h-full flex flex-col', isDark ? 'bg-slate-900' : 'bg-slate-50')}>
+      <div className={cn('border-b px-6 py-4', isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
         <div className="flex items-center justify-end gap-3">
           <select
             value={dateRange}
             onChange={(e) => setDateRange(e.target.value as typeof dateRange)}
             className={cn(
               'px-4 py-2 rounded-lg border text-sm',
-              theme === 'dark'
+              isDark
                 ? 'bg-slate-700 border-slate-600 text-slate-100'
                 : 'bg-white border-slate-300 text-slate-900'
             )}
@@ -128,51 +129,51 @@ export const MatterAnalyticsDashboard: React.FC = () => {
             title="Total Matters"
             value={metrics.totalMatters.toString()}
             change={`${dateRange} period`}
-            theme={theme}
+            isDark={isDark}
           />
           <AnalyticsCard
             icon={DollarSign}
             title="Revenue"
             value={`$${(metrics.revenue / 1000000).toFixed(1)}M`}
             change="From invoices"
-            theme={theme}
+            isDark={isDark}
           />
           <AnalyticsCard
             icon={Clock}
             title="Avg Resolution Time"
             value={`${metrics.avgResolution} days`}
             change="Closed matters"
-            theme={theme}
+            isDark={isDark}
           />
           <AnalyticsCard
             icon={Users}
             title="Team Utilization"
             value={`${Math.round(metrics.utilization)}%`}
             change="Based on time entries"
-            theme={theme}
+            isDark={isDark}
           />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="p-6">
-            <h3 className={cn('text-lg font-semibold mb-4', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+            <h3 className={cn('text-lg font-semibold mb-4', isDark ? 'text-slate-100' : 'text-slate-900')}>
               Revenue Trend
             </h3>
-            <div className={cn('h-64 flex items-center justify-center rounded border', theme === 'dark' ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-slate-50')}>
-              <LineChart className={cn('w-12 h-12', theme === 'dark' ? 'text-slate-600' : 'text-slate-300')} />
-              <span className={cn('ml-3 text-sm', theme === 'dark' ? 'text-slate-500' : 'text-slate-400')}>
+            <div className={cn('h-64 flex items-center justify-center rounded border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-slate-50')}>
+              <LineChart className={cn('w-12 h-12', isDark ? 'text-slate-600' : 'text-slate-300')} />
+              <span className={cn('ml-3 text-sm', isDark ? 'text-slate-500' : 'text-slate-400')}>
                 Chart will be rendered here
               </span>
             </div>
           </Card>
 
           <Card className="p-6">
-            <h3 className={cn('text-lg font-semibold mb-4', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+            <h3 className={cn('text-lg font-semibold mb-4', isDark ? 'text-slate-100' : 'text-slate-900')}>
               Practice Area Distribution
             </h3>
-            <div className={cn('h-64 flex items-center justify-center rounded border', theme === 'dark' ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-slate-50')}>
-              <PieChart className={cn('w-12 h-12', theme === 'dark' ? 'text-slate-600' : 'text-slate-300')} />
-              <span className={cn('ml-3 text-sm', theme === 'dark' ? 'text-slate-500' : 'text-slate-400')}>
+            <div className={cn('h-64 flex items-center justify-center rounded border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-slate-50')}>
+              <PieChart className={cn('w-12 h-12', isDark ? 'text-slate-600' : 'text-slate-300')} />
+              <span className={cn('ml-3 text-sm', isDark ? 'text-slate-500' : 'text-slate-400')}>
                 Chart will be rendered here
               </span>
             </div>
@@ -189,26 +190,26 @@ const AnalyticsCard: React.FC<{
   value: string;
   change: string;
   trend?: 'up' | 'down';
-  theme: string;
-}> = ({ icon: Icon, title, value, change, trend, theme }) => (
+  isDark: boolean;
+}> = ({ icon: Icon, title, value, change, trend, isDark }) => (
   <Card className="p-6">
     <div className="flex items-start justify-between">
       <div className="flex-1">
-        <div className={cn('text-sm font-medium mb-1', theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+        <div className={cn('text-sm font-medium mb-1', isDark ? 'text-slate-400' : 'text-slate-600')}>
           {title}
         </div>
-        <div className={cn('text-2xl font-bold', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+        <div className={cn('text-2xl font-bold', isDark ? 'text-slate-100' : 'text-slate-900')}>
           {value}
         </div>
         <div className={cn('flex items-center gap-1 text-sm mt-2',
-          trend === 'up' ? 'text-emerald-500' : trend === 'down' ? 'text-red-500' : theme === 'dark' ? 'text-slate-400' : 'text-slate-600'
+          trend === 'up' ? 'text-emerald-500' : trend === 'down' ? 'text-red-500' : isDark ? 'text-slate-400' : 'text-slate-600'
         )}>
           {trend && (trend === 'up' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />)}
           {change}
         </div>
       </div>
-      <div className={cn('p-3 rounded-lg', theme === 'dark' ? 'bg-slate-700' : 'bg-slate-100')}>
-        <Icon className={cn('w-5 h-5', theme === 'dark' ? 'text-blue-400' : 'text-blue-600')} />
+      <div className={cn('p-3 rounded-lg', isDark ? 'bg-slate-700' : 'bg-slate-100')}>
+        <Icon className={cn('w-5 h-5', isDark ? 'text-blue-400' : 'text-blue-600')} />
       </div>
     </div>
   </Card>

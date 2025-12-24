@@ -15,9 +15,6 @@ import { useModalState } from '@/hooks';
 import { Modal } from '@/components';
 import { Input, TextArea } from '@/components';
 
-function setIsModalOpen() {
-
-}
 
 export const MotionForSanctions: React.FC = () => {
   const { theme } = useTheme();
@@ -50,7 +47,6 @@ export const MotionForSanctions: React.FC = () => {
       } as unknown as SanctionMotion);
   };
 
-    let isModalOpen;
     return (
     <div className="space-y-6 animate-fade-in">
         <div className={cn("p-6 rounded-lg border flex justify-between items-center", theme.status.error.bg, theme.status.error.border)}>
@@ -60,7 +56,7 @@ export const MotionForSanctions: React.FC = () => {
                  </h3>
                  <p className={cn("text-sm", theme.status.error.text)}>Track enforcement actions for discovery non-compliance.</p>
              </div>
-             <Button variant="danger" icon={Plus} onClick={() => setIsModalOpen()}>File Motion</Button>
+             <Button variant="danger" icon={Plus} onClick={sanctionModal.open}>File Motion</Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -86,7 +82,7 @@ export const MotionForSanctions: React.FC = () => {
             )}
         </div>
 
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen()} title="Draft Sanctions Motion">
+        <Modal isOpen={sanctionModal.isOpen} onClose={sanctionModal.close} title="Draft Sanctions Motion">
             <div className="p-6 space-y-4">
                 <Input label="Motion Title" value={newMotion.title || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMotion({...newMotion, title: e.target.value})} placeholder="e.g. Motion for Spoliation Sanctions"/>
                 <div>

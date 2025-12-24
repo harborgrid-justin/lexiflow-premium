@@ -60,7 +60,8 @@ export class InvoiceStatusChangedHandler extends BaseEventHandler<SystemEventPay
       }
     } catch (err: unknown) {
       console.error('[InvoiceHandler] Failed to deploy collection workflow:', err);
-      errors.push(`Collection workflow deployment failed: ${err.message}`);
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      errors.push(`Collection workflow deployment failed: ${errorMessage}`);
     }
   }
   

@@ -109,7 +109,7 @@ export class CitationRepository extends Repository<Citation> {
         this.validateId(id, 'update');
         if (this.useBackend) {
             try {
-                return await this.citationsApi.update(id, updates) as any;
+                return await this.citationsApi.update(id, updates as any) as any;
             } catch (error) {
                 console.warn('[CitationRepository] Backend API unavailable', error);
             }
@@ -135,7 +135,7 @@ export class CitationRepository extends Repository<Citation> {
     }
 
     async quickAdd(citation: unknown): Promise<Citation> {
-        return this.add(citation);
+        return this.add(citation as Citation);
     }
 
     async validate(citationText: string): Promise<{ valid: boolean; formatted?: string; errors?: string[] }> {
@@ -168,14 +168,15 @@ export class CitationRepository extends Repository<Citation> {
 
     async search(criteria: { caseId?: string; documentId?: string; type?: string; query?: string }): Promise<Citation[]> {
         let citations = await this.getAll();
-        if (criteria.caseId) citations = citations.filter(c => c.caseId === criteria.caseId);
-        if (criteria.documentId) citations = citations.filter(c => c.documentId === criteria.documentId);
-        if (criteria.type) citations = citations.filter(c => c.citationType === criteria.type);
+        if (criteria.caseId) citations = citations.filter(c => (c as any).caseId === criteria.caseId);
+        if (criteria.documentId) citations = citations.filter(c => (c as any).documentId === criteria.documentId);
+        if (criteria.type) citations = citations.filter(c => (c as any).type === criteria.type);
         if (criteria.query) {
             const lowerQuery = criteria.query.toLowerCase();
             citations = citations.filter(c =>
-                c.citationText?.toLowerCase().includes(lowerQuery) ||
-                c.bluebookFormat?.toLowerCase().includes(lowerQuery)
+                c.citation?.toLowerCase().includes(lowerQuery) ||
+                (c as any).citationText?.toLowerCase().includes(lowerQuery) ||
+                (c as any).bluebookFormat?.toLowerCase().includes(lowerQuery)
             );
         }
         return citations;

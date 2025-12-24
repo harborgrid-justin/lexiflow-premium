@@ -63,8 +63,8 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
   const templates = Array.isArray(templatesData) ? templatesData : [];
   
   // Use useFilterAndSearch hook for unified filtering
-  const { filteredItems: filteredTemplates, searchQuery, setSearchQuery, category, setCategory, categories } = useFilterAndSearch<WorkflowTemplateData>({
-    items: templates,
+  const { filteredItems: filteredTemplates, searchQuery, setSearchQuery, category, setCategory, categories } = useFilterAndSearch({
+    items: templates as unknown as Record<string, unknown>[],
     config: {
       categoryField: 'category',
       searchFields: ['title'],
@@ -126,7 +126,7 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredTemplates.map((tpl) => (
+        {(filteredTemplates as unknown as WorkflowTemplateData[]).map((tpl) => (
           <TemplatePreview key={tpl.id} data={tpl} onClick={() => onCreate(tpl)} />
         ))}
         

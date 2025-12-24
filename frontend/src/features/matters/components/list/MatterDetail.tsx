@@ -73,7 +73,7 @@ export const MatterDetail: React.FC = () => {
 
   const handleDelete = async () => {
     setDeleting(true);
-    await deleteMutation.mutateAsync();
+    await deleteMutation.mutateAsync(matterId!);
   };
 
   const formatCurrency = (amount?: number) => {

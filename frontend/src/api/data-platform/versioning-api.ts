@@ -35,7 +35,7 @@ export class VersioningApiService {
   async getHistory(
     entityType: string,
     entityId: string,
-    filters?: unknown,
+    filters?: Record<string, any>,
   ): Promise<PaginatedResponse<DataVersion>> {
     try {
       return await apiClient.get<PaginatedResponse<DataVersion>>(

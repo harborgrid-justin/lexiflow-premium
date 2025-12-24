@@ -31,7 +31,7 @@ import { Card } from '@/components/molecules/Card';
 import { Badge } from '@/components/atoms/Badge';
 
 export const MatterFinancialsCenter: React.FC = () => {
-  const { theme } = useTheme();
+  const { mode, isDark } = useTheme();
   const [dateRange, setDateRange] = useState<'30d' | '90d' | 'ytd' | 'all'>('30d');
   const [viewMode, setViewMode] = useState<'overview' | 'billing' | 'expenses' | 'budget'>('overview');
 
@@ -65,20 +65,21 @@ export const MatterFinancialsCenter: React.FC = () => {
       new Date(inv.createdAt) >= cutoffDate
     ) || [];
     
-    const recentTimeEntries = timeEntries?.filter(t => 
-      new Date(t.date || t.createdAt) >= cutoffDate
-    ) || [];
+    const recentTimeEntries = timeEntries?.filter(t => {
+      const entryDate = t.date || (t.createdAt ? t.createdAt : new Date().toISOString());
+      return new Date(entryDate) >= cutoffDate;
+    }) || [];
 
     const totalRevenue = recentInvoices.reduce((sum, inv) => 
       sum + (inv.amount || 0), 0
     );
 
-    const billableHours = recentTimeEntries.reduce((sum, t) => 
-      sum + (t.hours || 0), 0
+    const billableHours = recentTimeEntries.reduce((sum, t) =>
+      sum + (t.duration || 0), 0
     );
 
-    const totalBilled = recentTimeEntries.reduce((sum, t) => 
-      sum + ((t.hours || 0) * (t.rate || 150)), 0
+    const totalBilled = recentTimeEntries.reduce((sum, t) =>
+      sum + ((t.duration || 0) * (t.rate || 150)), 0
     );
 
     const realizationRate = totalBilled > 0 
@@ -98,15 +99,15 @@ export const MatterFinancialsCenter: React.FC = () => {
   }, [invoices, timeEntries, dateRange]);
 
   return (
-    <div className={cn('h-full flex flex-col', theme === 'dark' ? 'bg-slate-900' : 'bg-slate-50')}>
-      <div className={cn('border-b px-6 py-4', theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
+    <div className={cn('h-full flex flex-col', isDark ? 'bg-slate-900' : 'bg-slate-50')}>
+      <div className={cn('border-b px-6 py-4', isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
         <div className="flex items-center justify-between">
             <select
               value={dateRange}
               onChange={(e) => setDateRange(e.target.value as typeof dateRange)}
               className={cn(
                 'px-4 py-2 rounded-lg border text-sm',
-                theme === 'dark'
+                isDark
                   ? 'bg-slate-700 border-slate-600 text-slate-100'
                   : 'bg-white border-slate-300 text-slate-900'
               )}
@@ -123,13 +124,13 @@ export const MatterFinancialsCenter: React.FC = () => {
           </div>
         </div>
 
-        <div className={cn('flex items-center gap-2 p-1 rounded-lg', theme === 'dark' ? 'bg-slate-700' : 'bg-slate-100')}>
+        <div className={cn('flex items-center gap-2 p-1 rounded-lg', isDark ? 'bg-slate-700' : 'bg-slate-100')}>
           <button
             onClick={() => setViewMode('overview')}
             className={cn('px-4 py-2 rounded text-sm font-medium transition-colors',
               viewMode === 'overview'
-                ? theme === 'dark' ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
-                : theme === 'dark' ? 'text-slate-400' : 'text-slate-600'
+                ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
+                : isDark ? 'text-slate-400' : 'text-slate-600'
             )}
           >
             Overview
@@ -138,8 +139,8 @@ export const MatterFinancialsCenter: React.FC = () => {
             onClick={() => setViewMode('billing')}
             className={cn('px-4 py-2 rounded text-sm font-medium transition-colors',
               viewMode === 'billing'
-                ? theme === 'dark' ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
-                : theme === 'dark' ? 'text-slate-400' : 'text-slate-600'
+                ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
+                : isDark ? 'text-slate-400' : 'text-slate-600'
             )}
           >
             Billing
@@ -148,8 +149,8 @@ export const MatterFinancialsCenter: React.FC = () => {
             onClick={() => setViewMode('expenses')}
             className={cn('px-4 py-2 rounded text-sm font-medium transition-colors',
               viewMode === 'expenses'
-                ? theme === 'dark' ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
-                : theme === 'dark' ? 'text-slate-400' : 'text-slate-600'
+                ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
+                : isDark ? 'text-slate-400' : 'text-slate-600'
             )}
           >
             Expenses
@@ -158,8 +159,8 @@ export const MatterFinancialsCenter: React.FC = () => {
             onClick={() => setViewMode('budget')}
             className={cn('px-4 py-2 rounded text-sm font-medium transition-colors',
               viewMode === 'budget'
-                ? theme === 'dark' ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
-                : theme === 'dark' ? 'text-slate-400' : 'text-slate-600'
+                ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
+                : isDark ? 'text-slate-400' : 'text-slate-600'
             )}
           >
             Budget
@@ -174,65 +175,65 @@ export const MatterFinancialsCenter: React.FC = () => {
             title="Total Revenue"
             value={`$${(financialMetrics.totalRevenue / 1000000).toFixed(1)}M`}
             change={dateRange}
-            theme={theme}
+            isDark={isDark}
           />
           <FinancialKPICard
             icon={Clock}
             title="Billable Hours"
             value={financialMetrics.billableHours.toLocaleString()}
             change={`${dateRange} period`}
-            theme={theme}
+            isDark={isDark}
           />
           <FinancialKPICard
             icon={TrendingUp}
             title="Realization Rate"
             value={`${financialMetrics.realizationRate}%`}
             change="Revenue vs billed"
-            theme={theme}
+            isDark={isDark}
           />
           <FinancialKPICard
             icon={Wallet}
             title="Outstanding AR"
             value={`$${(financialMetrics.outstandingAR / 1000).toFixed(0)}K`}
             change="Pending invoices"
-            theme={theme}
+            isDark={isDark}
           />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
           <Card className="lg:col-span-2 p-6">
-            <h3 className={cn('text-lg font-semibold mb-4', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+            <h3 className={cn('text-lg font-semibold mb-4', isDark ? 'text-slate-100' : 'text-slate-900')}>
               Revenue Trend
             </h3>
-            <div className={cn('h-64 flex items-center justify-center rounded border', theme === 'dark' ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-slate-50')}>
-              <BarChart3 className={cn('w-12 h-12', theme === 'dark' ? 'text-slate-600' : 'text-slate-300')} />
-              <span className={cn('ml-3 text-sm', theme === 'dark' ? 'text-slate-500' : 'text-slate-400')}>
+            <div className={cn('h-64 flex items-center justify-center rounded border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-slate-50')}>
+              <BarChart3 className={cn('w-12 h-12', isDark ? 'text-slate-600' : 'text-slate-300')} />
+              <span className={cn('ml-3 text-sm', isDark ? 'text-slate-500' : 'text-slate-400')}>
                 Revenue chart will be rendered here
               </span>
             </div>
           </Card>
 
           <Card className="p-6">
-            <h3 className={cn('text-lg font-semibold mb-4', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+            <h3 className={cn('text-lg font-semibold mb-4', isDark ? 'text-slate-100' : 'text-slate-900')}>
               Top Matters by Revenue
             </h3>
             <div className="space-y-3">
               {matters && (() => {
                 const matterRevenue = matters.map(matter => {
-                  const matterInvoices = invoices?.filter(inv => inv.matterId === matter.id) || [];
-                  const revenue = matterInvoices.reduce((sum, inv) => sum + (inv.amount || 0), 0);
+                  const matterInvoices = invoices?.filter(inv => inv.caseId === matter.id) || [];
+                  const revenue = matterInvoices.reduce((sum, inv) => sum + (inv.amount || inv.totalAmount || 0), 0);
                   return { matter, revenue };
                 }).sort((a, b) => b.revenue - a.revenue).slice(0, 5);
-                
+
                 const totalRevenue = matterRevenue.reduce((sum, mr) => sum + mr.revenue, 0);
-                
+
                 return matterRevenue.map(({ matter, revenue }) => (
                   <MatterRevenueItem
                     key={matter.id}
                     matter={matter.title}
                     revenue={revenue}
                     percentage={totalRevenue > 0 ? Math.round((revenue / totalRevenue) * 100) : 0}
-                    theme={theme}
+                    isDark={isDark}
                   />
                 ));
               })()}
@@ -243,7 +244,7 @@ export const MatterFinancialsCenter: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className={cn('text-lg font-semibold', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+              <h3 className={cn('text-lg font-semibold', isDark ? 'text-slate-100' : 'text-slate-900')}>
                 Budget Performance
               </h3>
               <Button variant="ghost" size="sm">View All</Button>
@@ -254,28 +255,28 @@ export const MatterFinancialsCenter: React.FC = () => {
                 budget={150000}
                 spent={178000}
                 remaining={-28000}
-                theme={theme}
+                isDark={isDark}
               />
               <BudgetPerformanceItem
                 matter="Tech Startup M&A"
                 budget={200000}
                 spent={195000}
                 remaining={5000}
-                theme={theme}
+                isDark={isDark}
               />
               <BudgetPerformanceItem
                 matter="Johnson Estate"
                 budget={50000}
                 spent={45000}
                 remaining={5000}
-                theme={theme}
+                isDark={isDark}
               />
             </div>
           </Card>
 
           <Card className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <h3 className={cn('text-lg font-semibold', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+              <h3 className={cn('text-lg font-semibold', isDark ? 'text-slate-100' : 'text-slate-900')}>
                 Recent Invoices
               </h3>
               <Button variant="ghost" size="sm">View All</Button>
@@ -287,7 +288,7 @@ export const MatterFinancialsCenter: React.FC = () => {
                 amount={25000}
                 status="paid"
                 date="Dec 15, 2025"
-                theme={theme}
+                isDark={isDark}
               />
               <InvoiceItem
                 invoiceNumber="INV-2025-0235"
@@ -295,7 +296,7 @@ export const MatterFinancialsCenter: React.FC = () => {
                 amount={18500}
                 status="pending"
                 date="Dec 18, 2025"
-                theme={theme}
+                isDark={isDark}
               />
               <InvoiceItem
                 invoiceNumber="INV-2025-0236"
@@ -303,7 +304,7 @@ export const MatterFinancialsCenter: React.FC = () => {
                 amount={8200}
                 status="overdue"
                 date="Dec 1, 2025"
-                theme={theme}
+                isDark={isDark}
               />
             </div>
           </Card>
@@ -319,15 +320,15 @@ const FinancialKPICard: React.FC<{
   value: string;
   change: string;
   trend?: 'up' | 'down';
-  theme: string;
-}> = ({ icon: Icon, title, value, change, trend = 'up', theme }) => (
+  isDark: boolean;
+}> = ({ icon: Icon, title, value, change, trend = 'up', isDark }) => (
   <Card className="p-6">
     <div className="flex items-start justify-between">
       <div className="flex-1">
-        <div className={cn('text-sm font-medium mb-1', theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+        <div className={cn('text-sm font-medium mb-1', isDark ? 'text-slate-400' : 'text-slate-600')}>
           {title}
         </div>
-        <div className={cn('text-2xl font-bold', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+        <div className={cn('text-2xl font-bold', isDark ? 'text-slate-100' : 'text-slate-900')}>
           {value}
         </div>
         <div className={cn('text-sm mt-2',
@@ -336,8 +337,8 @@ const FinancialKPICard: React.FC<{
           {change}
         </div>
       </div>
-      <div className={cn('p-3 rounded-lg', theme === 'dark' ? 'bg-slate-700' : 'bg-slate-100')}>
-        <Icon className={cn('w-5 h-5', theme === 'dark' ? 'text-blue-400' : 'text-blue-600')} />
+      <div className={cn('p-3 rounded-lg', isDark ? 'bg-slate-700' : 'bg-slate-100')}>
+        <Icon className={cn('w-5 h-5', isDark ? 'text-blue-400' : 'text-blue-600')} />
       </div>
     </div>
   </Card>
@@ -347,18 +348,18 @@ const MatterRevenueItem: React.FC<{
   matter: string;
   revenue: number;
   percentage: number;
-  theme: string;
-}> = ({ matter, revenue, percentage, theme }) => (
+  isDark: boolean;
+}> = ({ matter, revenue, percentage, isDark }) => (
   <div>
     <div className="flex items-center justify-between mb-2">
-      <span className={cn('text-sm font-medium', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+      <span className={cn('text-sm font-medium', isDark ? 'text-slate-300' : 'text-slate-700')}>
         {matter}
       </span>
-      <span className={cn('text-sm font-semibold', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+      <span className={cn('text-sm font-semibold', isDark ? 'text-slate-100' : 'text-slate-900')}>
         ${(revenue / 1000).toFixed(0)}K
       </span>
     </div>
-    <div className={cn('h-2 rounded-full', theme === 'dark' ? 'bg-slate-700' : 'bg-slate-200')}>
+    <div className={cn('h-2 rounded-full', isDark ? 'bg-slate-700' : 'bg-slate-200')}>
       <div
         className="h-full rounded-full bg-gradient-to-r from-blue-500 to-emerald-500"
         style={{ width: `${percentage}%` }}
@@ -372,26 +373,26 @@ const BudgetPerformanceItem: React.FC<{
   budget: number;
   spent: number;
   remaining: number;
-  theme: string;
-}> = ({ matter, budget, spent, remaining, theme }) => {
+  isDark: boolean;
+}> = ({ matter, budget, spent, remaining, isDark }) => {
   const percentageSpent = (spent / budget) * 100;
   const isOverBudget = remaining < 0;
 
   return (
-    <div className={cn('p-4 rounded-lg border', theme === 'dark' ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-white')}>
-      <div className={cn('font-medium mb-2', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+    <div className={cn('p-4 rounded-lg border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-white')}>
+      <div className={cn('font-medium mb-2', isDark ? 'text-slate-100' : 'text-slate-900')}>
         {matter}
       </div>
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm">
-          <span className={cn(theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+          <span className={cn(isDark ? 'text-slate-400' : 'text-slate-600')}>
             Budget: ${(budget / 1000).toFixed(0)}K
           </span>
-          <span className={cn(theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+          <span className={cn(isDark ? 'text-slate-400' : 'text-slate-600')}>
             Spent: ${(spent / 1000).toFixed(0)}K
           </span>
         </div>
-        <div className={cn('h-2 rounded-full', theme === 'dark' ? 'bg-slate-700' : 'bg-slate-200')}>
+        <div className={cn('h-2 rounded-full', isDark ? 'bg-slate-700' : 'bg-slate-200')}>
           <div
             className={cn('h-full rounded-full', isOverBudget ? 'bg-red-500' : 'bg-emerald-500')}
             style={{ width: `${Math.min(percentageSpent, 100)}%` }}
@@ -413,15 +414,15 @@ const InvoiceItem: React.FC<{
   amount: number;
   status: 'paid' | 'pending' | 'overdue';
   date: string;
-  theme: string;
-}> = ({ invoiceNumber, matter, amount, status, date, theme }) => (
-  <div className={cn('p-4 rounded-lg border', theme === 'dark' ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-white')}>
+  isDark: boolean;
+}> = ({ invoiceNumber, matter, amount, status, date, isDark }) => (
+  <div className={cn('p-4 rounded-lg border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-white')}>
     <div className="flex items-start justify-between mb-2">
       <div>
-        <div className={cn('font-medium', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+        <div className={cn('font-medium', isDark ? 'text-slate-100' : 'text-slate-900')}>
           {invoiceNumber}
         </div>
-        <div className={cn('text-sm mt-1', theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+        <div className={cn('text-sm mt-1', isDark ? 'text-slate-400' : 'text-slate-600')}>
           {matter}
         </div>
       </div>
@@ -430,10 +431,10 @@ const InvoiceItem: React.FC<{
       </Badge>
     </div>
     <div className="flex items-center justify-between">
-      <span className={cn('text-lg font-semibold', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+      <span className={cn('text-lg font-semibold', isDark ? 'text-slate-100' : 'text-slate-900')}>
         ${amount.toLocaleString()}
       </span>
-      <span className={cn('text-sm', theme === 'dark' ? 'text-slate-500' : 'text-slate-500')}>
+      <span className={cn('text-sm', isDark ? 'text-slate-500' : 'text-slate-500')}>
         {date}
       </span>
     </div>

@@ -27,9 +27,9 @@ export const ClientCRMContent: React.FC<ClientCRMContentProps> = ({ activeTab, o
     switch (activeTab) {
         case 'dashboard': return <CRMDashboard />;
         case 'directory': return <ClientDirectory onOpenPortal={onOpenPortal} clients={clients} />;
-        case 'pipeline': 
+        case 'pipeline':
             if (isLoadingLeads) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
-            return <CRMPipeline leads={leads} />;
+            return <CRMPipeline leads={leads as unknown[]} />;
         case 'analytics': return <ClientAnalytics />;
         default: return <CRMDashboard />;
     }

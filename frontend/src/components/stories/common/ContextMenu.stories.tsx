@@ -25,9 +25,13 @@ const meta: Meta<typeof ContextMenu> = {
       control: 'object',
       description: 'Array of menu items',
     },
-    children: {
-      control: 'text',
-      description: 'The trigger element',
+    x: {
+      control: 'number',
+      description: 'X coordinate for menu position',
+    },
+    y: {
+      control: 'number',
+      description: 'Y coordinate for menu position',
     },
   },
   decorators: [
@@ -46,22 +50,43 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const menuItems = [
-  { icon: Edit, label: 'Edit', onClick: () => console.log('Edit') },
-  { icon: Copy, label: 'Duplicate', onClick: () => console.log('Duplicate') },
-  { icon: Trash2, label: 'Delete', onClick: () => console.log('Delete'), variant: 'danger' as const },
+  { icon: Edit, label: 'Edit', action: () => console.log('Edit') },
+  { icon: Copy, label: 'Duplicate', action: () => console.log('Duplicate') },
+  { icon: Trash2, label: 'Delete', action: () => console.log('Delete'), danger: true },
 ];
 
 export const Default: Story = {
-  render: () => (
-    <div className="p-20 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg">
-      <p className="text-center text-slate-600 dark:text-slate-400">
-        Right-click here to see the context menu
-      </p>
-      <ContextMenu items={menuItems}>
-        <div className="p-8 bg-blue-50 dark:bg-blue-900/20 rounded-lg mt-4">
-          Right-click this area
+  render: () => {
+    const [menuState, setMenuState] = React.useState<{ x: number; y: number; visible: boolean }>({
+      x: 0,
+      y: 0,
+      visible: false
+    });
+
+    const handleContextMenu = (e: React.MouseEvent) => {
+      e.preventDefault();
+      setMenuState({ x: e.clientX, y: e.clientY, visible: true });
+    };
+
+    return (
+      <div className="p-20 border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-lg">
+        <div
+          className="p-8 bg-blue-50 dark:bg-blue-900/20 rounded-lg cursor-pointer"
+          onContextMenu={handleContextMenu}
+        >
+          <p className="text-center text-slate-600 dark:text-slate-400">
+            Right-click here to see the context menu
+          </p>
         </div>
-      </ContextMenu>
-    </div>
-  ),
+        {menuState.visible && (
+          <ContextMenu
+            items={menuItems}
+            x={menuState.x}
+            y={menuState.y}
+            onClose={() => setMenuState({ ...menuState, visible: false })}
+          />
+        )}
+      </div>
+    );
+  },
 };

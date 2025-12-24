@@ -75,7 +75,7 @@ export const FinancialPerformance: React.FC = () => {
                                 />
                                 <Tooltip
                                     cursor={{fill: 'transparent'}}
-                                    formatter={(value: number) => `$${value.toLocaleString()}`}
+                                    formatter={(value: number | undefined) => value !== undefined ? `$${value.toLocaleString()}` : '$0'}
                                     contentStyle={{
                                         backgroundColor: mode === 'dark' ? '#1e293b' : '#ffffff',
                                         borderColor: mode === 'dark' ? '#334155' : '#e2e8f0',

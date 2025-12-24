@@ -39,7 +39,11 @@ import { PleadingDocument } from '@/types';
 // COMPONENT
 // ============================================================================
 
-interface FilingQueueItem extends PleadingDocument {
+interface FilingQueueItem {
+    id: string;
+    title: string;
+    caseId: string;
+    status: string;
     filingStatus?: 'pending' | 'filed' | 'failed' | 'scheduled';
     scheduledDate?: string;
     court?: string;
@@ -54,8 +58,8 @@ export const PleadingFilingQueue: React.FC = () => {
         async () => {
             const all = await DataService.pleadings.getAll();
             // Filter for finalized pleadings ready for filing
-            return all.filter((p: PleadingDocument) => 
-                p.status === 'Finalized' || p.status === 'Filed'
+            return all.filter((p: PleadingDocument) =>
+                p.status === 'Final' || p.status === 'Filed'
             );
         }
     );
@@ -83,13 +87,13 @@ export const PleadingFilingQueue: React.FC = () => {
     const getStatusBadge = (status: string) => {
         switch (status) {
             case 'filed':
-                return <Badge variant="success" icon={CheckCircle}>Filed</Badge>;
+                return <Badge variant="success"><CheckCircle className="w-3 h-3 inline mr-1" />Filed</Badge>;
             case 'pending':
-                return <Badge variant="warning" icon={Clock}>Pending</Badge>;
+                return <Badge variant="warning"><Clock className="w-3 h-3 inline mr-1" />Pending</Badge>;
             case 'failed':
-                return <Badge variant="error" icon={XCircle}>Failed</Badge>;
+                return <Badge variant="error"><XCircle className="w-3 h-3 inline mr-1" />Failed</Badge>;
             case 'scheduled':
-                return <Badge variant="info" icon={Clock}>Scheduled</Badge>;
+                return <Badge variant="info"><Clock className="w-3 h-3 inline mr-1" />Scheduled</Badge>;
             default:
                 return <Badge variant="neutral">Unknown</Badge>;
         }

@@ -83,8 +83,8 @@ const StatCard = React.memo<StatCardProps>(({
         };
       default:
         return {
-          bg: theme.bg.secondary,
-          border: theme.border.primary,
+          bg: theme.surface.default,
+          border: theme.border.default,
           text: theme.text.primary,
           icon: theme.text.secondary,
         };
@@ -182,8 +182,8 @@ const ComplianceIssueCard = React.memo<ComplianceIssueProps>(({
     <div
       className={cn(
         'flex items-start gap-3 p-4 rounded-lg border',
-        theme.bg.tertiary,
-        theme.border.primary
+        theme.surface.default,
+        theme.border.default
       )}
     >
       <AlertCircle className={cn('h-5 w-5 flex-shrink-0 mt-0.5', severityColor)} />
@@ -251,8 +251,8 @@ const AccountListItem = React.memo<AccountListItemProps>(({ account, onClick }) 
       onClick={() => onClick(account.id)}
       className={cn(
         'w-full text-left p-4 rounded-lg border transition-all hover:shadow-md',
-        theme.bg.tertiary,
-        theme.border.primary
+        theme.surface.default,
+        theme.border.default
       )}
       aria-label={`View ${account.accountName}`}
     >
@@ -390,7 +390,7 @@ export const TrustAccountDashboard: React.FC = () => {
    */
   if (isLoading) {
     return (
-      <div className={cn('flex items-center justify-center h-64', theme.bg.primary)}>
+      <div className={cn('flex items-center justify-center h-64', theme.surface.default)}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className={cn('text-sm', theme.text.secondary)}>Loading trust accounts...</p>

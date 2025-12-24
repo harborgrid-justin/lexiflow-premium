@@ -58,12 +58,14 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
     generatedData,
     currentStep: wizard.currentStep
   };
-  
-  const { isSaving, lastSaved } = useAutoSave(
-    'evidence-intake-draft',
-    draftData,
-    { debounceMs: 2000 }
-  );
+
+  const { isSaving } = useAutoSave({
+    data: draftData,
+    onSave: async (data) => {
+      localStorage.setItem('evidence-intake-draft', JSON.stringify(data));
+    },
+    delay: 2000
+  });
   
   // Restore draft on mount
   useEffect(() => {
@@ -156,11 +158,6 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
               {isSaving && (
                   <div className="flex items-center text-xs text-blue-600">
                       <Save className="h-3 w-3 mr-1 animate-pulse"/> Saving draft...
-                  </div>
-              )}
-              {!isSaving && lastSaved && (
-                  <div className="text-xs text-slate-500">
-                      Draft saved {new Date(lastSaved).toLocaleTimeString()}
                   </div>
               )}
           </div>

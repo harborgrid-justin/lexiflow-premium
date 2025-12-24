@@ -34,7 +34,7 @@ import { CANVAS_CONSTANTS, VALIDATION_MESSAGES } from '@/types/canvas-constants'
 import { Playbook } from '@/api/data/mockLitigationPlaybooks';
 
 // Types
-import { Case, CasePhase, WorkflowTask, CaseId, TaskId } from '../types';
+import { Case, CasePhase, WorkflowTask, CaseId, TaskId, TaskStatusBackend, TaskPriorityBackend } from '../types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -145,7 +145,7 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
                   startDate: DateCalculationService.formatToISO(startDate),
                   dueDate: DateCalculationService.formatToISO(dueDate),
                   status: TaskStatusBackend.TODO,
-                  assignee: node.config.assignee || 'Unassigned',
+                  assignee: typeof node.config.assignee === 'string' ? node.config.assignee : 'Unassigned',
                   priority: TaskPriorityBackend.MEDIUM,
                   dependencies: connections.filter(c => c.to === node.id).map(c => c.from as TaskId)
               });

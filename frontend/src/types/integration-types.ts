@@ -35,6 +35,9 @@ export enum SystemEventType {
 
     // Opp #8: Compliance -> Security
     WALL_ERECTED = 'WALL_ERECTED',
+    ETHICAL_WALL_CREATED = 'ETHICAL_WALL_CREATED',
+    CONFLICT_DETECTED = 'CONFLICT_DETECTED',
+    SECURITY_THREAT_DETECTED = 'SECURITY_THREAT_DETECTED',
 
     // Opp #9: HR -> Admin
     STAFF_HIRED = 'STAFF_HIRED',
@@ -80,6 +83,9 @@ export interface SystemEventPayloads {
 
     // Opp #8
     [SystemEventType.WALL_ERECTED]: { wall: EthicalWall };
+    [SystemEventType.ETHICAL_WALL_CREATED]: { wall: EthicalWall; caseId?: string };
+    [SystemEventType.CONFLICT_DETECTED]: { check: unknown; entityName: string; conflictCount: number };
+    [SystemEventType.SECURITY_THREAT_DETECTED]: { threatCount: number; threats: unknown[]; scannedAt: string };
 
     // Opp #9
     [SystemEventType.STAFF_HIRED]: { staff: StaffMember };

@@ -21,6 +21,7 @@ export interface SearchResult {
   description?: string;
   highlights?: string[];
   score: number;
+  url?: string;
   metadata?: Record<string, any>;
   createdAt?: string;
   updatedAt?: string;

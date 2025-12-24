@@ -28,7 +28,7 @@ interface ComposeMessageModalProps {
 export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen, onClose, onSend, initialData }) => {
   const { theme } = useTheme();
   const notify = useNotify();
-  const { registerBlob, getBlob, removeBlob } = useBlobRegistry();
+  const { register, revoke } = useBlobRegistry();
   
   // Fetch users from backend API
   const { data: users = [] } = useQuery<User[]>(
@@ -54,25 +54,25 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   // Auto-save draft every 2 seconds
-  useAutoSave(
-    () => {
-      if (body && formData.subject && isOpen) {
+  useAutoSave({
+    data: { formData, body, attachments },
+    onSave: async (data) => {
+      if (data.body && data.formData.subject && isOpen) {
         // Save draft to IndexedDB
-        const draftKey = `draft_communication_${formData.caseId || 'new'}`;
-        localStorage.setItem(draftKey, JSON.stringify({ formData, body, attachments }));
+        const draftKey = `draft_communication_${data.formData.caseId || 'new'}`;
+        localStorage.setItem(draftKey, JSON.stringify(data));
       }
     },
-    [body, formData, attachments, isOpen],
-    2000
-  );
+    delay: 2000,
+    enabled: isOpen
+  });
 
   // Keyboard shortcuts
   useKeyboardShortcuts([
       {
           key: 's',
           cmd: true,
-          callback: (e: KeyboardEvent) => {
-              e.preventDefault();
+          callback: () => {
               if (isOpen) {
                   handleSend();
               }
@@ -142,7 +142,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
               continue;
           }
 
-          const blobId = await registerBlob(file, 'correspondence');
+          const blobId = register(file);
           setAttachments(prev => [...prev, {
               id: blobId,
               name: file.name,
@@ -150,12 +150,12 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
           }]);
       }
       event.target.value = ''; // Reset input
-  }, [registerBlob, notify]);
+  }, [register, notify]);
 
   const handleRemoveAttachment = useCallback((attachmentId: string) => {
-      removeBlob(attachmentId);
+      revoke(attachmentId);
       setAttachments(prev => prev.filter(a => a.id !== attachmentId));
-  }, [removeBlob]);
+  }, [revoke]);
 
   const handleSend = () => {
       if (!formData.subject || !formData.recipient || !formData.caseId) {
@@ -223,11 +223,11 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
                 </div>
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Matter Reference</label>
-                    <select 
+                    <select
                         title="Select case reference"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                         value={formData.caseId || ''}
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, caseId: e.target.value})}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, caseId: e.target.value as import('@/types').CaseId})}
                     >
                         <option value="">Select Case...</option>
                         {(Array.isArray(cases) ? cases : []).map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
@@ -291,15 +291,18 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
 
             <div className="flex items-center justify-between pt-2">
                 <div className="flex items-center gap-4">
-                    <label>
-                        <input 
-                            type="file" 
-                            multiple 
+                    <label className="cursor-pointer">
+                        <input
+                            type="file"
+                            multiple
                             onChange={handleAttachmentUpload}
                             className="hidden"
                             accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
                         />
-                        <Button size="sm" variant="ghost" icon={Paperclip} as="span">Attach File</Button>
+                        <span className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md hover:bg-slate-100 transition-colors">
+                            <Paperclip className="h-4 w-4" />
+                            Attach File
+                        </span>
                     </label>
                     <label className="flex items-center text-sm cursor-pointer">
                         <input 

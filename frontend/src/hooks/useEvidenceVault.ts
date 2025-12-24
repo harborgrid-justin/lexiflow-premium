@@ -388,7 +388,7 @@ export const useEvidenceVault = (caseId?: string) => {
     }
 
     // Validation
-    if (!newEvent || !newEvent.custodian || !newEvent.timestamp) {
+    if (!newEvent || !newEvent.actor || !newEvent.date) {
       console.error('[useEvidenceVault.handleCustodyUpdate] Invalid custody event:', newEvent);
       alert('Error: Invalid custody event. Please check all required fields.');
       return;
@@ -398,7 +398,7 @@ export const useEvidenceVault = (caseId?: string) => {
       const updatedItem: EvidenceItem = {
         ...selectedItem,
         chainOfCustody: [newEvent, ...selectedItem.chainOfCustody],
-        custodian: newEvent.custodian
+        custodian: newEvent.actor
       };
       
       // Optimistic UI update
@@ -442,11 +442,9 @@ export const useEvidenceVault = (caseId?: string) => {
     try {
       return evidenceItems.filter((e: EvidenceItem) => {
         // Search filter: Multi-field text search
-        const matchesSearch = !filters.search || 
-          e.title?.toLowerCase().includes(filters.search.toLowerCase()) || 
-          e.description?.toLowerCase().includes(filters.search.toLowerCase()) ||
-          e.evidenceNumber?.toLowerCase().includes(filters.search.toLowerCase()) ||
-          e.batesNumber?.toLowerCase().includes(filters.search.toLowerCase());
+        const matchesSearch = !filters.search ||
+          e.title?.toLowerCase().includes(filters.search.toLowerCase()) ||
+          e.description?.toLowerCase().includes(filters.search.toLowerCase());
         
         // Type filter: Exact match
         const matchesType = !filters.type || e.type === filters.type;
@@ -460,9 +458,8 @@ export const useEvidenceVault = (caseId?: string) => {
           e.caseId?.toLowerCase().includes(filters.caseId.toLowerCase());
         
         // Custodian filter: Partial match
-        const matchesCustodian = !filters.custodian || 
-          e.custodian?.toLowerCase().includes(filters.custodian.toLowerCase()) ||
-          e.currentCustodian?.toLowerCase().includes(filters.custodian.toLowerCase());
+        const matchesCustodian = !filters.custodian ||
+          e.custodian?.toLowerCase().includes(filters.custodian.toLowerCase());
         
         // Date range filters: ISO string comparison
         const matchesDateFrom = !filters.dateFrom || 

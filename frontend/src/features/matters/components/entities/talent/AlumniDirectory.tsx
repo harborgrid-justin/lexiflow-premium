@@ -29,12 +29,12 @@ export const AlumniDirectory: React.FC<AlumniDirectoryProps> = ({ entities }) =>
   // Safety check: ensure allAlumni is always an array
   const safeAlumni = Array.isArray(allAlumni) ? allAlumni : [];
 
-  // Filter for alumni (individuals with specific metadata or roles)
-  const alumni = safeAlumni.filter(entity => 
-    entity.type === 'Individual' && 
-    (entity.roles?.includes('Alumni') || entity.tags?.includes('alumni'))
-  ).filter(person => 
-    searchTerm === '' || 
+  // Filter for alumni (individuals with specific metadata or tags)
+  const alumni = safeAlumni.filter(entity =>
+    entity.type === 'Individual' &&
+    entity.tags?.includes('alumni')
+  ).filter(person =>
+    searchTerm === '' ||
     person.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -42,7 +42,10 @@ export const AlumniDirectory: React.FC<AlumniDirectoryProps> = ({ entities }) =>
   const stats = {
     total: alumni.length,
     clientPlacements: alumni.filter(a => a.metadata?.clientPlacements).length,
-    referralRevenue: alumni.reduce((sum, a) => sum + (a.metadata?.referralRevenue || 0), 0),
+    referralRevenue: alumni.reduce((sum, a) => {
+      const revenue = a.metadata?.referralRevenue;
+      return sum + (typeof revenue === 'number' ? revenue : 0);
+    }, 0),
   };
 
   return (
@@ -75,7 +78,7 @@ export const AlumniDirectory: React.FC<AlumniDirectoryProps> = ({ entities }) =>
                       <div className="flex justify-between items-start mb-4">
                           <UserAvatar name={person.name} size="lg" className="border-2 border-white shadow-sm"/>
                           <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                              {person.metadata?.linkedin && (
+                              {person.metadata?.linkedin && typeof person.metadata.linkedin === 'string' && (
                                 <a href={person.metadata.linkedin} target="_blank" rel="noopener noreferrer" className={cn("p-1.5 rounded hover:bg-blue-50 text-blue-600")}>
                                   <Linkedin className="h-4 w-4"/>
                                 </a>
@@ -90,26 +93,26 @@ export const AlumniDirectory: React.FC<AlumniDirectoryProps> = ({ entities }) =>
                       
                       <h4 className={cn("font-bold text-lg mb-0.5", theme.text.primary)}>{person.name}</h4>
                       <p className={cn("text-xs uppercase font-bold tracking-wide mb-3", theme.text.tertiary)}>
-                        {person.metadata?.previousRole || 'Former Employee'} ({person.metadata?.yearLeft || 'N/A'})
+                        {String(person.metadata?.previousRole || 'Former Employee')} ({String(person.metadata?.yearLeft || 'N/A')})
                       </p>
-                      
+
                       <div className={cn("p-3 rounded-lg border bg-slate-50/50 flex items-center gap-3", theme.border.default)}>
                           <div className="p-2 bg-white rounded shadow-sm border border-slate-100">
                               <Briefcase className="h-4 w-4 text-slate-600"/>
                           </div>
                           <div>
                               <p className={cn("text-xs font-bold", theme.text.primary)}>
-                                {person.metadata?.currentRole || 'Current Role Unknown'}
+                                {String(person.metadata?.currentRole || 'Current Role Unknown')}
                               </p>
                               <p className={cn("text-xs", theme.text.secondary)}>
-                                {person.metadata?.currentOrganization || 'Organization Unknown'}
+                                {String(person.metadata?.currentOrganization || 'Organization Unknown')}
                               </p>
                           </div>
                       </div>
 
                       <div className="mt-4 pt-3 border-t border-dashed flex justify-between items-center text-xs">
                           <span className={theme.text.tertiary}>
-                            Referrals: <strong>{person.metadata?.activeReferrals || 0} Active</strong>
+                            Referrals: <strong>{typeof person.metadata?.activeReferrals === 'number' ? person.metadata.activeReferrals : 0} Active</strong>
                           </span>
                           <button className="text-blue-600 hover:underline">View History</button>
                       </div>

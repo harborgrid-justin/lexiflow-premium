@@ -176,7 +176,7 @@ export const TabsV2: React.FC<TabsV2Props> = ({
                 'flex items-center font-medium transition-all border-b-2 whitespace-nowrap',
                 sizes.parent,
                 isDisabled
-                  ? cn('opacity-40 cursor-not-allowed', theme.text.disabled)
+                  ? cn('opacity-40 cursor-not-allowed', theme.text.tertiary)
                   : isActive
                     ? cn('border-current', theme.primary.text)
                     : cn('border-transparent', theme.text.secondary, `hover:${theme.text.primary}`, 'hover:border-slate-300')
@@ -220,7 +220,7 @@ export const TabsV2: React.FC<TabsV2Props> = ({
                   'flex-shrink-0 rounded-full font-medium transition-all duration-200 whitespace-nowrap flex items-center gap-2 border',
                   sizes.sub,
                   isDisabled
-                    ? cn('opacity-40 cursor-not-allowed', theme.text.disabled)
+                    ? cn('opacity-40 cursor-not-allowed', theme.text.tertiary)
                     : isActive
                       ? cn(theme.surface.default, theme.primary.text, 'shadow-sm border-transparent ring-1', theme.primary.border)
                       : cn('bg-transparent', theme.text.secondary, 'border-transparent', `hover:${theme.surface.default}`)
@@ -232,7 +232,7 @@ export const TabsV2: React.FC<TabsV2Props> = ({
                   <span className={cn(
                     'ml-1 px-1.5 py-0.5 rounded-full text-xs',
                     isActive
-                      ? cn(theme.primary.background, 'text-white')
+                      ? cn(theme.primary.DEFAULT, 'text-white')
                       : cn(theme.surface.default, theme.text.tertiary)
                   )}>
                     {tab.badge}

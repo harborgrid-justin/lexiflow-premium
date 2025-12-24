@@ -111,8 +111,8 @@ export const SecureMessenger: React.FC<SecureMessengerProps> = ({ initialTab }) 
             isPending && "opacity-60 transition-opacity"
         )}>
           {activeTab === 'contacts' && (
-            <MessengerContacts 
-              contacts={contacts}
+            <MessengerContacts
+              contacts={contacts as any}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
               onMessageClick={() => setActiveTab('chats')}

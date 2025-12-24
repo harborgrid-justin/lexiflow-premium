@@ -34,7 +34,8 @@ export class TaskCompletedHandler extends BaseEventHandler<SystemEventPayloads[t
       description: `Task Completion: ${task.title}`,
       rate: 0, // Will be filled by billing rules
       total: 0,
-      status: 'Unbilled'
+      status: 'Unbilled',
+      billable: true
     };
     
     await DataService.billing.addTimeEntry(draftTimeEntry);
@@ -47,11 +48,18 @@ export class TaskCompletedHandler extends BaseEventHandler<SystemEventPayloads[t
    * Business rules for determining if a task should generate a time entry
    */
   private isBillable(task: SystemEventPayloads[typeof SystemEventType.TASK_COMPLETED]['task']): boolean {
-    const isBillableCategory = task.category && !['Administrative', 'Internal', 'Training'].includes(task.category);
-    const hasValidCase = task.caseId && task.caseId !== 'General';
+    // Check if task description/title suggests non-billable work
+    const nonBillableKeywords = ['administrative', 'internal', 'training'];
+    const titleLower = task.title.toLowerCase();
+    const descLower = task.description?.toLowerCase() || '';
+    const isBillableCategory = !nonBillableKeywords.some(keyword =>
+      titleLower.includes(keyword) || descLower.includes(keyword)
+    );
+
+    const hasValidCase = !!(task.caseId && task.caseId !== 'General');
     const isHighPriority = task.priority === 'High' || task.priority === 'Critical';
-    const hasAssignee = !!task.assigneeId;
-    
+    const hasAssignee = !!(task.assigneeId || task.assignedTo);
+
     return hasValidCase && isHighPriority && isBillableCategory && hasAssignee;
   }
 }

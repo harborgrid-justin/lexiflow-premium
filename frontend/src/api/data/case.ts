@@ -1,5 +1,5 @@
 
-import { Case, CaseStatus, CaseId, UserId, EntityId, OrgId, PartyId } from '../../types';
+import { Case, CaseStatus, CaseId, UserId, EntityId, OrgId, PartyId, MatterType } from '../../types';
 
 export const MOCK_CASES: Case[] = [
   // MAIN APPEAL CASE
@@ -13,8 +13,8 @@ export const MOCK_CASES: Case[] = [
     filingDate: '2025-03-12',
     description: 'Bankruptcy Appeal from District Court. Nature of Suit: 3422 Bankruptcy Appeals Rule 28 USC 158.',
     natureOfSuit: '3422 Bankruptcy Appeals Rule 28 USC 158',
-    value: 0, 
-    matterType: 'Appeal',
+    value: 0,
+    matterType: MatterType.LITIGATION,
     matterSubType: 'from the district court',
     jurisdiction: 'Federal - 4th Circuit',
     court: 'US Court of Appeals for the Fourth Circuit',
@@ -81,7 +81,7 @@ export const MOCK_CASES: Case[] = [
     dateTerminated: '2025-02-26',
     description: 'Bankruptcy Appeal from Judgment/Order. Cause: 28:0158. Underlying District Court Civil Action.',
     value: 0,
-    matterType: 'Litigation',
+    matterType: MatterType.LITIGATION,
     natureOfSuit: '422 Bankruptcy Appeal (801)',
     jurisdiction: 'Federal Question',
     court: 'E.D. Virginia (Alexandria)',
@@ -105,9 +105,9 @@ export const MOCK_CASES: Case[] = [
     opposingCounsel: 'Morgan & Morgan',
     status: CaseStatus.Discovery, 
     filingDate: '2025-01-15', 
-    description: 'Employment discrimination class action alleging systemic bias in promotion practices.', 
+    description: 'Employment discrimination class action alleging systemic bias in promotion practices.',
     value: 4500000,
-    matterType: 'Litigation', 
+    matterType: MatterType.LITIGATION, 
     jurisdiction: 'CA Superior Court', 
     court: 'San Francisco',
     isConsolidated: false,
@@ -133,7 +133,7 @@ export const MOCK_CASES: Case[] = [
     filingDate: '2025-04-01',
     description: 'Strategic acquisition of mid-market logistics competitor.',
     value: 12500000,
-    matterType: 'M&A',
+    matterType: MatterType.TRANSACTIONAL,
     jurisdiction: 'Delaware',
     court: 'Chancery',
     isArchived: false,

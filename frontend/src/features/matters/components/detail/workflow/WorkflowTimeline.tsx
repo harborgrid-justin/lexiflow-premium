@@ -99,10 +99,12 @@ return (
                                             <p className={cn("text-xs mb-2 line-clamp-1", theme.text.secondary)}>{task.description}</p>
                                         )}
                                         <div className={cn("flex flex-wrap items-center gap-4 text-xs", theme.text.tertiary)}>
-                                            <span className="flex items-center gap-1"><UserAvatar name={task.assignee} size="sm" className="w-4 h-4 text-[9px]"/> {task.assignee}</span>
-                                            <span className={`flex items-center gap-1 ${task.status !== TaskStatusBackend.COMPLETED && new Date(task.dueDate as string) < new Date() ? 'text-red-500 font-bold' : ''}`}>
-                                                <Clock className="h-3 w-3"/> Due: {task.dueDate}
-                                            </span>
+                                            <span className="flex items-center gap-1"><UserAvatar name={task.assignee || 'Unassigned'} size="sm" className="w-4 h-4 text-[9px]"/> {task.assignee || 'Unassigned'}</span>
+                                            {task.dueDate && (
+                                                <span className={`flex items-center gap-1 ${task.status !== TaskStatusBackend.COMPLETED && new Date(task.dueDate) < new Date() ? 'text-red-500 font-bold' : ''}`}>
+                                                    <Clock className="h-3 w-3"/> Due: {task.dueDate}
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
 

@@ -22,7 +22,7 @@ interface RuleBookViewerProps {
 }
 
 export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isOrbital }) => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   const { openWindow } = useWindow();
   const [activeTab, setActiveTab] = useState('text');
 
@@ -137,7 +137,7 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isO
                         </>
                     ) : (
                         <div className="flex-1 overflow-y-auto p-8 max-w-4xl mx-auto w-full">
-                            <div className={cn("prose max-w-none leading-loose font-serif text-base", theme.mode === 'dark' ? "prose-invert" : "prose-slate")}>
+                            <div className={cn("prose max-w-none leading-loose font-serif text-base", mode === 'dark' ? "prose-invert" : "prose-slate")}>
                                 <p>{selectedRule.text || selectedRule.summary}</p>
                             </div>
                             

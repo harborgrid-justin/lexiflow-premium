@@ -246,7 +246,8 @@ export const TrustAccountStatusEnum = {
   CLOSED: 'Closed'
 } as const;
 
-export type TrustAccountStatus = typeof TrustAccountStatusEnum[keyof typeof TrustAccountStatusEnum];
+// Deprecated: Use TrustAccountStatus from trust-accounts.ts instead
+export type LegacyTrustAccountStatus = typeof TrustAccountStatusEnum[keyof typeof TrustAccountStatusEnum];
 
 export type ServiceStatusType = typeof ServiceStatus[keyof typeof ServiceStatus];
 

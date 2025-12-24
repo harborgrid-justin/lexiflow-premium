@@ -66,7 +66,7 @@ interface TeamAvailability {
 }
 
 export const MatterCalendar: React.FC = () => {
-  const { theme } = useTheme();
+  const { mode, isDark } = useTheme();
   const [view, setView] = useState<CalendarView>('month');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
@@ -82,39 +82,39 @@ export const MatterCalendar: React.FC = () => {
       // Fetch docket entries which contain court dates and deadlines
       const docketEntries = await api.docket.getAll();
       const matters = await api.matters.getAll();
-      
+
       const calendarEvents: CalendarEvent[] = [];
-      
+
       // Convert docket entries to calendar events
       docketEntries.forEach(entry => {
-        const matter = matters.find(m => m.id === entry.matterId);
+        const matter = matters.find(m => String(m.id) === String(entry.caseId));
         if (entry.date) {
           calendarEvents.push({
             id: `docket-${entry.id}`,
-            matterId: entry.matterId,
-            matterTitle: matter?.title || entry.matterNumber || 'Unknown Matter',
+            matterId: entry.caseId,
+            matterTitle: matter?.title || 'Unknown Matter',
             title: entry.title || entry.description || 'Docket Entry',
-            type: entry.entryType === 'HEARING' ? 'hearing' : 
-                  entry.entryType === 'FILING' ? 'filing' : 
-                  entry.entryType === 'DEADLINE' ? 'deadline' : 'other',
+            type: entry.type === 'Hearing' ? 'hearing' :
+                  entry.type === 'Filing' ? 'filing' :
+                  entry.type === 'Motion' ? 'deadline' : 'other',
             startTime: entry.date,
-            priority: entry.priority || 'medium',
+            priority: 'medium',
             status: 'scheduled',
             description: entry.description,
           });
         }
       });
-      
-      // Add matter deadlines
+
+      // Add matter deadlines from targetCloseDate
       matters.forEach(matter => {
-        if (matter.nextDeadline) {
+        if (matter.targetCloseDate) {
           calendarEvents.push({
             id: `deadline-${matter.id}`,
             matterId: matter.id,
             matterTitle: matter.title,
             title: 'Matter Deadline',
             type: 'deadline',
-            startTime: matter.nextDeadline,
+            startTime: matter.targetCloseDate,
             priority: matter.priority === 'HIGH' ? 'high' : matter.priority === 'MEDIUM' ? 'medium' : 'low',
             status: 'scheduled',
             reminder: 1440, // 24 hours
@@ -234,9 +234,9 @@ export const MatterCalendar: React.FC = () => {
   };
 
   return (
-    <div className={cn('h-full flex flex-col', theme === 'dark' ? 'bg-slate-900' : 'bg-slate-50')}>
+    <div className={cn('h-full flex flex-col', isDark ? 'bg-slate-900' : 'bg-slate-50')}>
       {/* Controls */}
-      <div className={cn('border-b px-6 py-4', theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
+      <div className={cn('border-b px-6 py-4', isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={goToToday}>
@@ -265,7 +265,7 @@ export const MatterCalendar: React.FC = () => {
               >
                 <ChevronLeft className="w-4 h-4" />
               </Button>
-              <div className={cn('text-lg font-semibold min-w-[200px] text-center', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+              <div className={cn('text-lg font-semibold min-w-[200px] text-center', isDark ? 'text-slate-100' : 'text-slate-900')}>
                 {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
               </div>
               <Button
@@ -278,13 +278,13 @@ export const MatterCalendar: React.FC = () => {
             </div>
 
             {/* View Selector */}
-            <div className={cn('flex items-center gap-1 p-1 rounded-lg', theme === 'dark' ? 'bg-slate-700' : 'bg-slate-100')}>
+            <div className={cn('flex items-center gap-1 p-1 rounded-lg', isDark ? 'bg-slate-700' : 'bg-slate-100')}>
               <button
                 onClick={() => setView('month')}
                 className={cn('px-3 py-1.5 rounded text-sm font-medium transition-colors', 
                   view === 'month'
-                    ? theme === 'dark' ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
-                    : theme === 'dark' ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-900'
+                    ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
+                    : isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-900'
                 )}
               >
                 Month
@@ -293,8 +293,8 @@ export const MatterCalendar: React.FC = () => {
                 onClick={() => setView('week')}
                 className={cn('px-3 py-1.5 rounded text-sm font-medium transition-colors',
                   view === 'week'
-                    ? theme === 'dark' ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
-                    : theme === 'dark' ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-900'
+                    ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
+                    : isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-900'
                 )}
               >
                 Week
@@ -303,8 +303,8 @@ export const MatterCalendar: React.FC = () => {
                 onClick={() => setView('day')}
                 className={cn('px-3 py-1.5 rounded text-sm font-medium transition-colors',
                   view === 'day'
-                    ? theme === 'dark' ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
-                    : theme === 'dark' ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-900'
+                    ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
+                    : isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-900'
                 )}
               >
                 Day
@@ -313,8 +313,8 @@ export const MatterCalendar: React.FC = () => {
                 onClick={() => setView('agenda')}
                 className={cn('px-3 py-1.5 rounded text-sm font-medium transition-colors',
                   view === 'agenda'
-                    ? theme === 'dark' ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
-                    : theme === 'dark' ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-900'
+                    ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
+                    : isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-900'
                 )}
               >
                 Agenda
@@ -329,7 +329,7 @@ export const MatterCalendar: React.FC = () => {
               onChange={(e) => setFilterType(e.target.value)}
               className={cn(
                 'px-3 py-1.5 rounded-lg border text-sm',
-                theme === 'dark'
+                isDark
                   ? 'bg-slate-700 border-slate-600 text-slate-100'
                   : 'bg-white border-slate-300 text-slate-900'
               )}
@@ -346,7 +346,7 @@ export const MatterCalendar: React.FC = () => {
               onChange={(e) => setFilterMatter(e.target.value)}
               className={cn(
                 'px-3 py-1.5 rounded-lg border text-sm',
-                theme === 'dark'
+                isDark
                   ? 'bg-slate-700 border-slate-600 text-slate-100'
                   : 'bg-white border-slate-300 text-slate-900'
               )}
@@ -372,7 +372,7 @@ export const MatterCalendar: React.FC = () => {
             onEventClick={handleEventClick}
             getEventsForDate={getEventsForDate}
             getEventTypeColor={getEventTypeColor}
-            theme={theme}
+            isDark={isDark}
           />
         )}
         {view === 'agenda' && (
@@ -380,7 +380,7 @@ export const MatterCalendar: React.FC = () => {
             events={filteredEvents || []}
             onEventClick={handleEventClick}
             getEventTypeColor={getEventTypeColor}
-            theme={theme}
+            isDark={isDark}
           />
         )}
       </div>
@@ -390,7 +390,7 @@ export const MatterCalendar: React.FC = () => {
         <EventDetailModal
           event={selectedEvent}
           onClose={() => setShowEventModal(false)}
-          theme={theme}
+          isDark={isDark}
         />
       )}
     </div>
@@ -405,7 +405,7 @@ interface MonthViewProps {
   onEventClick: (event: CalendarEvent) => void;
   getEventsForDate: (date: Date) => CalendarEvent[];
   getEventTypeColor: (type: string) => string;
-  theme: string;
+  isDark: boolean;
 }
 
 const MonthView: React.FC<MonthViewProps> = ({
@@ -415,25 +415,25 @@ const MonthView: React.FC<MonthViewProps> = ({
   onEventClick,
   getEventsForDate,
   getEventTypeColor,
-  theme,
+  isDark,
 }) => {
   const today = new Date();
   const isToday = (date: Date) => date.toDateString() === today.toDateString();
   const isCurrentMonth = (date: Date) => date.getMonth() === currentDate.getMonth();
 
   return (
-    <div className={cn('rounded-lg border overflow-hidden', theme === 'dark' ? 'border-slate-700' : 'border-slate-200')}>
+    <div className={cn('rounded-lg border overflow-hidden', isDark ? 'border-slate-700' : 'border-slate-200')}>
       {/* Weekday Headers */}
-      <div className={cn('grid grid-cols-7 border-b', theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200')}>
+      <div className={cn('grid grid-cols-7 border-b', isDark ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-200')}>
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-          <div key={day} className={cn('px-3 py-2 text-center text-sm font-semibold', theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+          <div key={day} className={cn('px-3 py-2 text-center text-sm font-semibold', isDark ? 'text-slate-400' : 'text-slate-600')}>
             {day}
           </div>
         ))}
       </div>
 
       {/* Calendar Grid */}
-      <div className={cn('grid grid-cols-7', theme === 'dark' ? 'bg-slate-900' : 'bg-white')}>
+      <div className={cn('grid grid-cols-7', isDark ? 'bg-slate-900' : 'bg-white')}>
         {weeks.map((week, weekIdx) =>
           week.map((date, dayIdx) => {
             const dayEvents = getEventsForDate(date);
@@ -442,8 +442,8 @@ const MonthView: React.FC<MonthViewProps> = ({
                 key={`${weekIdx}-${dayIdx}`}
                 className={cn(
                   'min-h-[120px] border-r border-b p-2',
-                  theme === 'dark' ? 'border-slate-700' : 'border-slate-200',
-                  !isCurrentMonth(date) && (theme === 'dark' ? 'bg-slate-800/30' : 'bg-slate-50')
+                  isDark ? 'border-slate-700' : 'border-slate-200',
+                  !isCurrentMonth(date) && (isDark ? 'bg-slate-800/30' : 'bg-slate-50')
                 )}
               >
                 <div className={cn(
@@ -451,8 +451,8 @@ const MonthView: React.FC<MonthViewProps> = ({
                   isToday(date)
                     ? 'flex items-center justify-center w-7 h-7 rounded-full bg-blue-500 text-white'
                     : !isCurrentMonth(date)
-                    ? theme === 'dark' ? 'text-slate-600' : 'text-slate-400'
-                    : theme === 'dark' ? 'text-slate-300' : 'text-slate-700'
+                    ? isDark ? 'text-slate-600' : 'text-slate-400'
+                    : isDark ? 'text-slate-300' : 'text-slate-700'
                 )}>
                   {date.getDate()}
                 </div>
@@ -471,7 +471,7 @@ const MonthView: React.FC<MonthViewProps> = ({
                     </button>
                   ))}
                   {dayEvents.length > 3 && (
-                    <div className={cn('text-xs px-2', theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+                    <div className={cn('text-xs px-2', isDark ? 'text-slate-400' : 'text-slate-600')}>
                       +{dayEvents.length - 3} more
                     </div>
                   )}
@@ -490,10 +490,10 @@ interface AgendaViewProps {
   events: CalendarEvent[];
   onEventClick: (event: CalendarEvent) => void;
   getEventTypeColor: (type: string) => string;
-  theme: string;
+  isDark: boolean;
 }
 
-const AgendaView: React.FC<AgendaViewProps> = ({ events, onEventClick, getEventTypeColor, theme }) => {
+const AgendaView: React.FC<AgendaViewProps> = ({ events, onEventClick, getEventTypeColor, isDark }) => {
   const groupedEvents = useMemo(() => {
     const groups = new Map<string, CalendarEvent[]>();
     events.forEach(event => {
@@ -510,39 +510,40 @@ const AgendaView: React.FC<AgendaViewProps> = ({ events, onEventClick, getEventT
     <div className="space-y-6">
       {groupedEvents.map(([date, dayEvents]) => (
         <div key={date}>
-          <h3 className={cn('text-lg font-semibold mb-3', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+          <h3 className={cn('text-lg font-semibold mb-3', isDark ? 'text-slate-100' : 'text-slate-900')}>
             {new Date(date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
           </h3>
           <div className="space-y-2">
             {dayEvents.map(event => (
-              <Card key={event.id} className="p-4 cursor-pointer hover:shadow-md transition-shadow" onClick={() => onEventClick(event)}>
-                <div className="flex items-start gap-4">
+              <div key={event.id} className="cursor-pointer" onClick={() => onEventClick(event)}>
+                <Card className="p-4 hover:shadow-md transition-shadow">
+                  <div className="flex items-start gap-4">
                   <div className={cn('w-1 h-full rounded-full', getEventTypeColor(event.type))} />
                   <div className="flex-1">
                     <div className="flex items-start justify-between">
                       <div>
-                        <h4 className={cn('font-semibold', theme === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+                        <h4 className={cn('font-semibold', isDark ? 'text-slate-100' : 'text-slate-900')}>
                           {event.title}
                         </h4>
-                        <p className={cn('text-sm mt-1', theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+                        <p className={cn('text-sm mt-1', isDark ? 'text-slate-400' : 'text-slate-600')}>
                           {event.matterTitle}
                         </p>
                       </div>
-                      <Badge variant={event.priority === 'high' ? 'error' : event.priority === 'medium' ? 'warning' : 'secondary'}>
+                      <Badge variant={event.priority === 'high' ? 'error' : event.priority === 'medium' ? 'warning' : 'neutral'}>
                         {event.priority}
                       </Badge>
                     </div>
                     <div className="flex items-center gap-4 mt-3 text-sm">
                       <div className="flex items-center gap-1">
-                        <Clock className={cn('w-4 h-4', theme === 'dark' ? 'text-slate-400' : 'text-slate-500')} />
-                        <span className={cn(theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+                        <Clock className={cn('w-4 h-4', isDark ? 'text-slate-400' : 'text-slate-500')} />
+                        <span className={cn(isDark ? 'text-slate-400' : 'text-slate-600')}>
                           {new Date(event.startTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                         </span>
                       </div>
                       {event.location && (
                         <div className="flex items-center gap-1">
-                          <MapPin className={cn('w-4 h-4', theme === 'dark' ? 'text-slate-400' : 'text-slate-500')} />
-                          <span className={cn(theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+                          <MapPin className={cn('w-4 h-4', isDark ? 'text-slate-400' : 'text-slate-500')} />
+                          <span className={cn(isDark ? 'text-slate-400' : 'text-slate-600')}>
                             {event.location}
                           </span>
                         </div>
@@ -551,6 +552,7 @@ const AgendaView: React.FC<AgendaViewProps> = ({ events, onEventClick, getEventT
                   </div>
                 </div>
               </Card>
+              </div>
             ))}
           </div>
         </div>
@@ -563,46 +565,46 @@ const AgendaView: React.FC<AgendaViewProps> = ({ events, onEventClick, getEventT
 interface EventDetailModalProps {
   event: CalendarEvent;
   onClose: () => void;
-  theme: string;
+  isDark: boolean;
 }
 
-const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose, theme }) => (
+const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose, isDark }) => (
   <Modal isOpen={true} onClose={onClose} title={event.title} size="md">
     <div className="space-y-4">
       <div>
-        <label className={cn('text-sm font-medium', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+        <label className={cn('text-sm font-medium', isDark ? 'text-slate-300' : 'text-slate-700')}>
           Matter
         </label>
-        <p className={cn('text-sm mt-1', theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+        <p className={cn('text-sm mt-1', isDark ? 'text-slate-400' : 'text-slate-600')}>
           {event.matterTitle}
         </p>
       </div>
       <div>
-        <label className={cn('text-sm font-medium', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+        <label className={cn('text-sm font-medium', isDark ? 'text-slate-300' : 'text-slate-700')}>
           Date & Time
         </label>
-        <p className={cn('text-sm mt-1', theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+        <p className={cn('text-sm mt-1', isDark ? 'text-slate-400' : 'text-slate-600')}>
           {new Date(event.startTime).toLocaleString()}
         </p>
       </div>
       {event.location && (
         <div>
-          <label className={cn('text-sm font-medium', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+          <label className={cn('text-sm font-medium', isDark ? 'text-slate-300' : 'text-slate-700')}>
             Location
           </label>
-          <p className={cn('text-sm mt-1', theme === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+          <p className={cn('text-sm mt-1', isDark ? 'text-slate-400' : 'text-slate-600')}>
             {event.location}
           </p>
         </div>
       )}
       {event.attendees && event.attendees.length > 0 && (
         <div>
-          <label className={cn('text-sm font-medium', theme === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+          <label className={cn('text-sm font-medium', isDark ? 'text-slate-300' : 'text-slate-700')}>
             Attendees
           </label>
           <div className="flex flex-wrap gap-2 mt-1">
             {event.attendees.map((attendee, idx) => (
-              <Badge key={idx} variant="secondary">{attendee}</Badge>
+              <Badge key={idx} variant="neutral">{attendee}</Badge>
             ))}
           </div>
         </div>

@@ -122,14 +122,14 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                     <div>
                                         <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Data Classification</label>
                                         <div className="space-y-2">
-                                            {['Public', 'Internal', 'Confidential', 'Restricted'].map(cls => (
-                                                <div 
+                                            {(['Public', 'Internal', 'Confidential', 'Restricted'] as const).map(cls => (
+                                                <div
                                                     key={cls}
                                                     onClick={() => setFormData({...formData, classification: cls})}
                                                     className={cn(
                                                         "flex items-center p-2 rounded border cursor-pointer transition-colors",
-                                                        formData.classification === cls 
-                                                            ? cn(theme.primary.light, theme.primary.border, "border-l-4 border-l-blue-600") 
+                                                        formData.classification === cls
+                                                            ? cn(theme.primary.light, theme.primary.border, "border-l-4 border-l-blue-600")
                                                             : cn(theme.surface.default, theme.border.default)
                                                     )}
                                                 >

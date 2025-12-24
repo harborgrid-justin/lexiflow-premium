@@ -21,14 +21,14 @@ import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { LegalDocument } from '@/types';
-import type { ThemeTokens } from '@/components/theme/tokens';
+import { tokens } from '@/components/theme/tokens';
 
 interface CaseDocumentItemProps {
   doc: LegalDocument;
   analyzingId: string | null;
   onAnalyze: (doc: LegalDocument) => void;
   onTaskClick: (doc: LegalDocument) => void;
-  theme: ThemeTokens;
+  theme: typeof tokens.colors.light;
 }
 
 export const CaseDocumentItem: React.FC<CaseDocumentItemProps> = ({ doc, analyzingId, onAnalyze, onTaskClick, theme }) => {

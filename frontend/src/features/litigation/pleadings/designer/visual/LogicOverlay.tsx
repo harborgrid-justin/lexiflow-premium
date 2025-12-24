@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { PleadingDocument } from '../../../../../types/pleading-types';
+import { PleadingDocument, PleadingSection } from '../../../../../types/pleading-types';
 import { useTheme } from '@/providers/ThemeContext';
 
 interface LogicOverlayProps {
@@ -37,7 +37,7 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDo
                         rect: el.getBoundingClientRect()
                     };
                 })
-                .filter(item => item !== null) as { section: unknown, rect: DOMRect }[];
+                .filter(item => item !== null) as { section: PleadingSection, rect: DOMRect }[];
 
             // Optimization: Batch Calculation/Write
             const newPaths = targets.map(({ section, rect }) => {

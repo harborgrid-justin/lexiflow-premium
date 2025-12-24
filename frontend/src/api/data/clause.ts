@@ -7,8 +7,8 @@ export const MOCK_CLAUSES: Clause[] = [
       content: 'The Seller shall indemnify, defend and hold harmless the Buyer from and against any and all losses...',
       version: 2, usageCount: 45, lastUpdated: '2024-02-10', riskRating: 'Low',
       versions: [
-        { version: 2, content: 'The Seller shall indemnify, defend and hold harmless the Buyer from and against any and all losses...', createdAt: '2024-02-10' },
-        { version: 1, content: 'Seller indemnifies Buyer against losses.', createdAt: '2023-01-15' }
+        { version: 2, content: 'The Seller shall indemnify, defend and hold harmless the Buyer from and against any and all losses...', author: 'Sarah Chen', updatedAt: '2024-02-10', createdAt: '2024-02-10' },
+        { version: 1, content: 'Seller indemnifies Buyer against losses.', author: 'John Smith', updatedAt: '2023-01-15', createdAt: '2023-01-15' }
       ]
     },
     {
@@ -16,7 +16,7 @@ export const MOCK_CLAUSES: Clause[] = [
       content: 'Employee agrees not to engage in any business competing with the Company for a period of 24 months...',
       version: 1, usageCount: 12, lastUpdated: '2023-11-05', riskRating: 'High',
       versions: [
-        { version: 1, content: 'Employee agrees not to engage in any business competing with the Company for a period of 24 months...', createdAt: '2023-11-05' }
+        { version: 1, content: 'Employee agrees not to engage in any business competing with the Company for a period of 24 months...', author: 'David Martinez', updatedAt: '2023-11-05', createdAt: '2023-11-05' }
       ]
     },
     {
@@ -24,8 +24,8 @@ export const MOCK_CLAUSES: Clause[] = [
       content: 'This Agreement shall be governed by and construed in accordance with the internal laws of the State of Delaware.',
       version: 3, usageCount: 89, lastUpdated: '2024-01-15', riskRating: 'Low',
       versions: [
-        { version: 3, content: 'This Agreement shall be governed by and construed in accordance with the internal laws of the State of Delaware.', createdAt: '2024-01-15' },
-        { version: 2, content: 'Governed by Delaware law.', createdAt: '2023-06-01' }
+        { version: 3, content: 'This Agreement shall be governed by and construed in accordance with the internal laws of the State of Delaware.', author: 'Emily Rodriguez', updatedAt: '2024-01-15', createdAt: '2024-01-15' },
+        { version: 2, content: 'Governed by Delaware law.', author: 'Michael Johnson', updatedAt: '2023-06-01', createdAt: '2023-06-01' }
       ]
     },
 ];

@@ -66,9 +66,21 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
   // MEMOIZED VALUES
   // ============================================================================
   const sections: BinderSection[] = useMemo(() => {
-      const motions = (warRoomData.motions || []).map((m) => ({ ...m, docType: 'Motion', date: m.filingDate }));
-      const orders = (warRoomData.docket || []).filter((d: any) => d.type === 'Order').map((d: any) => ({ ...d, docType: 'Order' }));
-      const filings = (warRoomData.docket || []).filter((d: any) => d.type === 'Filing').map((d: any) => ({ ...d, docType: 'Filing' }));
+      const motions = (warRoomData.motions || []).map((m): LegalDocument & { docType: string; date: string } => ({
+        ...(m as any),
+        docType: 'Motion',
+        date: (m as any).filingDate || ''
+      })) as LegalDocument[];
+      const orders = (warRoomData.docket || []).filter((d: any) => d.type === 'Order').map((d: any): LegalDocument & { docType: string; date: string } => ({
+        ...(d as any),
+        docType: 'Order',
+        date: d.date || ''
+      })) as LegalDocument[];
+      const filings = (warRoomData.docket || []).filter((d: any) => d.type === 'Filing').map((d: any): LegalDocument & { docType: string; date: string } => ({
+        ...(d as any),
+        docType: 'Filing',
+        date: d.date || ''
+      })) as LegalDocument[];
 
       return [
         { id: 'motions', title: 'Motions & Pleadings', icon: Gavel, documents: motions },
@@ -139,8 +151,8 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
                                         <div className="min-w-0">
                                             <h4 className={cn("font-bold text-sm truncate", theme.text.primary)} title={doc.title}>{doc.title}</h4>
                                             <div className={cn("flex items-center gap-3 text-xs mt-1", theme.text.secondary)}>
-                                                <span className="font-bold">{doc.docType}</span>
-                                                <span>• {doc.date}</span>
+                                                <span className="font-bold">{(doc as any).docType}</span>
+                                                <span>• {(doc as any).date}</span>
                                                 {doc.status && <span className={cn("px-1.5 py-0.5 rounded border font-medium", theme.surface.default, theme.border.default)}>{doc.status}</span>}
                                             </div>
                                             {doc.description && <p className={cn("text-xs mt-1 truncate max-w-md", theme.text.tertiary)}>{doc.description}</p>}

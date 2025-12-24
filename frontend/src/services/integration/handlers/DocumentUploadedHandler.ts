@@ -44,7 +44,7 @@ export class DocumentUploadedHandler extends BaseEventHandler<SystemEventPayload
         actor: 'IntegrationOrchestrator'
       }],
       tags: ['Auto-Ingest'],
-      fileSize: document.fileSize
+      fileSize: typeof document.fileSize === 'number' ? String(document.fileSize) : document.fileSize
     };
     
     await DataService.evidence.add(evidenceItem);

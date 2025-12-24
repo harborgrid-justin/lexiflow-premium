@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Client } from '@/types';
+import { Client, ClientStatus } from '@/types';
 import { Badge } from '@/components/atoms/Badge';
 import { Button } from '@/components/atoms/Button';
 import { Currency } from '@/components/atoms';
@@ -22,7 +22,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({ client, onGenerateToken 
             <div className={cn("h-12 w-12 rounded-full flex items-center justify-center font-bold text-lg border", theme.primary.light, theme.primary.text, theme.primary.border)}>
                 {(client.name || '').substring(0, 2)}
             </div>
-            <Badge variant={client.status === 'Active' ? 'success' : 'neutral'}>{client.status}</Badge>
+            <Badge variant={client.status === ClientStatus.ACTIVE ? 'success' : 'neutral'}>{client.status}</Badge>
             </div>
             
             <h3 className={cn("font-bold text-lg mb-1", theme.text.primary)}>{client.name}</h3>

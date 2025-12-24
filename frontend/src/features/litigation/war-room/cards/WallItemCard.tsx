@@ -36,6 +36,8 @@ interface WallItem {
     title: string;
     date?: string;
     hot?: boolean;
+    num?: string;
+    status?: string;
 }
 
 interface WallItemCardProps {
@@ -77,14 +79,14 @@ export const WallItemCard: React.FC<WallItemCardProps> = ({ item, onView }) => {
             </div>
             <div className="p-3">
                 <div className="flex justify-between items-start mb-1">
-                    <span className={cn("font-mono text-[10px] font-bold px-1.5 rounded border", theme.surface.highlight, theme.text.secondary, theme.border.default)}>{item.num.substring(0, 8)}</span>
+                    {item.num && <span className={cn("font-mono text-[10px] font-bold px-1.5 rounded border", theme.surface.highlight, theme.text.secondary, theme.border.default)}>{item.num.substring(0, 8)}</span>}
                     {item.status === 'Admitted' && <CheckCircle className="h-3.5 w-3.5 text-emerald-500"/>}
                     {item.status === 'Excluded' && <AlertTriangle className="h-3.5 w-3.5 text-rose-500"/>}
                 </div>
                 <h4 className={cn("font-bold text-sm line-clamp-2 leading-tight mb-2", theme.text.primary)}>{item.title}</h4>
                 <div className="flex justify-between items-center text-xs">
                     <span className={cn(theme.text.tertiary)}>{item.type}</span>
-                    <span className={cn("font-medium", (item.status === 'Admitted' || item.status === 'Filed') ? 'text-emerald-600' : theme.text.secondary)}>{item.status}</span>
+                    {item.status && <span className={cn("font-medium", (item.status === 'Admitted' || item.status === 'Filed') ? 'text-emerald-600' : theme.text.secondary)}>{item.status}</span>}
                 </div>
             </div>
         </div>

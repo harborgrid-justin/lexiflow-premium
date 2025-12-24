@@ -82,19 +82,19 @@ export const BusinessIntelligence: React.FC<BusinessIntelligenceProps> = ({ subT
   // ==========================================================================
   const { data: kpis, isLoading: kpisLoading } = useQuery<KPIData>(
     ['analytics', 'kpis'],
-    () => api.analyticsDashboard.getKPIs({ period: '30d' }),
+    () => api.analyticsDashboard.getKPIs({ period: '30d' }) as Promise<KPIData>,
     { staleTime: 5 * 60 * 1000 }
   );
 
   const { data: teamPerformance, isLoading: teamLoading } = useQuery<TeamPerformanceData>(
     ['analytics', 'team-performance'],
-    () => api.analyticsDashboard.getTeamPerformance({}),
+    () => api.analyticsDashboard.getTeamPerformance({}) as Promise<TeamPerformanceData>,
     { staleTime: 5 * 60 * 1000 }
   );
 
   const { data: financialMetrics, isLoading: financialLoading } = useQuery<FinancialMetricsData>(
     ['analytics', 'financial-metrics'],
-    () => api.analyticsDashboard.getFinancialMetrics({}),
+    () => api.analyticsDashboard.getFinancialMetrics({}) as Promise<FinancialMetricsData>,
     { staleTime: 5 * 60 * 1000 }
   );
 

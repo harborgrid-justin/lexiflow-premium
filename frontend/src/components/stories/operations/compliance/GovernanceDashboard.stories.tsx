@@ -48,15 +48,45 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Mock data for stories
+const mockRules = [
+  { id: '1', name: 'PII Protection', status: 'Active', impact: 'High' },
+  { id: '2', name: 'Data Retention', status: 'Active', impact: 'Medium' },
+  { id: '3', name: 'Access Control', status: 'Active', impact: 'High' },
+];
+
+const mockHandleScan = () => {
+  console.log('Scan initiated');
+};
+
+const mockSetEditingRule = (rule: { id: string; name: string; status: string; impact: string }) => {
+  console.log('Editing rule:', rule);
+};
+
 /**
  * Default governance dashboard view
  */
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    rules: mockRules,
+    isScanning: false,
+    scanProgress: 0,
+    handleScan: mockHandleScan,
+    setEditingRule: mockSetEditingRule,
+  },
+};
 
 /**
  * Mobile responsive view
  */
 export const Mobile: Story = {
+  args: {
+    rules: mockRules,
+    isScanning: false,
+    scanProgress: 0,
+    handleScan: mockHandleScan,
+    setEditingRule: mockSetEditingRule,
+  },
   parameters: {
     viewport: {
       defaultViewport: 'mobile1',
@@ -68,6 +98,13 @@ export const Mobile: Story = {
  * Tablet responsive view
  */
 export const Tablet: Story = {
+  args: {
+    rules: mockRules,
+    isScanning: false,
+    scanProgress: 0,
+    handleScan: mockHandleScan,
+    setEditingRule: mockSetEditingRule,
+  },
   parameters: {
     viewport: {
       defaultViewport: 'tablet',

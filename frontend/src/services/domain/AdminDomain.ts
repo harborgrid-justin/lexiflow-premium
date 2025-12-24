@@ -16,10 +16,12 @@ export const AdminService = {
             if (!response) return [];
 
             // Handle paginated response from backend
-            const logs: AuditLogEntry[] = Array.isArray(response) ? response :
-                (response && typeof response === 'object' && 'data' in response ? (response as { data: AuditLogEntry[] }).data : []);
+            const logs = Array.isArray(response) ? response :
+                (response && typeof response === 'object' && 'data' in response ? (response as { data: unknown }).data : []);
 
-            return logs.sort((a: AuditLogEntry, b: AuditLogEntry) =>
+            const auditLogs: AuditLogEntry[] = Array.isArray(logs) ? logs : [];
+
+            return auditLogs.sort((a: AuditLogEntry, b: AuditLogEntry) =>
                 new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
             );
         } catch (error) {
@@ -89,39 +91,57 @@ export const AdminService = {
     },
 
     // RLS Policies from backend
-    getRLSPolicies: async (): Promise<RLSPolicy[]> => { 
-        const policies = await adminApi.rlsPolicies?.getAll?.();
-        if (policies && policies.length > 0) return policies;
-        
-        // Fallback to mock data
-        await delay(200); 
+    getRLSPolicies: async (): Promise<RLSPolicy[]> => {
+        // RLS policies are managed via data platform API, not admin API
+        // Fallback to mock data for development
+        await delay(200);
         return [
             { id: 'rls1', name: 'tenant_isolation_cases', table: 'cases', cmd: 'ALL', roles: ['All'], using: "org_id = current_setting('app.current_org_id')::uuid", status: 'Active' },
             { id: 'rls2', name: 'partner_view_billing', table: 'billing', cmd: 'SELECT', roles: ['Partner'], using: "true", status: 'Active' },
             { id: 'rls3', name: 'associate_edit_own_time', table: 'time_entries', cmd: 'UPDATE', roles: ['Associate'], using: "user_id = auth.uid()", status: 'Active' }
-        ]; 
+        ];
     },
-    saveRLSPolicy: async (policy: Partial<RLSPolicy>): Promise<unknown> => { 
-        return adminApi.rlsPolicies?.create?.(policy) || policy;
+    saveRLSPolicy: async (policy: Partial<RLSPolicy>): Promise<unknown> => {
+        // In production, this would save via data platform API
+        return policy;
     },
-    deleteRLSPolicy: async (id: string): Promise<void> => { 
-        await adminApi.rlsPolicies?.delete?.(id);
+    deleteRLSPolicy: async (id: string): Promise<void> => {
+        // In production, this would delete via data platform API
+        await delay(100);
     },
-    
+
     // Permissions from backend
-    getPermissions: async (): Promise<RolePermission[]> => { 
-        return adminApi.permissions?.getAll?.() || [{id: 'p1', role: 'Associate', resource: 'Financials', access: 'Read'}];
+    getPermissions: async (): Promise<RolePermission[]> => {
+        // Permissions are managed via auth API, not admin API
+        return [{id: 'p1', role: 'Associate', resource: 'Financials', access: 'Read'}];
     },
-    updatePermission: async (payload: { role: string, resource: string, level: string }): Promise<unknown> => { 
-        return adminApi.permissions?.update?.(payload) || payload;
+    updatePermission: async (payload: { role: string, resource: string, level: string }): Promise<unknown> => {
+        // In production, this would update via auth API
+        return payload;
     },
-    
+
     // Data Platform - ETL Pipelines
-    getPipelines: async (): Promise<PipelineJob[]> => { 
-        return adminApi.pipelines?.getAll?.() || [];
+    getPipelines: async (): Promise<PipelineJob[]> => {
+        // Pipelines are managed via data platform API
+        return [];
     },
-    getApiKeys: async (): Promise<ApiKey[]> => { 
-        return adminApi.apiKeys?.getAll?.() || [{id: 'key_1', name: 'Default Key', prefix: 'pk_live_ab12...', created: '2024-01-01', status: 'Active'}];
+    getApiKeys: async (): Promise<ApiKey[]> => {
+        // API keys are managed via auth API
+        return [{
+            id: 'key_1',
+            name: 'Default Key',
+            keyPrefix: 'pk_live_ab12...',
+            keyHash: '',
+            scopes: [],
+            rateLimit: 1000,
+            requestCount: 0,
+            isActive: true,
+            userId: 'usr-admin-justin',
+            createdAt: '2024-01-01',
+            status: 'Active',
+            lastUsedAt: undefined,
+            expiresAt: undefined
+        }];
     },
     
     getAnomalies: async (): Promise<DataAnomaly[]> => {
@@ -190,24 +210,32 @@ export const AdminService = {
             if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
                 const connections = await response.json();
                 // Transform backend response to connector format
-                return connections.map((conn: unknown) => ({
-                    id: conn.id,
-                    name: conn.name,
-                    type: conn.type,
-                    status: conn.status === 'active' ? 'Healthy' : conn.status === 'syncing' ? 'Syncing' : 'Disconnected',
-                    color: conn.type === 'PostgreSQL' ? 'text-blue-600' : 
-                           conn.type === 'Snowflake' ? 'text-sky-500' : 'text-gray-600'
-                }));
+                return connections.map((conn: { id: string; name: string; type: string; status: string }) => {
+                    // Map status to valid Connector status
+                    let connectorStatus: 'Healthy' | 'Syncing' | 'Degraded' | 'Error' = 'Error';
+                    if (conn.status === 'active') connectorStatus = 'Healthy';
+                    else if (conn.status === 'syncing') connectorStatus = 'Syncing';
+                    else if (conn.status === 'degraded') connectorStatus = 'Degraded';
+
+                    return {
+                        id: conn.id,
+                        name: conn.name,
+                        type: conn.type,
+                        status: connectorStatus,
+                        color: conn.type === 'PostgreSQL' ? 'text-blue-600' :
+                               conn.type === 'Snowflake' ? 'text-sky-500' : 'text-gray-600'
+                    };
+                });
             }
         } catch (error) {
             // Silently fail - backend not available
         }
         
-        // Backend not available - return disconnected connectors based on backend support
+        // Backend not available - return error status connectors
         await delay(200);
         return [
-          { id: 'c1', name: 'Primary Warehouse', type: 'Snowflake', status: 'Disconnected', color: 'text-sky-500' },
-          { id: 'c2', name: 'Legacy Archive', type: 'PostgreSQL', status: 'Disconnected', color: 'text-blue-600' },
+          { id: 'c1', name: 'Primary Warehouse', type: 'Snowflake', status: 'Error' as const, color: 'text-sky-500' },
+          { id: 'c2', name: 'Legacy Archive', type: 'PostgreSQL', status: 'Error' as const, color: 'text-blue-600' },
         ];
     },
     

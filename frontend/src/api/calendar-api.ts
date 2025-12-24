@@ -317,12 +317,12 @@ export class CalendarApiService {
   /**
    * Get statute of limitations deadlines
    * Backend: GET /calendar/statute-of-limitations
-   * 
+   *
    * @param query - Optional query parameters
    * @returns Promise<CalendarEvent[]> Statute of limitations events
    * @throws Error if fetch fails
    */
-  async getStatuteOfLimitations(query?: unknown): Promise<CalendarEvent[]> {
+  async getStatuteOfLimitations(query?: Record<string, string>): Promise<CalendarEvent[]> {
     try {
       const params = new URLSearchParams(query);
       const queryString = params.toString();

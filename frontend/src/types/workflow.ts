@@ -69,8 +69,9 @@ export interface WorkflowTask extends Omit<BaseEntity, 'createdBy'> {
 // Backward compatibility alias
 export type Task = WorkflowTask;
 
-export interface SLAConfig extends BaseEntity { name: string; targetHours: number; warningThresholdHours: number; businessHoursOnly: boolean; }
-export interface ApprovalChain extends BaseEntity { name: string; steps: { role: UserRole; userId?: UserId; order: number }[]; }
+// Basic/Legacy SLA and Approval types (renamed to avoid conflict with advanced types)
+export interface SLAConfigBasic extends BaseEntity { name: string; targetHours: number; warningThresholdHours: number; businessHoursOnly: boolean; }
+export interface ApprovalChainBasic extends BaseEntity { name: string; steps: { role: UserRole; userId?: UserId; order: number }[]; }
 export interface WorkflowStage { id: string; title: string; status: StageStatus | string; tasks: WorkflowTask[]; }
 export interface WorkflowTemplateData extends BaseEntity { id: WorkflowTemplateId; title: string; category: string; complexity: 'Low' | 'Medium' | 'High'; duration: string; tags: string[]; auditReady: boolean; stages: string[]; }
 
@@ -182,7 +183,8 @@ export interface TaskHistory {
   description?: string;
 }
 
-export interface WorkflowAnalytics {
+// Renamed to avoid conflict with workflow-advanced-types WorkflowAnalytics
+export interface WorkflowProcessAnalytics {
   totalProcesses: number;
   activeProcesses: number;
   completedThisMonth: number;
@@ -205,7 +207,7 @@ export interface TemplateDocument extends BaseEntity {
   variables?: Array<{ key: string; label: string; type: string; required?: boolean }>;
   sections?: string[];
   status: 'Draft' | 'Active' | 'Archived';
-  version?: string;
+  templateVersion?: string;
   tags?: string[];
   jurisdictions?: string[];
   complexity?: 'Low' | 'Medium' | 'High';

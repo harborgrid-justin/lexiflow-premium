@@ -277,7 +277,8 @@
  */
 
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
-import { ParsedDocket, SearchResult } from '@/types';
+import { ParsedDocket } from '@/types';
+import { SearchResult } from '@/api/search/search-api';
 import { Prompts } from "../../ai/prompts";
 import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema, ShepardizeSchema, StrategyGraphSchema, LinterResultSchema } from "../../ai/schemas";
 import { safeParseJSON, withRetry } from '@/utils/apiUtils';
@@ -293,7 +294,13 @@ export * from '@/types/ai';
  * Singleton-like accessor to ensure consistent config and prevent unnecessary instantiation overhead
  * @private
  */
-const getClient = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
+const getClient = () => {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    throw new Error('Gemini API key not configured. Please set API_KEY environment variable.');
+  }
+  return new GoogleGenAI({ apiKey: apiKey as string });
+};
 
 // =============================================================================
 // GEMINI SERVICE
@@ -459,23 +466,35 @@ export const GeminiService = {
                         tools: [{googleSearch: {}} as any],
                     }
                 });
-                    
-                const sources: SearchResult[] = [];
+
+                const sources: import('@/api/search/search-api').SearchResult[] = [];
                 if (response.candidates && response.candidates[0]?.groundingMetadata?.groundingChunks) {
                     const chunks = response.candidates[0].groundingMetadata.groundingChunks as GroundingChunk[];
                     chunks.forEach((c: GroundingChunk) => {
                         if (c.web) {
                             sources.push({
-                            id: crypto.randomUUID(),
-                            title: c.web.title,
-                            url: c.web.uri
+                                id: crypto.randomUUID(),
+                                type: 'web',
+                                title: c.web.title,
+                                score: 1.0,
+                                metadata: {
+                                    url: c.web.uri
+                                }
                             });
                         }
                     });
                 }
-                return { text: response.text || "No text response.", sources };
+                const researchResponse: ResearchResponse = {
+                    text: response.text || "No text response.",
+                    sources
+                };
+                return researchResponse;
             } catch (e) {
-                return { text: "Research service unavailable.", sources: [] };
+                const errorResponse: ResearchResponse = {
+                    text: "Research service unavailable.",
+                    sources: []
+                };
+                return errorResponse;
             }
         });
     },
@@ -495,7 +514,7 @@ export const GeminiService = {
     },
 
     async shepardizeCitation(citation: string): Promise<ShepardizeResult | null> {
-        return withRetry(async () => {
+        return withRetry<ShepardizeResult | null>(async () => {
             try {
                 const response: GenerateContentResponse = await getClient().models.generateContent({
                     model: 'gemini-3-pro-preview',
@@ -505,9 +524,16 @@ export const GeminiService = {
                         responseSchema: ShepardizeSchema
                     }
                 });
-        
+
                 if (!response.text) return null;
-                return safeParseJSON<ShepardizeResult>(response.text, null);
+                const defaultValue: ShepardizeResult = {
+                    caseName: '',
+                    citation: '',
+                    summary: '',
+                    history: [],
+                    treatment: []
+                };
+                return safeParseJSON<ShepardizeResult>(response.text, defaultValue);
             } catch (e) {
                 return null;
             }

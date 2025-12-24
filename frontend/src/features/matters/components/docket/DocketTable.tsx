@@ -43,12 +43,12 @@ interface DocketTableProps {
   isLoadingMore?: boolean;
 }
 
-export const DocketTable: React.FC<DocketTableProps> = ({ 
+export const DocketTable: React.FC<DocketTableProps> = ({
     entries, onSelectEntry, onSelectCaseId, showCaseColumn = true,
     onLoadMore, hasMore = false, isLoadingMore = false
 }) => {
   const { theme } = useTheme();
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
 
   // Keyboard navigation (using unified useListNavigation with full mode)
   const { focusedIndex } = useListNavigation({
@@ -57,7 +57,7 @@ export const DocketTable: React.FC<DocketTableProps> = ({
     onSelect: onSelectEntry,
     enabled: true,
     initialIndex: 0,
-    containerRef,
+    containerRef: containerRef as unknown as React.RefObject<HTMLElement>,
     circular: false
   });
 
@@ -137,8 +137,8 @@ export const DocketTable: React.FC<DocketTableProps> = ({
   };
 
   return (
-    <div 
-      ref={containerRef}
+    <div
+      ref={containerRef as React.Ref<HTMLDivElement>}
       className={cn("flex flex-col h-full", theme.surface.default)}
       role="table"
       aria-label="Docket entries table"

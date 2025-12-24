@@ -147,7 +147,7 @@ const ClauseLibrary: React.FC<ClauseLibraryProps> = ({ onSelectClause }) => {
                                             </h3>
                                         </div>
                                         {clause.category && (
-                                            <Badge variant="blue">{clause.category}</Badge>
+                                            <Badge variant="info">{clause.category}</Badge>
                                         )}
                                     </div>
                                     <p className={cn("text-sm line-clamp-2 mb-3", theme.text.secondary)}>

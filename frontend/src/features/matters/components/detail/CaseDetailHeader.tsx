@@ -27,7 +27,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Case, ClientStatus } from '@/types';
+import { Case, ClientStatus, PaymentTerms } from '@/types';
 
 interface CaseDetailHeaderProps {
   id: string;
@@ -61,7 +61,29 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
           winId,
           `Client Portal: ${client}`,
           <ClientPortalModal
-             client={{ id: (clientId || 'unknown') as any, name: client, industry: 'General', status: ClientStatus.ACTIVE, totalBilled: 0, matters: [id as any] }}
+             client={{
+               id: (clientId || 'unknown') as any,
+               name: client,
+               industry: 'General',
+               status: ClientStatus.ACTIVE,
+               totalBilled: 0,
+               totalPaid: 0,
+               totalCases: 1,
+               activeCases: 1,
+               matters: [id as any],
+               clientNumber: 'TEMP',
+               paymentTerms: PaymentTerms.NET_30,
+               creditLimit: 0,
+               currentBalance: 0,
+               isVip: false,
+               requiresConflictCheck: false,
+               hasRetainer: false,
+               email: '',
+               phone: '',
+               address: '',
+               billingAddress: '',
+               notes: ''
+             }}
              onClose={() => closeWindow(winId)}
           />
       );

@@ -10,7 +10,7 @@ import React from 'react';
 import { cn } from '@/utils/cn';
 import { sizeClasses, weightClasses, colorClasses, alignClasses, variantClasses } from './Text.styles';
 
-interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
+export interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** Text variant */
   variant?: 'body' | 'heading' | 'caption' | 'label';
   /** Text size */

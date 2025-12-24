@@ -24,7 +24,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Case, TimeEntry } from '@/types';
+import { Case, TimeEntryPayload } from '@/types';
 
 interface CaseOverviewModalsProps {
   caseData: Case;
@@ -35,24 +35,24 @@ interface CaseOverviewModalsProps {
   showTransferModal: boolean;
   setShowTransferModal: (v: boolean) => void;
   availableCases: Case[];
-  onSaveTime: (entry: TimeEntry) => void;
+  onSaveTime: (entry: TimeEntryPayload) => void;
   onLinkCase: (c: Case) => void;
   onTransfer: () => void;
 }
 
 export const CaseOverviewModals: React.FC<CaseOverviewModalsProps> = ({
-  caseData, showTimeModal, setShowTimeModal, showLinkModal, setShowLinkModal, 
+  caseData, showTimeModal, setShowTimeModal, showLinkModal, setShowLinkModal,
   showTransferModal, setShowTransferModal, availableCases, onSaveTime, onLinkCase, onTransfer
 }) => {
   const { theme } = useTheme();
 
   return (
     <>
-      <TimeEntryModal 
-        isOpen={showTimeModal} 
-        onClose={() => setShowTimeModal(false)} 
-        caseId={caseData.id} 
-        onSave={onSaveTime} 
+      <TimeEntryModal
+        isOpen={showTimeModal}
+        onClose={() => setShowTimeModal(false)}
+        caseId={caseData.id}
+        onSave={onSaveTime}
       />
 
       <Modal isOpen={showLinkModal} onClose={() => setShowLinkModal(false)} title="Link Related Docket">

@@ -114,11 +114,11 @@ export class DataSourceRouter {
       };
     }
   ): Record<keyof TMap, PropertyDescriptor> {
-    const descriptors: unknown = {};
+    const descriptors: any = {};
     for (const [key, { api: apiPath, fallback }] of Object.entries(config)) {
-      descriptors[key] = this.createPropertyDescriptor(apiPath, fallback);
+      (descriptors as any)[key] = this.createPropertyDescriptor(apiPath, fallback);
     }
-    return descriptors;
+    return descriptors as Record<keyof TMap, PropertyDescriptor>;
   }
 }
 

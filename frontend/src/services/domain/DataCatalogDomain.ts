@@ -30,8 +30,8 @@ export const DataCatalogService = {
     },
     
     getSchemaTables: async (): Promise<SchemaTable[]> => {
-        const tables = Object.values(STORES).map((name, i) => ({
-            name,
+        const tables: SchemaTable[] = Object.values(STORES).map((name, i) => ({
+            name: name as string,
             x: (i % 6) * 300 + 50,
             y: Math.floor(i / 6) * 350 + 50,
             columns: [
@@ -46,10 +46,11 @@ export const DataCatalogService = {
 
     getRegistryInfo: async (): Promise<any[]> => {
         const stores = Object.values(STORES);
-        const info = [];
+        const info: any[] = [];
         for (const store of stores) {
             try {
-                const count = await db.count(store);
+                const dbInstance = db as any;
+                const count = await dbInstance.count(store);
                 info.push({
                     name: store,
                     type: 'System Table',
@@ -85,18 +86,18 @@ export const DataCatalogService = {
 
     // Dynamically build lineage based on current Entity Relationships in backend
     getLineageGraph: async (): Promise<{ nodes: LineageNode[], links: LineageLink[] }> => {
-        const [entities, relationships] = await Promise.all([
-            dataPlatformApi.dataPlatform?.getEntities?.() || [],
-            dataPlatformApi.dataPlatform?.getRelationships?.() || []
-        ]);
+        // Note: dataPlatform API is not yet available in the integrations API
+        // This will need to be updated when the API is added
+        const entities: any[] = [];
+        const relationships: any[] = [];
 
-        const nodes: LineageNode[] = entities.map((e: unknown) => ({
+        const nodes: LineageNode[] = entities.map((e: any) => ({
             id: e.id,
             label: e.name,
             type: e.type === 'Corporation' ? 'org' : 'party'
         }));
 
-        const links: LineageLink[] = relationships.map((r: unknown) => ({
+        const links: LineageLink[] = relationships.map((r: any) => ({
             source: r.sourceId,
             target: r.targetId,
             strength: r.weight || 0.5

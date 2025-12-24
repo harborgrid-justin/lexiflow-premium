@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { MetricCard } from '@/components/molecules/MetricCard';
+import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
 
 interface DiscoveryMetricsProps {
   stats: {
@@ -8,7 +9,7 @@ interface DiscoveryMetricsProps {
     legalHolds: number;
     privilegedItems: number;
   };
-  onNavigate: (view: string) => void;
+  onNavigate: (view: DiscoveryView) => void;
 }
 
 const DiscoveryMetrics: React.FC<DiscoveryMetricsProps> = ({ stats, onNavigate }) => {

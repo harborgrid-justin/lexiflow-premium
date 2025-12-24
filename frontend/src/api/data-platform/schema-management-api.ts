@@ -167,7 +167,7 @@ export class SchemaManagementApiService {
    */
   async createTable(data: {
     name: string;
-    columns: unknown[];
+    columns: Record<string, any>[];
     description?: string;
   }): Promise<{ success: boolean; table: string }> {
     return await apiClient.post('/schema/tables', data);

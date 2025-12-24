@@ -116,12 +116,12 @@ export function debounce<T extends (...args: unknown[]) => Promise<unknown>>(
     }
 
     if (!pendingPromise) {
-      pendingPromise = new Promise((resolve, reject) => {
+      pendingPromise = new Promise<ReturnType<T>>((resolve, reject) => {
         timeoutId = setTimeout(() => {
           timeoutId = null;
           pendingPromise = null;
           fn(...args)
-            .then(resolve)
+            .then((result) => resolve(result as ReturnType<T>))
             .catch(reject);
         }, ms);
       });
@@ -159,7 +159,7 @@ export function throttle<T extends (...args: unknown[]) => Promise<unknown>>(
     }
 
     isThrottled = true;
-    lastResult = fn(...args);
+    lastResult = fn(...args) as Promise<ReturnType<T>>;
 
     setTimeout(() => {
       isThrottled = false;

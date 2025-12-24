@@ -100,19 +100,14 @@ const BillingWIPComponent: React.FC = () => {
   );
 
   // Auto-save draft time entry
-  useAutoSave(
-    draftEntry ? JSON.stringify(draftEntry) : '',
-    'billing-wip-draft',
-    2000,
-    {
-      data: draftEntry,
-      onSave: useCallback(async (entry: Partial<TimeEntry>) => {
-        if (!entry || !entry.description) return;
-        localStorage.setItem('billing-wip-draft', JSON.stringify(entry));
-      }, []),
-      delay: 2000
-    }
-  );
+  useAutoSave({
+    data: draftEntry,
+    onSave: useCallback(async (entry: Partial<TimeEntry> | null) => {
+      if (!entry || !entry.description) return;
+      localStorage.setItem('billing-wip-draft', JSON.stringify(entry));
+    }, []),
+    delay: 2000
+  });
 
   // Keyboard shortcuts
   useKeyboardShortcuts({

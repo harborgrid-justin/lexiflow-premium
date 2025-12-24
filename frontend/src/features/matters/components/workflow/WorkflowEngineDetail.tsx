@@ -18,6 +18,17 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { ErrorState } from '@/components/molecules/ErrorState';
 
+interface EngineDetails {
+  id: string;
+  type: 'case' | 'process';
+  status: string;
+  progress: number;
+  tasksTotal: number;
+  tasksCompleted: number;
+  nextDeadline: string;
+  automationRate: string;
+}
+
 interface WorkflowEngineDetailProps {
   id: string;
   type: 'case' | 'process';
@@ -29,8 +40,8 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
   const notify = useNotify();
   const [activeTab, setActiveTab] = useState<'visualizer' | 'tasks' | 'audit' | 'settings'>('visualizer');
   
-  const { data: engineData, isLoading, isError, refetch } = useQuery(
-    queryKeys.workflows.engineDetail(id, type),
+  const { data: engineData, isLoading, isError, refetch } = useQuery<EngineDetails>(
+    queryKeys.workflows.engineDetail(id),
     () => DataService.workflow.getEngineDetails(id, type)
   );
 

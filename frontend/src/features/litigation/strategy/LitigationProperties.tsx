@@ -44,23 +44,23 @@ export const LitigationProperties: React.FC<LitigationPropertiesProps> = ({
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Success Probability</label>
                     <div className="flex items-center gap-3">
-                        <input 
-                            type="range" 
-                            min="0" max="100" 
-                            value={selectedNode!.config.probability || 50}
+                        <input
+                            type="range"
+                            min="0" max="100"
+                            value={Number(selectedNode!.config.probability) || 50}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateNode(selectedNode!.id, { config: { ...selectedNode!.config, probability: parseInt(e.target.value) } })}
                             className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
                         />
-                        <span className="font-mono text-sm font-bold w-12 text-right">{selectedNode!.config.probability || 50}%</span>
+                        <span className="font-mono text-sm font-bold w-12 text-right">{Number(selectedNode!.config.probability) || 50}%</span>
                     </div>
                 </div>
             )}
 
-            <TextArea 
+            <TextArea
                 label="Strategic Notes"
                 rows={4}
                 placeholder="Why are we filing this? What is the probability of success?"
-                value={selectedNode!.config.description || ''}
+                value={String(selectedNode!.config.description || '')}
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdateNode(selectedNode!.id, { config: { ...selectedNode!.config, description: e.target.value } })}
             />
         </div>

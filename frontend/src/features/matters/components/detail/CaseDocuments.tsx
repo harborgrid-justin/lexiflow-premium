@@ -122,7 +122,7 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
               notes: 'Linked from Case Documents'
             }],
             tags: ['Document'],
-            fileSize: savedDoc.fileSize
+            fileSize: typeof savedDoc.fileSize === 'string' ? savedDoc.fileSize : String(savedDoc.fileSize)
           };
           await DataService.evidence.add(evidence);
           // INVALIDATE EVIDENCE CACHE

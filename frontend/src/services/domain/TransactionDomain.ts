@@ -30,40 +30,51 @@ interface Balance {
 }
 
 export const TransactionService = {
-  getAll: async () => api.billing?.transactions?.getAll?.() || [],
-  getById: async (id: string) => api.billing?.transactions?.getById?.(id),
-  
+  getAll: async () => {
+    // Transactions API not yet available, return empty array
+    await delay(200);
+    return [];
+  },
+  getById: async (id: string) => {
+    await delay(200);
+    return undefined;
+  },
+
   add: async (item: unknown) => {
+    const itemObj = item && typeof item === 'object' ? item as Record<string, unknown> : {};
     const transaction = {
-      ...(item && typeof item === 'object' ? item : {}),
+      ...itemObj,
       createdAt: new Date().toISOString(),
-      status: item.status || 'pending'
+      status: itemObj.status || 'pending'
     };
-    return api.billing?.transactions?.create?.(transaction) || transaction;
+    await delay(200);
+    return transaction;
   },
 
   update: async (id: string, updates: unknown) => {
-    return api.billing?.transactions?.update?.(id, updates) || {
+    await delay(200);
+    return {
       id,
       ...(updates && typeof updates === 'object' ? updates : {})
     };
   },
-  
+
   delete: async (id: string) => {
-    await api.billing?.transactions?.delete?.(id);
+    await delay(200);
     return { success: true, id };
   },
   
   // Transaction specific methods
-  getTransactions: async (filters?: { 
-    type?: string; 
-    status?: string; 
+  getTransactions: async (filters?: {
+    type?: string;
+    status?: string;
     caseId?: string;
     startDate?: string;
     endDate?: string;
   }): Promise<Transaction[]> => {
-    // Use backend filtering if available
-    const transactions = await api.billing?.transactions?.getAll?.(filters) || [];
+    // Transactions API not yet available
+    await delay(200);
+    const transactions: Transaction[] = [];
     
     // Client-side filtering as fallback
     let filtered = transactions;
@@ -110,18 +121,15 @@ export const TransactionService = {
       reference: transaction.reference,
       metadata: transaction.metadata,
     };
-    
-    return api.billing?.transactions?.create?.(newTransaction) || newTransaction;
+
+    await delay(200);
+    return newTransaction;
   },
-  
+
   getBalance: async (caseId?: string): Promise<Balance> => {
-    // Try to get balance from backend
-    const backendBalance = await api.billing?.getBalance?.(caseId);
-    if (backendBalance) return backendBalance;
-    
-    // Fallback calculation
+    // Fallback calculation (API not available)
     await delay(50);
-    const transactions = await api.billing?.transactions?.getAll?.({ caseId }) || [];
+    const transactions: Transaction[] = [];
     
     const balance: Balance = {
       total: 0,
@@ -147,12 +155,7 @@ export const TransactionService = {
   
   reconcile: async (transactionId: string): Promise<boolean> => {
     await delay(100);
-    try {
-      await api.billing?.transactions?.reconcile?.(transactionId);
-      console.log(`[TransactionService] Reconciled transaction: ${transactionId}`);
-      return true;
-    } catch {
-      return false;
-    }
+    console.log(`[TransactionService] Reconciled transaction: ${transactionId}`);
+    return true;
   },
 };

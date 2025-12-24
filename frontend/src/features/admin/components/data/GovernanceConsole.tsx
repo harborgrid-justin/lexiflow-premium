@@ -12,7 +12,18 @@ import { ModalFooter } from '@/components/molecules/ModalFooter/ModalFooter';
 import { GovernanceDashboard } from './governance/GovernanceDashboard';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { GovernanceRule, GovernancePolicy } from '@/types';
+import { GovernancePolicy } from '@/types';
+import type { GovernanceRule as ImportedGovernanceRule } from '@/types/data-infrastructure';
+
+// Local type to match both the API response and component expectations
+interface GovernanceRule {
+  id: string;
+  name: string;
+  status: string;
+  impact: string;
+  passing?: string;
+  desc?: string;
+}
 
 interface GovernanceConsoleProps {
     initialTab?: string;
@@ -28,10 +39,20 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
   const scanIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Data Fetching
-  const { data: rules = [] } = useQuery<GovernanceRule[]>(
+  const { data: fetchedRules = [] } = useQuery<ImportedGovernanceRule[]>(
       ['admin', 'governance_rules'],
       DataService.admin.getGovernanceRules
   );
+
+  // Map imported rules to local type
+  const rules: GovernanceRule[] = fetchedRules.map(rule => ({
+    id: String(rule.id),
+    name: rule.name,
+    status: rule.status,
+    impact: rule.impact,
+    passing: rule.passing,
+    desc: rule.desc
+  }));
 
   const { data: policies = [] } = useQuery<GovernancePolicy[]>(
       ['admin', 'governance_policies'],
@@ -82,12 +103,12 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
 
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
             {activeTab === 'overview' && (
-                <GovernanceDashboard 
-                    rules={rules} 
-                    isScanning={isScanning} 
-                    scanProgress={scanProgress} 
-                    handleScan={handleScan} 
-                    setEditingRule={setEditingRule} 
+                <GovernanceDashboard
+                    rules={rules}
+                    isScanning={isScanning}
+                    scanProgress={scanProgress}
+                    handleScan={handleScan}
+                    setEditingRule={setEditingRule}
                 />
             )}
 

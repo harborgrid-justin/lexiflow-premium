@@ -4,7 +4,7 @@ import type { MatterFormData, FormErrors } from './types';
 import { PracticeArea, MatterType, MatterStatus, MatterPriority } from '@/types';
 
 // Define arrays locally from the type unions
-const MATTER_TYPES: MatterType[] = ['Case', 'Advisory', 'Compliance'];
+const MATTER_TYPES: MatterType[] = [MatterType.LITIGATION, MatterType.ADVISORY, MatterType.COMPLIANCE];
 const MATTER_STATUSES: MatterStatus[] = [MatterStatus.ACTIVE, MatterStatus.PENDING, MatterStatus.CLOSED, MatterStatus.ON_HOLD];
 const MATTER_PRIORITIES: MatterPriority[] = [MatterPriority.LOW, MatterPriority.MEDIUM, MatterPriority.HIGH, MatterPriority.URGENT];
 const PRACTICE_AREAS: PracticeArea[] = [

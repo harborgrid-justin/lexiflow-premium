@@ -40,10 +40,17 @@ export class EntityRepository extends Repository<LegalEntity> {
             try {
                 const entities = await this.legalEntitiesApi.getAll();
                 // Transform API format to frontend format
-                return entities.map(e => ({
-                    ...e,
-                    type: this.mapEntityType(e.entityType),
-                } as LegalEntity));
+                return entities.map(e => {
+                    const transformed: LegalEntity = {
+                        ...e,
+                        id: e.id as unknown as import('@/types').EntityId,
+                        type: this.mapEntityType(e.entityType),
+                        roles: [],
+                        riskScore: 0,
+                        tags: [],
+                    } as any;
+                    return transformed;
+                });
             } catch (error) {
                 console.error('[EntityRepository] Backend API unavailable', error);
                 return await super.getAll();
@@ -73,10 +80,15 @@ export class EntityRepository extends Repository<LegalEntity> {
         if (this.useBackend) {
             try {
                 const entity = await this.legalEntitiesApi.getById(id);
-                return {
+                const transformed: LegalEntity = {
                     ...entity,
+                    id: entity.id as unknown as import('@/types').EntityId,
                     type: this.mapEntityType(entity.entityType),
-                } as LegalEntity;
+                    roles: [],
+                    riskScore: 0,
+                    tags: [],
+                } as any;
+                return transformed;
             } catch (error) {
                 console.error('[EntityRepository] Backend API unavailable', error);
                 return await super.getById(id);
@@ -137,7 +149,7 @@ export class EntityRepository extends Repository<LegalEntity> {
         const lowerQuery = query.toLowerCase();
         return entities.filter(e =>
             e.name?.toLowerCase().includes(lowerQuery) ||
-            e.legalName?.toLowerCase().includes(lowerQuery)
+            (e as any).legalName?.toLowerCase().includes(lowerQuery)
         );
     }
 }

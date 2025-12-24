@@ -39,19 +39,19 @@ export const CompliancePolicies: React.FC = () => {
           winId,
           `Policy: ${policy.title}`,
           <div className="h-full bg-white">
-              <DocumentPreviewPanel 
-                  document={{ 
-                      id: policy.id, 
-                      title: policy.title, 
-                      type: 'Policy', 
-                      content: 'Policy Content Preview...', 
-                      uploadDate: policy.date, 
-                      lastModified: policy.date, 
-                      tags: ['Compliance', 'Policy'], 
-                      versions: [], 
-                      caseId: 'General',
-                      status: policy.status 
-                  }} 
+              <DocumentPreviewPanel
+                  document={{
+                      id: policy.id as import('@/types').DocumentId,
+                      title: policy.title,
+                      type: 'Policy',
+                      content: 'Policy Content Preview...',
+                      uploadDate: policy.date,
+                      lastModified: policy.date,
+                      tags: ['Compliance', 'Policy'],
+                      versions: [],
+                      caseId: 'General' as import('@/types').CaseId,
+                      status: policy.status
+                  }}
                   onViewHistory={() => {}}
                   isOrbital={true}
               />

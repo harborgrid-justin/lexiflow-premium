@@ -30,7 +30,7 @@ export const WITNESS_QUERY_KEYS = {
     byStatus: (status: string) => ['witnesses', 'status', status] as const,
 } as const;
 
-export class WitnessRepository extends Repository<unknown> {
+export class WitnessRepository extends Repository<Witness> {
     private useBackend: boolean;
     private witnessesApi: WitnessesApiService;
 
@@ -112,7 +112,7 @@ export class WitnessRepository extends Repository<unknown> {
         return await super.getById(id);
     }
 
-    override async add(item: unknown): Promise<unknown> {
+    override async add(item: Witness): Promise<Witness> {
         if (!item || typeof item !== 'object') {
             throw new Error('[WitnessRepository.add] Invalid witness data');
         }
@@ -127,31 +127,31 @@ export class WitnessRepository extends Repository<unknown> {
         return item;
     }
 
-    override async update(id: string, updates: unknown): Promise<unknown> {
+    override async update(id: string, updates: Partial<Witness>): Promise<Witness> {
         this.validateId(id, 'update');
         if (this.useBackend) {
             try {
-                return await this.witnessesApi.update(id, updates);
+                return await this.witnessesApi.update(id, updates as any) as any;
             } catch (error) {
                 console.warn('[WitnessRepository] Backend API unavailable', error);
             }
         }
         return await super.update(id, updates);
     }
-    
-    async updateStatus(id: string, status: string): Promise<unknown> {
+
+    async updateStatus(id: string, status: string): Promise<Witness> {
         this.validateId(id, 'updateStatus');
         if (!status || typeof status !== 'string') {
             throw new Error('[WitnessRepository.updateStatus] Invalid status');
         }
         if (this.useBackend) {
             try {
-                return await this.witnessesApi.updateStatus(id, status as any);
+                return await this.witnessesApi.updateStatus(id, status as any) as any;
             } catch (error) {
                 console.warn('[WitnessRepository] Backend API unavailable', error);
             }
         }
-        return await this.update(id, { status });
+        return await this.update(id, { status: status as Witness['status'] });
     }
 
     override async delete(id: string): Promise<void> {

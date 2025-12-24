@@ -105,7 +105,7 @@ const EvidenceVaultInternal: React.FC<EvidenceVaultProps> = ({ onNavigateToCase,
               selectedItem={selectedItem}
               handleBack={handleBack}
               activeTab={activeTab}
-              setActiveTab={setActiveTab}
+              setActiveTab={(tab) => setActiveTab(tab as any)}
               onNavigateToCase={onNavigateToCase}
               onCustodyUpdate={handleCustodyUpdate}
             />

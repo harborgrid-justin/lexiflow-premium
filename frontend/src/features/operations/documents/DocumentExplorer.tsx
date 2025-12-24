@@ -42,7 +42,7 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
   const {
     selectedIds: selectedDocs, toggleSelection, selectAll,
     clearSelection, isSelected, isAllSelected
-  } = useSelection(filtered);
+  } = useSelection(filtered as unknown as Record<string, unknown>[]);
 
   const { mutate: summarizeBatch, isLoading: isSummarizing } = useMutation(
       DataService.documents.summarizeBatch,

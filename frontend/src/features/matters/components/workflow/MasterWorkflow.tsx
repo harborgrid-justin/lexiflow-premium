@@ -4,7 +4,7 @@ import { Plus, RefreshCw, Play, Loader2, AlertTriangle } from 'lucide-react';
 import { PageHeader } from '../../common/PageHeader';
 import { Button } from '../../common/Button';
 import { DataService } from '@/services/data/dataService';
-import { ErrorBoundary } from '../../common/ErrorBoundary';
+import { ErrorBoundary } from '../../../../components/organisms/ErrorBoundary/ErrorBoundary';
 import { EmptyState } from '../../common/EmptyState';
 
 // Direct Imports to optimize Tree-Shaking and HMR
@@ -30,7 +30,7 @@ interface FirmProcess {
   owner: string;
 }
 
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { getTodayString } from '@/utils/dateUtils';
 import { WORKFLOW_TABS } from './WorkflowTabs';

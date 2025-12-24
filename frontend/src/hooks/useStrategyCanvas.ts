@@ -9,14 +9,14 @@
 
 import React, { useState, useRef, useCallback } from 'react';
 import { TypedWorkflowNode, createTypedNode, WorkflowConnection, NodeType } from '@/types/workflow-types';
-import { ContextMenuItem } from '../components/common/ContextMenu';
+import { ContextMenuItem } from '../components/molecules/ContextMenu/ContextMenu';
 import { CANVAS_CONSTANTS } from '@/types/canvas-constants';
 import {
   calculateDropPosition,
   calculateCanvasMousePosition,
   generateNodeContextMenuItems,
   generateCanvasContextMenuItems,
-} from '../components/litigation/utils';
+} from "../features/litigation/strategy/utils/canvasUtils";
 import { useCommandHistory } from './useCommandHistory';
 import { useKeyboardShortcuts } from './useKeyboardShortcuts';
 import {

@@ -6,10 +6,10 @@
 import { LegalEntity } from '../../../types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
-import { IntegrationOrchestrator } from '../../integration/integrationOrchestrator';
-import { SystemEventType } from '../../../types/integration-types';
-import { isBackendApiEnabled } from '../../integration/apiConfig';
-import { LegalEntitiesApiService } from '../../api/domains/legal-entities.api';
+import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { SystemEventType } from '@/types/integration-types';
+import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { LegalEntitiesApiService } from '@/api/domains/legal-entities.api';
 
 export const ENTITY_QUERY_KEYS = {
     all: () => ['entities'] as const,

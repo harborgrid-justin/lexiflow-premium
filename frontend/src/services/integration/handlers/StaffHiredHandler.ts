@@ -6,8 +6,8 @@
  */
 
 import { BaseEventHandler } from './BaseEventHandler';
-import type { SystemEventPayloads } from '../../../types/integration-types';
-import { SystemEventType } from '../../../types/integration-types';
+import type { SystemEventPayloads } from '@/types/integration-types';
+import { SystemEventType } from '@/types/integration-types';
 
 export class StaffHiredHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.STAFF_HIRED]> {
   readonly eventType = SystemEventType.STAFF_HIRED;
@@ -24,7 +24,7 @@ export class StaffHiredHandler extends BaseEventHandler<SystemEventPayloads[type
       return this.createError(errors);
     }
     
-    const { DataService } = await import('../../data/dataService');
+    const { DataService } = await import('@/api/data/dataService');
     
     // Verify user service is available
     if (!DataService.users || typeof DataService.users.add !== 'function') {

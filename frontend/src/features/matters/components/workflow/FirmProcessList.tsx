@@ -4,7 +4,7 @@ import { Card } from '../../common/Card';
 import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
 import { MoreHorizontal, Play, Search } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { EmptyState } from '../../common/EmptyState';
 import { Process } from './types';

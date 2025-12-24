@@ -164,7 +164,7 @@ All pages are registered as lazy-loaded modules in `config/modules.tsx`:
 
 ```typescript
 const Dashboard = lazyWithPreload(() => import('../components/dashboard/Dashboard'));
-const MatterModule = lazyWithPreload(() => import('../components/matters/list/MatterModule'));
+const MatterModule = lazyWithPreload(() => import('@features/matters/components/list/MatterModule'));
 // ... etc
 ```
 

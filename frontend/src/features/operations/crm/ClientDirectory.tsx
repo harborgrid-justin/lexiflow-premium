@@ -7,7 +7,7 @@ import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
 import { Currency } from '../../common/Primitives';
 import { Lock, MoreVertical } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

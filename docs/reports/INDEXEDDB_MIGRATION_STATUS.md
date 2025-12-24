@@ -335,8 +335,8 @@ Based on the successful ComplianceDomain migration:
 
 ```typescript
 // 1. Import backend API services
-import { backendApi } from '../api/domains/[domain].api';
-import type { ApiType } from '../api/[domain]-api';
+import { backendApi } from '@/api/domains/[domain].api';
+import type { ApiType } from '@/api/[domain]-api';
 
 // 2. Replace IndexedDB calls with API calls
 // OLD: const data = await db.getAll(STORES.SOMETHING);

@@ -3,7 +3,7 @@
  * Manages discovery productions
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface Production {
   id: string;

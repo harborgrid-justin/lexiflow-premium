@@ -1,8 +1,8 @@
 /**
  * +---------------------------------------------------------------------------+
- * ¦                     LEXIFLOW SEARCH DOMAIN SERVICE                        ¦
- * ¦                  Enterprise Search & Indexing Layer v2.0                  ¦
- * ¦                       PhD-Level Systems Architecture                      ¦
+ * ï¿½                     LEXIFLOW SEARCH DOMAIN SERVICE                        ï¿½
+ * ï¿½                  Enterprise Search & Indexing Layer v2.0                  ï¿½
+ * ï¿½                       PhD-Level Systems Architecture                      ï¿½
  * +---------------------------------------------------------------------------+
  * 
  * @module services/domain/SearchDomain
@@ -15,10 +15,10 @@
  * and relevance scoring.
  */
 
-import { analyticsApi } from '../api/domains/analytics.api';
-import { delay } from '../../utils/async';
-import { isBackendApiEnabled } from '../api';
-import { apiClient } from '../infrastructure/apiClient';
+import { analyticsApi } from '@/api/domains/analytics.api';
+import { delay } from '@/utils/async';
+import { isBackendApiEnabled } from '@/api';
+import { apiClient } from '@/services/infrastructure/apiClient';
 
 interface SearchResult {
   id: string;

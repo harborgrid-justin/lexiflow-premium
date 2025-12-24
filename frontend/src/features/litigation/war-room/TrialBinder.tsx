@@ -19,7 +19,7 @@ import { Folder, FileText, ChevronRight, Gavel, BookOpen, Plus, File, Scale, Mor
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
 import { Button } from '../../common/Button';

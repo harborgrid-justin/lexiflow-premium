@@ -6,7 +6,7 @@
  * @responsibility Execute and manage SQL queries
  */
 
-import { apiClient } from '../../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 /**
  * Query execution result interface

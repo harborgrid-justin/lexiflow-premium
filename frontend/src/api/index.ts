@@ -30,7 +30,7 @@ export {
   isProduction,
   getBackendUrl,
   logApiConfig 
-} from '../integration/apiConfig';
+} from '@/services/integration/apiConfig';
 
 // ==================== DOMAIN EXPORTS ====================
 // Re-export domain API services for direct access

@@ -17,7 +17,7 @@ import { GanttTimeline } from '../../matters/detail/planning/GanttTimeline';
 import { Button } from '../../common/Button';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 
 // Utils
 import { cn } from '@/utils/cn';

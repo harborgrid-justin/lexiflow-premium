@@ -6,7 +6,7 @@
  * @responsibility Manage data synchronization operations
  */
 
-import { apiClient, type PaginatedResponse } from '../../infrastructure/apiClient';
+import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
 
 /**
  * Sync status overview interface

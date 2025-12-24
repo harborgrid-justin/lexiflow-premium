@@ -1,10 +1,10 @@
-import { BUSINESS_PROCESSES } from '../../../data/models/firmProcess';
+import { BUSINESS_PROCESSES } from "@/api/data/firmProcess";
 import { delay } from '@/utils/async';
-import { TEMPLATE_LIBRARY } from '../../../data/models/workflowTemplates';
+import { TEMPLATE_LIBRARY } from '@/api/data/workflowTemplates';
 import { WorkflowTask, TaskId, WorkflowTemplateData, CaseId, ProjectId, CasePhase } from '../../../types';
 import { db, STORES } from '../db';
-import { IntegrationOrchestrator } from '../../integration/integrationOrchestrator';
-import { SystemEventType } from '../../../types/integration-types';
+import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { SystemEventType } from '@/types/integration-types';
 import { StorageUtils } from '@/utils/storage';
 
 export const WorkflowRepository = {

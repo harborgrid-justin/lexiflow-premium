@@ -4,7 +4,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis
 import { Card } from '../../common/Card';
 import { MetricCard } from '../../common/Primitives';
 import { ShieldAlert, FileText, CheckCircle, TrendingUp } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { getRiskData, getUsageData } from './clauseAnalytics.utils';
 import { DataService } from '@/services/data/dataService';

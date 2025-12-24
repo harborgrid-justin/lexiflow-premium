@@ -6,9 +6,9 @@
  */
 
 import { BaseEventHandler } from './BaseEventHandler';
-import type { SystemEventPayloads } from '../../../types/integration-types';
+import type { SystemEventPayloads } from '@/types/integration-types';
 import type { ConflictCheck } from '../../../types';
-import { SystemEventType } from '../../../types/integration-types';
+import { SystemEventType } from '@/types/integration-types';
 
 export class LeadStageChangedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.LEAD_STAGE_CHANGED]> {
   readonly eventType = SystemEventType.LEAD_STAGE_CHANGED;
@@ -19,7 +19,7 @@ export class LeadStageChangedHandler extends BaseEventHandler<SystemEventPayload
     // Only trigger conflict checks for specific stages
     if (payload.stage === 'Engagement' || payload.stage === 'Conflict Check') {
       // Dynamic import to avoid circular dependency
-      const { DataService } = await import('../../data/dataService');
+      const { DataService } = await import('@/api/data/dataService');
       
       await DataService.compliance.runConflictCheck(payload.clientName);
       actions.push('Triggered Automated Conflict Check');

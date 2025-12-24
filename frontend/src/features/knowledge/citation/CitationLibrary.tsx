@@ -26,9 +26,9 @@ import { CitationDetail } from './CitationDetail';
 import { EmptyState } from '../../common/EmptyState';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useWindow } from '../../../context/WindowContext';
+import { useWindow } from '../../../providers/WindowContext';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 // Services & Utils

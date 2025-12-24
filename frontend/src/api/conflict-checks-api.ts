@@ -3,7 +3,7 @@
  * Automated conflict of interest checking
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface ConflictCheck {
   id: string;

@@ -5,7 +5,7 @@ import { Button } from '../../common/Button';
 import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 import { ExternalLink, Clock } from 'lucide-react';
 import { SearchToolbar } from '../../common/SearchToolbar';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { ResearchSession } from '../../../types';

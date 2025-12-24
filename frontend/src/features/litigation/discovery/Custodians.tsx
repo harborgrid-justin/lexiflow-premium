@@ -3,7 +3,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
 import { Users, Plus, Mail, Building2, Trash2, Edit } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Modal } from '../../common/Modal';
 import { Input, TextArea } from '../../common/Inputs';

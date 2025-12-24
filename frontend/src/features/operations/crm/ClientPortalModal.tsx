@@ -2,7 +2,7 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { Client } from '../../../types';
 import { X, Lock, FileText, MessageSquare, UploadCloud, Bell, Activity, Shield } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '../../common/Button';
 import { Tabs } from '../../common/Tabs';

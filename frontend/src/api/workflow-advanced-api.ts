@@ -5,7 +5,7 @@
  * @integration DataService facade pattern for seamless backend/local routing
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 import type {
   EnhancedWorkflowInstance,
   ConditionalBranchingConfig,

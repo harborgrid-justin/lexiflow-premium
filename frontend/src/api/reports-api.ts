@@ -3,7 +3,7 @@
  * Manages report generation and templates
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface Report {
   id: string;

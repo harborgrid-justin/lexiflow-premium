@@ -16,7 +16,7 @@ import { X } from 'lucide-react';
 import { CaseTimeline } from './CaseTimeline';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';

@@ -7,8 +7,8 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { DocumentTable } from '../../../../frontend/components/operations/documents/table/DocumentTable';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
+import { DocumentTable } from '../../../../features/operations/documents/table/DocumentTable';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
 import { LegalDocument, DocumentId, UserId, CaseId } from '../../../../frontend/types';
 
 const meta: Meta<typeof DocumentTable> = {

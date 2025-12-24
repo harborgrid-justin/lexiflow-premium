@@ -28,7 +28,7 @@
  * - Comprehensive error handling
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 /**
  * Query keys for React Query integration

@@ -26,7 +26,7 @@
  * - Multi-phase workflow support
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface DiscoveryProcess {
   id: string;

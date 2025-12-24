@@ -16,7 +16,7 @@
  */
 
 import { useQuery, useMutation, useQueryClient, type UseQueryResult } from '../services/infrastructure/queryClient';
-import { trustAccountsApi } from '../services/api/trust-accounts-api';
+import { trustAccountsApi } from '../api/trust-accounts-api';
 import type {
   TrustAccount,
   TrustTransactionEntity,

@@ -32,8 +32,8 @@ import { STORES, db } from '../db';
 import { IdGenerator } from '@/utils/idGenerator';
 import { createTemplateContext, hydrateTemplateSections } from '@/utils/templateEngine';
 import { validateTemplate } from '@/utils/validation';
-import { isBackendApiEnabled } from '../../integration/apiConfig';
-import { PleadingsApiService } from '../../api/pleadings-api';
+import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { PleadingsApiService } from '@/api/pleadings-api';
 
 /**
  * Query keys for React Query integration

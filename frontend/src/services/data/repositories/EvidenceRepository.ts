@@ -30,8 +30,8 @@ import { EvidenceItem, CaseId } from '../../../types';
 import { delay } from '@/utils/async';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
-import { isBackendApiEnabled } from '../../integration/apiConfig';
-import { EvidenceApiService } from '../../api/evidence-api';
+import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { EvidenceApiService } from '@/api/evidence-api';
 
 /**
  * Query keys for React Query integration
@@ -246,8 +246,8 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             // If admissibility status changed, publish event
             if (updates.admissibility && updates.admissibility !== existing.admissibility) {
                 try {
-                    const { IntegrationOrchestrator } = await import('../../integration/integrationOrchestrator');
-                    const { SystemEventType } = await import('../../../types/integration-types');
+                    const { IntegrationOrchestrator } = await import('@/services/integration/integrationOrchestrator');
+                    const { SystemEventType } = await import('@/types/integration-types');
                     
                     await IntegrationOrchestrator.publish(SystemEventType.EVIDENCE_STATUS_UPDATED, {
                         item: result,

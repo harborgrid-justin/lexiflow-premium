@@ -22,7 +22,7 @@ import { UserAvatar } from '../../common/UserAvatar';
 import { ProgressBar } from '../../common/ProgressBar';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils

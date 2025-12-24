@@ -19,11 +19,11 @@ import { Globe, Building } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 
 // Utils & Data
 import { cn } from '@/utils/cn';
-import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS, StateJurisdiction } from '../../../../data/federalHierarchy';
+import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS, StateJurisdiction } from '@/api/data/federalHierarchy';
 
 // ============================================================================
 // TYPES & INTERFACES

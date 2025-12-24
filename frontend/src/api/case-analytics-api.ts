@@ -3,7 +3,7 @@
  * Case performance and outcome analytics
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface CaseAnalytics {
   caseId: string;

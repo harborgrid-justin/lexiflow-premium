@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, Save, LayoutTemplate, Link, BookOpen, MessageSquare, UploadCloud, Download, FileText } from 'lucide-react';
 import jsPDF from 'jspdf';
 import { Button } from '../../../common/Button';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { PleadingDocument, PleadingSection, PleadingComment, PleadingVariable } from '../../../../types/pleading-types';
 import { DocumentCanvas } from './DocumentCanvas';

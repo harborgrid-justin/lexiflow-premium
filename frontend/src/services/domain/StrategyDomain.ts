@@ -1,8 +1,8 @@
 /**
  * +---------------------------------------------------------------------------+
- * ¦                    LEXIFLOW STRATEGY DOMAIN SERVICE                       ¦
- * ¦                 Enterprise Litigation Strategy Layer v2.0                 ¦
- * ¦                       PhD-Level Systems Architecture                      ¦
+ * ï¿½                    LEXIFLOW STRATEGY DOMAIN SERVICE                       ï¿½
+ * ï¿½                 Enterprise Litigation Strategy Layer v2.0                 ï¿½
+ * ï¿½                       PhD-Level Systems Architecture                      ï¿½
  * +---------------------------------------------------------------------------+
  * 
  * @module services/domain/StrategyDomain
@@ -15,11 +15,11 @@
  * with backend API integration for persistent storage and analytics.
  */
 
-import { litigationApi } from '../api/domains/litigation.api';
-import { delay } from '../../utils/async';
-import { isBackendApiEnabled } from '../api';
-import { apiClient } from '../infrastructure/apiClient';
-import { STORES, db } from '../data/db';
+import { litigationApi } from '@/api/domains/litigation.api';
+import { delay } from '@/utils/async';
+import { isBackendApiEnabled } from '@/api';
+import { apiClient } from '@/services/infrastructure/apiClient';
+import { STORES, db } from '@/services/data/db';
 
 interface Strategy {
   id: string;

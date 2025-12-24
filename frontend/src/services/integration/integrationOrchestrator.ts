@@ -66,7 +66,7 @@
  * ```
  */
 
-import type { SystemEventPayloads, IntegrationResult } from '../../types/integration-types';
+import type { SystemEventPayloads, IntegrationResult } from '@/types/integration-types';
 import { EventHandlerRegistry } from './handlers';
 
 // =============================================================================

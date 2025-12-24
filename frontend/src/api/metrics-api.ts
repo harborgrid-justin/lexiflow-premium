@@ -3,7 +3,7 @@
  * System metrics and health monitoring
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface SystemMetrics {
   timestamp: string;

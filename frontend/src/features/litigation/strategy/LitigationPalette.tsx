@@ -12,7 +12,7 @@ import React from 'react';
 import { X, GripVertical } from 'lucide-react';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 
 // Utils
 import { cn } from '@/utils/cn';

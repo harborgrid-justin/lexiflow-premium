@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '../../../common/Button';
 import { Plus, Edit2, Trash2, Shield, Lock, Play, Pause } from 'lucide-react';

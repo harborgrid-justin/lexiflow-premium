@@ -5,7 +5,7 @@
  * Pattern: Template Method + Strategy
  */
 
-import type { IntegrationResult } from '../../../types/integration-types';
+import type { IntegrationResult } from '@/types/integration-types';
 
 export abstract class BaseEventHandler<TPayload = any> {
   abstract readonly eventType: string;

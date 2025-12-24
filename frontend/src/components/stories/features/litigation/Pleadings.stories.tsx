@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CaseId, DocumentId, Pleading, Clause, PleadingDocument } from '../../../../frontend/types';
-import { PleadingBuilder } from '../../../../frontend/components/litigation/pleadings/PleadingBuilder';
-import { PleadingDashboard } from '../../../../frontend/components/litigation/pleadings/PleadingDashboard';
-import PleadingDesigner from '../../../../frontend/components/litigation/pleadings/PleadingDesigner';
-import { PleadingTemplates } from '../../../../frontend/components/litigation/pleadings/PleadingTemplates';
-import { PleadingDrafts } from '../../../../frontend/components/litigation/pleadings/PleadingDrafts';
-import { PleadingFilingQueue } from '../../../../frontend/components/litigation/pleadings/PleadingFilingQueue';
-import { PleadingAnalytics } from '../../../../frontend/components/litigation/pleadings/PleadingAnalytics';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
-import { ToastProvider } from '../../../../frontend/context/ToastContext';
+import { PleadingBuilder } from '../../../../features/litigation/pleadings/PleadingBuilder';
+import { PleadingDashboard } from '../../../../features/litigation/pleadings/PleadingDashboard';
+import PleadingDesigner from '../../../../features/litigation/pleadings/PleadingDesigner';
+import { PleadingTemplates } from '../../../../features/litigation/pleadings/PleadingTemplates';
+import { PleadingDrafts } from '../../../../features/litigation/pleadings/PleadingDrafts';
+import { PleadingFilingQueue } from '../../../../features/litigation/pleadings/PleadingFilingQueue';
+import { PleadingAnalytics } from '../../../../features/litigation/pleadings/PleadingAnalytics';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { ToastProvider } from '../../../../frontend/providers/ToastContext';
 import React from 'react';
 
 /**

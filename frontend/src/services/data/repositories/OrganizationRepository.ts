@@ -6,8 +6,8 @@
 import { Organization } from '../../../types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
-import { isBackendApiEnabled } from '../../integration/apiConfig';
-import { OrganizationsApiService } from '../../api/organizations-api';
+import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { OrganizationsApiService } from '@/api/organizations-api';
 
 export const ORGANIZATION_QUERY_KEYS = {
     all: () => ['organizations'] as const,

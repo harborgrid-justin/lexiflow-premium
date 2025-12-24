@@ -7,9 +7,9 @@
 
 import { BaseEventHandler } from './BaseEventHandler';
 import { ChainService } from '../../infrastructure/chainService';
-import type { SystemEventPayloads } from '../../../types/integration-types';
+import type { SystemEventPayloads } from '@/types/integration-types';
 import type { UserId } from '../../../types';
-import { SystemEventType } from '../../../types/integration-types';
+import { SystemEventType } from '@/types/integration-types';
 
 export class EvidenceStatusUpdatedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.EVIDENCE_STATUS_UPDATED]> {
   readonly eventType = SystemEventType.EVIDENCE_STATUS_UPDATED;

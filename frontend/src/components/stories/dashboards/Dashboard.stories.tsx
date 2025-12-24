@@ -8,9 +8,9 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn, expect, userEvent, within } from 'storybook/test';
-import { Dashboard } from '../../components/dashboard/Dashboard';
+import { Dashboard } from '../../../features/dashboard/components/Dashboard';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import { ToastProvider } from '../../context/ToastContext';
+import { ToastProvider } from '@providers/ToastContext';
 import type { User, UserId } from '../../types';
 
 const meta: Meta<typeof Dashboard> = {

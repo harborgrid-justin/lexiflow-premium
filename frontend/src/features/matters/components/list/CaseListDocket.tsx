@@ -25,7 +25,7 @@ import { VirtualList } from '../../common/VirtualList';
 import { LazyLoader } from '../../common/LazyLoader';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils

@@ -24,10 +24,10 @@ import { ProgressBar } from '../../common/ProgressBar';
 import { EvidenceCustodyLog } from '../evidence/EvidenceCustodyLog';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
-import { useWindow } from '../../../context/WindowContext';
+import { useWindow } from '../../../providers/WindowContext';
 
 // Config
 import { DEBUG_API_SIMULATION_DELAY_MS } from '../../../config/master.config';
@@ -42,7 +42,7 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 import { ESISource } from '../../../types';
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
-import { ESICollectionStatusEnum } from '../../../types/enums';
+import { ESICollectionStatusEnum } from '@/types/enums';
 
 /**
  * ESI Collection Queue

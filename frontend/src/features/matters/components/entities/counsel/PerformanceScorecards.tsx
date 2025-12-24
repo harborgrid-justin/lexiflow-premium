@@ -5,7 +5,7 @@ import { RiskMeter } from '../../../common/RiskMeter';
 import { Badge } from '../../../common/Badge';
 import { Star, TrendingUp, DollarSign, Scale } from 'lucide-react';
 import { LegalEntity } from '../../../../types';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface PerformanceScorecardsProps {

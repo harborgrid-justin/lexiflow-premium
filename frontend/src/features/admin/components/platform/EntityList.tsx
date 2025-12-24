@@ -3,7 +3,7 @@ import React from 'react';
 import { Badge } from '../../common/Badge';
 import { Edit2, Trash2 } from 'lucide-react';
 import { Category } from './EntitySidebar';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { VirtualList } from '../../common/VirtualList';
 

@@ -4,7 +4,7 @@ import { Organization, Group, User as UserType, Case, GroupId } from '../../../t
 import { Button } from '../../common/Button';
 import { HierarchyColumn } from './HierarchyColumn';
 import { OrgListItem, GroupListItem, UserListItem } from './HierarchyRows';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';

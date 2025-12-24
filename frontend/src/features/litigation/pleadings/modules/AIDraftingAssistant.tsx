@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Wand2, Sparkles, AlertCircle, Play, RefreshCw, FileText, WifiOff } from 'lucide-react';
 import { Button } from '../../../common/Button';
 import { TextArea } from '../../../common/Inputs';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { AIDraftingAssistantProps } from '../../types';

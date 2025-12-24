@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CaseId, EvidenceId, EvidenceItem, EvidenceType, AdmissibilityStatus } from '../../../../frontend/types';
-import { EvidenceDashboard } from '../../../../frontend/components/litigation/evidence/EvidenceDashboard';
-import { EvidenceVault } from '../../../../frontend/components/litigation/evidence/EvidenceVault';
-import { EvidenceInventory } from '../../../../frontend/components/litigation/evidence/EvidenceInventory';
-import { EvidenceIntake } from '../../../../frontend/components/litigation/evidence/EvidenceIntake';
-import { EvidenceChainOfCustody } from '../../../../frontend/components/litigation/evidence/EvidenceChainOfCustody';
-import { EvidenceAdmissibility } from '../../../../frontend/components/litigation/evidence/EvidenceAdmissibility';
-import { EvidenceForensics } from '../../../../frontend/components/litigation/evidence/EvidenceForensics';
-import { EvidenceDetail } from '../../../../frontend/components/litigation/evidence/EvidenceDetail';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
-import { ToastProvider } from '../../../../frontend/context/ToastContext';
+import { EvidenceDashboard } from '../../../../features/litigation/evidence/EvidenceDashboard';
+import { EvidenceVault } from '../../../../features/litigation/evidence/EvidenceVault';
+import { EvidenceInventory } from '../../../../features/litigation/evidence/EvidenceInventory';
+import { EvidenceIntake } from '../../../../features/litigation/evidence/EvidenceIntake';
+import { EvidenceChainOfCustody } from '../../../../features/litigation/evidence/EvidenceChainOfCustody';
+import { EvidenceAdmissibility } from '../../../../features/litigation/evidence/EvidenceAdmissibility';
+import { EvidenceForensics } from '../../../../features/litigation/evidence/EvidenceForensics';
+import { EvidenceDetail } from '../../../../features/litigation/evidence/EvidenceDetail';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { ToastProvider } from '../../../../frontend/providers/ToastContext';
 import React from 'react';
 
 /**

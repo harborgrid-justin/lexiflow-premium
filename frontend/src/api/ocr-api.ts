@@ -3,7 +3,7 @@
  * Optical Character Recognition and document processing
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface OCRJob {
   id: string;

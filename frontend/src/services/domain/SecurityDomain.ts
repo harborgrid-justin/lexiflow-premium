@@ -29,7 +29,7 @@
  * @migrated Backend API integration completed 2025-12-21
  */
 
-import { adminApi } from '../api/domains/admin.api';
+import { adminApi } from "@/api/domains/admin.api";
 
 /**
  * Query keys for React Query integration
@@ -178,8 +178,8 @@ export const SecurityService = {
                 
                 // Publish security event
                 try {
-                    const { IntegrationOrchestrator } = await import('../integration/integrationOrchestrator');
-                    const { SystemEventType } = await import('../../types/integration-types');
+                    const { IntegrationOrchestrator } = await import('@/services/integration/integrationOrchestrator');
+                    const { SystemEventType } = await import('@/types/integration-types');
                     
                     await IntegrationOrchestrator.publish(SystemEventType.SECURITY_THREAT_DETECTED, {
                         threatCount: threatsFound.length,

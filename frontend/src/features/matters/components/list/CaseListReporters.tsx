@@ -21,7 +21,7 @@ import { Mic2, Plus, User } from 'lucide-react';
 import { Button } from '../../common/Button';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils

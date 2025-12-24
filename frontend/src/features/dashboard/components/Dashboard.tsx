@@ -22,7 +22,7 @@ import { useSessionStorage } from '@/hooks';
 
 // Components
 import { Button } from '@/components/atoms/Button';
-import { LazyLoader } from '@/components/common/LazyLoader';
+import { LazyLoader } from '@components/molecules/LazyLoader';
 import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout'; // Assuming I move it there
 import { DashboardContent } from './DashboardContent';
 

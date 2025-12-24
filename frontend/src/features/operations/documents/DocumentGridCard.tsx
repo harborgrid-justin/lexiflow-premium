@@ -3,7 +3,7 @@ import React from 'react';
 import { LegalDocument } from '../../../types';
 import { FileIcon } from '../../common/Primitives';
 import { Badge } from '../../common/Badge';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface DocumentGridCardProps {

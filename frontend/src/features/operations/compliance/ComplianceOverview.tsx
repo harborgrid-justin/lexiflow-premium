@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ShieldAlert, FileText, AlertTriangle, CheckCircle, Activity } from 'lucide-react';
 import { MetricCard } from '../../common/Primitives';
 import { Card } from '../../common/Card';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { DataService } from '@/services/data/dataService';

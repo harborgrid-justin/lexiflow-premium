@@ -75,9 +75,9 @@
  */
 
 import { Risk, ConflictCheck, EthicalWall, ComplianceMetrics, CaseId, GroupId, UserId } from '../../types';
-import { complianceApi } from '../api/domains/compliance.api';
-import type { ConflictCheck as ApiConflictCheck } from '../api/conflict-checks-api';
-import type { EthicalWall as ApiEthicalWall } from '../api/compliance-api';
+import { complianceApi } from "@/api/domains/compliance.api";
+import type { ConflictCheck as ApiConflictCheck } from '@/api/conflict-checks-api';
+import type { EthicalWall as ApiEthicalWall } from '@/api/compliance-api';
 
 /**
  * Query keys for React Query integration
@@ -285,8 +285,8 @@ export const ComplianceService = {
             // Publish integration event if conflicts found
             if (result.status === 'Flagged' && result.foundIn.length > 0) {
                 try {
-                    const { IntegrationOrchestrator } = await import('../integration/integrationOrchestrator');
-                    const { SystemEventType } = await import('../../types/integration-types');
+                    const { IntegrationOrchestrator } = await import('@/services/integration/integrationOrchestrator');
+                    const { SystemEventType } = await import('@/types/integration-types');
                     
                     await IntegrationOrchestrator.publish(SystemEventType.CONFLICT_DETECTED, {
                         check: result,
@@ -400,8 +400,8 @@ export const ComplianceService = {
 
             // Publish integration event
             try {
-                const { IntegrationOrchestrator } = await import('../integration/integrationOrchestrator');
-                const { SystemEventType } = await import('../../types/integration-types');
+                const { IntegrationOrchestrator } = await import('@/services/integration/integrationOrchestrator');
+                const { SystemEventType } = await import('@/types/integration-types');
                 
                 await IntegrationOrchestrator.publish(SystemEventType.ETHICAL_WALL_CREATED, {
                     wall: result,

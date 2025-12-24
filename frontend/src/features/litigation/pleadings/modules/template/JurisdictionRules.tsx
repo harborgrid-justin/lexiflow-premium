@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Gavel, CheckCircle, AlertTriangle } from 'lucide-react';
-import { useTheme } from '../../../../../context/ThemeContext';
+import { useTheme } from '../../../../../providers/ThemeContext';
 import { cn } from '../../../../../utils/cn';
 
 interface JurisdictionRulesProps {

@@ -3,7 +3,7 @@
  * Discovery process analytics
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface DiscoveryAnalytics {
   caseId: string;

@@ -4,7 +4,7 @@ import { Users, GitMerge, XCircle, CheckCircle, ArrowRight, Layers } from 'lucid
 import { Card } from '../../../common/Card';
 import { Button } from '../../../common/Button';
 import { Badge } from '../../../common/Badge';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';

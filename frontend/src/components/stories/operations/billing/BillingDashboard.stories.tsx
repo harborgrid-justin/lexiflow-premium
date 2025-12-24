@@ -8,9 +8,9 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import BillingDashboard from '../../../components/operations/billing/BillingDashboard';
-import { ThemeProvider } from '../../../context/ThemeContext';
-import { ToastProvider } from '../../../context/ToastContext';
+import BillingDashboard from '../../../../features/operations/billing/BillingDashboard';
+import { ThemeProvider } from '../../../providers/ThemeContext';
+import { ToastProvider } from '@providers/ToastContext';
 
 const meta: Meta<typeof BillingDashboard> = {
   title: 'Pages/Billing Dashboard',

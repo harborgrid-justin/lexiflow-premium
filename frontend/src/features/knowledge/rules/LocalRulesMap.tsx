@@ -2,7 +2,7 @@
 import React, { useMemo } from 'react';
 import { JurisdictionGeoMap } from '../jurisdiction/JurisdictionGeoMap';
 import { Card } from '../../common/Card';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { MapPin, Book, Loader2 } from 'lucide-react';
 import { groupJurisdictionsByState } from './localRulesMap.utils';

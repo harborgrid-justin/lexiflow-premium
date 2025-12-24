@@ -6,7 +6,7 @@ import { RecordModal } from './RecordModal';
 import { EntitySidebar, Category } from './EntitySidebar';
 import { EntityList } from './EntityList';
 import { TableContainer } from '../../common/Table';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useAdminData } from './useAdminData';
 import { EMPTY_TEMPLATES } from './AdminConfig';

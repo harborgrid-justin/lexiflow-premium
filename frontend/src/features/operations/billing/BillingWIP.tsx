@@ -22,7 +22,7 @@ import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { STORES } from '@/services/data/db';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
@@ -37,7 +37,7 @@ import { SearchToolbar } from '../../common/SearchToolbar';
 import { cn } from '@/utils/cn';
 import { billingQueryKeys } from '@/services/infrastructure/queryKeys';
 import { validateTimeEntrySafe } from '@/services/validation/billingSchemas';
-import { WIPStatusEnum } from '../../../types/enums';
+import { WIPStatusEnum } from '@/types/enums';
 
 // Types
 import { TimeEntry } from '../../../types';

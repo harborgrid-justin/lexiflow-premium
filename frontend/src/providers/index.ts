@@ -14,7 +14,7 @@ export * from './DataSourceContext';
 // ============================================================================
 
 // Theme Context Types
-export type { ThemeMode } from '../theme/tokens';
+export type { ThemeMode } from '../components/theme/tokens';
 
 // Toast Context Types
 export type { ToastType } from './ToastContext';

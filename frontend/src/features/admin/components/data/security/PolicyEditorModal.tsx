@@ -4,7 +4,7 @@ import { Modal } from '../../../common/Modal';
 import { Button } from '../../../common/Button';
 import { Input, TextArea } from '../../../common/Inputs';
 import { RLSPolicy, SqlCmd } from '../../../../types';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Check, Code, Shield } from 'lucide-react';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Wand2, Upload, Plus, Trash2 } from 'lucide-react';
 import { Button } from '../../../common/Button';
 import { Card } from '../../../common/Card';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { FormatOptionsCard } from './FormatOptionsCard';
 import type { FormatOptions } from './types';

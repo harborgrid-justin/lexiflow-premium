@@ -18,7 +18,7 @@ import { LitigationProperties } from './LitigationProperties';
 import { ContextMenu, ContextMenuItem } from '../../common/ContextMenu';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useToggle } from '@/hooks/useToggle';
 
 // Types

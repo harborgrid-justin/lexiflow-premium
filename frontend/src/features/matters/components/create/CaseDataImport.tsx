@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { FileText, FileCode, Sparkles, ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
 import { cn } from '@/utils/cn';

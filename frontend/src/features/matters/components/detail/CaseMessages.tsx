@@ -17,7 +17,7 @@ import { Button } from '../../common/Button';
 import { UserAvatar } from '../../common/UserAvatar';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 

@@ -21,7 +21,7 @@ import { ShieldAlert, Search, AlertCircle, ArrowRight, Loader2 } from 'lucide-re
 import { Button } from '../../common/Button';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils

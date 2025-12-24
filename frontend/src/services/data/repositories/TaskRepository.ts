@@ -28,10 +28,10 @@
 import { WorkflowTask, CaseId, UserId, TaskStatusBackend, TaskPriorityBackend } from '../../../types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
-import { isBackendApiEnabled } from '../../integration/apiConfig';
-import { TasksApiService } from '../../api/tasks-api';
-import { IntegrationOrchestrator } from '../../integration/integrationOrchestrator';
-import { SystemEventType } from '../../../types/integration-types';
+import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { TasksApiService } from '@/api/tasks-api';
+import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { SystemEventType } from '@/types/integration-types';
 
 /**
  * Query keys for React Query integration

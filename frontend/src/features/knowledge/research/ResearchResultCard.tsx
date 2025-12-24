@@ -3,7 +3,7 @@ import React from 'react';
 import { SearchResult } from '../../../types';
 import { ExternalLink } from 'lucide-react';
 import { Badge } from '../../common/Badge';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useReadAnalytics } from '@/hooks/useReadAnalytics';
 

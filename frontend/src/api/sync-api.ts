@@ -3,7 +3,7 @@
  * Data synchronization and conflict resolution
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface AdminSyncStatus {
   lastSyncAt?: string;

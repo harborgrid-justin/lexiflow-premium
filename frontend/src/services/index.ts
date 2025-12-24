@@ -62,8 +62,8 @@ export * from './domain/SecurityDomain';
 export * from './infrastructure/apiClient';
 // NOTE: Commented out full API barrel export to avoid QUERY_KEYS duplicates, Notification type conflicts, Filter type conflicts, and CalendarEvent conflicts
 // Individual API services can be imported directly from '@/services/api' when needed
-// export * from './api';
-export { api } from './api';  // Export the consolidated api object
+// export * from '@api';
+export { api } from '@api';  // Export the consolidated api object
 export {
   isBackendApiEnabled,
   isIndexedDBMode,

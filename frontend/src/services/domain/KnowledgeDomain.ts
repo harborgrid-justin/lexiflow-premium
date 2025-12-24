@@ -31,8 +31,8 @@
  */
 
 import { WikiArticle, Precedent, QAItem } from '../../types';
-import { delay } from '../../utils/async';
-import { analyticsApi } from '../api/domains/analytics.api';
+import { delay } from '@/utils/async';
+import { analyticsApi } from "@/api/domains/analytics.api";
 
 /**
  * Query keys for React Query integration
@@ -201,8 +201,8 @@ export class KnowledgeRepository {
 
             // Publish integration event
             try {
-                const { IntegrationOrchestrator } = await import('../integration/integrationOrchestrator');
-                const { SystemEventType } = await import('../../types/integration-types');
+                const { IntegrationOrchestrator } = await import('@/services/integration/integrationOrchestrator');
+                const { SystemEventType } = await import('@/types/integration-types');
                 
                 await IntegrationOrchestrator.publish(SystemEventType.WIKI_ARTICLE_CREATED, {
                     article,

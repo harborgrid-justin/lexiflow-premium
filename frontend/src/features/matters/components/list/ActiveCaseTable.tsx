@@ -23,7 +23,7 @@ import { EmptyListState } from '../../common/RefactoredCommon';
 import { CaseRow } from './CaseRow';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 
 // Utils
 import { cn } from '@/utils/cn';

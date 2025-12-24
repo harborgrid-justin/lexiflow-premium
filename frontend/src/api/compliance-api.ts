@@ -27,7 +27,7 @@
  * - Event-driven compliance monitoring
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface ComplianceCheck {
   id: string;

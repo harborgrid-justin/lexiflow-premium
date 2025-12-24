@@ -3,7 +3,7 @@ import React from 'react';
 import { Modal } from '../../../common/Modal';
 import { Input } from '../../../common/Inputs';
 import { Button } from '../../../common/Button';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface ColumnData {

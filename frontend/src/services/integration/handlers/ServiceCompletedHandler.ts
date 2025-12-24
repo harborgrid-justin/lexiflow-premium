@@ -6,9 +6,9 @@
  */
 
 import { BaseEventHandler } from './BaseEventHandler';
-import type { SystemEventPayloads } from '../../../types/integration-types';
+import type { SystemEventPayloads } from '@/types/integration-types';
 import type { DocketEntry, DocketId } from '../../../types';
-import { SystemEventType } from '../../../types/integration-types';
+import { SystemEventType } from '@/types/integration-types';
 
 export class ServiceCompletedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.SERVICE_COMPLETED]> {
   readonly eventType = SystemEventType.SERVICE_COMPLETED;
@@ -22,7 +22,7 @@ export class ServiceCompletedHandler extends BaseEventHandler<SystemEventPayload
       return this.createSuccess([]);
     }
     
-    const { DataService } = await import('../../data/dataService');
+    const { DataService } = await import('@/api/data/dataService');
     
     const entry: DocketEntry = {
       id: `dk-proof-${Date.now()}` as DocketId,

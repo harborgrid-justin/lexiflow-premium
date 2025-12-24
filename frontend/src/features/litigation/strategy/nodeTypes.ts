@@ -7,10 +7,10 @@
  * @module components/litigation/nodeTypes
  */
 
-export * from '../../../types/workflow-types';
+export * from '@/types/workflow-types';
 
 // Component-specific extensions can be added below if needed
-import { BaseNodeProps, Port, NodeType } from '../../../types/workflow-types';
+import { BaseNodeProps, Port, NodeType } from '@/types/workflow-types';
 
 export interface TaskNode extends BaseNodeProps {
   type: 'Task';

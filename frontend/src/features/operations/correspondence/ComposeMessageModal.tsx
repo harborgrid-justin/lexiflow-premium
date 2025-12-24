@@ -6,7 +6,7 @@ import { Input, TextArea } from '../../common/Inputs';
 import { UserSelect } from '../../common/UserSelect';
 import { Send, Paperclip, Wand2, X } from 'lucide-react';
 import { CommunicationItem, CommunicationType, UserId, User } from '../../../types';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -16,7 +16,7 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useNotify } from '@/hooks/useNotify';
 import { validateCommunicationItemSafe } from '@/services/validation/correspondenceSchemas';
-import { CommunicationStatus } from '../../../types/enums';
+import { CommunicationStatus } from '@/types/enums';
 
 interface ComposeMessageModalProps {
   isOpen: boolean;

@@ -21,7 +21,7 @@ import { Badge } from '../../common/Badge';
 import { ConfirmDialog } from '../../common/ConfirmDialog';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useModalState } from '../../../hooks';
 

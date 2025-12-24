@@ -17,7 +17,7 @@ import { MessageSquare, Users, FileText, Archive } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useSecureMessenger } from '@/hooks/useSecureMessenger';
 
 // Components

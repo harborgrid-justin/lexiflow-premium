@@ -5,7 +5,7 @@ import { FileAttachment } from '../../common/FileAttachment';
 import { Attachment } from '@/hooks/useSecureMessenger';
 import { EmptyState } from '../../common/EmptyState';
 import { FolderOpen } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface MessengerFilesProps {

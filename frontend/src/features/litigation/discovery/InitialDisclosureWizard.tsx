@@ -5,7 +5,7 @@ import { Button } from '../../common/Button';
 import { Stepper } from '../../common/Stepper';
 import { Input, TextArea } from '../../common/Inputs';
 import { Users, FileText, Calculator, ShieldCheck } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useNotify } from '@/hooks/useNotify';
 import { useWizard } from '@/hooks/useWizard';

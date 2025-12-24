@@ -5,7 +5,7 @@ import { Scale, Loader2, CheckCircle, AlertTriangle, XCircle, HelpCircle } from 
 import { Button } from '../../common/Button';
 import { Card } from '../../common/Card';
 import { Badge } from '../../common/Badge';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { GeminiService, ShepardizeResult, TreatmentType } from '@/services/features/research/geminiService';
 

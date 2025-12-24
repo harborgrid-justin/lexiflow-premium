@@ -16,7 +16,7 @@ import { Button } from '../../common/Button';
 import { Input, TextArea } from '../../common/Inputs';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 
 // Utils
 import { cn } from '@/utils/cn';

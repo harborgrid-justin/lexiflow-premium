@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { MotionToCompelBuilder } from '../../../../frontend/components/litigation/discovery/MotionToCompelBuilder';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
-import { ToastProvider } from '../../../../frontend/context/ToastContext';
+import { MotionToCompelBuilder } from '../../../../features/litigation/discovery/MotionToCompelBuilder';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { ToastProvider } from '../../../../frontend/providers/ToastContext';
 import React from 'react';
 import { CaseId } from '../../../../frontend/types';
 

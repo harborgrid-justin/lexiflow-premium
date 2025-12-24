@@ -26,13 +26,13 @@ import { FilterPanel } from '../../common/FilterPanel';
 import { VirtualList } from '../../common/VirtualList';
 
 // Context & Utils
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useToggle } from '@/hooks/useToggle';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { EvidenceFilters } from '@/hooks/useEvidenceVault';
-import { AdmissibilityStatusEnum } from '../../../types/enums';
+import { AdmissibilityStatusEnum } from '@/types/enums';
 
 // Types
 import { EvidenceItem } from '../../../types';

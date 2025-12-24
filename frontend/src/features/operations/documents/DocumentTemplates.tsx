@@ -4,7 +4,7 @@ import { FileText, Wand2, ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 import { DataService } from '@/services/data/dataService';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)

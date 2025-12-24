@@ -4,7 +4,7 @@
  * 100% backend endpoint coverage (10/10 endpoints)
  */
 
-import { apiClient, type PaginatedResponse } from '../../infrastructure/apiClient';
+import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
 import type { Invoice } from '../../../types';
 
 export interface InvoiceFilters {

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { StandardizationConsole } from '../../components/admin/data/quality/StandardizationConsole';
+import { StandardizationConsole } from '../../../features/admin/components/data/quality/StandardizationConsole';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import { ToastProvider } from '../../context/ToastContext';
+import { ToastProvider } from '@providers/ToastContext';
 import React from 'react';
 
 const meta = {

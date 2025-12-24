@@ -7,9 +7,9 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { DocumentToolbar } from '../../../../frontend/components/operations/documents/DocumentToolbar';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
-import { WindowProvider } from '../../../../frontend/context/WindowContext';
+import { DocumentToolbar } from '../../../../features/operations/documents/DocumentToolbar';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { WindowProvider } from '../../../../frontend/providers/WindowContext';
 
 const meta: Meta<typeof DocumentToolbar> = {
   title: 'Documents/Document Toolbar',

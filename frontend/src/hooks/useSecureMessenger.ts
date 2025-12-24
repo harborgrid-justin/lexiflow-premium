@@ -24,7 +24,7 @@ import { Scheduler } from '../utils/scheduler';
 
 // Types
 import { Conversation, Message, Attachment } from '../types';
-import { Contact } from '../services/api/messaging-api';
+import { Contact } from '../api/messaging-api';
 
 // Re-export types for consumers
 export type { Conversation, Message, Attachment, Contact };

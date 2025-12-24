@@ -25,14 +25,14 @@ import { TaskCreationModal } from '../../common/TaskCreationModal';
 import { VirtualList } from '../../common/VirtualList';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
-import { useWindow } from '../../../context/WindowContext';
+import { useTheme } from '../../../providers/ThemeContext';
+import { useWindow } from '../../../providers/WindowContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useToggle } from '@/hooks/useToggle';
 
 // Utils
 import { cn } from '@/utils/cn';
-import { DiscoveryRequestStatusEnum } from '../../../types/enums';
+import { DiscoveryRequestStatusEnum } from '@/types/enums';
 
 // ============================================================================
 // TYPES & INTERFACES

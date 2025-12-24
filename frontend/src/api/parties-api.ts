@@ -7,7 +7,7 @@
  * - DTOs: backend/src/parties/dto/create-party.dto.ts, update-party.dto.ts
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 import type { Party } from '../../types'; // Use centralized type definition
 
 // Backend PartyType enum values

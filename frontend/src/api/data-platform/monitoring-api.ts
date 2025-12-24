@@ -6,7 +6,7 @@
  * @responsibility Monitor system health and performance
  */
 
-import { apiClient, type PaginatedResponse } from '../../infrastructure/apiClient';
+import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
 
 /**
  * Performance metric interface

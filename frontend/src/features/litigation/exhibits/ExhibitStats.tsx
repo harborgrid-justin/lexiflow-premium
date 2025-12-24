@@ -21,7 +21,7 @@ import { CheckCircle, XCircle, FileText, PieChart as PieIcon } from 'lucide-reac
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
 import { MetricCard } from '../../common/Primitives';

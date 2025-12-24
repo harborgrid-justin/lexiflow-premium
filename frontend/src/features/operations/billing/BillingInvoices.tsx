@@ -22,7 +22,7 @@ import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { STORES } from '@/services/data/db';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useCallback } from 'react';
@@ -37,7 +37,7 @@ import { SearchToolbar } from '../../common/SearchToolbar';
 import { cn } from '@/utils/cn';
 import { Formatters } from '@/utils/formatters';
 import { billingQueryKeys } from '@/services/infrastructure/queryKeys';
-import { InvoiceStatusEnum } from '../../../types/enums';
+import { InvoiceStatusEnum } from '@/types/enums';
 
 // Types
 import { Invoice } from '../../../types';

@@ -5,7 +5,7 @@
  */
 
 import { z } from 'zod';
-import { CommunicationStatus, ServiceStatus } from '../../types/enums';
+import { CommunicationStatus, ServiceStatus } from '@/types/enums';
 
 // Base validation rules
 const sanitizeString = (str: string) => str.trim().replace(/[<>]/g, ''); // Basic XSS prevention

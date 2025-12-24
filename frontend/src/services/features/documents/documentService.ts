@@ -12,7 +12,7 @@
 // ============================================================================
 // Services & Data
 
-import { db, STORES } from '../../data/db';
+import { db, STORES } from '@services/data/db';
 import { BlobManager } from '../../infrastructure/blobManager';
 import { CryptoService } from '../../infrastructure/cryptoService';
 

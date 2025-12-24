@@ -20,8 +20,8 @@
 import { Citation } from '../../../types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
-import { isBackendApiEnabled } from '../../integration/apiConfig';
-import { CitationsApiService } from '../../api/citations-api';
+import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { CitationsApiService } from '@/api/citations-api';
 
 export const CITATION_QUERY_KEYS = {
     all: () => ['citations'] as const,
@@ -92,8 +92,8 @@ export class CitationRepository extends Repository<Citation> {
 
         // Publish integration event
         try {
-            const { IntegrationOrchestrator } = await import('../../integration/integrationOrchestrator');
-            const { SystemEventType } = await import('../../../types/integration-types');
+            const { IntegrationOrchestrator } = await import('@/services/integration/integrationOrchestrator');
+            const { SystemEventType } = await import('@/types/integration-types');
             await IntegrationOrchestrator.publish(SystemEventType.CITATION_SAVED, {
                 citation: result,
                 queryContext: (item as any).caseContext || ''

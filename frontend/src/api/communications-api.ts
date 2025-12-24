@@ -3,7 +3,7 @@
  * Manages communications (emails, calls, messages) related to cases
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface Communication {
   id: string;

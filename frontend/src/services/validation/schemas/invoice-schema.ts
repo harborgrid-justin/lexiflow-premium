@@ -6,7 +6,7 @@
  * @responsibility Validate invoice data with financial integrity checks
  */
 
-import { InvoiceStatusEnum } from '../../../types/enums';
+import { InvoiceStatusEnum } from '@/types/enums';
 import type { CaseId } from '../../../types';
 import { 
   isValidDate, 

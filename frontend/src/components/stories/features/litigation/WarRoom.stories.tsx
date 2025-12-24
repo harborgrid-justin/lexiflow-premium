@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CaseId, Witness, Expert, Advisor, CaseStrategy, TrialExhibit } from '../../../../frontend/types';
-import { WarRoom } from '../../../../frontend/components/litigation/war-room/WarRoom';
-import { CommandCenter } from '../../../../frontend/components/litigation/war-room/CommandCenter';
-import { EvidenceWall } from '../../../../frontend/components/litigation/war-room/EvidenceWall';
-import { AdvisoryBoard } from '../../../../frontend/components/litigation/war-room/AdvisoryBoard';
-import { OppositionManager } from '../../../../frontend/components/litigation/war-room/OppositionManager';
-import { WitnessPrep } from '../../../../frontend/components/litigation/war-room/WitnessPrep';
-import { TrialBinder } from '../../../../frontend/components/litigation/war-room/TrialBinder';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
-import { ToastProvider } from '../../../../frontend/context/ToastContext';
+import { WarRoom } from '../../../../features/litigation/war-room/WarRoom';
+import { CommandCenter } from '../../../../features/litigation/war-room/CommandCenter';
+import { EvidenceWall } from '../../../../features/litigation/war-room/EvidenceWall';
+import { AdvisoryBoard } from '../../../../features/litigation/war-room/AdvisoryBoard';
+import { OppositionManager } from '../../../../features/litigation/war-room/OppositionManager';
+import { WitnessPrep } from '../../../../features/litigation/war-room/WitnessPrep';
+import { TrialBinder } from '../../../../features/litigation/war-room/TrialBinder';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { ToastProvider } from '../../../../frontend/providers/ToastContext';
 import React from 'react';
 
 /**

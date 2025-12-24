@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Radio, Activity, Zap, AlertCircle, CheckCircle, Users, Plus } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Card } from '../../common/Card';
 import { Badge } from '../../common/Badge';

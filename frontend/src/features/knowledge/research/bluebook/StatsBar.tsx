@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card } from '../../../common/Card';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { FormatStats } from './types';
 

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TrustAccountDashboard } from '../../../components/operations/billing/trust/TrustAccountDashboard';
-import { ThemeProvider } from '../../../context/ThemeContext';
-import { ToastProvider } from '../../../context/ToastContext';
+import { TrustAccountDashboard } from '../../../../features/operations/billing/trust/TrustAccountDashboard';
+import { ThemeProvider } from '../../../providers/ThemeContext';
+import { ToastProvider } from '@providers/ToastContext';
 import React from 'react';
 
 /**

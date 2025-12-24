@@ -33,8 +33,8 @@ import {
 import { db, STORES } from '../db';
 import { Repository } from '../../core/Repository';
 import { BlobManager } from '../../infrastructure/blobManager';
-import { isBackendApiEnabled } from '../../integration/apiConfig';
-import { DocumentsApiService } from '../../api/documents-api';
+import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { DocumentsApiService } from '@/api/documents-api';
 
 const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
 

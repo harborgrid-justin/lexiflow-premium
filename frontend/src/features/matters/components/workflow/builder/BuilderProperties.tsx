@@ -6,7 +6,7 @@ import { Button } from '../../../common/Button';
 import { ConfirmDialog } from '../../../common/ConfirmDialog';
 import { useModalState } from '../../../../hooks';
 import { WorkflowNode, getNodeIcon } from './types';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface BuilderPropertiesProps {

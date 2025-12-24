@@ -17,7 +17,7 @@ import { useCallback } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useToast } from '../context/ToastContext';
+import { useToast } from '../providers/ToastContext';
 
 // ============================================================================
 // HOOK

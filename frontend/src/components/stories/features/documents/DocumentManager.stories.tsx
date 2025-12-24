@@ -7,10 +7,10 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import DocumentManager from '../../../../frontend/components/operations/documents/DocumentManager';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
-import { ToastProvider } from '../../../../frontend/context/ToastContext';
-import { WindowProvider } from '../../../../frontend/context/WindowContext';
+import DocumentManager from '../../../../features/operations/documents/DocumentManager';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { ToastProvider } from '../../../../frontend/providers/ToastContext';
+import { WindowProvider } from '../../../../frontend/providers/WindowContext';
 import type { UserRole } from '../../../../frontend/types';
 
 const meta: Meta<typeof DocumentManager> = {

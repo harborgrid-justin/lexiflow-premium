@@ -3,7 +3,7 @@
  * Manages third-party integrations and connections
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface Integration {
   id: string;

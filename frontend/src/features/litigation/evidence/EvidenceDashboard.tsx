@@ -16,7 +16,7 @@ import { Button } from '../../common/Button';
 import { MetricCard } from '../../common/Primitives';
 
 // Context & Utils
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types

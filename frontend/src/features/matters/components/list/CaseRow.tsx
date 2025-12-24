@@ -22,7 +22,7 @@ import { StatusBadge } from '../../common/StatusBadge';
 import { Currency } from '../../common/Primitives';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 
 // Utils
 import { cn } from '@/utils/cn';

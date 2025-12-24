@@ -74,7 +74,7 @@
  * - Knowledge base at /api/analytics/knowledge
  */
 
-import { analyticsApi } from '../api/domains/analytics.api';
+import { analyticsApi } from "@/api/domains/analytics.api";
 import { JudgeMotionStat, OpposingCounselProfile, OutcomePredictionData, Motion } from '../../types';
 
 /**

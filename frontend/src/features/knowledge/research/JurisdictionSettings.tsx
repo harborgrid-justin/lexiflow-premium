@@ -2,7 +2,7 @@
 import React from 'react';
 import { Globe, CheckCircle } from 'lucide-react';
 import { Card } from '../../common/Card';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 export const JurisdictionSettings: React.FC = () => {

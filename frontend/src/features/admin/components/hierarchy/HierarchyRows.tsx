@@ -2,7 +2,7 @@
 import React from 'react';
 import { Building2, Globe, Shield, MoreVertical } from 'lucide-react';
 import { Organization, Group, User as UserType } from '../../../types';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { UserAvatar } from '../../common/UserAvatar';
 

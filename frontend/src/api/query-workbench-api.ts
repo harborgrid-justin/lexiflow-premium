@@ -3,7 +3,7 @@
  * Ad-hoc SQL query execution
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface QueryExecution {
   id: string;

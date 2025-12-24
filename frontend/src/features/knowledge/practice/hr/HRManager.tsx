@@ -10,7 +10,7 @@ import { StaffMember, UserId } from '../../../../types';
 
 type StaffRole = 'Associate' | 'Paralegal' | 'Senior Partner' | 'Administrator';
 import { DataService } from '@/services/data/dataService';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { AddStaffModal } from './AddStaffModal';
 import { useMutation } from '@/hooks/useQueryHooks';

@@ -6,7 +6,7 @@
 /**
  * ALIGNED WITH BACKEND: backend/src/risks/risks.controller.ts
  */
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 import type { Risk, RiskImpact, RiskProbability, RiskStatusEnum } from '../../types';
 
 // DTOs matching backend risks/dto/create-risk.dto.ts

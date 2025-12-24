@@ -4,7 +4,7 @@ import { Modal } from '../../common/Modal';
 import { Button } from '../../common/Button';
 import { Plus, X } from 'lucide-react';
 import { LegalDocument } from '../../../types';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface TagManagementModalProps {

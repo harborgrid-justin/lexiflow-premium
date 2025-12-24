@@ -6,10 +6,10 @@
 import { Risk } from '../../../types';
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
-import { IntegrationOrchestrator } from '../../integration/integrationOrchestrator';
-import { SystemEventType } from '../../../types/integration-types';
-import { isBackendApiEnabled } from '../../integration/apiConfig';
-import { RisksApiService } from '../../api/risks-api';
+import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { SystemEventType } from '@/types/integration-types';
+import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { RisksApiService } from '@/api/risks-api';
 
 export const RISK_QUERY_KEYS = {
     all: () => ['risks'] as const,

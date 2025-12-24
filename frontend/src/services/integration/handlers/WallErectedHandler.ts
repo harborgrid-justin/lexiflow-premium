@@ -6,8 +6,8 @@
  */
 
 import { BaseEventHandler } from './BaseEventHandler';
-import type { SystemEventPayloads } from '../../../types/integration-types';
-import { SystemEventType } from '../../../types/integration-types';
+import type { SystemEventPayloads } from '@/types/integration-types';
+import { SystemEventType } from '@/types/integration-types';
 
 export class WallErectedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.WALL_ERECTED]> {
   readonly eventType = SystemEventType.WALL_ERECTED;
@@ -16,7 +16,7 @@ export class WallErectedHandler extends BaseEventHandler<SystemEventPayloads[typ
     const actions: string[] = [];
     const { wall } = payload;
     
-    const { DataService } = await import('../../data/dataService');
+    const { DataService } = await import('@/api/data/dataService');
     
     // Generate RLS policy for ethical wall
     const policyName = `wall_enforce_${wall.caseId}`;

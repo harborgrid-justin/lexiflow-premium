@@ -7,7 +7,7 @@ import { Clock, Eye, Loader2, FolderOpen } from 'lucide-react';
 import { EmptyState } from '../../common/EmptyState';
 import { DataService } from '@/services/data/dataService';
 import { LegalDocument } from '../../../types';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 

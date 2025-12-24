@@ -1,8 +1,8 @@
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { api } from '../api';
-import { delay } from '../../utils/async';
+import { api } from '@/api';
+import { delay } from '@/utils/async';
 import { CostMetric, CostForecast } from '../../types';
 
 export const OperationsService = {

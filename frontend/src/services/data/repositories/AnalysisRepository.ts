@@ -7,7 +7,7 @@ import { BriefAnalysisSession, JudgeProfile } from '../../../types';
 import { delay } from '@/utils/async';
 import { Repository } from '../../core/Repository';
 import { STORES, db } from '../db';
-import { isBackendApiEnabled } from '../../integration/apiConfig';
+import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
 export const ANALYSIS_QUERY_KEYS = {
     all: () => ['analysis'] as const,

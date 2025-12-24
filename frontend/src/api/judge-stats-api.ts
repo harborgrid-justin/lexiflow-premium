@@ -3,7 +3,7 @@
  * Judge statistics and analytics
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface JudgeStatistics {
   judgeId: string;

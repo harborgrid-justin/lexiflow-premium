@@ -15,7 +15,7 @@ import { Calendar, CheckCircle, ChevronDown, ChevronUp, Plus } from 'lucide-reac
 import { Badge } from '../../../common/Badge';
 
 // Internal Dependencies - Hooks & Context
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';

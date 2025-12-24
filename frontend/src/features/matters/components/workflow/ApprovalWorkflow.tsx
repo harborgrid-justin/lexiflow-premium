@@ -3,7 +3,7 @@ import React from 'react';
 import { CheckCircle, XCircle, Clock, User, Shield } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { Card } from '../../common/Card';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';

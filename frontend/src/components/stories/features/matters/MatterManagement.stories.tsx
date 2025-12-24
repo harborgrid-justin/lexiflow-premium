@@ -7,9 +7,9 @@
 
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { MatterManagement } from '../../../../frontend/components/matters/list/MatterManagement';
-import { ThemeProvider } from '../../../../frontend/context/ThemeContext';
-import { ToastProvider } from '../../../../frontend/context/ToastContext';
+import { MatterManagement } from '../../../../features/matters/components/list/MatterManagement';
+import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { ToastProvider } from '../../../../frontend/providers/ToastContext';
 
 const meta: Meta<typeof MatterManagement> = {
   title: 'Pages/Matter Management',

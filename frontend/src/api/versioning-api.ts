@@ -3,7 +3,7 @@
  * Document and entity version control
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface Version {
   id: string;

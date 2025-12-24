@@ -3,7 +3,7 @@
  * System health checks
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface HealthCheck {
   status: 'healthy' | 'degraded' | 'unhealthy';

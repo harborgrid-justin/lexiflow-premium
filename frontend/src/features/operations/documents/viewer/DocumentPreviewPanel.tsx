@@ -24,8 +24,8 @@ import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useTheme } from '../../../../context/ThemeContext';
-import { useWindow } from '../../../../context/WindowContext';
+import { useTheme } from '../../../../providers/ThemeContext';
+import { useWindow } from '../../../../providers/WindowContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 

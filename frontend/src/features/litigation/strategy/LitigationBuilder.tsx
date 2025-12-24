@@ -14,10 +14,10 @@ import { Save, Rocket, Loader2 } from 'lucide-react';
 import { LazyLoader } from '../../common/LazyLoader';
 import { TabbedPageLayout } from '../../layout/TabbedPageLayout';
 import { Button } from '../../common/Button';
-import { ErrorBoundary } from '../../common/ErrorBoundary';
+import { ErrorBoundary } from '../../../components/organisms/ErrorBoundary/ErrorBoundary';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { useLitigationBuilder } from '@/hooks/useLitigationBuilder';
 
 // Utils

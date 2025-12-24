@@ -122,7 +122,7 @@
  * Used by EvidenceRepository, DiscoveryPlatform, ChainOfCustody components
  */
 
-import { AdmissibilityStatusEnum, CustodyActionType } from '../../types/enums';
+import { AdmissibilityStatusEnum, CustodyActionType } from '@/types/enums';
 import type { EvidenceItem, ChainOfCustodyEvent } from '../../types';
 
 // =============================================================================

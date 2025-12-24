@@ -29,7 +29,7 @@
  * - Stateful workflow instance tracking
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 import type {
   EnhancedWorkflowInstance,
   ConditionalBranchingConfig,

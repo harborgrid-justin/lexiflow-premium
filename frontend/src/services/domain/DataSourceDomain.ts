@@ -4,9 +4,9 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { dataPlatformApi } from '../api/domains/data-platform.api';
-import { delay } from '../../utils/async';
-import { STORES, db } from '../data/db';
+import { dataPlatformApi } from '@/api/domains/data-platform.api';
+import { delay } from '@/utils/async';
+import { STORES, db } from '@/services/data/db';
 
 interface DataSource {
   id: string;

@@ -9,7 +9,7 @@ import { BlobManager } from '@/services/infrastructure/blobManager';
 import { PDFViewer } from '../../../common/PDFViewer';
 import { PIIPanel } from '../../preview/PIIPanel';
 import { Loader2, Eraser } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
+import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { ErrorState } from '../../../common/ErrorState';

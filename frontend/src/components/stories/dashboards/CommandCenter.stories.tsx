@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CommandCenter } from '../../components/litigation/war-room/CommandCenter';
+import { CommandCenter } from '../../../features/litigation/war-room/CommandCenter';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import { ToastProvider } from '../../context/ToastContext';
+import { ToastProvider } from '@providers/ToastContext';
 import React from 'react';
 
 /**

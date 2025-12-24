@@ -3,7 +3,7 @@
 import React from 'react';
 import { LegalDocument, DocumentVersion, UserRole } from '../../../types';
 import { History, RotateCcw, AlertTriangle, X } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface DocumentVersionsProps {

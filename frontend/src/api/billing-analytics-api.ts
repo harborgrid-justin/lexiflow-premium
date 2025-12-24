@@ -3,7 +3,7 @@
  * Billing and revenue analytics
  */
 
-import { apiClient } from '../infrastructure/apiClient';
+import { apiClient } from '@services/infrastructure/apiClient';
 
 export interface BillingAnalytics {
   period: { start: string; end: string };

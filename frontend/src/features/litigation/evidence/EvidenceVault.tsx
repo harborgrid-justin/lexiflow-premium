@@ -25,7 +25,7 @@ import { EvidenceErrorBoundary } from './EvidenceErrorBoundary';
 import { EvidenceInventorySkeleton, EvidenceDetailSkeleton } from './EvidenceSkeleton';
 
 // Context & Utils
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useEvidenceVault, ViewMode } from '@/hooks/useEvidenceVault';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';

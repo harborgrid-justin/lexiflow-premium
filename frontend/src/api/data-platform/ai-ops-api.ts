@@ -6,7 +6,7 @@
  * @responsibility Manage AI/ML operations and embeddings
  */
 
-import { apiClient, type PaginatedResponse } from '../../infrastructure/apiClient';
+import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
 
 /**
  * Vector embedding interface

@@ -8,8 +8,8 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentVersions } from '../../../../features/operations/documents/DocumentVersions';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
-import { LegalDocument, DocumentId, CaseId } from '../../../../frontend/types';
+import { ThemeProvider } from '@/providers/ThemeContext';
+import { LegalDocument, DocumentId, CaseId } from '@/types';
 
 const meta: Meta<typeof DocumentVersions> = {
   title: 'Documents/Document Versions',

@@ -26,7 +26,7 @@
  */
 
 import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
-import type { Case } from '../../types';
+import type { Case } from '@/types';
 
 /**
  * Backend case data structure (from API response)

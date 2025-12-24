@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TabsV2, ParentTabItem } from '../../../components/common/TabsV2';
+import { TabsV2, ParentTabItem } from '@/components/molecules/TabsV2';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import React, { useState } from 'react';
 import {

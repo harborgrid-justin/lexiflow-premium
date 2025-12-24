@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { QualityDashboard } from '../../../../frontend/components/admin/data/quality/QualityDashboard';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
-import { ToastProvider } from '../../../../frontend/providers/ToastContext';
+import { QualityDashboard } from '@/features/admin/components/data/quality/QualityDashboard';
+import { ThemeProvider } from '@/providers/ThemeContext';
+import { ToastProvider } from '@/providers/ToastContext';
 import React from 'react';
-import type { DataAnomaly, QualityMetricHistory } from '../../../../frontend/types';
+import type { DataAnomaly, QualityMetricHistory } from '@/types';
 
 // Mock data
 const mockAnomalies: DataAnomaly[] = [];

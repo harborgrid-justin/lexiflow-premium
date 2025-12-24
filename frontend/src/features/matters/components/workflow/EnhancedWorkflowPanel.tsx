@@ -9,7 +9,7 @@ import { ApprovalWorkflow } from './ApprovalWorkflow';
 import { Tabs } from '@/components/molecules/Tabs';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import type { ThemeTokens } from '../../../theme/tokens';
+import type { ThemeTokens } from '@/components/theme/tokens';
 
 // ============================================================================
 // TYPES

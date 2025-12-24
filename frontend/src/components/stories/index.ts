@@ -9,22 +9,22 @@
  */
 
 // Docket Components
-export * as DocketRowStories from './DocketRow.stories';
-export * as DocketTableStories from './DocketTable.stories';
-export * as DocketEntryModalStories from './DocketEntryModal.stories';
-export * as DocketEntryBuilderStories from './DocketEntryBuilder.stories';
-export * as DocketImportModalStories from './DocketImportModal.stories';
-export * as DocketFilterPanelStories from './DocketFilterPanel.stories';
-export * as DocketToolbarStories from './DocketToolbar.stories';
-export * as DocketStatsStories from './DocketStats.stories';
-export * as DocketCalendarStories from './DocketCalendar.stories';
-export * as DocketAnalyticsStories from './DocketAnalytics.stories';
-export * as DocketSettingsStories from './DocketSettings.stories';
-export * as DocketSheetStories from './DocketSheet.stories';
-export * as DocketManagerStories from './DocketManager.stories';
+export * as DocketRowStories from './features/docket/DocketRow.stories';
+export * as DocketTableStories from './features/docket/DocketTable.stories';
+export * as DocketEntryModalStories from './features/docket/DocketEntryModal.stories';
+export * as DocketEntryBuilderStories from './features/docket/DocketEntryBuilder.stories';
+export * as DocketImportModalStories from './features/docket/DocketImportModal.stories';
+export * as DocketFilterPanelStories from './features/docket/DocketFilterPanel.stories';
+export * as DocketToolbarStories from './features/docket/DocketToolbar.stories';
+export * as DocketStatsStories from './features/docket/DocketStats.stories';
+export * as DocketCalendarStories from './features/docket/DocketCalendar.stories';
+export * as DocketAnalyticsStories from './features/docket/DocketAnalytics.stories';
+export * as DocketSettingsStories from './features/docket/DocketSettings.stories';
+export * as DocketSheetStories from './features/docket/DocketSheet.stories';
+export * as DocketManagerStories from './features/docket/DocketManager.stories';
 
 // Filing Components
-export * as FilingCenterStories from './FilingCenter.stories';
+export * as FilingCenterStories from './dashboards/FilingCenter.stories';
 
 /**
  * Component categories for navigation

@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { DocketManager } from '../../../../frontend/components/matters/docket/DocketManager';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { DocketManager } from '@/features/matters/components/docket/DocketManager';
+import { ThemeProvider } from '@/providers/ThemeContext';
 
-import { WindowProvider } from '../../../../frontend/providers/WindowContext';
+import { WindowProvider } from '@/providers/WindowContext';
 import React from 'react';
 
 /**

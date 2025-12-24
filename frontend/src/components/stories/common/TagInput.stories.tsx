@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TagInput } from '../../components/common/TagInput';
+import { TagInput } from '@/components/molecules/TagInput';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import React, { useState } from 'react';
 

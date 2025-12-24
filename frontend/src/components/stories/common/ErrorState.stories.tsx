@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ErrorState } from '../../components/common/ErrorState';
+import { ErrorState } from '@/components/molecules/ErrorState';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import { Button } from '../../components/common/Button';
+import { Button } from '@/components/atoms/Button';
 import React from 'react';
 
 /**

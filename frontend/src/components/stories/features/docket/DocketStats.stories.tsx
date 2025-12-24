@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { DocketStats } from '../../../../frontend/components/matters/docket/DocketStats';
-import { Button } from '../../../../frontend/components/common/Button';
-import { ThemeProvider } from '../../../../frontend/providers/ThemeContext';
+import { DocketStats } from '@/features/matters/components/docket/DocketStats';
+import { Button } from '@/components/atoms/Button';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import { RefreshCw, Download, FileText, Plus } from 'lucide-react';
 import React from 'react';
 

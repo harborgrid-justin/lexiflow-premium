@@ -27,7 +27,7 @@ import {
   CheckCircle, Circle, AlertCircle, XCircle, ChevronRight, Loader2
 } from 'lucide-react';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { api } from '@api';
+import { api } from '@/api';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms/Button';

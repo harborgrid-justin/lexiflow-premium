@@ -17,7 +17,7 @@ import React, { Suspense, lazy } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { LazyLoader } from '../../common/LazyLoader';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 
 // ============================================================================
 // LAZY-LOADED COMPONENTS

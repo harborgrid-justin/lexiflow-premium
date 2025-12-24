@@ -21,8 +21,8 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { UserAvatar } from '@/components/common/UserAvatar';
-import { BackendStatusIndicator } from '@/components/common/BackendStatusIndicator';
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
+import { BackendStatusIndicator } from '@/components/organisms/BackendStatusIndicator/BackendStatusIndicator';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

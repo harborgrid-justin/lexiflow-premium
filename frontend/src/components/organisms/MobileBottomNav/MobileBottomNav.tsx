@@ -21,14 +21,14 @@ import { Home, Briefcase, FileText, Users, MoreHorizontal } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
-import { NAVIGATION_ITEMS } from '../../config/nav.config';
+import { cn } from '@/utils/cn';
+import { NAVIGATION_ITEMS } from '@/config/nav.config';
 
 // Types
-import { AppView } from '../../types';
+import { AppView } from '@/types';
 
 // ========================================
 // TYPES & INTERFACES

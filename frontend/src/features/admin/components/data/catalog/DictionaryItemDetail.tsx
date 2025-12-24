@@ -1,17 +1,18 @@
 
 import React, { useState } from 'react';
-import { DataDictionaryItem } from '../../../../types';
-import { DataService } from '../../../../services/data/dataService';
-import { useMutation } from '../../../../hooks/useQueryHooks';
-import { Button } from '../../../common/Button';
-import { Card } from '../../../common/Card';
-import { Input, TextArea } from '../../../common/Inputs';
-import { Badge } from '../../../common/Badge';
+import { DataDictionaryItem } from '@/types';
+import { DataService } from '@/services/data/dataService';
+import { useMutation } from '@/hooks/useQueryHooks';
+import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules/Card/Card';
+import { Input } from '@/components/atoms/Input/Input';
+import { TextArea } from '@/components/atoms/TextArea/TextArea';
+import { Badge } from '@/components/atoms/Badge/Badge';
 import { ArrowLeft, Save, Shield, Tag, Database, User, Clock, Wand2, Activity } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { useNotify } from '../../../../hooks/useNotify';
-import { GeminiService } from '../../../../services/features/research/geminiService';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { useNotify } from '@/hooks/useNotify';
+import { GeminiService } from '@/services/features/research/geminiService';
 
 interface DictionaryItemDetailProps {
     item: DataDictionaryItem;

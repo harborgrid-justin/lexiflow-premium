@@ -3,14 +3,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles, RefreshCw, FileSearch, Plus, Settings, Edit2, Loader2, GitMerge, Wand2, Activity, CheckCircle } from 'lucide-react';
 import { JSX } from 'react/jsx-runtime';
 
-import { useTheme } from '../../../context/ThemeContext';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { DataAnomaly, QualityMetricHistory } from '../../../types';
-import { cn } from '../../../utils/cn';
-import { Button } from '../../common/Button';
-import { Modal } from '../../common/Modal';
-import { Tabs } from '../../common/Tabs';
+import { useTheme } from '@/providers/ThemeContext';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataAnomaly, QualityMetricHistory } from '@/types';
+import { cn } from '@/utils/cn';
+import { Button } from '@/components/atoms/Button/Button';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
 
 import { DataProfiler } from './quality/DataProfiler';
 import { DeduplicationManager } from './quality/DeduplicationManager';

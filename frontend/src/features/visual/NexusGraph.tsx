@@ -16,7 +16,7 @@ import React, { useRef, useState, useEffect, useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useNexusGraph } from '../../hooks/useNexusGraph';
 import { useChartTheme } from '../common/ChartHelpers';
 
@@ -24,7 +24,7 @@ import { useChartTheme } from '../common/ChartHelpers';
 import { GraphOverlay } from './GraphOverlay';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 import { NODE_STRIDE } from '../../utils/nexusPhysics';
 import { buildGraphData, getNodeStrokeColor, getNodeRadius, getNodeLabelYOffset } from './utils';
 

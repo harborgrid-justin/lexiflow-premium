@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EmptyState } from '../../components/common/EmptyState';
-import { ThemeProvider } from '../../context/ThemeContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import { FileText, Inbox, Search } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import React from 'react';

@@ -1,18 +1,18 @@
 
 import React, { useState, useMemo } from 'react';
-import { DataDictionaryItem } from '../../../../types';
-import { DataService } from '../../../../services/data/dataService';
-import { useQuery } from '../../../../hooks/useQueryHooks';
-import { useSelection } from '../../../../hooks/useSelectionState';
-import { ErrorState } from '../../../common/ErrorState';
-import { VirtualList } from '../../../common/VirtualList';
-import { SearchToolbar } from '../../../common/SearchToolbar';
-import { Badge } from '../../../common/Badge';
-import { Button } from '../../../common/Button';
-import { FilterPanel } from '../../../common/FilterPanel';
-import { TableContainer, TableHeader, TableHead, TableCell, TableRow } from '../../../common/Table';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { DataDictionaryItem } from '@/types';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useSelection } from '@/hooks/useSelectionState';
+import { ErrorState } from '@/components/molecules/ErrorState/ErrorState';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
+import { FilterPanel } from '@/components/organisms/FilterPanel/FilterPanel';
+import { TableContainer, TableHeader, TableHead, TableCell, TableRow } from '@/components/organisms/Table/Table';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 import { Eye, Shield, Tag, Loader2, Filter } from 'lucide-react';
 import { DictionaryItemDetail } from './DictionaryItemDetail';
 

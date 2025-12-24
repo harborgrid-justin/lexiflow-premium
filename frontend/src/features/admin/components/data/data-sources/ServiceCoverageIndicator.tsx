@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Activity, AlertTriangle, CheckCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { useDataSource } from '../../../../context/DataSourceContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { useDataSource } from '@/providers/DataSourceContext';
 
 const BACKEND_SERVICES = [
   'cases', 'docket', 'documents', 'evidence', 'billing', 'users',

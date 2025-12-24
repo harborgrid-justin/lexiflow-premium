@@ -22,19 +22,19 @@ import { Lock, Shield, Smartphone, Globe, Eye, FileText, Clock, AlertTriangle, C
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { Card } from '../common/Card';
-import { Button } from '../common/Button';
+import { Card } from '@/components/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button/Button';
 
 // Services & Data
-import { DataService } from '../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
-import { useQuery } from '../../hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
-import { BloomFilter } from '../../utils/bloomFilter';
+import { cn } from '@/utils/cn';
+import { BloomFilter } from '@/utils/bloomFilter';
 
 
 // ========================================

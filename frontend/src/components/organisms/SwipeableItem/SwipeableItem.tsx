@@ -11,16 +11,16 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState, useRef } from 'react';
-import { Trash2, Archive, Check } from 'lucide-react';
+import { Trash2, Check } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

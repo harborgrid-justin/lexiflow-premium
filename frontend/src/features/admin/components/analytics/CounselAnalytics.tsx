@@ -18,16 +18,16 @@ import { Users, TrendingUp, Scale, AlertTriangle } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Card } from '../../common/Card';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Utils
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
-import type { OpposingCounselProfile } from '../../../types';
+import type { OpposingCounselProfile } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

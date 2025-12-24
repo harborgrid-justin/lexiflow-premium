@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, ReactNode } from 'react';
-import { PageHeader } from '../common/PageHeader';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 import { LucideIcon } from 'lucide-react';
 
 export interface TabConfigItem {

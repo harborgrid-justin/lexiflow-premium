@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Stepper } from '../../components/common/Stepper';
-import { ThemeProvider } from '../../context/ThemeContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import React, { useState } from 'react';
 import { Button } from '../../components/common/Button';
 

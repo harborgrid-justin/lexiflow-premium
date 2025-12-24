@@ -44,7 +44,7 @@ import { IntegrationOrchestrator } from '../../services/integrationOrchestrator'
 
 // Hooks & Context
 import { useQuery } from '../../services/queryClient';
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useToast } from '../../context/ToastContext';
 
 // Theme

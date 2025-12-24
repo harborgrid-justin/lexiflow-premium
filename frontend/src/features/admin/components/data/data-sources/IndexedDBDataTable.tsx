@@ -1,6 +1,6 @@
 import React from 'react';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 import type { StoreRecord } from './types';
 
 interface IndexedDBDataTableProps {

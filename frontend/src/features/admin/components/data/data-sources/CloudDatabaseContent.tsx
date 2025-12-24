@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { RefreshCw, Plus, X, Database } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { useQuery, useMutation, queryClient } from '../../../../hooks/useQueryHooks';
-import { useNotify } from '../../../../hooks/useNotify';
-import { DataService } from '../../../../services/data/dataService';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
+import { DataService } from '@/services/data/dataService';
 import { ConnectionCard } from './ConnectionCard';
 import { ConnectionForm } from './ConnectionForm';
 import type { DataConnection, ConnectionFormData, ConnectionStatus, TestConnectionResult } from './types';

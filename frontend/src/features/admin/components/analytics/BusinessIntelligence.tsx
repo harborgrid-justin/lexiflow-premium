@@ -17,12 +17,12 @@ import { BarChart3, TrendingUp, Users, Building2 } from 'lucide-react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { api } from '../../../services/api';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { MetricCard } from '../../common/primitives/MetricCard';
-import { EmptyState } from '../../common/EmptyState';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { api } from '@/api';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
 
 // ============================================================================
 // TYPES & INTERFACES

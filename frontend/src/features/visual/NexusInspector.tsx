@@ -17,13 +17,13 @@ import { X, User, Building, Fingerprint, ExternalLink } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
 import { Button } from '../common/Button';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { Party, EvidenceItem, Case, NexusNodeData } from '../../types';

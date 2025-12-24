@@ -1,8 +1,8 @@
 import React, { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { Search, X, Command } from 'lucide-react';
-import { useClickOutside } from '../../../hooks/useClickOutside';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { useClickOutside } from '@/hooks/useClickOutside';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 import type { SearchCategory, SearchResult, EnhancedSearchProps } from './types';
 import { highlightMatch, filterSuggestions } from './utils';
 import { getRecentSearches, parseSearchSyntax } from './storage';

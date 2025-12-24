@@ -6,8 +6,8 @@
 
 import React, { useRef, useEffect } from 'react';
 import { Save, Download, Copy, Sparkles, Loader2, CheckCircle } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 
 interface Step3DraftReviewProps {
   result: string;

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Database, RefreshCw, Trash2, Plus, Info, AlertTriangle, CheckCircle } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { db } from '../../../services/data/db';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { ConfirmDialog } from '../../common/ConfirmDialog';
-import { useModalState } from '../../../hooks/useModalState';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { db } from '@/services/data/db';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
+import { useModalState } from '@/hooks/useModalState';
 
 export const DatabaseManagement: React.FC = () => {
   const { theme } = useTheme();

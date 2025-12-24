@@ -3,13 +3,13 @@ import React, { useState } from 'react';
 
 import { Loader2, Server, ChevronRight } from 'lucide-react';
 
-import { useTheme } from '../../../context/ThemeContext';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { ApiServiceSpec, ApiMethod } from '../../../types';
-import { cn } from '../../../utils/cn';
-import { encodeHtmlEntities } from '../../../utils/sanitize';
-import { Badge } from '../../common/Badge';
+import { useTheme } from '@/providers/ThemeContext';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { ApiServiceSpec, ApiMethod } from '@/types';
+import { cn } from '@/utils/cn';
+import { encodeHtmlEntities } from '@/utils/sanitize';
+import { Badge } from '@/components/atoms/Badge/Badge';
 
 // Internal CodeBlock component for syntax highlighting
 function CodeBlock({ code }: { code: string }): React.JSX.Element {

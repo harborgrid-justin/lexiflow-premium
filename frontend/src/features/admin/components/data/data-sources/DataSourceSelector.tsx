@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Database, Server, Cloud, Power, RefreshCw } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { useDataSource } from '../../../../context/DataSourceContext';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { useDataSource } from '@/providers/DataSourceContext';
 
 export const DataSourceSelector: React.FC = () => {
   const { theme } = useTheme();

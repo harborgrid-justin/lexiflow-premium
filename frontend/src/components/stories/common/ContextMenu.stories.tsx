@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ContextMenu } from '../../components/common/ContextMenu';
-import { ThemeProvider } from '../../context/ThemeContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import { Copy, Edit, Trash2 } from 'lucide-react';
 import React from 'react';
 

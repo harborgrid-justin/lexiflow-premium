@@ -1,16 +1,16 @@
 
 import React, { useState } from 'react';
 import { RefreshCw, Play, ShieldCheck, Server, AlertCircle } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { Button } from '../../common/Button';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { BackupSnapshot } from '../../../services/api/data-platform/backups-api';
-import { useNotify } from '../../../hooks/useNotify';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { Button } from '@/components/atoms/Button/Button';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { BackupSnapshot } from '@/api/data-platform/backups-api';
+import { useNotify } from '@/hooks/useNotify';
 import { BackupMetrics } from './backup/BackupMetrics';
 import { SnapshotList } from './backup/SnapshotList';
 import { CreateSnapshotModal, RestoreSnapshotModal } from './backup/BackupModals';
-import { dataPlatformApi } from '../../../services/api/data-platform-api';
+import { dataPlatformApi } from '@/api/data-platform-api';
 
 export const BackupVault: React.FC = () => {
   const { theme } = useTheme();

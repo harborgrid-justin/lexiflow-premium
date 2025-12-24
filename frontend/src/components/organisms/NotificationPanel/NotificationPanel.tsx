@@ -6,11 +6,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Bell, X, Check, Clock, AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-react';
-import { useModalState } from '../../hooks/useModalState';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import type { Notification, NotificationGroup } from '../../types';
-import { NotificationService } from '../../services/domain/NotificationDomain';
+import { useModalState } from '@/hooks/useModalState';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import type { Notification, NotificationGroup } from '@/types';
+import { NotificationService } from '@/services/domain/NotificationDomain';
 import { formatDistanceToNow } from 'date-fns';
 
 export const NotificationPanel: React.FC = () => {
@@ -22,12 +22,22 @@ export const NotificationPanel: React.FC = () => {
 
   // Subscribe to notifications
   useEffect(() => {
-    const unsubscribe = NotificationService.subscribe((notifications: Notification[]) => {
+    let unsubscribe: (() => void) | undefined;
+
+    // Subscribe with a subscriber ID and callback
+    const subscriberId = 'notification-panel';
+    NotificationService.subscribe(subscriberId, (notifications: Notification[]) => {
       setNotifications(notifications);
       setGroupedNotifications(NotificationService.getGrouped());
+    }).then((unsub) => {
+      unsubscribe = unsub as unknown as (() => void);
     });
 
-    return unsubscribe;
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, []);
 
   const unreadCount = NotificationService.getUnreadCount();

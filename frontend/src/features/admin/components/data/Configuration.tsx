@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Settings, Code, FileSearch, Save, Download, Upload, CheckCircle } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { Card } from '../../common/Card';
-import { Button } from '../../common/Button';
-import { Input } from '../../common/Inputs';
-import { Tabs } from '../../common/Tabs';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { Card } from '@/components/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button/Button';
+import { Input } from '@/components/atoms/Input/Input';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 interface ConfigurationProps {
   initialTab?: string;

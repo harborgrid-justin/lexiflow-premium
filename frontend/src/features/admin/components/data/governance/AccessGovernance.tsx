@@ -1,16 +1,16 @@
 import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../common/Table';
-import { UserAvatar } from '../../../common/UserAvatar';
-import { Badge } from '../../../common/Badge';
-import { Button } from '../../../common/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Button } from '@/components/atoms/Button/Button';
 import { Shield, CheckCircle, XCircle, Lock, Info } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { queryKeys } from '../../../../utils/queryKeys';
-import { useQuery, useMutation, queryClient } from '../../../../hooks/useQueryHooks';
-import { DataService } from '../../../../services/data/dataService';
-import { useNotify } from '../../../../hooks/useNotify';
-import { RolePermission, PermissionLevel } from '../../../../types';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { queryKeys } from '@/utils/queryKeys';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { useNotify } from '@/hooks/useNotify';
+import { RolePermission, PermissionLevel } from '@/types';
 
 export const AccessGovernance: React.FC = () => {
   const { theme } = useTheme();

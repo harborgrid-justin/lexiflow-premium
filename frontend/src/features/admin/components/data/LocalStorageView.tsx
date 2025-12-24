@@ -7,8 +7,8 @@
 
 import React, { useEffect } from 'react';
 import { HardDrive, Trash2 } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 import { DataSourceSelector } from './DataSourceSelector';
 import { useLocalStorageFiles } from './hooks';
 

@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { AuditLogEntry } from '../../types';
+import { AuditLogEntry } from '@/types';
 import { User, Link, AlertOctagon, Loader2 } from 'lucide-react';
-import { Button } from '../common/Button';
-import { Badge } from '../common/Badge';
-import { ChainService, ChainedLogEntry, IntegrityReport } from '../../services/infrastructure/chainService';
+import { Button } from '@/components/atoms/Button/Button';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { ChainService, ChainedLogEntry, IntegrityReport } from '@/services/infrastructure/chainService';
 import { LedgerVisualizer } from './ledger/LedgerVisualizer';
-import { cn } from '../../utils/cn';
-import { useTheme } from '../../context/ThemeContext';
-import { useToast } from '../../context/ToastContext';
-import { VirtualList } from '../common/VirtualList';
-import { useWindow } from '../../context/WindowContext';
-import { useQuery } from '../../hooks/useQueryHooks';
-import { DataService } from '../../services/data/dataService';
+import { cn } from '@/utils/cn';
+import { useTheme } from '@/providers/ThemeContext';
+import { useToast } from '@/providers/ToastContext';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { useWindow } from '@/providers/WindowContext';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 import { AuditLogControls } from './audit/AuditLogControls';
-import { DEBUG_API_SIMULATION_DELAY_MS } from '../../config/master.config';
+import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/master.config';
 
 interface AdminAuditLogProps {
   // logs prop is removed; component will fetch its own data.

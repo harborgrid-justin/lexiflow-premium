@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Clock, HardDrive, Database } from 'lucide-react';
-import { MetricTile } from '../../../common/RefactoredCommon';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 
 interface BackupMetricsProps {
     latestCreated?: string;
@@ -15,20 +15,20 @@ interface BackupMetricsProps {
 export const BackupMetrics: React.FC<BackupMetricsProps> = ({ latestCreated, stats }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <MetricTile 
+        <MetricCard 
             label="Latest Recovery Point" 
             value={latestCreated ? new Date(latestCreated).toLocaleTimeString() : 'N/A'} 
             icon={Clock} 
             trend="Healthy"
             trendUp={true}
         />
-        <MetricTile 
+        <MetricCard 
             label="Total Snapshots" 
             value={stats?.totalSnapshots.toString() || '0'} 
             icon={HardDrive} 
             trend={`${(stats?.totalSize || 0)} bytes`}
         />
-        <MetricTile 
+        <MetricCard 
             label="Active Schedules" 
             value={stats?.activeSchedules.toString() || '0'} 
             icon={Database} 

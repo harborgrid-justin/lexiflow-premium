@@ -19,17 +19,17 @@ import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadius
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Card } from '../../common/Card';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
-import { useChartTheme } from '../../common/ChartHelpers';
+import { useTheme } from '@/providers/ThemeContext';
+import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 
 // Utils
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
-import type { OutcomePredictionData } from '../../../types';
+import type { OutcomePredictionData } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

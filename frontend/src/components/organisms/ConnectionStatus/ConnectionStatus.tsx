@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Database, Cloud, Wifi, WifiOff, AlertCircle, Activity, Info } from 'lucide-react';
-import { apiClient } from '../../services/infrastructure/apiClient';
-import { useDataSource } from '../../context/DataSourceContext.tsx';
-import { BackendHealthMonitor } from './BackendHealthMonitor';
-import { ServiceCoverageIndicator } from './ServiceCoverageIndicator';
+import { apiClient } from '@/services/infrastructure/apiClient';
+import { useDataSource } from '@/providers/DataSourceContext';
+import { BackendHealthMonitor } from '@/components/organisms/BackendHealthMonitor/BackendHealthMonitor';
+import { ServiceCoverageIndicator } from '@/components/organisms/ServiceCoverageIndicator/ServiceCoverageIndicator';
 
 interface ConnectionStatusProps {
   className?: string;

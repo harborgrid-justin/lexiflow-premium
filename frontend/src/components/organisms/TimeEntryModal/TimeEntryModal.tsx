@@ -20,7 +20,7 @@ import { Clock, Wand2, DollarSign } from 'lucide-react';
 import { GeminiService } from '../../services/features/research/geminiService';
 
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
 import { Modal } from './Modal';
@@ -28,7 +28,7 @@ import { Button } from './Button';
 import { Input, TextArea } from './Inputs';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 import { getTodayString } from '../../utils/dateUtils';
 
 // Types

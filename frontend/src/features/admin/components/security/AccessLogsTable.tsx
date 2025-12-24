@@ -1,8 +1,8 @@
 import React from 'react';
 import { Search, Download } from 'lucide-react';
-import { Card } from '../../common/Card';
-import { Button } from '../../common/Button';
-import { Badge } from '../../common/Badge';
+import { Card } from '../../components/molecules/Card';
+import { Button } from '../../components/atoms/Button';
+import { Badge } from '../../components/atoms/Badge';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { AccessLogEntry } from './types';

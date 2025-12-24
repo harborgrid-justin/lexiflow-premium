@@ -25,11 +25,11 @@ import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';
-import { useChartTheme } from '../../common/ChartHelpers';
+import { useChartTheme } from '../../components/organisms/ChartHelpers';
 
 // Components
-import { Card } from '../../common/Card';
-import { MetricCard } from '../../common/Primitives';
+import { Card } from '../../components/molecules/Card';
+import { MetricCard } from '../../components/atoms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

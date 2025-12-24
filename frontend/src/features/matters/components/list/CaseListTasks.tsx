@@ -18,10 +18,10 @@ import { Plus, FileText, Scale, Box, Gavel, ArrowRight } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '../../common/Badge';
+import { Badge } from '../../components/atoms/Badge';
 import { TaskCreationModal } from '../../common/TaskCreationModal';
-import { VirtualList } from '../../common/VirtualList';
-import { LazyLoader } from '../../common/LazyLoader';
+import { VirtualList } from '../../components/organisms/VirtualList';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
 
 // Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

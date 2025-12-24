@@ -25,8 +25,8 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
-import { EmptyState } from '../../common/EmptyState';
-import { AdaptiveLoader } from '../../common/AdaptiveLoader';
+import { EmptyState } from '../../components/molecules/EmptyState';
+import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

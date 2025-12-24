@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { Modal } from '../../common/Modal';
-import { Button } from '../../common/Button';
+import { Modal } from '../../components/molecules/Modal';
+import { Button } from '../../components/atoms/Button';
 import { Save } from 'lucide-react';
 
 interface RecordModalProps {

@@ -21,9 +21,9 @@ import {
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../common/Button';
-import { Card } from '../../common/Card';
-import { Tabs } from '../../common/Tabs';
+import { Button } from '../../components/atoms/Button';
+import { Card } from '../../components/molecules/Card';
+import { Tabs } from '../../components/molecules/Tabs';
 import { RiskMeter } from '../../common/RiskMeter';
 
 // Hooks & Context

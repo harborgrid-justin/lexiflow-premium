@@ -14,7 +14,7 @@ import {
   GitCompare, Briefcase, UserPlus, BrainCircuit, TrendingUp, Wallet,
   ShieldCheck, Link, Server, Bookmark, Building2, Eye, Lightbulb, LucideIcon
 } from 'lucide-react';
-import { TabConfigItem } from '../components/layout/TabbedPageLayout';
+import { TabConfigItem } from '../components/components/templates/TabbedPageLayout';
 import { PlatformView } from '../features/admin/components/data/AdminDatabaseControl';
 
 // =============================================================================

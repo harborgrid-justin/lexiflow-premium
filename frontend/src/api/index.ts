@@ -12,11 +12,11 @@
  * - Backend-first: Defaults to PostgreSQL + NestJS backend (IndexedDB deprecated)
  * 
  * Usage - Domain-based imports (RECOMMENDED):
- *   import { litigationApi } from '@/services/api/domains/litigation.api';
+ *   import { litigationApi } from '@/api/domains/litigation.api';
  *   const cases = await litigationApi.cases.getAll();
  * 
  * Usage - Legacy flat imports (BACKWARD COMPATIBLE):
- *   import { api } from '@/services/api';
+ *   import { api } from '@api';
  *   const cases = await api.cases.getAll();
  */
 

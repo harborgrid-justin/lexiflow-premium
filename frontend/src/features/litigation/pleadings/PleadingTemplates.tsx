@@ -20,7 +20,7 @@ import { LayoutTemplate, ArrowRight, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
-import { VirtualGrid } from '../../common/VirtualGrid';
+import { VirtualGrid } from '../../components/organisms/VirtualGrid';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

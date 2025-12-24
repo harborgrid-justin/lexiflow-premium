@@ -10,11 +10,11 @@ import React, { useState } from 'react';
 import { ShieldAlert, CheckCircle, Scale, Plus } from 'lucide-react';
 
 // Common Components
-import { Card } from '../../common/Card';
-import { Badge } from '../../common/Badge';
-import { Button } from '../../common/Button';
-import { RuleSelector } from '../../common/RuleSelector';
-import { Modal } from '../../common/Modal';
+import { Card } from '../../components/molecules/Card';
+import { Badge } from '../../components/atoms/Badge';
+import { Button } from '../../components/atoms/Button';
+import { RuleSelector } from '../../components/molecules/RuleSelector';
+import { Modal } from '../../components/molecules/Modal';
 
 // Context & Utils
 import { useTheme } from '../../../providers/ThemeContext';

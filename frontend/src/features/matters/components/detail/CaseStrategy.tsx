@@ -13,9 +13,9 @@ import React, { useState } from 'react';
 import { Target, Shield, Plus, Scale } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '../../common/Button';
-import { Modal } from '../../common/Modal';
-import { Input, TextArea } from '../../common/Inputs';
+import { Button } from '../../components/atoms/Button';
+import { Modal } from '../../components/molecules/Modal';
+import { Input, TextArea } from '../../components/atoms';
 import { StrategySection } from './strategy/StrategySection';
 
 // Internal Dependencies - Hooks & Context

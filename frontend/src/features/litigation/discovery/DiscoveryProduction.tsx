@@ -18,8 +18,8 @@ import { ArrowLeft, Upload, FileText, Check, Settings, ShieldCheck, Database, Pr
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../common/Button';
-import { Card } from '../../common/Card';
+import { Button } from '../../components/atoms/Button';
+import { Card } from '../../components/molecules/Card';
 
 // Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

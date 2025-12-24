@@ -20,8 +20,8 @@ import {
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '../../common/PageHeader';
-import { Button } from '../../common/Button';
+import { PageHeader } from '../../components/organisms/PageHeader';
+import { Button } from '../../components/atoms/Button';
 import { DocketSheet } from './DocketSheet';
 import { DocketCalendar } from './DocketCalendar';
 import { DocketAnalytics } from './DocketAnalytics';

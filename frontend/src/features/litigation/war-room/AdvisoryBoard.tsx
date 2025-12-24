@@ -31,14 +31,14 @@ import { useSelection } from '@/hooks/useSelectionState';
 import { useToggle } from '@/hooks/useToggle';
 
 // Components
-import { Button } from '../../common/Button';
-import { SearchToolbar } from '../../common/SearchToolbar';
-import { AdaptiveLoader } from '../../common/AdaptiveLoader';
+import { Button } from '../../components/atoms/Button';
+import { SearchToolbar } from '../../components/organisms/SearchToolbar';
+import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
 import { AdvisorySidebar } from './advisory/AdvisorySidebar';
 import { AdvisorList, Advisor } from './advisory/AdvisorList';
 import { AdvisorDetail } from './advisory/AdvisorDetail';
-import { Modal } from '../../common/Modal';
-import { ErrorState } from '../../common/ErrorState';
+import { Modal } from '../../components/molecules/Modal';
+import { ErrorState } from '../../components/molecules/ErrorState';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

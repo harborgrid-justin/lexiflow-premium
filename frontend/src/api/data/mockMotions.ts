@@ -1,3 +1,3 @@
-import { MOCK_MOTIONS } from './models/motion';
+import { MOCK_MOTIONS } from './motion';
 
 export { MOCK_MOTIONS };

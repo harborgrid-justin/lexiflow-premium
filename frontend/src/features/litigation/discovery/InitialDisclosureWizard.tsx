@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
-import { Card } from '../../common/Card';
-import { Button } from '../../common/Button';
-import { Stepper } from '../../common/Stepper';
-import { Input, TextArea } from '../../common/Inputs';
+import { Card } from '../../components/molecules/Card';
+import { Button } from '../../components/atoms/Button';
+import { Stepper } from '../../components/molecules/Stepper';
+import { Input, TextArea } from '../../components/atoms';
 import { Users, FileText, Calculator, ShieldCheck } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';

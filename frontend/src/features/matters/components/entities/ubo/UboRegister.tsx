@@ -1,8 +1,8 @@
 
 import React, { useMemo } from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../common/Table';
-import { Badge } from '../../../common/Badge';
-import { Button } from '../../../common/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/organisms/Table';
+import { Badge } from '../../../components/atoms/Badge';
+import { Button } from '../../../components/atoms/Button';
 import { SearchInputBar, ActionRow, MetricTile } from '../../../common/RefactoredCommon';
 import { Building, User, AlertTriangle, ShieldCheck, Network, Download, Plus } from 'lucide-react';
 import { LegalEntity } from '../../../../types';
@@ -10,9 +10,9 @@ import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { api } from '@/services/api';
-import { AdaptiveLoader } from '../../../common/AdaptiveLoader';
-import { ErrorState } from '../../../common/ErrorState';
+import { api } from '@api';
+import { AdaptiveLoader } from '../../../components/molecules/AdaptiveLoader';
+import { ErrorState } from '../../../components/molecules/ErrorState';
 
 interface UboRegisterProps {
   entities: LegalEntity[];

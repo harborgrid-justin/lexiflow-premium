@@ -20,9 +20,9 @@ import { Briefcase, MapPin, Mail, Phone, Award, ShieldCheck, Clock, Scale } from
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { UserAvatar } from '../common/UserAvatar';
-import { Card } from '../common/Card';
-import { Badge } from '../common/Badge';
+import { UserAvatar } from '../components/atoms/UserAvatar';
+import { Card } from '../components/molecules/Card';
+import { Badge } from '../components/atoms/Badge';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

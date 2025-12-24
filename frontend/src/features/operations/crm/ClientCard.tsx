@@ -1,9 +1,9 @@
 
 import React from 'react';
 import { Client } from '../../../types';
-import { Badge } from '../../common/Badge';
-import { Button } from '../../common/Button';
-import { Currency } from '../../common/Primitives';
+import { Badge } from '../../components/atoms/Badge';
+import { Button } from '../../components/atoms/Button';
+import { Currency } from '../../components/atoms';
 import { Lock, PieChart, Building } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';

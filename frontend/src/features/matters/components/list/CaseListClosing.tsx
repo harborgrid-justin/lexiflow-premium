@@ -18,7 +18,7 @@ import { FileCheck, ArrowRight, Wand2, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../common/Button';
+import { Button } from '../../components/atoms/Button';
 
 // Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

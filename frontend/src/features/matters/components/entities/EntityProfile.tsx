@@ -25,9 +25,9 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
-import { Button } from '../../common/Button';
-import { Tabs } from '../../common/Tabs';
-import { EmptyState } from '../../common/EmptyState';
+import { Button } from '../../components/atoms/Button';
+import { Tabs } from '../../components/molecules/Tabs';
+import { EmptyState } from '../../components/molecules/EmptyState';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

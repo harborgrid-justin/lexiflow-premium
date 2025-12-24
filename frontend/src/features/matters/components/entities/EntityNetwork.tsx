@@ -26,8 +26,8 @@ import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
 import { NexusGraph } from '../../visual/NexusGraph';
-import { Card } from '../../common/Card';
-import { AdaptiveLoader } from '../../common/AdaptiveLoader';
+import { Card } from '../../components/molecules/Card';
+import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

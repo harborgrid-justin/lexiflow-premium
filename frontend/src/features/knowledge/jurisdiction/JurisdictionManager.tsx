@@ -20,9 +20,9 @@ import { Plus } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
-import { PageHeader } from '../../common/PageHeader';
-import { Button } from '../../common/Button';
-import { LazyLoader } from '../../common/LazyLoader';
+import { PageHeader } from '../../components/organisms/PageHeader';
+import { Button } from '../../components/atoms/Button';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

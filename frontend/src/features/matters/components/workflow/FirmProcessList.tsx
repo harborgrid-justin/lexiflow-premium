@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { Card } from '../../common/Card';
-import { Badge } from '../../common/Badge';
-import { Button } from '../../common/Button';
+import { Card } from '../../components/molecules/Card';
+import { Badge } from '../../components/atoms/Badge';
+import { Button } from '../../components/atoms/Button';
 import { MoreHorizontal, Play, Search } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { EmptyState } from '../../common/EmptyState';
+import { EmptyState } from '../../components/molecules/EmptyState';
 import { Process } from './types';
 import { getProcessIcon } from './utils';
 

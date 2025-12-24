@@ -6,13 +6,13 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DocumentService } from '@/services/features/documents/documentService';
 import { BlobManager } from '@/services/infrastructure/blobManager';
-import { PDFViewer } from '../../../common/PDFViewer';
+import { PDFViewer } from '../../../components/organisms/PDFViewer';
 import { PIIPanel } from '../../preview/PIIPanel';
 import { Loader2, Eraser } from 'lucide-react';
 import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
-import { ErrorState } from '../../../common/ErrorState';
+import { ErrorState } from '../../../components/molecules/ErrorState';
 
 export const RedactionStudioView: React.FC = () => {
     const { theme } = useTheme();

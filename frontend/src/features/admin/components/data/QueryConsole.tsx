@@ -3,15 +3,15 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Play, Download, AlignLeft, Bot } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Tabs } from '../../common/Tabs';
-import { Modal } from '../../common/Modal';
+import { Tabs } from '../../components/molecules/Tabs';
+import { Modal } from '../../components/molecules/Modal';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { CopyButton } from '../../common/CopyButton';
-import { Button } from '../../common/Button';
-import { VirtualList } from '../../common/VirtualList';
+import { CopyButton } from '../../components/atoms/CopyButton';
+import { Button } from '../../components/atoms/Button';
+import { VirtualList } from '../../components/organisms/VirtualList';
 import { SqlHelpers } from '@/utils/sqlHelpers';
 import { QuerySidebar } from './query/QuerySidebar';
-import { dataPlatformApi } from '@/services/api/data-platform-api';
+import { dataPlatformApi } from '@/api/data-platform-api';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 interface QueryConsoleProps {

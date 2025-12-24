@@ -22,12 +22,12 @@ import { Plus, Trash2, Edit2, Shield, Globe, Lock, Clock } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../common/Table';
-import { Button } from '../common/Button';
-import { Badge } from '../common/Badge';
-import { Modal } from '../common/Modal';
-import { ConfirmDialog } from '../common/ConfirmDialog';
-import { Input } from '../common/Inputs';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/organisms/Table';
+import { Button } from '../components/atoms/Button';
+import { Badge } from '../components/atoms/Badge';
+import { Modal } from '../components/molecules/Modal';
+import { ConfirmDialog } from '../components/molecules/ConfirmDialog';
+import { Input } from '../components/atoms';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

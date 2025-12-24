@@ -26,7 +26,7 @@ import { useTheme } from '../../../providers/ThemeContext';
 import { useWindow } from '../../../providers/WindowContext';
 
 // Components
-import { VirtualGrid } from '../../common/VirtualGrid';
+import { VirtualGrid } from '../../components/organisms/VirtualGrid';
 import { PlaybookDetail } from './PlaybookDetail';
 
 // Utils & Constants

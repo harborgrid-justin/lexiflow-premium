@@ -44,9 +44,9 @@ import {
   PracticeArea 
 } from '../../../types';
 import { PATHS } from '../../../config/paths.config';
-import { Button } from '../../common/Button';
-import { PageHeader } from '../../common/PageHeader';
-import { Breadcrumbs } from '../../common/Breadcrumbs';
+import { Button } from '../../components/atoms/Button';
+import { PageHeader } from '../../components/organisms/PageHeader';
+import { Breadcrumbs } from '../../components/molecules/Breadcrumbs';
 import { useTheme } from '../../../providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/utils/cn';

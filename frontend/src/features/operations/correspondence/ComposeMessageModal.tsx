@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Modal } from '../../common/Modal';
-import { Button } from '../../common/Button';
-import { Input, TextArea } from '../../common/Inputs';
-import { UserSelect } from '../../common/UserSelect';
+import { Modal } from '../../components/molecules/Modal';
+import { Button } from '../../components/atoms/Button';
+import { Input, TextArea } from '../../components/atoms';
+import { UserSelect } from '../../components/molecules/UserSelect';
 import { Send, Paperclip, Wand2, X } from 'lucide-react';
 import { CommunicationItem, CommunicationType, UserId, User } from '../../../types';
 import { useTheme } from '../../../providers/ThemeContext';

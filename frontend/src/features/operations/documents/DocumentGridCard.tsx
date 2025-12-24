@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { LegalDocument } from '../../../types';
-import { FileIcon } from '../../common/Primitives';
-import { Badge } from '../../common/Badge';
+import { FileIcon } from '../../components/atoms';
+import { Badge } from '../../components/atoms/Badge';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 

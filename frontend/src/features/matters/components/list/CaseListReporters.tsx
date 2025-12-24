@@ -18,7 +18,7 @@ import { Mic2, Plus, User } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../common/Button';
+import { Button } from '../../components/atoms/Button';
 
 // Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

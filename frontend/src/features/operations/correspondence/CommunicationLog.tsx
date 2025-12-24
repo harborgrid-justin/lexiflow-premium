@@ -21,8 +21,8 @@ import { useTheme } from '../../../providers/ThemeContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Components
-import { Badge } from '../../common/Badge';
-import { VirtualList } from '../../common/VirtualList';
+import { Badge } from '../../components/atoms/Badge';
+import { VirtualList } from '../../components/organisms/VirtualList';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

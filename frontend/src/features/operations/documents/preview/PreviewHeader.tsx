@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Lock, Unlock, CheckCircle2, ChevronDown } from 'lucide-react';
-import { FileIcon } from '../../../common/Primitives';
+import { FileIcon } from '../../../components/atoms';
 import { LegalDocument } from '../../../../types';
 import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';

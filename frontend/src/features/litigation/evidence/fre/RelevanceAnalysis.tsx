@@ -9,9 +9,9 @@ import React from 'react';
 import { Filter, ThumbsUp, ThumbsDown, Scale, Wand2 } from 'lucide-react';
 
 // Common Components
-import { Card } from '../../../common/Card';
-import { Button } from '../../../common/Button';
-import { Badge } from '../../../common/Badge';
+import { Card } from '../../../components/molecules/Card';
+import { Button } from '../../../components/atoms/Button';
+import { Badge } from '../../../components/atoms/Badge';
 import { RiskMeter } from '../../../common/RiskMeter';
 
 // Context & Utils

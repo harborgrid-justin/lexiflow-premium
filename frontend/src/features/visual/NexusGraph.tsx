@@ -18,7 +18,7 @@ import React, { useRef, useState, useEffect, useMemo } from 'react';
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 import { useNexusGraph } from '@/hooks/useNexusGraph';
-import { useChartTheme } from '../common/ChartHelpers';
+import { useChartTheme } from '../components/organisms/ChartHelpers';
 
 // Components
 import { GraphOverlay } from './GraphOverlay';

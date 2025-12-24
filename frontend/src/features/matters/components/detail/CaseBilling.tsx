@@ -13,10 +13,10 @@ import React from 'react';
 import { Download, Clock, DollarSign, TrendingUp, AlertCircle } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { Card } from '../../common/Card';
-import { Badge } from '../../common/Badge';
-import { Button } from '../../common/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
+import { Card } from '../../components/molecules/Card';
+import { Badge } from '../../components/atoms/Badge';
+import { Button } from '../../components/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

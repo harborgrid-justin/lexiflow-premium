@@ -1,11 +1,11 @@
 
 import React, { useState, useMemo } from 'react';
 import { Client } from '../../../types';
-import { SearchToolbar } from '../../common/SearchToolbar';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { Badge } from '../../common/Badge';
-import { Button } from '../../common/Button';
-import { Currency } from '../../common/Primitives';
+import { SearchToolbar } from '../../components/organisms/SearchToolbar';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
+import { Badge } from '../../components/atoms/Badge';
+import { Button } from '../../components/atoms/Button';
+import { Currency } from '../../components/atoms';
 import { Lock, MoreVertical } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';

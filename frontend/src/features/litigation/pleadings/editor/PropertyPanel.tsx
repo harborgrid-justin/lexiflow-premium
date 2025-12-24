@@ -4,7 +4,7 @@ import { PleadingSection } from '../../../../types/pleading-types';
 import { AlignLeft, AlignCenter, AlignRight, AlignJustify, Bold } from 'lucide-react';
 import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { TextArea } from '../../../common/Inputs';
+import { TextArea } from '../../../components/atoms';
 
 interface PropertyPanelProps {
   section?: PleadingSection;

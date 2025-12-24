@@ -15,7 +15,7 @@ import { BuilderToolbar } from '../../matters/workflow/builder/BuilderToolbar';
 import { BuilderCanvas } from '../../matters/workflow/builder/BuilderCanvas';
 import { LitigationPalette } from './LitigationPalette';
 import { LitigationProperties } from './LitigationProperties';
-import { ContextMenu, ContextMenuItem } from '../../common/ContextMenu';
+import { ContextMenu, ContextMenuItem } from '../../components/molecules/ContextMenu';
 
 // Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

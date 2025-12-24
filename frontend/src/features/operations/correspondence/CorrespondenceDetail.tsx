@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { CommunicationItem, ServiceJob, LegalDocument, DocketEntry, EvidenceItem, WorkflowTask, DocumentId, CaseId, DocketId, EvidenceId, UUID } from '../../../types';
 import { X, Mail, MapPin, User, Calendar, FileText, Download, Navigation, CheckSquare, Archive, Briefcase, BookOpen, Truck, Package, PenTool, UploadCloud } from 'lucide-react';
-import { Button } from '../../common/Button';
+import { Button } from '../../components/atoms/Button';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { TaskCreationModal } from '../../common/TaskCreationModal';

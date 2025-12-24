@@ -1,11 +1,11 @@
 
 import React, { useState, useMemo, useCallback, useEffect, useTransition } from 'react';
 import { Plus, RefreshCw, Play, Loader2, AlertTriangle } from 'lucide-react';
-import { PageHeader } from '../../common/PageHeader';
-import { Button } from '../../common/Button';
+import { PageHeader } from '../../components/organisms/PageHeader';
+import { Button } from '../../components/atoms/Button';
 import { DataService } from '@/services/data/dataService';
 import { ErrorBoundary } from '../../../../components/organisms/ErrorBoundary/ErrorBoundary';
-import { EmptyState } from '../../common/EmptyState';
+import { EmptyState } from '../../components/molecules/EmptyState';
 
 // Direct Imports to optimize Tree-Shaking and HMR
 import { CaseWorkflowList } from './CaseWorkflowList';

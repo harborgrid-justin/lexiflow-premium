@@ -28,9 +28,9 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../common/Button';
-import { Tabs } from '../../common/Tabs';
-import { Card } from '../../common/Card';
+import { Button } from '../../components/atoms/Button';
+import { Tabs } from '../../components/molecules/Tabs';
+import { Card } from '../../components/molecules/Card';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';

@@ -12,8 +12,8 @@ import React from 'react';
 import { ArrowLeft, FileSearch, Lock, ExternalLink, Stamp } from 'lucide-react';
 
 // Common Components
-import { Button } from '../../common/Button';
-import { Tabs } from '../../common/Tabs';
+import { Button } from '../../components/atoms/Button';
+import { Tabs } from '../../components/molecules/Tabs';
 
 // Sub-components
 import { EvidenceOverview } from './EvidenceOverview';

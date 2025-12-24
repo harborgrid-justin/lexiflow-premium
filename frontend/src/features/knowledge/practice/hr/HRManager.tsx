@@ -1,10 +1,10 @@
 import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../common/Table';
-import { UserAvatar } from '../../../common/UserAvatar';
-import { Badge } from '../../../common/Badge';
-import { Button } from '../../../common/Button';
-import { ConfirmDialog } from '../../../common/ConfirmDialog';
-import { MetricCard } from '../../../common/Primitives';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../components/organisms/Table';
+import { UserAvatar } from '../../../components/atoms/UserAvatar';
+import { Badge } from '../../../components/atoms/Badge';
+import { Button } from '../../../components/atoms/Button';
+import { ConfirmDialog } from '../../../components/molecules/ConfirmDialog';
+import { MetricCard } from '../../../components/atoms';
 import { Plus, User, Award, TrendingUp, MoreHorizontal, Trash2, Loader2, AlertCircle, Users } from 'lucide-react';
 import { StaffMember, UserId } from '../../../../types';
 

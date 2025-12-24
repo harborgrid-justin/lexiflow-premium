@@ -5,8 +5,8 @@
 
 import React from 'react';
 import { Settings, Database, Zap } from 'lucide-react';
-import { Card } from '../common/Card';
-import { DataSourceSelector } from '../common/DataSourceSelector';
+import { Card } from '../components/molecules/Card';
+import { DataSourceSelector } from '../components/molecules/DataSourceSelector';
 
 export const SystemSettings: React.FC = () => {
   return (

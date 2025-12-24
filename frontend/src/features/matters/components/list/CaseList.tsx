@@ -19,9 +19,9 @@ import { Plus, Download } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TabbedPageLayout } from '../../layout/TabbedPageLayout';
-import { LazyLoader } from '../../common/LazyLoader';
-import { Button } from '../../common/Button';
+import { TabbedPageLayout } from '../../components/templates/TabbedPageLayout';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
+import { Button } from '../../components/atoms/Button';
 import { CaseListActive } from './CaseListActive';
 import { CaseListIntake } from './CaseListIntake';
 import { CaseListDocket } from './CaseListDocket';

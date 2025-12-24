@@ -17,8 +17,8 @@ import { Loader2, Radio } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Modal } from '../../common/Modal';
-import { ConfirmDialog } from '../../common/ConfirmDialog';
+import { Modal } from '../../components/molecules/Modal';
+import { ConfirmDialog } from '../../components/molecules/ConfirmDialog';
 import { DocketStats } from './DocketStats';
 import { DocketFilterPanel } from './DocketFilterPanel';
 import { DocketEntryModal } from './DocketEntryModal';

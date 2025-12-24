@@ -2,8 +2,8 @@
 import React from 'react';
 import { GitMerge, MoreHorizontal, User, ListTodo } from 'lucide-react';
 import { TaskWorkflowBadges } from './TaskWorkflowBadges';
-import { EmptyState } from '../../common/EmptyState';
-import { AdaptiveLoader } from '../../common/AdaptiveLoader';
+import { EmptyState } from '../../components/molecules/EmptyState';
+import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';

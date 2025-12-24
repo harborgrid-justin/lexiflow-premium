@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../../common/Button';
+import { Button } from '../../../components/atoms/Button';
 import { Plus, Edit2, Trash2, Shield, Lock, Play, Pause } from 'lucide-react';
 import { RLSPolicy } from '../../../../types';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';

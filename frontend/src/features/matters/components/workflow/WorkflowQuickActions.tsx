@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Button } from '../../common/Button';
+import { Button } from '../../components/atoms/Button';
 import { Play, Pause, FastForward, CheckSquare } from 'lucide-react';
 
 interface WorkflowQuickActionsProps {

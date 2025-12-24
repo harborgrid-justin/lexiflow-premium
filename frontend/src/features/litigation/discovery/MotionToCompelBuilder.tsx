@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import { DiscoveryRequest } from '../../../types';
-import { Card } from '../../common/Card';
-import { Button } from '../../common/Button';
-import { Badge } from '../../common/Badge';
+import { Card } from '../../components/molecules/Card';
+import { Button } from '../../components/atoms/Button';
+import { Badge } from '../../components/atoms/Badge';
 import { AlertTriangle, Gavel, CheckSquare, MessageSquare, Wand2, ArrowLeft } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';

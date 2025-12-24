@@ -9,8 +9,8 @@ import React from 'react';
 import { FileWarning, FileText, CheckCircle, AlertTriangle, Wand2 } from 'lucide-react';
 
 // Common Components
-import { Card } from '../../../common/Card';
-import { Button } from '../../../common/Button';
+import { Card } from '../../../components/molecules/Card';
+import { Button } from '../../../components/atoms/Button';
 
 // Context & Utils
 import { useTheme } from '../../../../providers/ThemeContext';

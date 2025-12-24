@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { Modal } from '../../../common/Modal';
-import { Button } from '../../../common/Button';
-import { Input } from '../../../common/Inputs';
+import { Modal } from '../../../components/molecules/Modal';
+import { Button } from '../../../components/atoms/Button';
+import { Input } from '../../../components/atoms';
 import { StaffMember } from '../../../../types';
 import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';

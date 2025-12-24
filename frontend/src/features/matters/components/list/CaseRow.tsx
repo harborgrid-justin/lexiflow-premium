@@ -18,8 +18,8 @@ import { User, Eye } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { StatusBadge } from '../../common/StatusBadge';
-import { Currency } from '../../common/Primitives';
+import { StatusBadge } from '../../components/atoms/StatusBadge';
+import { Currency } from '../../components/atoms';
 
 // Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';

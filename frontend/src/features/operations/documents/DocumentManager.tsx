@@ -23,9 +23,9 @@ import {
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { Button } from '../../common/Button';
-import { TabbedPageLayout, TabConfigItem } from '../../layout/TabbedPageLayout';
-import { LazyLoader } from '../../common/LazyLoader';
+import { Button } from '../../components/atoms/Button';
+import { TabbedPageLayout, TabConfigItem } from '../../components/templates/TabbedPageLayout';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
 import { DocumentManagerContent } from './DocumentManagerContent';
 
 // Utils & Config

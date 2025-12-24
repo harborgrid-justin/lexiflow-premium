@@ -20,12 +20,12 @@ import { Briefcase, ChevronRight, ArrowRight } from 'lucide-react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
-import { useChartTheme } from '../common/ChartHelpers';
+import { useChartTheme } from '../components/organisms/ChartHelpers';
 
 // Components
-import { Card } from '../common/Card';
-import { Button } from '../common/Button';
-import { Badge } from '../common/Badge';
+import { Card } from '../components/molecules/Card';
+import { Button } from '../components/atoms/Button';
+import { Badge } from '../components/atoms/Badge';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

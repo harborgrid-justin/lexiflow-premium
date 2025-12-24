@@ -6,7 +6,7 @@ import { ParallelTasksManager } from './ParallelTasksManager';
 import { TaskDependencyManager } from './TaskDependencyManager';
 import { TimeTrackingPanel } from './TimeTrackingPanel';
 import { ApprovalWorkflow } from './ApprovalWorkflow';
-import { Tabs } from '../../common/Tabs';
+import { Tabs } from '../../components/molecules/Tabs';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { ThemeTokens } from '../../../theme/tokens';

@@ -6,14 +6,14 @@
  * This file maintains backward compatibility by re-exporting all primitives.
  * New code should import directly from the primitives/ subdirectory.
  * 
- * @deprecated Import from 'components/common/primitives' instead
+ * @deprecated Import from 'components/components/atoms' instead
  * 
  * @example
  * // ❌ Old way (still works but deprecated)
- * import { StatusDot, Currency } from './components/common/Primitives';
+ * import { StatusDot, Currency } from './components/components/atoms';
  * 
  * // ✅ New way (preferred)
- * import { StatusDot, Currency } from './components/common/primitives';
+ * import { StatusDot, Currency } from './components/components/atoms';
  */
 
 export { StatusDot, type StatusDotProps } from './primitives/StatusDot';

@@ -1,11 +1,11 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { X, Plus, Trash2, Play, Save, Code, CheckCircle, Database } from 'lucide-react';
-import { Button } from '../../../common/Button';
-import { Input, TextArea } from '../../../common/Inputs';
+import { Button } from '../../../components/atoms/Button';
+import { Input, TextArea } from '../../../components/atoms';
 import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Modal } from '../../../common/Modal';
+import { Modal } from '../../../components/molecules/Modal';
 
 export interface RuleCondition {
   id: string;

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Radio, Activity, Zap, AlertCircle, CheckCircle, Users, Plus } from 'lucide-react';
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Card } from '../../common/Card';
-import { Badge } from '../../common/Badge';
-import { Tabs } from '../../common/Tabs';
-import { Button } from '../../common/Button';
+import { Card } from '../../components/molecules/Card';
+import { Badge } from '../../components/atoms/Badge';
+import { Tabs } from '../../components/molecules/Tabs';
+import { Button } from '../../components/atoms/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 

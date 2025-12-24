@@ -20,8 +20,8 @@ import { useTheme } from '../../../providers/ThemeContext';
 import { Conversation } from '@/hooks/useSecureMessenger';
 
 // Components
-import { FileAttachment } from '../../common/FileAttachment';
-import { ChatBubble } from '../../common/ChatBubble';
+import { FileAttachment } from '../../components/molecules/FileAttachment';
+import { ChatBubble } from '../../components/molecules/ChatBubble';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

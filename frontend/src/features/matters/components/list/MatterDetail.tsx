@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { queryClient } from '@/services/infrastructure/queryClient';
 import { Matter, MatterStatus, MatterPriority } from '../../../types';
-import { ConfirmDialog } from '../../common/ConfirmDialog';
+import { ConfirmDialog } from '../../components/molecules/ConfirmDialog';
 import { useModalState } from '@/hooks/useModalState';
 import { 
   ArrowLeft, 

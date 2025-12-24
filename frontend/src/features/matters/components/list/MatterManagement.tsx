@@ -16,10 +16,10 @@ import { Plus, Clock, BarChart3, Briefcase, Settings, Eye, Activity, DollarSign,
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from '../../../providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { api } from '@/services/api';
-import { PageHeader } from '../../common/PageHeader';
-import { Button } from '../../common/Button';
-import { LazyLoader } from '../../common/LazyLoader';
+import { api } from '@api';
+import { PageHeader } from '../../components/organisms/PageHeader';
+import { Button } from '../../components/atoms/Button';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
 import { MatterManagerContent } from './MatterManagerContent';
 import { cn } from '@/utils/cn';
 import { MatterView } from '../../../config/tabs.config';

@@ -20,9 +20,9 @@ import { Download } from 'lucide-react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { Button } from '../../common/Button';
-import { TabbedPageLayout } from '../../layout/TabbedPageLayout';
-import { LazyLoader } from '../../common/LazyLoader';
+import { Button } from '../../components/atoms/Button';
+import { TabbedPageLayout } from '../../components/templates/TabbedPageLayout';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
 import { ComplianceDashboardContent } from './ComplianceDashboardContent';
 
 // Utils & Config

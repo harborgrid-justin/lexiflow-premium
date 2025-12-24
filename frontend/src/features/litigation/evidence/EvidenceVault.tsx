@@ -17,9 +17,9 @@ import { Plus, Search } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '../../common/PageHeader';
-import { Button } from '../../common/Button';
-import { LazyLoader } from '../../common/LazyLoader';
+import { PageHeader } from '../../components/organisms/PageHeader';
+import { Button } from '../../components/atoms/Button';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
 import { EvidenceVaultContent } from './EvidenceVaultContent';
 import { EvidenceErrorBoundary } from './EvidenceErrorBoundary';
 import { EvidenceInventorySkeleton, EvidenceDetailSkeleton } from './EvidenceSkeleton';

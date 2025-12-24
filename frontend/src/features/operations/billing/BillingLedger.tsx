@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { Button } from '../../common/Button';
-import { Badge } from '../../common/Badge';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/organisms/Table';
+import { Button } from '../../components/atoms/Button';
+import { Badge } from '../../components/atoms/Badge';
 import { Landmark, ArrowUpRight, ArrowDownLeft, Plus, FileText } from 'lucide-react';
 import { FirmExpense } from '../../../types';
 import { DataService } from '@/services/data/dataService';

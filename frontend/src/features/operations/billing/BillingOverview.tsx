@@ -23,11 +23,11 @@ import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
 import { useTheme } from '../../../providers/ThemeContext';
-import { useChartTheme } from '../../common/ChartHelpers';
+import { useChartTheme } from '../../components/organisms/ChartHelpers';
 
 // Components
-import { Card } from '../../common/Card';
-import { MetricCard, Currency } from '../../common/Primitives';
+import { Card } from '../../components/molecules/Card';
+import { MetricCard, Currency } from '../../components/atoms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

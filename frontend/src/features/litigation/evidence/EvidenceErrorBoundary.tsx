@@ -5,7 +5,7 @@
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertOctagon, RefreshCw, Home } from 'lucide-react';
-import { Button } from '../../common/Button';
+import { Button } from '../../components/atoms/Button';
 
 interface Props {
   children: ReactNode;

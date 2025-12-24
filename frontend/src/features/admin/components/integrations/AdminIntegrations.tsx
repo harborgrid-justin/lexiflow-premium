@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { Card } from '../../common/Card';
-import { Button } from '../../common/Button';
-import { Badge } from '../../common/Badge';
+import { Card } from '../../components/molecules/Card';
+import { Button } from '../../components/atoms/Button';
+import { Badge } from '../../components/atoms/Badge';
 import { RefreshCw, Link as LinkIcon, Settings, Plus, Loader2 } from 'lucide-react';
 import { useTheme } from '@providers/ThemeContext';
 import { cn } from '@utils/cn';

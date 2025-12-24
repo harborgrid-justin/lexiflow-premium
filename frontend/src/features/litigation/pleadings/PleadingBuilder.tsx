@@ -29,11 +29,11 @@ import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '../../../hooks';
 
 // Components
-import { TabbedPageLayout } from '../../layout/TabbedPageLayout';
-import { Button } from '../../common/Button';
-import { Modal } from '../../common/Modal';
-import { Input } from '../../common/Inputs';
-import { LazyLoader } from '../../common/LazyLoader';
+import { TabbedPageLayout } from '../../components/templates/TabbedPageLayout';
+import { Button } from '../../components/atoms/Button';
+import { Modal } from '../../components/molecules/Modal';
+import { Input } from '../../components/atoms';
+import { LazyLoader } from '../../components/molecules/LazyLoader';
 
 // Utils & Config
 import { cn } from '@/utils/cn';

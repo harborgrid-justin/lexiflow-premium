@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ShieldAlert, Eye, EyeOff, Check, AlertTriangle } from 'lucide-react';
-import { Button } from '../../../common/Button';
+import { Button } from '../../../components/atoms/Button';
 import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { yieldToMain } from '@/utils/apiUtils';

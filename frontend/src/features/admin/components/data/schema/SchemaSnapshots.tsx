@@ -3,7 +3,7 @@ import React from 'react';
 import { Camera, Download, RefreshCw, Calendar, Database } from 'lucide-react';
 import { useTheme } from '../../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '../../../common/Button';
+import { Button } from '../../../components/atoms/Button';
 
 export const SchemaSnapshots: React.FC = () => {
     const { theme } = useTheme();

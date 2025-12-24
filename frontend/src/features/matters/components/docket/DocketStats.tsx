@@ -13,7 +13,7 @@ import React from 'react';
 import { FileText, Gavel, AlertCircle, RefreshCw } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { MetricCard } from '../../common/Primitives';
+import { MetricCard } from '../../components/atoms';
 
 export const DocketStats: React.FC = () => {
   return (

@@ -3,13 +3,13 @@ import { LegalRule } from '../../../types';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { AdaptiveLoader } from '../../common/AdaptiveLoader';
+import { AdaptiveLoader } from '../../components/molecules/AdaptiveLoader';
 // ✅ Migrated to backend API (2025-12-21)
 import { useTheme } from '../../../providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Bookmark, Share2, ExternalLink, BookOpen, Scale, FileText, History, Loader2, Search } from 'lucide-react';
-import { Button } from '../../common/Button';
-import { Tabs } from '../../common/Tabs';
+import { Button } from '../../components/atoms/Button';
+import { Tabs } from '../../components/molecules/Tabs';
 import { useWindow } from '../../../providers/WindowContext';
 import { RuleTreeViewer } from './rule-viewer/RuleTreeViewer';
 import { RuleContentDisplay } from './rule-viewer/RuleContentDisplay';

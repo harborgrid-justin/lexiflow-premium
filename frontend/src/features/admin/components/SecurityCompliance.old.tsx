@@ -20,10 +20,10 @@ import {
 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Card } from '../common/Card';
-import { Button } from '../common/Button';
-import { Badge } from '../common/Badge';
-import { Input } from '../common/Inputs';
+import { Card } from '../components/molecules/Card';
+import { Button } from '../components/atoms/Button';
+import { Badge } from '../components/atoms/Badge';
+import { Input } from '../components/atoms';
 import { BloomFilter } from '../../utils/bloomFilter';
 import { useNotify } from '@/hooks/useNotify';
 

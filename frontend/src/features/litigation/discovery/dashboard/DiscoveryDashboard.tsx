@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card } from '../../../common/Card';
-import { Button } from '../../../common/Button';
-import { Badge } from '../../../common/Badge';
+import { Card } from '../../../components/molecules/Card';
+import { Button } from '../../../components/atoms/Button';
+import { Badge } from '../../../components/atoms/Badge';
 import { ArrowRight, Database, FileText, CheckCircle, Scale, AlertTriangle } from 'lucide-react';
 import { DataService } from '@/services/data/dataService';
 import { useTheme } from '../../../../providers/ThemeContext';

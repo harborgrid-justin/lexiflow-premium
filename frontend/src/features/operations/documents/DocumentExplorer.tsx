@@ -16,7 +16,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
-import { VirtualGrid } from '../../common/VirtualGrid';
+import { VirtualGrid } from '../../components/organisms/VirtualGrid';
 import { DocumentGridCard } from './DocumentGridCard';
 
 interface DocumentExplorerProps {

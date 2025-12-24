@@ -1,4 +1,4 @@
-import { MOCK_JURISDICTIONS } from './models/jurisdiction';
+import { MOCK_JURISDICTIONS } from './jurisdiction';
 
 export interface CourtNode {
     name: string;

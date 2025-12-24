@@ -26,11 +26,11 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '../../../providers/ThemeContext';
 
 // Components
-import { Tabs } from '../../common/Tabs';
+import { Tabs } from '../../components/molecules/Tabs';
 import { MetricTile } from '../../common/RefactoredCommon';
-import { KanbanBoard, KanbanColumn, KanbanCard } from '../../common/Kanban';
-import { Card } from '../../common/Card';
-import { ProgressBar } from '../../common/ProgressBar';
+import { KanbanBoard, KanbanColumn, KanbanCard } from '../../components/organisms/Kanban';
+import { Card } from '../../components/molecules/Card';
+import { ProgressBar } from '../../components/atoms/ProgressBar';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

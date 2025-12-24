@@ -1,0 +1,38 @@
+/**
+ * @module components/common/EvidenceTypeIcon
+ * @category Common
+ * @description Icon selector for evidence types.
+ *
+ * THEME SYSTEM USAGE:
+ * Uses hardcoded colors for evidence type differentiation.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
+import React from 'react';
+import { Box, Activity, FileText, Fingerprint } from 'lucide-react';
+import { getIconClass } from './EvidenceTypeIcon.styles';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Types
+import { EvidenceType } from '@/types';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+interface EvidenceTypeIconProps {
+  type: EvidenceType;
+  className?: string;
+}
+
+export const EvidenceTypeIcon: React.FC<EvidenceTypeIconProps> = ({ type, className = "h-5 w-5" }) => {
+  switch(type) {
+    case 'Physical': return <Box className={getIconClass(type, className)}/>;
+    case 'Digital': return <Activity className={getIconClass(type, className)}/>;
+    case 'Document': return <FileText className={getIconClass(type, className)}/>;
+    default: return <Fingerprint className={getIconClass(type, className)}/>;
+  }
+};

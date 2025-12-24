@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 
 export interface InfoGridItem {
   label: string;

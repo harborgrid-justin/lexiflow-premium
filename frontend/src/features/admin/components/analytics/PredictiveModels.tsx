@@ -17,12 +17,12 @@ import { BrainCircuit, TrendingUp, Target, AlertCircle } from 'lucide-react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { api } from '../../../services/api';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { EmptyState } from '../../common/EmptyState';
-import type { OutcomePrediction } from '../../../services/api/outcome-predictions-api';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { api } from '@/api';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import type { OutcomePrediction } from '@/api/outcome-predictions-api';
 
 // ============================================================================
 // TYPES & INTERFACES

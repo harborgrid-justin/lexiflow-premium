@@ -18,8 +18,8 @@ import {
   AlertTriangle, CheckCircle, XCircle, Activity, UserCheck,
   Settings, Search, Download, Filter, TrendingUp, AlertOctagon
 } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';

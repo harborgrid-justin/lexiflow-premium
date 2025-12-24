@@ -3,7 +3,7 @@
  * Tests for the cn (classNames) utility function
  */
 
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 describe('cn utility', () => {
   describe('basic usage', () => {

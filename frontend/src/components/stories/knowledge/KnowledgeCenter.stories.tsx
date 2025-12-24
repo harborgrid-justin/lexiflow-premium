@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { KnowledgeCenter } from '../../components/knowledge/practice/KnowledgeCenter';
-import { ThemeProvider } from '../../context/ThemeContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '../../context/ToastContext';
 import React from 'react';
 

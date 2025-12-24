@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { Shield, LayoutList, GitCommit, RefreshCw, Skull, ShieldCheck, Loader2, Download, AlertOctagon } from 'lucide-react';
-import { Button } from '../../common/Button';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { IntegrityReport } from '../../../services/infrastructure/chainService';
+import { Button } from '@/components/atoms/Button/Button';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { IntegrityReport } from '@/services/infrastructure/chainService';
 
 interface AuditLogControlsProps {
     viewMode: 'table' | 'visual';

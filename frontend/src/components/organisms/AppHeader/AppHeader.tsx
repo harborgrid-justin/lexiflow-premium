@@ -22,25 +22,25 @@ import { Menu, Bell, PlusCircle, UserPlus, Clock, FileText } from 'lucide-react'
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { ConnectivityHUD } from '../common/ConnectivityHUD';
-import { NeuralCommandBar } from './NeuralCommandBar';
-import { UserAvatar } from '../common/UserAvatar';
-import { ConnectionStatus } from '../common/ConnectionStatus';
+import { ConnectivityHUD } from '@/components/organisms/ConnectivityHUD/ConnectivityHUD';
+import { NeuralCommandBar } from '@/components/organisms/NeuralCommandBar/NeuralCommandBar';
+import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
+import { ConnectionStatus } from '@/components/organisms/ConnectionStatus/ConnectionStatus';
 
 // Services & Data
-import { GlobalSearchResult } from '../../services/search/searchService';
-import { IntentResult } from '../../services/features/research/geminiService';
+import { GlobalSearchResult } from '@/services/search/searchService';
+import { IntentResult } from '@/services/features/research/geminiService';
 
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useInterval } from '@/hooks/useInterval';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
-import { User as UserType } from '../../types';
+import { User as UserType } from '@/types';
 
 // ========================================
 // TYPES & INTERFACES

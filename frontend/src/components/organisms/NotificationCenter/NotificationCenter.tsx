@@ -14,21 +14,21 @@ import { Bell, Check, Trash2, Settings, CheckCheck } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
-import { useQuery, useMutation, queryClient } from '../../hooks/useQueryHooks';
-import { useTheme } from '../../context/ThemeContext';
-import { useToast } from '../../context/ToastContext';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
+import { useToast } from '@/providers/ToastContext';
 
 // Components
-import { Button } from '../common/Button';
-import { Badge } from '../common/Badge';
-import { PageHeader } from '../common/PageHeader';
-import { Modal } from '../common/Modal';
+import { Button } from '@/components/atoms/Button/Button';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { Modal } from '@/components/molecules/Modal/Modal';
 
 // Utils
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

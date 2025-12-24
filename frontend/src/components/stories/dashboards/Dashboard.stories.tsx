@@ -9,7 +9,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn, expect, userEvent, within } from 'storybook/test';
 import { Dashboard } from '../../components/dashboard/Dashboard';
-import { ThemeProvider } from '../../context/ThemeContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '../../context/ToastContext';
 import type { User, UserId } from '../../types';
 

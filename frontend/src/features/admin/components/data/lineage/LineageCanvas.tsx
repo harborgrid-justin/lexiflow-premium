@@ -1,12 +1,12 @@
 
 import React, { useRef, useEffect, useState } from 'react';
-import { useTheme } from '../../../../context/ThemeContext';
-import { NODE_STRIDE } from '../../../../utils/nexusPhysics';
-import { useNexusGraph } from '../../../../hooks/useNexusGraph';
+import { useTheme } from '@/providers/ThemeContext';
+import { NODE_STRIDE } from '@/utils/nexusPhysics';
+import { useNexusGraph } from '@/hooks/useNexusGraph';
 import { Pause, Play, RefreshCw } from 'lucide-react';
-import { cn } from '../../../../utils/cn';
-import { LineageNode, LineageLink } from '../../../../types';
-import { SimulationNode } from '../../../../utils/nexusPhysics';
+import { cn } from '@/utils/cn';
+import { LineageNode, LineageLink } from '@/types';
+import { SimulationNode } from '@/utils/nexusPhysics';
 
 interface LineageCanvasProps {
     data?: { nodes: LineageNode[], links: LineageLink[] };

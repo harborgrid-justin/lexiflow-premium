@@ -17,11 +17,11 @@ import { Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
-import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
+import { useTheme } from '@/providers/ThemeContext';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

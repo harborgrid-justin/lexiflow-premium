@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { HardDrive, Database, Cloud } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 import { LocalStorageView } from './data-sources/LocalStorageView';
 import { IndexedDBView } from './data-sources/IndexedDBView';
 import { CloudDatabaseContent } from './data-sources/CloudDatabaseContent';

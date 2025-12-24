@@ -16,16 +16,16 @@ import React, { Suspense, lazy, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useSessionStorage } from '../../hooks/useSessionStorage';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { TabbedPageLayout } from '../layout/TabbedPageLayout';
-import { LazyLoader } from '../common/LazyLoader';
+import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout/TabbedPageLayout';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { AdminPanelContent } from './AdminPanelContent';
 
 // Utils & Config
-import { cn } from '../../utils/cn';
-import { ADMIN_TAB_CONFIG } from '../../config/tabs.config';
+import { cn } from '@/utils/cn';
+import { ADMIN_TAB_CONFIG } from '@/config/tabs.config';
 
 // ============================================================================
 // TYPES & INTERFACES

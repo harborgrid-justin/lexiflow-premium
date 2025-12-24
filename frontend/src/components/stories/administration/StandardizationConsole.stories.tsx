@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StandardizationConsole } from '../../components/admin/data/quality/StandardizationConsole';
-import { ThemeProvider } from '../../context/ThemeContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '../../context/ToastContext';
 import React from 'react';
 

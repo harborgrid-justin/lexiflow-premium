@@ -32,11 +32,11 @@ import { LazyLoader } from '../common/LazyLoader';
 import { DataService } from '../../services/data/dataService';
 
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '../../hooks/useQueryHooks';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { ExtendedUserProfile } from '../../types';

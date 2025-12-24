@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Maximize2, Menu, X } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 import { DataPlatformSidebar } from './DataPlatformSidebar';
-import { useWindow } from '../../../context/WindowContext';
+import { useWindow } from '@/providers/WindowContext';
 import { Loader2 } from 'lucide-react';
 
 export type PlatformView = string;

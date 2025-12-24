@@ -1,18 +1,18 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Plus, FileText } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { Modal } from '../../common/Modal';
-import { Input } from '../../common/Inputs';
-import { Tabs } from '../../common/Tabs';
-import { Button } from '../../common/Button';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { Input } from '@/components/atoms/Input/Input';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { Button } from '@/components/atoms/Button/Button';
 import { AccessGovernance } from './governance/AccessGovernance';
-import { ModalFooter } from '../../common/RefactoredCommon';
+import { ModalFooter } from '@/components/molecules/ModalFooter/ModalFooter';
 import { GovernanceDashboard } from './governance/GovernanceDashboard';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { GovernanceRule, GovernancePolicy } from '../../../types';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { GovernanceRule, GovernancePolicy } from '@/types';
 
 interface GovernanceConsoleProps {
     initialTab?: string;

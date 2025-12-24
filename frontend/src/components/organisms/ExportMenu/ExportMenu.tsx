@@ -17,14 +17,14 @@ import { Download, FileText, Table, FileCode } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
-import { useClickOutside } from '../../hooks/useClickOutside';
+import { useTheme } from '@/providers/ThemeContext';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Components
-import { Button } from './Button';
+import { Button } from '@/components/atoms/Button/Button';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

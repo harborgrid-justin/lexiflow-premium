@@ -17,7 +17,7 @@ import { Briefcase, MapPin, Mail, Phone, Award, ShieldCheck, Clock, Scale } from
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
 import { UserAvatar } from '../common/UserAvatar';
@@ -25,7 +25,7 @@ import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { ExtendedUserProfile } from '../../types';

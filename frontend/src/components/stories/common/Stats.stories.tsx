@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Stats } from '../../components/common/Stats';
-import { ThemeProvider } from '../../context/ThemeContext';
+import { ThemeProvider } from '@/providers/ThemeContext';
 import { Briefcase, FileText, Users, DollarSign } from 'lucide-react';
 import React from 'react';
 

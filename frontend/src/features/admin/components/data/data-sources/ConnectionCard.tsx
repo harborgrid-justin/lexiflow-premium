@@ -1,8 +1,8 @@
 import React from 'react';
 import { RefreshCw, AlertTriangle, X, Database, Cloud, Server, ShieldCheck, Trash2, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 import type { DataConnection } from './types';
 
 interface ConnectionCardProps {

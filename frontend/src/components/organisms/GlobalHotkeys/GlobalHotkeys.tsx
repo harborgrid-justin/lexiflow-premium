@@ -16,7 +16,7 @@ import React, { useEffect } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useNotify } from '../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 
 // ============================================================================
 // TYPES & INTERFACES

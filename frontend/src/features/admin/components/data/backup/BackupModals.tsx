@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { Modal } from '../../../common/Modal';
-import { Button } from '../../../common/Button';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { Button } from '@/components/atoms/Button/Button';
 import { Clock, Database, AlertCircle } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { BackupSnapshot } from '../../../../services/api/data-platform/backups-api';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { BackupSnapshot } from '@/api/data-platform/backups-api';
 
 interface CreateSnapshotModalProps {
     isOpen: boolean;

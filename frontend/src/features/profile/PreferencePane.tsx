@@ -25,10 +25,10 @@ import { Bell, Moon, Sun, Monitor, Globe, Grid } from 'lucide-react';
 import { Card } from '../common/Card';
 
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { ExtendedUserProfile } from '../../types';

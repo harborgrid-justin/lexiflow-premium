@@ -17,21 +17,21 @@ import { Download } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '../../common/Button';
-import { LazyLoader } from '../../common/LazyLoader';
-import { TabbedPageLayout } from '../../layout/TabbedPageLayout';
+import { Button } from '@/components/atoms/Button/Button';
+import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout/TabbedPageLayout';
 import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
-import { useSessionStorage } from '../../../hooks/useSessionStorage';
+import { useTheme } from '@/providers/ThemeContext';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Services
-import { api } from '../../../services/api';
+import { api } from '@/api';
 
 // Utils & Config
-import { cn } from '../../../utils/cn';
-import { ANALYTICS_TAB_CONFIG } from '../../../config/tabs.config';
+import { cn } from '@/utils/cn';
+import { ANALYTICS_TAB_CONFIG } from '@/config/tabs.config';
 
 // ============================================================================
 // MAIN COMPONENT

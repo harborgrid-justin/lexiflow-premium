@@ -19,17 +19,17 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Card } from '../../common/Card';
+import { Card } from '@/components/molecules/Card/Card';
 
 // Hooks & Context
-import { useTheme } from '../../../context/ThemeContext';
-import { useChartTheme } from '../../common/ChartHelpers';
+import { useTheme } from '@/providers/ThemeContext';
+import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 
 // Utils
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
-import type { JudgeProfile, JudgeMotionStat } from '../../../types';
+import type { JudgeProfile, JudgeMotionStat } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

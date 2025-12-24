@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { TableContainer, TableHeader, TableHead, TableBody, TableRow, TableCell } from '../../../common/Table';
-import { Button } from '../../../common/Button';
-import { StatusBadge } from '../../../common/RefactoredCommon';
+import { TableContainer, TableHeader, TableHead, TableBody, TableRow, TableCell } from '@/components/organisms/Table/Table';
+import { Button } from '@/components/atoms/Button/Button';
+import { StatusBadge } from '@/components/atoms/StatusBadge/StatusBadge';
 import { Database, Clock, Download, Archive } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { BackupSnapshot } from '../../../../services/api/data-platform/backups-api';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { BackupSnapshot } from '@/api/data-platform/backups-api';
 
 interface SnapshotListProps {
   snapshots: BackupSnapshot[];

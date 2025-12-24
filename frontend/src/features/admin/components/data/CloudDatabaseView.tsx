@@ -8,8 +8,8 @@
 import React from 'react';
 import { Plus, X, RefreshCw, Database } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme, ThemeContextType } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { useTheme, ThemeContextType } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 import { ConnectionCard } from './ConnectionCard';
 import { ServiceCoverageIndicator } from './ServiceCoverageIndicator';
 import { DATA_PROVIDERS } from './constants';

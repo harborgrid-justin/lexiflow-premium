@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { Key, Plus, Copy, Trash2, Eye, EyeOff, RefreshCw } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { Button } from '../../common/Button';
-import { Badge } from '../../common/Badge';
-import { Modal } from '../../common/Modal';
-import { Input, TextArea } from '../../common/Inputs';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../common/Table';
-import { useNotify } from '../../../hooks/useNotify';
-import { useModalState } from '../../../hooks';
-import { getTodayString } from '../../../utils/dateUtils';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { DataService } from '../../../services/data/dataService';
-import { queryKeys } from '../../../utils/queryKeys';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { Button } from '@/components/atoms/Button/Button';
+import { Badge } from '@/components/atoms/Badge/Badge';
+import { Modal } from '@/components/molecules/Modal/Modal';
+import { Input } from '@/components/atoms/Input/Input';
+import { TextArea } from '@/components/atoms/TextArea/TextArea';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { useNotify } from '@/hooks/useNotify';
+import { useModalState } from '@/hooks/useModalState';
+import { getTodayString } from '@/utils/dateUtils';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { queryKeys } from '@/utils/queryKeys';
 
 interface ApiKey {
   id: string;

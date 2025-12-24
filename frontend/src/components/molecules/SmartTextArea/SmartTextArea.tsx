@@ -13,8 +13,8 @@
 
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { AlertCircle, AlertTriangle, CheckCircle } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

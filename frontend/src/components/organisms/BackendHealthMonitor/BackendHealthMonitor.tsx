@@ -4,9 +4,9 @@ import {
   TrendingUp, Clock, Zap
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../../context/ThemeContext';
-import { cn } from '../../utils/cn';
-import { apiClient, type SystemHealth, type ServiceHealthStatus } from '../../services/infrastructure/apiClient';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { apiClient, type SystemHealth, type ServiceHealthStatus } from '@/services/infrastructure/apiClient';
 
 interface BackendHealthMonitorProps {
   isOpen: boolean;

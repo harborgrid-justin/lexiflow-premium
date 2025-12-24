@@ -17,7 +17,7 @@ import { RefreshCw, AlertTriangle } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Utils & Constants
-import { errorHandler } from '../../utils/errorHandler';
+import { errorHandler } from '@/utils/errorHandler';
 
 // ============================================================================
 // TYPES & INTERFACES

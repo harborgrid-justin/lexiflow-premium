@@ -1,11 +1,11 @@
 
 import React from 'react';
 import { Server, HardDrive, Loader2 } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { VirtualList } from '../../common/VirtualList';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { DataService } from '../../../services/data/dataService';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 
 interface DataFile {
     name: string;

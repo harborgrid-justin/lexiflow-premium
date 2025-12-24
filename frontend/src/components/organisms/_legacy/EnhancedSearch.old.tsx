@@ -15,9 +15,9 @@
 
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Search, Clock, X, Command, TrendingUp, Hash, Calendar, Tag } from 'lucide-react';
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useClickOutside } from '../../hooks/useClickOutside';
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 import { sanitizeHtml } from '../../utils/sanitize';
 import { SEARCH_DEBOUNCE_MS } from '../../config/master.config';
 

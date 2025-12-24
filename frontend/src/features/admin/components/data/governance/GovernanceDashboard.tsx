@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { ShieldCheck, AlertTriangle, FileSearch, Scale, Edit2 } from 'lucide-react';
-import { Card } from '../../../common/Card';
-import { Button } from '../../../common/Button';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { Card } from '@/components/molecules/Card/Card';
+import { Button } from '@/components/atoms/Button/Button';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 
 interface GovernanceRule {
   id: string;

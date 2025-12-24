@@ -17,12 +17,12 @@ import { Wifi, CloudOff, RefreshCw, AlertTriangle, Activity } from 'lucide-react
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useSync } from '../../hooks/useSync';
-import { useTheme } from '../../context/ThemeContext';
-import { useInterval } from '../../hooks/useInterval';
+import { useSync } from '@/hooks/useSync';
+import { useTheme } from '@/providers/ThemeContext';
+import { useInterval } from '@/hooks/useInterval';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // COMPONENT

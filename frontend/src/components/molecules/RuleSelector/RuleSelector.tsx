@@ -17,19 +17,19 @@ import { Book, X, Search, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { RuleService } from '../../services/features/rules/ruleService';
-import { useQuery } from '../../hooks/useQueryHooks';
+import { RuleService } from '@/services/features/rules/ruleService';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
-import { useDebounce } from '../../hooks/useDebounce';
+import { useTheme } from '@/providers/ThemeContext';
+import { useDebounce } from '@/hooks/useDebounce';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
-import { SEARCH_DEBOUNCE_MS } from '../../config/master.config';
+import { cn } from '@/utils/cn';
+import { SEARCH_DEBOUNCE_MS } from '@/config/master.config';
 
 // Types
-import { LegalRule } from '../../types';
+import { LegalRule } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

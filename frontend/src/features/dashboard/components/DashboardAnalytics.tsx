@@ -19,7 +19,7 @@ import { Briefcase, ChevronRight, ArrowRight } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useChartTheme } from '../common/ChartHelpers';
 
 // Components
@@ -28,7 +28,7 @@ import { Button } from '../common/Button';
 import { Badge } from '../common/Badge';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

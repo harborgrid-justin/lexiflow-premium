@@ -4,14 +4,14 @@ import React from 'react';
 import { DollarSign, TrendingDown, AlertTriangle, Loader2 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, CartesianGrid } from 'recharts';
 
-import { useTheme } from '../../../context/ThemeContext';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { CostMetric, CostForecast } from '../../../types';
-import { cn } from '../../../utils/cn';
-import { Card } from '../../common/Card';
-import { useChartTheme } from '../../common/ChartHelpers';
-import { MetricTile } from '../../common/RefactoredCommon';
+import { useTheme } from '@/providers/ThemeContext';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { CostMetric, CostForecast } from '@/types';
+import { cn } from '@/utils/cn';
+import { Card } from '@/components/molecules/Card/Card';
+import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
+import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
 
 export function CostFinOps() {
   const { theme } = useTheme();
@@ -34,15 +34,15 @@ export function CostFinOps() {
   return (
     <div className="p-6 space-y-6 overflow-y-auto h-full">
          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-             <MetricTile 
+             <MetricCard 
                 label="Total Monthly Spend" 
                 value={<span className="flex items-center"><DollarSign className="h-6 w-6"/> 6,050</span>} 
              />
-             <MetricTile 
+             <MetricCard 
                 label="Forecast (EOM)" 
                 value={<span className="text-blue-600">$6,200</span>} 
              />
-             <MetricTile 
+             <MetricCard 
                 label="Savings Opportunity" 
                 value={<span className="text-green-600 flex items-center"><TrendingDown className="h-6 w-6 mr-2"/> $45,100</span>} 
              />

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Tag, Folder, Database, ChevronRight, ArrowLeft, Table, FileText, Key, Book, Info, Maximize2, Loader2 } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { Tabs } from '../../common/Tabs';
-import { VirtualList } from '../../common/VirtualList';
-import { SearchToolbar } from '../../common/SearchToolbar';
-import { useWindow } from '../../../context/WindowContext';
-import { Button } from '../../common/Button';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
+import { useWindow } from '@/providers/WindowContext';
+import { Button } from '@/components/atoms/Button/Button';
 import { AccessRequestManager } from './catalog/AccessRequestManager';
 import { DataDictionary } from './catalog/DataDictionary';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 interface DataDomain {
     name: string;

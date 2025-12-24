@@ -17,14 +17,14 @@ import { Search, Clock } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services/Data
-import { SearchService } from '../../services/search/searchService';
+import { SearchService } from '@/services/search/searchService';
 
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
-import { useClickOutside } from '../../hooks/useClickOutside';
+import { useTheme } from '@/providers/ThemeContext';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

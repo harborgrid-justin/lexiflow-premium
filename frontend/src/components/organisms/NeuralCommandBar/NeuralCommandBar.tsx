@@ -11,28 +11,28 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Sparkles, Command, ArrowRight, X, Zap, AlertCircle, CornerDownLeft } from 'lucide-react';
+import { Sparkles, Command, X, Zap, AlertCircle, CornerDownLeft } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { GlobalSearchResult, SearchService } from '../../services/search/searchService';
-import { GeminiService, IntentResult } from '../../services/features/research/geminiService';
-import { HolographicRouting } from '../../services/infrastructure/holographicRouting';
+import { GlobalSearchResult, SearchService } from '@/services/search/searchService';
+import { GeminiService, IntentResult } from '@/services/features/research/geminiService';
+import { HolographicRouting } from '@/services/infrastructure/holographicRouting';
 
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
-import { useDebounce } from '../../hooks/useDebounce';
-import { useListNavigation } from '../../hooks/useListNavigation';
-import { useClickOutside } from '../../hooks/useClickOutside';
+import { useTheme } from '@/providers/ThemeContext';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useListNavigation } from '@/hooks/useListNavigation';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Components
-import { HighlightedText } from '../common/HighlightedText';
+import { HighlightedText } from '@/components/atoms/HighlightedText/HighlightedText';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
-import { SEARCH_DEBOUNCE_MS, SEARCH_MIN_QUERY_LENGTH } from '../../config/master.config';
+import { cn } from '@/utils/cn';
+import { SEARCH_DEBOUNCE_MS, SEARCH_MIN_QUERY_LENGTH } from '@/config/master.config';
 
 interface NeuralCommandBarProps {
   globalSearch: string;

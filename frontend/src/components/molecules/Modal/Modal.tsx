@@ -18,12 +18,12 @@ import { createPortal } from 'react-dom';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
-import { useScrollLock } from '../../hooks/useScrollLock';
+import { useTheme } from '@/providers/ThemeContext';
+import { useScrollLock } from '@/hooks/useScrollLock';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
-import { tokens } from '../../theme/tokens';
+import { cn } from '@/utils/cn';
+import { tokens } from '@/components/theme/tokens';
 
 // ============================================================================
 // TYPES & INTERFACES

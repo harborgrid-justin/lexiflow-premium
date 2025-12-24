@@ -30,11 +30,11 @@ import { ConfirmDialog } from '../common/ConfirmDialog';
 import { Input } from '../common/Inputs';
 
 // Hooks & Context
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
 import { useModalState } from '../../hooks';
 
 // Utils & Constants
-import { cn } from '../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { ExtendedUserProfile, GranularPermission, AccessEffect } from '../../types';

@@ -4,15 +4,15 @@ import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
 import { Users, Plus, Mail, Building2, Trash2, Edit } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Modal } from '../../common/Modal';
 import { Input, TextArea } from '../../common/Inputs';
-import { useNotify } from '../../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '../../../hooks';
-import { useSelection } from '../../../hooks/useSelectionState';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
-import { DataService } from '../../../services/data/dataService';
+import { useSelection } from '@/hooks/useSelectionState';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
 
 interface Custodian {
   id: string;

@@ -18,7 +18,7 @@ import { Card } from '../../../common/Card';
 import { useTheme } from '../../../../context/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 export const EvidenceFRCPStatus: React.FC = () => {
   const { theme } = useTheme();

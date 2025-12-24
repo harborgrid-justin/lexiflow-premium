@@ -6,7 +6,7 @@ import {
   ChevronLeft, ChevronRight, ZoomIn, ZoomOut 
 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 export type PDFTool = 'select' | 'pen' | 'highlight' | 'text' | 'signature' | 'date' | 'initials';
 

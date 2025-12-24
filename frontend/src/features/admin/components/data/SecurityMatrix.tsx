@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Save, RefreshCw } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Button } from '../../common/Button';
 import { AccessMatrix } from './security/AccessMatrix';
 import { RLSPolicyManager } from './security/RLSPolicyManager';

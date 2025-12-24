@@ -22,12 +22,12 @@ import { Button } from '../../common/Button';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useNotify } from '../../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 
 // Services & Utils
-import { GeminiService } from '../../../services/features/research/geminiService';
-import { cn } from '../../../utils/cn';
-import { sanitizeHtml } from '../../../utils/sanitize';
+import { GeminiService } from '@/services/features/research/geminiService';
+import { cn } from '@/utils/cn';
+import { sanitizeHtml } from '@/utils/sanitize';
 
 export const CaseListClosing: React.FC = () => {
   const { theme } = useTheme();

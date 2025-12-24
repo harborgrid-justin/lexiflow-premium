@@ -1,13 +1,13 @@
 
 import React, { useState } from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Shield, CheckCircle, XCircle, Info, Lock } from 'lucide-react';
 import { RolePermission, PermissionLevel } from '../../../../types';
-import { useQuery, useMutation, queryClient } from '../../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../../utils/queryKeys';
-import { DataService } from '../../../../services/data/dataService';
-import { useNotify } from '../../../../hooks/useNotify';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useNotify } from '@/hooks/useNotify';
 
 export const AccessMatrix: React.FC = () => {
   const { theme } = useTheme();

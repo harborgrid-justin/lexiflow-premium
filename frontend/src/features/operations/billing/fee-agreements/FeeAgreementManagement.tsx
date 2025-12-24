@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { FileText, Plus, Edit, Trash2, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Button } from '../../../common/Button';
 import { Badge } from '../../../common/Badge';
 import { Modal } from '../../../common/Modal';
 import { Input, TextArea } from '../../../common/Inputs';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../../common/Table';
-import { useNotify } from '../../../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '../../../../hooks';
-import { getTodayString } from '../../../../utils/dateUtils';
-import { useQuery, useMutation, queryClient } from '../../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../../utils/queryKeys';
-import { DataService } from '../../../../services/data/dataService';
+import { getTodayString } from '@/utils/dateUtils';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
 
 interface FeeAgreement {
   id: string;

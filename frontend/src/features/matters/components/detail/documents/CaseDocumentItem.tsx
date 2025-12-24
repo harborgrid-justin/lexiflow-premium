@@ -17,7 +17,7 @@ import { Button } from '../../../common/Button';
 import { TagList } from '../../../common/Primitives';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { LegalDocument } from '../../../../types';

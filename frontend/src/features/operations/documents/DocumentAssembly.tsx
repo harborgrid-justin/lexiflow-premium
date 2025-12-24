@@ -2,17 +2,17 @@
 // components/DocumentAssembly.tsx
 import React, { useState, useEffect } from 'react';
 import { X, Wand2, Activity, Minus } from 'lucide-react';
-import { GeminiService } from '../../../services/features/research/geminiService';
+import { GeminiService } from '@/services/features/research/geminiService';
 import { LegalDocument, DocumentId, CaseId } from '../../../types';
 import { useWindow } from '../../../context/WindowContext';
-import { DataService } from '../../../services/data/dataService';
-import { useMutation, queryClient } from '../../../hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../utils/queryKeys';
-import { useNotify } from '../../../hooks/useNotify';
+import { queryKeys } from '@/utils/queryKeys';
+import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { getTodayString } from '../../../utils/dateUtils';
+import { cn } from '@/utils/cn';
+import { getTodayString } from '@/utils/dateUtils';
 import { Step1TemplateSelection } from '../../document-assembly/Step1TemplateSelection';
 import { Step2FormConfiguration } from '../../document-assembly/Step2FormConfiguration';
 import { Step3DraftReview } from '../../document-assembly/Step3DraftReview';

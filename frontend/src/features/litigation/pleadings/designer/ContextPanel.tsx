@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Search, Fingerprint, Scale, FileText, ArrowRight, Link, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Tabs } from '../../../common/Tabs';
-import { DataService } from '../../../../services/data/dataService';
-import { useQuery } from '../../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../../utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 import { CaseId } from '../../../../types';
 

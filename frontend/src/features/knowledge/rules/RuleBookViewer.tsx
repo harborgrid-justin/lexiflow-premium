@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useMemo, useTransition } from 'react';
 import { LegalRule } from '../../../types';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 // ✅ Migrated to backend API (2025-12-21)
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Bookmark, Share2, ExternalLink, BookOpen, Scale, FileText, History, Loader2, Search } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { Tabs } from '../../common/Tabs';
 import { useWindow } from '../../../context/WindowContext';
 import { RuleTreeViewer } from './rule-viewer/RuleTreeViewer';
 import { RuleContentDisplay } from './rule-viewer/RuleContentDisplay';
-import { useRuleSearchAndSelection } from '../../../hooks/useRuleSearchAndSelection';
+import { useRuleSearchAndSelection } from '@/hooks/useRuleSearchAndSelection';
 
 interface RuleBookViewerProps {
   type: 'FRE' | 'FRCP' | 'FRAP' | 'Local';

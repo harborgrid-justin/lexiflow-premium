@@ -4,7 +4,7 @@ import { LegalDocument } from '../../../types';
 import { FileIcon } from '../../common/Primitives';
 import { Badge } from '../../common/Badge';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface DocumentGridCardProps {
     doc: LegalDocument;

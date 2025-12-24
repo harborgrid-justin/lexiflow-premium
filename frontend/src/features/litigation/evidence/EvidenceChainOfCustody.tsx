@@ -21,19 +21,19 @@ import { SignaturePad } from '../../common/SignaturePad';
 
 // Context & Utils
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useNotify } from '../../../hooks/useNotify';
+import { cn } from '@/utils/cn';
+import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '../../../hooks';
-import { getTodayString } from '../../../utils/dateUtils';
+import { getTodayString } from '@/utils/dateUtils';
 
 // Services & Types
-import { ChainService } from '../../../services/infrastructure/chainService';
-import { useMutation, queryClient } from '../../../hooks/useQueryHooks';
+import { ChainService } from '@/services/infrastructure/chainService';
+import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 import { EvidenceItem, ChainOfCustodyEvent, UserId } from '../../../types';
-import { evidenceQueryKeys } from '../../../services/infrastructure/queryKeys';
-import { validateCustodyEventSafe, CustodyActionType } from '../../../services/validation/evidenceSchemas';
+import { evidenceQueryKeys } from '@/services/infrastructure/queryKeys';
+import { validateCustodyEventSafe, CustodyActionType } from '@/services/validation/evidenceSchemas';
 
 interface EvidenceChainOfCustodyProps {
   selectedItem: EvidenceItem;

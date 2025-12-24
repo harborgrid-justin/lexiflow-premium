@@ -3,8 +3,8 @@ import { Wand2, Sparkles, AlertCircle, RefreshCw } from 'lucide-react';
 import { Button } from '../../../common/Button';
 import { TextArea } from '../../../common/Inputs';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { GeminiService } from '../../../../services/features/research/geminiService';
+import { cn } from '@/utils/cn';
+import { GeminiService } from '@/services/features/research/geminiService';
 
 interface AIDraftingAssistantProps {
   onInsert: (text: string) => void;

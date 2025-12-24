@@ -12,7 +12,7 @@ import { CheckCircle, Clock, BookOpen, Target, Shield, Layers, Scale, FileText, 
 
 import { useTheme } from '../../../context/ThemeContext';
 import { useWindow } from '../../../context/WindowContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 import { Button } from '../../common/Button';
 import { Tabs } from '../../common/Tabs';

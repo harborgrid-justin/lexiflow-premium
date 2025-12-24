@@ -16,7 +16,7 @@ jest.mock('../../../context/ThemeContext', () => ({
   }),
 }));
 
-jest.mock('../../../utils/cn', () => ({
+jest.mock('@/utils/cn', () => ({
   cn: (...args: any[]) => args.filter(Boolean).join(' '),
 }));
 

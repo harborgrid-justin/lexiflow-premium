@@ -17,13 +17,13 @@ import { Search, Shield, Plus } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useFilterAndSearch } from '../../../hooks/useFilterAndSearch';
+import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
 import { TemplatePreview } from './TemplatePreview';
@@ -34,7 +34,7 @@ import { ErrorState } from '../../common/ErrorState';
 import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { WorkflowTemplateData } from '../../../types';

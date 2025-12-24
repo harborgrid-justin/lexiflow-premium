@@ -17,17 +17,17 @@ import { Wand2, AlertCircle, Lock, Unlock, ExternalLink, Eraser, ShieldAlert, X 
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DocumentService } from '../../../../services/features/documents/documentService';
-import { DataService } from '../../../../services/data/dataService';
-import { useMutation, queryClient } from '../../../../hooks/useQueryHooks';
+import { DocumentService } from '@/services/features/documents/documentService';
+import { DataService } from '@/services/data/dataService';
+import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../../../context/ThemeContext';
 import { useWindow } from '../../../../context/WindowContext';
-import { useNotify } from '../../../../hooks/useNotify';
-import { useBlobRegistry } from '../../../../hooks/useBlobRegistry';
+import { useNotify } from '@/hooks/useNotify';
+import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 
 // Components
 import { TagList } from '../../../common/Primitives';
@@ -37,7 +37,7 @@ import { PreviewContent } from '../preview/PreviewContent';
 import { PIIPanel } from '../preview/PIIPanel';
 
 // Utils & Constants
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { LegalDocument, UserRole } from '../../../../types';

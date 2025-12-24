@@ -25,14 +25,14 @@ import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { useKeyboardShortcuts } from '../../../hooks/useKeyboardShortcuts';
-import { useNotify } from '../../../hooks/useNotify';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useNotify } from '@/hooks/useNotify';
 
 // Services & Utils
-import { DataService } from '../../../services/data/dataService';
-import { cn } from '../../../utils/cn';
-import { discoveryQueryKeys } from '../../../services/infrastructure/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
+import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
 
 // ============================================================================
 // TYPES & INTERFACES

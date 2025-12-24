@@ -4,8 +4,8 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { Card } from '../../../common/Card';
 import { Landmark, FileText } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { Formatters } from '../../../../utils/formatters';
+import { cn } from '@/utils/cn';
+import { Formatters } from '@/utils/formatters';
 
 interface TrustLedgerProps {
     trustAccounts: unknown[];

@@ -17,8 +17,8 @@ import { Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
@@ -30,8 +30,8 @@ import { Card } from '../../common/Card';
 import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
-import { DisjointSet } from '../../../utils/datastructures/disjointSet';
+import { cn } from '@/utils/cn';
+import { DisjointSet } from '@/utils/datastructures/disjointSet';
 
 // Types
 import { LegalEntity, EntityRelationship } from '../../../types';

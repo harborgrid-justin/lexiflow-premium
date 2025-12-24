@@ -2,8 +2,8 @@ import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react'
 import { Badge } from '../../../common/Badge';
 import { WorkflowNode, WorkflowConnection, getNodeIcon, getNodeStyles, NodeType } from './types';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { useNotify } from '../../../../hooks/useNotify';
+import { cn } from '@/utils/cn';
+import { useNotify } from '@/hooks/useNotify';
 
 interface BuilderCanvasProps {
   nodes: WorkflowNode[];

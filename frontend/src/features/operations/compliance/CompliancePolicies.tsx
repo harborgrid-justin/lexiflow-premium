@@ -6,11 +6,11 @@ import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 import { useWindow } from '../../../context/WindowContext';
 import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
 import { ActionRow } from '../../common/RefactoredCommon';

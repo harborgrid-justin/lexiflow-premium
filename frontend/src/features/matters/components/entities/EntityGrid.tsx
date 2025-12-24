@@ -18,7 +18,7 @@ import { Building2, User, Gavel, Briefcase, Loader2 } from 'lucide-react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useWorkerSearch } from '../../../hooks/useWorkerSearch';
+import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 // Components
 import { Badge } from '../../common/Badge';
@@ -26,7 +26,7 @@ import { SearchInputBar } from '../../common/RefactoredCommon';
 import { VirtualList } from '../../common/VirtualList';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { LegalEntity } from '../../../types';

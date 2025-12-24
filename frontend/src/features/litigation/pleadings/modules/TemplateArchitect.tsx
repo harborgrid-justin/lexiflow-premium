@@ -5,7 +5,7 @@ import { VariableManager } from './template/VariableManager';
 import { JurisdictionRules } from './template/JurisdictionRules';
 import { PleadingVariable } from '../../../../types/pleading-types';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface TemplateArchitectProps {
   variables?: PleadingVariable[];

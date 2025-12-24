@@ -26,7 +26,7 @@ import { LazyLoader } from '../../common/LazyLoader';
 import { RulesPlatformContent } from './RulesPlatformContent';
 
 // Utils & Config
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { RULES_PLATFORM_TABS, RulesView } from '../../../config/tabs.config';
 
 // ============================================================================

@@ -17,7 +17,7 @@ import { useTheme } from '../../../../context/ThemeContext';
 import { useWindow } from '../../../../context/WindowContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 export const CaseOverviewStats: React.FC = () => {
   const { theme } = useTheme();

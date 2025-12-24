@@ -2,7 +2,7 @@
 import React from 'react';
 import { ResearchSession } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface ResearchSidebarProps {
   history: ResearchSession[];

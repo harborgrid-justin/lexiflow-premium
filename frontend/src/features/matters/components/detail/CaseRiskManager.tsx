@@ -21,12 +21,12 @@ import { RiskDetail } from './risk/RiskDetail';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
 import { useWindow } from '../../../context/WindowContext';
-import { useQuery, useMutation } from '../../../hooks/useQueryHooks';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { Case, Risk, RiskImpact, RiskProbability, RiskStatusEnum } from '../../../types';

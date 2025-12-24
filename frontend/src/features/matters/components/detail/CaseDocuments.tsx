@@ -20,16 +20,16 @@ import { Button } from '../../common/Button';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
 import { useWindow } from '../../../context/WindowContext';
-import { useNotify } from '../../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
-import { DocumentService } from '../../../services/features/documents/documentService';
-import { DataService } from '../../../services/data/dataService';
-import { queryClient } from '../../../hooks/useQueryHooks';
+import { DocumentService } from '@/services/features/documents/documentService';
+import { DataService } from '@/services/data/dataService';
+import { queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../utils/queryKeys';
-import { IntegrationOrchestrator } from '../../../services/integration/integrationOrchestrator';
-import { cn } from '../../../utils/cn';
+import { queryKeys } from '@/utils/queryKeys';
+import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { LegalDocument, EvidenceItem, WorkflowTask, CaseId, EvidenceId } from '../../../types';

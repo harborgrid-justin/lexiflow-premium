@@ -17,7 +17,7 @@ import { Plus } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useSessionStorage } from '../../../hooks/useSessionStorage';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
 import { TabbedPageLayout } from '../../layout/TabbedPageLayout';
@@ -26,7 +26,7 @@ import { KnowledgeContent } from './KnowledgeContent';
 import { Button } from '../../common/Button';
 
 // Utils & Config
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { KNOWLEDGE_BASE_TABS, KnowledgeView } from '../../../config/tabs.config';
 
 // ============================================================================

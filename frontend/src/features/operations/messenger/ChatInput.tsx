@@ -18,10 +18,10 @@ import { Paperclip, Send, X, FileText, Clock, Sparkles, Loader2 } from 'lucide-r
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { Attachment } from '../../../hooks/useSecureMessenger';
+import { Attachment } from '@/hooks/useSecureMessenger';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

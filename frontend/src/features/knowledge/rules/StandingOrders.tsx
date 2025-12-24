@@ -4,9 +4,9 @@ import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
 import { Download, ExternalLink, Gavel } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 export const StandingOrders: React.FC = () => {
   const { theme } = useTheme();

@@ -17,7 +17,7 @@ import { Briefcase, CheckSquare, Shield, AlertCircle } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useCalendarView } from '../../../hooks/useCalendarView';
+import { useCalendarView } from '@/hooks/useCalendarView';
 
 // Components
 import { CalendarToolbar } from '../../common/CalendarToolbar';

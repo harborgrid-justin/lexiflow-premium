@@ -6,9 +6,9 @@
 
 import React, { useState, useCallback } from 'react';
 import { BookOpen } from 'lucide-react';
-import { useNotify } from '../../../../hooks/useNotify';
-import { BluebookParser } from '../../../../services/features/bluebook/bluebookParser';
-import { BluebookFormatter as Formatter } from '../../../../services/features/bluebook/bluebookFormatter';
+import { useNotify } from '@/hooks/useNotify';
+import { BluebookParser } from '@/services/features/bluebook/bluebookParser';
+import { BluebookFormatter as Formatter } from '@/services/features/bluebook/bluebookFormatter';
 import { CitationFormat, ExportFormat } from '../../../../types/bluebook';
 import { StatsBar } from './StatsBar';
 import { InputSection } from './InputSection';

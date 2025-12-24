@@ -5,7 +5,7 @@ import { EthicalWall } from '../../../types';
 import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface ComplianceWallsProps {
   walls: EthicalWall[];

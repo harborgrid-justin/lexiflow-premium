@@ -8,13 +8,13 @@ import {
 import { ClientIntakeModal } from './ClientIntakeModal';
 import { ClientPortalModal } from './ClientPortalModal';
 import { Button } from '../../common/Button';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { useSessionStorage } from '../../../hooks/useSessionStorage';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from '../../layout/TabbedPageLayout';
 import { LazyLoader } from '../../common/LazyLoader';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { CRM_TAB_CONFIG, CRMView } from '../../../config/tabs.config';
 import { ClientCRMContent } from './ClientCRMContent';
 

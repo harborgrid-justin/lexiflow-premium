@@ -17,11 +17,11 @@ jest.mock('../../../context/ThemeContext', () => ({
   }),
 }));
 
-jest.mock('../../../utils/cn', () => ({
+jest.mock('@/utils/cn', () => ({
   cn: (...args: any[]) => args.filter(Boolean).join(' '),
 }));
 
-jest.mock('../../../services/dataService', () => ({
+jest.mock('@/services/dataService', () => ({
   DataService: {
     billing: {
       getTimeEntries: jest.fn().mockResolvedValue([]),

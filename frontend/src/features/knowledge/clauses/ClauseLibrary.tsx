@@ -19,7 +19,7 @@ import { Search, FileText, Plus, Tag, Filter, BookOpen } from 'lucide-react';
 // Types
 import { Clause } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
 import { Input } from '../../common/Inputs';
@@ -27,8 +27,8 @@ import { Badge } from '../../common/Badge';
 import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 import { ErrorState } from '../../common/ErrorState';
 import { EmptyState } from '../../common/EmptyState';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { DataService } from '../../../services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 
 // ============================================================================
 // TYPES & INTERFACES

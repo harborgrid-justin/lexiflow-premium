@@ -25,7 +25,7 @@ import { Button } from '../../../common/Button';
 import { SectionTitle } from '../../../common/RefactoredCommon';
 
 // Utils & Constants
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import type { Advisor } from './AdvisorList';

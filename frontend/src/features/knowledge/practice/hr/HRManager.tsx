@@ -9,17 +9,17 @@ import { Plus, User, Award, TrendingUp, MoreHorizontal, Trash2, Loader2, AlertCi
 import { StaffMember, UserId } from '../../../../types';
 
 type StaffRole = 'Associate' | 'Paralegal' | 'Senior Partner' | 'Administrator';
-import { DataService } from '../../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { AddStaffModal } from './AddStaffModal';
-import { useMutation } from '../../../../hooks/useQueryHooks';
+import { useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { useStaff } from '../../../../hooks/useDomainData';
+import { useStaff } from '@/hooks/useDomainData';
 import { useModalState } from '../../../../hooks';
-import { useNotify } from '../../../../hooks/useNotify';
-import { getTodayString } from '../../../../utils/dateUtils';
-import { IdGenerator } from '../../../../utils/idGenerator';
+import { useNotify } from '@/hooks/useNotify';
+import { getTodayString } from '@/utils/dateUtils';
+import { IdGenerator } from '@/utils/idGenerator';
 
 // ============================================================================
 // CONSTANTS

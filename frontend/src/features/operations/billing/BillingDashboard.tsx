@@ -17,13 +17,13 @@ import { RefreshCw } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useMutation } from '../../../hooks/useQueryHooks';
-import { DataService } from '../../../services/data/dataService';
+import { useMutation } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 
 // Hooks
-import { useNotify } from '../../../hooks/useNotify';
-import { useSessionStorage } from '../../../hooks/useSessionStorage';
-import { useKeyboardShortcuts } from '../../../hooks/useKeyboardShortcuts';
+import { useNotify } from '@/hooks/useNotify';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Components
 import { Button } from '../../common/Button';
@@ -35,7 +35,7 @@ import { BillingDashboardContent } from './BillingDashboardContent';
 import { BillingErrorBoundary } from './BillingErrorBoundary';
 
 // Utils & Config
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { BILLING_TAB_CONFIG, BillingView } from '../../../config/tabs.config';
 
 // ============================================================================

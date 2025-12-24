@@ -21,7 +21,7 @@ import { Loader2 } from 'lucide-react';
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
 import { useWindow } from '../../../context/WindowContext';
-import { useFilterAndSearch } from '../../../hooks/useFilterAndSearch';
+import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
 import { SearchToolbar } from '../../common/SearchToolbar';
@@ -29,7 +29,7 @@ import { DocumentPreviewPanel } from '../../operations/documents/viewer/Document
 import { WallItemCard } from './cards/WallItemCard';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import type { WarRoomData, LegalDocument, EvidenceItem, Motion, DocumentId, CaseId } from '../../../types';

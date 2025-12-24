@@ -26,10 +26,10 @@ import {
   Filter, Search, Plus, ArrowRight, Calendar, FileText, Activity,
   CheckCircle, Circle, AlertCircle, XCircle, ChevronRight, Loader2
 } from 'lucide-react';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { api } from '../../../services/api';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { api } from '@/services/api';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Button } from '../../common/Button';
 import { Card } from '../../common/Card';
 import { Badge } from '../../common/Badge';

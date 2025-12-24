@@ -20,15 +20,15 @@ import { GanttTimeline } from './planning/GanttTimeline';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { useNotify } from '../../../hooks/useNotify';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '../../../hooks';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { Pathfinding } from '../../../utils/pathfinding';
-import { cn } from '../../../utils/cn';
+import { Pathfinding } from '@/utils/pathfinding';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { Case, CasePhase, WorkflowTask } from '../../../types';

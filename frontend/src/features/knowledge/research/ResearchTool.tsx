@@ -16,14 +16,14 @@ import React, { useState, useEffect, Suspense, lazy } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
-import { useSessionStorage } from '../../../hooks/useSessionStorage';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from '../../../context/ThemeContext';
-import { useSingleSelection } from '../../../hooks/useMultiSelection';
+import { useSingleSelection } from '@/hooks/useMultiSelection';
 
 // Components
 import { LazyLoader } from '../../common/LazyLoader';
@@ -31,7 +31,7 @@ import { TabbedPageLayout } from '../../layout/TabbedPageLayout';
 import { ResearchToolContent } from './ResearchToolContent';
 
 // Utils & Config
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { RESEARCH_TAB_CONFIG } from '../../../config/tabs.config';
 
 // Types

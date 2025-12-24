@@ -3,7 +3,7 @@ import { Filter, Copy, Table, FileDown, Info } from 'lucide-react';
 import { Button } from '../../../common/Button';
 import { Card } from '../../../common/Card';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { BluebookCitationType, ExportFormat } from '../../../../types/bluebook';
 import { ResultItem } from './ResultItem';
 import type { FormattingResult, FilterOptions } from './types';

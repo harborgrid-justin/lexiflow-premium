@@ -5,14 +5,14 @@ import { Button } from '../../common/Button';
 import { Badge } from '../../common/Badge';
 import { Wand2 } from 'lucide-react';
 import { DiscoveryRequest } from '../../../types';
-import { GeminiService } from '../../../services/features/research/geminiService';
+import { GeminiService } from '@/services/features/research/geminiService';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/data/dataService';
-import { useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { useNotify } from '../../../hooks/useNotify';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 
 interface DiscoveryResponseModalProps {
   request: DiscoveryRequest | null;

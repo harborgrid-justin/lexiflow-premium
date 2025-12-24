@@ -20,14 +20,14 @@ import { Stepper } from '../../common/Stepper';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useNotify } from '../../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '../../../utils/cn';
-import { GeminiService } from '../../../services/features/research/geminiService';
-import { XmlDocketParser } from '../../../services/features/documents/xmlDocketParser';
-import { FallbackDocketParser } from '../../../services/features/discovery/fallbackDocketParser';
-import type { FallbackParseResult } from '../../../services/features/discovery/fallbackDocketParser';
+import { cn } from '@/utils/cn';
+import { GeminiService } from '@/services/features/research/geminiService';
+import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';
+import { FallbackDocketParser } from '@/services/features/discovery/fallbackDocketParser';
+import type { FallbackParseResult } from '@/services/features/discovery/fallbackDocketParser';
 
 interface DocketImportModalProps {
   isOpen: boolean;

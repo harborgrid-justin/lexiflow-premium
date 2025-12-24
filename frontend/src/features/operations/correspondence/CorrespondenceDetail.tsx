@@ -4,14 +4,14 @@ import { CommunicationItem, ServiceJob, LegalDocument, DocketEntry, EvidenceItem
 import { X, Mail, MapPin, User, Calendar, FileText, Download, Navigation, CheckSquare, Archive, Briefcase, BookOpen, Truck, Package, PenTool, UploadCloud } from 'lucide-react';
 import { Button } from '../../common/Button';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { TaskCreationModal } from '../../common/TaskCreationModal';
-import { DataService } from '../../../services/data/dataService';
-import { useNotify } from '../../../hooks/useNotify';
-import { useMutation } from '../../../hooks/useQueryHooks';
-import { correspondenceQueryKeys } from '../../../services/infrastructure/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useNotify } from '@/hooks/useNotify';
+import { useMutation } from '@/hooks/useQueryHooks';
+import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { ServiceStatus, CommunicationStatus } from '../../../types/enums';
-import { useBlobRegistry } from '../../../hooks/useBlobRegistry';
+import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 
 // Discriminated union type for correspondence items
 type CorrespondenceItem = 

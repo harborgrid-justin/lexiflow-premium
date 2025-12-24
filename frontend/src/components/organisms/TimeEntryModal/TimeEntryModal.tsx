@@ -17,7 +17,7 @@ import { Clock, Wand2, DollarSign } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services/Data
-import { GeminiService } from '../../services/features/research/geminiService';
+import { GeminiService } from '@/services/features/research/geminiService';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

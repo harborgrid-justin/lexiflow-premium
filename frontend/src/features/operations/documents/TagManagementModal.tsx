@@ -5,7 +5,7 @@ import { Button } from '../../common/Button';
 import { Plus, X } from 'lucide-react';
 import { LegalDocument } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface TagManagementModalProps {
   document: LegalDocument;

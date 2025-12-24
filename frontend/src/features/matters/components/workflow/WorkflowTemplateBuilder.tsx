@@ -9,13 +9,13 @@ import { BuilderProperties } from './builder/BuilderProperties';
 import { PageHeader } from '../../common/PageHeader';
 import { Button } from '../../common/Button';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Save, Rocket, ArrowLeft, Loader2 } from 'lucide-react';
 import { useWorkflowBuilder } from '@/hooks/useWorkflowBuilder';
 import { ErrorBoundary } from '../../common/ErrorBoundary';
-import { useToggle } from '../../../hooks/useToggle';
-import { DataService } from '../../../services/data/dataService';
-import { useNotify } from '../../../hooks/useNotify';
+import { useToggle } from '@/hooks/useToggle';
+import { DataService } from '@/services/data/dataService';
+import { useNotify } from '@/hooks/useNotify';
 
 interface WorkflowTemplateBuilderProps {
   initialTemplate?: WorkflowTemplateData | null;

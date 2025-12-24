@@ -15,7 +15,7 @@ import { X, GripVertical } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
 
 // Utils
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types & Constants
 import { LitigationPaletteProps } from './types';

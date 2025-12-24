@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { Card } from '../../common/Card';
 import { ToggleLeft, ToggleRight, Settings, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
-import { useNotify } from '../../../hooks/useNotify';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { useNotify } from '@/hooks/useNotify';
 
 export const WorkflowConfig: React.FC = () => {
   const { theme } = useTheme();

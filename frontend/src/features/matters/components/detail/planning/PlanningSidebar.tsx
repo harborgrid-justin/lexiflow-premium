@@ -19,7 +19,7 @@ import { Badge } from '../../../common/Badge';
 import { useTheme } from '../../../../context/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { CasePhase, WorkflowTask } from '../../../../types';

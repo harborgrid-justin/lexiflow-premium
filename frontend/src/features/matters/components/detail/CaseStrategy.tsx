@@ -20,14 +20,14 @@ import { StrategySection } from './strategy/StrategySection';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useNotify } from '../../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '../../../hooks';
-import { useMutation, queryClient } from '../../../hooks/useQueryHooks';
+import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/data/dataService';
-import { queryKeys } from '../../../utils/queryKeys';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Types & Interfaces
 import { Citation, LegalArgument, Defense, EvidenceItem } from '../../../types';

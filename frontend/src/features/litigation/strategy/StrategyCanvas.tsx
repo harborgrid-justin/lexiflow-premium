@@ -19,7 +19,7 @@ import { ContextMenu, ContextMenuItem } from '../../common/ContextMenu';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useToggle } from '../../../hooks/useToggle';
+import { useToggle } from '@/hooks/useToggle';
 
 // Types
 import { NodeType } from '../../matters/workflow/builder/types';

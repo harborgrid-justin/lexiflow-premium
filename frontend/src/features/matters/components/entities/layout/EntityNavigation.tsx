@@ -2,7 +2,7 @@
 import React from 'react';
 import { Network, Users, Share2, ShieldAlert, Map as MapIcon, BarChart3, Database, Building, Briefcase, Import, GraduationCap, Scale, FileCheck, DollarSign } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 export type DirectorView = 
   | 'directory' | 'network' | 'hierarchy' | 'conflicts' | 'map' | 'analytics' | 'ingestion' | 'governance' | 'vendors'

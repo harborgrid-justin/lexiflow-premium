@@ -2,7 +2,7 @@
 import React from 'react';
 import { Camera, Download, RefreshCw, Calendar, Database } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Button } from '../../../common/Button';
 
 export const SchemaSnapshots: React.FC = () => {

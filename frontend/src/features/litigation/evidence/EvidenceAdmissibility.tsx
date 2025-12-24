@@ -18,7 +18,7 @@ import { Modal } from '../../common/Modal';
 
 // Context & Utils
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { useModalState } from '../../../hooks';
 
 // Types

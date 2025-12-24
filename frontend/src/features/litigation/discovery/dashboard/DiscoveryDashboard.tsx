@@ -3,15 +3,15 @@ import { Card } from '../../../common/Card';
 import { Button } from '../../../common/Button';
 import { Badge } from '../../../common/Badge';
 import { ArrowRight, Database, FileText, CheckCircle, Scale, AlertTriangle } from 'lucide-react';
-import { DataService } from '../../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { useQuery } from '../../../../hooks/useQueryHooks';
+import { cn } from '@/utils/cn';
+import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 import DiscoveryMetrics from './DiscoveryMetrics';
 import DiscoveryCharts from './DiscoveryCharts';
-import { DiscoveryView } from '../../../../hooks/useDiscoveryPlatform';
+import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
 import { LegalHold, PrivilegeLogEntry, DiscoveryRequest } from '../../../../types';
 
 interface DiscoveryDashboardProps {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, Tag, Calendar, Hash } from 'lucide-react';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import type { SearchCategory } from './types';
 
 interface CategoryFilterProps {

@@ -17,9 +17,9 @@ import { Zap, Clock, Plus } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
@@ -29,7 +29,7 @@ import { EmptyState } from '../../common/EmptyState';
 import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // COMPONENT

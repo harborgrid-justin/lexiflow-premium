@@ -17,7 +17,7 @@ import { EvidenceInventory } from '../../litigation/evidence/EvidenceInventory';
 import { EmptyState } from '../../common/EmptyState';
 
 // Internal Dependencies - Hooks & Context
-import { useEvidenceVault } from '../../../hooks/useEvidenceVault'; 
+import { useEvidenceVault } from '@/hooks/useEvidenceVault'; 
 
 interface CaseEvidenceProps {
   caseId: string;

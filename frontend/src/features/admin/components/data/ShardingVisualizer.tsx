@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Server, Database, Plus, Trash2, ArrowRight } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { ConsistentHashRing } from '../../../utils/datastructures/consistentHashRing';
+import { cn } from '@/utils/cn';
+import { ConsistentHashRing } from '@/utils/datastructures/consistentHashRing';
 import { Button } from '../../common/Button';
 
 export const ShardingVisualizer: React.FC = () => {

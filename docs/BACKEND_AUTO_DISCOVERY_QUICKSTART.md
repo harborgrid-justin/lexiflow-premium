@@ -116,7 +116,7 @@ export const YourComponent = () => {
 ### Using Backend Discovery in Your Component
 
 ```tsx
-import { useBackendDiscovery } from '../../hooks/useBackendDiscovery';
+import { useBackendDiscovery } from '@/hooks/useBackendDiscovery';
 
 export const YourComponent = () => {
   const { 

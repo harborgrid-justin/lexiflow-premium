@@ -30,10 +30,10 @@ import {
   Trash2,
   X
 } from 'lucide-react';
-import { DataService } from '../../../services/data/dataService';
-import { useMutation, useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
-import { queryClient } from '../../../services/infrastructure/queryClient';
+import { DataService } from '@/services/data/dataService';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { queryClient } from '@/services/infrastructure/queryClient';
 import { 
   Case, 
   Matter, 
@@ -48,8 +48,8 @@ import { Button } from '../../common/Button';
 import { PageHeader } from '../../common/PageHeader';
 import { Breadcrumbs } from '../../common/Breadcrumbs';
 import { useTheme } from '../../../context/ThemeContext';
-import { useNotify } from '../../../hooks/useNotify';
-import { cn } from '../../../utils/cn';
+import { useNotify } from '@/hooks/useNotify';
+import { cn } from '@/utils/cn';
 
 // Federal Case Type enum
 export enum CaseType {

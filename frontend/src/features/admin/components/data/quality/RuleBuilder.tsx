@@ -4,7 +4,7 @@ import { X, Plus, Trash2, Play, Save, Code, CheckCircle, Database } from 'lucide
 import { Button } from '../../../common/Button';
 import { Input, TextArea } from '../../../common/Inputs';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Modal } from '../../../common/Modal';
 
 export interface RuleCondition {

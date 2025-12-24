@@ -5,9 +5,9 @@ import {
   FileText, Image as ImageIcon, Video, AlertOctagon, CheckCircle2, File, Loader2 
 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 interface DocumentFiltersProps {
   currentFolder: string;

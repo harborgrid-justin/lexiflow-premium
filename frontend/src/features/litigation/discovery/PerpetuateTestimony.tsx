@@ -4,9 +4,9 @@ import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
 import { Clock, Loader2 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { DataService } from '../../../services/data/dataService';
+import { cn } from '@/utils/cn';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 interface Petition {

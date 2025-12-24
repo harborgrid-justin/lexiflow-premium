@@ -8,9 +8,9 @@
 import React, { useState, useMemo } from 'react';
 import { Target, Search, AlertCircle, Briefcase, Clock, Shield } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { DataService } from '../../../services/data/dataService';
-import { cn } from '../../../utils/cn';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
 import { Case } from '../../../types';
 import { Button } from '../../common/Button';
 import { LazyLoader } from '../../common/LazyLoader';

@@ -17,9 +17,9 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pi
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
@@ -35,7 +35,7 @@ import {
   getAxisConfig, 
   getGridConfig, 
   getTooltipConfig 
-} from '../../../utils/chartConfig';
+} from '@/utils/chartConfig';
 
 // Types
 import { WorkflowAnalyticsData } from './types';

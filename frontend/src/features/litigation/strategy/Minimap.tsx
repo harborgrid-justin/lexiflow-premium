@@ -9,7 +9,7 @@
 import React, { useRef, useMemo, useCallback } from 'react';
 
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { MinimapProps } from './types';
 import { 
   calculateMinimapBoundsAndScale,

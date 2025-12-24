@@ -13,7 +13,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { X, User, Building2, Gavel } from 'lucide-react';
-import { CreatePartyDto, PartyTypeBackend, PartyRoleBackend } from '../../../services/api/parties-api';
+import { CreatePartyDto, PartyTypeBackend, PartyRoleBackend } from '@/services/api/parties-api';
 import { CreateComponentProps } from '../../common/AutocompleteSelect';
 
 // Type aliases for cleaner code

@@ -20,14 +20,14 @@ import { MotionModal } from './MotionModal';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../../context/ThemeContext';
-import { useQuery, useMutation } from '../../../../hooks/useQueryHooks';
-import { useNotify } from '../../../../hooks/useNotify';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '../../../../context/WindowContext';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { Motion, MotionStatus, MotionType, LegalDocument, MotionId, CaseId } from '../../../../types';

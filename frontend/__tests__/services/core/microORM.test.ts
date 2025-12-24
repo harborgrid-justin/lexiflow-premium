@@ -8,7 +8,7 @@ import { db } from '@services/db';
 import { BaseEntity } from '@/types';
 
 // Mock the db module
-jest.mock('../../../services/db', () => ({
+jest.mock('@/services/db', () => ({
   db: {
     get: jest.fn(),
     getAll: jest.fn(),

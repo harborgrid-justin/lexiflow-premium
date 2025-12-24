@@ -22,7 +22,7 @@ import { Globe, Building } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
 
 // Utils & Data
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS, StateJurisdiction } from '../../../../data/federalHierarchy';
 
 // ============================================================================

@@ -1,17 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { LegalDocument } from '../../../../types';
-import { DataService } from '../../../../services/data/dataService';
-import { useQuery } from '../../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../../utils/queryKeys';
-import { DocumentService } from '../../../../services/features/documents/documentService';
-import { BlobManager } from '../../../../services/infrastructure/blobManager';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { DocumentService } from '@/services/features/documents/documentService';
+import { BlobManager } from '@/services/infrastructure/blobManager';
 import { PDFViewer } from '../../../common/PDFViewer';
 import { PIIPanel } from '../../preview/PIIPanel';
 import { Loader2, Eraser } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { useSingleSelection } from '../../../../hooks/useMultiSelection';
+import { cn } from '@/utils/cn';
+import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { ErrorState } from '../../../common/ErrorState';
 
 export const RedactionStudioView: React.FC = () => {

@@ -18,14 +18,14 @@ import { ArrowLeft, Phone, Video, Info, Lock, AlertTriangle } from 'lucide-react
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { Conversation } from '../../../hooks/useSecureMessenger';
+import { Conversation } from '@/hooks/useSecureMessenger';
 
 // Components
 import { UserAvatar } from '../../common/UserAvatar';
 import { Button } from '../../common/Button';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

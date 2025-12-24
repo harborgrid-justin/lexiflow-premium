@@ -19,7 +19,7 @@ import { Briefcase, Clock, FileText, AlertTriangle } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useInterval } from '../../hooks/useInterval';
+import { useInterval } from '@/hooks/useInterval';
 
 // Components
 import { MetricCard } from '../common/Primitives';

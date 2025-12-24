@@ -24,7 +24,7 @@ import { Card } from '../../common/Card';
 import { Badge } from '../../common/Badge';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { ServiceStatus } from '../../../types/enums';
 
 // Types

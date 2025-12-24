@@ -1,14 +1,14 @@
 
 import React, { useState } from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Button } from '../../../common/Button';
 import { Plus, Edit2, Trash2, Shield, Lock, Play, Pause } from 'lucide-react';
 import { RLSPolicy } from '../../../../types';
-import { useQuery, useMutation, queryClient } from '../../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../../utils/queryKeys';
-import { DataService } from '../../../../services/data/dataService';
-import { useNotify } from '../../../../hooks/useNotify';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useNotify } from '@/hooks/useNotify';
 import { PolicyEditorModal } from './PolicyEditorModal';
 import { EmptyListState } from '../../../common/RefactoredCommon';
 

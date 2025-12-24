@@ -20,7 +20,7 @@ import {
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useSessionStorage } from '../../../hooks/useSessionStorage';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
 import { Button } from '../../common/Button';
@@ -29,7 +29,7 @@ import { LazyLoader } from '../../common/LazyLoader';
 import { DocumentManagerContent } from './DocumentManagerContent';
 
 // Utils & Config
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { DOCUMENT_MANAGER_TAB_CONFIG, DocView } from '../../../config/tabs.config';
 
 // Types

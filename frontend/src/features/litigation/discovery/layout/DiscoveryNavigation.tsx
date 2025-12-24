@@ -2,9 +2,9 @@
 import React from 'react';
 import { Scale, Database, ClipboardList, Lock, MessageCircle, Package, Shield, Mic2, Users, FileText } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import type { DiscoveryView } from '../../../../utils/discoveryNavigation';
-import { getParentTabForView, getFirstTabOfParent } from '../../../../utils/discoveryNavigation';
+import { cn } from '@/utils/cn';
+import type { DiscoveryView } from '@/utils/discoveryNavigation';
+import { getParentTabForView, getFirstTabOfParent } from '@/utils/discoveryNavigation';
 
 interface DiscoveryNavigationProps {
   activeTab: DiscoveryView;
@@ -98,7 +98,7 @@ export const DiscoveryNavigation: React.FC<DiscoveryNavigationProps> = ({
 };
 
 // Re-export utilities for backwards compatibility
-// New code should import directly from '../../../../utils/discoveryNavigation'
-export { getParentTabForView, getFirstTabOfParent } from '../../../../utils/discoveryNavigation';
+// New code should import directly from '@/utils/discoveryNavigation'
+export { getParentTabForView, getFirstTabOfParent } from '@/utils/discoveryNavigation';
 
 export default DiscoveryNavigation;

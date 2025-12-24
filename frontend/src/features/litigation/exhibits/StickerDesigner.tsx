@@ -26,7 +26,7 @@ import { Card } from '../../common/Card';
 import { Button } from '../../common/Button';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // COMPONENT

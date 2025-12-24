@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 
 import { RefreshCw, Activity, Play, FileText, Database, Cloud, Server, Settings, Plus, ArrowLeft, Loader2, GitMerge } from 'lucide-react';
 
-import { useTheme } from '../../../context/ThemeContext';
-import { useQuery, useMutation } from '../../../hooks/useQueryHooks';
-import { Connector } from '../../../types';
-import { cn } from '../../../utils/cn';
-import { Button } from '../../common/Button';
-import { Tabs } from '../../common/Tabs';
-import { dataPlatformApi, Pipeline } from '../../../services/api/data-platform-api';
+import { useTheme } from '@/providers/ThemeContext';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
+import { Connector } from '@/types';
+import { cn } from '@/utils/cn';
+import { Button } from '@/components/atoms/Button/Button';
+import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { dataPlatformApi, Pipeline } from '@/api/data-platform-api';
 
 import { PipelineDAG } from './pipeline/PipelineDAG';
 import { PipelineList } from './pipeline/PipelineList';

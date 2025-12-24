@@ -30,18 +30,18 @@ import { DocketTableSkeleton } from '../../common/DocketSkeleton';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
 import { useWindow } from '../../../context/WindowContext';
-import { useWorkerSearch } from '../../../hooks/useWorkerSearch';
-import { useLiveDocketFeed } from '../../../hooks/useLiveDocketFeed';
-import { useQuery, useMutation } from '../../../hooks/useQueryHooks';
+import { useWorkerSearch } from '@/hooks/useWorkerSearch';
+import { useLiveDocketFeed } from '@/hooks/useLiveDocketFeed';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { useModalState } from '../../../hooks';
-import { useToggle } from '../../../hooks/useToggle';
+import { useToggle } from '@/hooks/useToggle';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../../services/data/dataService';
-import { cn } from '../../../utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../utils/queryKeys';
-import { IdGenerator } from '../../../utils/idGenerator';
+import { queryKeys } from '@/utils/queryKeys';
+import { IdGenerator } from '@/utils/idGenerator';
 
 // Types & Interfaces
 import { DocketEntry, Case, DocketId, CaseId } from '../../../types';

@@ -17,14 +17,14 @@ import { Lock, Shield } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { GeminiService } from '../../../services/features/research/geminiService';
+import { GeminiService } from '@/services/features/research/geminiService';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useNotify } from '../../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '../../../context/WindowContext';
-import { useInterval } from '../../../hooks/useInterval';
-import { Conversation, Attachment } from '../../../hooks/useSecureMessenger';
+import { useInterval } from '@/hooks/useInterval';
+import { Conversation, Attachment } from '@/hooks/useSecureMessenger';
 
 // Components
 import { ChatHeader } from './ChatHeader';
@@ -34,7 +34,7 @@ import { FileAttachment } from '../../common/FileAttachment';
 import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

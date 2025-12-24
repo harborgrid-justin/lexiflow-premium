@@ -16,7 +16,7 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useSecureMessenger } from '../../../hooks/useSecureMessenger';
+import { useSecureMessenger } from '@/hooks/useSecureMessenger';
 
 // Components
 import { MessengerChatList } from './MessengerChatList';

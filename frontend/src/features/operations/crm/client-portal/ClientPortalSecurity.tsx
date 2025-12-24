@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Shield } from 'lucide-react';
 
 export const ClientPortalSecurity: React.FC = () => {

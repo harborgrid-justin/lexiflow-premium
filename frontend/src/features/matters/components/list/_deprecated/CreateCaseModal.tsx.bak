@@ -44,17 +44,17 @@ import { JurisdictionSelector } from './case-form/JurisdictionSelector';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useNotify } from '../../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 
 // Services
-import { DataService } from '../../../services/data/dataService';
-import { queryClient } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { queryClient } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Utils
-import { cn } from '../../../utils/cn';
-import { getTodayString } from '../../../utils/dateUtils';
+import { cn } from '@/utils/cn';
+import { getTodayString } from '@/utils/dateUtils';
 
 // ============================================================================
 // TYPES & INTERFACES

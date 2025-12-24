@@ -5,7 +5,7 @@ import { Button } from '../../../common/Button';
 import { Input } from '../../../common/Inputs';
 import { StaffMember } from '../../../../types';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface AddStaffModalProps {
   isOpen: boolean;

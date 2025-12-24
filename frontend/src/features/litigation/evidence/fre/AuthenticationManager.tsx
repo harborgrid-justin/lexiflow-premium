@@ -16,13 +16,13 @@ import { Button } from '../../../common/Button';
 
 // Context & Utils
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Services & Types
-import { useQuery } from '../../../../hooks/useQueryHooks';
-import { DataService } from '../../../../services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 import { EvidenceItem } from '../../../../types';
 
 export const AuthenticationManager: React.FC = () => {

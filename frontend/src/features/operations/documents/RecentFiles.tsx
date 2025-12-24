@@ -5,11 +5,11 @@ import { FileIcon } from '../../common/Primitives';
 import { Button } from '../../common/Button';
 import { Clock, Eye, Loader2, FolderOpen } from 'lucide-react';
 import { EmptyState } from '../../common/EmptyState';
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 import { LegalDocument } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { cn } from '@/utils/cn';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 export const RecentFiles: React.FC = () => {
   const { theme } = useTheme();

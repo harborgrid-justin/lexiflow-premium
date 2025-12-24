@@ -1,11 +1,11 @@
 
 import React from 'react';
-import { Conversation } from '../../../hooks/useSecureMessenger';
+import { Conversation } from '@/hooks/useSecureMessenger';
 import { Button } from '../../common/Button';
 import { SearchToolbar } from '../../common/SearchToolbar';
 import { MoreVertical } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { VirtualList } from '../../common/VirtualList';
 import { useWindow } from '../../../context/WindowContext';
 import { MessengerChatWindow } from './MessengerChatWindow';

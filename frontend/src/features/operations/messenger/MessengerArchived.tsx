@@ -2,7 +2,7 @@
 import React from 'react';
 import { Archive } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 export const MessengerArchived: React.FC = () => {
   const { theme } = useTheme();

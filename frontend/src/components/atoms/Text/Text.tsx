@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { sizeClasses, weightClasses, colorClasses, alignClasses, variantClasses } from './Text.styles';
 
 interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {

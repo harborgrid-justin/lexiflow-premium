@@ -14,10 +14,10 @@ import { Button } from '../../../common/Button';
 
 // Context & Utils
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Services
-import { DocumentService } from '../../../../services/features/documents/documentService';
+import { DocumentService } from '@/services/features/documents/documentService';
 
 interface IntakeStepUploadProps {
     file: File | null;

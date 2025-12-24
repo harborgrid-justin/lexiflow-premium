@@ -6,8 +6,8 @@ import { Button } from '../../common/Button';
 import { Card } from '../../common/Card';
 import { Badge } from '../../common/Badge';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { GeminiService, ShepardizeResult, TreatmentType } from '../../../services/features/research/geminiService';
+import { cn } from '@/utils/cn';
+import { GeminiService, ShepardizeResult, TreatmentType } from '@/services/features/research/geminiService';
 
 export const ShepardizingTool: React.FC = () => {
   const { theme } = useTheme();

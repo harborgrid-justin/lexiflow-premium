@@ -26,7 +26,7 @@ import { Badge } from '../../common/Badge';
 import { SearchToolbar } from '../../common/SearchToolbar';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { ConflictCheck } from '../../../types';

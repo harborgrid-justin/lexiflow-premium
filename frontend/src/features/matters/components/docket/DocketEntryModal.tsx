@@ -22,7 +22,7 @@ import { CopyButton } from '../../common/CopyButton';
 import { useTheme } from '../../../context/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { DocketEntry } from '../../../types';

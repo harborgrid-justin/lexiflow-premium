@@ -26,9 +26,9 @@ import { EvidenceInventorySkeleton, EvidenceDetailSkeleton } from './EvidenceSke
 
 // Context & Utils
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useEvidenceVault, ViewMode } from '../../../hooks/useEvidenceVault';
-import { useKeyboardShortcuts } from '../../../hooks/useKeyboardShortcuts';
+import { cn } from '@/utils/cn';
+import { useEvidenceVault, ViewMode } from '@/hooks/useEvidenceVault';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Config & Types
 import { EVIDENCE_PARENT_TABS } from '../../../config/tabs.config';

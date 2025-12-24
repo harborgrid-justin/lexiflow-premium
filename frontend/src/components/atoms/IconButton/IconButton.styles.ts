@@ -1,4 +1,4 @@
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 export const variantClasses = {
   primary: "bg-blue-600 hover:bg-blue-700 text-white",

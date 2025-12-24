@@ -25,7 +25,7 @@ import { Button } from '../../common/Button';
 import { LazyLoader } from '../../common/LazyLoader';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { JURISDICTION_TABS, JurisdictionView } from './utils';
 
 const JurisdictionFederal = React.lazy(() => import('./JurisdictionFederal').then(m => ({ default: m.JurisdictionFederal })));

@@ -20,8 +20,8 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { AlertCircle, CheckCircle, Landmark, Building, Shield, Users, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Card } from '../../../common/Card';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { useCreateTrustAccount, useTrustAccountValidation } from '../../../../hooks/useTrustAccounts';
+import { cn } from '@/utils/cn';
+import { useCreateTrustAccount, useTrustAccountValidation } from '@/hooks/useTrustAccounts';
 import type { CreateTrustAccountDto, TrustAccountType, TrustAccountStatus } from '../../../../types/trust-accounts';
 import { TrustAccountType as AccountType } from '../../../../types/trust-accounts';
 

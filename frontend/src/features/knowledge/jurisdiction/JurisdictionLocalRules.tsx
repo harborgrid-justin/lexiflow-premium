@@ -5,16 +5,16 @@ import { Button } from '../../common/Button';
 import { Modal } from '../../common/Modal';
 import { Input, TextArea } from '../../common/Inputs';
 import { SearchToolbar } from '../../common/SearchToolbar';
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 import { ConfirmDialog } from '../../common/ConfirmDialog';
 import { LegalRule } from '../../../types';
 import { Badge } from '../../common/Badge';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { useModalState } from '../../../hooks';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 import { filterRules } from './utils';
 
 export const JurisdictionLocalRules: React.FC = () => {

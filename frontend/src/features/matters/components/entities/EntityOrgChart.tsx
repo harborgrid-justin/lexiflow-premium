@@ -17,9 +17,9 @@ import { Building2, User, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services/Data
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
@@ -28,7 +28,7 @@ import { useTheme } from '../../../context/ThemeContext';
 import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 
 // Utils & Constants
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { LegalEntity } from '../../../types';

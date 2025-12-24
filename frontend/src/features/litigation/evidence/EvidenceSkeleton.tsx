@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 /**
  * Skeleton for Evidence Inventory list

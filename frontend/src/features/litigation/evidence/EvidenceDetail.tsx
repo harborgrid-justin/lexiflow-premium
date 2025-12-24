@@ -24,13 +24,13 @@ import { EvidenceChainOfCustody } from './EvidenceChainOfCustody';
 
 // Context & Utils
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useNotify } from '../../../hooks/useNotify';
-import { useKeyboardShortcuts } from '../../../hooks/useKeyboardShortcuts';
+import { cn } from '@/utils/cn';
+import { useNotify } from '@/hooks/useNotify';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Services & Types
-import { DataService } from '../../../services/data/dataService';
-import { useMutation, queryClient } from '../../../hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { EvidenceItem, ChainOfCustodyEvent, TrialExhibit } from '../../../types';
 

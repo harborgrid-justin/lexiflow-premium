@@ -18,8 +18,8 @@ import { Archive, FolderInput, CheckSquare, Download, Upload, RefreshCw } from '
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useNotify } from '../../../hooks/useNotify';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 
 // Components
 import { Button } from '../../common/Button';
@@ -28,9 +28,9 @@ import { Tabs } from '../../common/Tabs';
 import { MetricCard } from '../../common/Primitives';
 
 // Services & Utils
-import { DataService } from '../../../services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Types
 import { Case } from '../../../types';

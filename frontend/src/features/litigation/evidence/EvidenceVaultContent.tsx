@@ -9,7 +9,7 @@
 import React, { lazy } from 'react';
 
 // Types
-import { ViewMode, EvidenceFilters } from '../../../hooks/useEvidenceVault';
+import { ViewMode, EvidenceFilters } from '@/hooks/useEvidenceVault';
 import { EvidenceItem } from '../../../types';
 
 // Lazy Loaded Components

@@ -5,7 +5,7 @@ import { Badge } from '../../common/Badge';
 import { Button } from '../../common/Button';
 import { MoreHorizontal, Play, Search } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { EmptyState } from '../../common/EmptyState';
 import { Process } from './types';
 import { getProcessIcon } from './utils';

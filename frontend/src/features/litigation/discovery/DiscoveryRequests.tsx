@@ -27,11 +27,11 @@ import { VirtualList } from '../../common/VirtualList';
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
 import { useWindow } from '../../../context/WindowContext';
-import { useKeyboardShortcuts } from '../../../hooks/useKeyboardShortcuts';
-import { useToggle } from '../../../hooks/useToggle';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useToggle } from '@/hooks/useToggle';
 
 // Utils
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { DiscoveryRequestStatusEnum } from '../../../types/enums';
 
 // ============================================================================

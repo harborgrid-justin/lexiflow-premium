@@ -8,8 +8,8 @@
 
 import React, { useState } from 'react';
 import { Shield } from 'lucide-react';
-import { useNotify } from '../../../hooks/useNotify';
-import { BloomFilter } from '../../../utils/bloomFilter';
+import { useNotify } from '@/hooks/useNotify';
+import { BloomFilter } from '@/utils/bloomFilter';
 import { SecurityMetrics } from './SecurityMetrics';
 import { SecurityControlsPanel } from './SecurityControlsPanel';
 import { ThreatDetectionPanel } from './ThreatDetectionPanel';

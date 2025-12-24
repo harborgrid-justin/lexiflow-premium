@@ -4,8 +4,8 @@ import { MessageSquare, CheckCircle, Send, MessagesSquare } from 'lucide-react';
 import { PleadingComment } from '../../../../types/pleading-types';
 import { EmptyState } from '../../../common/EmptyState';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { DataService } from '../../../../services/data/dataService';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services/data/dataService';
 import { WorkflowTask, TaskId, CaseId, UserId, TaskStatusBackend, TaskPriorityBackend } from '../../../../types';
 
 interface ReviewPanelProps {

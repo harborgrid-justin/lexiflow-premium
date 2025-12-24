@@ -1,4 +1,4 @@
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 export const containerStyles = "relative overflow-hidden bg-slate-100 dark:bg-slate-800";
 

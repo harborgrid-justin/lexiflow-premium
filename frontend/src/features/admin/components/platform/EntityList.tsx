@@ -4,7 +4,7 @@ import { Badge } from '../../common/Badge';
 import { Edit2, Trash2 } from 'lucide-react';
 import { Category } from './EntitySidebar';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { VirtualList } from '../../common/VirtualList';
 
 // Generic interface to cover the varying shapes of entities in the list

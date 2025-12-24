@@ -20,8 +20,8 @@ import React, { useState, useReducer, useCallback, useEffect } from 'react';
 import { Scale, Users, Building, FileText, Calendar, AlertCircle } from 'lucide-react';
 import { AutocompleteSelect } from '../../common/AutocompleteSelect';
 import { Case, CaseStatus } from '../../../types';
-import { api } from '../../../services/api';
-import { useAutoSave } from '../../../hooks/useAutoSave';
+import { api } from '@/services/api';
+import { useAutoSave } from '@/hooks/useAutoSave';
 
 // Federal Case Type enum (matching backend case.entity.ts)
 export enum CaseType {

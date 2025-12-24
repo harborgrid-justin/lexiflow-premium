@@ -41,14 +41,14 @@ import { Input, TextArea } from '../../common/Inputs';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useNotify } from '../../../hooks/useNotify';
+import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '../../../hooks';
 
 // Services & Utils
-import { DataService } from '../../../services/data/dataService';
-import { cn } from '../../../utils/cn';
-import { IdGenerator } from '../../../utils/idGenerator';
-import { useQuery, useMutation } from '../../../hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
+import { IdGenerator } from '@/utils/idGenerator';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================

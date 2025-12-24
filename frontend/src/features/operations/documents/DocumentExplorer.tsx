@@ -10,12 +10,12 @@ import { DocumentPreviewPanel } from './viewer/DocumentPreviewPanel';
 import { TagManagementModal } from './TagManagementModal';
 import { useSelection } from '@/hooks/useSelection';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/data/dataService';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';
-import { useMutation, queryClient } from '../../../hooks/useQueryHooks';
+import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 import { VirtualGrid } from '../../common/VirtualGrid';
 import { DocumentGridCard } from './DocumentGridCard';
 

@@ -20,7 +20,7 @@ import { Users, Briefcase, Stethoscope, Microscope, BrainCircuit, Gavel } from '
 import { useTheme } from '../../../../context/ThemeContext';
 
 // Utils & Constants
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

@@ -32,7 +32,7 @@
 // ============================================================================
 // API & Query Keys
 import { api } from '../../api';
-import { queryKeys } from '../../../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 import { queryClient } from '../../infrastructure/queryClient';
 
 // Types

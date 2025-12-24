@@ -5,11 +5,11 @@ import { Card } from '../../common/Card';
 import { MetricCard } from '../../common/Primitives';
 import { ShieldAlert, FileText, CheckCircle, TrendingUp } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { getRiskData, getUsageData } from './clauseAnalytics.utils';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 import { Clause } from '../../../types';
 
 export const ClauseAnalytics: React.FC = () => {

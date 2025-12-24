@@ -1,9 +1,9 @@
 
 import React from 'react';
 import { Activity, XCircle, GitMerge, Clock, ChevronRight } from 'lucide-react';
-import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
-import { Pipeline } from '../../../../services/api/data-platform-api';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
+import { Pipeline } from '@/api/data-platform-api';
 
 interface PipelineListProps {
   pipelines: Pipeline[];

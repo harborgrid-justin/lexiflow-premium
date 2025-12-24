@@ -4,8 +4,8 @@ import { SearchResult } from '../../../types';
 import { ExternalLink } from 'lucide-react';
 import { Badge } from '../../common/Badge';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { useReadAnalytics } from '../../../hooks/useReadAnalytics';
+import { cn } from '@/utils/cn';
+import { useReadAnalytics } from '@/hooks/useReadAnalytics';
 
 interface ResearchResultCardProps {
     source: SearchResult;

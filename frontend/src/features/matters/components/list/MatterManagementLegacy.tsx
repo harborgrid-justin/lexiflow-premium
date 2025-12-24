@@ -6,9 +6,9 @@ import {
   FileText, Clock, AlertCircle, CheckCircle, Users, DollarSign,
   Building2, Gavel, Calendar, Tag, TrendingUp, Settings
 } from 'lucide-react';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 import { Matter, MatterStatus, MatterPriority } from '../../../types';
 import { PATHS } from '../../../config/paths.config';
 

@@ -27,13 +27,13 @@ import { EmptyState } from '../../common/EmptyState';
 
 // Hooks & Context
 import { useTheme } from '../../../context/ThemeContext';
-import { useQuery } from '../../../hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useWindow } from '../../../context/WindowContext';
-import { useWorkerSearch } from '../../../hooks/useWorkerSearch';
+import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 // Services & Utils
-import { DataService } from '../../../services/data/dataService';
-import { cn } from '../../../utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================

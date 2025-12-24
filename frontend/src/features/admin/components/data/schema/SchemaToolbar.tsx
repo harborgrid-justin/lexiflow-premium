@@ -2,7 +2,7 @@
 import React from 'react';
 import { Table, Code, GitBranch, History, BrainCircuit as Brain, RefreshCw, Save } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Button } from '../../../common/Button';
 
 interface SchemaToolbarProps {

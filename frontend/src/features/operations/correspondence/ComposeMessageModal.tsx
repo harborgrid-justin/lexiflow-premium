@@ -7,15 +7,15 @@ import { UserSelect } from '../../common/UserSelect';
 import { Send, Paperclip, Wand2, X } from 'lucide-react';
 import { CommunicationItem, CommunicationType, UserId, User } from '../../../types';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
-import { useAutoSave } from '../../../hooks/useAutoSave';
-import { useKeyboardShortcuts } from '../../../hooks/useKeyboardShortcuts';
-import { useBlobRegistry } from '../../../hooks/useBlobRegistry';
-import { useNotify } from '../../../hooks/useNotify';
-import { validateCommunicationItemSafe } from '../../../services/validation/correspondenceSchemas';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { useAutoSave } from '@/hooks/useAutoSave';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useBlobRegistry } from '@/hooks/useBlobRegistry';
+import { useNotify } from '@/hooks/useNotify';
+import { validateCommunicationItemSafe } from '@/services/validation/correspondenceSchemas';
 import { CommunicationStatus } from '../../../types/enums';
 
 interface ComposeMessageModalProps {
@@ -118,7 +118,7 @@ export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen
       setIsDrafting(true);
       try {
           // Lazy load GeminiService only when needed
-          const { GeminiService } = await import('../../../services/features/research/geminiService');
+          const { GeminiService } = await import('@/services/features/research/geminiService');
           const draft = await GeminiService.generateDraft(
               `Draft a formal ${formData.type} to ${formData.recipient} regarding ${formData.subject}. Tone: Professional Legal.`,
               'Communication'

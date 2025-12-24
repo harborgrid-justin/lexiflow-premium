@@ -23,7 +23,7 @@ import { Input, TextArea } from '../../../common/Inputs';
 import { useTheme } from '../../../../context/ThemeContext';
 
 // Utils
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

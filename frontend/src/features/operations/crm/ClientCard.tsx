@@ -6,7 +6,7 @@ import { Button } from '../../common/Button';
 import { Currency } from '../../common/Primitives';
 import { Lock, PieChart, Building } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface ClientCardProps {
     client: Client;

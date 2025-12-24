@@ -22,8 +22,8 @@ import { ProjectModal } from './ProjectModal';
 import { useTheme } from '../../../../context/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '../../../../services/data/dataService';
-import { cn } from '../../../../utils/cn';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { Project, WorkflowTask, ProjectId, CaseId } from '../../../../types';

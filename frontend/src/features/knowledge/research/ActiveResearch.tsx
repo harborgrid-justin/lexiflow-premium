@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { GeminiService } from '../../../services/features/research/geminiService';
+import { GeminiService } from '@/services/features/research/geminiService';
 import { ResearchSession, UserId } from '../../../types';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
-import { DataService } from '../../../services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
 import { ResearchSidebar } from './ResearchSidebar';
 import { ResearchResults } from './ResearchResults';
 import { ResearchInput } from './ResearchInput';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { performSearch } from './research.utils';
 import { useWindow } from '../../../context/WindowContext';
-import { queryClient } from '../../../services/infrastructure/queryClient';
+import { queryClient } from '@/services/infrastructure/queryClient';
 
 export const ActiveResearch: React.FC = () => {
   const { theme } = useTheme();

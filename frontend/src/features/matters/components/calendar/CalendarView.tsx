@@ -17,7 +17,7 @@ import { Download, Plus, Calendar, Clock, Users, Gavel, AlertTriangle, Settings,
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useSessionStorage } from '../../../hooks/useSessionStorage';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
 import { Button } from '../../common/Button';
@@ -25,7 +25,7 @@ import { TabbedPageLayout, TabConfigItem } from '../../layout/TabbedPageLayout';
 import { LazyLoader } from '../../common/LazyLoader';
 
 // Utils & Config
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 // Lazy load sub-components
 const CalendarMaster = lazy(() => import('./CalendarMaster').then(m => ({ default: m.CalendarMaster })));

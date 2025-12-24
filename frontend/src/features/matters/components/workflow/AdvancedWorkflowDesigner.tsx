@@ -27,13 +27,13 @@ import {
   Database,
 } from 'lucide-react';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { Button } from '../../common/Button';
 import { Tabs } from '../../common/Tabs';
 import { Card } from '../../common/Card';
-import { useQuery, useMutation, queryClient } from '../../../hooks/useQueryHooks';
-import { DataService } from '../../../services/data/dataService';
-import { useNotify } from '../../../hooks/useNotify';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { useNotify } from '@/hooks/useNotify';
 import type {
   EnhancedWorkflowInstance,
   ConditionalBranchingConfig,

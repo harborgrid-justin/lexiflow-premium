@@ -6,7 +6,7 @@ import { Badge } from '../../../common/Badge';
 import { Button } from '../../../common/Button';
 import { User, Calendar, CheckSquare } from 'lucide-react';
 import { useTheme } from '../../../../context/ThemeContext';
-import { cn } from '../../../../utils/cn';
+import { cn } from '@/utils/cn';
 
 interface InterviewListProps {
   interviews: CustodianInterview[];

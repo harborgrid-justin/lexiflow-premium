@@ -4,13 +4,13 @@ import { Modal } from '../../common/Modal';
 import { Button } from '../../common/Button';
 import { Input, TextArea } from '../../common/Inputs';
 import { ServiceJob, UserId } from '../../../types';
-import { DataService } from '../../../services/data/dataService';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { DataService } from '@/services/data/dataService';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '../../../context/ThemeContext';
-import { useNotify } from '../../../hooks/useNotify';
-import { cn } from '../../../utils/cn';
-import { validateServiceJobSafe } from '../../../services/validation/correspondenceSchemas';
+import { useNotify } from '@/hooks/useNotify';
+import { cn } from '@/utils/cn';
+import { validateServiceJobSafe } from '@/services/validation/correspondenceSchemas';
 import { ServiceStatus } from '../../../types/enums';
 
 interface CreateServiceJobModalProps {

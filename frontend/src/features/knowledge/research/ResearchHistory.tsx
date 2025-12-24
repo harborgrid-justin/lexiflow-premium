@@ -6,11 +6,11 @@ import { AdaptiveLoader } from '../../common/AdaptiveLoader';
 import { ExternalLink, Clock } from 'lucide-react';
 import { SearchToolbar } from '../../common/SearchToolbar';
 import { useTheme } from '../../../context/ThemeContext';
-import { cn } from '../../../utils/cn';
-import { DataService } from '../../../services/data/dataService';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services/data/dataService';
 import { ResearchSession } from '../../../types';
-import { useQuery } from '../../../hooks/useQueryHooks';
-import { queryKeys } from '../../../utils/queryKeys';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
 
 export const ResearchHistory: React.FC = () => {
   const { theme } = useTheme();

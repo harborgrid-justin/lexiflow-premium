@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Loader2 } from 'lucide-react';
-import { cn } from '../../../utils/cn';
+import { cn } from '@/utils/cn';
 import { containerStyles, getSpinnerClass, textStyles } from './LoadingSpinner.styles';
 
 export interface LoadingSpinnerProps {

@@ -27,7 +27,7 @@ import { SplitView } from '@/components/organisms/SplitView';
 // COMPONENT
 // ============================================================================
 
-export const MessengerInbox: React.FC = () => {
+export const MessengerInbox = () => {
   const {
     activeConvId,
     setActiveConvId,

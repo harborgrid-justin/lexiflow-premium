@@ -40,7 +40,7 @@ const MUTATION_HANDLERS: Record<string, MutationHandler> = {
     }
 };
 
-export const SyncProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const SyncProvider = ({ children }: { children: React.ReactNode }) => {
   const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
   const [pendingCount, setPendingCount] = useState(0);
   const [failedCount, setFailedCount] = useState(0);

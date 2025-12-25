@@ -65,7 +65,7 @@ const PROFILE_TABS = [
 // ========================================
 // COMPONENT
 // ========================================
-export const UserProfileManager: React.FC = () => {
+export const UserProfileManager = () => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('overview');
 

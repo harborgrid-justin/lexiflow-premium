@@ -44,7 +44,7 @@ interface PreferencePaneProps {
 // ========================================
 // COMPONENT
 // ========================================
-export const PreferencePane: React.FC<PreferencePaneProps> = ({ profile }) => {
+export const PreferencePane = ({ profile }: PreferencePaneProps) => {
   const { theme, setTheme, mode } = useTheme();
 
   return (

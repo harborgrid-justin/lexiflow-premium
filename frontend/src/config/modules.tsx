@@ -97,6 +97,7 @@ const COMPONENT_MAP: Record<string, React.LazyExoticComponent<React.ComponentTyp
   [PATHS.CALENDAR]: CalendarView,
   [PATHS.RULES_ENGINE]: RulesPlatform,
   [PATHS.PROFILE]: UserProfileManager,
+  [PATHS.DAF]: DafDashboard,
   [PATHS.PLEADING_BUILDER]: PleadingBuilder,
   [PATHS.LIBRARY]: KnowledgeBase,
   [PATHS.LITIGATION_BUILDER]: LitigationBuilder,

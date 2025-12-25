@@ -20,7 +20,7 @@ import { ErrorState } from '@/components/molecules/ErrorState';
 type FormStatus = 'Draft' | 'Sent' | 'Signed';
 type FilterCategory = FormStatus | 'Templates' | 'Out for Signature' | 'Completed';
 
-export const FormsSigningView: React.FC = () => {
+export const FormsSigningView = () => {
     const { theme } = useTheme();
     const notify = useNotify();
     const [selectedDocument, setSelectedDocument] = useState<LegalDocument | null>(null);
@@ -98,7 +98,7 @@ export const FormsSigningView: React.FC = () => {
             const updatedDoc: LegalDocument = {
                 ...selectedDocument,
                 formFields: (selectedDocument.formFields || []).map((f) =>
-                    (f as { name: string; type: string; value: any }).name === activeField.id
+                    (f as { name: string; type: string; value: unknown }).name === activeField.id
                         ? {...f, value: "Signed by User"}
                         : f
                 )
@@ -212,7 +212,7 @@ export const FormsSigningView: React.FC = () => {
                                         type: ((f as { type: string }).type as Field['type']) || 'text',
                                         x: 0,
                                         y: 0,
-                                        value: (f as { value: any }).value as string
+                                        value: (f as { value: unknown }).value as string
                                     }))}
                                     onFieldsUpdate={handleFieldsUpdate}
                                 />

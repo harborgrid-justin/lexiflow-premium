@@ -43,7 +43,7 @@ interface SecurityPaneProps {
 // ========================================
 // COMPONENT
 // ========================================
-export const SecurityPane: React.FC<SecurityPaneProps> = ({ profile }) => {
+export const SecurityPane = ({ profile }: SecurityPaneProps) => {
   const { theme } = useTheme();
 
   return (

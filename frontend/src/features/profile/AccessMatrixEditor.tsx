@@ -50,7 +50,7 @@ interface AccessMatrixEditorProps {
 // ========================================
 // COMPONENT
 // ========================================
-export const AccessMatrixEditor: React.FC<AccessMatrixEditorProps> = ({ profile }) => {
+export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
   const { theme } = useTheme();
   const [permissions, setPermissions] = useState<GranularPermission[]>(profile.accessMatrix);
   const permModal = useModalState();

@@ -23,9 +23,9 @@ interface DocumentTableProps {
   onRowClick?: (doc: LegalDocument) => void;
 }
 
-export const DocumentTable: React.FC<DocumentTableProps> = ({ 
+export const DocumentTable = ({ 
   documents, viewMode, selectedDocs, toggleSelection, selectAll, isAllSelected, isSelected, setSelectedDocForHistory, setTaggingDoc, onRowClick 
-}) => {
+}: DocumentTableProps) => {
   const { theme } = useTheme();
   const [ruleModalDoc, setRuleModalDoc] = useState<LegalDocument | null>(null);
   const [sortField, setSortField] = useState<keyof LegalDocument>('lastModified');
@@ -45,7 +45,7 @@ export const DocumentTable: React.FC<DocumentTableProps> = ({
   };
 
   const sortedDocuments = useMemo(() => {
-      return [...documents].sort((a: any, b: any) => {
+      return [...documents].sort((a, b) => {
         const aVal = a[sortField];
         const bVal = b[sortField];
         if (aVal === undefined || bVal === undefined) return 0;

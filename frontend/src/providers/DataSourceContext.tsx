@@ -29,7 +29,7 @@ interface DataSourceProviderProps {
   children: ReactNode;
 }
 
-export const DataSourceProvider: React.FC<DataSourceProviderProps> = ({ children }) => {
+export const DataSourceProvider = ({ children }: DataSourceProviderProps) => {
   const [currentSource, setCurrentSource] = useState<DataSourceType>(getInitialDataSource);
 
   // Derived state: boolean check for backend

@@ -75,12 +75,12 @@ interface CaseDetailProps {
  * - Integrated data management via useCaseDetail hook
  * - Real-time timeline and collaboration features
  */
-export const CaseDetail: React.FC<CaseDetailProps> = ({ 
+export const CaseDetail = ({ 
   caseData, 
   onBack, 
   onSelectCase,
   initialTab = 'Overview'
-}) => {
+}: CaseDetailProps) => {
   const { theme } = useTheme();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showTimelineOverlay, setShowTimelineOverlay] = useState(false);

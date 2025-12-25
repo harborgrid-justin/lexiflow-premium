@@ -25,7 +25,7 @@ interface MessengerContactsProps {
   onMessageClick: () => void;
 }
 
-export const MessengerContacts: React.FC<MessengerContactsProps> = ({ contacts, searchTerm, setSearchTerm, onMessageClick }) => {
+export const MessengerContacts = ({ contacts, searchTerm, setSearchTerm, onMessageClick }: MessengerContactsProps) => {
   const { theme } = useTheme();
 
   return (

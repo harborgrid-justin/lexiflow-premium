@@ -12,14 +12,14 @@ import { cn } from '@/utils/cn';
 // OVERVIEW SKELETON (Charts and Stats)
 // ============================================================================
 
-export const BillingOverviewSkeleton: React.FC = () => {
+export const BillingOverviewSkeleton = () => {
   const { theme } = useTheme();
   
   return (
     <div className="space-y-6 animate-pulse">
       {/* Stats Cards Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[1, 2, 3, 4].map((i: any) => (
+        {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
             className={cn(
@@ -54,7 +54,7 @@ export const BillingOverviewSkeleton: React.FC = () => {
       <div className={cn('p-6 rounded-lg border', theme.surface.default, theme.border.default)}>
         <div className={cn('h-5 w-32 rounded mb-4', theme.surface.raised)} />
         <div className="space-y-3">
-          {[1, 2, 3, 4, 5].map((i: any) => (
+          {[1, 2, 3, 4, 5].map((i) => (
             <div key={i} className="flex items-center gap-4">
               <div className={cn('h-4 w-8 rounded', theme.surface.highlight)} />
               <div className={cn('h-4 flex-1 rounded', theme.surface.highlight)} />
@@ -72,7 +72,7 @@ export const BillingOverviewSkeleton: React.FC = () => {
 // WIP TABLE SKELETON
 // ============================================================================
 
-export const BillingWIPSkeleton: React.FC = () => {
+export const BillingWIPSkeleton = () => {
   const { theme } = useTheme();
   
   return (
@@ -111,7 +111,7 @@ export const BillingWIPSkeleton: React.FC = () => {
 
         {/* Table Rows */}
         <div className={theme.surface.default}>
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((i: any) => (
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
             <div
               key={i}
               className={cn(
@@ -138,7 +138,7 @@ export const BillingWIPSkeleton: React.FC = () => {
       <div className="flex items-center justify-between pt-4">
         <div className={cn('h-4 w-32 rounded', theme.surface.highlight)} />
         <div className="flex gap-2">
-          {[1, 2, 3].map((i: any) => (
+          {[1, 2, 3].map((i) => (
             <div key={i} className={cn('h-8 w-8 rounded', theme.surface.highlight)} />
           ))}
         </div>
@@ -151,7 +151,7 @@ export const BillingWIPSkeleton: React.FC = () => {
 // INVOICES GRID SKELETON
 // ============================================================================
 
-export const BillingInvoicesSkeleton: React.FC = () => {
+export const BillingInvoicesSkeleton = () => {
   const { theme } = useTheme();
   
   return (
@@ -174,7 +174,7 @@ export const BillingInvoicesSkeleton: React.FC = () => {
 
       {/* Invoice Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {[1, 2, 3, 4, 5, 6].map((i: any) => (
+        {[1, 2, 3, 4, 5, 6].map((i) => (
           <div
             key={i}
             className={cn(
@@ -217,14 +217,14 @@ export const BillingInvoicesSkeleton: React.FC = () => {
 // LEDGER ENTRIES SKELETON
 // ============================================================================
 
-export const BillingLedgerSkeleton: React.FC = () => {
+export const BillingLedgerSkeleton = () => {
   const { theme } = useTheme();
   
   return (
     <div className="space-y-4 animate-pulse">
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        {[1, 2, 3].map((i: any) => (
+        {[1, 2, 3].map((i) => (
           <div
             key={i}
             className={cn(
@@ -253,7 +253,7 @@ export const BillingLedgerSkeleton: React.FC = () => {
         </div>
         
         <div className={theme.surface.default}>
-          {[1, 2, 3, 4, 5].map((i: any) => (
+          {[1, 2, 3, 4, 5].map((i) => (
             <div
               key={i}
               className={cn(
@@ -283,7 +283,7 @@ export const BillingLedgerSkeleton: React.FC = () => {
         </div>
         
         <div className={theme.surface.default}>
-          {[1, 2, 3].map((i: any) => (
+          {[1, 2, 3].map((i) => (
             <div
               key={i}
               className={cn(
@@ -310,7 +310,7 @@ export const BillingLedgerSkeleton: React.FC = () => {
 // TRUST ACCOUNT DETAIL SKELETON
 // ============================================================================
 
-export const TrustAccountDetailSkeleton: React.FC = () => {
+export const TrustAccountDetailSkeleton = () => {
   const { theme } = useTheme();
   
   return (
@@ -344,7 +344,7 @@ export const TrustAccountDetailSkeleton: React.FC = () => {
         </div>
         
         <div className={theme.surface.default}>
-          {[1, 2, 3, 4, 5, 6].map((i: any) => (
+          {[1, 2, 3, 4, 5, 6].map((i) => (
             <div
               key={i}
               className={cn(

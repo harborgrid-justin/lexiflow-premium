@@ -39,17 +39,17 @@ export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, o
           const [clients, parties] = await Promise.all([
               DataService.clients.getAll(),
               // DataService.parties.getAll() // Assuming we implement a party retrieval in DataService facade or fetch cases and flatten parties
-              DataService.cases.getAll().then((cases: any[]) => cases.flatMap((c: any) => c.parties || []))
+              DataService.cases.getAll().then((cases) => cases.flatMap((c) => c.parties || []))
           ]);
 
           const q = debouncedName.toLowerCase();
           const found: string[] = [];
 
-          clients.forEach((c: any) => {
+          clients.forEach((c) => {
               if (c.name.toLowerCase().includes(q)) found.push(`Existing Client: ${c.name}`);
           });
 
-          parties.forEach((p: any) => {
+          parties.forEach((p) => {
               if (p.name.toLowerCase().includes(q)) found.push(`Party in Case: ${p.name} (${p.role})`);
           });
           

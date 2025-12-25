@@ -16,12 +16,12 @@ import type {
 export class EvidenceApiService {
   async getAll(caseId?: string): Promise<EvidenceItem[]> {
     const params = caseId ? { caseId } : {};
-    const response = await apiClient.get<PaginatedResponse<EvidenceItem>>('/discovery/evidence', params);
+    const response = await apiClient.get<PaginatedResponse<EvidenceItem>>('/evidence', params);
     return response.data;
   }
 
   async getById(id: string): Promise<EvidenceItem> {
-    return apiClient.get<EvidenceItem>(`/discovery/evidence/${id}`);
+    return apiClient.get<EvidenceItem>(`/evidence/${id}`);
   }
 
   async add(item: Omit<EvidenceItem, 'id' | 'createdAt' | 'updatedAt'>): Promise<EvidenceItem> {

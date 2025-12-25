@@ -773,16 +773,6 @@ Object.defineProperties(DataServiceBase, {
     enumerable: true 
   },
   
-  /**
-   * War Room API - Case war room/situation room
-   * @backend api.warRoom
-   * @features Trial preparation, team coordination, resources
-   */
-  warRoom: { 
-    get: () => import('../domain/WarRoomDomain').then(m => m.WarRoomService),
-    enumerable: true 
-  },
-  
   // ─────────────────────────────────────────────────────────────────────────
   // DOCUMENT PROCESSING & AUTOMATION
   // ─────────────────────────────────────────────────────────────────────────

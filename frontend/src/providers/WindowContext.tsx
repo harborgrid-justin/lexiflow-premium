@@ -42,7 +42,7 @@ export const useWindow = () => {
 // Base Z-Index for Windows (below Modals and Toasts)
 const BASE_WINDOW_Z = 1000;
 
-export const WindowProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const WindowProvider = ({ children }: { children: ReactNode }) => {
   const [windows, setWindows] = useState<WindowInstance[]>([]);
   const [maxZIndex, setMaxZIndex] = useState(BASE_WINDOW_Z);
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);

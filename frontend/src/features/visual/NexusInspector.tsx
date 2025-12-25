@@ -42,7 +42,7 @@ interface NexusInspectorProps {
 // COMPONENT
 // ============================================================================
 
-export const NexusInspector: React.FC<NexusInspectorProps> = ({ item, onClose }) => {
+export const NexusInspector = ({ item, onClose }: NexusInspectorProps) => {
   const { theme } = useTheme();
 
   if (!item) return null;

@@ -81,6 +81,7 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
   // ============================================================================
   // OPERATIONS - Firm Management & Business
   // ============================================================================
+  { id: PATHS.DAF, label: 'DAF Operations', icon: ShieldCheck, category: 'Operations' },
   { id: PATHS.DATA_PLATFORM, label: 'Data Platform', icon: Database, category: 'Operations' },
   { id: PATHS.ENTITIES, label: 'Entity Director', icon: Network, category: 'Operations' },
   { id: PATHS.PRACTICE, label: 'Firm Operations', icon: Building2, category: 'Operations' },

@@ -42,7 +42,7 @@ interface ProfileOverviewProps {
 // COMPONENT
 // ============================================================================
 
-export const ProfileOverview: React.FC<ProfileOverviewProps> = ({ profile }) => {
+export const ProfileOverview = ({ profile }: ProfileOverviewProps) => {
   const { theme } = useTheme();
 
   return (

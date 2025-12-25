@@ -54,11 +54,11 @@ interface MessengerChatWindowProps {
   formatTime: (iso: string) => string;
 }
 
-export const MessengerChatWindow: React.FC<MessengerChatWindowProps> = ({
+export const MessengerChatWindow = ({
   activeConversation, activeConvId, setActiveConvId,
   inputText, setInputText, pendingAttachments, setPendingAttachments,
   isPrivilegedMode, setIsPrivilegedMode, handleSendMessage, handleFileSelect, formatTime
-}) => {
+}: MessengerChatWindowProps) => {
   const { theme } = useTheme();
   const notify = useNotify();
   const { openWindow } = useWindow();

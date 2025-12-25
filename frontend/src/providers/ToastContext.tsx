@@ -44,7 +44,7 @@ const PRIORITY_MAP: Record<ToastType, number> = {
     'info': 0
 };
 
-export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const queueRef = useRef<Toast[]>([]);
   const timeoutIdsRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());

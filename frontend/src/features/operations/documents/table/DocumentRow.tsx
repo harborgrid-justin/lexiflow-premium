@@ -7,6 +7,7 @@ import { FileIcon } from '@/components/atoms';
 import { TagList } from '@/components/molecules/TagList';
 import { TableRow, TableCell } from '@/components/organisms/Table';
 import { cn } from '@/utils/cn';
+import { tokens } from '@/components/theme/tokens';
 
 interface DocumentRowProps {
   doc: LegalDocument;
@@ -15,7 +16,7 @@ interface DocumentRowProps {
   setSelectedDocForHistory: (doc: LegalDocument) => void;
   setTaggingDoc: (doc: LegalDocument) => void;
   onRowClick?: (doc: LegalDocument) => void;
-  theme: any;
+  theme: typeof tokens.colors.light;
 }
 
 export const DocumentRow = React.memo<DocumentRowProps>(({ 

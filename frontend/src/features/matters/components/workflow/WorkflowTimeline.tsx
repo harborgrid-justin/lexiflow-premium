@@ -35,7 +35,7 @@ interface WorkflowTimelineProps {
   onNavigateToModule?: (module: string) => void;
 }
 
-export const WorkflowTimeline: React.FC<WorkflowTimelineProps> = ({ stages, onToggleTask, onNavigateToModule }) => {
+export const WorkflowTimeline = ({ stages, onToggleTask, onNavigateToModule }: WorkflowTimelineProps) => {
   const { theme } = useTheme();
   const [expandedStage, setExpandedStage] = useState<string | null>(stages.find(s => s.status === 'Active')?.id || null);
 

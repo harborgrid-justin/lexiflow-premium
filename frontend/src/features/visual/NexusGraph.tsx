@@ -49,7 +49,7 @@ interface NexusGraphProps {
 // COMPONENT
 // ============================================================================
 
-export const NexusGraph: React.FC<NexusGraphProps> = ({ caseData, parties, evidence, onNodeClick }) => {
+export const NexusGraph = ({ caseData, parties, evidence, onNodeClick }: NexusGraphProps) => {
   const { theme, mode } = useTheme();
   const chartTheme = useChartTheme();
   const containerRef = useRef<HTMLDivElement | null>(null);

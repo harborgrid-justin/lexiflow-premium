@@ -66,7 +66,7 @@ const PARENT_TABS = [
   }
 ];
 
-export const SecureMessenger: React.FC<SecureMessengerProps> = ({ initialTab }) => {
+export const SecureMessenger = ({ initialTab }: SecureMessengerProps) => {
   const { theme } = useTheme();
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useState<MessengerView>('chats');

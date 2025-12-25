@@ -34,7 +34,7 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const WorkflowAutomations: React.FC = () => {
+export const WorkflowAutomations = () => {
   const { theme } = useTheme();
   
   // Load automations from IndexedDB via useQuery for accurate, cached data

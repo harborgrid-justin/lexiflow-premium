@@ -36,7 +36,7 @@ interface TemplatePreviewProps {
   onClick: () => void;
 }
 
-export const TemplatePreview: React.FC<TemplatePreviewProps> = ({ data, onClick }) => {
+export const TemplatePreview = ({ data, onClick }: TemplatePreviewProps) => {
   const { theme } = useTheme();
 
   const getComplexityColor = (c: string) => {

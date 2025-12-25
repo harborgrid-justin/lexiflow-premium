@@ -15,7 +15,7 @@ import { Input, TextArea } from '@/components/atoms';
 import { useModalState } from '@/hooks';
 import { getTodayString } from '@/utils/dateUtils';
 
-export const Examinations: React.FC = () => {
+export const Examinations = () => {
   const { theme } = useTheme();
   const examModal = useModalState();
   const [newExam, setNewExam] = useState<Partial<Examination>>({});

@@ -11,7 +11,7 @@ import { WorkflowTask, TaskStatusBackend } from '@/types';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
-export const ParallelTasksManager: React.FC = () => {
+export const ParallelTasksManager = () => {
   const { theme } = useTheme();
   
   // Performance Engine: useQuery

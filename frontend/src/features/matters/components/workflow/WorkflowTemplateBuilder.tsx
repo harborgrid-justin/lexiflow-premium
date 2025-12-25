@@ -22,7 +22,7 @@ interface WorkflowTemplateBuilderProps {
   onBack?: () => void;
 }
 
-export const WorkflowTemplateBuilder: React.FC<WorkflowTemplateBuilderProps> = ({ initialTemplate, onBack }) => {
+export const WorkflowTemplateBuilder = ({ initialTemplate, onBack }: WorkflowTemplateBuilderProps) => {
   const { theme } = useTheme();
   const notify = useNotify();
   const { nodes, connections, addNode, updateNode, deleteNode } = useWorkflowBuilder(initialTemplate);

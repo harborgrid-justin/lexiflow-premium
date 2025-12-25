@@ -11,7 +11,7 @@ import { queryKeys } from '@/utils/queryKeys';
 import { VirtualList } from '@/components/organisms/VirtualList';
 import { AuditEvent } from './types';
 
-export const AuditTrailViewer: React.FC = () => {
+export const AuditTrailViewer = () => {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery

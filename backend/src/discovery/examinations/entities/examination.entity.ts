@@ -31,10 +31,10 @@ export class Examination {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', name: 'case_id' })
   caseId!: string;
 
-  @Column({ type: 'varchar', length: 300 })
+  @Column({ type: 'varchar', length: 300, name: 'examination_title' })
   examinationTitle!: string;
 
   @Column({
@@ -59,28 +59,28 @@ export class Examination {
   @Column({ type: 'varchar', length: 300, nullable: true })
   examiner!: string;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
+  @Column({ type: 'varchar', length: 300, nullable: true, name: 'examiner_organization' })
   examinerOrganization!: string;
 
-  @Column({ type: 'varchar', length: 200, nullable: true })
+  @Column({ type: 'varchar', length: 200, nullable: true, name: 'examiner_specialty' })
   examinerSpecialty!: string;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'date', nullable: true, name: 'request_date' })
   requestDate!: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: 'timestamp', nullable: true, name: 'scheduled_date' })
   scheduledDate!: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: 'timestamp', nullable: true, name: 'completed_date' })
   completedDate!: Date;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ type: 'int', nullable: true, name: 'duration_minutes' })
   durationMinutes!: number;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
   location!: string;
 
-  @Column({ type: 'varchar', length: 200, nullable: true })
+  @Column({ type: 'varchar', length: 200, nullable: true, name: 'requesting_party' })
   requestingParty!: string;
 
   @Column({ type: 'text', nullable: true })
@@ -98,22 +98,22 @@ export class Examination {
   @Column({ type: 'text', nullable: true })
   conclusions!: string;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: 'boolean', default: false, name: 'is_report_received' })
   isReportReceived!: boolean;
 
-  @Column({ type: 'date', nullable: true })
+  @Column({ type: 'date', nullable: true, name: 'report_received_date' })
   reportReceivedDate!: Date;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
+  @Column({ type: 'varchar', length: 500, nullable: true, name: 'report_path' })
   reportPath!: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, name: 'estimated_cost' })
   estimatedCost!: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true, name: 'actual_cost' })
   actualCost!: number;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'text', nullable: true, name: 'dispute_reason' })
   disputeReason!: string;
 
   @Column({ type: 'text', nullable: true })
@@ -122,21 +122,21 @@ export class Examination {
   @Column({ type: 'jsonb', nullable: true })
   metadata!: Record<string, unknown>;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ type: 'uuid', nullable: true, name: 'assigned_attorney' })
   assignedAttorney!: string;
 
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', name: 'created_by' })
   createdBy!: string;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ type: 'uuid', nullable: true, name: 'updated_by' })
   updatedBy!: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: 'timestamp', nullable: true, name: 'deleted_at' })
   deletedAt!: Date;
 }

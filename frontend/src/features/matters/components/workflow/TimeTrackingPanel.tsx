@@ -28,7 +28,7 @@ interface TimerControlsProps {
 /**
  * TimerDisplay - Shows the current timer status and time
  */
-const TimerDisplay: React.FC<TimerDisplayProps> = ({ isActive, formattedTime, theme }) => (
+const TimerDisplay = ({ isActive, formattedTime, theme }: TimerDisplayProps) => (
   <div className="flex items-center gap-3">
     <div className={cn("p-2 rounded-full", isActive ? "animate-pulse bg-green-100 text-green-600" : theme.primary.light)}>
       <Clock className={cn("h-5 w-5", isActive ? "text-green-600" : theme.primary.text)} />
@@ -43,7 +43,7 @@ const TimerDisplay: React.FC<TimerDisplayProps> = ({ isActive, formattedTime, th
 /**
  * TimerControls - Play, pause, and stop buttons
  */
-const TimerControls: React.FC<TimerControlsProps> = ({ isActive, seconds, onStart, onPause, onStop }) => (
+const TimerControls = ({ isActive, seconds, onStart, onPause, onStop }: TimerControlsProps) => (
   <div className="flex gap-2">
     {!isActive ? (
       <button 
@@ -84,7 +84,7 @@ const TimerControls: React.FC<TimerControlsProps> = ({ isActive, seconds, onStar
  * Uses useTimeTracker hook for all business logic and state management
  * Composed of TimerDisplay and TimerControls presentation components
  */
-export const TimeTrackingPanel: React.FC = () => {
+export const TimeTrackingPanel = () => {
   const { theme } = useTheme();
   const { isActive, seconds, formattedTime, start, pause, stop } = useTimeTracker();
 

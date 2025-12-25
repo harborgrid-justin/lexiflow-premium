@@ -46,6 +46,7 @@ export const PATHS = {
   ENTITIES: 'entities',
   DATA_PLATFORM: 'data_platform',
   PROFILE: 'profile',
+  DAF: 'daf',
   PLEADING_BUILDER: 'pleading_builder',
   LITIGATION_BUILDER: 'litigation_builder'
 } as const;

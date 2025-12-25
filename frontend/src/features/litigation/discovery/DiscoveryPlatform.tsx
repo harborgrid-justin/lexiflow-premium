@@ -62,7 +62,7 @@ import { DiscoveryView, DiscoveryPlatformProps } from './types';
 import { DiscoveryErrorBoundary } from './DiscoveryErrorBoundary';
 import { DiscoveryRequestsSkeleton, PrivilegeLogSkeleton, LegalHoldsSkeleton, ESIDashboardSkeleton } from './DiscoverySkeleton';
 
-const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTab, caseId }) => {
+const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProps) => {
   const { theme } = useTheme();
   const notify = useNotify();
   const [activeTab, setActiveTab] = useSessionStorage<DiscoveryView>(
@@ -234,7 +234,7 @@ const DiscoveryPlatformInternal: React.FC<DiscoveryPlatformProps> = ({ initialTa
 };
 
 // Wrap with error boundary
-export const DiscoveryPlatform: React.FC<DiscoveryPlatformProps> = (props) => (
+export const DiscoveryPlatform = (props: DiscoveryPlatformProps) => (
   <DiscoveryErrorBoundary onReset={() => window.location.reload()}>
     <DiscoveryPlatformInternal {...props} />
   </DiscoveryErrorBoundary>

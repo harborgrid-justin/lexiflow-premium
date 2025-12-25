@@ -56,7 +56,7 @@ interface AppContentRendererProps {
 // ========================================
 // COMPONENT
 // ========================================
-export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
+export const AppContentRenderer = ({
   activeView,
   currentUser,
   selectedCase,
@@ -66,7 +66,7 @@ export const AppContentRenderer: React.FC<AppContentRendererProps> = ({
   handleBackToMain,
   setActiveView,
   initialTab
-}) => {
+}: AppContentRendererProps) => {
   // Only show CaseDetail when we have a valid case with an ID
   // This prevents showing CaseDetail with empty/undefined case data
   const hasValidCase = selectedCase && selectedCase.id;

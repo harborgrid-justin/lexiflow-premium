@@ -191,7 +191,7 @@ function validateIdKey<T extends Record<string, unknown>>(items: T[], idKey: key
  * - Ctrl/Cmd + click: Add to selection (browser default)
  * - Compatible with screen readers when used with proper ARIA
  */
-export const useSelection = <T extends Record<string, unknown>>(
+export const useSelection = <T extends object>(
   items: T[],
   idKey: keyof T = 'id' as keyof T
 ): UseSelectionReturn<T> => {

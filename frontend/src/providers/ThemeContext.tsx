@@ -25,7 +25,7 @@ interface ThemeProviderProps {
   children: ReactNode;
 }
 
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
+export const ThemeProvider = ({ children }: ThemeProviderProps) => {
   // Principle 35/38: Deterministic First Render
   // Start with a stable default (e.g. 'light') during initial render/hydration
   // to avoid mismatched markup. Sync with storage/preference in effect.

@@ -23,7 +23,7 @@ interface DocumentExplorerProps {
   currentUserRole?: UserRole;
 }
 
-export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserRole = 'Associate' }) => {
+export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExplorerProps) => {
   const { theme } = useTheme();
   const notify = useNotify();
 
@@ -42,7 +42,7 @@ export const DocumentExplorer: React.FC<DocumentExplorerProps> = ({ currentUserR
   const {
     selectedIds: selectedDocs, toggleSelection, selectAll,
     clearSelection, isSelected, isAllSelected
-  } = useSelection(filtered as unknown as Record<string, unknown>[]);
+  } = useSelection(filtered);
 
   const { mutate: summarizeBatch, isLoading: isSummarizing } = useMutation(
       DataService.documents.summarizeBatch,

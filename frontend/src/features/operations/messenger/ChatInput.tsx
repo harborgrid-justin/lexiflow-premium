@@ -41,11 +41,11 @@ interface ChatInputProps {
   isAiThinking?: boolean;
 }
 
-export const ChatInput: React.FC<ChatInputProps> = ({
+export const ChatInput = ({
   inputText, setInputText, pendingAttachments, setPendingAttachments,
   isPrivilegedMode, setIsPrivilegedMode, onSend, onFileSelect, draft, recipientName,
   onAiAssist, isAiThinking
-}) => {
+}: ChatInputProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { theme } = useTheme();

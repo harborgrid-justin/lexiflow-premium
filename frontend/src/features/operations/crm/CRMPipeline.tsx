@@ -12,7 +12,7 @@ interface CRMPipelineProps {
   leads: unknown[];
 }
 
-export const CRMPipeline: React.FC<CRMPipelineProps> = ({ leads }) => {
+export const CRMPipeline = ({ leads }: CRMPipelineProps) => {
   const { theme } = useTheme();
   const { success: notifySuccess } = useNotify();
   const [draggedLeadId, setDraggedLeadId] = useState<string | null>(null);

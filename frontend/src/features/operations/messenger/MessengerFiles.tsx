@@ -14,7 +14,7 @@ interface MessengerFilesProps {
   setSearchTerm: (s: string) => void;
 }
 
-export const MessengerFiles: React.FC<MessengerFilesProps> = ({ files, searchTerm, setSearchTerm }) => {
+export const MessengerFiles = ({ files, searchTerm, setSearchTerm }: MessengerFilesProps) => {
   const { theme } = useTheme();
 
   return (

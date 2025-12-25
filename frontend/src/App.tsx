@@ -20,7 +20,7 @@ import { backendDiscovery } from '@/services';
 // Initialize Module Registry
 initializeModules();
 
-const InnerApp: React.FC = () => {
+const InnerApp = () => {
   const {
     activeView,
     selectedCase,
@@ -102,7 +102,7 @@ const InnerApp: React.FC = () => {
   );
 };
 
-const App: React.FC = () => {
+const App = () => {
   // Enable memory cleanup and optional logging in development
   useDataServiceCleanup({
     enableLogging: process.env.NODE_ENV === 'development',

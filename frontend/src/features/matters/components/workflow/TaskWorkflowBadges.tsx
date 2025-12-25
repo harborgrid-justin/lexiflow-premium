@@ -7,7 +7,7 @@ interface TaskWorkflowBadgesProps {
   status: string | 'Pending' | 'In Progress' | 'Review' | 'Done';
 }
 
-export const TaskWorkflowBadges: React.FC<TaskWorkflowBadgesProps> = ({ status }) => {
+export const TaskWorkflowBadges = ({ status }: TaskWorkflowBadgesProps) => {
   const { theme } = useTheme();
 
   let styles = cn(theme.status.neutral.bg, theme.status.neutral.text, theme.status.neutral.border);

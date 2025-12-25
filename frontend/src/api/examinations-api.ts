@@ -16,16 +16,19 @@ import type { Examination } from '@/types/discovery';
 
 export class ExaminationsApiService {
   async getAll(filters?: { caseId?: string; status?: string; type?: string }): Promise<Examination[]> {
-    const response = await apiClient.get<PaginatedResponse<Examination>>('/discovery/examinations', filters);
-    return response.data;
+    const response = await apiClient.get<PaginatedResponse<Examination> | { items: Examination[] }>('/examinations', filters);
+    if ('items' in response) {
+        return response.items;
+    }
+    return response.data || [];
   }
 
   async getById(id: string): Promise<Examination> {
-    return apiClient.get<Examination>(`/discovery/examinations/${id}`);
+    return apiClient.get<Examination>(`/examinations/${id}`);
   }
 
   async create(examination: Omit<Examination, 'id' | 'createdAt' | 'updatedAt'>): Promise<Examination> {
-    return apiClient.post<Examination>('/discovery/examinations', examination);
+    return apiClient.post<Examination>('/examinations', examination);
   }
 
   async update(id: string, examination: Partial<Examination>): Promise<Examination> {

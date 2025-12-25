@@ -4,7 +4,7 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { analyticsApi } from '@/api/domains/analytics.api';
+import { api } from '@/api';
 import { delay } from '@/utils/async';
 import { STORES, db } from '@/services/data/db';
 
@@ -91,33 +91,24 @@ export const DashboardService = {
   },
   
   getMetrics: async (): Promise<DashboardMetrics> => {
-    await delay(100); // Simulate calculation time
-    const cases = await db.getAll<{ status?: string; upcomingDeadlines?: any[] }>(STORES.CASES);
-    const tasks = await db.getAll<{ status?: string }>(STORES.TASKS);
-    const timeEntries = await db.getAll<{ date?: string }>(STORES.TIME_ENTRIES);
-
+    const stats = await api.cases.getStats();
     return {
-      activeCases: cases.filter((c) => c?.status === 'Active').length,
-      upcomingDeadlines: cases.reduce((sum: number, c) => sum + (c?.upcomingDeadlines?.length || 0), 0),
-      recentActivity: timeEntries.filter((t) => {
-        if (!t?.date) return false;
-        const date = new Date(t.date);
-        const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-        return date > dayAgo;
-      }).length,
-      pendingTasks: tasks.filter((t) => t?.status === 'Pending').length,
-      utilizationRate: 0.78, // Mock calculation
-      revenueThisMonth: 125000, // Mock calculation
+      activeCases: stats.totalActive,
+      upcomingDeadlines: stats.upcomingDeadlines,
+      recentActivity: 0,
+      pendingTasks: 0,
+      utilizationRate: stats.utilizationRate,
+      revenueThisMonth: 0,
     };
   },
 
   getStats: async () => {
-    const metrics = await DashboardService.getMetrics();
+    const stats = await api.cases.getStats();
     return {
-      activeCases: metrics.activeCases,
-      pendingMotions: 5, // Mock
-      billableHours: 120, // Mock
-      highRisks: 2 // Mock
+      activeCases: stats.totalActive,
+      pendingMotions: 0,
+      billableHours: 0,
+      highRisks: stats.atRisk
     };
   },
 

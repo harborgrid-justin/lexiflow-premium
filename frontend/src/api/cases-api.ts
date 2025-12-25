@@ -75,6 +75,17 @@ interface ArchivedCase {
   outcome: string;
 }
 
+export interface CaseStats {
+  totalActive: number;
+  intakePipeline: number;
+  upcomingDeadlines: number;
+  atRisk: number;
+  totalValue: number;
+  utilizationRate: number;
+  averageAge: number;
+  conversionRate: number;
+}
+
 /**
  * Search filter parameters
  */
@@ -104,6 +115,7 @@ export const CASES_QUERY_KEYS = {
     byType: (type: string) => ['cases', 'type', type] as const,
     archived: () => ['cases', 'archived'] as const,
     search: (query: string) => ['cases', 'search', query] as const,
+    stats: () => ['cases', 'stats'] as const,
 } as const;
 
 /**
@@ -200,6 +212,20 @@ export class CasesApiService {
       };
     });
   }
+
+    /**
+     * Get case statistics
+     * 
+     * @returns Promise<CaseStats> Case statistics
+     */
+    async getStats(): Promise<CaseStats> {
+        try {
+            return await apiClient.get<CaseStats>('/cases/stats');
+        } catch (error) {
+            console.error('[CasesApiService.getStats] Error:', error);
+            throw new Error('Failed to fetch case statistics');
+        }
+    }
 
     /**
      * Get case by ID

@@ -58,6 +58,17 @@ export class MattersApiService {
   }
 
   /**
+   * Get matter KPIs
+   */
+  async getKPIs(dateRange?: string): Promise<any> {
+    const params = new URLSearchParams();
+    if (dateRange) params.append('dateRange', dateRange);
+    const queryString = params.toString();
+    const url = queryString ? `${this.baseUrl}/kpis?${queryString}` : `${this.baseUrl}/kpis`;
+    return await apiClient.get(url);
+  }
+
+  /**
    * Create new matter
    */
   async create(matter: Partial<Matter>): Promise<Matter> {

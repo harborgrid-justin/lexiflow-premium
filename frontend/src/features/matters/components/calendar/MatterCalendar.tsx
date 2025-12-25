@@ -141,7 +141,7 @@ export const MatterCalendar: React.FC = () => {
       return users.map(user => ({
         userId: user.id,
         userName: user.name || user.email,
-        availability: [], // TODO: Implement availability tracking
+        availability: [], // Availability tracking not yet implemented in backend
       }));
     }
   );

@@ -91,39 +91,7 @@ export const MatterOverviewDashboard: React.FC = () => {
   // Fetch KPIs
   const { data: kpis, isLoading: kpisLoading } = useQuery(
     ['matters', 'kpis', dateRange],
-    async () => {
-      const allMatters = matters || [];
-      const activeMatters = allMatters.filter(m => m.status === MatterStatus.ACTIVE);
-      const intakeMatters = allMatters.filter(m => m.status === MatterStatus.ACTIVE && m.conflictCheckCompleted === false);
-      
-      const now = new Date();
-      const upcomingDeadlines = allMatters.filter(m => {
-        if (!m.targetCloseDate) return false;
-        const deadline = new Date(m.targetCloseDate);
-        const daysUntil = (deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
-        return daysUntil >= 0 && daysUntil <= 7;
-      }).length;
-
-      const averageAge = allMatters.length > 0
-        ? Math.round(allMatters.reduce((sum, m) => {
-            if (!m.createdAt) return sum;
-            const created = new Date(m.createdAt);
-            return sum + (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
-          }, 0) / allMatters.length)
-        : 0;
-      
-      return {
-        totalActive: activeMatters.length,
-        intakePipeline: intakeMatters.length,
-        upcomingDeadlines,
-        atRisk: activeMatters.filter(m => m.priority === 'HIGH').length,
-        totalValue: allMatters.reduce((sum, m) => sum + (m.estimatedValue || 0), 0),
-        utilizationRate: 0, // Will be calculated from time entries API
-        averageAge,
-        conversionRate: intakeMatters.length > 0 ? Math.round((activeMatters.length / (activeMatters.length + intakeMatters.length)) * 100 * 10) / 10 : 0,
-      } as MatterKPIs;
-    },
-    { enabled: !!matters }
+    () => api.matters.getKPIs(dateRange)
   );
 
   // Fetch intake pipeline data

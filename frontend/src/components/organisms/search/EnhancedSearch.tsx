@@ -3,6 +3,7 @@ import { Search, X, Command } from 'lucide-react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import * as styles from './EnhancedSearch.styles';
 import type { SearchCategory, SearchResult, EnhancedSearchProps } from './types';
 import { highlightMatch, filterSuggestions } from './utils';
 import { getRecentSearches, parseSearchSyntax } from './storage';
@@ -103,16 +104,10 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
   useClickOutside(containerRef as React.RefObject<HTMLElement>, () => setIsOpen(false));
 
   return (
-    <div ref={containerRef} className={cn("relative w-full", className)}>
+    <div ref={containerRef} className={styles.searchContainer(className)}>
       {/* Search Input */}
-      <div className={cn(
-        "relative flex items-center gap-2 px-3 py-2 rounded-lg border transition-all",
-        theme.surface.input,
-        theme.border.default,
-        isOpen && theme.border.focused,
-        "focus-within:ring-2 focus-within:ring-offset-0 focus-within:ring-blue-500"
-      )}>
-        <Search className={cn("h-4 w-4 flex-shrink-0", theme.text.tertiary)} />
+      <div className={styles.getInputContainer(theme, isOpen)}>
+        <Search className={styles.getSearchIcon(theme)} />
         
         <input
           ref={inputRef}
@@ -123,29 +118,22 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
           onFocus={() => setIsOpen(true)}
           placeholder={placeholder}
           autoFocus={autoFocus}
-          className={cn(
-            "flex-1 bg-transparent outline-none text-sm",
-            theme.text.primary,
-            "placeholder:text-slate-400 dark:placeholder:text-slate-600"
-          )}
+          className={styles.getSearchInput(theme)}
         />
         
         {query && (
           <button
             onClick={handleClear}
-            className={cn(
-              "p-1 rounded hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors",
-              theme.text.tertiary
-            )}
+            className={styles.getClearButton(theme)}
             title="Clear"
           >
-            <X className="h-3 w-3" />
+            <X className={styles.clearIcon} />
           </button>
         )}
         
         {showSyntaxHints && !query && (
-          <div className="flex items-center gap-1 text-xs text-slate-400">
-            <Command className="h-3 w-3" />
+          <div className={styles.syntaxHintsContainer}>
+            <Command className={styles.commandIcon} />
             <span>K</span>
           </div>
         )}
@@ -153,17 +141,12 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
 
       {/* Categories */}
       {showCategories && (
-        <div className="flex items-center gap-1 mt-2">
+        <div className={styles.categoriesContainer}>
           {(['all', 'cases', 'documents', 'people', 'dates', 'tags'] as SearchCategory[]).map(cat => (
             <button
               key={cat}
               onClick={() => setCategory(cat)}
-              className={cn(
-                "px-2 py-1 text-xs font-medium rounded transition-colors capitalize",
-                category === cat
-                  ? cn(theme.primary.DEFAULT, 'text-white')
-                  : cn(theme.surface.input, theme.text.secondary, "hover:bg-slate-200 dark:hover:bg-slate-700")
-              )}
+              className={styles.getCategoryButton(theme, category === cat)}
             >
               {cat}
             </button>
@@ -175,53 +158,32 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
       {isOpen && displayItems.length > 0 && (
         <div
           ref={dropdownRef}
-          className={cn(
-            "absolute z-50 w-full mt-2 rounded-lg border shadow-lg overflow-hidden",
-            theme.surface.default,
-            theme.border.default
-          )}
+          className={styles.getDropdownContainer(theme)}
         >
-          <div className="max-h-96 overflow-y-auto">
+          <div className={styles.dropdownScrollContainer}>
             {displayItems.map((item, idx) => (
               <button
                 key={item.id}
                 onClick={() => handleSuggestionClick(item)}
-                className={cn(
-                  "w-full px-3 py-2.5 flex items-center gap-3 text-left transition-colors",
-                  selectedIndex === idx
-                    ? cn(theme.primary.light, theme.primary.text)
-                    : cn(theme.surface.default, "hover:bg-slate-100 dark:hover:bg-slate-800")
-                )}
+                className={styles.getSuggestionButton(theme, selectedIndex === idx)}
               >
-                <div className={cn(
-                  "flex-shrink-0",
-                  selectedIndex === idx ? theme.primary.text : theme.text.tertiary
-                )}>
+                <div className={styles.getSuggestionIcon(theme, selectedIndex === idx)}>
                   {item.icon || getCategoryIcon(item.category)}
                 </div>
                 
-                <div className="flex-1 min-w-0">
+                <div className={styles.suggestionContentContainer}>
                   <p
-                    className={cn(
-                      "text-sm truncate",
-                      selectedIndex === idx ? theme.primary.text : theme.text.primary
-                    )}
+                    className={styles.getSuggestionText(theme, selectedIndex === idx)}
                     dangerouslySetInnerHTML={{ __html: sanitizeHtml(('highlightedText' in item ? item.highlightedText : undefined) || item.text) }}
                   />
                   {'metadata' in item && item.metadata && (
-                    <p className={cn(
-                      "text-xs mt-0.5",
-                      selectedIndex === idx ? theme.primary.text : theme.text.tertiary
-                    )}>
+                    <p className={styles.getSuggestionMetadata(theme, selectedIndex === idx)}>
                       {String(item.metadata.description || '')}
                     </p>
                   )}
                 </div>
                 
-                <span className={cn(
-                  "text-xs capitalize flex-shrink-0",
-                  selectedIndex === idx ? theme.primary.text : theme.text.tertiary
-                )}>
+                <span className={styles.getSuggestionCategory(theme, selectedIndex === idx)}>
                   {item.category}
                 </span>
               </button>

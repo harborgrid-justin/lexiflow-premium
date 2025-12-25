@@ -1,21 +1,22 @@
 import React from 'react';
 import { FileText, Users, Calendar, Tag, Hash, Search } from 'lucide-react';
 import type { SearchCategory } from './types';
+import * as styles from './helpers.styles';
 
 export function getCategoryIcon(category: SearchCategory): React.ReactNode {
   switch (category) {
     case 'cases':
-      return <Hash className="h-4 w-4" />;
+      return <Hash className={styles.categoryIcon} />;
     case 'documents':
-      return <FileText className="h-4 w-4" />;
+      return <FileText className={styles.categoryIcon} />;
     case 'people':
-      return <Users className="h-4 w-4" />;
+      return <Users className={styles.categoryIcon} />;
     case 'dates':
-      return <Calendar className="h-4 w-4" />;
+      return <Calendar className={styles.categoryIcon} />;
     case 'tags':
-      return <Tag className="h-4 w-4" />;
+      return <Tag className={styles.categoryIcon} />;
     default:
-      return <Search className="h-4 w-4" />;
+      return <Search className={styles.categoryIcon} />;
   }
 }
 

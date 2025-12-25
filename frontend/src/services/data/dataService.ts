@@ -367,6 +367,13 @@ Object.defineProperties(DataServiceBase, {
    * @features Upload, version control, OCR, metadata extraction
    */
   documents: DataSourceRouter.createPropertyDescriptor('documents', getIntegratedDocumentRepository),
+
+  /**
+   * Drafting API - Document drafting and assembly
+   * @backend api.drafting
+   * @features Drafts, templates, approval queue
+   */
+  drafting: { get: () => api.drafting },
   
   /**
    * Pleadings API - Legal pleading management

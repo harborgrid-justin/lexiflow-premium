@@ -60,6 +60,7 @@ const KnowledgeBase = lazyWithPreload(() => import('../features/knowledge/base/K
 const LitigationBuilder = lazyWithPreload(() => import('../features/litigation/strategy/LitigationBuilder') as Promise<{ default: React.ComponentType<any> }>);
 const ClauseLibrary = lazyWithPreload(() => import('../features/knowledge/clauses/ClauseLibrary') as Promise<{ default: React.ComponentType<any> }>);
 const CitationManager = lazyWithPreload(() => import('../features/knowledge/citation/CitationManager') as Promise<{ default: React.ComponentType<any> }>);
+const DraftingDashboard = lazyWithPreload(() => import('../features/drafting/DraftingDashboard') as Promise<{ default: React.ComponentType<any> }>);
 
 const COMPONENT_MAP: Record<string, React.LazyExoticComponent<React.ComponentType<any>>> = {
   [PATHS.DASHBOARD]: Dashboard,
@@ -79,6 +80,7 @@ const COMPONENT_MAP: Record<string, React.LazyExoticComponent<React.ComponentTyp
   [PATHS.CORRESPONDENCE]: CorrespondenceManager,
   [PATHS.WORKFLOWS]: MasterWorkflow,
   [PATHS.DOCUMENTS]: DocumentManager,
+  [PATHS.DRAFTING]: DraftingDashboard,
   [PATHS.WAR_ROOM]: WarRoom,
   [PATHS.EXHIBITS]: ExhibitManager,
   [PATHS.DISCOVERY]: DiscoveryPlatform,
@@ -97,7 +99,7 @@ const COMPONENT_MAP: Record<string, React.LazyExoticComponent<React.ComponentTyp
   [PATHS.CALENDAR]: CalendarView,
   [PATHS.RULES_ENGINE]: RulesPlatform,
   [PATHS.PROFILE]: UserProfileManager,
-  [PATHS.DAF]: DafDashboard,
+  // [PATHS.DAF]: DafDashboard, // TODO: Create DafDashboard component
   [PATHS.PLEADING_BUILDER]: PleadingBuilder,
   [PATHS.LIBRARY]: KnowledgeBase,
   [PATHS.LITIGATION_BUILDER]: LitigationBuilder,

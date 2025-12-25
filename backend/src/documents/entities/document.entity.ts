@@ -4,11 +4,13 @@ import {
   Index,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { BaseEntity } from '../../common/base/base.entity';
 import { DocumentType, DocumentStatus } from '../interfaces/document.interface';
 import { User } from '../../users/entities/user.entity';
 import { Case } from '../../cases/entities/case.entity';
+import { DocumentReviewer } from './document-reviewer.entity';
 
 @Entity('documents')
 @Index(['caseId', 'type'])
@@ -99,4 +101,7 @@ export class Document extends BaseEntity {
 
   @Column({ name: 'updated_by', type: 'uuid', nullable: true })
   updatedBy!: string;
+
+  @OneToMany(() => DocumentReviewer, (reviewer) => reviewer.document)
+  reviewers!: DocumentReviewer[];
 }

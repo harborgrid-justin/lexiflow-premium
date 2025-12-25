@@ -27,6 +27,7 @@ import { useHoverIntent } from '@/hooks/useHoverIntent';
 import { cn } from '@/utils/cn';
 import { PREFETCH_MAP } from '@/config/prefetchConfig';
 import { Scheduler } from '@/utils/scheduler';
+import * as styles from './SidebarNav.styles';
 
 // Types
 import type { NavCategory, ModuleDefinition } from '@/types';
@@ -98,17 +99,17 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
   });
 
   return (
-    <nav className="flex-1 overflow-y-auto py-6 px-3 space-y-8 custom-scrollbar touch-auto">
+    <nav className={styles.navContainer}>
       {(Object.keys(groupedItems) as NavCategory[]).map(category => {
         const items = groupedItems[category];
         if (!items || items.length === 0) return null;
 
         return (
           <div key={category}>
-            <h3 className={cn("px-3 text-[10px] font-bold uppercase tracking-wider mb-2", theme.text.tertiary)}>
+            <h3 className={styles.getCategoryHeader(theme)}>
               {category}
             </h3>
-            <div className="space-y-0.5">
+            <div className={styles.itemsContainer}>
               {items.map(item => {
                 if (!item.icon) return null;
                 const Icon = item.icon;
@@ -120,21 +121,16 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
                     <button
                       onClick={() => setActiveView(item.id)}
                       {...hoverHandlers(item)}
-                      className={cn(
-                        "w-full flex items-center space-x-3 px-3 h-9 rounded-lg text-sm font-medium transition-all duration-200 group relative",
-                        isActive || isChildActive
-                          ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300" 
-                          : cn(theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.text.primary}`)
-                      )}
+                      className={styles.getNavItemButton(theme, isActive || isChildActive)}
                     >
-                      <Icon className={cn("h-4 w-4 shrink-0 transition-colors", isActive || isChildActive ? "text-blue-600 dark:text-blue-400" : "opacity-70 group-hover:opacity-100")} />
-                      <span className="truncate">{item.label}</span>
-                      {(isActive || isChildActive) && <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-blue-600 rounded-r-full"></div>}
+                      <Icon className={styles.getNavItemIcon(isActive || isChildActive)} />
+                      <span className={styles.navItemLabel}>{item.label}</span>
+                      {(isActive || isChildActive) && <div className={styles.activeIndicator}></div>}
                     </button>
                     
                     {/* Submenu for children */}
                     {item.children && item.children.length > 0 && (isActive || isChildActive) && (
-                      <div className="ml-4 mt-1 space-y-0.5 border-l-2 border-slate-200 dark:border-slate-700 pl-2">
+                      <div className={styles.submenuContainer}>
                         {item.children.map(child => {
                           const ChildIcon = child.icon as React.ComponentType<{ className?: string }>;
                           const isChildItemActive = activeView === child.id;
@@ -142,15 +138,10 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
                             <button
                               key={child.id}
                               onClick={() => setActiveView(child.id)}
-                              className={cn(
-                                "w-full flex items-center space-x-2 px-2 h-8 rounded text-xs font-medium transition-all duration-200 group",
-                                isChildItemActive
-                                  ? "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
-                                  : cn(theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.text.primary}`)
-                              )}
+                              className={styles.getSubmenuButton(theme, isChildItemActive)}
                             >
-                              {ChildIcon && <ChildIcon className={cn("h-3.5 w-3.5 shrink-0", isChildItemActive ? "text-blue-600 dark:text-blue-400" : "opacity-60")} />}
-                              <span className="truncate">{child.label}</span>
+                              {ChildIcon && <ChildIcon className={styles.getSubmenuIcon(isChildItemActive)} />}
+                              <span className={styles.submenuLabel}>{child.label}</span>
                             </button>
                           );
                         })}

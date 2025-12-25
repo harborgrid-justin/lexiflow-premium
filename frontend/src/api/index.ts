@@ -48,6 +48,7 @@ export * from './domains/admin.api';
 export * from './domains/data-platform.api';
 export * from './domains/hr.api';
 export * from './domains/legal-entities.api';
+export * from './domains/drafting.api';
 
 // ==================== STANDALONE API SERVICES ====================
 // Export individual API service classes
@@ -150,6 +151,7 @@ import { adminApi as adminDomain } from './domains/admin.api';
 import { dataPlatformApi as dataPlatformDomain } from './domains/data-platform.api';
 import { hrApi as hrDomain } from './domains/hr.api';
 import { LegalEntitiesApiService } from './domains/legal-entities.api';
+import { draftingApi } from './domains/drafting.api';
 
 export const api = {
   auth: authDomain.auth,
@@ -241,6 +243,7 @@ export const api = {
   queryWorkbench: dataPlatformDomain.queryWorkbench,
   hr: hrDomain.hr,
   legalEntities: new LegalEntitiesApiService(),
+  drafting: draftingApi,
 } as const;
 
 export default api;

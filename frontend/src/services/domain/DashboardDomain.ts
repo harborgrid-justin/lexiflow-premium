@@ -123,9 +123,13 @@ export const DashboardService = {
   },
 
   getRecentAlerts: async () => {
+    // Generate ISO timestamps for 2 and 4 hours ago
+    const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
+    const fourHoursAgo = new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString();
+    
     return [
-      { id: 1, message: 'New Case Assigned', detail: 'Smith v. Jones', time: '2h ago', caseId: '123' },
-      { id: 2, message: 'Deadline Approaching', detail: 'Motion to Dismiss', time: '4h ago', caseId: '456' }
+      { id: 1, message: 'New Case Assigned', detail: 'Smith v. Jones', time: twoHoursAgo, caseId: '550e8400-e29b-41d4-a716-446655440000' },
+      { id: 2, message: 'Deadline Approaching', detail: 'Motion to Dismiss', time: fourHoursAgo, caseId: '6ba7b810-9dad-11d1-80b4-00c04fd430c8' }
     ];
   }
 };

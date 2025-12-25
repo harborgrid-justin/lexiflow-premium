@@ -1,6 +1,7 @@
 import React from 'react';
 import { Search, Tag, Calendar, Hash } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import * as styles from './SearchComponents.styles';
 import type { SearchCategory } from './types';
 
 interface CategoryFilterProps {
@@ -17,17 +18,12 @@ const categories: Array<{ id: SearchCategory; label: string; icon: React.ReactNo
 ];
 
 export const CategoryFilter: React.FC<CategoryFilterProps> = ({ activeCategory, onCategoryChange, theme }) => (
-  <div className="flex gap-1 px-2 py-1 border-b">
+  <div className={styles.categoryFilterContainer}>
     {categories.map(cat => (
       <button
         key={cat.id}
         onClick={() => onCategoryChange(cat.id)}
-        className={cn(
-          "px-2 py-1 rounded text-xs font-medium flex items-center gap-1 transition-colors",
-          activeCategory === cat.id
-            ? theme.surface.highlight
-            : cn("hover:bg-slate-100", theme.text.secondary)
-        )}
+        className={styles.getCategoryButton(theme, activeCategory === cat.id)}
       >
         {cat.icon}
         {cat.label}
@@ -46,14 +42,11 @@ interface SuggestionItemProps {
 export const SuggestionItem: React.FC<SuggestionItemProps> = ({ suggestion, isSelected, onClick, theme }) => (
   <button
     onClick={onClick}
-    className={cn(
-      "w-full px-4 py-2 text-left hover:bg-slate-50 flex items-center gap-3 transition-colors",
-      isSelected && theme.surface.highlight
-    )}
+    className={styles.getSuggestionButton(theme, isSelected)}
   >
-    {suggestion.icon || <Search className="h-4 w-4 text-slate-400" />}
+    {suggestion.icon || <Search className={styles.suggestionIcon} />}
     <span
-      className={cn("flex-1 text-sm", theme.text.primary)}
+      className={styles.getSuggestionText(theme)}
       dangerouslySetInnerHTML={{ __html: suggestion.highlightedText || suggestion.text }}
     />
   </button>

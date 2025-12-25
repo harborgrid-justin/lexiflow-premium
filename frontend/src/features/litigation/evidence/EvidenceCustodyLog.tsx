@@ -28,15 +28,31 @@ export const EvidenceCustodyLog: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Enterprise Data Access: Fetch from the main evidence store to ensure consistency
-  const { data: evidence = [] } = useQuery<EvidenceItem[]>(
+  const { data } = useQuery<EvidenceItem[]>(
       ['evidence', 'all'],
       () => DataService.evidence.getAll()
   );
 
+  // Ensure evidence is always an array
+  const evidence = useMemo(() => {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    // Handle paginated response with data property (backend pagination)
+    if (typeof data === 'object' && 'data' in data && Array.isArray((data as any).data)) {
+      return (data as any).data;
+    }
+    // Handle object with items property
+    if (typeof data === 'object' && 'items' in data && Array.isArray((data as any).items)) {
+      return (data as any).items;
+    }
+    console.warn('[EvidenceCustodyLog] Data is not an array:', data);
+    return [];
+  }, [data]);
+
   // Flatten custody events from all evidence items
   const events = useMemo(() => {
       return evidence.flatMap(item => 
-        item.chainOfCustody.map(event => ({
+        (item.chainOfCustody || []).map(event => ({
           ...event,
           itemId: item.id,
           itemTitle: item.title,

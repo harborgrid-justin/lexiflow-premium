@@ -5,6 +5,8 @@ import {
   BaseEntity, UserId, GroupId, DocumentId, CaseId, MetadataRecord, JsonValue
 } from './primitives';
 import { OcrStatus } from './enums';
+import { Case } from './case';
+import { User } from './system';
 
 
 // --- CLUSTER 4: DOCUMENTS & DISCOVERY ---
@@ -15,7 +17,9 @@ export interface LegalDocument extends BaseEntity {
   description?: string; // Backend: text, nullable
   type: string; // Backend: DocumentType enum
   caseId: CaseId; // Backend: uuid, indexed
+  case?: Case; // Relation
   creatorId?: UserId; // Backend: uuid (maps to authorId)
+  creator?: User; // Relation
   authorId?: UserId; // Frontend legacy
   status?: string; // Backend: DocumentStatus enum (default: DRAFT)
   

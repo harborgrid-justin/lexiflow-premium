@@ -25,6 +25,7 @@ import { useTheme } from '@/providers/ThemeContext';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
+import * as styles from './SidebarHeader.styles';
 
 // Types
 import type { TenantConfig } from '@/types';
@@ -51,22 +52,22 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ onClose }) => {
   );
 
   return (
-    <div className={cn("h-16 flex items-center justify-between px-6 border-b shrink-0", theme.surface.default, theme.border.default)}>
-      <div className="flex items-center space-x-3">
-        <div className={cn("p-1.5 rounded-lg shadow-sm border", theme.primary.DEFAULT, theme.primary.border)}>
-            <Scale className={cn("h-5 w-5 text-white")} />
+    <div className={styles.getHeaderContainer(theme)}>
+      <div className={styles.brandingContainer}>
+        <div className={styles.getLogoContainer(theme)}>
+            <Scale className={styles.logoIcon} />
         </div>
-        <div>
-          <h1 className={cn("text-lg font-bold tracking-tight leading-none", theme.text.primary)}>{tenantConfig?.name}</h1>
-          <p className={cn("text-[10px] uppercase tracking-widest font-bold mt-0.5 opacity-60", theme.text.primary)}>{tenantConfig?.tier}</p>
+        <div className={styles.textContainer}>
+          <h1 className={styles.getTenantName(theme)}>{tenantConfig?.name}</h1>
+          <p className={styles.getTenantTier(theme)}>{tenantConfig?.tier}</p>
         </div>
       </div>
       <button 
         onClick={onClose}
         aria-label="Close sidebar"
-        className={cn("md:hidden p-1.5 rounded-md transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.text.primary}`)}
+        className={styles.getCloseButton(theme)}
       >
-        <X className="h-5 w-5" />
+        <X className={styles.closeIcon} />
       </button>
     </div>
   );

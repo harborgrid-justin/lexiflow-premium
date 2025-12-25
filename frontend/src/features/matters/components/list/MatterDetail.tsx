@@ -34,11 +34,19 @@ export const MatterDetail: React.FC = () => {
   const [deleting, setDeleting] = useState(false);
   const deleteModal = useModalState();
 
+  // Validate UUID format before making API call
+  const isValidUUID = (id: string) => {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    return uuidRegex.test(id);
+  };
+
+  const isValidMatterId = matterId && isValidUUID(matterId);
+
   // ✅ Migrated to backend API with queryKeys (2025-12-21)
   const { data: matter, isLoading: loading, error } = useQuery<Matter | null>(
     queryKeys.cases.matters.detail(matterId!),
     () => DataService.matters.getById(matterId!),
-    { enabled: !!matterId }
+    { enabled: isValidMatterId }
   );
 
   const updateMutation = useMutation(
@@ -61,8 +69,11 @@ export const MatterDetail: React.FC = () => {
     }
   );
 
-  // Redirect if matter not found
-  if (error || (!loading && !matter)) {
+  // Redirect if invalid UUID or matter not found
+  if (!isValidMatterId || error || (!loading && !matter)) {
+    if (!isValidMatterId && matterId) {
+      console.error(`[MatterDetail] Invalid UUID format: ${matterId}`);
+    }
     navigate(PATHS.MATTERS);
     return null;
   }

@@ -87,7 +87,11 @@ export const AppContentRenderer = ({
   const moduleDef = ModuleRegistry.getModule(activeView);
 
   if (moduleDef) {
-    if (moduleDef.requiresAdmin && (!currentUser || (currentUser.role !== 'Administrator' && currentUser.role !== 'Senior Partner'))) {
+    // Check admin permission - support both backend role names (snake_case) and legacy frontend names
+    const adminRoles = ['super_admin', 'admin', 'Administrator', 'Senior Partner', 'partner', 'it_admin'];
+    const hasAdminAccess = currentUser && adminRoles.includes(currentUser.role);
+    
+    if (moduleDef.requiresAdmin && !hasAdminAccess) {
       return (
         <div className="flex flex-col justify-center items-center h-full text-slate-500 animate-fade-in">
           <div className="bg-red-50 p-6 rounded-full mb-4 border border-red-100">

@@ -39,7 +39,21 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
     () => DataService.evidence.getAll()
   );
 
-  const evidence = (data as EvidenceItem[]) || [];
+  // Ensure evidence is always an array with proper type guards
+  const evidence = React.useMemo(() => {
+    if (!data) return [];
+    if (Array.isArray(data)) return data as EvidenceItem[];
+    // Handle paginated response with data property (backend pagination)
+    if (typeof data === 'object' && 'data' in data && Array.isArray((data as any).data)) {
+      return (data as any).data as EvidenceItem[];
+    }
+    // Handle object with items property
+    if (typeof data === 'object' && 'items' in data && Array.isArray((data as any).items)) {
+      return (data as any).items as EvidenceItem[];
+    }
+    console.warn('[EvidenceDashboard] Data is not an array:', data);
+    return [];
+  }, [data]);
 
   // Calculate stats from live data
   const stats = React.useMemo(() => ({

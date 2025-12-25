@@ -63,6 +63,7 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
   },
   { id: PATHS.DOCKET, label: 'Docket & Filings', icon: BookOpen, category: 'Case Work' },
   { id: PATHS.DOCUMENTS, label: 'Document Manager', icon: FileText, category: 'Case Work' },
+  { id: PATHS.DRAFTING, label: 'Drafting & Assembly', icon: PenTool, category: 'Case Work' },
   { id: PATHS.CORRESPONDENCE, label: 'Correspondence', icon: Send, category: 'Case Work' },
   { id: PATHS.PLEADING_BUILDER, label: 'Pleading Builder', icon: PenTool, category: 'Case Work' },
   { id: PATHS.LITIGATION_BUILDER, label: 'Litigation Strategy', icon: Milestone, category: 'Case Work' },

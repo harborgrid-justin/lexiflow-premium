@@ -24,6 +24,7 @@ export enum DocumentType {
   PLEADING = 'Pleading',
   ORDER = 'Order',
   TRANSCRIPT = 'Transcript',
+  TEMPLATE = 'Template',
 }
 
 export enum DocumentAccessLevel {

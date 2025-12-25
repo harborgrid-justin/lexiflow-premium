@@ -54,6 +54,7 @@ import { ClausesModule } from './clauses/clauses.module';
 import { PleadingsModule } from './pleadings/pleadings.module';
 import { OcrModule } from './ocr/ocr.module';
 import { ProcessingJobsModule } from './processing-jobs/processing-jobs.module';
+import { DraftingModule } from './drafting/drafting.module';
 
 // Discovery Module
 import { DiscoveryModule } from './discovery/discovery.module';
@@ -222,6 +223,7 @@ if (isRedisEnabled) {
     PleadingsModule,
     OcrModule,
     ProcessingJobsModule,
+    DraftingModule,
 
     // Discovery & E-Discovery
     DiscoveryModule,

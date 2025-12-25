@@ -208,10 +208,26 @@ export const useEvidenceVault = (caseId?: string) => {
    * Fetch all evidence items from backend
    * Automatically filtered by case scope if caseId provided
    */
-  const { data: allEvidenceItems = [], isLoading } = useQuery<EvidenceItem[]>(
+  const { data, isLoading } = useQuery<EvidenceItem[]>(
       queryKeys.evidence.all(),
       () => DataService.evidence.getAll()
   );
+
+  // Ensure allEvidenceItems is always an array
+  const allEvidenceItems = useMemo(() => {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    // Handle paginated response with data property (backend pagination)
+    if (typeof data === 'object' && 'data' in data && Array.isArray((data as any).data)) {
+      return (data as any).data;
+    }
+    // Handle object with items property (some APIs return { items: [...] })
+    if (typeof data === 'object' && 'items' in data && Array.isArray((data as any).items)) {
+      return (data as any).items;
+    }
+    console.warn('[useEvidenceVault] Data is not an array:', data);
+    return [];
+  }, [data]);
 
   /**
    * Filter evidence items by case scope

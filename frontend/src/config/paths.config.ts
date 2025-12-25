@@ -35,6 +35,7 @@ export const PATHS = {
   PRACTICE: 'practice',
   CRM: 'crm',
   DOCUMENTS: 'documents',
+  DRAFTING: 'drafting',
   LIBRARY: 'library',
   CLAUSES: 'clauses',
   RESEARCH: 'research',

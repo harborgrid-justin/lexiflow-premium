@@ -17,6 +17,7 @@ import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
 import { CaseFilterDto } from './dto/case-filter.dto';
 import { CaseResponseDto, PaginatedCaseResponseDto } from './dto/case-response.dto';
+import { CaseStatsDto } from './dto/case-stats.dto';
 
 @ApiTags('Cases')
 @ApiBearerAuth('JWT-auth')
@@ -24,6 +25,15 @@ import { CaseResponseDto, PaginatedCaseResponseDto } from './dto/case-response.d
 @Controller('cases')
 export class CasesController {
   constructor(private readonly casesService: CasesService) {}
+
+  @Get('stats')
+  @ApiOperation({ summary: 'Get case statistics and KPIs' })
+  @ApiResponse({ status: 200, description: 'Case statistics', type: CaseStatsDto })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async getStats(): Promise<CaseStatsDto> {
+    return this.casesService.getStats();
+  }
 
   @Get()
   @ApiOperation({ summary: 'List all cases' })

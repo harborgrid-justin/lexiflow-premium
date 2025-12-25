@@ -1,11 +1,12 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository} from 'typeorm';
-import { Case } from './entities/case.entity';
+import { Case, CaseStatus } from './entities/case.entity';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
 import { CaseFilterDto } from './dto/case-filter.dto';
 import { PaginatedCaseResponseDto, CaseResponseDto } from './dto/case-response.dto';
+import { CaseStatsDto } from './dto/case-stats.dto';
 
 import { validateSortField, validateSortOrder } from '../common/utils/query-validation.util';
 
@@ -15,6 +16,57 @@ export class CasesService {
     @InjectRepository(Case)
     private readonly caseRepository: Repository<Case>,
   ) {}
+
+  async getStats(): Promise<CaseStatsDto> {
+    const totalActive = await this.caseRepository.count({ where: { status: CaseStatus.ACTIVE } });
+    
+    const intakePipeline = await this.caseRepository.count({ 
+        where: [
+            { status: CaseStatus.OPEN },
+            { status: CaseStatus.PENDING }
+        ]
+    });
+
+    const sevenDaysFromNow = new Date();
+    sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
+    const now = new Date();
+
+    const upcomingDeadlines = await this.caseRepository
+        .createQueryBuilder('case')
+        .where('case.trialDate BETWEEN :now AND :sevenDaysFromNow', { now, sevenDaysFromNow })
+        .getCount();
+
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    
+    const atRisk = await this.caseRepository
+        .createQueryBuilder('case')
+        .where('case.status = :status', { status: CaseStatus.ACTIVE })
+        .andWhere('case.updatedAt < :thirtyDaysAgo', { thirtyDaysAgo })
+        .getCount();
+
+    const totalValue = 0; 
+    const utilizationRate = 0; 
+
+    const { avgAge } = await this.caseRepository
+        .createQueryBuilder('case')
+        .select('AVG(EXTRACT(EPOCH FROM (NOW() - case.createdAt)) / 86400)', 'avgAge')
+        .where('case.status = :status', { status: CaseStatus.ACTIVE })
+        .getRawOne();
+
+    const conversionRate = 0;
+
+    return {
+      totalActive,
+      intakePipeline,
+      upcomingDeadlines,
+      atRisk,
+      totalValue,
+      utilizationRate,
+      averageAge: Math.round(parseFloat(avgAge) || 0),
+      conversionRate
+    };
+  }
 
   async findAll(filterDto: CaseFilterDto): Promise<PaginatedCaseResponseDto> {
     const {

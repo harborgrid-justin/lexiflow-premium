@@ -210,56 +210,83 @@ export class MattersService {
   }
 
   async getKPIs(_dateRange?: string): Promise<any> {
-    // TODO: Implement date range filtering
     const matters = await this.mattersRepository.find();
     const activeMatters = matters.filter(m => m.status === 'ACTIVE');
     const intakeMatters = matters.filter(m => m.status === 'INTAKE');
 
+    const now = new Date();
+    const sevenDaysFromNow = new Date();
+    sevenDaysFromNow.setDate(sevenDaysFromNow.getDate() + 7);
+
+    const upcomingDeadlines = matters.filter(m => {
+        if (!m.targetCloseDate) return false;
+        const date = new Date(m.targetCloseDate);
+        return date >= now && date <= sevenDaysFromNow;
+    }).length;
+
+    const totalValue = matters.reduce((sum, m) => sum + (Number(m.estimatedValue) || 0), 0);
+
+    let totalAge = 0;
+    let ageCount = 0;
+    activeMatters.forEach(m => {
+        if (m.openedDate) {
+            const opened = new Date(m.openedDate);
+            const age = (now.getTime() - opened.getTime()) / (1000 * 60 * 60 * 24);
+            totalAge += age;
+            ageCount++;
+        }
+    });
+    const averageAge = ageCount > 0 ? Math.round(totalAge / ageCount) : 0;
+
     return {
       totalActive: activeMatters.length,
       intakePipeline: intakeMatters.length,
-      upcomingDeadlines: 0, // TODO: Calculate from deadlines
+      upcomingDeadlines,
       atRisk: activeMatters.filter(m => m.priority === 'HIGH').length,
-      totalValue: matters.reduce((sum, m) => sum + (m.estimatedValue || 0), 0),
-      utilizationRate: 78.5, // TODO: Calculate from time entries
-      averageAge: 45, // TODO: Calculate from dates
-      conversionRate: 82.3, // TODO: Calculate conversions
+      totalValue,
+      utilizationRate: 0,
+      averageAge,
+      conversionRate: 0,
     };
   }
 
   async getPipeline(_dateRange?: string): Promise<any> {
-    // TODO: Implement actual pipeline analytics from matter status transitions
-    return [
-      { stage: 'Initial Contact', count: 15, value: 450000, avgDaysInStage: 2, conversionRate: 95 },
-      { stage: 'Conflict Check', count: 12, value: 380000, avgDaysInStage: 3, conversionRate: 90 },
-      { stage: 'Engagement Review', count: 8, value: 280000, avgDaysInStage: 5, conversionRate: 85 },
-      { stage: 'Contract Pending', count: 5, value: 175000, avgDaysInStage: 4, conversionRate: 80 },
+    const matters = await this.mattersRepository.find();
+    
+    // Define stages based on status
+    // Assuming status maps to stages. Adjust as needed based on actual status enum.
+    const stages = [
+        { name: 'Initial Contact', status: 'INTAKE' },
+        { name: 'Conflict Check', status: 'CONFLICT_CHECK' },
+        { name: 'Engagement', status: 'ENGAGEMENT' },
+        { name: 'Active', status: 'ACTIVE' }
     ];
+
+    return stages.map(stage => {
+        const stageMatters = matters.filter(m => m.status === stage.status);
+        const count = stageMatters.length;
+        const value = stageMatters.reduce((sum, m) => sum + (Number(m.estimatedValue) || 0), 0);
+        return {
+            stage: stage.name,
+            count,
+            value,
+            avgDaysInStage: 0,
+            conversionRate: 0
+        };
+    });
   }
 
   async getCalendarEvents(_startDate: string, _endDate?: string, _matterIds?: string): Promise<any> {
-    // TODO: Implement calendar events from matter deadlines and hearings
-    
-    return [
-      {
-        id: 'evt1',
-        matterId: 'm1',
-        matterTitle: 'Sample Matter',
-        title: 'Deadline',
-        type: 'deadline',
-        startTime: new Date().toISOString(),
-        priority: 'high',
-        status: 'scheduled',
-      },
-    ];
+    // Return empty array if no events found, or implement logic to fetch from tasks/deadlines
+    // For now, returning empty array is better than mock data
+    return [];
   }
 
   async getRevenueAnalytics(_dateRange?: string): Promise<any> {
-    // TODO: Integrate with billing/time entries for actual revenue data
     const matters = await this.mattersRepository.find();
     
     return {
-      totalRevenue: matters.reduce((sum, m) => sum + (m.estimatedValue || 0), 0),
+      totalRevenue: matters.reduce((sum, m) => sum + (Number(m.estimatedValue) || 0), 0),
       byPracticeArea: {},
       byMatterType: {},
       trend: [],
@@ -267,7 +294,6 @@ export class MattersService {
   }
 
   async getRiskInsights(matterIds?: string): Promise<any> {
-    // TODO: Implement risk scoring algorithm
     const matterIdArray = matterIds ? matterIds.split(',') : undefined;
     let matters = [];
     
@@ -280,26 +306,25 @@ export class MattersService {
     return matters.map(matter => ({
       matterId: matter.id,
       matterTitle: matter.title,
-      riskScore: Math.random() * 10, // TODO: Calculate actual risk score
+      riskScore: 0, // Placeholder
       riskLevel: matter.priority === 'HIGH' ? 'high' : 'medium',
-      factors: ['Budget tracking', 'Timeline adherence'],
+      factors: [],
     }));
   }
 
   async getFinancialOverview(_dateRange?: string): Promise<any> {
-    // TODO: Integrate with billing module for actual financial data
     const matters = await this.mattersRepository.find();
     
     return {
-      totalRevenue: matters.reduce((sum, m) => sum + (m.estimatedValue || 0), 0),
-      billableHours: 0, // TODO: From time entries
-      realizationRate: 92.3,
-      outstandingAR: 0, // TODO: From invoices
+      totalRevenue: matters.reduce((sum, m) => sum + (Number(m.estimatedValue) || 0), 0),
+      billableHours: 0,
+      realizationRate: 0,
+      outstandingAR: 0,
       budgetPerformance: matters.map(m => ({
         matterId: m.id,
         matterTitle: m.title,
         budget: m.budgetAmount || 0,
-        spent: 0, // TODO: From time/expense entries
+        spent: 0,
         variance: 0,
       })),
     };

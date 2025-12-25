@@ -31,23 +31,21 @@ import { DeadlineEngine } from '@/services/features/deadlines/deadlineEngine';
 import { IdGenerator } from '@/utils/idGenerator';
 
 // Types & Interfaces
-import { DocketEntry, DocketEntryType, WorkflowTask, TaskId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
+import { DocketEntry, DocketEntryType, WorkflowTask, TaskId, CaseId, TaskStatusBackend, TaskPriorityBackend, Case } from '@/types';
 
 interface DocketEntryBuilderProps {
   initialData?: Partial<DocketEntry>;
   caseParties?: string[]; // Names of parties for dropdown
   onSave: (entry: Partial<DocketEntry>) => void;
   onCancel: () => void;
+  caseData?: Case;
 }
 
 export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
-  initialData, caseParties = [], onSave, onCancel
+  initialData, caseParties = [], onSave, onCancel, caseData
 }) => {
   const { theme } = useTheme();
   const { success: notifySuccess, error: notifyError } = useNotify();
-
-  // TODO: Fetch case data if needed for jurisdiction-based deadline calculation
-  const caseData = undefined;
 
   // Core Data
   const [date, setDate] = useState(initialData?.date || getTodayString());

@@ -66,6 +66,8 @@ export enum CaseType {
   TAX = 'Tax',
 }
 
+import { User } from '@/types';
+
 interface NewMatterProps {
   /** Matter/Case ID for editing (omit for create mode) */
   id?: string;
@@ -75,6 +77,9 @@ interface NewMatterProps {
   
   /** Callback after successful save */
   onSaved?: (id: string) => void;
+
+  /** Current user context */
+  currentUser?: User;
 }
 
 type TabId = 'intake' | 'court' | 'parties' | 'financial' | 'related';
@@ -159,7 +164,7 @@ interface FormData {
   metadata?: Record<string, unknown>;
 }
 
-const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved }) => {
+const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser }) => {
   const { theme } = useTheme();
   const notify = useNotify();
   const isEditMode = Boolean(id);
@@ -482,7 +487,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved }) => {
         id: id || crypto.randomUUID(),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        userId: 'current-user', // TODO: Get from auth
+        userId: currentUser?.id || 'current-user',
       } as Matter & Case;
 
       if (isEditMode && id) {

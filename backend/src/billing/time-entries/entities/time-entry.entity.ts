@@ -55,7 +55,7 @@ export class TimeEntry extends BaseEntity {
   @Column({ type: 'varchar', length: 100, nullable: true })
   activity!: string; // e.g., "Research", "Court Appearance", "Client Meeting"
 
-  @Column({ type: 'varchar', length: 20, nullable: true })
+  @Column({ name: 'ledes_code', type: 'varchar', length: 20, nullable: true })
   ledesCode!: string; // LEDES billing code
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })

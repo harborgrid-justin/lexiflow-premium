@@ -39,6 +39,7 @@ export class PipelinesApiService {
    * Get all pipelines with optional filters
    */
   async getAll(filters?: Record<string, any>): Promise<PaginatedResponse<Pipeline>> {
+    console.log('[PipelinesApi] getAll called with filters:', filters);
     try {
       return await apiClient.get<PaginatedResponse<Pipeline>>('/pipelines', filters);
     } catch (error) {

@@ -26,13 +26,13 @@ export class CustodianInterview {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ type: 'uuid' })
+  @Column({ name: 'case_id', type: 'uuid' })
   caseId!: string;
 
-  @Column({ type: 'uuid' })
+  @Column({ name: 'custodian_id', type: 'uuid' })
   custodianId!: string;
 
-  @Column({ type: 'varchar', length: 300 })
+  @Column({ name: 'custodian_name', type: 'varchar', length: 300 })
   custodianName!: string;
 
   @Column({
@@ -48,16 +48,16 @@ export class CustodianInterview {
   })
   status!: InterviewStatus;
 
-  @Column({ type: 'timestamp' })
+  @Column({ name: 'scheduled_date', type: 'timestamp' })
   scheduledDate!: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'actual_start_time', type: 'timestamp', nullable: true })
   actualStartTime!: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'actual_end_time', type: 'timestamp', nullable: true })
   actualEndTime!: Date;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ name: 'duration_minutes', type: 'int', nullable: true })
   durationMinutes!: number;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
@@ -86,10 +86,10 @@ export class CustodianInterview {
   @Column({ type: 'text', nullable: true })
   summary!: string;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ name: 'key_findings', type: 'text', nullable: true })
   keyFindings!: string;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ name: 'data_sources_discussed', type: 'jsonb', nullable: true })
   dataSourcesDiscussed!: Array<{
     sourceName: string;
     sourceType: string;
@@ -97,14 +97,14 @@ export class CustodianInterview {
     notes?: string;
   }>;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ name: 'documents_identified', type: 'jsonb', nullable: true })
   documentsIdentified!: Array<{
     description: string;
     location?: string;
     custodian?: string;
   }>;
 
-  @Column({ type: 'jsonb', nullable: true })
+  @Column({ name: 'follow_up_actions', type: 'jsonb', nullable: true })
   followUpActions!: Array<{
     action: string;
     assignedTo?: string;
@@ -112,16 +112,16 @@ export class CustodianInterview {
     status: string;
   }>;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ name: 'is_recorded', type: 'boolean', default: false })
   isRecorded!: boolean;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
+  @Column({ name: 'recording_path', type: 'varchar', length: 500, nullable: true })
   recordingPath!: string;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ name: 'is_transcribed', type: 'boolean', default: false })
   isTranscribed!: boolean;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
+  @Column({ name: 'transcript_path', type: 'varchar', length: 500, nullable: true })
   transcriptPath!: string;
 
   @Column({ type: 'text', nullable: true })
@@ -130,21 +130,21 @@ export class CustodianInterview {
   @Column({ type: 'jsonb', nullable: true })
   metadata!: Record<string, unknown>;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'conducted_by', type: 'uuid', nullable: true })
   conductedBy!: string;
 
-  @Column({ type: 'uuid' })
+  @Column({ name: 'created_by', type: 'uuid' })
   createdBy!: string;
 
-  @Column({ type: 'uuid', nullable: true })
+  @Column({ name: 'updated_by', type: 'uuid', nullable: true })
   updatedBy!: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ name: 'deleted_at', type: 'timestamp', nullable: true })
   deletedAt!: Date;
 }

@@ -29,24 +29,24 @@ export class ETLPipeline {
     schedule?: string;
   };
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ type: 'int', default: 0, name: 'runs_total' })
   runsTotal!: number;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ type: 'int', default: 0, name: 'runs_successful' })
   runsSuccessful!: number;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ type: 'int', default: 0, name: 'runs_failed' })
   runsFailed!: number;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @Column({ type: 'timestamp', nullable: true, name: 'last_run_at' })
   lastRunAt!: Date;
 
-  @Column()
+  @Column({ name: 'created_by' })
   createdBy!: string;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 }

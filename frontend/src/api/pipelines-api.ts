@@ -36,12 +36,18 @@ export class PipelinesApiService {
   private readonly baseUrl = '/pipelines';
 
   async getAll(filters?: { type?: Pipeline['type']; status?: Pipeline['status'] }): Promise<Pipeline[]> {
-    const params = new URLSearchParams();
-    if (filters?.type) params.append('type', filters.type);
-    if (filters?.status) params.append('status', filters.status);
-    const queryString = params.toString();
-    const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    return apiClient.get<Pipeline[]>(url);
+    console.log('[LegacyPipelinesApi] getAll called. baseUrl:', '/pipelines');
+    try {
+      const params = new URLSearchParams();
+      if (filters?.type) params.append('type', filters.type);
+      if (filters?.status) params.append('status', filters.status);
+      const queryString = params.toString();
+      const url = queryString ? `/pipelines?${queryString}` : '/pipelines';
+      return await apiClient.get<Pipeline[]>(url);
+    } catch (error) {
+      console.error('[LegacyPipelinesApi] Error:', error);
+      return [];
+    }
   }
 
   async getById(id: string): Promise<Pipeline> {

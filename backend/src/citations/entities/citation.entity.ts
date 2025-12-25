@@ -18,14 +18,14 @@ export class Citation {
   @Column({ nullable: true })
   title!: string;
 
-  @Column({ nullable: true })
+  @Column({ name: 'case_id', nullable: true })
   caseId!: string;
 
   @ManyToOne(() => Case, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'caseId' })
+  @JoinColumn({ name: 'case_id' })
   case!: Case;
 
-  @Column({ nullable: true })
+  @Column({ name: 'document_id', nullable: true })
   documentId!: string;
 
   @Column({ default: 'Valid' })

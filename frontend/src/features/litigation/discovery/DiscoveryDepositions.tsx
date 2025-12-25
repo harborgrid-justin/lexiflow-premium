@@ -46,10 +46,13 @@ export const DiscoveryDepositions: React.FC = () => {
   const [newDepo, setNewDepo] = useState<Partial<Deposition>>({});
 
   // Enterprise Data Access
-  const { data: depositions = [] } = useQuery<Deposition[]>(
+  const { data: rawDepositions = [] } = useQuery<Deposition[]>(
       [STORES.DISCOVERY_EXT_DEPO, 'all'],
       () => DataService.discovery.getDepositions()
   );
+
+  // Ensure depositions is always an array
+  const depositions = Array.isArray(rawDepositions) ? rawDepositions : [];
 
   const { mutate: scheduleDeposition } = useMutation(
       DataService.discovery.addDeposition,

@@ -110,4 +110,31 @@ export const DashboardService = {
       revenueThisMonth: 125000, // Mock calculation
     };
   },
+
+  getStats: async () => {
+    const metrics = await DashboardService.getMetrics();
+    return {
+      activeCases: metrics.activeCases,
+      pendingMotions: 5, // Mock
+      billableHours: 120, // Mock
+      highRisks: 2 // Mock
+    };
+  },
+
+  getChartData: async () => {
+    return [
+      { name: 'Jan', value: 400 },
+      { name: 'Feb', value: 300 },
+      { name: 'Mar', value: 600 },
+      { name: 'Apr', value: 800 },
+      { name: 'May', value: 500 }
+    ];
+  },
+
+  getRecentAlerts: async () => {
+    return [
+      { id: 1, message: 'New Case Assigned', detail: 'Smith v. Jones', time: '2h ago', caseId: '123' },
+      { id: 2, message: 'Deadline Approaching', detail: 'Motion to Dismiss', time: '4h ago', caseId: '456' }
+    ];
+  }
 };

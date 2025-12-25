@@ -12,7 +12,7 @@ export const CorrespondenceService = {
     getServiceJobs: async (): Promise<ServiceJob[]> => {
         // Note: serviceJobs API is not yet available in communicationsApi
         // This will need to be updated when the API is added
-        console.warn('[CorrespondenceService.getServiceJobs] Service jobs API not yet available');
+        // console.warn('[CorrespondenceService.getServiceJobs] Service jobs API not yet available');
         return [];
     },
 
@@ -35,13 +35,13 @@ export const CorrespondenceService = {
     addServiceJob: async (job: ServiceJob): Promise<ServiceJob> => {
         const newJob = { ...job, id: job.id || crypto.randomUUID() };
         // Note: serviceJobs API is not yet available in communicationsApi
-        console.warn('[CorrespondenceService.addServiceJob] Service jobs API not yet available');
+        // console.warn('[CorrespondenceService.addServiceJob] Service jobs API not yet available');
         return newJob;
     },
 
     updateServiceJob: async (id: string, updates: Partial<ServiceJob>): Promise<ServiceJob> => {
         // Note: serviceJobs API is not yet available in communicationsApi
-        console.warn('[CorrespondenceService.updateServiceJob] Service jobs API not yet available');
+        // console.warn('[CorrespondenceService.updateServiceJob] Service jobs API not yet available');
 
         // Mock job for type safety
         const job: ServiceJob = {

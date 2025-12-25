@@ -41,7 +41,7 @@ export class PipelinesService {
     if (status) queryBuilder.andWhere('pipeline.status = :status', { status });
 
     const [data, total] = await queryBuilder
-      .orderBy('pipeline.updatedAt', 'DESC')
+      .orderBy('pipeline.updated_at', 'DESC')
       .skip((page - 1) * limit)
       .take(limit)
       .getManyAndCount();

@@ -45,7 +45,7 @@ export class Jurisdiction {
   @Column({ type: 'varchar', length: 500, nullable: true, name: 'website' })
   website!: string;
 
-  @Column({ type: 'varchar', length: 500, nullable: true, name: 'rulesUrl', select: false })
+  @Column({ type: 'varchar', length: 500, nullable: true, name: 'rules_url', select: false })
   rulesUrl?: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true, name: 'code' })
@@ -63,9 +63,9 @@ export class Jurisdiction {
   @OneToMany(() => JurisdictionRule, rule => rule.jurisdiction, { cascade: true })
   rules!: JurisdictionRule[];
 
-  @CreateDateColumn({ name: 'createdAt' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn({ name: 'updatedAt' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 }

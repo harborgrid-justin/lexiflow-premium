@@ -30,8 +30,15 @@ export interface Custodian {
 export class CustodiansApiService {
   async getAll(filters?: { caseId?: string; status?: string }): Promise<Custodian[]> {
     const response = await apiClient.get<PaginatedResponse<Custodian>>('/custodians', filters);
+    
+    // Handle direct array response
+    if (Array.isArray(response)) {
+      return response;
+    }
+
     // Backend returns paginated response, extract items
-    return (response as any).items || response.data || [];
+    const items = (response as any).items || response.data || [];
+    return Array.isArray(items) ? items : [];
   }
 
   async getById(id: string): Promise<Custodian> {

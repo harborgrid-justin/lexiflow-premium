@@ -17,11 +17,11 @@ export class JurisdictionRule {
   @PrimaryGeneratedColumn('uuid', { name: 'id' })
   id!: string;
 
-  @Column({ type: 'uuid', name: 'jurisdictionId' })
+  @Column({ type: 'uuid', name: 'jurisdiction_id' })
   jurisdictionId!: string;
 
   @ManyToOne(() => Jurisdiction, jurisdiction => jurisdiction.rules, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'jurisdictionId' })
+  @JoinColumn({ name: 'jurisdiction_id' })
   jurisdiction!: Jurisdiction;
 
   @Column({ type: 'varchar', length: 100, name: 'code' })
@@ -36,7 +36,7 @@ export class JurisdictionRule {
   @Column({ type: 'text', nullable: true, name: 'description' })
   description!: string;
 
-  @Column({ type: 'text', nullable: true, name: 'fullText' })
+  @Column({ type: 'text', nullable: true, name: 'full_text' })
   fullText!: string;
 
   @Column({ type: 'varchar', length: 500, nullable: true, name: 'url' })
@@ -45,15 +45,15 @@ export class JurisdictionRule {
   @Column({ type: 'simple-json', nullable: true, name: 'citations' })
   citations!: string[];
 
-  @Column({ type: 'date', nullable: true, name: 'effectiveDate' })
+  @Column({ type: 'date', nullable: true, name: 'effective_date' })
   effectiveDate!: Date;
 
-  @Column({ type: 'boolean', default: true, name: 'isActive' })
+  @Column({ type: 'boolean', default: true, name: 'is_active' })
   isActive!: boolean;
 
-  @CreateDateColumn({ name: 'createdAt' })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn({ name: 'updatedAt' })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 }

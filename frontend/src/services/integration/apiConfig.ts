@@ -45,7 +45,12 @@ export function isBackendApiEnabled(): boolean {
   // Check if explicitly disabled via environment variable
   const envDisabled = import.meta.env.VITE_USE_BACKEND_API === 'false' || 
                       import.meta.env.VITE_USE_BACKEND_API === false;
-  if (envDisabled) {
+
+  // Check for localStorage override
+  const localDisabled = typeof window !== 'undefined' && typeof localStorage !== 'undefined' && 
+                        localStorage.getItem('VITE_USE_BACKEND_API') === 'false';
+
+  if (envDisabled || localDisabled) {
     console.warn('[API Config] Backend API explicitly disabled via VITE_USE_BACKEND_API=false');
   }
   
@@ -59,8 +64,18 @@ export function isBackendApiEnabled(): boolean {
     }
   }
   
+  // Force enable backend if not explicitly disabled
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      // Clear any legacy disabled flags if we want to force enable
+      if (localStorage.getItem('VITE_USE_BACKEND_API') === 'false') {
+          console.log('[API Config] Clearing legacy VITE_USE_BACKEND_API=false flag');
+          localStorage.removeItem('VITE_USE_BACKEND_API');
+          return true;
+      }
+  }
+
   // Default to backend API (production mode)
-  return !envDisabled;
+  return !(envDisabled || localDisabled);
 }
 
 /**

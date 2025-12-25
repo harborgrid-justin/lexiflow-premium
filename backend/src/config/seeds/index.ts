@@ -1,4 +1,4 @@
-import dataSource from '@/api/data-source';
+import dataSource from '../data-source';
 import { seedUsers } from './user.seed';
 import { seedClients } from './client.seed';
 

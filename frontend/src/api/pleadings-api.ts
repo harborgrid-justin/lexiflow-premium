@@ -26,7 +26,7 @@
  * - Pleading lifecycle management
  */
 
-import { apiClient } from '@services/infrastructure/apiClient';
+import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
 
 export interface Pleading {
   id: string;
@@ -98,7 +98,24 @@ export class PleadingsApiService {
             if (filters?.status) params.append('status', filters.status);
             const queryString = params.toString();
             const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-            return await apiClient.get<Pleading[]>(url);
+            
+            const response = await apiClient.get<Pleading[] | PaginatedResponse<Pleading>>(url);
+            
+            // Handle paginated response (support both 'items' and 'data' properties)
+            if (response && typeof response === 'object' && !Array.isArray(response)) {
+                const items = (response as any).items || (response as any).data;
+                if (Array.isArray(items)) {
+                    return items;
+                }
+            }
+            
+            // Handle direct array response
+            if (Array.isArray(response)) {
+                return response;
+            }
+            
+            // Fallback
+            return [];
         } catch (error) {
             console.error('[PleadingsApiService.getAll] Error:', error);
             throw new Error('Failed to fetch pleadings');

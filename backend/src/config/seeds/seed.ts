@@ -1,4 +1,4 @@
-import AppDataSource from '@/api/data-source';
+import AppDataSource from '../data-source';
 import { seedUsers } from './users.seed';
 import { seedClients } from './clients.seed';
 import { seedCases } from './cases.seed';

@@ -89,29 +89,51 @@ export const useAppController = () => {
             
             if (backendApiEnabled) {
                 setAppStatusMessage('Connecting to backend API...');
+                
+                // 1. Check Health First
                 try {
                     await apiClient.healthCheck();
-                    
+                } catch (healthError) {
+                    console.error("Backend health check failed:", healthError);
+                    setAppStatusMessage('Backend not reachable. Switching to local mode.');
+                    localStorage.setItem('VITE_USE_BACKEND_API', 'false');
+                    window.location.reload();
+                    return;
+                }
+
+                // 2. Authenticate
+                try {
                     const existingToken = apiClient.getAuthToken();
                     if (!existingToken) {
                         setAppStatusMessage('Authenticating...');
                         // Auto-login logic (Dev Mode)
-                        const loginResponse = await apiClient.post<{ accessToken: string; refreshToken: string }>('/auth/login', {
+                        const loginResponse = await apiClient.post<any>('/auth/login', {
                             email: 'admin@lexiflow.com',
                             password: 'Password123!'
                         });
-                        apiClient.setAuthTokens(loginResponse.accessToken, loginResponse.refreshToken);
-                        setIsAuthenticated(true);
-                        console.log('✅ Auto-login successful');
+                        
+                        // Handle wrapped response format (common in NestJS with interceptors)
+                        const accessToken = loginResponse?.accessToken || loginResponse?.data?.accessToken;
+                        const refreshToken = loginResponse?.refreshToken || loginResponse?.data?.refreshToken;
+                        
+                        // Validate response before setting tokens
+                        if (accessToken) {
+                            apiClient.setAuthTokens(accessToken, refreshToken);
+                            setIsAuthenticated(true);
+                            console.log('✅ Auto-login successful');
+                        } else {
+                            console.error('❌ Auto-login failed: Invalid response format', loginResponse);
+                            throw new Error('Invalid login response');
+                        }
                     } else {
                         setIsAuthenticated(true);
                     }
                     setIsAppLoading(false);
-                } catch (apiError) {
-                    console.error("Backend API error:", apiError);
-                    setAppStatusMessage('Backend not available. Switching to local mode.');
-                    localStorage.setItem('VITE_USE_BACKEND_API', 'false');
-                    window.location.reload();
+                } catch (authError) {
+                    console.error("Authentication failed:", authError);
+                    setAppStatusMessage('Authentication failed. Please check backend logs.');
+                    // Do NOT reload here - let the user see the error
+                    setIsAppLoading(false);
                 }
             } else {
                 // IndexedDB mode (DEPRECATED - for development only)

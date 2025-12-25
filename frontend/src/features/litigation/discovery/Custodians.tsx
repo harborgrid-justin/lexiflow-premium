@@ -33,10 +33,13 @@ export const Custodians: React.FC = () => {
   const notify = useNotify();
   
   // Load custodians from backend/IndexedDB via useQuery for accurate, cached data
-  const { data: custodians = [], isLoading: _isLoading } = useQuery<Custodian[]>(
+  const { data: rawCustodians = [], isLoading: _isLoading } = useQuery<Custodian[]>(
     queryKeys.discoveryExtended.custodians(),
     () => DataService.custodians.getAll()
   );
+
+  // Ensure custodians is always an array to prevent .map() errors
+  const custodians = Array.isArray(rawCustodians) ? rawCustodians : [];
   
   const createModal = useModalState();
   const editModal = useModalState();

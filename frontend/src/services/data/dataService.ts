@@ -179,6 +179,8 @@ import { EntityRepository } from './repositories/EntityRepository';
 import { AnalysisRepository } from './repositories/AnalysisRepository';
 import { CitationRepository } from './repositories/CitationRepository';
 import { RiskRepository } from './repositories/RiskRepository';
+import { DashboardService } from '../domain/DashboardDomain';
+import { WarRoomService } from '../domain/WarRoomDomain';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                            TYPE DEFINITIONS
@@ -796,6 +798,13 @@ Object.defineProperties(DataServiceBase, {
   })),
   
   /**
+   * War Room API - Litigation strategy and command center
+   * @backend api.warRoom
+   * @features Strategy, advisory board, opposition intel
+   */
+  warRoom: DataSourceRouter.createPropertyDescriptor(null, () => WarRoomService),
+
+  /**
    * Processing Jobs API - Background job management
    * @backend api.processingJobs
    * @features Job queues, status tracking, scheduling
@@ -914,7 +923,7 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.dashboard
    * @features Custom dashboards, widgets, layouts
    */
-  dashboard: DataSourceRouter.createPropertyDescriptor(null, () => import('../domain/DashboardDomain').then(m => m.DashboardService)),
+  dashboard: DataSourceRouter.createPropertyDescriptor(null, () => DashboardService),
   
   /**
    * Metrics API - System metrics and monitoring

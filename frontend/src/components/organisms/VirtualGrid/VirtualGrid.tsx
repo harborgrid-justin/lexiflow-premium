@@ -73,15 +73,23 @@ export function VirtualGrid<T>({
   }, []);
 
   // Calculate Columns
-  const columnCount = Math.max(1, Math.floor((containerSize.width + gap) / (itemWidth + gap)));
-  const totalRows = Math.ceil(items.length / columnCount);
-  const totalHeight = totalRows * (itemHeight + gap) - gap;
+  const safeItemWidth = itemWidth || 250;
+  const safeItemHeight = itemHeight || 180;
+  const safeGap = gap || 16;
+  const safeWidth = containerSize.width || 0;
+  const safeHeight = containerSize.height || 0;
+
+  const columnCount = Math.max(1, Math.floor((safeWidth + safeGap) / (safeItemWidth + safeGap)));
+  const totalRows = Math.ceil((items?.length || 0) / columnCount);
+  const totalHeight = Math.max(0, totalRows * (safeItemHeight + safeGap) - safeGap);
+  const containerContentHeight = Math.max(totalHeight, safeHeight);
+  const safeContainerContentHeight = isNaN(containerContentHeight) ? 0 : containerContentHeight;
 
   // Virtualization Math
   const overscan = 2; // Render 2 rows above/below viewport
-  const startRow = Math.max(0, Math.floor(scrollTop / (itemHeight + gap)) - overscan);
-  const visibleRows = containerSize.height > 0 
-    ? Math.ceil(containerSize.height / (itemHeight + gap)) + 2 * overscan 
+  const startRow = Math.max(0, Math.floor(scrollTop / (safeItemHeight + safeGap)) - overscan);
+  const visibleRows = safeHeight > 0 
+    ? Math.ceil(safeHeight / (safeItemHeight + safeGap)) + 2 * overscan 
     : 5; // Default to 5 rows if container not yet measured
   const endRow = Math.min(totalRows, startRow + visibleRows);
 
@@ -92,20 +100,20 @@ export function VirtualGrid<T>({
         const index = r * columnCount + c;
         if (index < items.length) {
           // Centering Logic
-          const totalRowWidth = columnCount * itemWidth + (columnCount - 1) * gap;
-          const offsetX = (containerSize.width - totalRowWidth) / 2;
+          const totalRowWidth = columnCount * safeItemWidth + (columnCount - 1) * safeGap;
+          const offsetX = (safeWidth - totalRowWidth) / 2;
           
           rendered.push({
             index,
             data: items[index],
-            top: r * (itemHeight + gap),
-            left: c * (itemWidth + gap) + Math.max(0, offsetX)
+            top: r * (safeItemHeight + safeGap),
+            left: c * (safeItemWidth + safeGap) + Math.max(0, offsetX)
           });
         }
       }
     }
     return rendered;
-  }, [items, startRow, endRow, columnCount, itemHeight, itemWidth, gap, containerSize.width]);
+  }, [items, startRow, endRow, columnCount, safeItemHeight, safeItemWidth, safeGap, safeWidth]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollTop = e.currentTarget.scrollTop;
@@ -130,7 +138,7 @@ export function VirtualGrid<T>({
       style={{ height: typeof height === 'number' ? `${height}px` : height }}
       onScroll={handleScroll}
     >
-      <div style={{ height: Math.max(totalHeight, containerSize.height), position: 'relative' }}>
+      <div style={{ height: safeContainerContentHeight, position: 'relative' }}>
         {visibleItems.map(({ index, data, top, left }) => (
           <div
             key={resolveKey(data, index)}
@@ -138,8 +146,8 @@ export function VirtualGrid<T>({
               position: 'absolute',
               top: 0,
               left: 0,
-              width: itemWidth,
-              height: itemHeight,
+              width: safeItemWidth,
+              height: safeItemHeight,
               transform: `translate3d(${left}px, ${top}px, 0)`,
               willChange: 'transform',
               contain: 'strict'

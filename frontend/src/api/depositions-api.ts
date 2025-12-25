@@ -3,7 +3,7 @@
  * Manages depositions in discovery
  */
 
-import { apiClient } from '@services/infrastructure/apiClient';
+import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
 
 export interface Deposition {
   id: string;
@@ -52,7 +52,21 @@ export class DepositionsApiService {
     if (filters?.endDate) params.append('endDate', filters.endDate);
     const queryString = params.toString();
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-    return apiClient.get<Deposition[]>(url);
+    
+    const response = await apiClient.get<Deposition[] | PaginatedResponse<Deposition>>(url);
+    
+    // Handle paginated response
+    if (response && typeof response === 'object' && 'items' in response && Array.isArray((response as any).items)) {
+        return (response as any).items;
+    }
+    
+    // Handle direct array response
+    if (Array.isArray(response)) {
+        return response;
+    }
+    
+    // Fallback
+    return [];
   }
 
   async getById(id: string): Promise<Deposition> {

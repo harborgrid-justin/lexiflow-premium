@@ -39,7 +39,7 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
       () => dataPlatformApi.pipelines.getAll(),
   );
 
-  const pipelines = pipelinesResponse?.data || [];
+  const pipelines = Array.isArray(pipelinesResponse) ? pipelinesResponse : (pipelinesResponse?.data || []);
 
   // Fetch pipeline stats
   const { data: stats } = useQuery(

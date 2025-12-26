@@ -7,7 +7,7 @@ export class DocumentReviewer {
   @PrimaryColumn({ type: 'uuid', name: 'document_id' })
   documentId!: string;
 
-  @PrimaryColumn({ type: 'uuid', name: 'user_id' })
+  @PrimaryColumn({ type: 'uuid', name: 'reviewer_id' })
   userId!: string;
 
   @ManyToOne(() => Document, (doc) => doc.reviewers, { onDelete: 'CASCADE' })
@@ -15,6 +15,6 @@ export class DocumentReviewer {
   document!: Document;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn({ name: 'reviewer_id' })
   user!: User;
 }

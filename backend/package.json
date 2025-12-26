@@ -32,6 +32,8 @@
     "db:fresh": "npm run db:clean && npm run seed",
     "db:test": "ts-node src/scripts/test-db-connection.ts",
     "db:drop-all": "node scripts/drop-all-tables.js",
+    "db:create-drafting": "ts-node src/database/scripts/create-drafting-tables.ts",
+    "seed:drafting": "ts-node src/database/scripts/seed-drafting.ts",
     "db:init-snake-case": "ts-node scripts/init-db-snake-case.ts",
     "db:reset-snake-case": "node scripts/reset-db-snake-case.js"
   },

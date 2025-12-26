@@ -18,7 +18,7 @@ export class AnalyticsEvent {
   userId!: string;
 
   @Column('jsonb', { nullable: true })
-  metadata: any;
+  metadata: Record<string, unknown> | null = null;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   timestamp!: Date;

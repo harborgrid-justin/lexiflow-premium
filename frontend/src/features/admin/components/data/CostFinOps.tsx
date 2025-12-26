@@ -19,12 +19,12 @@ export function CostFinOps() {
 
   const { data: costData = [], isLoading: costLoading } = useQuery<CostMetric[]>(
       ['finops', 'costs'],
-      () => (DataService as any).operations.getCostMetrics() as Promise<CostMetric[]>
+      () => (DataService as unknown as { operations: { getCostMetrics: () => Promise<CostMetric[]> } }).operations.getCostMetrics()
   );
 
   const { data: forecastData = [], isLoading: forecastLoading } = useQuery<CostForecast[]>(
       ['finops', 'forecast'],
-      () => (DataService as any).operations.getCostForecast() as Promise<CostForecast[]>
+      () => (DataService as unknown as { operations: { getCostForecast: () => Promise<CostForecast[]> } }).operations.getCostForecast()
   );
 
   const isLoading = costLoading || forecastLoading;

@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ProgressIndicator } from '@/components/atoms/ProgressIndicator';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import React from 'react';
 
 /**
  * ProgressIndicator component for task progress tracking.

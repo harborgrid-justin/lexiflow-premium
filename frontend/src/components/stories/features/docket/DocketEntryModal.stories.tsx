@@ -3,7 +3,6 @@ import { fn } from 'storybook/test';
 import { DocketEntryModal } from '@/features/cases/components/docket/DocketEntryModal';
 import { DocketEntry, DocketEntryType } from '@/types';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import React from 'react';
 
 /**
  * DocketEntryModal displays detailed information about a docket entry

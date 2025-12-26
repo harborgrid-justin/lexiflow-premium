@@ -64,7 +64,16 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
   } | null>(['dashboard', 'stats'], () => DataService.dashboard.getStats());
   const { data: tasks = [] } = useQuery<WorkflowTask[]>(['tasks', 'all'], () => DataService.tasks.getAll());
   const { data: chartData = [] } = useQuery<ChartDataPoint[]>(['dashboard', 'charts'], () => DataService.dashboard.getChartData());
-  const { data: rawAlerts = [] } = useQuery<any[]>(['dashboard', 'alerts'], () => DataService.dashboard.getRecentAlerts());
+
+  interface RawAlert {
+    id?: number | string;
+    message?: string;
+    detail?: string;
+    time?: string;
+    caseId?: string;
+  }
+
+  const { data: rawAlerts = [] } = useQuery<RawAlert[]>(['dashboard', 'alerts'], () => DataService.dashboard.getRecentAlerts());
 
   // Transform alerts to match DashboardAlert type
   const alerts = rawAlerts.map((alert: unknown, index: number) => {
@@ -95,9 +104,9 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
           // Process heavy filtering/mapping in idle time to unblock initial paint
           Scheduler.defer(() => {
               const processed = tasks
-                  .filter((t: any) => t.priority === 'High' && t.status !== TaskStatusBackend.COMPLETED)
+                  .filter((t: WorkflowTask) => t.priority === 'High' && t.status !== TaskStatusBackend.COMPLETED)
                   .slice(0, 5)
-                  .map((t: any) => ({
+                  .map((t: WorkflowTask) => ({
                       id: t.id,
                       title: t.title,
                       case: t.caseId || 'General',

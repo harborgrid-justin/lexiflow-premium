@@ -150,6 +150,7 @@ export class AuthService {
 
       return tokens;
     } catch (error) {
+      this.logger.error('Failed to refresh token', error instanceof Error ? error.stack : String(error));
       throw new UnauthorizedException('Invalid refresh token');
     }
   }
@@ -479,14 +480,19 @@ export class AuthService {
       throw new UnauthorizedException('Server configuration error');
     }
 
+    const accessExpiresIn = parseInt(this.configService.get<string>('jwt.expiresIn') || '900', 10);
+    const refreshExpiresIn = parseInt(this.configService.get<string>('jwt.refreshExpiresIn') || '604800', 10);
+
     const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(accessPayload, {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.jwtService.signAsync(accessPayload as any, {
         secret: jwtSecret,
-        expiresIn: (this.configService.get<string>('jwt.expiresIn') || '900') as any,
+        expiresIn: accessExpiresIn,
       }),
-      this.jwtService.signAsync(refreshPayload, {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      this.jwtService.signAsync(refreshPayload as any, {
         secret: refreshSecret,
-        expiresIn: (this.configService.get<string>('jwt.refreshExpiresIn') || '604800') as any,
+        expiresIn: refreshExpiresIn,
       }),
     ]);
 

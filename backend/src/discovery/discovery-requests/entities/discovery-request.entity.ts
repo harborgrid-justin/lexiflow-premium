@@ -92,13 +92,13 @@ export class DiscoveryRequest extends BaseEntity {
   numberOfObjections!: number;
 
   @Column({ name: 'request_items', type: 'jsonb', nullable: true })
-  requestItems!: any[];
+  requestItems!: Record<string, unknown>[] | null;
 
   @Column({ type: 'jsonb', nullable: true })
-  responses!: any[];
+  responses!: Record<string, unknown>[] | null;
 
   @Column({ type: 'jsonb', nullable: true })
-  objections!: any[];
+  objections!: Record<string, unknown>[] | null;
 
   // Fields from generic
   @Column({ name: 'objection_deadline', type: 'date', nullable: true })

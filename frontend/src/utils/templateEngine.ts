@@ -43,7 +43,8 @@ export function substituteVariables(
     const value = getNestedProperty(context, variablePath);
 
     if (value === undefined || value === null) {
-      return `[${variablePath.toUpperCase()}]`;
+      // Return original match when value not found
+      return match;
     }
 
     if (typeof value === 'object') {

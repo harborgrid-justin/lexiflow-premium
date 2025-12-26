@@ -5,7 +5,6 @@
  * intake pipeline, and resource coordination.
  */
 
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MatterManagement } from '../../../../features/matters/components/list/MatterManagement';
 import { ThemeProvider } from '@/providers/ThemeContext';

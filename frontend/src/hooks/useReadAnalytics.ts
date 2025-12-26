@@ -33,6 +33,14 @@ export const useReadAnalytics = (id: string, options: ReadAnalyticsOptions = {})
     const startTimeRef = useRef<number | null>(null);
     const timerRef = useRef<number | null>(null);
     const totalDurationRef = useRef(0);
+    const onReadRef = useRef(options.onRead);
+    const thresholdMsRef = useRef(options.thresholdMs);
+
+    // Keep refs in sync
+    useEffect(() => {
+        onReadRef.current = options.onRead;
+        thresholdMsRef.current = options.thresholdMs;
+    }, [options.onRead, options.thresholdMs]);
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -52,12 +60,17 @@ export const useReadAnalytics = (id: string, options: ReadAnalyticsOptions = {})
                     }, 1000);
                 } else {
                     if (timerRef.current) clearInterval(timerRef.current);
-                    
+
                     if (startTimeRef.current) {
                         const sessionDuration = Date.now() - startTimeRef.current;
-                        if (sessionDuration > (options.thresholdMs || 3000) && !isRead) {
-                            setIsRead(true);
-                            if (options.onRead) options.onRead(id, sessionDuration);
+                        const threshold = thresholdMsRef.current || 3000;
+                        if (sessionDuration > threshold) {
+                            setIsRead(prev => {
+                                if (!prev && onReadRef.current) {
+                                    onReadRef.current(id, sessionDuration);
+                                }
+                                return true;
+                            });
                         }
                         startTimeRef.current = null;
                     }
@@ -73,7 +86,7 @@ export const useReadAnalytics = (id: string, options: ReadAnalyticsOptions = {})
             observer.disconnect();
             if (timerRef.current) clearInterval(timerRef.current);
         };
-    }, [id, options.thresholdMs, isRead]);
+    }, [id]);
 
     return { ref, isRead, duration };
 };

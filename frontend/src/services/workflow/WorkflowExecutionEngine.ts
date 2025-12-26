@@ -41,9 +41,9 @@ export type WorkflowExecutionEvent =
 export interface ExecutionContext {
   workflowId: string;
   instanceId: string;
-  variables: Record<string, any>;
-  data: Record<string, any>;
-  metadata: Record<string, any>;
+  variables: Record<string, unknown>;
+  data: Record<string, unknown>;
+  metadata: Record<string, unknown>;
   userId: string;
   startTime: Date;
   currentNodeId?: string;
@@ -80,7 +80,8 @@ export class WorkflowExecutionEngine extends EventEmitter {
   private connectionMap: Map<string, WorkflowConnection[]>;
   private snapshotTimer?: NodeJS.Timeout;
   private slaTimers: Map<string, NodeJS.Timeout>;
-  private parallelExecutions: Map<string, Promise<any>[]>;
+  private parallelExecutions: Map<string, Promise<unknown>[]>;
+  private executionTimeout?: NodeJS.Timeout;
 
   constructor(
     workflow: EnhancedWorkflowInstance,
@@ -138,7 +139,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
 
       // Setup timeout if specified
       if (this.options.timeout) {
-        setTimeout(() => {
+        this.executionTimeout = setTimeout(() => {
           if (this.state === 'running') {
             this.cancel('Execution timeout exceeded');
           }
@@ -152,11 +153,12 @@ export class WorkflowExecutionEngine extends EventEmitter {
       this.emit('completed', { context: this.context, result });
 
       return { success: true, result };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.state = 'failed';
-      this.emit('failed', { context: this.context, error: error.message });
-      
-      return { success: false, error: error.message };
+      this.emit('failed', { context: this.context, error: errorMessage });
+
+      return { success: false, error: errorMessage };
     } finally {
       this._cleanup();
     }
@@ -230,7 +232,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute a single workflow node
    */
-  private async _executeNode(node: WorkflowNode): Promise<any> {
+  private async _executeNode(node: WorkflowNode): Promise<unknown> {
     if (this.options.dryRun) {
       console.log(`[DryRun] Executing node: ${node.label} (${node.type})`);
       await this._delay(100); // Simulate execution
@@ -316,14 +318,14 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute start node
    */
-  private async _executeStartNode(node: WorkflowNode): Promise<any> {
+  private async _executeStartNode(node: WorkflowNode): Promise<unknown> {
     return { type: 'start', timestamp: new Date() };
   }
 
   /**
    * Execute end node
    */
-  private async _executeEndNode(node: WorkflowNode): Promise<any> {
+  private async _executeEndNode(node: WorkflowNode): Promise<unknown> {
     return {
       type: 'end',
       outcome: node.config.outcome || 'success',
@@ -335,7 +337,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute task node
    */
-  private async _executeTaskNode(node: WorkflowNode): Promise<any> {
+  private async _executeTaskNode(node: WorkflowNode): Promise<unknown> {
     // Check for approval requirement
     if (this.options.enableApprovals && node.config.requiresApproval) {
       const approved = await this._handleApproval(node);
@@ -359,7 +361,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute decision node (conditional branching)
    */
-  private async _executeDecisionNode(node: WorkflowNode): Promise<any> {
+  private async _executeDecisionNode(node: WorkflowNode): Promise<unknown> {
     const conditionalConfig = this.workflow.conditionalConfigs.find((c: ConditionalBranchingConfig) => c.nodeId === node.id);
 
     if (!conditionalConfig) {
@@ -392,7 +394,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute parallel node
    */
-  private async _executeParallelNode(node: WorkflowNode): Promise<any> {
+  private async _executeParallelNode(node: WorkflowNode): Promise<unknown> {
     const parallelConfig = this.workflow.parallelConfigs.find((c: ParallelExecutionConfig) => c.nodeId === node.id);
 
     if (!parallelConfig) {
@@ -408,7 +410,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
     this.parallelExecutions.set(node.id, branchPromises);
 
     // Apply join strategy
-    let results: any[];
+    let results: unknown[];
     switch (parallelConfig.joinStrategy) {
       case 'wait_all':
         results = await Promise.all(branchPromises);
@@ -428,7 +430,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute delay node
    */
-  private async _executeDelayNode(node: WorkflowNode): Promise<any> {
+  private async _executeDelayNode(node: WorkflowNode): Promise<unknown> {
     const delay = typeof node.config.delayMs === 'number' ? node.config.delayMs : 1000;
     await this._delay(delay);
 
@@ -442,7 +444,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute generic node
    */
-  private async _executeGenericNode(node: WorkflowNode): Promise<any> {
+  private async _executeGenericNode(node: WorkflowNode): Promise<unknown> {
     return {
       type: node.type,
       nodeId: node.id,
@@ -453,7 +455,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute parallel branch
    */
-  private async _executeParallelBranch(branch: ParallelBranch): Promise<any> {
+  private async _executeParallelBranch(branch: ParallelBranch): Promise<unknown> {
     const results = [];
     
     for (const nodeId of branch.nodeIds) {
@@ -470,14 +472,14 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute multiple nodes in parallel
    */
-  private async _executeParallelNodes(nodes: WorkflowNode[]): Promise<any[]> {
+  private async _executeParallelNodes(nodes: WorkflowNode[]): Promise<unknown[]> {
     return Promise.all(nodes.map(node => this._executeNode(node)));
   }
 
   /**
    * Retry node execution
    */
-  private async _retryNode(node: WorkflowNode, attemptNumber: number = 1): Promise<any> {
+  private async _retryNode(node: WorkflowNode, attemptNumber: number = 1): Promise<unknown> {
     if (attemptNumber > (this.options.maxRetries || 3)) {
       throw new Error(`Max retries exceeded for node ${node.id}`);
     }
@@ -547,7 +549,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Evaluate rules
    */
-  private _evaluateRules(rules: any[], context: ExecutionContext): boolean {
+  private _evaluateRules(rules: Array<{ field: string; operator: string; value: unknown }>, context: ExecutionContext): boolean {
     return rules.every(rule => {
       const value = context.variables[rule.field];
       switch (rule.operator) {
@@ -652,10 +654,29 @@ export class WorkflowExecutionEngine extends EventEmitter {
   private _cleanup(): void {
     if (this.snapshotTimer) {
       clearInterval(this.snapshotTimer);
+      this.snapshotTimer = undefined;
     }
-    
+
+    if (this.executionTimeout) {
+      clearTimeout(this.executionTimeout);
+      this.executionTimeout = undefined;
+    }
+
     this.slaTimers.forEach(timer => clearTimeout(timer));
     this.slaTimers.clear();
+  }
+
+  /**
+   * Dispose of the execution engine and cleanup all resources
+   * Call this when the engine is no longer needed to prevent memory leaks
+   */
+  dispose(): void {
+    this._cleanup();
+    this.removeAllListeners();
+    this.parallelExecutions.clear();
+    this.visitedNodes.clear();
+    this.nodeMap.clear();
+    this.connectionMap.clear();
   }
 
   /**

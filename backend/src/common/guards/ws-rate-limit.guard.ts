@@ -7,6 +7,10 @@ interface RateLimitEntry {
   resetAt: number;
 }
 
+interface SocketWithUserId extends Socket {
+  userId?: string;
+}
+
 /**
  * WebSocket Rate Limit Guard
  *
@@ -45,7 +49,7 @@ export class WsRateLimitGuard implements CanActivate, OnModuleDestroy {
   }
 
   canActivate(context: ExecutionContext): boolean {
-    const client = context.switchToWs().getClient<Socket>();
+    const client = context.switchToWs().getClient<SocketWithUserId>();
     const clientId = this.getClientIdentifier(client);
     const now = Date.now();
 
@@ -93,8 +97,9 @@ export class WsRateLimitGuard implements CanActivate, OnModuleDestroy {
   /**
    * Get unique identifier for client (prefer userId, fallback to socketId)
    */
-  private getClientIdentifier(client: Socket): string {
-    const userId = (client as any).userId || client.handshake.query.userId;
+  private getClientIdentifier(client: SocketWithUserId): string {
+    const queryUserId = client.handshake.query.userId;
+    const userId = client.userId || (typeof queryUserId === 'string' ? queryUserId : null);
     return userId ? `user:${userId}` : `socket:${client.id}`;
   }
 

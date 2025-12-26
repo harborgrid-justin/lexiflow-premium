@@ -25,7 +25,7 @@ export class MonitoringMetric {
   unit!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: any;
+  metadata: Record<string, unknown> | null = null;
 
   @CreateDateColumn()
   recordedAt!: Date;
@@ -52,7 +52,7 @@ export class MonitoringAlert {
   source!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  context: any;
+  context: Record<string, unknown> | null = null;
 
   @CreateDateColumn()
   createdAt!: Date;

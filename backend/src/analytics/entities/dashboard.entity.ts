@@ -12,7 +12,7 @@ export class Dashboard {
   description!: string;
 
   @Column('jsonb', { default: [] })
-  widgets!: any[];
+  widgets!: Record<string, unknown>[];
 
   @Column()
   userId!: string;

@@ -70,12 +70,12 @@ type LoadingState = 'idle' | 'loading' | 'loaded' | 'error';
  * Decode blurhash to data URL (simplified version)
  * In production, use the 'blurhash' npm package
  */
-function decodeBlurHash(hash: string, width: number = 32, height: number = 32): string {
+function decodeBlurHash(_hash: string, width: number = 32, height: number = 32): string {
   // This is a placeholder implementation
   // In production, use: import { decode } from 'blurhash';
-  // const pixels = decode(hash, width, height);
+  // const pixels = decode(_hash, width, height);
   // Then convert pixels to canvas and return as data URL
-  
+
   // For now, return a simple gradient as placeholder
   const canvas = document.createElement('canvas');
   canvas.width = width;

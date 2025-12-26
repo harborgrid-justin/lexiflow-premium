@@ -106,8 +106,8 @@ export const AppContentRenderer = ({
       );
     }
 
-    const Component = moduleDef.component as unknown as React.ComponentType<any>;
-    const dynamicProps: Record<string, any> = { currentUser };
+    const Component = moduleDef.component as unknown as React.ComponentType<Record<string, unknown>>;
+    const dynamicProps: Record<string, unknown> = { currentUser };
 
     if (initialTab) {
         dynamicProps.initialTab = initialTab;

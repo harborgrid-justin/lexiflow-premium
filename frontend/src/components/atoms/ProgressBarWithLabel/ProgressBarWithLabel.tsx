@@ -72,7 +72,7 @@ export const ProgressBarWithLabel: React.FC<ProgressBarWithLabelProps> = ({
     success: theme.status.success.bg,
     warning: theme.status.warning.bg,
     error: theme.status.error.bg,
-    info: theme.accent.primary,
+    info: theme.action.primary.bg,
     neutral: theme.status.neutral.bg
   };
 
@@ -88,7 +88,7 @@ export const ProgressBarWithLabel: React.FC<ProgressBarWithLabelProps> = ({
           )}
         </div>
       )}
-      <div className={cn('w-full rounded-full overflow-hidden', theme.surface.muted)}>
+      <div className={cn('w-full rounded-full overflow-hidden', theme.surface.highlight)}>
         <div
           className={cn(
             'rounded-full',

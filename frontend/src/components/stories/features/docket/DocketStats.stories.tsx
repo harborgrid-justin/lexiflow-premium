@@ -4,7 +4,6 @@ import { DocketStats } from '@/features/cases/components/docket/DocketStats';
 import { Button } from '@/components/atoms/Button';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { RefreshCw, Download, FileText, Plus } from 'lucide-react';
-import React from 'react';
 
 /**
  * DocketStats displays summary metric cards showing key docket activity

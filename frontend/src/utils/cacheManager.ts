@@ -270,11 +270,12 @@ export class CacheManager<K, V> {
  * Global cache registry for named caches
  */
 class CacheRegistry {
-  private caches = new Map<string, CacheManager<any, any>>();
+  private caches = new Map<string, CacheManager<unknown, unknown>>();
 
   get<K, V>(name: string, options?: CacheOptions): CacheManager<K, V> {
     if (!this.caches.has(name)) {
-      this.caches.set(name, new CacheManager<K, V>(options));
+      const newCache = new CacheManager<K, V>(options);
+      this.caches.set(name, newCache as CacheManager<unknown, unknown>);
     }
     return this.caches.get(name)! as CacheManager<K, V>;
   }

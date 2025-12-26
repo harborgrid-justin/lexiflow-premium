@@ -3,7 +3,6 @@ import { fn } from 'storybook/test';
 import { DocketRow } from '@/features/cases/components/docket/DocketRow';
 import { DocketEntry, DocketEntryType } from '@/types';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import React from 'react';
 
 /**
  * DocketRow displays an individual docket entry row with type icons, 

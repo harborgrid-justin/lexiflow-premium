@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Bell, X, Check, Clock, AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-react';
+import { Bell, X, Clock, AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-react';
 import { useModalState } from '@/hooks/useModalState';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

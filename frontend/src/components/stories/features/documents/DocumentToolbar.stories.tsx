@@ -4,7 +4,6 @@
  * Toolbar with search, view mode toggle, and bulk actions.
  */
 
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentToolbar } from '../../../../features/operations/documents/DocumentToolbar';

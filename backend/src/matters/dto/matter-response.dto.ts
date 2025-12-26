@@ -43,16 +43,16 @@ export class MatterResponseDto {
   tags?: string[];
   
   // Opposing Party
-  opposingCounsel?: any;
-  
+  opposingCounsel?: Record<string, unknown> | null;
+
   // Risk & Conflict
   conflictCheckCompleted!: boolean;
   conflictCheckDate?: Date;
   conflictCheckNotes?: string;
   officeLocation?: string;
-  
+
   // Resources
-  relatedMatterIds?: any;
+  relatedMatterIds?: string[];
   
   // Notes & Custom Fields
   internalNotes?: string;

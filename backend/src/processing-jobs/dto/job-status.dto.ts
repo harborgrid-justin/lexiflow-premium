@@ -34,7 +34,7 @@ export class JobStatusDto {
   progress?: number;
 
   @ApiProperty({ required: false })
-  result?: any;
+  result?: Record<string, unknown>;
 
   @ApiProperty({ required: false })
   error?: string;

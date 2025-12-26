@@ -1,13 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import React from 'react';
 
 /**
  * Table component for displaying tabular data.
  */
 
-const TableDemo = ({ data, columns, selectable, onRowClick }: any) => {
+const TableDemo = ({ data, columns, selectable: _selectable, onRowClick }: any) => {
   return (
     <TableContainer>
       <TableHeader>

@@ -69,8 +69,7 @@ export function validateDependency(
   }
 
   const fromTask = taskMap.get(dependency.fromTaskId);
-  const _toTask = taskMap.get(dependency.toTaskId);
-  
+
   if (fromTask?.isMilestone && dependency.type !== 'finish-to-start') {
     warnings.push('Milestones typically use finish-to-start dependencies');
   }

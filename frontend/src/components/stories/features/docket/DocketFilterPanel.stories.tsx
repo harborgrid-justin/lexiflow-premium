@@ -3,7 +3,6 @@ import { fn } from 'storybook/test';
 import { DocketFilterPanel } from '@/features/cases/components/docket/DocketFilterPanel';
 import { Case, CaseStatus } from '@/types';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import React from 'react';
 
 /**
  * DocketFilterPanel provides a sidebar filter panel for docket entries

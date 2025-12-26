@@ -5,7 +5,6 @@
  * privilege logging, and legal holds management.
  */
 
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DiscoveryPlatform } from '../../../../features/litigation/discovery/DiscoveryPlatform';
 import { ThemeProvider } from '@/providers/ThemeContext';

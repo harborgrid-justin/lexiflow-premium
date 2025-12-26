@@ -33,11 +33,18 @@ import { cn } from '@/utils/cn';
 // COMPONENT
 // ============================================================================
 
+interface Integration {
+  id: string;
+  type: string;
+  status?: string;
+  name?: string;
+}
+
 export const CalendarSync: React.FC = () => {
   const { theme } = useTheme();
-  
+
   // Enterprise Data Access
-  const { data: integrations = [], isLoading } = useQuery<any[]>(
+  const { data: integrations = [], isLoading } = useQuery<Integration[]>(
       ['admin', 'integrations'],
       DataService.admin.getIntegrations
   );

@@ -15,17 +15,17 @@ export abstract class BaseEntity {
 
   @ApiProperty({ example: '2024-01-01T00:00:00.000Z' })
   @CreateDateColumn({ name: 'created_at' })
-  @Transform(({ value }) => value?.toISOString(), { toPlainOnly: true })
+  @Transform(({ value }: { value: Date }) => value?.toISOString(), { toPlainOnly: true })
   createdAt!: Date;
 
   @ApiProperty({ example: '2024-01-01T00:00:00.000Z' })
   @UpdateDateColumn({ name: 'updated_at' })
-  @Transform(({ value }) => value?.toISOString(), { toPlainOnly: true })
+  @Transform(({ value }: { value: Date }) => value?.toISOString(), { toPlainOnly: true })
   updatedAt!: Date;
 
   @ApiProperty({ example: null, nullable: true })
   @DeleteDateColumn({ name: 'deleted_at', nullable: true })
-  @Transform(({ value }) => value?.toISOString(), { toPlainOnly: true })
+  @Transform(({ value }: { value?: Date }) => value?.toISOString(), { toPlainOnly: true })
   deletedAt?: Date;
 
   @ApiProperty({ example: 'user-123', nullable: true })

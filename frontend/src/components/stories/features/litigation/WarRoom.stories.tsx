@@ -10,7 +10,6 @@ import { WitnessPrep } from '../../../../features/litigation/war-room/WitnessPre
 import { TrialBinder } from '../../../../features/litigation/war-room/TrialBinder';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
-import React from 'react';
 
 // ============================================================================
 // MOCK DATA

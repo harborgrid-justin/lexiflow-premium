@@ -2,7 +2,9 @@
 export type ThemeMode = 'light' | 'dark';
 
 // Base Primitive Colors (Tailwind Reference)
-const palette = {
+// This is kept for reference and future use
+// @ts-expect-error - palette is kept for reference
+const _palette = {
   slate: {
     50: '#f8fafc',
     100: '#f1f5f9',

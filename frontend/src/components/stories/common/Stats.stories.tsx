@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Stats } from '@/components/molecules/Stats';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { Briefcase, FileText, Users, DollarSign } from 'lucide-react';
-import React from 'react';
 
 /**
  * Stats component for displaying key metrics.

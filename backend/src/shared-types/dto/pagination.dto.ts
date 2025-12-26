@@ -33,7 +33,7 @@ export interface FilterParams {
   search?: string;
   startDate?: string;
   endDate?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**

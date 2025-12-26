@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronRight, Home, Clock, ChevronDown, X } from 'lucide-react';
+import { ChevronRight, Home, Clock, ChevronDown } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { cn } from '@/utils/cn';
@@ -211,7 +211,7 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
   /**
    * Render a single breadcrumb item
    */
-  const renderBreadcrumbItem = (item: BreadcrumbItem, index: number, isLast: boolean) => {
+  const renderBreadcrumbItem = (item: BreadcrumbItem, _index: number, isLast: boolean) => {
     const hasChildren = item.children && item.children.length > 0;
     const isDropdownOpen = activeDropdown === item.id;
 

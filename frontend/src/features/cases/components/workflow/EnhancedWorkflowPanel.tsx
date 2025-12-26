@@ -30,7 +30,7 @@ interface WorkflowContentProps {
 // ============================================================================
 const WORKFLOW_TABS: WorkflowTab[] = ['tasks', 'dependencies', 'approvals', 'history'];
 
-const TAB_COMPONENTS: Record<WorkflowTab, React.FC<any>> = {
+const TAB_COMPONENTS: Record<WorkflowTab, React.FC<Record<string, unknown>>> = {
   tasks: ParallelTasksManager,
   dependencies: TaskDependencyManager,
   approvals: ApprovalWorkflow,

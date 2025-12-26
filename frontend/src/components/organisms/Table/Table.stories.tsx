@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from './Table';
 
 const TableDemo = () => {

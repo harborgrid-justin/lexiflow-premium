@@ -1,6 +1,5 @@
 import React from 'react';
 import { Search, Tag, Calendar, Hash } from 'lucide-react';
-import { cn } from '@/utils/cn';
 import * as styles from './SearchComponents.styles';
 import type { SearchCategory } from './types';
 

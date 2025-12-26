@@ -9,7 +9,6 @@ import { PleadingFilingQueue } from '../../../../features/litigation/pleadings/P
 import { PleadingAnalytics } from '../../../../features/litigation/pleadings/PleadingAnalytics';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
-import React from 'react';
 
 /**
  * Pleading components provide comprehensive tools for drafting, managing, and filing
@@ -78,9 +77,9 @@ export const WithTemplate: Story = {
     <ThemeProvider>
       <ToastProvider>
         <div className="min-h-screen bg-slate-50">
-          <PleadingDashboard caseId="case-123" onCreate={function (newDoc: PleadingDocument): void {
+          <PleadingDashboard caseId="case-123" onCreate={function (_newDoc: PleadingDocument): void {
                         throw new Error('Function not implemented.');
-                    } } onEdit={function (id: string): void {
+                    } } onEdit={function (_id: string): void {
                         throw new Error('Function not implemented.');
                     } } />
         </div>

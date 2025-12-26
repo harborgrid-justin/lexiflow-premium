@@ -24,7 +24,6 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useHoverIntent } from '@/hooks/useHoverIntent';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
 import { PREFETCH_MAP } from '@/config/prefetchConfig';
 import { Scheduler } from '@/utils/scheduler';
 import * as styles from './SidebarNav.styles';
@@ -121,9 +120,9 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
                     <button
                       onClick={() => setActiveView(item.id)}
                       {...hoverHandlers(item)}
-                      className={styles.getNavItemButton(theme, isActive || isChildActive)}
+                      className={styles.getNavItemButton(theme, !!(isActive || isChildActive))}
                     >
-                      <Icon className={styles.getNavItemIcon(isActive || isChildActive)} />
+                      <Icon className={styles.getNavItemIcon(!!(isActive || isChildActive))} />
                       <span className={styles.navItemLabel}>{item.label}</span>
                       {(isActive || isChildActive) && <div className={styles.getActiveIndicator(theme)}></div>}
                     </button>

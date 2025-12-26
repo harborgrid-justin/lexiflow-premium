@@ -3,7 +3,6 @@ import { fn } from 'storybook/test';
 import { DocketTable } from '@/features/cases/components/docket/DocketTable';
 import { DocketEntry, DocketEntryType, CaseId, DocumentId, DocketId } from '@/types';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import React from 'react';
 
 /**
  * DocketTable provides a virtualized table view for displaying docket entries

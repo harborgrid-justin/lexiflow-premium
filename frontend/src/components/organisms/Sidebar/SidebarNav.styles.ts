@@ -21,7 +21,7 @@ export const itemsContainer = "space-y-0.5";
 export const getNavItemButton = (theme: Theme, isActive: boolean) => cn(
   "w-full flex items-center space-x-3 px-3 h-9 rounded-lg text-sm font-medium transition-all duration-200 group relative",
   isActive
-    ? cn(theme.action.primary.surface, theme.action.primary.text)
+    ? cn(theme.primary.light, theme.action.primary.text)
     : cn(theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.text.primary}`)
 );
 
@@ -45,7 +45,7 @@ export const getSubmenuContainer = (theme: Theme) => cn(
 export const getSubmenuButton = (theme: Theme, isChildItemActive: boolean) => cn(
   "w-full flex items-center space-x-2 px-2 h-8 rounded text-xs font-medium transition-all duration-200 group",
   isChildItemActive
-    ? cn(theme.action.primary.surface, theme.action.primary.text)
+    ? cn(theme.primary.light, theme.action.primary.text)
     : cn(theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.text.primary}`)
 );
 

@@ -5,6 +5,15 @@ import { AnalyticsService } from './analytics.service';
 import { AnalyticsEvent } from './entities/analytics-event.entity';
 import { Dashboard } from './entities/dashboard.entity';
 import { Public } from '../common/decorators/public.decorator';
+import { CreateAnalyticsEventDto } from './dto/create-analytics-event.dto';
+import { CreateDashboardDto } from './dto/create-dashboard.dto';
+import { GenerateReportDto, GenerateReportResponseDto } from './dto/generate-report.dto';
+import {
+  CaseMetricsDto,
+  UserActivityMetricsDto,
+  BillingMetricsDto,
+  TimeSeriesDataPointDto,
+} from './dto/metrics-response.dto';
 
 @ApiTags('analytics')
 @ApiBearerAuth()
@@ -30,7 +39,7 @@ export class AnalyticsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async trackEvent(@Body() eventData: any): Promise<AnalyticsEvent> {
+  async trackEvent(@Body() eventData: CreateAnalyticsEventDto): Promise<AnalyticsEvent> {
     return this.analyticsService.trackEvent(eventData);
   }
 
@@ -78,28 +87,28 @@ export class AnalyticsController {
 
   @Get('metrics/case')
   @ApiOperation({ summary: 'Get case metrics' })
-  @ApiResponse({ status: 200, description: 'Case metrics retrieved successfully' })
+  @ApiResponse({ status: 200, description: 'Case metrics retrieved successfully', type: CaseMetricsDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getCaseMetrics(): Promise<any> {
+  async getCaseMetrics(): Promise<CaseMetricsDto> {
     return this.analyticsService.getCaseMetrics();
   }
 
   @Get('metrics/user-activity')
   @ApiOperation({ summary: 'Get user activity metrics' })
-  @ApiResponse({ status: 200, description: 'User activity metrics retrieved successfully' })
+  @ApiResponse({ status: 200, description: 'User activity metrics retrieved successfully', type: UserActivityMetricsDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getUserActivityMetrics(): Promise<any> {
+  async getUserActivityMetrics(): Promise<UserActivityMetricsDto> {
     return this.analyticsService.getUserActivityMetrics();
   }
 
   @Get('metrics/billing')
   @ApiOperation({ summary: 'Get billing metrics' })
-  @ApiResponse({ status: 200, description: 'Billing metrics retrieved successfully' })
+  @ApiResponse({ status: 200, description: 'Billing metrics retrieved successfully', type: BillingMetricsDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getBillingMetrics(): Promise<any> {
+  async getBillingMetrics(): Promise<BillingMetricsDto> {
     return this.analyticsService.getBillingMetrics();
   }
 
@@ -138,13 +147,13 @@ export class AnalyticsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createDashboard(@Body() dashboardData: any): Promise<Dashboard> {
+  async createDashboard(@Body() dashboardData: CreateDashboardDto): Promise<Dashboard> {
     return this.analyticsService.createDashboard(dashboardData);
   }
 
   @Get('timeseries/:eventType')
   @ApiOperation({ summary: 'Get time series data for event type' })
-  @ApiResponse({ status: 200, description: 'Time series data retrieved successfully' })
+  @ApiResponse({ status: 200, description: 'Time series data retrieved successfully', type: [TimeSeriesDataPointDto] })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async getTimeSeriesData(
@@ -152,7 +161,7 @@ export class AnalyticsController {
     @Query('startDate') startDate: string,
     @Query('endDate') endDate: string,
     @Query('granularity') granularity?: string,
-  ): Promise<any[]> {
+  ): Promise<TimeSeriesDataPointDto[]> {
     return this.analyticsService.getTimeSeriesData(
       eventType,
       granularity || 'day',
@@ -163,12 +172,12 @@ export class AnalyticsController {
 
   @Post('reports/generate')
   @ApiOperation({ summary: 'Generate analytics report' })
-  @ApiResponse({ status: 200, description: 'Report generated successfully' })
+  @ApiResponse({ status: 200, description: 'Report generated successfully', type: GenerateReportResponseDto })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async generateReport(@Body() params: any): Promise<any> {
+  async generateReport(@Body() params: GenerateReportDto): Promise<GenerateReportResponseDto> {
     return this.analyticsService.generateReport(params);
   }
 }

@@ -43,7 +43,7 @@ export class ConditionalRuleDto {
   operator!: string;
 
   @ApiProperty()
-  value!: any;
+  value!: unknown;
 
   @ApiProperty({ enum: ['string', 'number', 'boolean', 'date', 'array', 'object'] })
   @IsEnum(['string', 'number', 'boolean', 'date', 'array', 'object'])
@@ -256,7 +256,7 @@ export class CreateWorkflowVersionDto {
 
   @ApiProperty()
   @IsObject()
-  config!: Record<string, any>;
+  config!: Record<string, unknown>;
 }
 
 export class CompareVersionsDto {
@@ -334,19 +334,19 @@ export class CreateWorkflowTemplateDto {
 
   @ApiProperty()
   @IsArray()
-  nodes!: any[];
+  nodes!: Record<string, unknown>[];
 
   @ApiProperty()
   @IsArray()
-  connections!: any[];
+  connections!: Record<string, unknown>[];
 
   @ApiProperty()
   @IsArray()
-  variables!: any[];
+  variables!: Record<string, unknown>[];
 
   @ApiProperty()
   @IsObject()
-  config!: Record<string, any>;
+  config!: Record<string, unknown>;
 
   @ApiProperty()
   @IsString()
@@ -430,7 +430,7 @@ export class EscalationLevelDto {
 
   @ApiProperty()
   @IsArray()
-  actions!: any[];
+  actions!: Record<string, unknown>[];
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -853,22 +853,22 @@ export class CreateExternalTriggerDto {
 
   @ApiProperty()
   @IsObject()
-  config!: Record<string, any>;
+  config!: Record<string, unknown>;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsArray()
-  filters?: any[];
+  filters?: Record<string, unknown>[];
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsObject()
-  transformation?: any;
+  transformation?: Record<string, unknown>;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsObject()
-  authentication?: any;
+  authentication?: Record<string, unknown>;
 }
 
 export class TestExternalTriggerDto {
@@ -878,7 +878,7 @@ export class TestExternalTriggerDto {
 
   @ApiProperty()
   @IsObject()
-  payload!: Record<string, any>;
+  payload!: Record<string, unknown>;
 }
 
 // ============================================================================
@@ -912,12 +912,12 @@ export class CreateWorkflowInstanceDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsObject()
-  variables?: Record<string, any>;
+  variables?: Record<string, unknown>;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsObject()
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 export class UpdateWorkflowInstanceDto {
@@ -934,19 +934,19 @@ export class UpdateWorkflowInstanceDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsObject()
-  variables?: Record<string, any>;
+  variables?: Record<string, unknown>;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsObject()
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 export class WorkflowExecutionDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsObject()
-  input?: Record<string, any>;
+  input?: Record<string, unknown>;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -1032,9 +1032,9 @@ export interface WorkflowVersion {
   author: string;
   tag?: string;
   branchName?: string;
-  nodes: any[];
-  connections: any[];
-  config: Record<string, any>;
+  nodes: Record<string, unknown>[];
+  connections: Record<string, unknown>[];
+  config: Record<string, unknown>;
   checksum: string;
   status: string;
   createdAt: string;
@@ -1045,17 +1045,17 @@ export interface WorkflowVersion {
 export interface WorkflowDiff {
   versionA: string;
   versionB: string;
-  addedNodes: any[];
-  removedNodes: any[];
-  modifiedNodes: any[];
-  addedConnections: any[];
-  removedConnections: any[];
-  nodesAdded: any[];
-  nodesRemoved: any[];
-  nodesModified: any[];
-  connectionsAdded: any[];
-  connectionsRemoved: any[];
-  configChanges: any[];
+  addedNodes: Record<string, unknown>[];
+  removedNodes: Record<string, unknown>[];
+  modifiedNodes: Record<string, unknown>[];
+  addedConnections: Record<string, unknown>[];
+  removedConnections: Record<string, unknown>[];
+  nodesAdded: Record<string, unknown>[];
+  nodesRemoved: Record<string, unknown>[];
+  nodesModified: Record<string, unknown>[];
+  connectionsAdded: Record<string, unknown>[];
+  connectionsRemoved: Record<string, unknown>[];
+  configChanges: Record<string, unknown>[];
   breakingChanges: boolean;
   migrationRequired: boolean;
 }
@@ -1103,8 +1103,8 @@ export interface ApprovalChain {
   name: string;
   description?: string;
   levels: Array<ApprovalLevelDto & {
-    onApprove?: any[];
-    onReject?: any[];
+    onApprove?: Record<string, unknown>[];
+    onReject?: Record<string, unknown>[];
   }>;
   requireSequential: boolean;
   allowParallel: boolean;
@@ -1154,18 +1154,18 @@ export interface WorkflowSnapshot {
 
 export interface WorkflowState {
   currentNodeId: string;
-  nodes: any[];
-  connections: any[];
-  variables: Record<string, any>;
+  nodes: Record<string, unknown>[];
+  connections: Record<string, unknown>[];
+  variables: Record<string, unknown>;
   completedNodes: string[];
   pendingNodes: string[];
   currentNodes: string[];
-  context: Record<string, any>;
-  approvals: any[];
-  slaStatuses: any[];
-  parallelExecutions: any[];
-  conditionalBranches: any[];
-  externalTriggers: any[];
+  context: Record<string, unknown>;
+  approvals: Record<string, unknown>[];
+  slaStatuses: Record<string, unknown>[];
+  parallelExecutions: Record<string, unknown>[];
+  conditionalBranches: Record<string, unknown>[];
+  externalTriggers: Record<string, unknown>[];
 }
 
 export interface RollbackOperation {
@@ -1181,7 +1181,7 @@ export interface RollbackOperation {
   completedAt?: Date | string;
   dryRun: boolean;
   error?: string;
-  compensatingActions?: any[];
+  compensatingActions?: Record<string, unknown>[];
 }
 
 // Analytics Types
@@ -1191,7 +1191,7 @@ export interface WorkflowAnalytics {
     start: Date | string;
     end: Date | string;
   };
-  summary: any;
+  summary: Record<string, unknown>;
   totalExecutions: number;
   successfulExecutions: number;
   failedExecutions: number;
@@ -1206,8 +1206,8 @@ export interface WorkflowAnalytics {
   bottlenecks?: WorkflowBottleneck[];
   suggestions?: OptimizationSuggestion[];
   optimizationSuggestions: OptimizationSuggestion[];
-  trends: any[];
-  comparisons: any[];
+  trends: Record<string, unknown>[];
+  comparisons: Record<string, unknown>[];
 }
 
 export interface WorkflowBottleneck {
@@ -1243,8 +1243,8 @@ export interface AIWorkflowSuggestion {
     estimatedEffort: string;
     affectedNodes: string[];
   };
-  dataPoints: any[];
-  changes: any[];
+  dataPoints: Record<string, unknown>[];
+  changes: Record<string, unknown>[];
   implementationDifficulty: 'easy' | 'medium' | 'hard';
   autoApply: boolean;
   status: 'pending' | 'applied' | 'rejected';
@@ -1260,10 +1260,10 @@ export interface ExternalTrigger {
   description?: string;
   type: 'webhook' | 'api_poll' | 'email' | 'file_watch' | 'database' | 'queue' | 'custom';
   enabled: boolean;
-  config: Record<string, any>;
-  filters?: any[];
-  transformation?: any;
-  authentication?: any;
+  config: Record<string, unknown>;
+  filters?: Record<string, unknown>[];
+  transformation?: Record<string, unknown>;
+  authentication?: Record<string, unknown>;
   workflowId: string;
 }
 
@@ -1271,7 +1271,7 @@ export interface TriggerEvent {
   id: string;
   triggerId: string;
   timestamp: string;
-  payload: Record<string, any>;
+  payload: Record<string, unknown>;
   receivedAt: Date;
   processedAt?: Date | string;
   status: 'pending' | 'processed' | 'failed' | 'ignored' | 'completed';
@@ -1286,10 +1286,10 @@ export interface EnhancedWorkflowInstance {
   name: string;
   description?: string;
   status: string;
-  nodes: any[];
-  connections: any[];
-  variables: Record<string, any>;
-  context: Record<string, any>;
+  nodes: Record<string, unknown>[];
+  connections: Record<string, unknown>[];
+  variables: Record<string, unknown>;
+  context: Record<string, unknown>;
   completedNodes: string[];
   currentNodes: string[];
   currentNodeId?: string;
@@ -1297,7 +1297,7 @@ export interface EnhancedWorkflowInstance {
   completedAt?: Date;
   createdBy: string;
   assignedTo?: string;
-  snapshots: any[];
-  approvalInstances: any[];
-  slaStatuses: any[];
+  snapshots: Record<string, unknown>[];
+  approvalInstances: Record<string, unknown>[];
+  slaStatuses: Record<string, unknown>[];
 }

@@ -4,7 +4,6 @@ import { DocketEntryBuilder } from '@/features/cases/components/docket/DocketEnt
 import { DocketEntry, DocketEntryType } from '@/types';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
-import React from 'react';
 
 /**
  * DocketEntryBuilder provides a comprehensive form for creating and editing

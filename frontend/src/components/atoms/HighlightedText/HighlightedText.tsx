@@ -15,9 +15,6 @@ import React, { memo } from 'react';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-// Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
-
 // Utils & Constants
 import { getHighlightClass, defaultHighlightClass } from './HighlightedText.styles';
 

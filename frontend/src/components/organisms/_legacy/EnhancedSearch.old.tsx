@@ -208,8 +208,8 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
   // Filter and score suggestions
   const filteredSuggestions = useMemo(() => {
     if (!query) return [];
-    
-    const { text, filters } = parseSearchSyntax(query);
+
+    const { text } = parseSearchSyntax(query);
     
     const results = suggestions
       .map(suggestion => {

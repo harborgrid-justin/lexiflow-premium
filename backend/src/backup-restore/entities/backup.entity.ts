@@ -12,10 +12,10 @@ export class SchemaBackup {
   description!: string;
 
   @Column({ type: 'jsonb' })
-  schema: any;
+  schema!: Record<string, unknown>;
 
   @Column({ type: 'jsonb', nullable: true })
-  data: any;
+  data: Record<string, unknown> | null = null;
 
   @Column({ type: 'bigint' })
   sizeBytes!: number;

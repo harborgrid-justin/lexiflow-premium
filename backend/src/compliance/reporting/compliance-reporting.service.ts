@@ -63,7 +63,7 @@ export class ComplianceReportingService {
       generatedAt: new Date(),
       generatedBy: dto.generatedBy,
       dateRange: { startDate, endDate },
-      data: accessData,
+      data: { ...accessData },
       summary: {
         totalRecords: accessData.totalAccessAttempts,
         metrics: {
@@ -141,7 +141,7 @@ export class ComplianceReportingService {
       generatedAt: new Date(),
       generatedBy: dto.generatedBy,
       dateRange: { startDate, endDate },
-      data: activityData,
+      data: { ...activityData },
       summary: {
         totalRecords: activityData.totalActivities,
         metrics: {
@@ -199,7 +199,7 @@ export class ComplianceReportingService {
       generatedAt: new Date(),
       generatedBy: dto.generatedBy,
       dateRange: { startDate, endDate },
-      data: conflictsData,
+      data: { ...conflictsData },
       summary: {
         totalRecords: conflictsData.totalChecks,
         metrics: {
@@ -257,7 +257,7 @@ export class ComplianceReportingService {
       generatedAt: new Date(),
       generatedBy: dto.generatedBy,
       dateRange: { startDate, endDate },
-      data: wallsData,
+      data: { ...wallsData },
       summary: {
         totalRecords: wallsData.totalWalls,
         metrics: {

@@ -11,7 +11,7 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 
 // ========================================
 // INTERNAL DEPENDENCIES
@@ -41,6 +41,23 @@ export const useGanttDrag = ({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions)
         initialWidth: number;
         element: HTMLElement;
     } | null>(null);
+
+    const activeListenersRef = useRef<{
+        move: ((e: MouseEvent) => void) | null;
+        up: ((e: MouseEvent) => void) | null;
+    }>({ move: null, up: null });
+
+    // Cleanup event listeners on unmount
+    useEffect(() => {
+        return () => {
+            if (activeListenersRef.current.move) {
+                window.removeEventListener('mousemove', activeListenersRef.current.move);
+            }
+            if (activeListenersRef.current.up) {
+                window.removeEventListener('mouseup', activeListenersRef.current.up);
+            }
+        };
+    }, []);
 
     // 60fps Loop for smooth visual updates without React re-renders
     const handleMouseMove = useCallback((e: MouseEvent) => {
@@ -74,6 +91,7 @@ export const useGanttDrag = ({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions)
         // Cleanup
         window.removeEventListener('mousemove', handleMouseMove);
         window.removeEventListener('mouseup', handleMouseUp);
+        activeListenersRef.current = { move: null, up: null };
         document.body.style.cursor = '';
         
         // Reset visual overrides (React state update will snap it to correct place)
@@ -146,6 +164,10 @@ export const useGanttDrag = ({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions)
         };
 
         document.body.style.cursor = mode === 'move' ? 'grabbing' : 'col-resize';
+
+        // Store listeners in ref for cleanup
+        activeListenersRef.current = { move: handleMouseMove, up: handleMouseUp };
+
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseup', handleMouseUp);
     }, [handleMouseMove, handleMouseUp]);

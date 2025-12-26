@@ -215,7 +215,7 @@ export class FilterDefinition {
   required!: boolean;
 
   @ApiProperty({ description: 'Default value' })
-  defaultValue?: any;
+  defaultValue?: unknown;
 }
 
 export class ParameterDefinition {
@@ -232,7 +232,7 @@ export class ParameterDefinition {
   options?: { value: string; label: string }[];
 
   @ApiProperty({ description: 'Default value' })
-  defaultValue?: any;
+  defaultValue?: unknown;
 
   @ApiProperty({ description: 'Description' })
   description?: string;

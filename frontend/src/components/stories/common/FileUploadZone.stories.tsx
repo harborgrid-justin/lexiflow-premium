@@ -1,7 +1,7 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FileUploadZone } from '@/components/molecules/FileUploadZone';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import React from 'react';
 
 /**
  * FileUploadZone component for drag-and-drop file uploads.

@@ -4,7 +4,6 @@
  * Sidebar filters for document browsing with smart views and folder navigation.
  */
 
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentFilters } from '../../../../features/operations/documents/DocumentFilters';

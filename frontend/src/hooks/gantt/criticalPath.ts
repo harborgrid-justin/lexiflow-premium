@@ -45,8 +45,7 @@ export function topologicalSort(tasks: GanttTask[], dependencies: TaskDependency
  */
 export function calculateCriticalPath(
   tasks: GanttTask[],
-  dependencies: TaskDependency[],
-  _taskMap: Map<string, GanttTask>
+  dependencies: TaskDependency[]
 ): CriticalPath | null {
   if (tasks.length === 0) return null;
 

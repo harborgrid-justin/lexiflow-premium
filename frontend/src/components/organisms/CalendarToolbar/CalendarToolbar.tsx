@@ -11,16 +11,13 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React from 'react';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, List, Grid } from 'lucide-react';
+import { ChevronLeft, ChevronRight, List, Grid } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
-
-// Components
-import { Button } from '@/components/atoms/Button/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

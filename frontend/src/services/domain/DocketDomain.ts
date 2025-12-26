@@ -45,7 +45,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { DocketEntry, DocketId, CaseId } from '@/types';
-import { Repository } from '../core/Repository';
+import { Repository } from '@services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { SystemEventType } from "@/types/integration-types";

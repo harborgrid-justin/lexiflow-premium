@@ -23,12 +23,12 @@ export const StatusDot: React.FC<StatusDotProps> = ({
   const { theme } = useTheme();
   const variant = StatusRegistry.getVariant(status);
   
-  // Map variant to color classes
+  // Map variant to semantic theme colors
   let color = theme.status.neutral.bg; 
-  if (variant === 'success') color = "bg-emerald-500";
-  if (variant === 'warning') color = "bg-amber-500";
-  if (variant === 'error') color = "bg-rose-500";
-  if (variant === 'info') color = "bg-blue-500";
+  if (variant === 'success') color = theme.status.success.bg;
+  if (variant === 'warning') color = theme.status.warning.bg;
+  if (variant === 'error') color = theme.status.error.bg;
+  if (variant === 'info') color = theme.status.info.bg;
 
   return (
     <div 

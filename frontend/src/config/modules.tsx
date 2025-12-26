@@ -47,6 +47,7 @@ const BillingDashboard = lazyWithPreload(() => import('../features/operations/bi
 const ClientCRM = lazyWithPreload(() => import('../features/operations/crm/ClientCRM') as Promise<{ default: React.ComponentType<any> }>);
 const ComplianceDashboard = lazyWithPreload(() => import('../features/operations/compliance/ComplianceDashboard') as Promise<{ default: React.ComponentType<any> }>);
 const AdminPanel = lazyWithPreload(() => import('../features/admin/AdminPanel') as Promise<{ default: React.ComponentType<any> }>);
+const ThemeSettings = lazyWithPreload(() => import('../features/admin/ThemeSettingsPage') as Promise<{ default: React.ComponentType<any> }>);
 const SecureMessenger = lazyWithPreload(() => import('../features/operations/messenger/SecureMessenger') as Promise<{ default: React.ComponentType<any> }>);
 const EntityDirector = lazyWithPreload(() => import('../features/cases/components/entities/EntityDirector') as Promise<{ default: React.ComponentType<any> }>);
 const AdminDatabaseControl = lazyWithPreload(() => import('../features/admin/components/data/AdminDatabaseControl') as Promise<{ default: React.ComponentType<any> }>);
@@ -91,6 +92,7 @@ const COMPONENT_MAP: Record<string, React.LazyExoticComponent<React.ComponentTyp
   [PATHS.CRM]: ClientCRM,
   [PATHS.COMPLIANCE]: ComplianceDashboard,
   [PATHS.ADMIN]: AdminPanel,
+  '/admin/theme-settings': ThemeSettings,
   [PATHS.MESSAGES]: SecureMessenger,
   [PATHS.ENTITIES]: EntityDirector,
   [PATHS.DATA_PLATFORM]: AdminDatabaseControl,

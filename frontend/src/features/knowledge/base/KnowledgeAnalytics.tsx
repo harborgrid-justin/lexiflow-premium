@@ -48,13 +48,13 @@ interface KnowledgeAnalyticsData {
 // ============================================================================
 
 export const KnowledgeAnalytics: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   const chartTheme = useChartTheme();
 
   // Enterprise Data Access
   const { data: analytics = { usage: [], topics: [] } } = useQuery<KnowledgeAnalyticsData>(
       ['qa', 'analytics'],
-      DataService.knowledge.getAnalytics
+      () => DataService.knowledge.getAnalytics(mode)
   );
 
   return (

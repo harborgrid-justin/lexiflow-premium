@@ -33,7 +33,7 @@
 // API & Query Keys
 import { api } from '@/api';
 import { queryKeys } from '@/utils/queryKeys';
-import { queryClient } from '../../infrastructure/queryClient';
+import { queryClient } from '@services/infrastructure/queryClient';
 
 // Types
 import { LegalRule } from '@/types';

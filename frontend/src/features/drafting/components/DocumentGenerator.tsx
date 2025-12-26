@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, ArrowRight, ArrowLeft, Save, Eye, X, CheckCircle } from 'lucide-react';
-import { useTheme } from '../../../providers/ThemeContext';
-import { useToast } from '../../../providers/ToastContext';
-import { draftingApi, DraftingTemplate, TemplateVariable, GenerateDocumentDto, GeneratedDocument } from '../../../api/domains/drafting.api';
-import { api } from '../../../api';
+import { FileText, ArrowRight, ArrowLeft, Save, Eye, X, CheckCircle, List, Edit, Layers, FileSearch, FolderCheck } from 'lucide-react';
+import { useTheme } from '@providers/ThemeContext';
+import { useToast } from '@providers/ToastContext';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
+import { cn } from '@/utils/cn';
+import { 
+  draftingApi, 
+  DraftingTemplate, 
+  TemplateVariable, 
+  GenerateDocumentDto, 
+  GeneratedDocument, 
+  DraftingValidationService,
+  ValidationError,
+  VariableValidationResult 
+} from '@/api/domains/drafting.api';
+import { apiClient } from '@/services/infrastructure/apiClient';
 
 interface DocumentGeneratorProps {
   templateId?: string;
@@ -33,6 +45,8 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
   const [description, setDescription] = useState('');
   const [previewContent, setPreviewContent] = useState('');
   const [loading, setLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({});
+  const [validationWarnings, setValidationWarnings] = useState<string[]>([]);
 
   useEffect(() => {
     loadInitialData();
@@ -48,8 +62,8 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
     try {
       const [templatesData, casesData, clausesData] = await Promise.all([
         draftingApi.getAllTemplates(),
-        api.cases.getAll(),
-        api.clauses.getAll(),
+        apiClient.get<any[]>('/cases'),
+        apiClient.get<any[]>('/clauses'),
       ]);
       setTemplates(Array.isArray(templatesData) ? templatesData : []);
       setCases(Array.isArray(casesData) ? casesData : []);
@@ -86,34 +100,95 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
     loadTemplate(template.id);
   };
 
-  const generatePreview = () => {
+  const tabs = [
+    { id: 'template', label: 'Template', icon: List },
+    { id: 'variables', label: 'Variables', icon: Edit },
+    ...(selectedTemplate?.clauseReferences && selectedTemplate.clauseReferences.length > 0 
+      ? [{ id: 'clauses', label: 'Clauses', icon: Layers }] 
+      : []),
+    { id: 'preview', label: 'Preview', icon: FileSearch },
+    { id: 'save', label: 'Save', icon: FolderCheck },
+  ];
+
+  const generatePreview = async () => {
     if (!selectedTemplate) return '';
 
-    let content = selectedTemplate.content;
-
-    // Replace variables
-    Object.entries(variableValues).forEach(([key, value]) => {
-      const regex = new RegExp(`\\{\\{${key}\\}\\}`, 'g');
-      content = content.replace(regex, String(value || `[${key}]`));
-    });
-
-    // Replace case data
-    const selectedCase = cases.find(c => c.id === selectedCaseId);
-    if (selectedCase) {
-      content = content.replace(/\{\{case\.(\w+)\}\}/g, (match, field) => {
-        return selectedCase[field]?.toString() || match;
+    try {
+      // Use frontend preview generation for instant feedback
+      const clauseContent: Record<string, string> = {};
+      selectedClauses.forEach((clauseId) => {
+        const clause = availableClauses.find(c => c.id === clauseId);
+        if (clause) {
+          clauseContent[clauseId] = clause.content;
+        }
       });
+
+      // Add case data to variable values if selected
+      const enrichedValues = { ...variableValues };
+      if (selectedCaseId) {
+        const selectedCase = cases.find(c => c.id === selectedCaseId);
+        if (selectedCase) {
+          enrichedValues.case = selectedCase;
+        }
+      }
+
+      const preview = DraftingValidationService.generatePreview(
+        selectedTemplate,
+        enrichedValues,
+        clauseContent
+      );
+
+      return preview;
+    } catch (error) {
+      console.error('Failed to generate preview:', error);
+      addToast('Failed to generate preview', 'error');
+      return '';
+    }
+  };
+
+  const validateCurrentStep = async (): Promise<boolean> => {
+    setValidationErrors({});
+    setValidationWarnings([]);
+
+    if (step === 'variables' && selectedTemplate) {
+      // Validate all variables
+      const validation = DraftingValidationService.validateVariables(
+        selectedTemplate,
+        variableValues
+      );
+
+      setValidationErrors(validation.errors);
+
+      if (!validation.isValid) {
+        const errorCount = Object.keys(validation.errors).length;
+        addToast(`Please fix ${errorCount} validation error${errorCount > 1 ? 's' : ''}`, 'error');
+        return false;
+      }
     }
 
-    // Replace clause placeholders with clause titles
-    content = content.replace(/\{\{clause:(\d+)\}\}/g, (match, position) => {
-      const pos = parseInt(position);
-      const clauseId = selectedClauses[pos];
-      const clause = availableClauses.find(c => c.id === clauseId);
-      return clause ? `\n\n[CLAUSE: ${clause.title}]\n${clause.content}\n` : match;
-    });
+    if (step === 'clauses' && selectedClauses.length > 0) {
+      // Validate clause conflicts
+      const clausesToValidate = availableClauses.filter(c => selectedClauses.includes(c.id));
+      const validation = DraftingValidationService.validateClauses(clausesToValidate);
 
-    return content;
+      if (!validation.isValid) {
+        const errors = validation.conflicts
+          .filter(c => c.severity === 'error')
+          .map(c => c.reason);
+        addToast(`Clause conflicts detected: ${errors.join('; ')}`, 'error');
+        return false;
+      }
+
+      // Show warnings
+      const warnings = validation.conflicts
+        .filter(c => c.severity === 'warning')
+        .map(c => c.reason);
+      if (warnings.length > 0) {
+        setValidationWarnings(warnings);
+      }
+    }
+
+    return true;
   };
 
   const handleNext = () => {
@@ -176,34 +251,73 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
       return;
     }
 
+    // Final validation before generation
+    if (!(await validateCurrentStep())) {
+      return;
+    }
+
     setLoading(true);
     try {
+      // Validate variables one more time
+      const validation = DraftingValidationService.validateVariables(
+        selectedTemplate,
+        variableValues
+      );
+
+      if (!validation.isValid) {
+        const errorMessages = Object.entries(validation.errors)
+          .map(([field, errors]) => `${field}: ${errors.join(', ')}`)
+          .join('; ');
+        addToast(`Validation failed: ${errorMessages}`, 'error');
+        setLoading(false);
+        return;
+      }
+
       const dto: GenerateDocumentDto = {
         title,
         description,
         templateId: selectedTemplate.id,
         caseId: selectedCaseId,
-        variableValues: {
-          ...variableValues,
-          case: cases.find(c => c.id === selectedCaseId),
-        },
+        variableValues: validation.processedValues, // Use validated and processed values
         includedClauses: selectedClauses,
       };
 
-      const generated = await draftingApi.generateDocument(dto);
-      addToast('Document generated successfully', 'success');
-      onComplete(generated);
-    } catch (error) {
+      const document = await draftingApi.generateDocument(dto);
+      
+      addToast('Document generated successfully!', 'success');
+      onComplete(document);
+    } catch (error: any) {
       console.error('Failed to generate document:', error);
-      addToast('Failed to generate document', 'error');
+      addToast(error.message || 'Failed to generate document', 'error');
     } finally {
       setLoading(false);
     }
   };
 
+  const handleRefreshPreview = async () => {
+    setLoading(true);
+    try {
+      const preview = await generatePreview();
+      setPreviewContent(preview);
+      addToast('Preview refreshed', 'success');
+    } catch (error) {
+      console.error('Failed to refresh preview:', error);
+      addToast('Failed to refresh preview', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Automatically refresh preview when moving to preview tab
+  useEffect(() => {
+    if (step === 'preview') {
+      handleRefreshPreview();
+    }
+  }, [step]);
+
   const renderTemplateSelection = () => (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+      <h3 className={cn("text-lg font-semibold mb-4", theme.text.primary)}>
         Select a Template
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -211,30 +325,31 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
           <div
             key={template.id}
             onClick={() => handleSelectTemplate(template)}
-            className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+            className={cn(
+              "p-4 border-2 rounded-lg cursor-pointer transition-all",
               selectedTemplate?.id === template.id
-                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
-            }`}
+                ? cn(theme.primary.border, theme.status.info.bg)
+                : cn(theme.border.default, `hover:${theme.border.focused}`)
+            )}
           >
             <div className="flex items-start justify-between mb-2">
-              <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <FileText className={cn("h-6 w-6", theme.primary.text)} />
               {selectedTemplate?.id === template.id && (
-                <CheckCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                <CheckCircle className={cn("h-5 w-5", theme.primary.text)} />
               )}
             </div>
-            <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-1">
+            <h4 className={cn("font-semibold mb-1", theme.text.primary)}>
               {template.name}
             </h4>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-2 line-clamp-2">
+            <p className={cn("text-sm mb-2 line-clamp-2", theme.text.secondary)}>
               {template.description || 'No description'}
             </p>
-            <div className="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400">
-              <span className="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded">
+            <div className={cn("flex items-center gap-2 text-xs", theme.text.tertiary)}>
+              <span className={cn("px-2 py-1 rounded", theme.surface.active)}>
                 {template.category}
               </span>
               {template.jurisdiction && (
-                <span className="px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded">
+                <span className={cn("px-2 py-1 rounded", theme.surface.active)}>
                   {template.jurisdiction}
                 </span>
               )}
@@ -247,19 +362,26 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
 
   const renderVariableInputs = () => (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+      <h3 className={cn("text-lg font-semibold mb-4", theme.text.primary)}>
         Fill Template Variables
       </h3>
 
       {/* Case Selection */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+        <label className={cn("block text-sm font-medium mb-1", theme.text.primary)}>
           Associated Case (Optional)
         </label>
         <select
           value={selectedCaseId || ''}
           onChange={(e) => setSelectedCaseId(e.target.value || undefined)}
-          className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={cn(
+            "w-full px-3 py-2 border rounded-lg transition-colors",
+            theme.surface.input,
+            theme.text.primary,
+            theme.border.default,
+            "focus:outline-none focus:ring-2",
+            theme.border.focused
+          )}
         >
           <option value="">No case selected</option>
           {cases.map((c) => (
@@ -285,7 +407,12 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
                 type="text"
                 value={variableValues[variable.name] || ''}
                 onChange={(e) => setVariableValues({ ...variableValues, [variable.name]: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={cn(
+                  "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2",
+                  validationErrors[variable.name] 
+                    ? "border-red-500 focus:ring-red-500" 
+                    : cn(theme.border.default, theme.border.focused)
+                )}
                 required={variable.required}
               />
             )}
@@ -295,7 +422,12 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
                 type="date"
                 value={variableValues[variable.name] || ''}
                 onChange={(e) => setVariableValues({ ...variableValues, [variable.name]: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={cn(
+                  "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2",
+                  validationErrors[variable.name] 
+                    ? "border-red-500 focus:ring-red-500" 
+                    : cn(theme.border.default, theme.border.focused)
+                )}
                 required={variable.required}
               />
             )}
@@ -305,7 +437,12 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
                 type="number"
                 value={variableValues[variable.name] || ''}
                 onChange={(e) => setVariableValues({ ...variableValues, [variable.name]: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={cn(
+                  "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2",
+                  validationErrors[variable.name] 
+                    ? "border-red-500 focus:ring-red-500" 
+                    : cn(theme.border.default, theme.border.focused)
+                )}
                 required={variable.required}
               />
             )}
@@ -314,7 +451,12 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
               <select
                 value={variableValues[variable.name] || ''}
                 onChange={(e) => setVariableValues({ ...variableValues, [variable.name]: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={cn(
+                  "w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2",
+                  validationErrors[variable.name] 
+                    ? "border-red-500 focus:ring-red-500" 
+                    : cn(theme.border.default, theme.border.focused)
+                )}
                 required={variable.required}
               >
                 <option value="">Select...</option>
@@ -322,6 +464,17 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
                   <option key={opt} value={opt}>{opt}</option>
                 ))}
               </select>
+            )}
+            
+            {/* Display validation errors for this field */}
+            {validationErrors[variable.name] && (
+              <div className="mt-1">
+                {validationErrors[variable.name].map((error, idx) => (
+                  <p key={idx} className="text-xs text-red-600 dark:text-red-400">
+                    {error}
+                  </p>
+                ))}
+              </div>
             )}
             
             {variable.type === 'boolean' && (
@@ -446,85 +599,96 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
   );
 
   return (
-    <div className="h-full flex flex-col bg-white dark:bg-slate-900">
+    <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
-        <div className="flex items-center space-x-3">
-          <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-            Generate Document
-          </h2>
-        </div>
-        <button
-          onClick={onCancel}
-          className="p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
-        >
-          <X className="h-5 w-5" />
-        </button>
+      <div className="px-6 pt-6 shrink-0">
+        <PageHeader
+          title="Generate Document"
+          subtitle="Create a new document from template"
+          icon={FileText}
+          actions={
+            <button
+              onClick={onCancel}
+              className={cn(
+                "p-2 rounded-lg transition-colors",
+                theme.text.secondary,
+                `hover:${theme.surface.highlight}`
+              )}
+            >
+              <X className="h-5 w-5" />
+            </button>
+          }
+        />
       </div>
 
-      {/* Progress Steps */}
-      <div className="flex items-center justify-center space-x-2 py-4 border-b border-slate-200 dark:border-slate-700">
-        {['template', 'variables', 'clauses', 'preview', 'save'].map((s, index) => (
-          <React.Fragment key={s}>
-            <div
-              className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold ${
-                s === step
-                  ? 'bg-blue-600 text-white'
-                  : index < ['template', 'variables', 'clauses', 'preview', 'save'].indexOf(step)
-                  ? 'bg-emerald-500 text-white'
-                  : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
-              }`}
-            >
-              {index + 1}
-            </div>
-            {index < 4 && (
-              <div className={`w-12 h-0.5 ${
-                index < ['template', 'variables', 'clauses', 'preview', 'save'].indexOf(step)
-                  ? 'bg-emerald-500'
-                  : 'bg-slate-200 dark:bg-slate-700'
-              }`} />
-            )}
-          </React.Fragment>
-        ))}
+      {/* Tab Navigation */}
+      <div className="px-6">
+        <TabNavigation
+          tabs={tabs}
+          activeTab={step}
+          onTabChange={(id) => setStep(id as typeof step)}
+        />
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-6">
-        {step === 'template' && renderTemplateSelection()}
-        {step === 'variables' && renderVariableInputs()}
-        {step === 'clauses' && renderClauseSelection()}
-        {step === 'preview' && renderPreview()}
-        {step === 'save' && renderSaveForm()}
+      <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0">
+        <div className="h-full overflow-y-auto custom-scrollbar">
+          {step === 'template' && renderTemplateSelection()}
+          {step === 'variables' && renderVariableInputs()}
+          {step === 'clauses' && renderClauseSelection()}
+          {step === 'preview' && renderPreview()}
+          {step === 'save' && renderSaveForm()}
+        </div>
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between p-4 border-t border-slate-200 dark:border-slate-700">
+      <div className={cn("flex items-center justify-between px-6 py-4 border-t", theme.border.default)}>
         <button
-          onClick={handleBack}
-          disabled={step === 'template'}
-          className="px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+          onClick={onCancel}
+          className={cn(
+            "px-4 py-2 rounded-lg transition-colors flex items-center gap-2",
+            theme.action.secondary.bg,
+            theme.action.secondary.text,
+            theme.action.secondary.border,
+            theme.action.secondary.hover
+          )}
         >
-          <ArrowLeft className="h-4 w-4" />
-          <span>Back</span>
+          <X className="h-4 w-4" />
+          <span>Cancel</span>
         </button>
 
-        <div className="flex items-center space-x-2">
-          {step !== 'save' && (
+        <div className="flex items-center gap-2">
+          {step === 'preview' && (
             <button
-              onClick={handleNext}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
+              onClick={() => {
+                const preview = generatePreview();
+                setPreviewContent(preview);
+                addToast('Preview refreshed', 'success');
+              }}
+              className={cn(
+                "px-4 py-2 rounded-lg transition-colors flex items-center gap-2",
+                theme.action.secondary.bg,
+                theme.action.secondary.text,
+                theme.action.secondary.border,
+                theme.action.secondary.hover
+              )}
             >
-              <span>Next</span>
-              <ArrowRight className="h-4 w-4" />
+              <Eye className="h-4 w-4" />
+              <span>Refresh Preview</span>
             </button>
           )}
           
           {step === 'save' && (
             <button
               onClick={handleGenerate}
-              disabled={loading}
-              className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 flex items-center space-x-2"
+              disabled={loading || !title.trim()}
+              className={cn(
+                "px-4 py-2 rounded-lg transition-colors flex items-center gap-2",
+                theme.action.primary.bg,
+                theme.action.primary.text,
+                theme.action.primary.hover,
+                "disabled:opacity-50 disabled:cursor-not-allowed"
+              )}
             >
               <Save className="h-4 w-4" />
               <span>{loading ? 'Generating...' : 'Generate Document'}</span>

@@ -3,7 +3,7 @@ import { BaseEntity, UserId } from '@/types';
 import { MicroORM } from './microORM';
 import { errorHandler } from '@/utils/errorHandler';
 import { LRUCache } from '@/utils/LRUCache';
-import { queryClient } from '../infrastructure/queryClient';
+import { queryClient } from '@services/infrastructure/queryClient';
 import { REPOSITORY_CACHE_MAX_SIZE } from '@/config/master.config';
 
 type Listener<T> = (item: T) => void;

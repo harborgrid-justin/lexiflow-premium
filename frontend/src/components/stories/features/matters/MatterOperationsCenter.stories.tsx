@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CaseOperationsCenter } from '../../../../features/cases/components/operations/CaseOperationsCenter';
+import { CaseOperationsCenter } from '@features/cases/components/operations/CaseOperationsCenter';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
 import React from 'react';

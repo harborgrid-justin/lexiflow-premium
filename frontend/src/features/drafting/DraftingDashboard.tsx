@@ -1,24 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, FileText, FolderOpen, Settings as SettingsIcon, Layout } from 'lucide-react';
-import { useTheme } from '../../providers/ThemeContext';
-import * as styles from './DraftingDashboard.styles';
+import { Plus, FileText, FolderOpen, Settings as SettingsIcon, Layout, BarChart3, Clock } from 'lucide-react';
+import { useTheme } from '@providers/ThemeContext';
+import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { cn } from '@/utils/cn';
 import { RecentDrafts } from './components/RecentDrafts';
 import { TemplateGallery } from './components/TemplateGallery';
 import { ApprovalQueue } from './components/ApprovalQueue';
 import { DraftingStats } from './components/DraftingStats';
 import { TemplateEditor } from './components/TemplateEditor';
 import { DocumentGenerator } from './components/DocumentGenerator';
-import { draftingApi, GeneratedDocument, DraftingTemplate } from '../../api/domains/drafting.api';
-import { DraftingStats as StatsType } from '../../api/domains/drafting.api';
-import { useToast } from '../../providers/ToastContext';
+import { draftingApi, GeneratedDocument, DraftingTemplate } from '@api/domains/drafting.api';
+import { DraftingStats as StatsType } from '@api/domains/drafting.api';
+import { useToast } from '@providers/ToastContext';
 
-type View = 'dashboard' | 'template-editor' | 'document-generator' | 'template-library';
+type View = 'overview' | 'recent' | 'templates' | 'approvals';
+type EditorView = 'template-editor' | 'document-generator' | null;
 
 const DraftingDashboard: React.FC = () => {
   const { theme } = useTheme();
   const { addToast } = useToast();
   
-  const [view, setView] = useState<View>('dashboard');
+  const [activeTab, setActiveTab] = useState<View>('overview');
+  const [editorView, setEditorView] = useState<EditorView>(null);
   const [recentDrafts, setRecentDrafts] = useState<GeneratedDocument[]>([]);
   const [templates, setTemplates] = useState<DraftingTemplate[]>([]);
   const [approvals, setApprovals] = useState<GeneratedDocument[]>([]);
@@ -28,10 +32,10 @@ const DraftingDashboard: React.FC = () => {
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (view === 'dashboard') {
+    if (!editorView) {
       loadData();
     }
-  }, [view]);
+  }, [editorView, activeTab]);
 
   const loadData = async () => {
     try {
@@ -57,12 +61,12 @@ const DraftingDashboard: React.FC = () => {
 
   const handleCreateDraft = () => {
     setSelectedTemplateId(undefined);
-    setView('document-generator');
+    setEditorView('document-generator');
   };
 
   const handleCreateTemplate = () => {
     setEditingTemplate(undefined);
-    setView('template-editor');
+    setEditorView('template-editor');
   };
 
   const handleSelectDraft = (draft: GeneratedDocument) => {
@@ -72,12 +76,12 @@ const DraftingDashboard: React.FC = () => {
 
   const handleSelectTemplate = (template: DraftingTemplate) => {
     setSelectedTemplateId(template.id);
-    setView('document-generator');
+    setEditorView('document-generator');
   };
 
   const handleEditTemplate = (template: DraftingTemplate) => {
     setEditingTemplate(template);
-    setView('template-editor');
+    setEditorView('template-editor');
   };
 
   const handleReview = (doc: GeneratedDocument) => {
@@ -87,162 +91,235 @@ const DraftingDashboard: React.FC = () => {
 
   const handleTemplateSaved = (template: DraftingTemplate) => {
     addToast('Template saved successfully', 'success');
-    setView('dashboard');
+    setEditorView(null);
+    setActiveTab('templates');
     loadData();
   };
 
   const handleDocumentGenerated = (doc: GeneratedDocument) => {
     addToast('Document generated successfully', 'success');
-    setView('dashboard');
+    setEditorView(null);
+    setActiveTab('recent');
     loadData();
   };
 
-  if (view === 'template-editor') {
+  if (editorView === 'template-editor') {
     return (
       <TemplateEditor
         template={editingTemplate}
         onSave={handleTemplateSaved}
-        onCancel={() => setView('dashboard')}
+        onCancel={() => setEditorView(null)}
       />
     );
   }
 
-  if (view === 'document-generator') {
+  if (editorView === 'document-generator') {
     return (
       <DocumentGenerator
         templateId={selectedTemplateId}
         onComplete={handleDocumentGenerated}
-        onCancel={() => setView('dashboard')}
+        onCancel={() => setEditorView(null)}
       />
     );
   }
 
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: BarChart3 },
+    { id: 'recent', label: 'Recent Drafts', icon: Clock },
+    { id: 'templates', label: 'Templates', icon: FolderOpen },
+    { id: 'approvals', label: 'Approvals', icon: FileText },
+  ];
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full bg-slate-50 dark:bg-slate-900">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className={cn("flex items-center justify-center h-full", theme.background)}>
+        <div className={cn("animate-spin rounded-full h-8 w-8 border-b-2", theme.primary.text)}></div>
       </div>
     );
   }
 
   return (
-    <div className={styles.getDashboardContainer(theme)}>
-      {/* Header */}
-      <div className={styles.getHeaderContainer(theme)}>
-        <div className="flex items-center space-x-3">
-          <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-            <FileText className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-          </div>
-          <div>
-            <h1 className={styles.getTitle(theme)}>Drafting & Assembly</h1>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              Enterprise document automation with template management
-            </p>
-          </div>
-        </div>
-        <div className={styles.getActionContainer(theme)}>
-          <button 
-            className={styles.getActionButton(theme, 'secondary')}
-            onClick={handleCreateTemplate}
-          >
-            <FolderOpen className="h-4 w-4" />
-            <span>New Template</span>
-          </button>
-          <button 
-            className={styles.getActionButton(theme, 'secondary')}
-            onClick={() => setView('template-library')}
-          >
-            <Layout className="h-4 w-4" />
-            <span>Template Library</span>
-          </button>
-          <button 
-            className={styles.getActionButton(theme, 'primary')}
-            onClick={handleCreateDraft}
-          >
-            <Plus className="h-4 w-4" />
-            <span>Generate Document</span>
-          </button>
+    <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
+      {/* Header Section */}
+      <div className="px-6 pt-6 shrink-0">
+        <PageHeader
+          title="Drafting & Assembly"
+          subtitle="Enterprise document automation with template management"
+          icon={FileText}
+          actions={
+            <div className="flex items-center gap-2">
+              <button 
+                className={cn(
+                  "px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2",
+                  theme.action.secondary.bg,
+                  theme.action.secondary.text,
+                  theme.action.secondary.border,
+                  theme.action.secondary.hover
+                )}
+                onClick={handleCreateTemplate}
+              >
+                <FolderOpen className="h-4 w-4" />
+                <span>New Template</span>
+              </button>
+              <button 
+                className={cn(
+                  "px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2",
+                  theme.action.primary.bg,
+                  theme.action.primary.text,
+                  theme.action.primary.hover
+                )}
+                onClick={handleCreateDraft}
+              >
+                <Plus className="h-4 w-4" />
+                <span>Generate Document</span>
+              </button>
+            </div>
+          }
+        />
+
+        {/* Tab Navigation */}
+        <div className="mt-4 mb-4">
+          <TabNavigation
+            tabs={tabs}
+            activeTab={activeTab}
+            onTabChange={(id) => setActiveTab(id as View)}
+          />
         </div>
       </div>
 
-      {/* Content Grid */}
-      <div className={styles.getContentGrid(theme)}>
-        {/* Main Column */}
-        <div className={styles.getMainColumn(theme)}>
-          <DraftingStats stats={stats} />
+      {/* Content Area */}
+      <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0">
+        <div className="h-full overflow-y-auto custom-scrollbar">{activeTab === 'overview' && (
+          <div className="grid grid-cols-12 gap-6">
+            {/* Main Column */}
+            <div className="col-span-12 lg:col-span-8 space-y-6">
+              <DraftingStats stats={stats} />
 
-          <div className={styles.getCard(theme)}>
-            <div className={styles.getCardHeader(theme)}>
-              <h3 className={styles.getCardTitle(theme)}>Recent Drafts</h3>
-              <button 
-                className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400"
-                onClick={() => addToast('View all feature coming soon', 'info')}
-              >
-                View All
-              </button>
+              <div className={cn("rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
+                <div className={cn("px-6 py-4 border-b flex items-center justify-between", theme.border.default)}>
+                  <h3 className={cn("text-lg font-medium", theme.text.primary)}>Recent Drafts</h3>
+                  <button 
+                    className={cn("text-sm", theme.text.link)}
+                    onClick={() => setActiveTab('recent')}
+                  >
+                    View All
+                  </button>
+                </div>
+                <div>
+                  <RecentDrafts drafts={Array.isArray(recentDrafts) ? recentDrafts.slice(0, 5) : []} onSelect={handleSelectDraft} />
+                </div>
+              </div>
+
+              <div className={cn("rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
+                <div className={cn("px-6 py-4 border-b flex items-center justify-between", theme.border.default)}>
+                  <h3 className={cn("text-lg font-medium", theme.text.primary)}>Template Gallery</h3>
+                  <button 
+                    className={cn("text-sm", theme.text.link)}
+                    onClick={() => setActiveTab('templates')}
+                  >
+                    Browse All
+                  </button>
+                </div>
+                <div>
+                  <TemplateGallery 
+                    templates={Array.isArray(templates) ? templates.slice(0, 4) : []} 
+                    onSelect={handleSelectTemplate}
+                    onEdit={handleEditTemplate}
+                  />
+                </div>
+              </div>
             </div>
-            <div className={styles.getCardContent(theme)}>
+
+            {/* Side Column */}
+            <div className="col-span-12 lg:col-span-4 space-y-6">
+              <div className={cn("rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
+                <div className={cn("px-6 py-4 border-b flex items-center justify-between", theme.border.default)}>
+                  <h3 className={cn("text-lg font-medium", theme.text.primary)}>Approval Queue</h3>
+                  <span className={cn("text-xs font-medium px-2.5 py-0.5 rounded", theme.status.warning.bg, theme.status.warning.text)}>
+                    {Array.isArray(approvals) ? approvals.length : 0} Pending
+                  </span>
+                </div>
+                <div>
+                  <ApprovalQueue approvals={approvals} onReview={handleReview} />
+                </div>
+              </div>
+
+              <div className={cn("p-4 rounded-xl border", theme.status.info.bg, theme.status.info.border)}>
+                <h4 className={cn("font-medium mb-2", theme.status.info.text)}>Quick Tips</h4>
+                <ul className={cn("text-sm space-y-2 list-disc list-inside", theme.status.info.text)}>
+                  <li>Use templates to ensure compliance with local rules.</li>
+                  <li>Variables like {`{{case.title}}`} auto-populate from case data.</li>
+                  <li>Insert clause library items for consistent language.</li>
+                  <li>Submit for review to notify senior partners automatically.</li>
+                </ul>
+              </div>
+
+              <div className={cn("p-4 rounded-xl border", theme.status.success.bg, theme.status.success.border)}>
+                <h4 className={cn("font-medium mb-2", theme.status.success.text)}>
+                  Integration Points
+                </h4>
+                <ul className={cn("text-sm space-y-2", theme.status.success.text)}>
+                  <li>✓ Case Management: Auto-populate case data</li>
+                  <li>✓ Clause Library: Reusable legal clauses</li>
+                  <li>✓ Document Manager: Direct save integration</li>
+                  <li>✓ E-Filing: One-click court filing</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'recent' && (
+          <div className={cn("rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
+            <div className={cn("px-6 py-4 border-b", theme.border.default)}>
+              <h3 className={cn("text-lg font-medium", theme.text.primary)}>All Recent Drafts</h3>
+            </div>
+            <div>
               <RecentDrafts drafts={recentDrafts} onSelect={handleSelectDraft} />
             </div>
           </div>
+        )}
 
-          <div className="mt-6">
-            <div className={styles.getCard(theme)}>
-              <div className={styles.getCardHeader(theme)}>
-                <h3 className={styles.getCardTitle(theme)}>Template Gallery</h3>
-                <button 
-                  className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400"
-                  onClick={() => setView('template-library')}
-                >
-                  Browse Library
-                </button>
-              </div>
-              <div className={styles.getCardContent(theme)}>
-                <TemplateGallery 
-                  templates={templates} 
-                  onSelect={handleSelectTemplate}
-                  onEdit={handleEditTemplate}
-                />
-              </div>
+        {activeTab === 'templates' && (
+          <div className={cn("rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
+            <div className={cn("px-6 py-4 border-b flex items-center justify-between", theme.border.default)}>
+              <h3 className={cn("text-lg font-medium", theme.text.primary)}>All Templates</h3>
+              <button 
+                className={cn(
+                  "px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2",
+                  theme.action.primary.bg,
+                  theme.action.primary.text,
+                  theme.action.primary.hover
+                )}
+                onClick={handleCreateTemplate}
+              >
+                <Plus className="h-4 w-4" />
+                <span>New Template</span>
+              </button>
+            </div>
+            <div>
+              <TemplateGallery 
+                templates={templates} 
+                onSelect={handleSelectTemplate}
+                onEdit={handleEditTemplate}
+              />
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Side Column */}
-        <div className={styles.getSideColumn(theme)}>
-          <div className={styles.getCard(theme)}>
-            <div className={styles.getCardHeader(theme)}>
-              <h3 className={styles.getCardTitle(theme)}>Approval Queue</h3>
-              <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-amber-900 dark:text-amber-300">
-                {approvals.length} Pending
+        {activeTab === 'approvals' && (
+          <div className={cn("rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
+            <div className={cn("px-6 py-4 border-b flex items-center justify-between", theme.border.default)}>
+              <h3 className={cn("text-lg font-medium", theme.text.primary)}>Approval Queue</h3>
+              <span className={cn("text-xs font-medium px-2.5 py-0.5 rounded", theme.status.warning.bg, theme.status.warning.text)}>
+                {Array.isArray(approvals) ? approvals.length : 0} Pending
               </span>
             </div>
-            <div className={styles.getCardContent(theme)}>
+            <div>
               <ApprovalQueue approvals={approvals} onReview={handleReview} />
             </div>
           </div>
-
-          <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800">
-            <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">Quick Tips</h4>
-            <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-2 list-disc list-inside">
-              <li>Use templates to ensure compliance with local rules.</li>
-              <li>Variables like {`{{case.title}}`} auto-populate from case data.</li>
-              <li>Insert clause library items for consistent language.</li>
-              <li>Submit for review to notify senior partners automatically.</li>
-            </ul>
-          </div>
-
-          <div className="mt-6 p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 dark:border-emerald-800">
-            <h4 className="font-medium text-emerald-900 dark:text-emerald-100 mb-2">
-              Integration Points
-            </h4>
-            <ul className="text-sm text-emerald-800 dark:text-emerald-200 space-y-2">
-              <li>✓ Case Management: Auto-populate case data</li>
-              <li>✓ Clause Library: Reusable legal clauses</li>
-              <li>✓ Document Manager: Direct save integration</li>
-              <li>✓ E-Filing: One-click court filing</li>
-            </ul>
-          </div>
+        )}
         </div>
       </div>
     </div>

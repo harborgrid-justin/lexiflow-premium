@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PleadingSection } from '../../../../types/pleading-types';
+import { PleadingSection } from '@types/pleading-types';
 import { AlignLeft, AlignCenter, AlignRight, AlignJustify, Bold } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

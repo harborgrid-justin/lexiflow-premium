@@ -27,6 +27,8 @@ import { MetricCard } from '@/components/molecules/MetricCard';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
+import { ChartColorService } from '@/services/theme/chartColorService';
+import { getChartTheme } from '@/utils/chartConfig';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/utils/cn';
 
@@ -38,7 +40,8 @@ import { PleadingDocument } from '@/types';
 // ============================================================================
 
 export const PleadingAnalytics: React.FC = () => {
-    const { theme } = useTheme();
+    const { theme, mode } = useTheme();
+    const colors = ChartColorService.getCategoryColors(mode);
 
     const { data: pleadings = [] } = useQuery<PleadingDocument[]>(
         ['pleadings', 'all'],
@@ -54,13 +57,13 @@ export const PleadingAnalytics: React.FC = () => {
         // Average drafting time (mock - 2-5 days)
         const avgDraftingTime = 3.5;
 
-        // Clause usage (mock data)
+        // Clause usage (mock data) - use theme-aware colors
         const clauseUsage = [
-            { name: 'Jurisdiction', count: 45, color: '#3b82f6' },
-            { name: 'Summary Judgment', count: 32, color: '#8b5cf6' },
-            { name: 'Discovery', count: 28, color: '#10b981' },
-            { name: 'Damages', count: 25, color: '#f59e0b' },
-            { name: 'Relief Sought', count: 42, color: '#ef4444' },
+            { name: 'Jurisdiction', count: 45, color: colors[0] },
+            { name: 'Summary Judgment', count: 32, color: colors[1] },
+            { name: 'Discovery', count: 28, color: colors[2] },
+            { name: 'Damages', count: 25, color: colors[3] },
+            { name: 'Relief Sought', count: 42, color: colors[4] },
         ];
 
         // Monthly trend (mock data)
@@ -91,7 +94,7 @@ export const PleadingAnalytics: React.FC = () => {
             monthlyTrend,
             motionTypes,
         };
-    }, [pleadings]);
+    }, [pleadings, mode, colors]);
 
     return (
         <div className="h-full overflow-y-auto p-6 space-y-6">

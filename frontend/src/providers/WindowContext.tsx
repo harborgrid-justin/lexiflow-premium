@@ -3,6 +3,8 @@ import React, { createContext, useContext, useState, ReactNode, useCallback, use
 import { createPortal } from 'react-dom';
 import { X, Minus, Maximize2 } from 'lucide-react';
 import { ErrorBoundary } from "../components/organisms/ErrorBoundary/ErrorBoundary";
+import { useTheme } from './ThemeContext';
+import { cn } from '@/utils/cn';
 
 export interface WindowInstance {
   id: string;
@@ -43,6 +45,7 @@ export const useWindow = () => {
 const BASE_WINDOW_Z = 1000;
 
 export const WindowProvider = ({ children }: { children: ReactNode }) => {
+  const { theme } = useTheme();
   const [windows, setWindows] = useState<WindowInstance[]>([]);
   const [maxZIndex, setMaxZIndex] = useState(BASE_WINDOW_Z);
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
@@ -212,11 +215,14 @@ export const WindowProvider = ({ children }: { children: ReactNode }) => {
           win.isOpen && !win.isMinimized && createPortal(
             <div 
                 key={win.id} 
-                className={`fixed overflow-hidden bg-white dark:bg-slate-900 flex flex-col shadow-2xl transition-all duration-200 ease-out ${
+                className={cn(
+                    "fixed overflow-hidden flex flex-col shadow-2xl transition-all duration-200 ease-out",
+                    theme.surface.default,
+                    theme.border.default,
                     isOrbitalEnabled 
-                    ? "rounded-lg border border-slate-200 dark:border-slate-700" 
-                    : "inset-4 md:inset-8 rounded-xl border border-slate-200 dark:border-slate-700 ring-1 ring-black/5 animate-in zoom-in-95" 
-                }`}
+                    ? "rounded-lg border" 
+                    : "inset-4 md:inset-8 rounded-xl border ring-1 ring-black/5 animate-in zoom-in-95" 
+                )}
                 style={isOrbitalEnabled ? { 
                     zIndex: win.zIndex,
                     width: `${win.size.width}px`,
@@ -235,30 +241,39 @@ export const WindowProvider = ({ children }: { children: ReactNode }) => {
             >
                 {/* Window Header */}
                 <div 
-                    className={`h-10 border-b flex justify-between items-center px-3 shrink-0 select-none ${
+                    className={cn(
+                        "h-10 border-b flex justify-between items-center px-3 shrink-0 select-none",
                         isOrbitalEnabled 
-                        ? "bg-slate-50 dark:bg-slate-800 cursor-grab active:cursor-grabbing" : "bg-white dark:bg-slate-900"
-                    } border-slate-200 dark:border-slate-700`}
+                        ? cn(theme.surface.muted, "cursor-grab active:cursor-grabbing") 
+                        : theme.surface.default,
+                        theme.border.default
+                    )}
                     onMouseDown={(e) => handleDragStart(e, win.id, win.position.x, win.position.y)}
                 >
                     <div className="flex items-center gap-2">
-                        {!isOrbitalEnabled && <div className="w-1.5 h-4 bg-blue-600 rounded-full mr-1"></div>}
-                        <span className="text-xs font-bold text-slate-600 dark:text-slate-300">{win.title}</span>
+                        {!isOrbitalEnabled && <div className={cn("w-1.5 h-4 rounded-full mr-1", theme.accent.primary)}></div>}
+                        <span className={cn("text-xs font-bold", theme.text.secondary)}>{win.title}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
                         {isOrbitalEnabled && (
-                            <button onClick={() => minimizeWindow(win.id)} className="p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-400">
+                            <button onClick={() => minimizeWindow(win.id)} className={cn("p-1 rounded", theme.interactive.hover, theme.text.tertiary)}>
                                 <Minus className="h-3 w-3"/>
                             </button>
                         )}
                          {isOrbitalEnabled && (
-                            <button className="p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-400">
+                            <button className={cn("p-1 rounded", theme.interactive.hover, theme.text.tertiary)}>
                                 <Maximize2 className="h-3 w-3"/>
                             </button>
                         )}
                         <button 
                             onClick={() => closeWindow(win.id)} 
-                            className={`p-1 rounded ${isOrbitalEnabled ? "hover:bg-red-50 text-slate-400 hover:text-red-500" : "bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400"}`}
+                            className={cn(
+                                "p-1 rounded",
+                                isOrbitalEnabled 
+                                ? "hover:bg-red-50 hover:text-red-500" 
+                                : cn(theme.surface.muted, theme.interactive.hover),
+                                theme.text.tertiary
+                            )}
                         >
                             <X className="h-3 w-3"/>
                         </button>
@@ -266,7 +281,7 @@ export const WindowProvider = ({ children }: { children: ReactNode }) => {
                 </div>
                 
                 {!isOrbitalEnabled && (
-                    <div className="absolute inset-0 -z-10 bg-white dark:bg-slate-900"></div>
+                    <div className={cn("absolute inset-0 -z-10", theme.surface.default)}></div>
                 )}
 
                 {/* Content */}
@@ -281,7 +296,7 @@ export const WindowProvider = ({ children }: { children: ReactNode }) => {
       ))}
       
       {!isOrbitalEnabled && windows.some(w => w.isOpen && !w.isMinimized) && portalRoot && createPortal(
-          <div className="fixed inset-0 bg-slate-900/30 backdrop-blur-[1px] z-[1000] transition-opacity" />,
+          <div className="fixed inset-0 bg-black/30 backdrop-blur-[1px] z-[1000] transition-opacity" />,
           portalRoot
       )}
 

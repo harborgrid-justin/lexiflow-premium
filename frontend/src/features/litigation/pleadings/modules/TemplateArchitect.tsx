@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { LayoutTemplate, Settings, Sliders } from 'lucide-react';
 import { VariableManager } from './template/VariableManager';
 import { JurisdictionRules } from './template/JurisdictionRules';
-import { PleadingVariable } from '../../../../types/pleading-types';
+import { PleadingVariable } from '@types/pleading-types';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { FileText, FileCode, CheckSquare } from 'lucide-react';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@providers/ThemeContext';
 import * as styles from '../DraftingDashboard.styles';
-import { DraftingStats as StatsType } from '../../../api/domains/drafting.api';
+import { DraftingStats as StatsType } from '@api/domains/drafting.api';
 
 interface DraftingStatsProps {
   stats: StatsType;

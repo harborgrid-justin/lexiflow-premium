@@ -2,7 +2,7 @@ import { BUSINESS_PROCESSES } from "@/api/data/firmProcess";
 import { delay } from '@/utils/async';
 import { TEMPLATE_LIBRARY } from '@/api/data/workflowTemplates';
 import { WorkflowTask, TaskId, WorkflowTemplateData, CaseId, ProjectId, CasePhase, TaskStatusBackend, TaskPriorityBackend } from '@/types';
-import { db, STORES } from '../db';
+import { db, STORES } from '@services/data/db';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { SystemEventType } from '@/types/integration-types';
 import { StorageUtils } from '@/utils/storage';

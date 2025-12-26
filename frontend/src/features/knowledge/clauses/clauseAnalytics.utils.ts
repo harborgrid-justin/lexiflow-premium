@@ -1,10 +1,15 @@
 import { Clause } from '@/types';
+import { ChartColorService } from '@/services/theme/chartColorService';
+import { ThemeMode } from '@/components/theme/tokens';
 
-export const getRiskData = (clauses: Clause[]) => [
-  { name: 'Low Risk', value: clauses.filter(c => c.riskRating === 'Low').length, color: '#10b981' },
-  { name: 'Medium Risk', value: clauses.filter(c => c.riskRating === 'Medium').length, color: '#f59e0b' },
-  { name: 'High Risk', value: clauses.filter(c => c.riskRating === 'High').length, color: '#ef4444' },
-];
+export const getRiskData = (clauses: Clause[], mode: ThemeMode = 'light') => {
+  const colors = ChartColorService.getRiskColors(mode);
+  return [
+    { name: 'Low Risk', value: clauses.filter(c => c.riskRating === 'Low').length, color: colors.low },
+    { name: 'Medium Risk', value: clauses.filter(c => c.riskRating === 'Medium').length, color: colors.medium },
+    { name: 'High Risk', value: clauses.filter(c => c.riskRating === 'High').length, color: colors.high },
+  ];
+};
 
 export const getUsageData = (clauses: Clause[]) => [...clauses]
   .sort((a, b) => b.usageCount - a.usageCount)

@@ -337,6 +337,19 @@ export class DraftingService {
     await this.generatedDocRepository.remove(doc);
   }
 
+  async generatePreview(dto: GenerateDocumentDto, _userId: string): Promise<{ content: string }> {
+    const template = await this.getTemplateById(dto.templateId);
+
+    // Merge content with variables (same logic as generateDocument but don't save)
+    const mergedContent = await this.mergeTemplateContent(
+      template.content,
+      dto.variableValues,
+      dto.includedClauses,
+    );
+
+    return { content: mergedContent };
+  }
+
   // ============================================================================
   // MERGE ENGINE
   // ============================================================================

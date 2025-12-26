@@ -137,18 +137,22 @@ export const ComplianceService = {
      * Get risk statistics for dashboard visualization
      * 
      * @returns Promise Array of risk statistics by severity level
+     * @param mode - Theme mode ('light' or 'dark') for color selection
      * @throws Error if fetch fails
      * 
      * @example
-     * const stats = await ComplianceService.getRiskStats();
+     * const stats = await ComplianceService.getRiskStats('light');
      * // Returns: [
      * //   { name: 'Low Risk', value: 5, color: '#22c55e' },
      * //   { name: 'Medium Risk', value: 3, color: '#f59e0b' },
      * //   { name: 'High Risk', value: 2, color: '#ef4444' }
      * // ]
      */
-    getRiskStats: async (): Promise<Array<{ name: string; value: number; color: string }>> => {
+    getRiskStats: async (mode: 'light' | 'dark' = 'light'): Promise<Array<{ name: string; value: number; color: string }>> => {
         try {
+            const { ChartColorService } = await import('../theme/chartColorService');
+            const colors = ChartColorService.getRiskColors(mode);
+            
             // Risk statistics computed from available compliance data
             // Returns categorized risk distribution
             const risks: Risk[] = [];
@@ -158,9 +162,9 @@ export const ComplianceService = {
             const low = risks.filter(r => r.impact === 'Low' && r.probability === 'Low').length;
 
             return [
-                { name: 'Low Risk', value: low, color: '#22c55e' },
-                { name: 'Medium Risk', value: medium, color: '#f59e0b' },
-                { name: 'High Risk', value: high, color: '#ef4444' },
+                { name: 'Low Risk', value: low, color: colors.low },
+                { name: 'Medium Risk', value: medium, color: colors.medium },
+                { name: 'High Risk', value: high, color: colors.high },
             ];
         } catch (error) {
             console.error('[ComplianceService.getRiskStats] Error:', error);

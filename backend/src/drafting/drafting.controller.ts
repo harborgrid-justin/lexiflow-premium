@@ -161,6 +161,18 @@ export class DraftingController {
   }
 
   @Public()
+  @Post('documents/preview')
+  @ApiOperation({ summary: 'Generate preview of document without saving' })
+  @ApiResponse({ status: 200, description: 'Preview generated successfully' })
+  async generatePreview(
+    @Body() dto: GenerateDocumentDto,
+    @Request() req: RequestWithUser,
+  ) {
+    const userId = req.user?.id || '00000000-0000-0000-0000-000000000001';
+    return this.draftingService.generatePreview(dto, userId);
+  }
+
+  @Public()
   @Get('documents')
   @ApiOperation({ summary: 'Get all generated documents' })
   @ApiQuery({ name: 'status', required: false })

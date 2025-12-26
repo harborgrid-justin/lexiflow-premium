@@ -110,7 +110,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { Case, CasePhase, Party, CaseId } from '@/types';
-import { Repository } from '../core/Repository';
+import { Repository } from '@services/core/Repository';
 import { STORES, db } from '@/services/data/db';
 import { delay } from '@/utils/async';
 

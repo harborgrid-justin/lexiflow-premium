@@ -7,8 +7,8 @@
  */
 
 import type { CaseId, UserId } from '@/types';
-import { isValidDate, isValidDateRange } from '../validators/common-validators';
-import { sanitizeString } from '../sanitizers/input-sanitizer';
+import { isValidDate, isValidDateRange } from '@services/validation/validators/common-validators';
+import { sanitizeString } from '@services/validation/sanitizers/input-sanitizer';
 
 /**
  * Billing filters input interface

@@ -85,9 +85,10 @@ export const useWorkerSearch = <T>({ items, query, fields, idKey = 'id' as keyof
       });
       
       // If query is empty, reset display immediately
+      // But ONLY if we haven't already done this for this items reference
       if (!query) {
-          // Only update if items actually changed to prevent infinite loops
-          setFilteredItems(prev => prev === items ? prev : items);
+          // Only update filteredItems once per items reference to prevent loops
+          setFilteredItems(items);
       } else {
           // If data updated while searching, re-trigger search
           const currentRequestId = ++requestIdRef.current;

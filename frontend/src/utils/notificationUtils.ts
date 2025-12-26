@@ -60,12 +60,14 @@ export const notifyInfo = (message: string, options?: NotificationOptions): void
 
 /**
  * Show warning notification
+ * Note: Toast styles are fixed (not theme-aware) to maintain high visibility
  */
 export const notifyWarning = (message: string, options?: NotificationOptions): void => {
   toast(message, {
     duration: options?.duration || 4000,
     position: options?.position || 'top-right',
     icon: options?.icon || '⚠️',
+    // Fixed light colors for visibility - toast notifications should be consistent
     style: {
       background: '#fef3c7',
       color: '#92400e'

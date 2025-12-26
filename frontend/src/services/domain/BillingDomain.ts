@@ -95,7 +95,7 @@
  */
 
 import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData } from '@/types';
-import { Repository } from '../core/Repository';
+import { Repository } from '@services/core/Repository';
 import { STORES, db } from '@/services/data/db';
 import { delay } from '@/utils/async';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';

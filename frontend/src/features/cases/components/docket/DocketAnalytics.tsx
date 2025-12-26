@@ -21,6 +21,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
+import { ChartColorService } from '@/services/theme/chartColorService';
 
 // Components
 import { Card } from '@/components/molecules/Card';
@@ -88,10 +89,10 @@ export const DocketAnalytics: React.FC = () => {
               <BarChart data={filingActivity} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
                 <XAxis dataKey="month" fontSize={12} tickLine={false} axisLine={false} />
                 <YAxis fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip cursor={{fill: '#f1f5f9'}} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                <Tooltip cursor={{fill: chartTheme.grid}} contentStyle={chartTheme.tooltipStyle} />
                 <Legend />
-                <Bar dataKey="filings" name="Filings" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="orders" name="Orders" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="filings" name="Filings" fill={chartColors[0]} radius={[4, 4, 0, 0]} />
+                <Bar dataKey="orders" name="Orders" fill={chartColors[1]} radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

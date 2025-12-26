@@ -4,14 +4,16 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useChartTheme } from '@/components/organisms/ChartHelpers';
+import { useTheme } from '@/providers/ThemeContext';
 
 export const ClientAnalytics: React.FC = () => {
+  const { mode } = useTheme();
   const chartTheme = useChartTheme();
 
   // Enterprise Data Access
   const { data: analyticsData } = useQuery(
       ['crm', 'analytics'],
-      DataService.crm.getAnalytics
+      () => DataService.crm.getAnalytics(mode)
   );
 
   // Type guard for analytics

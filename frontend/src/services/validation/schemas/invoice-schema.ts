@@ -14,15 +14,15 @@ import {
   isValidStringLength, 
   isValidInvoiceNumber,
   isValidEnum 
-} from '../validators/common-validators';
+} from '@services/validation/validators/common-validators';
 import { 
   isValidAmount, 
   isValidRate,
   validateLineItemCalculation,
   validateInvoiceTotal,
   FINANCIAL_CONSTRAINTS 
-} from '../validators/financial-validators';
-import { sanitizeString } from '../sanitizers/input-sanitizer';
+} from '@services/validation/validators/financial-validators';
+import { sanitizeString } from '@services/validation/sanitizers/input-sanitizer';
 
 /**
  * Invoice line item interface

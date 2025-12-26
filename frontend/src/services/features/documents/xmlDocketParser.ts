@@ -15,7 +15,7 @@ import { yieldToMain } from '@/utils/apiUtils';
 
 // Types
 import { CaseStatus, DocketEntry, DocketEntryType, Party, Case, CaseId, PartyId, DocketId, MatterType } from '@/types';
-import { PacerCase, PacerParty, PacerJurisdictionType } from "../../../types/pacer";
+import { PacerCase, PacerParty, PacerJurisdictionType } from "@types/pacer";
 
 // ============================================================================
 // SERVICE

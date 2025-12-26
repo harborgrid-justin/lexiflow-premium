@@ -22,7 +22,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDebounce } from './useDebounce';
-import { queryClient } from '../services/infrastructure/queryClient';
+import { queryClient } from '@services/infrastructure/queryClient';
 
 export interface EntityAutocompleteConfig<TEntity, TCreateData = Partial<TEntity>> {
   /** Function to fetch entities based on search query */

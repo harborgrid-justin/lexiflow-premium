@@ -10,7 +10,8 @@ import type { tokens } from '@/components/theme/tokens';
 type Theme = typeof tokens.colors.light;
 
 export const getFooterContainer = (theme: Theme) => cn(
-  "p-4 border-t shrink-0 bg-slate-50/50",
+  "p-4 border-t shrink-0",
+  theme.surface.muted,
   theme.border.default
 );
 
@@ -18,11 +19,14 @@ export const statusIndicatorContainer = "mb-3";
 
 export const holographicModeContainer = "mb-4 flex items-center justify-between px-1";
 
-export const holographicModeLabel = "text-xs font-bold text-slate-400 uppercase tracking-wide";
+export const getHolographicModeLabel = (theme: Theme) => cn(
+  "text-xs font-bold uppercase tracking-wide",
+  theme.text.tertiary
+);
 
-export const getToggleButton = (isEnabled: boolean) => cn(
+export const getToggleButton = (theme: Theme, isEnabled: boolean) => cn(
   "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none",
-  isEnabled ? "bg-blue-600" : "bg-slate-300"
+  isEnabled ? theme.action.primary.bg : theme.surface.emphasis
 );
 
 export const getToggleIndicator = (isEnabled: boolean) => cn(

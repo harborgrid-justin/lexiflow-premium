@@ -234,10 +234,69 @@ export class SchemaManagementService {
     return { success: true, table: dto.name };
   }
 
-  async alterTable(_tableName: string, _alterations: any) {
-    // Implementation for ALTER TABLE operations
-    // This would handle adding/dropping columns, changing types, etc.
-    throw new Error('Not implemented yet');
+  async alterTable(tableName: string, alterations: any) {
+    // Validate table name to prevent SQL injection
+    if (!this.isValidIdentifier(tableName)) {
+      throw new BadRequestException('Invalid table name format');
+    }
+
+    const operations: string[] = [];
+
+    // Handle ADD COLUMN
+    if (alterations.addColumns && Array.isArray(alterations.addColumns)) {
+      for (const col of alterations.addColumns) {
+        if (!this.isValidIdentifier(col.name)) {
+          throw new BadRequestException(`Invalid column name: ${col.name}`);
+        }
+        const columnDef = `ADD COLUMN "${col.name}" ${col.type}${col.nullable === false ? ' NOT NULL' : ''}${col.default ? ` DEFAULT ${col.default}` : ''}`;
+        operations.push(columnDef);
+      }
+    }
+
+    // Handle DROP COLUMN
+    if (alterations.dropColumns && Array.isArray(alterations.dropColumns)) {
+      for (const colName of alterations.dropColumns) {
+        if (!this.isValidIdentifier(colName)) {
+          throw new BadRequestException(`Invalid column name: ${colName}`);
+        }
+        operations.push(`DROP COLUMN "${colName}"`);
+      }
+    }
+
+    // Handle ALTER COLUMN TYPE
+    if (alterations.alterColumns && Array.isArray(alterations.alterColumns)) {
+      for (const col of alterations.alterColumns) {
+        if (!this.isValidIdentifier(col.name)) {
+          throw new BadRequestException(`Invalid column name: ${col.name}`);
+        }
+        if (col.type) {
+          operations.push(`ALTER COLUMN "${col.name}" TYPE ${col.type}`);
+        }
+        if (col.nullable !== undefined) {
+          operations.push(`ALTER COLUMN "${col.name}" ${col.nullable ? 'DROP NOT NULL' : 'SET NOT NULL'}`);
+        }
+      }
+    }
+
+    // Handle RENAME COLUMN
+    if (alterations.renameColumns && Array.isArray(alterations.renameColumns)) {
+      for (const rename of alterations.renameColumns) {
+        if (!this.isValidIdentifier(rename.oldName) || !this.isValidIdentifier(rename.newName)) {
+          throw new BadRequestException('Invalid column names for rename');
+        }
+        operations.push(`RENAME COLUMN "${rename.oldName}" TO "${rename.newName}"`);
+      }
+    }
+
+    if (operations.length === 0) {
+      throw new BadRequestException('No valid alterations provided');
+    }
+
+    // Execute all operations in a single ALTER TABLE statement
+    const query = `ALTER TABLE "${tableName}" ${operations.join(', ')}`;
+    await this.dataSource.query(query);
+
+    return { success: true, table: tableName, operations: operations.length };
   }
 
   async dropTable(tableName: string) {

@@ -346,6 +346,24 @@ export class CasesApiService {
     }
 
     /**
+     * Parse case data from text/document
+     * 
+     * @param content - Text content to parse
+     * @param options - Parsing options
+     * @returns Promise<any> Parsed case data
+     */
+    async parse(content: string, options: { useAI: boolean; provider?: 'gemini' | 'openai'; apiKey?: string }): Promise<any> {
+        this.validateString(content, 'content', 'parse');
+
+        try {
+            return await apiClient.post<any>('/cases/import/parse', { content, options });
+        } catch (error) {
+            console.error('[CasesApiService.parse] Error:', error);
+            throw new Error('Failed to parse case data');
+        }
+    }
+
+    /**
      * Archive a case
      * 
      * @param id - Case ID

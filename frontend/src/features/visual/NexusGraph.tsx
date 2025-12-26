@@ -82,12 +82,6 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
     [caseData, parties, evidence]
   );
 
-  // Memoized graph data computation (Practice #4)
-  const graphData = useMemo(
-    () => buildGraphData(caseData, parties, evidence), 
-    [caseData, parties, evidence]
-  );
-
   // Hook receives updated dimensions to recenter physics
   const { nodesMeta, isStable, reheat, physicsState } = useNexusGraph(
     containerRef as React.RefObject<HTMLDivElement>, 
@@ -157,14 +151,6 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
   const getStroke = useCallback(
     (type: string) => getNodeStrokeColor(type, chartTheme, theme.chart.text),
     [chartTheme, theme.chart.text]
-  );
-
-  // Memoized node click handler (Practice #4)
-  const handleNodeClick = useCallback(
-    (index: number) => {
-      onNodeClick(graphData.nodes[index]);
-    },
-    [graphData.nodes, onNodeClick]
   );
 
   // Memoized node click handler (Practice #4)

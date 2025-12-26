@@ -435,21 +435,45 @@ export class WorkflowAdvancedService {
     return nodesA.filter(n => !idsB.has(n.id));
   }
 
-  private _findModifiedNodes(_nodesA: any[], _nodesB: any[]): any[] {
-    // Implementation for detecting modifications
-    return [];
+  private _findModifiedNodes(nodesA: any[], nodesB: any[]): any[] {
+    const modified: any[] = [];
+    const mapB = new Map(nodesB.map(n => [n.id, n]));
+    
+    for (const nodeA of nodesA) {
+      const nodeB = mapB.get(nodeA.id);
+      if (nodeB && JSON.stringify(nodeA) !== JSON.stringify(nodeB)) {
+        modified.push({ old: nodeA, new: nodeB });
+      }
+    }
+    
+    return modified;
   }
 
-  private _findAddedConnections(_connsA: any[], _connsB: any[]): any[] {
-    return [];
+  private _findAddedConnections(connsA: any[], connsB: any[]): any[] {
+    const idsA = new Set(connsA.map(c => `${c.from}-${c.to}`));
+    return connsB.filter(c => !idsA.has(`${c.from}-${c.to}`));
   }
 
-  private _findRemovedConnections(_connsA: any[], _connsB: any[]): any[] {
-    return [];
+  private _findRemovedConnections(connsA: any[], connsB: any[]): any[] {
+    const idsB = new Set(connsB.map(c => `${c.from}-${c.to}`));
+    return connsA.filter(c => !idsB.has(`${c.from}-${c.to}`));
   }
 
-  private _findConfigChanges(_configA: any, _configB: any): any[] {
-    return [];
+  private _findConfigChanges(configA: any, configB: any): any[] {
+    const changes: any[] = [];
+    const allKeys = new Set([...Object.keys(configA || {}), ...Object.keys(configB || {})]);
+    
+    for (const key of allKeys) {
+      if (JSON.stringify(configA?.[key]) !== JSON.stringify(configB?.[key])) {
+        changes.push({
+          key,
+          oldValue: configA?.[key],
+          newValue: configB?.[key],
+        });
+      }
+    }
+    
+    return changes;
   }
 
   // ============================================================================
@@ -770,10 +794,27 @@ export class WorkflowAdvancedService {
   }
 
   private async _generateCompensatingActions(
-    _instance: EnhancedWorkflowInstance,
-    _targetState: WorkflowState,
+    instance: EnhancedWorkflowInstance,
+    targetState: WorkflowState,
   ): Promise<any[]> {
-    return [];
+    const actions: any[] = [];
+    const currentNodes = instance.nodes || [];
+    const targetNodes = targetState.nodes || [];
+    
+    // Generate undo actions for nodes that were executed
+    for (const node of currentNodes) {
+      const nodeAny = node as any;
+      if (nodeAny.status === 'completed' && !targetNodes.find((n: any) => n.id === nodeAny.id)) {
+        actions.push({
+          type: 'compensate',
+          nodeId: nodeAny.id,
+          action: 'undo',
+          data: nodeAny.outputData,
+        });
+      }
+    }
+    
+    return actions;
   }
 
   // ============================================================================
@@ -819,8 +860,15 @@ export class WorkflowAdvancedService {
     };
   }
 
-  private async _getWorkflowExecutions(_workflowId: string, _start: Date, _end: Date): Promise<any[]> {
-    return []; // Fetch from database
+  private async _getWorkflowExecutions(workflowId: string, start: Date, end: Date): Promise<any[]> {
+    // In a production environment, this would query a workflow_executions table
+    // For now, return mock data structure that matches expected format
+    this.logger.debug(`Fetching executions for workflow ${workflowId} from ${start} to ${end}`);
+    
+    // TODO: Replace with actual repository query when workflow_executions entity is created
+    // Example: return this.executionRepository.find({ where: { workflowId, createdAt: Between(start, end) } });
+    
+    return [];
   }
 
   private _calculatePerformanceSummary(_executions: any[]): any {
@@ -833,16 +881,127 @@ export class WorkflowAdvancedService {
     };
   }
 
-  private _calculateNodeMetrics(_executions: any[]): any[] {
-    return [];
+  private _calculateNodeMetrics(executions: any[]): any[] {
+    const nodeMap = new Map<string, any>();
+    
+    for (const execution of executions) {
+      const nodes = execution.nodes || [];
+      for (const node of nodes) {
+        if (!nodeMap.has(node.id)) {
+          nodeMap.set(node.id, {
+            nodeId: node.id,
+            nodeName: node.name || node.id,
+            executions: 0,
+            successCount: 0,
+            failureCount: 0,
+            totalDuration: 0,
+            averageDuration: 0,
+            minDuration: Infinity,
+            maxDuration: 0,
+          });
+        }
+        
+        const metrics = nodeMap.get(node.id);
+        metrics.executions++;
+        
+        if (node.status === 'completed') metrics.successCount++;
+        if (node.status === 'failed') metrics.failureCount++;
+        
+        const duration = node.duration || 0;
+        metrics.totalDuration += duration;
+        metrics.minDuration = Math.min(metrics.minDuration, duration);
+        metrics.maxDuration = Math.max(metrics.maxDuration, duration);
+      }
+    }
+    
+    // Calculate averages
+    for (const metrics of nodeMap.values()) {
+      metrics.averageDuration = metrics.executions > 0 ? metrics.totalDuration / metrics.executions : 0;
+    }
+    
+    return Array.from(nodeMap.values());
   }
 
-  private _detectBottlenecks(_nodeMetrics: any[]): WorkflowBottleneck[] {
-    return [];
+  private _detectBottlenecks(nodeMetrics: any[]): WorkflowBottleneck[] {
+    const bottlenecks: WorkflowBottleneck[] = [];
+    
+    // Calculate average duration across all nodes
+    const avgDuration = nodeMetrics.length > 0
+      ? nodeMetrics.reduce((sum, m) => sum + m.averageDuration, 0) / nodeMetrics.length
+      : 0;
+    
+    for (const metric of nodeMetrics) {
+      // Detect slow nodes (2x average duration)
+      if (metric.averageDuration > avgDuration * 2) {
+        const impactPercent = avgDuration > 0 ? ((metric.averageDuration / avgDuration) * 100) - 100 : 0;
+        bottlenecks.push({
+          nodeId: metric.nodeId,
+          type: 'duration',
+          severity: 'high',
+          impact: impactPercent,
+          description: `Node execution time is ${impactPercent.toFixed(0)}% above average`,
+        });
+      }
+      
+      // Detect high failure rates (>10%)
+      const failureRate = metric.executions > 0 ? (metric.failureCount / metric.executions) * 100 : 0;
+      if (failureRate > 10) {
+        bottlenecks.push({
+          nodeId: metric.nodeId,
+          type: 'failure_rate',
+          severity: failureRate > 25 ? 'critical' : 'medium',
+          impact: failureRate,
+          description: `Node has ${failureRate.toFixed(1)}% failure rate`,
+        });
+      }
+    }
+    
+    return bottlenecks;
   }
 
-  private _generateOptimizationSuggestions(_bottlenecks: any[], _nodeMetrics: any[]): OptimizationSuggestion[] {
-    return [];
+  private _generateOptimizationSuggestions(bottlenecks: any[], nodeMetrics: any[]): OptimizationSuggestion[] {
+    const suggestions: OptimizationSuggestion[] = [];
+    
+    for (const bottleneck of bottlenecks) {
+      if (bottleneck.type === 'duration') {
+        suggestions.push({
+          id: `opt-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          type: 'caching',
+          targetNodeIds: [bottleneck.nodeId],
+          description: `Optimize slow node by implementing caching strategies`,
+          estimatedImprovement: 35,
+          confidence: 0.75,
+          implementationComplexity: 'medium',
+        });
+      }
+      
+      if (bottleneck.type === 'failure_rate') {
+        suggestions.push({
+          id: `opt-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          type: 'automation',
+          targetNodeIds: [bottleneck.nodeId],
+          description: `Improve reliability with automated error handling and retry logic`,
+          estimatedImprovement: 30,
+          confidence: 0.80,
+          implementationComplexity: 'medium',
+        });
+      }
+    }
+    
+    // Check for parallelization opportunities
+    if (nodeMetrics.length > 3) {
+      suggestions.push({
+        id: `opt-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        type: 'parallel',
+        targetNodeIds: [],
+        description: 'Execute independent nodes in parallel to reduce total duration',
+        estimatedImprovement: 25,
+        confidence: 0.65,
+        implementationComplexity: 'high',
+      });
+    }
+    
+    return suggestions;
   }
 
   // ============================================================================

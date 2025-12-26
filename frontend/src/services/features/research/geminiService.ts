@@ -276,7 +276,7 @@
  * - Fallback models: Graceful degradation to gemini-2.5-flash on pro-preview failures
  */
 
-import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
+import { GoogleGenerativeAI, GenerateContentResult } from "@google/generative-ai";
 import { ParsedDocket } from '@/types';
 import { SearchResult } from '@/api/search/search-api';
 import { Prompts } from "@services/ai/prompts";
@@ -292,14 +292,19 @@ export * from '@/types/ai';
 
 /**
  * Singleton-like accessor to ensure consistent config and prevent unnecessary instantiation overhead
+ * Checks multiple sources for API key: env vars, localStorage
  * @private
  */
 const getClient = () => {
-  const apiKey = process.env.API_KEY;
+  // Check environment variables (Vite-prefixed and standard)
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY || 
+                 import.meta.env.GEMINI_API_KEY || 
+                 (typeof localStorage !== 'undefined' ? localStorage.getItem('gemini_api_key') : null);
+  
   if (!apiKey) {
-    throw new Error('Gemini API key not configured. Please set API_KEY environment variable.');
+    throw new Error('Gemini API key not configured. Please set VITE_GEMINI_API_KEY environment variable or gemini_api_key in localStorage.');
   }
-  return new GoogleGenAI({ apiKey: apiKey as string });
+  return new GoogleGenerativeAI(apiKey);
 };
 
 // =============================================================================
@@ -314,17 +319,20 @@ export const GeminiService = {
     async analyzeDocument(content: string): Promise<AnalyzedDoc> {
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await getClient().models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: Prompts.Analysis(content),
-                    config: {
+                const model = getClient().getGenerativeModel({ 
+                    model: 'gemini-2.0-flash-exp',
+                    generationConfig: {
                         responseMimeType: 'application/json',
                         responseSchema: AnalyzedDocSchema
                     }
                 });
                 
-                if (!response.text) throw new Error("No response text from Gemini");
-                return safeParseJSON(response.text, { summary: "Analysis failed to parse", riskScore: 0 });
+                const result = await model.generateContent(Prompts.Analysis(content));
+                const response = result.response;
+                const text = response.text();
+                
+                if (!text) throw new Error("No response text from Gemini");
+                return safeParseJSON(text, { summary: "Analysis failed to parse", riskScore: 0 });
             } catch (e) {
                 console.error("Gemini Analysis Error:", e);
                 return { summary: "Analysis unavailable due to service error.", riskScore: 0 };
@@ -335,17 +343,19 @@ export const GeminiService = {
     async critiqueBrief(text: string): Promise<BriefCritique> {
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await getClient().models.generateContent({
-                    model: 'gemini-3-pro-preview',
-                    contents: Prompts.Critique(text),
-                    config: {
+                const model = getClient().getGenerativeModel({
+                    model: 'gemini-2.0-flash-exp',
+                    generationConfig: {
                         responseMimeType: 'application/json',
                         responseSchema: BriefCritiqueSchema
                     }
                 });
 
-                if (!response.text) throw new Error("No response text from Gemini");
-                return safeParseJSON(response.text, {
+                const result = await model.generateContent(Prompts.Critique(text));
+                const responseText = result.response.text();
+                
+                if (!responseText) throw new Error("No response text from Gemini");
+                return safeParseJSON(responseText, {
                     score: 0,
                     strengths: [],
                     weaknesses: ["Analysis unavailable"],
@@ -362,11 +372,11 @@ export const GeminiService = {
     async reviewContract(text: string): Promise<string> {
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await getClient().models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: Prompts.Review(text)
+                const model = getClient().getGenerativeModel({
+                    model: 'gemini-2.0-flash-exp'
                 });
-                return response.text || "Error reviewing contract.";
+                const result = await model.generateContent(Prompts.Review(text));
+                return result.response.text() || "Error reviewing contract.";
             } catch (e) {
                 return "Contract review service unavailable.";
             }
@@ -375,12 +385,13 @@ export const GeminiService = {
 
     async *streamDraft(context: string, type: string): AsyncGenerator<string, void, unknown> {
         try {
-            const responseStream = await getClient().models.generateContentStream({
-                model: 'gemini-2.5-flash',
-                contents: Prompts.Draft(context, type)
+            const model = getClient().getGenerativeModel({
+                model: 'gemini-2.0-flash-exp'
             });
-            for await (const chunk of responseStream) {
-                if (chunk.text) yield chunk.text;
+            const result = await model.generateContentStream(Prompts.Draft(context, type));
+            for await (const chunk of result.stream) {
+                const chunkText = chunk.text();
+                if (chunkText) yield chunkText;
             }
         } catch (e) {
             yield "Error streaming content.";
@@ -390,11 +401,11 @@ export const GeminiService = {
     async refineTimeEntry(desc: string): Promise<string> {
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await getClient().models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: Prompts.Refine(desc)
+                const model = getClient().getGenerativeModel({
+                    model: 'gemini-2.0-flash-exp'
                 });
-                return response.text || desc;
+                const result = await model.generateContent(Prompts.Refine(desc));
+                return result.response.text() || desc;
             } catch (e) {
                 return desc;
             }
@@ -404,11 +415,11 @@ export const GeminiService = {
     async generateDraft(prompt: string, type: string): Promise<string> {
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await getClient().models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: Prompts.Draft(prompt, type)
+                const model = getClient().getGenerativeModel({
+                    model: 'gemini-2.0-flash-exp'
                 });
-                return response.text || "Error generating content.";
+                const result = await model.generateContent(Prompts.Draft(prompt, type));
+                return result.response.text() || "Error generating content.";
             } catch(e) {
                 return "Generation failed.";
             }
@@ -418,17 +429,19 @@ export const GeminiService = {
     async predictIntent(query: string): Promise<IntentResult> {
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await getClient().models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: Prompts.Intent(query),
-                    config: {
+                const model = getClient().getGenerativeModel({
+                    model: 'gemini-2.0-flash-exp',
+                    generationConfig: {
                         responseMimeType: 'application/json',
                         responseSchema: IntentResultSchema
                     }
                 });
                 
-                if (!response.text) throw new Error("No response text from Gemini");
-                return safeParseJSON(response.text, { action: 'UNKNOWN', confidence: 0 });
+                const result = await model.generateContent(Prompts.Intent(query));
+                const responseText = result.response.text();
+                
+                if (!responseText) throw new Error("No response text from Gemini");
+                return safeParseJSON(responseText, { action: 'UNKNOWN', confidence: 0 });
             } catch (e) {
                 return { action: 'UNKNOWN', confidence: 0 };
             }
@@ -438,17 +451,19 @@ export const GeminiService = {
     async parseDocket(text: string): Promise<Partial<ParsedDocket>> {
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await getClient().models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: Prompts.Docket(text),
-                    config: {
+                const model = getClient().getGenerativeModel({
+                    model: 'gemini-2.0-flash-exp',
+                    generationConfig: {
                         responseMimeType: 'application/json',
                         responseSchema: DocketSchema
                     }
                 });
                 
-                if (!response.text) throw new Error("No response text from Gemini");
-                return safeParseJSON<Partial<ParsedDocket>>(response.text, {});
+                const result = await model.generateContent(Prompts.Docket(text));
+                const responseText = result.response.text();
+                
+                if (!responseText) throw new Error("No response text from Gemini");
+                return safeParseJSON<Partial<ParsedDocket>>(responseText, {});
             } catch(e) {
                 console.error("Docket Parse Error", e);
                 return {};
@@ -459,17 +474,18 @@ export const GeminiService = {
     async conductResearch(query: string): Promise<ResearchResponse> {
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await getClient().models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: Prompts.Research(query),
-                    config: {
-                        tools: [{googleSearch: {}} as any],
-                    }
+                const model = getClient().getGenerativeModel({
+                    model: 'gemini-2.0-flash-exp',
+                    tools: [{ googleSearch: {} }],
                 });
 
+                const result = await model.generateContent(Prompts.Research(query));
+                const response = result.response;
+
                 const sources: import('@/api/search/search-api').SearchResult[] = [];
-                if (response.candidates && response.candidates[0]?.groundingMetadata?.groundingChunks) {
-                    const chunks = response.candidates[0].groundingMetadata.groundingChunks as GroundingChunk[];
+                const candidates = response.candidates;
+                if (candidates && candidates[0]?.groundingMetadata?.groundingChunks) {
+                    const chunks = candidates[0].groundingMetadata.groundingChunks as GroundingChunk[];
                     chunks.forEach((c: GroundingChunk) => {
                         if (c.web) {
                             sources.push({
@@ -485,7 +501,7 @@ export const GeminiService = {
                     });
                 }
                 const researchResponse: ResearchResponse = {
-                    text: response.text || "No text response.",
+                    text: response.text() || "No text response.",
                     sources
                 };
                 return researchResponse;
@@ -502,11 +518,13 @@ export const GeminiService = {
     async generateReply(lastMsg: string, role: string): Promise<string> {
         return withRetry(async () => {
             try {
-                const response: GenerateContentResponse = await getClient().models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: `Draft a professional reply to this message from a ${role}: "${lastMsg}"`
+                const model = getClient().getGenerativeModel({
+                    model: 'gemini-2.0-flash-exp'
                 });
-                return response.text || "";
+                const result = await model.generateContent(
+                    `Draft a professional reply to this message from a ${role}: "${lastMsg}"`
+                );
+                return result.response.text() || "";
             } catch (e) {
                 return "Unable to generate reply.";
             }
@@ -516,16 +534,18 @@ export const GeminiService = {
     async shepardizeCitation(citation: string): Promise<ShepardizeResult | null> {
         return withRetry<ShepardizeResult | null>(async () => {
             try {
-                const response: GenerateContentResponse = await getClient().models.generateContent({
-                    model: 'gemini-3-pro-preview',
-                    contents: Prompts.Shepardize(citation),
-                    config: {
+                const model = getClient().getGenerativeModel({
+                    model: 'gemini-2.0-flash-exp',
+                    generationConfig: {
                         responseMimeType: 'application/json',
                         responseSchema: ShepardizeSchema
                     }
                 });
 
-                if (!response.text) return null;
+                const result = await model.generateContent(Prompts.Shepardize(citation));
+                const responseText = result.response.text();
+
+                if (!responseText) return null;
                 const defaultValue: ShepardizeResult = {
                     caseName: '',
                     citation: '',
@@ -533,7 +553,7 @@ export const GeminiService = {
                     history: [],
                     treatment: []
                 };
-                return safeParseJSON<ShepardizeResult>(response.text, defaultValue);
+                return safeParseJSON<ShepardizeResult>(responseText, defaultValue);
             } catch (e) {
                 return null;
             }
@@ -544,16 +564,17 @@ export const GeminiService = {
     async generateStrategyFromPrompt(prompt: string): Promise<{ nodes: unknown[], connections: unknown[] } | null> {
         return withRetry(async () => {
             try {
-                 const response: GenerateContentResponse = await getClient().models.generateContent({
-                    model: 'gemini-3-pro-preview',
-                    contents: Prompts.Strategy(prompt),
-                    config: {
+                const model = getClient().getGenerativeModel({
+                    model: 'gemini-2.0-flash-exp',
+                    generationConfig: {
                         responseMimeType: 'application/json',
                         responseSchema: StrategyGraphSchema
                     }
                 });
-                if (!response.text) return null;
-                return safeParseJSON(response.text, { nodes: [], connections: [] });
+                const result = await model.generateContent(Prompts.Strategy(prompt));
+                const responseText = result.response.text();
+                if (!responseText) return null;
+                return safeParseJSON(responseText, { nodes: [], connections: [] });
             } catch(e) {
                 console.error("Gemini Strategy Generation Error:", e);
                 return null;
@@ -564,19 +585,45 @@ export const GeminiService = {
     async lintStrategy(graphData: unknown): Promise<{ suggestions: unknown[] } | null> {
         return withRetry(async () => {
             try {
-                 const response: GenerateContentResponse = await getClient().models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: Prompts.Lint(JSON.stringify(graphData)),
-                    config: {
+                const model = getClient().getGenerativeModel({
+                    model: 'gemini-2.0-flash-exp',
+                    generationConfig: {
                         responseMimeType: 'application/json',
                         responseSchema: LinterResultSchema
                     }
                 });
-                if (!response.text) return null;
-                return safeParseJSON(response.text, { suggestions: [] });
+                const result = await model.generateContent(Prompts.Lint(JSON.stringify(graphData)));
+                const responseText = result.response.text();
+                if (!responseText) return null;
+                return safeParseJSON(responseText, { suggestions: [] });
             } catch(e) {
                 console.error("Gemini Strategy Linter Error:", e);
                 return null;
+            }
+        });
+    },
+
+    async extractCaseData(text: string): Promise<Partial<ParsedDocket>> {
+        return withRetry(async () => {
+            try {
+                const model = getClient().getGenerativeModel({
+                    model: 'gemini-2.0-flash-exp',
+                    generationConfig: {
+                        responseMimeType: 'application/json',
+                        responseSchema: DocketSchema
+                    }
+                });
+                
+                const result = await model.generateContent(
+                    `Extract structured case data from the following text. Include all parties, attorneys, dates, court information, case numbers, and any other relevant case details:\n\n${text.slice(0, 15000)}`
+                );
+                const responseText = result.response.text();
+                
+                if (!responseText) throw new Error("No response text from Gemini");
+                return safeParseJSON<Partial<ParsedDocket>>(responseText, {});
+            } catch(e) {
+                console.error("Extract Case Data Error:", e);
+                return {};
             }
         });
     },

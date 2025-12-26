@@ -12,6 +12,7 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
+import { CaseImportService, ImportOptions } from './case-import.service';
 import { CasesService } from './cases.service';
 import { CreateCaseDto } from './dto/create-case.dto';
 import { UpdateCaseDto } from './dto/update-case.dto';
@@ -24,7 +25,18 @@ import { CaseStatsDto } from './dto/case-stats.dto';
 
 @Controller('cases')
 export class CasesController {
-  constructor(private readonly casesService: CasesService) {}
+  constructor(
+    private readonly casesService: CasesService,
+    private readonly caseImportService: CaseImportService,
+  ) {}
+
+  @Post('import/parse')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Parse case data from text/document' })
+  @ApiResponse({ status: 200, description: 'Parsed case data' })
+  async parse(@Body() body: { content: string; options: ImportOptions }) {
+    return this.caseImportService.parse(body.content, body.options);
+  }
 
   @Get('stats')
   @ApiOperation({ summary: 'Get case statistics and KPIs' })

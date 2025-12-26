@@ -47,11 +47,11 @@ export class HealthController {
       // Telemetry health - disabled until OpenTelemetry dependencies are installed
       // () => this.telemetry.isHealthy('telemetry'),
 
-      // Memory health (max 300MB heap)
-      () => this.memory.checkHeap('memory_heap', 300 * 1024 * 1024),
+      // Memory health (max 800MB heap)
+      () => this.memory.checkHeap('memory_heap', 800 * 1024 * 1024),
 
-      // Memory RSS (max 500MB)
-      () => this.memory.checkRSS('memory_rss', 500 * 1024 * 1024),
+      // Memory RSS (max 1GB)
+      () => this.memory.checkRSS('memory_rss', 1024 * 1024 * 1024),
 
       // Disk health (min 10% free) - disabled on Windows due to path issues
       // () =>

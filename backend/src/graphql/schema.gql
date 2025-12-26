@@ -496,14 +496,14 @@ type Mutation {
   addTeamMember(input: AddTeamMemberInput!): CaseType!
   changePassword(input: ChangePasswordInput!): Boolean!
   createCase(input: CreateCaseInput!): CaseType!
-  createDeposition(_input: CreateDepositionInput!): DepositionType!
+  createDeposition(input: CreateDepositionInput!): DepositionType!
   createDiscoveryRequest(input: CreateDiscoveryRequestInput!): DiscoveryRequestType!
   createDocketEntry(input: CreateDocketEntryInput!): CaseType!
   createDocumentVersion(input: CreateDocumentVersionInput!): DocumentType!
   createInvoice(input: CreateInvoiceInput!): InvoiceType!
   createLegalHold(input: CreateLegalHoldInput!): LegalHoldType!
   createMotion(input: CreateMotionInput!): CaseType!
-  createPrivilegeLogEntry(_input: CreatePrivilegeLogEntryInput!): PrivilegeLogEntryType!
+  createPrivilegeLogEntry(input: CreatePrivilegeLogEntryInput!): PrivilegeLogEntryType!
   createTimeEntry(input: CreateTimeEntryInput!): TimeEntryType!
   deleteCase(id: ID!): Boolean!
   deleteDocument(id: ID!): Boolean!
@@ -519,7 +519,7 @@ type Mutation {
   releaseLegalHold(id: ID!): LegalHoldType!
   sendInvoice(id: ID!): InvoiceType!
   updateCase(id: ID!, input: UpdateCaseInput!): CaseType!
-  updateDeposition(_id: ID!, _input: UpdateDepositionInput!): DepositionType!
+  updateDeposition(id: ID!, input: UpdateDepositionInput!): DepositionType!
   updateDiscoveryRequest(id: ID!, input: UpdateDiscoveryRequestInput!): DiscoveryRequestType!
   updateDocument(id: ID!, input: UpdateDocumentInput!): DocumentType!
   updateTimeEntry(id: ID!, input: UpdateTimeEntryInput!): TimeEntryType!
@@ -571,8 +571,8 @@ type Query {
   case(id: ID!): CaseType
   caseMetrics: CaseMetrics!
   cases(filter: CaseFilterInput, pagination: PaginationInput): CaseConnection!
-  deposition(_id: ID!): DepositionType
-  depositions(_caseId: ID!): [DepositionType!]!
+  deposition(id: ID!): DepositionType
+  depositions(caseId: ID!): [DepositionType!]!
   discoveryRequest(id: ID!): DiscoveryRequestType
   discoveryRequests(caseId: ID!): [DiscoveryRequestType!]!
   document(id: ID!): DocumentType
@@ -582,7 +582,7 @@ type Query {
   invoices(_filter: InvoiceFilterInput): [InvoiceType!]!
   legalHolds(caseId: ID!): [LegalHoldType!]!
   me: UserType!
-  privilegeLog(_caseId: ID!): [PrivilegeLogEntryType!]!
+  privilegeLog(caseId: ID!): [PrivilegeLogEntryType!]!
   rateTables: [RateTableType!]!
   timeEntries(filter: TimeEntryFilterInput): [TimeEntryType!]!
   timeEntry(id: ID!): TimeEntryType

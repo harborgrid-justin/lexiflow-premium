@@ -9,7 +9,7 @@ import {
 import { CaseAnalyticsService } from './case-analytics.service';
 import {
   CaseMetricsQueryDto,
-  CaseMetricsDto,
+  AnalyticsCaseMetricsDto,
   CaseTrendDataPoint,
   CaseSpecificMetricsDto,
   PracticeAreaBreakdownDto,
@@ -28,11 +28,11 @@ export class CaseAnalyticsController {
   @ApiResponse({
     status: 200,
     description: 'Case metrics retrieved successfully',
-    type: CaseMetricsDto,
+    type: AnalyticsCaseMetricsDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getCaseMetrics(@Query() query: CaseMetricsQueryDto): Promise<CaseMetricsDto> {
+  async getCaseMetrics(@Query() query: CaseMetricsQueryDto): Promise<AnalyticsCaseMetricsDto> {
     return this.caseAnalyticsService.getCaseMetrics(query);
   }
 

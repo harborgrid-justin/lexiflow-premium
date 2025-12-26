@@ -1,5 +1,8 @@
 
-import { Type } from "@google/genai";
+import { SchemaType } from "@google/generative-ai";
+
+// Type alias for backward compatibility
+const Type = SchemaType;
 
 // Existing Schemas
 export const AnalyzedDocSchema = {

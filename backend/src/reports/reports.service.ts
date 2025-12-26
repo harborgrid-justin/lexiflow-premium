@@ -33,11 +33,17 @@ export class ReportsService {
    * Get list of available report templates
    */
   async getGeneratedReports(): Promise<any[]> {
-    return [];
+    this.logger.debug('Fetching all generated reports');
+    return Array.from(this.reports.values()).sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
   }
 
-  async getReportsByType(_type: string): Promise<any[]> {
-    return [];
+  async getReportsByType(type: string): Promise<any[]> {
+    this.logger.debug(`Fetching reports of type: ${type}`);
+    return Array.from(this.reports.values())
+      .filter(report => report.type === type)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
 
   async getReportTemplates(): Promise<ReportTemplateDto[]> {
@@ -513,8 +519,13 @@ export class ReportsService {
     };
   }
 
-  async getScheduledReports(_userId: string): Promise<any[]> {
-    return [];
+  async getScheduledReports(userId: string): Promise<any[]> {
+    this.logger.debug(`Fetching scheduled reports for user: ${userId}`);
+    // In production, this would query a scheduled_reports table
+    // For now, filter reports with status 'scheduled' and matching userId
+    return Array.from(this.reports.values())
+      .filter(report => report.status === 'scheduled' && report.userId === userId)
+      .sort((a, b) => new Date(a.scheduledAt || a.createdAt).getTime() - new Date(b.scheduledAt || b.createdAt).getTime());
   }
 
   async cancelScheduledReport(scheduleId: string, _userId: string): Promise<any> {

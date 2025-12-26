@@ -7,11 +7,11 @@ import { Dashboard } from './entities/dashboard.entity';
 import { Public } from '../common/decorators/public.decorator';
 import { CreateAnalyticsEventDto } from './dto/create-analytics-event.dto';
 import { CreateDashboardDto } from './dto/create-dashboard.dto';
-import { GenerateReportDto, GenerateReportResponseDto } from './dto/generate-report.dto';
+import { AnalyticsGenerateReportDto, GenerateReportResponseDto } from './dto/generate-report.dto';
 import {
-  CaseMetricsDto,
+  AnalyticsCaseMetricsDto,
   UserActivityMetricsDto,
-  BillingMetricsDto,
+  AnalyticsBillingMetricsDto,
   TimeSeriesDataPointDto,
 } from './dto/metrics-response.dto';
 
@@ -87,10 +87,10 @@ export class AnalyticsController {
 
   @Get('metrics/case')
   @ApiOperation({ summary: 'Get case metrics' })
-  @ApiResponse({ status: 200, description: 'Case metrics retrieved successfully', type: CaseMetricsDto })
+  @ApiResponse({ status: 200, description: 'Case metrics retrieved successfully', type: AnalyticsCaseMetricsDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getCaseMetrics(): Promise<CaseMetricsDto> {
+  async getCaseMetrics(): Promise<AnalyticsCaseMetricsDto> {
     return this.analyticsService.getCaseMetrics();
   }
 
@@ -105,10 +105,10 @@ export class AnalyticsController {
 
   @Get('metrics/billing')
   @ApiOperation({ summary: 'Get billing metrics' })
-  @ApiResponse({ status: 200, description: 'Billing metrics retrieved successfully', type: BillingMetricsDto })
+  @ApiResponse({ status: 200, description: 'Billing metrics retrieved successfully', type: AnalyticsBillingMetricsDto })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getBillingMetrics(): Promise<BillingMetricsDto> {
+  async getBillingMetrics(): Promise<AnalyticsBillingMetricsDto> {
     return this.analyticsService.getBillingMetrics();
   }
 
@@ -177,7 +177,7 @@ export class AnalyticsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async generateReport(@Body() params: GenerateReportDto): Promise<GenerateReportResponseDto> {
+  async generateReport(@Body() params: AnalyticsGenerateReportDto): Promise<GenerateReportResponseDto> {
     return this.analyticsService.generateReport(params);
   }
 }

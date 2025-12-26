@@ -5,11 +5,11 @@ import { AnalyticsEvent } from './entities/analytics-event.entity';
 import { Dashboard } from './entities/dashboard.entity';
 import { CreateAnalyticsEventDto } from './dto/create-analytics-event.dto';
 import { CreateDashboardDto } from './dto/create-dashboard.dto';
-import { GenerateReportDto, GenerateReportResponseDto, ReportFormat } from './dto/generate-report.dto';
+import { AnalyticsGenerateReportDto, GenerateReportResponseDto, ReportFormat } from './dto/generate-report.dto';
 import {
-  CaseMetricsDto,
+  AnalyticsCaseMetricsDto,
   UserActivityMetricsDto,
-  BillingMetricsDto,
+  AnalyticsBillingMetricsDto,
   TimeSeriesDataPointDto,
 } from './dto/metrics-response.dto';
 
@@ -85,7 +85,7 @@ export class AnalyticsService {
     });
   }
 
-  async getCaseMetrics(): Promise<CaseMetricsDto> {
+  async getCaseMetrics(): Promise<AnalyticsCaseMetricsDto> {
     const events = await this.analyticsEventRepository.find({
       where: { eventType: 'case_created' },
     });
@@ -152,7 +152,7 @@ export class AnalyticsService {
     return timeSeries;
   }
 
-  async getBillingMetrics(): Promise<BillingMetricsDto> {
+  async getBillingMetrics(): Promise<AnalyticsBillingMetricsDto> {
     const billingEvents = await this.analyticsEventRepository.find({
       where: { eventType: 'time_logged' },
     });
@@ -264,7 +264,7 @@ export class AnalyticsService {
     return Array.isArray(saved) ? saved[0] : saved;
   }
 
-  async generateReport(params: GenerateReportDto): Promise<GenerateReportResponseDto> {
+  async generateReport(params: AnalyticsGenerateReportDto): Promise<GenerateReportResponseDto> {
     const { reportType, startDate, endDate, format } = params;
 
     const start = startDate ? new Date(startDate) : new Date();

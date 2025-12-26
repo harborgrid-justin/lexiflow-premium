@@ -313,7 +313,7 @@ export class WorkflowTemplateMetadataDto {
   requiredRoles!: string[];
 }
 
-export class CreateWorkflowTemplateDto {
+export class CreateWorkflowMarketplaceTemplateDto {
   @ApiProperty()
   @IsString()
   name!: string;
@@ -1061,7 +1061,7 @@ export interface WorkflowDiff {
 }
 
 // Template Types (using Create DTO as base)
-export type WorkflowTemplate = CreateWorkflowTemplateDto;
+export type WorkflowTemplate = CreateWorkflowMarketplaceTemplateDto;
 
 // SLA Types
 export interface SLAConfig {

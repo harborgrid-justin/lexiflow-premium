@@ -19,7 +19,9 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^3.0.1",
     "@google/genai": "^1.30.0",
+    "@google/generative-ai": "^0.24.1",
     "@lexiflow/shared-types": "file:../packages/shared-types",
     "@nestjs/terminus": "^11.0.0",
     "axios-retry": "^4.5.0",
@@ -34,6 +36,7 @@
     "lucide": "^0.562.0",
     "lucide-react": "^0.562.0",
     "nest-winston": "^1.10.2",
+    "openai": "^6.15.0",
     "opossum": "^9.0.0",
     "pdfjs-dist": "5.4.449",
     "react": "18.2.0",

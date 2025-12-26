@@ -35,6 +35,7 @@ const CASE_TABS = [
       { id: 'overview', label: 'Overview Dashboard', icon: Eye },
       { id: 'active', label: 'Active Cases', icon: Briefcase },
       { id: 'intake', label: 'Intake Pipeline', icon: ClipboardList },
+      { id: 'import', label: 'Import Data', icon: FileText },
       { id: 'operations', label: 'Operations Center', icon: Activity },
     ],
   },

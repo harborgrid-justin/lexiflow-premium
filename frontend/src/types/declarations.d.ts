@@ -1,4 +1,4 @@
-declare module "@google/genai" {
+declare module "@google/generative-ai" {
   export class GoogleGenAI {
     constructor(config: { apiKey: string });
     models: {

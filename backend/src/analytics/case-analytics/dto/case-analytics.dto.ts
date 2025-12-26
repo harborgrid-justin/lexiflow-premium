@@ -52,7 +52,7 @@ export class CaseMetricsQueryDto {
   period?: MetricPeriod = MetricPeriod.MONTH;
 }
 
-export class CaseMetricsDto {
+export class AnalyticsCaseMetricsDto {
   @ApiProperty({ description: 'Total number of cases' })
   totalCases!: number;
 

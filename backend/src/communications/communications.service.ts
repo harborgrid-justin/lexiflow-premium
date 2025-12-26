@@ -7,16 +7,6 @@ import { Template } from './entities/template.entity';
 @Injectable()
 export class CommunicationsService {
   private readonly logger = new Logger(CommunicationsService.name);
-
-  _scheduleMessage(_scheduleMessage: any) {
-    throw new Error('Method not implemented.');
-  }
-  _getScheduledMessages(_getScheduledMessages: any) {
-    throw new Error('Method not implemented.');
-  }
-  _getDeliveryStatus(_getDeliveryStatus: any) {
-    throw new Error('Method not implemented.');
-  }
   
   constructor(
     @InjectRepository(Communication)
@@ -207,5 +197,47 @@ export class CommunicationsService {
     const result = Array.isArray(saved) ? saved[0] : saved;
     if (!result) throw new Error('Failed to create communication');
     return result;
+  }
+
+  async scheduleMessage(id: string, scheduledAt: Date): Promise<Communication> {
+    this.logger.debug(`Scheduling communication ${id} for ${scheduledAt}`);
+    const communication = await this.findById(id);
+    
+    if (communication.status === 'sent') {
+      throw new Error('Cannot schedule a communication that has already been sent');
+    }
+
+    communication.status = 'scheduled';
+    communication.sentAt = scheduledAt;
+    
+    const saved = await this.communicationRepository.save(communication);
+    const result = Array.isArray(saved) ? saved[0] : saved;
+    if (!result) throw new Error('Failed to schedule communication');
+    
+    this.logger.log(`Communication ${id} scheduled for ${scheduledAt}`);
+    return result;
+  }
+
+  async getScheduledMessages(): Promise<Communication[]> {
+    this.logger.debug('Fetching scheduled communications');
+    return this.communicationRepository.find({
+      where: { status: 'scheduled' },
+      order: { sentAt: 'ASC' },
+    });
+  }
+
+  async getDeliveryStatus(id: string): Promise<any> {
+    this.logger.debug(`Fetching delivery status for communication ${id}`);
+    const communication = await this.findById(id);
+    
+    return {
+      communicationId: communication.id,
+      status: communication.status,
+      sentAt: communication.sentAt,
+      deliveryAttempts: 1,
+      lastAttempt: communication.sentAt || communication.updatedAt,
+      successful: communication.status === 'sent',
+      errorMessage: communication.status === 'failed' ? 'Delivery failed' : null,
+    };
   }
 }

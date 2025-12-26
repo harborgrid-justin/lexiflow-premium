@@ -22,6 +22,7 @@ const CaseAnalyticsDashboard = lazy(() => import('../analytics/CaseAnalyticsDash
 // Import existing list views
 const CaseListActive = lazy(() => import('./CaseListActive').then(m => ({ default: m.CaseListActive })));
 const CaseListIntake = lazy(() => import('./CaseListIntake').then(m => ({ default: m.CaseListIntake })));
+const CaseImporter = lazy(() => import('../import/CaseImporter').then(m => ({ default: m.CaseImporter })));
 const CaseListDocket = lazy(() => import('./CaseListDocket').then(m => ({ default: m.CaseListDocket })));
 const CaseListTasks = lazy(() => import('./CaseListTasks').then(m => ({ default: m.CaseListTasks })));
 const CaseListConflicts = lazy(() => import('./CaseListConflicts').then(m => ({ default: m.CaseListConflicts })));
@@ -82,6 +83,8 @@ export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTa
         />;
       case 'intake':
         return <CaseListIntake />;
+      case 'import':
+        return <CaseImporter />;
       case 'operations':
         return <CaseOperationsCenter />;
       case 'workflows':

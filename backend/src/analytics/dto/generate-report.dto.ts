@@ -24,7 +24,7 @@ export enum ReportFormat {
   JSON = 'json',
 }
 
-export class GenerateReportDto {
+export class AnalyticsGenerateReportDto {
   @ApiProperty({
     description: 'Report type',
     enum: ReportType

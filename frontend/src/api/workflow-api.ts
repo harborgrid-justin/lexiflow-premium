@@ -334,7 +334,12 @@ export class WorkflowApiService {
             const url = queryString ? `${this.baseUrl}/instances?${queryString}` : `${this.baseUrl}/instances`;
             
             return await apiClient.get<WorkflowInstance[]>(url);
-        } catch (error) {
+        } catch (error: any) {
+            // Graceful degradation: if endpoint doesn't exist yet, return empty array
+            if (error?.message?.includes('404') || error?.message?.includes('Cannot GET')) {
+                console.warn('[WorkflowApiService.getInstances] Workflow instances endpoint not implemented yet, returning empty array');
+                return [];
+            }
             console.error('[WorkflowApiService.getInstances] Error:', error);
             throw new Error('Failed to fetch workflow instances');
         }

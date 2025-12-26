@@ -1,6 +1,30 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export class CaseMetricsDto {
+export class AnalyticsCaseMetricsDto {
+  @ApiProperty({ description: 'Total number of cases' })
+  totalCases!: number;
+
+  @ApiProperty({ description: 'Number of active cases' })
+  activeCases!: number;
+
+  @ApiProperty({ description: 'Number of closed cases' })
+  closedCases!: number;
+
+  @ApiProperty({ description: 'Number of cases by status' })
+  casesByStatus!: Record<string, number>;
+
+  @ApiPropertyOptional({ description: 'Average case duration in days' })
+  averageDuration?: number;
+
+  @ApiPropertyOptional({ description: 'Cases by type' })
+  casesByType?: Record<string, number>;
+
+  @ApiPropertyOptional({ description: 'Additional metrics data' })
+  additionalMetrics?: Record<string, unknown>;
+}
+
+// Legacy alias for backward compatibility
+export class CaseMetricsDto extends AnalyticsCaseMetricsDto {
   @ApiProperty({ description: 'Total number of cases' })
   totalCases!: number;
 
@@ -43,7 +67,7 @@ export class UserActivityMetricsDto {
   additionalMetrics?: Record<string, unknown>;
 }
 
-export class BillingMetricsDto {
+export class AnalyticsBillingMetricsDto {
   @ApiProperty({ description: 'Total revenue' })
   totalRevenue!: number;
 

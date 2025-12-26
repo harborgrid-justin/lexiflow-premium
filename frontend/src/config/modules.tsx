@@ -21,7 +21,7 @@ function lazyWithPreload<T extends React.ComponentType<any>>(
 // Lazy Imports with Strict Relative Paths
 const Dashboard = lazyWithPreload(() => import('../features/dashboard/components/Dashboard') as Promise<{ default: React.ComponentType<any> }>);
 const CaseList = lazyWithPreload(() => import('@features/cases/components/list/CaseList') as Promise<{ default: React.ComponentType<any> }>);
-const CaseModule = lazyWithPreload(() => import('@features/cases/components/list/CaseModule').then(m => ({ default: m.CaseModule })) as Promise<{ default: React.ComponentType<any> }>);
+const CaseModule = lazyWithPreload(() => import('@features/cases/components/list/CaseManagement').then(m => ({ default: m.CaseManagement })) as Promise<{ default: React.ComponentType<any> }>);
 const NewCasePage = lazyWithPreload(() => import('../features/cases/components/create/NewCase') as Promise<{ default: React.ComponentType<any> }>);
 const DocketManager = lazyWithPreload(() => import('../features/cases/components/docket/DocketManager') as Promise<{ default: React.ComponentType<any> }>);
 

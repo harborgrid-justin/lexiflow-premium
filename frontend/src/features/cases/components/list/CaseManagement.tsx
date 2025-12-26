@@ -12,7 +12,7 @@
  */
 
 import React, { Suspense, lazy, useTransition, useMemo, useState, useCallback } from 'react';
-import { Plus, Clock, BarChart3, Briefcase, Settings, Eye, Activity, DollarSign, Lightbulb, TrendingUp, RefreshCw } from 'lucide-react';
+import { Plus, Clock, BarChart3, Briefcase, Settings, Eye, Activity, DollarSign, Lightbulb, TrendingUp, RefreshCw, FileText, Shield, Users, Archive, ClipboardList, Scale } from 'lucide-react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -33,14 +33,26 @@ const CASE_TABS = [
     icon: Briefcase,
     subTabs: [
       { id: 'overview', label: 'Overview Dashboard', icon: Eye },
+      { id: 'active', label: 'Active Cases', icon: Briefcase },
+      { id: 'intake', label: 'Intake Pipeline', icon: ClipboardList },
       { id: 'operations', label: 'Operations Center', icon: Activity },
-      { id: 'intake', label: 'New Case Intake', icon: Plus },
+    ],
+  },
+  {
+    id: 'workflow_group',
+    label: 'Workflow',
+    icon: Settings,
+    subTabs: [
+      { id: 'workflows', label: 'Master Workflow', icon: Activity },
+      { id: 'docket', label: 'Docket & Filings', icon: FileText },
+      { id: 'tasks', label: 'Tasks & Deadlines', icon: Clock },
+      { id: 'conflicts', label: 'Conflict Checks', icon: Shield },
     ],
   },
   {
     id: 'planning_group',
     label: 'Planning',
-    icon: Settings,
+    icon: DollarSign,
     subTabs: [
       { id: 'calendar', label: 'Case Calendar', icon: Clock },
       { id: 'financials', label: 'Financials', icon: DollarSign },
@@ -48,11 +60,25 @@ const CASE_TABS = [
     ],
   },
   {
-    id: 'analytics_group',
-    label: 'Analytics',
-    icon: BarChart3,
+    id: 'resources_group',
+    label: 'Resources',
+    icon: Users,
     subTabs: [
-      { id: 'analytics', label: 'Analytics Dashboard', icon: TrendingUp },
+      { id: 'resources', label: 'Resource Allocation', icon: Users },
+      { id: 'experts', label: 'Expert Witnesses', icon: Users },
+      { id: 'reporters', label: 'Court Reporters', icon: Users },
+      { id: 'trust', label: 'Trust Accounting', icon: Scale },
+    ],
+  },
+  {
+    id: 'admin_group',
+    label: 'Admin',
+    icon: Archive,
+    subTabs: [
+      { id: 'closing', label: 'Closing Queue', icon: Archive },
+      { id: 'archived', label: 'Archived Cases', icon: Archive },
+      { id: 'misc', label: 'Bulk Operations', icon: Settings },
+      { id: 'analytics', label: 'Analytics', icon: TrendingUp },
     ],
   },
 ];
@@ -83,9 +109,18 @@ export const CaseManagement: React.FC = () => {
   };
 
   // Fetch KPIs for stats
-  const { data: cases } = useQuery(['cases', 'all'], () => api.cases.getAll());
-  const { data: timeEntries } = useQuery(['billing', 'time-entries'], () => api.billing.getTimeEntries());
-  const { data: invoices } = useQuery(['billing', 'invoices'], () => api.billing.getInvoices());
+  const { data: cases } = useQuery(['cases', 'all'], () => api.cases.getAll(), { 
+    suspense: false,
+    onError: (error) => console.error('[CaseManagement] Failed to fetch cases:', error)
+  });
+  const { data: timeEntries } = useQuery(['billing', 'time-entries'], () => api.billing.getTimeEntries(), {
+    suspense: false,
+    onError: (error) => console.warn('[CaseManagement] Failed to fetch time entries:', error)
+  });
+  const { data: invoices } = useQuery(['billing', 'invoices'], () => api.billing.getInvoices(), {
+    suspense: false,
+    onError: (error) => console.warn('[CaseManagement] Failed to fetch invoices:', error)
+  });
 
   const metrics = useMemo(() => {
     const activeCases = cases?.filter(m => m.status === MatterStatus.ACTIVE).length || 0;

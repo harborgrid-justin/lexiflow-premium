@@ -35,16 +35,25 @@ export const CaseOperationsCenter: React.FC = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [filterStatus, setFilterStatus] = useState('all');
 
-  // Fetch tasks from workflow API
-  const { data: tasks, isLoading: tasksLoading } = useQuery(
+  // Fetch tasks from workflow API with error handling
+  const { data: tasks, isLoading: tasksLoading, error: tasksError } = useQuery(
     ['workflow', 'instances'],
-    () => api.workflow.getInstances()
+    () => api.workflow.getInstances(),
+    {
+      suspense: false,
+      retry: false,
+      onError: (error) => console.warn('[CaseOperationsCenter] Workflow API not available:', error)
+    }
   );
 
   // Fetch team members
   const { data: teamMembers } = useQuery(
     ['users', 'team'],
-    () => api.users.getAll()
+    () => api.users.getAll(),
+    {
+      suspense: false,
+      onError: (error) => console.warn('[CaseOperationsCenter] Users API error:', error)
+    }
   );
 
   // Calculate stats from actual data

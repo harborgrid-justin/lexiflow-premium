@@ -439,3 +439,6 @@ export class CasesApiService {
         }
     }
 }
+
+// Export singleton instance
+export const casesApi = new CasesApiService();

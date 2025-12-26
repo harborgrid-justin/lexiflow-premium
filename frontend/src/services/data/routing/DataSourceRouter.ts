@@ -9,8 +9,7 @@
  * that allows the rest of the application to remain agnostic to the data source.
  */
 
-import { isBackendApiEnabled } from '../../../api';
-import { api } from '../../../api';
+import { isBackendApiEnabled, api } from '@/api';
 
 /**
  * Generic data source interface that both backend and IndexedDB implement

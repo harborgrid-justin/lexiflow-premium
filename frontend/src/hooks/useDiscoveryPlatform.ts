@@ -36,7 +36,7 @@ import type { DiscoveryView } from '../utils/discoveryNavigation';
 // ============================================================================
 // RE-EXPORTS (for backwards compatibility)
 // ============================================================================
-export type { DiscoveryView } from '../utils/discoveryNavigation';
+export type { DiscoveryView } from '@utils/discoveryNavigation';
 
 // ============================================================================
 // HOOK

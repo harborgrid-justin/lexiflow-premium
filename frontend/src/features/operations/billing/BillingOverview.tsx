@@ -49,7 +49,7 @@ interface BillingOverviewProps {
 // ============================================================================
 
 export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   const chartTheme = useChartTheme();
   
   // Enterprise Data Access: Parallel Queries with safety check
@@ -60,7 +60,7 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
   
   const { data: rawRealizationData = [] } = useQuery(
       ['billing', 'realization'],
-      () => DataService.billing ? DataService.billing.getRealizationStats() : Promise.resolve([])
+      () => DataService.billing ? DataService.billing.getRealizationStats(mode) : Promise.resolve([])
   );
   
   const { data: rawTopClients = [] } = useQuery(

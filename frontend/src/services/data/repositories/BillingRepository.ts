@@ -1,9 +1,9 @@
 
 import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData, UserId, FirmExpense } from '@/types';
 import { delay } from '@/utils/async';
-import { Repository } from '../../core/Repository';
-import { STORES, db } from '../db';
-import { ChainService } from '../../infrastructure/chainService';
+import { Repository } from '@services/core/Repository';
+import { STORES, db } from '@services/data/db';
+import { ChainService } from '@services/infrastructure/chainService';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { SystemEventType } from "@/types/integration-types";
 export class BillingRepository extends Repository<TimeEntry> {
@@ -85,15 +85,19 @@ export class BillingRepository extends Repository<TimeEntry> {
          return stats.sort((a,b) => b.wip - a.wip).slice(0, 5);
     }
     
-    async getRealizationStats(): Promise<unknown> {
+    async getRealizationStats(mode: 'light' | 'dark' = 'light'): Promise<unknown> {
         const invoices = await this.getInvoices();
         const totalBilled = invoices.reduce((acc, i) => acc + (i.amount || 0), 0);
         const totalCollected = invoices.filter(i => i.status === 'Paid').reduce((acc, i) => acc + (i.amount || 0), 0);
         
+        // Get theme-aware colors
+        const { ChartColorService } = await import('../../theme/chartColorService');
+        const colors = ChartColorService.getChartColors(mode);
+        
         const rate = totalBilled > 0 ? Math.round((totalCollected / totalBilled) * 100) : 0;
         return [
-            { name: 'Billed', value: rate, color: '#10b981' },
-            { name: 'Write-off', value: 100 - rate, color: '#ef4444' },
+            { name: 'Billed', value: rate, color: colors.success },
+            { name: 'Write-off', value: 100 - rate, color: colors.danger },
         ];
     }
     

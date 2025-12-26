@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { cn } from '@/utils/cn';
+import { useTheme } from '@/providers/ThemeContext';
 
 // ============================================================================
 // TYPES
@@ -33,13 +34,6 @@ export interface ProgressBarWithLabelProps {
 // ============================================================================
 // CONSTANTS
 // ============================================================================
-const VARIANT_CLASSES: Record<ProgressVariant, string> = {
-  success: 'bg-green-500',
-  warning: 'bg-amber-500',
-  error: 'bg-red-500',
-  info: 'bg-blue-500',
-  neutral: 'bg-slate-500'
-};
 
 const HEIGHT_CLASSES: Record<NonNullable<ProgressBarWithLabelProps['height']>, string> = {
   sm: 'h-1',
@@ -70,7 +64,17 @@ export const ProgressBarWithLabel: React.FC<ProgressBarWithLabelProps> = ({
   height = 'md',
   animated = true
 }) => {
+  const { theme } = useTheme();
   const clampedValue = Math.min(100, Math.max(0, value));
+  
+  // Map variant to theme colors
+  const variantClasses = {
+    success: theme.status.success.bg,
+    warning: theme.status.warning.bg,
+    error: theme.status.error.bg,
+    info: theme.accent.primary,
+    neutral: theme.status.neutral.bg
+  };
 
   return (
     <div className={cn('space-y-1', className)}>
@@ -84,12 +88,12 @@ export const ProgressBarWithLabel: React.FC<ProgressBarWithLabelProps> = ({
           )}
         </div>
       )}
-      <div className="w-full rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+      <div className={cn('w-full rounded-full overflow-hidden', theme.surface.muted)}>
         <div
           className={cn(
             'rounded-full',
             HEIGHT_CLASSES[height],
-            VARIANT_CLASSES[variant],
+            variantClasses[variant],
             animated && 'transition-all duration-300'
           )}
           style={{ width: `${clampedValue}%` }}

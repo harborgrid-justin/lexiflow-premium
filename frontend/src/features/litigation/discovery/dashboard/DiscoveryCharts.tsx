@@ -6,11 +6,9 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useChartTheme } from '@/components/organisms/ChartHelpers';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
+import { ChartColorService } from '@/services/theme/chartColorService';
 // ✅ Migrated to backend API (2025-12-21)
 import { Loader2 } from 'lucide-react';
-
-// Map theme colors to chart
-const CHART_COLORS = ['#94a3b8', '#64748b', '#3b82f6', '#22c55e'];
 
 interface FunnelDataItem {
   name: string;
@@ -24,8 +22,9 @@ interface CustodianDataItem {
 }
 
 const DiscoveryCharts: React.FC = () => {
-  const { mode: _mode } = useTheme();
+  const { mode } = useTheme();
   const chartTheme = useChartTheme();
+  const chartColors = ChartColorService.getPalette(mode);
   
   const { data: funnelData = [], isLoading: funnelLoading } = useQuery<FunnelDataItem[]>(
       ['discovery-funnel-stats', 'main'],
@@ -64,7 +63,7 @@ const DiscoveryCharts: React.FC = () => {
                     />
                     <Bar dataKey="value" radius={[4, 4, 0, 0]} label={{ position: 'top', fontSize: 10, fill: chartTheme.text, formatter: (v: unknown) => typeof v === 'number' ? (funnelData.find((d: FunnelDataItem) => d.value === v)?.label ?? '') : '' }}>
                     {funnelData.map((entry: FunnelDataItem, index: number) => (
-                        <Cell key={`cell-${index}`} fill={CHART_COLORS[index]} />
+                        <Cell key={`cell-${index}`} fill={chartColors[index % chartColors.length]} />
                     ))}
                     </Bar>
                 </BarChart>
@@ -86,7 +85,7 @@ const DiscoveryCharts: React.FC = () => {
                     cursor={{fill: 'transparent'}} 
                     contentStyle={chartTheme.tooltipStyle}
                     />
-                    <Bar dataKey="docs" fill="#8b5cf6" radius={[0, 4, 4, 0]} barSize={20} />
+                    <Bar dataKey="docs" fill={chartColors[0]} radius={[0, 4, 4, 0]} barSize={20} />
                 </BarChart>
             </ResponsiveContainer>
         </Card>

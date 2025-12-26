@@ -30,9 +30,9 @@ import {
     LegalDocument, DocumentId, CaseId, DocumentVersion, 
     FileChunk, EvidenceItem 
 } from '@/types';
-import { db, STORES } from '../db';
-import { Repository } from '../../core/Repository';
-import { BlobManager } from '../../infrastructure/blobManager';
+import { db, STORES } from '@services/data/db';
+import { Repository } from '@services/core/Repository';
+import { BlobManager } from '@services/infrastructure/blobManager';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { DocumentsApiService } from '@/api/documents-api';
 

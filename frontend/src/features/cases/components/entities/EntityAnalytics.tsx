@@ -19,6 +19,7 @@ import { Users, Building2, ShieldAlert, Globe } from 'lucide-react';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
+import { ChartColorService } from '@/services/theme/chartColorService';
 
 // Components
 import { MetricCard } from '@/components/molecules/MetricCard';
@@ -40,15 +41,16 @@ interface EntityAnalyticsProps {
 // ============================================================================
 
 export const EntityAnalytics: React.FC<EntityAnalyticsProps> = ({ entities }) => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
+  const colors = ChartColorService.getCategoryColors(mode);
 
   // Memoize Stats Calculation
   const { typeStats, riskStats, jurisdictionCount, topHighRisk } = useMemo(() => {
       const tStats = [
-        { name: 'Individual', value: entities.filter(e => e.type === 'Individual').length, color: '#3b82f6' },
-        { name: 'Corporation', value: entities.filter(e => e.type === 'Corporation').length, color: '#8b5cf6' },
-        { name: 'Court/Gov', value: entities.filter(e => e.type === 'Court' || e.type === 'Government').length, color: '#10b981' },
-        { name: 'Vendor', value: entities.filter(e => e.type === 'Vendor').length, color: '#f59e0b' },
+        { name: 'Individual', value: entities.filter(e => e.type === 'Individual').length, color: colors[0] },
+        { name: 'Corporation', value: entities.filter(e => e.type === 'Corporation').length, color: colors[1] },
+        { name: 'Court/Gov', value: entities.filter(e => e.type === 'Court' || e.type === 'Government').length, color: colors[2] },
+        { name: 'Vendor', value: entities.filter(e => e.type === 'Vendor').length, color: colors[3] },
       ];
 
       const rStats = entities.reduce((acc: any, e) => {
@@ -62,7 +64,7 @@ export const EntityAnalytics: React.FC<EntityAnalyticsProps> = ({ entities }) =>
       const highRiskEntities = entities.sort((a: any, b: any) => b.riskScore - a.riskScore).slice(0, 10).map(e => ({ name: e.name.substring(0, 10), score: e.riskScore }));
 
       return { typeStats: tStats, riskStats: rStats, jurisdictionCount: jCount, topHighRisk: highRiskEntities };
-  }, [entities]);
+  }, [entities, colors]);
 
   return (
     <div className="space-y-6 animate-fade-in">

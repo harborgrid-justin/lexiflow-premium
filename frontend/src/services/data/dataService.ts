@@ -104,7 +104,7 @@ import { IntegrationEventPublisher, createIntegratedRepository } from './integra
 import { RepositoryRegistry } from './repositories/RepositoryRegistry';
 
 // Backend API Layer (Primary Data Source)
-import { api, isBackendApiEnabled } from '../../api';
+import { api, isBackendApiEnabled } from '@/api';
 
 // Legacy Database (Fallback Only - DEPRECATED)
 import { STORES } from './db';
@@ -114,35 +114,35 @@ import { STORES } from './db';
 // ═══════════════════════════════════════════════════════════════════════════
 
 // Core Domain Services (Backend-First)
-import { CaseRepository, PhaseRepository } from '../domain/CaseDomain';
-import { DocketRepository } from '../domain/DocketDomain';
-import { KnowledgeRepository } from '../domain/KnowledgeDomain';
-import { CalendarService } from '../domain/CalendarDomain';
+import { CaseRepository, PhaseRepository } from '@services/domain/CaseDomain';
+import { DocketRepository } from '@services/domain/DocketDomain';
+import { KnowledgeRepository } from '@services/domain/KnowledgeDomain';
+import { CalendarService } from '@services/domain/CalendarDomain';
 
 // Compliance & Security Services
-import { ComplianceService } from '../domain/ComplianceDomain';
-import { SecurityService } from '../domain/SecurityDomain';
+import { ComplianceService } from '@services/domain/ComplianceDomain';
+import { SecurityService } from '@services/domain/SecurityDomain';
 
 // Operations & Administration
-import { AdminService } from '../domain/AdminDomain';
-import { OperationsService } from '../domain/OperationsDomain';
+import { AdminService } from '@services/domain/AdminDomain';
+import { OperationsService } from '@services/domain/OperationsDomain';
 
 // Communication & Collaboration
-import { CorrespondenceService } from '../domain/CommunicationDomain';
+import { CorrespondenceService } from '@services/domain/CommunicationDomain';
 
 // Data Management Services
-import { DataQualityService } from '../domain/DataQualityDomain';
-import { DataCatalogService } from '../domain/DataCatalogDomain';
-import { BackupService } from '../domain/BackupDomain';
+import { DataQualityService } from '@services/domain/DataQualityDomain';
+import { DataCatalogService } from '@services/domain/DataCatalogDomain';
+import { BackupService } from '@services/domain/BackupDomain';
 
 // Business Intelligence
-import { AnalyticsService } from '../domain/AnalyticsDomain';
-import { CRMService } from '../domain/CRMDomain';
+import { AnalyticsService } from '@services/domain/AnalyticsDomain';
+import { CRMService } from '@services/domain/CRMDomain';
 
 // Enterprise Features
-import { ProfileDomain } from '../domain/ProfileDomain';
-import { MarketingService } from '../domain/MarketingDomain';
-import { JurisdictionService } from '../domain/JurisdictionDomain';
+import { ProfileDomain } from '@services/domain/ProfileDomain';
+import { MarketingService } from '@services/domain/MarketingDomain';
+import { JurisdictionService } from '@services/domain/JurisdictionDomain';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                       MODULAR REPOSITORY LAYER
@@ -179,8 +179,8 @@ import { EntityRepository } from './repositories/EntityRepository';
 import { AnalysisRepository } from './repositories/AnalysisRepository';
 import { CitationRepository } from './repositories/CitationRepository';
 import { RiskRepository } from './repositories/RiskRepository';
-import { DashboardService } from '../domain/DashboardDomain';
-import { WarRoomService } from '../domain/WarRoomDomain';
+import { DashboardService } from '@services/domain/DashboardDomain';
+import { WarRoomService } from '@services/domain/WarRoomDomain';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                            TYPE DEFINITIONS
@@ -314,7 +314,7 @@ const getWitnessesRepository = () =>
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { analyticsApi } from '@/api/domains/analytics.api';
-import { repositoryRegistry as legacyRepositoryRegistry } from '../core/RepositoryFactory';
+import { repositoryRegistry as legacyRepositoryRegistry } from '@services/core/RepositoryFactory';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                          ╔═══════════════════════╗

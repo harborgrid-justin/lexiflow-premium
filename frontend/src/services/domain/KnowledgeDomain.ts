@@ -414,7 +414,7 @@ export class KnowledgeRepository {
      * //   topics: [{ name: 'Litigation', value: 40, color: '#3b82f6' }, ...]
      * // }
      */
-    getAnalytics = async (): Promise<{
+    getAnalytics = async (mode: 'light' | 'dark' = 'light'): Promise<{
         usage: Array<{ name: string; views: number }>;
         topics: Array<{ name: string; value: number; color: string }>;
     }> => {
@@ -424,6 +424,10 @@ export class KnowledgeRepository {
 
             await delay(200);
             
+            // Get theme-aware colors
+            const { ChartColorService } = await import('../theme/chartColorService');
+            const categoryColors = ChartColorService.getCategoryColors(mode || 'light');
+            
             return { 
                 usage: [
                     { name: 'Jan', views: 400 },
@@ -431,9 +435,9 @@ export class KnowledgeRepository {
                     { name: 'Mar', views: 600 },
                 ], 
                 topics: [
-                    { name: 'Litigation', value: 40, color: '#3b82f6' },
-                    { name: 'Finance', value: 25, color: '#8b5cf6' },
-                    { name: 'HR', value: 15, color: '#10b981' },
+                    { name: 'Litigation', value: 40, color: categoryColors.legal },
+                    { name: 'Finance', value: 25, color: categoryColors.finance },
+                    { name: 'HR', value: 15, color: categoryColors.other },
                 ]
             };
         } catch (error) {

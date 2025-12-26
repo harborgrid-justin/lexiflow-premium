@@ -30,17 +30,21 @@ import { Card } from '@/components/molecules/Card';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
+import { ChartColorService } from '@/services/theme/chartColorService';
+import { getChartTheme } from '@/utils/chartConfig';
 
 // ============================================================================
 // COMPONENT
 // ============================================================================
 export const CRMDashboard: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
+  const chartColors = ChartColorService.getPalette(mode);
+  const chartTheme = getChartTheme(mode);
 
   // Enterprise Data Access
   const { data: analyticsData } = useQuery(
       ['crm', 'analytics'],
-      DataService.crm.getAnalytics
+      () => DataService.crm.getAnalytics(mode)
   );
 
   // Type guard for analytics with proper array checks
@@ -140,18 +144,18 @@ export const CRMDashboard: React.FC = () => {
               <AreaChart data={analytics.growth} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorClients" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    <stop offset="5%" stopColor={chartColors[0]} stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor={chartColors[0]} stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 12}} />
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: chartTheme.text, fontSize: 12}} />
+                <YAxis axisLine={false} tickLine={false} tick={{fill: chartTheme.text, fontSize: 12}} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
                 <Tooltip 
-                  cursor={{stroke: '#3b82f6', strokeWidth: 1}}
-                  contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  cursor={{stroke: chartColors[0], strokeWidth: 1}}
+                  contentStyle={chartTheme.tooltipStyle}
                 />
-                <Area type="monotone" dataKey="clients" stroke="#3b82f6" fillOpacity={1} fill="url(#colorClients)" />
+                <Area type="monotone" dataKey="clients" stroke={chartColors[0]} fillOpacity={1} fill="url(#colorClients)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>

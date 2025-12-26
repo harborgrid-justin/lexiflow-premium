@@ -9,7 +9,7 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Utils & Constants
-import { ENTERPRISE_SCHEMA_DDL } from '../../assets/data/schemaDDL';
+import { ENTERPRISE_SCHEMA_DDL } from '@/assets/data/schemaDDL';
 
 // ============================================================================
 // SERVICE

@@ -1,6 +1,6 @@
 // services/repositories/MatterRepository.ts
-import { Repository } from '../../core/Repository';
-import { STORES } from '../db';
+import { Repository } from '@services/core/Repository';
+import { STORES } from '@services/data/db';
 import { Matter, MatterId, MatterStatus } from '@/types';
 import { casesApi } from '@/api/cases-api';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';

@@ -5,7 +5,7 @@ import jsPDF from 'jspdf';
 import { Button } from '@/components/atoms/Button';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { PleadingDocument, PleadingSection, PleadingComment, PleadingVariable } from '../../../../types/pleading-types';
+import { PleadingDocument, PleadingSection, PleadingComment, PleadingVariable } from '@types/pleading-types';
 import { DocumentCanvas } from './DocumentCanvas';
 import { PropertyPanel } from './PropertyPanel';
 import { DataService } from '@/services/data/dataService';

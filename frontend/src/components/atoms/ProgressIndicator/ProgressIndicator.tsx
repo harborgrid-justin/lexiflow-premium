@@ -99,14 +99,14 @@ function calculateETA(
 function getProgressColor(variant: string, theme: any): string {
   switch (variant) {
     case 'success':
-      return 'bg-emerald-500';
+      return theme.status.success.bg;
     case 'warning':
-      return 'bg-amber-500';
+      return theme.status.warning.bg;
     case 'error':
-      return 'bg-rose-500';
+      return theme.status.error.bg;
     case 'primary':
     default:
-      return 'bg-blue-500';
+      return theme.accent.primary;
   }
 }
 

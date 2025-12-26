@@ -13,7 +13,7 @@ import { queryKeys } from '@/utils/queryKeys';
 import { Clause } from '@/types';
 
 export const ClauseAnalytics: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   
   // Load clauses from IndexedDB via useQuery for accurate, cached data
   const { data: clausesData = [], isLoading } = useQuery<Clause[]>(
@@ -22,7 +22,7 @@ export const ClauseAnalytics: React.FC = () => {
   );
 
   const clauses = Array.isArray(clausesData) ? clausesData : [];
-  const riskData = getRiskData(clauses);
+  const riskData = getRiskData(clauses, mode);
   const usageData = getUsageData(clauses);
 
   return (

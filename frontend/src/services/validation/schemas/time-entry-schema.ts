@@ -8,9 +8,9 @@
 
 import { WIPStatusEnum } from '@/types/enums';
 import type { CaseId, UserId } from '@/types';
-import { isValidDate, isFutureDate, isValidStringLength, isValidEnum } from '../validators/common-validators';
-import { isValidDuration, isValidRate, FINANCIAL_CONSTRAINTS } from '../validators/financial-validators';
-import { sanitizeString } from '../sanitizers/input-sanitizer';
+import { isValidDate, isFutureDate, isValidStringLength, isValidEnum } from '@services/validation/validators/common-validators';
+import { isValidDuration, isValidRate, FINANCIAL_CONSTRAINTS } from '@services/validation/validators/financial-validators';
+import { sanitizeString } from '@services/validation/sanitizers/input-sanitizer';
 
 /**
  * Time entry input interface

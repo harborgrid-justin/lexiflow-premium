@@ -49,9 +49,9 @@ export const NexusInspector = ({ item, onClose }: NexusInspectorProps) => {
 
   const getIcon = () => {
     switch (item.type) {
-        case 'party': return <User className="h-6 w-6 text-blue-600"/>;
+        case 'party': return <User className={cn("h-6 w-6", theme.text.link)}/>;
         case 'org': return <Building className="h-6 w-6 text-purple-600"/>;
-        case 'evidence': return <Fingerprint className="h-6 w-6 text-amber-600"/>;
+        case 'evidence': return <Fingerprint className={cn("h-6 w-6", theme.text.warning)}/>;
         default: return null;
     }
   };

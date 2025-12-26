@@ -125,12 +125,12 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
                     >
                       <Icon className={styles.getNavItemIcon(isActive || isChildActive)} />
                       <span className={styles.navItemLabel}>{item.label}</span>
-                      {(isActive || isChildActive) && <div className={styles.activeIndicator}></div>}
+                      {(isActive || isChildActive) && <div className={styles.getActiveIndicator(theme)}></div>}
                     </button>
                     
                     {/* Submenu for children */}
                     {item.children && item.children.length > 0 && (isActive || isChildActive) && (
-                      <div className={styles.submenuContainer}>
+                      <div className={styles.getSubmenuContainer(theme)}>
                         {item.children.map(child => {
                           const ChildIcon = child.icon as React.ComponentType<{ className?: string }>;
                           const isChildItemActive = activeView === child.id;

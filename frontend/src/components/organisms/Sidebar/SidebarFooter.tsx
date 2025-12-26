@@ -62,10 +62,10 @@ export const SidebarFooter: React.FC<SidebarFooterProps> = ({ currentUser, onSwi
       </div>
 
       <div className={styles.holographicModeContainer}>
-          <span className={styles.holographicModeLabel}>Holographic Mode</span>
+          <span className={styles.getHolographicModeLabel(theme)}>Holographic Mode</span>
           <button 
             onClick={toggleOrbitalMode}
-            className={styles.getToggleButton(isOrbitalEnabled)}
+            className={styles.getToggleButton(theme, isOrbitalEnabled)}
             title={isOrbitalEnabled ? "Windowed Interface" : "Flat Interface"}
           >
             <span className={styles.getToggleIndicator(isOrbitalEnabled)} />

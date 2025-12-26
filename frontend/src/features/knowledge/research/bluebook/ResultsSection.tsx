@@ -4,7 +4,7 @@ import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { BluebookCitationType, ExportFormat } from '../../../../types/bluebook';
+import { BluebookCitationType, ExportFormat } from '@types/bluebook';
 import { ResultItem } from './ResultItem';
 import type { FormattingResult, FilterOptions } from './types';
 

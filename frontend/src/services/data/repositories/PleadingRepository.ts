@@ -27,8 +27,8 @@
  */
 
 import { PleadingDocument, PleadingTemplate, FormattingRule, PleadingSection, Case, CaseId, UserId } from '@/types';
-import { Repository } from '../../core/Repository';
-import { STORES, db } from '../db';
+import { Repository } from '@services/core/Repository';
+import { STORES, db } from '@services/data/db';
 import { IdGenerator } from '@/utils/idGenerator';
 import { createTemplateContext, hydrateTemplateSections } from '@/utils/templateEngine';
 import { validateTemplate } from '@/utils/validation';

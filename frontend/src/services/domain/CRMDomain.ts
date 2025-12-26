@@ -144,7 +144,7 @@ export const CRMService = {
         return [];
     },
 
-    getAnalytics: async () => {
+    getAnalytics: async (mode: 'light' | 'dark' = 'light') => {
         const leads = await CRMService.getLeads();
 
         // Dynamic Calculation based on DB state
@@ -156,14 +156,18 @@ export const CRMService = {
 
         const sourcesChart = Object.keys(bySource).map(k => ({ name: k, value: bySource[k] }));
 
+        // Get theme-aware colors
+        const { ChartColorService } = await import('../theme/chartColorService');
+        const categoryColors = ChartColorService.getCategoryColors(mode || 'light');
+
         return { 
             growth: [
                 { month: 'Jan', clients: 5 }, { month: 'Feb', clients: 8 }, { month: 'Mar', clients: leads.length }
             ], 
             industry: [
-                { name: 'Tech', value: 40, color: '#3b82f6' },
-                { name: 'Finance', value: 25, color: '#8b5cf6' },
-                { name: 'Healthcare', value: 15, color: '#10b981' }
+                { name: 'Tech', value: 40, color: categoryColors.tech },
+                { name: 'Finance', value: 25, color: categoryColors.finance },
+                { name: 'Healthcare', value: 15, color: categoryColors.healthcare }
             ], 
             revenue: [
                 { name: 'Q1', retained: 400000, new: 120000 },

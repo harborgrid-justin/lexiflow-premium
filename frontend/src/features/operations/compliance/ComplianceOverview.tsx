@@ -20,12 +20,12 @@ interface RiskChartData {
 }
 
 export const ComplianceOverview: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme, mode } = useTheme();
   const chartTheme = useChartTheme();
   
   const { data: riskData = [], isLoading: loadingRiskData } = useQuery<RiskChartData[]>(
       ['compliance', 'riskStats'], 
-      DataService.compliance.getRiskStats as any
+      () => DataService.compliance.getRiskStats(mode) as any
   );
 
   const { data: metrics, isLoading: loadingMetrics } = useQuery<ComplianceMetrics>(

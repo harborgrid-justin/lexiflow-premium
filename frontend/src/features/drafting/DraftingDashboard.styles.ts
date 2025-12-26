@@ -1,4 +1,4 @@
-import { tokens } from '../../components/theme/tokens';
+import { tokens } from '@theme/tokens';
 
 type Theme = typeof tokens.colors.light;
 

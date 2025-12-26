@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CaseOverviewDashboard } from '../../../../features/cases/components/overview/CaseOverviewDashboard';
+import { CaseOverviewDashboard } from '@features/cases/components/overview/CaseOverviewDashboard';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
 import React from 'react';

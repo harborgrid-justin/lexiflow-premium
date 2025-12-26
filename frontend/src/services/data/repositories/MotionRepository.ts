@@ -24,8 +24,8 @@
  */
 
 import { Motion } from '@/types';
-import { Repository } from '../../core/Repository';
-import { STORES } from '../db';
+import { Repository } from '@services/core/Repository';
+import { STORES } from '@services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { MotionsApiService } from '@/api/motions-api';
 

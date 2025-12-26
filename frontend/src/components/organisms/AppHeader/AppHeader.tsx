@@ -95,7 +95,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         
         {/* System Heartbeat Dot - Desktop only */}
         <div className={cn("hidden xl:flex items-center gap-2 px-3 py-1 rounded border", theme.surface.highlight, theme.border.default)}>
-             <div className={cn("w-2 h-2 rounded-full transition-opacity duration-1000", pulse ? "bg-green-400 opacity-100" : "bg-green-600 opacity-40")}></div>
+             <div className={cn("w-2 h-2 rounded-full transition-opacity duration-1000", pulse ? `${theme.status.success.bg} opacity-100` : `${theme.status.success.text} opacity-40`)}></div>
              <span className={cn("text-[9px] font-mono uppercase tracking-widest", theme.text.tertiary)}>System Online</span>
         </div>
       </div>
@@ -106,19 +106,19 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
                 onClick={() => setIsQuickActionOpen(!isQuickActionOpen)}
                 className={cn("flex items-center gap-1 px-3 py-1.5 rounded-full border transition-all text-xs font-bold shadow-sm", theme.surface.default, theme.border.default, theme.text.primary, `hover:${theme.surface.highlight}`)}
              >
-                 <PlusCircle className="h-4 w-4 text-blue-600"/> Quick Add
+                 <PlusCircle className={cn("h-4 w-4", theme.primary.text)}/> Quick Add
              </button>
              
              {isQuickActionOpen && (
                  <div className={cn("absolute top-full right-0 mt-2 w-48 rounded-lg shadow-xl border overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-100", theme.surface.default, theme.border.default)}>
                      <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}>
-                         <Clock className="h-4 w-4 text-green-600"/> Log Time
+                         <Clock className={cn("h-4 w-4", theme.status.success.icon)}/> Log Time
                      </button>
                      <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}>
-                         <FileText className="h-4 w-4 text-blue-600"/> New Document
+                         <FileText className={cn("h-4 w-4", theme.primary.text)}/> New Document
                      </button>
                      <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}>
-                         <UserPlus className="h-4 w-4 text-purple-600"/> New Client
+                         <UserPlus className="h-4 w-4 text-purple-600 dark:text-purple-400"/> New Client
                      </button>
                  </div>
              )}
@@ -128,7 +128,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         
         <button className={cn("relative p-2 rounded-lg transition-colors group", theme.text.tertiary, `hover:${theme.surface.highlight} hover:${theme.text.secondary}`)}>
             <Bell className="h-5 w-5" />
-            <span className="absolute top-2 right-2 h-2 w-2 bg-rose-500 rounded-full border border-white dark:border-slate-800 animate-pulse"></span>
+            <span className={cn("absolute top-2 right-2 h-2 w-2 rounded-full border-2 animate-pulse", theme.status.error.icon, theme.border.default)}></span>
         </button>
 
         <div className={cn("h-8 w-px mx-1", theme.border.default)}></div>

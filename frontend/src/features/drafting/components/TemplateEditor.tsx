@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, Save, X, Eye, Code, FileDown, Settings } from 'lucide-react';
-import { useTheme } from '../../../providers/ThemeContext';
-import { useToast } from '../../../providers/ToastContext';
-import { draftingApi, DraftingTemplate, TemplateVariable, TemplateCategory, ClauseReference } from '../../../api/domains/drafting.api';
-import { api } from '../../../api';
+import { useTheme } from '@providers/ThemeContext';
+import { useToast } from '@providers/ToastContext';
+import { draftingApi, DraftingTemplate, TemplateVariable, TemplateCategory, ClauseReference } from '@api/domains/drafting.api';
+import { api } from '@/api';
 
 interface TemplateEditorProps {
   template?: DraftingTemplate;

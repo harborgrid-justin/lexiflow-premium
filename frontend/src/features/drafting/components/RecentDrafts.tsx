@@ -1,8 +1,8 @@
 import React from 'react';
 import { FileText, Clock } from 'lucide-react';
-import { useTheme } from '../../../providers/ThemeContext';
+import { useTheme } from '@providers/ThemeContext';
 import * as styles from '../DraftingDashboard.styles';
-import { GeneratedDocument } from '../../../api/domains/drafting.api';
+import { GeneratedDocument } from '@api/domains/drafting.api';
 import { formatDistanceToNow } from 'date-fns';
 
 interface RecentDraftsProps {

@@ -30,13 +30,13 @@
 
 /**
  * Extended error interface with additional context
- * 
+ *
  * @interface AppError
  * @extends Error
  */
 export interface AppError extends Error {
   code?: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   isFatal?: boolean;
 }
 
@@ -53,7 +53,7 @@ interface LogEntry {
 
 /**
  * Error details structure for logging
- * 
+ *
  * @interface ErrorDetails
  * @private
  */
@@ -62,7 +62,7 @@ interface ErrorDetails {
   stack?: string;
   context: string;
   code?: string;
-  meta?: Record<string, any>;
+  meta?: Record<string, unknown>;
 }
 
 /**
@@ -293,9 +293,19 @@ export class ErrorHandler {
       // Mark as fatal for monitoring
       const fatalError: AppError = Object.assign(error, { isFatal: true });
 
-      // Recovery mechanisms
-      // Global crash screen
-      // Graceful shutdown attempt
+      // Send fatal error to monitoring service with special handling
+      const fatalDetails: ErrorDetails = {
+        message: fatalError.message || 'Fatal error',
+        stack: this.sanitizeStackTrace(fatalError.stack),
+        context: 'FATAL',
+        code: fatalError.code,
+        meta: {
+          ...this.sanitizeErrorContext(fatalError.context),
+          isFatal: true,
+        },
+      };
+
+      this.sendToMonitoringService(fatalDetails);
 
       // For now, rely on React ErrorBoundary to catch this in the UI tree
     } catch (fatalHandlingError) {
@@ -335,7 +345,8 @@ export class ErrorHandler {
       if (typeof error === 'object' && error !== null) {
         try {
           return JSON.stringify(error);
-        } catch (e) {
+        } catch (stringifyError) {
+          console.warn('[ErrorHandler] Failed to stringify error object:', stringifyError);
           return String(error);
         }
       }
@@ -401,11 +412,11 @@ export class ErrorHandler {
    * Sanitize error context to remove sensitive data
    * @private
    */
-  private sanitizeErrorContext(context?: Record<string, any>): Record<string, any> | undefined {
+  private sanitizeErrorContext(context?: Record<string, unknown>): Record<string, unknown> | undefined {
     if (!context) return undefined;
 
     const sensitiveKeys = ['password', 'token', 'apiKey', 'secret', 'ssn', 'creditCard'];
-    const sanitized: Record<string, any> = {};
+    const sanitized: Record<string, unknown> = {};
 
     Object.keys(context).forEach(key => {
       if (sensitiveKeys.some(sensitive => key.toLowerCase().includes(sensitive))) {
@@ -421,11 +432,30 @@ export class ErrorHandler {
   /**
    * Send error to external monitoring service
    * @private
-   * @todo Implement Sentry/LogRocket integration
    */
   private sendToMonitoringService(errorDetails: ErrorDetails): void {
-    // Error tracking integration point
-    // Example: Sentry.captureException(error, { extra: errorDetails });
+    // Error tracking integration point - errorDetails contains all telemetry data
+    // In production, this would send to Sentry/LogRocket:
+    // Sentry.captureException(new Error(errorDetails.message), {
+    //   extra: {
+    //     context: errorDetails.context,
+    //     code: errorDetails.code,
+    //     meta: errorDetails.meta,
+    //     stack: errorDetails.stack
+    //   },
+    //   tags: {
+    //     errorContext: errorDetails.context,
+    //     errorCode: errorDetails.code || 'unknown'
+    //   }
+    // });
+
+    if (process.env.NODE_ENV === 'development') {
+      console.debug('[ErrorHandler] Would send to monitoring:', {
+        message: errorDetails.message,
+        context: errorDetails.context,
+        code: errorDetails.code
+      });
+    }
   }
 
   /**

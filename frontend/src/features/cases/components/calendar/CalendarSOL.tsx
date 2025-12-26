@@ -27,9 +27,18 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 // COMPONENT
 // ============================================================================
 
+interface SOLEntry {
+  id: string;
+  date: string;
+  matter: string;
+  cause: string;
+  jurisdiction: string;
+  daysLeft: number;
+}
+
 export const CalendarSOL: React.FC = () => {
   // Enterprise Data Access
-  const { data: solData = [], isLoading } = useQuery<any[]>(
+  const { data: solData = [], isLoading } = useQuery<SOLEntry[]>(
       ['calendar', 'sol'],
       DataService.calendar.getSOL
   );

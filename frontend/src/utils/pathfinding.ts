@@ -16,10 +16,13 @@ import { WorkflowTask } from '../types';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-// Reserved for future graph algorithm enhancements
-interface _GraphNode {
+
+/**
+ * Graph node interface for advanced pathfinding algorithms
+ */
+export interface GraphNode {
     id: string;
-    duration: number; // Estimate
+    duration: number;
     neighbors: string[];
 }
 

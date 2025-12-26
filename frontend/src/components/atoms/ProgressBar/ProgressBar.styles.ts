@@ -1,5 +1,3 @@
-import { cn } from '@/utils/cn';
-
 export const labelContainerStyles = "flex justify-between text-sm mb-1";
 export const valueStyles = "font-bold";
 export const trackStyles = "w-full rounded-full h-2";

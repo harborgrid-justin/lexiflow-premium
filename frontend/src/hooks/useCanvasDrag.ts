@@ -39,10 +39,26 @@ export const useCanvasDrag = ({ onUpdateItemPos, zoom = 1 }: UseCanvasDragProps 
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const dragState = useRef<DragState | null>(null);
   const onUpdateItemPosRef = useRef(onUpdateItemPos);
-  
+  const activeListenersRef = useRef<{
+    move: ((e: MouseEvent) => void) | null;
+    up: ((e: MouseEvent) => void) | null;
+  }>({ move: null, up: null });
+
   useEffect(() => {
     onUpdateItemPosRef.current = onUpdateItemPos;
   }, [onUpdateItemPos]);
+
+  // Cleanup event listeners on unmount
+  useEffect(() => {
+    return () => {
+      if (activeListenersRef.current.move) {
+        window.removeEventListener('mousemove', activeListenersRef.current.move);
+      }
+      if (activeListenersRef.current.up) {
+        window.removeEventListener('mouseup', activeListenersRef.current.up);
+      }
+    };
+  }, []);
 
   const handleMouseDown = useCallback((e: React.MouseEvent, type: DragType, itemId?: string, currentItemPos?: { x: number, y: number }) => {
     // Middle mouse, shift, or meta/cmd for panning, or explicit pan type
@@ -94,7 +110,11 @@ export const useCanvasDrag = ({ onUpdateItemPos, zoom = 1 }: UseCanvasDragProps 
         dragState.current = null;
         window.removeEventListener('mousemove', handleWindowMouseMove);
         window.removeEventListener('mouseup', handleWindowMouseUp);
+        activeListenersRef.current = { move: null, up: null };
     };
+
+    // Store listeners in ref for cleanup
+    activeListenersRef.current = { move: handleWindowMouseMove, up: handleWindowMouseUp };
 
     window.addEventListener('mousemove', handleWindowMouseMove);
     window.addEventListener('mouseup', handleWindowMouseUp);

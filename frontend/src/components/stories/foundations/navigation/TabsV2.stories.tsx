@@ -4,7 +4,7 @@ import { ThemeProvider } from '@/providers/ThemeContext';
 import React, { useState } from 'react';
 import {
   Briefcase, Folder, Activity, Plus, Settings, Clock, DollarSign,
-  Users, BarChart3, TrendingUp, Eye, Lightbulb, FileText, Calendar
+  Users, BarChart3, TrendingUp, Eye, Lightbulb, FileText
 } from 'lucide-react';
 
 /**

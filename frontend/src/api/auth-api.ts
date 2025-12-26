@@ -3,15 +3,8 @@
  * API service split from apiServices.ts
  */
 
-import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
-import type {
-  Case,
-  DocketEntry,
-  LegalDocument,
-  EvidenceItem,
-  TimeEntry,
-  User,
-} from '@/types';
+import { apiClient } from '@services/infrastructure/apiClient';
+import type { User } from '@/types';
 
 export class AuthApiService {
   async login(email: string, password: string): Promise<{ accessToken: string; refreshToken: string; user: User }> {

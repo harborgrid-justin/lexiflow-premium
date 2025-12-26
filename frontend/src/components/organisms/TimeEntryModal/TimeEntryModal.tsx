@@ -30,7 +30,6 @@ import { TextArea } from '@/components/atoms/TextArea';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
-import { getTodayString } from '@/utils/dateUtils';
 
 // Types
 import { TimeEntryPayload, CaseId } from '@/types';

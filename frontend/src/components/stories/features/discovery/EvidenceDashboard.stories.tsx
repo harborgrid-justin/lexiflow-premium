@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EvidenceDashboard } from '../../../../features/litigation/evidence/EvidenceDashboard';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
-import React from 'react';
 
 /**
  * EvidenceDashboard provides comprehensive evidence management including document

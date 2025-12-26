@@ -4,7 +4,7 @@ import { Button } from '@/components/atoms/Button';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 import React, { useState, Suspense } from 'react';
-import { Briefcase, Folder, Activity, Plus, Settings, Clock, DollarSign, Users, BarChart3, TrendingUp, Eye, Lightbulb } from 'lucide-react';
+import { Briefcase, Activity, Plus, Settings, Clock, DollarSign, BarChart3, TrendingUp, Eye, Lightbulb } from 'lucide-react';
 
 // Import actual Case Management components
 import { CaseOverviewDashboard } from '../../../../features/cases/components/overview/CaseOverviewDashboard';

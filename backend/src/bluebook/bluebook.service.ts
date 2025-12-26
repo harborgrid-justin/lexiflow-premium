@@ -1,16 +1,93 @@
 import { Injectable } from '@nestjs/common';
 
+export interface BaseCitation {
+  type: string;
+  raw: string;
+}
+
+export interface CaseCitation extends BaseCitation {
+  type: 'CASE';
+  party1: string;
+  party2: string;
+  volume: number;
+  reporter: string;
+  page: number;
+  pinpoint?: string;
+  court?: string;
+  year: number;
+}
+
+export interface StatuteCitation extends BaseCitation {
+  type: 'STATUTE';
+  title: number;
+  code: string;
+  section: string;
+  year?: number;
+}
+
+export interface ConstitutionCitation extends BaseCitation {
+  type: 'CONSTITUTION';
+  jurisdiction: string;
+  provision: 'amendment' | 'article';
+  number: string;
+}
+
+export interface RegulationCitation extends BaseCitation {
+  type: 'REGULATION';
+  title: number;
+  section: string;
+  year?: number;
+}
+
+export interface UnknownCitation extends BaseCitation {
+  type: 'UNKNOWN';
+  error: string;
+}
+
+export type ParsedCitation = CaseCitation | StatuteCitation | ConstitutionCitation | RegulationCitation | UnknownCitation;
+
+export interface FormatOptions {
+  italicizeCaseNames?: boolean;
+  useSmallCaps?: boolean;
+}
+
+export interface ValidationError {
+  code: string;
+  message: string;
+  severity: 'ERROR' | 'WARNING';
+}
+
+export interface BatchFormatResult {
+  original: string;
+  formatted: string;
+  type: string;
+  isValid: boolean;
+  errors: ValidationError[];
+  suggestions: string[];
+}
+
+export interface BatchFormatResponse {
+  results: BatchFormatResult[];
+  summary: {
+    total: number;
+    successful: number;
+    failed: number;
+    warnings: number;
+    processingTime: number;
+  };
+}
+
 /**
  * Bluebook citation formatting service
  * Provides parsing, formatting, and validation for legal citations
  */
 @Injectable()
 export class BluebookService {
-  
+
   /**
    * Parse a raw citation string
    */
-  parseCitation(rawCitation: string): any {
+  parseCitation(rawCitation: string): ParsedCitation {
     // Case citation pattern
     const casePattern = /^(.+?)\s+v\.\s+(.+?),\s*(\d+)\s+([\w\s.]+)\s+(\d+)(?:,\s*(\d+))?\s*\((.*?)(\d{4})\)/i;
     const caseMatch = rawCitation.match(casePattern);
@@ -84,7 +161,7 @@ export class BluebookService {
   /**
    * Format a parsed citation
    */
-  formatCitation(parsed: any, options: any = {}): string {
+  formatCitation(parsed: ParsedCitation, options: FormatOptions = {}): string {
     const { italicizeCaseNames = true } = options;
 
     switch (parsed.type) {
@@ -108,7 +185,7 @@ export class BluebookService {
   /**
    * Format case citation
    */
-  private formatCaseCitation(parsed: any, italicize: boolean): string {
+  private formatCaseCitation(parsed: CaseCitation, italicize: boolean): string {
     const caseName = `${parsed.party1} v. ${parsed.party2}`;
     const formattedName = italicize ? `<em>${caseName}</em>` : caseName;
     
@@ -132,7 +209,7 @@ export class BluebookService {
   /**
    * Format statute citation
    */
-  private formatStatuteCitation(parsed: any): string {
+  private formatStatuteCitation(parsed: StatuteCitation): string {
     let formatted = `${parsed.title} ${parsed.code} § ${parsed.section}`;
     
     if (parsed.year) {
@@ -145,7 +222,7 @@ export class BluebookService {
   /**
    * Format constitutional citation
    */
-  private formatConstitutionCitation(parsed: any): string {
+  private formatConstitutionCitation(parsed: ConstitutionCitation): string {
     const provision = parsed.provision === 'amendment' ? 'amend.' : 'art.';
     return `${parsed.jurisdiction} Const. ${provision} ${parsed.number}`;
   }
@@ -153,7 +230,7 @@ export class BluebookService {
   /**
    * Format regulation citation
    */
-  private formatRegulationCitation(parsed: any): string {
+  private formatRegulationCitation(parsed: RegulationCitation): string {
     let formatted = `${parsed.title} C.F.R. § ${parsed.section}`;
     
     if (parsed.year) {
@@ -166,8 +243,8 @@ export class BluebookService {
   /**
    * Validate a citation
    */
-  validateCitation(parsed: any): any[] {
-    const errors = [];
+  validateCitation(parsed: ParsedCitation): ValidationError[] {
+    const errors: ValidationError[] = [];
 
     switch (parsed.type) {
       case 'CASE':
@@ -212,9 +289,9 @@ export class BluebookService {
   /**
    * Batch format citations
    */
-  batchFormat(citations: string[], options: any = {}): any {
+  batchFormat(citations: string[], options: FormatOptions = {}): BatchFormatResponse {
     const startTime = Date.now();
-    const results = [];
+    const results: BatchFormatResult[] = [];
     let successful = 0;
     let failed = 0;
     let warnings = 0;
@@ -259,7 +336,7 @@ export class BluebookService {
   /**
    * Generate suggestions for fixing citations
    */
-  private generateSuggestions(parsed: any, errors: any[]): string[] {
+  private generateSuggestions(parsed: ParsedCitation, errors: ValidationError[]): string[] {
     const suggestions = [];
 
     if (parsed.type === 'UNKNOWN') {
@@ -284,7 +361,7 @@ export class BluebookService {
    */
   generateTableOfAuthorities(citations: string[]): string {
     const parsed = citations.map(c => this.parseCitation(c));
-    const grouped: Record<string, any[]> = {};
+    const grouped: Record<string, ParsedCitation[]> = {};
 
     // Group by type
     parsed.forEach(p => {

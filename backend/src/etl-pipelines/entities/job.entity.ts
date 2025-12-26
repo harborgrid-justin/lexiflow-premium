@@ -37,7 +37,7 @@ export class ETLJob {
   error!: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  metrics: any;
+  metrics: Record<string, unknown> | null = null;
 
   @CreateDateColumn()
   startedAt!: Date;

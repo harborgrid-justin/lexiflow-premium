@@ -24,5 +24,5 @@ export class SearchEmbeddingsDto {
 
   @ApiPropertyOptional({ description: 'Filter by metadata' })
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

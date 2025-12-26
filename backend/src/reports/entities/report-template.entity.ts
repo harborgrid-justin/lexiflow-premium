@@ -15,7 +15,7 @@ export class ReportTemplate {
   template!: string;
 
   @Column('simple-json', { nullable: true })
-  schema: any;
+  schema: Record<string, unknown> | null = null;
 
   @Column({ nullable: true })
   createdBy!: string;

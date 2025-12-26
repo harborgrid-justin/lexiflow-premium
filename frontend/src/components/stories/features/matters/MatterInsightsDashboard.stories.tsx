@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CaseInsightsDashboard } from '@features/cases/components/insights/CaseInsightsDashboard';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
-import React from 'react';
 
 /**
  * MatterInsightsDashboard provides AI-powered case insights including risk

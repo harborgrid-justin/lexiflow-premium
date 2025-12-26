@@ -23,9 +23,9 @@ export class ETLPipeline {
 
   @Column({ type: 'jsonb' })
   config!: {
-    source: { type: string; config: any };
-    transformations: any[];
-    destination: { type: string; config: any };
+    source: { type: string; config: Record<string, unknown> };
+    transformations: Record<string, unknown>[];
+    destination: { type: string; config: Record<string, unknown> };
     schedule?: string;
   };
 

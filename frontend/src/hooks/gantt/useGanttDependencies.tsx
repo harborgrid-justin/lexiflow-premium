@@ -35,9 +35,9 @@ export function useGanttDependencies(
 
   // Recalculate critical path when tasks or dependencies change
   useEffect(() => {
-    const path = calculateCriticalPath(tasks, dependencies, taskMap);
+    const path = calculateCriticalPath(tasks, dependencies);
     setCriticalPath(path);
-  }, [tasks, dependencies, taskMap]);
+  }, [tasks, dependencies]);
 
   const addDependency = useCallback((dependency: Omit<TaskDependency, 'id'>): string => {
     const validation = validateDependency(dependency, taskMap, dependencies);
@@ -70,8 +70,8 @@ export function useGanttDependencies(
   }, [dependencies]);
 
   const calcCriticalPath = useCallback(() => {
-    return calculateCriticalPath(tasks, dependencies, taskMap);
-  }, [tasks, dependencies, taskMap]);
+    return calculateCriticalPath(tasks, dependencies);
+  }, [tasks, dependencies]);
 
   const isTaskOnCriticalPath = useCallback((taskId: string): boolean => {
     return criticalPath?.taskIds.includes(taskId) || false;

@@ -21,7 +21,7 @@ export class ComplianceRule {
   isActive!: boolean;
 
   @Column('jsonb', { nullable: true })
-  conditions: any;
+  conditions: Record<string, unknown> | null = null;
 
   @CreateDateColumn()
   createdAt!: Date;

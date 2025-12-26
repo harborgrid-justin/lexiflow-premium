@@ -10,6 +10,13 @@ import { ConfigService } from '@nestjs/config';
 import { TokenBlacklistService } from '../token-blacklist.service';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
 
+interface RequestWithToken {
+  headers: {
+    authorization?: string;
+  };
+  tokenPayload?: JwtPayload;
+}
+
 /**
  * TokenBlacklistGuard
  *
@@ -41,16 +48,14 @@ export class TokenBlacklistGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<RequestWithToken>();
     const token = this.extractTokenFromHeader(request);
 
-    // If no token, let JwtAuthGuard handle it
     if (!token) {
       return true;
     }
 
     try {
-      // Decode token without full verification (JwtAuthGuard will verify)
       const jwtSecret = this.configService.get<string>('JWT_SECRET');
       if (!jwtSecret) {
         throw new UnauthorizedException('Server configuration error');
@@ -59,20 +64,16 @@ export class TokenBlacklistGuard implements CanActivate {
       const payload = this.jwtService.decode(token) as JwtPayload;
 
       if (!payload || !payload.jti) {
-        // Token doesn't have JTI - this is an old token, allow it for backwards compatibility
-        // In strict mode, you could throw an error here
         this.logger.warn('Token without JTI detected - consider regenerating all tokens');
         return true;
       }
 
-      // Check if token is in the blacklist
       const isBlacklisted = await this.tokenBlacklistService.isBlacklisted(payload.jti);
       if (isBlacklisted) {
         this.logger.warn(`Blocked blacklisted token: ${payload.jti} for user: ${payload.sub}`);
         throw new UnauthorizedException('Token has been revoked');
       }
 
-      // Check if token was issued before user-level blacklist (e.g., after password change)
       if (payload.iat && payload.sub) {
         const isUserTokenBlacklisted = await this.tokenBlacklistService.isUserTokenBlacklisted(
           payload.sub,
@@ -86,7 +87,6 @@ export class TokenBlacklistGuard implements CanActivate {
         }
       }
 
-      // Attach payload to request for downstream use
       request.tokenPayload = payload;
 
       return true;
@@ -95,14 +95,17 @@ export class TokenBlacklistGuard implements CanActivate {
         throw error;
       }
 
-      // Log error but allow JwtAuthGuard to handle token validation
       this.logger.error('Error checking token blacklist:', error);
       return true;
     }
   }
 
-  private extractTokenFromHeader(request: any): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+  private extractTokenFromHeader(request: RequestWithToken): string | undefined {
+    const authHeader = request.headers.authorization;
+    if (!authHeader) {
+      return undefined;
+    }
+    const [type, token] = authHeader.split(' ');
     return type === 'Bearer' ? token : undefined;
   }
 }

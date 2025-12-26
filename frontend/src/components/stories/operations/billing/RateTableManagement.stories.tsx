@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RateTableManagement } from '../../../../features/operations/billing/rate-tables/RateTableManagement';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
-import React from 'react';
 
 /**
  * RateTableManagement provides billing rate administration including attorney

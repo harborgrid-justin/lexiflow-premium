@@ -5,7 +5,6 @@
  * Provides financial tracking, time entry management, and revenue analytics.
  */
 
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import BillingDashboard from '../../../../features/operations/billing/BillingDashboard';

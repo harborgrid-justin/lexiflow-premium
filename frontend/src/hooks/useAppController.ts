@@ -107,7 +107,7 @@ export const useAppController = () => {
                     if (!existingToken) {
                         setAppStatusMessage('Authenticating...');
                         // Auto-login logic (Dev Mode)
-                        const loginResponse = await apiClient.post<any>('/auth/login', {
+                        const loginResponse = await apiClient.post<{ accessToken?: string; refreshToken?: string; data?: { accessToken?: string; refreshToken?: string } }>('/auth/login', {
                             email: 'admin@lexiflow.com',
                             password: 'Password123!'
                         });

@@ -53,7 +53,14 @@ export class TokenBlacklistService implements OnModuleInit {
 
       this.logger.log(`Attempting to connect to Redis at ${redisHost}:${redisPort}`);
 
-      const clientOptions: any = {
+      const clientOptions: {
+        socket: {
+          host: string;
+          port: number;
+          reconnectStrategy: (retries: number) => number | false;
+        };
+        password?: string;
+      } = {
         socket: {
           host: redisHost,
           port: redisPort,

@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React from 'react';
-import { Maximize2, X, Minimize2, Layers } from 'lucide-react';
+import { Maximize2, X, Layers } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

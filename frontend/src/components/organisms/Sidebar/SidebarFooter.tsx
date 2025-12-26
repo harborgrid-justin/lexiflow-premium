@@ -25,7 +25,6 @@ import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 import { BackendStatusIndicator } from '@/components/organisms/BackendStatusIndicator/BackendStatusIndicator';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
 import { PATHS } from '@/config/paths.config';
 import * as styles from './SidebarFooter.styles';
 

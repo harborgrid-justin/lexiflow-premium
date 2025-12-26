@@ -1,12 +1,154 @@
 import { Injectable } from '@nestjs/common';
 
+export interface BaseQuery {
+  startDate?: string;
+  endDate?: string;
+}
+
+export interface KPIQuery extends BaseQuery {
+  period?: string;
+}
+
+export interface KPIResponse {
+  activeCases: number;
+  revenue: number;
+  billableHours: number;
+  clientSatisfaction: number;
+  winRate: number;
+  avgCaseDuration: number;
+  period: string;
+}
+
+export interface CaseMetricsQuery extends BaseQuery {
+  caseType?: string;
+}
+
+export interface CaseMetricsResponse {
+  totalCases: number;
+  activeCases: number;
+  closedCases: number;
+  winRate: number;
+  avgSettlement: number;
+  casesByType: Record<string, number>;
+  casesByStatus: Record<string, number>;
+  timeline: Array<{ date: string; count: number }>;
+  filters: CaseMetricsQuery;
+}
+
+export interface FinancialMetricsResponse {
+  totalRevenue: number;
+  outstandingAR: number;
+  collectionRate: number;
+  avgBillingRate: number;
+  revenueByPracticeArea: Record<string, number>;
+  revenueTimeline: Array<{ date: string; revenue: number }>;
+  filters: BaseQuery;
+}
+
+export interface TeamPerformanceQuery extends BaseQuery {
+  teamId?: string;
+}
+
+export interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  hours: number;
+  revenue: number;
+}
+
+export interface TeamPerformanceResponse {
+  billableHours: number;
+  utilizationRate: number;
+  revenueGenerated: number;
+  casesHandled: number;
+  teamMembers: TeamMember[];
+  performanceTimeline: Array<{ date: string; hours: number }>;
+  filters: TeamPerformanceQuery;
+}
+
+export interface ClientMetricsResponse {
+  totalClients: number;
+  activeClients: number;
+  newClients: number;
+  retentionRate: number;
+  avgClientValue: number;
+  clientsByIndustry: Record<string, number>;
+  satisfactionScores: Array<{ date: string; score: number }>;
+  filters: BaseQuery;
+}
+
+export interface ChartDataQuery extends BaseQuery {
+  groupBy?: string;
+  metric?: string;
+}
+
+export interface Dataset {
+  label: string;
+  data: number[];
+  backgroundColor?: string;
+  borderColor?: string;
+}
+
+export interface ChartDataResponse {
+  chartType: string;
+  labels: string[];
+  datasets: Dataset[];
+  filters: ChartDataQuery;
+}
+
+export interface ExportReportQuery extends BaseQuery {
+  includeCharts?: boolean;
+  sections?: string[];
+}
+
+export interface ExportReportResponse {
+  url: string;
+  format: string;
+  generatedAt: string;
+  filters: ExportReportQuery;
+}
+
+export interface ComparativeAnalysisQuery extends BaseQuery {
+  compareWith?: string;
+}
+
+export interface ComparativeAnalysisResponse {
+  metric: string;
+  current: Record<string, number>;
+  comparison: Record<string, number>;
+  variance: Record<string, number>;
+  trend: 'up' | 'down' | 'stable';
+  filters: ComparativeAnalysisQuery;
+}
+
+export interface StatsResponse {
+  totalCases: number;
+  totalRevenue: number;
+  totalHours: number;
+  activeUsers: number;
+  filters: BaseQuery;
+}
+
+export interface Alert {
+  id: string;
+  type: string;
+  message: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  timestamp: string;
+}
+
+export interface RecentAlertsResponse {
+  alerts: Alert[];
+  total: number;
+  limit: number;
+}
+
 @Injectable()
 export class AnalyticsDashboardService {
-  constructor() {}
-
-  async getKPIs(query: any): Promise<any> {
+  async getKPIs(query: KPIQuery): Promise<KPIResponse> {
     const { period = '30d' } = query;
-    
+
     // Aggregate KPIs from various sources
     return {
       activeCases: 0,
@@ -19,7 +161,7 @@ export class AnalyticsDashboardService {
     };
   }
 
-  async getCaseMetrics(query: any): Promise<any> {
+  async getCaseMetrics(query: CaseMetricsQuery): Promise<CaseMetricsResponse> {
     // Query parameters available for filtering: startDate, endDate, caseType
 
     return {
@@ -35,7 +177,7 @@ export class AnalyticsDashboardService {
     };
   }
 
-  async getFinancialMetrics(query: any): Promise<any> {
+  async getFinancialMetrics(query: BaseQuery): Promise<FinancialMetricsResponse> {
     // Query parameters available for filtering: startDate, endDate
 
     return {
@@ -49,7 +191,7 @@ export class AnalyticsDashboardService {
     };
   }
 
-  async getTeamPerformance(query: any): Promise<any> {
+  async getTeamPerformance(query: TeamPerformanceQuery): Promise<TeamPerformanceResponse> {
     // Query parameters available for filtering: startDate, endDate, teamId
 
     return {
@@ -63,7 +205,7 @@ export class AnalyticsDashboardService {
     };
   }
 
-  async getClientMetrics(query: any): Promise<any> {
+  async getClientMetrics(query: BaseQuery): Promise<ClientMetricsResponse> {
     // Query parameters available for filtering: startDate, endDate
 
     return {
@@ -78,7 +220,7 @@ export class AnalyticsDashboardService {
     };
   }
 
-  async getChartData(chartType: string, query: any): Promise<any> {
+  async getChartData(chartType: string, query: ChartDataQuery): Promise<ChartDataResponse> {
     // Query parameters available for chart configuration
 
     return {
@@ -89,7 +231,7 @@ export class AnalyticsDashboardService {
     };
   }
 
-  async exportReport(format: string, query: any): Promise<any> {
+  async exportReport(format: string, query: ExportReportQuery): Promise<ExportReportResponse> {
     // Query parameters available for report generation
 
     return {
@@ -100,7 +242,7 @@ export class AnalyticsDashboardService {
     };
   }
 
-  async getComparativeAnalysis(metric: string, query: any): Promise<any> {
+  async getComparativeAnalysis(metric: string, query: ComparativeAnalysisQuery): Promise<ComparativeAnalysisResponse> {
     // Query parameters available for comparative analysis
 
     return {
@@ -113,7 +255,7 @@ export class AnalyticsDashboardService {
     };
   }
 
-  async getStats(query: any): Promise<any> {
+  async getStats(query: BaseQuery): Promise<StatsResponse> {
     // Query parameters available for statistics
 
     return {
@@ -125,7 +267,7 @@ export class AnalyticsDashboardService {
     };
   }
 
-  async getRecentAlerts(limit?: number): Promise<any> {
+  async getRecentAlerts(limit?: number): Promise<RecentAlertsResponse> {
     const alertLimit = limit || 10;
 
     return {

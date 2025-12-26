@@ -475,8 +475,8 @@ export class DraftingValidationService {
 
         // Check for undefined variables in content
         referencedVars.forEach(varName => {
-          const isDefined = dto.variables.some(v => v.name === varName) || 
-                           varName.startsWith('case.') || 
+          const isDefined = dto.variables?.some(v => v.name === varName) ||
+                           varName.startsWith('case.') ||
                            varName.startsWith('party.');
           if (!isDefined) {
             warnings.push(`Variable "${varName}" is used in content but not defined`);

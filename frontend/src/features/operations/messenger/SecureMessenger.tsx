@@ -112,7 +112,7 @@ export const SecureMessenger = ({ initialTab }: SecureMessengerProps) => {
         )}>
           {activeTab === 'contacts' && (
             <MessengerContacts
-              contacts={contacts as any}
+              contacts={contacts}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
               onMessageClick={() => setActiveTab('chats')}

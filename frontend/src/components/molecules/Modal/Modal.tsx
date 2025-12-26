@@ -102,7 +102,7 @@ export const Modal: React.FC<ModalProps> = ({
     return () => document.removeEventListener('keydown', handleTabKey);
   }, [isOpen, onClose]);
 
-  const handleBackdropClick = (e: React.MouseEvent) => {
+  const handleBackdropClick = () => {
       if (closeOnBackdrop) {
           onClose();
       }

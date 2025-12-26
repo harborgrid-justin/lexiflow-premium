@@ -60,7 +60,7 @@ PassiveTimeTracker.displayName = 'PassiveTimeTracker';
 // ========================================
 // COMPONENT
 // ========================================
-export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, children, activeView, onNavigate, selectedCaseId }) => {
+export const AppShell: React.FC<AppShellProps> = ({ sidebar, headerContent, children, activeView, onNavigate: _onNavigate, selectedCaseId }) => {
   const { theme } = useTheme();
   const { isFetching } = useGlobalQueryStatus();
   

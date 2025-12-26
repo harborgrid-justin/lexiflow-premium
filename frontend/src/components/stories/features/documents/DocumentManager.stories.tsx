@@ -5,7 +5,6 @@
  * Provides centralized DMS, version control, and automated drafting capabilities.
  */
 
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import DocumentManager from '../../../../features/operations/documents/DocumentManager';
 import { ThemeProvider } from '@/providers/ThemeContext';

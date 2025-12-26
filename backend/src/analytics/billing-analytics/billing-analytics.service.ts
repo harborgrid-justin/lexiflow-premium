@@ -250,7 +250,7 @@ export class BillingAnalyticsService {
   /**
    * Estimate age from AR distribution
    */
-  private estimateAgeFromDistribution(clientData: any): number {
+  private estimateAgeFromDistribution(clientData: { totalDue: number; current: number; days30: number; days60: number; days90: number; over90: number }): number {
     const total = clientData.totalDue;
     if (total === 0) return 0;
 
@@ -269,7 +269,7 @@ export class BillingAnalyticsService {
   /**
    * Determine AR aging category for client
    */
-  private determineArAgingCategory(clientData: any): 'current' | '31-60' | '61-90' | '91-120' | 'over-120' {
+  private determineArAgingCategory(clientData: { current: number; days30: number; days60: number; days90: number; over90: number }): 'current' | '31-60' | '61-90' | '91-120' | 'over-120' {
     // Use largest bucket
     const max = Math.max(
       clientData.current,

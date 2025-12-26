@@ -114,7 +114,7 @@ export class CaseStrategy {
   keyArguments!: string;
 
   @Column({ type: 'json', nullable: true })
-  notes: any;
+  notes: Record<string, unknown> | null = null;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;

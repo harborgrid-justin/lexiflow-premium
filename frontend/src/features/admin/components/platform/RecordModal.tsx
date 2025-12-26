@@ -8,12 +8,12 @@ interface RecordModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  item: Record<string, any>;
-  onSave: (item: Record<string, any>) => void;
+  item: Record<string, unknown>;
+  onSave: (item: Record<string, unknown>) => void;
 }
 
 export const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, title, item, onSave }) => {
-  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [formData, setFormData] = useState<Record<string, unknown>>({});
 
   useEffect(() => {
     if (item) setFormData({ ...item });

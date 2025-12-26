@@ -25,6 +25,17 @@ export interface ApiKeyWithSecret extends ApiKey {
   key: string;
 }
 
+export interface ApiKeyUsageStats {
+  id: string;
+  name: string;
+  totalRequests: number;
+  lastUsed?: Date;
+  lastUsedAt?: Date;
+  currentHourRequests: number;
+  rateLimit: number;
+  rateLimitResetAt?: Date;
+}
+
 @Injectable()
 export class ApiKeysService implements OnModuleDestroy {
   private readonly logger = new Logger(ApiKeysService.name);
@@ -211,7 +222,7 @@ export class ApiKeysService implements OnModuleDestroy {
   /**
    * Get API key usage statistics
    */
-  async getUsageStats(id: string, userId: string): Promise<any> {
+  async getUsageStats(id: string, userId: string): Promise<ApiKeyUsageStats> {
     const apiKey = await this.findOne(id, userId);
     const rateData = this.requestCounts.get(id);
 

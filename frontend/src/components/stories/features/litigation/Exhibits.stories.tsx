@@ -1,11 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CaseId, ExhibitId, TrialExhibit, ExhibitStatus, ExhibitParty } from '@/types';
 import { ExhibitManager } from '../../../../features/litigation/exhibits/ExhibitManager';
-import { ExhibitTable } from '../../../../features/litigation/exhibits/ExhibitTable';
-import { StickerDesigner } from '../../../../features/litigation/exhibits/StickerDesigner';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
-import React from 'react';
 
 /**
  * Exhibit components provide tools for managing trial exhibits including

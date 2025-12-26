@@ -6,7 +6,7 @@
 /**
  * Standard API response wrapper
  */
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
   error?: ApiError;
@@ -20,7 +20,7 @@ export interface ApiResponse<T = any> {
 export interface ApiError {
   code: string;
   message: string;
-  details?: any;
+  details?: unknown;
   stack?: string; // Only in development
 }
 
@@ -31,13 +31,13 @@ export interface ResponseMeta {
   requestId?: string;
   duration?: number;
   version?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**
  * Success response helper type
  */
-export interface SuccessResponse<T = any> extends ApiResponse<T> {
+export interface SuccessResponse<T = unknown> extends ApiResponse<T> {
   success: true;
   data: T;
 }
@@ -53,7 +53,7 @@ export interface ErrorResponse extends ApiResponse<never> {
 /**
  * Batch operation result
  */
-export interface BatchOperationResult<T = any> {
+export interface BatchOperationResult<T = unknown> {
   succeeded: T[];
   failed: BatchOperationError[];
   totalProcessed: number;
@@ -65,6 +65,6 @@ export interface BatchOperationResult<T = any> {
  * Batch operation error item
  */
 export interface BatchOperationError {
-  item: any;
+  item: unknown;
   error: ApiError;
 }

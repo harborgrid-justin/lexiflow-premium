@@ -3,6 +3,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagg
 import { ClientsService } from './clients.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { QueryClientsDto } from './dto/query-clients.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @ApiTags('Clients')
@@ -18,7 +19,7 @@ export class ClientsController {
   @ApiResponse({ status: 200, description: 'Clients retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(@Query() query: any) {
+  async findAll(@Query() query: QueryClientsDto) {
     return await this.clientsService.findAll(query);
   }
 

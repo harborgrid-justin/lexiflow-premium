@@ -44,7 +44,7 @@ export class AppService {
     try {
       await this.dataSource.query('SELECT 1');
       return { connected: true };
-    } catch (error) {
+    } catch {
       return { connected: false };
     }
   }

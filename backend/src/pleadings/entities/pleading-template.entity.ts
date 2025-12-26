@@ -15,13 +15,13 @@ export class PleadingTemplate {
   category!: string;
 
   @Column({ type: 'jsonb' })
-  defaultSections!: any[];
+  defaultSections!: Record<string, unknown>[];
 
   @Column({ type: 'jsonb', nullable: true })
-  variables!: any[];
+  variables!: Record<string, unknown>[] | null;
 
   @Column({ type: 'jsonb', nullable: true })
-  formattingRules: any;
+  formattingRules: Record<string, unknown> | null = null;
 
   @Column({ nullable: true })
   jurisdictionId!: string;

@@ -29,25 +29,6 @@ import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiC
 import type { Case } from '@/types';
 
 /**
- * Backend case data structure (from API response)
- */
-interface _BackendCase {
-  id: string;
-  title: string;
-  caseNumber?: string;
-  description?: string;
-  status: string;
-  practiceArea?: string;
-  type?: string;
-  jurisdiction?: string;
-  court?: string;
-  judge?: string;
-  filingDate?: string;
-  clientId?: string;
-  [key: string]: unknown;
-}
-
-/**
  * Create case DTO for backend API
  */
 interface CreateCaseDto {

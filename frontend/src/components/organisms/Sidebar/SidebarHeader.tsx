@@ -24,7 +24,6 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
 import * as styles from './SidebarHeader.styles';
 
 // Types

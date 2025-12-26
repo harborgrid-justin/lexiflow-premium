@@ -95,7 +95,7 @@ export class Motion extends BaseEntity {
   rulingDate?: Date;
 
   @Column({ type: 'jsonb', nullable: true })
-  ruling?: any;
+  ruling?: Record<string, unknown>;
 
   @Column({ name: 'supporting_docs', type: 'jsonb', nullable: true })
   supportingDocs?: string[];
@@ -104,7 +104,7 @@ export class Motion extends BaseEntity {
   attachments?: string[];
 
   @Column({ name: 'opposing_party_response', type: 'jsonb', nullable: true })
-  opposingPartyResponse?: any;
+  opposingPartyResponse?: Record<string, unknown>;
 
   @Column({ name: 'decision_date', type: 'date', nullable: true })
   decisionDate!: Date;

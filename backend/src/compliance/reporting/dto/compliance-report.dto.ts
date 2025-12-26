@@ -3,7 +3,7 @@ export class ComplianceReportDto {
   generatedAt!: Date;
   generatedBy!: string;
   dateRange!: DateRange;
-  data: any;
+  data!: Record<string, unknown>;
   summary!: ReportSummary;
   organizationId!: string;
 }

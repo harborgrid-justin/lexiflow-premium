@@ -20,7 +20,7 @@ import {
 export class NotificationsService {
   private readonly logger = new Logger(NotificationsService.name);
   private notifications: Map<string, any> = new Map();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   private preferences: Map<string, NotificationPreferencesDto> = new Map();
 
   constructor() {

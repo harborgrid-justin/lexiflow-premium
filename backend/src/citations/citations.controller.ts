@@ -2,6 +2,7 @@ import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpS
 import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { CitationsService } from './citations.service';
 import { CreateCitationDto, UpdateCitationDto } from './dto/citation.dto';
+import { QueryCitationsDto } from './dto/query-citations.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @ApiTags('Citations')
@@ -16,7 +17,7 @@ export class CitationsController {
   @ApiResponse({ status: 200, description: 'Citations retrieved' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(@Query() query: any) {
+  async findAll(@Query() query: QueryCitationsDto) {
     return await this.citationsService.findAll(query);
   }
 

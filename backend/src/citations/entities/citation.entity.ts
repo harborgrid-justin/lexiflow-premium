@@ -32,7 +32,7 @@ export class Citation {
   status!: string;
 
   @Column({ type: 'json', nullable: true })
-  shepards: any;
+  shepards: Record<string, unknown> | null = null;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;

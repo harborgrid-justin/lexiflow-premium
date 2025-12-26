@@ -2,112 +2,95 @@
  * Vite Configuration
  *
  * Enterprise-grade Vite configuration for LexiFlow frontend.
- * Includes optimizations for production builds and development experience.
+ * Optimized for Vite 7+ using Oxc and Lightning CSS.
  */
 
-import path from 'path';
-import { defineConfig, loadEnv, UserConfig, ConfigEnv } from 'vite';
+import path from 'node:path';
+import { defineConfig, loadEnv, type UserConfig, type ConfigEnv } from 'vite';
 import react from '@vitejs/plugin-react';
+import tsconfigPaths from 'vite-tsconfig-paths'; // 1. Add this to fix alias resolution
 
-/**
- * Vite configuration factory
- * @param configEnv - Vite configuration environment (mode, command)
- * @returns Fully typed Vite configuration
- */
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
-  // Load environment variables with VITE_ prefix
-  const env = loadEnv(mode, '.', '');
-
-  // Validate critical environment variables
-  if (!env.GEMINI_API_KEY && mode === 'production') {
-    console.warn('GEMINI_API_KEY is not set - AI features may not work');
-  }
+  const env = loadEnv(mode, process.cwd(), '');
 
   return {
-    // Development server configuration
+    // Base path for assets - important for proper CSS/asset loading
+    base: '/',
+    
+    // 1. Server & Preview: Consolidation
     server: {
       port: 3000,
-      host: '0.0.0.0',
-      strictPort: false,
-      hmr: {
+      host: true,
+      strictPort: true,
+      hmr: process.env.CODESPACES ? {
         clientPort: 443,
+        protocol: 'wss',
+      } : {
+        port: 3000,
       },
       proxy: {
         '/api': {
-          target: env.VITE_API_BASE_URL || 'http://localhost:3001',
+          target: env.VITE_API_BASE_URL || 'http://localhost:5000',
           changeOrigin: true,
           secure: false,
-          rewrite: (path: string) => path.replace(/^\/api/, ''),
+          rewrite: (path) => path.replace(/^\/api/, ''),
         },
       },
     },
 
-    // Plugin configuration
+    // 2. Plugins & Transformations
     plugins: [
-      react({
-        // Include .tsx files
-        include: '**/*.tsx',
-      }),
+      react(),
+      tsconfigPaths(), // Automatically resolves all aliases from tsconfig.json
     ],
 
-    // Global constants definition
+    // 3. Modern CSS Handling (Tailwind v3 Compatibility)
+    css: {
+      // PostCSS for Tailwind processing
+      postcss: './postcss.config.js',
+      devSourcemap: mode === 'development',
+    },
+
+    // 4. Global Constants
     define: {
-      'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY || ''),
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY || ''),
       __APP_VERSION__: JSON.stringify(process.env.npm_package_version || '1.0.0'),
     },
 
-    // Module resolution configuration
+    // 5. Module Resolution (Now automated, but left here for edge cases)
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, 'src'),
-        '@types': path.resolve(__dirname, 'src/types'),
-        '@utils': path.resolve(__dirname, 'src/utils'),
-        '@hooks': path.resolve(__dirname, 'src/hooks'),
-        '@components': path.resolve(__dirname, 'src/components'),
-        '@features': path.resolve(__dirname, 'src/features'),
-        '@providers': path.resolve(__dirname, 'src/providers'),
-        '@config': path.resolve(__dirname, 'src/config'),
-        '@data': path.resolve(__dirname, 'src/api/data'),
-        '@theme': path.resolve(__dirname, 'src/components/theme'),
-        '@services': path.resolve(__dirname, 'src/services'),
-        '@api': path.resolve(__dirname, 'src/api'),
+        // tsconfigPaths handles @/*, but we keep the root @ for safety
+        '@': path.resolve(__dirname, './src'),
       },
     },
 
-    // Production build configuration
+    // 6. Production Build (Rolldown & Oxc Optimized)
     build: {
-      target: 'esnext',
+      target: 'baseline',
       outDir: 'dist',
       sourcemap: mode === 'development',
       minify: mode === 'production' ? 'esbuild' : false,
-      chunkSizeWarningLimit: 1000,
+      cssMinify: 'lightningcss', // Use Lightning CSS to compress final output
+      chunkSizeWarningLimit: 800,
       rollupOptions: {
         output: {
-          manualChunks: {
-            // Split vendor chunks for better caching
-            'vendor-react': ['react', 'react-dom'],
-            'vendor-ui': ['lucide-react'],
-            // Group recharts separately as it's large
-            'vendor-charts': ['recharts'],
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              if (id.includes('react')) return 'vendor-core';
+              if (id.includes('recharts')) return 'vendor-charts';
+              if (id.includes('lucide')) return 'vendor-ui';
+              return 'vendor-misc';
+            }
           },
         },
       },
     },
 
-    // Dependency optimization
+    // 7. Dependency Optimization
     optimizeDeps: {
-      esbuildOptions: {
-        target: 'esnext',
-      },
       include: ['react', 'react-dom', 'lucide-react'],
-    },
-
-    // Preview server configuration
-    preview: {
-      port: 3000,
-      host: '0.0.0.0',
-      strictPort: false,
+      // If aliases still fail pre-bundling, you can force exclude them here:
+      // exclude: ['@providers'] 
     },
   };
 });

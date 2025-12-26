@@ -8,7 +8,7 @@ import { useTheme } from '@/providers';
 import { cn } from '@/utils';
 import { DataService } from '@/services';
 import { SanctionMotion } from '@/types';
-import { useQuery, useMutation } from '@hooks/useQueryHooks.ts';
+import { useQuery, useMutation } from '@hooks/useQueryHooks';
 import { STORES } from '@/services';
 import { queryKeys } from '@/utils/queryKeys';
 import { useModalState } from '@/hooks';

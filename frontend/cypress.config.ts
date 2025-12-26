@@ -80,7 +80,7 @@ export default defineConfig({
   // Environment variables
   env: {
     ENVIRONMENT: 'development',
-    API_BASE_URL: 'http://localhost:3001/api',
+    API_BASE_URL: 'http://localhost:5000/api',
   },
 
   // File server options

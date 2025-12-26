@@ -116,7 +116,7 @@ export const useWorkerSearch = <T>({ items, query, fields, idKey = 'id' as keyof
     }
 
     if (!query) {
-        setFilteredItems(items);
+        setFilteredItems(prev => prev === items ? prev : items);
         setIsSearching(false);
         return;
     }

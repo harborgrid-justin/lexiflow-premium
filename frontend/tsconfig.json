@@ -1,42 +1,64 @@
-
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    /* Base Options */
+    "target": "ESNext", 
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "types": ["vite/client"],
-    "moduleResolution": "bundler",
+
+    /* Bundler mode (Required for Vite 7) */
+    "moduleResolution": "Bundler",
     "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
     "isolatedModules": true,
+    "moduleDetection": "force",
     "noEmit": true,
-    "jsx": "react",
+
+    /* JSX (Modern React Transform) */
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+
+    /* Strictness & Reliability */
     "strict": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "useDefineForClassFields": true,
+    
+    /* Interop & Resolution */
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "esModuleInterop": true,
-    "baseUrl": "./src",
+    "resolveJsonModule": true,
+
+    /* Path Mapping */
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
-      "@types/*": ["types/*"],
-      "@utils/*": ["utils/*"],
-      "@hooks/*": ["hooks/*"],
-      "@components/*": ["components/*"],
-      "@features/*": ["features/*"],
-      "@providers/*": ["providers/*"],
-      "@config/*": ["config/*"],
-      "@data/*": ["api/data/*"],
-      "@theme/*": ["components/theme/*"],
-      "@services/*": ["services/*"],
-      "@api/*": ["api/*"],
-      "@constants/*": ["constants/*"]
-    }
+      "@/*": ["src/*"],
+      "@api/*": ["src/api/*"],
+      "@data/*": ["src/api/data/*"],
+      "@components/*": ["src/components/*"],
+      "@theme/*": ["src/components/theme/*"],
+      "@features/*": ["src/features/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@providers/*": ["src/providers/*"],
+      "@services/*": ["src/services/*"],
+      "@types/*": ["src/types/*"],
+      "@utils/*": ["src/utils/*"],
+      "@config/*": ["src/config/*"],
+      "@constants/*": ["src/constants/*"]
+    },
+    "types": ["vite/client"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules", "__tests__", "**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx", "archived", "cypress"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
+  "exclude": [
+    "node_modules", 
+    "dist", 
+    "**/*.test.ts", 
+    "**/*.test.tsx", 
+    "**/*.spec.ts", 
+    "**/*.spec.tsx",
+    "cypress"
+  ]
 }

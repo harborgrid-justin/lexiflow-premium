@@ -26,15 +26,21 @@ export class DraftingService {
   }
 
   async getTemplates(limit: number = 10): Promise<Document[]> {
-    return this.documentRepository.find({
-      where: {
-        type: DocumentType.TEMPLATE,
-      },
-      order: {
-        title: 'ASC',
-      },
-      take: limit,
-    });
+    try {
+      return this.documentRepository.find({
+        where: {
+          type: DocumentType.TEMPLATE,
+        },
+        order: {
+          title: 'ASC',
+        },
+        take: limit,
+      });
+    } catch (error) {
+      // If Template enum value doesn't exist in database, return empty array
+      console.warn('Template enum not found in database, returning empty array');
+      return [];
+    }
   }
 
   async getPendingApprovals(userId: string): Promise<Document[]> {

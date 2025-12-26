@@ -39,7 +39,7 @@ const envSchema = Joi.object({
   ),
 
   // CORS
-  CORS_ORIGINS: Joi.string().default('http://localhost:5173'),
+  CORS_ORIGINS: Joi.string().default('*'),
 
   // Rate Limiting
   THROTTLE_TTL: Joi.number().positive().default(60),
@@ -111,16 +111,10 @@ export default () => {
       origin:
         validatedEnv.NODE_ENV === 'production'
           ? validatedEnv.CORS_ORIGINS.split(',')
-          : (origin: any, callback: any) => {
-              // Allow localhost on common dev ports:
-              // - 3000-3999 (Vite, React, etc.)
-              // - 5000-5999 (Backend, Flask, etc.)
-              // - 6000-6999 (Storybook, etc.)
-              if (!origin || /^http:\/\/localhost:([3-6][0-9]{3})$/.test(origin)) {
-                callback(null, true);
-              } else {
-                callback(new Error('Not allowed by CORS'));
-              }
+          : (_origin: any, callback: any) => {
+              // Allow all origins in development (for accessing from any IP)
+              // In production, use CORS_ORIGINS environment variable
+              callback(null, true);
             },
       credentials: true,
     },

@@ -19,7 +19,7 @@ import {X, FileText, Gavel, Scale, Activity, Loader2} from 'lucide-react';
 // ============================================================================
 // Services & Data
 import {DataService} from '@/services';
-import {useQuery} from '@hooks/useQueryHooks.ts';
+import {useQuery} from '@hooks/useQueryHooks';
 
 // Hooks & Context
 import {useTheme} from '@/providers';

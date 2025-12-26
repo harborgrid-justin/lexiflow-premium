@@ -1,40 +1,41 @@
 import './index.css';
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import App from './App';
-import { ErrorBoundary } from './components/organisms/ErrorBoundary/ErrorBoundary';
+import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
 
 /**
- * Entry point for the React 18 application.
- * Ensures the DOM container exists before attempting to render.
+ * Enterprise Entry Point (Vite 7 + React 18)
+ * Using 'createRoot' enables Concurrent React features.
  */
-const rootElement = document.getElementById('root');
+const mountRoot = (): void => {
+  const container = document.getElementById('root');
 
-if (!rootElement) {
-  const errorMsg = "Critical Error: Could not find root element 'root' to mount React application.";
-  
-  // Log to console for debugging
-  console.error(errorMsg);
-  
-  // Render a fallback UI directly to the body if the React root is missing
-  document.body.innerHTML = `
-    <div style="color: #ef4444; padding: 40px; font-family: system-ui, -apple-system, sans-serif; text-align: center;">
-      <h1 style="font-size: 24px; font-weight: bold;">Fatal Initialization Error</h1>
-      <p style="margin-top: 10px; color: #4b5563;">${errorMsg}</p>
-    </div>
-  `;
-  
-  throw new Error(errorMsg);
-}
+  if (!container) {
+    const errorMsg = "Fatal: Root element '#root' not found.";
+    console.error(errorMsg);
+    
+    // Fallback UI if the DOM isn't ready or is corrupted
+    document.body.innerHTML = `
+      <div style="display:grid; place-items:center; height:100vh; font-family:sans-serif; background:#0a0a0a; color:#fff;">
+        <div style="text-align:center; border-left: 4px solid #ef4444; padding-left: 20px;">
+          <h1 style="font-size: 1.5rem; margin:0;">System Initialization Failure</h1>
+          <p style="color:#a1a1aa; margin: 8px 0 0;">${errorMsg}</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
 
-// Create the React 18 root
-const root = ReactDOM.createRoot(rootElement);
+  const root = createRoot(container);
 
-// Initial render
-root.render(
-  <React.StrictMode>
-    <ErrorBoundary scope="Root">
-      <App />
-    </ErrorBoundary>
-  </React.StrictMode>
-);
+  root.render(
+    <React.StrictMode>
+      <ErrorBoundary scope="AppRoot">
+        <App />
+      </ErrorBoundary>
+    </React.StrictMode>
+  );
+};
+
+mountRoot();

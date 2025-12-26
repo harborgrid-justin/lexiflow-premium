@@ -29,12 +29,15 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       port: 3000,
       host: '0.0.0.0',
       strictPort: false,
+      hmr: {
+        clientPort: 443,
+      },
       proxy: {
         '/api': {
-          target: env.VITE_API_BASE_URL || 'http://localhost:5000',
+          target: env.VITE_API_BASE_URL || 'http://localhost:3001',
           changeOrigin: true,
           secure: false,
-          rewrite: (path: string) => path,
+          rewrite: (path: string) => path.replace(/^\/api/, ''),
         },
       },
     },

@@ -13,7 +13,7 @@
 // - config/network/sync.config.ts - Sync engine settings
 // - config/features/search.config.ts - Search functionality
 // - config/features/upload.config.ts - File upload rules
-// - config/features/pagination.config.ts - Pagination defaults
+// - config/features/pagination.ts - Pagination defaults
 // - config/features/ui.config.ts - UI/UX preferences
 // - config/features/forms.config.ts - Form validation rules
 // - config/features/legal.config.ts - Legal-specific features
@@ -29,7 +29,7 @@ export * from './network/websocket.config';
 export * from './network/sync.config';
 export * from './features/search.config';
 export * from './features/upload.config';
-export * from './features/pagination.config';
+export * from './features/pagination';
 export * from './features/ui.config';
 export * from './features/forms.config';
 export * from './features/legal.config';

@@ -6,7 +6,7 @@
 import { Risk } from '@/types';
 import { Repository } from '@services/core/Repository';
 import { STORES } from '@services/data/db';
-import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { RisksApiService } from '@/api/risks-api';
@@ -93,7 +93,7 @@ export class RiskRepository extends Repository<Risk> {
 
         if (result.impact === 'High' && result.probability === 'High') {
             try {
-                await IntegrationOrchestrator.publish(SystemEventType.RISK_ESCALATED, { risk: result });
+                await IntegrationEventPublisher.publish(SystemEventType.RISK_ESCALATED, { risk: result });
             } catch (eventError) {
                 console.warn('[RiskRepository] Failed to publish escalation event', eventError);
             }

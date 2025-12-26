@@ -3,7 +3,7 @@ import { CommunicationItem, ServiceJob, DocketEntry, DocketId, DocumentId, Evide
  * ? Migrated to backend API (2025-12-21)
  */
 import { communicationsApi } from "@/api/domains/communications.api";
-import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from "@/types/integration-types";
 
 export const CorrespondenceService = {
@@ -61,7 +61,7 @@ export const CorrespondenceService = {
 
         // Integration Logic: If served, trigger orchestrator
         if (updates.status === 'SERVED' && job.status !== 'SERVED') {
-            IntegrationOrchestrator.publish(SystemEventType.SERVICE_COMPLETED, { job });
+            IntegrationEventPublisher.publish(SystemEventType.SERVICE_COMPLETED, { job });
         }
 
         return job;

@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Socket } from 'socket.io';
 
@@ -9,9 +9,10 @@ import { Socket } from 'socket.io';
  * preventing memory exhaustion from unlimited room subscriptions.
  */
 @Injectable()
-export class WsRoomLimitGuard {
+export class WsRoomLimitGuard implements OnModuleDestroy {
   private readonly logger = new Logger(WsRoomLimitGuard.name);
   private userRoomCounts = new Map<string, Set<string>>();
+  private cleanupInterval: NodeJS.Timeout;
 
   private readonly maxRoomsPerUser: number;
 
@@ -20,6 +21,33 @@ export class WsRoomLimitGuard {
       'resourceLimits.websocket.maxRoomsPerUser',
       50,
     );
+
+    // Periodic cleanup for stale entries (every hour)
+    this.cleanupInterval = setInterval(() => this.cleanup(), 3600000);
+  }
+
+  onModuleDestroy() {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+    }
+  }
+
+  private cleanup() {
+    // This is a safety net. Normally cleanupUser handles this.
+    // But if we have stale entries for some reason, we might want to check connectivity.
+    // Since we don't have access to socket server here easily to check connectivity,
+    // we rely on cleanupUser.
+    // However, we can log stats or clear if empty.
+    let emptyCount = 0;
+    for (const [userId, rooms] of this.userRoomCounts.entries()) {
+      if (rooms.size === 0) {
+        this.userRoomCounts.delete(userId);
+        emptyCount++;
+      }
+    }
+    if (emptyCount > 0) {
+      this.logger.debug(`Cleaned up ${emptyCount} empty user room entries`);
+    }
   }
 
   /**

@@ -28,7 +28,7 @@ import { DashboardContent } from './DashboardContent';
 
 // Utils & Config
 import { cn } from '@/utils';
-import { DASHBOARD_TAB_CONFIG } from '@/config';
+import { DASHBOARD_TAB_CONFIG } from '@/config/tabs.config';
 
 // Types
 import type { User } from '@/types';

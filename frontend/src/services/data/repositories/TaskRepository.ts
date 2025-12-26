@@ -30,7 +30,7 @@ import { Repository } from '@services/core/Repository';
 import { STORES } from '@services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { TasksApiService } from '@/api/tasks-api';
-import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
 
 // Type alias to satisfy Repository constraint
@@ -271,7 +271,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
         // Integration Point: Publish event when task is completed
         if (updates.status === TaskStatusBackend.COMPLETED) {
             try {
-                await IntegrationOrchestrator.publish(SystemEventType.TASK_COMPLETED, {
+                await IntegrationEventPublisher.publish(SystemEventType.TASK_COMPLETED, {
                     task: result
                 });
             } catch (eventError) {

@@ -8,6 +8,8 @@
 /**
  * Status of a data source connection
  */
+export type PlatformView = string;
+
 export type ConnectionStatus = 'active' | 'syncing' | 'degraded' | 'error' | 'disconnected';
 
 /**

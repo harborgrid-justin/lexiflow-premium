@@ -68,6 +68,8 @@
 
 import type { SystemEventPayloads, IntegrationResult } from '@/types/integration-types';
 import { EventHandlerRegistry } from './handlers';
+import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
+import { SystemEventType } from '@/types/integration-types';
 
 // =============================================================================
 // VALIDATION (Private)
@@ -98,54 +100,55 @@ function validatePayload(payload: unknown, type: string, methodName: string): vo
 // =============================================================================
 
 /**
- * Enterprise Integration Bus
- * Decouples modules by routing side-effects of core actions to handlers
+ * Central orchestrator for all system integration events
  */
-export const IntegrationOrchestrator = {
+export class IntegrationOrchestrator {
+  private static initialized = false;
+
+  /**
+   * Initialize the orchestrator and subscribe to events
+   */
+  static initialize() {
+    if (this.initialized) return;
     
-    /**
-     * Publish an event to the integration bus
-     * Routes to appropriate handler via registry
-     * 
-     * @template K - Event type key from SystemEventPayloads
-     * @param type - Event type (e.g., 'CASE_CREATED', 'DOCUMENT_UPLOADED')
-     * @param payload - Event payload matching the type
-     * @returns Promise<IntegrationResult> - Success status, triggered actions, errors
-     * @throws Error if validation fails
-     * 
-     * @example
-     * const result = await IntegrationOrchestrator.publish('DOCKET_INGESTED', {
-     *   caseId: 'case-123',
-     *   docketId: 'docket-456',
-     *   entryCount: 42
-     * });
-     */
-    publish: async <K extends keyof SystemEventPayloads>(
-        type: K, 
-        payload: SystemEventPayloads[K]
-    ): Promise<IntegrationResult> => {
+    // Subscribe to all known event types
+    Object.values(SystemEventType).forEach(type => {
+      IntegrationEventPublisher.subscribe(type, (payload) => this.publish(type as any, payload));
+    });
+    
+    this.initialized = true;
+    console.log('[IntegrationOrchestrator] Initialized and subscribed to events');
+  }
+
+  /**
+   * Publish an event to trigger integration workflows
+   */
+  static async publish<T extends keyof SystemEventPayloads>(
+    eventType: T,
+    payload: SystemEventPayloads[T]
+  ): Promise<IntegrationResult> {
         try {
-            validateEventType(type as string, 'publish');
-            validatePayload(payload, type as string, 'publish');
+            validateEventType(eventType as string, 'publish');
+            validatePayload(payload, eventType as string, 'publish');
             
-            console.log(`[IntegrationOrchestrator] Received event: ${type}`);
+            console.log(`[IntegrationOrchestrator] Received event: ${eventType}`);
             
             // Get handler from registry
-            const handler = EventHandlerRegistry.getHandler(type as string);
+            const handler = EventHandlerRegistry.getHandler(eventType as string);
             
             if (!handler) {
-                console.warn(`[IntegrationOrchestrator] No handler registered for event: ${type}`);
+                console.warn(`[IntegrationOrchestrator] No handler registered for event: ${eventType}`);
                 return {
                     success: true,
                     triggeredActions: [],
-                    errors: [`No handler registered for ${type}`]
+                    errors: [`No handler registered for ${eventType}`]
                 };
             }
             
             // Execute handler with error isolation
             const result = await handler.execute(payload);
             
-            console.log(`[IntegrationOrchestrator] Event ${type} completed:`, {
+            console.log(`[IntegrationOrchestrator] Event ${eventType} completed:`, {
                 success: result.success,
                 actions: result.triggeredActions.length,
                 errors: result.errors?.length ?? 0
@@ -155,7 +158,7 @@ export const IntegrationOrchestrator = {
             
         } catch (error: unknown) {
             const errorMsg = error instanceof Error ? error.message : String(error);
-            console.error(`[IntegrationOrchestrator] Fatal error processing ${type}:`, errorMsg);
+            console.error(`[IntegrationOrchestrator] Fatal error processing ${eventType}:`, errorMsg);
             
             return {
                 success: false,
@@ -163,7 +166,7 @@ export const IntegrationOrchestrator = {
                 errors: [errorMsg]
             };
         }
-    },
+    }
     
     /**
      * Get integration statistics
@@ -175,7 +178,7 @@ export const IntegrationOrchestrator = {
      * const stats = IntegrationOrchestrator.getStats();
      * console.log(`Handlers: ${stats.handlerCount}`);
      */
-    getStats() {
+    static getStats() {
         try {
             return EventHandlerRegistry.getStats();
         } catch (error) {
@@ -183,5 +186,5 @@ export const IntegrationOrchestrator = {
             return { handlerCount: 0, handlers: [] };
         }
     }
-};
+}
 

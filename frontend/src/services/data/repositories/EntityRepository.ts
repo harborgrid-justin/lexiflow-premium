@@ -6,7 +6,7 @@
 import { LegalEntity } from '@/types';
 import { Repository } from '@services/core/Repository';
 import { STORES } from '@services/data/db';
-import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { LegalEntitiesApiService } from '@/api/domains/legal-entities.api';
@@ -119,7 +119,7 @@ export class EntityRepository extends Repository<LegalEntity> {
         const result = await super.add(item);
         
         try {
-            await IntegrationOrchestrator.publish(SystemEventType.ENTITY_CREATED, { entity: result });
+            await IntegrationEventPublisher.publish(SystemEventType.ENTITY_CREATED, { entity: result });
         } catch (eventError) {
             console.warn('[EntityRepository] Failed to publish entity creation event', eventError);
         }

@@ -6,8 +6,7 @@ import { cn } from '@/utils/cn';
 import { DataPlatformSidebar } from './DataPlatformSidebar';
 import { useWindow } from '@/providers/WindowContext';
 import { Loader2 } from 'lucide-react';
-
-export type PlatformView = string;
+import { PlatformView } from './types';
 
 // Lazy Load All Sub-Modules
 const PlatformOverview = lazy(() => import('./PlatformOverview').then(m => ({ default: m.PlatformOverview })));

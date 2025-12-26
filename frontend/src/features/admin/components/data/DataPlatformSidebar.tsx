@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { Server, ChevronDown, ChevronRight, Layers } from 'lucide-react';
-import { PlatformView } from './AdminDatabaseControl';
+import { PlatformView } from './types';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DATA_PLATFORM_MENU, MenuItem } from '@/config/tabs.config';

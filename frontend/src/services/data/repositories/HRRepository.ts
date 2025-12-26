@@ -1,6 +1,6 @@
 import { StaffMember, TimeEntry } from '@/types';
 import { db, STORES } from '@services/data/db';
-import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from "@/types/integration-types";
 
 export const HRRepository = {
@@ -55,7 +55,7 @@ export const HRRepository = {
         const newStaff = { ...staff, id: staff.id || crypto.randomUUID() };
         await db.put(STORES.STAFF, newStaff);
         // Opp #9 Integration Point
-        IntegrationOrchestrator.publish(SystemEventType.STAFF_HIRED, { staff: newStaff });
+        IntegrationEventPublisher.publish(SystemEventType.STAFF_HIRED, { staff: newStaff });
         return newStaff;
     },
     

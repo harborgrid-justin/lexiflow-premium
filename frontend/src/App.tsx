@@ -18,9 +18,13 @@ import { GlobalHotkeys } from '@/components/organisms/GlobalHotkeys/GlobalHotkey
 import { useAppController } from '@/hooks';
 import { useDataServiceCleanup } from './hooks/useDataServiceCleanup';
 import { backendDiscovery } from '@/services';
+import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 
 // Initialize Module Registry
 initializeModules();
+
+// Initialize Integration Orchestrator
+IntegrationOrchestrator.initialize();
 
 const InnerApp: React.FC = () => {
   const {

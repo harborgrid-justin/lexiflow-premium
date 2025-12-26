@@ -34,6 +34,12 @@ export class WsConnectionLimitGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     const client = context.switchToWs().getClient<Socket>();
+    
+    // Avoid counting the same connection multiple times if guard runs on messages
+    if ((client as any)._connectionCounted) {
+      return true;
+    }
+
     const userId = this.extractUserId(client);
 
     // Check global connection limit
@@ -68,9 +74,11 @@ export class WsConnectionLimitGuard implements CanActivate {
 
     // Increment global connection count
     this.globalConnectionCount++;
+    (client as any)._connectionCounted = true;
 
     // Setup disconnect handler to decrement counts
-    client.on('disconnect', () => {
+    // Use 'once' to ensure it only runs once per connection
+    client.once('disconnect', () => {
       this.handleDisconnect(userId);
     });
 

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException, OnModuleDestroy, Logger } from '@nestjs/common';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
 import * as MasterConfig from '../config/master.config';
@@ -26,10 +26,37 @@ export interface ApiKeyWithSecret extends ApiKey {
 }
 
 @Injectable()
-export class ApiKeysService {
+export class ApiKeysService implements OnModuleDestroy {
+  private readonly logger = new Logger(ApiKeysService.name);
   private readonly apiKeys = new Map<string, ApiKey>();
   private readonly requestCounts = new Map<string, { count: number; resetAt: Date }>();
   private readonly defaultRateLimit = MasterConfig.API_KEY_DEFAULT_RATE_LIMIT;
+  private cleanupInterval: NodeJS.Timeout;
+
+  constructor() {
+    // Cleanup expired rate limit counters every hour
+    this.cleanupInterval = setInterval(() => this.cleanup(), 3600000);
+  }
+
+  onModuleDestroy() {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+    }
+  }
+
+  private cleanup() {
+    const now = new Date();
+    let removedCount = 0;
+    for (const [key, data] of this.requestCounts.entries()) {
+      if (data.resetAt < now) {
+        this.requestCounts.delete(key);
+        removedCount++;
+      }
+    }
+    if (removedCount > 0) {
+      this.logger.debug(`Cleaned up ${removedCount} expired rate limit counters`);
+    }
+  }
 
   /**
    * Create a new API key

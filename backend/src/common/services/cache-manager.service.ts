@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 
 /**
  * Cache Configuration
@@ -19,7 +19,7 @@ export interface CacheConfig {
  * await cacheManager.invalidatePattern('users:*');
  */
 @Injectable()
-export class CacheManagerService {
+export class CacheManagerService implements OnModuleDestroy {
   private readonly logger = new Logger(CacheManagerService.name);
   private cache: Map<string, CacheEntry> = new Map();
   private readonly DEFAULT_TTL = 3600; // 1 hour

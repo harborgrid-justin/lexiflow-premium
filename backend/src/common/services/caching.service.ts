@@ -1,13 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleDestroy, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Jurisdiction } from '../../jurisdictions/entities/jurisdiction.entity';
 
 @Injectable()
-export class CachingService {
+export class CachingService implements OnModuleDestroy {
+  private readonly logger = new Logger(CachingService.name);
   private cache = new Map<string, { value: any; expiry: number }>();
+  private cleanupInterval: NodeJS.Timeout;
 
-  constructor() {}
+  constructor() {
+    // Cleanup expired cache entries every minute
+    this.cleanupInterval = setInterval(() => this.cleanup(), 60000);
+  }
+
+  onModuleDestroy() {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+    }
+  }
+
+  private cleanup() {
+    const now = Date.now();
+    let removedCount = 0;
+    for (const [key, entry] of this.cache.entries()) {
+      if (entry.expiry <= now) {
+        this.cache.delete(key);
+        removedCount++;
+      }
+    }
+    if (removedCount > 0) {
+      this.logger.debug(`Cleaned up ${removedCount} expired cache entries`);
+    }
+  }
 
   /**
    * Get value from cache or fetch from database

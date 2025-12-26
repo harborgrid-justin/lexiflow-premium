@@ -3,7 +3,7 @@ import { delay } from '@/utils/async';
 import { TEMPLATE_LIBRARY } from '@/api/data/workflowTemplates';
 import { WorkflowTask, TaskId, WorkflowTemplateData, CaseId, ProjectId, CasePhase, TaskStatusBackend, TaskPriorityBackend } from '@/types';
 import { db, STORES } from '@services/data/db';
-import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
 import { StorageUtils } from '@/utils/storage';
 

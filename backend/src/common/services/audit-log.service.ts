@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 
 /**
  * Audit Log Entry
@@ -50,7 +50,7 @@ export enum AuditAction {
  * });
  */
 @Injectable()
-export class AuditLogService {
+export class AuditLogService implements OnModuleDestroy {
   private readonly logger = new Logger(AuditLogService.name);
   private pendingLogs: AuditLogEntry[] = [];
   private flushInterval: ReturnType<typeof setInterval>;

@@ -8,7 +8,7 @@ import {
   MessageBody,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Logger, Injectable, UseGuards } from '@nestjs/common';
+import { Logger, Injectable, UseGuards, OnModuleDestroy } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as MasterConfig from '../config/master.config';
 import { WsRateLimitGuard } from '../common/guards/ws-rate-limit.guard';
@@ -74,7 +74,7 @@ export enum WSEvent {
   pingTimeout: MasterConfig.REALTIME_PING_TIMEOUT_MS,
   pingInterval: MasterConfig.REALTIME_PING_INTERVAL_MS,
 })
-export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect, OnModuleDestroy {
   @WebSocketServer()
   server!: Server;
 
@@ -89,6 +89,12 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
     protected _wsRateLimitGuard: WsRateLimitGuard,
     private wsRoomLimitGuard: WsRoomLimitGuard,
   ) {}
+
+  onModuleDestroy() {
+    this.connectedClients.clear();
+    this.rooms.clear();
+    this.socketToUser.clear();
+  }
 
   async handleConnection(client: Socket) {
     try {

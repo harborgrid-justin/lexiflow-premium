@@ -1,4 +1,4 @@
-import { Injectable, CanActivate, ExecutionContext, Logger } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, Logger, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Socket } from 'socket.io';
 
@@ -16,9 +16,10 @@ interface RateLimitEntry {
  * Uses a sliding window algorithm to track event rates per client.
  */
 @Injectable()
-export class WsRateLimitGuard implements CanActivate {
+export class WsRateLimitGuard implements CanActivate, OnModuleDestroy {
   private readonly logger = new Logger(WsRateLimitGuard.name);
   private rateLimitMap = new Map<string, RateLimitEntry>();
+  private cleanupInterval: NodeJS.Timeout;
 
   private readonly maxEventsPerMinute: number;
   private readonly windowMs: number;
@@ -34,7 +35,13 @@ export class WsRateLimitGuard implements CanActivate {
     );
 
     // Cleanup expired entries every minute
-    setInterval(() => this.cleanup(), 60000);
+    this.cleanupInterval = setInterval(() => this.cleanup(), 60000);
+  }
+
+  onModuleDestroy() {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+    }
   }
 
   canActivate(context: ExecutionContext): boolean {

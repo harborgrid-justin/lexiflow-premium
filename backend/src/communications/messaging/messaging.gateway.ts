@@ -8,7 +8,7 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Logger} from '@nestjs/common';
+import { Logger, OnModuleDestroy } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtPayload } from '../../auth/interfaces/jwt-payload.interface';
@@ -32,7 +32,7 @@ import { JwtPayload } from '../../auth/interfaces/jwt-payload.interface';
   },
   namespace: '/messaging',
 })
-export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnect, OnModuleDestroy {
   @WebSocketServer()
   server!: Server;
 
@@ -44,6 +44,11 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {}
+
+  onModuleDestroy() {
+    this.userSockets.clear();
+    this.socketUsers.clear();
+  }
 
   /**
    * Handle client connection

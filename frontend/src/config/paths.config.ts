@@ -7,19 +7,28 @@
 
 export const PATHS = {
   DASHBOARD: 'dashboard',
-  CASES: 'matters',
-  CREATE_CASE: 'matters/create',
-  CASE_MANAGEMENT: 'matters', // Redirect to main matters page
-  MATTERS: 'matters', // Primary matter management
+  CASES: 'cases',
+  CREATE_CASE: 'cases/create',
+  CASE_MANAGEMENT: 'cases', // Primary case management
+  MATTERS: 'cases', // Alias for backward compatibility
   
-  // Matter Management Enterprise Suite
-  MATTERS_OVERVIEW: 'matters/overview',
-  MATTERS_CALENDAR: 'matters/calendar-view',
-  MATTERS_ANALYTICS: 'matters/analytics',
-  MATTERS_INTAKE: 'matters/intake',
-  MATTERS_OPERATIONS: 'matters/operations',
-  MATTERS_INSIGHTS: 'matters/insights',
-  MATTERS_FINANCIALS: 'matters/financials',
+  // Case Management Enterprise Suite
+  CASES_OVERVIEW: 'cases/overview',
+  CASES_CALENDAR: 'cases/calendar-view',
+  CASES_ANALYTICS: 'cases/analytics',
+  CASES_INTAKE: 'cases/intake',
+  CASES_OPERATIONS: 'cases/operations',
+  CASES_INSIGHTS: 'cases/insights',
+  CASES_FINANCIALS: 'cases/financials',
+  
+  // Legacy aliases for backward compatibility
+  MATTERS_OVERVIEW: 'cases/overview',
+  MATTERS_CALENDAR: 'cases/calendar-view',
+  MATTERS_ANALYTICS: 'cases/analytics',
+  MATTERS_INTAKE: 'cases/intake',
+  MATTERS_OPERATIONS: 'cases/operations',
+  MATTERS_INSIGHTS: 'cases/insights',
+  MATTERS_FINANCIALS: 'cases/financials',
   
   DOCKET: 'docket',
   WORKFLOWS: 'workflows',

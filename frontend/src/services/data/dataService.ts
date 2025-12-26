@@ -349,12 +349,6 @@ Object.defineProperties(DataServiceBase, {
   cases: DataSourceRouter.createPropertyDescriptor('cases', getIntegratedCaseRepository),
   
   /**
-   * Matters API - Alias to cases for law firm terminology
-   * @backend api.matters (maps to cases)
-   */
-  matters: DataSourceRouter.createPropertyDescriptor('cases', getIntegratedCaseRepository),
-  
-  /**
    * Docket API - Court document tracking and management
    * @backend api.docket
    * @features Filing tracking, deadlines, court entries

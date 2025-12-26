@@ -11,8 +11,8 @@
 import React, { useState, useRef, useCallback } from 'react';
 
 // Internal Components
-import { BuilderToolbar } from '@/features/matters/components/workflow/builder/BuilderToolbar';
-import { BuilderCanvas } from '@/features/matters/components/workflow/builder/BuilderCanvas';
+import { BuilderToolbar } from '@/features/cases/components/workflow/builder/BuilderToolbar';
+import { BuilderCanvas } from '@/features/cases/components/workflow/builder/BuilderCanvas';
 import { LitigationPalette } from './LitigationPalette';
 import { LitigationProperties } from './LitigationProperties';
 import { ContextMenu, ContextMenuItem } from '@/components/molecules/ContextMenu';
@@ -22,7 +22,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useToggle } from '@/hooks/useToggle';
 
 // Types
-import { NodeType } from '@/features/matters/components/workflow/builder/types';
+import { NodeType } from '@/features/cases/components/workflow/builder/types';
 import { StrategyCanvasProps } from './types';
 import { LITIGATION_DESCRIPTIONS } from './constants';
 import { 

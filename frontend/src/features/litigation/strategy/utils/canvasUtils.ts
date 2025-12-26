@@ -7,7 +7,7 @@
  */
 
 import { LucideIcon, Edit2, Copy, Trash2, Layout, GitBranch, BoxSelect } from 'lucide-react';
-import { NodeType } from '@/features/matters/components/workflow/builder/types';
+import { NodeType } from '@/features/cases/components/workflow/builder/types';
 import { ContextMenuItem } from '@/components/molecules/ContextMenu';
 import { CANVAS_CONSTANTS } from '../canvasConstants';
 

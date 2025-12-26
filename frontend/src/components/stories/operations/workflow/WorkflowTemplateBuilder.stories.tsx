@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { WorkflowTemplateBuilder } from '../../../../features/matters/components/workflow/WorkflowTemplateBuilder';
+import { WorkflowTemplateBuilder } from '../../../../features/cases/components/workflow/WorkflowTemplateBuilder';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 import React from 'react';

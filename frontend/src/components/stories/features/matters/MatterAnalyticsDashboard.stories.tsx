@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { MatterAnalyticsDashboard } from '../../../../features/matters/components/analytics/MatterAnalyticsDashboard';
+import { CaseAnalyticsDashboard } from '../../../../features/cases/components/analytics/CaseAnalyticsDashboard';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
 import React from 'react';

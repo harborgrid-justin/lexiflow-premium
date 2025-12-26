@@ -20,22 +20,22 @@ function lazyWithPreload<T extends React.ComponentType<any>>(
 
 // Lazy Imports with Strict Relative Paths
 const Dashboard = lazyWithPreload(() => import('../features/dashboard/components/Dashboard') as Promise<{ default: React.ComponentType<any> }>);
-const CaseList = lazyWithPreload(() => import('@features/matters/components/list/CaseList') as Promise<{ default: React.ComponentType<any> }>);
-const MatterModule = lazyWithPreload(() => import('@features/matters/components/list/MatterModule').then(m => ({ default: m.MatterModule })) as Promise<{ default: React.ComponentType<any> }>);
-const NewMatterPage = lazyWithPreload(() => import('../features/matters/components/create/NewMatter') as Promise<{ default: React.ComponentType<any> }>);
-const DocketManager = lazyWithPreload(() => import('../features/matters/components/docket/DocketManager') as Promise<{ default: React.ComponentType<any> }>);
+const CaseList = lazyWithPreload(() => import('@features/cases/components/list/CaseList') as Promise<{ default: React.ComponentType<any> }>);
+const CaseModule = lazyWithPreload(() => import('@features/cases/components/list/CaseModule').then(m => ({ default: m.CaseModule })) as Promise<{ default: React.ComponentType<any> }>);
+const NewCasePage = lazyWithPreload(() => import('../features/cases/components/create/NewCase') as Promise<{ default: React.ComponentType<any> }>);
+const DocketManager = lazyWithPreload(() => import('../features/cases/components/docket/DocketManager') as Promise<{ default: React.ComponentType<any> }>);
 
-// NEW: Matter Management Enterprise Suite
-const MatterOverviewDashboard = lazyWithPreload(() => import('../features/matters/components/overview/MatterOverviewDashboard').then(m => ({ default: m.MatterOverviewDashboard })) as Promise<{ default: React.ComponentType<any> }>);
-const MatterCalendar = lazyWithPreload(() => import('../features/matters/components/calendar/MatterCalendar').then(m => ({ default: m.MatterCalendar })) as Promise<{ default: React.ComponentType<any> }>);
-const MatterAnalyticsDashboard = lazyWithPreload(() => import('../features/matters/components/analytics/MatterAnalyticsDashboard').then(m => ({ default: m.MatterAnalyticsDashboard })) as Promise<{ default: React.ComponentType<any> }>);
-const NewMatterIntakeForm = lazyWithPreload(() => import('../features/matters/components/intake/NewMatterIntakeForm').then(m => ({ default: m.NewMatterIntakeForm })) as Promise<{ default: React.ComponentType<any> }>);
-const MatterOperationsCenter = lazyWithPreload(() => import('../features/matters/components/operations/MatterOperationsCenter').then(m => ({ default: m.MatterOperationsCenter })) as Promise<{ default: React.ComponentType<any> }>);
-const MatterInsightsDashboard = lazyWithPreload(() => import('../features/matters/components/insights/MatterInsightsDashboard').then(m => ({ default: m.MatterInsightsDashboard })) as Promise<{ default: React.ComponentType<any> }>);
-const MatterFinancialsCenter = lazyWithPreload(() => import('../features/matters/components/financials/MatterFinancialsCenter').then(m => ({ default: m.MatterFinancialsCenter })) as Promise<{ default: React.ComponentType<any> }>);
+// NEW: Case Management Enterprise Suite
+const CaseOverviewDashboard = lazyWithPreload(() => import('../features/cases/components/overview/CaseOverviewDashboard').then(m => ({ default: m.CaseOverviewDashboard })) as Promise<{ default: React.ComponentType<any> }>);
+const CaseCalendar = lazyWithPreload(() => import('../features/cases/components/calendar/CaseCalendar').then(m => ({ default: m.CaseCalendar })) as Promise<{ default: React.ComponentType<any> }>);
+const CaseAnalyticsDashboard = lazyWithPreload(() => import('../features/cases/components/analytics/CaseAnalyticsDashboard').then(m => ({ default: m.CaseAnalyticsDashboard })) as Promise<{ default: React.ComponentType<any> }>);
+const NewCaseIntakeForm = lazyWithPreload(() => import('../features/cases/components/intake/NewCaseIntakeForm').then(m => ({ default: m.NewCaseIntakeForm })) as Promise<{ default: React.ComponentType<any> }>);
+const CaseOperationsCenter = lazyWithPreload(() => import('../features/cases/components/operations/CaseOperationsCenter').then(m => ({ default: m.CaseOperationsCenter })) as Promise<{ default: React.ComponentType<any> }>);
+const CaseInsightsDashboard = lazyWithPreload(() => import('../features/cases/components/insights/CaseInsightsDashboard').then(m => ({ default: m.CaseInsightsDashboard })) as Promise<{ default: React.ComponentType<any> }>);
+const CaseFinancialsCenter = lazyWithPreload(() => import('../features/cases/components/financials/CaseFinancialsCenter').then(m => ({ default: m.CaseFinancialsCenter })) as Promise<{ default: React.ComponentType<any> }>);
 
 const CorrespondenceManager = lazyWithPreload(() => import('../features/operations/correspondence/CorrespondenceManager') as Promise<{ default: React.ComponentType<any> }>);
-const MasterWorkflow = lazyWithPreload(() => import('../features/matters/components/workflow/MasterWorkflow') as Promise<{ default: React.ComponentType<any> }>);
+const MasterWorkflow = lazyWithPreload(() => import('../features/cases/components/workflow/MasterWorkflow') as Promise<{ default: React.ComponentType<any> }>);
 const DocumentManager = lazyWithPreload(() => import('../features/operations/documents/DocumentManager') as Promise<{ default: React.ComponentType<any> }>);
 const WarRoom = lazyWithPreload(() => import('../features/litigation/war-room/WarRoom') as Promise<{ default: React.ComponentType<any> }>);
 const ExhibitManager = lazyWithPreload(() => import('../features/litigation/exhibits/ExhibitManager') as Promise<{ default: React.ComponentType<any> }>);
@@ -48,11 +48,11 @@ const ClientCRM = lazyWithPreload(() => import('../features/operations/crm/Clien
 const ComplianceDashboard = lazyWithPreload(() => import('../features/operations/compliance/ComplianceDashboard') as Promise<{ default: React.ComponentType<any> }>);
 const AdminPanel = lazyWithPreload(() => import('../features/admin/AdminPanel') as Promise<{ default: React.ComponentType<any> }>);
 const SecureMessenger = lazyWithPreload(() => import('../features/operations/messenger/SecureMessenger') as Promise<{ default: React.ComponentType<any> }>);
-const EntityDirector = lazyWithPreload(() => import('../features/matters/components/entities/EntityDirector') as Promise<{ default: React.ComponentType<any> }>);
+const EntityDirector = lazyWithPreload(() => import('../features/cases/components/entities/EntityDirector') as Promise<{ default: React.ComponentType<any> }>);
 const AdminDatabaseControl = lazyWithPreload(() => import('../features/admin/components/data/AdminDatabaseControl') as Promise<{ default: React.ComponentType<any> }>);
 const AnalyticsDashboard = lazyWithPreload(() => import('../features/admin/components/analytics/AnalyticsDashboard') as Promise<{ default: React.ComponentType<any> }>);
 const JurisdictionManager = lazyWithPreload(() => import('../features/knowledge/jurisdiction/JurisdictionManager') as Promise<{ default: React.ComponentType<any> }>);
-const CalendarView = lazyWithPreload(() => import('../features/matters/components/calendar/CalendarView') as Promise<{ default: React.ComponentType<any> }>);
+const CalendarView = lazyWithPreload(() => import('../features/cases/components/calendar/CalendarView') as Promise<{ default: React.ComponentType<any> }>);
 const RulesPlatform = lazyWithPreload(() => import('../features/knowledge/rules/RulesPlatform') as Promise<{ default: React.ComponentType<any> }>);
 const UserProfileManager = lazyWithPreload(() => import('../features/profile/UserProfileManager') as Promise<{ default: React.ComponentType<any> }>);
 const PleadingBuilder = lazyWithPreload(() => import('../features/litigation/pleadings/PleadingBuilder') as Promise<{ default: React.ComponentType<any> }>);
@@ -64,17 +64,17 @@ const DraftingDashboard = lazyWithPreload(() => import('../features/drafting/Dra
 
 const COMPONENT_MAP: Record<string, React.LazyExoticComponent<React.ComponentType<any>>> = {
   [PATHS.DASHBOARD]: Dashboard,
-  [PATHS.CREATE_CASE]: NewMatterPage, // ✅ Unified matter creation page
-  [PATHS.MATTERS]: MatterModule, // ✅ Primary matter management with routing (CASE_MANAGEMENT redirects here)
+  [PATHS.CREATE_CASE]: NewCasePage, // ✅ Unified case creation page
+  [PATHS.CASES]: CaseModule, // ✅ Primary case management with routing
   
-  // Matter Management Enterprise Suite
-  [PATHS.MATTERS_OVERVIEW]: MatterOverviewDashboard,
-  [PATHS.MATTERS_CALENDAR]: MatterCalendar,
-  [PATHS.MATTERS_ANALYTICS]: MatterAnalyticsDashboard,
-  [PATHS.MATTERS_INTAKE]: NewMatterIntakeForm,
-  [PATHS.MATTERS_OPERATIONS]: MatterOperationsCenter,
-  [PATHS.MATTERS_INSIGHTS]: MatterInsightsDashboard,
-  [PATHS.MATTERS_FINANCIALS]: MatterFinancialsCenter,
+  // Case Management Enterprise Suite (using new CASES paths)
+  [PATHS.CASES_OVERVIEW]: CaseOverviewDashboard,
+  [PATHS.CASES_CALENDAR]: CaseCalendar,
+  [PATHS.CASES_ANALYTICS]: CaseAnalyticsDashboard,
+  [PATHS.CASES_INTAKE]: NewCaseIntakeForm,
+  [PATHS.CASES_OPERATIONS]: CaseOperationsCenter,
+  [PATHS.CASES_INSIGHTS]: CaseInsightsDashboard,
+  [PATHS.CASES_FINANCIALS]: CaseFinancialsCenter,
   
   [PATHS.DOCKET]: DocketManager,
   [PATHS.CORRESPONDENCE]: CorrespondenceManager,
@@ -137,11 +137,11 @@ export const initializeModules = () => {
     // These are accessed via other components (footer, page actions, etc.)
     ModuleRegistry.register({
         id: PATHS.CREATE_CASE,
-        label: 'New Matter',
+        label: 'New Case',
         icon: FilePlus,
         category: 'Case Work',
-        component: NewMatterPage, // ✅ Unified matter creation with intake/conflicts/ops/financials
-        hidden: true // Accessed via Matter Management page
+        component: NewCasePage, // ✅ Unified case creation with intake/conflicts/ops/financials
+        hidden: true // Accessed via Case Management page
     });
     
     ModuleRegistry.register({

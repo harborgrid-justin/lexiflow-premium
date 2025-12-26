@@ -45,20 +45,20 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
   { id: PATHS.MESSAGES, label: 'Secure Messenger', icon: MessageSquare, category: 'Main' },
 
   // ============================================================================
-  // CASE WORK - Matter Management & Documents
+  // CASE WORK - Case Management & Documents
   // ============================================================================
   { 
-    id: PATHS.MATTERS_OVERVIEW, 
-    label: 'Matter Management', 
+    id: PATHS.CASES_OVERVIEW, 
+    label: 'Case Management', 
     icon: Briefcase, 
     category: 'Case Work',
     children: [
-      { id: PATHS.MATTERS_OPERATIONS, label: 'Operations Center', icon: FolderKanban },
-      { id: PATHS.MATTERS_INSIGHTS, label: 'Insights & Risk', icon: Lightbulb },
-      { id: PATHS.MATTERS_CALENDAR, label: 'Matter Calendar', icon: Calendar },
-      { id: PATHS.MATTERS_ANALYTICS, label: 'Analytics', icon: TrendingUp },
-      { id: PATHS.MATTERS_FINANCIALS, label: 'Financials', icon: Wallet },
-      { id: PATHS.MATTERS_INTAKE, label: 'New Matter Intake', icon: ClipboardCheck },
+      { id: PATHS.CASES_OPERATIONS, label: 'Operations Center', icon: FolderKanban },
+      { id: PATHS.CASES_INSIGHTS, label: 'Insights & Risk', icon: Lightbulb },
+      { id: PATHS.CASES_CALENDAR, label: 'Case Calendar', icon: Calendar },
+      { id: PATHS.CASES_ANALYTICS, label: 'Analytics', icon: TrendingUp },
+      { id: PATHS.CASES_FINANCIALS, label: 'Financials', icon: Wallet },
+      { id: PATHS.CASES_INTAKE, label: 'New Case Intake', icon: ClipboardCheck },
     ]
   },
   { id: PATHS.DOCKET, label: 'Docket & Filings', icon: BookOpen, category: 'Case Work' },

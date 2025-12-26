@@ -6,14 +6,14 @@ import { ToastProvider } from '@providers/ToastContext';
 import React, { useState, Suspense } from 'react';
 import { Briefcase, Folder, Activity, Plus, Settings, Clock, DollarSign, Users, BarChart3, TrendingUp, Eye, Lightbulb } from 'lucide-react';
 
-// Import actual Matter Management components
-import { MatterOverviewDashboard } from '../../../../features/matters/components/overview/MatterOverviewDashboard';
-import { MatterOperationsCenter } from '../../../../features/matters/components/operations/MatterOperationsCenter';
-import { MatterCalendar } from '../../../../features/matters/components/calendar/MatterCalendar';
-import { MatterFinancialsCenter } from '../../../../features/matters/components/financials/MatterFinancialsCenter';
-import { MatterAnalyticsDashboard } from '../../../../features/matters/components/analytics/MatterAnalyticsDashboard';
-import { MatterInsightsDashboard } from '../../../../features/matters/components/insights/MatterInsightsDashboard';
-import { NewMatterIntakeForm } from '@/features/matters/components/intake/NewMatterIntakeForm';
+// Import actual Case Management components
+import { CaseOverviewDashboard } from '../../../../features/cases/components/overview/CaseOverviewDashboard';
+import { CaseOperationsCenter } from '../../../../features/cases/components/operations/CaseOperationsCenter';
+import { CaseCalendar } from '../../../../features/cases/components/calendar/CaseCalendar';
+import { CaseFinancialsCenter } from '../../../../features/cases/components/financials/CaseFinancialsCenter';
+import { CaseAnalyticsDashboard } from '../../../../features/cases/components/analytics/CaseAnalyticsDashboard';
+import { CaseInsightsDashboard } from '../../../../features/cases/components/insights/CaseInsightsDashboard';
+import { NewCaseIntakeForm } from '@/features/cases/components/intake/NewCaseIntakeForm';
 
 /**
  * TabbedPageLayout with Actions - Matter Management pattern
@@ -94,13 +94,13 @@ export const Default: Story = {
             <div className="text-slate-500">Loading...</div>
           </div>
         }>
-          {activeTab === 'overview' && <MatterOverviewDashboard />}
-          {activeTab === 'operations' && <MatterOperationsCenter />}
-          {activeTab === 'intake' && <NewMatterIntakeForm />}
-          {activeTab === 'calendar' && <MatterCalendar />}
-          {activeTab === 'financials' && <MatterFinancialsCenter />}
-          {activeTab === 'insights' && <MatterInsightsDashboard />}
-          {activeTab === 'analytics' && <MatterAnalyticsDashboard />}
+          {activeTab === 'overview' && <CaseOverviewDashboard />}
+          {activeTab === 'operations' && <CaseOperationsCenter />}
+          {activeTab === 'intake' && <NewCaseIntakeForm />}
+          {activeTab === 'calendar' && <CaseCalendar />}
+          {activeTab === 'financials' && <CaseFinancialsCenter />}
+          {activeTab === 'insights' && <CaseInsightsDashboard />}
+          {activeTab === 'analytics' && <CaseAnalyticsDashboard />}
         </Suspense>
       );
     };

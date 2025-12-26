@@ -69,7 +69,7 @@ const parseNumber = (value: string | undefined, defaultValue: number): number =>
 export const ENV_CONFIG: EnvironmentConfig = {
   environment: getEnvironment(),
   dataSource: 'backend',
-  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api',
+  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || '/api',
   apiTimeout: parseNumber(import.meta.env.VITE_API_TIMEOUT, 30000),
   features: {
     useBackendApi: true,

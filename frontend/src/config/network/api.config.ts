@@ -3,7 +3,7 @@
 // =============================================================================
 // Backend API connection and request settings
 
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 export const API_PREFIX = import.meta.env.VITE_API_PREFIX || '/api/v1';
 export const API_TIMEOUT_MS = 30000; // 30 seconds
 export const API_RETRY_ATTEMPTS = 3;

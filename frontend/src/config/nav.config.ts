@@ -48,18 +48,10 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
   // CASE WORK - Case Management & Documents
   // ============================================================================
   { 
-    id: PATHS.CASES_OVERVIEW, 
+    id: PATHS.CASES, 
     label: 'Case Management', 
     icon: Briefcase, 
-    category: 'Case Work',
-    children: [
-      { id: PATHS.CASES_OPERATIONS, label: 'Operations Center', icon: FolderKanban },
-      { id: PATHS.CASES_INSIGHTS, label: 'Insights & Risk', icon: Lightbulb },
-      { id: PATHS.CASES_CALENDAR, label: 'Case Calendar', icon: Calendar },
-      { id: PATHS.CASES_ANALYTICS, label: 'Analytics', icon: TrendingUp },
-      { id: PATHS.CASES_FINANCIALS, label: 'Financials', icon: Wallet },
-      { id: PATHS.CASES_INTAKE, label: 'New Case Intake', icon: ClipboardCheck },
-    ]
+    category: 'Case Work'
   },
   { id: PATHS.DOCKET, label: 'Docket & Filings', icon: BookOpen, category: 'Case Work' },
   { id: PATHS.DOCUMENTS, label: 'Document Manager', icon: FileText, category: 'Case Work' },

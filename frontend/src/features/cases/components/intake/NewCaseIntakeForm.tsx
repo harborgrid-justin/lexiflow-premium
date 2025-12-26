@@ -141,10 +141,10 @@ export const NewCaseIntakeForm: React.FC = () => {
   };
 
   return (
-    <div className={cn('h-full flex flex-col', mode === 'dark' ? 'bg-slate-900' : 'bg-slate-50')}>
+    <div className={cn('h-full min-h-screen flex flex-col', mode === 'dark' ? 'bg-slate-900' : 'bg-slate-50')}>
       {/* Progress Stepper */}
-      <div className={cn('border-b px-6 py-4', mode === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
-        <div className="flex items-center justify-between max-w-4xl mx-auto">
+      <div className={cn('shrink-0 border-b px-6 py-4', mode === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
+        <div className="flex items-center justify-between max-w-5xl mx-auto">
           {steps.map((step, index) => {
             const Icon = step.icon;
             const isActive = step.id === currentStep;
@@ -189,8 +189,8 @@ export const NewCaseIntakeForm: React.FC = () => {
       </div>
 
       {/* Form Content */}
-      <div className="flex-1 overflow-auto p-6">
-        <Card className="max-w-3xl mx-auto p-8">
+      <div className="flex-1 min-h-0 overflow-auto p-6">
+        <Card className="max-w-5xl mx-auto p-8 min-h-[600px]">
           {currentStep === 'client' && <ClientInfoStep formData={formData} setFormData={setFormData} />}
           {currentStep === 'matter' && <MatterDetailsStep formData={formData} setFormData={setFormData} />}
           {currentStep === 'conflicts' && <ConflictCheckStep conflictCheck={conflictCheck} />}
@@ -201,8 +201,8 @@ export const NewCaseIntakeForm: React.FC = () => {
       </div>
 
       {/* Navigation Footer */}
-      <div className={cn('border-t px-6 py-4', mode === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
-        <div className="max-w-3xl mx-auto flex items-center justify-between">
+      <div className={cn('shrink-0 border-t px-6 py-4', mode === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
+        <div className="max-w-5xl mx-auto flex items-center justify-between">
           <Button
             variant="outline"
             onClick={handlePrev}

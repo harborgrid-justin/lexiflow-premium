@@ -608,11 +608,12 @@ Object.defineProperties(DataServiceBase, {
   
   /**
    * Compliance API - Compliance management system
-   * @backend api.compliance
-   * @features Conflict checks, ethical walls, audit trails
+   * @backend ComplianceService (always uses backend via ComplianceDomain)
+   * @features Conflict checks, ethical walls, audit trails, risk management
+   * @note ComplianceService already handles backend routing internally
    */
   compliance: { 
-    get: () => isBackendApiEnabled() && api.compliance ? api.compliance : ComplianceService, 
+    get: () => ComplianceService, 
     enumerable: true 
   },
   

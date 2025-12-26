@@ -90,13 +90,13 @@ export const CaseOverviewDashboard: React.FC = () => {
 
   // Fetch KPIs
   const { data: kpis, isLoading: kpisLoading } = useQuery(
-    ['matters', 'kpis', dateRange],
-    () => api.cases.getKPIs(dateRange)
+    ['matters', 'kpis'],
+    () => api.cases.getStats()
   );
 
   // Fetch intake pipeline data
   const { data: pipelineStages } = useQuery(
-    ['matters', 'pipeline', dateRange],
+    ['matters', 'pipeline'],
     async (): Promise<IntakePipelineStage[]> => {
       const intakeMatters = (matters || []).filter(m => m.status === MatterStatus.ACTIVE && m.conflictCheckCompleted === false);
       const stages = ['Initial Contact', 'Conflict Check', 'Engagement Review', 'Contract Pending'];

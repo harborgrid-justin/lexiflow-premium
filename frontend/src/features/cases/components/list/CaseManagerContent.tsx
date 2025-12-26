@@ -4,8 +4,11 @@
  * @description Content router for Case Management module tabs
  */
 
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, useState } from 'react';
 import { MatterView } from '@/config/tabs.config';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { api } from '@/api';
+import { Case } from '@/types';
 
 // Lazy load tab content components - from Case Management Suite
 const CaseOverviewDashboard = lazy(() => import('../overview/CaseOverviewDashboard').then(m => ({ default: m.CaseOverviewDashboard })));
@@ -16,26 +19,99 @@ const CaseFinancialsCenter = lazy(() => import('../financials/CaseFinancialsCent
 const CaseInsightsDashboard = lazy(() => import('../insights/CaseInsightsDashboard').then(m => ({ default: m.CaseInsightsDashboard })));
 const CaseAnalyticsDashboard = lazy(() => import('../analytics/CaseAnalyticsDashboard').then(m => ({ default: m.CaseAnalyticsDashboard })));
 
+// Import existing list views
+const CaseListActive = lazy(() => import('./CaseListActive').then(m => ({ default: m.CaseListActive })));
+const CaseListIntake = lazy(() => import('./CaseListIntake').then(m => ({ default: m.CaseListIntake })));
+const CaseListDocket = lazy(() => import('./CaseListDocket').then(m => ({ default: m.CaseListDocket })));
+const CaseListTasks = lazy(() => import('./CaseListTasks').then(m => ({ default: m.CaseListTasks })));
+const CaseListConflicts = lazy(() => import('./CaseListConflicts').then(m => ({ default: m.CaseListConflicts })));
+const CaseListResources = lazy(() => import('./CaseListResources').then(m => ({ default: m.CaseListResources })));
+const CaseListExperts = lazy(() => import('./CaseListExperts').then(m => ({ default: m.CaseListExperts })));
+const CaseListReporters = lazy(() => import('./CaseListReporters').then(m => ({ default: m.CaseListReporters })));
+const CaseListTrust = lazy(() => import('./CaseListTrust').then(m => ({ default: m.CaseListTrust })));
+const CaseListClosing = lazy(() => import('./CaseListClosing').then(m => ({ default: m.CaseListClosing })));
+const CaseListArchived = lazy(() => import('./CaseListArchived').then(m => ({ default: m.CaseListArchived })));
+const CaseListMisc = lazy(() => import('./CaseListMisc').then(m => ({ default: m.CaseListMisc })));
+
+// Import workflow components
+const MasterWorkflow = lazy(() => import('../workflow/MasterWorkflow').then(m => ({ default: m.default })));
+
 interface CaseManagerContentProps {
-  activeTab: MatterView;
+  activeTab: MatterView | string;
   currentUserRole?: string;
 }
 
 export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTab }) => {
+  // Fetch cases for list views that need them
+  const { data: cases = [] } = useQuery<Case[]>(['cases', 'all'], () => api.cases.getAll());
+  
+  // Filter state for CaseListActive
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [typeFilter, setTypeFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
+
+  const resetFilters = () => {
+    setStatusFilter('all');
+    setTypeFilter('all');
+    setSearchTerm('');
+    setDateFrom('');
+    setDateTo('');
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case 'overview':
         return <CaseOverviewDashboard />;
+      case 'active':
+        return <CaseListActive 
+          filteredCases={cases}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+          typeFilter={typeFilter}
+          setTypeFilter={setTypeFilter}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          dateFrom={dateFrom}
+          setDateFrom={setDateFrom}
+          dateTo={dateTo}
+          setDateTo={setDateTo}
+          resetFilters={resetFilters}
+          onSelectCase={(c) => console.log('Selected:', c)}
+        />;
+      case 'intake':
+        return <CaseListIntake />;
       case 'operations':
         return <CaseOperationsCenter />;
-      case 'intake':
-        return <NewCaseIntakeForm />;
+      case 'workflows':
+        return <MasterWorkflow />;
+      case 'docket':
+        return <CaseListDocket onSelectCase={(c) => console.log('Selected:', c)} />;
+      case 'tasks':
+        return <CaseListTasks onSelectCase={(c) => console.log('Selected:', c)} />;
+      case 'conflicts':
+        return <CaseListConflicts onSelectCase={(c) => console.log('Selected:', c)} />;
       case 'calendar':
         return <CaseCalendar />;
       case 'financials':
         return <CaseFinancialsCenter />;
       case 'insights':
         return <CaseInsightsDashboard />;
+      case 'resources':
+        return <CaseListResources />;
+      case 'experts':
+        return <CaseListExperts />;
+      case 'reporters':
+        return <CaseListReporters />;
+      case 'trust':
+        return <CaseListTrust />;
+      case 'closing':
+        return <CaseListClosing />;
+      case 'archived':
+        return <CaseListArchived onSelectCase={(c) => console.log('Selected:', c)} />;
+      case 'misc':
+        return <CaseListMisc />;
       case 'analytics':
         return <CaseAnalyticsDashboard />;
       default:
@@ -43,13 +119,6 @@ export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTa
     }
   };
 
-  return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center h-96">
-        <div className="text-slate-500">Loading...</div>
-      </div>
-    }>
-      {renderContent()}
-    </Suspense>
-  );
+  // No Suspense boundary here - parent CaseManagement component handles it
+  return renderContent();
 };

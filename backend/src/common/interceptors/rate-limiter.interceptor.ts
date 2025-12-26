@@ -5,6 +5,7 @@ import {
   CallHandler,
   HttpException,
   HttpStatus,
+  OnModuleDestroy,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
@@ -16,12 +17,19 @@ import { RATE_LIMIT_KEY, RateLimitOptions } from '../decorators/rate-limit.decor
  * In production, would use Redis for distributed rate limiting
  */
 @Injectable()
-export class RateLimiterInterceptor implements NestInterceptor {
+export class RateLimiterInterceptor implements NestInterceptor, OnModuleDestroy {
   private requestCounts: Map<string, RequestCount[]> = new Map();
+  private cleanupInterval: NodeJS.Timeout;
 
   constructor(private reflector: Reflector) {
     // Cleanup old entries every 60 seconds
-    setInterval(() => this.cleanup(), 60000);
+    this.cleanupInterval = setInterval(() => this.cleanup(), 60000);
+  }
+
+  onModuleDestroy() {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+    }
   }
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {

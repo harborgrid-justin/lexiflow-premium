@@ -1,4 +1,4 @@
-import { Injectable, Logger, BadRequestException } from '@nestjs/common';
+import { Injectable, Logger, BadRequestException, OnModuleDestroy } from '@nestjs/common';
 import { CalendarIntegrationEventDto, CalendarSyncDto, CalendarEvent } from './dto';
 
 /**
@@ -7,9 +7,38 @@ import { CalendarIntegrationEventDto, CalendarSyncDto, CalendarEvent } from './d
  * for managing legal deadlines, depositions, and court dates
  */
 @Injectable()
-export class CalendarService {
+export class CalendarService implements OnModuleDestroy {
   private readonly logger = new Logger(CalendarService.name);
   private readonly events = new Map<string, CalendarEvent>();
+  private cleanupInterval: NodeJS.Timeout;
+
+  constructor() {
+    // Cleanup old events every hour
+    this.cleanupInterval = setInterval(() => this.cleanup(), 3600000);
+  }
+
+  onModuleDestroy() {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+    }
+  }
+
+  private cleanup() {
+    const now = new Date();
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    let removedCount = 0;
+
+    for (const [id, event] of this.events.entries()) {
+      if (event.endTime < thirtyDaysAgo) {
+        this.events.delete(id);
+        removedCount++;
+      }
+    }
+
+    if (removedCount > 0) {
+      this.logger.debug(`Cleaned up ${removedCount} old calendar events`);
+    }
+  }
 
   /**
    * Create a calendar event

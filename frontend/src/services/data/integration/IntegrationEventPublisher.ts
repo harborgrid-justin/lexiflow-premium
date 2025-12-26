@@ -8,19 +8,32 @@
  * repositories to trigger cross-domain workflows without tight coupling.
  */
 
-import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { SystemEventType } from '@/types/integration-types';
 import type { Case, DocketEntry, LegalDocument, TimeEntry } from '@/types';
+
+type EventHandler = (payload: any) => Promise<void>;
 
 /**
  * Centralized event publisher for data layer integration events
  */
 export class IntegrationEventPublisher {
+  private static listeners = new Map<string, EventHandler[]>();
+
+  /**
+   * Subscribe to an event type
+   */
+  static subscribe(eventType: string, handler: EventHandler): void {
+    if (!this.listeners.has(eventType)) {
+      this.listeners.set(eventType, []);
+    }
+    this.listeners.get(eventType)?.push(handler);
+  }
+
   /**
    * Publishes a case creation event
    */
   static async publishCaseCreated(caseData: Case): Promise<void> {
-    await IntegrationOrchestrator.publish(SystemEventType.CASE_CREATED, {
+    await this.publish(SystemEventType.CASE_CREATED, {
       caseData
     });
   }
@@ -29,7 +42,7 @@ export class IntegrationEventPublisher {
    * Publishes a docket entry ingestion event
    */
   static async publishDocketIngested(entry: DocketEntry): Promise<void> {
-    await IntegrationOrchestrator.publish(SystemEventType.DOCKET_INGESTED, {
+    await this.publish(SystemEventType.DOCKET_INGESTED, {
       entry,
       caseId: entry.caseId
     });
@@ -39,7 +52,7 @@ export class IntegrationEventPublisher {
    * Publishes a document upload event
    */
   static async publishDocumentUploaded(document: LegalDocument): Promise<void> {
-    await IntegrationOrchestrator.publish(SystemEventType.DOCUMENT_UPLOADED, {
+    await this.publish(SystemEventType.DOCUMENT_UPLOADED, {
       document
     });
   }
@@ -48,7 +61,7 @@ export class IntegrationEventPublisher {
    * Publishes a time entry logged event
    */
   static async publishTimeLogged(entry: TimeEntry): Promise<void> {
-    await IntegrationOrchestrator.publish(SystemEventType.TIME_LOGGED, {
+    await this.publish(SystemEventType.TIME_LOGGED, {
       entry
     });
   }
@@ -61,7 +74,7 @@ export class IntegrationEventPublisher {
     provider: string,
     name: string
   ): Promise<void> {
-    await IntegrationOrchestrator.publish(SystemEventType.DATA_SOURCE_CONNECTED, {
+    await this.publish(SystemEventType.DATA_SOURCE_CONNECTED, {
       connectionId,
       provider,
       name
@@ -75,7 +88,8 @@ export class IntegrationEventPublisher {
     eventType: SystemEventType,
     payload: { caseData: Case } | { matter: unknown } | { leadId: string; stage: string; clientName: string; value: string } | { entry: DocketEntry; caseId: string } | { task: unknown } | { document: LegalDocument } | { entry: TimeEntry } | { invoice: unknown } | { connectionId: string; provider: string; name: string } | { citation: unknown; queryContext: string } | Record<string, unknown>
   ): Promise<void> {
-    await IntegrationOrchestrator.publish(eventType, payload as any);
+    const handlers = this.listeners.get(eventType) || [];
+    await Promise.all(handlers.map(h => h(payload)));
   }
 }
 

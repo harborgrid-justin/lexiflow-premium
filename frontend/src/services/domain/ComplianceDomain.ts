@@ -75,6 +75,7 @@
  */
 
 import { Risk, ConflictCheck, EthicalWall, ComplianceMetrics, CaseId, GroupId, UserId } from '@/types';
+import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { complianceApi } from "@/api/domains/compliance.api";
 import type { ConflictCheck as ApiConflictCheck } from '@/api/conflict-checks-api';
 import type { EthicalWall as ApiEthicalWall } from '@/api/compliance-api';
@@ -289,10 +290,9 @@ export const ComplianceService = {
             // Publish integration event if conflicts found
             if (result.status === 'Flagged' && result.foundIn.length > 0) {
                 try {
-                    const { IntegrationOrchestrator } = await import('@/services/integration/integrationOrchestrator');
                     const { SystemEventType } = await import('@/types/integration-types');
                     
-                    await IntegrationOrchestrator.publish(SystemEventType.CONFLICT_DETECTED, {
+                    await IntegrationEventPublisher.publish(SystemEventType.CONFLICT_DETECTED, {
                         check: result,
                         entityName,
                         conflictCount: result.foundIn.length
@@ -404,10 +404,9 @@ export const ComplianceService = {
 
             // Publish integration event
             try {
-                const { IntegrationOrchestrator } = await import('@/services/integration/integrationOrchestrator');
                 const { SystemEventType } = await import('@/types/integration-types');
                 
-                await IntegrationOrchestrator.publish(SystemEventType.ETHICAL_WALL_CREATED, {
+                await IntegrationEventPublisher.publish(SystemEventType.ETHICAL_WALL_CREATED, {
                     wall: result,
                     caseId: wall.caseId
                 });

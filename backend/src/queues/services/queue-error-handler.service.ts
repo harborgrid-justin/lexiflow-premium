@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { QUEUE_NAMES } from '../constants';
@@ -8,8 +8,9 @@ import { QUEUE_NAMES } from '../constants';
  * Provides centralized error handling, logging, and notification for failed jobs
  */
 @Injectable()
-export class QueueErrorHandlerService implements OnModuleInit {
+export class QueueErrorHandlerService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(QueueErrorHandlerService.name);
+  private readonly handlers: { queue: Queue; event: string; handler: (...args: any[]) => void }[] = [];
 
   constructor(
     @InjectQueue(QUEUE_NAMES.DOCUMENT_PROCESSING)
@@ -45,38 +46,37 @@ export class QueueErrorHandlerService implements OnModuleInit {
     this.logger.log('Global queue error handlers initialized successfully');
   }
 
+  async onModuleDestroy() {
+    this.logger.log('Cleaning up queue error handlers...');
+    for (const { queue, event, handler } of this.handlers) {
+      queue.removeListener(event, handler);
+    }
+    this.handlers.length = 0;
+  }
+
   /**
    * Attach error handlers to a queue
    */
   private attachErrorHandlers(queueName: string, queue: Queue) {
-    // Handle job failures
-    queue.on('failed', (job, error) => {
-      this.handleJobFailure(queueName, job, error);
-    });
+    const failedHandler = (job, error) => this.handleJobFailure(queueName, job, error);
+    queue.on('failed', failedHandler);
+    this.handlers.push({ queue, event: 'failed', handler: failedHandler });
 
-    // Handle job completion with errors
-    queue.on('error', (error) => {
-      this.handleQueueError(queueName, error);
-    });
+    const errorHandler = (error) => this.handleQueueError(queueName, error);
+    queue.on('error', errorHandler);
+    this.handlers.push({ queue, event: 'error', handler: errorHandler });
 
-    // Handle stalled jobs
-    queue.on('stalled', (job) => {
-      this.handleStalledJob(queueName, job);
-    });
+    const stalledHandler = (job) => this.handleStalledJob(queueName, job);
+    queue.on('stalled', stalledHandler);
+    this.handlers.push({ queue, event: 'stalled', handler: stalledHandler });
 
-    // Log when jobs complete successfully (debug level)
-    queue.on('completed', (job) => {
-      this.logger.debug(
-        `[${queueName}] Job ${job.id} completed successfully`,
-      );
-    });
+    const completedHandler = (job) => this.logger.debug(`[${queueName}] Job ${job.id} completed successfully`);
+    queue.on('completed', completedHandler);
+    this.handlers.push({ queue, event: 'completed', handler: completedHandler });
 
-    // Log when jobs are active
-    queue.on('active', (job) => {
-      this.logger.debug(
-        `[${queueName}] Job ${job.id} started processing`,
-      );
-    });
+    const activeHandler = (job) => this.logger.debug(`[${queueName}] Job ${job.id} started processing`);
+    queue.on('active', activeHandler);
+    this.handlers.push({ queue, event: 'active', handler: activeHandler });
   }
 
   /**

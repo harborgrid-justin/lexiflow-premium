@@ -240,6 +240,28 @@ export class WebhooksService {
   }
 
   /**
+   * Cleanup old webhook deliveries (runs every day at midnight)
+   * Removes deliveries older than 7 days
+   */
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  async cleanupOldDeliveries(): Promise<void> {
+    const now = new Date();
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    
+    let removedCount = 0;
+    for (const [id, delivery] of this.deliveries.entries()) {
+      if (delivery.createdAt < sevenDaysAgo) {
+        this.deliveries.delete(id);
+        removedCount++;
+      }
+    }
+    
+    if (removedCount > 0) {
+      this.logger.log(`Cleaned up ${removedCount} old webhook deliveries`);
+    }
+  }
+
+  /**
    * Generate a signature for webhook payload verification
    */
   private generateSignature(payload: WebhookPayload, secret: string): string {

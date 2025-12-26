@@ -86,7 +86,7 @@
 
 import { Client, Case, EntityId, CaseId, UserId, MatterType, CaseStatus } from '@/types';
 import { adminApi } from "@/api/domains/admin.api";
-import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from "@/types/integration-types";
 import { delay } from '@/utils/async';
 
@@ -189,7 +189,7 @@ export const CRMService = {
 
         // Integration Point: CRM -> Compliance
         if (updates.stage) {
-            IntegrationOrchestrator.publish(SystemEventType.LEAD_STAGE_CHANGED, {
+            IntegrationEventPublisher.publish(SystemEventType.LEAD_STAGE_CHANGED, {
                 leadId: id,
                 stage: updates.stage,
                 clientName: lead.client,
@@ -247,8 +247,8 @@ export const CRMService = {
         });
 
         // Trigger Integration Events
-        IntegrationOrchestrator.publish(SystemEventType.CASE_CREATED, { caseData: newCase });
-        IntegrationOrchestrator.publish(SystemEventType.ENTITY_CREATED, {
+        IntegrationEventPublisher.publish(SystemEventType.CASE_CREATED, { caseData: newCase });
+        IntegrationEventPublisher.publish(SystemEventType.ENTITY_CREATED, {
             entity: {
                 ...newClient,
                 type: 'Corporation',

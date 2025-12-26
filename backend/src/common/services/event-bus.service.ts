@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { EventEmitter2} from '@nestjs/event-emitter';
 
 export interface DomainEvent {
@@ -12,10 +12,14 @@ export interface DomainEvent {
 }
 
 @Injectable()
-export class EventBusService {
+export class EventBusService implements OnModuleDestroy {
   private readonly logger = new Logger(EventBusService.name);
 
   constructor(private readonly eventEmitter: EventEmitter2) {}
+
+  onModuleDestroy() {
+    this.eventEmitter.removeAllListeners();
+  }
 
   /**
    * Publish a domain event

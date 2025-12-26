@@ -32,25 +32,13 @@
 import { apiClient } from '@services/infrastructure/apiClient';
 import type {
   EnhancedWorkflowInstance,
-  ConditionalBranchingConfig,
-  ParallelExecutionConfig,
   WorkflowVersion,
-  WorkflowDiff,
-  WorkflowTemplate as EnhancedWorkflowTemplate,
-  SLAConfig,
   SLAStatus,
-  ApprovalChain,
-  ApprovalInstance,
-  ApprovalDecision,
   WorkflowSnapshot,
   RollbackOperation,
   WorkflowAnalytics,
   AIWorkflowSuggestion,
-  AILearningFeedback,
   ExternalTrigger,
-  TriggerEvent,
-  WorkflowQueryFilters,
-  WorkflowSortOptions,
 } from '@/types/workflow-advanced-types';
 
 export interface WorkflowTemplate {

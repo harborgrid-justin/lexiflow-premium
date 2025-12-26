@@ -94,10 +94,10 @@ export const GovernanceConsole: React.FC<GovernanceConsoleProps> = ({ initialTab
                     <p className={cn("text-sm", theme.text.secondary)}>Policy enforcement and risk mitigation.</p>
                 </div>
             </div>
-            <Tabs 
+            <Tabs
                 tabs={['overview', 'policies', 'access']}
                 activeTab={activeTab}
-                onChange={(t) => setActiveTab(t as any)}
+                onChange={(t) => setActiveTab(t as string)}
             />
         </div>
 

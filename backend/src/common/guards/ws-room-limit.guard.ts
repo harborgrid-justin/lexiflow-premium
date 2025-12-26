@@ -2,6 +2,10 @@ import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Socket } from 'socket.io';
 
+interface SocketWithUserId extends Socket {
+  userId?: string;
+}
+
 /**
  * WebSocket Room Limit Service
  *
@@ -22,7 +26,6 @@ export class WsRoomLimitGuard implements OnModuleDestroy {
       50,
     );
 
-    // Periodic cleanup for stale entries (every hour)
     this.cleanupInterval = setInterval(() => this.cleanup(), 3600000);
   }
 
@@ -53,7 +56,7 @@ export class WsRoomLimitGuard implements OnModuleDestroy {
   /**
    * Check if user can join a room
    */
-  canJoinRoom(client: Socket, roomId: string): {
+  canJoinRoom(client: SocketWithUserId, roomId: string): {
     allowed: boolean;
     reason?: string;
     currentCount?: number;
@@ -99,7 +102,7 @@ export class WsRoomLimitGuard implements OnModuleDestroy {
   /**
    * Remove room from user's tracking
    */
-  leaveRoom(client: Socket, roomId: string): void {
+  leaveRoom(client: SocketWithUserId, roomId: string): void {
     const userId = this.extractUserId(client);
 
     if (!userId) return;
@@ -121,7 +124,7 @@ export class WsRoomLimitGuard implements OnModuleDestroy {
   /**
    * Clean up all rooms for a user (called on disconnect)
    */
-  cleanupUser(client: Socket): void {
+  cleanupUser(client: SocketWithUserId): void {
     const userId = this.extractUserId(client);
 
     if (userId) {
@@ -137,7 +140,7 @@ export class WsRoomLimitGuard implements OnModuleDestroy {
   /**
    * Get user's current room count
    */
-  getUserRoomCount(client: Socket): number {
+  getUserRoomCount(client: SocketWithUserId): number {
     const userId = this.extractUserId(client);
     return userId ? (this.userRoomCounts.get(userId)?.size || 0) : 0;
   }
@@ -162,7 +165,8 @@ export class WsRoomLimitGuard implements OnModuleDestroy {
     return stats;
   }
 
-  private extractUserId(client: Socket): string | null {
-    return (client as any).userId || client.handshake.query.userId as string || null;
+  private extractUserId(client: SocketWithUserId): string | null {
+    const queryUserId = client.handshake.query.userId;
+    return client.userId || (typeof queryUserId === 'string' ? queryUserId : null);
   }
 }

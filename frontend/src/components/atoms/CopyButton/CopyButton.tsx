@@ -23,7 +23,6 @@ import { useTheme } from '@/providers/ThemeContext';
 import { Button } from '../Button';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
 import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/master.config';
 import { getSuccessStyles } from './CopyButton.styles';
 

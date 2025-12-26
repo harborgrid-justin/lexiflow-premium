@@ -58,7 +58,7 @@ export class CreateDiscoveryRequestDto {
 
   @IsOptional()
   @IsArray()
-  requestItems?: unknown[];
+  requestItems?: Record<string, unknown>[];
 
   @IsOptional()
   @IsString()

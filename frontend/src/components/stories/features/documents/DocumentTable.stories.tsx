@@ -4,7 +4,6 @@
  * Sortable table view for document listing with selection and actions.
  */
 
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentTable } from '../../../../features/operations/documents/table/DocumentTable';

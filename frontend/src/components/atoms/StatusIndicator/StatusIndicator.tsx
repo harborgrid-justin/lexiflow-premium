@@ -62,11 +62,11 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
   
   // Map type to theme status classes
   const statusClasses = {
-    success: cn(theme.status.success.surface, theme.status.success.text),
-    warning: cn(theme.status.warning.surface, theme.status.warning.text),
-    error: cn(theme.status.error.surface, theme.status.error.text),
-    info: cn(theme.status.info.surface, theme.status.info.text),
-    neutral: cn(theme.status.neutral.surface, theme.status.neutral.text)
+    success: cn(theme.status.success.bg, theme.status.success.text),
+    warning: cn(theme.status.warning.bg, theme.status.warning.text),
+    error: cn(theme.status.error.bg, theme.status.error.text),
+    info: cn(theme.status.info.bg, theme.status.info.text),
+    neutral: cn(theme.status.neutral.bg, theme.status.neutral.text)
   };
   return (
     <span

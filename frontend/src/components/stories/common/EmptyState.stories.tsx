@@ -3,7 +3,6 @@ import { EmptyState } from '@/components/molecules/EmptyState';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { FileText, Inbox, Search } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
-import React from 'react';
 
 /**
  * EmptyState component displays helpful messages when there's no content.

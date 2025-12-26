@@ -18,7 +18,7 @@ export class ComplianceCheck {
   checkedAt!: Date;
 
   @Column('jsonb', { nullable: true })
-  details: any;
+  details: Record<string, unknown> | null = null;
 
   @CreateDateColumn()
   createdAt!: Date;

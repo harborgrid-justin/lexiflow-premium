@@ -11,7 +11,7 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 // ========================================
 // TYPES & INTERFACES
@@ -33,12 +33,12 @@ export function useIntersectionObserver(
   }: IntersectionObserverArgs
 ): IntersectionObserverEntry | undefined {
   const [entry, setEntry] = useState<IntersectionObserverEntry>();
-  
+
   const frozen = entry?.isIntersecting && freezeOnceVisible;
 
-  const updateEntry = ([entry]: IntersectionObserverEntry[]): void => {
+  const updateEntry = useCallback(([entry]: IntersectionObserverEntry[]): void => {
     setEntry(entry);
-  };
+  }, []);
 
   useEffect(() => {
     const node = elementRef?.current; // DOM Ref
@@ -52,7 +52,7 @@ export function useIntersectionObserver(
     observer.observe(node);
 
     return () => observer.disconnect();
-  }, [elementRef?.current, JSON.stringify(threshold), root, rootMargin, frozen]);
+  }, [elementRef, threshold, root, rootMargin, frozen, updateEntry]);
 
   return entry;
 }

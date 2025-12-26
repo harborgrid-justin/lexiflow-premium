@@ -104,20 +104,41 @@ function validatePayload(payload: unknown, type: string, methodName: string): vo
  */
 export class IntegrationOrchestrator {
   private static initialized = false;
+  private static subscriptionCleanups: Array<() => void> = [];
 
   /**
    * Initialize the orchestrator and subscribe to events
    */
   static initialize() {
     if (this.initialized) return;
-    
-    // Subscribe to all known event types
+
+    // Subscribe to all known event types and track cleanup functions
     Object.values(SystemEventType).forEach(type => {
-      IntegrationEventPublisher.subscribe(type, (payload) => this.publish(type as any, payload));
+      const unsubscribe = IntegrationEventPublisher.subscribe(type, (payload) => this.publish(type as SystemEventType, payload));
+      this.subscriptionCleanups.push(unsubscribe);
     });
-    
+
     this.initialized = true;
     console.log('[IntegrationOrchestrator] Initialized and subscribed to events');
+  }
+
+  /**
+   * Cleanup all event subscriptions
+   * Call this when shutting down the orchestrator to prevent memory leaks
+   */
+  static cleanup() {
+    console.log('[IntegrationOrchestrator] Cleaning up event subscriptions');
+
+    this.subscriptionCleanups.forEach(unsubscribe => {
+      try {
+        unsubscribe();
+      } catch (error) {
+        console.error('[IntegrationOrchestrator] Error during cleanup:', error);
+      }
+    });
+
+    this.subscriptionCleanups = [];
+    this.initialized = false;
   }
 
   /**
@@ -128,38 +149,39 @@ export class IntegrationOrchestrator {
     payload: SystemEventPayloads[T]
   ): Promise<IntegrationResult> {
         try {
-            validateEventType(eventType as string, 'publish');
-            validatePayload(payload, eventType as string, 'publish');
-            
-            console.log(`[IntegrationOrchestrator] Received event: ${eventType}`);
-            
+            const eventTypeStr = String(eventType);
+            validateEventType(eventTypeStr, 'publish');
+            validatePayload(payload, eventTypeStr, 'publish');
+
+            console.log(`[IntegrationOrchestrator] Received event: ${eventTypeStr}`);
+
             // Get handler from registry
-            const handler = EventHandlerRegistry.getHandler(eventType as string);
-            
+            const handler = EventHandlerRegistry.getHandler(eventTypeStr);
+
             if (!handler) {
-                console.warn(`[IntegrationOrchestrator] No handler registered for event: ${eventType}`);
+                console.warn(`[IntegrationOrchestrator] No handler registered for event: ${eventTypeStr}`);
                 return {
                     success: true,
                     triggeredActions: [],
-                    errors: [`No handler registered for ${eventType}`]
+                    errors: [`No handler registered for ${eventTypeStr}`]
                 };
             }
-            
+
             // Execute handler with error isolation
             const result = await handler.execute(payload);
-            
-            console.log(`[IntegrationOrchestrator] Event ${eventType} completed:`, {
+
+            console.log(`[IntegrationOrchestrator] Event ${eventTypeStr} completed:`, {
                 success: result.success,
                 actions: result.triggeredActions.length,
                 errors: result.errors?.length ?? 0
             });
-            
+
             return result;
-            
+
         } catch (error: unknown) {
             const errorMsg = error instanceof Error ? error.message : String(error);
-            console.error(`[IntegrationOrchestrator] Fatal error processing ${eventType}:`, errorMsg);
-            
+            console.error(`[IntegrationOrchestrator] Fatal error processing ${String(eventType)}:`, errorMsg);
+
             return {
                 success: false,
                 triggeredActions: [],

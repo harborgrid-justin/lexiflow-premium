@@ -32,10 +32,17 @@ import { cn } from '@/utils/cn';
 // COMPONENT
 // ============================================================================
 
+interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  availability?: Record<string, unknown>;
+}
+
 export const CalendarTeam: React.FC = () => {
   const { theme } = useTheme();
-  
-  const { data: team = [] } = useQuery<any[]>(
+
+  const { data: team = [] } = useQuery<TeamMember[]>(
       ['calendar', 'team'],
       DataService.calendar.getTeamAvailability
   );

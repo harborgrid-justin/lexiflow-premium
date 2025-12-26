@@ -3,15 +3,16 @@
  * @description Type-safe ID generation utilities for branded types
  */
 
-import { 
-  CaseId, 
-  UserId, 
+import {
+  CaseId,
+  UserId,
   PleadingDocument,
-  PleadingSection,
   PleadingTemplate,
   FormattingRule,
   EvidenceId,
-  DocumentId
+  DocumentId,
+  DocketId,
+  PartyId
 } from '../types';
 
 /**
@@ -60,12 +61,12 @@ export const IdGenerator = {
     return generateSecureId('doc') as DocumentId;
   },
 
-  docket: () => {
-    return generateSecureId('dk') as any; // Will be properly typed as DocketId
+  docket: (): DocketId => {
+    return generateSecureId('dk') as DocketId;
   },
 
-  party: () => {
-    return generateSecureId('party') as any; // Will be properly typed as PartyId
+  party: (): PartyId => {
+    return generateSecureId('party') as PartyId;
   },
 
   staff: () => {

@@ -140,7 +140,7 @@ export class Matter {
 
   // Opposing Party
   @Column({ name: 'opposingcounsel', type: 'jsonb', nullable: true })
-  opposingCounsel: any;
+  opposingCounsel: Record<string, unknown> | null = null;
 
   // Risk & Conflict
   @Column({ name: 'conflictcheckcompleted', type: 'boolean', default: false })
@@ -157,7 +157,7 @@ export class Matter {
 
   // Resources
   @Column({ name: 'relatedmatterids', type: 'jsonb', nullable: true })
-  relatedMatterIds: any;
+  relatedMatterIds: string[] | null = null;
 
   // Notes & Custom Fields
   @Column({ name: 'internalnotes', type: 'text', nullable: true })

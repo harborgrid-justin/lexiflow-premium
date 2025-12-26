@@ -12,7 +12,7 @@ export class Snapshot {
   description!: string;
 
   @Column({ type: 'jsonb' })
-  schema: any;
+  schema: Record<string, unknown> = {};
 
   @Column({ type: 'bigint' })
   sizeBytes!: number;

@@ -105,8 +105,9 @@ function getProgressColor(variant: string, theme: any): string {
     case 'error':
       return theme.status.error.bg;
     case 'primary':
+      return theme.action.primary.bg;
     default:
-      return theme.accent.primary;
+      return theme.action.primary.bg;
   }
 }
 
@@ -163,6 +164,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
       const timer = setTimeout(() => setShowSuccess(false), NOTIFICATION_AUTO_DISMISS_MS);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [status]);
 
   // Clamp progress to 0-100

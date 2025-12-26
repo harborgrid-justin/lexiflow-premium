@@ -15,7 +15,7 @@
 // EXTERNAL DEPENDENCIES
 // ========================================
 import React from 'react';
-import { Home, Briefcase, FileText, Users, MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 
 // ========================================
 // INTERNAL DEPENDENCIES

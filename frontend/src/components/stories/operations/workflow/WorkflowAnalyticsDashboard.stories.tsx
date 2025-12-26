@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { WorkflowAnalyticsDashboard } from '../../../../features/cases/components/workflow/WorkflowAnalyticsDashboard';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
-import React from 'react';
 
 /**
  * WorkflowAnalyticsDashboard provides workflow performance analytics including

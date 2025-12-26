@@ -2,6 +2,7 @@ import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpS
 import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { CalendarService } from './calendar.service';
 import { CreateCalendarEventDto, UpdateCalendarEventDto } from './dto/calendar.dto';
+import { QueryCalendarEventsDto, CalendarEventType } from './dto/query-calendar-events.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 @ApiTags('Calendar')
@@ -16,7 +17,7 @@ export class CalendarController {
   @ApiResponse({ status: 200, description: 'Events retrieved' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(@Query() query: any) {
+  async findAll(@Query() query: QueryCalendarEventsDto) {
     return await this.calendarService.findAll(query);
   }
 
@@ -35,9 +36,9 @@ export class CalendarController {
   @ApiResponse({ status: 200, description: 'Statute events retrieved' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getStatuteOfLimitations(@Query() query: any) {
+  async getStatuteOfLimitations(@Query() query: QueryCalendarEventsDto) {
     // Statute of limitations are typically deadlines, search in title instead
-    return await this.calendarService.findAll({ ...query, eventType: 'Deadline' });
+    return await this.calendarService.findAll({ ...query, eventType: CalendarEventType.DEADLINE });
   }
 
   @Get(':id')

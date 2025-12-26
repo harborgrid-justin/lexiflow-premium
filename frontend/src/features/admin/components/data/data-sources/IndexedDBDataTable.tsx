@@ -64,7 +64,7 @@ export const IndexedDBDataTable: React.FC<IndexedDBDataTableProps> = ({
               </tr>
             </thead>
             <tbody>
-              {data.map((item: any) => (
+              {data.map((item: StoreRecord) => (
                 <tr key={item.id} className={cn(
                   "border-b hover:bg-gray-50 dark:hover:bg-slate-800/50",
                   theme.border.default

@@ -21,9 +21,17 @@ const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact }) => 
 
     const { data: caseData, isLoading } = useQuery(queryKeys.cases.detail(caseId), () => DataService.cases.getById(caseId));
 
-    const facts = ((caseData as any)?.arguments || []).map((arg: any) => ({ id: arg.id, type: 'Argument', text: arg.title, source: 'Case Strategy' }));
-    const evidence = (caseData as any)?.evidence?.map((ev: any) => ({ id: ev.id, type: 'Evidence', text: ev.title, source: 'Evidence Vault' })) || [];
-    const law = ((caseData as any)?.citations || []).map((cit: any) => ({ id: cit.id, type: 'Citation', text: cit.citation, source: 'Authority Library' }));
+    interface CaseDataWithContext {
+        arguments?: Array<{ id: string; title: string }>;
+        evidence?: Array<{ id: string; title: string }>;
+        citations?: Array<{ id: string; citation: string }>;
+    }
+
+    const typedCaseData = caseData as CaseDataWithContext | undefined;
+
+    const facts = (typedCaseData?.arguments || []).map(arg => ({ id: arg.id, type: 'Argument', text: arg.title, source: 'Case Strategy' }));
+    const evidence = typedCaseData?.evidence?.map(ev => ({ id: ev.id, type: 'Evidence', text: ev.title, source: 'Evidence Vault' })) || [];
+    const law = (typedCaseData?.citations || []).map(cit => ({ id: cit.id, type: 'Citation', text: cit.citation, source: 'Authority Library' }));
     
     const items = [...facts, ...evidence, ...law];
 

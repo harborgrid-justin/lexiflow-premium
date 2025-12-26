@@ -2,6 +2,11 @@ import { Injectable, CanActivate, ExecutionContext, Logger } from '@nestjs/commo
 import { ConfigService } from '@nestjs/config';
 import { Socket } from 'socket.io';
 
+interface SocketWithMetadata extends Socket {
+  _connectionCounted?: boolean;
+  userId?: string;
+}
+
 /**
  * WebSocket Connection Limit Guard
  *
@@ -33,10 +38,9 @@ export class WsConnectionLimitGuard implements CanActivate {
   }
 
   canActivate(context: ExecutionContext): boolean {
-    const client = context.switchToWs().getClient<Socket>();
-    
-    // Avoid counting the same connection multiple times if guard runs on messages
-    if ((client as any)._connectionCounted) {
+    const client = context.switchToWs().getClient<SocketWithMetadata>();
+
+    if (client._connectionCounted) {
       return true;
     }
 
@@ -72,12 +76,9 @@ export class WsConnectionLimitGuard implements CanActivate {
       this.userConnectionCounts.set(userId, userConnections + 1);
     }
 
-    // Increment global connection count
     this.globalConnectionCount++;
-    (client as any)._connectionCounted = true;
+    client._connectionCounted = true;
 
-    // Setup disconnect handler to decrement counts
-    // Use 'once' to ensure it only runs once per connection
     client.once('disconnect', () => {
       this.handleDisconnect(userId);
     });
@@ -90,12 +91,10 @@ export class WsConnectionLimitGuard implements CanActivate {
   }
 
   private handleDisconnect(userId: string | null): void {
-    // Decrement global count
     if (this.globalConnectionCount > 0) {
       this.globalConnectionCount--;
     }
 
-    // Decrement user count
     if (userId) {
       const count = this.userConnectionCounts.get(userId) || 0;
       if (count <= 1) {
@@ -106,9 +105,9 @@ export class WsConnectionLimitGuard implements CanActivate {
     }
   }
 
-  private extractUserId(client: Socket): string | null {
-    // Extract userId from handshake (will be set by auth middleware)
-    return (client as any).userId || client.handshake.query.userId as string || null;
+  private extractUserId(client: SocketWithMetadata): string | null {
+    const queryUserId = client.handshake.query.userId;
+    return client.userId || (typeof queryUserId === 'string' ? queryUserId : null);
   }
 
   /**

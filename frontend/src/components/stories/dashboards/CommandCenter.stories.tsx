@@ -3,7 +3,6 @@ import { CommandCenter } from '../../../features/litigation/war-room/CommandCent
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 import { CaseStatus, MatterType } from '@/types/enums';
-import React from 'react';
 
 /**
  * CommandCenter is the litigation war room providing real-time case monitoring,

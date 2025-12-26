@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TrustAccountDashboard } from '../../../../features/operations/billing/trust/TrustAccountDashboard';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
-import React from 'react';
 
 /**
  * TrustAccountDashboard provides comprehensive trust accounting management with

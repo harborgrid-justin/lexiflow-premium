@@ -135,6 +135,8 @@ class NotificationServiceClass {
   private desktopEnabled: boolean = false;
   private maxNotifications: number = NOTIFICATION_MAX_DISPLAY * 20;
   private initialized: boolean = false;
+  private autoDismissTimers: Map<string, NodeJS.Timeout> = new Map();
+  private desktopNotifications: Map<string, globalThis.Notification> = new Map();
 
   // =============================================================================
   // INITIALIZATION
@@ -265,9 +267,11 @@ class NotificationServiceClass {
 
       // Auto-dismiss if duration is set
       if (notification.duration && notification.duration > 0) {
-        setTimeout(() => {
+        const timer = setTimeout(() => {
           this.remove(id);
+          this.autoDismissTimers.delete(id);
         }, notification.duration);
+        this.autoDismissTimers.set(id, timer);
       }
 
       return id;
@@ -279,7 +283,7 @@ class NotificationServiceClass {
 
   /**
    * Remove notification by ID
-   * 
+   *
    * @param id - Notification ID
    * @throws Error if validation fails
    */
@@ -288,6 +292,21 @@ class NotificationServiceClass {
       this.validateId(id, 'remove');
       const before = this.notifications.length;
       this.notifications = this.notifications.filter(n => n.id !== id);
+
+      // Clear auto-dismiss timer if exists
+      const timer = this.autoDismissTimers.get(id);
+      if (timer) {
+        clearTimeout(timer);
+        this.autoDismissTimers.delete(id);
+      }
+
+      // Close desktop notification if exists
+      const desktopNotif = this.desktopNotifications.get(id);
+      if (desktopNotif) {
+        desktopNotif.close();
+        this.desktopNotifications.delete(id);
+      }
+
       if (this.notifications.length < before) {
         this.notifyListeners();
       }
@@ -345,6 +364,15 @@ class NotificationServiceClass {
     try {
       const count = this.notifications.length;
       this.notifications = [];
+
+      // Clear all auto-dismiss timers
+      this.autoDismissTimers.forEach(timer => clearTimeout(timer));
+      this.autoDismissTimers.clear();
+
+      // Close all desktop notifications
+      this.desktopNotifications.forEach(notif => notif.close());
+      this.desktopNotifications.clear();
+
       if (count > 0) {
         this.notifyListeners();
         console.log(`[NotificationService] Cleared ${count} notifications`);
@@ -552,17 +580,25 @@ class NotificationServiceClass {
     if (!this.desktopEnabled || !('Notification' in window)) return;
 
     try {
-      const desktopNotification = new Notification(notification.title, {
+      const desktopNotification = new globalThis.Notification(notification.title, {
         body: notification.message,
         icon: notification.icon || '/favicon.ico',
         tag: notification.id,
         requireInteraction: notification.priority === 'urgent',
       });
 
+      // Track desktop notification for cleanup
+      this.desktopNotifications.set(notification.id, desktopNotification);
+
       desktopNotification.onclick = () => {
         window.focus();
         this.markAsRead(notification.id);
         desktopNotification.close();
+        this.desktopNotifications.delete(notification.id);
+      };
+
+      desktopNotification.onclose = () => {
+        this.desktopNotifications.delete(notification.id);
       };
     } catch (error) {
       console.warn('[NotificationService.showDesktopNotification] Error:', error);
@@ -581,6 +617,36 @@ class NotificationServiceClass {
         console.error('[NotificationService.notifyListeners] Listener error:', error);
       }
     });
+  }
+
+  /**
+   * Dispose of the notification service and cleanup all resources
+   * Call this when shutting down to prevent memory leaks
+   */
+  dispose(): void {
+    console.log('[NotificationService] Disposing and cleaning up resources');
+
+    // Clear all auto-dismiss timers
+    this.autoDismissTimers.forEach(timer => clearTimeout(timer));
+    this.autoDismissTimers.clear();
+
+    // Close all desktop notifications
+    this.desktopNotifications.forEach(notif => {
+      try {
+        notif.close();
+      } catch (error) {
+        console.warn('[NotificationService] Error closing desktop notification:', error);
+      }
+    });
+    this.desktopNotifications.clear();
+
+    // Clear all listeners
+    this.listeners.clear();
+
+    // Clear all notifications
+    this.notifications = [];
+
+    this.initialized = false;
   }
 }
 

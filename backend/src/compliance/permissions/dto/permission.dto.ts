@@ -37,7 +37,7 @@ export enum PermissionScope {
 export interface PermissionCondition {
   field: string;
   operator: 'equals' | 'not_equals' | 'in' | 'not_in' | 'contains';
-  value: any;
+  value: unknown;
 }
 
 export class GrantPermissionDto {

@@ -14,6 +14,18 @@ export class MattersService {
   ) {}
 
   /**
+   * Convert Matter entity to MatterResponseDto
+   * Handles the null to undefined conversion for opposingCounsel
+   */
+  private toResponseDto(matter: Matter): MatterResponseDto {
+    return new MatterResponseDto({
+      ...matter,
+      opposingCounsel: matter.opposingCounsel ?? undefined,
+      relatedMatterIds: matter.relatedMatterIds ?? undefined,
+    });
+  }
+
+  /**
    * Generate unique matter number in format: MAT-YYYY-NNNN
    */
   private async generateMatterNumber(): Promise<string> {
@@ -43,17 +55,18 @@ export class MattersService {
 
     // Map userId to createdBy (entity expects createdBy, DTO uses userId)
     // Use system UUID (00000000-0000-0000-0000-000000000000) as default
-    const { userId, ...dtoWithoutUserId } = createMatterDto;
+    const { userId, opposingCounsel, ...dtoRest } = createMatterDto;
     const SYSTEM_USER_UUID = '00000000-0000-0000-0000-000000000000';
-    
+
     const matter = this.mattersRepository.create({
-      ...dtoWithoutUserId,
+      ...dtoRest,
       matterNumber,
       createdBy: userId || SYSTEM_USER_UUID,
+      opposingCounsel: opposingCounsel ? { name: opposingCounsel } : null,
     });
 
     const savedMatter = await this.mattersRepository.save(matter);
-    return new MatterResponseDto(savedMatter);
+    return this.toResponseDto(savedMatter);
   }
 
   async findAll(
@@ -106,36 +119,36 @@ export class MattersService {
     const [matters, total] = await queryBuilder.getManyAndCount();
 
     return {
-      matters: matters.map(matter => new MatterResponseDto(matter)),
+      matters: matters.map(matter => this.toResponseDto(matter)),
       total,
     };
   }
 
   async findOne(id: string): Promise<MatterResponseDto> {
     const matter = await this.mattersRepository.findOne({ where: { id } });
-    
+
     if (!matter) {
       throw new NotFoundException(`Matter with ID ${id} not found`);
     }
 
-    return new MatterResponseDto(matter);
+    return this.toResponseDto(matter);
   }
 
   async findByMatterNumber(matterNumber: string): Promise<MatterResponseDto> {
-    const matter = await this.mattersRepository.findOne({ 
-      where: { matterNumber } 
+    const matter = await this.mattersRepository.findOne({
+      where: { matterNumber }
     });
-    
+
     if (!matter) {
       throw new NotFoundException(`Matter with number ${matterNumber} not found`);
     }
 
-    return new MatterResponseDto(matter);
+    return this.toResponseDto(matter);
   }
 
   async update(id: string, updateMatterDto: UpdateMatterDto): Promise<MatterResponseDto> {
     const matter = await this.mattersRepository.findOne({ where: { id } });
-    
+
     if (!matter) {
       throw new NotFoundException(`Matter with ID ${id} not found`);
     }
@@ -144,7 +157,7 @@ export class MattersService {
     Object.assign(matter, updateMatterDto);
     const updatedMatter = await this.mattersRepository.save(matter);
 
-    return new MatterResponseDto(updatedMatter);
+    return this.toResponseDto(updatedMatter);
   }
 
   async remove(id: string): Promise<void> {
@@ -159,7 +172,7 @@ export class MattersService {
 
   async archive(id: string): Promise<MatterResponseDto> {
     const matter = await this.mattersRepository.findOne({ where: { id } });
-    
+
     if (!matter) {
       throw new NotFoundException(`Matter with ID ${id} not found`);
     }
@@ -167,12 +180,12 @@ export class MattersService {
     // Note: isArchived field not in current schema - using soft delete instead
     await this.mattersRepository.softRemove(matter);
 
-    return new MatterResponseDto(matter);
+    return this.toResponseDto(matter);
   }
 
   async restore(id: string): Promise<MatterResponseDto> {
     const matter = await this.mattersRepository.findOne({ where: { id }, withDeleted: true });
-    
+
     if (!matter) {
       throw new NotFoundException(`Matter with ID ${id} not found`);
     }
@@ -180,7 +193,7 @@ export class MattersService {
     // Note: Using soft delete recovery instead of isArchived field
     await this.mattersRepository.recover(matter);
 
-    return new MatterResponseDto(matter);
+    return this.toResponseDto(matter);
   }
 
   async getStatistics(userId?: string): Promise<any> {

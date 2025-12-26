@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
+import { Queue, Job } from 'bull';
 import { QUEUE_NAMES } from '../constants';
 
 /**
@@ -10,7 +10,7 @@ import { QUEUE_NAMES } from '../constants';
 @Injectable()
 export class QueueErrorHandlerService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(QueueErrorHandlerService.name);
-  private readonly handlers: { queue: Queue; event: string; handler: (...args: any[]) => void }[] = [];
+  private readonly handlers: { queue: Queue; event: string; handler: (...args: unknown[]) => void }[] = [];
 
   constructor(
     @InjectQueue(QUEUE_NAMES.DOCUMENT_PROCESSING)
@@ -58,31 +58,31 @@ export class QueueErrorHandlerService implements OnModuleInit, OnModuleDestroy {
    * Attach error handlers to a queue
    */
   private attachErrorHandlers(queueName: string, queue: Queue) {
-    const failedHandler = (job, error) => this.handleJobFailure(queueName, job, error);
+    const failedHandler = (job: Job, error: Error) => this.handleJobFailure(queueName, job, error);
     queue.on('failed', failedHandler);
-    this.handlers.push({ queue, event: 'failed', handler: failedHandler });
+    this.handlers.push({ queue, event: 'failed', handler: failedHandler as (...args: unknown[]) => void });
 
-    const errorHandler = (error) => this.handleQueueError(queueName, error);
+    const errorHandler = (error: Error) => this.handleQueueError(queueName, error);
     queue.on('error', errorHandler);
-    this.handlers.push({ queue, event: 'error', handler: errorHandler });
+    this.handlers.push({ queue, event: 'error', handler: errorHandler as (...args: unknown[]) => void });
 
-    const stalledHandler = (job) => this.handleStalledJob(queueName, job);
+    const stalledHandler = (job: Job) => this.handleStalledJob(queueName, job);
     queue.on('stalled', stalledHandler);
-    this.handlers.push({ queue, event: 'stalled', handler: stalledHandler });
+    this.handlers.push({ queue, event: 'stalled', handler: stalledHandler as (...args: unknown[]) => void });
 
-    const completedHandler = (job) => this.logger.debug(`[${queueName}] Job ${job.id} completed successfully`);
+    const completedHandler = (job: Job) => this.logger.debug(`[${queueName}] Job ${job.id} completed successfully`);
     queue.on('completed', completedHandler);
-    this.handlers.push({ queue, event: 'completed', handler: completedHandler });
+    this.handlers.push({ queue, event: 'completed', handler: completedHandler as (...args: unknown[]) => void });
 
-    const activeHandler = (job) => this.logger.debug(`[${queueName}] Job ${job.id} started processing`);
+    const activeHandler = (job: Job) => this.logger.debug(`[${queueName}] Job ${job.id} started processing`);
     queue.on('active', activeHandler);
-    this.handlers.push({ queue, event: 'active', handler: activeHandler });
+    this.handlers.push({ queue, event: 'active', handler: activeHandler as (...args: unknown[]) => void });
   }
 
   /**
    * Handle individual job failures
    */
-  private handleJobFailure(queueName: string, job: any, error: Error) {
+  private handleJobFailure(queueName: string, job: Job, error: Error) {
     const attemptsMade = job.attemptsMade || 0;
     const maxAttempts = job.opts?.attempts || 1;
     const willRetry = attemptsMade < maxAttempts;
@@ -128,7 +128,7 @@ export class QueueErrorHandlerService implements OnModuleInit, OnModuleDestroy {
   /**
    * Handle stalled jobs (jobs that stopped processing unexpectedly)
    */
-  private handleStalledJob(queueName: string, job: any) {
+  private handleStalledJob(queueName: string, job: Job) {
     this.logger.warn(
       `[${queueName}] Job ${job.id} has stalled and will be reprocessed`,
       {
@@ -144,7 +144,7 @@ export class QueueErrorHandlerService implements OnModuleInit, OnModuleDestroy {
   /**
    * Send notification for permanently failed jobs
    */
-  private sendFailureNotification(queueName: string, job: any, error: Error) {
+  private sendFailureNotification(queueName: string, job: Job, error: Error) {
     // Enterprise notification system integration
     const notificationPayload = {
       jobId: job.id,
@@ -203,7 +203,7 @@ export class QueueErrorHandlerService implements OnModuleInit, OnModuleDestroy {
   /**
    * Sanitize job data to remove sensitive information from logs
    */
-  private sanitizeJobData(data: any): any {
+  private sanitizeJobData(data: Record<string, unknown>): Record<string, unknown> {
     if (!data) return data;
 
     const sanitized = { ...data };

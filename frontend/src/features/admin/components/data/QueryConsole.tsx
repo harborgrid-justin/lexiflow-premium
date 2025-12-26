@@ -23,12 +23,12 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
   const [activeSidebarTab, setActiveSidebarTab] = useState<'schema' | 'history' | 'saved'>('schema');
   const [activeResultsTab, setActiveResultsTab] = useState<'results' | 'explain' | 'visualize'>('results');
   const [query, setQuery] = useState('SELECT id, title, status FROM cases\nWHERE status = \'Active\'\nLIMIT 10;');
-  const [results, setResults] = useState<Record<string, any>[] | null>(null);
+  const [results, setResults] = useState<Record<string, unknown>[] | null>(null);
   const [executionTime, setExecutionTime] = useState<string | null>(null);
   const [isExecuting, setIsExecuting] = useState(false);
-  
+
   const [shareModalOpen, setShareModalOpen] = useState(false);
-  const [explainPlan, setExplainPlan] = useState<any>(null);
+  const [explainPlan, setExplainPlan] = useState<unknown | null>(null);
   const [isFormatting, setIsFormatting] = useState(false);
 
   // Dynamic Schema Fetching from real backend
@@ -38,7 +38,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
   );
 
   const formattedSchema = useMemo(() => {
-      const schema: Record<string, any> = {};
+      const schema: Record<string, { desc: string; columns: unknown }> = {};
       schemaTables.forEach(t => {
           schema[t.name] = {
               desc: `Table: ${t.name}`, // In a real app, description would come from API
@@ -130,7 +130,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
 
   const renderResultRow = (row: unknown, index: number) => (
       <div key={index} className={cn("flex border-b transition-colors h-8", theme.border.default, `hover:${theme.surface.highlight}`)}>
-          {Object.values(row as Record<string, any>).map((v: unknown, j) => (
+          {Object.values(row as Record<string, unknown>).map((v: unknown, j) => (
               <div key={j} className={cn("flex-1 px-4 py-1.5 font-mono text-xs whitespace-nowrap overflow-hidden text-ellipsis border-r last:border-r-0", theme.border.default)}>
                   {String(v)}
               </div>

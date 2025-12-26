@@ -39,12 +39,12 @@ export const useAutoTimeCapture = (currentPath: string, currentCaseId?: string |
   // Reset timer on path/case change
   useEffect(() => {
       if (activeTime > 60 && currentCaseId) {
-          // In a real app, auto-log here. 
+          // In a real app, auto-log here.
       }
       setActiveTime(0);
       lastActivity.current = Date.now();
       setIsIdle(false);
-  }, [currentPath, currentCaseId]);
+  }, [currentPath, currentCaseId, activeTime]);
 
   // Throttled Activity Handler using RAF
   const handleActivity = useCallback(() => {

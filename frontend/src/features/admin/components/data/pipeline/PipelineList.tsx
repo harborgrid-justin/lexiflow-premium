@@ -23,7 +23,7 @@ export const PipelineList: React.FC<PipelineListProps> = ({ pipelines, selectedJ
         theme.border.default,
         selectedJob ? "hidden lg:block" : "block"
     )}>
-        {pipelinesArray.map((p: any) => (
+        {pipelinesArray.map((p: Pipeline) => (
             <div 
                 key={p.id} 
                 onClick={() => onSelectJob(p)}

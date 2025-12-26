@@ -11,7 +11,7 @@ type Theme = typeof tokens.colors.light;
 
 export const getFooterContainer = (theme: Theme) => cn(
   "p-4 border-t shrink-0",
-  theme.surface.muted,
+  theme.surface.highlight,
   theme.border.default
 );
 
@@ -26,7 +26,7 @@ export const getHolographicModeLabel = (theme: Theme) => cn(
 
 export const getToggleButton = (theme: Theme, isEnabled: boolean) => cn(
   "relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none",
-  isEnabled ? theme.action.primary.bg : theme.surface.emphasis
+  isEnabled ? theme.action.primary.bg : theme.surface.active
 );
 
 export const getToggleIndicator = (isEnabled: boolean) => cn(

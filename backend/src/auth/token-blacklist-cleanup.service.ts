@@ -46,7 +46,7 @@ export class TokenBlacklistCleanupService {
   /**
    * Manual cleanup trigger (can be called via admin endpoint)
    */
-  async triggerManualCleanup(): Promise<{ cleanedCount: number; stats: any }> {
+  async triggerManualCleanup(): Promise<{ cleanedCount: number; stats: { storage: string; size: number; useRedis: boolean } }> {
     this.logger.log('Manual cleanup triggered');
     const cleanedCount = await this.tokenBlacklistService.cleanupExpired();
     const stats = await this.tokenBlacklistService.getStats();

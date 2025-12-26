@@ -87,7 +87,7 @@ export class DashboardController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getBillingSummary(@CurrentUser() user: any): Promise<BillingSummaryDto> {
+  async getBillingSummary(@CurrentUser() user: JwtPayload): Promise<BillingSummaryDto> {
     return this.dashboardService.getBillingSummary(user.sub);
   }
 }

@@ -15,7 +15,7 @@ export class Report {
   templateId!: string;
 
   @Column('simple-json', { nullable: true })
-  parameters: any;
+  parameters: Record<string, unknown> | null = null;
 
   @Column({ nullable: true })
   filePath!: string;

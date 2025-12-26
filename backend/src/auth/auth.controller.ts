@@ -27,6 +27,13 @@ import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthenticatedUser } from './interfaces/authenticated-user.interface';
 import { UsersService } from '../users/users.service';
 
+interface RequestWithTokenPayload extends Request {
+  user?: {
+    jti?: string;
+    exp?: number;
+  };
+}
+
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
@@ -102,8 +109,7 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async logout(@Request() req: any, @CurrentUser('id') userId: string) {
-    // Extract JTI and expiration from the decoded token
+  async logout(@Request() req: RequestWithTokenPayload, @CurrentUser('id') userId: string) {
     const jti = req.user?.jti;
     const exp = req.user?.exp;
     return this.authService.logout(userId, jti, exp);
@@ -236,7 +242,7 @@ export class AuthController {
       return { message: 'MFA is not enabled' };
     }
     await this.usersService.setMfaEnabled(userId, false);
-    await this.usersService.setTotpSecret(userId, null as any);
+    await this.usersService.setTotpSecret(userId, '');
     return { message: 'MFA disabled successfully' };
   }
 }

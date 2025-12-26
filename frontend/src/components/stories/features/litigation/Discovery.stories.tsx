@@ -1,25 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CaseId, DiscoveryRequest, DiscoveryType, DiscoveryStatus } from '@/types';
 import { DiscoveryPlatform } from '@features/litigation/discovery/DiscoveryPlatform';
-import { DiscoveryRequests } from '@features/litigation/discovery/DiscoveryRequests';
-import { DiscoveryProductions } from '@features/litigation/discovery/DiscoveryProductions';
-import { DiscoveryESI } from '@features/litigation/discovery/DiscoveryESI';
-import { DiscoveryDepositions } from '@features/litigation/discovery/DiscoveryDepositions';
-import { DiscoveryInterviews } from '@features/litigation/discovery/DiscoveryInterviews';
-import { DiscoveryStipulations } from '@features/litigation/discovery/DiscoveryStipulations';
-import { LegalHolds } from '@features/litigation/discovery/LegalHolds';
-import { PrivilegeLog } from '../../../../features/litigation/discovery/PrivilegeLog';
-import { Custodians } from '@/features/litigation/discovery/Custodians';
-import { VendorManagement } from '@/features/litigation/discovery/VendorManagement';
-import { InitialDisclosureWizard } from '@/features/litigation/discovery/InitialDisclosureWizard';
-import { MotionToCompelBuilder } from '@/features/litigation/discovery/MotionToCompelBuilder';
-import { MotionForSanctions } from '@/features/litigation/discovery/MotionForSanctions';
-import { RequestForAdmission } from '@/features/litigation/discovery/RequestForAdmission';
-import { PerpetuateTestimony } from '@/features/litigation/discovery/PerpetuateTestimony';
-import { TranscriptManager } from '@/features/litigation/discovery/TranscriptManager';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
-import React from 'react';
 
 /**
  * Discovery components provide comprehensive tools for managing the discovery process

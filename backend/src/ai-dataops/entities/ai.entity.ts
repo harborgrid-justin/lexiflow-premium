@@ -24,7 +24,7 @@ export class VectorEmbedding {
   dimensions!: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  metadata: any;
+  metadata: Record<string, unknown> | null = null;
 
   @CreateDateColumn()
   createdAt!: Date;
@@ -51,13 +51,13 @@ export class AIModel {
   description!: string;
 
   @Column({ type: 'jsonb' })
-  config: any;
+  config!: Record<string, unknown>;
 
   @Column({ type: 'varchar', length: 20, default: 'active' })
   status!: 'active' | 'inactive' | 'training';
 
   @Column({ type: 'jsonb', nullable: true })
-  performance: any;
+  performance: Record<string, unknown> | null = null;
 
   @CreateDateColumn()
   createdAt!: Date;

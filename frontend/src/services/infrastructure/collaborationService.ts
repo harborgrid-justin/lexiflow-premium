@@ -460,20 +460,32 @@ export class CollaborationService extends EventEmitter {
         section
       };
 
+      let timeoutId: NodeJS.Timeout | null = null;
+      let resolved = false;
+
       // Listen for lock response
       const responseHandler = (lock: DocumentLock) => {
         if (lock.documentId === documentId && lock.userId === this.currentUserId) {
-          this.off('lock-acquired', responseHandler);
-          resolve(true);
+          if (!resolved) {
+            resolved = true;
+            this.off('lock-acquired', responseHandler);
+            if (timeoutId) {
+              clearTimeout(timeoutId);
+            }
+            resolve(true);
+          }
         }
       };
 
       this.on('lock-acquired', responseHandler);
-      
+
       // Timeout after 5 seconds
-      setTimeout(() => {
-        this.off('lock-acquired', responseHandler);
-        resolve(false);
+      timeoutId = setTimeout(() => {
+        if (!resolved) {
+          resolved = true;
+          this.off('lock-acquired', responseHandler);
+          resolve(false);
+        }
       }, 5000);
 
       this.send('lock-request', lockRequest);

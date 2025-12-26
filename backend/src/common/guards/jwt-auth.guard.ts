@@ -2,6 +2,20 @@ import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
+interface JwtPayload {
+  sub: string;
+  email: string;
+  role: string;
+  [key: string]: unknown;
+}
+
+interface RequestWithAuth {
+  headers: {
+    authorization?: string;
+  };
+  user?: JwtPayload;
+}
+
 /**
  * Consolidated JWT Authentication Guard
  * Validates JWT tokens and checks public route access
@@ -24,12 +38,10 @@ export class JwtAuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    // Skip authentication in development mode
     if (process.env.NODE_ENV === 'development') {
       return true;
     }
 
-    // Check if route is public (supports both 'isPublic' and 'IS_PUBLIC_KEY')
     const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
       context.getHandler(),
       context.getClass(),
@@ -39,7 +51,7 @@ export class JwtAuthGuard implements CanActivate {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<RequestWithAuth>();
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
@@ -51,7 +63,7 @@ export class JwtAuthGuard implements CanActivate {
       if (!jwtSecret) {
         throw new UnauthorizedException('Server configuration error');
       }
-      const payload = await this.jwtService.verifyAsync(token, {
+      const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
         secret: jwtSecret,
       });
       request.user = payload;
@@ -65,8 +77,12 @@ export class JwtAuthGuard implements CanActivate {
     return true;
   }
 
-  private extractTokenFromHeader(request: any): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+  private extractTokenFromHeader(request: RequestWithAuth): string | undefined {
+    const authHeader = request.headers.authorization;
+    if (!authHeader) {
+      return undefined;
+    }
+    const [type, token] = authHeader.split(' ');
     return type === 'Bearer' ? token : undefined;
   }
 }

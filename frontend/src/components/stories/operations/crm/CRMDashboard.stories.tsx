@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CRMDashboard } from '../../../../features/operations/crm/CRMDashboard';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
-import React from 'react';
 
 /**
  * CRMDashboard provides client relationship management tools including contact

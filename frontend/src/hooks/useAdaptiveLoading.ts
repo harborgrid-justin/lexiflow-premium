@@ -111,7 +111,7 @@ const requestCache = new Map<string, Promise<unknown>>();
  * return <CaseDetail data={data} />;
  * ```
  */
-export function useAdaptiveLoading<T = any>(
+export function useAdaptiveLoading<T>(
   options: UseAdaptiveLoadingOptions<T>
 ): UseAdaptiveLoadingReturn<T> {
   const {

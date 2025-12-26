@@ -68,7 +68,7 @@
  * Worker task with promise resolution callbacks
  * @template T - Type of value returned by the task
  */
-interface WorkerTask<T = any> {
+interface WorkerTask<T = unknown> {
   resolve: (value: T) => void;
   reject: (error: Error) => void;
   timeout?: number;
@@ -448,6 +448,7 @@ export class WorkerPool {
 // ============================================================================
 class WorkerPoolManager {
   private pools = new Map<string, WorkerPool>();
+  private devStatsInterval: number | null = null;
 
   /**
    * Get or create a named worker pool
@@ -475,11 +476,16 @@ class WorkerPoolManager {
   }
 
   /**
-   * Terminate all pools
+   * Terminate all pools and cleanup resources
    */
   terminateAll(): void {
     this.pools.forEach(pool => pool.terminate());
     this.pools.clear();
+
+    if (this.devStatsInterval !== null) {
+      clearInterval(this.devStatsInterval);
+      this.devStatsInterval = null;
+    }
   }
 
   /**
@@ -491,6 +497,31 @@ class WorkerPoolManager {
       stats[name] = pool.getStats();
     });
     return stats;
+  }
+
+  /**
+   * Start dev stats logging interval
+   * @private
+   */
+  private startDevStatsLogging(): void {
+    if (this.devStatsInterval === null) {
+      this.devStatsInterval = window.setInterval(() => {
+        const stats = this.getAllStats();
+        const activePools = Object.entries(stats).filter(([, s]) => s.size > 0);
+
+        if (activePools.length > 0) {
+          console.debug('[WorkerPool] Active pools:', stats);
+        }
+      }, 60 * 1000);
+    }
+  }
+
+  /**
+   * Initialize dev mode features
+   * @private
+   */
+  initDevMode(): void {
+    this.startDevStatsLogging();
   }
 }
 
@@ -512,16 +543,13 @@ if (typeof window !== 'undefined') {
 // DEVELOPMENT HELPERS
 // ============================================================================
 if (import.meta.env.DEV) {
-  (window as any).__workerPoolManager = PoolManager;
-  
-  // Log pool stats every minute in dev
-  setInterval(() => {
-    const stats = PoolManager.getAllStats();
-    const activePools = Object.entries(stats).filter(([_, s]) => s.size > 0);
-    
-    if (activePools.length > 0) {
-      console.debug('[WorkerPool] Active pools:', stats);
-    }
-  }, 60 * 1000);
+  interface WindowWithDebug extends Window {
+    __workerPoolManager?: WorkerPoolManager;
+  }
+
+  (window as WindowWithDebug).__workerPoolManager = PoolManager;
+
+  // Start dev stats logging
+  PoolManager.initDevMode();
 }
 

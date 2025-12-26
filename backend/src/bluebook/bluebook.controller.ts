@@ -95,11 +95,10 @@ export class BluebookController {
   @ApiResponse({ status: 409, description: 'Resource already exists' })
   batchFormat(@Body() dto: BatchFormatDto) {
     const result = this.bluebookService.batchFormat(dto.citations, {
-      format: dto.format,
       italicizeCaseNames: dto.italicizeCaseNames,
       useSmallCaps: dto.useSmallCaps,
     });
-    
+
     return result;
   }
 

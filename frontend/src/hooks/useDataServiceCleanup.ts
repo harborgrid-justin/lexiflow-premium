@@ -95,15 +95,24 @@ export function useDataServiceMemoryStats(refreshInterval: number = 5000) {
     // Dynamically import to avoid circular dependency
     import('../services/data/dataService').then(({ getDataServiceMemoryStats }) => {
       const updateStats = () => {
-        const memStats = getDataServiceMemoryStats();
+        const memStats = getDataServiceMemoryStats() as {
+          repositoryCount?: number;
+          totalListeners: number;
+          refactoredSingletons: number;
+          legacyRepositories: number;
+          totalRepositories: number;
+          estimatedMemoryKB?: number;
+          repositories?: Array<{ name: string; listeners: number }>;
+          refactoredKeys: string[];
+        };
         setStats({
-          repositoryCount: (memStats as any).repositoryCount || 0,
+          repositoryCount: memStats.repositoryCount || 0,
           totalListeners: memStats.totalListeners || 0,
           refactoredSingletons: memStats.refactoredSingletons || 0,
           legacyRepositories: memStats.legacyRepositories || 0,
           totalRepositories: memStats.totalRepositories || 0,
-          estimatedMemoryKB: (memStats as any).estimatedMemoryKB || 0,
-          repositories: (memStats as any).repositories || [],
+          estimatedMemoryKB: memStats.estimatedMemoryKB || 0,
+          repositories: memStats.repositories || [],
           refactoredKeys: memStats.refactoredKeys || [],
         });
       };

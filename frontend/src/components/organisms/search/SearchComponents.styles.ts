@@ -5,9 +5,6 @@
  */
 
 import { cn } from '@/utils/cn';
-import type { tokens } from '@/components/theme/tokens';
-
-type Theme = typeof tokens.colors.light;
 
 // CategoryFilter styles
 export const categoryFilterContainer = "flex gap-1 px-2 py-1 border-b";

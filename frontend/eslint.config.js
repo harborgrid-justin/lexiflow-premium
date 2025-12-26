@@ -1,6 +1,4 @@
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import storybook from "eslint-plugin-storybook";
-
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import react from 'eslint-plugin-react';
@@ -9,66 +7,71 @@ import globals from 'globals';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 
-// Get current directory for tsconfigRootDir
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// DEBUGGING: Uncomment to see resolved paths
-// console.log('[ESLint Debug] Frontend config loaded');
-// console.log('[ESLint Debug] tsconfigRootDir:', __dirname);
-// console.log('[ESLint Debug] tsconfig path:', __dirname + '/tsconfig.json');
-
-export default tseslint.config(js.configs.recommended, ...tseslint.configs.recommended, {
-  files: ['**/*.{ts,tsx}'],
-  languageOptions: {
-    globals: {
-      ...globals.browser,
-      ...globals.es2021,
-      ...globals.node,
+export default tseslint.config(
+  js.configs.recommended, 
+  ...tseslint.configs.recommended, 
+  {
+    // Apply this block to all relevant files
+    files: ['**/*.{ts,tsx,mts,cts}'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
+        ...globals.node,
+      },
+      parserOptions: {
+        // Modern Vite 7 / TS-ESLint v8 replacement for 'project'
+        projectService: {
+          allowDefaultProject: [
+            'vite.config.ts', 
+            'eslint.config.js',
+            'tailwind.config.ts'
+          ],
+          defaultProject: './tsconfig.json',
+        },
+        tsconfigRootDir: __dirname,
+        ecmaFeatures: { jsx: true },
+      },
     },
-    parserOptions: {
-      project: './tsconfig.json',
-      tsconfigRootDir: __dirname,
-      ecmaFeatures: { jsx: true },
-      
-      // Enterprise debugging options
-      EXPERIMENTAL_useProjectService: false,
-      debugLevel: process.env.ESLINT_DEBUG ? ['typescript-eslint'] : undefined,
+    plugins: {
+      react,
+      'react-hooks': reactHooks,
     },
-  },
-  plugins: {
-    react,
-    'react-hooks': reactHooks,
-  },
-  settings: {
-    react: { version: 'detect' },
-  },
-  rules: {
-    '@typescript-eslint/no-explicit-any': 'warn',
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-empty-function': 'off',
-    '@typescript-eslint/no-empty-object-type': 'off',
-    'react/react-in-jsx-scope': 'off',
-    'react/prop-types': 'off',
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
-    'no-console': 'off',
-  },
-}, {
-  ignores: [
-    'node_modules/**',
-    'dist/**',
-    'build/**',
-    'coverage/**',
-    '**/*.js',
-    '**/*.d.ts',
-    '__tests__/**',
-    'archived/**',
-    'cypress/**',
-    '**/*.test.ts',
-    '**/*.test.tsx',
-    '**/*.spec.ts',
-    '**/*.spec.tsx',
-  ],
-}, storybook.configs["flat/recommended"]);
+    settings: {
+      react: { version: 'detect' },
+    },
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/no-empty-function': 'off',
+      '@typescript-eslint/no-empty-object-type': 'off',
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+      'no-console': 'off',
+    },
+  }, 
+  {
+    ignores: [
+      'node_modules/**',
+      'dist/**',
+      'build/**',
+      'coverage/**',
+      '**/*.js', // Note: If you want to lint JS configs, remove this or move it
+      '**/*.d.ts',
+      '__tests__/**',
+      'archived/**',
+      'cypress/**',
+      '**/*.test.ts',
+      '**/*.test.tsx',
+      '**/*.spec.ts',
+      '**/*.spec.tsx',
+    ],
+  }, 
+  storybook.configs["flat/recommended"]
+);

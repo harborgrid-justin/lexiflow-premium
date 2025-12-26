@@ -26,7 +26,7 @@ import { Input, TextArea } from '@/components';
 
 // Hooks & Context
 import { useTheme } from '@/providers';
-import { useQuery, useMutation } from '@hooks/useQueryHooks.ts';
+import { useQuery, useMutation } from '@hooks/useQueryHooks';
 import { useWindow } from '@/providers';
 
 // Services & Utils

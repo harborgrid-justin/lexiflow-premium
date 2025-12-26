@@ -2,11 +2,13 @@ import React, { useEffect } from 'react';
 import { Sidebar } from '@/components/organisms/Sidebar/Sidebar';
 import { AppShell } from '@/components/templates/AppShell/AppShell';
 import { AppHeader } from '@/components/organisms/AppHeader/AppHeader';
-import { ThemeProvider } from '@/providers';
-import { ToastProvider } from '@/providers';
-import { WindowProvider } from '@/providers';
-import { SyncProvider } from '@/providers';
-import { DataSourceProvider } from '@/providers';
+import { 
+  ThemeProvider, 
+  ToastProvider, 
+  WindowProvider, 
+  SyncProvider, 
+  DataSourceProvider 
+} from '@/providers';
 import { HolographicDock } from '@/components/organisms/HolographicDock/HolographicDock';
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
@@ -20,7 +22,7 @@ import { backendDiscovery } from '@/services';
 // Initialize Module Registry
 initializeModules();
 
-const InnerApp = () => {
+const InnerApp: React.FC = () => {
   const {
     activeView,
     selectedCase,
@@ -102,16 +104,14 @@ const InnerApp = () => {
   );
 };
 
-const App = () => {
-  // Enable memory cleanup and optional logging in development
+const App: React.FC = () => {
+  // Use Vite built-in env flags
   useDataServiceCleanup({
-    enableLogging: process.env.NODE_ENV === 'development',
+    enableLogging: import.meta.env.DEV,
   });
 
-  // Initialize backend discovery service on app mount
   useEffect(() => {
     backendDiscovery.start();
-
     return () => {
       backendDiscovery.stop();
     };

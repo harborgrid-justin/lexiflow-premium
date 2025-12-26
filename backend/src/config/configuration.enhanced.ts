@@ -1,16 +1,14 @@
 export default () => ({
   // Application
   nodeEnv: process.env.NODE_ENV || 'development',
-  port: parseInt(process.env.PORT || '3001', 10),
+  port: parseInt(process.env.PORT || '5000', 10),
 
   // CORS
   cors: {
-    origin: process.env.CORS_ORIGIN || ((origin: any, callback: any) => {
-      if (!origin || /^http:\/\/localhost:(3[0-9]{3})$/.test(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
+    origin: process.env.CORS_ORIGIN || ((_origin: any, callback: any) => {
+      // Allow all origins in development (for accessing from any IP)
+      // In production, set CORS_ORIGIN environment variable to restrict
+      callback(null, true);
     }),
     credentials: true,
   },

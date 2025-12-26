@@ -3,7 +3,7 @@ import {Card} from '@/components';
 import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar} from 'recharts';
 import {useTheme} from '@/providers';
 import {DataService} from '@/services';
-import {useQuery} from '@hooks/useQueryHooks.ts';
+import {useQuery} from '@hooks/useQueryHooks';
 import {FinancialPerformanceData} from '@/types';
 
 export const FinancialPerformance: React.FC = () => {

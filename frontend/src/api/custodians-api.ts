@@ -69,3 +69,6 @@ export class CustodiansApiService {
     return this.getAll({ caseId });
   }
 }
+
+// Export the service instance
+export const custodiansApi = new CustodiansApiService();

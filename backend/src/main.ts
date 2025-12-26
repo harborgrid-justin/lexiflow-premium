@@ -72,9 +72,9 @@ async function bootstrap() {
   // Swagger API Documentation
   setupSwagger(app);
 
-  // Start server
+  // Start server on all interfaces (0.0.0.0) to accept connections from any IP
   const port = configService.get('port');
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
 
   const env = configService.get('nodeEnv');
   const telemetryStatus = process.env.OTEL_ENABLED === 'true' ? 'Enabled' : 'Disabled';

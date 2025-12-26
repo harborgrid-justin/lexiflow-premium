@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { MatterFinancialsCenter } from '../../../../features/matters/components/financials/MatterFinancialsCenter';
+import { CaseFinancialsCenter } from '../../../../features/cases/components/financials/CaseFinancialsCenter';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
 import React from 'react';

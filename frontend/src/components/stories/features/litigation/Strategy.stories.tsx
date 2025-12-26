@@ -9,7 +9,7 @@ import { PlaybookDetail } from '../../../../features/litigation/strategy/Playboo
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
 import React, { useState } from 'react';
-import type { WorkflowNode, WorkflowConnection, NodeType } from '../../../../features/matters/components/workflow/builder/types';
+import type { WorkflowNode, WorkflowConnection, NodeType } from '../../../../features/cases/components/workflow/builder/types';
 
 /**
  * Litigation Strategy components provide visual strategy planning tools including

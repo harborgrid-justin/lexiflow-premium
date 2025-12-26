@@ -2,7 +2,7 @@
 import { Repository } from '../../core/Repository';
 import { STORES } from '../db';
 import { Matter, MatterId, MatterStatus } from '@/types';
-import { mattersApi } from '@/api/matters-api';
+import { casesApi } from '@/api/cases-api';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
 export class MatterRepository extends Repository<Matter> {
@@ -19,7 +19,7 @@ export class MatterRepository extends Repository<Matter> {
   async getAll(): Promise<Matter[]> {
     if (this.useBackend) {
       try {
-        return await mattersApi.getAll();
+        return await casesApi.getAll();
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
         return super.getAll();
@@ -34,7 +34,7 @@ export class MatterRepository extends Repository<Matter> {
   async getById(id: MatterId): Promise<Matter | undefined> {
     if (this.useBackend) {
       try {
-        return await mattersApi.getById(id);
+        return await casesApi.getById(id);
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
         return super.getById(id);
@@ -49,7 +49,7 @@ export class MatterRepository extends Repository<Matter> {
   async add(matter: Matter): Promise<Matter> {
     if (this.useBackend) {
       try {
-        return await mattersApi.create(matter);
+        return await casesApi.create(matter);
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
         return super.add(matter);
@@ -64,7 +64,7 @@ export class MatterRepository extends Repository<Matter> {
   async update(id: MatterId, updates: Partial<Matter>): Promise<Matter> {
     if (this.useBackend) {
       try {
-        return await mattersApi.update(id, updates);
+        return await casesApi.update(id, updates);
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
         return super.update(id, updates);
@@ -79,7 +79,7 @@ export class MatterRepository extends Repository<Matter> {
   async delete(id: MatterId): Promise<void> {
     if (this.useBackend) {
       try {
-        await mattersApi.delete(id);
+        await casesApi.delete(id);
         return;
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
@@ -95,7 +95,7 @@ export class MatterRepository extends Repository<Matter> {
   async getByStatus(status: string): Promise<Matter[]> {
     if (this.useBackend) {
       try {
-        return await mattersApi.getByStatus(status);
+        return await casesApi.getByStatus(status);
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
       }
@@ -109,7 +109,7 @@ export class MatterRepository extends Repository<Matter> {
   async getByClientId(clientId: string): Promise<Matter[]> {
     if (this.useBackend) {
       try {
-        return await mattersApi.getByClient(clientId);
+        return await casesApi.getByClient(clientId);
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
       }
@@ -124,7 +124,7 @@ export class MatterRepository extends Repository<Matter> {
   async getByLeadAttorney(leadAttorneyId: string): Promise<Matter[]> {
     if (this.useBackend) {
       try {
-        return await mattersApi.getByAttorney(leadAttorneyId);
+        return await casesApi.getByAttorney(leadAttorneyId);
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
       }
@@ -150,7 +150,7 @@ export class MatterRepository extends Repository<Matter> {
   async search(query: string): Promise<Matter[]> {
     if (this.useBackend) {
       try {
-        return await mattersApi.search(query);
+        return await casesApi.search(query);
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
       }

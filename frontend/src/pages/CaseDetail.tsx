@@ -17,29 +17,29 @@ import { Plus } from 'lucide-react';
 // ============================================================================
 // INTERNAL DEPENDENCIES - COMPONENTS
 // ============================================================================
-import { CaseDetailHeader } from '@/features/matters/components/detail/CaseDetailHeader';
-import { CaseDetailNavigation } from '@/features/matters/components/detail/layout/CaseDetailNavigation';
-import { CaseDetailMobileMenu } from '@/features/matters/components/detail/CaseDetailMobileMenu';
-import { MobileTimelineOverlay } from '@/features/matters/components/detail/MobileTimelineOverlay';
+import { CaseDetailHeader } from '@/features/cases/components/detail/CaseDetailHeader';
+import { CaseDetailNavigation } from '@/features/cases/components/detail/layout/CaseDetailNavigation';
+import { CaseDetailMobileMenu } from '@/features/cases/components/detail/CaseDetailMobileMenu';
+import { MobileTimelineOverlay } from '@/features/cases/components/detail/MobileTimelineOverlay';
 
 // Tab Content Components
-import { CaseOverview } from '@/features/matters/components/detail/overview/CaseOverview';
-import { CaseParties } from '@/features/matters/components/detail/CaseParties';
-import { CaseTimeline } from '@/features/matters/components/detail/CaseTimeline';
-import { CaseStrategy } from '@/features/matters/components/detail/CaseStrategy';
-import { CaseArgumentManager } from '@/features/matters/components/detail/CaseArgumentManager';
-import { CaseRiskManager } from '@/features/matters/components/detail/CaseRiskManager';
-import { CasePlanning } from '@/features/matters/components/detail/CasePlanning';
-import { CaseProjects } from '@/features/matters/components/detail/projects/CaseProjects';
-import { CaseWorkflow } from '@/features/matters/components/detail/CaseWorkflow';
-import { CaseCollaboration } from '@/features/matters/components/detail/collaboration/CaseCollaboration';
-import { CaseMotions } from '@/features/matters/components/detail/motions/CaseMotions';
-import { CaseDiscovery } from '@/features/matters/components/detail/CaseDiscovery';
-import { CaseEvidence } from '@/features/matters/components/detail/CaseEvidence';
-import { CaseDocuments } from '@/features/matters/components/detail/CaseDocuments';
-import { CaseDrafting } from '@/features/matters/components/detail/CaseDrafting';
-import { CaseContractReview } from '@/features/matters/components/detail/CaseContractReview';
-import { CaseBilling } from '@/features/matters/components/detail/CaseBilling';
+import { CaseOverview } from '@/features/cases/components/detail/overview/CaseOverview';
+import { CaseParties } from '@/features/cases/components/detail/CaseParties';
+import { CaseTimeline } from '@/features/cases/components/detail/CaseTimeline';
+import { CaseStrategy } from '@/features/cases/components/detail/CaseStrategy';
+import { CaseArgumentManager } from '@/features/cases/components/detail/CaseArgumentManager';
+import { CaseRiskManager } from '@/features/cases/components/detail/CaseRiskManager';
+import { CasePlanning } from '@/features/cases/components/detail/CasePlanning';
+import { CaseProjects } from '@/features/cases/components/detail/projects/CaseProjects';
+import { CaseWorkflow } from '@/features/cases/components/detail/CaseWorkflow';
+import { CaseCollaboration } from '@/features/cases/components/detail/collaboration/CaseCollaboration';
+import { CaseMotions } from '@/features/cases/components/detail/motions/CaseMotions';
+import { CaseDiscovery } from '@/features/cases/components/detail/CaseDiscovery';
+import { CaseEvidence } from '@/features/cases/components/detail/CaseEvidence';
+import { CaseDocuments } from '@/features/cases/components/detail/CaseDocuments';
+import { CaseDrafting } from '@/features/cases/components/detail/CaseDrafting';
+import { CaseContractReview } from '@/features/cases/components/detail/CaseContractReview';
+import { CaseBilling } from '@/features/cases/components/detail/CaseBilling';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES - HOOKS & CONTEXT
@@ -51,7 +51,7 @@ import { useCaseDetail } from '@/hooks/useCaseDetail';
 // INTERNAL DEPENDENCIES - SERVICES & UTILS
 // ============================================================================
 import { cn } from '@/utils/cn';
-import { CASE_DETAIL_TABS } from '../features/matters/components/detail/CaseDetailConfig';
+import { CASE_DETAIL_TABS } from '../features/cases/components/detail/CaseDetailConfig';
 
 // ============================================================================
 // TYPES & INTERFACES

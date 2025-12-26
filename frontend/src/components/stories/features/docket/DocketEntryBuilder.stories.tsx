@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn, expect, userEvent, within } from 'storybook/test';
-import { DocketEntryBuilder } from '@/features/matters/components/docket/DocketEntryBuilder';
+import { DocketEntryBuilder } from '@/features/cases/components/docket/DocketEntryBuilder';
 import { DocketEntry, DocketEntryType } from '@/types';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';

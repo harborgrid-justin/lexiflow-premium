@@ -101,7 +101,7 @@ export * from './judge-stats-api';
 export * from './jurisdiction-api';
 export * from './knowledge-api';
 export * from './legal-holds-api';
-export * from './matters-api';
+export * from './cases-api';
 export * from './messaging-api';
 export * from './metrics-api';
 export * from './monitoring-api';

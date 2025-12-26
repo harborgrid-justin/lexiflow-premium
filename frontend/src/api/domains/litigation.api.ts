@@ -10,7 +10,6 @@ import { PleadingsApiService } from '../pleadings-api';
 import { PartiesApiService } from '../parties-api';
 import { CaseTeamsApiService } from '../case-teams-api';
 import { CasePhasesApiService } from '../case-phases-api';
-import { MattersApiService } from '../matters-api';
 
 // Export service classes
 export {
@@ -21,7 +20,6 @@ export {
   PartiesApiService,
   CaseTeamsApiService,
   CasePhasesApiService,
-  MattersApiService,
 };
 
 // Export singleton instances
@@ -33,5 +31,4 @@ export const litigationApi = {
   parties: new PartiesApiService(),
   caseTeams: new CaseTeamsApiService(),
   casePhases: new CasePhasesApiService(),
-  matters: new MattersApiService(),
 } as const;

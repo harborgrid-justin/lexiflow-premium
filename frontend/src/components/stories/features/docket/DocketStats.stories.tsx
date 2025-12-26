@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { DocketStats } from '@/features/matters/components/docket/DocketStats';
+import { DocketStats } from '@/features/cases/components/docket/DocketStats';
 import { Button } from '@/components/atoms/Button';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { RefreshCw, Download, FileText, Plus } from 'lucide-react';

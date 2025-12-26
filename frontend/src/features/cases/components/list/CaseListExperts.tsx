@@ -46,14 +46,17 @@ export const CaseListExperts: React.FC = () => {
   // Performance Engine: Caching
   const { data: experts = [], isLoading } = useQuery<Expert[]>(
       ['advisors', 'experts'],
-      DataService.warRoom.getExperts
+      () => DataService.warRoom.getExperts()
   );
 
   if (isLoading) return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600"/></div>;
 
+  // Ensure experts is an array
+  const expertsList = Array.isArray(experts) ? experts : [];
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {experts.map(exp => (
+      {expertsList.map(exp => (
         <div key={exp.id} className={cn("p-6 rounded-lg border shadow-sm hover:shadow-md transition-all group", theme.surface.default, theme.border.default)}>
           <div className="flex justify-between items-start mb-4">
             <div className="h-12 w-12 bg-indigo-100 rounded-full flex items-center justify-center font-bold text-indigo-700 text-lg group-hover:bg-indigo-600 group-hover:text-white transition-colors">
@@ -70,7 +73,7 @@ export const CaseListExperts: React.FC = () => {
           <Button variant="outline" size="sm" className="w-full mt-4">View CV & Conflicts</Button>
         </div>
       ))}
-      {experts.length === 0 && (
+      {expertsList.length === 0 && (
           <div className="col-span-3 py-12 text-center text-slate-400 border-2 border-dashed rounded-lg">
               No expert witnesses retained.
           </div>

@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
   VersionColumn,
   Index,
 } from 'typeorm';
@@ -157,6 +158,6 @@ export class TrustAccount {
   @Column({ name: 'updated_by', type: 'uuid', nullable: true })
   updatedBy!: string;
 
-  @Column({ type: 'timestamp', nullable: true })
-  deletedAt!: Date;
+  @DeleteDateColumn({ name: 'deleted_at', nullable: true })
+  deletedAt?: Date;
 }

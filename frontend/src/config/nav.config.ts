@@ -10,7 +10,8 @@ import {
   Calendar, Book, DollarSign, Users, BarChart3, Settings,
   FileQuestion, Fingerprint, MessageSquare, Globe, GitBranch,
   ScrollText, BookOpen, Building2, Target, StickyNote, Send, Library, Gavel, Network, Database, UserCircle, PenTool, Milestone, LucideIcon,
-  Lightbulb, TrendingUp, LayoutGrid, ClipboardCheck, Wallet, FolderKanban
+  Lightbulb, TrendingUp, LayoutGrid, ClipboardCheck, Wallet, FolderKanban,
+  Home, Package, PieChart, FileSpreadsheet, Receipt, MapPin, Repeat, Share2, Trash2, ShoppingCart, AlertTriangle, UserCog, FileCheck
 } from 'lucide-react';
 import { AppView, NavCategory } from '../types';
 import { PATHS } from './paths.config';
@@ -89,6 +90,35 @@ export const NAVIGATION_ITEMS: NavItemConfig[] = [
   { id: PATHS.CLAUSES, label: 'Clause Library', icon: Book, category: 'Knowledge' },
   { id: PATHS.JURISDICTION, label: 'Jurisdictions', icon: Globe, category: 'Knowledge' },
   { id: PATHS.RULES_ENGINE, label: 'Rules Engine', icon: Gavel, category: 'Knowledge' },
+
+  // ============================================================================
+  // REAL ESTATE DIVISION - Property & Asset Management
+  // ============================================================================
+  {
+    id: PATHS.REAL_ESTATE,
+    label: 'Real Estate Division',
+    icon: Home,
+    category: 'Operations',
+    children: [
+      // Portfolio Management
+      { id: PATHS.RE_PORTFOLIO_SUMMARY, label: 'Portfolio Summary', icon: LayoutGrid },
+      { id: PATHS.RE_INVENTORY, label: 'Inventory (RPUID)', icon: Package },
+      { id: PATHS.RE_UTILIZATION, label: 'Utilization Analytics', icon: PieChart },
+      
+      // Transactions
+      { id: PATHS.RE_OUTGRANTS, label: 'Outgrants & Revenue', icon: Receipt },
+      { id: PATHS.RE_SOLICITATIONS, label: 'Solicitations', icon: FileSpreadsheet },
+      { id: PATHS.RE_RELOCATION, label: 'Relocation', icon: MapPin },
+      { id: PATHS.RE_COST_SHARE, label: 'Cost Share Programs', icon: Share2 },
+      { id: PATHS.RE_DISPOSAL, label: 'Disposal Actions', icon: Trash2 },
+      { id: PATHS.RE_ACQUISITION, label: 'Land Acquisition', icon: ShoppingCart },
+      { id: PATHS.RE_ENCROACHMENT, label: 'Encroachment', icon: AlertTriangle },
+      
+      // Administration
+      { id: PATHS.RE_USER_MGMT, label: 'User Management', icon: UserCog },
+      { id: PATHS.RE_AUDIT, label: 'Audit Readiness (CFI)', icon: FileCheck },
+    ]
+  },
 
   // ============================================================================
   // ADMIN - System Administration (Admin-Only)

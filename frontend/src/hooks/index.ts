@@ -14,6 +14,10 @@ export type { UseListNavigationConfig, UseListNavigationResult, NavigationMode }
 // Backend Health Monitoring (replaces useBackendDiscovery)
 export { useBackendHealth } from './useBackendHealth';
 
+// UI Interaction Hooks (Best Practices Applied)
+export { useResizeObserver, type Dimensions } from './useResizeObserver';
+export { usePanZoom, type PanZoomState, type PanZoomControls } from './usePanZoom';
+
 // ============================================================================
 // CORE LOGIC & UTILITIES
 // ============================================================================

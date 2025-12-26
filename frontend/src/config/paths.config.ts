@@ -58,7 +58,22 @@ export const PATHS = {
   PROFILE: 'profile',
   DAF: 'daf',
   PLEADING_BUILDER: 'pleading_builder',
-  LITIGATION_BUILDER: 'litigation_builder'
+  LITIGATION_BUILDER: 'litigation_builder',
+  
+  // Real Estate Division
+  REAL_ESTATE: 'real_estate',
+  RE_PORTFOLIO_SUMMARY: 'real_estate/portfolio_summary',
+  RE_INVENTORY: 'real_estate/inventory',
+  RE_UTILIZATION: 'real_estate/utilization',
+  RE_OUTGRANTS: 'real_estate/outgrants',
+  RE_SOLICITATIONS: 'real_estate/solicitations',
+  RE_RELOCATION: 'real_estate/relocation',
+  RE_COST_SHARE: 'real_estate/cost_share',
+  RE_DISPOSAL: 'real_estate/disposal',
+  RE_ACQUISITION: 'real_estate/acquisition',
+  RE_ENCROACHMENT: 'real_estate/encroachment',
+  RE_USER_MGMT: 'real_estate/user_management',
+  RE_AUDIT: 'real_estate/audit_readiness'
 } as const;
 
 export type AppPath = typeof PATHS[keyof typeof PATHS];

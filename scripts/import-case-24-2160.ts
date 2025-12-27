@@ -2,9 +2,15 @@ import { XMLParser } from 'fast-xml-parser';
 import axios from 'axios';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+import * as dotenv from 'dotenv';
 
-// Configuration
-const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://localhost:3000';
+// Load backend .env file
+dotenv.config({ path: resolve(__dirname, '../backend/.env') });
+
+// Configuration from backend .env
+const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://localhost:5000';
+const AUTH_EMAIL = process.env.AUTH_EMAIL || 'admin@lexiflow.com';
+const AUTH_PASSWORD = process.env.AUTH_PASSWORD || 'Admin123!@#';
 
 // Full XML data from the user
 const FULL_XML_DATA = `<?xml version="1.0" encoding="UTF-8" ?>
@@ -315,7 +321,39 @@ function inferDocketEntryType(text: string): string {
   return 'Other';
 }
 
-async function importCaseToBackend(caseData: CourtCaseImport) {
+/**
+ * Login and get JWT token
+ */
+async function login(): Promise<string> {
+  try {
+    console.log('🔐 Authenticating...');
+    console.log(`   Email: ${AUTH_EMAIL}`);
+    console.log(`   URL: ${BACKEND_API_URL}/api/v1/auth/login`);
+    
+    const response = await axios.post(`${BACKEND_API_URL}/api/v1/auth/login`, {
+      email: AUTH_EMAIL,
+      password: AUTH_PASSWORD,
+    });
+    
+    console.log('✅ Authentication successful');
+    return response.data.accessToken;
+  } catch (error: any) {
+    console.error('❌ Authentication failed');
+    console.error('Error message:', error.message);
+    if (error.response) {
+      console.error('Status code:', error.response.status);
+      console.error('Response data:', JSON.stringify(error.response.data, null, 2));
+    } else if (error.request) {
+      console.error('No response received from server');
+      console.error('Request:', error.request);
+    } else {
+      console.error('Error setting up request:', error.message);
+    }
+    throw new Error('Failed to authenticate');
+  }
+}
+
+async function importCaseToBackend(caseData: CourtCaseImport, token: string) {
   try {
     console.log(`\n📋 Importing case: ${caseData.caseNumber} - ${caseData.title}`);
     
@@ -387,11 +425,12 @@ async function importCaseToBackend(caseData: CourtCaseImport) {
       metadata,
     };
 
-    const postUrl = `${BACKEND_API_URL}/cases`;
+    const postUrl = `${BACKEND_API_URL}/api/v1/cases`;
     console.log(`   POST ${postUrl}`);
     const caseResponse = await axios.post(
       postUrl,
-      casePayload
+      casePayload,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     
     const createdCase = caseResponse.data;
@@ -461,7 +500,9 @@ async function importCaseToBackend(caseData: CourtCaseImport) {
           },
         };
 
-        await axios.post(`${BACKEND_API_URL}/parties`, partyPayload);
+        await axios.post(`${BACKEND_API_URL}/api/v1/parties`, partyPayload, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         console.log(`   ✓ Added party: ${party.name.substring(0, 50)}...`);
         console.log(`     Attorneys: ${party.attorneys.length} (${party.attorneys.map(a => a.lastName).join(', ')})`);
       } catch (error: any) {
@@ -487,7 +528,9 @@ async function importCaseToBackend(caseData: CourtCaseImport) {
           ecfUrl: entry.docLink,
         };
 
-        await axios.post(`${BACKEND_API_URL}/docket`, docketPayload);
+        await axios.post(`${BACKEND_API_URL}/api/v1/docket`, docketPayload, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         
         if (sequenceNumber % 10 === 0) {
           console.log(`   ✓ Added ${sequenceNumber} docket entries...`);
@@ -649,7 +692,8 @@ async function main() {
     console.log(`   - Associated Cases: ${parsedCase.associatedCases?.length || 0}`);
     console.log(`   - Docket Entries: ${parsedCase.docketEntries.length}`);
     
-    const caseId = await importCaseToBackend(parsedCase);
+    const token = await login();
+    const caseId = await importCaseToBackend(parsedCase, token);
     
     console.log(`\n🎉 Import successful! Case ID: ${caseId}`);
   } catch (error: any) {

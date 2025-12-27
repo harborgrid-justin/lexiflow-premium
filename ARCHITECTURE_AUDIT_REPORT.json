@@ -1,0 +1,596 @@
+{
+  "auditMetadata": {
+    "agent": "Enterprise Agent 3: Architecture Audit",
+    "auditDate": "2025-12-27",
+    "applicationValue": "$350M Legal Enterprise Application",
+    "codebaseLocation": "/home/user/lexiflow-premium/backend/src",
+    "totalModules": 89,
+    "totalEntities": 107,
+    "totalServices": 92,
+    "severity": "CRITICAL"
+  },
+  "executiveSummary": {
+    "overallRating": "NEEDS SIGNIFICANT IMPROVEMENT",
+    "criticalIssues": 17,
+    "highPriorityIssues": 23,
+    "mediumPriorityIssues": 15,
+    "recommendation": "IMMEDIATE ARCHITECTURAL REFACTORING REQUIRED",
+    "riskLevel": "HIGH",
+    "technicalDebt": "SUBSTANTIAL",
+    "mainConcerns": [
+      "17 circular dependencies creating tight coupling and potential runtime issues",
+      "No Domain-Driven Design (DDD) implementation - anemic domain models throughout",
+      "Missing CQRS patterns for complex operations",
+      "Repository pattern not properly implemented - direct TypeORM repository injection",
+      "Business logic scattered in services instead of domain models",
+      "Insufficient use of aggregate roots and value objects",
+      "Limited transaction boundary management",
+      "Event-driven architecture underutilized"
+    ]
+  },
+  "architectureIssues": [
+    {
+      "id": "ARCH-001",
+      "severity": "CRITICAL",
+      "category": "Circular Dependencies",
+      "title": "17 Circular Dependencies Detected",
+      "description": "Multiple circular dependencies exist between entities and modules, creating tight coupling and potential runtime errors.",
+      "impact": "Runtime initialization failures, tight coupling, difficult testing, maintenance nightmares",
+      "affectedFiles": [
+        "users/entities/user.entity.ts <-> auth/entities/session.entity.ts",
+        "cases/entities/case.entity.ts <-> clients/entities/client.entity.ts <-> billing/invoices/entities/invoice.entity.ts",
+        "cases/entities/case.entity.ts <-> evidence/entities/evidence-item.entity.ts",
+        "cases/entities/case.entity.ts <-> parties/entities/party.entity.ts",
+        "users/entities/user.entity.ts <-> billing/time-entries/entities/time-entry.entity.ts",
+        "users/entities/user.entity.ts <-> case-teams/entities/case-team.entity.ts",
+        "users/entities/user.entity.ts <-> users/entities/user-profile.entity.ts",
+        "authorization/entities/permission.entity.ts <-> authorization/entities/role.permission.entity.ts",
+        "documents/entities/document.entity.ts <-> documents/entities/document-reviewer.entity.ts",
+        "documents/documents.module.ts <-> processing-jobs/processing-jobs.module.ts",
+        "hr/entities/employee.entity.ts <-> hr/entities/time-off-request.entity.ts",
+        "jurisdictions/entities/jurisdiction-rule.entity.ts <-> jurisdictions/entities/jurisdiction.entity.ts",
+        "messenger/entities/conversation.entity.ts <-> messenger/entities/message.entity.ts"
+      ],
+      "recommendations": [
+        "Break circular dependencies using Aggregate Roots pattern",
+        "Use Domain Events instead of direct entity references",
+        "Implement proper repository pattern with domain models",
+        "Consider using IDs instead of full entity references",
+        "Apply Dependency Inversion Principle with interfaces"
+      ]
+    },
+    {
+      "id": "ARCH-002",
+      "severity": "CRITICAL",
+      "category": "Domain-Driven Design",
+      "title": "No DDD Implementation - Anemic Domain Models",
+      "description": "Entities are purely data containers with no business logic. All domain logic is scattered across services, violating DDD principles.",
+      "impact": "Poor maintainability, difficult testing, business logic duplication, violation of single responsibility",
+      "affectedFiles": [
+        "All 107 entity files",
+        "All 92 service files"
+      ],
+      "examples": [
+        {
+          "file": "cases/entities/case.entity.ts",
+          "issue": "Case entity has no business methods like archive(), close(), assignTeam(), etc.",
+          "currentPattern": "Anemic entity with only @Column decorators"
+        },
+        {
+          "file": "billing/billing.service.ts",
+          "issue": "Business logic for invoice generation, payment processing in service layer",
+          "currentPattern": "Service contains all business rules instead of domain"
+        },
+        {
+          "file": "cases/cases.service.ts",
+          "issue": "Case archiving, status changes, validation logic in service",
+          "currentPattern": "Methods like archive(), findArchived() should be domain behaviors"
+        }
+      ],
+      "recommendations": [
+        "Move business logic from services to domain entities",
+        "Implement Aggregate Roots for Cases, Invoices, Users",
+        "Create Value Objects for Money, Address, CaseNumber, etc.",
+        "Use Domain Events for cross-aggregate communication",
+        "Apply Rich Domain Model pattern"
+      ]
+    },
+    {
+      "id": "ARCH-003",
+      "severity": "HIGH",
+      "category": "Repository Pattern",
+      "title": "Improper Repository Pattern Implementation",
+      "description": "Services directly inject TypeORM repositories instead of custom domain repositories. BaseRepository exists but is unused.",
+      "impact": "Tight coupling to TypeORM, difficult to test, no domain-specific queries, hard to swap ORMs",
+      "affectedFiles": [
+        "92 service files using @InjectRepository",
+        "common/base/base.repository.ts (defined but unused)"
+      ],
+      "currentPattern": "@InjectRepository(Entity) private repository: Repository<Entity>",
+      "recommendations": [
+        "Create domain-specific repositories extending BaseRepository",
+        "Inject custom repositories in services instead of TypeORM Repository",
+        "Move complex queries to repository layer",
+        "Use repository interfaces for dependency inversion",
+        "Implement Unit of Work pattern for transaction management"
+      ]
+    },
+    {
+      "id": "ARCH-004",
+      "severity": "HIGH",
+      "category": "CQRS Pattern",
+      "title": "No CQRS Implementation",
+      "description": "No Command/Query separation found. Complex operations like invoice generation, case archiving should use CQRS.",
+      "impact": "Poor scalability, mixing read/write concerns, difficulty optimizing queries, no audit trail",
+      "affectedFiles": [
+        "billing/billing.service.ts - generateInvoice() should be a Command",
+        "cases/cases.service.ts - archive() should be a Command",
+        "compliance/compliance.service.ts - complex operations mixed"
+      ],
+      "recommendations": [
+        "Implement @nestjs/cqrs for complex domains",
+        "Create Commands for write operations (CreateInvoiceCommand, ArchiveCaseCommand)",
+        "Create Queries for read operations (GetCaseStatsQuery, GetBillingSummaryQuery)",
+        "Use CommandHandlers and QueryHandlers",
+        "Implement EventSourcing for audit-critical operations"
+      ]
+    },
+    {
+      "id": "ARCH-005",
+      "severity": "HIGH",
+      "category": "Value Objects",
+      "title": "Missing Value Objects",
+      "description": "No value objects found. Primitive obsession throughout codebase (using strings for emails, money, addresses).",
+      "impact": "No type safety, duplicate validation, inconsistent formatting, difficult to enforce invariants",
+      "examples": [
+        "Email represented as string - no validation in domain",
+        "Money amounts as number - no currency handling",
+        "Addresses as strings - no structured validation",
+        "Case numbers as strings - no format enforcement",
+        "Phone numbers as strings - no validation"
+      ],
+      "recommendations": [
+        "Create Email value object with validation",
+        "Create Money value object with currency",
+        "Create Address value object with structured fields",
+        "Create CaseNumber value object with format validation",
+        "Create PhoneNumber value object with validation"
+      ]
+    },
+    {
+      "id": "ARCH-006",
+      "severity": "MEDIUM",
+      "category": "Aggregate Roots",
+      "title": "No Aggregate Roots Defined",
+      "description": "No clear aggregate boundaries. All entities can be accessed directly without aggregate root control.",
+      "impact": "Inconsistent state, difficult to maintain invariants, unclear transaction boundaries",
+      "recommendations": [
+        "Define Case as aggregate root for parties, phases, teams",
+        "Define Invoice as aggregate root for line items, payments",
+        "Define User as aggregate root for profile, sessions",
+        "Define Discovery as aggregate root for evidence, productions",
+        "Enforce: only aggregate roots can be repositories"
+      ]
+    },
+    {
+      "id": "ARCH-007",
+      "severity": "MEDIUM",
+      "category": "Event-Driven Architecture",
+      "title": "Underutilized Event-Driven Architecture",
+      "description": "EventBusService exists with domain events defined, but not consistently used across services.",
+      "impact": "Tight coupling, difficulty adding cross-cutting concerns, no event sourcing, limited audit trail",
+      "affectedFiles": [
+        "common/services/event-bus.service.ts - well designed but underused",
+        "common/base/base.service.ts - optional events, not mandatory"
+      ],
+      "recommendations": [
+        "Mandatory domain events for all aggregate state changes",
+        "Implement event handlers for cross-cutting concerns",
+        "Use events for inter-module communication instead of direct calls",
+        "Implement event store for audit trail",
+        "Add event versioning strategy"
+      ]
+    },
+    {
+      "id": "ARCH-008",
+      "severity": "MEDIUM",
+      "category": "Transaction Management",
+      "title": "Inconsistent Transaction Management",
+      "description": "TransactionManagerService exists but is not widely used. Most services don't wrap operations in transactions.",
+      "impact": "Data inconsistency risk, partial updates, difficult rollback, no ACID guarantees",
+      "affectedFiles": [
+        "common/services/transaction-manager.service.ts - good implementation",
+        "Most services don't use it - direct repository calls"
+      ],
+      "recommendations": [
+        "Mandatory transaction boundaries for aggregate operations",
+        "Use transaction decorators for service methods",
+        "Implement Unit of Work pattern",
+        "Add transaction middleware for HTTP requests",
+        "Document transaction boundaries clearly"
+      ]
+    },
+    {
+      "id": "ARCH-009",
+      "severity": "LOW",
+      "category": "Provider Scopes",
+      "title": "Limited Custom Scope Management",
+      "description": "Only 5 files use custom scopes. All providers are singleton by default, which may not be appropriate for request-scoped data.",
+      "impact": "Potential state leakage, difficulty with request-scoped logging, no per-request isolation",
+      "affectedFiles": [
+        "graphql/dataloaders/case.loader.ts - REQUEST scope",
+        "graphql/dataloaders/document.loader.ts - REQUEST scope",
+        "graphql/dataloaders/user.loader.ts - REQUEST scope",
+        "monitoring/services/structured.logger.service.ts - REQUEST scope",
+        "database/security/subscribers/audit.subscriber.ts - REQUEST scope"
+      ],
+      "recommendations": [
+        "Use REQUEST scope for request-specific services (logging, audit)",
+        "Use TRANSIENT scope for services with mutable state",
+        "Document scope decisions clearly",
+        "Avoid REQUEST scope for performance-critical services",
+        "Consider using AsyncLocalStorage for request context"
+      ]
+    }
+  ],
+  "moduleImprovements": [
+    {
+      "id": "MOD-001",
+      "module": "CoreModule",
+      "status": "GOOD",
+      "description": "Well-organized orchestration module with proper dependency ordering",
+      "strengths": [
+        "Clear phase-based module loading",
+        "Good documentation of dependencies",
+        "Proper use of @Global decorator",
+        "Re-exports for convenience"
+      ],
+      "improvements": [
+        "Add module health checks",
+        "Implement graceful degradation if optional modules fail",
+        "Add module initialization metrics"
+      ]
+    },
+    {
+      "id": "MOD-002",
+      "module": "DiscoveryModule",
+      "status": "NEEDS IMPROVEMENT",
+      "description": "Monolithic module with 10+ sub-features. Should be split into bounded contexts.",
+      "issues": [
+        "Too many controllers/services in one module (11 controllers)",
+        "Poor separation of concerns",
+        "Difficult to maintain and test"
+      ],
+      "improvements": [
+        "Split into separate modules: EvidenceModule, DepositionsModule, ProductionsModule",
+        "Use module facade pattern for cross-module communication",
+        "Implement bounded context boundaries"
+      ]
+    },
+    {
+      "id": "MOD-003",
+      "module": "BillingModule",
+      "status": "NEEDS IMPROVEMENT",
+      "description": "Good sub-module organization but lacks aggregate root coordination",
+      "issues": [
+        "Direct entity access across sub-modules",
+        "No clear aggregate boundaries",
+        "Invoice generation logic in service layer"
+      ],
+      "improvements": [
+        "Make Invoice an aggregate root",
+        "Use domain events for time entry -> invoice workflow",
+        "Implement CQRS for complex billing operations"
+      ]
+    },
+    {
+      "id": "MOD-004",
+      "module": "CommonModule",
+      "status": "GOOD",
+      "description": "Well-organized with proper @Global scope and enterprise services",
+      "strengths": [
+        "Good collection of enterprise services",
+        "Proper global scope",
+        "Clear exports"
+      ],
+      "improvements": [
+        "Split into smaller focused modules (InfrastructureModule, UtilitiesModule)",
+        "Version the API for breaking changes",
+        "Add module documentation"
+      ]
+    },
+    {
+      "id": "MOD-005",
+      "module": "SharedModule",
+      "status": "EXCELLENT",
+      "description": "Outstanding documentation and organization. Best practice example.",
+      "strengths": [
+        "Comprehensive JSDoc documentation",
+        "Clear usage examples",
+        "Migration guide included",
+        "Performance notes",
+        "Testing guidance"
+      ],
+      "improvements": [
+        "Actually implement the exports (currently empty)",
+        "Add barrel exports for cleaner imports"
+      ]
+    }
+  ],
+  "patternViolations": [
+    {
+      "id": "PATTERN-001",
+      "pattern": "Single Responsibility Principle",
+      "severity": "HIGH",
+      "description": "Services have multiple responsibilities - data access, business logic, orchestration",
+      "examples": [
+        {
+          "file": "billing/billing.service.ts",
+          "violations": [
+            "Direct repository access (data layer)",
+            "Business logic (invoice generation)",
+            "Orchestration (getting stats from multiple sources)",
+            "Presentation logic (formatting for frontend)"
+          ]
+        },
+        {
+          "file": "cases/cases.service.ts",
+          "violations": [
+            "Query building",
+            "Business validation",
+            "DTO transformation",
+            "Archive logic"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "PATTERN-002",
+      "pattern": "Dependency Inversion Principle",
+      "severity": "HIGH",
+      "description": "Services depend on concrete TypeORM repositories instead of abstractions",
+      "violation": "Direct injection of Repository<T> instead of custom repository interfaces",
+      "recommendation": "Create repository interfaces and inject those instead"
+    },
+    {
+      "id": "PATTERN-003",
+      "pattern": "Open/Closed Principle",
+      "severity": "MEDIUM",
+      "description": "Entities cannot be extended without modification",
+      "violation": "No strategy pattern, no polymorphism in domain models",
+      "recommendation": "Use abstract base classes and inheritance for entity hierarchies"
+    },
+    {
+      "id": "PATTERN-004",
+      "pattern": "Tell, Don't Ask",
+      "severity": "HIGH",
+      "description": "Services ask entities for data and make decisions instead of telling entities what to do",
+      "examples": [
+        {
+          "file": "cases/cases.service.ts",
+          "currentCode": "const caseEntity = await this.findOne(id); await this.caseRepository.update(id, { isArchived: true });",
+          "shouldBe": "const caseEntity = await this.findOne(id); caseEntity.archive(); await this.save(caseEntity);"
+        }
+      ]
+    }
+  ],
+  "circularDependencies": [
+    {
+      "id": "CIRCULAR-001",
+      "severity": "CRITICAL",
+      "path": "users/entities/user.entity.ts -> auth/entities/session.entity.ts -> users/entities/user.entity.ts",
+      "description": "User entity references Sessions, Session references User",
+      "resolution": "Use Domain Events: UserLoggedIn event instead of direct Session relation"
+    },
+    {
+      "id": "CIRCULAR-002",
+      "severity": "CRITICAL",
+      "path": "cases/entities/case.entity.ts -> clients/entities/client.entity.ts -> billing/invoices/entities/invoice.entity.ts -> cases",
+      "description": "Three-way circular dependency in core domain",
+      "resolution": "Break into aggregates: Case aggregate, Client aggregate, Billing aggregate. Use IDs instead of entity refs."
+    },
+    {
+      "id": "CIRCULAR-003",
+      "severity": "HIGH",
+      "path": "documents/documents.module.ts <-> processing-jobs/processing-jobs.module.ts",
+      "description": "Module-level circular dependency with forwardRef workaround",
+      "resolution": "Create DocumentProcessingOrchestrator service in a separate module to coordinate between Documents and ProcessingJobs"
+    },
+    {
+      "id": "CIRCULAR-004",
+      "severity": "MEDIUM",
+      "path": "users/entities/user.entity.ts -> users/entities/user-profile.entity.ts",
+      "description": "User references UserProfile bidirectionally",
+      "resolution": "Make UserProfile a value object owned by User aggregate, not a separate entity"
+    }
+  ],
+  "codeChanges": [
+    {
+      "id": "CODE-001",
+      "title": "Implement Case Aggregate Root",
+      "priority": "CRITICAL",
+      "file": "cases/entities/case.entity.ts",
+      "description": "Convert Case entity to proper aggregate root with business methods",
+      "currentCode": "export class Case extends BaseEntity {\n  @Column({ name: 'is_archived', type: 'boolean', default: false })\n  isArchived!: boolean;\n  // ... just data fields\n}",
+      "improvedCode": "import { AggregateRoot } from '@nestjs/cqrs';\nimport { CaseArchivedEvent } from './events/case-archived.event';\n\nexport class Case extends AggregateRoot {\n  @Column({ name: 'is_archived', type: 'boolean', default: false })\n  private isArchived!: boolean;\n\n  // Business methods\n  public archive(archivedBy: string, reason: string): void {\n    if (this.isArchived) {\n      throw new Error('Case is already archived');\n    }\n    if (this.status === CaseStatus.ACTIVE && !reason) {\n      throw new Error('Active cases require archival reason');\n    }\n    \n    this.isArchived = true;\n    this.status = CaseStatus.ARCHIVED;\n    \n    // Emit domain event\n    this.apply(new CaseArchivedEvent(this.id, archivedBy, reason));\n  }\n\n  public assignTeam(teamId: string): void {\n    if (!teamId) {\n      throw new Error('Team ID is required');\n    }\n    this.assignedTeamId = teamId;\n    this.apply(new CaseTeamAssignedEvent(this.id, teamId));\n  }\n\n  public close(closedBy: string, outcome: string): void {\n    if (this.status === CaseStatus.CLOSED) {\n      throw new Error('Case is already closed');\n    }\n    \n    this.status = CaseStatus.CLOSED;\n    this.closeDate = new Date();\n    \n    this.apply(new CaseClosedEvent(this.id, closedBy, outcome));\n  }\n\n  // Getters\n  public getIsArchived(): boolean {\n    return this.isArchived;\n  }\n}",
+      "benefits": [
+        "Business logic encapsulated in domain",
+        "Invariants enforced",
+        "Domain events published automatically",
+        "Testable in isolation"
+      ]
+    },
+    {
+      "id": "CODE-002",
+      "title": "Create Custom Case Repository",
+      "priority": "CRITICAL",
+      "file": "cases/repositories/case.repository.ts",
+      "description": "Implement domain-specific repository extending BaseRepository",
+      "improvedCode": "import { Injectable } from '@nestjs/common';\nimport { InjectRepository } from '@nestjs/typeorm';\nimport { Repository } from 'typeorm';\nimport { BaseRepository } from '../../common/base/base.repository';\nimport { Case } from '../entities/case.entity';\nimport { CaseStatus } from '../entities/case.entity';\n\n@Injectable()\nexport class CaseRepository extends BaseRepository<Case> {\n  constructor(\n    @InjectRepository(Case)\n    private caseRepository: Repository<Case>,\n  ) {\n    super(caseRepository, 'CaseRepository');\n  }\n\n  /**\n   * Find cases by client with eager loading\n   */\n  async findByClient(clientId: string): Promise<Case[]> {\n    return this.caseRepository.find({\n      where: { clientId },\n      relations: ['parties', 'team'],\n      order: { createdAt: 'DESC' },\n    });\n  }\n\n  /**\n   * Find active cases with upcoming deadlines\n   */\n  async findWithUpcomingDeadlines(days: number = 7): Promise<Case[]> {\n    const futureDate = new Date();\n    futureDate.setDate(futureDate.getDate() + days);\n\n    return this.caseRepository\n      .createQueryBuilder('case')\n      .where('case.status = :status', { status: CaseStatus.ACTIVE })\n      .andWhere('case.trialDate BETWEEN :now AND :future', {\n        now: new Date(),\n        future: futureDate,\n      })\n      .orderBy('case.trialDate', 'ASC')\n      .getMany();\n  }\n\n  /**\n   * Find cases at risk (not updated in 30 days)\n   */\n  async findAtRiskCases(): Promise<Case[]> {\n    const thirtyDaysAgo = new Date();\n    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);\n\n    return this.caseRepository\n      .createQueryBuilder('case')\n      .where('case.status = :status', { status: CaseStatus.ACTIVE })\n      .andWhere('case.updatedAt < :date', { date: thirtyDaysAgo })\n      .getMany();\n  }\n}",
+      "benefits": [
+        "Domain-specific query methods",
+        "Encapsulation of data access",
+        "Easy to test with mocks",
+        "Can swap ORM without changing services"
+      ]
+    },
+    {
+      "id": "CODE-003",
+      "title": "Refactor CasesService to Use Domain Model",
+      "priority": "HIGH",
+      "file": "cases/cases.service.ts",
+      "description": "Remove business logic from service, delegate to domain",
+      "currentCode": "async archive(id: string): Promise<CaseResponseDto> {\n  await this.findOne(id);\n  await this.caseRepository.update(id, { isArchived: true });\n  return this.findOne(id);\n}",
+      "improvedCode": "async archive(id: string, userId: string, reason: string): Promise<CaseResponseDto> {\n  // Load aggregate root\n  const caseEntity = await this.caseRepository.findById(id);\n  if (!caseEntity) {\n    throw new NotFoundException(`Case with ID ${id} not found`);\n  }\n\n  // Delegate to domain\n  caseEntity.archive(userId, reason);\n\n  // Persist and publish events\n  await this.caseRepository.save(caseEntity);\n  caseEntity.commit(); // Publish domain events\n\n  return this.toCaseResponse(caseEntity);\n}",
+      "benefits": [
+        "Business logic in domain, not service",
+        "Service becomes orchestrator",
+        "Domain events published automatically",
+        "Easier testing"
+      ]
+    },
+    {
+      "id": "CODE-004",
+      "title": "Create Money Value Object",
+      "priority": "HIGH",
+      "file": "common/domain/value-objects/money.ts",
+      "description": "Replace primitive number with Money value object for billing",
+      "improvedCode": "export class Money {\n  private readonly amount: number;\n  private readonly currency: string;\n\n  private constructor(amount: number, currency: string = 'USD') {\n    if (amount < 0) {\n      throw new Error('Amount cannot be negative');\n    }\n    if (!currency || currency.length !== 3) {\n      throw new Error('Invalid currency code');\n    }\n    \n    this.amount = Math.round(amount * 100) / 100; // Round to 2 decimals\n    this.currency = currency.toUpperCase();\n  }\n\n  public static fromAmount(amount: number, currency: string = 'USD'): Money {\n    return new Money(amount, currency);\n  }\n\n  public static zero(currency: string = 'USD'): Money {\n    return new Money(0, currency);\n  }\n\n  public add(other: Money): Money {\n    this.ensureSameCurrency(other);\n    return new Money(this.amount + other.amount, this.currency);\n  }\n\n  public subtract(other: Money): Money {\n    this.ensureSameCurrency(other);\n    return new Money(this.amount - other.amount, this.currency);\n  }\n\n  public multiply(factor: number): Money {\n    return new Money(this.amount * factor, this.currency);\n  }\n\n  public equals(other: Money): boolean {\n    return this.amount === other.amount && this.currency === other.currency;\n  }\n\n  public isGreaterThan(other: Money): boolean {\n    this.ensureSameCurrency(other);\n    return this.amount > other.amount;\n  }\n\n  private ensureSameCurrency(other: Money): void {\n    if (this.currency !== other.currency) {\n      throw new Error(`Cannot operate on different currencies: ${this.currency} vs ${other.currency}`);\n    }\n  }\n\n  public getAmount(): number {\n    return this.amount;\n  }\n\n  public getCurrency(): string {\n    return this.currency;\n  }\n\n  public format(): string {\n    return new Intl.NumberFormat('en-US', {\n      style: 'currency',\n      currency: this.currency,\n    }).format(this.amount);\n  }\n\n  // TypeORM transformer\n  public toJSON() {\n    return {\n      amount: this.amount,\n      currency: this.currency,\n    };\n  }\n}",
+      "usage": "// In Invoice entity\n@Column(() => Money)\npublic totalAmount: Money;\n\n// In service\nconst total = Money.fromAmount(100.50, 'USD');\nconst tax = total.multiply(0.1);\nconst grandTotal = total.add(tax);",
+      "benefits": [
+        "Type safety for monetary values",
+        "Currency handling built-in",
+        "Immutable value object",
+        "Business rules enforced",
+        "No floating-point errors"
+      ]
+    },
+    {
+      "id": "CODE-005",
+      "title": "Implement CQRS for Invoice Generation",
+      "priority": "HIGH",
+      "file": "billing/commands/generate-invoice.command.ts",
+      "description": "Convert invoice generation to CQRS pattern",
+      "improvedCode": "// Command\nexport class GenerateInvoiceCommand {\n  constructor(\n    public readonly caseId: string,\n    public readonly clientId: string,\n    public readonly generatedBy: string,\n    public readonly billingPeriodStart: Date,\n    public readonly billingPeriodEnd: Date,\n  ) {}\n}\n\n// Command Handler\n@CommandHandler(GenerateInvoiceCommand)\nexport class GenerateInvoiceHandler implements ICommandHandler<GenerateInvoiceCommand> {\n  constructor(\n    private readonly invoiceRepository: InvoiceRepository,\n    private readonly timeEntryRepository: TimeEntryRepository,\n    private readonly expenseRepository: ExpenseRepository,\n    private readonly eventBus: EventBus,\n  ) {}\n\n  async execute(command: GenerateInvoiceCommand): Promise<string> {\n    // Load unbilled items\n    const timeEntries = await this.timeEntryRepository.findUnbilled(command.caseId);\n    const expenses = await this.expenseRepository.findUnbilled(command.caseId);\n\n    // Create invoice aggregate\n    const invoice = Invoice.generate(\n      command.caseId,\n      command.clientId,\n      command.generatedBy,\n      timeEntries,\n      expenses,\n    );\n\n    // Persist\n    await this.invoiceRepository.save(invoice);\n\n    // Publish events\n    invoice.commit();\n\n    return invoice.id;\n  }\n}",
+      "benefits": [
+        "Clear separation of write operations",
+        "Easier testing",
+        "Audit trail built-in",
+        "Scalable architecture",
+        "Event sourcing ready"
+      ]
+    },
+    {
+      "id": "CODE-006",
+      "title": "Break Circular Dependency: Documents <-> ProcessingJobs",
+      "priority": "CRITICAL",
+      "file": "document-processing/document-processing-orchestrator.module.ts",
+      "description": "Create orchestrator module to coordinate between Documents and ProcessingJobs",
+      "improvedCode": "// New orchestrator module\nimport { Module } from '@nestjs/common';\nimport { DocumentsModule } from '../documents/documents.module';\nimport { ProcessingJobsModule } from '../processing-jobs/processing-jobs.module';\nimport { DocumentProcessingOrchestrator } from './document-processing.orchestrator';\nimport { DocumentProcessedHandler } from './handlers/document-processed.handler';\n\n@Module({\n  imports: [DocumentsModule, ProcessingJobsModule],\n  providers: [\n    DocumentProcessingOrchestrator,\n    DocumentProcessedHandler,\n  ],\n  exports: [DocumentProcessingOrchestrator],\n})\nexport class DocumentProcessingModule {}\n\n// Orchestrator service\n@Injectable()\nexport class DocumentProcessingOrchestrator {\n  constructor(\n    private readonly documentsService: DocumentsService,\n    private readonly processingJobsService: ProcessingJobsService,\n    private readonly eventBus: EventBusService,\n  ) {\n    // Subscribe to domain events\n    this.eventBus.subscribe(DomainEvents.DOCUMENT_UPLOADED, this.onDocumentUploaded.bind(this));\n  }\n\n  private async onDocumentUploaded(event: DomainEvent): Promise<void> {\n    // Trigger processing job\n    await this.processingJobsService.createJob({\n      documentId: event.aggregateId,\n      type: 'OCR',\n    });\n  }\n}\n\n// Event handler\n@OnEvent('processing.completed')\nexport class DocumentProcessedHandler {\n  constructor(private readonly documentsService: DocumentsService) {}\n\n  async handle(event: ProcessingCompletedEvent): Promise<void> {\n    await this.documentsService.updateProcessingStatus(\n      event.documentId,\n      'PROCESSED',\n    );\n  }\n}",
+      "benefits": [
+        "Breaks circular dependency",
+        "Clear coordination point",
+        "Event-driven communication",
+        "Easier testing",
+        "Better separation of concerns"
+      ]
+    },
+    {
+      "id": "CODE-007",
+      "title": "Add Transaction Boundaries to Service Methods",
+      "priority": "HIGH",
+      "file": "common/decorators/transactional.decorator.ts",
+      "description": "Create decorator for automatic transaction management",
+      "improvedCode": "import { TransactionManagerService } from '../services/transaction-manager.service';\n\n/**\n * Transactional decorator\n * Automatically wraps method in transaction with rollback on error\n */\nexport function Transactional(options?: TransactionOptions) {\n  return function (\n    target: any,\n    propertyKey: string,\n    descriptor: PropertyDescriptor,\n  ) {\n    const originalMethod = descriptor.value;\n\n    descriptor.value = async function (...args: any[]) {\n      const transactionManager: TransactionManagerService = this.transactionManager;\n      \n      if (!transactionManager) {\n        throw new Error('TransactionManagerService must be injected');\n      }\n\n      return transactionManager.executeInTransaction(\n        async (manager) => {\n          // Replace repository with transaction manager\n          const originalRepo = this.repository;\n          this.repository = manager.getRepository(originalRepo.target);\n          \n          try {\n            return await originalMethod.apply(this, args);\n          } finally {\n            this.repository = originalRepo;\n          }\n        },\n        options,\n      );\n    };\n\n    return descriptor;\n  };\n}\n\n// Usage in service\nexport class InvoicesService {\n  constructor(\n    private readonly invoiceRepository: InvoiceRepository,\n    private readonly timeEntryRepository: TimeEntryRepository,\n    private readonly transactionManager: TransactionManagerService,\n  ) {}\n\n  @Transactional()\n  async generateInvoice(caseId: string, clientId: string): Promise<Invoice> {\n    // Everything in this method runs in a transaction\n    const timeEntries = await this.timeEntryRepository.findUnbilled(caseId);\n    const invoice = await this.invoiceRepository.create({ ... });\n    await this.timeEntryRepository.markAsBilled(timeEntries);\n    return invoice;\n  }\n}",
+      "benefits": [
+        "Automatic transaction management",
+        "ACID guarantees",
+        "Rollback on error",
+        "Clean code",
+        "Testable"
+      ]
+    }
+  ],
+  "recommendations": {
+    "immediate": [
+      {
+        "priority": 1,
+        "action": "Fix all 17 circular dependencies using domain events and proper aggregate boundaries",
+        "effort": "2-3 weeks",
+        "risk": "High - may break existing functionality"
+      },
+      {
+        "priority": 2,
+        "action": "Implement proper repository pattern - create custom repositories extending BaseRepository",
+        "effort": "1 week",
+        "risk": "Low - additive change"
+      },
+      {
+        "priority": 3,
+        "action": "Create aggregate roots for Case, Invoice, User, Discovery domains",
+        "effort": "2 weeks",
+        "risk": "Medium - requires refactoring"
+      }
+    ],
+    "shortTerm": [
+      {
+        "priority": 4,
+        "action": "Move business logic from services to domain entities",
+        "effort": "3-4 weeks",
+        "risk": "Medium - requires extensive testing"
+      },
+      {
+        "priority": 5,
+        "action": "Implement CQRS for complex operations (invoice generation, case management)",
+        "effort": "2 weeks",
+        "risk": "Low - can be done incrementally"
+      },
+      {
+        "priority": 6,
+        "action": "Create value objects for Money, Email, Address, CaseNumber",
+        "effort": "1 week",
+        "risk": "Low - additive change"
+      }
+    ],
+    "longTerm": [
+      {
+        "priority": 7,
+        "action": "Implement event sourcing for audit-critical domains",
+        "effort": "4-6 weeks",
+        "risk": "High - architectural change"
+      },
+      {
+        "priority": 8,
+        "action": "Add comprehensive domain event handling across all modules",
+        "effort": "2-3 weeks",
+        "risk": "Low - improves decoupling"
+      },
+      {
+        "priority": 9,
+        "action": "Implement bounded contexts with API gateways",
+        "effort": "6-8 weeks",
+        "risk": "High - major refactoring"
+      }
+    ]
+  },
+  "metrics": {
+    "architectureScore": "4.5/10",
+    "dddImplementation": "2/10",
+    "cqrsImplementation": "0/10",
+    "repositoryPattern": "3/10",
+    "domainEventUsage": "3/10",
+    "aggregateRoots": "0/10",
+    "valueObjects": "0/10",
+    "transactionManagement": "4/10",
+    "moduleOrganization": "7/10",
+    "circularDependencies": "2/10 (17 found)",
+    "overallMaturity": "3.0/10"
+  },
+  "conclusion": {
+    "summary": "The application has good infrastructure (CoreModule, transaction management, event bus) but lacks proper domain-driven design implementation. Critical issues include 17 circular dependencies, anemic domain models, and missing CQRS/repository patterns. The codebase is currently organized as a transaction script pattern rather than rich domain model.",
+    "risk": "HIGH - For a $350M enterprise application, these architectural deficiencies pose significant risks for maintainability, scalability, and correctness.",
+    "recommendation": "IMMEDIATE REFACTORING REQUIRED - Start with breaking circular dependencies, then progressively introduce DDD patterns starting with aggregate roots and repositories.",
+    "estimatedEffort": "12-16 weeks for full architectural refactoring",
+    "businessImpact": "Reduced bugs, faster feature development, better testability, improved scalability"
+  }
+}

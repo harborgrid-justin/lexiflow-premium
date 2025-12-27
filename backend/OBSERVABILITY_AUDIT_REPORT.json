@@ -1,0 +1,470 @@
+{
+  "auditMetadata": {
+    "agent": "Enterprise Agent 10: Observability Audit",
+    "target": "$350M Legal Enterprise Application",
+    "auditDate": "2025-12-27",
+    "scope": "Telemetry, Metrics, Health Checks, Distributed Tracing, Monitoring",
+    "filesAudited": 32,
+    "linesOfCodeReviewed": 2301,
+    "severity": "CRITICAL"
+  },
+
+  "executiveSummary": {
+    "overallStatus": "CRITICAL - Observability Infrastructure Incomplete",
+    "readinessScore": "45/100",
+    "criticalIssues": 8,
+    "highPriorityIssues": 12,
+    "mediumPriorityIssues": 6,
+    "positiveFindings": 7,
+    "recommendation": "OpenTelemetry is installed but NOT enabled. Missing critical dependencies, no APM integration, no SLA monitoring, incomplete log correlation, and no production dashboards. Requires immediate remediation before production deployment."
+  },
+
+  "observabilityGaps": [
+    {
+      "id": "OBS-001",
+      "title": "OpenTelemetry Disabled by Default",
+      "severity": "CRITICAL",
+      "category": "Distributed Tracing",
+      "description": "OpenTelemetry is installed but OTEL_ENABLED=false by default. The telemetry module is merely a stub with no actual instrumentation.",
+      "impact": "NO distributed tracing in production. Cannot correlate requests across microservices or track request flows.",
+      "affectedFiles": [
+        "/home/user/lexiflow-premium/backend/src/telemetry/telemetry.module.ts",
+        "/home/user/lexiflow-premium/backend/src/telemetry/index.ts",
+        "/home/user/lexiflow-premium/backend/.env.example"
+      ],
+      "evidence": "Lines 6-14 in telemetry.module.ts show stub implementation with console warnings. OTEL_ENABLED=false in .env.example line 108.",
+      "businessRisk": "Cannot debug production issues, no request tracing, impossible to identify performance bottlenecks across services"
+    },
+    {
+      "id": "OBS-002",
+      "title": "Missing Critical OpenTelemetry Dependency",
+      "severity": "CRITICAL",
+      "category": "Dependencies",
+      "description": "Package @opentelemetry/sdk-trace-base is imported in distributed.tracing.service.ts but NOT listed in package.json dependencies",
+      "impact": "Runtime error when tracing is enabled. Application will crash when OTEL_ENABLED=true",
+      "affectedFiles": [
+        "/home/user/lexiflow-premium/backend/package.json",
+        "/home/user/lexiflow-premium/backend/src/monitoring/services/distributed.tracing.service.ts"
+      ],
+      "evidence": "Line 7 of distributed.tracing.service.ts imports BatchSpanProcessor from @opentelemetry/sdk-trace-base, but this package is missing from package.json dependencies",
+      "businessRisk": "Application crashes when observability is enabled, no production telemetry possible"
+    },
+    {
+      "id": "OBS-003",
+      "title": "No APM Integration",
+      "severity": "HIGH",
+      "category": "Application Performance Monitoring",
+      "description": "No integration with enterprise APM platforms (Datadog, New Relic, Dynatrace, AppDynamics, Elastic APM)",
+      "impact": "Cannot leverage enterprise-grade APM features, alerting, anomaly detection, or AI-powered insights",
+      "affectedFiles": [
+        "/home/user/lexiflow-premium/backend/src/monitoring/services/distributed.tracing.service.ts"
+      ],
+      "evidence": "Only basic OTLP HTTP exporter configured. No vendor-specific APM integration found in codebase",
+      "businessRisk": "Limited observability capabilities, no advanced analytics, no AI-powered incident detection"
+    },
+    {
+      "id": "OBS-004",
+      "title": "No SLA Monitoring Infrastructure",
+      "severity": "CRITICAL",
+      "category": "SLA Monitoring",
+      "description": "Zero SLA monitoring implementation. No SLA tracking, violation detection, or SLA reporting",
+      "impact": "Cannot track or enforce service level agreements. No visibility into SLA compliance",
+      "affectedFiles": [],
+      "evidence": "Grep search for 'SLA' returned only 15 unrelated files. No dedicated SLA monitoring service or metrics",
+      "businessRisk": "Cannot prove SLA compliance to customers, potential contract violations, no proactive SLA management"
+    },
+    {
+      "id": "OBS-005",
+      "title": "Incomplete Log-Trace Correlation",
+      "severity": "HIGH",
+      "category": "Log Correlation",
+      "description": "Logs and traces are not correlated. Trace IDs are not automatically injected into log context",
+      "impact": "Cannot correlate logs with distributed traces. Difficult to debug issues spanning multiple services",
+      "affectedFiles": [
+        "/home/user/lexiflow-premium/backend/src/monitoring/services/structured.logger.service.ts",
+        "/home/user/lexiflow-premium/backend/src/monitoring/interceptors/performance.interceptor.ts"
+      ],
+      "evidence": "StructuredLoggerService has correlationId support (line 7-17) but no automatic trace ID injection. DistributedTracingService doesn't share context with logger",
+      "businessRisk": "Increased MTTR (Mean Time To Resolution), difficult root cause analysis, poor debugging experience"
+    },
+    {
+      "id": "OBS-006",
+      "title": "No OpenTelemetry Metrics SDK Integration",
+      "severity": "HIGH",
+      "category": "Metrics",
+      "description": "MetricsCollectorService is custom implementation, not using OpenTelemetry Metrics SDK. Disconnect between tracing and metrics",
+      "impact": "Metrics and traces are separate systems. Cannot correlate metrics with traces. No unified observability",
+      "affectedFiles": [
+        "/home/user/lexiflow-premium/backend/src/monitoring/services/metrics.collector.service.ts"
+      ],
+      "evidence": "Custom metrics implementation (lines 1-461) doesn't use @opentelemetry/sdk-metrics or @opentelemetry/api-metrics",
+      "businessRisk": "Fragmented observability, cannot correlate performance metrics with trace data, incomplete picture"
+    },
+    {
+      "id": "OBS-007",
+      "title": "No Trace Sampling Configuration",
+      "severity": "HIGH",
+      "category": "Distributed Tracing",
+      "description": "No trace sampling configured. Will capture 100% of traces in production",
+      "impact": "Extremely high costs and performance overhead in production. Overwhelming trace data volume",
+      "affectedFiles": [
+        "/home/user/lexiflow-premium/backend/src/monitoring/services/distributed.tracing.service.ts"
+      ],
+      "evidence": "Lines 58-90 show NodeSDK initialization with no sampling configuration. Will use default 100% sampling",
+      "businessRisk": "Excessive infrastructure costs, performance degradation, overwhelming observability data"
+    },
+    {
+      "id": "OBS-008",
+      "title": "No Dashboard Configuration",
+      "severity": "HIGH",
+      "category": "Dashboards",
+      "description": "No Grafana dashboards, no dashboard configurations, no visualization configs provided",
+      "impact": "No production-ready dashboards for monitoring. Operations team cannot visualize system health",
+      "affectedFiles": [],
+      "evidence": "MONITORING.md line 409 mentions Grafana but no dashboard JSON provided. No dashboard directory found",
+      "businessRisk": "Poor operational visibility, delayed incident response, no proactive monitoring"
+    }
+  ],
+
+  "tracingIssues": [
+    {
+      "issue": "Distributed Tracing Service Not Initialized",
+      "severity": "CRITICAL",
+      "description": "DistributedTracingService.onModuleInit() exits early when OTEL_ENABLED !== 'true'",
+      "location": "/home/user/lexiflow-premium/backend/src/monitoring/services/distributed.tracing.service.ts:42",
+      "impact": "No spans created, no traces exported, complete loss of distributed tracing capability"
+    },
+    {
+      "issue": "Missing Trace Context Propagation",
+      "severity": "HIGH",
+      "description": "No automatic trace context propagation to outbound HTTP requests via Axios or other HTTP clients",
+      "location": "/home/user/lexiflow-premium/backend/src/monitoring/services/distributed.tracing.service.ts",
+      "impact": "Broken trace chains when calling external services"
+    },
+    {
+      "issue": "No Database Query Auto-Instrumentation",
+      "severity": "MEDIUM",
+      "description": "TypeORM queries not automatically instrumented. Manual instrumentation required",
+      "location": "/home/user/lexiflow-premium/backend/src/monitoring/services/distributed.tracing.service.ts:209-220",
+      "impact": "Incomplete visibility into database operations"
+    },
+    {
+      "issue": "No Redis Auto-Instrumentation",
+      "severity": "MEDIUM",
+      "description": "Redis operations not automatically traced despite having cache span methods",
+      "location": "/home/user/lexiflow-premium/backend/src/monitoring/services/distributed.tracing.service.ts:255-265",
+      "impact": "No visibility into cache performance"
+    },
+    {
+      "issue": "Missing Span Baggage/Attributes",
+      "severity": "LOW",
+      "description": "No business context added to spans (caseId, userId, orgId, etc.)",
+      "location": "/home/user/lexiflow-premium/backend/src/monitoring/services/distributed.tracing.service.ts",
+      "impact": "Difficult to filter and analyze traces by business context"
+    }
+  ],
+
+  "metricsIssues": [
+    {
+      "issue": "Custom Metrics Implementation Instead of OpenTelemetry",
+      "severity": "HIGH",
+      "description": "MetricsCollectorService uses custom implementation instead of OpenTelemetry Metrics API",
+      "location": "/home/user/lexiflow-premium/backend/src/monitoring/services/metrics.collector.service.ts",
+      "impact": "Cannot correlate metrics with traces, fragmented observability",
+      "recommendation": "Migrate to @opentelemetry/sdk-metrics"
+    },
+    {
+      "issue": "Missing Business Metrics",
+      "severity": "MEDIUM",
+      "description": "No legal-specific business metrics: case processing time, document review rates, deposition counts, etc.",
+      "location": "/home/user/lexiflow-premium/backend/src/monitoring/services/metrics.collector.service.ts",
+      "impact": "Cannot track business KPIs, no operational intelligence"
+    },
+    {
+      "issue": "No Metrics Cardinality Control",
+      "severity": "MEDIUM",
+      "description": "Path normalization exists but no limits on label cardinality for high-cardinality metrics",
+      "location": "/home/user/lexiflow-premium/backend/src/monitoring/services/metrics.collector.service.ts:206-211",
+      "impact": "Risk of metrics explosion with unbounded label values"
+    },
+    {
+      "issue": "In-Memory Metrics Storage",
+      "severity": "MEDIUM",
+      "description": "Metrics stored in memory (Map). No persistence. Lost on restart",
+      "location": "/home/user/lexiflow-premium/backend/src/monitoring/services/metrics.collector.service.ts:32-36",
+      "impact": "Metrics lost on application restart, no historical data"
+    },
+    {
+      "issue": "No OTLP Metrics Exporter",
+      "severity": "HIGH",
+      "description": "Despite having @opentelemetry/exporter-metrics-otlp-http in package.json, it's not used",
+      "location": "/home/user/lexiflow-premium/backend/package.json:76",
+      "impact": "Cannot export metrics to OpenTelemetry collectors"
+    }
+  ],
+
+  "healthCheckIssues": [
+    {
+      "issue": "Health Check Results Not Exposed as Metrics",
+      "severity": "MEDIUM",
+      "description": "Health check results not exported as Prometheus metrics for monitoring systems",
+      "location": "/home/user/lexiflow-premium/backend/src/health/health.controller.ts",
+      "impact": "Cannot alert on health check failures via Prometheus"
+    },
+    {
+      "issue": "No Integration with Distributed Tracing",
+      "severity": "LOW",
+      "description": "Health checks don't create spans or traces",
+      "location": "/home/user/lexiflow-premium/backend/src/monitoring/services/health.aggregator.service.ts",
+      "impact": "Health check latency not visible in tracing"
+    },
+    {
+      "issue": "Redis Health Check Simplified",
+      "severity": "LOW",
+      "description": "Redis health check returns stub data when disabled rather than actual connection test",
+      "location": "/home/user/lexiflow-premium/backend/src/health/redis-health.indicator.ts:13-24",
+      "impact": "False positives when Redis is misconfigured"
+    },
+    {
+      "issue": "Queue Health Check Stubbed",
+      "severity": "MEDIUM",
+      "description": "Queue health check always returns healthy without checking Bull queue status",
+      "location": "/home/user/lexiflow-premium/backend/src/monitoring/services/health.aggregator.service.ts:317-336",
+      "impact": "Cannot detect queue failures or backlogs"
+    },
+    {
+      "issue": "External Services Health Stubbed",
+      "severity": "MEDIUM",
+      "description": "External services health check always returns healthy",
+      "location": "/home/user/lexiflow-premium/backend/src/monitoring/services/health.aggregator.service.ts:342-354",
+      "impact": "Cannot detect external API failures (PACER, calendar integrations, etc.)"
+    }
+  ],
+
+  "missingFeatures": [
+    {
+      "feature": "SLA Monitoring & Reporting",
+      "priority": "CRITICAL",
+      "description": "No SLA definition, tracking, violation detection, or reporting capabilities"
+    },
+    {
+      "feature": "APM Platform Integration",
+      "priority": "CRITICAL",
+      "description": "No Datadog, New Relic, Dynatrace, or Elastic APM integration"
+    },
+    {
+      "feature": "Exemplars (Metrics-to-Traces)",
+      "priority": "HIGH",
+      "description": "No exemplar support to link metrics to traces"
+    },
+    {
+      "feature": "Adaptive Sampling",
+      "priority": "HIGH",
+      "description": "No tail-based or adaptive sampling configuration"
+    },
+    {
+      "feature": "Alert Escalation",
+      "priority": "HIGH",
+      "description": "No alert escalation chains or PagerDuty integration"
+    },
+    {
+      "feature": "Synthetic Monitoring",
+      "priority": "MEDIUM",
+      "description": "No synthetic tests or uptime monitoring"
+    },
+    {
+      "feature": "User Journey Tracking",
+      "priority": "MEDIUM",
+      "description": "No end-to-end user journey tracking across legal workflows"
+    },
+    {
+      "feature": "Log Aggregation Platform",
+      "priority": "MEDIUM",
+      "description": "No ELK/Splunk/Datadog Logs integration for centralized log management"
+    },
+    {
+      "feature": "Continuous Profiling",
+      "priority": "LOW",
+      "description": "No CPU/memory profiling integration (Pyroscope, etc.)"
+    }
+  ],
+
+  "codeChanges": [
+    {
+      "file": "/home/user/lexiflow-premium/backend/package.json",
+      "change": "Add Missing OpenTelemetry Dependency",
+      "priority": "CRITICAL",
+      "before": "Dependencies section missing @opentelemetry/sdk-trace-base",
+      "after": "Add to dependencies object after line 81:\n    \"@opentelemetry/sdk-trace-base\": \"^1.29.0\",",
+      "code": "{\n  \"dependencies\": {\n    \"@opentelemetry/sdk-trace-base\": \"^1.29.0\",\n    \"@opentelemetry/instrumentation-http\": \"^0.54.0\",\n    \"@opentelemetry/instrumentation-express\": \"^0.43.0\",\n    \"@opentelemetry/instrumentation-pg\": \"^0.47.0\",\n    \"@opentelemetry/instrumentation-redis-4\": \"^0.43.0\"\n  }\n}"
+    },
+    {
+      "file": "/home/user/lexiflow-premium/backend/.env.example",
+      "change": "Enable OpenTelemetry by Default",
+      "priority": "CRITICAL",
+      "before": "OTEL_ENABLED=false",
+      "after": "OTEL_ENABLED=true",
+      "code": "# OpenTelemetry Configuration\nOTEL_ENABLED=true\nOTEL_SERVICE_NAME=lexiflow-backend\nOTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces\nOTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://localhost:4318/v1/metrics\nOTEL_LOG_LEVEL=info\nOTEL_TRACES_SAMPLER=parentbased_traceidratio\nOTEL_TRACES_SAMPLER_ARG=0.1"
+    },
+    {
+      "file": "/home/user/lexiflow-premium/backend/src/monitoring/services/distributed.tracing.service.ts",
+      "change": "Add Trace Sampling Configuration",
+      "priority": "HIGH",
+      "lineNumber": 84,
+      "before": "    this.sdk = new NodeSDK({\n      resource,\n      spanProcessors: [spanProcessor],\n    });",
+      "after": "Add sampler configuration",
+      "code": "import { TraceIdRatioBasedSampler, ParentBasedSampler } from '@opentelemetry/sdk-trace-base';\n\n// In initializeTracing method, before NodeSDK initialization:\nconst samplerArg = parseFloat(process.env.OTEL_TRACES_SAMPLER_ARG || '0.1');\nconst sampler = new ParentBasedSampler({\n  root: new TraceIdRatioBasedSampler(samplerArg),\n});\n\nthis.sdk = new NodeSDK({\n  resource,\n  spanProcessors: [spanProcessor],\n  sampler,\n  instrumentations: [\n    // Auto-instrumentation will be configured here\n  ],\n});"
+    },
+    {
+      "file": "/home/user/lexiflow-premium/backend/src/monitoring/services/distributed.tracing.service.ts",
+      "change": "Add Auto-Instrumentation",
+      "priority": "HIGH",
+      "lineNumber": 1,
+      "code": "import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';\nimport { HttpInstrumentation } from '@opentelemetry/instrumentation-http';\nimport { ExpressInstrumentation } from '@opentelemetry/instrumentation-express';\n\n// In initializeTracing method:\ninstrumentations: [\n  getNodeAutoInstrumentations({\n    '@opentelemetry/instrumentation-fs': { enabled: false },\n    '@opentelemetry/instrumentation-net': { enabled: false },\n  }),\n  new HttpInstrumentation({\n    ignoreIncomingPaths: ['/health', '/health/live', '/health/ready'],\n    requestHook: (span, request) => {\n      span.setAttribute('http.request.headers.user_agent', request.headers['user-agent']);\n    },\n  }),\n  new ExpressInstrumentation(),\n]"
+    },
+    {
+      "file": "/home/user/lexiflow-premium/backend/src/monitoring/services/structured.logger.service.ts",
+      "change": "Add Trace ID Injection to Logs",
+      "priority": "HIGH",
+      "lineNumber": 220,
+      "code": "import { trace } from '@opentelemetry/api';\n\nprivate buildMetadata(context?: string | LogContext, additionalMeta?: any): any {\n  const currentContext = this.getContext();\n  let contextData: LogContext = {};\n\n  if (typeof context === 'string') {\n    contextData.context = context;\n  } else if (context) {\n    contextData = context;\n  }\n\n  // Inject trace context\n  const activeSpan = trace.getActiveSpan();\n  if (activeSpan) {\n    const spanContext = activeSpan.spanContext();\n    contextData.traceId = spanContext.traceId;\n    contextData.spanId = spanContext.spanId;\n    contextData.traceFlags = spanContext.traceFlags;\n  }\n\n  const metadata = {\n    ...currentContext,\n    ...contextData,\n    ...additionalMeta,\n    timestamp: new Date().toISOString(),\n    environment: process.env.NODE_ENV || 'development',\n    service: 'lexiflow-backend',\n  };\n\n  return this.redactPII(metadata);\n}"
+    },
+    {
+      "file": "/home/user/lexiflow-premium/backend/src/monitoring/services/sla.monitoring.service.ts",
+      "change": "Create SLA Monitoring Service (NEW FILE)",
+      "priority": "CRITICAL",
+      "code": "import { Injectable } from '@nestjs/common';\nimport { MetricsCollectorService } from './metrics.collector.service';\nimport { AlertingService } from './alerting.service';\nimport { StructuredLoggerService } from './structured.logger.service';\n\nexport interface SLADefinition {\n  id: string;\n  name: string;\n  description: string;\n  target: number; // e.g., 99.9 for 99.9% availability\n  metric: 'availability' | 'latency' | 'error_rate';\n  threshold: {\n    p50?: number;\n    p95?: number;\n    p99?: number;\n  };\n  window: '1h' | '24h' | '7d' | '30d';\n}\n\nexport interface SLAStatus {\n  slaId: string;\n  currentValue: number;\n  target: number;\n  compliance: boolean;\n  compliancePercent: number;\n  violationCount: number;\n  lastViolation?: Date;\n}\n\n@Injectable()\nexport class SLAMonitoringService {\n  private slaDefinitions: Map<string, SLADefinition> = new Map();\n  private slaStatus: Map<string, SLAStatus> = new Map();\n\n  constructor(\n    private readonly metricsCollector: MetricsCollectorService,\n    private readonly alertingService: AlertingService,\n    private readonly logger: StructuredLoggerService,\n  ) {\n    this.initializeDefaultSLAs();\n    this.startSLAMonitoring();\n  }\n\n  private initializeDefaultSLAs(): void {\n    // API Availability SLA\n    this.defineSLA({\n      id: 'api-availability',\n      name: 'API Availability',\n      description: '99.9% API availability',\n      target: 99.9,\n      metric: 'availability',\n      threshold: {},\n      window: '30d',\n    });\n\n    // API Latency SLA\n    this.defineSLA({\n      id: 'api-latency-p95',\n      name: 'API Response Time (P95)',\n      description: 'P95 response time under 500ms',\n      target: 500,\n      metric: 'latency',\n      threshold: { p95: 500 },\n      window: '24h',\n    });\n\n    // Error Rate SLA\n    this.defineSLA({\n      id: 'error-rate',\n      name: 'API Error Rate',\n      description: 'Error rate below 0.1%',\n      target: 0.1,\n      metric: 'error_rate',\n      threshold: {},\n      window: '24h',\n    });\n  }\n\n  defineSLA(sla: SLADefinition): void {\n    this.slaDefinitions.set(sla.id, sla);\n    this.logger.log(`SLA defined: ${sla.name}`, { slaId: sla.id });\n  }\n\n  private startSLAMonitoring(): void {\n    // Check SLAs every 5 minutes\n    setInterval(() => {\n      this.checkAllSLAs();\n    }, 5 * 60 * 1000);\n  }\n\n  private async checkAllSLAs(): Promise<void> {\n    for (const sla of this.slaDefinitions.values()) {\n      await this.checkSLA(sla);\n    }\n  }\n\n  private async checkSLA(sla: SLADefinition): Promise<void> {\n    const currentValue = this.calculateSLAMetric(sla);\n    const compliance = this.isSLACompliant(sla, currentValue);\n    \n    const status = this.slaStatus.get(sla.id) || {\n      slaId: sla.id,\n      currentValue: 0,\n      target: sla.target,\n      compliance: true,\n      compliancePercent: 100,\n      violationCount: 0,\n    };\n\n    status.currentValue = currentValue;\n    status.compliance = compliance;\n    status.compliancePercent = this.calculateCompliance(sla, currentValue);\n\n    if (!compliance) {\n      status.violationCount++;\n      status.lastViolation = new Date();\n      await this.handleSLAViolation(sla, status);\n    }\n\n    this.slaStatus.set(sla.id, status);\n    \n    // Record metrics\n    this.metricsCollector.recordGauge(`sla.${sla.id}.current_value`, currentValue);\n    this.metricsCollector.recordGauge(`sla.${sla.id}.compliance_percent`, status.compliancePercent);\n    this.metricsCollector.recordGauge(`sla.${sla.id}.compliance`, compliance ? 1 : 0);\n  }\n\n  private calculateSLAMetric(sla: SLADefinition): number {\n    const stats = this.metricsCollector.getRequestStats();\n    \n    switch (sla.metric) {\n      case 'availability': {\n        const totalRequests = Object.values(stats).reduce((sum: number, s: any) => sum + s.count, 0);\n        const successfulRequests = Object.values(stats).reduce(\n          (sum: number, s: any) => sum + (s.count - s.errors),\n          0\n        );\n        return totalRequests > 0 ? (successfulRequests / totalRequests) * 100 : 100;\n      }\n      case 'latency': {\n        const p95Values = Object.values(stats).map((s: any) => s.p95);\n        return p95Values.length > 0 ? Math.max(...p95Values) : 0;\n      }\n      case 'error_rate': {\n        const totalRequests = Object.values(stats).reduce((sum: number, s: any) => sum + s.count, 0);\n        const totalErrors = Object.values(stats).reduce((sum: number, s: any) => sum + s.errors, 0);\n        return totalRequests > 0 ? (totalErrors / totalRequests) * 100 : 0;\n      }\n      default:\n        return 0;\n    }\n  }\n\n  private isSLACompliant(sla: SLADefinition, currentValue: number): boolean {\n    switch (sla.metric) {\n      case 'availability':\n        return currentValue >= sla.target;\n      case 'latency':\n        return currentValue <= sla.target;\n      case 'error_rate':\n        return currentValue <= sla.target;\n      default:\n        return true;\n    }\n  }\n\n  private calculateCompliance(sla: SLADefinition, currentValue: number): number {\n    switch (sla.metric) {\n      case 'availability':\n        return currentValue;\n      case 'latency':\n        return sla.target > 0 ? Math.max(0, (1 - currentValue / sla.target) * 100) : 100;\n      case 'error_rate':\n        return sla.target > 0 ? Math.max(0, (1 - currentValue / sla.target) * 100) : 100;\n      default:\n        return 100;\n    }\n  }\n\n  private async handleSLAViolation(sla: SLADefinition, status: SLAStatus): Promise<void> {\n    this.logger.warn(`SLA violation detected: ${sla.name}`, {\n      slaId: sla.id,\n      currentValue: status.currentValue,\n      target: sla.target,\n      violationCount: status.violationCount,\n    });\n\n    await this.alertingService.createAlert({\n      title: `SLA Violation: ${sla.name}`,\n      message: `${sla.description} violated. Current: ${status.currentValue.toFixed(2)}, Target: ${sla.target}`,\n      severity: 'CRITICAL',\n      source: 'sla-monitoring',\n      metadata: {\n        slaId: sla.id,\n        currentValue: status.currentValue,\n        target: sla.target,\n        compliancePercent: status.compliancePercent,\n      },\n    });\n  }\n\n  getSLAStatus(slaId?: string): SLAStatus | SLAStatus[] {\n    if (slaId) {\n      return this.slaStatus.get(slaId);\n    }\n    return Array.from(this.slaStatus.values());\n  }\n\n  getSLAReport(): any {\n    const statuses = Array.from(this.slaStatus.values());\n    const compliantSLAs = statuses.filter(s => s.compliance).length;\n    const totalSLAs = statuses.length;\n\n    return {\n      summary: {\n        total: totalSLAs,\n        compliant: compliantSLAs,\n        violated: totalSLAs - compliantSLAs,\n        overallCompliance: totalSLAs > 0 ? (compliantSLAs / totalSLAs) * 100 : 100,\n      },\n      slas: statuses,\n      timestamp: new Date().toISOString(),\n    };\n  }\n}"
+    },
+    {
+      "file": "/home/user/lexiflow-premium/backend/src/monitoring/monitoring.module.ts",
+      "change": "Add SLA Monitoring Service to Module",
+      "priority": "CRITICAL",
+      "lineNumber": 14,
+      "code": "import { SLAMonitoringService } from './services/sla.monitoring.service';\n\n// In providers array:\nproviders: [\n  MonitoringService,\n  StructuredLoggerService,\n  MetricsCollectorService,\n  AlertingService,\n  DistributedTracingService,\n  HealthAggregatorService,\n  PerformanceInterceptor,\n  SLAMonitoringService, // Add this\n],\nexports: [\n  MonitoringService,\n  StructuredLoggerService,\n  MetricsCollectorService,\n  AlertingService,\n  DistributedTracingService,\n  HealthAggregatorService,\n  PerformanceInterceptor,\n  SLAMonitoringService, // Add this\n],"
+    },
+    {
+      "file": "/home/user/lexiflow-premium/backend/src/monitoring/controllers/metrics.controller.ts",
+      "change": "Add SLA Endpoints",
+      "priority": "HIGH",
+      "lineNumber": 20,
+      "code": "import { SLAMonitoringService } from '../services/sla.monitoring.service';\n\nconstructor(\n  private readonly metricsCollector: MetricsCollectorService,\n  private readonly healthAggregator: HealthAggregatorService,\n  private readonly alertingService: AlertingService,\n  private readonly slaMonitoring: SLAMonitoringService, // Add this\n) {}\n\n/**\n * Get SLA status\n */\n@Public()\n@Get('sla')\n@ApiOperation({\n  summary: 'Get SLA status',\n  description: 'Returns current SLA compliance status',\n})\ngetSLAStatus() {\n  return this.slaMonitoring.getSLAStatus();\n}\n\n/**\n * Get SLA report\n */\n@Public()\n@Get('sla/report')\n@ApiOperation({\n  summary: 'Get SLA compliance report',\n  description: 'Returns comprehensive SLA compliance report',\n})\ngetSLAReport() {\n  return this.slaMonitoring.getSLAReport();\n}"
+    },
+    {
+      "file": "/home/user/lexiflow-premium/backend/src/monitoring/services/health.aggregator.service.ts",
+      "change": "Implement Real Queue Health Check",
+      "priority": "MEDIUM",
+      "lineNumber": 317,
+      "code": "import { InjectQueue } from '@nestjs/bull';\nimport { Queue } from 'bull';\n\nconstructor(\n  @InjectDataSource()\n  private readonly dataSource: DataSource,\n  private readonly logger: StructuredLoggerService,\n  @InjectQueue('documents') private documentsQueue: Queue, // Inject queues\n  @InjectQueue('notifications') private notificationsQueue: Queue,\n) {}\n\nprivate async checkQueue(): Promise<HealthCheck> {\n  try {\n    const queues = [\n      { name: 'documents', queue: this.documentsQueue },\n      { name: 'notifications', queue: this.notificationsQueue },\n    ];\n\n    const queueStatuses = await Promise.all(\n      queues.map(async ({ name, queue }) => {\n        const jobCounts = await queue.getJobCounts();\n        const failed = jobCounts.failed || 0;\n        const active = jobCounts.active || 0;\n        const waiting = jobCounts.waiting || 0;\n\n        return {\n          name,\n          active,\n          waiting,\n          failed,\n          status: failed > 100 ? 'degraded' : 'up',\n        };\n      })\n    );\n\n    const hasIssues = queueStatuses.some(q => q.status === 'degraded');\n\n    return {\n      status: hasIssues ? 'degraded' : 'up',\n      message: hasIssues ? 'Some queues have high failure rates' : 'All queues healthy',\n      details: { queues: queueStatuses },\n      lastChecked: new Date().toISOString(),\n    };\n  } catch (error) {\n    return {\n      status: 'down',\n      message: `Queue health check failed: ${error.message}`,\n      lastChecked: new Date().toISOString(),\n    };\n  }\n}"
+    },
+    {
+      "file": "/home/user/lexiflow-premium/backend/src/app.module.ts",
+      "change": "Enable Telemetry Module",
+      "priority": "HIGH",
+      "lineNumber": 34,
+      "before": "// Note: OpenTelemetry telemetry module is available but optional\n// Uncomment to enable: import { TelemetryModule } from './telemetry/telemetry.module';",
+      "after": "import { TelemetryModule } from './telemetry/telemetry.module';",
+      "code": "// At top of file:\nimport { TelemetryModule } from './telemetry/telemetry.module';\n\n// In imports array (around line 214):\n// Telemetry & Observability\nTelemetryModule, // Enable this"
+    }
+  ],
+
+  "recommendations": {
+    "immediate": [
+      {
+        "priority": 1,
+        "action": "Install @opentelemetry/sdk-trace-base dependency",
+        "command": "npm install @opentelemetry/sdk-trace-base@^1.29.0"
+      },
+      {
+        "priority": 2,
+        "action": "Enable OpenTelemetry in environment configuration",
+        "command": "Set OTEL_ENABLED=true in production .env"
+      },
+      {
+        "priority": 3,
+        "action": "Add trace sampling to avoid 100% capture overhead",
+        "impact": "Reduce observability costs by 90%"
+      },
+      {
+        "priority": 4,
+        "action": "Implement SLA monitoring service",
+        "impact": "Track and prove SLA compliance to customers"
+      }
+    ],
+    "shortTerm": [
+      {
+        "action": "Integrate trace IDs into logs for correlation",
+        "timeline": "1-2 days"
+      },
+      {
+        "action": "Add auto-instrumentation for HTTP, Express, PostgreSQL, Redis",
+        "timeline": "2-3 days"
+      },
+      {
+        "action": "Implement real health checks for queues and external services",
+        "timeline": "2-3 days"
+      },
+      {
+        "action": "Set up Grafana dashboards for metrics visualization",
+        "timeline": "3-5 days"
+      }
+    ],
+    "longTerm": [
+      {
+        "action": "Migrate metrics to OpenTelemetry Metrics SDK",
+        "timeline": "1-2 weeks"
+      },
+      {
+        "action": "Integrate with enterprise APM (Datadog or New Relic)",
+        "timeline": "2-3 weeks"
+      },
+      {
+        "action": "Implement business metrics for legal operations",
+        "timeline": "2-3 weeks"
+      },
+      {
+        "action": "Set up synthetic monitoring and uptime checks",
+        "timeline": "1-2 weeks"
+      },
+      {
+        "action": "Implement alert escalation and PagerDuty integration",
+        "timeline": "1 week"
+      }
+    ]
+  },
+
+  "architectureRecommendations": {
+    "observabilityStack": {
+      "tracing": "OpenTelemetry + Jaeger/Tempo",
+      "metrics": "OpenTelemetry + Prometheus",
+      "logging": "Winston + ELK Stack / Datadog Logs",
+      "apm": "Datadog APM or New Relic",
+      "dashboards": "Grafana + custom legal dashboards",
+      "alerting": "AlertManager + PagerDuty",
+      "uptime": "Pingdom / UptimeRobot"
+    },
+    "bestPractices": [
+      "Use OpenTelemetry for vendor-agnostic observability",
+      "Implement 10% trace sampling with adaptive sampling for errors",
+      "Correlate logs, metrics, and traces with trace IDs",
+      "Export health check results as Prometheus metrics",
+      "Create business-specific metrics for legal operations",
+      "Set up SLA monitoring with automated alerting",
+      "Use structured logging with PII redaction (already implemented)",
+      "Implement exemplars to link metrics to traces",
+      "Set up continuous profiling for production optimization"
+    ]
+  },
+
+  "complianceConsiderations": {
+    "dataRetention": "Audit logs retained for 7 years (compliant). Ensure trace and metric retention aligns with legal requirements",
+    "piiHandling": "PII redaction implemented in logs (compliant). Extend to traces and metrics",
+    "security": "Ensure observability data is encrypted in transit and at rest. Implement RBAC for observability platforms"
+  },
+
+  "estimatedEffort": {
+    "criticalFixes": "40-60 hours",
+    "fullImplementation": "120-160 hours",
+    "teamSize": "2 senior engineers + 1 DevOps engineer",
+    "timeline": "4-6 weeks for production-ready observability"
+  }
+}

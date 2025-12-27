@@ -1,0 +1,523 @@
+{
+  "auditSummary": {
+    "auditDate": "2025-12-27",
+    "auditor": "Enterprise Agent 7: Testing Audit Agent",
+    "overallStatus": "CRITICAL - FAR BELOW ENTERPRISE STANDARDS",
+    "currentCoverage": "~20%",
+    "targetCoverage": "80%",
+    "criticalityLevel": "HIGH"
+  },
+  "coverageMetrics": {
+    "services": {
+      "total": 169,
+      "tested": 30,
+      "coverage": "17.7%",
+      "gap": 139,
+      "status": "CRITICAL"
+    },
+    "controllers": {
+      "total": 98,
+      "tested": 23,
+      "coverage": "23.5%",
+      "gap": 75,
+      "status": "CRITICAL"
+    },
+    "resolvers": {
+      "total": 5,
+      "tested": 0,
+      "coverage": "0%",
+      "gap": 5,
+      "status": "CRITICAL",
+      "files": [
+        "src/graphql/resolvers/user.resolver.ts",
+        "src/graphql/resolvers/discovery.resolver.ts",
+        "src/graphql/resolvers/case.resolver.ts",
+        "src/graphql/resolvers/document.resolver.ts",
+        "src/graphql/resolvers/billing.resolver.ts"
+      ]
+    },
+    "gateways": {
+      "total": 2,
+      "tested": 0,
+      "coverage": "0%",
+      "gap": 2,
+      "status": "CRITICAL"
+    },
+    "guardsInterceptorsPipes": {
+      "total": 29,
+      "tested": 5,
+      "coverage": "17.2%",
+      "gap": 24,
+      "status": "CRITICAL"
+    },
+    "middleware": {
+      "total": 3,
+      "tested": 0,
+      "coverage": "0%",
+      "gap": 3,
+      "status": "CRITICAL",
+      "files": [
+        "src/common/middleware/sanitization.middleware.ts",
+        "src/common/middleware/optimized-compression.middleware.ts",
+        "src/security/middleware/security.headers.middleware.ts"
+      ]
+    },
+    "exceptionFilters": {
+      "total": 3,
+      "tested": 0,
+      "coverage": "0%",
+      "gap": 3,
+      "status": "CRITICAL",
+      "files": [
+        "src/common/filters/all-exceptions.filter.ts",
+        "src/common/filters/enterprise-exception.filter.ts",
+        "src/common/filters/http-exception.filter.ts"
+      ]
+    },
+    "integrationTests": {
+      "total": 0,
+      "status": "MISSING",
+      "note": "No *.integration.spec.ts files found"
+    },
+    "e2eTests": {
+      "total": 8,
+      "status": "INSUFFICIENT",
+      "note": "Limited E2E coverage for 350M enterprise application"
+    },
+    "entities": {
+      "total": 107,
+      "note": "No entity-level unit tests"
+    },
+    "dtos": {
+      "total": 186,
+      "validationDecorators": 205,
+      "note": "DTOs have validation but no validation tests"
+    }
+  },
+  "testingGaps": [
+    {
+      "category": "Unit Test Coverage",
+      "severity": "CRITICAL",
+      "description": "Only 17.7% of services have tests. Enterprise standard requires 80%+",
+      "impact": "139 services completely untested",
+      "risk": "High risk of undetected bugs in business logic"
+    },
+    {
+      "category": "Controller Coverage",
+      "severity": "CRITICAL",
+      "description": "Only 23.5% of controllers tested",
+      "impact": "75 controllers with no HTTP endpoint tests",
+      "risk": "API contract violations, incorrect status codes, missing validation"
+    },
+    {
+      "category": "GraphQL Coverage",
+      "severity": "CRITICAL",
+      "description": "0% GraphQL resolver coverage",
+      "impact": "All 5 GraphQL resolvers untested",
+      "risk": "GraphQL API completely untested - schema violations, resolver errors"
+    },
+    {
+      "category": "WebSocket Coverage",
+      "severity": "CRITICAL",
+      "description": "0% WebSocket gateway coverage",
+      "impact": "Real-time features completely untested",
+      "risk": "WebSocket connection failures, message handling errors"
+    },
+    {
+      "category": "Integration Tests",
+      "severity": "CRITICAL",
+      "description": "No integration tests exist",
+      "impact": "Database interactions, external services, module integration untested",
+      "risk": "Integration failures in production"
+    },
+    {
+      "category": "Middleware Coverage",
+      "severity": "HIGH",
+      "description": "0% middleware coverage",
+      "impact": "Security headers, compression, sanitization untested",
+      "risk": "Security vulnerabilities, performance issues"
+    },
+    {
+      "category": "Exception Filter Coverage",
+      "severity": "HIGH",
+      "description": "0% exception filter coverage",
+      "impact": "Error handling and response formatting untested",
+      "risk": "Improper error responses, information leakage"
+    },
+    {
+      "category": "Guards/Interceptors Coverage",
+      "severity": "HIGH",
+      "description": "Only 17.2% coverage",
+      "impact": "Authentication, authorization, logging untested",
+      "risk": "Security bypasses, missing audit logs"
+    },
+    {
+      "category": "DTO Validation Tests",
+      "severity": "MEDIUM",
+      "description": "186 DTOs with 205 validation decorators but no validation tests",
+      "impact": "Input validation rules untested",
+      "risk": "Invalid data accepted, validation bypass"
+    },
+    {
+      "category": "E2E Test Coverage",
+      "severity": "MEDIUM",
+      "description": "Only 8 E2E tests for entire application",
+      "impact": "Critical user flows untested end-to-end",
+      "risk": "Broken user journeys in production"
+    },
+    {
+      "category": "Skipped Tests",
+      "severity": "MEDIUM",
+      "description": "45 tests are skipped",
+      "impact": "Technical debt accumulation",
+      "risk": "False sense of security from passing test suite"
+    }
+  ],
+  "patternIssues": [
+    {
+      "issue": "Inconsistent Mock Patterns",
+      "severity": "MEDIUM",
+      "description": "Mix of jest.fn(), jest.mock(), and manual mocks",
+      "occurrences": "Throughout test suite",
+      "recommendation": "Standardize on jest.fn() for services, use mock factories from test-utils"
+    },
+    {
+      "issue": "Real bcrypt in Some Tests",
+      "severity": "MEDIUM",
+      "description": "Some tests use real bcrypt instead of mocks, slowing tests",
+      "files": [
+        "src/users/users.service.spec.ts",
+        "src/auth/auth.service.spec.ts"
+      ],
+      "recommendation": "Always mock bcrypt at module level"
+    },
+    {
+      "issue": "Incomplete Assertion Patterns",
+      "severity": "MEDIUM",
+      "description": "Only 319 'toHaveBeenCalled' assertions for 10,595 lines of tests",
+      "impact": "Tests may pass without actually verifying behavior",
+      "recommendation": "Every mock call should have assertion"
+    },
+    {
+      "issue": "Skipped Test Accumulation",
+      "severity": "MEDIUM",
+      "description": "45 tests using .skip or xit",
+      "impact": "Technical debt, incomplete coverage",
+      "recommendation": "Fix or remove skipped tests immediately"
+    },
+    {
+      "issue": "Missing Repository Transaction Tests",
+      "severity": "HIGH",
+      "description": "No tests verify database transaction rollback behavior",
+      "impact": "Data consistency issues may go undetected",
+      "recommendation": "Add transaction isolation tests"
+    },
+    {
+      "issue": "No Error Path Testing",
+      "severity": "HIGH",
+      "description": "Limited testing of error scenarios and edge cases",
+      "impact": "Error handling code paths untested",
+      "recommendation": "Test all error conditions (network failures, DB errors, validation failures)"
+    },
+    {
+      "issue": "Missing Test Data Factories",
+      "severity": "LOW",
+      "description": "Test data creation is repetitive, not using factories consistently",
+      "impact": "Test maintenance burden",
+      "recommendation": "Use TestDataFactory and MockFactory from test-utils"
+    },
+    {
+      "issue": "Hardcoded Test Data",
+      "severity": "LOW",
+      "description": "Many tests use hardcoded values instead of factories",
+      "impact": "Tests are brittle, hard to maintain",
+      "recommendation": "Use faker.js and factory patterns"
+    }
+  ],
+  "infrastructureIssues": [
+    {
+      "issue": "No Coverage Reports",
+      "severity": "HIGH",
+      "description": "Coverage directory not found, no coverage tracking",
+      "impact": "Cannot measure or track coverage improvements",
+      "recommendation": "Run 'npm run test:cov' and commit coverage to CI/CD"
+    },
+    {
+      "issue": "Missing Integration Test Infrastructure",
+      "severity": "CRITICAL",
+      "description": "No integration test setup despite having test database utilities",
+      "impact": "Cannot test database interactions properly",
+      "recommendation": "Create integration test suite with real database"
+    },
+    {
+      "issue": "Insufficient E2E Coverage",
+      "severity": "HIGH",
+      "description": "Only 8 E2E tests for enterprise application",
+      "impact": "Critical business flows untested",
+      "recommendation": "Add E2E tests for all critical user journeys"
+    },
+    {
+      "issue": "No Performance Tests",
+      "severity": "MEDIUM",
+      "description": "No performance or load testing infrastructure",
+      "impact": "Performance regressions undetected",
+      "recommendation": "Add performance benchmarks for critical paths"
+    },
+    {
+      "issue": "Test Isolation Issues",
+      "severity": "MEDIUM",
+      "description": "Some tests may share state (27 process.env usages in tests)",
+      "impact": "Flaky tests, order-dependent failures",
+      "recommendation": "Mock environment variables in beforeEach"
+    },
+    {
+      "issue": "No Contract Testing",
+      "severity": "MEDIUM",
+      "description": "No API contract tests for external integrations",
+      "impact": "Breaking changes to external APIs undetected",
+      "recommendation": "Add Pact or OpenAPI contract tests"
+    },
+    {
+      "issue": "Missing Security Tests",
+      "severity": "HIGH",
+      "description": "No dedicated security test suite",
+      "impact": "Security vulnerabilities may be introduced",
+      "recommendation": "Add security-focused tests (SQL injection, XSS, CSRF)"
+    }
+  ],
+  "mockingIssues": [
+    {
+      "issue": "Inconsistent Repository Mocking",
+      "severity": "MEDIUM",
+      "description": "Repository mocks created inconsistently across tests",
+      "files": [
+        "src/cases/cases.service.spec.ts",
+        "src/billing/billing.service.spec.ts"
+      ],
+      "recommendation": "Use createMockRepository from testSetup.ts consistently"
+    },
+    {
+      "issue": "No Mock Reset Between Tests",
+      "severity": "MEDIUM",
+      "description": "Some tests don't call jest.clearAllMocks()",
+      "impact": "Mock state bleeding between tests",
+      "recommendation": "Always call jest.clearAllMocks() in beforeEach"
+    },
+    {
+      "issue": "Overly Complex Mocks",
+      "severity": "LOW",
+      "description": "Some mocks recreate entire service logic",
+      "impact": "Tests become coupled to implementation",
+      "recommendation": "Mock at appropriate boundary, test behavior not implementation"
+    },
+    {
+      "issue": "Missing Mock Verification",
+      "severity": "MEDIUM",
+      "description": "Not all mock calls are verified with assertions",
+      "impact": "Tests may not catch when code doesn't call expected methods",
+      "recommendation": "Verify all critical mock interactions"
+    }
+  ],
+  "codeChanges": [
+    {
+      "priority": "CRITICAL",
+      "category": "GraphQL Resolver Tests",
+      "file": "src/graphql/resolvers/user.resolver.spec.ts",
+      "action": "CREATE",
+      "description": "Add comprehensive resolver tests",
+      "code": "import { Test, TestingModule } from '@nestjs/testing';\nimport { UserResolver } from './user.resolver';\nimport { UsersService } from '../../users/users.service';\nimport { createMockConfigService, createMockJwtService } from '../../../test/setup/testSetup';\n\ndescribe('UserResolver', () => {\n  let resolver: UserResolver;\n  let usersService: UsersService;\n\n  const mockUser = {\n    id: '123',\n    email: 'test@example.com',\n    firstName: 'John',\n    lastName: 'Doe',\n    role: 'CLIENT_USER'\n  };\n\n  const mockUsersService = {\n    findAll: jest.fn().mockResolvedValue([mockUser]),\n    findById: jest.fn().mockResolvedValue(mockUser),\n    create: jest.fn().mockResolvedValue(mockUser),\n    update: jest.fn().mockResolvedValue(mockUser),\n    remove: jest.fn().mockResolvedValue(undefined)\n  };\n\n  beforeEach(async () => {\n    const module: TestingModule = await Test.createTestingModule({\n      providers: [\n        UserResolver,\n        { provide: UsersService, useValue: mockUsersService }\n      ]\n    }).compile();\n\n    resolver = module.get<UserResolver>(UserResolver);\n    usersService = module.get<UsersService>(UsersService);\n    jest.clearAllMocks();\n  });\n\n  it('should be defined', () => {\n    expect(resolver).toBeDefined();\n  });\n\n  describe('users query', () => {\n    it('should return array of users', async () => {\n      const result = await resolver.users();\n      expect(result).toEqual([mockUser]);\n      expect(usersService.findAll).toHaveBeenCalled();\n    });\n  });\n\n  describe('user query', () => {\n    it('should return user by id', async () => {\n      const result = await resolver.user('123');\n      expect(result).toEqual(mockUser);\n      expect(usersService.findById).toHaveBeenCalledWith('123');\n    });\n\n    it('should throw error when user not found', async () => {\n      mockUsersService.findById.mockResolvedValue(null);\n      await expect(resolver.user('999')).rejects.toThrow();\n    });\n  });\n\n  describe('createUser mutation', () => {\n    it('should create new user', async () => {\n      const input = {\n        email: 'new@example.com',\n        firstName: 'Jane',\n        lastName: 'Smith',\n        password: 'password123'\n      };\n      const result = await resolver.createUser(input);\n      expect(result).toEqual(mockUser);\n      expect(usersService.create).toHaveBeenCalledWith(input);\n    });\n  });\n});"
+    },
+    {
+      "priority": "CRITICAL",
+      "category": "Integration Tests Infrastructure",
+      "file": "test/integration/database.integration.spec.ts",
+      "action": "CREATE",
+      "description": "Add database integration test example",
+      "code": "import { Test, TestingModule } from '@nestjs/testing';\nimport { TypeOrmModule } from '@nestjs/typeorm';\nimport { DataSource } from 'typeorm';\nimport { CasesService } from '../../src/cases/cases.service';\nimport { Case } from '../../src/cases/entities/case.entity';\nimport { createTestDatabaseHelper } from '../utils/testDatabase';\n\ndescribe('Cases Integration Tests', () => {\n  let module: TestingModule;\n  let casesService: CasesService;\n  let dataSource: DataSource;\n  const dbHelper = createTestDatabaseHelper();\n\n  beforeAll(async () => {\n    dataSource = await dbHelper.createTestDataSource({\n      type: 'postgres',\n      database: 'lexiflow_test',\n      synchronize: true,\n      dropSchema: true\n    });\n\n    module = await Test.createTestingModule({\n      imports: [\n        TypeOrmModule.forRoot({\n          type: 'postgres',\n          database: 'lexiflow_test',\n          entities: [Case],\n          synchronize: true\n        }),\n        TypeOrmModule.forFeature([Case])\n      ],\n      providers: [CasesService]\n    }).compile();\n\n    casesService = module.get<CasesService>(CasesService);\n  });\n\n  afterAll(async () => {\n    await dbHelper.closeConnection();\n    await module.close();\n  });\n\n  beforeEach(async () => {\n    await dbHelper.cleanDatabase();\n  });\n\n  describe('create and retrieve', () => {\n    it('should create case in database and retrieve it', async () => {\n      const caseData = {\n        title: 'Integration Test Case',\n        caseNumber: 'INT-001',\n        type: 'CIVIL',\n        status: 'ACTIVE'\n      };\n\n      const created = await casesService.create(caseData);\n      expect(created).toHaveProperty('id');\n\n      const retrieved = await casesService.findOne(created.id);\n      expect(retrieved).toMatchObject(caseData);\n    });\n\n    it('should enforce unique case number constraint', async () => {\n      const caseData = {\n        title: 'Test Case',\n        caseNumber: 'UNIQUE-001',\n        type: 'CIVIL',\n        status: 'ACTIVE'\n      };\n\n      await casesService.create(caseData);\n      await expect(casesService.create(caseData)).rejects.toThrow();\n    });\n  });\n\n  describe('transactions', () => {\n    it('should rollback on error', async () => {\n      await dbHelper.runInTransaction(async (manager) => {\n        const repository = manager.getRepository(Case);\n        await repository.save({\n          title: 'Test',\n          caseNumber: 'TX-001',\n          type: 'CIVIL',\n          status: 'ACTIVE'\n        });\n        throw new Error('Rollback test');\n      }).catch(() => {});\n\n      const count = await dbHelper.countRecords('cases');\n      expect(count).toBe(0);\n    });\n  });\n});"
+    },
+    {
+      "priority": "CRITICAL",
+      "category": "Middleware Tests",
+      "file": "src/common/middleware/__tests__/sanitization.middleware.spec.ts",
+      "action": "CREATE",
+      "description": "Add sanitization middleware tests",
+      "code": "import { SanitizationMiddleware } from '../sanitization.middleware';\nimport { Request, Response, NextFunction } from 'express';\n\ndescribe('SanitizationMiddleware', () => {\n  let middleware: SanitizationMiddleware;\n  let mockRequest: Partial<Request>;\n  let mockResponse: Partial<Response>;\n  let nextFunction: NextFunction;\n\n  beforeEach(() => {\n    middleware = new SanitizationMiddleware();\n    mockRequest = {\n      body: {},\n      query: {},\n      params: {}\n    };\n    mockResponse = {};\n    nextFunction = jest.fn();\n  });\n\n  describe('XSS prevention', () => {\n    it('should sanitize HTML tags from request body', () => {\n      mockRequest.body = {\n        text: '<script>alert(\"XSS\")</script>Safe text'\n      };\n\n      middleware.use(mockRequest as Request, mockResponse as Response, nextFunction);\n\n      expect(mockRequest.body.text).not.toContain('<script>');\n      expect(nextFunction).toHaveBeenCalled();\n    });\n\n    it('should sanitize nested objects', () => {\n      mockRequest.body = {\n        user: {\n          name: '<img src=x onerror=alert(1)>'\n        }\n      };\n\n      middleware.use(mockRequest as Request, mockResponse as Response, nextFunction);\n\n      expect(mockRequest.body.user.name).not.toContain('<img');\n    });\n\n    it('should sanitize arrays', () => {\n      mockRequest.body = {\n        items: ['<script>evil</script>', 'safe']\n      };\n\n      middleware.use(mockRequest as Request, mockResponse as Response, nextFunction);\n\n      expect(mockRequest.body.items[0]).not.toContain('<script>');\n    });\n  });\n\n  describe('query parameters', () => {\n    it('should sanitize query parameters', () => {\n      mockRequest.query = {\n        search: '<b>onload=alert(1)</b>'\n      };\n\n      middleware.use(mockRequest as Request, mockResponse as Response, nextFunction);\n\n      expect(mockRequest.query.search).not.toContain('<b>');\n    });\n  });\n});"
+    },
+    {
+      "priority": "HIGH",
+      "category": "Exception Filter Tests",
+      "file": "src/common/filters/__tests__/enterprise-exception.filter.spec.ts",
+      "action": "CREATE",
+      "description": "Add exception filter tests",
+      "code": "import { EnterpriseExceptionFilter } from '../enterprise-exception.filter';\nimport { ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';\nimport { Test } from '@nestjs/testing';\n\ndescribe('EnterpriseExceptionFilter', () => {\n  let filter: EnterpriseExceptionFilter;\n  let mockArgumentsHost: ArgumentsHost;\n  let mockResponse: any;\n  let mockRequest: any;\n\n  beforeEach(() => {\n    filter = new EnterpriseExceptionFilter();\n\n    mockResponse = {\n      status: jest.fn().mockReturnThis(),\n      json: jest.fn().mockReturnThis()\n    };\n\n    mockRequest = {\n      url: '/api/test',\n      method: 'GET',\n      ip: '127.0.0.1'\n    };\n\n    mockArgumentsHost = {\n      switchToHttp: jest.fn().mockReturnValue({\n        getResponse: () => mockResponse,\n        getRequest: () => mockRequest\n      })\n    } as any;\n  });\n\n  describe('HTTP exceptions', () => {\n    it('should format 404 errors correctly', () => {\n      const exception = new HttpException('Not Found', HttpStatus.NOT_FOUND);\n\n      filter.catch(exception, mockArgumentsHost);\n\n      expect(mockResponse.status).toHaveBeenCalledWith(404);\n      expect(mockResponse.json).toHaveBeenCalledWith(\n        expect.objectContaining({\n          statusCode: 404,\n          message: expect.any(String),\n          path: '/api/test',\n          timestamp: expect.any(String)\n        })\n      );\n    });\n\n    it('should not expose stack traces in production', () => {\n      const originalEnv = process.env.NODE_ENV;\n      process.env.NODE_ENV = 'production';\n\n      const exception = new Error('Internal error');\n      filter.catch(exception, mockArgumentsHost);\n\n      expect(mockResponse.json).toHaveBeenCalledWith(\n        expect.not.objectContaining({\n          stack: expect.anything()\n        })\n      );\n\n      process.env.NODE_ENV = originalEnv;\n    });\n\n    it('should log errors for monitoring', () => {\n      const logSpy = jest.spyOn(console, 'error').mockImplementation();\n      const exception = new Error('Test error');\n\n      filter.catch(exception, mockArgumentsHost);\n\n      expect(logSpy).toHaveBeenCalled();\n      logSpy.mockRestore();\n    });\n  });\n\n  describe('validation errors', () => {\n    it('should format validation errors properly', () => {\n      const exception = new HttpException(\n        { message: ['field is required'] },\n        HttpStatus.BAD_REQUEST\n      );\n\n      filter.catch(exception, mockArgumentsHost);\n\n      expect(mockResponse.status).toHaveBeenCalledWith(400);\n    });\n  });\n});"
+    },
+    {
+      "priority": "HIGH",
+      "category": "DTO Validation Tests",
+      "file": "src/cases/dto/__tests__/create-case.dto.spec.ts",
+      "action": "CREATE",
+      "description": "Add DTO validation tests",
+      "code": "import { validate } from 'class-validator';\nimport { plainToInstance } from 'class-transformer';\nimport { CreateCaseDto } from '../create-case.dto';\n\ndescribe('CreateCaseDto', () => {\n  describe('validation', () => {\n    it('should pass with valid data', async () => {\n      const dto = plainToInstance(CreateCaseDto, {\n        title: 'Test Case',\n        caseNumber: 'CASE-001',\n        type: 'CIVIL',\n        status: 'ACTIVE',\n        jurisdiction: 'Federal'\n      });\n\n      const errors = await validate(dto);\n      expect(errors).toHaveLength(0);\n    });\n\n    it('should fail when title is missing', async () => {\n      const dto = plainToInstance(CreateCaseDto, {\n        caseNumber: 'CASE-001',\n        type: 'CIVIL'\n      });\n\n      const errors = await validate(dto);\n      expect(errors.length).toBeGreaterThan(0);\n      expect(errors[0].property).toBe('title');\n    });\n\n    it('should fail when title is too short', async () => {\n      const dto = plainToInstance(CreateCaseDto, {\n        title: 'ab',\n        caseNumber: 'CASE-001',\n        type: 'CIVIL'\n      });\n\n      const errors = await validate(dto);\n      expect(errors.length).toBeGreaterThan(0);\n    });\n\n    it('should fail with invalid case type', async () => {\n      const dto = plainToInstance(CreateCaseDto, {\n        title: 'Test',\n        caseNumber: 'CASE-001',\n        type: 'INVALID_TYPE'\n      });\n\n      const errors = await validate(dto);\n      expect(errors.length).toBeGreaterThan(0);\n    });\n\n    it('should sanitize input strings', async () => {\n      const dto = plainToInstance(CreateCaseDto, {\n        title: '  Test Case  ',\n        caseNumber: 'CASE-001',\n        type: 'CIVIL'\n      });\n\n      await validate(dto);\n      expect(dto.title.trim()).toBe('Test Case');\n    });\n  });\n});"
+    },
+    {
+      "priority": "HIGH",
+      "category": "E2E Critical Flow Tests",
+      "file": "test/case-lifecycle.e2e-spec.ts",
+      "action": "CREATE",
+      "description": "Add critical case lifecycle E2E test",
+      "code": "import { Test, TestingModule } from '@nestjs/testing';\nimport { INestApplication, ValidationPipe } from '@nestjs/common';\nimport * as request from 'supertest';\nimport { AppModule } from '../src/app.module';\nimport { DataSource } from 'typeorm';\n\ndescribe('Case Lifecycle (e2e)', () => {\n  let app: INestApplication;\n  let dataSource: DataSource;\n  let authToken: string;\n  let caseId: string;\n\n  beforeAll(async () => {\n    const moduleFixture: TestingModule = await Test.createTestingModule({\n      imports: [AppModule]\n    }).compile();\n\n    app = moduleFixture.createNestApplication();\n    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));\n    await app.init();\n\n    dataSource = moduleFixture.get<DataSource>(DataSource);\n\n    // Login to get auth token\n    const loginResponse = await request(app.getHttpServer())\n      .post('/auth/login')\n      .send({ email: 'admin@lexiflow.com', password: 'admin123' });\n    authToken = loginResponse.body.access_token;\n  });\n\n  afterAll(async () => {\n    if (dataSource?.isInitialized) {\n      await dataSource.destroy();\n    }\n    await app.close();\n  });\n\n  describe('Complete case workflow', () => {\n    it('should create, update, add documents, and close a case', async () => {\n      // Step 1: Create case\n      const createResponse = await request(app.getHttpServer())\n        .post('/cases')\n        .set('Authorization', `Bearer ${authToken}`)\n        .send({\n          title: 'E2E Test Case',\n          caseNumber: 'E2E-001',\n          type: 'CIVIL',\n          status: 'ACTIVE',\n          jurisdiction: 'Federal'\n        })\n        .expect(201);\n\n      caseId = createResponse.body.id;\n      expect(createResponse.body).toHaveProperty('id');\n      expect(createResponse.body.title).toBe('E2E Test Case');\n\n      // Step 2: Retrieve case\n      const getResponse = await request(app.getHttpServer())\n        .get(`/cases/${caseId}`)\n        .set('Authorization', `Bearer ${authToken}`)\n        .expect(200);\n\n      expect(getResponse.body.id).toBe(caseId);\n\n      // Step 3: Update case\n      const updateResponse = await request(app.getHttpServer())\n        .patch(`/cases/${caseId}`)\n        .set('Authorization', `Bearer ${authToken}`)\n        .send({ status: 'IN_PROGRESS' })\n        .expect(200);\n\n      expect(updateResponse.body.status).toBe('IN_PROGRESS');\n\n      // Step 4: Add document to case\n      const documentResponse = await request(app.getHttpServer())\n        .post('/documents')\n        .set('Authorization', `Bearer ${authToken}`)\n        .send({\n          title: 'Case Document',\n          caseId: caseId,\n          type: 'BRIEF'\n        })\n        .expect(201);\n\n      expect(documentResponse.body.caseId).toBe(caseId);\n\n      // Step 5: Close case\n      const closeResponse = await request(app.getHttpServer())\n        .patch(`/cases/${caseId}`)\n        .set('Authorization', `Bearer ${authToken}`)\n        .send({ status: 'CLOSED' })\n        .expect(200);\n\n      expect(closeResponse.body.status).toBe('CLOSED');\n    });\n  });\n\n  describe('Error handling', () => {\n    it('should return 401 for unauthenticated requests', async () => {\n      await request(app.getHttpServer())\n        .get('/cases')\n        .expect(401);\n    });\n\n    it('should return 400 for invalid case data', async () => {\n      await request(app.getHttpServer())\n        .post('/cases')\n        .set('Authorization', `Bearer ${authToken}`)\n        .send({ title: 'ab' })  // Too short\n        .expect(400);\n    });\n\n    it('should return 404 for non-existent case', async () => {\n      await request(app.getHttpServer())\n        .get('/cases/non-existent-id')\n        .set('Authorization', `Bearer ${authToken}`)\n        .expect(404);\n    });\n  });\n});"
+    },
+    {
+      "priority": "MEDIUM",
+      "category": "Test Infrastructure",
+      "file": "test/setup/globalSetup.ts",
+      "action": "CREATE",
+      "description": "Add global test setup for better isolation",
+      "code": "import { configDotenv } from 'dotenv';\n\nexport default async function globalSetup() {\n  // Load test environment variables\n  configDotenv({ path: '.env.test' });\n\n  // Set test environment\n  process.env.NODE_ENV = 'test';\n  process.env.DATABASE_NAME = 'lexiflow_test';\n  process.env.LOG_LEVEL = 'error';\n\n  // Disable external services in tests\n  process.env.DISABLE_EXTERNAL_SERVICES = 'true';\n\n  console.log('🧪 Global test setup complete');\n}\n\nexport async function globalTeardown() {\n  console.log('🧹 Global test teardown complete');\n}"
+    },
+    {
+      "priority": "MEDIUM",
+      "category": "CI/CD Configuration",
+      "file": ".github/workflows/test.yml",
+      "action": "CREATE",
+      "description": "Add CI/CD test workflow",
+      "code": "name: Test Suite\n\non:\n  push:\n    branches: [main, develop]\n  pull_request:\n    branches: [main, develop]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n\n    services:\n      postgres:\n        image: postgres:15\n        env:\n          POSTGRES_USER: postgres\n          POSTGRES_PASSWORD: postgres\n          POSTGRES_DB: lexiflow_test\n        options: >-\n          --health-cmd pg_isready\n          --health-interval 10s\n          --health-timeout 5s\n          --health-retries 5\n        ports:\n          - 5432:5432\n\n      redis:\n        image: redis:7-alpine\n        options: >-\n          --health-cmd \"redis-cli ping\"\n          --health-interval 10s\n          --health-timeout 5s\n          --health-retries 5\n        ports:\n          - 6379:6379\n\n    steps:\n      - uses: actions/checkout@v3\n\n      - name: Setup Node.js\n        uses: actions/setup-node@v3\n        with:\n          node-version: '20'\n          cache: 'npm'\n\n      - name: Install dependencies\n        run: npm ci\n\n      - name: Run unit tests\n        run: npm run test:unit -- --coverage\n\n      - name: Run integration tests\n        run: npm run test:integration -- --coverage\n        env:\n          DATABASE_HOST: localhost\n          DATABASE_PORT: 5432\n          DATABASE_USER: postgres\n          DATABASE_PASSWORD: postgres\n          DATABASE_NAME: lexiflow_test\n          REDIS_HOST: localhost\n          REDIS_PORT: 6379\n\n      - name: Run E2E tests\n        run: npm run test:e2e\n        env:\n          DATABASE_HOST: localhost\n          DATABASE_PORT: 5432\n          DATABASE_USER: postgres\n          DATABASE_PASSWORD: postgres\n          DATABASE_NAME: lexiflow_test\n\n      - name: Upload coverage\n        uses: codecov/codecov-action@v3\n        with:\n          files: ./coverage/lcov.info\n          flags: backend\n\n      - name: Check coverage threshold\n        run: npm run test:cov -- --coverageThreshold='{\"global\":{\"branches\":80,\"functions\":80,\"lines\":80,\"statements\":80}}'"
+    },
+    {
+      "priority": "MEDIUM",
+      "category": "Package.json Scripts",
+      "file": "package.json",
+      "action": "UPDATE",
+      "description": "Update test scripts for better organization",
+      "code": "{\n  \"scripts\": {\n    \"test\": \"jest\",\n    \"test:watch\": \"jest --watch\",\n    \"test:cov\": \"jest --coverage --coverageReporters=text --coverageReporters=lcov\",\n    \"test:debug\": \"node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand\",\n    \"test:e2e\": \"jest --config ./test/jest-e2e.json --runInBand\",\n    \"test:unit\": \"jest --testPathPattern=\\\\.spec\\\\.ts$ --testPathIgnorePatterns=integration\",\n    \"test:integration\": \"jest --testPathPattern=\\\\.integration\\\\.spec\\\\.ts$ --runInBand\",\n    \"test:resolver\": \"jest --testPathPattern=resolver\\\\.spec\\\\.ts$\",\n    \"test:dto\": \"jest --testPathPattern=dto.*spec\\\\.ts$\",\n    \"test:all\": \"npm run test:unit && npm run test:integration && npm run test:e2e\",\n    \"test:ci\": \"npm run test:all -- --coverage --ci --maxWorkers=2\"\n  }\n}"
+    }
+  ],
+  "prioritizedRecommendations": [
+    {
+      "priority": 1,
+      "category": "IMMEDIATE - Critical Coverage",
+      "actions": [
+        "Add tests for all 5 GraphQL resolvers",
+        "Add tests for 2 WebSocket gateways",
+        "Create integration test suite infrastructure",
+        "Add tests for 3 exception filters",
+        "Add tests for 3 middleware components"
+      ],
+      "impact": "Addresses 0% coverage areas - highest risk",
+      "effort": "2-3 weeks",
+      "businessValue": "Prevents critical production failures"
+    },
+    {
+      "priority": 2,
+      "category": "HIGH - Service Coverage",
+      "actions": [
+        "Add tests for top 50 most critical services",
+        "Focus on authentication, billing, and compliance services",
+        "Implement integration tests for database operations"
+      ],
+      "impact": "Increases service coverage from 17.7% to ~50%",
+      "effort": "4-6 weeks",
+      "businessValue": "Reduces business logic bugs"
+    },
+    {
+      "priority": 3,
+      "category": "HIGH - Controller Coverage",
+      "actions": [
+        "Add tests for all REST API endpoints",
+        "Test HTTP status codes, headers, validation",
+        "Add E2E tests for critical user flows"
+      ],
+      "impact": "Ensures API contract stability",
+      "effort": "3-4 weeks",
+      "businessValue": "Prevents API breaking changes"
+    },
+    {
+      "priority": 4,
+      "category": "MEDIUM - DTO Validation",
+      "actions": [
+        "Add validation tests for all 186 DTOs",
+        "Test edge cases, boundary conditions",
+        "Verify sanitization and transformation"
+      ],
+      "impact": "Prevents invalid data from entering system",
+      "effort": "2-3 weeks",
+      "businessValue": "Data integrity and security"
+    },
+    {
+      "priority": 5,
+      "category": "MEDIUM - Test Infrastructure",
+      "actions": [
+        "Set up code coverage tracking and reporting",
+        "Add CI/CD pipeline with test gates",
+        "Fix all 45 skipped tests",
+        "Standardize mocking patterns"
+      ],
+      "impact": "Improves test quality and maintainability",
+      "effort": "1-2 weeks",
+      "businessValue": "Long-term quality assurance"
+    }
+  ],
+  "estimatedEffort": {
+    "totalEstimate": "12-18 weeks",
+    "breakdown": {
+      "criticalCoverage": "2-3 weeks",
+      "serviceCoverage": "4-6 weeks",
+      "controllerCoverage": "3-4 weeks",
+      "dtoValidation": "2-3 weeks",
+      "infrastructure": "1-2 weeks"
+    },
+    "teamSize": "2-3 engineers",
+    "note": "Estimates assume dedicated focus on testing improvements"
+  },
+  "nextSteps": [
+    {
+      "step": 1,
+      "action": "Executive Review",
+      "description": "Present audit findings to engineering leadership",
+      "deliverable": "Approval for testing initiative"
+    },
+    {
+      "step": 2,
+      "action": "Resource Allocation",
+      "description": "Assign 2-3 engineers to testing improvements",
+      "deliverable": "Team and timeline commitment"
+    },
+    {
+      "step": 3,
+      "action": "Sprint 1 - Critical Coverage",
+      "description": "Implement all Priority 1 items (resolvers, gateways, filters, middleware)",
+      "deliverable": "0% coverage areas addressed"
+    },
+    {
+      "step": 4,
+      "action": "Sprint 2-3 - Service Coverage",
+      "description": "Add tests for top 50 critical services",
+      "deliverable": "Service coverage reaches 40-50%"
+    },
+    {
+      "step": 5,
+      "action": "Sprint 4-5 - API Coverage",
+      "description": "Complete controller and E2E tests",
+      "deliverable": "API coverage reaches 70%+"
+    },
+    {
+      "step": 6,
+      "action": "Continuous Improvement",
+      "description": "Establish testing standards and code review practices",
+      "deliverable": "Sustain 80%+ coverage"
+    }
+  ],
+  "conclusion": {
+    "status": "CRITICAL",
+    "summary": "Current test coverage of ~20% is far below enterprise standards of 80%+. For a $350M legal enterprise application handling sensitive data, this represents unacceptable risk.",
+    "criticalFindings": [
+      "139 of 169 services (82%) completely untested",
+      "75 of 98 controllers (77%) have no API tests",
+      "All GraphQL resolvers and WebSocket gateways untested (0%)",
+      "No integration tests despite complex database operations",
+      "Security-critical middleware and filters have zero tests"
+    ],
+    "businessImpact": "High risk of production failures, data corruption, security vulnerabilities, and compliance violations",
+    "recommendation": "IMMEDIATE ACTION REQUIRED: Allocate dedicated resources to address critical testing gaps within next 12-18 weeks"
+  }
+}

@@ -2,9 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Stack } from './Stack';
 
 const meta: Meta<typeof Stack> = {
-  title: 'Atoms/Stack',
+  title: 'Components/Atoms/Stack/Stack',
   component: Stack,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;

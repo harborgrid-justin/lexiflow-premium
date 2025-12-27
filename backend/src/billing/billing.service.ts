@@ -16,8 +16,22 @@ export class BillingService {
     private expenseRepository: Repository<Expense>,
   ) {}
 
-  async findAllInvoices(): Promise<Invoice[]> {
-    return this.invoiceRepository.find();
+  async findAllInvoices(options?: { page?: number; limit?: number }): Promise<{ data: Invoice[]; total: number; page: number; limit: number }> {
+    const { page = 1, limit = 50 } = options || {};
+    const skip = (page - 1) * limit;
+
+    const [invoices, total] = await this.invoiceRepository.findAndCount({
+      order: { createdAt: 'DESC' },
+      skip,
+      take: limit,
+    });
+
+    return {
+      data: invoices,
+      total,
+      page,
+      limit,
+    };
   }
 
   async findInvoiceById(id: string): Promise<Invoice> {

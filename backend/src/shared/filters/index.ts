@@ -33,7 +33,7 @@
  * }
  * ```
  */
-export { AllExceptionsFilter } from '../../common/filters/all-exceptions.filter';
+export { AllExceptionsFilter } from '@common/filters/all-exceptions.filter';
 
 /**
  * HttpExceptionFilter
@@ -55,7 +55,7 @@ export { AllExceptionsFilter } from '../../common/filters/all-exceptions.filter'
  * - InternalServerErrorException
  * - And all other HttpException subclasses
  */
-export { HttpExceptionFilter } from '../../common/filters/http-exception.filter';
+export { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 
 /**
  * EnterpriseExceptionFilter
@@ -71,7 +71,7 @@ export { HttpExceptionFilter } from '../../common/filters/http-exception.filter'
  * Usage:
  * Applied globally for comprehensive error handling
  */
-export { EnterpriseExceptionFilter } from '../../common/filters/enterprise-exception.filter';
+export { EnterpriseExceptionFilter } from '@common/filters/enterprise-exception.filter';
 
 // =============================================================================
 // EXCEPTION FILTER USAGE GUIDELINES

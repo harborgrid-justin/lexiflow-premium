@@ -1,15 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { BackendHealthMonitor } from '@/components';
+import { BackendHealthMonitor } from './BackendHealthMonitor';
 
 const meta: Meta<typeof BackendHealthMonitor> = {
-  title: 'Organisms/BackendHealthMonitor',
+  title: 'Components/Organisms/BackendHealthMonitor/BackendHealthMonitor',
   component: BackendHealthMonitor,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof BackendHealthMonitor>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "isOpen": true,
+  "onClose": {}
+},
 };

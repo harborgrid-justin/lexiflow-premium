@@ -1,8 +1,8 @@
 import { DataSource } from 'typeorm';
-import { User, UserRole, UserStatus } from '../../users/entities/user.entity';
-import { UserProfile } from '../../users/entities/user-profile.entity';
+import { User, UserRole, UserStatus } from '@users/entities/user.entity';
+import { UserProfile } from '@users/entities/user-profile.entity';
 import * as bcrypt from 'bcrypt';
-import { BCRYPT_ROUNDS } from '../master.config';
+import { BCRYPT_ROUNDS } from '@config/master.config';
 
 export async function seedUsers(dataSource: DataSource): Promise<void> {
   const userRepository = dataSource.getRepository(User);

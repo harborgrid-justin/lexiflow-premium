@@ -1,15 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { LoadingState } from '@/components';
+import { LoadingState } from './LoadingState';
 
 const meta: Meta<typeof LoadingState> = {
-  title: 'Molecules/LoadingState',
+  title: 'Components/Molecules/LoadingState/LoadingState',
   component: LoadingState,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof LoadingState>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "message": "Sample Text",
+  "size": {},
+  "centered": true,
+  "className": "Sample Text"
+},
 };

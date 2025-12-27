@@ -92,9 +92,22 @@ export class UsersService implements OnModuleInit {
     return this.toAuthenticatedUser(savedUser);
   }
 
-  async findAll(): Promise<AuthenticatedUser[]> {
-    const users = await this.userRepository.find();
-    return users.map((user) => this.toAuthenticatedUser(user));
+  async findAll(options?: { page?: number; limit?: number }): Promise<{ data: AuthenticatedUser[]; total: number; page: number; limit: number }> {
+    const { page = 1, limit = 50 } = options || {};
+    const skip = (page - 1) * limit;
+
+    const [users, total] = await this.userRepository.findAndCount({
+      skip,
+      take: limit,
+      order: { createdAt: 'DESC' },
+    });
+
+    return {
+      data: users.map((user) => this.toAuthenticatedUser(user)),
+      total,
+      page,
+      limit,
+    };
   }
 
   async findById(id: string): Promise<AuthenticatedUser | null> {

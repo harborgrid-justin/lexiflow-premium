@@ -3,6 +3,7 @@ import {
   Logger,
   NotFoundException,
   UnauthorizedException,
+  OnModuleDestroy,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThan, MoreThan } from 'typeorm';
@@ -61,11 +62,15 @@ export interface SessionActivityUpdate {
  * - Automatic cleanup of expired sessions
  */
 @Injectable()
-export class SessionManagementService {
+export class SessionManagementService implements OnModuleDestroy {
   private readonly logger = new Logger(SessionManagementService.name);
   private readonly maxSessionsPerUser: number;
   private readonly sessionExpiryHours: number;
   private readonly slidingWindowMinutes: number;
+  
+  // Memory optimization
+  private readonly sessionCache = new Map<string, Session>();
+  private readonly MAX_CACHE_SIZE = 1000;
 
   constructor(
     @InjectRepository(Session)
@@ -84,6 +89,22 @@ export class SessionManagementService {
       this.configService.get('SESSION_SLIDING_WINDOW_MINUTES', '30'),
       10,
     );
+  }
+
+  onModuleDestroy() {
+    this.sessionCache.clear();
+    this.logger.log('SessionManagementService destroyed, cache cleared');
+  }
+
+  private enforceCacheLRU() {
+    if (this.sessionCache.size > this.MAX_CACHE_SIZE) {
+      // Simple eviction: remove first entry (oldest inserted)
+      const iterator = this.sessionCache.keys();
+      const first = iterator.next().value;
+      if (first) {
+        this.sessionCache.delete(first);
+      }
+    }
   }
 
   /**
@@ -171,6 +192,7 @@ export class SessionManagementService {
       order: {
         lastActivityAt: 'DESC',
       },
+      take: 100, // Limit to 100 sessions per user to prevent memory issues
     });
 
     return sessions.map((session) => ({
@@ -196,9 +218,20 @@ export class SessionManagementService {
    * Get session by ID
    */
   async getSessionById(sessionId: string): Promise<Session | null> {
-    return this.sessionRepository.findOne({
+    if (this.sessionCache.has(sessionId)) {
+      return this.sessionCache.get(sessionId)!;
+    }
+
+    const session = await this.sessionRepository.findOne({
       where: { id: sessionId },
     });
+
+    if (session) {
+      this.sessionCache.set(sessionId, session);
+      this.enforceCacheLRU();
+    }
+
+    return session;
   }
 
   /**
@@ -280,6 +313,7 @@ export class SessionManagementService {
     session.revocationReason = reason || 'User revoked session';
 
     await this.sessionRepository.save(session);
+    this.sessionCache.delete(sessionId); // Clear from cache
 
     this.logger.log(
       `Revoked session ${sessionId} for user ${userId}. Reason: ${session.revocationReason}`,

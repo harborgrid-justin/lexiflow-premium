@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
-import { Invoice, InvoiceStatus, BillingModel } from '../../billing/invoices/entities/invoice.entity';
-import { Client } from '../../clients/entities/client.entity';
-import { Case } from '../../cases/entities/case.entity';
+import { Invoice, InvoiceStatus, BillingModel } from '@billing/invoices/entities/invoice.entity';
+import { Client } from '@core/clients/entities/client.entity';
+import { Case } from '@cases/entities/case.entity';
 import { faker } from '@faker-js/faker';
 
 export const seedInvoices = async (dataSource: DataSource) => {

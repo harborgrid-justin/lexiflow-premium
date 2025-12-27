@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
-import { DocketEntry, DocketEntryType } from '../../docket/entities/docket-entry.entity';
-import { Case } from '../../cases/entities/case.entity';
+import { DocketEntry, DocketEntryType } from '@core/docket/entities/docket-entry.entity';
+import { Case } from '@cases/entities/case.entity';
 import { faker } from '@faker-js/faker';
 
 export const seedDocketEntries = async (dataSource: DataSource) => {

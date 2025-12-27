@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MonitoringController } from './monitoring.controller';
 import { MonitoringService } from './monitoring.service';
 import { MetricsController } from './controllers/metrics.controller';
+import { MemoryManagementController } from './memory-management.controller';
 import { PerformanceMetric } from './entities/performance-metric.entity';
 import { SystemAlert } from './entities/system-alert.entity';
 import { AuthModule } from '../auth/auth.module';
@@ -12,6 +13,7 @@ import { AlertingService } from './services/alerting.service';
 import { DistributedTracingService } from './services/distributed.tracing.service';
 import { HealthAggregatorService } from './services/health.aggregator.service';
 import { PerformanceInterceptor } from './interceptors/performance.interceptor';
+import { MemoryManagementModule } from '../common/memory-management.module';
 
 /**
  * Monitoring Module
@@ -29,10 +31,12 @@ import { PerformanceInterceptor } from './interceptors/performance.interceptor';
   imports: [
     TypeOrmModule.forFeature([PerformanceMetric, SystemAlert]),
     AuthModule,
+    MemoryManagementModule,
   ],
   controllers: [
     MonitoringController,
     MetricsController,
+    MemoryManagementController,
   ],
   providers: [
     MonitoringService,

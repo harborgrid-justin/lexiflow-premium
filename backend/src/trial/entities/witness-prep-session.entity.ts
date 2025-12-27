@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { WitnessPrepStatus } from '../dto/create-witness-prep.dto';
-import { Case } from '../../cases/entities/case.entity';
+import { Case } from '@cases/entities/case.entity';
 
 @Entity('witness_prep_sessions')
 export class WitnessPrepSession {

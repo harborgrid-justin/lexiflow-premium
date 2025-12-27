@@ -2,9 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { LazyImage } from './LazyImage';
 
 const meta: Meta<typeof LazyImage> = {
-  title: 'Atoms/LazyImage',
+  title: 'Components/Atoms/LazyImage/LazyImage',
   component: LazyImage,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;

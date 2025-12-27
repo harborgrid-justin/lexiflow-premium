@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { VirtualList } from '@/components';
+import { VirtualList } from './VirtualList';
 
 const meta: Meta<typeof VirtualList> = {
-  title: 'Organisms/VirtualList',
+  title: 'Components/Organisms/VirtualList/VirtualList',
   component: VirtualList,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;

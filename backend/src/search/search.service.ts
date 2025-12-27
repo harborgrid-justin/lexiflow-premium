@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import * as MasterConfig from '../config/master.config';
 import { calculateOffset, calculateTotalPages, calculateExecutionTime } from '../common/utils/math.utils';
 import {
@@ -17,78 +17,193 @@ import {
   SearchFacets,
 } from './dto/search-result.dto';
 
+/**
+ * Search Service with Memory Optimizations
+ * 
+ * MEMORY OPTIMIZATIONS:
+ * - LRU cache with 5K entry limit
+ * - 15-minute TTL for cached results
+ * - Proper cleanup on module destroy
+ */
 @Injectable()
-export class SearchService {
+export class SearchService implements OnModuleDestroy {
   private readonly logger = new Logger(SearchService.name);
+  private readonly MAX_SEARCH_RESULTS = 10000;
+  private readonly MAX_PAGE_SIZE = 100;
+  private readonly MAX_CACHE_ENTRIES = 5000;
+  private readonly CACHE_TTL_MS = 900000; // 15 minutes
+  
+  // Add search result cache tracking with TTL
+  private searchCache: Map<string, { data: any; timestamp: number }> = new Map();
+  private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
     // @InjectRepository(Case) private caseRepository: Repository<any>,
     // @InjectRepository(LegalDocument) private documentRepository: Repository<any>,
     // @InjectRepository(Client) private clientRepository: Repository<any>,
     // These will be injected when entities are available
-  ) {}
+  ) {
+    this.startCacheCleanup();
+  }
+
+  onModuleDestroy() {
+    this.logger.log('Cleaning up search service...');
+    
+    // Clear cleanup interval
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+      this.cleanupInterval = null;
+    }
+    
+    // Clear search caches
+    if (this.searchCache) {
+      const cacheSize = this.searchCache.size;
+      this.searchCache.clear();
+      this.logger.log(`Cleared ${cacheSize} cached search results`);
+    }
+    
+    this.logger.log('Search service cleanup complete');
+  }
 
   /**
-   * Perform global search across all entities
+   * Start periodic cache cleanup
    */
-  async search(query: SearchQueryDto): Promise<SearchResultDto> {
-    const startTime = Date.now();
-    const { page = 1, limit = 20, entityType } = query;
+  private startCacheCleanup(): void {
+    this.cleanupInterval = setInterval(() => {
+      this.cleanupExpiredCache();
+    }, 300000); // Clean every 5 minutes
+  }
 
-    try {
-      let results: SearchResultItem[] = [];
-      let total = 0;
+  /**
+   * Remove expired cache entries
+   */
+  private cleanupExpiredCache(): void {
+    const now = Date.now();
+    let removedCount = 0;
+    
+    for (const [key, entry] of this.searchCache.entries()) {
+      if (now - entry.timestamp > this.CACHE_TTL_MS) {
+        this.searchCache.delete(key);
+        removedCount++;
+      }
+    }
+    
+    if (removedCount > 0) {
+      this.logger.log(`Cleaned up ${removedCount} expired cache entries`);
+    }
+  }
 
-      switch (entityType) {
-        case SearchEntityType.CASE: {
-          const caseResults = await this.searchCases(query);
-          results = caseResults.results;
-          total = caseResults.total;
-          break;
-        }
+  /**
+   * Get from cache or execute function
+   */
+  private async getOrCache<T>(key: string, fn: () => Promise<T>): Promise<T> {
+    const cached = this.searchCache.get(key);
+    const now = Date.now();
+    
+    // Return cached if valid
+    if (cached && now - cached.timestamp < this.CACHE_TTL_MS) {
+      return cached.data as T;
+    }
+    
+    // Execute and cache
+    const data = await fn();
+    this.searchCache.set(key, { data, timestamp: now });
+    
+    // Enforce LRU limit
+    this.enforceCacheLRU();
+    
+    return data;
+  }
 
-        case SearchEntityType.DOCUMENT: {
-          const docResults = await this.searchDocuments(query);
-          results = docResults.results;
-          total = docResults.total;
-          break;
-        }
-
-        case SearchEntityType.CLIENT: {
-          const clientResults = await this.searchClients(query);
-          results = clientResults.results;
-          total = clientResults.total;
-          break;
-        }
-
-        case SearchEntityType.ALL:
-        default: {
-          const allResults = await this.searchAll(query);
-          results = allResults.results;
-          total = allResults.total;
-          break;
+  /**
+   * Enforce LRU eviction on cache
+   */
+  private enforceCacheLRU(): void {
+    if (this.searchCache.size > this.MAX_CACHE_ENTRIES) {
+      const toRemove = Math.floor(this.MAX_CACHE_ENTRIES * 0.1);
+      const iterator = this.searchCache.keys();
+      for (let i = 0; i < toRemove; i++) {
+        const key = iterator.next().value;
+        if (key !== undefined) {
+          this.searchCache.delete(key);
         }
       }
-
-      const executionTime = calculateExecutionTime(startTime);
-      const totalPages = calculateTotalPages(total, limit);
-
-      return {
-        results,
-        total,
-        page,
-        limit,
-        totalPages,
-        query: query.query,
-        executionTime,
-        facets: await this.generateFacets(results),
-      };
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      const stack = error instanceof Error ? error.stack : undefined;
-      this.logger.error(`Search error: ${message}`, stack);
-      throw error;
+      this.logger.warn(`LRU eviction: removed ${toRemove} cache entries (size: ${this.searchCache.size})`);
     }
+  }
+
+  /**
+   * Perform global search across all entities with caching
+   */
+  async search(query: SearchQueryDto): Promise<SearchResultDto> {
+    const cacheKey = `search:${JSON.stringify(query)}`;
+    
+    return this.getOrCache(cacheKey, async () => {
+      const startTime = Date.now();
+      const { page = 1, limit = 20, entityType } = query;
+
+      const safeLimit = Math.min(limit, this.MAX_PAGE_SIZE);
+      if (limit > this.MAX_PAGE_SIZE) {
+        this.logger.warn(`Limit ${limit} exceeds maximum ${this.MAX_PAGE_SIZE}, using ${this.MAX_PAGE_SIZE}`);
+      }
+
+      const safeQuery = { ...query, limit: safeLimit };
+
+      try {
+        let results: SearchResultItem[] = [];
+        let total = 0;
+
+        switch (entityType) {
+          case SearchEntityType.CASE: {
+            const caseResults = await this.searchCases(safeQuery);
+            results = caseResults.results;
+            total = caseResults.total;
+            break;
+          }
+
+          case SearchEntityType.DOCUMENT: {
+            const docResults = await this.searchDocuments(safeQuery);
+            results = docResults.results;
+            total = docResults.total;
+            break;
+          }
+
+          case SearchEntityType.CLIENT: {
+            const clientResults = await this.searchClients(safeQuery);
+            results = clientResults.results;
+            total = clientResults.total;
+            break;
+          }
+
+          case SearchEntityType.ALL:
+          default: {
+            const allResults = await this.searchAll(safeQuery);
+            results = allResults.results;
+            total = allResults.total;
+            break;
+          }
+        }
+
+        const executionTime = calculateExecutionTime(startTime);
+        const totalPages = calculateTotalPages(total, safeLimit);
+
+        return {
+          results,
+          total,
+          page,
+          limit: safeLimit,
+          totalPages,
+          query: query.query,
+          executionTime,
+          facets: await this.generateFacets(results),
+        };
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error';
+        const stack = error instanceof Error ? error.stack : undefined;
+        this.logger.error(`Search error: ${message}`, stack);
+        throw error;
+      }
+    });
   }
 
   /**

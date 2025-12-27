@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Breadcrumbs } from '@/components';
+import { Breadcrumbs } from './Breadcrumbs';
 
 const meta: Meta<typeof Breadcrumbs> = {
-  title: 'Molecules/Breadcrumbs',
+  title: 'Components/Molecules/Breadcrumbs/Breadcrumbs',
   component: Breadcrumbs,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;

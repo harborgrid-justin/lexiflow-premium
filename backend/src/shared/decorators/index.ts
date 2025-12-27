@@ -21,7 +21,7 @@
  * async publicRoute() { ... }
  * ```
  */
-export { Public } from '../../common/decorators/public.decorator';
+export { Public } from '@common/decorators/public.decorator';
 
 /**
  * @Roles
@@ -34,7 +34,7 @@ export { Public } from '../../common/decorators/public.decorator';
  * async adminRoute() { ... }
  * ```
  */
-export { Roles } from '../../common/decorators/roles.decorator';
+export { Roles } from '@common/decorators/roles.decorator';
 
 /**
  * @Permissions
@@ -47,7 +47,7 @@ export { Roles } from '../../common/decorators/roles.decorator';
  * async getCases() { ... }
  * ```
  */
-export { Permissions } from '../../common/decorators/permissions.decorator';
+export { Permissions } from '@common/decorators/permissions.decorator';
 
 /**
  * @CurrentUser
@@ -59,7 +59,7 @@ export { Permissions } from '../../common/decorators/permissions.decorator';
  * async getProfile(@CurrentUser() user: User) { ... }
  * ```
  */
-export { CurrentUser } from '../../common/decorators/current-user.decorator';
+export { CurrentUser } from '@common/decorators/current-user.decorator';
 
 // =============================================================================
 // API DOCUMENTATION DECORATORS
@@ -76,12 +76,12 @@ export { CurrentUser } from '../../common/decorators/current-user.decorator';
  * async getCases() { ... }
  * ```
  */
-export { ApiPaginatedResponse } from '../../common/decorators/api-paginated-response.decorator';
+export { ApiPaginatedResponse } from '@common/decorators/api-paginated-response.decorator';
 
 /**
  * Swagger common decorators for API documentation
  */
-export * from '../../common/decorators/swagger-common.decorator';
+export * from '@common/decorators/swagger-common.decorator';
 
 // =============================================================================
 // CACHING DECORATORS
@@ -98,7 +98,7 @@ export * from '../../common/decorators/swagger-common.decorator';
  * async getData() { ... }
  * ```
  */
-export { Cache } from '../../common/decorators/cache.decorator';
+export { Cache } from '@common/decorators/cache.decorator';
 
 /**
  * @Cacheable
@@ -110,7 +110,7 @@ export { Cache } from '../../common/decorators/cache.decorator';
  * async getUserData() { ... }
  * ```
  */
-export { Cacheable } from '../../performance/decorators/cacheable.decorator';
+export { Cacheable } from '@performance/decorators/cacheable.decorator';
 
 // =============================================================================
 // RATE LIMITING DECORATORS
@@ -127,7 +127,7 @@ export { Cacheable } from '../../performance/decorators/cacheable.decorator';
  * async login() { ... }
  * ```
  */
-export { RateLimit } from '../../common/decorators/rate-limit.decorator';
+export { RateLimit } from '@common/decorators/rate-limit.decorator';
 
 // =============================================================================
 // AUDIT LOGGING DECORATORS
@@ -144,7 +144,7 @@ export { RateLimit } from '../../common/decorators/rate-limit.decorator';
  * async updateUser() { ... }
  * ```
  */
-export { AuditLog } from '../../common/decorators/audit-log.decorator';
+export { AuditLog } from '@common/decorators/audit-log.decorator';
 
 // =============================================================================
 // TRANSACTION DECORATORS
@@ -160,7 +160,7 @@ export { AuditLog } from '../../common/decorators/audit-log.decorator';
  * async createUserWithProfile() { ... }
  * ```
  */
-export { Transaction } from '../../common/decorators/transaction.decorator';
+export { Transaction } from '@common/decorators/transaction.decorator';
 
 // =============================================================================
 // VALIDATION DECORATORS
@@ -178,7 +178,7 @@ export { Transaction } from '../../common/decorators/transaction.decorator';
  * }
  * ```
  */
-export { IsStrongPassword } from '../../common/decorators/is-strong-password.decorator';
+export { IsStrongPassword } from '@common/decorators/is-strong-password.decorator';
 
 // =============================================================================
 // SECURITY DECORATORS
@@ -195,7 +195,7 @@ export { IsStrongPassword } from '../../common/decorators/is-strong-password.dec
  * async handleWebhook() { ... }
  * ```
  */
-export { SkipIpCheck } from '../../security/decorators/skip.ip.check.decorator';
+export { SkipIpCheck } from '@security/decorators/skip.ip.check.decorator';
 
 /**
  * @EncryptedColumn
@@ -208,7 +208,7 @@ export { SkipIpCheck } from '../../security/decorators/skip.ip.check.decorator';
  * ssn: string;
  * ```
  */
-export { EncryptedColumn } from '../../database/security/decorators/encrypted.column.decorator';
+export { EncryptedColumn } from '@database/security/decorators/encrypted.column.decorator';
 
 // =============================================================================
 // DECORATOR USAGE GUIDELINES

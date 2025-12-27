@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Repository, SelectQueryBuilder, FindOptionsWhere, ObjectLiteral } from 'typeorm';
-import * as MasterConfig from '../../config/master.config';
+import * as MasterConfig from '@config/master.config';
 
 /**
  * Pagination Type

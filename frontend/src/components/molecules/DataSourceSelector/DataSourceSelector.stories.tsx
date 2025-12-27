@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { DataSourceSelector } from '@/components';
+import { DataSourceSelector } from './DataSourceSelector';
 
 const meta: Meta<typeof DataSourceSelector> = {
-  title: 'Molecules/DataSourceSelector',
+  title: 'Components/Molecules/DataSourceSelector/DataSourceSelector',
   component: DataSourceSelector,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;

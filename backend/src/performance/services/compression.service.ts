@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as zlib from 'zlib';
-import * as MasterConfig from '../../config/master.config';
+import * as MasterConfig from '@config/master.config';
 
 /**
  * Compression Configuration

@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import * as MasterConfig from '../../config/master.config';
+import * as MasterConfig from '@config/master.config';
 import { Repository, ObjectLiteral } from 'typeorm';
 
 /**
@@ -95,6 +95,9 @@ export class BulkOperationsService {
     this.logger.log(
       `Bulk insert completed: ${result.successCount} success, ${result.failedCount} failed`,
     );
+
+    // Clear batch arrays to free memory
+    items.length = 0;
 
     return result;
   }

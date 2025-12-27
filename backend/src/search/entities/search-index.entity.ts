@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, Index, ManyToOne, JoinColumn } from 'typeorm';
-import { Case } from '../../cases/entities/case.entity';
+import { Case } from '@cases/entities/case.entity';
 
 @Entity('search_index')
 @Index(['entityType', 'entityId'])

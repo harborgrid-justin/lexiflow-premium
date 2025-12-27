@@ -8,13 +8,13 @@ import {
   CreateInvoiceInput,
   InvoiceFilterInput,
 } from '../inputs/billing.input';
-import { CurrentUser } from '../../auth/decorators/current-user.decorator';
-import { GqlAuthGuard } from '../../auth/guards/gql-auth.guard';
-import { BillingService } from '../../billing/billing.service';
-import { TimeEntriesService } from '../../billing/time-entries/time-entries.service';
-import { RateTablesService } from '../../billing/rate-tables/rate-tables.service';
-import { FeeAgreementsService } from '../../billing/fee-agreements/fee-agreements.service';
-import { AuthenticatedUser } from '../../auth/interfaces/authenticated-user.interface';
+import { CurrentUser } from '@auth/decorators/current-user.decorator';
+import { GqlAuthGuard } from '@auth/guards/gql-auth.guard';
+import { BillingService } from '@billing/billing.service';
+import { TimeEntriesService } from '@billing/time-entries/time-entries.service';
+import { RateTablesService } from '@billing/rate-tables/rate-tables.service';
+import { FeeAgreementsService } from '@billing/fee-agreements/fee-agreements.service';
+import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface';
 
 @Resolver(() => TimeEntryType)
 export class BillingResolver {

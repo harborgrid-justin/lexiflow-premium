@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { UserRole } from '../../users/entities/user.entity';
+import { UserRole } from '@users/entities/user.entity';
 
 export enum PolicyEffect {
   ALLOW = 'allow',

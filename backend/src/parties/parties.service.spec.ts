@@ -9,6 +9,7 @@ describe('PartiesService', () => {
   const mockRepository = {
     find: jest.fn(),
     findOne: jest.fn(),
+    findAndCount: jest.fn(),
     create: jest.fn(),
     save: jest.fn(),
     remove: jest.fn(),
@@ -36,14 +37,21 @@ describe('PartiesService', () => {
   describe('findAllByCaseId', () => {
     it('should return parties for a case', async () => {
       const mockParties = [{ id: 'party-001', caseId: 'case-001', name: 'John Doe' }];
-      (mockRepository.find as jest.Mock).mockResolvedValue(mockParties);
+      (mockRepository.findAndCount as jest.Mock).mockResolvedValue([mockParties, 1]);
 
       const result = await service.findAllByCaseId('case-001');
 
-      expect(result).toEqual(mockParties);
-      expect(mockRepository.find).toHaveBeenCalledWith({
+      expect(result).toEqual({
+        data: mockParties,
+        total: 1,
+        page: 1,
+        limit: 50,
+      });
+      expect(mockRepository.findAndCount).toHaveBeenCalledWith({
         where: { caseId: 'case-001' },
         order: { createdAt: 'DESC' },
+        skip: 0,
+        take: 50,
       });
     });
   });

@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { RiskImpact, RiskProbability, RiskStatus } from '../dto/create-risk.dto';
-import { Case } from '../../cases/entities/case.entity';
+import { Case } from '@cases/entities/case.entity';
 
 @Entity('risks')
 export class Risk {

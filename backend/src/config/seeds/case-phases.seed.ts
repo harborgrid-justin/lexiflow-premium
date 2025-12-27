@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
-import { CasePhase, PhaseType, PhaseStatus } from '../../case-phases/entities/case-phase.entity';
-import { Case } from '../../cases/entities/case.entity';
+import { CasePhase, PhaseType, PhaseStatus } from '@core/case-phases/entities/case-phase.entity';
+import { Case } from '@cases/entities/case.entity';
 import { faker } from '@faker-js/faker';
 
 export const seedCasePhases = async (dataSource: DataSource) => {

@@ -2,14 +2,24 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ErrorState } from './ErrorState';
 
 const meta: Meta<typeof ErrorState> = {
-  title: 'Molecules/ErrorState',
+  title: 'Components/Molecules/ErrorState/ErrorState',
   component: ErrorState,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof ErrorState>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "title": "Sample Text",
+  "message": "Sample Text",
+  "onRetry": {},
+  "retryText": "Sample Text",
+  "className": "Sample Text",
+  "centered": true
+},
 };

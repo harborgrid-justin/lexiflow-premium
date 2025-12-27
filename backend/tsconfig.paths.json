@@ -47,7 +47,13 @@
       "@types": ["src/types"],
       "@types/*": ["src/types/*"],
       "@sharedTypes": ["src/shared-types"],
-      "@sharedTypes/*": ["src/shared-types/*"]
+      "@sharedTypes/*": ["src/shared-types/*"],
+      "@case-teams": ["src/case-teams"],
+      "@case-teams/*": ["src/case-teams/*"],
+      "@tasks": ["src/tasks"],
+      "@tasks/*": ["src/tasks/*"],
+      "@organizations": ["src/organizations"],
+      "@organizations/*": ["src/organizations/*"]
     }
   }
 }

@@ -23,7 +23,7 @@
  *
  * Note: This guard is applied globally and can be bypassed with @Public() decorator
  */
-export { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+export { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 
 // =============================================================================
 // AUTHORIZATION GUARDS
@@ -43,7 +43,7 @@ export { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
  *
  * Requires: @Roles() decorator on the route handler
  */
-export { RolesGuard } from '../../common/guards/roles.guard';
+export { RolesGuard } from '@common/guards/roles.guard';
 
 /**
  * PermissionsGuard
@@ -59,7 +59,7 @@ export { RolesGuard } from '../../common/guards/roles.guard';
  *
  * Requires: @Permissions() decorator on the route handler
  */
-export { PermissionsGuard } from '../../common/guards/permissions.guard';
+export { PermissionsGuard } from '@common/guards/permissions.guard';
 
 // =============================================================================
 // WEBSOCKET GUARDS
@@ -78,7 +78,7 @@ export { PermissionsGuard } from '../../common/guards/permissions.guard';
  *
  * Prevents abuse of WebSocket message endpoints
  */
-export { WsRateLimitGuard } from '../../common/guards/ws-rate-limit.guard';
+export { WsRateLimitGuard } from '@common/guards/ws-rate-limit.guard';
 
 /**
  * WsRoomLimitGuard
@@ -93,7 +93,7 @@ export { WsRateLimitGuard } from '../../common/guards/ws-rate-limit.guard';
  *
  * Prevents resource exhaustion from unlimited room joins
  */
-export { WsRoomLimitGuard } from '../../common/guards/ws-room-limit.guard';
+export { WsRoomLimitGuard } from '@common/guards/ws-room-limit.guard';
 
 /**
  * WsConnectionLimitGuard
@@ -107,7 +107,7 @@ export { WsRoomLimitGuard } from '../../common/guards/ws-room-limit.guard';
  *
  * Prevents abuse of WebSocket connections
  */
-export { WsConnectionLimitGuard } from '../../common/guards/ws-connection-limit.guard';
+export { WsConnectionLimitGuard } from '@common/guards/ws-connection-limit.guard';
 
 // =============================================================================
 // SECURITY GUARDS
@@ -126,7 +126,7 @@ export { WsConnectionLimitGuard } from '../../common/guards/ws-connection-limit.
  *
  * Can be bypassed with @SkipIpCheck() decorator
  */
-export { IpReputationGuard } from '../../security/guards/ip.reputation.guard';
+export { IpReputationGuard } from '@security/guards/ip.reputation.guard';
 
 // =============================================================================
 // GUARD USAGE GUIDELINES

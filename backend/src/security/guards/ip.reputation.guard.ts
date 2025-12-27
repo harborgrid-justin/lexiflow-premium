@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
-import { RedisCacheManagerService } from '../../common/services/redis-cache-manager.service';
+import { RedisCacheManagerService } from '@common/services/redis-cache-manager.service';
 import {
   IP_BLOCK_DURATION,
   IP_TEMPORARY_BLOCK_DURATION,
@@ -233,22 +233,26 @@ export class IpReputationGuard implements CanActivate {
     await this.cacheManager.set(key, data, { ttl: 3600 });
 
     // Reset per-minute counter after 60 seconds
-    setTimeout(async () => {
+    const minuteTimeout = setTimeout(async () => {
       const current = await this.cacheManager.get<IpReputationData>(key);
       if (current) {
         current.requestsPerMinute = Math.max(0, current.requestsPerMinute - 1);
         await this.cacheManager.set(key, current, { ttl: 3600 });
       }
     }, 60000);
+    // Prevent timeout from keeping process alive
+    minuteTimeout.unref();
 
     // Reset per-hour counter after 1 hour
-    setTimeout(async () => {
+    const hourTimeout = setTimeout(async () => {
       const current = await this.cacheManager.get<IpReputationData>(key);
       if (current) {
         current.requestsPerHour = Math.max(0, current.requestsPerHour - 1);
         await this.cacheManager.set(key, current, { ttl: 3600 });
       }
     }, 3600000);
+    // Prevent timeout from keeping process alive
+    hourTimeout.unref();
   }
 
   /**

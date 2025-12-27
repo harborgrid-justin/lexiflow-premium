@@ -35,7 +35,7 @@
  * })
  * ```
  */
-export { ValidationPipe } from '../../common/pipes/validation.pipe';
+export { ValidationPipe } from '@common/pipes/validation.pipe';
 
 /**
  * ParseUuidPipe
@@ -49,7 +49,7 @@ export { ValidationPipe } from '../../common/pipes/validation.pipe';
  *
  * Throws BadRequestException if parameter is not a valid UUID
  */
-export { ParseUuidPipe } from '../../common/pipes/parse-uuid.pipe';
+export { ParseUuidPipe } from '@common/pipes/parse-uuid.pipe';
 
 // =============================================================================
 // PIPE USAGE GUIDELINES

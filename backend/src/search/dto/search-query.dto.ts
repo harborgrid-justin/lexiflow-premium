@@ -1,7 +1,7 @@
 import { IsString, IsOptional, IsEnum, IsInt, Min, Max, IsDateString, IsArray } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import * as MasterConfig from '../../config/master.config';
+import * as MasterConfig from '@config/master.config';
 
 export enum SearchEntityType {
   ALL = 'all',

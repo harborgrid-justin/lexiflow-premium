@@ -5,8 +5,8 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { BaseEntity } from '../../common/base/base.entity';
-import { Case } from '../../cases/entities/case.entity';
+import { BaseEntity } from '@common/base/base.entity';
+import { Case } from '@cases/entities/case.entity';
 
 export enum PleadingType {
   COMPLAINT = 'complaint',

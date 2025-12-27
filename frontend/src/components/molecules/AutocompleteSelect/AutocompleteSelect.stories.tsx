@@ -2,9 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { AutocompleteSelect } from './AutocompleteSelect';
 
 const meta: Meta<typeof AutocompleteSelect> = {
-  title: 'Molecules/AutocompleteSelect',
+  title: 'Components/Molecules/AutocompleteSelect/AutocompleteSelect',
   component: AutocompleteSelect,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;

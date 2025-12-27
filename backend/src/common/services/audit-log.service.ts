@@ -36,9 +36,14 @@ export enum AuditAction {
 }
 
 /**
- * Audit Log Service
+ * Audit Log Service with Memory Optimizations
  * Provides comprehensive audit logging for compliance (SOC 2, HIPAA, GDPR)
  * Immutable, append-only logs with cryptographic integrity
+ * 
+ * MEMORY OPTIMIZATIONS:
+ * - 5K max buffer with overflow warning
+ * - Backpressure handling
+ * - Proper cleanup on module destroy
  * 
  * @example
  * await auditLogService.log({
@@ -54,6 +59,13 @@ export class AuditLogService implements OnModuleDestroy {
   private readonly logger = new Logger(AuditLogService.name);
   private pendingLogs: AuditLogEntry[] = [];
   private flushInterval: ReturnType<typeof setInterval>;
+  private readonly MAX_BUFFER_SIZE = 5000;
+  private readonly FLUSH_THRESHOLD = 100;
+  private isOverflow = false;
+  
+  // Memory safety
+  private failedFlushAttempts = 0;
+  private readonly MAX_FLUSH_ATTEMPTS = 5;
 
   constructor() {
     // Flush logs every 30 seconds
@@ -67,12 +79,33 @@ export class AuditLogService implements OnModuleDestroy {
       clearInterval(this.flushInterval);
     }
     this.flush();
+    this.pendingLogs.length = 0;
   }
 
   /**
-   * Log an audit event
+   * Log an audit event with buffer overflow protection
    */
   async log(entry: Omit<AuditLogEntry, 'timestamp'>): Promise<void> {
+    // Check buffer overflow
+    if (this.pendingLogs.length >= this.MAX_BUFFER_SIZE) {
+      if (!this.isOverflow) {
+        this.logger.error(
+          `CRITICAL: Audit log buffer overflow! Size: ${this.pendingLogs.length}/${this.MAX_BUFFER_SIZE}. ` +
+          `Forcing immediate flush. Consider increasing flush frequency or buffer size.`
+        );
+        this.isOverflow = true;
+      }
+      
+      // Force immediate flush to prevent memory issues
+      await this.flush();
+      
+      // If still overflow after flush, reject new logs (backpressure)
+      if (this.pendingLogs.length >= this.MAX_BUFFER_SIZE) {
+        this.logger.error('Audit log buffer still full after flush - rejecting log entry');
+        return;
+      }
+    }
+
     const auditEntry: AuditLogEntry = {
       ...entry,
       timestamp: new Date(),
@@ -80,6 +113,12 @@ export class AuditLogService implements OnModuleDestroy {
 
     // Add to pending queue
     this.pendingLogs.push(auditEntry);
+    
+    // Reset overflow flag if buffer is back to normal
+    if (this.isOverflow && this.pendingLogs.length < this.MAX_BUFFER_SIZE * 0.5) {
+      this.isOverflow = false;
+      this.logger.log('Audit log buffer back to normal levels');
+    }
 
     // Log to console for monitoring
     this.logger.log(
@@ -87,7 +126,7 @@ export class AuditLogService implements OnModuleDestroy {
     );
 
     // Flush if queue is large
-    if (this.pendingLogs.length >= 100) {
+    if (this.pendingLogs.length >= this.FLUSH_THRESHOLD) {
       await this.flush();
     }
   }
@@ -248,10 +287,25 @@ export class AuditLogService implements OnModuleDestroy {
     try {
       // In production, batch insert to database
       this.logger.debug(`Flushed ${logsToFlush.length} audit logs to storage`);
+      this.failedFlushAttempts = 0; // Reset on success
     } catch (error) {
       this.logger.error('Failed to flush audit logs', error);
-      // Re-add to queue
-      this.pendingLogs.unshift(...logsToFlush);
+      this.failedFlushAttempts++;
+      
+      // Memory safety: Prevent infinite accumulation of failed logs
+      if (this.failedFlushAttempts < this.MAX_FLUSH_ATTEMPTS) {
+        // Re-add to queue
+        this.pendingLogs.unshift(...logsToFlush);
+        
+        // Enforce buffer size even on retry
+        if (this.pendingLogs.length > this.MAX_BUFFER_SIZE) {
+          this.pendingLogs.length = this.MAX_BUFFER_SIZE;
+          this.logger.warn('Audit log buffer truncated after failed flush');
+        }
+      } else {
+        this.logger.error('Max flush attempts reached. Dropping logs to prevent memory leak.');
+        this.failedFlushAttempts = 0; // Reset to allow new attempts
+      }
     }
   }
 
@@ -262,13 +316,22 @@ export class AuditLogService implements OnModuleDestroy {
       ...Object.keys(oldData || {}),
       ...Object.keys(newData || {}),
     ]);
+    
+    let changeCount = 0;
+    const MAX_CHANGES = 50;
 
     for (const key of allKeys) {
+      if (changeCount >= MAX_CHANGES) {
+        changes['_truncated'] = 'Too many changes to track';
+        break;
+      }
+
       if (oldData?.[key] !== newData?.[key]) {
         changes[key] = {
           old: oldData?.[key],
           new: newData?.[key],
         };
+        changeCount++;
       }
     }
 

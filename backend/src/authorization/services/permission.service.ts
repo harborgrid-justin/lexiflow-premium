@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 import { Permission, PermissionStatus } from '../entities/permission.entity';
@@ -32,13 +32,23 @@ interface PermissionCheckResult {
   grantedBy?: string;
 }
 
+/**
+ * Permission Service with Memory Optimizations
+ * 
+ * MEMORY OPTIMIZATIONS:
+ * - 10K entry cap per cache with LRU eviction
+ * - Proper cleanup interval tracking
+ * - Module destroy cleanup
+ */
 @Injectable()
-export class PermissionService {
+export class PermissionService implements OnModuleDestroy {
   private readonly logger = new Logger(PermissionService.name);
   private readonly permissionCache = new Map<string, Permission>();
   private readonly rolePermissionCache = new Map<string, RolePermission[]>();
   private readonly userPermissionCache = new Map<string, Set<string>>();
   private readonly cacheExpirationMs = 5 * 60 * 1000;
+  private readonly MAX_CACHE_SIZE = 10000;
+  private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
     @InjectRepository(Permission)
@@ -49,8 +59,23 @@ export class PermissionService {
     this.initializeCacheCleanup();
   }
 
+  onModuleDestroy() {
+    this.logger.log('Cleaning up permission service...');
+    
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+      this.cleanupInterval = null;
+    }
+    
+    this.permissionCache.clear();
+    this.rolePermissionCache.clear();
+    this.userPermissionCache.clear();
+    
+    this.logger.log('Permission service cleanup complete');
+  }
+
   private initializeCacheCleanup(): void {
-    setInterval(() => {
+    this.cleanupInterval = setInterval(() => {
       this.clearCaches();
     }, this.cacheExpirationMs);
   }
@@ -252,6 +277,7 @@ export class PermissionService {
 
     if (permission) {
       this.permissionCache.set(code, permission);
+      this.enforceCacheLRU(this.permissionCache);
     }
 
     return permission;
@@ -276,8 +302,26 @@ export class PermissionService {
     });
 
     this.rolePermissionCache.set(role, rolePermissions);
+    this.enforceCacheLRU(this.rolePermissionCache);
 
     return rolePermissions;
+  }
+
+  /**
+   * Enforce LRU eviction on cache Maps
+   */
+  private enforceCacheLRU<K, V>(cache: Map<K, V>): void {
+    if (cache.size > this.MAX_CACHE_SIZE) {
+      const toRemove = Math.floor(this.MAX_CACHE_SIZE * 0.1);
+      const iterator = cache.keys();
+      for (let i = 0; i < toRemove; i++) {
+        const key = iterator.next().value;
+        if (key !== undefined) {
+          cache.delete(key);
+        }
+      }
+      this.logger.warn(`LRU eviction: removed ${toRemove} entries from cache (size: ${cache.size})`);
+    }
   }
 
   private async checkDirectUserPermission(

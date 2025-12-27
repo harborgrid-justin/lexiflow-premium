@@ -1,15 +1,25 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { CalendarEvent } from '@/components';
+import { CalendarEvent } from './CalendarEvent';
 
 const meta: Meta<typeof CalendarEvent> = {
-  title: 'Organisms/CalendarEvent',
+  title: 'Components/Organisms/CalendarEvent/CalendarEvent',
   component: CalendarEvent,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof CalendarEvent>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "title": "Sample Text",
+  "time": "Sample Text",
+  "variant": {},
+  "onClick": {},
+  "icon": "<div>Sample Content</div>",
+  "isCompact": true
+},
 };

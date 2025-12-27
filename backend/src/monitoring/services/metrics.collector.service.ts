@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PerformanceMetric } from '../entities/performance-metric.entity';
@@ -26,9 +26,23 @@ export interface HistogramData {
  * Metrics Collector Service
  * Collects and aggregates application metrics for monitoring and observability
  * Provides Prometheus-compatible metrics export
+ * 
+ * MEMORY OPTIMIZATIONS:
+ * - LRU eviction with 10K entry limits per Map
+ * - Periodic flush to database (5 minutes)
+ * - Array bounds enforcement (1K max per histogram)
+ * - Proper cleanup on module destroy
  */
 @Injectable()
-export class MetricsCollectorService {
+export class MetricsCollectorService implements OnModuleDestroy {
+  private readonly logger = new Logger(MetricsCollectorService.name);
+  
+  // Memory limits
+  private readonly MAX_METRICS_PER_MAP = 10000;
+  private readonly MAX_HISTOGRAM_VALUES = 1000;
+  private readonly MAX_REQUEST_DURATIONS = 1000;
+  private readonly FLUSH_INTERVAL_MS = 300000; // 5 minutes
+  
   private metrics: Map<string, number[]> = new Map();
   private counters: Map<string, number> = new Map();
   private gauges: Map<string, number> = new Map();
@@ -49,21 +63,66 @@ export class MetricsCollectorService {
   private cacheHits = 0;
   private cacheMisses = 0;
 
+  // Interval tracking for cleanup
+  private systemMetricsInterval: NodeJS.Timeout | null = null;
+  private flushInterval: NodeJS.Timeout | null = null;
+
   constructor(
     @InjectRepository(PerformanceMetric)
     private readonly metricRepository: Repository<PerformanceMetric>,
   ) {
     // Start periodic system metrics collection
     this.startSystemMetricsCollection();
+    // Start periodic flush to database
+    this.startPeriodicFlush();
+  }
+
+  onModuleDestroy() {
+    this.logger.log('Cleaning up metrics collector...');
+    
+    // Clear intervals
+    if (this.systemMetricsInterval) {
+      clearInterval(this.systemMetricsInterval);
+      this.systemMetricsInterval = null;
+    }
+    if (this.flushInterval) {
+      clearInterval(this.flushInterval);
+      this.flushInterval = null;
+    }
+    
+    // Clear all Maps and arrays
+    this.counters.clear();
+    this.gauges.clear();
+    this.histograms.clear();
+    this.requestCounts.clear();
+    this.requestDurations.clear();
+    this.errorCounts.clear();
+    this.queryDurations.length = 0;
+    
+    this.logger.log('Metrics collector cleanup complete');
   }
 
   /**
    * Start collecting system metrics periodically
    */
   private startSystemMetricsCollection(): void {
-    setInterval(() => {
+    this.systemMetricsInterval = setInterval(() => {
       this.collectSystemMetrics();
     }, 30000); // Collect every 30 seconds
+  }
+
+  /**
+   * Start periodic flush to database
+   */
+  private startPeriodicFlush(): void {
+    this.flushInterval = setInterval(async () => {
+      try {
+        await this.persistMetrics();
+        this.logger.log('Metrics flushed to database');
+      } catch (error) {
+        this.logger.error('Failed to flush metrics', error);
+      }
+    }, this.FLUSH_INTERVAL_MS);
   }
 
   /**
@@ -108,24 +167,30 @@ export class MetricsCollectorService {
   }
 
   /**
-   * Increment a counter metric
+   * Increment a counter metric with LRU eviction
    */
   incrementCounter(name: string, value: number = 1, labels?: Record<string, string>): void {
     const key = this.buildMetricKey(name, labels);
     const current = this.counters.get(key) || 0;
     this.counters.set(key, current + value);
+    
+    // LRU eviction if size exceeds limit
+    this.enforceLRULimit(this.counters, this.MAX_METRICS_PER_MAP);
   }
 
   /**
-   * Record a gauge metric (point-in-time value)
+   * Record a gauge metric (point-in-time value) with LRU eviction
    */
   recordGauge(name: string, value: number, labels?: Record<string, string>): void {
     const key = this.buildMetricKey(name, labels);
     this.gauges.set(key, value);
+    
+    // LRU eviction if size exceeds limit
+    this.enforceLRULimit(this.gauges, this.MAX_METRICS_PER_MAP);
   }
 
   /**
-   * Record a histogram metric (distribution of values)
+   * Record a histogram metric (distribution of values) with size limits
    */
   recordHistogram(name: string, value: number, labels?: Record<string, string>): void {
     const key = this.buildMetricKey(name, labels);
@@ -133,9 +198,29 @@ export class MetricsCollectorService {
     values.push(value);
     this.histograms.set(key, values);
 
-    // Keep only last 1000 values to prevent memory issues
-    if (values.length > 1000) {
+    // Keep only last N values to prevent memory issues
+    if (values.length > this.MAX_HISTOGRAM_VALUES) {
       values.shift();
+    }
+    
+    // LRU eviction if too many histograms
+    this.enforceLRULimit(this.histograms, this.MAX_METRICS_PER_MAP);
+  }
+
+  /**
+   * Enforce LRU eviction on a Map when size exceeds limit
+   */
+  private enforceLRULimit<K, V>(map: Map<K, V>, maxSize: number): void {
+    if (map.size > maxSize) {
+      const keysToDelete = Math.floor(maxSize * 0.1); // Remove oldest 10%
+      const iterator = map.keys();
+      for (let i = 0; i < keysToDelete; i++) {
+        const key = iterator.next().value;
+        if (key !== undefined) {
+          map.delete(key);
+        }
+      }
+      this.logger.warn(`LRU eviction: removed ${keysToDelete} entries from Map (size: ${map.size})`);
     }
   }
 
@@ -156,7 +241,7 @@ export class MetricsCollectorService {
   }
 
   /**
-   * Record HTTP request metrics
+   * Record HTTP request metrics with bounded storage
    */
   recordRequest(method: string, path: string, statusCode: number, duration: number): void {
     const endpoint = `${method} ${this.normalizePath(path)}`;
@@ -186,17 +271,26 @@ export class MetricsCollectorService {
       this.incrementCounter(errorKey);
     }
 
-    // Store for endpoint-specific tracking
+    // Store for endpoint-specific tracking with LRU
     const count = this.requestCounts.get(endpoint) || 0;
     this.requestCounts.set(endpoint, count + 1);
+    this.enforceLRULimit(this.requestCounts, this.MAX_METRICS_PER_MAP);
 
     const durations = this.requestDurations.get(endpoint) || [];
     durations.push(duration);
+    
+    // Keep only last N durations per endpoint
+    if (durations.length > this.MAX_REQUEST_DURATIONS) {
+      durations.shift();
+    }
+    
     this.requestDurations.set(endpoint, durations);
+    this.enforceLRULimit(this.requestDurations, this.MAX_METRICS_PER_MAP);
 
     if (statusCode >= 400) {
       const errors = this.errorCounts.get(endpoint) || 0;
       this.errorCounts.set(endpoint, errors + 1);
+      this.enforceLRULimit(this.errorCounts, this.MAX_METRICS_PER_MAP);
     }
   }
 
@@ -211,14 +305,14 @@ export class MetricsCollectorService {
   }
 
   /**
-   * Record database query metrics
+   * Record database query metrics with bounded storage
    */
   recordDatabaseQuery(duration: number, success: boolean = true): void {
     this.queryCount++;
     this.queryDurations.push(duration);
 
-    // Keep only last 1000 queries
-    if (this.queryDurations.length > 1000) {
+    // Keep only last N queries to prevent unbounded growth
+    if (this.queryDurations.length > this.MAX_HISTOGRAM_VALUES) {
       this.queryDurations.shift();
     }
 

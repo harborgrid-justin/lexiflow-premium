@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
-import { Motion, MotionType, MotionStatus } from '../../motions/entities/motion.entity';
-import { Case } from '../../cases/entities/case.entity';
+import { Motion, MotionType, MotionStatus } from '@core/motions/entities/motion.entity';
+import { Case } from '@cases/entities/case.entity';
 import { faker } from '@faker-js/faker';
 
 export const seedMotions = async (dataSource: DataSource) => {

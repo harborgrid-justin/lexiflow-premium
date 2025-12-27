@@ -91,9 +91,30 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
   ) {}
 
   onModuleDestroy() {
+    this.logger.log('Cleaning up WebSocket gateway...');
+    
+    const clientCount = this.connectedClients.size;
+    const roomCount = this.rooms.size;
+    const socketCount = this.socketToUser.size;
+    
+    // Disconnect all clients gracefully
+    for (const [socketId, clientInfo] of this.connectedClients.entries()) {
+      try {
+        const socket = this.server.sockets.sockets.get(socketId);
+        if (socket) {
+          socket.disconnect(true);
+        }
+      } catch (error) {
+        this.logger.error(`Error disconnecting client ${socketId}: ${error}`);
+      }
+    }
+    
+    // Clear all data structures
     this.connectedClients.clear();
     this.rooms.clear();
     this.socketToUser.clear();
+    
+    this.logger.log(`WebSocket cleanup complete (${clientCount} clients, ${roomCount} rooms, ${socketCount} mappings)`);
   }
 
   async handleConnection(client: Socket) {

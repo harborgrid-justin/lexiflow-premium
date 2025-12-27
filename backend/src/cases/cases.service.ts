@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, OnModuleDestroy } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository} from 'typeorm';
 import { Case, CaseStatus } from './entities/case.entity';
@@ -10,14 +10,73 @@ import { CaseStatsDto } from './dto/case-stats.dto';
 
 import { validateSortField, validateSortOrder } from '../common/utils/query-validation.util';
 
+/**
+ * Cases Service with Memory Optimizations
+ *
+ * MEMORY OPTIMIZATIONS:
+ * - LRU cache for case lookups (500 entries)
+ * - Stats cache with TTL (5 minutes)
+ * - Metrics cache with TTL (2 minutes)
+ * - Query result caching for pagination
+ * - Proper cleanup on module destroy
+ */
 @Injectable()
-export class CasesService {
+export class CasesService implements OnModuleDestroy {
+  // Memory limits
+  private readonly MAX_CASE_CACHE_SIZE = 500;
+  private readonly STATS_CACHE_TTL_MS = 300000; // 5 minutes
+  private readonly METRICS_CACHE_TTL_MS = 120000; // 2 minutes
+  private readonly QUERY_CACHE_TTL_MS = 60000; // 1 minute
+
+  // Caches for memory optimization
+  private caseCache: Map<string, { data: CaseResponseDto; timestamp: number }> = new Map();
+  private statsCache: { data: CaseStatsDto; timestamp: number } | null = null;
+  private metricsCache: { data: any; timestamp: number } | null = null;
+  private queryCache: Map<string, { data: PaginatedCaseResponseDto; timestamp: number }> = new Map();
+
   constructor(
     @InjectRepository(Case)
     private readonly caseRepository: Repository<Case>,
   ) {}
 
+  onModuleDestroy() {
+    // Clear all caches to free memory
+    this.caseCache.clear();
+    this.statsCache = null;
+    this.metricsCache = null;
+    this.queryCache.clear();
+  }
+
+  /**
+   * Enforce LRU cache limits to prevent memory bloat
+   * Evicts 10% of oldest entries when cache exceeds limits
+   */
+  private enforceCacheLRU(cache: Map<any, any>, maxSize: number): void {
+    if (cache.size > maxSize) {
+      const entriesToRemove = Math.ceil(maxSize * 0.1); // Remove 10% of entries
+      const keysToDelete = Array.from(cache.keys()).slice(0, entriesToRemove);
+      keysToDelete.forEach(key => cache.delete(key));
+    }
+  }
+
+  /**
+   * Invalidate all caches when data changes
+   * Ensures cache consistency across all operations
+   */
+  private invalidateCaches(): void {
+    this.caseCache.clear();
+    this.statsCache = null;
+    this.metricsCache = null;
+    this.queryCache.clear();
+  }
+
   async getStats(): Promise<CaseStatsDto> {
+    // Check cache first
+    if (this.statsCache && this.isCacheValid(this.statsCache.timestamp, this.STATS_CACHE_TTL_MS)) {
+      return this.statsCache.data;
+    }
+
+    // Compute stats with memory-efficient queries
     const totalActive = await this.caseRepository.count({ 
       where: { status: CaseStatus.ACTIVE },
       cache: 60000 // 1 minute cache
@@ -59,7 +118,7 @@ export class CasesService {
 
     const conversionRate = 0;
 
-    return {
+    const stats: CaseStatsDto = {
       totalActive,
       intakePipeline,
       upcomingDeadlines,
@@ -69,11 +128,16 @@ export class CasesService {
       averageAge: Math.round(parseFloat(avgAge) || 0),
       conversionRate
     };
+
+    // Cache the result
+    this.statsCache = { data: stats, timestamp: Date.now() };
+    return stats;
   }
 
   /**
    * Get case metrics using efficient database aggregation
    * PERFORMANCE: Uses COUNT and GROUP BY instead of loading all records
+   * MEMORY OPTIMIZATION: Cached results with TTL to prevent repeated computation
    * This is critical for enterprise scale - O(1) memory usage
    */
   async getCaseMetrics(): Promise<{
@@ -84,6 +148,11 @@ export class CasesService {
     byType: Array<{ type: string; count: number }>;
     byStatus: Array<{ status: string; count: number }>;
   }> {
+    // Check cache first
+    if (this.metricsCache && this.isCacheValid(this.metricsCache.timestamp, this.METRICS_CACHE_TTL_MS)) {
+      return this.metricsCache.data;
+    }
+
     // Get total count
     const totalCases = await this.caseRepository.count({
       cache: 30000, // 30 second cache for performance
@@ -128,7 +197,7 @@ export class CasesService {
       }
     }
 
-    return {
+    const metrics = {
       totalCases,
       activeCases,
       closedCases,
@@ -142,6 +211,10 @@ export class CasesService {
         count: parseInt(row.count, 10),
       })),
     };
+
+    // Cache the result
+    this.metricsCache = { data: metrics, timestamp: Date.now() };
+    return metrics;
   }
 
   async findAll(filterDto: CaseFilterDto): Promise<PaginatedCaseResponseDto> {
@@ -162,6 +235,34 @@ export class CasesService {
       includeTeam,
       includePhases,
     } = filterDto;
+
+    // Create cache key from filter parameters
+    const cacheKey = JSON.stringify({
+      search,
+      status,
+      type,
+      practiceArea,
+      assignedTeamId,
+      leadAttorneyId,
+      jurisdiction,
+      isArchived,
+      page,
+      limit,
+      sortBy,
+      sortOrder,
+      includeParties,
+      includeTeam,
+      includePhases,
+    });
+
+    // Check cache first
+    const cachedResult = this.queryCache.get(cacheKey);
+    if (cachedResult && this.isCacheValid(cachedResult.timestamp, this.QUERY_CACHE_TTL_MS)) {
+      return cachedResult.data;
+    }
+
+    // Enforce LRU on query cache
+    this.enforceCacheLRU(this.queryCache, 100); // Max 100 cached queries
 
     const queryBuilder = this.caseRepository.createQueryBuilder('case');
 
@@ -226,22 +327,36 @@ export class CasesService {
     const safeSortOrder = validateSortOrder(sortOrder);
     queryBuilder.orderBy(`case.${safeSortField}`, safeSortOrder);
 
-    // Pagination
-    const skip = (page - 1) * limit;
-    queryBuilder.skip(skip).take(limit);
+    // Pagination with memory limits
+    const maxLimit = Math.min(limit, 100); // Cap at 100 to prevent memory issues
+    const skip = (page - 1) * maxLimit;
+    queryBuilder.skip(skip).take(maxLimit);
 
     const [data, total] = await queryBuilder.getManyAndCount();
 
-    return {
+    const result: PaginatedCaseResponseDto = {
       data: data.map((c) => this.toCaseResponse(c)),
       total,
       page,
-      limit,
-      totalPages: Math.ceil(total / limit),
+      limit: maxLimit,
+      totalPages: Math.ceil(total / maxLimit),
     };
+
+    // Cache the result
+    this.queryCache.set(cacheKey, { data: result, timestamp: Date.now() });
+    return result;
   }
 
   async findOne(id: string): Promise<CaseResponseDto> {
+    // Check cache first
+    const cached = this.caseCache.get(id);
+    if (cached && this.isCacheValid(cached.timestamp, this.QUERY_CACHE_TTL_MS)) {
+      return cached.data;
+    }
+
+    // Enforce LRU on case cache
+    this.enforceCacheLRU(this.caseCache, this.MAX_CASE_CACHE_SIZE);
+
     const caseEntity = await this.caseRepository.findOne({
       where: { id },
     });
@@ -250,7 +365,11 @@ export class CasesService {
       throw new NotFoundException(`Case with ID ${id} not found`);
     }
 
-    return this.toCaseResponse(caseEntity);
+    const response = this.toCaseResponse(caseEntity);
+
+    // Cache the result
+    this.caseCache.set(id, { data: response, timestamp: Date.now() });
+    return response;
   }
 
   async create(createCaseDto: CreateCaseDto): Promise<CaseResponseDto> {
@@ -267,6 +386,9 @@ export class CasesService {
 
     const caseEntity = this.caseRepository.create(createCaseDto);
     const savedCase = await this.caseRepository.save(caseEntity);
+
+    // Invalidate caches after creation
+    this.invalidateCaches();
 
     return this.toCaseResponse(savedCase);
   }
@@ -301,17 +423,27 @@ export class CasesService {
       throw new NotFoundException(`Case with ID ${id} not found`);
     }
 
+    // Invalidate caches after update
+    this.invalidateCaches();
+
     return this.toCaseResponse(result.raw[0]);
   }
 
   async remove(id: string): Promise<void> {
     await this.findOne(id);
     await this.caseRepository.softDelete(id);
+
+    // Invalidate caches after deletion
+    this.invalidateCaches();
   }
 
   async archive(id: string): Promise<CaseResponseDto> {
     await this.findOne(id);
     await this.caseRepository.update(id, { isArchived: true });
+
+    // Invalidate caches after archiving
+    this.invalidateCaches();
+
     return this.findOne(id);
   }
 

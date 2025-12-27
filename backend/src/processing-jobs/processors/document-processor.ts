@@ -3,7 +3,7 @@ import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 import { ProcessingJobsService } from '../processing-jobs.service';
 import { OcrService } from '../../ocr/ocr.service';
-import { DocumentsService } from '../../documents/documents.service';
+import { DocumentsService } from '@documents/documents.service';
 import { JobType, JobStatus } from '../dto/job-status.dto';
 
 @Processor('document-processing')

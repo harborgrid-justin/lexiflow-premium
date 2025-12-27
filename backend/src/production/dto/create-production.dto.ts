@@ -1,6 +1,6 @@
 import { IsString, IsUUID, IsEnum, IsOptional, IsBoolean, IsDate, IsObject, MaxLength} from 'class-validator';
 import { Type } from 'class-transformer';
-import { ProductionFormat } from '../../discovery/productions/entities/production.entity';
+import { ProductionFormat } from '@discovery/productions/entities/production.entity';
 
 export class CreateProductionDto {
   @IsString()

@@ -12,17 +12,41 @@ export class PartiesService {
     private readonly partyRepository: Repository<Party>,
   ) {}
 
-  async findAll(): Promise<Party[]> {
-    return this.partyRepository.find({
+  async findAll(options?: { page?: number; limit?: number }): Promise<{ data: Party[]; total: number; page: number; limit: number }> {
+    const { page = 1, limit = 50 } = options || {};
+    const skip = (page - 1) * limit;
+
+    const [parties, total] = await this.partyRepository.findAndCount({
       order: { createdAt: 'DESC' },
+      skip,
+      take: limit,
     });
+
+    return {
+      data: parties,
+      total,
+      page,
+      limit,
+    };
   }
 
-  async findAllByCaseId(caseId: string): Promise<Party[]> {
-    return this.partyRepository.find({
+  async findAllByCaseId(caseId: string, options?: { page?: number; limit?: number }): Promise<{ data: Party[]; total: number; page: number; limit: number }> {
+    const { page = 1, limit = 50 } = options || {};
+    const skip = (page - 1) * limit;
+
+    const [parties, total] = await this.partyRepository.findAndCount({
       where: { caseId },
       order: { createdAt: 'DESC' },
+      skip,
+      take: limit,
     });
+
+    return {
+      data: parties,
+      total,
+      page,
+      limit,
+    };
   }
 
   async findOne(id: string): Promise<Party> {

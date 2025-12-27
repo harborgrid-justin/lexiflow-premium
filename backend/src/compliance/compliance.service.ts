@@ -41,11 +41,23 @@ export class ComplianceService {
     return checks;
   }
 
-  async getChecksByCaseId(caseId: string): Promise<ComplianceCheck[]> {
-    return this.complianceCheckRepository.find({
+  async getChecksByCaseId(caseId: string, options?: { page?: number; limit?: number }): Promise<{ data: ComplianceCheck[]; total: number; page: number; limit: number }> {
+    const { page = 1, limit = 50 } = options || {};
+    const skip = (page - 1) * limit;
+
+    const [checks, total] = await this.complianceCheckRepository.findAndCount({
       where: { caseId },
       order: { checkedAt: 'DESC' },
+      skip,
+      take: limit,
     });
+
+    return {
+      data: checks,
+      total,
+      page,
+      limit,
+    };
   }
 
   async getFailedChecks(): Promise<ComplianceCheck[]> {

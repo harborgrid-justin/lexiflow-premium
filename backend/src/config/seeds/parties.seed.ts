@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
-import { Party, PartyType, PartyRole } from '../../parties/entities/party.entity';
-import { Case } from '../../cases/entities/case.entity';
+import { Party, PartyType, PartyRole } from '@core/parties/entities/party.entity';
+import { Case } from '@cases/entities/case.entity';
 import { faker } from '@faker-js/faker';
 
 export const seedParties = async (dataSource: DataSource) => {

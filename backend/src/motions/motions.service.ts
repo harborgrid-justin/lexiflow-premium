@@ -12,11 +12,23 @@ export class MotionsService {
     private readonly motionRepository: Repository<Motion>,
   ) {}
 
-  async findAllByCaseId(caseId: string): Promise<Motion[]> {
-    return this.motionRepository.find({
+  async findAllByCaseId(caseId: string, options?: { page?: number; limit?: number }): Promise<{ data: Motion[]; total: number; page: number; limit: number }> {
+    const { page = 1, limit = 50 } = options || {};
+    const skip = (page - 1) * limit;
+
+    const [motions, total] = await this.motionRepository.findAndCount({
       where: { caseId },
       order: { filingDate: 'DESC', createdAt: 'DESC' },
+      skip,
+      take: limit,
     });
+
+    return {
+      data: motions,
+      total,
+      page,
+      limit,
+    };
   }
 
   async findOne(id: string): Promise<Motion> {

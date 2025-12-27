@@ -30,10 +30,22 @@ export class EvidenceService {
     return saved;
   }
 
-  async findAll(): Promise<EvidenceItem[]> {
-    return this.evidenceRepository.find({
+  async findAll(options?: { page?: number; limit?: number }): Promise<{ data: EvidenceItem[]; total: number; page: number; limit: number }> {
+    const { page = 1, limit = 50 } = options || {};
+    const skip = (page - 1) * limit;
+
+    const [evidence, total] = await this.evidenceRepository.findAndCount({
       order: { collectionDate: 'DESC' },
+      skip,
+      take: limit,
     });
+
+    return {
+      data: evidence,
+      total,
+      page,
+      limit,
+    };
   }
 
   async findOne(id: string): Promise<EvidenceItem> {

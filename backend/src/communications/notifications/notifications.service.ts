@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, ForbiddenException, OnModuleDestroy } from '@nestjs/common';
 import {
   CreateNotificationDto,
   NotificationPreferencesDto,
@@ -17,14 +17,57 @@ import {
  * @class NotificationsService
  */
 @Injectable()
-export class NotificationsService {
+export class NotificationsService implements OnModuleDestroy {
   private readonly logger = new Logger(NotificationsService.name);
   private notifications: Map<string, any> = new Map();
    
   private preferences: Map<string, NotificationPreferencesDto> = new Map();
+  
+  // Memory optimization
+  private readonly MAX_NOTIFICATIONS = 10000;
+  private readonly CLEANUP_INTERVAL = 60 * 60 * 1000; // 1 hour
+  private cleanupTimer: NodeJS.Timeout;
 
   constructor() {
     this.logger.log('NotificationsService initialized with in-memory storage');
+    this.cleanupTimer = setInterval(() => this.cleanup(), this.CLEANUP_INTERVAL);
+  }
+
+  onModuleDestroy() {
+    clearInterval(this.cleanupTimer);
+    this.notifications.clear();
+    this.preferences.clear();
+    this.logger.log('NotificationsService destroyed, memory cleared');
+  }
+
+  private cleanup() {
+    const now = Date.now();
+    const TTL = 30 * 24 * 60 * 60 * 1000; // 30 days
+    
+    let removedCount = 0;
+
+    // Remove old notifications
+    for (const [id, notification] of this.notifications.entries()) {
+      if (now - new Date(notification.createdAt).getTime() > TTL) {
+        this.notifications.delete(id);
+        removedCount++;
+      }
+    }
+    
+    // Enforce max size if still too large
+    if (this.notifications.size > this.MAX_NOTIFICATIONS) {
+      // Sort by date and remove oldest
+      const sorted = Array.from(this.notifications.entries())
+        .sort(([, a], [, b]) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+            
+      const toRemove = sorted.slice(0, this.notifications.size - this.MAX_NOTIFICATIONS);
+      toRemove.forEach(([id]) => this.notifications.delete(id));
+      removedCount += toRemove.length;
+    }
+
+    if (removedCount > 0) {
+      this.logger.debug(`Cleanup: Removed ${removedCount} old notifications`);
+    }
   }
 
   /**
@@ -99,6 +142,11 @@ export class NotificationsService {
     };
 
     this.notifications.set(notification.id, notification);
+    
+    // Quick check to avoid growing too large between cleanups
+    if (this.notifications.size > this.MAX_NOTIFICATIONS + 100) {
+      this.cleanup();
+    }
     
     this.logger.log(`Notification created: ${notification.id} for user ${createDto.userId}`);
 

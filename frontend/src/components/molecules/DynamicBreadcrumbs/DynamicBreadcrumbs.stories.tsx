@@ -2,14 +2,24 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { DynamicBreadcrumbs } from './DynamicBreadcrumbs';
 
 const meta: Meta<typeof DynamicBreadcrumbs> = {
-  title: 'Molecules/DynamicBreadcrumbs',
+  title: 'Components/Molecules/DynamicBreadcrumbs/DynamicBreadcrumbs',
   component: DynamicBreadcrumbs,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof DynamicBreadcrumbs>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "items": [],
+  "maxVisible": 42,
+  "maxRecent": 42,
+  "showHome": true,
+  "onNavigate": "Sample Text",
+  "className": "Sample Text"
+},
 };

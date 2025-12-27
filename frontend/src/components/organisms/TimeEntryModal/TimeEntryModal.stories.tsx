@@ -1,15 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TimeEntryModal } from '@/components';
+import { TimeEntryModal } from './TimeEntryModal';
 
 const meta: Meta<typeof TimeEntryModal> = {
-  title: 'Organisms/TimeEntryModal',
+  title: 'Components/Organisms/TimeEntryModal/TimeEntryModal',
   component: TimeEntryModal,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof TimeEntryModal>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "isOpen": true,
+  "onClose": {},
+  "caseId": {},
+  "onSave": {}
+},
 };

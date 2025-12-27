@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
 import { DataSourcesService } from './data-sources.service';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { TestConnectionDto } from './dto/test-connection.dto';
 
 

@@ -15,17 +15,41 @@ export class DocketService {
     private readonly docketRepository: Repository<DocketEntry>,
   ) {}
 
-  async findAll(): Promise<DocketEntry[]> {
-    return this.docketRepository.find({
+  async findAll(options?: { page?: number; limit?: number }): Promise<{ data: DocketEntry[]; total: number; page: number; limit: number }> {
+    const { page = 1, limit = 50 } = options || {};
+    const skip = (page - 1) * limit;
+
+    const [entries, total] = await this.docketRepository.findAndCount({
       order: { sequenceNumber: 'DESC' },
+      skip,
+      take: limit,
     });
+
+    return {
+      data: entries,
+      total,
+      page,
+      limit,
+    };
   }
 
-  async findAllByCaseId(caseId: string): Promise<DocketEntry[]> {
-    return this.docketRepository.find({
+  async findAllByCaseId(caseId: string, options?: { page?: number; limit?: number }): Promise<{ data: DocketEntry[]; total: number; page: number; limit: number }> {
+    const { page = 1, limit = 50 } = options || {};
+    const skip = (page - 1) * limit;
+
+    const [entries, total] = await this.docketRepository.findAndCount({
       where: { caseId },
       order: { sequenceNumber: 'DESC' },
+      skip,
+      take: limit,
     });
+
+    return {
+      data: entries,
+      total,
+      page,
+      limit,
+    };
   }
 
   async findOne(id: string): Promise<DocketEntry> {

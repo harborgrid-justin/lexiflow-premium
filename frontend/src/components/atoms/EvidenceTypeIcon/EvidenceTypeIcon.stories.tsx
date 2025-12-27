@@ -1,15 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { EvidenceTypeIcon } from '@/components';
+import { EvidenceTypeIcon } from './EvidenceTypeIcon';
 
 const meta: Meta<typeof EvidenceTypeIcon> = {
-  title: 'Atoms/EvidenceTypeIcon',
+  title: 'Components/Atoms/EvidenceTypeIcon/EvidenceTypeIcon',
   component: EvidenceTypeIcon,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof EvidenceTypeIcon>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "type": {},
+  "className": "Sample Text"
+},
 };

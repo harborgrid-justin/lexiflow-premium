@@ -1,15 +1,22 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { SectionHeader } from '@/components';
+import { SectionHeader } from './SectionHeader';
 
 const meta: Meta<typeof SectionHeader> = {
-  title: 'Atoms/SectionHeader',
+  title: 'Components/Atoms/SectionHeader/SectionHeader',
   component: SectionHeader,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof SectionHeader>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "title": "Sample Text",
+  "subtitle": "Sample Text",
+  "action": "<div>Sample Content</div>"
+},
 };

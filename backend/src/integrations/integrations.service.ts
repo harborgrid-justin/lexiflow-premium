@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, OnModuleDestroy } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Integration } from './entities/integration.entity';
@@ -6,11 +6,35 @@ import { CreateIntegrationDto } from './dto/create-integration.dto';
 import { UpdateIntegrationDto } from './dto/update-integration.dto';
 
 @Injectable()
-export class IntegrationsService {
+export class IntegrationsService implements OnModuleDestroy {
+  // Memory optimization: Cache for integrations
+  private readonly integrationCache = new Map<string, Integration>();
+  private readonly MAX_CACHE_SIZE = 50;
+
   constructor(
     @InjectRepository(Integration)
     private readonly integrationRepository: Repository<Integration>,
   ) {}
+
+  onModuleDestroy() {
+    this.integrationCache.clear();
+  }
+
+  /**
+   * Enforce LRU eviction on integration cache
+   */
+  private enforceCacheLRU(): void {
+    if (this.integrationCache.size > this.MAX_CACHE_SIZE) {
+      const toRemove = Math.floor(this.MAX_CACHE_SIZE * 0.1);
+      const iterator = this.integrationCache.keys();
+      for (let i = 0; i < toRemove; i++) {
+        const key = iterator.next().value;
+        if (key !== undefined) {
+          this.integrationCache.delete(key);
+        }
+      }
+    }
+  }
 
   findById(id: string): Promise<Integration | null> {
     return this.findOne(id);
@@ -25,14 +49,18 @@ export class IntegrationsService {
     integration.status = 'active' as any;
     integration.credentials = credentials;
     integration.lastSyncedAt = new Date();
-    return this.integrationRepository.save(integration);
+    const saved = await this.integrationRepository.save(integration);
+    this.integrationCache.delete(id); // Invalidate cache
+    return saved;
   }
   
   async disconnect(id: string): Promise<Integration> {
     const integration = await this.findOne(id);
     integration.status = 'disconnected' as any;
     integration.credentials = undefined;
-    return this.integrationRepository.save(integration);
+    const saved = await this.integrationRepository.save(integration);
+    this.integrationCache.delete(id); // Invalidate cache
+    return saved;
   }
   
   async refreshCredentials(id: string): Promise<Integration> {
@@ -90,10 +118,19 @@ export class IntegrationsService {
   }
 
   async findOne(id: string): Promise<Integration> {
+    if (this.integrationCache.has(id)) {
+      return this.integrationCache.get(id)!;
+    }
+
     const integration = await this.integrationRepository.findOne({ where: { id } });
     if (!integration) {
       throw new NotFoundException(`Integration with ID ${id} not found`);
     }
+
+    // Cache result and enforce LRU limits
+    this.integrationCache.set(id, integration);
+    this.enforceCacheLRU();
+
     return integration;
   }
 

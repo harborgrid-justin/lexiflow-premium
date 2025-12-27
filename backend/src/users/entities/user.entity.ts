@@ -1,10 +1,10 @@
 import { Entity, Column, Index, Unique, OneToOne, OneToMany } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { BaseEntity } from '../../common/base/base.entity';
+import { BaseEntity } from '@common/base/base.entity';
 import { UserProfile } from './user-profile.entity';
-import { Session } from '../../auth/entities/session.entity';
-import { TimeEntry } from '../../billing/time-entries/entities/time-entry.entity';
-import { CaseTeamMember } from '../../case-teams/entities/case-team.entity';
+import { Session } from '@auth/entities/session.entity';
+import { TimeEntry } from '@billing/time-entries/entities/time-entry.entity';
+import { CaseTeamMember } from '@case-teams/entities/case-team.entity';
 
 export enum UserRole {
   SUPER_ADMIN = 'super_admin',

@@ -2,14 +2,20 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { FileIcon } from './FileIcon';
 
 const meta: Meta<typeof FileIcon> = {
-  title: 'Atoms/FileIcon',
+  title: 'Components/Atoms/FileIcon/FileIcon',
   component: FileIcon,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof FileIcon>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "type": "Sample Text",
+  "className": "Sample Text"
+},
 };

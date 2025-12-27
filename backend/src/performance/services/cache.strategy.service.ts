@@ -1,6 +1,6 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { RedisCacheManagerService } from '../../common/services/redis-cache-manager.service';
+import { RedisCacheManagerService } from '@common/services/redis-cache-manager.service';
 import * as crypto from 'crypto';
 
 /**
@@ -57,7 +57,7 @@ export interface CacheWarmingConfig {
  * }, { ttl: 3600, tags: ['users'], tier: 'both' });
  */
 @Injectable()
-export class CacheStrategyService implements OnModuleInit {
+export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(CacheStrategyService.name);
   private readonly memoryCache = new Map<string, MemoryCacheEntry>();
   private readonly metadata = new Map<string, CacheMetadata>();
@@ -66,8 +66,10 @@ export class CacheStrategyService implements OnModuleInit {
 
   // Memory cache limits
   private readonly MAX_MEMORY_ENTRIES = 10000;
-  private readonly MAX_ENTRY_SIZE = 1024 * 1024; // 1MB
-  private readonly DEFAULT_TTL = 3600; // 1 hour
+  private readonly MAX_ENTRY_SIZE = 1024 * 1024;
+  private readonly DEFAULT_TTL = 3600;
+  private currentMemorySize = 0;
+  private readonly MAX_MEMORY_SIZE = 100 * 1024 * 1024;
 
   constructor(
     private readonly redisCache: RedisCacheManagerService,
@@ -77,6 +79,26 @@ export class CacheStrategyService implements OnModuleInit {
   async onModuleInit() {
     this.startCleanupInterval();
     this.logger.log('Multi-tier cache strategy initialized');
+  }
+
+  async onModuleDestroy() {
+    this.logger.log('Cleaning up cache strategy service...');
+    
+    // Clear warming interval
+    if (this.warmingInterval) {
+      clearInterval(this.warmingInterval);
+      this.warmingInterval = null;
+    }
+    
+    // Clear all cache maps to free memory
+    this.memoryCache.clear();
+    this.metadata.clear();
+    this.tagIndex.clear();
+    
+    // Reset memory tracking
+    this.currentMemorySize = 0;
+    
+    this.logger.log('Cache strategy cleanup complete');
   }
 
   /**
@@ -227,15 +249,66 @@ export class CacheStrategyService implements OnModuleInit {
   }
 
   /**
-   * Clear all cache (use with caution!)
+   * Start automatic cleanup interval for expired entries and memory management
    */
-  async clearAll(): Promise<void> {
-    this.memoryCache.clear();
-    this.metadata.clear();
-    this.tagIndex.clear();
-    await this.redisCache.clear();
-
-    this.logger.warn('All cache cleared');
+  private startCleanupInterval(): void {
+    setInterval(() => {
+      const now = Date.now();
+      let evicted = 0;
+      
+      // Remove expired entries
+      for (const [key, entry] of this.memoryCache.entries()) {
+        if (entry.expiresAt && entry.expiresAt < now) {
+          const size = entry.size || 0;
+          this.memoryCache.delete(key);
+          this.metadata.delete(key);
+          this.currentMemorySize -= size;
+          evicted++;
+        }
+      }
+      
+      // Enforce memory limits - evict oldest entries if over limit
+      if (this.memoryCache.size > this.MAX_MEMORY_ENTRIES) {
+        const sortedEntries = Array.from(this.metadata.entries())
+          .sort((a, b) => a[1].createdAt - b[1].createdAt);
+        
+        const toRemove = sortedEntries.slice(0, sortedEntries.length - this.MAX_MEMORY_ENTRIES);
+        for (const [key] of toRemove) {
+          const entry = this.memoryCache.get(key);
+          if (entry) {
+            this.currentMemorySize -= entry.size || 0;
+          }
+          this.memoryCache.delete(key);
+          this.metadata.delete(key);
+          evicted++;
+        }
+      }
+      
+      // Check memory size limit
+      if (this.currentMemorySize > this.MAX_MEMORY_SIZE) {
+        const sortedBySize = Array.from(this.memoryCache.entries())
+          .sort((a, b) => (b[1].size || 0) - (a[1].size || 0));
+        
+        // Remove largest entries until under limit
+        let freedMemory = 0;
+        for (const [key, entry] of sortedBySize) {
+          if (this.currentMemorySize - freedMemory <= this.MAX_MEMORY_SIZE * 0.9) {
+            break;
+          }
+          const size = entry.size || 0;
+          this.memoryCache.delete(key);
+          this.metadata.delete(key);
+          freedMemory += size;
+          evicted++;
+        }
+        this.currentMemorySize -= freedMemory;
+      }
+      
+      if (evicted > 0) {
+        this.logger.debug(`Cache cleanup: evicted ${evicted} entries, memory: ${(this.currentMemorySize / 1024 / 1024).toFixed(2)}MB`);
+      }
+    }, 60000); // Run every minute
+  }
   }
 
   /**
@@ -468,6 +541,21 @@ export class CacheStrategyService implements OnModuleInit {
       expiredCount,
       tags: this.tagIndex.size,
     };
+  }
+
+  async onModuleDestroy(): Promise<void> {
+    this.logger.log('CacheStrategyService cleanup');
+    
+    if (this.warmingInterval) {
+      clearInterval(this.warmingInterval);
+      this.warmingInterval = null;
+    }
+    
+    this.memoryCache.clear();
+    this.metadata.clear();
+    this.tagIndex.clear();
+    
+    this.logger.log('CacheStrategyService cleanup complete');
   }
 }
 

@@ -1,15 +1,22 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { StatusBadge } from '@/components';
+import { StatusBadge } from './StatusBadge';
 
 const meta: Meta<typeof StatusBadge> = {
-  title: 'Atoms/StatusBadge',
+  title: 'Components/Atoms/StatusBadge/StatusBadge',
   component: StatusBadge,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof StatusBadge>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "status": "Sample Text",
+  "className": "Sample Text",
+  "variantOverride": {}
+},
 };

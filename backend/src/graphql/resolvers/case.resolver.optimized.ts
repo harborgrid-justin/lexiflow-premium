@@ -12,14 +12,14 @@ import {
   CreateDocketEntryInput,
 } from '../inputs/case.input';
 import { PaginationInput } from '../inputs/pagination.input';
-import { CurrentUser } from '../../auth/decorators/current-user.decorator';
-import { GqlAuthGuard } from '../../auth/guards/gql-auth.guard';
-import { CasesService } from '../../cases/cases.service';
-import { CaseStatus } from '../../cases/entities/case.entity';
-import { AuthenticatedUser } from '../../auth/interfaces/authenticated-user.interface';
+import { CurrentUser } from '@auth/decorators/current-user.decorator';
+import { GqlAuthGuard } from '@auth/guards/gql-auth.guard';
+import { CasesService } from '@cases/cases.service';
+import { CaseStatus } from '@cases/entities/case.entity';
+import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { Cacheable } from '../../common/decorators/cache.decorator';
+import { Cacheable } from '@common/decorators/cache.decorator';
 
 const pubSub = new PubSub();
 

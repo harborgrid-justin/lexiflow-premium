@@ -24,7 +24,7 @@
  * Logs: Request method, URL, response time, status code
  * Applied globally via APP_INTERCEPTOR for comprehensive logging
  */
-export { LoggingInterceptor } from '../../common/interceptors/logging.interceptor';
+export { LoggingInterceptor } from '@common/interceptors/logging.interceptor';
 
 // =============================================================================
 // RESPONSE TRANSFORMATION INTERCEPTORS
@@ -43,7 +43,7 @@ export { LoggingInterceptor } from '../../common/interceptors/logging.intercepto
  *
  * Wraps responses in { success: true, data: ... } format
  */
-export { TransformInterceptor } from '../../common/interceptors/transform.interceptor';
+export { TransformInterceptor } from '@common/interceptors/transform.interceptor';
 
 /**
  * ResponseTransformInterceptor
@@ -58,7 +58,7 @@ export { TransformInterceptor } from '../../common/interceptors/transform.interc
  *
  * Adds timestamp, correlationId, and other metadata to responses
  */
-export { ResponseTransformInterceptor } from '../../common/interceptors/response-transform.interceptor';
+export { ResponseTransformInterceptor } from '@common/interceptors/response-transform.interceptor';
 
 // =============================================================================
 // CACHING INTERCEPTORS
@@ -78,7 +78,7 @@ export { ResponseTransformInterceptor } from '../../common/interceptors/response
  *
  * Requires: @Cache() decorator with TTL configuration
  */
-export { CacheInterceptor } from '../../common/interceptors/cache.interceptor';
+export { CacheInterceptor } from '@common/interceptors/cache.interceptor';
 
 // =============================================================================
 // SECURITY INTERCEPTORS
@@ -94,7 +94,7 @@ export { CacheInterceptor } from '../../common/interceptors/cache.interceptor';
  * Generates or extracts correlation ID from X-Correlation-Id header
  * Useful for tracking requests across microservices
  */
-export { CorrelationIdInterceptor } from '../../common/interceptors/correlation-id.interceptor';
+export { CorrelationIdInterceptor } from '@common/interceptors/correlation-id.interceptor';
 
 /**
  * RateLimiterInterceptor
@@ -110,7 +110,7 @@ export { CorrelationIdInterceptor } from '../../common/interceptors/correlation-
  *
  * Requires: @RateLimit() decorator with configuration
  */
-export { RateLimiterInterceptor } from '../../common/interceptors/rate-limiter.interceptor';
+export { RateLimiterInterceptor } from '@common/interceptors/rate-limiter.interceptor';
 
 /**
  * RedisRateLimiterInterceptor
@@ -125,7 +125,7 @@ export { RateLimiterInterceptor } from '../../common/interceptors/rate-limiter.i
  *
  * Provides consistent rate limiting across multiple instances
  */
-export { RedisRateLimiterInterceptor } from '../../common/interceptors/redis-rate-limiter.interceptor';
+export { RedisRateLimiterInterceptor } from '@common/interceptors/redis-rate-limiter.interceptor';
 
 // =============================================================================
 // AUDIT & COMPLIANCE INTERCEPTORS
@@ -146,7 +146,7 @@ export { RedisRateLimiterInterceptor } from '../../common/interceptors/redis-rat
  * Requires: @AuditLog() decorator with action name
  * Logs: User, action, timestamp, request/response data
  */
-export { AuditLogInterceptor } from '../../common/interceptors/audit-log.interceptor';
+export { AuditLogInterceptor } from '@common/interceptors/audit-log.interceptor';
 
 // =============================================================================
 // UTILITY INTERCEPTORS
@@ -166,7 +166,7 @@ export { AuditLogInterceptor } from '../../common/interceptors/audit-log.interce
  * Throws TimeoutException if operation exceeds configured timeout
  * Default timeout: 30 seconds
  */
-export { TimeoutInterceptor } from '../../common/interceptors/timeout.interceptor';
+export { TimeoutInterceptor } from '@common/interceptors/timeout.interceptor';
 
 // =============================================================================
 // ERROR HANDLING INTERCEPTORS
@@ -176,7 +176,7 @@ export { TimeoutInterceptor } from '../../common/interceptors/timeout.intercepto
  * Error handling interceptors from errors module
  * These intercept and transform errors for consistent error responses
  */
-export * from '../../errors/interceptors';
+export * from '@errors/interceptors';
 
 // =============================================================================
 // MONITORING INTERCEPTORS
@@ -186,13 +186,13 @@ export * from '../../errors/interceptors';
  * Performance monitoring interceptors
  * Track response times, resource usage, and application metrics
  */
-export * from '../../monitoring/interceptors';
+export * from '@monitoring/interceptors';
 
 /**
  * Performance interceptors for advanced monitoring
  * Detailed performance tracking and optimization
  */
-export * from '../../performance/interceptors';
+export * from '@performance/interceptors';
 
 // =============================================================================
 // INTERCEPTOR USAGE GUIDELINES

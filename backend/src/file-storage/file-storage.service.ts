@@ -3,6 +3,7 @@ import {
   Logger,
   NotFoundException,
   BadRequestException,
+  OnModuleDestroy,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
@@ -23,12 +24,14 @@ import { formatBytes } from '../common/utils/format.utils';
 import { validateDiskSpace } from '../common/utils/disk.utils';
 
 @Injectable()
-export class FileStorageService {
+export class FileStorageService implements OnModuleDestroy {
   private readonly logger = new Logger(FileStorageService.name);
   private readonly uploadDir: string;
   private readonly maxFileSize: number;
   private readonly minDiskSpace: number;
   private readonly allowedMimeTypes: string[];
+  private readonly MAX_BUFFER_SIZE = 50 * 1024 * 1024;
+  private readonly pendingOperations = new Set<Promise<any>>();
 
   constructor(private configService: ConfigService) {
     this.uploadDir = PathsConfig.UPLOAD_DIR;
@@ -69,13 +72,14 @@ export class FileStorageService {
     documentId: string,
     version: number,
   ): Promise<FileUploadResult> {
-    try {
-      // Validate file size
-      if (file.size > this.maxFileSize) {
-        throw new BadRequestException(
-          `File size ${formatBytes(file.size)} exceeds maximum allowed size of ${formatBytes(this.maxFileSize)}`,
-        );
-      }
+    const operation = (async () => {
+      try {
+        // Validate file size
+        if (file.size > this.maxFileSize) {
+          throw new BadRequestException(
+            `File size ${formatBytes(file.size)} exceeds maximum allowed size of ${formatBytes(this.maxFileSize)}`,
+          );
+        }
 
       // Validate MIME type if allowlist is configured
       if (!isAllowedMimeType(file.mimetype, this.allowedMimeTypes)) {
@@ -96,7 +100,10 @@ export class FileStorageService {
       const filePath = path.join(dirPath, filename);
 
       // Write file
-      await writeFile(filePath, file.buffer);
+      const writeOp = writeFile(filePath, file.buffer);
+      this.pendingOperations.add(writeOp);
+      await writeOp;
+      this.pendingOperations.delete(writeOp);
 
       // Calculate checksum
       const checksum = calculateChecksum(file.buffer);
@@ -118,7 +125,15 @@ export class FileStorageService {
       this.logger.error('Failed to store file', error);
       throw error;
     }
+  })();
+
+  this.pendingOperations.add(operation);
+  try {
+    return await operation;
+  } finally {
+    this.pendingOperations.delete(operation);
   }
+}
 
   /**
    * Retrieve a file as a buffer
@@ -132,6 +147,13 @@ export class FileStorageService {
       const exists = await fileExists(absolutePath);
       if (!exists) {
         throw new NotFoundException(`File not found: ${filePath}`);
+      }
+
+      const fileSize = await getFileSize(absolutePath);
+      if (fileSize > this.MAX_BUFFER_SIZE) {
+        throw new BadRequestException(
+          `File too large to load into memory: ${formatBytes(fileSize)}. Use streaming instead.`
+        );
       }
 
       return await readFile(absolutePath);
@@ -249,6 +271,20 @@ export class FileStorageService {
   async getStorageStats(): Promise<any> {
     return {
       totalFiles: 0,
+      totalSize: 0,
+      uploadDir: this.uploadDir,
+    };
+  }
+
+  async onModuleDestroy(): Promise<void> {
+    this.logger.log('FileStorageService cleanup - waiting for pending operations');
+    if (this.pendingOperations.size > 0) {
+      this.logger.log(`Waiting for ${this.pendingOperations.size} pending file operations...`);
+      await Promise.allSettled(Array.from(this.pendingOperations));
+      this.pendingOperations.clear();
+    }
+    this.logger.log('FileStorageService cleanup complete');
+  }
       totalSize: 0,
       usedSpace: 0,
       available: 1000000000,

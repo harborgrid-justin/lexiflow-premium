@@ -8,6 +8,7 @@ export class CachingService implements OnModuleDestroy {
   private readonly logger = new Logger(CachingService.name);
   private cache = new Map<string, { value: any; expiry: number }>();
   private cleanupInterval: NodeJS.Timeout;
+  private readonly MAX_CACHE_SIZE = 5000;
 
   constructor() {
     // Cleanup expired cache entries every minute
@@ -31,6 +32,21 @@ export class CachingService implements OnModuleDestroy {
     }
     if (removedCount > 0) {
       this.logger.debug(`Cleaned up ${removedCount} expired cache entries`);
+    }
+    
+    // Enforce max size
+    if (this.cache.size > this.MAX_CACHE_SIZE) {
+      const entries = Array.from(this.cache.entries());
+      // Sort by expiry (remove soonest to expire first) or just remove oldest inserted?
+      // Maps preserve insertion order, so first items are oldest.
+      // Let's remove the first 10%
+      const toRemove = Math.ceil(this.MAX_CACHE_SIZE * 0.1);
+      for (let i = 0; i < toRemove; i++) {
+        if (entries[i]) {
+          this.cache.delete(entries[i][0]);
+        }
+      }
+      this.logger.warn(`Cache size limit reached. Evicted ${toRemove} entries.`);
     }
   }
 

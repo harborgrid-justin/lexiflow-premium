@@ -15,19 +15,41 @@ export class CommunicationsService {
     private readonly templateRepository: Repository<Template>,
   ) {}
 
-  async findAll(): Promise<Communication[]> {
-    this.logger.debug('Fetching all communications');
-    return this.communicationRepository.find({
+  async findAll(options?: { page?: number; limit?: number }): Promise<{ data: Communication[]; total: number; page: number; limit: number }> {
+    const { page = 1, limit = 50 } = options || {};
+    const skip = (page - 1) * limit;
+
+    const [communications, total] = await this.communicationRepository.findAndCount({
       order: { createdAt: 'DESC' },
+      skip,
+      take: limit,
     });
+
+    return {
+      data: communications,
+      total,
+      page,
+      limit,
+    };
   }
 
-  async findByCaseId(caseId: string): Promise<Communication[]> {
-    this.logger.debug(`Fetching communications for case: ${caseId}`);
-    return this.communicationRepository.find({
+  async findByCaseId(caseId: string, options?: { page?: number; limit?: number }): Promise<{ data: Communication[]; total: number; page: number; limit: number }> {
+    const { page = 1, limit = 50 } = options || {};
+    const skip = (page - 1) * limit;
+
+    const [communications, total] = await this.communicationRepository.findAndCount({
       where: { caseId },
       order: { createdAt: 'DESC' },
+      skip,
+      take: limit,
     });
+
+    return {
+      data: communications,
+      total,
+      page,
+      limit,
+    };
   }
 
   async findById(id: string): Promise<Communication> {

@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { IsEnum, IsOptional, IsInt, IsString, Min } from 'class-validator';
 import { CreateProductionDto } from './create-production.dto';
-import { ProductionStatus } from '../../discovery/productions/entities/production.entity';
+import { ProductionStatus } from '@discovery/productions/entities/production.entity';
 
 export class UpdateProductionDto extends PartialType(CreateProductionDto) {
   @IsEnum(ProductionStatus)

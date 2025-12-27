@@ -21,6 +21,7 @@ import { Injectable, Logger } from '@nestjs/common';
 @Injectable()
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
+  private readonly MAX_ATTACHMENT_SIZE = 25 * 1024 * 1024; // 25MB limit for attachments
 
   constructor() {
     // Email provider configuration will be injected
@@ -40,6 +41,21 @@ export class EmailService {
     attachments?: any[];
   }): Promise<{ success: boolean; messageId?: string; error?: string }> {
     try {
+      // Memory optimization: Check attachment size before processing
+      if (options.attachments && options.attachments.length > 0) {
+        const totalSize = options.attachments.reduce((acc, att) => {
+          // Handle Buffer, string, or stream
+          if (att.content) {
+            return acc + (att.content.length || 0);
+          }
+          return acc;
+        }, 0);
+
+        if (totalSize > this.MAX_ATTACHMENT_SIZE) {
+          throw new Error(`Total attachment size (${(totalSize / 1024 / 1024).toFixed(2)}MB) exceeds limit of 25MB`);
+        }
+      }
+
       this.logger.log(`Sending email to ${options.to}`);
 
       // Implementation will integrate with actual email provider

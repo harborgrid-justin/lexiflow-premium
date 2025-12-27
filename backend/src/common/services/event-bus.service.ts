@@ -18,7 +18,18 @@ export class EventBusService implements OnModuleDestroy {
   constructor(private readonly eventEmitter: EventEmitter2) {}
 
   onModuleDestroy() {
+    this.logger.log('Cleaning up event bus...');
+    
+    // Get listener counts before cleanup
+    const eventNames = this.eventEmitter.eventNames();
+    const totalListeners = eventNames.reduce((sum, event) => {
+      return sum + this.eventEmitter.listenerCount(event);
+    }, 0);
+    
+    // Remove all listeners to prevent memory leaks
     this.eventEmitter.removeAllListeners();
+    
+    this.logger.log(`Event bus cleanup complete (removed ${totalListeners} listeners for ${eventNames.length} events)`);
   }
 
   /**

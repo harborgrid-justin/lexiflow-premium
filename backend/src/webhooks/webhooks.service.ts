@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger, OnModuleDestroy } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import * as crypto from 'crypto';
 import axios from 'axios';
@@ -19,13 +19,33 @@ export interface Webhook {
   userId: string;
 }
 
+/**
+ * Webhooks Service with Memory Optimizations
+ * 
+ * MEMORY OPTIMIZATIONS:
+ * - Max 10K deliveries per webhook with LRU eviction
+ * - TTL-based cleanup (30 days)
+ * - Proper cleanup on module destroy
+ */
 @Injectable()
-export class WebhooksService {
+export class WebhooksService implements OnModuleDestroy {
   private readonly logger = new Logger(WebhooksService.name);
   private readonly webhooks = new Map<string, Webhook>();
   private readonly deliveries = new Map<string, WebhookDelivery>();
   private readonly maxRetries = MasterConfig.WEBHOOK_MAX_RETRIES;
   private readonly retryDelays = MasterConfig.WEBHOOK_RETRY_DELAYS;
+  
+  // Memory limits
+  private readonly MAX_DELIVERIES_TOTAL = 100000; // 100K total deliveries
+  private readonly MAX_DELIVERIES_PER_WEBHOOK = 10000; // 10K per webhook
+  private readonly DELIVERY_TTL_DAYS = 30;
+
+  onModuleDestroy() {
+    this.logger.log('Cleaning up webhooks service...');
+    this.webhooks.clear();
+    this.deliveries.clear();
+    this.logger.log('Webhooks service cleanup complete');
+  }
 
   /**
    * Create a new webhook
@@ -201,6 +221,9 @@ export class WebhooksService {
 
     delivery.updatedAt = new Date();
     this.deliveries.set(delivery.id, delivery);
+    
+    // Enforce delivery limits with LRU eviction
+    this.enforceDeliveryLimits(webhook.id);
 
     return delivery;
   }
@@ -241,16 +264,16 @@ export class WebhooksService {
 
   /**
    * Cleanup old webhook deliveries (runs every day at midnight)
-   * Removes deliveries older than 7 days
+   * Removes deliveries older than 30 days
    */
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async cleanupOldDeliveries(): Promise<void> {
     const now = new Date();
-    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const cutoffDate = new Date(now.getTime() - this.DELIVERY_TTL_DAYS * 24 * 60 * 60 * 1000);
     
     let removedCount = 0;
     for (const [id, delivery] of this.deliveries.entries()) {
-      if (delivery.createdAt < sevenDaysAgo) {
+      if (delivery.createdAt < cutoffDate) {
         this.deliveries.delete(id);
         removedCount++;
       }
@@ -258,6 +281,37 @@ export class WebhooksService {
     
     if (removedCount > 0) {
       this.logger.log(`Cleaned up ${removedCount} old webhook deliveries`);
+    }
+  }
+
+  /**
+   * Enforce delivery limits per webhook with LRU eviction
+   */
+  private enforceDeliveryLimits(webhookId: string): void {
+    // Check total deliveries
+    if (this.deliveries.size > this.MAX_DELIVERIES_TOTAL) {
+      const toRemove = Math.floor(this.MAX_DELIVERIES_TOTAL * 0.1);
+      const iterator = this.deliveries.keys();
+      for (let i = 0; i < toRemove; i++) {
+        const key = iterator.next().value;
+        if (key !== undefined) {
+          this.deliveries.delete(key);
+        }
+      }
+      this.logger.warn(`LRU eviction: removed ${toRemove} oldest deliveries (total: ${this.deliveries.size})`);
+    }
+    
+    // Check per-webhook deliveries
+    const webhookDeliveries = Array.from(this.deliveries.values())
+      .filter(d => d.webhookId === webhookId)
+      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+    
+    if (webhookDeliveries.length > this.MAX_DELIVERIES_PER_WEBHOOK) {
+      const toRemove = webhookDeliveries.length - this.MAX_DELIVERIES_PER_WEBHOOK;
+      for (let i = 0; i < toRemove; i++) {
+        this.deliveries.delete(webhookDeliveries[i].id);
+      }
+      this.logger.warn(`Removed ${toRemove} oldest deliveries for webhook ${webhookId}`);
     }
   }
 

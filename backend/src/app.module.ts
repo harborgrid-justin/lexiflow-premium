@@ -11,6 +11,7 @@ import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR, Reflector } from '@nestjs/core'
 import * as path from 'path';
 import configuration from './config/configuration';
 import resourceLimitsConfig from './config/resource-limits.config';
+import memoryConfig from './config/memory.config';
 import { getDatabaseConfig } from './config/database.config';
 import { validationSchema, validationOptions } from './config/env.validation';
 
@@ -19,6 +20,8 @@ import { CoreModule } from './core/core.module';
 
 // Core Modules (most now imported via CoreModule)
 import { CommonModule } from './common/common.module';
+import { MemoryModule } from './common/memory.module';
+import { MemoryManagementModule } from './common/memory-management.module';
 import { DatabaseModule } from './config/database.module';
 import { SecurityModule } from './security/security.module';
 import { ErrorsModule } from './errors/errors.module';
@@ -38,8 +41,10 @@ import { RealtimeModule } from './realtime/realtime.module';
 
 // Enterprise Infrastructure
 import { SanitizationMiddleware } from './common/middleware/sanitization.middleware';
+import { StreamProcessingMiddleware } from './common/middleware/stream-processing.middleware';
 import { CorrelationIdInterceptor } from './common/interceptors/correlation-id.interceptor';
 import { ResponseTransformInterceptor } from './common/interceptors/response-transform.interceptor';
+import { MemoryManagementInterceptor } from './common/interceptors/memory-management.interceptor';
 import { EnterpriseExceptionFilter } from './common/filters/enterprise-exception.filter';
 
 // Case Management Modules
@@ -165,11 +170,11 @@ if (isRedisEnabled) {
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: path.resolve(__dirname, '../.env'),
-      load: [configuration, resourceLimitsConfig],
+      load: [configuration, resourceLimitsConfig, memoryConfig],
       validationSchema,
       validationOptions,
-      cache: true, // Cache environment variables for better performance
-      expandVariables: true, // Support ${VAR} syntax in .env files
+      cache: true,
+      expandVariables: true,
     }),
 
     // Database
@@ -205,6 +210,10 @@ if (isRedisEnabled) {
     // Monitoring, Health, Performance, API Security, Common, Errors
     // Provides: Bootstrap, Shutdown, Configuration Validation
     CoreModule,
+
+    // Memory Management Modules
+    MemoryModule,
+    MemoryManagementModule, // Production memory management & leak detection
 
     // Database Module (database connection configuration)
     DatabaseModule,
@@ -317,6 +326,10 @@ if (isRedisEnabled) {
     },
     {
       provide: APP_INTERCEPTOR,
+      useClass: MemoryManagementInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
       useFactory: (reflector: Reflector) => new ClassSerializerInterceptor(reflector, {
         excludeExtraneousValues: false,
         enableImplicitConversion: true,
@@ -331,9 +344,9 @@ if (isRedisEnabled) {
   ],
 })
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
+  configure(consumer: MiddlewareConsumer): void {
     consumer
-      .apply(SanitizationMiddleware)
+      .apply(SanitizationMiddleware, StreamProcessingMiddleware)
       .forRoutes('*');
   }
 }

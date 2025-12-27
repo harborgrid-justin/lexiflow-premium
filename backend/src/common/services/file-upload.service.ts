@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as crypto from 'crypto';
 import * as path from 'path';
 import * as fs from 'fs/promises';
-import * as MasterConfig from '../../config/master.config';
-import * as PathsConfig from '../../config/paths.config';
+import * as MasterConfig from '@config/master.config';
+import * as PathsConfig from '@config/paths.config';
 import { calculateChecksum, generateUniqueFilename, isAllowedMimeType } from '../utils/file.utils';
 
 /**

@@ -1,8 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, Repository, ObjectLiteral, EntityTarget } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import * as MasterConfig from '../../config/master.config';
+import * as MasterConfig from '@config/master.config';
+import { Readable } from 'stream';
 
 /**
  * Batch Processing Configuration
@@ -96,17 +97,102 @@ export interface BatchUpdateOptions extends BatchConfig {
  * });
  */
 @Injectable()
-export class BatchProcessorService {
+export class BatchProcessorService implements OnModuleDestroy {
   private readonly logger = new Logger(BatchProcessorService.name);
   private readonly DEFAULT_CHUNK_SIZE = MasterConfig.BULK_OPERATION_BATCH_SIZE || 1000;
   private readonly DEFAULT_CONCURRENCY = 5;
   private readonly DEFAULT_RETRY_ATTEMPTS = 3;
   private readonly DEFAULT_RETRY_DELAY = 1000;
+  
+  // Memory management
+  private readonly MEMORY_THRESHOLD_MB = 512; // Pause if heap used > 512MB
+  private readonly MEMORY_CHECK_INTERVAL = 1000; // Check every 1s
+  private isPaused = false;
 
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,
     private readonly eventEmitter: EventEmitter2,
   ) {}
+
+  onModuleDestroy() {
+    this.isPaused = true;
+    this.logger.log('BatchProcessorService destroyed, pausing operations');
+  }
+
+  private checkMemoryPressure(): boolean {
+    const used = process.memoryUsage().heapUsed / 1024 / 1024;
+    if (used > this.MEMORY_THRESHOLD_MB) {
+      this.logger.warn(`High memory usage detected: ${used.toFixed(2)}MB. Pausing batch processing...`);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Stream processing for large datasets
+   */
+  async streamBatch<T>(
+    stream: Readable,
+    processor: (item: T) => Promise<void>,
+    options: BatchConfig = {}
+  ): Promise<BatchResult> {
+    const startTime = Date.now();
+    const result: BatchResult = {
+      total: 0,
+      processed: 0,
+      successful: 0,
+      failed: 0,
+      errors: [],
+      duration: 0,
+      throughput: 0,
+      results: [],
+    };
+
+    const concurrency = options.concurrency || this.DEFAULT_CONCURRENCY;
+    const executing = new Set<Promise<void>>();
+
+    for await (const item of stream) {
+      result.total++;
+      
+      // Check memory pressure
+      while (this.checkMemoryPressure()) {
+        await this.sleep(1000);
+        if (global.gc) global.gc();
+      }
+
+      const p = (async () => {
+        try {
+          await processor(item as T);
+          result.successful++;
+        } catch (error) {
+          result.failed++;
+          result.errors.push({
+            index: result.processed,
+            item,
+            error: error.message,
+            attempts: 1,
+            timestamp: Date.now(),
+          });
+        } finally {
+          result.processed++;
+          executing.delete(p);
+        }
+      })();
+
+      executing.add(p);
+
+      if (executing.size >= concurrency) {
+        await Promise.race(executing);
+      }
+    }
+
+    await Promise.all(executing);
+
+    result.duration = Date.now() - startTime;
+    result.throughput = result.processed / (result.duration / 1000);
+
+    return result;
+  }
 
   /**
    * Batch insert with optimized chunking
@@ -438,18 +524,23 @@ export class BatchProcessorService {
     processor: (chunk: T[], index: number) => Promise<void>,
     concurrency: number,
   ): Promise<void> {
-    const executing: Promise<void>[] = [];
+    const executing = new Set<Promise<void>>();
 
     for (let i = 0; i < chunks.length; i++) {
-      const promise = processor(chunks[i], i);
-      executing.push(promise);
+      // Check memory pressure
+      while (this.checkMemoryPressure()) {
+        await this.sleep(1000);
+        if (global.gc) global.gc();
+      }
 
-      if (executing.length >= concurrency) {
+      const p = processor(chunks[i], i).then(() => {
+        executing.delete(p);
+      });
+      
+      executing.add(p);
+
+      if (executing.size >= concurrency) {
         await Promise.race(executing);
-        executing.splice(
-          executing.findIndex((p) => p === promise),
-          1,
-        );
       }
     }
 

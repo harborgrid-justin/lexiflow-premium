@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { Client } from '../../clients/entities/client.entity';
+import { Client } from '@core/clients/entities/client.entity';
 
 export async function seedClients(dataSource: DataSource): Promise<void> {
   const clientRepository = dataSource.getRepository(Client);

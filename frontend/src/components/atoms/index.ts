@@ -25,3 +25,4 @@ export * from './UserAvatar';
 export * from './CopyButton';
 export * from './IconButton';
 export * from './LazyImage';
+export * from './SafeContent';

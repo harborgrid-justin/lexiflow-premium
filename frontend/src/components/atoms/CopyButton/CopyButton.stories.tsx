@@ -2,14 +2,22 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { CopyButton } from './CopyButton';
 
 const meta: Meta<typeof CopyButton> = {
-  title: 'Atoms/CopyButton',
+  title: 'Components/Atoms/CopyButton/CopyButton',
   component: CopyButton,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof CopyButton>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "text": "Sample Text",
+  "label": "Sample Text",
+  "variant": {},
+  "size": {}
+},
 };

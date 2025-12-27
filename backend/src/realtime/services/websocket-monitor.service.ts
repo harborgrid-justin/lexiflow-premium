@@ -1,8 +1,8 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
 import { RealtimeGateway } from '../realtime.gateway';
-import { WsRateLimitGuard } from '../../common/guards/ws-rate-limit.guard';
-import { WsRoomLimitGuard } from '../../common/guards/ws-room-limit.guard';
+import { WsRateLimitGuard } from '@common/guards/ws-rate-limit.guard';
+import { WsRoomLimitGuard } from '@common/guards/ws-room-limit.guard';
 
 /**
  * WebSocket Monitor Service
@@ -24,6 +24,10 @@ export class WebSocketMonitorService implements OnModuleDestroy {
   private readonly logger = new Logger(WebSocketMonitorService.name);
   private readonly MEMORY_THRESHOLD_MB = 500;
   private readonly CONNECTION_THRESHOLD = 9000; // 90% of max 10000
+  
+  // Memory optimization: Sliding window for metrics
+  private metricsHistory: { timestamp: number; metrics: WebSocketMetrics }[] = [];
+  private readonly MAX_HISTORY_SIZE = 60; // 1 hour of history (1 per minute)
 
   constructor(
     private realtimeGateway: RealtimeGateway,
@@ -32,6 +36,7 @@ export class WebSocketMonitorService implements OnModuleDestroy {
   ) {}
 
   onModuleDestroy() {
+    this.metricsHistory = []; // Clear history to free memory
     this.logger.log('WebSocket monitor shutting down');
   }
 
@@ -66,6 +71,15 @@ export class WebSocketMonitorService implements OnModuleDestroy {
           `📊 WebSocket Stats: ${metrics.connections.total} connections, ${metrics.rooms.totalRooms} rooms, ${metrics.rateLimits.activeClients} rate-limited clients`,
         );
       }
+
+      // Store metrics in history with sliding window
+      this.metricsHistory.push({ timestamp: Date.now(), metrics });
+      
+      // Enforce sliding window limit (memory optimization)
+      if (this.metricsHistory.length > this.MAX_HISTORY_SIZE) {
+        this.metricsHistory.shift(); // Remove oldest entry
+      }
+
     } catch (error) {
       this.logger.error('Health check failed:', error);
     }

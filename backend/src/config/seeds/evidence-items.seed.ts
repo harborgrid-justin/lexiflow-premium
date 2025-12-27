@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
-import { EvidenceItem, EvidenceType } from '../../evidence/entities/evidence-item.entity';
-import { Case } from '../../cases/entities/case.entity';
+import { EvidenceItem, EvidenceType } from '@evidence/entities/evidence-item.entity';
+import { Case } from '@cases/entities/case.entity';
 import { faker } from '@faker-js/faker';
 
 export const seedEvidenceItems = async (dataSource: DataSource) => {

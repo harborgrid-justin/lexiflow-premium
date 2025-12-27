@@ -106,8 +106,18 @@ async function bootstrap() {
     xssFilter: true,
   }));
 
-  // Compression
-  app.use(compression.default());
+  // Compression with optimized settings
+  app.use(compression.default({
+    level: 6,
+    threshold: 1024,
+    memLevel: 8,
+    filter: (req: any, res: any) => {
+      if (req.headers['x-no-compression']) {
+        return false;
+      }
+      return compression.default.filter(req, res);
+    },
+  }));
 
   const configService = app.get(ConfigService);
 
@@ -286,4 +296,4 @@ bootstrap().catch((error) => {
   console.error(error);
   console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   process.exit(1);
-});
+});

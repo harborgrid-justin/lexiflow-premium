@@ -46,13 +46,14 @@ export class PleadingsService {
     }
   }
 
-  /**
-   * Find all pleadings with optional filtering
-   */
   async findAll(
     caseId?: string,
     status?: PleadingStatus,
-  ): Promise<Pleading[]> {
+    options?: { page?: number; limit?: number },
+  ): Promise<{ data: Pleading[]; total: number; page: number; limit: number }> {
+    const { page = 1, limit = 50 } = options || {};
+    const skip = (page - 1) * limit;
+
     const query = this.pleadingRepository.createQueryBuilder('pleading');
 
     if (caseId) {
@@ -65,8 +66,17 @@ export class PleadingsService {
 
     query.orderBy('pleading.filedDate', 'DESC');
     query.addOrderBy('pleading.createdAt', 'DESC');
+    query.skip(skip);
+    query.take(limit);
 
-    return await query.getMany();
+    const [pleadings, total] = await query.getManyAndCount();
+
+    return {
+      data: pleadings,
+      total,
+      page,
+      limit,
+    };
   }
 
   /**

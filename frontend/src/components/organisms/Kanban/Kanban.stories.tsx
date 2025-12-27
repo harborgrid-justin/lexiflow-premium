@@ -1,34 +1,25 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { KanbanBoard, KanbanColumn, KanbanCard } from './Kanban';
+import { Kanban } from './Kanban';
 
-const KanbanDemo = () => {
-  return (
-    <KanbanBoard>
-      <KanbanColumn title="To Do" count={3}>
-        <KanbanCard>Task 1</KanbanCard>
-        <KanbanCard>Task 2</KanbanCard>
-        <KanbanCard>Task 3</KanbanCard>
-      </KanbanColumn>
-      <KanbanColumn title="In Progress" count={1}>
-        <KanbanCard>Task 4</KanbanCard>
-      </KanbanColumn>
-      <KanbanColumn title="Done" count={2}>
-        <KanbanCard>Task 5</KanbanCard>
-        <KanbanCard>Task 6</KanbanCard>
-      </KanbanColumn>
-    </KanbanBoard>
-  );
-};
-
-const meta: Meta<typeof KanbanDemo> = {
-  title: 'Organisms/Kanban',
-  component: KanbanDemo,
+const meta: Meta<typeof Kanban> = {
+  title: 'Components/Organisms/Kanban/Kanban',
+  component: Kanban,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
-type Story = StoryObj<typeof KanbanDemo>;
+type Story = StoryObj<typeof Kanban>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "title": "Sample Text",
+  "count": 42,
+  "children": "<div>Sample Content</div>",
+  "onDrop": {},
+  "isDragOver": true,
+  "action": "<div>Sample Content</div>"
+},
 };

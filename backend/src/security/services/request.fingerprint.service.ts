@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { Request } from 'express';
 import * as crypto from 'crypto';
 import {
@@ -35,9 +35,41 @@ export interface SessionValidationResult {
  * Detects session hijacking attempts through device consistency tracking
  */
 @Injectable()
-export class RequestFingerprintService {
+export class RequestFingerprintService implements OnModuleDestroy {
   private readonly logger = new Logger(RequestFingerprintService.name);
   private readonly fingerprintCache = new Map<string, FingerprintData>();
+  private readonly MAX_CACHE_SIZE = 10000;
+  private readonly CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+  private cleanupInterval: NodeJS.Timeout;
+
+  constructor() {
+    this.cleanupInterval = setInterval(() => this.cleanupCache(), 60 * 60 * 1000);
+  }
+
+  onModuleDestroy() {
+    clearInterval(this.cleanupInterval);
+    this.fingerprintCache.clear();
+  }
+
+  private cleanupCache() {
+    const now = Date.now();
+    for (const [key, data] of this.fingerprintCache.entries()) {
+      if (now - data.timestamp > this.CACHE_TTL) {
+        this.fingerprintCache.delete(key);
+      }
+    }
+    
+    if (this.fingerprintCache.size > this.MAX_CACHE_SIZE) {
+      const entries = Array.from(this.fingerprintCache.entries());
+      // Remove oldest 20%
+      const toRemove = Math.floor(this.MAX_CACHE_SIZE * 0.2);
+      for (let i = 0; i < toRemove; i++) {
+        if (entries[i]) {
+          this.fingerprintCache.delete(entries[i][0]);
+        }
+      }
+    }
+  }
 
   /**
    * Extract fingerprint components from request

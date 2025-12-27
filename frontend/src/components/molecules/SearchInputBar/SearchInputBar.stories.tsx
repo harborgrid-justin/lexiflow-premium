@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { SearchInputBar } from '@/components';
+import { SearchInputBar } from './SearchInputBar';
 
 const meta: Meta<typeof SearchInputBar> = {
-  title: 'Molecules/SearchInputBar',
+  title: 'Components/Molecules/SearchInputBar/SearchInputBar',
   component: SearchInputBar,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;

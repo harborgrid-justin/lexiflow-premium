@@ -1,6 +1,6 @@
 import { Controller, Get, Header } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Public } from '../../common/decorators/public.decorator';
+import { Public } from '@common/decorators/public.decorator';
 import { MetricsCollectorService } from '../services/metrics.collector.service';
 import { HealthAggregatorService } from '../services/health.aggregator.service';
 import { AlertingService } from '../services/alerting.service';

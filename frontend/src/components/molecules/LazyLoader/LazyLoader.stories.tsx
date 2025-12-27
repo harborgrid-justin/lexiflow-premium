@@ -2,14 +2,19 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { LazyLoader } from './LazyLoader';
 
 const meta: Meta<typeof LazyLoader> = {
-  title: 'Molecules/LazyLoader',
+  title: 'Components/Molecules/LazyLoader/LazyLoader',
   component: LazyLoader,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof LazyLoader>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "message": "Sample Text"
+},
 };

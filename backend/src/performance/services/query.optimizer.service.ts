@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, SelectQueryBuilder, ObjectLiteral } from 'typeorm';
 import { CacheStrategyService } from './cache.strategy.service';
@@ -60,38 +60,44 @@ export interface SlowQuery {
 }
 
 /**
- * Query Optimizer Service
+ * Query Optimizer Service with Memory Optimizations
  *
- * Enterprise-grade database query optimization:
- * - Query analysis and cost estimation
- * - N+1 query detection and prevention
- * - Automatic eager loading recommendations
- * - Query result caching
- * - Slow query logging and monitoring
- * - Index recommendations
- * - Query performance metrics
- *
- * @example
- * const optimized = await queryOptimizer.optimizeQuery(queryBuilder, {
- *   enableCaching: true,
- *   detectNPlusOne: true,
- *   maxResults: 1000
- * });
+ * MEMORY OPTIMIZATIONS:
+ * - LRU cache with 1K query limit
+ * - Sliding window for metrics (1 hour)
+ * - Bounded slow queries array (100 max)
+ * - Proper cleanup on module destroy
  */
 @Injectable()
-export class QueryOptimizerService {
+export class QueryOptimizerService implements OnModuleDestroy {
   private readonly logger = new Logger(QueryOptimizerService.name);
   private readonly queryMetrics = new Map<string, QueryExecutionMetric>();
   private readonly slowQueries: SlowQuery[] = [];
   private readonly SLOW_QUERY_THRESHOLD = 1000; // 1 second
   private readonly MAX_SLOW_QUERIES = 100;
+  private readonly MAX_QUERY_METRICS = 1000; // LRU limit
   private queryExecutionCount = 0;
+  private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,
     private readonly cacheStrategy: CacheStrategyService,
   ) {
     this.initializeQueryLogging();
+  }
+
+  onModuleDestroy() {
+    this.logger.log('Cleaning up query optimizer...');
+    
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+      this.cleanupInterval = null;
+    }
+    
+    this.queryMetrics.clear();
+    this.slowQueries.length = 0;
+    
+    this.logger.log('Query optimizer cleanup complete');
   }
 
   /**
@@ -225,7 +231,7 @@ export class QueryOptimizerService {
   }
 
   /**
-   * Detect N+1 query patterns
+   * Detect N+1 query patterns with LRU eviction
    */
   async detectNPlusOne<T extends ObjectLiteral>(
     queryBuilder: SelectQueryBuilder<T>,
@@ -252,9 +258,29 @@ export class QueryOptimizerService {
         lastExecuted: Date.now(),
         totalDuration: 0,
       });
+      
+      // Enforce LRU limit
+      this.enforceLRULimit();
     }
 
     return false;
+  }
+
+  /**
+   * Enforce LRU eviction on queryMetrics Map
+   */
+  private enforceLRULimit(): void {
+    if (this.queryMetrics.size > this.MAX_QUERY_METRICS) {
+      const toRemove = Math.floor(this.MAX_QUERY_METRICS * 0.1);
+      const iterator = this.queryMetrics.keys();
+      for (let i = 0; i < toRemove; i++) {
+        const key = iterator.next().value;
+        if (key !== undefined) {
+          this.queryMetrics.delete(key);
+        }
+      }
+      this.logger.warn(`LRU eviction: removed ${toRemove} query metrics (size: ${this.queryMetrics.size})`);
+    }
   }
 
   /**
@@ -421,13 +447,20 @@ export class QueryOptimizerService {
       this.logger.log('Query optimizer initialized with performance monitoring');
     }
 
-    // Clean up old metrics every hour
-    setInterval(() => {
+    // Clean up old metrics every hour (sliding window)
+    this.cleanupInterval = setInterval(() => {
       const oneHourAgo = Date.now() - 3600000;
+      let removedCount = 0;
+      
       for (const [hash, metric] of this.queryMetrics.entries()) {
         if (metric.lastExecuted < oneHourAgo) {
           this.queryMetrics.delete(hash);
+          removedCount++;
         }
+      }
+      
+      if (removedCount > 0) {
+        this.logger.log(`Cleaned up ${removedCount} stale query metrics`);
       }
     }, 3600000);
   }

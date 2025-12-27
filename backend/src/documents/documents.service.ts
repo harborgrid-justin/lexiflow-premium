@@ -3,6 +3,7 @@ import {
   Logger,
   NotFoundException,
   BadRequestException,
+  OnModuleDestroy,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like} from 'typeorm';
@@ -15,8 +16,10 @@ import { TransactionManagerService } from '../common/services/transaction-manage
 import { validateSortField, validateSortOrder } from '../common/utils/query-validation.util';
 
 @Injectable()
-export class DocumentsService {
+export class DocumentsService implements OnModuleDestroy {
   private readonly logger = new Logger(DocumentsService.name);
+  private readonly MAX_RESULTS = 1000;
+  private readonly STREAM_THRESHOLD = 10 * 1024 * 1024;
 
   constructor(
     @InjectRepository(Document)
@@ -82,6 +85,10 @@ export class DocumentsService {
     });
   }
 
+  onModuleDestroy(): void {
+    this.logger.log('DocumentsService cleanup - releasing resources');
+  }
+
   /**
    * Find all documents with filtering and pagination
    */
@@ -106,6 +113,11 @@ export class DocumentsService {
       sortBy = 'createdAt',
       sortOrder = 'DESC',
     } = filterDto;
+
+    const safeLimit = Math.min(limit, this.MAX_RESULTS);
+    if (limit > this.MAX_RESULTS) {
+      this.logger.warn(`Limit ${limit} exceeds maximum ${this.MAX_RESULTS}, using ${this.MAX_RESULTS}`);
+    }
 
     const query = this.documentRepository.createQueryBuilder('document');
 
@@ -153,9 +165,9 @@ export class DocumentsService {
     const safeSortOrder = validateSortOrder(sortOrder);
     query.orderBy(`document.${safeSortField}`, safeSortOrder);
 
-    // Apply pagination
-    const skip = (page - 1) * limit;
-    query.skip(skip).take(limit);
+    // Apply pagination with safe limit
+    const skip = (page - 1) * safeLimit;
+    query.skip(skip).take(safeLimit);
 
     // Execute query
     const [data, total] = await query.getManyAndCount();
@@ -164,8 +176,8 @@ export class DocumentsService {
       data,
       total,
       page,
-      limit,
-      totalPages: Math.ceil(total / limit),
+      limit: safeLimit,
+      totalPages: Math.ceil(total / safeLimit),
     };
   }
 

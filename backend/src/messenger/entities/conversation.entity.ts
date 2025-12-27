@@ -1,7 +1,7 @@
 import { Entity, Column, Index, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../common/base/base.entity';
+import { BaseEntity } from '@common/base/base.entity';
 import { Message } from './message.entity';
-import { Case } from '../../cases/entities/case.entity';
+import { Case } from '@cases/entities/case.entity';
 
 @Entity('conversations')
 @Index(['conversationType'])

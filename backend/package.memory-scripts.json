@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "start:prod:memory": "bash scripts/start-production-memory-optimized.sh production",
+    "start:staging:memory": "bash scripts/start-production-memory-optimized.sh staging",
+    "start:dev:memory": "bash scripts/start-production-memory-optimized.sh development",
+    "start:prod:memory:win": "powershell -ExecutionPolicy Bypass -File scripts/start-production-memory-optimized.ps1 -Environment production",
+    "start:staging:memory:win": "powershell -ExecutionPolicy Bypass -File scripts/start-production-memory-optimized.ps1 -Environment staging",
+    "test:memory": "jest --testPathPattern=memory --runInBand",
+    "profile:memory": "node --inspect --expose-gc dist/main.js",
+    "monitor:memory": "node scripts/monitor-memory.js"
+  }
+}

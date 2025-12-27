@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import * as MasterConfig from '../../config/master.config';
+import * as MasterConfig from '@config/master.config';
 
 /**
  * Connection Pool Metrics
@@ -97,12 +97,24 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
   }
 
   async onModuleDestroy() {
+    this.logger.log('Cleaning up connection pool optimizer...');
+    
+    // Clear all intervals
     if (this.optimizationInterval) {
       clearInterval(this.optimizationInterval);
+      this.optimizationInterval = null;
     }
     if (this.metricsInterval) {
       clearInterval(this.metricsInterval);
+      this.metricsInterval = null;
     }
+    
+    // Clear tracking arrays to free memory
+    this.connectionEvents.length = 0;
+    this.queryTimes.length = 0;
+    this.acquireTimes.length = 0;
+    
+    this.logger.log('Connection pool optimizer cleanup complete');
   }
 
   /**

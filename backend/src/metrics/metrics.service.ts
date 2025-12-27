@@ -1,17 +1,67 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 
-interface MetricData {
-  name: string;
-  type: 'counter' | 'gauge' | 'histogram';
-  value: number;
-  labels?: Record<string, string>;
-  timestamp: Date;
-}
-
+/**
+ * Metrics Service with Memory Optimizations
+ * 
+ * MEMORY OPTIMIZATIONS:
+ * - Max 10K metrics in memory
+ * - TTL-based cleanup (1 hour)
+ * - Proper cleanup on module destroy
+ */
 @Injectable()
-export class MetricsService {
+export class MetricsService implements OnModuleDestroy {
   private readonly logger = new Logger(MetricsService.name);
+  private readonly MAX_METRICS = 10000;
+  private readonly METRICS_TTL_MS = 3600000; // 1 hour
   private metrics: Map<string, MetricData> = new Map();
+  private cleanupInterval: NodeJS.Timeout | null = null;
+
+  constructor() {
+    this.cleanupInterval = setInterval(() => this.cleanupExpiredMetrics(), 300000); // Clean every 5 minutes
+  }
+
+  onModuleDestroy() {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+      this.cleanupInterval = null;
+    }
+    this.metrics.clear();
+  }
+
+  /**
+   * Clean up expired metrics
+   */
+  private cleanupExpiredMetrics(): void {
+    const now = Date.now();
+    const toDelete: string[] = [];
+
+    for (const [key, metric] of this.metrics.entries()) {
+      if (now - metric.timestamp.getTime() > this.METRICS_TTL_MS) {
+        toDelete.push(key);
+      }
+    }
+
+    toDelete.forEach(key => this.metrics.delete(key));
+
+    if (toDelete.length > 0) {
+      this.logger.debug(`Cleaned up ${toDelete.length} expired metrics`);
+    }
+  }
+
+  /**
+   * Enforce memory limits
+   */
+  private enforceMemoryLimits(): void {
+    if (this.metrics.size > this.MAX_METRICS) {
+      // Remove oldest metrics (simple FIFO)
+      const keys = Array.from(this.metrics.keys());
+      const toRemove = Math.floor(this.MAX_METRICS * 0.1); // Remove 10%
+      for (let i = 0; i < toRemove; i++) {
+        this.metrics.delete(keys[i]);
+      }
+      this.logger.debug(`Enforced memory limits, removed ${toRemove} metrics`);
+    }
+  }
 
   recordMetric(name: string, value: number, type: MetricData['type'] = 'counter', labels?: Record<string, string>): void {
     const key = this.getMetricKey(name, labels);
@@ -26,6 +76,8 @@ export class MetricsService {
       labels,
       timestamp: new Date(),
     });
+
+    this.enforceMemoryLimits();
 
     this.logger.debug(`Recorded metric: ${name} = ${newValue}`);
   }

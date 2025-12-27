@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, OnModuleDestroy } from '@nestjs/common';
 import {
   GenerateReportDto,
   ReportDto,
@@ -12,21 +12,73 @@ import {
 import { validatePagination } from '../common/utils/query-validation.util';
 
 @Injectable()
-export class ReportsService {
+export class ReportsService implements OnModuleDestroy {
   private readonly logger = new Logger(ReportsService.name);
   private reportTemplates: any[] = [];
   private reports: Map<string, any> = new Map();
+  private readonly MAX_REPORTS_IN_MEMORY = 1000;
+  private readonly REPORT_TTL_MS = 24 * 60 * 60 * 1000;
+  private cleanupInterval: NodeJS.Timeout;
 
   constructor(
     // @InjectRepository(Report) private reportRepository: Repository<any>,
     // Inject repositories when entities are available
   ) {
     this.initializeTemplates();
+    // Memory optimization: Periodic cleanup
+    this.cleanupInterval = setInterval(() => this.cleanupOldReports(), 60 * 60 * 1000);
   }
 
   private initializeTemplates() {
-    // Initialize with default templates
     this.reportTemplates = [];
+  }
+
+  private cleanupOldReports(): void {
+    const now = Date.now();
+    const keysToDelete: string[] = [];
+    
+    for (const [key, report] of this.reports.entries()) {
+      const age = now - new Date(report.createdAt).getTime();
+      if (age > this.REPORT_TTL_MS) {
+        keysToDelete.push(key);
+      }
+    }
+    
+    keysToDelete.forEach(key => this.reports.delete(key));
+    
+    if (keysToDelete.length > 0) {
+      this.logger.debug(`Cleaned up ${keysToDelete.length} old reports`);
+    }
+    
+    if (this.reports.size > this.MAX_REPORTS_IN_MEMORY) {
+      const sortedReports = Array.from(this.reports.entries())
+        .sort((a, b) => new Date(a[1].createdAt).getTime() - new Date(b[1].createdAt).getTime());
+      
+      const toRemove = sortedReports.slice(0, sortedReports.length - this.MAX_REPORTS_IN_MEMORY);
+      toRemove.forEach(([key]) => this.reports.delete(key));
+      
+      this.logger.warn(`Memory limit reached, removed ${toRemove.length} oldest reports`);
+    }
+  }
+
+  onModuleDestroy(): void {
+    this.logger.log('ReportsService cleanup...');
+    
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+    }
+    
+    // Clear large data structures
+    const reportCount = this.reports.size;
+    this.reports.clear();
+    this.reportTemplates = [];
+    
+    // Explicitly trigger GC hint (if available)
+    if (global.gc) {
+      global.gc();
+    }
+    
+    this.logger.log(`ReportsService cleanup complete (cleared ${reportCount} reports)`);
   }
 
   /**
@@ -34,6 +86,7 @@ export class ReportsService {
    */
   async getGeneratedReports(): Promise<any[]> {
     this.logger.debug('Fetching all generated reports');
+    this.cleanupOldReports();
     return Array.from(this.reports.values()).sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
@@ -458,6 +511,15 @@ export class ReportsService {
   }
 
   async generate(generateDto: any, userId: string): Promise<any> {
+    // Memory optimization: Check limits before generating
+    if (this.reports.size >= this.MAX_REPORTS_IN_MEMORY) {
+      this.cleanupOldReports();
+      if (this.reports.size >= this.MAX_REPORTS_IN_MEMORY) {
+        this.logger.warn('Report generation rejected due to memory limits');
+        throw new Error('System busy: Report generation queue full. Please try again later.');
+      }
+    }
+
     const reportId = this.generateReportId();
     const report = {
       id: reportId,

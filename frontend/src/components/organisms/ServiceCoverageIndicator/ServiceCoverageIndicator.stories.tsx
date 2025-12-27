@@ -1,15 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ServiceCoverageIndicator } from '@/components';
+import { ServiceCoverageIndicator } from './ServiceCoverageIndicator';
 
 const meta: Meta<typeof ServiceCoverageIndicator> = {
-  title: 'Organisms/ServiceCoverageIndicator',
+  title: 'Components/Organisms/ServiceCoverageIndicator/ServiceCoverageIndicator',
   component: ServiceCoverageIndicator,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof ServiceCoverageIndicator>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "className": "Sample Text",
+  "compact": true
+},
 };

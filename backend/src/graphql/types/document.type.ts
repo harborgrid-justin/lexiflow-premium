@@ -1,6 +1,6 @@
 import { ObjectType, Field, ID, registerEnumType } from '@nestjs/graphql';
 import { UserType } from './user.type';
-import { DocumentStatus, DocumentAccessLevel } from '../../common/enums/document.enum';
+import { DocumentStatus, DocumentAccessLevel } from '@common/enums/document.enum';
 
 registerEnumType(DocumentStatus, { name: 'DocumentStatus' });
 registerEnumType(DocumentAccessLevel, { name: 'DocumentAccessLevel' });

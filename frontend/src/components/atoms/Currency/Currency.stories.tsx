@@ -2,14 +2,21 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Currency } from './Currency';
 
 const meta: Meta<typeof Currency> = {
-  title: 'Atoms/Currency',
+  title: 'Components/Atoms/Currency/Currency',
   component: Currency,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof Currency>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+  "value": 42,
+  "className": "Sample Text",
+  "hideSymbol": true
+},
 };

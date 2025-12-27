@@ -96,18 +96,32 @@ export class ExaminationsService {
     id: string,
     updateDto: UpdateExaminationDto,
   ): Promise<Examination> {
-    const examination = await this.findOne(id);
+    const result = await this.examinationRepository
+      .createQueryBuilder()
+      .update(Examination)
+      .set({ ...updateDto, updatedAt: new Date() })
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .returning('*')
+      .execute();
 
-    Object.assign(examination, updateDto);
-    examination.updatedAt = new Date();
-
-    return await this.examinationRepository.save(examination);
+    if (!result.affected) {
+      throw new NotFoundException(`Examination with ID ${id} not found`);
+    }
+    return result.raw[0];
   }
 
   async remove(id: string): Promise<void> {
-    const examination = await this.findOne(id);
-    examination.deletedAt = new Date();
-    await this.examinationRepository.save(examination);
+    const result = await this.examinationRepository
+      .createQueryBuilder()
+      .softDelete()
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .execute();
+
+    if (!result.affected) {
+      throw new NotFoundException(`Examination with ID ${id} not found`);
+    }
   }
 
   async getStatistics(caseId: string) {

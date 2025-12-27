@@ -5,6 +5,11 @@ import { CitationsService } from './citations.service';
 import { Citation } from './entities/citation.entity';
 import { AuthModule } from '../auth/auth.module';
 
+/**
+ * Citations Module
+ * Manages legal citations, case references, and legal authority linking
+ * Provides citation validation, extraction, and formatting services
+ */
 @Module({
   imports: [
     TypeOrmModule.forFeature([Citation]),

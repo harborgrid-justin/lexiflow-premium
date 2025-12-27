@@ -99,18 +99,32 @@ export class DepositionsService {
     id: string,
     updateDto: UpdateDepositionDto,
   ): Promise<Deposition> {
-    const deposition = await this.findOne(id);
+    const result = await this.depositionRepository
+      .createQueryBuilder()
+      .update(Deposition)
+      .set({ ...updateDto, updatedAt: new Date() })
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .returning('*')
+      .execute();
 
-    Object.assign(deposition, updateDto);
-    deposition.updatedAt = new Date();
-
-    return await this.depositionRepository.save(deposition);
+    if (!result.affected) {
+      throw new NotFoundException(`Deposition with ID ${id} not found`);
+    }
+    return result.raw[0];
   }
 
   async remove(id: string): Promise<void> {
-    const deposition = await this.findOne(id);
-    deposition.deletedAt = new Date();
-    await this.depositionRepository.save(deposition);
+    const result = await this.depositionRepository
+      .createQueryBuilder()
+      .softDelete()
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .execute();
+
+    if (!result.affected) {
+      throw new NotFoundException(`Deposition with ID ${id} not found`);
+    }
   }
 
   async getUpcoming(caseId: string, days: number = 30) {

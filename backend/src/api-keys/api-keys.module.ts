@@ -4,7 +4,7 @@ import { ApiKeysController } from './api-keys.controller';
 import { ApiKeysService } from './api-keys.service';
 
 @Module({
-  imports: [JwtModule.register({})],
+  imports: [],
   controllers: [ApiKeysController],
   providers: [ApiKeysService],
   exports: [ApiKeysService],

@@ -43,7 +43,7 @@ interface PDFViewerProps {
 /**
  * PDFViewer - React 18 optimized with useId
  */
-export const PDFViewer: React.FC<PDFViewerProps> = ({ 
+export const PDFViewer = React.memo<PDFViewerProps>(({ 
   url, 
   scale = 1.0, 
   rotation = 0, 
@@ -246,4 +246,6 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
       )}
     </div>
   );
-};
+});
+
+PDFViewer.displayName = 'PDFViewer';

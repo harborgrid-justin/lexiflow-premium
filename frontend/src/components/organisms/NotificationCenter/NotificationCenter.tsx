@@ -7,7 +7,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useDeferredValue } from 'react';
 import { Bell, Check, Trash2, Settings, CheckCheck } from 'lucide-react';
 
 // ============================================================================
@@ -52,6 +52,7 @@ export const NotificationCenter: React.FC = () => {
   
   // Local State for UI only
   const [filter, setFilter] = useState<string>('all');
+  const deferredFilter = useDeferredValue(filter);
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
   const [preferences, setPreferences] = useState({
     emailNotifications: true,
@@ -101,11 +102,11 @@ export const NotificationCenter: React.FC = () => {
   );
 
   // --- LOGIC ---
-  const filteredNotifications = notifications.filter(n => {
-    if (filter === 'all') return true;
-    if (filter === 'unread') return !n.isRead;
-    return n.category === filter;
-  });
+  const filteredNotifications = useMemo(() => notifications.filter(n => {
+    if (deferredFilter === 'all') return true;
+    if (deferredFilter === 'unread') return !n.isRead;
+    return n.category === deferredFilter;
+  }), [notifications, deferredFilter]);
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
 

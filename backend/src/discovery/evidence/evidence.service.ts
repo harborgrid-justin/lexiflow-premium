@@ -34,6 +34,19 @@ export class EvidenceService {
 
     return this.evidenceRepository.find({
       where,
+      select: [
+        'id',
+        'caseId',
+        'trackingUuid',
+        'type',
+        'description',
+        'admissibility',
+        'custodian',
+        'status',
+        'acquiredDate',
+        'createdAt',
+        'updatedAt',
+      ],
       order: { createdAt: 'DESC' },
     });
   }
@@ -59,9 +72,18 @@ export class EvidenceService {
   }
 
   async update(id: string, updateEvidenceDto: UpdateDiscoveryEvidenceDto): Promise<Evidence> {
-    await this.findOne(id);
-    await this.evidenceRepository.update(id, updateEvidenceDto);
-    return this.findOne(id);
+    const result = await this.evidenceRepository
+      .createQueryBuilder()
+      .update(Evidence)
+      .set(updateEvidenceDto)
+      .where('id = :id', { id })
+      .returning('*')
+      .execute();
+
+    if (!result.affected) {
+      throw new NotFoundException(`Evidence with ID ${id} not found`);
+    }
+    return result.raw[0];
   }
 
   async remove(id: string): Promise<void> {

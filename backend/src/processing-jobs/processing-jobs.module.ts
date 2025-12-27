@@ -8,6 +8,17 @@ import { DocumentProcessor } from './processors/document-processor';
 import { OcrModule } from '../ocr/ocr.module';
 import { DocumentsModule } from '../documents/documents.module';
 
+/**
+ * Processing Jobs Module
+ * Handles background document processing with Bull queues
+ * 
+ * Circular Dependency Note:
+ * This module has a circular dependency with DocumentsModule.
+ * ProcessingJobs need Documents to read/update document metadata.
+ * Documents need ProcessingJobs to create processing tasks.
+ * Using forwardRef() to resolve this at runtime.
+ * @see https://docs.nestjs.com/fundamentals/circular-dependency
+ */
 @Module({
   imports: [
     TypeOrmModule.forFeature([ProcessingJob]),

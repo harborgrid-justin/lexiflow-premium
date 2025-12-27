@@ -15,7 +15,7 @@ export interface ActionRowProps {
   className?: string;
 }
 
-export const ActionRow: React.FC<ActionRowProps> = ({ title, subtitle, children, className }) => {
+export const ActionRow = React.memo<ActionRowProps>(({ title, subtitle, children, className }) => {
   const { theme } = useTheme();
   
   return (
@@ -32,4 +32,6 @@ export const ActionRow: React.FC<ActionRowProps> = ({ title, subtitle, children,
       <div className="flex gap-2">{children}</div>
     </div>
   );
-};
+});
+
+ActionRow.displayName = 'ActionRow';

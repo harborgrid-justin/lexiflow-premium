@@ -9,21 +9,36 @@ import { BackupProcessorService } from './processors/backup-processor.service';
 import { QueueErrorHandlerService } from './services/queue-error-handler.service';
 import { QUEUE_NAMES } from './constants';
 
+/**
+ * Queues Module
+ * Background job processing with Bull and Redis
+ * 
+ * Features:
+ * - Document processing (OCR, indexing, conversion)
+ * - Email sending and delivery
+ * - Report generation
+ * - Notification dispatch
+ * - Automated backups
+ * 
+ * Each processor runs in separate worker processes for fault isolation.
+ * Includes automatic retry logic and error handling.
+ */
+
 // Re-export for use in other modules
 export { QUEUE_NAMES };
 
 // Helper to get Redis config from ConfigService
 const getRedisConfig = (configService: ConfigService) => {
-  const redisUrl = configService.get('redis.url');
+  const redisUrl = configService.get<string>('redis.url');
   if (redisUrl) {
     return { url: redisUrl };
   }
   return {
     redis: {
-      host: configService.get('redis.host', 'localhost'),
-      port: configService.get('redis.port', 6379),
-      password: configService.get('redis.password'),
-      username: configService.get('redis.username'),
+      host: configService.get<string>('redis.host', 'localhost'),
+      port: configService.get<number>('redis.port', 6379),
+      password: configService.get<string>('redis.password'),
+      username: configService.get<string>('redis.username'),
     },
   };
 };

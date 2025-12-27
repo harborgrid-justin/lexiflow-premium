@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useId } from 'react';
 import { 
   Activity, CheckCircle, AlertTriangle, XCircle, RefreshCw, X, 
   TrendingUp, Clock, Zap
@@ -18,6 +18,8 @@ export const BackendHealthMonitor: React.FC<BackendHealthMonitorProps> = ({ isOp
   const [health, setHealth] = useState<SystemHealth | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
+  const titleId = useId();
+  const descriptionId = useId();
 
   const checkHealth = async () => {
     setIsLoading(true);
@@ -93,6 +95,10 @@ export const BackendHealthMonitor: React.FC<BackendHealthMonitorProps> = ({ isOp
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           onClick={(e: React.MouseEvent) => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={titleId}
+          aria-describedby={descriptionId}
           className={cn(
             "w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col",
             theme.surface.default
@@ -103,8 +109,8 @@ export const BackendHealthMonitor: React.FC<BackendHealthMonitorProps> = ({ isOp
             <div className="flex items-center gap-3">
               <Activity className="h-6 w-6 text-blue-600" />
               <div>
-                <h2 className={cn("text-xl font-bold", theme.text.primary)}>Backend Health Monitor</h2>
-                <p className={cn("text-xs mt-0.5", theme.text.secondary)}>
+                <h2 id={titleId} className={cn("text-xl font-bold", theme.text.primary)}>Backend Health Monitor</h2>
+                <p id={descriptionId} className={cn("text-xs mt-0.5", theme.text.secondary)}>
                   Real-time service status and performance metrics
                 </p>
               </div>

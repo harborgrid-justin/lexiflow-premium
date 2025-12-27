@@ -4,7 +4,7 @@ import { AnalyticsDashboardController } from './analytics-dashboard.controller';
 import { AnalyticsDashboardService } from './analytics-dashboard.service';
 
 @Module({
-  imports: [JwtModule.register({})],
+  imports: [],
   controllers: [AnalyticsDashboardController],
   providers: [AnalyticsDashboardService],
   exports: [AnalyticsDashboardService]

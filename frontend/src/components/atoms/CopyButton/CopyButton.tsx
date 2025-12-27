@@ -36,7 +36,7 @@ interface CopyButtonProps {
   size?: 'sm' | 'md';
 }
 
-export function CopyButton({ text, label = "Copy", variant = "secondary", size = "sm" }: CopyButtonProps) {
+export const CopyButton = React.memo<CopyButtonProps>(({ text, label = "Copy", variant = "secondary", size = "sm" }) => {
   const { theme } = useTheme();
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -66,4 +66,6 @@ export function CopyButton({ text, label = "Copy", variant = "secondary", size =
       {copied ? 'Copied' : label}
     </Button>
   );
-};
+});
+
+CopyButton.displayName = 'CopyButton';

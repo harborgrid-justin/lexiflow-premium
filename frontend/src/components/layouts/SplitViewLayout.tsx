@@ -30,7 +30,7 @@ const sidebarWidthClasses = {
   xl: 'md:w-[28rem]',
 };
 
-export const SplitViewLayout: React.FC<SplitViewLayoutProps> = ({ 
+export const SplitViewLayout = React.memo<SplitViewLayoutProps>(({ 
   sidebar, 
   content, 
   showSidebarOnMobile = true,
@@ -84,4 +84,6 @@ export const SplitViewLayout: React.FC<SplitViewLayoutProps> = ({
       )}
     </div>
   );
-};
+});
+
+SplitViewLayout.displayName = 'SplitViewLayout';

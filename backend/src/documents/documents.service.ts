@@ -190,17 +190,26 @@ export class DocumentsService {
     updateDocumentDto: UpdateDocumentDto,
     userId?: string,
   ): Promise<Document> {
-    const document = await this.findOne(id);
+    const updateData = {
+      ...updateDocumentDto,
+      ...(userId ? { updatedBy: userId } : {}),
+      updatedAt: new Date()
+    };
 
-    Object.assign(document, updateDocumentDto);
-    if (userId) {
-      document.updatedBy = userId;
+    const result = await this.documentRepository
+      .createQueryBuilder()
+      .update(Document)
+      .set(updateData)
+      .where('id = :id', { id })
+      .returning('*')
+      .execute();
+
+    if (!result.affected || result.affected === 0) {
+      throw new NotFoundException(`Document with ID ${id} not found`);
     }
 
-    const updatedDocument = await this.documentRepository.save(document);
     this.logger.log(`Document updated: ${id}`);
-
-    return updatedDocument;
+    return result.raw[0];
   }
 
   /**

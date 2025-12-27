@@ -6,10 +6,18 @@ import { HRService } from './hr.service';
 import { Employee } from './entities/employee.entity';
 import { TimeOffRequest } from './entities/time-off-request.entity';
 
+/**
+ * HR Module
+ * Human resources management for law firms
+ * Features:
+ * - Employee profiles and directory
+ * - Time-off request management
+ * - Timesheet and attendance tracking
+ * - Performance reviews and evaluations
+ */
 @Module({
   imports: [
     TypeOrmModule.forFeature([Employee, TimeOffRequest]),
-    JwtModule.register({}),
   ],
   controllers: [HRController],
   providers: [HRService],

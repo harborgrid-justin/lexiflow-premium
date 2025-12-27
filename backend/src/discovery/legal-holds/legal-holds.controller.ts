@@ -10,8 +10,13 @@ import {
   Head,
   HttpCode,
   HttpStatus,
+  UseGuards,
+  UseInterceptors,
+  CacheInterceptor,
+  CacheTTL,
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { LegalHoldsService } from './legal-holds.service';
 import { CreateLegalHoldDto } from './dto/create-legal-hold.dto';
 import { UpdateLegalHoldDto } from './dto/update-legal-hold.dto';
@@ -19,7 +24,9 @@ import { QueryLegalHoldDto } from './dto/query-legal-hold.dto';
 import { ReleaseLegalHoldDto } from './dto/release-legal-hold.dto';
 
 
+@UseGuards(JwtAuthGuard)
 @Controller('legal-holds')
+@UseInterceptors(CacheInterceptor)
 export class LegalHoldsController {
   constructor(private readonly legalHoldsService: LegalHoldsService) {}
 

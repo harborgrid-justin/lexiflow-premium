@@ -5,10 +5,18 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 
+/**
+ * Users Module
+ * User account management and authentication
+ * Features:
+ * - User profile management
+ * - Role-based access control (RBAC)
+ * - User preferences and settings
+ * - Activity tracking and audit logs
+ */
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
-    JwtModule.register({}), // JwtService needed for JwtAuthGuard
   ],
   controllers: [UsersController],
   providers: [UsersService],

@@ -19,7 +19,18 @@ import { TokenBlacklistGuard } from './guards/token-blacklist.guard';
   imports: [
     ConfigModule,
     PassportModule,
-    JwtModule.register({}), // Configuration is done in strategies
+    // Configure JWT globally with async configuration for proper dependency injection
+    // @see https://docs.nestjs.com/techniques/configuration#async-configuration
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('app.jwt.secret'),
+        signOptions: {
+          expiresIn: configService.get<string>('app.jwt.expiresIn'),
+        },
+      }),
+    }),
     UsersModule,
     ScheduleModule.forRoot(), // Enable scheduled tasks
   ],

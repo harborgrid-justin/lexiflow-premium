@@ -5,6 +5,15 @@ import { OrganizationsController } from './organizations.controller';
 import { OrganizationsService } from './organizations.service';
 import { AuthModule } from '../auth/auth.module';
 
+/**
+ * Organizations Module
+ * Multi-tenant law firm and organization management
+ * Features:
+ * - Firm/organization profiles
+ * - Multi-tenant data isolation
+ * - Organization settings and configuration
+ * - Cross-organizational relationships
+ */
 @Module({
   imports: [
     TypeOrmModule.forFeature([Organization]),

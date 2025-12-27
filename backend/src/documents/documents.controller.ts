@@ -14,6 +14,7 @@ import {
   HttpCode,
   ParseUUIDPipe,
   Inject,
+  CacheInterceptor,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiConsumes, ApiBody, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
@@ -30,6 +31,7 @@ import { OcrRequestDto } from '../ocr/dto/ocr-request.dto';
 @ApiBearerAuth('JWT-auth')
 
 @Controller('documents')
+@UseInterceptors(CacheInterceptor)
 export class DocumentsController {
   constructor(
     private readonly documentsService: DocumentsService,

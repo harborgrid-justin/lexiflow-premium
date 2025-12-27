@@ -26,7 +26,7 @@ const sanitize = (dirty: string): string => {
     .replace(/'/g, "&#039;");
 };
 
-export function SafeContent({ content, as: Component = 'div', className }: SafeContentProps) {
+export const SafeContent = React.memo<SafeContentProps>(({ content, as: Component = 'div', className }) => {
   // Principle 28: Avoid dangerouslySetInnerHTML where possible.
   // If we MUST use it, we sanitize first.
   // Ideally, we parse and render as React nodes, but for this principle we demonstrate safety wrapper.
@@ -40,13 +40,15 @@ export function SafeContent({ content, as: Component = 'div', className }: SafeC
       {content}
     </Component>
   );
-};
+});
+
+SafeContent.displayName = 'SafeContent';
 
 /**
  * TrustedHTML Component
  * Use this ONLY when you absolutely need to render HTML.
  */
-export function TrustedHTML({ content, as: Component = 'div', className }: SafeContentProps) {
+export const TrustedHTML = React.memo<SafeContentProps>(({ content, as: Component = 'div', className }) => {
     const sanitized = sanitize(content);
     
     // Principle 28: Explicitly marking this as a "Sink" that has been secured.
@@ -56,4 +58,6 @@ export function TrustedHTML({ content, as: Component = 'div', className }: SafeC
             dangerouslySetInnerHTML={{ __html: sanitized }} 
         />
     );
-};
+});
+
+TrustedHTML.displayName = 'TrustedHTML';

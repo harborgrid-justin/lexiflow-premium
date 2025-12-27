@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useId } from 'react';
 import { X } from 'lucide-react';
 
 // ============================================================================
@@ -40,18 +40,22 @@ interface FilterPanelProps {
  */
 export const FilterPanel = React.memo<FilterPanelProps>(({ isOpen, onClose, onClear, children, title = "Filters", className = "" }) => {
   const { theme } = useTheme();
+  const panelId = useId();
 
   if (!isOpen) return null;
 
   return (
-    <div className={cn(
+    <div 
+      role="region"
+      aria-labelledby={panelId}
+      className={cn(
       "border rounded-lg p-4 animate-in slide-in-from-top-2 mb-4 shadow-sm",
       theme.surface.default,
       theme.border.default,
       className
     )}>
       <div className={cn("flex justify-between items-center mb-4 border-b pb-2", theme.border.default)}>
-        <h4 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>{title}</h4>
+        <h4 id={panelId} className={cn("font-bold text-sm uppercase tracking-wide", theme.text.secondary)}>{title}</h4>
         <div className="flex items-center gap-3">
           {onClear && (
             <button 

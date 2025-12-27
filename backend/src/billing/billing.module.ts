@@ -16,7 +16,6 @@ import { BillingController } from './billing.controller';
 
 @Module({
   imports: [
-    JwtModule.register({}),
     TypeOrmModule.forFeature([Invoice, TimeEntry, Expense]),
     TimeEntriesModule,
     InvoicesModule,

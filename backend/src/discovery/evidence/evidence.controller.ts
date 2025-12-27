@@ -11,6 +11,9 @@ import {
   HttpCode,
   HttpStatus,
   Head,
+  UseInterceptors,
+  CacheInterceptor,
+  CacheTTL,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth  , ApiResponse }from '@nestjs/swagger';
 import { EvidenceService } from './evidence.service';
@@ -23,6 +26,7 @@ import { Evidence } from './entities/evidence.entity';
 @ApiBearerAuth('JWT-auth')
 
 @Controller('evidence')
+@UseInterceptors(CacheInterceptor)
 export class EvidenceController {
   constructor(private readonly evidenceService: EvidenceService) {}
 

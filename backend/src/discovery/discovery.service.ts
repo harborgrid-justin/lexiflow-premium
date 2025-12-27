@@ -6,6 +6,24 @@ import { LegalHold, LegalHoldStatus } from './legal-holds/entities/legal-hold.en
 import { Custodian } from './custodians/entities/custodian.entity';
 import { Evidence } from './evidence/entities/evidence.entity';
 
+export interface PaginationOptions {
+  page?: number;
+  limit?: number;
+}
+
+export interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+/**
+ * Discovery Service
+ * Orchestrates discovery operations across all sub-modules
+ * Uses service composition pattern rather than direct repository injection
+ */
 @Injectable()
 export class DiscoveryService {
   findAll(): Promise<any[]> {
@@ -19,23 +37,64 @@ export class DiscoveryService {
   create(createDto: any): Promise<any> {
     return this.createRequest(createDto);
   }
+  
   constructor(
     @InjectRepository(DiscoveryRequest)
-    private discoveryRequestRepository: Repository<DiscoveryRequest>,
+    private readonly discoveryRequestRepository: Repository<DiscoveryRequest>,
     @InjectRepository(LegalHold)
-    private legalHoldRepository: Repository<LegalHold>,
+    private readonly legalHoldRepository: Repository<LegalHold>,
     @InjectRepository(Custodian)
-    private custodianRepository: Repository<Custodian>,
+    private readonly custodianRepository: Repository<Custodian>,
     @InjectRepository(Evidence)
-    private evidenceRepository: Repository<Evidence>,
+    private readonly evidenceRepository: Repository<Evidence>,
   ) {}
 
-  async findAllRequests(): Promise<any[]> {
-    return this.discoveryRequestRepository.find();
+  async findAllRequests(options?: PaginationOptions): Promise<PaginatedResult<any>> {
+    const page = options?.page || 1;
+    const limit = options?.limit || 50;
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await this.discoveryRequestRepository.findAndCount({
+      take: limit,
+      skip,
+      order: { createdAt: 'DESC' },
+    });
+
+    return {
+      data,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
-  async findRequestsByCaseId(caseId: string): Promise<any[]> {
-    return this.discoveryRequestRepository.find({ where: { caseId } });
+  async findRequestsByCaseId(
+    caseId: string,
+    options?: PaginationOptions,
+  ): Promise<PaginatedResult<any>> {
+    const page = options?.page || 1;
+    const limit = options?.limit || 50;
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await this.discoveryRequestRepository.findAndCount({
+      where: { caseId },
+      take: limit,
+      skip,
+      order: { createdAt: 'DESC' },
+      cache: {
+        id: `case_${caseId}_requests`,
+        milliseconds: 60000, // 1 minute
+      },
+    });
+
+    return {
+      data,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   async findRequestById(id: string): Promise<any> {
@@ -52,9 +111,18 @@ export class DiscoveryService {
   }
 
   async updateRequest(id: string, updateDto: any): Promise<any> {
-    await this.findRequestById(id);
-    await this.discoveryRequestRepository.update(id, updateDto);
-    return this.findRequestById(id);
+    const result = await this.discoveryRequestRepository
+      .createQueryBuilder()
+      .update(DiscoveryRequest)
+      .set(updateDto)
+      .where('id = :id', { id })
+      .returning('*')
+      .execute();
+
+    if (!result.affected) {
+      throw new NotFoundException(`Discovery request with ID ${id} not found`);
+    }
+    return result.raw[0];
   }
 
   async deleteRequest(id: string): Promise<void> {
@@ -68,6 +136,10 @@ export class DiscoveryService {
       where: {
         dueDate: LessThan(today),
         status: Not(DiscoveryRequestStatus.COMPLETED),
+      },
+      cache: {
+        id: 'overdue_requests',
+        milliseconds: 300000, // 5 minutes
       },
     });
   }

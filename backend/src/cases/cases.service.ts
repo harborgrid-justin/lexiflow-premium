@@ -18,7 +18,10 @@ export class CasesService {
   ) {}
 
   async getStats(): Promise<CaseStatsDto> {
-    const totalActive = await this.caseRepository.count({ where: { status: CaseStatus.ACTIVE } });
+    const totalActive = await this.caseRepository.count({ 
+      where: { status: CaseStatus.ACTIVE },
+      cache: 60000 // 1 minute cache
+    });
     
     const intakePipeline = await this.caseRepository.count({ 
         where: [
@@ -196,15 +199,13 @@ export class CasesService {
   }
 
   async update(id: string, updateCaseDto: UpdateCaseDto): Promise<CaseResponseDto> {
-    const caseEntity = await this.findOne(id);
-
     // If updating case number, check for duplicates
-    if (updateCaseDto.caseNumber && updateCaseDto.caseNumber !== caseEntity.caseNumber) {
+    if (updateCaseDto.caseNumber) {
       const existingCase = await this.caseRepository.findOne({
         where: { caseNumber: updateCaseDto.caseNumber },
       });
 
-      if (existingCase) {
+      if (existingCase && existingCase.id !== id) {
         throw new ConflictException(
           `Case with number ${updateCaseDto.caseNumber} already exists`,
         );
@@ -212,11 +213,22 @@ export class CasesService {
     }
 
     const { metadata, ...restDto } = updateCaseDto;
-    await this.caseRepository.update(id, {
-      ...restDto,
-      ...(metadata ? { metadata: JSON.stringify(metadata) as any } : {})
-    } as any);
-    return this.findOne(id);
+    const result = await this.caseRepository
+      .createQueryBuilder()
+      .update(Case)
+      .set({
+        ...restDto,
+        ...(metadata ? { metadata: JSON.stringify(metadata) as any } : {})
+      } as any)
+      .where('id = :id', { id })
+      .returning('*')
+      .execute();
+
+    if (!result.affected || result.affected === 0) {
+      throw new NotFoundException(`Case with ID ${id} not found`);
+    }
+
+    return this.toCaseResponse(result.raw[0]);
   }
 
   async remove(id: string): Promise<void> {

@@ -6,7 +6,7 @@ import { KnowledgeService } from './knowledge.service';
 import { KnowledgeArticle } from './entities/knowledge-article.entity';
 
 @Module({
-  imports: [JwtModule.register({}), TypeOrmModule.forFeature([KnowledgeArticle])],
+  imports: [TypeOrmModule.forFeature([KnowledgeArticle])],
   controllers: [KnowledgeController],
   providers: [KnowledgeService],
   exports: [KnowledgeService],

@@ -9,6 +9,8 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  UseInterceptors,
+  CacheInterceptor,
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
 import { CustodianInterviewsService } from './custodian-interviews.service';
@@ -18,6 +20,7 @@ import { QueryCustodianInterviewDto } from './dto/query-custodian-interview.dto'
 
 
 @Controller('custodian-interviews')
+@UseInterceptors(CacheInterceptor)
 export class CustodianInterviewsController {
   constructor(
     private readonly interviewsService: CustodianInterviewsService,

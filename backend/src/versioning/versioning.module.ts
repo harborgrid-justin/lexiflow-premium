@@ -5,6 +5,15 @@ import { VersioningService } from './versioning.service';
 import { DataVersion } from './entities/data-version.entity';
 import { AuthModule } from '../auth/auth.module';
 
+/**
+ * Versioning Module
+ * Data versioning and audit trail for all entities
+ * Features:
+ * - Entity change tracking
+ * - Version history and rollback
+ * - Audit trail with user attribution
+ * - Time-travel queries
+ */
 @Module({
   imports: [
     TypeOrmModule.forFeature([DataVersion]),

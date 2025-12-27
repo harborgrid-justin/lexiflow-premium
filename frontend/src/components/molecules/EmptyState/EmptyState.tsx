@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useId } from 'react';
 import { LucideIcon } from 'lucide-react';
 
 // ============================================================================
@@ -39,9 +39,11 @@ interface EmptyStateProps {
 
 export const EmptyState: React.FC<EmptyStateProps> = ({ icon: Icon, title, description, action, className = '' }) => {
   const { theme } = useTheme();
+  const titleId = useId();
   
   return (
     <Box
+      aria-labelledby={titleId}
       flex
       direction="col"
       align="center"
@@ -62,7 +64,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({ icon: Icon, title, descr
       >
         <Icon className={cn("h-12 w-12 opacity-40", theme.text.tertiary)} />
       </Box>
-      <Text variant="heading" size="lg" className="mb-1">{title}</Text>
+      <Text id={titleId} variant="heading" size="lg" className="mb-1">{title}</Text>
       <Text size="sm" color="secondary" className="max-w-sm mb-6">{description}</Text>
       {action}
     </Box>

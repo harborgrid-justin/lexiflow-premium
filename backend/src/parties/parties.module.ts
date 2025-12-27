@@ -4,6 +4,15 @@ import { PartiesController } from './parties.controller';
 import { PartiesService } from './parties.service';
 import { Party } from './entities/party.entity';
 
+/**
+ * Parties Module
+ * Case parties, attorneys, and litigant management
+ * Features:
+ * - Party/litigant tracking
+ * - Attorney of record management
+ * - Party roles (plaintiff, defendant, intervenor)
+ * - Contact information and service addresses
+ */
 @Module({
   imports: [TypeOrmModule.forFeature([Party])],
   controllers: [PartiesController],

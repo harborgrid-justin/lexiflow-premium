@@ -73,7 +73,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   useInterval(() => setPulse(p => !p), 2000);
 
   return (
-    <div className="flex-1 flex items-center justify-between h-full">
+    <header role="banner" className="flex-1 flex items-center justify-between h-full">
       <div className="flex items-center flex-1 gap-4">
         <button 
             onClick={onToggleSidebar} 
@@ -145,7 +145,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
             <UserAvatar name={currentUser?.name || 'Guest'} size="sm" className="shadow-sm" />
         </button>
       </div>
-    </div>
+    </header>
   );
 };
 

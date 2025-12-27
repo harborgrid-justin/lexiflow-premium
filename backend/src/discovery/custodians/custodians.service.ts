@@ -102,18 +102,32 @@ export class CustodiansService {
   }
 
   async update(id: string, updateDto: UpdateCustodianDto): Promise<Custodian> {
-    const custodian = await this.findOne(id);
+    const result = await this.custodianRepository
+      .createQueryBuilder()
+      .update(Custodian)
+      .set({ ...updateDto, updatedAt: new Date() })
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .returning('*')
+      .execute();
 
-    Object.assign(custodian, updateDto);
-    custodian.updatedAt = new Date();
-
-    return await this.custodianRepository.save(custodian);
+    if (!result.affected) {
+      throw new NotFoundException(`Custodian with ID ${id} not found`);
+    }
+    return result.raw[0];
   }
 
   async remove(id: string): Promise<void> {
-    const custodian = await this.findOne(id);
-    custodian.deletedAt = new Date();
-    await this.custodianRepository.save(custodian);
+    const result = await this.custodianRepository
+      .createQueryBuilder()
+      .softDelete()
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .execute();
+
+    if (!result.affected) {
+      throw new NotFoundException(`Custodian with ID ${id} not found`);
+    }
   }
 
   async getStatistics(caseId: string) {

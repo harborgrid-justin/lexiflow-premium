@@ -15,10 +15,20 @@ export class WitnessesService {
     return this.witnessRepository.save(witness);
   }
 
-  async findAll(): Promise<Witness[]> {
-    return this.witnessRepository.find({
+  async findAll(page = 1, limit = 50): Promise<{ items: Witness[]; total: number; page: number; limit: number; totalPages: number }> {
+    const [items, total] = await this.witnessRepository.findAndCount({
       order: { name: 'ASC' },
+      take: limit,
+      skip: (page - 1) * limit,
     });
+
+    return {
+      items,
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   async findOne(id: string): Promise<Witness> {
@@ -37,6 +47,10 @@ export class WitnessesService {
     return this.witnessRepository.find({
       where: { caseId },
       order: { name: 'ASC' },
+      cache: {
+        id: `witnesses_case_${caseId}`,
+        milliseconds: 120000, // 2 minutes
+      },
     });
   }
 
@@ -55,14 +69,30 @@ export class WitnessesService {
   }
 
   async update(id: string, updateData: Partial<Witness>): Promise<Witness> {
-    const witness = await this.findOne(id);
-    Object.assign(witness, updateData);
-    return this.witnessRepository.save(witness);
+    const result = await this.witnessRepository
+      .createQueryBuilder()
+      .update(Witness)
+      .set(updateData)
+      .where('id = :id', { id })
+      .returning('*')
+      .execute();
+
+    if (!result.affected) {
+      throw new NotFoundException(`Witness with ID ${id} not found`);
+    }
+    return result.raw[0];
   }
 
   async remove(id: string): Promise<void> {
-    const witness = await this.findOne(id);
-    await this.witnessRepository.remove(witness);
+    const result = await this.witnessRepository
+      .createQueryBuilder()
+      .delete()
+      .where('id = :id', { id })
+      .execute();
+
+    if (!result.affected) {
+      throw new NotFoundException(`Witness with ID ${id} not found`);
+    }
   }
 
   async updateStatus(id: string, status: WitnessStatus): Promise<Witness> {

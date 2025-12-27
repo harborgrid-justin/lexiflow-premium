@@ -6,6 +6,15 @@ import { CasesService } from './cases.service';
 import { CaseImportService } from './case-import.service';
 import { Case } from './entities/case.entity';
 
+/**
+ * Cases Module
+ * Core case/matter management system
+ * Features:
+ * - Case lifecycle management
+ * - PACER data import and synchronization
+ * - Case metadata and status tracking
+ * - Multi-user case access and permissions
+ */
 @Module({
   imports: [
     TypeOrmModule.forFeature([Case]),

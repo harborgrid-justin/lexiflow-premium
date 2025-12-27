@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useEffect } from 'react';
+import React, { useEffect, useId } from 'react';
 import { X } from 'lucide-react';
 
 // ============================================================================
@@ -35,6 +35,7 @@ interface DrawerProps {
 
 export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose, title, children, width = 'max-w-md' }) => {
   const { theme } = useTheme();
+  const titleId = useId();
 
   useEffect(() => {
     if (isOpen) document.body.style.overflow = 'hidden';
@@ -53,13 +54,17 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose, title, children
       />
       
       {/* Panel */}
-      <div className={cn(
+      <div 
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        className={cn(
         "relative w-full h-full flex flex-col animate-in slide-in-from-right duration-300 shadow-2xl", 
         width,
         theme.surface.default
       )}>
         <div className={cn("flex items-center justify-between p-4 border-b", theme.surface.highlight, theme.border.default)}>
-          <h3 className={cn("font-bold text-lg", theme.text.primary)}>{title}</h3>
+          <h3 id={titleId} className={cn("font-bold text-lg", theme.text.primary)}>{title}</h3>
           <button onClick={onClose} className={cn("p-2 rounded-full transition-colors", theme.text.secondary, `hover:${theme.surface.default}`)}>
             <X className="h-5 w-5" />
           </button>

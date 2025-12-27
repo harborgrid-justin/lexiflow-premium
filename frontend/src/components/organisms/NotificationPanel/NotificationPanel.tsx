@@ -27,7 +27,7 @@ interface Notification {
   priority?: 'low' | 'medium' | 'high' | 'urgent';
 }
 
-export const NotificationPanel: React.FC = () => {
+export const NotificationPanel = React.memo(() => {
   const { theme } = useTheme();
   const panel = useModalState();
   const [notifications, setNotifications] = useState<Notification[]>([]);

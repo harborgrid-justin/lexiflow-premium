@@ -6,6 +6,15 @@ import { Conversation } from './entities/conversation.entity';
 import { Message } from './entities/message.entity';
 import { AuthModule } from '../auth/auth.module';
 
+/**
+ * Messenger Module
+ * Internal team messaging and collaboration
+ * Features:
+ * - Direct messaging and group conversations
+ * - Case-specific communication threads
+ * - Message search and history
+ * - File sharing and attachments
+ */
 @Module({
   imports: [
     TypeOrmModule.forFeature([Conversation, Message]),

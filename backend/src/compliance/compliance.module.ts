@@ -2,6 +2,23 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 
+/**
+ * Compliance Module
+ * Legal compliance, audit trails, and conflict checking
+ * 
+ * Features:
+ * - Automated compliance rule enforcement
+ * - Comprehensive audit logging with interceptors
+ * - Conflict of interest checks
+ * - Ethics rule validation
+ * - Regulatory compliance tracking
+ * 
+ * Sub-modules:
+ * - AuditLogs: Complete audit trail for all system actions
+ * - ConflictChecks: Automated conflict detection for parties/attorneys
+ * - ComplianceRules: Configurable compliance rule engine
+ */
+
 // Entities
 import { ComplianceCheck } from './entities/compliance-check.entity';
 import { AuditLog } from './entities/audit-log.entity';
@@ -39,7 +56,6 @@ import { ComplianceReportingService } from './reporting/compliance-reporting.ser
 
 @Module({
   imports: [
-    JwtModule.register({}),
     TypeOrmModule.forFeature([ComplianceCheck, AuditLog, ComplianceRule]),
   ],
   controllers: [

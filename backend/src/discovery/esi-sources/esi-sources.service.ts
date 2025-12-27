@@ -102,18 +102,32 @@ export class ESISourcesService {
   }
 
   async update(id: string, updateDto: UpdateESISourceDto): Promise<ESISource> {
-    const esiSource = await this.findOne(id);
+    const result = await this.esiSourceRepository
+      .createQueryBuilder()
+      .update(ESISource)
+      .set({ ...updateDto, updatedAt: new Date() })
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .returning('*')
+      .execute();
 
-    Object.assign(esiSource, updateDto);
-    esiSource.updatedAt = new Date();
-
-    return await this.esiSourceRepository.save(esiSource);
+    if (!result.affected) {
+      throw new NotFoundException(`ESI Source with ID ${id} not found`);
+    }
+    return result.raw[0];
   }
 
   async remove(id: string): Promise<void> {
-    const esiSource = await this.findOne(id);
-    esiSource.deletedAt = new Date();
-    await this.esiSourceRepository.save(esiSource);
+    const result = await this.esiSourceRepository
+      .createQueryBuilder()
+      .softDelete()
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .execute();
+
+    if (!result.affected) {
+      throw new NotFoundException(`ESI Source with ID ${id} not found`);
+    }
   }
 
   async getStatistics(caseId: string) {

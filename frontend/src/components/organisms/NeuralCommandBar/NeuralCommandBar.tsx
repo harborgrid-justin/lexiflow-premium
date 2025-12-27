@@ -45,7 +45,7 @@ interface NeuralCommandBarProps {
 /**
  * NeuralCommandBar - React 18 optimized with useId and useMemo
  */
-export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
+export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
   globalSearch, setGlobalSearch, onGlobalSearch, onSearchResultClick, onNeuralCommand
 }) => {
   const { theme } = useTheme();

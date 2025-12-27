@@ -11,7 +11,7 @@
  * - Accessibility compliant
  */
 
-import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo, useId } from 'react';
 import { AlertCircle, AlertTriangle, CheckCircle } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -122,6 +122,8 @@ export function SmartTextArea({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [internalValue, setInternalValue] = useState(value);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const textareaId = useId();
+  const errorId = useId();
 
   // Sync external value changes
   useEffect(() => {
@@ -222,10 +224,13 @@ export function SmartTextArea({
     <div className="w-full">
       {/* Label */}
       {label && (
-        <label className={cn(
-          "block text-xs font-semibold uppercase tracking-wide mb-1.5 ml-0.5",
-          theme.text.secondary
-        )}>
+        <label 
+          htmlFor={textareaId}
+          className={cn(
+            "block text-xs font-semibold uppercase tracking-wide mb-1.5 ml-0.5",
+            theme.text.secondary
+          )}
+        >
           {label}
         </label>
       )}
@@ -233,6 +238,7 @@ export function SmartTextArea({
       {/* Textarea */}
       <div className="relative">
         <textarea
+          id={textareaId}
           ref={textareaRef}
           value={internalValue}
           onChange={handleChange}
@@ -253,7 +259,7 @@ export function SmartTextArea({
             maxHeight: `${maxRows * LINE_HEIGHT_PX}px`,
           }}
           aria-invalid={!!(error || validationError)}
-          aria-describedby={error || validationError ? 'textarea-error' : undefined}
+          aria-describedby={error || validationError ? errorId : undefined}
           {...props}
         />
 
@@ -305,7 +311,7 @@ export function SmartTextArea({
       {/* Error message */}
       {(error || validationError) && (
         <p 
-          id="textarea-error"
+          id={errorId}
           className={cn("mt-1.5 text-xs font-medium flex items-center gap-1", theme.status.error.text)}
           role="alert"
         >

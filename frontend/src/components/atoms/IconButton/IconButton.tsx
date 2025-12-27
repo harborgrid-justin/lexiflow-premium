@@ -44,7 +44,7 @@ export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEl
  * <IconButton icon={StopCircle} variant="danger" aria-label="Stop" rounded />
  * ``r
  */
-export function IconButton({
+export const IconButton = React.memo<IconButtonProps>(({
   icon: Icon,
   variant = 'primary',
   size = 'md',
@@ -54,7 +54,7 @@ export function IconButton({
   className,
   disabled,
   ...props
-}: IconButtonProps) {
+}) => {
   return (
     <button
       className={getButtonClasses(variant, size, rounded, className)}
@@ -66,4 +66,6 @@ export function IconButton({
       <Icon className={getIconClasses(size, disabled)} />
     </button>
   );
-};
+});
+
+IconButton.displayName = 'IconButton';

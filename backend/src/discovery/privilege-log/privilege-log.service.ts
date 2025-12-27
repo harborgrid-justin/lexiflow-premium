@@ -105,18 +105,32 @@ export class PrivilegeLogService {
     id: string,
     updateDto: UpdatePrivilegeLogEntryDto,
   ): Promise<PrivilegeLogEntry> {
-    const entry = await this.findOne(id);
+    const result = await this.privilegeLogRepository
+      .createQueryBuilder()
+      .update(PrivilegeLogEntry)
+      .set({ ...updateDto, updatedAt: new Date() })
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .returning('*')
+      .execute();
 
-    Object.assign(entry, updateDto);
-    entry.updatedAt = new Date();
-
-    return await this.privilegeLogRepository.save(entry);
+    if (!result.affected) {
+      throw new NotFoundException(`Privilege log entry with ID ${id} not found`);
+    }
+    return result.raw[0];
   }
 
   async remove(id: string): Promise<void> {
-    const entry = await this.findOne(id);
-    entry.deletedAt = new Date();
-    await this.privilegeLogRepository.save(entry);
+    const result = await this.privilegeLogRepository
+      .createQueryBuilder()
+      .softDelete()
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .execute();
+
+    if (!result.affected) {
+      throw new NotFoundException(`Privilege log entry with ID ${id} not found`);
+    }
   }
 
   async getStatistics(caseId: string) {

@@ -9,6 +9,9 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  UseInterceptors,
+  CacheInterceptor,
+  CacheTTL,
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
 import { DiscoveryRequestsService } from './discovery-requests.service';
@@ -18,6 +21,7 @@ import { QueryDiscoveryRequestDto } from './dto/query-discovery-request.dto';
 
 
 @Controller('discovery-requests')
+@UseInterceptors(CacheInterceptor)
 export class DiscoveryRequestsController {
   constructor(
     private readonly discoveryRequestsService: DiscoveryRequestsService,

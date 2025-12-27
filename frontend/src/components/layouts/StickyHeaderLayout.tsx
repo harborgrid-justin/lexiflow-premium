@@ -17,7 +17,7 @@ interface StickyHeaderLayoutProps {
   className?: string;
 }
 
-export const StickyHeaderLayout: React.FC<StickyHeaderLayoutProps> = ({
+export const StickyHeaderLayout = React.memo<StickyHeaderLayoutProps>(({
   header,
   children,
   headerClassName = '',
@@ -42,4 +42,6 @@ export const StickyHeaderLayout: React.FC<StickyHeaderLayoutProps> = ({
       </div>
     </div>
   );
-};
+});
+
+StickyHeaderLayout.displayName = 'StickyHeaderLayout';

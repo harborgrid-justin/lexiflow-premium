@@ -9,15 +9,21 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  UseGuards,
+  UseInterceptors,
+  CacheInterceptor,
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { PrivilegeLogService } from './privilege-log.service';
 import { CreatePrivilegeLogEntryDto } from './dto/create-privilege-log-entry.dto';
 import { UpdatePrivilegeLogEntryDto } from './dto/update-privilege-log-entry.dto';
 import { QueryPrivilegeLogEntryDto } from './dto/query-privilege-log-entry.dto';
 
 
+@UseGuards(JwtAuthGuard)
 @Controller('privilege-log')
+@UseInterceptors(CacheInterceptor)
 export class PrivilegeLogController {
   constructor(private readonly privilegeLogService: PrivilegeLogService) {}
 

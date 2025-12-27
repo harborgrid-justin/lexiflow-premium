@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useRef, useState, useEffect, useMemo } from 'react';
+import React, { useRef, useState, useEffect, useMemo, useDeferredValue } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -48,6 +48,7 @@ export const VirtualGrid = React.memo(<T extends any>(props: VirtualGridProps<T>
   const [scrollTop, setScrollTop] = useState(0);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const rafRef = useRef<number | null>(null);
+  const deferredItems = useDeferredValue(items);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -84,7 +85,7 @@ export const VirtualGrid = React.memo(<T extends any>(props: VirtualGridProps<T>
   const safeHeight = containerSize.height || 0;
 
   const columnCount = Math.max(1, Math.floor((safeWidth + safeGap) / (safeItemWidth + safeGap)));
-  const totalRows = Math.ceil((items?.length || 0) / columnCount);
+  const totalRows = Math.ceil((deferredItems?.length || 0) / columnCount);
   const totalHeight = Math.max(0, totalRows * (safeItemHeight + safeGap) - safeGap);
   const containerContentHeight = Math.max(totalHeight, safeHeight);
   const safeContainerContentHeight = isNaN(containerContentHeight) ? 0 : containerContentHeight;
@@ -102,14 +103,14 @@ export const VirtualGrid = React.memo(<T extends any>(props: VirtualGridProps<T>
     for (let r = startRow; r < endRow; r++) {
       for (let c = 0; c < columnCount; c++) {
         const index = r * columnCount + c;
-        if (index < items.length) {
+        if (index < deferredItems.length) {
           // Centering Logic
           const totalRowWidth = columnCount * safeItemWidth + (columnCount - 1) * safeGap;
           const offsetX = (safeWidth - totalRowWidth) / 2;
           
           rendered.push({
             index,
-            data: items[index],
+            data: deferredItems[index],
             top: r * (safeItemHeight + safeGap),
             left: c * (safeItemWidth + safeGap) + Math.max(0, offsetX)
           });
@@ -117,7 +118,7 @@ export const VirtualGrid = React.memo(<T extends any>(props: VirtualGridProps<T>
       }
     }
     return rendered;
-  }, [items, startRow, endRow, columnCount, safeItemHeight, safeItemWidth, safeGap, safeWidth]);
+  }, [deferredItems, startRow, endRow, columnCount, safeItemHeight, safeItemWidth, safeGap, safeWidth]);
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollTop = e.currentTarget.scrollTop;
@@ -131,7 +132,7 @@ export const VirtualGrid = React.memo(<T extends any>(props: VirtualGridProps<T>
     return index;
   };
 
-  if (items.length === 0) {
+  if (deferredItems.length === 0) {
      return <div className={cn("flex items-center justify-center h-full text-slate-400", theme.text.tertiary)}>{emptyMessage}</div>;
   }
 

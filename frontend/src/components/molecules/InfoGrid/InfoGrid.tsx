@@ -19,7 +19,7 @@ export interface InfoGridProps {
   cols?: number;
 }
 
-export function InfoGrid({ items, cols = 2 }: InfoGridProps) {
+export const InfoGrid = React.memo<InfoGridProps>(({ items, cols = 2 }) => {
   const { theme } = useTheme();
   
   return (
@@ -36,4 +36,6 @@ export function InfoGrid({ items, cols = 2 }: InfoGridProps) {
       ))}
     </div>
   );
-};
+});
+
+InfoGrid.displayName = 'InfoGrid';

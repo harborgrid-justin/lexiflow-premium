@@ -1,53 +1,63 @@
-import * as Joi from 'joi';
+import { registerAs } from '@nestjs/config';
+import { Configuration } from './config.types';
 
-// Validate ALL environment variables with Joi schema
-const envSchema = Joi.object({
-  NODE_ENV: Joi.string()
-    .valid('development', 'production', 'test')
-    .default('development'),
-  PORT: Joi.number().port().default(5000),
-  API_PREFIX: Joi.string().default('/api/v1'),
-
-  // Database - all required except defaults
-  DATABASE_URL: Joi.string().uri().optional(),
-  DB_HOST: Joi.string().hostname().default('localhost'),
-  DB_PORT: Joi.number().port().default(5432),
-  DB_DATABASE: Joi.string().default('lexiflow'),
-  DB_USERNAME: Joi.string().default('lexiflow_admin'),
-  DB_PASSWORD: Joi.string().required(), // CRITICAL: Always required
-  DB_SSL: Joi.string().valid('true', 'false').default('false'),
-  DB_SSL_REJECT_UNAUTHORIZED: Joi.string().valid('true', 'false').default('true'),
-  DB_LOGGING: Joi.string().valid('true', 'false').default('false'),
-
-  // JWT - CRITICAL: Always required
-  JWT_SECRET: Joi.string().min(32).required(),
-  JWT_EXPIRES_IN: Joi.string().default('900'),
-  JWT_REFRESH_SECRET: Joi.string().min(32).required(),
-  JWT_REFRESH_EXPIRES_IN: Joi.string().default('604800'),
-
-  // Redis
-  REDIS_HOST: Joi.string().hostname().default('localhost'),
-  REDIS_PORT: Joi.number().port().default(6379),
-  REDIS_PASSWORD: Joi.string().optional(),
-  REDIS_DB: Joi.number().integer().min(0).default(0),
-
-  // Storage
-  UPLOAD_PATH: Joi.string().default('./uploads'),
-  MAX_FILE_SIZE: Joi.number().positive().default(52428800), // 50MB
-  ALLOWED_FILE_TYPES: Joi.string().default(
-    'pdf,doc,docx,xls,xlsx,txt,jpg,jpeg,png',
-  ),
-
-  // CORS
-  CORS_ORIGINS: Joi.string().default('*'),
-
-  // Rate Limiting
-  THROTTLE_TTL: Joi.number().positive().default(60),
-  THROTTLE_LIMIT: Joi.number().positive().default(10),
-
-  // Email (if configured)
-  SMTP_HOST: Joi.string().hostname().optional(),
-  SMTP_PORT: Joi.number().port().optional(),
+/**
+ * Application configuration factory
+ * Using registerAs() for namespaced configuration - NestJS best practice
+ * @see https://docs.nestjs.com/techniques/configuration#configuration-namespaces
+ */
+export default registerAs('app', (): Configuration => ({
+  app: {
+    nodeEnv: process.env.NODE_ENV || 'development',
+    demoMode: process.env.DEMO_MODE === 'true',
+    logLevel: process.env.LOG_LEVEL || 'info',
+  },
+  server: {
+    port: parseInt(process.env.PORT || '3001', 10),
+    corsOrigin: process.env.CORS_ORIGIN || '*',
+  },
+  database: {
+    url: process.env.DATABASE_URL,
+    host: process.env.DATABASE_HOST || 'localhost',
+    port: parseInt(process.env.DATABASE_PORT || '5432', 10),
+    user: process.env.DATABASE_USER || 'postgres',
+    password: process.env.DATABASE_PASSWORD || '',
+    name: process.env.DATABASE_NAME || 'lexiflow',
+    fallbackSqlite: process.env.DB_FALLBACK_SQLITE === 'true',
+    logging: process.env.DB_LOGGING === 'true',
+    synchronize: process.env.DB_SYNCHRONIZE === 'true',
+    ssl: process.env.DB_SSL === 'true',
+    sslRejectUnauthorized: process.env.DB_SSL_REJECT_UNAUTHORIZED !== 'false',
+    pool: {
+      max: parseInt(process.env.DB_POOL_MAX || '20', 10),
+      min: parseInt(process.env.DB_POOL_MIN || '2', 10),
+      idleTimeout: parseInt(process.env.DB_IDLE_TIMEOUT || '30000', 10),
+      connectionTimeout: parseInt(process.env.DB_CONNECTION_TIMEOUT || '10000', 10),
+    },
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET || 'change-me-in-production',
+    expiresIn: process.env.JWT_EXPIRATION || '1h',
+    refreshSecret: process.env.JWT_REFRESH_SECRET || 'change-me-in-production-refresh',
+    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRATION || '7d',
+  },
+  redis: {
+    enabled: process.env.REDIS_ENABLED !== 'false' && process.env.DEMO_MODE !== 'true',
+    host: process.env.REDIS_HOST || 'localhost',
+    port: parseInt(process.env.REDIS_PORT || '6379', 10),
+    password: process.env.REDIS_PASSWORD,
+    username: process.env.REDIS_USERNAME,
+    url: process.env.REDIS_URL,
+  },
+  rateLimit: {
+    ttl: parseInt(process.env.RATE_LIMIT_TTL || '60000', 10),
+    limit: parseInt(process.env.RATE_LIMIT_LIMIT || '100', 10),
+  },
+  fileStorage: {
+    uploadDir: process.env.UPLOAD_DIR || './uploads',
+    maxFileSize: parseInt(process.env.MAX_FILE_SIZE || '10485760', 10),
+  },
+}));
   SMTP_USER: Joi.string().email().optional(),
   SMTP_PASSWORD: Joi.string().optional(),
   SMTP_FROM: Joi.string().email().optional(),

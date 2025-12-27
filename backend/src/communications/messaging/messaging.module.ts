@@ -17,7 +17,7 @@ import { MessagingGateway } from './messaging.gateway';
 @Module({
   imports: [
     ConfigModule,
-    JwtModule.register({}), // Configuration handled in gateway
+    // JWT available globally from AuthModule
     // TypeORM entities will be imported here once created by Agent 1
     // TypeOrmModule.forFeature([Conversation, Message, Attachment]),
   ],

@@ -6,11 +6,19 @@ import { LegalEntitiesController } from './legal-entities.controller';
 import { LegalEntitiesService } from './legal-entities.service';
 import { LegalEntity } from './entities/legal-entity.entity';
 
+/**
+ * Legal Entities Module
+ * Business entities, corporations, and organizations in legal matters
+ * Features:
+ * - Corporate entity profiles
+ * - Entity relationship mapping
+ * - Corporate structure visualization
+ * - Entity compliance and filings tracking
+ */
 @Module({
   imports: [
     TypeOrmModule.forFeature([LegalEntity]),
     PassportModule,
-    JwtModule.register({}),
   ],
   controllers: [LegalEntitiesController],
   providers: [LegalEntitiesService],

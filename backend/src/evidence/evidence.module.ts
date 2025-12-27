@@ -6,6 +6,15 @@ import { EvidenceController } from './evidence.controller';
 import { EvidenceService } from './evidence.service';
 import { AuthModule } from '../auth/auth.module';
 
+/**
+ * Evidence Module
+ * Evidence tracking with chain of custody management
+ * Features:
+ * - Evidence item cataloging
+ * - Chain of custody tracking
+ * - Admissibility status management
+ * - Exhibits and demonstratives
+ */
 @Module({
   imports: [
     TypeOrmModule.forFeature([EvidenceItem, ChainOfCustodyEvent]),

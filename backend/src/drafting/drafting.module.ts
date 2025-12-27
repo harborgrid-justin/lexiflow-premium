@@ -9,6 +9,15 @@ import { DraftingTemplate } from './entities/template.entity';
 import { GeneratedDocument } from './entities/generated-document.entity';
 import { Clause } from '../clauses/entities/clause.entity';
 
+/**
+ * Drafting Module
+ * Document generation engine with template management and clause libraries
+ * Features:
+ * - Template-based document generation
+ * - Merge fields and variable substitution
+ * - Integration with clause library
+ * - Document review workflow
+ */
 @Module({
   imports: [
     AuthModule,

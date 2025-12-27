@@ -14,7 +14,6 @@ import { DataSourcesModule } from './data-sources/data-sources.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Integration]),
-    JwtModule.register({}),
     DataSourcesModule,
   ],
   controllers: [IntegrationsController, PacerController, ExternalApiController],

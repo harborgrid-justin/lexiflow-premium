@@ -41,7 +41,7 @@ const PassiveTimeTracker = memo(({ activeView, selectedCaseId }: { activeView: s
 });
 PassiveTimeTracker.displayName = 'PassiveTimeTracker';
 
-export const AppShellLayout: React.FC<AppShellLayoutProps> = ({ 
+export const AppShellLayout = React.memo<AppShellLayoutProps>(({ 
   sidebar, 
   headerContent, 
   children, 
@@ -84,4 +84,6 @@ export const AppShellLayout: React.FC<AppShellLayoutProps> = ({
       </div>
     </div>
   );
-};
+});
+
+AppShellLayout.displayName = 'AppShellLayout';

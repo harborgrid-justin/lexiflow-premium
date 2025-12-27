@@ -9,15 +9,22 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  UseGuards,
+  UseInterceptors,
+  CacheInterceptor,
+  CacheTTL,
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { ProductionsService } from './productions.service';
 import { CreateProductionDto } from './dto/create-production.dto';
 import { UpdateProductionDto } from './dto/update-production.dto';
 import { QueryProductionDto } from './dto/query-production.dto';
 
 
+@UseGuards(JwtAuthGuard)
 @Controller('productions')
+@UseInterceptors(CacheInterceptor)
 export class ProductionsController {
   constructor(private readonly productionsService: ProductionsService) {}
 

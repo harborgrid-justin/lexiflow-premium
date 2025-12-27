@@ -10,6 +10,8 @@ import {
   HttpCode,
   HttpStatus,
   ParseUUIDPipe,
+  UseInterceptors,
+  CacheInterceptor,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
 import { Public } from '../common/decorators/public.decorator';
@@ -25,6 +27,7 @@ import { CaseStatsDto } from './dto/case-stats.dto';
 @ApiBearerAuth('JWT-auth')
 
 @Controller('cases')
+@UseInterceptors(CacheInterceptor)
 export class CasesController {
   constructor(
     private readonly casesService: CasesService,

@@ -12,6 +12,7 @@ import * as path from 'path';
 import configuration from './config/configuration';
 import resourceLimitsConfig from './config/resource-limits.config';
 import { getDatabaseConfig } from './config/database.config';
+import { validationSchema, validationOptions } from './config/env.validation';
 
 // Core Modules
 import { CommonModule } from './common/common.module';
@@ -151,11 +152,16 @@ if (isRedisEnabled) {
 
 @Module({
   imports: [
-    // Configuration
+    // Configuration with Joi validation
+    // @see https://docs.nestjs.com/techniques/configuration#schema-validation
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: path.resolve(__dirname, '../.env'),
       load: [configuration, resourceLimitsConfig],
+      validationSchema,
+      validationOptions,
+      cache: true, // Cache environment variables for better performance
+      expandVariables: true, // Support ${VAR} syntax in .env files
     }),
 
     // Database
@@ -165,8 +171,7 @@ if (isRedisEnabled) {
       useFactory: getDatabaseConfig,
     }),
 
-    // JWT for global JwtAuthGuard
-    JwtModule.register({}),
+    // JWT configured globally in AuthModule
 
     // Conditionally load Bull/Redis
     ...conditionalImports,

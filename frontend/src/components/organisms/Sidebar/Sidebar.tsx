@@ -33,7 +33,7 @@ export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, is
       )}
 
       {/* Sidebar Container */}
-      <div className={cn(
+      <aside className={cn(
         "fixed inset-y-0 left-0 z-50 w-72 flex flex-col h-full border-r transform transition-transform duration-300 ease-in-out shadow-2xl md:shadow-none touch-pan-y",
         theme.surface.default,
         theme.border.default,
@@ -59,7 +59,7 @@ export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, is
             activeView={activeView}
           />
         )}
-      </div>
+      </aside>
     </>
   );
 });

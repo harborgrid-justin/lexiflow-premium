@@ -103,18 +103,36 @@ export class DiscoveryRequestsService {
     id: string,
     updateDto: UpdateDiscoveryRequestDto,
   ): Promise<DiscoveryRequest> {
-    const discoveryRequest = await this.findOne(id);
+    const result = await this.discoveryRequestRepository
+      .createQueryBuilder()
+      .update(DiscoveryRequest)
+      .set({ ...updateDto, updatedAt: new Date() })
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .returning('*')
+      .execute();
 
-    Object.assign(discoveryRequest, updateDto);
-    discoveryRequest.updatedAt = new Date();
-
-    return await this.discoveryRequestRepository.save(discoveryRequest);
+    if (!result.affected) {
+      throw new NotFoundException(
+        `Discovery request with ID ${id} not found`,
+      );
+    }
+    return result.raw[0];
   }
 
   async remove(id: string): Promise<void> {
-    const discoveryRequest = await this.findOne(id);
-    discoveryRequest.deletedAt = new Date();
-    await this.discoveryRequestRepository.save(discoveryRequest);
+    const result = await this.discoveryRequestRepository
+      .createQueryBuilder()
+      .softDelete()
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .execute();
+
+    if (!result.affected) {
+      throw new NotFoundException(
+        `Discovery request with ID ${id} not found`,
+      );
+    }
   }
 
   async getStatistics(caseId: string) {

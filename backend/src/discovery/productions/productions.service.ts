@@ -96,18 +96,32 @@ export class ProductionsService {
     id: string,
     updateDto: UpdateProductionDto,
   ): Promise<Production> {
-    const production = await this.findOne(id);
+    const result = await this.productionRepository
+      .createQueryBuilder()
+      .update(Production)
+      .set({ ...updateDto, updatedAt: new Date() })
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .returning('*')
+      .execute();
 
-    Object.assign(production, updateDto);
-    production.updatedAt = new Date();
-
-    return await this.productionRepository.save(production);
+    if (!result.affected) {
+      throw new NotFoundException(`Production with ID ${id} not found`);
+    }
+    return result.raw[0];
   }
 
   async remove(id: string): Promise<void> {
-    const production = await this.findOne(id);
-    production.deletedAt = new Date();
-    await this.productionRepository.save(production);
+    const result = await this.productionRepository
+      .createQueryBuilder()
+      .softDelete()
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .execute();
+
+    if (!result.affected) {
+      throw new NotFoundException(`Production with ID ${id} not found`);
+    }
   }
 
   async getStatistics(caseId: string) {

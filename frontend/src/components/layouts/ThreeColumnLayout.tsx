@@ -32,7 +32,7 @@ const gapClasses = {
   lg: 'gap-6',
 };
 
-export const ThreeColumnLayout: React.FC<ThreeColumnLayoutProps> = ({
+export const ThreeColumnLayout = React.memo<ThreeColumnLayoutProps>(({
   leftColumn,
   centerColumn,
   rightColumn,
@@ -63,4 +63,6 @@ export const ThreeColumnLayout: React.FC<ThreeColumnLayoutProps> = ({
       </div>
     </div>
   );
-};
+});
+
+ThreeColumnLayout.displayName = 'ThreeColumnLayout';

@@ -19,6 +19,17 @@ import { UsersModule } from '../users/users.module';
 import { AuthModule } from '../auth/auth.module';
 import { DiscoveryModule } from '../discovery/discovery.module';
 
+/**
+ * GraphQL Module
+ * Provides GraphQL API with Apollo Server and custom scalars
+ * Features:
+ * - Type-safe GraphQL schema with code-first approach
+ * - Custom scalars (DateTime, JSON, Money)
+ * - DataLoader for N+1 query optimization
+ * - Resolvers for Cases, Documents, Users, Billing, Discovery
+ * - Playground UI in development mode
+ */
+
 @Module({
   imports: [
     NestGraphQLModule.forRoot<ApolloDriverConfig>({

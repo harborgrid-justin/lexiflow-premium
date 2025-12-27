@@ -20,7 +20,7 @@ export interface MetricCardProps {
   sparklineData?: number[];
 }
 
-export function MetricCard({ 
+export const MetricCard = React.memo<MetricCardProps>(({ 
   label, 
   value, 
   icon: Icon, 
@@ -29,7 +29,7 @@ export function MetricCard({
   className = "", 
   isLive = false, 
   sparklineData 
-}: MetricCardProps) {
+}) => {
   const { theme } = useTheme();
   
   // Normalize value to handle undefined, null, and NaN
@@ -149,4 +149,6 @@ export function MetricCard({
       )}
     </div>
   );
-};
+});
+
+MetricCard.displayName = 'MetricCard';

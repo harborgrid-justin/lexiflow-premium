@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useId } from 'react';
 import { Bold, Italic, Underline, List, AlignLeft, AlignCenter, AlignRight, Highlighter, Save } from 'lucide-react';
 
 // ============================================================================
@@ -36,6 +36,7 @@ interface EditorToolbarProps {
  */
 export const EditorToolbar = React.memo<EditorToolbarProps>(({ wordCount, onCmd, onSave }) => {
   const { theme } = useTheme();
+  const formatSelectId = useId();
   const btnClass = cn(
       "p-1.5 rounded transition-colors border border-transparent",
       theme.text.primary,
@@ -47,7 +48,7 @@ export const EditorToolbar = React.memo<EditorToolbarProps>(({ wordCount, onCmd,
   return (
     <div className={cn("flex items-center gap-1 p-2 border-b flex-wrap", theme.surface.highlight, theme.border.default)}>
       <div className={cn("flex items-center gap-0.5 border-r pr-2 mr-2", theme.border.default)}>
-        <select className={cn("bg-transparent text-sm font-medium h-8 border-none outline-none cursor-pointer rounded px-1 transition-colors", theme.text.primary, `hover:${theme.surface.default}`)} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onCmd('formatBlock', e.target.value)}>
+        <select id={formatSelectId} aria-label="Text Format" className={cn("bg-transparent text-sm font-medium h-8 border-none outline-none cursor-pointer rounded px-1 transition-colors", theme.text.primary, `hover:${theme.surface.default}`)} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onCmd('formatBlock', e.target.value)}>
             <option value="p">Normal</option>
             <option value="h2">Heading 1</option>
             <option value="h3">Heading 2</option>

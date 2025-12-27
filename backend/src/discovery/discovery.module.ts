@@ -1,6 +1,24 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
+
+/**
+ * Discovery Module
+ * Comprehensive discovery management system
+ * 
+ * Features:
+ * - Evidence tracking and chain of custody
+ * - Discovery request management (interrogatories, RFPs, RFAs)
+ * - Deposition scheduling and transcript management
+ * - Document production with privilege logging
+ * - Legal hold and preservation tracking
+ * 
+ * Sub-modules:
+ * - Evidence: Physical and digital evidence cataloging
+ * - DiscoveryRequests: Interrogatories, RFPs, RFAs
+ * - Depositions: Scheduling, transcripts, exhibits
+ * - Productions: Document production and Bates numbering
+ * - LegalHolds: Preservation and litigation hold management
+ */
 
 // Main Discovery Controller & Service
 import { DiscoveryController } from './discovery.controller';
@@ -63,7 +81,6 @@ import { WitnessesService } from './witnesses/witnesses.service';
 
 @Module({
   imports: [
-    JwtModule.register({}),
     TypeOrmModule.forFeature([
       Evidence,
       DiscoveryRequest,

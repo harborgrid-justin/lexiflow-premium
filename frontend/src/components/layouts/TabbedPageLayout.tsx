@@ -38,7 +38,7 @@ interface TabbedPageLayoutProps {
   onTabChange: (tabId: string) => void;
 }
 
-export const TabbedPageLayout: React.FC<TabbedPageLayoutProps> = ({
+export const TabbedPageLayout = React.memo<TabbedPageLayoutProps>(({
   pageTitle, 
   pageSubtitle, 
   pageActions, 
@@ -118,4 +118,6 @@ export const TabbedPageLayout: React.FC<TabbedPageLayoutProps> = ({
       </div>
     </div>
   );
-};
+});
+
+TabbedPageLayout.displayName = 'TabbedPageLayout';

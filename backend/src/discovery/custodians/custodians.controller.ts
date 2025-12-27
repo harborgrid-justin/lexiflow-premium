@@ -9,15 +9,22 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  UseGuards,
+  UseInterceptors,
+  CacheInterceptor,
+  CacheTTL,
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { CustodiansService } from './custodians.service';
 import { CreateCustodianDto } from './dto/create-custodian.dto';
 import { UpdateCustodianDto } from './dto/update-custodian.dto';
 import { QueryCustodianDto } from './dto/query-custodian.dto';
 
 
+@UseGuards(JwtAuthGuard)
 @Controller('custodians')
+@UseInterceptors(CacheInterceptor)
 export class CustodiansController {
   constructor(private readonly custodiansService: CustodiansService) {}
 

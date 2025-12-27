@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import React, { useState, useId } from 'react';
 import { X, Plus } from 'lucide-react';
 
 // ============================================================================
@@ -39,6 +39,7 @@ interface TagInputProps {
 export const TagInput = React.memo<TagInputProps>(({ tags, onAdd, onRemove, suggestions = [], placeholder = "Add tag..." }) => {
   const { theme } = useTheme();
   const [input, setInput] = useState('');
+  const inputId = useId();
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -64,6 +65,7 @@ export const TagInput = React.memo<TagInputProps>(({ tags, onAdd, onRemove, sugg
       </div>
       <div className="relative">
         <input
+          id={inputId}
           className={cn(
               "w-full px-3 py-2 border rounded-md text-sm outline-none transition-colors", 
               theme.surface.default, theme.border.default, theme.text.primary,

@@ -103,18 +103,33 @@ export class CustodianInterviewsService {
     id: string,
     updateDto: UpdateCustodianInterviewDto,
   ): Promise<CustodianInterview> {
-    const interview = await this.findOne(id);
+    const result = await this.interviewRepository
+      .createQueryBuilder()
+      .update(CustodianInterview)
+      .set({ ...updateDto, updatedAt: new Date() })
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .returning('*')
+      .execute();
 
-    Object.assign(interview, updateDto);
-    interview.updatedAt = new Date();
+    if (!result.affected || result.affected === 0) {
+      throw new NotFoundException(`Custodian interview with ID ${id} not found`);
+    }
 
-    return await this.interviewRepository.save(interview);
+    return result.raw[0];
   }
 
   async remove(id: string): Promise<void> {
-    const interview = await this.findOne(id);
-    interview.deletedAt = new Date();
-    await this.interviewRepository.save(interview);
+    const result = await this.interviewRepository
+      .createQueryBuilder()
+      .softDelete()
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .execute();
+
+    if (!result.affected || result.affected === 0) {
+      throw new NotFoundException(`Custodian interview with ID ${id} not found`);
+    }
   }
 
   async getByCustodian(custodianId: string): Promise<CustodianInterview[]> {

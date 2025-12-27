@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useRef, useState, useEffect, useMemo, useImperativeHandle, forwardRef, useId } from 'react';
+import React, { useRef, useState, useEffect, useMemo, useImperativeHandle, forwardRef, useId, useDeferredValue } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -48,6 +48,7 @@ const VirtualListComponent = <T extends any>(
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
   const [containerHeight, setContainerHeight] = useState(0);
+  const deferredItems = useDeferredValue(items);
 
   // Expose scroll method via ref
   useImperativeHandle(ref, () => ({
@@ -90,7 +91,7 @@ const VirtualListComponent = <T extends any>(
     return () => observer.disconnect();
   }, []);
 
-  const safeItems = items || [];
+  const safeItems = deferredItems || [];
   const totalItemsHeight = safeItems.length * itemHeight;
   
   // Safety check for invalid height calculations

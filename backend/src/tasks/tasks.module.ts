@@ -5,10 +5,18 @@ import { TasksController } from './tasks.controller';
 import { TasksService } from './tasks.service';
 import { Task } from './entities/task.entity';
 
+/**
+ * Tasks Module
+ * Personal and team task management
+ * Features:
+ * - Task creation and assignment
+ * - Due date tracking and reminders
+ * - Task priorities and status workflow
+ * - Integration with cases and projects
+ */
 @Module({
   imports: [
     TypeOrmModule.forFeature([Task]),
-    JwtModule.register({}), // JwtService needed for JwtAuthGuard
   ],
   controllers: [TasksController],
   providers: [TasksService],

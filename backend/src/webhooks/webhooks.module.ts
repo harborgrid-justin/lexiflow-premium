@@ -4,10 +4,18 @@ import { JwtModule } from '@nestjs/jwt';
 import { WebhooksController } from './webhooks.controller';
 import { WebhooksService } from './webhooks.service';
 
+/**
+ * Webhooks Module
+ * Outbound webhook delivery and subscription management
+ * Features:
+ * - Event webhook subscriptions
+ * - Automatic retry with exponential backoff
+ * - Webhook signature verification
+ * - Delivery status tracking and logs
+ */
 @Module({
   imports: [
     ScheduleModule.forRoot(),
-    JwtModule.register({}), // Required for JwtAuthGuard
   ],
   controllers: [WebhooksController],
   providers: [WebhooksService],

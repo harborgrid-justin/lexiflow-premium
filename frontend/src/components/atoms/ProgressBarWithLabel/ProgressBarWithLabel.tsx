@@ -66,6 +66,7 @@ export const ProgressBarWithLabel: React.FC<ProgressBarWithLabelProps> = ({
 }) => {
   const { theme } = useTheme();
   const progressId = useId();
+  const labelId = `${progressId}-label`;
   const clampedValue = Math.min(100, Math.max(0, value));
   
   // Map variant to theme colors
@@ -81,7 +82,7 @@ export const ProgressBarWithLabel: React.FC<ProgressBarWithLabelProps> = ({
     <div className={cn('space-y-1', className)}>
       {(label || showPercentage) && (
         <div className="flex justify-between items-center text-sm">
-          {label && <span className="font-medium truncate">{label}</span>}
+          {label && <span id={labelId} className="font-medium truncate">{label}</span>}
           {showPercentage && (
             <span className="text-xs font-mono font-bold ml-2">
               {Math.round(clampedValue)}%
@@ -91,6 +92,11 @@ export const ProgressBarWithLabel: React.FC<ProgressBarWithLabelProps> = ({
       )}
       <div className={cn('w-full rounded-full overflow-hidden', theme.surface.highlight)}>
         <div
+          role="progressbar"
+          aria-labelledby={label ? labelId : undefined}
+          aria-valuenow={clampedValue}
+          aria-valuemin={0}
+          aria-valuemax={100}
           className={cn(
             'rounded-full',
             HEIGHT_CLASSES[height],

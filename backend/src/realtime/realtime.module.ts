@@ -5,6 +5,17 @@ import { RealtimeGateway } from './realtime.gateway';
 import { WsRateLimitGuard } from '../common/guards/ws-rate-limit.guard';
 import { WsRoomLimitGuard } from '../common/guards/ws-room-limit.guard';
 
+/**
+ * Realtime Module
+ * WebSocket gateway for real-time collaboration and notifications
+ * Features:
+ * - Real-time document collaboration
+ * - Live case updates and notifications
+ * - Presence detection (who's viewing what)
+ * - Rate limiting and room-based access control
+ * 
+ * Uses Socket.IO for bi-directional WebSocket communication
+ */
 @Module({
   imports: [
     ConfigModule,

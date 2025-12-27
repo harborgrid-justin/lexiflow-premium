@@ -26,9 +26,10 @@ class BackendDiscoveryService {
 
   private checkInterval: NodeJS.Timeout | null = null;
   private listeners: Set<BackendStatusCallback> = new Set();
-  private readonly CHECK_INTERVAL_MS = 30000; // Check every 30 seconds
+  private readonly CHECK_INTERVAL_MS = 60000; // Check every 60 seconds (optimized for performance)
   private readonly HEALTH_ENDPOINT = `${API_BASE_URL}/api/v1/health`; // Backend runs on port 5000
-  private readonly TIMEOUT_MS = 5000; // 5 second timeout
+  private readonly TIMEOUT_MS = 3000; // 3 second timeout (faster failure detection)
+  private notifyTimeout: NodeJS.Timeout | null = null; // Debounce notifications
 
   /**
    * Start auto-discovery service
@@ -54,6 +55,11 @@ class BackendDiscoveryService {
     if (this.checkInterval) {
       clearInterval(this.checkInterval);
       this.checkInterval = null;
+    }
+
+    if (this.notifyTimeout) {
+      clearTimeout(this.notifyTimeout);
+      this.notifyTimeout = null;
     }
   }
 
@@ -142,16 +148,25 @@ class BackendDiscoveryService {
   }
 
   /**
-   * Notify all registered listeners
+   * Notify all registered listeners (debounced to prevent performance issues)
    */
   private notifyListeners(): void {
-    this.listeners.forEach(callback => {
-      try {
-        callback(this.status);
-      } catch (error) {
-        console.error('[BackendDiscovery] Error in listener callback:', error);
-      }
-    });
+    // Clear any pending notification
+    if (this.notifyTimeout) {
+      clearTimeout(this.notifyTimeout);
+    }
+
+    // Debounce notifications by 100ms to batch rapid updates
+    this.notifyTimeout = setTimeout(() => {
+      this.listeners.forEach(callback => {
+        try {
+          callback(this.status);
+        } catch (error) {
+          console.error('[BackendDiscovery] Error in listener callback:', error);
+        }
+      });
+      this.notifyTimeout = null;
+    }, 100);
   }
 
   /**

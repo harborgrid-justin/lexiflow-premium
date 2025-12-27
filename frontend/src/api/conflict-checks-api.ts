@@ -26,7 +26,7 @@ export interface ConflictCheck {
 }
 
 export class ConflictChecksApiService {
-  private readonly baseUrl = '/compliance/conflicts';
+  private readonly baseUrl = '/api/v1/compliance/conflicts';
 
   async run(data: { clientName: string; opposingParties?: string[]; caseType?: string }): Promise<ConflictCheck> {
     return apiClient.post<ConflictCheck>(`${this.baseUrl}/run`, data);

@@ -188,21 +188,21 @@ export const BackendHealthMonitor: React.FC<BackendHealthMonitorProps> = ({ isOp
                     <div className="grid grid-cols-2 gap-3 text-xs">
                       {serviceHealth.latency !== undefined && (
                         <div>
-                          <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 mb-1">
+                          <div className={cn("flex items-center gap-1 mb-1", theme.text.tertiary)}>
                             <Zap className="h-3 w-3" />
                             <span className="font-semibold">Latency</span>
                           </div>
-                          <div className="font-mono font-bold">
+                          <div className={cn("font-mono font-bold", theme.text.primary)}>
                             {serviceHealth.latency}ms
                           </div>
                         </div>
                       )}
                       <div>
-                        <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 mb-1">
+                        <div className={cn("flex items-center gap-1 mb-1", theme.text.tertiary)}>
                           <Clock className="h-3 w-3" />
                           <span className="font-semibold">Last Check</span>
                         </div>
-                        <div className="font-mono text-xs">
+                        <div className={cn("font-mono text-xs", theme.text.primary)}>
                           {new Date(serviceHealth.lastChecked).toLocaleTimeString()}
                         </div>
                       </div>
@@ -225,7 +225,7 @@ export const BackendHealthMonitor: React.FC<BackendHealthMonitorProps> = ({ isOp
 
           {/* Footer */}
           <div className={cn("px-6 py-4 border-t", theme.border.default)}>
-            <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+            <div className={cn("flex items-center gap-2 text-xs", theme.text.tertiary)}>
               <TrendingUp className="h-4 w-4" />
               <span>Health checks run against backend API endpoints to monitor service availability and performance.</span>
             </div>

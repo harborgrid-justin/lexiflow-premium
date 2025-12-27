@@ -102,20 +102,22 @@ export class CaseImportService {
     const prompt = `
       Extract case data from the following text/document and return a JSON object.
       
-      Fields to extract:
-      - title (Case Name)
-      - caseNumber
-      - description
-      - type (Civil, Criminal, etc.)
-      - status
-      - practiceArea
-      - jurisdiction
-      - court
-      - judge
-      - filingDate (YYYY-MM-DD)
-      - trialDate (YYYY-MM-DD)
-      - causeOfAction
-      - natureOfSuit
+      REQUIRED: Return these exact field names:
+      - title (the case name/title, e.g., "Gibson v. Mississippi")
+      - caseNumber (case/docket number or citation if no docket exists, e.g., "162 U.S. 565")
+      - description (brief case summary)
+      - type (Civil, Criminal, Administrative, etc.)
+      - status (Active, Pending, Closed, etc.)
+      - practiceArea (Civil Rights, Employment, Contracts, etc.)
+      - jurisdiction (Federal, State, etc.)
+      - court (full court name)
+      - judge (presiding judge name)
+      - filingDate (YYYY-MM-DD format)
+      - trialDate (YYYY-MM-DD format)
+      - causeOfAction (legal basis for the suit)
+      - natureOfSuit (description of the legal matter)
+      
+      IMPORTANT: Use 'title' for case name, NOT 'caseName'. Use 'caseNumber' for docket/citation.
       
       Document content:
       ${content.slice(0, 20000)}
@@ -126,7 +128,41 @@ export class CaseImportService {
     const text = response.text();
     
     try {
-      return JSON.parse(text) as ParsedCaseData;
+      const parsed = JSON.parse(text) as any;
+      // Normalize field names in case AI returns variations
+      const normalized: ParsedCaseData = {
+        title: parsed.title || parsed.caseName || parsed.case_name,
+        caseNumber: parsed.caseNumber || parsed.case_number || parsed.citation || parsed.docketNumber,
+        description: parsed.description || parsed.summary,
+        type: parsed.type || parsed.caseType,
+        status: parsed.status,
+        practiceArea: parsed.practiceArea || parsed.practice_area,
+        jurisdiction: parsed.jurisdiction,
+        court: parsed.court || parsed.courtName,
+        judge: parsed.judge || parsed.presidingJudge,
+        referredJudge: parsed.referredJudge || parsed.referred_judge,
+        magistrateJudge: parsed.magistrateJudge || parsed.magistrate_judge,
+        filingDate: parsed.filingDate || parsed.filing_date || parsed.dateFiled,
+        trialDate: parsed.trialDate || parsed.trial_date,
+        closeDate: parsed.closeDate || parsed.close_date,
+        dateTerminated: parsed.dateTerminated || parsed.date_terminated,
+        juryDemand: parsed.juryDemand || parsed.jury_demand,
+        causeOfAction: parsed.causeOfAction || parsed.cause_of_action,
+        natureOfSuit: parsed.natureOfSuit || parsed.nature_of_suit,
+        natureOfSuitCode: parsed.natureOfSuitCode || parsed.nature_of_suit_code,
+        relatedCases: parsed.relatedCases || parsed.related_cases,
+        assignedTeamId: parsed.assignedTeamId || parsed.assigned_team_id,
+        leadAttorneyId: parsed.leadAttorneyId || parsed.lead_attorney_id,
+        clientId: parsed.clientId || parsed.client_id,
+        metadata: parsed.metadata || parsed
+      };
+      // Remove undefined values
+      Object.keys(normalized).forEach(key => {
+        if (normalized[key as keyof ParsedCaseData] === undefined) {
+          delete normalized[key as keyof ParsedCaseData];
+        }
+      });
+      return normalized;
     } catch (e) {
       this.logger.error('Failed to parse Gemini JSON response', e);
       return {};
@@ -145,7 +181,7 @@ export class CaseImportService {
       messages: [
         {
           role: 'system',
-          content: 'You are a legal assistant. Extract case data from the provided text and return it as JSON.'
+          content: 'You are a legal assistant. Extract case data from the provided text and return it as JSON with these exact fields: title (case name), caseNumber (docket/citation), description, type, status, practiceArea, jurisdiction, court, judge, filingDate (YYYY-MM-DD), trialDate, causeOfAction, natureOfSuit. Use "title" NOT "caseName", and "caseNumber" NOT "citation".'
         },
         {
           role: 'user',
@@ -241,7 +277,7 @@ export class CaseImportService {
       }
       
       // Try extracting from first line if it looks like a title (short, no periods at end)
-      if (!data.title && lines.length > 0) {
+      if (!data.title && lines.length > 0 && lines[0]) {
         const firstLine = lines[0].trim();
         if (firstLine.length > 5 && firstLine.length < 100 && !firstLine.endsWith('.')) {
           data.title = firstLine;

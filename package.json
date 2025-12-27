@@ -24,6 +24,7 @@
     "install:all": "npm install && npm install --workspace=frontend && npm install --workspace=backend && npm install --workspace=@lexiflow/shared-types"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "xmldom": "^0.6.0"
   }
 }

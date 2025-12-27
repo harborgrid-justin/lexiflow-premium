@@ -5,24 +5,24 @@ export class ComplianceCheck {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column()
+  @Column({ name: 'case_id' })
   caseId!: string;
 
-  @Column()
+  @Column({ name: 'rule_id' })
   ruleId!: string;
 
   @Column()
   status!: string;
 
-  @Column({ type: 'timestamp' })
+  @Column({ name: 'checked_at', type: 'timestamp' })
   checkedAt!: Date;
 
   @Column('jsonb', { nullable: true })
   details: Record<string, unknown> | null = null;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 }

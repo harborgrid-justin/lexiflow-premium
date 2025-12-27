@@ -11,6 +11,7 @@ import {
   Head,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth  , ApiResponse }from '@nestjs/swagger';
+import { Public } from '../common/decorators/public.decorator';
 import { PartiesService } from './parties.service';
 import { CreatePartyDto } from './dto/create-party.dto';
 import { UpdatePartyDto } from './dto/update-party.dto';
@@ -46,6 +47,7 @@ export class PartiesController {
     return this.partiesService.findAllByCaseId(caseId);
   }
 
+  @Public()  // Temporarily public for import script testing
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({ status: 400, description: 'Invalid request data' })

@@ -39,23 +39,20 @@ export const OpenAIService = {
     return withRetry(async () => {
       try {
         const client = getClient();
-        const completion = await client.chat.completions.create({
+        const response = await client.responses.create({
           model: 'gpt-4o-mini',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a legal document analyzer. Analyze the document and provide a risk score (0-100) and summary.'
-            },
-            {
-              role: 'user',
-              content: `Analyze this legal document and return JSON with {summary: string, riskScore: number}:\n\n${content.slice(0, 10000)}`
+          instructions: 'You are a legal document analyzer. Analyze the document and provide a risk score (0-100) and summary.',
+          input: `Analyze this legal document and return JSON with {summary: string, riskScore: number}:\n\n${content.slice(0, 10000)}`,
+          text: {
+            format: {
+              type: 'json_object'
             }
-          ],
-          response_format: { type: 'json_object' },
+          },
           temperature: 0.3
         });
 
-        const result = JSON.parse(completion.choices[0].message.content || '{}');
+        const textContent = response.output_text || '';
+        const result = JSON.parse(textContent || '{}');
         return { summary: result.summary || 'Analysis unavailable', riskScore: result.riskScore || 0 };
       } catch (e) {
         console.error('OpenAI Analysis Error:', e);
@@ -68,23 +65,20 @@ export const OpenAIService = {
     return withRetry(async () => {
       try {
         const client = getClient();
-        const completion = await client.chat.completions.create({
+        const response = await client.responses.create({
           model: 'gpt-4o',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a senior legal partner reviewing a brief. Provide constructive critique.'
-            },
-            {
-              role: 'user',
-              content: `Critique this brief and return JSON with {score: number, strengths: string[], weaknesses: string[], suggestions: string[], missingAuthority: string[]}:\n\n${text.slice(0, 15000)}`
+          instructions: 'You are a senior legal partner reviewing a brief. Provide constructive critique.',
+          input: `Critique this brief and return JSON with {score: number, strengths: string[], weaknesses: string[], suggestions: string[], missingAuthority: string[]}:\n\n${text.slice(0, 15000)}`,
+          text: {
+            format: {
+              type: 'json_object'
             }
-          ],
-          response_format: { type: 'json_object' },
+          },
           temperature: 0.4
         });
 
-        const result = JSON.parse(completion.choices[0].message.content || '{}');
+        const textContent = response.output_text || '';
+        const result = JSON.parse(textContent || '{}');
         return {
           score: result.score || 0,
           strengths: result.strengths || [],
@@ -103,22 +97,14 @@ export const OpenAIService = {
     return withRetry(async () => {
       try {
         const client = getClient();
-        const completion = await client.chat.completions.create({
+        const response = await client.responses.create({
           model: 'gpt-4o-mini',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a contract review attorney. Identify risks and missing clauses.'
-            },
-            {
-              role: 'user',
-              content: `Review this contract:\n\n${text.slice(0, 10000)}`
-            }
-          ],
+          instructions: 'You are a contract review attorney. Identify risks and missing clauses.',
+          input: `Review this contract:\n\n${text.slice(0, 10000)}`,
           temperature: 0.3
         });
 
-        return completion.choices[0].message.content || 'Error reviewing contract.';
+        return response.output_text || 'Error reviewing contract.';
       } catch (e) {
         return 'Contract review service unavailable.';
       }
@@ -128,25 +114,26 @@ export const OpenAIService = {
   async *streamDraft(context: string, type: string): AsyncGenerator<string, void, unknown> {
     try {
       const client = getClient();
-      const stream = await client.chat.completions.create({
+      const stream = await client.responses.create({
         model: 'gpt-4o',
-        messages: [
-          {
-            role: 'system',
-            content: `You are a legal drafting assistant. Generate a professional ${type}.`
-          },
-          {
-            role: 'user',
-            content: context.slice(0, 10000)
-          }
-        ],
+        instructions: `You are a legal drafting assistant. Generate a professional ${type}.`,
+        input: context.slice(0, 10000),
         stream: true,
         temperature: 0.7
       });
 
-      for await (const chunk of stream) {
-        const content = chunk.choices[0]?.delta?.content;
-        if (content) yield content;
+      for await (const event of stream) {
+        if (event.type === 'response.output_item.added' && event.item.type === 'message') {
+          const content = event.item.content?.[0];
+          if (content && content.type === 'output_text') {
+            yield content.text || '';
+          }
+        } else if (event.type === 'response.output_item.delta') {
+          const delta = event.delta;
+          if (delta && delta.type === 'output_text' && delta.text) {
+            yield delta.text;
+          }
+        }
       }
     } catch (e) {
       yield 'Error streaming content.';
@@ -157,22 +144,14 @@ export const OpenAIService = {
     return withRetry(async () => {
       try {
         const client = getClient();
-        const completion = await client.chat.completions.create({
+        const response = await client.responses.create({
           model: 'gpt-4o',
-          messages: [
-            {
-              role: 'system',
-              content: `You are a legal drafting assistant. Generate a professional ${type}.`
-            },
-            {
-              role: 'user',
-              content: prompt.slice(0, 10000)
-            }
-          ],
+          instructions: `You are a legal drafting assistant. Generate a professional ${type}.`,
+          input: prompt.slice(0, 10000),
           temperature: 0.7
         });
 
-        return completion.choices[0].message.content || 'Error generating content.';
+        return response.output_text || 'Error generating content.';
       } catch (e) {
         return 'Generation failed.';
       }
@@ -183,23 +162,20 @@ export const OpenAIService = {
     return withRetry(async () => {
       try {
         const client = getClient();
-        const completion = await client.chat.completions.create({
+        const response = await client.responses.create({
           model: 'gpt-4o-mini',
-          messages: [
-            {
-              role: 'system',
-              content: 'Predict user intent and return JSON with {action: string, confidence: number}'
-            },
-            {
-              role: 'user',
-              content: query
+          instructions: 'Predict user intent and return JSON with {action: string, confidence: number}',
+          input: query,
+          text: {
+            format: {
+              type: 'json_object'
             }
-          ],
-          response_format: { type: 'json_object' },
+          },
           temperature: 0.2
         });
 
-        const result = JSON.parse(completion.choices[0].message.content || '{}');
+        const textContent = response.output_text || '';
+        const result = JSON.parse(textContent || '{}');
         return { action: result.action || 'UNKNOWN', confidence: result.confidence || 0 };
       } catch (e) {
         return { action: 'UNKNOWN', confidence: 0 };
@@ -211,23 +187,20 @@ export const OpenAIService = {
     return withRetry(async () => {
       try {
         const client = getClient();
-        const completion = await client.chat.completions.create({
+        const response = await client.responses.create({
           model: 'gpt-4o-mini',
-          messages: [
-            {
-              role: 'system',
-              content: 'Extract case data from docket and return structured JSON.'
-            },
-            {
-              role: 'user',
-              content: `Parse this docket:\n\n${text.slice(0, 10000)}`
+          instructions: 'Extract case data from docket and return structured JSON.',
+          input: `Parse this docket:\n\n${text.slice(0, 10000)}`,
+          text: {
+            format: {
+              type: 'json_object'
             }
-          ],
-          response_format: { type: 'json_object' },
+          },
           temperature: 0.1
         });
 
-        return JSON.parse(completion.choices[0].message.content || '{}');
+        const textContent = response.output_text || '';
+        return JSON.parse(textContent || '{}');
       } catch (e) {
         console.error('Docket Parse Error', e);
         return {};
@@ -239,23 +212,15 @@ export const OpenAIService = {
     return withRetry(async () => {
       try {
         const client = getClient();
-        const completion = await client.chat.completions.create({
+        const response = await client.responses.create({
           model: 'gpt-4o',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a legal research assistant. Provide thorough legal analysis.'
-            },
-            {
-              role: 'user',
-              content: query
-            }
-          ],
+          instructions: 'You are a legal research assistant. Provide thorough legal analysis.',
+          input: query,
           temperature: 0.3
         });
 
         return {
-          text: completion.choices[0].message.content || 'Research unavailable.',
+          text: response.output_text || 'Research unavailable.',
           sources: []
         };
       } catch (e) {
@@ -271,22 +236,14 @@ export const OpenAIService = {
     return withRetry(async () => {
       try {
         const client = getClient();
-        const completion = await client.chat.completions.create({
+        const response = await client.responses.create({
           model: 'gpt-4o-mini',
-          messages: [
-            {
-              role: 'system',
-              content: `Draft a professional reply to this message from a ${role}.`
-            },
-            {
-              role: 'user',
-              content: lastMsg
-            }
-          ],
+          instructions: `Draft a professional reply to this message from a ${role}.`,
+          input: lastMsg,
           temperature: 0.5
         });
 
-        return completion.choices[0].message.content || '';
+        return response.output_text || '';
       } catch (e) {
         return 'Unable to generate reply.';
       }
@@ -297,22 +254,14 @@ export const OpenAIService = {
     return withRetry(async () => {
       try {
         const client = getClient();
-        const completion = await client.chat.completions.create({
+        const response = await client.responses.create({
           model: 'gpt-4o-mini',
-          messages: [
-            {
-              role: 'system',
-              content: 'Rewrite time entries to be ABA-compliant and professional.'
-            },
-            {
-              role: 'user',
-              content: desc
-            }
-          ],
+          instructions: 'Rewrite time entries to be ABA-compliant and professional.',
+          input: desc,
           temperature: 0.3
         });
 
-        return completion.choices[0].message.content || desc;
+        return response.output_text || desc;
       } catch (e) {
         return desc;
       }
@@ -323,23 +272,20 @@ export const OpenAIService = {
     return withRetry(async () => {
       try {
         const client = getClient();
-        const completion = await client.chat.completions.create({
+        const response = await client.responses.create({
           model: 'gpt-4o',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a legal research assistant. Analyze case citation validity and treatment history. Return JSON with {status: string, treatment: string[], citingCases: string[], redFlags: string[]}.'
-            },
-            {
-              role: 'user',
-              content: `Shepardize this citation: ${citation}`
+          instructions: 'You are a legal research assistant. Analyze case citation validity and treatment history. Return JSON with {status: string, treatment: string[], citingCases: string[], redFlags: string[]}.',
+          input: `Shepardize this citation: ${citation}`,
+          text: {
+            format: {
+              type: 'json_object'
             }
-          ],
-          response_format: { type: 'json_object' },
+          },
           temperature: 0.2
         });
 
-        const result = JSON.parse(completion.choices[0].message.content || '{}');
+        const textContent = response.output_text || '';
+        const result = JSON.parse(textContent || '{}');
         return {
           status: result.status || 'Unknown',
           treatment: result.treatment || [],
@@ -362,23 +308,20 @@ export const OpenAIService = {
     return withRetry(async () => {
       try {
         const client = getClient();
-        const completion = await client.chat.completions.create({
+        const response = await client.responses.create({
           model: 'gpt-4o',
-          messages: [
-            {
-              role: 'system',
-              content: 'Extract structured case data from unstructured text. Return JSON with case details including parties, attorneys, dates, court, etc.'
-            },
-            {
-              role: 'user',
-              content: `Extract case data from this text:\n\n${text.slice(0, 15000)}`
+          instructions: 'Extract structured case data from unstructured text. Return JSON with case details including parties, attorneys, dates, court, etc.',
+          input: `Extract case data from this text:\n\n${text.slice(0, 15000)}`,
+          text: {
+            format: {
+              type: 'json_object'
             }
-          ],
-          response_format: { type: 'json_object' },
+          },
           temperature: 0.1
         });
 
-        return JSON.parse(completion.choices[0].message.content || '{}');
+        const textContent = response.output_text || '';
+        return JSON.parse(textContent || '{}');
       } catch (e) {
         console.error('Extract Case Data Error:', e);
         return {};

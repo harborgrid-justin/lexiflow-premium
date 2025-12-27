@@ -39,6 +39,10 @@ import { DocketEntry } from '@/types';
 export const DocketAnalytics: React.FC = () => {
   const { theme } = useTheme();
   
+  // Get chart theme colors
+  const chartColors = ChartColorService.getPalette(theme.mode as 'light' | 'dark');
+  const chartTheme = ChartColorService.getTheme(theme.mode as 'light' | 'dark');
+  
   // Enterprise Data Access
   const { data: entries } = useQuery<DocketEntry[]>(
       ['docket', 'all'],

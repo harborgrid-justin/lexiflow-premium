@@ -63,8 +63,8 @@ export const tokens = {
       background: 'bg-slate-50',
       text: {
         primary: 'text-slate-900',
-        secondary: 'text-slate-500',
-        tertiary: 'text-slate-400',
+        secondary: 'text-slate-600',
+        tertiary: 'text-slate-500',
         inverse: 'text-white',
         link: 'text-blue-600 hover:text-blue-700',
         code: 'text-pink-600',

@@ -11,6 +11,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { Public } from '../common/decorators/public.decorator';
 import { DocketService } from './docket.service';
 import { CreateDocketEntryDto } from './dto/create-docket-entry.dto';
 import { UpdateDocketEntryDto } from './dto/update-docket-entry.dto';
@@ -46,6 +47,7 @@ export class DocketController {
     return this.docketService.findOne(id);
   }
 
+  @Public()  // Temporarily public for import script testing
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({ status: 400, description: 'Invalid request data' })

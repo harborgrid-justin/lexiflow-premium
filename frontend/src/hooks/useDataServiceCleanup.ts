@@ -21,7 +21,7 @@ interface UseDataServiceCleanupOptions {
   enableLogging?: boolean;
   
   /**
-   * Logging interval in milliseconds (default: 60000 = 1 minute)
+   * Logging interval in milliseconds (default: 120000 = 2 minutes)
    */
   loggingInterval?: number;
 }
@@ -38,7 +38,7 @@ interface UseDataServiceCleanupOptions {
  * ```
  */
 export function useDataServiceCleanup(options: UseDataServiceCleanupOptions = {}) {
-  const { enableLogging = false, loggingInterval = 60000 } = options;
+  const { enableLogging = false, loggingInterval = 120000 } = options;
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | null = null;

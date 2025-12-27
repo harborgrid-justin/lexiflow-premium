@@ -1,22 +1,32 @@
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsString, MinLength, MaxLength, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
+/**
+ * Login DTO with enterprise-grade validation
+ * Password minimum length matches password policy service (12 characters)
+ */
 export class LoginDto {
   @ApiProperty({
     description: 'User email address',
     example: 'user@lexiflow.com',
-    format: 'email'
+    format: 'email',
   })
-  @IsEmail()
+  @IsEmail({}, { message: 'Please provide a valid email address' })
+  @IsNotEmpty({ message: 'Email is required' })
+  @Transform(({ value }) => value?.toLowerCase().trim())
   email!: string;
 
   @ApiProperty({
-    description: 'User password (minimum 8 characters)',
+    description: 'User password (minimum 12 characters per enterprise policy)',
     example: 'SecurePass123!',
-    minLength: 8,
-    format: 'password'
+    minLength: 12,
+    maxLength: 128,
+    format: 'password',
   })
   @IsString()
-  @MinLength(8)
+  @IsNotEmpty({ message: 'Password is required' })
+  @MinLength(12, { message: 'Password must be at least 12 characters long' })
+  @MaxLength(128, { message: 'Password cannot exceed 128 characters' })
   password!: string;
 }

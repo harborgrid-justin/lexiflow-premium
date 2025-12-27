@@ -637,6 +637,18 @@ export class ErrorCodes {
   };
 
   // ============================================================================
+  // RESOURCE ERRORS (Generic)
+  // ============================================================================
+  static readonly RESOURCE_NOT_FOUND: ErrorCodeDefinition = {
+    code: 'RESOURCE_NOT_FOUND',
+    httpStatus: HttpStatus.NOT_FOUND,
+    message: 'The requested resource was not found',
+    category: ErrorCategory.BUSINESS_LOGIC,
+    severity: ErrorSeverity.LOW,
+    retryable: false,
+  };
+
+  // ============================================================================
   // USER MANAGEMENT ERRORS (USER_*)
   // ============================================================================
   static readonly USER_NOT_FOUND: ErrorCodeDefinition = {

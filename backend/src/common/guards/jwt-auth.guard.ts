@@ -1,11 +1,15 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 interface JwtPayload {
   sub: string;
   email: string;
   role: string;
+  jti?: string;
+  iat?: number;
+  exp?: number;
   [key: string]: unknown;
 }
 
@@ -17,9 +21,14 @@ interface RequestWithAuth {
 }
 
 /**
- * Consolidated JWT Authentication Guard
- * Validates JWT tokens and checks public route access
- * Supports both 'isPublic' metadata key for backwards compatibility
+ * Enterprise JWT Authentication Guard
+ * Validates JWT tokens using ConfigService for secure configuration management
+ *
+ * Features:
+ * - Uses ConfigService instead of direct process.env access
+ * - Supports @Public() decorator for unauthenticated routes
+ * - Comprehensive error handling and logging
+ * - Token payload validation
  *
  * @example Usage
  * @UseGuards(JwtAuthGuard)
@@ -32,9 +41,12 @@ interface RequestWithAuth {
  */
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
+  private readonly logger = new Logger(JwtAuthGuard.name);
+
   constructor(
-    private jwtService: JwtService,
-    private reflector: Reflector,
+    private readonly jwtService: JwtService,
+    private readonly reflector: Reflector,
+    private readonly configService: ConfigService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -58,18 +70,28 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     try {
-      const jwtSecret = process.env.JWT_SECRET;
+      // Use ConfigService for secure JWT secret access
+      const jwtSecret = this.configService.get<string>('jwt.secret');
       if (!jwtSecret) {
+        this.logger.error('JWT secret not configured - check environment variables');
         throw new UnauthorizedException('Server configuration error');
       }
+
       const payload = await this.jwtService.verifyAsync<JwtPayload>(token, {
         secret: jwtSecret,
       });
+
+      // Validate required payload fields
+      if (!payload.sub || !payload.email) {
+        throw new UnauthorizedException('Invalid token payload');
+      }
+
       request.user = payload;
     } catch (error) {
       if (error instanceof UnauthorizedException) {
         throw error;
       }
+      this.logger.debug(`Token verification failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
       throw new UnauthorizedException('Invalid or expired token');
     }
 

@@ -253,7 +253,7 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
       [HttpStatus.BAD_REQUEST]: 'VAL_INVALID_INPUT',
       [HttpStatus.UNAUTHORIZED]: 'AUTH_TOKEN_INVALID',
       [HttpStatus.FORBIDDEN]: 'AUTHZ_INSUFFICIENT_PERMISSIONS',
-      [HttpStatus.NOT_FOUND]: 'USER_NOT_FOUND',
+      [HttpStatus.NOT_FOUND]: 'RESOURCE_NOT_FOUND',
       [HttpStatus.CONFLICT]: 'DB_DUPLICATE_ENTRY',
       [HttpStatus.REQUEST_TIMEOUT]: 'SYS_TIMEOUT',
       [HttpStatus.PAYLOAD_TOO_LARGE]: 'DOC_FILE_TOO_LARGE',
@@ -414,15 +414,23 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
 
   /**
    * Sanitize database error
+   * SECURITY: Only return error type, do not expose schema details
    */
   private sanitizeDatabaseError(exception: QueryFailedError): Record<string, any> {
     const driverError = exception.driverError as any;
 
-    return {
+    // Log detailed database error for debugging (server-side only)
+    this.logger.debug('Database error details', {
       constraint: driverError?.constraint,
       table: driverError?.table,
       column: driverError?.column,
-      code: driverError?.code,
+      pgCode: driverError?.code,
+    });
+
+    // Return only non-sensitive information to client
+    // Do NOT expose table, column, or constraint names as this reveals schema
+    return {
+      errorType: 'database_error',
     };
   }
 
@@ -500,9 +508,11 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
   }
 
   /**
-   * Generate correlation ID
+   * Generate correlation ID using cryptographically secure random bytes
    */
   private generateCorrelationId(): string {
-    return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    // Use crypto for unpredictable, globally unique correlation IDs
+    const crypto = require('crypto');
+    return crypto.randomUUID();
   }
 }

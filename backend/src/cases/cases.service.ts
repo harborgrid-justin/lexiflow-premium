@@ -71,6 +71,79 @@ export class CasesService {
     };
   }
 
+  /**
+   * Get case metrics using efficient database aggregation
+   * PERFORMANCE: Uses COUNT and GROUP BY instead of loading all records
+   * This is critical for enterprise scale - O(1) memory usage
+   */
+  async getCaseMetrics(): Promise<{
+    totalCases: number;
+    activeCases: number;
+    closedCases: number;
+    pendingCases: number;
+    byType: Array<{ type: string; count: number }>;
+    byStatus: Array<{ status: string; count: number }>;
+  }> {
+    // Get total count
+    const totalCases = await this.caseRepository.count({
+      cache: 30000, // 30 second cache for performance
+    });
+
+    // Get counts by status using database aggregation
+    const statusCounts = await this.caseRepository
+      .createQueryBuilder('case')
+      .select('case.status', 'status')
+      .addSelect('COUNT(*)', 'count')
+      .groupBy('case.status')
+      .cache(30000)
+      .getRawMany();
+
+    // Get counts by type using database aggregation
+    const typeCounts = await this.caseRepository
+      .createQueryBuilder('case')
+      .select('case.type', 'type')
+      .addSelect('COUNT(*)', 'count')
+      .groupBy('case.type')
+      .cache(30000)
+      .getRawMany();
+
+    // Calculate specific status counts from aggregated data
+    let activeCases = 0;
+    let closedCases = 0;
+    let pendingCases = 0;
+
+    for (const row of statusCounts) {
+      const count = parseInt(row.count, 10);
+      switch (row.status) {
+        case CaseStatus.ACTIVE:
+          activeCases = count;
+          break;
+        case CaseStatus.CLOSED:
+        case CaseStatus.CLOSED_LOWER:
+          closedCases += count;
+          break;
+        case CaseStatus.PENDING:
+          pendingCases = count;
+          break;
+      }
+    }
+
+    return {
+      totalCases,
+      activeCases,
+      closedCases,
+      pendingCases,
+      byType: typeCounts.map((row) => ({
+        type: row.type || 'Unknown',
+        count: parseInt(row.count, 10),
+      })),
+      byStatus: statusCounts.map((row) => ({
+        status: row.status || 'Unknown',
+        count: parseInt(row.count, 10),
+      })),
+    };
+  }
+
   async findAll(filterDto: CaseFilterDto): Promise<PaginatedCaseResponseDto> {
     const {
       search,

@@ -133,35 +133,42 @@ export class UsersService implements OnModuleInit {
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<AuthenticatedUser> {
-    const user = await this.userRepository.findOne({ where: { id } });
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
     // Check if email is being changed and if it already exists
-    if (updateUserDto.email && updateUserDto.email !== user.email) {
+    if (updateUserDto.email) {
       const existingUser = await this.userRepository.findOne({
         where: { email: updateUserDto.email },
       });
-      if (existingUser) {
+      if (existingUser && existingUser.id !== id) {
         throw new ConflictException('User with this email already exists');
       }
     }
 
-    // Update fields
-    if (updateUserDto.email) user.email = updateUserDto.email;
-    if (updateUserDto.firstName) user.firstName = updateUserDto.firstName;
-    if (updateUserDto.lastName) user.lastName = updateUserDto.lastName;
-    if (updateUserDto.role) user.role = this.mapToUserRole(updateUserDto.role);
+    // Build update object
+    const updateData: any = {};
+    if (updateUserDto.email) updateData.email = updateUserDto.email;
+    if (updateUserDto.firstName) updateData.firstName = updateUserDto.firstName;
+    if (updateUserDto.lastName) updateData.lastName = updateUserDto.lastName;
+    if (updateUserDto.role) updateData.role = this.mapToUserRole(updateUserDto.role);
     if (updateUserDto.isActive !== undefined) {
-      user.status = updateUserDto.isActive ? UserStatus.ACTIVE : UserStatus.INACTIVE;
+      updateData.status = updateUserDto.isActive ? UserStatus.ACTIVE : UserStatus.INACTIVE;
     }
     if (updateUserDto.mfaEnabled !== undefined) {
-      user.twoFactorEnabled = updateUserDto.mfaEnabled;
+      updateData.twoFactorEnabled = updateUserDto.mfaEnabled;
     }
 
-    const updatedUser = await this.userRepository.save(user);
-    return this.toAuthenticatedUser(updatedUser);
+    const result = await this.userRepository
+      .createQueryBuilder()
+      .update(User)
+      .set(updateData)
+      .where('id = :id', { id })
+      .returning('*')
+      .execute();
+
+    if (!result.affected || result.affected === 0) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.toAuthenticatedUser(result.raw[0]);
   }
 
   async remove(id: string): Promise<void> {

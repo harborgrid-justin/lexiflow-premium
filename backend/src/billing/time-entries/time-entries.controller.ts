@@ -9,6 +9,8 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  UseInterceptors,
+  CacheInterceptor,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
 import { TimeEntriesService } from './time-entries.service';
@@ -21,6 +23,7 @@ import { TimeEntry } from './entities/time-entry.entity';
 @ApiBearerAuth('JWT-auth')
 
 @Controller('billing/time-entries')
+@UseInterceptors(CacheInterceptor)
 export class TimeEntriesController {
   constructor(private readonly timeEntriesService: TimeEntriesService) {}
 

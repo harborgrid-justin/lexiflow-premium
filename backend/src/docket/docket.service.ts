@@ -46,9 +46,19 @@ export class DocketService {
   }
 
   async update(id: string, updateDocketEntryDto: UpdateDocketEntryDto): Promise<DocketEntry> {
-    const entry = await this.findOne(id);
-    Object.assign(entry, updateDocketEntryDto);
-    return this.docketRepository.save(entry);
+    const result = await this.docketRepository
+      .createQueryBuilder()
+      .update(DocketEntry)
+      .set(updateDocketEntryDto)
+      .where('id = :id', { id })
+      .returning('*')
+      .execute();
+
+    if (!result.affected || result.affected === 0) {
+      throw new NotFoundException(`Docket entry with ID ${id} not found`);
+    }
+
+    return result.raw[0];
   }
 
   async remove(id: string): Promise<void> {

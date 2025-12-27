@@ -90,14 +90,27 @@ export class PleadingsService {
     updatePleadingDto: UpdatePleadingDto,
     userId?: string,
   ): Promise<Pleading> {
-    const pleading = await this.findOne(id);
+    const updateData = {
+      ...updatePleadingDto,
+      ...(userId ? { updatedBy: userId } : {}),
+      updatedAt: new Date()
+    };
 
-    Object.assign(pleading, updatePleadingDto);
-    if (userId) {
-      pleading.updatedBy = userId;
+    const result = await this.pleadingRepository
+      .createQueryBuilder()
+      .update(Pleading)
+      .set(updateData)
+      .where('id = :id', { id })
+      .returning('*')
+      .execute();
+
+    if (!result.affected || result.affected === 0) {
+      throw new NotFoundException(`Pleading with ID ${id} not found`);
     }
 
-    const updatedPleading = await this.pleadingRepository.save(pleading);
+    this.logger.log(`Pleading updated: ${id}`);
+    return result.raw[0];
+  }
     this.logger.log(`Pleading updated: ${id}`);
 
     return updatedPleading;

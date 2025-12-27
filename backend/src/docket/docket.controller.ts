@@ -9,6 +9,8 @@ import {
   Query,
   HttpCode,
   HttpStatus,
+  UseInterceptors,
+  CacheInterceptor,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { Public } from '../common/decorators/public.decorator';
@@ -22,6 +24,7 @@ import { DocketEntry } from './entities/docket-entry.entity';
 @ApiBearerAuth('JWT-auth')
 
 @Controller('docket')
+@UseInterceptors(CacheInterceptor)
 export class DocketController {
   constructor(private readonly docketService: DocketService) {}
 

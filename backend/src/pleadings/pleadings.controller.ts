@@ -9,6 +9,8 @@ import {
   Query,
   ParseUUIDPipe,
   ParseIntPipe,
+  UseInterceptors,
+  CacheInterceptor,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { PleadingsService } from './pleadings.service';
@@ -22,6 +24,7 @@ import { PleadingStatus } from './entities/pleading.entity';
 @ApiBearerAuth('JWT-auth')
 
 @Controller('pleadings')
+@UseInterceptors(CacheInterceptor)
 export class PleadingsController {
   constructor(private readonly pleadingsService: PleadingsService) {}
 

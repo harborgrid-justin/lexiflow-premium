@@ -151,7 +151,10 @@ export class TimeEntriesService {
   }
 
   async update(id: string, updateTimeEntryDto: UpdateTimeEntryDto): Promise<TimeEntry> {
+    // Fetch existing entry to compute totals if rate/duration changed
     const timeEntry = await this.findOne(id);
+
+    let updateData: any = { ...updateTimeEntryDto };
 
     // Recalculate totals if duration or rate changed
     if (updateTimeEntryDto.duration !== undefined || updateTimeEntryDto.rate !== undefined) {
@@ -161,18 +164,36 @@ export class TimeEntriesService {
       const discount = updateTimeEntryDto.discount ?? timeEntry.discount;
       const discountedTotal = discount ? total * (1 - discount / 100) : total;
 
-      Object.assign(timeEntry, updateTimeEntryDto, { total, discountedTotal });
-    } else {
-      Object.assign(timeEntry, updateTimeEntryDto);
+      updateData = { ...updateData, total, discountedTotal };
     }
 
-    return await this.timeEntryRepository.save(timeEntry);
+    const result = await this.timeEntryRepository
+      .createQueryBuilder()
+      .update(TimeEntry)
+      .set(updateData)
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .returning('*')
+      .execute();
+
+    if (!result.affected || result.affected === 0) {
+      throw new NotFoundException(`Time entry with ID ${id} not found`);
+    }
+
+    return result.raw[0];
   }
 
   async remove(id: string): Promise<void> {
-    const timeEntry = await this.findOne(id);
-    timeEntry.deletedAt = new Date();
-    await this.timeEntryRepository.save(timeEntry);
+    const result = await this.timeEntryRepository
+      .createQueryBuilder()
+      .softDelete()
+      .where('id = :id', { id })
+      .andWhere('deletedAt IS NULL')
+      .execute();
+
+    if (!result.affected || result.affected === 0) {
+      throw new NotFoundException(`Time entry with ID ${id} not found`);
+    }
   }
 
   async approve(id: string, approvedBy: string): Promise<TimeEntry> {

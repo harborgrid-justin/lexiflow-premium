@@ -64,7 +64,7 @@ export class AlertingService {
         metric: 'error.rate',
         operator: 'gt',
         value: 0.05, // 5% error rate
-        severity: AlertSeverity.HIGH,
+        severity: AlertSeverity.ERROR,
         windowMinutes: 5,
       },
       enabled: true,
@@ -89,7 +89,7 @@ export class AlertingService {
         metric: 'response.time.p95',
         operator: 'gt',
         value: 2000, // 2 seconds
-        severity: AlertSeverity.MEDIUM,
+        severity: AlertSeverity.WARNING,
         windowMinutes: 5,
       },
       enabled: true,
@@ -114,7 +114,7 @@ export class AlertingService {
         metric: 'auth.failures',
         operator: 'gt',
         value: 10,
-        severity: AlertSeverity.HIGH,
+        severity: AlertSeverity.ERROR,
         windowMinutes: 5,
       },
       enabled: true,
@@ -164,7 +164,7 @@ export class AlertingService {
         metric: 'system.cpu.usage.percent',
         operator: 'gt',
         value: 80,
-        severity: AlertSeverity.MEDIUM,
+        severity: AlertSeverity.WARNING,
         windowMinutes: 10,
       },
       enabled: true,
@@ -189,7 +189,7 @@ export class AlertingService {
         metric: 'system.memory.usage.percent',
         operator: 'gt',
         value: 85,
-        severity: AlertSeverity.HIGH,
+        severity: AlertSeverity.ERROR,
         windowMinutes: 10,
       },
       enabled: true,
@@ -214,7 +214,7 @@ export class AlertingService {
         metric: 'database.query.duration.p95',
         operator: 'gt',
         value: 1000, // 1 second
-        severity: AlertSeverity.MEDIUM,
+        severity: AlertSeverity.WARNING,
         windowMinutes: 5,
       },
       enabled: true,
@@ -459,7 +459,10 @@ export class AlertingService {
           break;
       }
     } catch (error) {
-      this.logger.error(`Failed to send alert to ${channel.type}`, error.message, {
+      this.logger.error(
+        `Failed to send alert to ${channel.type}`,
+        error instanceof Error ? error.message : String(error),
+        {
         alertId: alert.id,
         channel: channel.type,
       });
@@ -559,11 +562,11 @@ export class AlertingService {
     switch (severity) {
       case AlertSeverity.CRITICAL:
         return '#ff0000';
-      case AlertSeverity.HIGH:
+      case AlertSeverity.ERROR:
         return '#ff6600';
-      case AlertSeverity.MEDIUM:
+      case AlertSeverity.WARNING:
         return '#ffcc00';
-      case AlertSeverity.LOW:
+      case AlertSeverity.INFO:
         return '#00ccff';
       default:
         return '#cccccc';
@@ -635,7 +638,7 @@ export class AlertingService {
     });
 
     const highAlerts = await this.alertRepository.count({
-      where: { severity: AlertSeverity.HIGH, resolved: false },
+      where: { severity: AlertSeverity.ERROR, resolved: false },
     });
 
     return {

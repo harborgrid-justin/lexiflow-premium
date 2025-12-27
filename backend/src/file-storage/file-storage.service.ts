@@ -273,6 +273,8 @@ export class FileStorageService implements OnModuleDestroy {
       totalFiles: 0,
       totalSize: 0,
       uploadDir: this.uploadDir,
+      usedSpace: 0,
+      available: 1000000000,
     };
   }
 
@@ -284,11 +286,6 @@ export class FileStorageService implements OnModuleDestroy {
       this.pendingOperations.clear();
     }
     this.logger.log('FileStorageService cleanup complete');
-  }
-      totalSize: 0,
-      usedSpace: 0,
-      available: 1000000000,
-    };
   }
 
   async cleanupOrphans(_validDocIds: string[]): Promise<{ removed: number }> {

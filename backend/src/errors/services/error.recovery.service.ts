@@ -109,7 +109,7 @@ export class ErrorRecoveryService {
       if (!this.isRetryableError(errorCode, fullStrategy)) {
         this.logger.error(
           `Non-retryable error in ${operationType}: ${errorCode}`,
-          error.stack,
+          error instanceof Error ? error.stack : undefined,
         );
         throw error;
       }

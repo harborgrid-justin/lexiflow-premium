@@ -1,5 +1,13 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 
+export interface MetricData {
+  name: string;
+  type: 'counter' | 'gauge' | 'histogram';
+  value: number;
+  labels?: Record<string, string>;
+  timestamp: Date;
+}
+
 /**
  * Metrics Service with Memory Optimizations
  * 

@@ -33,7 +33,8 @@ export class EvidenceController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(): Promise<EvidenceItem[]> {
-    return this.evidenceService.findAll();
+    const result = await this.evidenceService.findAll();
+    return result.data;
   }
 
   @Get('case/:caseId')

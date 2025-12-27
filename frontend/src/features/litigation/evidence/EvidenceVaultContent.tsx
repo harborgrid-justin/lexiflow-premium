@@ -40,4 +40,4 @@ export function EvidenceVaultContent({
       case 'intake': return <EvidenceIntake handleBack={() => onNavigate('inventory')} onComplete={onIntakeComplete} />;
       default: return <EvidenceDashboard onNavigate={onNavigate} />;
     }
-};
+}

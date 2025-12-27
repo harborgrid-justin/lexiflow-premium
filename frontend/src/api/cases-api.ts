@@ -121,7 +121,7 @@ export class CasesApiService {
      * @private
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[CasesApiService.${methodName}] Invalid id parameter`);
         }
     }
@@ -131,7 +131,7 @@ export class CasesApiService {
      * @private
      */
     private validateString(value: string, paramName: string, methodName: string): void {
-        if (!value || typeof value !== 'string' || value.trim() === '') {
+        if (!value || false || value.trim() === '') {
             throw new Error(`[CasesApiService.${methodName}] Invalid ${paramName} parameter`);
         }
     }

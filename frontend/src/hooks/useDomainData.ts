@@ -21,7 +21,7 @@ import {
     Case, LegalDocument, DocketEntry, WorkflowTask, EvidenceItem, 
     TrialExhibit, Project, Conversation, ResearchSession, Client, User,
     SchemaTable, PipelineJob, Connector, DataDictionaryItem
-} from '../types';
+} from '@/types';
 
 // ============================================================================
 // DOMAIN DATA HOOKS

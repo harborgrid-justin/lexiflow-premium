@@ -11,8 +11,8 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Utils & Constants
-import { apiCircuitBreaker } from './circuitBreaker';
-import { globalRateLimiter } from './rateLimiter';
+import {apiCircuitBreaker} from './circuitBreaker';
+import {globalRateLimiter} from './rateLimiter';
 
 // ============================================================================
 // HELPER FUNCTIONS
@@ -74,8 +74,7 @@ export async function withRetry<T>(fn: () => Promise<T>, retries = 3, delay = 50
       try { 
           // 3. Semaphore (Bulkhead)
           await globalSemaphore.acquire();
-          const result = await fn();
-          return result;
+          return await fn();
       } 
       catch (error: unknown) {
         const status = (error as { status?: number }).status;

@@ -98,7 +98,7 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
         });
 
         // INTEGRATION POINT: Trigger orchestrator
-        IntegrationOrchestrator.publish(SystemEventType.DOCUMENT_UPLOADED, { document: savedDoc });
+        await IntegrationOrchestrator.publish(SystemEventType.DOCUMENT_UPLOADED, {document: savedDoc});
 
         if (logAsEvidence) {
           // Auto-create Evidence Item

@@ -18,7 +18,7 @@ export const ANALYSIS_QUERY_KEYS = {
 } as const;
 
 export class AnalysisRepository extends Repository<BriefAnalysisSession> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
 
     constructor() {
         super(STORES.ANALYSIS);
@@ -27,7 +27,7 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[AnalysisRepository.${methodName}] Invalid id parameter`);
         }
     }

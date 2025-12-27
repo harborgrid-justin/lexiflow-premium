@@ -405,4 +405,4 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
         </div>
     </div>
   );
-};
+}

@@ -82,14 +82,14 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
   });
 
   const handleAddTask = async (newTask: WorkflowTask) => {
-      addTask(newTask);
+      await addTask(newTask);
   };
 
   const handleToggle = async (id: string) => {
       const task = safeTasks.find(t => t.id === id);
       if (task) {
           const newStatus = task.status === TaskStatusBackend.COMPLETED ? TaskStatusBackend.TODO : TaskStatusBackend.COMPLETED;
-          updateTask({ id, updates: { status: newStatus as any }});
+          await updateTask({id, updates: {status: newStatus as any}});
       }
   };
 

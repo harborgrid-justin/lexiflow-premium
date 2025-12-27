@@ -3,7 +3,7 @@
 export class ConsistentHashRing {
     private ring: Map<number, string> = new Map();
     private sortedKeys: number[] = [];
-    private replicas: number;
+    private readonly replicas: number;
 
     constructor(replicas = 3) {
         this.replicas = replicas;

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { NeuralCommandBar } from './NeuralCommandBar';
+import { NeuralCommandBar } from '@/components';
 
 const meta: Meta<typeof NeuralCommandBar> = {
   title: 'Organisms/NeuralCommandBar',

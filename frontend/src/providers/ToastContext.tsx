@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
-import { cn } from '../utils/cn';
-import { NOTIFICATION_ERROR_DISMISS_MS, NOTIFICATION_AUTO_DISMISS_MS } from '../config/master.config';
+import { cn } from '@/utils';
+import { NOTIFICATION_ERROR_DISMISS_MS, NOTIFICATION_AUTO_DISMISS_MS } from '@/config';
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 

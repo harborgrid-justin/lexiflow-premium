@@ -101,7 +101,7 @@ export class BillingApiService {
      * @private
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[BillingApiService.${methodName}] Invalid id parameter`);
         }
     }
@@ -215,7 +215,7 @@ export class BillingApiService {
                 ledesCode: entry.ledesCode,
                 rate: entry.rate || 0,
                 status: entry.status,
-                billable: entry.billable !== false, // Default to true if not specified
+                billable: entry.billable, // Default to true if not specified
                 rateTableId: entry.rateTableId,
                 internalNotes: entry.internalNotes,
                 taskCode: entry.taskCode,

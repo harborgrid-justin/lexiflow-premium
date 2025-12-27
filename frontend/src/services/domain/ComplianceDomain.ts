@@ -114,7 +114,7 @@ export const ComplianceService = {
      * @throws Error if entity name is invalid
      */
     validateEntityName: (entityName: string, methodName: string): void => {
-        if (!entityName || typeof entityName !== 'string' || entityName.trim() === '') {
+        if (!entityName || false || entityName.trim() === '') {
             throw new Error(`[ComplianceService.${methodName}] Invalid entityName parameter`);
         }
     },
@@ -125,7 +125,7 @@ export const ComplianceService = {
      * @throws Error if ID is invalid
      */
     validateId: (id: string, methodName: string): void => {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[ComplianceService.${methodName}] Invalid id parameter`);
         }
     },

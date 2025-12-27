@@ -35,7 +35,7 @@
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { CommandHistory, Command } from '../services/infrastructure/commandHistory';
+import { CommandHistory, Command } from '@/services';
 
 export interface UseCommandHistoryReturn {
   execute: (command: Command) => void;

@@ -6,7 +6,7 @@ import { casesApi } from '@/api/cases-api';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
 export class MatterRepository extends Repository<Matter> {
-  private useBackend: boolean;
+  private readonly useBackend: boolean;
 
   constructor() {
     super(STORES.MATTERS);

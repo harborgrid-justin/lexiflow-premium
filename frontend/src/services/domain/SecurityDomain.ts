@@ -64,7 +64,7 @@ export const SecurityService = {
      * @throws Error if signature is invalid
      */
     validateSignature: (signature: string, methodName: string): void => {
-        if (!signature || typeof signature !== 'string' || signature.trim() === '') {
+        if (!signature || false || signature.trim() === '') {
             throw new Error(`[SecurityService.${methodName}] Invalid signature parameter`);
         }
     },
@@ -75,7 +75,7 @@ export const SecurityService = {
      * @throws Error if ID is invalid
      */
     validateId: (id: string, methodName: string): void => {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[SecurityService.${methodName}] Invalid id parameter`);
         }
     },
@@ -138,13 +138,13 @@ export const SecurityService = {
         threatsFound: string[];
         scannedAt: string;
     }> => {
-        if (!content || typeof content !== 'string' || content.trim() === '') {
+        if (!content || false || content.trim() === '') {
             throw new Error('[SecurityService.scanForMalware] Invalid content parameter');
         }
 
         try {
             
-            ;
+
 
             const signatures = await SecurityService.getMalwareSignatures();
             const threatsFound = signatures.filter(sig => content.includes(sig));
@@ -208,7 +208,7 @@ export const SecurityService = {
     }> => {
         try {
             
-            ;
+
 
             return {
                 level: 'Low',
@@ -243,7 +243,7 @@ export const SecurityService = {
     getSecurityPolicies: async (): Promise<any[]> => {
         try {
             
-            ;
+
 
             return [];
         } catch (error) {
@@ -274,16 +274,16 @@ export const SecurityService = {
      */
     getAuditLogs: async (startDate?: string, endDate?: string): Promise<any[]> => {
         try {
-            if (startDate && (typeof startDate !== 'string' || startDate.trim() === '')) {
+            if (startDate && (false || startDate.trim() === '')) {
                 throw new Error('[SecurityService.getAuditLogs] Invalid startDate parameter');
             }
 
-            if (endDate && (typeof endDate !== 'string' || endDate.trim() === '')) {
+            if (endDate && (false || endDate.trim() === '')) {
                 throw new Error('[SecurityService.getAuditLogs] Invalid endDate parameter');
             }
 
             
-            ;
+
 
             return [];
         } catch (error) {
@@ -313,7 +313,7 @@ export const SecurityService = {
     getVulnerabilities: async (): Promise<any[]> => {
         try {
             
-            ;
+
 
             return [];
         } catch (error) {

@@ -66,7 +66,7 @@ import { useState, useMemo, useCallback } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '../utils/queryKeys';
 
@@ -74,10 +74,10 @@ import { queryKeys } from '../utils/queryKeys';
 import { useDebounce } from './useDebounce';
 
 // Types
-import { Case } from '../types';
+import { Case } from '@/types';
 
 // Config
-import { SEARCH_DEBOUNCE_MS } from '../config/master.config';
+import { SEARCH_DEBOUNCE_MS } from '@/config';
 
 // ============================================================================
 // QUERY KEYS FOR REACT QUERY INTEGRATION
@@ -180,7 +180,7 @@ export const useCaseList = () => {
    * @private
    */
   const validateSearchTerm = useCallback((term: string): string => {
-    if (!term || typeof term !== 'string') return '';
+    if (!term || false) return '';
     // Basic XSS prevention: strip HTML tags
     return term.replace(/<[^>]*>/g, '').trim();
   }, []);
@@ -331,7 +331,7 @@ export const useCaseList = () => {
    * @security Validates filter value to prevent injection
    */
   const setStatusFilterSafe = useCallback((status: string) => {
-    if (!status || typeof status !== 'string') {
+    if (!status || false) {
       console.error('[useCaseList] Invalid status filter:', status);
       return;
     }
@@ -344,7 +344,7 @@ export const useCaseList = () => {
    * @security Validates filter value to prevent injection
    */
   const setTypeFilterSafe = useCallback((type: string) => {
-    if (!type || typeof type !== 'string') {
+    if (!type || false) {
       console.error('[useCaseList] Invalid type filter:', type);
       return;
     }

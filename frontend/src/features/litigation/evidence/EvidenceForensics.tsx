@@ -50,7 +50,7 @@ class VerificationQueue {
   async add(job: VerificationJob): Promise<void> {
     this.queue.push(job);
     if (!this.processing) {
-      this.processQueue();
+      await this.processQueue();
     }
   }
   

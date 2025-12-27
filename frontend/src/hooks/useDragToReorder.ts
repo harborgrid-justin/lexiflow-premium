@@ -12,7 +12,7 @@
  * - Touch support
  */
 
-import { useState, useCallback, useRef, useEffect, DragEvent, KeyboardEvent } from 'react';
+import React, { useState, useCallback, useRef, useEffect, DragEvent, KeyboardEvent } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES

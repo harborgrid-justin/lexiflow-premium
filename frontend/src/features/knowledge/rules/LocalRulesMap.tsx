@@ -1,6 +1,6 @@
 
 import React, { useMemo } from 'react';
-import { JurisdictionGeoMap } from '../jurisdiction/JurisdictionGeoMap';
+import { JurisdictionGeoMap } from '@features/knowledge/jurisdiction';
 import { Card } from '@/components/molecules/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

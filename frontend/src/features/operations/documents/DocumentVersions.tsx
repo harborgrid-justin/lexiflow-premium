@@ -79,4 +79,4 @@ export function DocumentVersions({ document, userRole, onRestore, onClose }: Doc
       </div>
     </div>
   );
-};
+}

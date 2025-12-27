@@ -126,5 +126,5 @@ export function DocumentFilters({ currentFolder, setCurrentFolder }: DocumentFil
         </div>
     </div>
   );
-};
+}
 

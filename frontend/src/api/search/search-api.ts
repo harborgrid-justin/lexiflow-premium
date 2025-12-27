@@ -22,7 +22,7 @@ export interface SearchResult {
   highlights?: string[];
   score: number;
   url?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, never>;
   createdAt?: string;
   updatedAt?: string;
 }

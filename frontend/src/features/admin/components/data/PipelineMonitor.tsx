@@ -266,6 +266,6 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
         )}
     </div>
   );
-};
+}
 
 export default PipelineMonitor;

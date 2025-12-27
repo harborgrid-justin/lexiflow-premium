@@ -48,4 +48,4 @@ export function TextArea({ label, className = '', ...props }: React.TextareaHTML
       />
     </div>
   );
-};
+}

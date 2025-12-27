@@ -11,9 +11,9 @@
 // ============================================================================
 // A simple Bloom Filter implementation using FNV-1a and MurmurHash3-like approximations
 export class BloomFilter {
-    private size: number;
-    private hashes: number;
-    private buffer: Uint8Array;
+    private readonly size: number;
+    private readonly hashes: number;
+    private readonly buffer: Uint8Array;
   
     constructor(expectedItems: number, falsePositiveRate: number) {
       this.size = Math.ceil(-1 * (expectedItems * Math.log(falsePositiveRate)) / (Math.log(2) ** 2));

@@ -5,6 +5,8 @@
  * and UI component props.
  */
 
+import React from "react";
+
 /**
  * Status of a data source connection
  */

@@ -196,7 +196,7 @@ export function WarRoomManager({ onSelectCase }: WarRoomManagerProps) {
       </div>
     </div>
   );
-};
+}
 
 // Case Card Component
 interface CaseCardProps {

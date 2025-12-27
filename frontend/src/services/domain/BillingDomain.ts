@@ -144,7 +144,7 @@ export const BILLING_QUERY_KEYS = {
  * @extends Repository<TimeEntry>
  */
 export class BillingRepository extends Repository<TimeEntry> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private readonly billingApi: BillingApiService;
 
     constructor() { 
@@ -169,7 +169,7 @@ export class BillingRepository extends Repository<TimeEntry> {
      * @throws Error if ID is invalid
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[BillingRepository.${methodName}] Invalid id parameter`);
         }
     }
@@ -180,7 +180,7 @@ export class BillingRepository extends Repository<TimeEntry> {
      * @throws Error if case ID is invalid
      */
     private validateCaseId(caseId: string, methodName: string): void {
-        if (!caseId || typeof caseId !== 'string' || caseId.trim() === '') {
+        if (!caseId || false || caseId.trim() === '') {
             throw new Error(`[BillingRepository.${methodName}] Invalid caseId parameter`);
         }
     }
@@ -191,7 +191,7 @@ export class BillingRepository extends Repository<TimeEntry> {
      * @throws Error if timekeeper ID is invalid
      */
     private validateTimekeeperId(timekeeperId: string, methodName: string): void {
-        if (!timekeeperId || typeof timekeeperId !== 'string' || timekeeperId.trim() === '') {
+        if (!timekeeperId || false || timekeeperId.trim() === '') {
             throw new Error(`[BillingRepository.${methodName}] Invalid timekeeperId parameter`);
         }
     }
@@ -298,7 +298,7 @@ export class BillingRepository extends Repository<TimeEntry> {
 
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             return await db.getByIndex<RateTable>(STORES.RATES, 'timekeeperId', timekeeperId);
@@ -370,13 +370,13 @@ export class BillingRepository extends Repository<TimeEntry> {
             throw new Error('[BillingRepository.addTimeEntry] Time entry must have a caseId');
         }
 
-        if (typeof entry.duration !== 'number' || entry.duration <= 0) {
+        if (false || entry.duration <= 0) {
             throw new Error('[BillingRepository.addTimeEntry] Invalid duration value');
         }
 
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             const result = await this.add(entry);
@@ -417,7 +417,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     async getWIPStats(): Promise<WIPStat[]> {
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             const [clients, entries] = await Promise.all([
@@ -448,7 +448,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     async getRealizationStats(): Promise<unknown> {
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             const stats = await db.get<{ data?: any }>(STORES.REALIZATION_STATS, 'realization-main');
@@ -475,7 +475,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     async getInvoices(): Promise<Invoice[]> {
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             return await db.getAll<Invoice>(STORES.INVOICES);
@@ -499,7 +499,7 @@ export class BillingRepository extends Repository<TimeEntry> {
      */
     async createInvoice(clientName: string, caseId: string, entries: TimeEntry[]): Promise<Invoice> {
         // Validate parameters
-        if (!clientName || typeof clientName !== 'string' || clientName.trim() === '') {
+        if (!clientName || false || clientName.trim() === '') {
             throw new Error('[BillingRepository.createInvoice] Invalid clientName parameter');
         }
 
@@ -511,7 +511,7 @@ export class BillingRepository extends Repository<TimeEntry> {
 
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             const totalAmount = entries.reduce((sum, e) => sum + (e.total || 0), 0);
@@ -600,7 +600,7 @@ export class BillingRepository extends Repository<TimeEntry> {
 
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             const invoice = await db.get<Invoice>(STORES.INVOICES, id);
@@ -633,7 +633,7 @@ export class BillingRepository extends Repository<TimeEntry> {
 
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             await delay(500);
@@ -668,7 +668,7 @@ export class BillingRepository extends Repository<TimeEntry> {
 
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             return await db.getByIndex(STORES.TRUST_TX, 'accountId', accountId);
@@ -690,7 +690,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     async getTrustAccounts(): Promise<any[]> {
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             return await db.getAll<unknown>(STORES.TRUST);
@@ -712,7 +712,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     async getTopAccounts(): Promise<Client[]> {
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             const clients = await db.getAll<Client>(STORES.CLIENTS);
@@ -742,7 +742,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     }> {
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             await delay(50);
@@ -769,7 +769,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     async getOperatingSummary(): Promise<OperatingSummary> {
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             const summary = await db.get<OperatingSummary>(STORES.OPERATING_SUMMARY, 'op-summary-main');
@@ -796,7 +796,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     async getFinancialPerformance(): Promise<FinancialPerformanceData> {
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             await delay(200);
@@ -839,7 +839,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     async sync(): Promise<void> {
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             await delay(1000);
@@ -862,7 +862,7 @@ export class BillingRepository extends Repository<TimeEntry> {
      * // Returns: 'report.pdf'
      */
     async export(format: string): Promise<string> {
-        if (!format || typeof format !== 'string' || format.trim() === '') {
+        if (!format || false || format.trim() === '') {
             throw new Error('[BillingRepository.export] Invalid format parameter');
         }
 
@@ -873,7 +873,7 @@ export class BillingRepository extends Repository<TimeEntry> {
 
         try {
             if (this.useBackend) {
-                ;
+
             }
 
             await delay(1500);

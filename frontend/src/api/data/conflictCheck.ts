@@ -1,5 +1,5 @@
 
-import { ConflictCheck, UUID, UserId } from '../../types';
+import { ConflictCheck, UUID, UserId } from '@/types';
 
 export const MOCK_CONFLICTS: ConflictCheck[] = [
     { id: '1' as UUID, entityName: 'MegaCorp Inc.', date: '2024-03-10', status: 'Cleared', foundIn: [], checkedById: 'system' as UserId, checkedBy: 'System Auto-Check' },

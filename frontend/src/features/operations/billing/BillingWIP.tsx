@@ -76,7 +76,7 @@ class InvoiceGenerationQueue {
       item.reject(error);
     } finally {
       this.processing--;
-      this.processQueue();
+      await this.processQueue();
     }
   }
 }

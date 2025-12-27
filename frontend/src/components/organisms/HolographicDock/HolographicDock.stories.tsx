@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { HolographicDock } from './HolographicDock';
+import { HolographicDock } from '@/components';
 
 const meta: Meta<typeof HolographicDock> = {
   title: 'Organisms/HolographicDock',

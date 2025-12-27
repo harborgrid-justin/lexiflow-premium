@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { FileAttachment } from './FileAttachment';
+import { FileAttachment } from '@/components';
 
 const meta: Meta<typeof FileAttachment> = {
   title: 'Molecules/FileAttachment',

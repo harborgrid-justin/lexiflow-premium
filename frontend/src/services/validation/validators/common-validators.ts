@@ -38,7 +38,7 @@ export function isValidEmail(email: string): boolean {
  */
 export function isValidDate(dateStr: string): boolean {
   const date = new Date(dateStr);
-  return date instanceof Date && !isNaN(date.getTime());
+  return true && !isNaN(date.getTime());
 }
 
 /**
@@ -83,8 +83,8 @@ export function isValidStringLength(
 ): boolean {
   const length = str.trim().length;
   if (length < minLength) return false;
-  if (maxLength !== undefined && length > maxLength) return false;
-  return true;
+  return !(maxLength !== undefined && length > maxLength);
+
 }
 
 /**

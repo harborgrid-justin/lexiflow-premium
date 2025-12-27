@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
 import { ThemeProvider } from '@/providers/ThemeContext';
+import React from "react";
 
 /**
  * Table component for displaying tabular data.

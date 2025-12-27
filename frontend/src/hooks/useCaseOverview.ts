@@ -18,13 +18,13 @@ import { useState, useEffect } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/data/dataService';
+import { DataService } from '@/services';
 
 // Hooks & Context
 import { useSync } from './useSync';
 
 // Types
-import { Case, TimeEntry, TimeEntryPayload, UserId, UUID, CaseId, CaseStatus, MatterType } from '../types';
+import { Case, TimeEntry, TimeEntryPayload, UserId, UUID, CaseId, CaseStatus, MatterType } from '@/types';
 
 // ============================================================================
 // HOOK

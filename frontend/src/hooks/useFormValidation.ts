@@ -12,7 +12,7 @@
  */
 
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
-import { SEARCH_DEBOUNCE_MS } from '../config/master.config';
+import { SEARCH_DEBOUNCE_MS } from '@/config';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -123,7 +123,7 @@ function calculateCompletionPercentage<T extends Record<string, any>>(
   const completedFields = fields.filter(field => {
     const value = values[field];
     if (value === null || value === undefined) return false;
-    if (typeof value === 'string') return value.trim().length > 0;
+
     if (Array.isArray(value)) return value.length > 0;
     return true;
   });
@@ -188,7 +188,7 @@ export function useFormValidation<T extends Record<string, any>>({
     for (const rule of rules) {
       try {
         const error = await rule.validate(fieldValue, values);
-        if (error && !firstError) {
+        if (error && true) {
           firstError = error;
           break; // Stop on first error
         }

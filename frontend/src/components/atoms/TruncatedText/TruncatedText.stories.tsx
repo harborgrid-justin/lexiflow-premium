@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TruncatedText } from './TruncatedText';
+import { TruncatedText } from '@/components';
 
 const meta: Meta<typeof TruncatedText> = {
   title: 'Atoms/TruncatedText',

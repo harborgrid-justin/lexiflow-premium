@@ -159,5 +159,5 @@ export function CommandCenter({ caseId, warRoomData, onNavigate }: CommandCenter
         </div>
     </div>
   );
-};
+}
 

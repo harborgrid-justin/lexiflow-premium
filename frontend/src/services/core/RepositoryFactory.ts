@@ -13,7 +13,7 @@
  */
 
 import { BaseEntity } from '@/types';
-import { Repository } from './Repository';
+import { Repository } from '@/services';
 
 /**
  * Generic Repository implementation without custom methods.

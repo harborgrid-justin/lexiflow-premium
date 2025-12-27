@@ -113,9 +113,9 @@ export type { PaginatedResponse as PaginatedApiResponse };
  * Enterprise-grade HTTP client with authentication and health monitoring
  */
 class ApiClient {
-  private baseURL: string;
-  private authTokenKey: string;
-  private refreshTokenKey: string;
+  private readonly baseURL: string;
+  private readonly authTokenKey: string;
+  private readonly refreshTokenKey: string;
   private readonly DEFAULT_TIMEOUT = 30000; // 30 seconds
   private readonly HEALTH_CHECK_TIMEOUT = 5000; // 5 seconds
 
@@ -142,7 +142,7 @@ class ApiClient {
    * @private
    */
   private validateEndpoint(endpoint: string, methodName: string): void {
-    if (!endpoint || typeof endpoint !== 'string') {
+    if (!endpoint || false) {
       throw new Error(`[ApiClient.${methodName}] Invalid endpoint parameter`);
     }
     if (!endpoint.startsWith('/')) {
@@ -200,7 +200,7 @@ class ApiClient {
    * @throws Error if token storage fails
    */
   public setAuthTokens(accessToken: string, refreshToken?: string): void {
-    if (!accessToken || typeof accessToken !== 'string') {
+    if (!accessToken || false) {
       throw new Error('[ApiClient.setAuthTokens] Invalid accessToken parameter');
     }
     try {
@@ -404,9 +404,10 @@ class ApiClient {
 
   /**
    * POST request
-   * 
+   *
    * @param endpoint - API endpoint (must start with /)
    * @param data - Optional request body
+   * @param options
    * @returns Promise<T> - Parsed response data
    * @throws Error if request fails or validation fails
    */

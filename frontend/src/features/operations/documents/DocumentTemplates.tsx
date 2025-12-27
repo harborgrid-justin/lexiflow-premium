@@ -73,6 +73,6 @@ export function DocumentTemplates() {
         </div>
     </div>
   );
-};
+}
 
 

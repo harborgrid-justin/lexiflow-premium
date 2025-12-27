@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { FilingCenter } from '../../../features/litigation/pleadings/modules/FilingCenter';
+import { FilingCenter } from '@features/litigation/pleadings/modules/FilingCenter.tsx';
 import { ThemeProvider } from '@/providers/ThemeContext';
 
 /**

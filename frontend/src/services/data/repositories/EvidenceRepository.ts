@@ -56,7 +56,7 @@ export const EVIDENCE_QUERY_KEYS = {
  * Implements backend-first pattern with IndexedDB fallback
  */
 export class EvidenceRepository extends Repository<EvidenceItem> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private evidenceApi: EvidenceApiService;
 
     constructor() { 
@@ -80,7 +80,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
      * @private
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[EvidenceRepository.${methodName}] Invalid id parameter`);
         }
     }
@@ -90,7 +90,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
      * @private
      */
     private validateCaseId(caseId: string, methodName: string): void {
-        if (!caseId || typeof caseId !== 'string' || caseId.trim() === '') {
+        if (!caseId || false || caseId.trim() === '') {
             throw new Error(`[EvidenceRepository.${methodName}] Invalid caseId parameter`);
         }
     }
@@ -101,11 +101,10 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
 
     /**
      * Get all evidence items, optionally filtered by case
-     * 
-     * @param caseId - Optional case ID filter
+     *
      * @returns Promise<EvidenceItem[]> Array of evidence items
      * @throws Error if fetch fails
-     * 
+     *
      * @example
      * const allEvidence = await repo.getAll();
      * const caseEvidence = await repo.getByCaseId('case-123');
@@ -365,7 +364,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
     async updateCustody(id: string, custodian: string, notes?: string): Promise<EvidenceItem> {
         this.validateId(id, 'updateCustody');
 
-        if (!custodian || typeof custodian !== 'string' || custodian.trim() === '') {
+        if (!custodian || false || custodian.trim() === '') {
             throw new Error('[EvidenceRepository.updateCustody] Invalid custodian parameter');
         }
 

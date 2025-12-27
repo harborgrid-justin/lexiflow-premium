@@ -178,4 +178,4 @@ export function WitnessPrep({ caseId: _caseId, warRoomData, initialWitnessId, on
         </div>
     </div>
   );
-};
+}

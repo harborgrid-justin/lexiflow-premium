@@ -15,7 +15,7 @@ export const TEMPLATE_QUERY_KEYS = {
 } as const;
 
 export class TemplateRepository extends Repository<WorkflowTemplateData> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
 
     constructor() {
         super(STORES.TEMPLATES);
@@ -24,7 +24,7 @@ export class TemplateRepository extends Repository<WorkflowTemplateData> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[TemplateRepository.${methodName}] Invalid id parameter`);
         }
     }

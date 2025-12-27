@@ -39,4 +39,4 @@ export function SearchInput(props: InputProps) {
       <Input {...props} id={inputId} className={cn("pl-10", props.className)} />
     </div>
   );
-};
+}

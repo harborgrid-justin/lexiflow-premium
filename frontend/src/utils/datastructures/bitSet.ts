@@ -1,7 +1,7 @@
 
 // BitSet for efficient storage of boolean flags
 export class BitSet {
-    private buffer: Uint32Array;
+    private readonly buffer: Uint32Array;
 
     constructor(size: number) {
         this.buffer = new Uint32Array(Math.ceil(size / 32));

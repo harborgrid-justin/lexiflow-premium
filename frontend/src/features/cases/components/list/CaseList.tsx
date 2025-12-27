@@ -22,15 +22,15 @@ import { Plus, Download } from 'lucide-react';
 import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { Button } from '@/components/atoms/Button';
-import { CaseListActive } from './CaseListActive';
-import { CaseListIntake } from './CaseListIntake';
-import { CaseListDocket } from './CaseListDocket';
+import { CaseListActive } from '@features/cases';
+import { CaseListIntake } from '@features/cases';
+import { CaseListDocket } from '@features/cases';
 import { CaseListTasks } from './CaseListTasks';
-import { CaseListConflicts } from './CaseListConflicts';
-import { CaseListResources } from './CaseListResources';
+import { CaseListConflicts } from '@features/cases';
+import { CaseListResources } from '@features/cases';
 import { CaseListTrust } from './CaseListTrust';
-import { CaseListClosing } from './CaseListClosing';
-import { CaseListArchived } from './CaseListArchived';
+import { CaseListClosing } from '@features/cases';
+import { CaseListArchived } from '@features/cases';
 // DEPRECATED: CreateCaseModal removed - use full-page CreateCase component via navigation
 
 // Hooks

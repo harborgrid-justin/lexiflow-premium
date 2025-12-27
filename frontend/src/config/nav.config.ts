@@ -13,7 +13,7 @@ import {
   Lightbulb, TrendingUp, LayoutGrid, ClipboardCheck, Wallet, FolderKanban,
   Home, Package, PieChart, FileSpreadsheet, Receipt, MapPin, Repeat, Share2, Trash2, ShoppingCart, AlertTriangle, UserCog, FileCheck
 } from 'lucide-react';
-import { AppView, NavCategory } from '../types';
+import { AppView, NavCategory } from '@/types';
 import { PATHS } from './paths.config';
 
 export interface NavItemConfig {

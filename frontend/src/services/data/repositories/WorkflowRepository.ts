@@ -1,11 +1,17 @@
-import { BUSINESS_PROCESSES } from "@/api/data/firmProcess";
-import { delay } from '@/utils/async';
-import { TEMPLATE_LIBRARY } from '@/api/data/workflowTemplates';
-import { WorkflowTask, TaskId, WorkflowTemplateData, CaseId, ProjectId, CasePhase, TaskStatusBackend, TaskPriorityBackend } from '@/types';
-import { db, STORES } from '@services/data/db';
-import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
-import { SystemEventType } from '@/types/integration-types';
-import { StorageUtils } from '@/utils/storage';
+import {BUSINESS_PROCESSES} from "@/api/data/firmProcess";
+import {delay} from '@/utils/async';
+import {TEMPLATE_LIBRARY} from '@/api/data/workflowTemplates';
+import {
+    CaseId,
+    CasePhase,
+    TaskId,
+    TaskPriorityBackend,
+    TaskStatusBackend,
+    WorkflowTask,
+    WorkflowTemplateData
+} from '@/types';
+import {db, STORES} from '@services/data/db';
+import {StorageUtils} from '@/utils/storage';
 
 export const WorkflowRepository = {
     getProcesses: async () => { 
@@ -186,7 +192,7 @@ export const WorkflowRepository = {
             }
             
             // Demo/seed data for first-time users
-            const demoAutomations = [
+            return [
             {
                 id: 'auto-1',
                 title: 'Document Upload Trigger',
@@ -210,8 +216,6 @@ export const WorkflowRepository = {
                 active: true
             }
         ];
-        
-        return demoAutomations;
         } catch (error) {
             console.warn('[WorkflowRepository] Error fetching automations:', error);
             // Return empty demo data on error

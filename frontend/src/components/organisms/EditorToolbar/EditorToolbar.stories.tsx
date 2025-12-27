@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { EditorToolbar } from './EditorToolbar';
+import { EditorToolbar } from '@/components';
 
 const meta: Meta<typeof EditorToolbar> = {
   title: 'Organisms/EditorToolbar',

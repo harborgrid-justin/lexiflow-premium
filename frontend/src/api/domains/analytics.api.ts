@@ -3,38 +3,20 @@
  * Search, analytics dashboards, AI/ML predictions, bluebook, knowledge
  */
 
-import { SearchApiService } from '../search/search-api';
-import { DashboardApiService } from '../dashboard-api';
-import { AIOpsApiService } from '../ai-ops-api';
-import { AnalyticsDashboardApiService } from '../analytics-dashboard-api';
-import { BillingAnalyticsApiService } from '../billing-analytics-api';
-import { CaseAnalyticsApiService } from '../case-analytics-api';
-import { DiscoveryAnalyticsApiService } from '../discovery-analytics-api';
-import { OutcomePredictionsApiService } from '../outcome-predictions-api';
-import { JudgeStatsApiService } from '../judge-stats-api';
-import { BluebookApiService } from '../bluebook-api';
-import { KnowledgeApiService } from '../knowledge-api';
-import { CitationsApiService } from '../citations-api';
-import { ClausesApiService } from '../clauses-api';
-import { JurisdictionApiService } from '../jurisdiction-api';
-
-// Export service classes
-export {
-  SearchApiService,
-  DashboardApiService,
-  AIOpsApiService,
-  AnalyticsDashboardApiService,
-  BillingAnalyticsApiService,
-  CaseAnalyticsApiService,
-  DiscoveryAnalyticsApiService,
-  OutcomePredictionsApiService,
-  JudgeStatsApiService,
-  BluebookApiService,
-  KnowledgeApiService,
-  CitationsApiService,
-  ClausesApiService,
-  JurisdictionApiService,
-};
+import { SearchApiService } from '@/api';
+import { DashboardApiService } from '@/api';
+import { AIOpsApiService } from '@/api';
+import { AnalyticsDashboardApiService } from '@/api';
+import { BillingAnalyticsApiService } from '@/api';
+import { CaseAnalyticsApiService } from '@/api';
+import { DiscoveryAnalyticsApiService } from '@/api';
+import { OutcomePredictionsApiService } from '@/api';
+import { JudgeStatsApiService } from '@/api';
+import { BluebookApiService } from '@/api';
+import { KnowledgeApiService } from '@/api';
+import { CitationsApiService } from '@/api';
+import { ClausesApiService } from '@/api';
+import { JurisdictionApiService } from '@/api';
 
 // Export singleton instances
 export const analyticsApi = {

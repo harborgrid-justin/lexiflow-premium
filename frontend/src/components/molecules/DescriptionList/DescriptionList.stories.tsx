@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { DescriptionList } from './DescriptionList';
+import { DescriptionList } from '@/components';
 
 const meta: Meta<typeof DescriptionList> = {
   title: 'Molecules/DescriptionList',

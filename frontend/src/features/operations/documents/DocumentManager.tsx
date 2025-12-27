@@ -26,7 +26,7 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { Button } from '@/components/atoms/Button';
 import { TabbedPageLayout, TabConfigItem } from '@/components/templates/TabbedPageLayout';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
-import { DocumentManagerContent } from './DocumentManagerContent';
+import { DocumentManagerContent } from '@features/operations';
 
 // Utils & Config
 import { cn } from '@/utils/cn';
@@ -85,6 +85,6 @@ export function DocumentManager({ currentUserRole = 'Associate', initialTab }: D
       </Suspense>
     </TabbedPageLayout>
   );
-};
+}
 
 export default DocumentManager;

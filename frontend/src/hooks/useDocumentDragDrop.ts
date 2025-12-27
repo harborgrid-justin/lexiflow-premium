@@ -28,15 +28,15 @@ import React, { useState, useRef } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Services & Data
-import { DocumentService } from '../services/features/documents/documentService';
-import { queryClient } from '../services/infrastructure/queryClient';
+import { DocumentService } from '@/services';
+import { queryClient } from '@/services';
 import { queryKeys } from '../utils/queryKeys';
 
 // Hooks & Context
 import { useNotify } from './useNotify';
 
 // Types
-import { CaseId } from '../types';
+import { CaseId } from '@/types';
 
 // ========================================
 // HOOK

@@ -256,5 +256,5 @@ export function CRMDashboard() {
       </div>
     </div>
   );
-};
+}
 

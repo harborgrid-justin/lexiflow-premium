@@ -3,12 +3,7 @@
  * Human resources management
  */
 
-import { HRApiService } from '../hr-api';
-
-// Export service classes
-export {
-  HRApiService,
-};
+import { HRApiService } from '@/api';
 
 // Export singleton instances
 export const hrApi = {

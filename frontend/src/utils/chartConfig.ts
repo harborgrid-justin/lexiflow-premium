@@ -9,7 +9,7 @@
 
 import { CSSProperties } from 'react';
 import { ChartColorService } from '../services/theme/chartColorService';
-import { ThemeMode } from '../components/theme/tokens';
+import { ThemeMode } from '@theme/tokens.ts';
 
 // ============================================================================
 // TYPES

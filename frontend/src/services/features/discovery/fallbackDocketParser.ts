@@ -327,9 +327,9 @@ export const FallbackDocketParser = {
    * Validate parsed result
    */
   validateResult(result: FallbackParseResult): boolean {
-    return !!(
-      result.caseInfo.id &&
-      result.docketEntries.length > 0
+    return (
+        result.caseInfo.id &&
+        result.docketEntries.length > 0
     );
   }
 };

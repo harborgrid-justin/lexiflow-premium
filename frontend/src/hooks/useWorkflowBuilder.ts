@@ -21,7 +21,7 @@ import { useState, useCallback } from 'react';
 import { WorkflowNode, WorkflowConnection, NodeType, LITIGATION_PORTS } from '@/types/workflow-types';
 
 // Types
-import { WorkflowTemplateData } from '../types';
+import { WorkflowTemplateData } from '@/types';
 
 // ============================================================================
 // HOOK

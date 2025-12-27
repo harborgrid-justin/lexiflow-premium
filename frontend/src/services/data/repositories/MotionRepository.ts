@@ -41,7 +41,7 @@ export const MOTION_QUERY_KEYS = {
 } as const;
 
 export class MotionRepository extends Repository<Motion> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private motionsApi: MotionsApiService;
 
     constructor() {
@@ -52,7 +52,7 @@ export class MotionRepository extends Repository<Motion> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[MotionRepository.${methodName}] Invalid id parameter`);
         }
     }
@@ -134,7 +134,7 @@ export class MotionRepository extends Repository<Motion> {
 
     async updateStatus(id: string, status: string): Promise<Motion> {
         this.validateId(id, 'updateStatus');
-        if (!status || typeof status !== 'string') {
+        if (!status || false) {
             throw new Error('[MotionRepository.updateStatus] Invalid status');
         }
         return await this.update(id, { status } as Partial<Motion>);

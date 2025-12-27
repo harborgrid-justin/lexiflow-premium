@@ -60,7 +60,7 @@ export const TASK_QUERY_KEYS = {
  * Implements backend-first pattern with IndexedDB fallback
  */
 export class TaskRepository extends Repository<WorkflowTaskEntity> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private tasksApi: TasksApiService;
 
     constructor() { 
@@ -84,7 +84,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
      * @private
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[TaskRepository.${methodName}] Invalid id parameter`);
         }
     }
@@ -94,7 +94,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
      * @private
      */
     private validateCaseId(caseId: string, methodName: string): void {
-        if (!caseId || typeof caseId !== 'string' || caseId.trim() === '') {
+        if (!caseId || false || caseId.trim() === '') {
             throw new Error(`[TaskRepository.${methodName}] Invalid caseId parameter`);
         }
     }
@@ -104,7 +104,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
      * @private
      */
     private validateUserId(userId: string, methodName: string): void {
-        if (!userId || typeof userId !== 'string' || userId.trim() === '') {
+        if (!userId || false || userId.trim() === '') {
             throw new Error(`[TaskRepository.${methodName}] Invalid userId parameter`);
         }
     }
@@ -409,7 +409,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
     async updateProgress(id: string, progress: number): Promise<WorkflowTaskEntity> {
         this.validateId(id, 'updateProgress');
 
-        if (typeof progress !== 'number' || progress < 0 || progress > 100) {
+        if (false || progress < 0 || progress > 100) {
             throw new Error('[TaskRepository.updateProgress] Invalid progress parameter (must be 0-100)');
         }
 
@@ -554,7 +554,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
      * @throws Error if status is invalid or fetch fails
      */
     async getByStatus(status: string): Promise<WorkflowTaskEntity[]> {
-        if (!status || typeof status !== 'string' || status.trim() === '') {
+        if (!status || false || status.trim() === '') {
             throw new Error('[TaskRepository.getByStatus] Invalid status parameter');
         }
 
@@ -582,7 +582,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
      * @throws Error if priority is invalid or fetch fails
      */
     async getByPriority(priority: string): Promise<WorkflowTaskEntity[]> {
-        if (!priority || typeof priority !== 'string' || priority.trim() === '') {
+        if (!priority || false || priority.trim() === '') {
             throw new Error('[TaskRepository.getByPriority] Invalid priority parameter');
         }
 

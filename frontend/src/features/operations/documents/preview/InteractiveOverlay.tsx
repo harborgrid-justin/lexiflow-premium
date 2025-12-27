@@ -194,4 +194,4 @@ export function InteractiveOverlay({
         </div>
     </div>
   );
-};
+}

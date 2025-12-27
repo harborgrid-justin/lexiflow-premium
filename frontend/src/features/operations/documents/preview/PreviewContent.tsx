@@ -117,4 +117,4 @@ export function PreviewContent({ document, previewUrl, isRedactionMode }: Previe
             </Modal>
         </div>
     );
-};
+}

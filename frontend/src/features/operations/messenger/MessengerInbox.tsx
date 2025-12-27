@@ -20,7 +20,7 @@ import { useSecureMessenger } from '@/hooks/useSecureMessenger';
 
 // Components
 import { MessengerChatList } from './MessengerChatList';
-import { MessengerChatWindow } from './MessengerChatWindow';
+import { MessengerChatWindow } from '@features/operations';
 import { SplitView } from '@/components/organisms/SplitView';
 
 // ============================================================================

@@ -4,7 +4,7 @@
  */
 
 import { DataSourcesApiService } from '@/api/data-sources-api';
-import { RLSPoliciesApiService } from '../rls-policies-api';
+import { RLSPoliciesApiService } from '@/api';
 import { 
   SchemaManagementApiService,
   QueryWorkbenchApiService

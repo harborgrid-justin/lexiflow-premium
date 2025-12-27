@@ -3,7 +3,7 @@
  * @description Exponential backoff retry logic for network requests
  */
 
-import { API_RETRY_ATTEMPTS, API_RETRY_DELAY_MS, SYNC_MAX_RETRY_DELAY_MS } from '../config/master.config';
+import { API_RETRY_ATTEMPTS, API_RETRY_DELAY_MS, SYNC_MAX_RETRY_DELAY_MS } from '@/config';
 
 export interface RetryOptions {
   maxRetries?: number;

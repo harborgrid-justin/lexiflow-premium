@@ -23,9 +23,9 @@ import {
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { Button } from '@/components/atoms/Button';
 import { DocketSheet } from './DocketSheet';
-import { DocketCalendar } from './DocketCalendar';
-import { DocketAnalytics } from './DocketAnalytics';
-import { DocketSettings } from './DocketSettings';
+import { DocketCalendar } from '@features/cases';
+import { DocketAnalytics } from '@features/cases';
+import { DocketSettings } from '@features/cases';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

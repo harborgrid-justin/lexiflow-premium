@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ErrorState } from '@/components/molecules/ErrorState';
 import { ThemeProvider } from '@/providers/ThemeContext';
+import React from "react";
 
 /**
  * ErrorState component displays error messages with retry actions.

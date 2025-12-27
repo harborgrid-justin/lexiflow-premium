@@ -7,9 +7,9 @@ class SkipNode<T> {
 }
 
 export class SkipList<T> {
-    private head: SkipNode<T>;
-    private maxLevel: number;
-    private p: number;
+    private readonly head: SkipNode<T>;
+    private readonly maxLevel: number;
+    private readonly p: number;
 
     constructor(maxLevel = 16, p = 0.5) {
         this.maxLevel = maxLevel;

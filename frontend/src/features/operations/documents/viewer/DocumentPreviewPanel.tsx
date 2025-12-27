@@ -194,5 +194,5 @@ export function DocumentPreviewPanel({
         </div>
     </div>
   );
-};
+}
 

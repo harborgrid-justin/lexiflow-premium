@@ -1,5 +1,5 @@
 
-import { ConferralSession, UUID, CaseId, MotionId } from '../../types';
+import { ConferralSession, UUID, CaseId, MotionId } from '@/types';
 
 export const MOCK_CONFERRALS: ConferralSession[] = [
   {

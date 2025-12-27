@@ -3,13 +3,13 @@
  * Time entries, invoices, expenses, fee agreements, rate tables, trust accounts
  */
 
-import { BillingApiService } from '../billing-api';
-import { TimeEntriesApiService } from '../billing/time-entries-api';
-import { InvoicesApiService } from '../billing/invoices-api';
-import { ExpensesApiService } from '../billing/expenses-api';
-import { FeeAgreementsApiService } from '../fee-agreements-api';
-import { RateTablesApiService } from '../rate-tables-api';
-import { TrustAccountsApiService } from '../trust-accounts-api';
+import { BillingApiService } from '@/api';
+import { TimeEntriesApiService } from '@/api';
+import { InvoicesApiService } from '@/api';
+import { ExpensesApiService } from '@/api';
+import { FeeAgreementsApiService } from '@/api';
+import { RateTablesApiService } from '@/api';
+import { TrustAccountsApiService } from '@/api';
 
 // Export service classes
 export {

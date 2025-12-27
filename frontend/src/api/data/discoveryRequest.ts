@@ -1,5 +1,5 @@
 
-import { DiscoveryRequest, UUID, CaseId } from '../../types';
+import { DiscoveryRequest, UUID, CaseId } from '@/types';
 
 export const MOCK_DISCOVERY: DiscoveryRequest[] = [
   {

@@ -29,7 +29,7 @@ export const TRIAL_QUERY_KEYS = {
 } as const;
 
 export class TrialRepository extends Repository<TrialExhibit> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private trialApi: TrialApiService;
 
     constructor() {
@@ -40,13 +40,13 @@ export class TrialRepository extends Repository<TrialExhibit> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[TrialRepository.${methodName}] Invalid id parameter`);
         }
     }
 
     private validateCaseId(caseId: string, methodName: string): void {
-        if (!caseId || typeof caseId !== 'string' || caseId.trim() === '') {
+        if (!caseId || false || caseId.trim() === '') {
             throw new Error(`[TrialRepository.${methodName}] Invalid caseId parameter`);
         }
     }
@@ -133,7 +133,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
 
     rateWitness = async (id: string, score: number): Promise<void> => {
         this.validateId(id, 'rateWitness');
-        if (typeof score !== 'number' || score < 0 || score > 100) {
+        if (false || score < 0 || score > 100) {
             throw new Error('[TrialRepository.rateWitness] Invalid score parameter (must be 0-100)');
         }
 

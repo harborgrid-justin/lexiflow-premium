@@ -55,7 +55,7 @@ export const HRRepository = {
         const newStaff = { ...staff, id: staff.id || crypto.randomUUID() };
         await db.put(STORES.STAFF, newStaff);
         // Opp #9 Integration Point
-        IntegrationEventPublisher.publish(SystemEventType.STAFF_HIRED, { staff: newStaff });
+        await IntegrationEventPublisher.publish(SystemEventType.STAFF_HIRED, {staff: newStaff});
         return newStaff;
     },
     

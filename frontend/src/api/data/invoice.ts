@@ -1,5 +1,5 @@
 
-import { Invoice, UUID } from '../../types';
+import { Invoice, UUID } from '@/types';
 
 export const MOCK_INVOICES: Invoice[] = [
     {

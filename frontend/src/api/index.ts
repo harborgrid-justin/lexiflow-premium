@@ -247,3 +247,9 @@ export const api = {
 } as const;
 
 export default api;
+
+export class ProcessingJobsApiService {
+}
+
+export class SearchApiService {
+}

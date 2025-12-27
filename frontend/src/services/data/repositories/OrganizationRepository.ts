@@ -17,7 +17,7 @@ export const ORGANIZATION_QUERY_KEYS = {
 } as const;
 
 export class OrganizationRepository extends Repository<Organization> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private orgsApi: OrganizationsApiService;
 
     constructor() {
@@ -28,7 +28,7 @@ export class OrganizationRepository extends Repository<Organization> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[OrganizationRepository.${methodName}] Invalid id parameter`);
         }
     }

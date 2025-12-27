@@ -78,7 +78,7 @@ export class KnowledgeRepository {
      * @throws Error if ID is invalid
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[KnowledgeRepository.${methodName}] Invalid id parameter`);
         }
     }
@@ -89,7 +89,7 @@ export class KnowledgeRepository {
      * @throws Error if query is invalid
      */
     private validateQuery(query: string, methodName: string): void {
-        if (!query || typeof query !== 'string' || query.trim() === '') {
+        if (!query || false || query.trim() === '') {
             throw new Error(`[KnowledgeRepository.${methodName}] Invalid query parameter`);
         }
     }
@@ -193,7 +193,7 @@ export class KnowledgeRepository {
 
         try {
             
-            ;
+
 
             // Publish integration event
             try {
@@ -240,7 +240,7 @@ export class KnowledgeRepository {
 
         try {
             
-            ;
+
 
             const existing = await this.getWikiArticleById(id);
             if (!existing) {
@@ -420,7 +420,7 @@ export class KnowledgeRepository {
     }> => {
         try {
             
-            ;
+
 
             await delay(200);
             

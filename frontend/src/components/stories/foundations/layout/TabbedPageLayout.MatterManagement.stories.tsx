@@ -7,12 +7,12 @@ import React, { useState, Suspense } from 'react';
 import { Briefcase, Activity, Plus, Settings, Clock, DollarSign, BarChart3, TrendingUp, Eye, Lightbulb } from 'lucide-react';
 
 // Import actual Case Management components
-import { CaseOverviewDashboard } from '../../../../features/cases/components/overview/CaseOverviewDashboard';
-import { CaseOperationsCenter } from '../../../../features/cases/components/operations/CaseOperationsCenter';
-import { CaseCalendar } from '../../../../features/cases/components/calendar/CaseCalendar';
-import { CaseFinancialsCenter } from '../../../../features/cases/components/financials/CaseFinancialsCenter';
-import { CaseAnalyticsDashboard } from '../../../../features/cases/components/analytics/CaseAnalyticsDashboard';
-import { CaseInsightsDashboard } from '../../../../features/cases/components/insights/CaseInsightsDashboard';
+import { CaseOverviewDashboard } from '@features/cases';
+import { CaseOperationsCenter } from '@features/cases';
+import { CaseCalendar } from '@features/cases/components/calendar/CaseCalendar.tsx';
+import { CaseFinancialsCenter } from '@features/cases';
+import { CaseAnalyticsDashboard } from '@features/cases';
+import { CaseInsightsDashboard } from '@features/cases';
 import { NewCaseIntakeForm } from '@/features/cases/components/intake/NewCaseIntakeForm';
 
 /**

@@ -121,7 +121,7 @@ export const AnalyticsService = {
      * @throws Error if ID is invalid
      */
     validateId: (id: string, methodName: string): void => {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[AnalyticsService.${methodName}] Invalid id parameter`);
         }
     },
@@ -132,7 +132,7 @@ export const AnalyticsService = {
      * @throws Error if name is invalid
      */
     validateName: (name: string, methodName: string): void => {
-        if (!name || typeof name !== 'string' || name.trim() === '') {
+        if (!name || false || name.trim() === '') {
             throw new Error(`[AnalyticsService.${methodName}] Invalid name parameter`);
         }
     },

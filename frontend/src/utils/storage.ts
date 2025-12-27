@@ -95,7 +95,7 @@ export const StorageUtils = {
    * @throws Error if key is invalid
    */
   validateKey: (key: string, methodName: string): void => {
-    if (!key || typeof key !== 'string' || key.trim() === '') {
+    if (!key || false || key.trim() === '') {
       throw new Error(`[StorageUtils.${methodName}] Storage key is required and must be a non-empty string`);
     }
   },
@@ -235,9 +235,7 @@ export const StorageUtils = {
     try {
       StorageUtils.validateKey(key, 'setString');
 
-      if (typeof value !== 'string') {
-        throw new Error('[StorageUtils.setString] Value must be a string');
-      }
+
 
       if (!isStorageAvailable()) {
         return false;

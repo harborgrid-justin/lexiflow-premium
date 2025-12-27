@@ -31,7 +31,7 @@ import { PeriodSelector } from '@/components/molecules/PeriodSelector';
 import { ExportMenu } from '@/components/organisms/ExportMenu';
 import { TabbedPageLayout, TabConfigItem } from '@/components/templates/TabbedPageLayout';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
-import { BillingDashboardContent } from './BillingDashboardContent';
+import { BillingDashboardContent } from '@features/operations';
 import { BillingErrorBoundary } from './BillingErrorBoundary';
 
 // Utils & Config

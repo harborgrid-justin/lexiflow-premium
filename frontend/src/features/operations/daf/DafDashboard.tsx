@@ -77,4 +77,4 @@ export function DafDashboard() {
       </div>
     </div>
   );
-};
+}

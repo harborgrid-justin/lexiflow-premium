@@ -7,10 +7,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '../services/data/dataService';
+import { DataService } from '@/services';
 import { queryKeys } from '../utils/queryKeys';
 import { useInterval } from './useInterval';
-import { Task } from '../types';
+import { Task } from '@/types';
 
 export interface SLAItem {
   id: string;

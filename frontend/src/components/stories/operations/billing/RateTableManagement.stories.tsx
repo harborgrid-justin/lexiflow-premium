@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { RateTableManagement } from '../../../../features/operations/billing/rate-tables/RateTableManagement';
+import { RateTableManagement } from '@features/operations/billing/rate-tables/RateTableManagement.tsx';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 

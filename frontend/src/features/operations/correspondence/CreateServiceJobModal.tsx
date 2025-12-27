@@ -160,7 +160,7 @@ export function CreateServiceJobModal({ isOpen, onClose, onSave }: CreateService
                                     aria-label="Select mail service"
                                     className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                     value={formData.mailType || ''}
-                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, mailType: e.target.value as any, serverName: e.target.value.includes('FedEx') ? 'FedEx' : e.target.value.includes('UPS') ? 'UPS' : 'USPS'})}
+                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, mailType: e.target.value as never, serverName: e.target.value.includes('FedEx') ? 'FedEx' : e.target.value.includes('UPS') ? 'UPS' : 'USPS'})}
                                 >
                                     <option value="">Select Service...</option>
                                     <option value="USPS Certified RR">USPS Certified w/ Return Receipt</option>
@@ -242,4 +242,4 @@ export function CreateServiceJobModal({ isOpen, onClose, onSave }: CreateService
         </div>
     </Modal>
   );
-};
+}

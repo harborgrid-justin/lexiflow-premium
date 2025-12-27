@@ -9,14 +9,14 @@
 
 import React, { useState, useRef, useCallback } from 'react';
 import { TypedWorkflowNode, createTypedNode, WorkflowConnection, NodeType } from '@/types/workflow-types';
-import { ContextMenuItem } from '../components/molecules/ContextMenu/ContextMenu';
+import { ContextMenuItem } from '@/components';
 import { CANVAS_CONSTANTS } from '@/types/canvas-constants';
 import {
   calculateDropPosition,
   calculateCanvasMousePosition,
   generateNodeContextMenuItems,
   generateCanvasContextMenuItems,
-} from "../features/litigation/strategy/utils/canvasUtils";
+} from "@features/litigation/strategy/utils";
 import { useCommandHistory } from './useCommandHistory';
 import { useKeyboardShortcuts } from './useKeyboardShortcuts';
 import {
@@ -26,7 +26,7 @@ import {
   MoveNodeCommand,
   AddConnectionCommand,
   DeleteConnectionCommand,
-} from '../services/infrastructure/commandHistory';
+} from '@/services';
 
 export interface UseStrategyCanvasProps {
   initialNodes?: TypedWorkflowNode[];

@@ -49,8 +49,8 @@ export type { DataVersion } from './versioning-api';
 export { VersioningApiService } from './versioning-api';
 
 // Import service classes for the unified API instance
-import { SchemaManagementApiService } from './schema-management-api';
-import { QueryWorkbenchApiService } from './query-workbench-api';
+import { SchemaManagementApiService } from '@/api';
+import { QueryWorkbenchApiService } from '@/api';
 import { PipelinesApiService } from './pipelines-api';
 import { SyncApiService } from './sync-api';
 import { BackupsApiService } from './backups-api';

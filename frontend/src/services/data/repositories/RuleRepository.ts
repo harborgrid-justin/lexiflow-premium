@@ -16,7 +16,7 @@ export const RULE_QUERY_KEYS = {
 } as const;
 
 export class RuleRepository extends Repository<LegalRule> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
 
     constructor() {
         super(STORES.RULES);
@@ -25,7 +25,7 @@ export class RuleRepository extends Repository<LegalRule> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[RuleRepository.${methodName}] Invalid id parameter`);
         }
     }

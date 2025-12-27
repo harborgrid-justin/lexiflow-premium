@@ -268,14 +268,7 @@ class BluebookFormatterClass {
       const periodicalCit = citation as Partial<PeriodicalCitation>;
       const bookCit = citation as Partial<BookCitation>;
 
-      if (typeof caseCit.page === 'number') {
         page = caseCit.page;
-      } else if (typeof periodicalCit.page === 'number') {
-        page = periodicalCit.page;
-      } else if (typeof bookCit.pageNumbers === 'string') {
-        const parsed = parseInt(bookCit.pageNumbers, 10);
-        if (!isNaN(parsed)) page = parsed;
-      }
 
       switch (citation.type) {
         case BluebookCitationType.CASE:

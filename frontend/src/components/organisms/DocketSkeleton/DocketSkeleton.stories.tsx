@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { DocketTableSkeleton } from './DocketSkeleton';
+import { DocketTableSkeleton } from '@/components';
 
 const meta: Meta<typeof DocketTableSkeleton> = {
   title: 'Organisms/DocketSkeleton',

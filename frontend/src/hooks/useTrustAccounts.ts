@@ -15,23 +15,20 @@
  * 4. Compliance validation logic lives in hook, not in UI
  */
 
-import { useQuery, useMutation, queryClient } from './useQueryHooks';
-import type { UseQueryResult } from '../services/infrastructure/queryTypes';
-import { trustAccountsApi } from '../api/trust-accounts-api';
+import {queryClient, useMutation, useQuery} from './useQueryHooks';
+import {trustAccountsApi} from '../api/trust-accounts-api';
 import type {
-  TrustAccount,
-  TrustTransactionEntity,
-  CreateTrustAccountDto,
-  UpdateTrustAccountDto,
-  DepositDto,
-  WithdrawalDto,
-  ThreeWayReconciliationDto,
-  TrustAccountFilters,
-  TrustAccountValidationResult,
-  TrustAccountComplianceReport,
+    CreateTrustAccountDto,
+    DepositDto,
+    ThreeWayReconciliationDto,
+    TrustAccount,
+    TrustAccountFilters,
+    TrustAccountValidationResult,
+    TrustTransactionEntity,
+    WithdrawalDto,
 } from '../types/trust-accounts';
-import { useCallback, useMemo, useState } from 'react';
-import { TrustAccountStatus, PaymentMethod } from '../types/trust-accounts';
+import {PaymentMethod, TrustAccountStatus} from '../types/trust-accounts';
+import {useCallback, useMemo, useState} from 'react';
 
 /**
  * Query key factory pattern for cache management
@@ -311,14 +308,12 @@ export function useTrustAccountDetail(accountId: string): UseTrustAccountDetailR
     const reconciledTransactions = transactions.filter((tx: TrustTransactionEntity) => tx.reconciled);
     if (reconciledTransactions.length === 0) return null;
 
-    const latest = reconciledTransactions.reduce((latest: string | null, tx: TrustTransactionEntity) => {
-      if (!tx.reconciledDate) return latest;
-      return !latest || new Date(tx.reconciledDate) > new Date(latest)
-        ? tx.reconciledDate
-        : latest;
+    return reconciledTransactions.reduce((latest: string | null, tx: TrustTransactionEntity) => {
+        if (!tx.reconciledDate) return latest;
+        return !latest || new Date(tx.reconciledDate) > new Date(latest)
+            ? tx.reconciledDate
+            : latest;
     }, null as string | null);
-
-    return latest;
   }, [transactions]);
 
   return {

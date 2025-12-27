@@ -14,7 +14,7 @@
  * ```
  */
 export class LRUCache<T> {
-  private capacity: number;
+  private readonly capacity: number;
   private cache: Map<string, T>;
 
   constructor(capacity: number) {

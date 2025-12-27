@@ -1,7 +1,7 @@
 
 import React, { createContext, useState, useEffect, useCallback, useRef } from 'react';
-import { SyncEngine, Mutation } from '../services/data/syncEngine';
-import { DataService } from '../services/data/dataService';
+import { SyncEngine, Mutation } from '@/services';
+import { DataService } from '@/services';
 import { useToast } from './ToastContext';
 import type { SyncContextType } from './SyncContext.types';
 
@@ -89,7 +89,7 @@ export const SyncProvider = ({ children }: { children: React.ReactNode }) => {
         isProcessingRef.current = false;
         
         // Process next immediately
-        processQueue();
+        await processQueue();
 
     } catch (err) {
         console.error(`[Sync] Failed ${mutation.type}:`, err);
@@ -164,7 +164,7 @@ export const SyncProvider = ({ children }: { children: React.ReactNode }) => {
         console.warn("Direct call failed, queuing mutation", e);
         SyncEngine.enqueue(type, payload);
         refreshCounts();
-        processQueue(); // Trigger queue attempt
+        await processQueue(); // Trigger queue attempt
       }
     } else {
       // Offline: Queue it

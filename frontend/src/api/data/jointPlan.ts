@@ -1,5 +1,5 @@
 
-import { JointPlan, UUID, CaseId } from '../../types';
+import { JointPlan, UUID, CaseId } from '@/types';
 
 export const MOCK_JOINT_PLANS: JointPlan[] = [
   {

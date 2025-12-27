@@ -63,8 +63,8 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
       // Filter out hidden routes (accessed via other pages, not directly in sidebar)
       if (item.hidden) return false;
       // Filter out admin-only routes for non-admin users
-      if (item.requiresAdmin && !isAuthorizedAdmin) return false;
-      return true;
+      return !(item.requiresAdmin && !isAuthorizedAdmin);
+
     });
   }, [currentUserRole, modules]);
 

@@ -1,4 +1,4 @@
-import { useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import type { SearchCategory, SearchResult } from './types';
 import { addRecentSearch, getRecentSearches } from './storage';
 

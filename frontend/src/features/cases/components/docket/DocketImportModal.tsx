@@ -15,7 +15,7 @@ import { ArrowRight, FileCode, Sparkles } from 'lucide-react';
 // Internal Dependencies - Components
 import { Modal } from '@/components/molecules/Modal';
 import { Button } from '@/components/atoms/Button';
-import { ParsedDocketPreview } from './ParsedDocketPreview';
+import { ParsedDocketPreview } from '@features/cases';
 import { Stepper } from '@/components/molecules/Stepper';
 
 // Internal Dependencies - Hooks & Context

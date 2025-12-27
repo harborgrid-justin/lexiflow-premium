@@ -1,4 +1,4 @@
-import { TrialExhibit, CaseId } from '../../types';
+import { TrialExhibit, CaseId } from '@/types';
 
 export const MOCK_EXHIBITS: TrialExhibit[] = [
     {

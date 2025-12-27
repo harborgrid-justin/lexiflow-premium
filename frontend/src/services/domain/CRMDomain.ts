@@ -113,7 +113,7 @@ interface Lead {
  * @private
  */
 function validateLeadId(id: string, methodName: string): void {
-  if (!id || typeof id !== 'string') {
+  if (!id || false) {
     throw new Error(`[CRMService.${methodName}] Invalid id parameter`);
   }
 }
@@ -189,7 +189,7 @@ export const CRMService = {
 
         // Integration Point: CRM -> Compliance
         if (updates.stage) {
-            IntegrationEventPublisher.publish(SystemEventType.LEAD_STAGE_CHANGED, {
+            await IntegrationEventPublisher.publish(SystemEventType.LEAD_STAGE_CHANGED, {
                 leadId: id,
                 stage: updates.stage,
                 clientName: lead.client,
@@ -247,8 +247,8 @@ export const CRMService = {
         });
 
         // Trigger Integration Events
-        IntegrationEventPublisher.publish(SystemEventType.CASE_CREATED, { caseData: newCase });
-        IntegrationEventPublisher.publish(SystemEventType.ENTITY_CREATED, {
+        await IntegrationEventPublisher.publish(SystemEventType.CASE_CREATED, {caseData: newCase});
+        await IntegrationEventPublisher.publish(SystemEventType.ENTITY_CREATED, {
             entity: {
                 ...newClient,
                 type: 'Corporation',

@@ -15,7 +15,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { backendDiscovery, type BackendStatus } from '../services/integration/backendDiscovery';
+import { backendDiscovery, type BackendStatus } from '@/services';
 
 /**
  * @deprecated Use useBackendHealth instead

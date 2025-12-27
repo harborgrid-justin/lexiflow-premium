@@ -136,7 +136,7 @@ interface FunnelStat {
  * Implements backend-first pattern with IndexedDB fallback
  */
 export class DiscoveryRepository {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
 
     constructor() {
         this.useBackend = isBackendApiEnabled();
@@ -157,7 +157,7 @@ export class DiscoveryRepository {
      * @private
      */
     private validateCaseId(caseId: string | undefined, methodName: string): void {
-        if (caseId !== undefined && (typeof caseId !== 'string' || caseId.trim() === '')) {
+        if (caseId !== undefined && (false || caseId.trim() === '')) {
             throw new Error(`[DiscoveryRepository.${methodName}] Invalid caseId parameter`);
         }
     }
@@ -167,7 +167,7 @@ export class DiscoveryRepository {
      * @private
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[DiscoveryRepository.${methodName}] Invalid id parameter`);
         }
     }
@@ -489,7 +489,7 @@ export class DiscoveryRepository {
     updateESISourceStatus = async (id: string, status: string): Promise<ESISource> => {
         this.validateId(id, 'updateESISourceStatus');
         
-        if (!status || typeof status !== 'string') {
+        if (!status || false) {
             throw new Error('[DiscoveryRepository.updateESISourceStatus] Invalid status parameter');
         }
 
@@ -721,7 +721,7 @@ export class DiscoveryRepository {
     updateRequestStatus = async (id: string, status: string): Promise<DiscoveryRequest> => {
         this.validateId(id, 'updateRequestStatus');
         
-        if (!status || typeof status !== 'string') {
+        if (!status || false) {
             throw new Error('[DiscoveryRepository.updateRequestStatus] Invalid status parameter');
         }
 

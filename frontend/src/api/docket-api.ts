@@ -73,7 +73,7 @@ export class DocketApiService {
      * @private
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[DocketApiService.${methodName}] Invalid id parameter`);
         }
     }

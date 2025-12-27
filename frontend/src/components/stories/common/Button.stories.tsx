@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '@/components/atoms/Button';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { Plus, Save, Trash2 } from 'lucide-react';
+import React from "react";
 
 /**
  * Button component with multiple variants, sizes, and loading states.

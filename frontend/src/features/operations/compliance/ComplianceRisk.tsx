@@ -58,5 +58,5 @@ export function ComplianceRisk() {
        />
     </div>
   );
-};
+}
 

@@ -122,4 +122,4 @@ export function Tabs({ tabs, activeTab, onChange, className = '', variant = 'seg
       })}
     </div>
   );
-};
+}

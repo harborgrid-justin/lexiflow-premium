@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { BackendHealthMonitor } from './BackendHealthMonitor';
+import { BackendHealthMonitor } from '@/components';
 
 const meta: Meta<typeof BackendHealthMonitor> = {
   title: 'Organisms/BackendHealthMonitor',

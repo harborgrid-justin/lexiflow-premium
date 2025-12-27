@@ -11,7 +11,7 @@
  */
 
 import { useEffect } from 'react';
-import { cleanupDataService, logDataServiceMemory } from '../services/data/dataService';
+import { cleanupDataService, logDataServiceMemory } from '@/services';
 
 interface UseDataServiceCleanupOptions {
   /**

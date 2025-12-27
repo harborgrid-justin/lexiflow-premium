@@ -1,9 +1,9 @@
 
 export class CuckooFilter {
-    private buckets: (string | null)[][];
-    private bucketSize: number;
-    private numBuckets: number;
-    private maxKicks: number;
+    private readonly buckets: (string | null)[][];
+    private readonly bucketSize: number;
+    private readonly numBuckets: number;
+    private readonly maxKicks: number;
 
     constructor(capacity: number, bucketSize = 4, maxKicks = 500) {
         this.bucketSize = bucketSize;

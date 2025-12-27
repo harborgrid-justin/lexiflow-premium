@@ -124,7 +124,7 @@ export class UsersApiService {
    * @private
    */
   private validateId(id: string, methodName: string): void {
-    if (!id || typeof id !== 'string' || id.trim() === '') {
+    if (!id || false || id.trim() === '') {
       throw new Error(`[UsersApiService.${methodName}] Invalid id parameter`);
     }
   }
@@ -383,7 +383,7 @@ export class UsersApiService {
    * @throws Error if validation fails or fetch fails
    */
   async getByDepartment(department: string): Promise<User[]> {
-    if (!department || typeof department !== 'string') {
+    if (!department || false) {
       throw new Error('[UsersApiService.getByDepartment] department is required');
     }
     return this.getAll({ department });

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { DataSourceSelector } from './DataSourceSelector';
+import { DataSourceSelector } from '@/components';
 
 const meta: Meta<typeof DataSourceSelector> = {
   title: 'Molecules/DataSourceSelector',

@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between } from 'typeorm';
 import { AnalyticsEvent } from './entities/analytics-event.entity';
 import { Dashboard } from './entities/dashboard.entity';
-import { CreateAnalyticsEventDto } from './dto/create-analytics-event.dto';
-import { CreateDashboardDto } from './dto/create-dashboard.dto';
+import { CreateAnalyticsEventDto } from '@analytics/dto';
+import { CreateDashboardDto } from '@analytics/dto';
 import { AnalyticsGenerateReportDto, GenerateReportResponseDto, ReportFormat } from './dto/generate-report.dto';
 import {
   AnalyticsCaseMetricsDto,

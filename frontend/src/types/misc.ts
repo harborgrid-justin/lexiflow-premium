@@ -18,7 +18,7 @@ import {
   OcrStatus, TaskDependencyType
 } from './enums';
 import { LucideIcon } from 'lucide-react';
-import type { FC, LazyExoticComponent } from 'react';
+import React, { FC, LazyExoticComponent } from 'react';
 import type { Case, Party } from './case';
 import type { Motion, DocketEntry } from './motion-docket';
 import type { EvidenceItem } from './evidence';

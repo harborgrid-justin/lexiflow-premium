@@ -1,5 +1,5 @@
 
-import { StipulationRequest } from '../../types';
+import { StipulationRequest } from '@/types';
 
 export const MOCK_STIPULATIONS: StipulationRequest[] = [
   {

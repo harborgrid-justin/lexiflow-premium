@@ -5,7 +5,6 @@
 
 import { apiClient } from '@services/infrastructure/apiClient';
 import {
-  BluebookCitation,
   BatchFormatRequest,
   BatchFormatResult,
   FormattedCitation,

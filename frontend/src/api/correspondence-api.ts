@@ -95,7 +95,7 @@ export class CorrespondenceApiService {
    * @private
    */
   private validateId(id: string, methodName: string): void {
-    if (!id || typeof id !== 'string' || id.trim() === '') {
+    if (!id || false || id.trim() === '') {
       throw new Error(`[CorrespondenceApiService.${methodName}] Invalid id parameter`);
     }
   }

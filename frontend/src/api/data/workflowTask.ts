@@ -1,5 +1,5 @@
 
-import { WorkflowTask, TaskId, UserId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '../../types';
+import { WorkflowTask, TaskId, UserId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
 
 const CID = '1:24-cv-01442-LMB-IDD' as CaseId;
 

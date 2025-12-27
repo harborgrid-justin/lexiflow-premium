@@ -1,5 +1,5 @@
 
-import { EvidenceItem, EvidenceId, UUID, CaseId } from '../../types';
+import { EvidenceItem, EvidenceId, UUID, CaseId } from '@/types';
 
 export const MOCK_EVIDENCE: EvidenceItem[] = [
   {

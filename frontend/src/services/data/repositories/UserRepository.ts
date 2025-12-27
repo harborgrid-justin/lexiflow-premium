@@ -16,7 +16,7 @@ export const USER_QUERY_KEYS = {
 } as const;
 
 export class UserRepository extends Repository<User> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private usersApi: UsersApiService;
 
     constructor() {
@@ -27,7 +27,7 @@ export class UserRepository extends Repository<User> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[UserRepository.${methodName}] Invalid id parameter`);
         }
     }

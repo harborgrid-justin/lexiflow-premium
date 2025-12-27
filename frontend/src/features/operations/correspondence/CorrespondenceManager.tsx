@@ -33,11 +33,11 @@ import { PageHeader } from '@/components/organisms/PageHeader';
 import { Button } from '@/components/atoms/Button';
 import { CommunicationLog } from './CommunicationLog';
 import { ServiceTracker } from './ServiceTracker';
-import { CorrespondenceDetail } from './CorrespondenceDetail';
-import { ComposeMessageModal } from './ComposeMessageModal';
-import { CreateServiceJobModal } from './CreateServiceJobModal';
-import { CorrespondenceErrorBoundary } from './CorrespondenceErrorBoundary';
-import { CommunicationLogSkeleton, ServiceTrackerSkeleton, CorrespondenceDetailSkeleton } from './CorrespondenceSkeleton';
+import { CorrespondenceDetail } from '@features/operations';
+import { ComposeMessageModal } from '@features/operations';
+import { CreateServiceJobModal } from '@features/operations';
+import { CorrespondenceErrorBoundary } from '@features/operations';
+import { CommunicationLogSkeleton, ServiceTrackerSkeleton, CorrespondenceDetailSkeleton } from '@features/operations';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

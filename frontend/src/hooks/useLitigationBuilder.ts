@@ -18,11 +18,11 @@ import { useState, useCallback } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery, useMutation } from './useQueryHooks';
 import { queryKeys } from '../utils/queryKeys';
-import { GraphValidationService } from '../services/search/graphValidationService';
-import { DateCalculationService } from '../services/infrastructure/dateCalculationService';
+import { GraphValidationService } from '@/services';
+import { DateCalculationService } from '@/services';
 
 // Hooks & Context
 import { useNotify } from './useNotify';
@@ -34,7 +34,7 @@ import { CANVAS_CONSTANTS, VALIDATION_MESSAGES } from '@/types/canvas-constants'
 import { Playbook } from '@/api/data/mockLitigationPlaybooks';
 
 // Types
-import { Case, CasePhase, WorkflowTask, CaseId, TaskId, TaskStatusBackend, TaskPriorityBackend } from '../types';
+import { Case, CasePhase, WorkflowTask, CaseId, TaskId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

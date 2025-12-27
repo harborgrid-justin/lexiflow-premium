@@ -178,10 +178,10 @@ describe('Async Utilities', () => {
       const fn = jest.fn().mockResolvedValue('result');
       const debounced = debounce(fn, 100);
 
-      debounced('arg1');
+      await debounced('arg1');
       jest.advanceTimersByTime(50);
 
-      debounced('arg2');
+      await debounced('arg2');
       jest.advanceTimersByTime(50);
 
       expect(fn).not.toHaveBeenCalled();

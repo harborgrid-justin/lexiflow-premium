@@ -1,4 +1,4 @@
-import { LegalHold, UUID } from '../../types';
+import { LegalHold, UUID } from '@/types';
 
 export const MOCK_LEGAL_HOLDS: LegalHold[] = [
   { id: 'LH-01' as UUID, custodian: 'John Doe', dept: 'Engineering', issued: '2023-11-01', status: 'Acknowledged' },

@@ -1,5 +1,5 @@
 
-import { Clause, UUID, UserId } from '../../types';
+import { Clause, UUID, UserId } from '@/types';
 
 export const MOCK_CLAUSES: Clause[] = [
     {

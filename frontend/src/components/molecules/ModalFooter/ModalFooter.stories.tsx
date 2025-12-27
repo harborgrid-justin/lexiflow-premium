@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ModalFooter } from './ModalFooter';
+import { ModalFooter } from '@/components';
 
 const meta: Meta<typeof ModalFooter> = {
   title: 'Molecules/ModalFooter',

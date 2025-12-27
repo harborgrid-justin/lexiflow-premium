@@ -79,7 +79,7 @@ export class PleadingsApiService {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[PleadingsApiService.${methodName}] Invalid id parameter`);
         }
     }

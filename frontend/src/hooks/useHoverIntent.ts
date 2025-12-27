@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ========================================
 import { useRef, useCallback, useEffect } from 'react';
-import { TOOLTIP_DELAY_MS } from '../config/master.config';
+import { TOOLTIP_DELAY_MS } from '@/config';
 
 // ========================================
 // TYPES & INTERFACES

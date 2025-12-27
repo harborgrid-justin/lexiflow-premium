@@ -47,18 +47,6 @@ export class ProcessingJobsApiService {
   async getById(id: string): Promise<ProcessingJob> {
     return apiClient.get<ProcessingJob>(`/processing-jobs/${id}`);
   }
-
-  /**
-   * Get jobs by entity (e.g., all jobs for a specific document)
-   * GET ${API_PREFIX}/processing-jobs/entity/:entityType/:entityId
-   */
-  async getByEntity(entityType: string, entityId: string): Promise<ProcessingJob[]> {
-    const response = await apiClient.get<PaginatedResponse<ProcessingJob>>(
-      `/processing-jobs/entity/${entityType}/${entityId}`
-    );
-    return response.data;
-  }
-
   /**
    * Cancel a running job
    * POST ${API_PREFIX}/processing-jobs/:id/cancel

@@ -1,5 +1,5 @@
 
-import { StaffMember, UUID, UserId } from '../../types';
+import { StaffMember, UUID, UserId } from '@/types';
 
 export const MOCK_STAFF: StaffMember[] = [
   { 

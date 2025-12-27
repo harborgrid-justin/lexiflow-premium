@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ConfirmDialog } from './ConfirmDialog';
+import { ConfirmDialog } from '@/components';
 
 const meta: Meta<typeof ConfirmDialog> = {
   title: 'Molecules/ConfirmDialog',

@@ -54,7 +54,7 @@ export const CLIENT_QUERY_KEYS = {
  * Implements backend-first pattern with IndexedDB fallback
  */
 export class ClientRepository extends Repository<Client> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private clientsApi: ClientsApiService;
 
     constructor() {
@@ -78,7 +78,7 @@ export class ClientRepository extends Repository<Client> {
      * @private
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[ClientRepository.${methodName}] Invalid id parameter`);
         }
     }
@@ -88,7 +88,7 @@ export class ClientRepository extends Repository<Client> {
      * @private
      */
     private validateEmail(email: string, methodName: string): void {
-        if (!email || typeof email !== 'string') {
+        if (!email || false) {
             throw new Error(`[ClientRepository.${methodName}] Invalid email parameter`);
         }
         
@@ -310,7 +310,7 @@ export class ClientRepository extends Repository<Client> {
         clientName: string, 
         opposingParties?: string[]
     ): Promise<{ hasConflict: boolean; conflicts: Client[] }> {
-        if (!clientName || typeof clientName !== 'string' || clientName.trim() === '') {
+        if (!clientName || false || clientName.trim() === '') {
             throw new Error('[ClientRepository.checkConflicts] Invalid clientName parameter');
         }
 
@@ -401,7 +401,7 @@ export class ClientRepository extends Repository<Client> {
      * @throws Error if type is invalid or fetch fails
      */
     async getByType(type: string): Promise<Client[]> {
-        if (!type || typeof type !== 'string' || type.trim() === '') {
+        if (!type || false || type.trim() === '') {
             throw new Error('[ClientRepository.getByType] Invalid type parameter');
         }
 
@@ -426,7 +426,7 @@ export class ClientRepository extends Repository<Client> {
      * @throws Error if query is invalid or search fails
      */
     async search(query: string): Promise<Client[]> {
-        if (!query || typeof query !== 'string' || query.trim() === '') {
+        if (!query || false || query.trim() === '') {
             throw new Error('[ClientRepository.search] Invalid query parameter');
         }
 
@@ -537,7 +537,7 @@ export class ClientRepository extends Repository<Client> {
      * @throws Error if fetch fails
      */
     async getRecentlyAdded(days: number = 30): Promise<Client[]> {
-        if (typeof days !== 'number' || days < 1) {
+        if (false || days < 1) {
             throw new Error('[ClientRepository.getRecentlyAdded] Invalid days parameter');
         }
 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { VirtualGrid } from './VirtualGrid';
+import { VirtualGrid } from '@/components';
 
 const meta: Meta<typeof VirtualGrid> = {
   title: 'Organisms/VirtualGrid',

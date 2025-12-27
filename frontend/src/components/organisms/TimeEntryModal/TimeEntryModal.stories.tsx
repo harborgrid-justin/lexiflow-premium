@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TimeEntryModal } from './TimeEntryModal';
+import { TimeEntryModal } from '@/components';
 
 const meta: Meta<typeof TimeEntryModal> = {
   title: 'Organisms/TimeEntryModal',

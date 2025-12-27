@@ -3,12 +3,12 @@
  * PACER, webhooks, external APIs, organizations
  */
 
-import { PACERApiService } from '../integrations/pacer-api';
-import { WebhooksApiService } from '../webhooks-api';
-import { IntegrationsApiService } from '../integrations-api';
-import { OrganizationsApiService } from '../organizations-api';
-import { ExternalAPIService } from '../external-api-api';
-import { PipelinesApiService } from '../pipelines-api';
+import { PACERApiService } from '@/api';
+import { WebhooksApiService } from '@/api';
+import { IntegrationsApiService } from '@/api';
+import { OrganizationsApiService } from '@/api';
+import { ExternalAPIService } from '@/api';
+import { PipelinesApiService } from '@/api';
 
 // Export service classes
 export {

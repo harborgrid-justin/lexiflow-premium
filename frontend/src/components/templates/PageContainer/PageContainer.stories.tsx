@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { PageContainer } from './PageContainer';
+import { PageContainer } from '@/components';
 
 const meta: Meta<typeof PageContainer> = {
   title: 'Templates/PageContainer',

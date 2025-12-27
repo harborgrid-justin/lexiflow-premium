@@ -125,9 +125,7 @@ const validateString = (value: string | undefined, methodName: string): string =
     throw new Error(`[FormattersService.${methodName}] String is required`);
   }
 
-  if (typeof value !== 'string') {
-    throw new Error(`[FormattersService.${methodName}] Value must be a string, got: ${typeof value}`);
-  }
+
 
   return value;
 };

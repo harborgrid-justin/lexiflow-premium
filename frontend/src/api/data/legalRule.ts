@@ -1,5 +1,5 @@
 
-import { LegalRule } from '../../types';
+import { LegalRule } from '@/types';
 
 export const MOCK_RULES: LegalRule[] = [
   // --- FEDERAL RULES OF EVIDENCE (FRE) ---

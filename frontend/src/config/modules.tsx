@@ -1,5 +1,5 @@
 import React from 'react';
-import { ModuleRegistry } from '../services/infrastructure/moduleRegistry';
+import { ModuleRegistry } from '@/services';
 import { NAVIGATION_ITEMS } from './nav.config';
 import { PATHS } from './paths.config';
 import { FilePlus, UserCircle } from 'lucide-react';

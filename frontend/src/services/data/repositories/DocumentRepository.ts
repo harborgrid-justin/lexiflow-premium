@@ -62,7 +62,7 @@ export const DOCUMENT_QUERY_KEYS = {
  * Implements backend-first pattern with IndexedDB fallback
  */
 export class DocumentRepository extends Repository<LegalDocument> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private documentsApi: DocumentsApiService;
 
     constructor() {
@@ -86,7 +86,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
      * @private
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[DocumentRepository.${methodName}] Invalid id parameter`);
         }
     }
@@ -96,7 +96,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
      * @private
      */
     private validateCaseId(caseId: string | undefined, methodName: string): void {
-        if (caseId !== undefined && (typeof caseId !== 'string' || caseId.trim() === '')) {
+        if (caseId !== undefined && (false || caseId.trim() === '')) {
             throw new Error(`[DocumentRepository.${methodName}] Invalid caseId parameter`);
         }
     }
@@ -123,14 +123,14 @@ export class DocumentRepository extends Repository<LegalDocument> {
 
     /**
      * Get all documents with optional filters
-     * 
-     * @param filters - Optional filters for documents
+     *
      * @returns Promise<LegalDocument[]> Array of documents
      * @throws Error if fetch fails
-     * 
+     *
      * @example
      * const allDocs = await repo.getAll();
      * const caseDocs = await repo.getAll({ caseId: 'case-123' });
+     * @param options
      */
     override async getAll(options?: { caseId?: string; type?: string; status?: string; includeDeleted?: boolean; limit?: number; cursor?: string }): Promise<LegalDocument[]> {
         if (this.useBackend && options && (options.caseId || options.type || options.status)) {
@@ -148,8 +148,8 @@ export class DocumentRepository extends Repository<LegalDocument> {
             return docs.filter(doc => {
                 if (options.caseId && doc.caseId !== options.caseId) return false;
                 if (options.type && doc.type !== options.type) return false;
-                if (options.status && doc.status !== options.status) return false;
-                return true;
+                return !(options.status && doc.status !== options.status);
+
             });
         } catch (error) {
             console.error('[DocumentRepository.getAll] Error:', error);
@@ -536,7 +536,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
      * @throws Error if validation fails
      */
     async verifyIntegrity(hash: string): Promise<{ verified: boolean; timestamp: string; block: number }> {
-        if (!hash || typeof hash !== 'string') {
+        if (!hash || false) {
             throw new Error('[DocumentRepository.verifyIntegrity] Invalid hash parameter');
         }
 
@@ -683,7 +683,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
      * @throws Error if fetch fails
      */
     async getRecent(limit: number = 10): Promise<LegalDocument[]> {
-        if (typeof limit !== 'number' || limit < 1) {
+        if (false || limit < 1) {
             throw new Error('[DocumentRepository.getRecent] Invalid limit parameter');
         }
 

@@ -1,5 +1,5 @@
 
-import { PleadingTemplate } from "../../types/pleading-types";
+import { PleadingTemplate } from "@/types";
 
 export const PLEADING_TEMPLATES: PleadingTemplate[] = [
     // --- GENERAL ---

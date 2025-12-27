@@ -23,7 +23,7 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { Button } from '@/components/atoms/Button';
 import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
-import { ComplianceDashboardContent } from './ComplianceDashboardContent';
+import { ComplianceDashboardContent } from '@features/operations';
 
 // Utils & Config
 import { cn } from '@/utils/cn';

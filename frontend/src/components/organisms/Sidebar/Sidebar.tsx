@@ -3,9 +3,9 @@ import React from 'react';
 import { User, AppView } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { SidebarHeader } from './SidebarHeader';
+import { SidebarHeader } from '@/components';
 import { SidebarNav } from './SidebarNav';
-import { SidebarFooter } from './SidebarFooter';
+import { SidebarFooter } from '@/components';
 
 interface SidebarProps {
   activeView: AppView;

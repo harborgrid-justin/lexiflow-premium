@@ -67,4 +67,4 @@ export function ProgressBar({
       </div>
     </div>
   );
-};
+}

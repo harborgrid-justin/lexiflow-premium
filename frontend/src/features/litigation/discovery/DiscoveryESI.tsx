@@ -21,7 +21,7 @@ import { Card } from '@/components/molecules/Card';
 import { Button } from '@/components/atoms/Button';
 import { Badge } from '@/components/atoms/Badge';
 import { ProgressBar } from '@/components/atoms/ProgressBar';
-import { EvidenceCustodyLog } from '../evidence/EvidenceCustodyLog';
+import { EvidenceCustodyLog } from '@features/litigation/evidence';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -51,8 +51,8 @@ import { ESICollectionStatusEnum } from '@/types/enums';
 class CollectionQueue {
   private queue: Array<{ id: string; source: ESISource }> = [];
   private running = 0;
-  private maxConcurrent = 3;
-  private onProgress?: (id: string, status: string) => void;
+  private readonly maxConcurrent = 3;
+  private readonly onProgress?: (id: string, status: string) => void;
 
   constructor(maxConcurrent = 3, onProgress?: (id: string, status: string) => void) {
     this.maxConcurrent = maxConcurrent;

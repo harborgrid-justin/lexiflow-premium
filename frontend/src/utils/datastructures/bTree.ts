@@ -9,8 +9,8 @@ class BTreeNode<K, V> {
 }
 
 export class BTree<K, V> {
-    private root: BTreeNode<K, V>;
-    private t: number; // Minimum degree (defines the range for # of keys)
+    private readonly root: BTreeNode<K, V>;
+    private readonly t: number; // Minimum degree (defines the range for # of keys)
 
     constructor(t: number) {
         this.t = t;

@@ -1,5 +1,5 @@
 
-import { TimeEntry, UUID, CaseId, UserId } from '../../types';
+import { TimeEntry, UUID, CaseId, UserId } from '@/types';
 
 export const MOCK_TIME_ENTRIES: TimeEntry[] = [
     {

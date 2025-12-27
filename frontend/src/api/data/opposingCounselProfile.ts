@@ -1,4 +1,4 @@
-import { OpposingCounselProfile, UUID } from '../../types';
+import { OpposingCounselProfile, UUID } from '@/types';
 
 export const MOCK_COUNSEL: OpposingCounselProfile[] = [
     {

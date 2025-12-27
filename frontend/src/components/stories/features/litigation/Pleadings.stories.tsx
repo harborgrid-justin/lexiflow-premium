@@ -1,14 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { CaseId, DocumentId, Pleading, Clause, PleadingDocument } from '@/types';
 import { PleadingBuilder } from '../../../../features/litigation/pleadings/PleadingBuilder';
-import { PleadingDashboard } from '../../../../features/litigation/pleadings/PleadingDashboard';
+import { PleadingDashboard } from '@features/litigation/pleadings';
 import PleadingDesigner from '../../../../features/litigation/pleadings/PleadingDesigner';
-import { PleadingTemplates } from '../../../../features/litigation/pleadings/PleadingTemplates';
-import { PleadingDrafts } from '../../../../features/litigation/pleadings/PleadingDrafts';
-import { PleadingFilingQueue } from '../../../../features/litigation/pleadings/PleadingFilingQueue';
-import { PleadingAnalytics } from '../../../../features/litigation/pleadings/PleadingAnalytics';
+import { PleadingTemplates } from '@features/litigation/pleadings';
+import { PleadingDrafts } from '@features/litigation/pleadings';
+import { PleadingFilingQueue } from '@features/litigation/pleadings';
+import { PleadingAnalytics } from '@features/litigation/pleadings';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
+import React from "react";
 
 /**
  * Pleading components provide comprehensive tools for drafting, managing, and filing

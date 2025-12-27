@@ -3,7 +3,7 @@
  * @description Safe template variable substitution engine
  */
 
-import { Case, PleadingSection } from '../types';
+import { Case, PleadingSection } from '@/types';
 
 export interface TemplateContext {
   case?: Case;

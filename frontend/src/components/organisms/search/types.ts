@@ -1,6 +1,7 @@
 /**
  * Type definitions for Enhanced Search
  */
+import React from "react";
 
 export type SearchCategory = 'all' | 'cases' | 'documents' | 'people' | 'dates' | 'tags';
 

@@ -96,4 +96,4 @@ export function LazyLoader({ message = "Loading..." }: LazyLoaderProps) {
       </div>
     </div>
   );
-};
+}

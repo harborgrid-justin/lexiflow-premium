@@ -67,4 +67,4 @@ export function ConversationRow({ conv, isActive, onSelect, onPopOut, formatTime
         </div>
       </div>
     );
-};
+}

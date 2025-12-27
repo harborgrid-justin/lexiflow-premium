@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { UserAvatar } from '@/components/atoms/UserAvatar';
 import { ThemeProvider } from '@/providers/ThemeContext';
+import React from "react";
 
 /**
  * UserAvatar component displays user profile pictures or initials.

@@ -1,5 +1,5 @@
 
-import { Motion, MotionId, CaseId, DocumentId, EvidenceId } from '../../types';
+import { Motion, MotionId, CaseId, DocumentId, EvidenceId } from '@/types';
 
 export const MOCK_MOTIONS: Motion[] = [
   // CASE: 1:24-cv-01442-LMB-IDD

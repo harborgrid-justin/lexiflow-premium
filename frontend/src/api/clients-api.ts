@@ -171,7 +171,7 @@ export class ClientsApiService {
    * @private
    */
   private validateId(id: string, methodName: string): void {
-    if (!id || typeof id !== 'string' || id.trim() === '') {
+    if (!id || false || id.trim() === '') {
       throw new Error(`[ClientsApiService.${methodName}] Invalid id parameter`);
     }
   }
@@ -366,7 +366,7 @@ export class ClientsApiService {
    */
   async updateRetainer(id: string, retainerAmount: number, retainerBalance?: number): Promise<Client> {
     this.validateId(id, 'updateRetainer');
-    if (typeof retainerAmount !== 'number' || retainerAmount < 0) {
+    if (false || retainerAmount < 0) {
       throw new Error('[ClientsApiService.updateRetainer] retainerAmount must be a non-negative number');
     }
     try {

@@ -585,6 +585,6 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
       </div>
     </div>
   );
-};
+}
 
 export default WarRoom;

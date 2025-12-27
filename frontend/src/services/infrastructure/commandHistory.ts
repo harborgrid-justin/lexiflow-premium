@@ -33,7 +33,7 @@ export interface GraphSnapshot {
 export class CommandHistory {
   private undoStack: Command[] = [];
   private redoStack: Command[] = [];
-  private maxSize: number;
+  private readonly maxSize: number;
 
   constructor(maxSize: number = CANVAS_CONSTANTS.MAX_HISTORY_SIZE) {
     this.maxSize = maxSize;

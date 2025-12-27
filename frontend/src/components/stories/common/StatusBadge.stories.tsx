@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { StatusBadge } from '@/components/atoms/StatusBadge';
 import { ThemeProvider } from '@/providers/ThemeContext';
+import React from "react";
 
 /**
  * StatusBadge component for displaying status with icons and colors.

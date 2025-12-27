@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { CalendarEvent } from './CalendarEvent';
+import { CalendarEvent } from '@/components';
 
 const meta: Meta<typeof CalendarEvent> = {
   title: 'Organisms/CalendarEvent',

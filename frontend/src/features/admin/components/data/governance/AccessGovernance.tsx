@@ -1,6 +1,4 @@
 import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
-import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
 import { Badge } from '@/components/atoms/Badge/Badge';
 import { Button } from '@/components/atoms/Button/Button';
 import { Shield, CheckCircle, XCircle, Lock, Info } from 'lucide-react';
@@ -46,7 +44,7 @@ export const AccessGovernance: React.FC = () => {
       const nextIndex = (levels.indexOf(current) + 1) % levels.length;
       const nextLevel = levels[nextIndex];
       
-      updatePermission({ role, resource, level: nextLevel });
+      updatePermission({role, resource, level: nextLevel}).then(r =>);
   };
 
   const getPermissionStyle = (level: PermissionLevel) => {

@@ -30,45 +30,45 @@ Successfully built out a complete enterprise page architecture for LexiFlow Prem
 1. **DashboardPage** - Executive overview with firm-wide metrics
 
 ### 📁 Case Management (7 pages)
-2. **CaseListPage** - Case list and search
-3. **CaseOverviewPage** - Individual case dashboard
-4. **CaseAnalyticsPage** - Case analytics and reporting
-5. **CaseIntakePage** - New case intake form
-6. **CaseOperationsPage** - Case task management
-7. **CaseInsightsPage** - AI-powered case insights
-8. **CaseFinancialsPage** - Case budgets and billing
+1. **CaseListPage** - Case list and search
+2. **CaseOverviewPage** - Individual case dashboard
+3. **CaseAnalyticsPage** - Case analytics and reporting
+4. **CaseIntakePage** - New case intake form
+5. **CaseOperationsPage** - Case task management
+6. **CaseInsightsPage** - AI-powered case insights
+7. **CaseFinancialsPage** - Case budgets and billing
 
 ### ⚖️ Litigation (4 pages)
-9. **DiscoveryPage** - E-discovery management
-10. **PleadingsPage** - Legal document drafting
-11. **EvidencePage** - Evidence vault and chain of custody
-12. **LitigationStrategyPage** - Visual strategy planning
+1. **DiscoveryPage** - E-discovery management
+2. **PleadingsPage** - Legal document drafting
+3. **EvidencePage** - Evidence vault and chain of custody
+4. **LitigationStrategyPage** - Visual strategy planning
 
 ### 🏢 Operations (6 pages)
-13. **BillingPage** - Time tracking and invoicing
-14. **CompliancePage** - Conflict checks and ethics
-15. **CRMPage** - Client relationship management
-16. **DocumentsPage** - Document repository
-17. **CorrespondencePage** - Email and communication tracking
-18. **AdminPage** - System administration
+1. **BillingPage** - Time tracking and invoicing
+2. **CompliancePage** - Conflict checks and ethics
+3. **CRMPage** - Client relationship management
+4. **DocumentsPage** - Document repository
+5. **CorrespondencePage** - Email and communication tracking
+6. **AdminPage** - System administration
 
 ### 📝 Document Generation (2 pages)
-19. **DraftingPage** - AI-powered drafting
-20. **DocumentAssemblyPage** - Template-based generation
+1. **DraftingPage** - AI-powered drafting
+2. **DocumentAssemblyPage** - Template-based generation
 
 ### 📚 Knowledge Management (4 pages)
-21. **LegalResearchPage** - Case law research
-22. **RulesPage** - Federal and local rules
-23. **JurisdictionPage** - Court-specific rules
-24. **ClauseLibraryPage** - Reusable clauses
+1. **LegalResearchPage** - Case law research
+2. **RulesPage** - Federal and local rules
+3. **JurisdictionPage** - Court-specific rules
+4. **ClauseLibraryPage** - Reusable clauses
 
 ### 🔄 Workflow & Collaboration (2 pages)
-25. **WorkflowPage** - Process automation
-26. **CalendarPage** - Deadline tracking
+1. **WorkflowPage** - Process automation
+2. **CalendarPage** - Deadline tracking
 
 ### 👤 User & Firm (2 pages)
-27. **ProfilePage** - User profile and settings
-28. **MarketingPage** - Business development
+1. **ProfilePage** - User profile and settings
+2. **MarketingPage** - Business development
 
 ## Architecture Compliance
 

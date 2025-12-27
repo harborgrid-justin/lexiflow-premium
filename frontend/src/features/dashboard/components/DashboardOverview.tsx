@@ -22,7 +22,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 
 // Components
 import { DashboardMetrics } from './DashboardMetrics';
-import { DashboardAnalytics } from './DashboardAnalytics';
+import { DashboardAnalytics } from '@features/dashboard';
 import { DashboardSidebar } from './DashboardSidebar';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 

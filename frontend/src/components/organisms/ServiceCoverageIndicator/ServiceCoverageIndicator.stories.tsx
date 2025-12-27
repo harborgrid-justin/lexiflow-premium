@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ServiceCoverageIndicator } from './ServiceCoverageIndicator';
+import { ServiceCoverageIndicator } from '@/components';
 
 const meta: Meta<typeof ServiceCoverageIndicator> = {
   title: 'Organisms/ServiceCoverageIndicator',

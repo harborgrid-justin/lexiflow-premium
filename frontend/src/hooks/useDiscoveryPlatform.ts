@@ -18,7 +18,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery, useMutation, queryClient } from './useQueryHooks';
 import { queryKeys } from '../utils/queryKeys';
 
@@ -30,7 +30,7 @@ import { useNotify } from './useNotify';
 import { getParentTabForView, getFirstTabOfParent, isDetailView } from '../utils/discoveryNavigation';
 
 // Types
-import { DiscoveryRequest } from '../types';
+import { DiscoveryRequest } from '@/types';
 import type { DiscoveryView } from '../utils/discoveryNavigation';
 
 // ============================================================================

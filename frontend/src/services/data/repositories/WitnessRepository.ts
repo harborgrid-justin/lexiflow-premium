@@ -31,7 +31,7 @@ export const WITNESS_QUERY_KEYS = {
 } as const;
 
 export class WitnessRepository extends Repository<Witness> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private witnessesApi: WitnessesApiService;
 
     constructor() {
@@ -42,7 +42,7 @@ export class WitnessRepository extends Repository<Witness> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[WitnessRepository.${methodName}] Invalid id parameter`);
         }
     }
@@ -141,7 +141,7 @@ export class WitnessRepository extends Repository<Witness> {
 
     async updateStatus(id: string, status: string): Promise<Witness> {
         this.validateId(id, 'updateStatus');
-        if (!status || typeof status !== 'string') {
+        if (!status || false) {
             throw new Error('[WitnessRepository.updateStatus] Invalid status');
         }
         if (this.useBackend) {

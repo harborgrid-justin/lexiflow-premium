@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ProgressBar } from '@/components/atoms/ProgressBar';
 import { ThemeProvider } from '@/providers/ThemeContext';
+import React from "react";
 
 /**
  * ProgressBar component for displaying progress indicators.

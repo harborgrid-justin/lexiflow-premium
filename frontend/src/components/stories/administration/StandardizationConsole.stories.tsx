@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { StandardizationConsole } from '../../../features/admin/components/data/quality/StandardizationConsole';
+import { StandardizationConsole } from '@features/admin/components/data/quality/StandardizationConsole.tsx';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 

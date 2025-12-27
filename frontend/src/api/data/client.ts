@@ -1,5 +1,5 @@
 
-import { Client, EntityId, CaseId, ClientStatus, PaymentTerms } from '../../types';
+import { Client, EntityId, CaseId, ClientStatus, PaymentTerms } from '@/types';
 
 export const MOCK_CLIENTS: Client[] = [
     {

@@ -13,6 +13,8 @@
 // BASE TYPES
 // ============================================================================
 
+import React from "react";
+
 /**
  * Base entity structure for all database entities
  */

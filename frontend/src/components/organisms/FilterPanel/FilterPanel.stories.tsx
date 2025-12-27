@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { FilterPanel } from './FilterPanel';
+import { FilterPanel } from '@/components';
 
 const meta: Meta<typeof FilterPanel> = {
   title: 'Organisms/FilterPanel',

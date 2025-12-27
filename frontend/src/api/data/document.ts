@@ -1,5 +1,5 @@
 
-import { LegalDocument, DocumentId, CaseId, UserId } from '../../types';
+import { LegalDocument, DocumentId, CaseId, UserId } from '@/types';
 
 export const MOCK_DOCUMENTS: LegalDocument[] = [
     // NEW FORM DOCS

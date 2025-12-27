@@ -1,5 +1,5 @@
 
-import { Deposition, ESISource, ProductionSet, CustodianInterview, UUID, CaseId } from '../../types';
+import { Deposition, ESISource, ProductionSet, CustodianInterview, UUID, CaseId } from '@/types';
 
 export const MOCK_DEPOSITIONS: Deposition[] = [
     {

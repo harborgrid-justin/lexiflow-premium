@@ -79,4 +79,4 @@ export function UserSelect({ label, value, onChange, options, className = '' }: 
       </div>
     </div>
   );
-};
+}

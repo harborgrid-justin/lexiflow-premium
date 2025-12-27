@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { CentredLoader } from './CentredLoader';
+import { CentredLoader } from '@/components';
 
 const meta: Meta<typeof CentredLoader> = {
   title: 'Atoms/CentredLoader',

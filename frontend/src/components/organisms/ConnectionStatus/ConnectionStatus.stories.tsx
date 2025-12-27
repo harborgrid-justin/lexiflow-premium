@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ConnectionStatus } from './ConnectionStatus';
+import { ConnectionStatus } from '@/components';
 
 const meta: Meta<typeof ConnectionStatus> = {
   title: 'Organisms/ConnectionStatus',

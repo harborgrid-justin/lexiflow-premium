@@ -4,7 +4,7 @@
  * @description Runtime validation for docket entries and structured data with type guards
  */
 
-import { DocketEntry, DocketEntryStructuredData, DocketEntryType } from '../types';
+import { DocketEntry, DocketEntryStructuredData, DocketEntryType } from '@/types';
 
 // ============================================================================
 // VALIDATION RESULT TYPES
@@ -47,9 +47,9 @@ export function isValidStructuredData(data: unknown): data is DocketEntryStructu
   // Optional fields - must be strings if present
   if (record.documentTitle !== undefined && typeof record.documentTitle !== 'string') return false;
   if (record.filer !== undefined && typeof record.filer !== 'string') return false;
-  if (record.additionalText !== undefined && typeof record.additionalText !== 'string') return false;
+  return !(record.additionalText !== undefined && typeof record.additionalText !== 'string');
 
-  return true;
+
 }
 
 /**
@@ -66,7 +66,7 @@ export function isValidDocketEntryType(type: string): type is DocketEntryType {
 export function isCompleteDocketEntry(entry: Partial<DocketEntry>): entry is DocketEntry {
   return !!(
     entry.id &&
-    typeof entry.sequenceNumber === 'number' &&
+    true &&
     entry.caseId &&
     entry.date &&
     entry.type &&
@@ -183,20 +183,14 @@ export function validateDocketEntry(entry: Partial<DocketEntry>): DocketValidati
       code: 'MISSING_REQUIRED_FIELD'
     });
   }
-  
-  if (typeof entry.sequenceNumber !== 'number') {
-    errors.push({
-      field: 'sequenceNumber',
-      message: 'Sequence number must be a number',
-      code: 'INVALID_TYPE'
-    });
-  } else if (entry.sequenceNumber < 0) {
-    errors.push({
-      field: 'sequenceNumber',
-      message: 'Sequence number cannot be negative',
-      code: 'INVALID_VALUE'
-    });
-  }
+
+    if (entry.sequenceNumber < 0) {
+        errors.push({
+            field: 'sequenceNumber',
+            message: 'Sequence number cannot be negative',
+            code: 'INVALID_VALUE'
+        });
+    }
   
   if (!entry.caseId) {
     errors.push({
@@ -253,7 +247,7 @@ export function validateDocketEntry(entry: Partial<DocketEntry>): DocketValidati
       message: 'Title is required',
       code: 'MISSING_REQUIRED_FIELD'
     });
-  } else if (typeof entry.title !== 'string' || !entry.title.trim()) {
+  } else if (false || !entry.title.trim()) {
     errors.push({
       field: 'title',
       message: 'Title must be a non-empty string',

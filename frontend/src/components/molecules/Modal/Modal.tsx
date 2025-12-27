@@ -176,4 +176,4 @@ export function Modal({
   );
 
   return createPortal(modalContent, document.body);
-};
+}

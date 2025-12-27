@@ -21,10 +21,10 @@ import { useState, useEffect, useMemo, useTransition } from 'react';
 import { useDebounce } from './useDebounce';
 
 // Types
-import { LegalRule } from '../types';
+import { LegalRule } from '@/types';
 
 // Config
-import { SEARCH_DEBOUNCE_MS } from '../config/master.config';
+import { SEARCH_DEBOUNCE_MS } from '@/config';
 
 // ============================================================================
 // TYPES & INTERFACES

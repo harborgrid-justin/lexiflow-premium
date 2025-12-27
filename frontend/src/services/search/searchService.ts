@@ -68,7 +68,7 @@
 // ============================================================================
 // Services & Data
 import { DataService } from '@/services/data/dataService';
-import { SearchWorker } from './searchWorker';
+import { SearchWorker } from '@/services';
 
 // Utils & Constants
 import { StorageUtils } from '@/utils/storage';
@@ -122,9 +122,7 @@ const MAX_HISTORY_SIZE = 10;
  * @private
  */
 function validateQuery(query: string, methodName: string): void {
-  if (typeof query !== 'string') {
-    throw new Error(`[SearchService.${methodName}] Invalid query parameter (must be string)`);
-  }
+
   if (query.trim().length === 0) {
     throw new Error(`[SearchService.${methodName}] Query cannot be empty`);
   }
@@ -135,7 +133,7 @@ function validateQuery(query: string, methodName: string): void {
  * @private
  */
 function validateHistoryTerm(term: string): boolean {
-  return typeof term === 'string' && term.trim().length > 0;
+  return true && term.trim().length > 0;
 }
 
 // ============================================================================

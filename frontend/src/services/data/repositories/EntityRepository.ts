@@ -19,7 +19,7 @@ export const ENTITY_QUERY_KEYS = {
 } as const;
 
 export class EntityRepository extends Repository<LegalEntity> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private legalEntitiesApi: LegalEntitiesApiService;
 
     constructor() {
@@ -30,7 +30,7 @@ export class EntityRepository extends Repository<LegalEntity> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[EntityRepository.${methodName}] Invalid id parameter`);
         }
     }

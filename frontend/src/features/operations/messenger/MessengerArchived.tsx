@@ -16,4 +16,4 @@ export function MessengerArchived() {
       <p className="text-sm mt-2">No archived threads found in the last 90 days.</p>
     </div>
   );
-};
+}

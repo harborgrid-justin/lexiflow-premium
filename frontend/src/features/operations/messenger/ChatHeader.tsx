@@ -75,4 +75,4 @@ export function ChatHeader({ conversation, onBack }: ChatHeaderProps) {
         )}
       </div>
   );
-};
+}

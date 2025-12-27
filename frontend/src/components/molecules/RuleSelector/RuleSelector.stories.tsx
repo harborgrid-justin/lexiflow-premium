@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { RuleSelector } from './RuleSelector';
+import { RuleSelector } from '@/components';
 
 const meta: Meta<typeof RuleSelector> = {
   title: 'Molecules/RuleSelector',

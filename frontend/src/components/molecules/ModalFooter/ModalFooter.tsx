@@ -20,4 +20,4 @@ export function ModalFooter({ children }: ModalFooterProps) {
       {children}
     </div>
   );
-};
+}

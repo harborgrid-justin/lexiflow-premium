@@ -34,7 +34,7 @@ export const CITATION_QUERY_KEYS = {
 } as const;
 
 export class CitationRepository extends Repository<Citation> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private citationsApi: CitationsApiService;
 
     constructor() {
@@ -45,7 +45,7 @@ export class CitationRepository extends Repository<Citation> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[CitationRepository.${methodName}] Invalid id parameter`);
         }
     }

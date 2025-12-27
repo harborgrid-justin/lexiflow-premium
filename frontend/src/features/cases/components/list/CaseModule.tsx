@@ -1,5 +1,5 @@
 import React from 'react';
-import { CaseManagement } from './CaseManagement';
+import { CaseManagement } from '@features/cases';
 
 /**
  * Case Module Router

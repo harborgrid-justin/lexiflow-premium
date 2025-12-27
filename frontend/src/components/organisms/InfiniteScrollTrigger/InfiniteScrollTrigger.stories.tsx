@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { InfiniteScrollTrigger } from './InfiniteScrollTrigger';
+import { InfiniteScrollTrigger } from '@/components';
 
 const meta: Meta<typeof InfiniteScrollTrigger> = {
   title: 'Organisms/InfiniteScrollTrigger',

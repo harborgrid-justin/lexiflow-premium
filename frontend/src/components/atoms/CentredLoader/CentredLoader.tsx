@@ -24,4 +24,4 @@ export function CentredLoader({ className, message }: CentredLoaderProps) {
       {message && <span className={messageStyles(theme)}>{message}</span>}
     </div>
   );
-};
+}

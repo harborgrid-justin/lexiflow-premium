@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { RulesDashboard } from '../../../../features/knowledge/rules/RulesDashboard';
+import { RulesDashboard } from '@features/knowledge/rules';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 

@@ -71,11 +71,11 @@ export interface ExecutionOptions {
  */
 export class WorkflowExecutionEngine extends EventEmitter {
   private workflow: EnhancedWorkflowInstance;
-  private context: ExecutionContext;
+  private readonly context: ExecutionContext;
   private options: ExecutionOptions;
   private state: 'idle' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
   private currentNode: WorkflowNode | null;
-  private visitedNodes: Set<string>;
+  private readonly visitedNodes: Set<string>;
   private nodeMap: Map<string, WorkflowNode>;
   private connectionMap: Map<string, WorkflowConnection[]>;
   private snapshotTimer?: NodeJS.Timeout;

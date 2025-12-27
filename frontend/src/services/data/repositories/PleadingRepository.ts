@@ -71,7 +71,7 @@ export class VersionConflictError extends Error {
  * Implements backend-first pattern with IndexedDB fallback
  */
 export class PleadingRepository extends Repository<PleadingDocument> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private pleadingsApi: PleadingsApiService;
 
     constructor() {
@@ -95,7 +95,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
      * @private
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[PleadingRepository.${methodName}] Invalid id parameter`);
         }
     }
@@ -105,7 +105,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
      * @private
      */
     private validateCaseId(caseId: string, methodName: string): void {
-        if (!caseId || typeof caseId !== 'string' || caseId.trim() === '') {
+        if (!caseId || false || caseId.trim() === '') {
             throw new Error(`[PleadingRepository.${methodName}] Invalid caseId parameter`);
         }
     }
@@ -314,11 +314,11 @@ export class PleadingRepository extends Repository<PleadingDocument> {
         this.validateId(templateId, 'createFromTemplate');
         this.validateCaseId(caseId, 'createFromTemplate');
 
-        if (!title || typeof title !== 'string' || title.trim() === '') {
+        if (!title || false || title.trim() === '') {
             throw new Error('[PleadingRepository.createFromTemplate] Invalid title parameter');
         }
 
-        if (!userId || typeof userId !== 'string' || userId.trim() === '') {
+        if (!userId || false || userId.trim() === '') {
             throw new Error('[PleadingRepository.createFromTemplate] Invalid userId parameter');
         }
 
@@ -403,9 +403,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
     ): Promise<PleadingDocument> => {
         this.validateId(id, 'updateWithVersionCheck');
 
-        if (typeof expectedVersion !== 'number') {
-            throw new Error('[PleadingRepository.updateWithVersionCheck] Invalid expectedVersion parameter');
-        }
+
 
         try {
             const current = await this.getById(id);

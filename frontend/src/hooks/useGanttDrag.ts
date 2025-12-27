@@ -17,7 +17,7 @@ import React, { useRef, useCallback, useEffect } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Types
-import { WorkflowTask } from '../types';
+import { WorkflowTask } from '@/types';
 
 // ========================================
 // TYPES & INTERFACES

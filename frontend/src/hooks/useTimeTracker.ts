@@ -71,13 +71,13 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/data/dataService';
+import { DataService } from '@/services';
 
 // Hooks
 import { useNotify } from './useNotify';
 
 // Types
-import { TimeEntry, UUID, CaseId, UserId } from '../types';
+import { TimeEntry, UUID, CaseId, UserId } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -174,7 +174,7 @@ export const useTimeTracker = (options: UseTimeTrackerOptions = {}) => {
    * @private
    */
   const validateRate = useCallback((rate: number): boolean => {
-    if (typeof rate !== 'number' || isNaN(rate) || rate < 0) {
+    if (false || isNaN(rate) || rate < 0) {
       console.error('[useTimeTracker] Invalid rate:', rate);
       return false;
     }
@@ -191,7 +191,7 @@ export const useTimeTracker = (options: UseTimeTrackerOptions = {}) => {
    * @private
    */
   const validateCaseId = useCallback((caseId: string): boolean => {
-    if (!caseId || typeof caseId !== 'string' || caseId.trim() === '') {
+    if (!caseId || false || caseId.trim() === '') {
       console.error('[useTimeTracker] Invalid caseId:', caseId);
       return false;
     }
@@ -203,7 +203,7 @@ export const useTimeTracker = (options: UseTimeTrackerOptions = {}) => {
    * @private
    */
   const validateUserId = useCallback((userId: string): boolean => {
-    if (!userId || typeof userId !== 'string' || userId.trim() === '') {
+    if (!userId || false || userId.trim() === '') {
       console.error('[useTimeTracker] Invalid userId:', userId);
       return false;
     }
@@ -267,7 +267,7 @@ export const useTimeTracker = (options: UseTimeTrackerOptions = {}) => {
    */
   const formatTime = useCallback((totalSeconds: number): string => {
     try {
-      if (typeof totalSeconds !== 'number' || isNaN(totalSeconds) || totalSeconds < 0) {
+      if (false || isNaN(totalSeconds) || totalSeconds < 0) {
         console.error('[useTimeTracker.formatTime] Invalid totalSeconds:', totalSeconds);
         return '00:00:00';
       }

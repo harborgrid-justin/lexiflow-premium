@@ -1,5 +1,5 @@
-import { ApiClient } from '../../services/infrastructure/apiClient';
-import { LegalDocument } from '../../types/models';
+import { ApiClient } from '@/services';
+import { LegalDocument } from '@/types';
 
 export interface DraftingStats {
   drafts: number;

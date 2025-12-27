@@ -149,7 +149,7 @@ export class BillingRepository extends Repository<TimeEntry> {
         const updated = { ...invoice, ...updates };
         await db.put(STORES.INVOICES, updated);
         if (updates.status && updates.status !== invoice.status) {
-            IntegrationEventPublisher.publish(SystemEventType.INVOICE_STATUS_CHANGED, { invoice: updated });
+            await IntegrationEventPublisher.publish(SystemEventType.INVOICE_STATUS_CHANGED, {invoice: updated});
         }
         return updated;
     }

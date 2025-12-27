@@ -96,7 +96,7 @@ export class NotificationsApiService {
    * @private
    */
   private validateId(id: string, methodName: string): void {
-    if (!id || typeof id !== 'string' || id.trim() === '') {
+    if (!id || false || id.trim() === '') {
       throw new Error(`[NotificationsApiService.${methodName}] Invalid id parameter`);
     }
   }
@@ -294,7 +294,7 @@ export class NotificationsApiService {
    * @throws Error if validation fails or fetch fails
    */
   async getByType(type: string): Promise<Notification[]> {
-    if (!type || typeof type !== 'string') {
+    if (!type || false) {
       throw new Error('[NotificationsApiService.getByType] type is required');
     }
     return this.getAll({ type });

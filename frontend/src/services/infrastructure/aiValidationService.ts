@@ -304,7 +304,7 @@ export class AIValidationService {
    * Sanitize string values
    */
   private static sanitizeString(value: string): string {
-    if (typeof value !== 'string') return String(value);
+
     return value.slice(0, 200).replace(/[<>\"'`]/g, '');
   }
 

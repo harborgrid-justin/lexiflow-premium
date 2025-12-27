@@ -95,11 +95,17 @@ export class IntegrationEventPublisher {
 
 /**
  * Creates an integrated repository wrapper that publishes events on mutations
- * 
+ *
  * @param Repository - Base repository class
- * @param eventPublisher - Function to publish event after mutation
+ * @param publishAdd
+ * @param publishUpdate
+ * @param publishDelete
+ * @param publishUpdate
+ * @param publishDelete
+ * @param publishUpdate
+ * @param publishDelete
  * @returns Extended repository class with event publishing
- * 
+ *
  * Example:
  * ```ts
  * class IntegratedCaseRepository extends createIntegratedRepository(

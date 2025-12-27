@@ -32,7 +32,7 @@ export const CLAUSE_QUERY_KEYS = {
 
 // Clause already extends BaseEntity, so we can use it directly as any to satisfy the constraint
 export class ClauseRepository extends Repository<any> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private clausesApi: ClausesApiService;
 
     constructor() {
@@ -43,7 +43,7 @@ export class ClauseRepository extends Repository<any> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[ClauseRepository.${methodName}] Invalid id parameter`);
         }
     }

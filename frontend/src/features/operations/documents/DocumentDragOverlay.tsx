@@ -29,4 +29,4 @@ export function DocumentDragOverlay({ onDrop, onDragLeave }: DocumentDragOverlay
       <p className={cn("mt-2 text-lg font-medium pointer-events-none", theme.text.secondary)}>Secure Ingestion Pipeline Ready</p>
     </div>
   );
-};
+}

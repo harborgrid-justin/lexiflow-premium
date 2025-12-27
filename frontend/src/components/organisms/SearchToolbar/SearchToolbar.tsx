@@ -119,5 +119,5 @@ export function SearchToolbar({ value, onChange, placeholder = "Search (Press /)
       )}
     </div>
   );
-};
+}
 

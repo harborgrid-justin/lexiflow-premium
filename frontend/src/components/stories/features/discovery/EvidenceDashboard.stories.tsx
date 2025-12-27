@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { EvidenceDashboard } from '../../../../features/litigation/evidence/EvidenceDashboard';
+import { EvidenceDashboard } from '@features/litigation/evidence';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
 

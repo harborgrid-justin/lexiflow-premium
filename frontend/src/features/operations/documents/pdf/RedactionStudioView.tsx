@@ -94,4 +94,4 @@ export function RedactionStudioView() {
             </div>
         </div>
     );
-};
+}

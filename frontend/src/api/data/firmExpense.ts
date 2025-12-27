@@ -1,5 +1,5 @@
 
-import { FirmExpense, UUID } from '../../types';
+import { FirmExpense, UUID } from '@/types';
 
 export const MOCK_EXPENSES: FirmExpense[] = [
   { id: 'ex-1' as UUID, date: '2024-03-15', category: 'Rent', description: 'Office Lease - Q1', amount: 12500, status: 'Paid', vendor: 'Tower Management LLC' },

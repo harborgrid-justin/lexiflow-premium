@@ -59,7 +59,7 @@ export const ClientCRM: React.FC<ClientCRMProps> = ({ initialTab }) => {
           matters: []
       };
       await DataService.clients.add(newClient);
-      refetch();
+      await refetch();
       setShowIntake(false);
   };
 

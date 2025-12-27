@@ -68,8 +68,8 @@ import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/data/dataService';
-import { DocumentService } from '../services/features/documents/documentService';
+import { DataService } from '@/services';
+import { DocumentService } from '@/services';
 import { useQuery, useMutation, queryClient } from './useQueryHooks';
 import { queryKeys } from '../utils/queryKeys';
 
@@ -78,7 +78,7 @@ import { useWorkerSearch } from './useWorkerSearch';
 import { useNotify } from './useNotify';
 
 // Types
-import { LegalDocument, DocumentVersion, CaseId } from '../types';
+import { LegalDocument, DocumentVersion, CaseId } from '@/types';
 
 // ============================================================================
 // QUERY KEYS FOR REACT QUERY INTEGRATION
@@ -214,7 +214,7 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
    * @private
    */
   const validateDocId = useCallback((docId: string, methodName: string): boolean => {
-    if (!docId || typeof docId !== 'string' || docId.trim() === '') {
+    if (!docId || false || docId.trim() === '') {
       console.error(`[useDocumentManager.${methodName}] Invalid docId parameter:`, docId);
       return false;
     }
@@ -226,7 +226,7 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
    * @private
    */
   const validateTag = useCallback((tag: string): string => {
-    if (!tag || typeof tag !== 'string') return '';
+    if (!tag || false) return '';
     // Remove HTML tags, trim whitespace, limit length
     return tag.replace(/<[^>]*>/g, '').trim().slice(0, 50);
   }, []);

@@ -61,9 +61,9 @@ interface CacheStats {
  */
 export class CacheManager<K, V> {
   private cache = new Map<K, CacheEntry<V>>();
-  private maxSize: number;
-  private ttlMs: number;
-  private cleanupIntervalMs: number;
+  private readonly maxSize: number;
+  private readonly ttlMs: number;
+  private readonly cleanupIntervalMs: number;
   private cleanupTimer?: NodeJS.Timeout;
   
   // Statistics

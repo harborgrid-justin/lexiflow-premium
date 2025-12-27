@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { API_RETRY_ATTEMPTS, API_RETRY_DELAY_MS, QUERY_CACHE_STALE_TIME_MS } from '../config/master.config';
+import { API_RETRY_ATTEMPTS, API_RETRY_DELAY_MS, QUERY_CACHE_STALE_TIME_MS } from '@/config';
 
 /**
  * Loading state

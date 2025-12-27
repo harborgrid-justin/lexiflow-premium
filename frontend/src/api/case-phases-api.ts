@@ -21,7 +21,7 @@ export interface CasePhase {
     status: 'pending' | 'completed';
   }[];
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, never>;
   createdAt?: string;
   updatedAt?: string;
 }

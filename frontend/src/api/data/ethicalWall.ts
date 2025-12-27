@@ -1,5 +1,5 @@
 
-import { EthicalWall, UUID, CaseId, GroupId, UserId } from '../../types';
+import { EthicalWall, UUID, CaseId, GroupId, UserId } from '@/types';
 
 export const MOCK_WALLS: EthicalWall[] = [
     { id: 'w1' as UUID, caseId: 'M&A-Project-Blue' as CaseId, title: 'Project Blue Acquisition', restrictedGroups: ['Litigation Team A' as GroupId], authorizedUsers: ['M&A Partners' as UserId, 'Risk Committee' as UserId], status: 'Active' },

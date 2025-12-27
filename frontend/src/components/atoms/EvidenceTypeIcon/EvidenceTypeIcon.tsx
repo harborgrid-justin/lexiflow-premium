@@ -35,4 +35,4 @@ export function EvidenceTypeIcon({ type, className = "h-5 w-5" }: EvidenceTypeIc
     case 'Document': return <FileText className={getIconClass(type, className)}/>;
     default: return <Fingerprint className={getIconClass(type, className)}/>;
   }
-};
+}

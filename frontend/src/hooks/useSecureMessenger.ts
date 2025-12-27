@@ -17,14 +17,14 @@ import React, { useState, useMemo, useEffect } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/data/dataService';
+import { DataService } from '@/services';
 
 // Utils & Constants
-import { Scheduler } from '../utils/scheduler';
+import { Scheduler } from '@/utils';
 
 // Types
-import { Conversation, Message, Attachment } from '../types';
-import { Contact } from '../api/messaging-api';
+import { Conversation, Message, Attachment } from '@/types';
+import { Contact } from '@/api';
 
 // Re-export types for consumers
 export type { Conversation, Message, Attachment, Contact };

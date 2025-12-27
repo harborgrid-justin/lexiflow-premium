@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { SectionHeader } from './SectionHeader';
+import { SectionHeader } from '@/components';
 
 const meta: Meta<typeof SectionHeader> = {
   title: 'Atoms/SectionHeader',

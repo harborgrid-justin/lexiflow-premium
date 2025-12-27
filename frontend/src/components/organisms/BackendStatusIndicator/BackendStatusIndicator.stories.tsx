@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { BackendStatusIndicator } from './BackendStatusIndicator';
+import { BackendStatusIndicator } from '@/components';
 
 const meta: Meta<typeof BackendStatusIndicator> = {
   title: 'Organisms/BackendStatusIndicator',

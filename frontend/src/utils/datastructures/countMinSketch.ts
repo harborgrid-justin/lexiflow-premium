@@ -1,9 +1,9 @@
 
 export class CountMinSketch {
-    private width: number;
-    private depth: number;
-    private table: number[][];
-    private seeds: number[];
+    private readonly width: number;
+    private readonly depth: number;
+    private readonly table: number[][];
+    private readonly seeds: number[];
 
     constructor(width: number, depth: number) {
         this.width = width;

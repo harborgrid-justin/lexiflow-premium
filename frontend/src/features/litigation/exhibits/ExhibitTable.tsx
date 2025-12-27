@@ -162,4 +162,4 @@ export function ExhibitTable({ exhibits, viewMode }: ExhibitTableProps) {
         </div>
     </div>
   );
-};
+}

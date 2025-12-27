@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CommandCenter } from '../../../features/litigation/war-room/CommandCenter';
+import { CommandCenter } from '@features/litigation/war-room';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 import { CaseStatus, MatterType } from '@/types/enums';

@@ -58,12 +58,12 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery, useMutation, queryClient } from './useQueryHooks';
 import { queryKeys } from '../utils/queryKeys';
 
 // Types
-import { EvidenceItem, ChainOfCustodyEvent, CaseId } from '../types';
+import { EvidenceItem, ChainOfCustodyEvent, CaseId } from '@/types';
 
 // ============================================================================
 // QUERY KEYS FOR REACT QUERY INTEGRATION

@@ -40,4 +40,4 @@ export function PreviewHeader({ document, onCloseMobile, onToggleEncryption }: P
             </div>
         </div>
     );
-};
+}

@@ -71,14 +71,14 @@ export function err<E>(error: E): Err<E> {
  * Type guard to check if result is Ok
  */
 export function isOk<T, E>(result: Result<T, E>): result is Ok<T> {
-  return result.ok === true;
+  return result.ok;
 }
 
 /**
  * Type guard to check if result is Err
  */
 export function isErr<T, E>(result: Result<T, E>): result is Err<E> {
-  return result.ok === false;
+  return !result.ok;
 }
 
 // ============================================================================

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RiskMeter } from '@/components/organisms/RiskMeter';
 import { ThemeProvider } from '@/providers/ThemeContext';
+import React from "react";
 
 /**
  * RiskMeter component for displaying risk levels.

@@ -25,7 +25,7 @@ export const FEATURE_EXPORT_IMPORT = true;
 export const FEATURE_BACKUP_RESTORE = true;
 
 // Development & Debugging
-import { APP_ENV } from '../app.config';
+import { APP_ENV } from '@/config';
 
 export const DEBUG_ENABLED = APP_ENV === 'development';
 export const DEBUG_SHOW_QUERY_CACHE = false;

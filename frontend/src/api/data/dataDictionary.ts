@@ -1,5 +1,5 @@
 
-import { DataDictionaryItem } from '../../types';
+import { DataDictionaryItem } from '@/types';
 
 export const MOCK_DATA_DICTIONARY: DataDictionaryItem[] = [
     {

@@ -1,12 +1,12 @@
 
 import { useState, useMemo } from 'react';
-import { Case, LegalDocument, WorkflowStage, TimeEntry, TimelineEvent, Party, Project, WorkflowTask, Motion } from '../types';
-import { GeminiService } from '../services/features/research/geminiService';
-import { DataService } from '../services/data/dataService';
+import { Case, LegalDocument, WorkflowStage, TimeEntry, TimelineEvent, Party, Project, WorkflowTask, Motion } from '@/types';
+import { GeminiService } from '@/services';
+import { DataService } from '@/services';
 import { useQuery, useMutation, queryClient } from './useQueryHooks';
 import { queryKeys } from '../utils/queryKeys';
 import { useNotify } from './useNotify';
-import { DEBUG_API_SIMULATION_DELAY_MS } from '../config/features/features.config';
+import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config';
 
 export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') => {
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -114,7 +114,7 @@ export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') =
     try {
         const result = await GeminiService.analyzeDocument(doc.content);
         const updated = { ...doc, summary: result.summary, riskScore: result.riskScore };
-        updateDocuments(updated); // Optimistic update via mutation
+        await updateDocuments(updated); // Optimistic update via mutation
     } catch (e) {
         console.error("Analysis failed", e);
         notify.error("AI analysis failed to complete.");

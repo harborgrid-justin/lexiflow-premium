@@ -2,7 +2,7 @@
  * AI Provider Selector - Choose between Gemini and OpenAI
  */
 
-import { GeminiService } from './geminiService';
+import { GeminiService } from '@/services';
 import { OpenAIService } from './openaiService';
 import type { AIServiceInterface } from './aiProvider';
 

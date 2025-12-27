@@ -80,4 +80,4 @@ export const ConfirmDialog = React.memo<ConfirmDialogProps>({
       </div>
     </Modal>
   );
-});
+})

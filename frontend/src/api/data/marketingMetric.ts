@@ -1,5 +1,5 @@
 
-import { MarketingMetric } from '../../types';
+import { MarketingMetric } from '@/types';
 
 export const MOCK_METRICS: MarketingMetric[] = [
   { source: 'Client Referral', leads: 45, conversions: 20, revenue: 250000, roi: 500 },

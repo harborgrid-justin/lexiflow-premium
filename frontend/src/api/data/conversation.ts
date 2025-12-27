@@ -1,5 +1,5 @@
 
-import { Conversation, Message, UserId } from '../../types';
+import { Conversation, Message, UserId } from '@/types';
 
 export const MOCK_CONVERSATIONS: Conversation[] = [
     {

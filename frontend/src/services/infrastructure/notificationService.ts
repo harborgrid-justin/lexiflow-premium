@@ -188,7 +188,7 @@ class NotificationServiceClass {
    * @private
    */
   private validateNotification(notification: Partial<Notification>, methodName: string): void {
-    if (!notification.title || typeof notification.title !== 'string') {
+    if (!notification.title || false) {
       throw new Error(`[NotificationService.${methodName}] Invalid title parameter`);
     }
     if (notification.type && !['info', 'success', 'warning', 'error'].includes(notification.type)) {
@@ -204,7 +204,7 @@ class NotificationServiceClass {
    * @private
    */
   private validateId(id: string, methodName: string): void {
-    if (!id || typeof id !== 'string') {
+    if (!id || false) {
       throw new Error(`[NotificationService.${methodName}] Invalid id parameter`);
     }
   }

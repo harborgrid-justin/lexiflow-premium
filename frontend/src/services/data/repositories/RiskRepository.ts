@@ -20,7 +20,7 @@ export const RISK_QUERY_KEYS = {
 } as const;
 
 export class RiskRepository extends Repository<Risk> {
-    private useBackend: boolean;
+    private readonly useBackend: boolean;
     private risksApi: RisksApiService;
 
     constructor() {
@@ -31,7 +31,7 @@ export class RiskRepository extends Repository<Risk> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[RiskRepository.${methodName}] Invalid id parameter`);
         }
     }

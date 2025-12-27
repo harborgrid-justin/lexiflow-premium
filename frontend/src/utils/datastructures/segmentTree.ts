@@ -1,9 +1,9 @@
 
 // Segment Tree for Range Queries
 export class SegmentTree {
-    private tree: number[];
-    private size: number;
-    private operation: (a: number, b: number) => number;
+    private readonly tree: number[];
+    private readonly size: number;
+    private readonly operation: (a: number, b: number) => number;
 
     constructor(arr: number[], operation: (a: number, b: number) => number) {
         this.size = arr.length;

@@ -1,5 +1,5 @@
 
-import { AuditLogEntry, UUID, UserId } from '../../types';
+import { AuditLogEntry, UUID, UserId } from '@/types';
 
 export const MOCK_AUDIT_LOGS: AuditLogEntry[] = [
     { id: 'l1' as UUID, timestamp: '2024-03-12 14:30:22', userId: 'usr-partner-alex' as UserId, user: 'Alexandra H.', action: 'VIEW_DOC', resource: 'D-001 (Confidential)', ip: '192.168.1.45' },

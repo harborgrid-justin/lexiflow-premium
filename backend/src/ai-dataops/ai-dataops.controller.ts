@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@common/guards';
 import { AiDataopsService } from './ai-dataops.service';
 import { StoreDataOpsEmbeddingDto } from './dto/store-embedding.dto';
 import { SearchEmbeddingsDto } from './dto/search-embeddings.dto';

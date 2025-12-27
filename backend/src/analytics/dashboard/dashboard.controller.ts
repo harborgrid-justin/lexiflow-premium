@@ -5,7 +5,7 @@ import {
   ApiResponse,
   ApiBearerAuth,
 } from '@nestjs/swagger';
-import { DashboardService } from './dashboard.service';
+import { DashboardService } from '@core/analytics';
 import {
   DashboardQueryDto,
   DashboardDataDto,
@@ -13,10 +13,10 @@ import {
   UpcomingDeadlinesDto,
   PendingTasksDto,
   BillingSummaryDto,
-} from './dto/dashboard.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import { JwtPayload } from '../../auth/interfaces/jwt-payload.interface';
+} from '@core/analytics';
+import { JwtAuthGuard } from '@common/guards';
+import { CurrentUser } from '@common/decorators';
+import { JwtPayload } from '@auth/interfaces';
 
 @ApiTags('Dashboard')
 

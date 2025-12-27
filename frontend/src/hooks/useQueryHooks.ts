@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 export { queryClient } from '../services/infrastructure/queryClient';
-import { queryClient } from '../services/infrastructure/queryClient';
+import { queryClient } from '@/services';
 import type { 
   QueryKey, 
   QueryState, 

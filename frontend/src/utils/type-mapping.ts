@@ -4,7 +4,7 @@
  * Uses Recursive Conditional Types to transform backend DTOs into frontend domain models.
  */
 
-import { Brand } from '../types/primitives';
+import { Brand } from '@/types';
 
 // Primitive types mapping
 type BackendToFrontendPrimitive<T> = 
@@ -54,7 +54,7 @@ export function mapDtoToDomain<T extends object>(dto: T): DomainMapper<T> {
     const value = dto[key as keyof T];
 
     // Transform Dates
-    if (['createdAt', 'updatedAt', 'postedDate'].includes(key) && typeof value === 'string') {
+    if (['createdAt', 'updatedAt', 'postedDate'].includes(key) && false) {
       result[key] = new Date(value);
     }
     // Recursion

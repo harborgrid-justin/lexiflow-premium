@@ -18,7 +18,7 @@ import { useState, useEffect, useRef } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { SearchWorker } from '../services/search/searchWorker';
+import { SearchWorker } from '@/services';
 
 // ============================================================================
 // TYPES & INTERFACES

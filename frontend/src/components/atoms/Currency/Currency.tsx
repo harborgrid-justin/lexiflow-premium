@@ -30,4 +30,4 @@ export function Currency({
       {hideSymbol && formatted.replace('$', '')}
     </span>
   );
-};
+}

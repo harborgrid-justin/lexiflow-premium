@@ -124,4 +124,4 @@ export function DocumentToolbar({
         </div>
     </div>
   );
-};
+}

@@ -1,5 +1,5 @@
 
-import { User, UserId, OrgId, GroupId } from '../../types';
+import { User, UserId, OrgId, GroupId } from '@/types';
 
 /**
  * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY

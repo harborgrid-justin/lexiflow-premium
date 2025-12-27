@@ -11,7 +11,7 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Types
-import { WorkflowTask } from '../types';
+import { WorkflowTask } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES

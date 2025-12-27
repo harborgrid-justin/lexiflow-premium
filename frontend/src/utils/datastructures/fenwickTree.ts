@@ -1,8 +1,8 @@
 
 // Fenwick Tree or Binary Indexed Tree (BIT)
 export class FenwickTree {
-    private bit: number[];
-    private size: number;
+    private readonly bit: number[];
+    private readonly size: number;
 
     constructor(size: number) {
         this.size = size;

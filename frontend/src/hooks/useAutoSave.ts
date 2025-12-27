@@ -5,7 +5,7 @@
 
 import { useEffect, useRef, useCallback } from 'react';
 import { useDebouncedCallback } from './useDebounce';
-import { FORM_AUTO_SAVE_DELAY_MS } from '../config/master.config';
+import { FORM_AUTO_SAVE_DELAY_MS } from '@/config';
 
 export interface UseAutoSaveOptions<T> {
   data: T;
@@ -61,7 +61,7 @@ export function useAutoSave<T>(options: UseAutoSaveOptions<T>) {
 
       // If another save was requested during execution, trigger it
       if (pendingSaveRef.current && mountedRef.current) {
-        performSave(data);
+        await performSave(data);
       }
     }
   }, [onSave, data, onSuccess, onError]);

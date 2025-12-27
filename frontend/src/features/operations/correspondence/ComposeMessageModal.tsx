@@ -322,4 +322,4 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
         </div>
     </Modal>
   );
-};
+}

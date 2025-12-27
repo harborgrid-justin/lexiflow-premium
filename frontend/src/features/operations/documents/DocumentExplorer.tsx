@@ -5,7 +5,7 @@ import { useDocumentManager } from '@/hooks/useDocumentManager';
 import { DocumentTable } from './table/DocumentTable';
 import { DocumentFilters } from './DocumentFilters';
 import { DocumentToolbar } from './DocumentToolbar';
-import { DocumentDragOverlay } from './DocumentDragOverlay';
+import { DocumentDragOverlay } from '@features/operations';
 import { DocumentPreviewPanel } from './viewer/DocumentPreviewPanel';
 import { TagManagementModal } from './TagManagementModal';
 import { useSelection } from '@/hooks/useSelection';

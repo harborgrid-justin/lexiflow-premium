@@ -1,5 +1,5 @@
 
-import { Case, CaseStatus, CaseId, UserId, EntityId, OrgId, PartyId, MatterType } from '../../types';
+import { Case, CaseStatus, CaseId, UserId, EntityId, OrgId, PartyId, MatterType } from '@/types';
 
 export const MOCK_CASES: Case[] = [
   // MAIN APPEAL CASE

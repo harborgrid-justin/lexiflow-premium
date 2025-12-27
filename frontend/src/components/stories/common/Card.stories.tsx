@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card } from '@/components/molecules/Card';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { Button } from '@/components/atoms/Button';
+import React from "react";
 
 /**
  * Card component provides a container with optional header and footer sections.

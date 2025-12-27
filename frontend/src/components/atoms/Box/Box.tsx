@@ -72,4 +72,4 @@ export function Box({
       {children}
     </div>
   );
-};
+}

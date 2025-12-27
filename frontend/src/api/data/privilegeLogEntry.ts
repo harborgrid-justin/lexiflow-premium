@@ -1,4 +1,4 @@
-import { PrivilegeLogEntry, UUID } from '../../types';
+import { PrivilegeLogEntry, UUID } from '@/types';
 
 export const MOCK_PRIVILEGE_LOG: PrivilegeLogEntry[] = [
   { id: 'PL-001' as UUID, date: '2023-11-10', author: 'J. Smith', recipient: 'K. Jones', type: 'Email', basis: 'Attorney-Client Privilege', desc: 'Legal advice re: termination risk.' },

@@ -28,9 +28,9 @@ import { useTheme } from '@/providers/ThemeContext';
 // Components
 import { Tabs } from '@/components/molecules/Tabs';
 import { WikiView } from '../base/WikiView';
-import { PrecedentsView } from '../base/PrecedentsView';
+import { PrecedentsView } from '@features/knowledge';
 import { QAView } from '../base/QAView';
-import { KnowledgeAnalytics } from '../base/KnowledgeAnalytics';
+import { KnowledgeAnalytics } from '@features/knowledge';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
 import { Badge } from '@/components/atoms/Badge';
 

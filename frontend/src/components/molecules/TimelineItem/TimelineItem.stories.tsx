@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TimelineItem } from './TimelineItem';
+import { TimelineItem } from '@/components';
 
 const meta: Meta<typeof TimelineItem> = {
   title: 'Molecules/TimelineItem',

@@ -216,6 +216,6 @@ export function DataQualityStudio({ initialTab = 'dashboard' }: DataQualityStudi
         </Modal>
     </div>
   );
-};
+}
 
 export default DataQualityStudio;

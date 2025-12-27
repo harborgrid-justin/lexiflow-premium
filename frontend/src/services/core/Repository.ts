@@ -16,7 +16,7 @@ export abstract class Repository<T extends BaseEntity> {
     protected orm: MicroORM<T>;
     private listenerWarningLogged = false;
 
-    constructor(protected storeName: string) {
+    protected constructor(protected storeName: string) {
         this.cache = new LRUCache<T>(REPOSITORY_CACHE_MAX_SIZE);
         this.orm = new MicroORM<T>(storeName);
 

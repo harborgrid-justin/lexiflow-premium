@@ -1,5 +1,5 @@
 
-import { Playbook } from '../../types';
+import { Playbook } from '@/types';
 
 export const MOCK_PLAYBOOKS: Playbook[] = [
     { id: 'pb1', name: 'CA Litigation Standard', jurisdiction: 'California', matterType: 'Litigation', stages: [] },

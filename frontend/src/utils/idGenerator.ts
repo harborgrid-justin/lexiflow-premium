@@ -13,7 +13,7 @@ import {
   DocumentId,
   DocketId,
   PartyId
-} from '../types';
+} from '@/types';
 
 /**
  * Generates a cryptographically secure random ID

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { SyncContext, SyncContextType } from '../providers/SyncContext';
+import { SyncContext, SyncContextType } from '@/providers';
 
 export const useSync = (): SyncContextType => {
   const context = useContext(SyncContext);

@@ -51,4 +51,4 @@ export function DocumentGridCard({ doc, isSelected, onToggleSelection, onPreview
             </div>
         </div>
     );
-};
+}

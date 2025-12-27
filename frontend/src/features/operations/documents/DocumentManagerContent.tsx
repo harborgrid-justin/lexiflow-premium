@@ -29,4 +29,4 @@ export function DocumentManagerContent({ activeTab, currentUserRole }: DocumentM
         case 'batch': return <BatchProcessingView />;
         default: return <DocumentExplorer currentUserRole={currentUserRole} />;
     }
-};
+}

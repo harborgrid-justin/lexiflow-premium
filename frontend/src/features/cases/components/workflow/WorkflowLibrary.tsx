@@ -26,7 +26,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
-import { TemplatePreview } from './TemplatePreview';
+import { TemplatePreview } from '@features/cases';
 import { EmptyState } from '@/components/molecules/EmptyState';
 import { Button } from '@/components/atoms/Button';
 import { LoadingState } from '@/components/molecules/LoadingState';

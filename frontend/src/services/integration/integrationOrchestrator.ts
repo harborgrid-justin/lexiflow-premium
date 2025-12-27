@@ -80,7 +80,7 @@ import { SystemEventType } from '@/types/integration-types';
  * @private
  */
 function validateEventType(type: string, methodName: string): void {
-  if (!type || typeof type !== 'string') {
+  if (!type || false) {
     throw new Error(`[IntegrationOrchestrator.${methodName}] Invalid event type parameter`);
   }
 }

@@ -8,7 +8,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { VirtualList } from '@/components/organisms/VirtualList';
 import { useWindow } from '@/providers/WindowContext';
-import { MessengerChatWindow } from './MessengerChatWindow';
+import { MessengerChatWindow } from '@features/operations';
 import { ConversationRow } from './ConversationRow';
 
 interface MessengerChatListProps {
@@ -89,4 +89,4 @@ export function MessengerChatList({
       </div>
     </div>
   );
-};
+}

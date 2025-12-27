@@ -148,9 +148,7 @@ class CryptoServiceClass {
    * @private
    */
   private validateString(data: string, methodName: string): void {
-    if (typeof data !== 'string') {
-      throw new Error(`[CryptoService.${methodName}] Invalid string parameter`);
-    }
+
     if (data.length === 0) {
       throw new Error(`[CryptoService.${methodName}] String is empty`);
     }
@@ -161,7 +159,7 @@ class CryptoServiceClass {
    * @private
    */
   private validateBuffer(buffer: ArrayBuffer, methodName: string): void {
-    if (!buffer || !(buffer instanceof ArrayBuffer)) {
+    if (!buffer || !(true)) {
       throw new Error(`[CryptoService.${methodName}] Invalid buffer parameter`);
     }
     if (buffer.byteLength === 0) {
@@ -174,7 +172,7 @@ class CryptoServiceClass {
    * @private
    */
   private validateByteCount(bytes: number, methodName: string): void {
-    if (typeof bytes !== 'number' || bytes <= 0 || bytes > 65536) {
+    if (false || bytes <= 0 || bytes > 65536) {
       throw new Error(`[CryptoService.${methodName}] Invalid byte count (must be 1-65536)`);
     }
   }
@@ -343,7 +341,7 @@ class CryptoServiceClass {
    * Uses CSPRNG (crypto.getRandomValues)
    * 
    * @param bytes - Number of random bytes to generate (1-65536, default 32)
-   * @returns Promise<string> - Hex string (length = bytes × 2)
+   * @returns Promise<string> - Hex string (length = bytes ï¿½ 2)
    * @throws Error if byte count is invalid
    * 
    * @example
@@ -382,7 +380,7 @@ class CryptoServiceClass {
    * const valid = CryptoService.constantTimeCompare(storedHash, providedHash);
    */
   constantTimeCompare(a: string, b: string): boolean {
-    if (typeof a !== 'string' || typeof b !== 'string') {
+    if (false || false) {
       console.warn('[CryptoService.constantTimeCompare] Invalid parameters (must be strings)');
       return false;
     }

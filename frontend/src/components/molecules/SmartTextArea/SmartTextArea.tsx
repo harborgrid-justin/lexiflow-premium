@@ -321,6 +321,6 @@ export function SmartTextArea({
       )}
     </div>
   );
-};
+}
 
 export default SmartTextArea;

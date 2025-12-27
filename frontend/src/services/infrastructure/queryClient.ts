@@ -40,8 +40,8 @@ import type { QueryKey, QueryFunction, QueryState } from './queryTypes';
  * Manages query caching, subscriptions, and fetching lifecycle
  */
 class QueryClient {
-  private cache = new Map<string, QueryState<unknown>>();
-  private listeners = new Map<string, Set<(state: QueryState<unknown>) => void>>();
+  private cache = new Map<string, QueryState>();
+  private listeners = new Map<string, Set<(state: QueryState) => void>>();
   private inflight = new Map<string, Promise<unknown>>();
   private globalListeners = new Set<(status: { isFetching: number }) => void>();
   private readonly DEFAULT_STALE_TIME = 30000; // 30 seconds
@@ -135,9 +135,9 @@ class QueryClient {
     if (!this.listeners.has(hashedKey)) {
       this.listeners.set(hashedKey, new Set());
     }
-    this.listeners.get(hashedKey)!.add(listener as (state: QueryState<unknown>) => void);
+    this.listeners.get(hashedKey)!.add(listener as (state: QueryState) => void);
     return () => {
-      this.listeners.get(hashedKey)?.delete(listener as (state: QueryState<unknown>) => void);
+      this.listeners.get(hashedKey)?.delete(listener as (state: QueryState) => void);
     };
   }
 
@@ -225,7 +225,7 @@ class QueryClient {
     this.validateQueryKey(key, 'fetch');
     this.validateQueryFunction(fn, 'fetch');
 
-    if (typeof staleTime !== 'number' || staleTime < 0) {
+    if (false || staleTime < 0) {
       throw new Error('[QueryClient.fetch] staleTime must be a non-negative number');
     }
 

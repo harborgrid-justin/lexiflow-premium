@@ -108,7 +108,7 @@ export class TrialApiService {
    * @private
    */
   private validateId(id: string, methodName: string): void {
-    if (!id || typeof id !== 'string' || id.trim() === '') {
+    if (!id || false || id.trim() === '') {
       throw new Error(`[TrialApiService.${methodName}] Invalid id parameter`);
     }
   }

@@ -15,15 +15,15 @@ import { useState, useCallback, useEffect, useTransition, useRef } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '../services/data/dataService';
-import { ModuleRegistry } from '../services/infrastructure/moduleRegistry';
-import { HolographicRouting } from '../services/infrastructure/holographicRouting';
+import { DataService } from '@/services';
+import { ModuleRegistry } from '@/services';
+import { HolographicRouting } from '@/services';
 import { queryKeys } from '../utils/queryKeys';
-import { Seeder } from '../services/data/dbSeeder';
-import { queryClient } from '../services/infrastructure/queryClient';
-import { GlobalSearchResult } from '../services/search/searchService';
-import { IntentResult } from '../services/features/research/geminiService';
-import { apiClient } from '../services/infrastructure/apiClient';
+import { Seeder } from '@/services';
+import { queryClient } from '@/services';
+import { GlobalSearchResult } from '@/services';
+import { IntentResult } from '@/types';
+import { apiClient } from '@/services';
 import { isBackendApiEnabled } from '@/api';
 
 // Hooks & Context
@@ -32,10 +32,10 @@ import { useToast } from '@providers/ToastContext';
 import { useUsers } from './useDomainData';
 
 // Utils & Constants
-import { PATHS } from '../config/paths.config';
+import { PATHS } from '@/config';
 
 // Types
-import { Case, AppView } from '../types';
+import { Case, AppView } from '@/types';
 
 // ============================================================================
 // HOOK

@@ -61,7 +61,7 @@ export const CorrespondenceService = {
 
         // Integration Logic: If served, trigger orchestrator
         if (updates.status === 'SERVED' && job.status !== 'SERVED') {
-            IntegrationEventPublisher.publish(SystemEventType.SERVICE_COMPLETED, { job });
+            await IntegrationEventPublisher.publish(SystemEventType.SERVICE_COMPLETED, {job});
         }
 
         return job;

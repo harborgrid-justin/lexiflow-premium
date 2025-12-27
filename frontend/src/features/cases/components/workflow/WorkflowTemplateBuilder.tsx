@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useCallback } from 'react';
 import { WorkflowTemplateData, WorkflowTemplateId } from '@/types';
-import { NodeType } from './builder/types';
+import { NodeType } from '@/types';
 import { BuilderToolbar } from './builder/BuilderToolbar';
 import { BuilderPalette } from './builder/BuilderPalette';
 import { BuilderCanvas } from './builder/BuilderCanvas';

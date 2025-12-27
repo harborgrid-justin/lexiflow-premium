@@ -149,16 +149,16 @@ export class DocketRepository extends Repository<DocketEntry> {
         if (isBackendApiEnabled()) {
             const created = await this.docketApi.add(entry);
             // Publish integration event
-            IntegrationOrchestrator.publish(SystemEventType.DOCKET_INGESTED, { 
-                entry: created, 
-                caseId: entry.caseId 
+            await IntegrationOrchestrator.publish(SystemEventType.DOCKET_INGESTED, {
+                entry: created,
+                caseId: entry.caseId
             });
             return created;
         }
         const created = await super.add(entry as DocketEntry);
-        IntegrationOrchestrator.publish(SystemEventType.DOCKET_INGESTED, { 
-            entry: created, 
-            caseId: entry.caseId 
+        await IntegrationOrchestrator.publish(SystemEventType.DOCKET_INGESTED, {
+            entry: created,
+            caseId: entry.caseId
         });
         return created;
     }

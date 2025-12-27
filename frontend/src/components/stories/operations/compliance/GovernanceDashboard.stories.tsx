@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { GovernanceDashboard } from '../../../../features/admin/components/data/governance/GovernanceDashboard';
+import { GovernanceDashboard } from '@features/admin/components/data/governance/GovernanceDashboard.tsx';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 

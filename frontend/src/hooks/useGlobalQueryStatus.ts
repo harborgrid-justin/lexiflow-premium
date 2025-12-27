@@ -16,7 +16,7 @@ import { useState, useEffect } from 'react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Services & Data
-import { queryClient } from '../services/infrastructure/queryClient';
+import { queryClient } from '@/services';
 
 // ========================================
 // HOOK

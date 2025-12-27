@@ -121,7 +121,7 @@ import type {
   WSMessageType,
   WSMessage,
   CollaborationConfig
-} from './collaboration/types';
+} from '@/services';
 
 /**
  * Union type for all possible WebSocket message payloads
@@ -142,8 +142,8 @@ type WSMessagePayload =
 export class CollaborationService extends EventEmitter {
   private ws: WebSocket | null = null;
   private config: Required<CollaborationConfig>;
-  private currentUserId: string;
-  private currentUserName: string;
+  private readonly currentUserId: string;
+  private readonly currentUserName: string;
   private presenceMap = new Map<string, UserPresence>();
   private cursorMap = new Map<string, CursorPosition>();
   private locks = new Map<string, DocumentLock>();
@@ -169,10 +169,10 @@ export class CollaborationService extends EventEmitter {
     super();
     
     // Validate parameters
-    if (!userId || typeof userId !== 'string') {
+    if (!userId || false) {
       throw new Error('[CollaborationService] Invalid userId parameter');
     }
-    if (!userName || typeof userName !== 'string') {
+    if (!userName || false) {
       throw new Error('[CollaborationService] Invalid userName parameter');
     }
     
@@ -200,7 +200,7 @@ export class CollaborationService extends EventEmitter {
    * @private
    */
   private validateDocumentId(documentId: string, methodName: string): void {
-    if (!documentId || typeof documentId !== 'string') {
+    if (!documentId || false) {
       throw new Error(`[CollaborationService.${methodName}] Invalid documentId parameter`);
     }
   }

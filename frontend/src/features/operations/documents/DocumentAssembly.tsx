@@ -123,6 +123,6 @@ export function DocumentAssembly({ onClose, caseTitle, onSave, windowId }: Docum
         </div>
     </div>
   );
-};
+}
 
 

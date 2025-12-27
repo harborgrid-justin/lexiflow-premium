@@ -112,6 +112,6 @@ export function CompliancePolicies() {
         </TableContainer>
     </div>
   );
-};
+}
 
 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TabbedPageLayout } from './TabbedPageLayout';
+import { TabbedPageLayout } from '@/components';
 
 const meta: Meta<typeof TabbedPageLayout> = {
   title: 'Templates/TabbedPageLayout',

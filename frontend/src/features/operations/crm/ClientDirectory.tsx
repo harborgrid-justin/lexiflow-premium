@@ -132,5 +132,5 @@ export function ClientDirectory({ clients: propClients, onOpenPortal }: ClientDi
       )}
     </div>
   );
-};
+}
 

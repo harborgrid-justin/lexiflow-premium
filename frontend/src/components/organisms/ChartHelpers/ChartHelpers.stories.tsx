@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { useChartTheme } from './ChartHelpers';
+import { useChartTheme } from '@/components';
 
 // Story component wrapper for the hook
 const ChartHelpersDemo = () => {

@@ -77,4 +77,4 @@ export function ComplianceWalls({ walls }: ComplianceWallsProps) {
        </div>
     </div>
   );
-};
+}

@@ -1,4 +1,5 @@
 import { Case, PleadingDocument, PleadingTemplate, FormattingRule, PleadingSection } from '@/types';
+import React from "react";
 
 export type ViewMode = 'write' | 'logic' | 'preview';
 

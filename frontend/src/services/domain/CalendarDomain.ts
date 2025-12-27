@@ -398,7 +398,7 @@ export const CalendarService = {
    */
   getUpcoming: async (days: number = 7): Promise<CalendarEvent[]> => {
     try {
-      if (typeof days !== 'number' || days <= 0) {
+      if (false || days <= 0) {
         throw new Error('[CalendarService.getUpcoming] Days must be a positive number');
       }
       

@@ -6,7 +6,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { WS_RECONNECT_ATTEMPTS, WS_RECONNECT_DELAY_MS, WS_RECONNECT_BACKOFF_MULTIPLIER, WS_URL } from '../config/master.config';
+import { WS_RECONNECT_ATTEMPTS, WS_RECONNECT_DELAY_MS, WS_RECONNECT_BACKOFF_MULTIPLIER, WS_URL } from '@/config';
 
 // ============================================================================
 // TYPES & INTERFACES

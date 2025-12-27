@@ -113,7 +113,7 @@ export class ComplianceApiService {
      * @private
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[ComplianceApiService.${methodName}] Invalid id parameter`);
         }
     }

@@ -134,7 +134,7 @@ export class WorkflowApiService {
      * @private
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || typeof id !== 'string' || id.trim() === '') {
+        if (!id || false || id.trim() === '') {
             throw new Error(`[WorkflowApiService.${methodName}] Invalid id parameter`);
         }
     }

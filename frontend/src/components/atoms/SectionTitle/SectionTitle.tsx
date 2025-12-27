@@ -13,7 +13,10 @@ export interface SectionTitleProps {
   className?: string;
 }
 
-export const SectionTitle: React.FC<SectionTitleProps> = ({ children, className }) => {
+/**
+ * SectionTitle - React 18 optimized with React.memo
+ */
+export const SectionTitle = React.memo<SectionTitleProps>(({ children, className }) => {
   const { theme } = useTheme();
   
   return (
@@ -21,4 +24,4 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({ children, className 
       {children}
     </h4>
   );
-};
+});

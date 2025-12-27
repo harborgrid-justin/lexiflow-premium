@@ -17,7 +17,10 @@ export interface DateTextProps {
   icon?: boolean;
 }
 
-export const DateText: React.FC<DateTextProps> = ({ 
+/**
+ * DateText - React 18 optimized with React.memo
+ */
+export const DateText = React.memo<DateTextProps>(({ 
   date, 
   className = "", 
   icon = false 
@@ -30,4 +33,4 @@ export const DateText: React.FC<DateTextProps> = ({
       {Formatters.date(date)}
     </span>
   );
-};
+});

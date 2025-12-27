@@ -11,7 +11,7 @@ interface ComplianceWallsProps {
   walls: EthicalWall[];
 }
 
-export const ComplianceWalls: React.FC<ComplianceWallsProps> = ({ walls }) => {
+export function ComplianceWalls({ walls }: ComplianceWallsProps) {
   const { theme } = useTheme();
 
   return (

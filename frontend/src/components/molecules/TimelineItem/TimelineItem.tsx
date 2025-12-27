@@ -37,7 +37,10 @@ interface TimelineItemProps {
   isLast?: boolean;
 }
 
-export const TimelineItem: React.FC<TimelineItemProps> = ({ 
+/**
+ * TimelineItem - React 18 optimized with React.memo
+ */
+export const TimelineItem = React.memo<TimelineItemProps>(({ 
   date, title, description, icon, colorClass = 'bg-slate-400', onClick, isLast 
 }) => {
   const { theme } = useTheme();
@@ -81,4 +84,4 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({
       </div>
     </div>
   );
-};
+});

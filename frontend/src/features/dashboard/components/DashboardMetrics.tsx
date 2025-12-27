@@ -41,7 +41,7 @@ interface DashboardMetricsProps {
 // COMPONENT
 // ============================================================================
 
-export const DashboardMetrics: React.FC<DashboardMetricsProps> = ({ stats }) => {
+export function DashboardMetrics({ stats }: DashboardMetricsProps) {
   // Use state to allow local simulation of "Live" updates
   const [liveStats, setLiveStats] = useState(stats || { activeCases: 0, pendingMotions: 0, billableHours: 0, highRisks: 0 });
 
@@ -82,4 +82,4 @@ export const DashboardMetrics: React.FC<DashboardMetricsProps> = ({ stats }) => 
       ))}
     </div>
   );
-};
+}

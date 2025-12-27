@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useId } from 'react';
 import { Loader2, AlertCircle } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist';
 
@@ -40,6 +40,9 @@ interface PDFViewerProps {
   children?: React.ReactNode;
 }
 
+/**
+ * PDFViewer - React 18 optimized with useId
+ */
 export const PDFViewer: React.FC<PDFViewerProps> = ({ 
   url, 
   scale = 1.0, 
@@ -50,6 +53,7 @@ export const PDFViewer: React.FC<PDFViewerProps> = ({
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasId = useId();
   
   const [pdfDoc, setPdfDoc] = useState<pdfjsLib.PDFDocumentProxy | null>(null);
   const [pageNum, setPageNum] = useState(1);

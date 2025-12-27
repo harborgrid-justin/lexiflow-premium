@@ -41,7 +41,10 @@ interface SidebarHeaderProps {
 // COMPONENT
 // ============================================================================
 
-export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ onClose }) => {
+/**
+ * SidebarHeader - React 18 optimized with React.memo
+ */
+export const SidebarHeader = React.memo<SidebarHeaderProps>(({ onClose }) => {
   const { theme } = useTheme();
   
   const { data: tenantConfig } = useQuery<TenantConfig>(
@@ -70,5 +73,5 @@ export const SidebarHeader: React.FC<SidebarHeaderProps> = ({ onClose }) => {
       </button>
     </div>
   );
-};
+});
 

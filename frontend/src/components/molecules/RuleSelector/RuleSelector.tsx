@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import React, { useState, useId } from 'react';
 import { Book, X, Search, Loader2 } from 'lucide-react';
 
 // ============================================================================
@@ -42,6 +42,7 @@ interface RuleSelectorProps {
 
 export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRulesChange, readOnly = false }) => {
   const { theme } = useTheme();
+  const inputId = useId();
   const [searchTerm, setSearchTerm] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const debouncedSearch = useDebounce(searchTerm, SEARCH_DEBOUNCE_MS);
@@ -92,6 +93,8 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
           <div className={cn("flex items-center border rounded-md transition-shadow focus-within:ring-1 focus-within:ring-blue-500", theme.surface.default, theme.border.default)}>
             <Search className={cn("h-4 w-4 ml-2", theme.text.tertiary)}/>
             <input 
+              id={inputId}
+              aria-label="Search legal rules"
               className={cn("flex-1 px-2 py-2 text-sm outline-none bg-transparent placeholder:text-slate-400 dark:placeholder:text-slate-500", theme.text.primary)}
               placeholder="Search rules (e.g. 'FRCP 12')..."
               value={searchTerm}

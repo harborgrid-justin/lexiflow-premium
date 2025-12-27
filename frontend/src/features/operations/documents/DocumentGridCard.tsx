@@ -13,7 +13,7 @@ interface DocumentGridCardProps {
     onPreview: (doc: LegalDocument) => void;
 }
 
-export const DocumentGridCard: React.FC<DocumentGridCardProps> = ({ doc, isSelected, onToggleSelection, onPreview }) => {
+export function DocumentGridCard({ doc, isSelected, onToggleSelection, onPreview }: DocumentGridCardProps) {
     const { theme } = useTheme();
 
     return (

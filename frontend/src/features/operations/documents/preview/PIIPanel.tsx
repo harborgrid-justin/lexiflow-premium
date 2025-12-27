@@ -19,7 +19,7 @@ interface PIIEntity {
   ignored: boolean;
 }
 
-export const PIIPanel: React.FC<PIIPanelProps> = ({ content, onApplyRedactions }) => {
+export function PIIPanel({ content, onApplyRedactions }: PIIPanelProps) {
   const { theme } = useTheme();
   const [entities, setEntities] = useState<PIIEntity[]>([]);
   const [isScanning, setIsScanning] = useState(true);

@@ -16,7 +16,7 @@ interface DocumentManagerContentProps {
   currentUserRole: UserRole;
 }
 
-export const DocumentManagerContent: React.FC<DocumentManagerContentProps> = ({ activeTab, currentUserRole }) => {
+export function DocumentManagerContent({ activeTab, currentUserRole }: DocumentManagerContentProps) {
     switch (activeTab) {
         case 'browse': return <DocumentExplorer currentUserRole={currentUserRole} />;
         case 'recent': return <RecentFiles />;

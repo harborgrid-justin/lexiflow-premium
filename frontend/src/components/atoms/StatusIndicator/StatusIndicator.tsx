@@ -51,7 +51,7 @@ const SIZE_CLASSES: Record<NonNullable<StatusIndicatorProps['size']>, string> = 
  * <StatusIndicator type="warning" label="At Risk" size="sm" />
  * ```
  */
-export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
+export const StatusIndicator = React.memo<StatusIndicatorProps>(({
   type,
   label,
   className,
@@ -87,4 +87,4 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
       {label}
     </span>
   );
-};
+});

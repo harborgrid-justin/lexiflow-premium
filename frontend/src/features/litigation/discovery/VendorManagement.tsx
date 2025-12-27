@@ -81,7 +81,7 @@ const STATUS_OPTIONS = [
  * Manages discovery service vendors including court reporters, videographers,
  * and interpreters with rating and status tracking.
  */
-export const VendorManagement: React.FC = () => {
+export function VendorManagement() {
   // ==========================================================================
   // HOOKS - Context & State
   // ==========================================================================

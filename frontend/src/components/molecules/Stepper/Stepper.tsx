@@ -32,7 +32,10 @@ interface StepperProps {
   className?: string;
 }
 
-export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, onStepClick, className = '' }) => {
+/**
+ * Stepper - React 18 optimized with React.memo
+ */
+export const Stepper = React.memo<StepperProps>(({ steps, currentStep, onStepClick, className = '' }) => {
   const { theme } = useTheme();
 
   return (
@@ -78,4 +81,4 @@ export const Stepper: React.FC<StepperProps> = ({ steps, currentStep, onStepClic
       </div>
     </div>
   );
-};
+});

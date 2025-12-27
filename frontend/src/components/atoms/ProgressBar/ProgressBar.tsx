@@ -38,12 +38,12 @@ interface ProgressBarProps {
   showValue?: boolean;
 }
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({
+export function ProgressBar({
   label,
   value,
   colorClass,
   showValue = true
-}) => {
+}: ProgressBarProps) {
   const { theme } = useTheme();
   
   return (
@@ -55,7 +55,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       <div 
         className={cn(trackStyles, theme.surface.highlight)}
         role="progressbar"
-        aria-labelledby={"progress-label-"}
+        aria-label={label || `Progress: ${progress}%`}
         aria-valuenow={value}
         aria-valuemin={0}
         aria-valuemax={100}

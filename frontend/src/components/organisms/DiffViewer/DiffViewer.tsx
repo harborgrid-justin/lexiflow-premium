@@ -31,7 +31,10 @@ interface DiffViewerProps {
   newLabel?: string;
 }
 
-export const DiffViewer: React.FC<DiffViewerProps> = ({ oldText, newText, oldLabel = "Original", newLabel = "Modified" }) => {
+/**
+ * DiffViewer - React 18 optimized with React.memo
+ */
+export const DiffViewer = React.memo<DiffViewerProps>(({ oldText, newText, oldLabel = "Original", newLabel = "Modified" }) => {
   const { theme } = useTheme();
   
   return (
@@ -54,4 +57,4 @@ export const DiffViewer: React.FC<DiffViewerProps> = ({ oldText, newText, oldLab
       </div>
     </div>
   );
-};
+});

@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import React, { useState, useId } from 'react';
 import { PenTool, CheckCircle, RefreshCcw, X } from 'lucide-react';
 
 // ============================================================================
@@ -33,11 +33,15 @@ interface SignaturePadProps {
   isSigning?: boolean;
 }
 
-export const SignaturePad: React.FC<SignaturePadProps> = ({ 
+/**
+ * SignaturePad - React 18 optimized with React.memo and useId
+ */
+export const SignaturePad = React.memo<SignaturePadProps>(({ 
   value, onChange, label = "Digital Signature", subtext = "I certify this record is accurate.", isSigning 
 }) => {
   const { theme } = useTheme();
   const [localSigning, setLocalSigning] = useState(false);
+  const signatureId = useId();
 
   const handleClick = () => {
     if (value) return; 
@@ -99,4 +103,4 @@ export const SignaturePad: React.FC<SignaturePadProps> = ({
       </div>
     </div>
   );
-};
+});

@@ -13,7 +13,10 @@ export interface FileIconProps {
   className?: string;
 }
 
-export const FileIcon: React.FC<FileIconProps> = ({ 
+/**
+ * FileIcon - React 18 optimized with React.memo
+ */
+export const FileIcon = React.memo<FileIconProps>(({ 
   type, 
   className = "h-5 w-5" 
 }) => {
@@ -36,4 +39,4 @@ export const FileIcon: React.FC<FileIconProps> = ({
   }
   
   return <FileText className={getIconClass(iconColors.default, className)} />;
-};
+});

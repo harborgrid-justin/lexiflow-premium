@@ -53,7 +53,7 @@ interface CommandCenterProps {
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const CommandCenter: React.FC<CommandCenterProps> = ({ caseId, warRoomData, onNavigate }) => {
+export function CommandCenter({ caseId, warRoomData, onNavigate }: CommandCenterProps) {
   // ============================================================================
   // HOOKS & CONTEXT
   // ============================================================================

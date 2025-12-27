@@ -13,12 +13,15 @@ export interface LoadingSpinnerProps {
   className?: string;
 }
 
-export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
+/**
+ * LoadingSpinner - React 18 optimized with React.memo
+ */
+export const LoadingSpinner = React.memo<LoadingSpinnerProps>(({ 
   text, 
   className = "h-5 w-5" 
 }) => (
   <div className={containerStyles}>
-    <Loader2 className={getSpinnerClass(className)} />
+    <Loader2 className={getSpinnerClass(className)} aria-label={text || "Loading"} />
     {text && <span className={textStyles}>{text}</span>}
   </div>
-);
+));

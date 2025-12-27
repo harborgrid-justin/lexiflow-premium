@@ -19,7 +19,10 @@ interface QuerySidebarProps {
   schema: Record<string, SchemaTable> | unknown;
 }
 
-export const QuerySidebar: React.FC<QuerySidebarProps> = ({ activeTab, setActiveTab, schema }) => {
+/**
+ * QuerySidebar - React 18 optimized with React.memo
+ */
+export const QuerySidebar = React.memo<QuerySidebarProps>(({ activeTab, setActiveTab, schema }) => {
   const { theme } = useTheme();
 
   return (

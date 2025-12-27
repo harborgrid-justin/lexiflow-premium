@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Maximize2, X, Layers } from 'lucide-react';
 
 // ============================================================================
@@ -27,11 +27,17 @@ import { cn } from '@/utils/cn';
 // COMPONENT
 // ============================================================================
 
-export const HolographicDock: React.FC = () => {
+/**
+ * HolographicDock - React 18 optimized with React.memo and useMemo
+ */
+export const HolographicDock = React.memo(() => {
   const { windows, restoreWindow, closeWindow } = useWindow();
   const { theme } = useTheme();
   
-  const minimizedWindows = windows.filter(w => w.isMinimized && w.isOpen);
+  const minimizedWindows = useMemo(
+    () => windows.filter(w => w.isMinimized && w.isOpen),
+    [windows]
+  );
 
   if (minimizedWindows.length === 0) return null;
 
@@ -78,4 +84,4 @@ export const HolographicDock: React.FC = () => {
       ))}
     </div>
   );
-};
+});

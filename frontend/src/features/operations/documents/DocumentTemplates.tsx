@@ -17,7 +17,7 @@ interface Template {
   popular: boolean;
 }
 
-export const DocumentTemplates: React.FC = () => {
+export function DocumentTemplates() {
   const { theme } = useTheme();
   
   // Performance Engine: useQuery

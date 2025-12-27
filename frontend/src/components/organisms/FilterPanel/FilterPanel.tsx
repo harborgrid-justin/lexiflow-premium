@@ -34,7 +34,11 @@ interface FilterPanelProps {
   className?: string;
 }
 
-export const FilterPanel: React.FC<FilterPanelProps> = ({ isOpen, onClose, onClear, children, title = "Filters", className = "" }) => {
+/**
+ * FilterPanel - React 18 optimized with React.memo
+ * Prevents unnecessary re-renders of filter content
+ */
+export const FilterPanel = React.memo<FilterPanelProps>(({ isOpen, onClose, onClear, children, title = "Filters", className = "" }) => {
   const { theme } = useTheme();
 
   if (!isOpen) return null;
@@ -69,4 +73,4 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({ isOpen, onClose, onCle
       </div>
     </div>
   );
-};
+});

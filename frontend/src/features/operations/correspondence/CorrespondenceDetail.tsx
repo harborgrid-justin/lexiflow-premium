@@ -24,7 +24,7 @@ interface CorrespondenceDetailProps {
   onReply?: (item: CommunicationItem) => void;
 }
 
-export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ correspondenceItem, onClose, onReply }) => {
+export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: CorrespondenceDetailProps) {
   const { theme } = useTheme();
   const notify = useNotify();
   const { register, revoke } = useBlobRegistry();

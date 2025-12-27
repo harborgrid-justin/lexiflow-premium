@@ -19,7 +19,7 @@ interface WarRoomManagerProps {
   onSelectCase: (caseId: string) => void;
 }
 
-export const WarRoomManager: React.FC<WarRoomManagerProps> = ({ onSelectCase }) => {
+export function WarRoomManager({ onSelectCase }: WarRoomManagerProps) {
   const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');

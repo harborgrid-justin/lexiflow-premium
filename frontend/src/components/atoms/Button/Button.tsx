@@ -34,7 +34,10 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children?: React.ReactNode;
 };
 
-export const Button = ({
+/**
+ * Button - React 18 optimized with React.memo
+ */
+export const Button = React.memo<ButtonProps>(({
   variant = 'primary',
   size = 'md',
   icon: Icon,
@@ -43,7 +46,7 @@ export const Button = ({
   className = '',
   disabled,
   ...props
-}: ButtonProps) => {
+}) => {
   const { theme } = useTheme();
   const variants = getVariants(theme);
 
@@ -66,4 +69,6 @@ export const Button = ({
       {children}
     </button>
   );
-};
+});
+
+Button.displayName = 'Button';

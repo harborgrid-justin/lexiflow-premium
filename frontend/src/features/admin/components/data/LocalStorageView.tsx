@@ -13,9 +13,9 @@ import { DataSourceSelector } from './DataSourceSelector';
 import { useLocalStorageFiles } from './hooks';
 
 /**
- * Component for viewing and managing localStorage
+ * Component for viewing and managing localStorage - React 18 optimized with React.memo
  */
-export const LocalStorageView: React.FC = () => {
+export const LocalStorageView = React.memo(() => {
   const { theme } = useTheme();
   const { files, loadFiles, clearCache, deleteItem } = useLocalStorageFiles();
 

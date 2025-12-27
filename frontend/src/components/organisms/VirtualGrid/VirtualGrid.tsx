@@ -36,9 +36,13 @@ interface VirtualGridProps<T> {
   getItemKey?: (item: T) => string | number;
 }
 
-export function VirtualGrid<T>({ 
-  items, itemHeight, itemWidth, renderItem, className, emptyMessage = "No items found", gap = 16, height, getItemKey 
-}: VirtualGridProps<T>) {
+/**
+ * VirtualGrid - React 18 optimized with React.memo
+ */
+export const VirtualGrid = React.memo(<T extends any>(props: VirtualGridProps<T>) => {
+  const { 
+    items, itemHeight, itemWidth, renderItem, className, emptyMessage = "No items found", gap = 16, height, getItemKey 
+  } = props;
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
@@ -159,4 +163,4 @@ export function VirtualGrid<T>({
       </div>
     </div>
   );
-}
+});

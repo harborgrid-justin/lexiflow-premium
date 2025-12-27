@@ -14,7 +14,7 @@ interface ConversationRowProps {
     formatTime: (iso: string) => string;
 }
 
-export const ConversationRow: React.FC<ConversationRowProps> = ({ conv, isActive, onSelect, onPopOut, formatTime }) => {
+export function ConversationRow({ conv, isActive, onSelect, onPopOut, formatTime }: ConversationRowProps) {
     const { theme } = useTheme();
     const lastMsg = conv.messages[conv.messages.length - 1];
 

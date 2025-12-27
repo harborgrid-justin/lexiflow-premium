@@ -10,7 +10,10 @@ import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';
 
-export const StandardizationConsole: React.FC = () => {
+/**
+ * StandardizationConsole - React 18 optimized with React.memo
+ */
+export const StandardizationConsole = React.memo(() => {
     const { theme } = useTheme();
     const notify = useNotify();
     const [isRunning, setIsRunning] = useState(false);

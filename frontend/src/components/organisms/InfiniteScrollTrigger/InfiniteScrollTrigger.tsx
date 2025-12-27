@@ -33,7 +33,10 @@ interface InfiniteScrollTriggerProps {
   className?: string;
 }
 
-export const InfiniteScrollTrigger: React.FC<InfiniteScrollTriggerProps> = ({ 
+/**
+ * InfiniteScrollTrigger - React 18 optimized with React.memo
+ */
+export const InfiniteScrollTrigger = React.memo<InfiniteScrollTriggerProps>(({ 
   onLoadMore, 
   hasMore, 
   isLoading,
@@ -67,4 +70,4 @@ export const InfiniteScrollTrigger: React.FC<InfiniteScrollTriggerProps> = ({
         )}
     </div>
   );
-};
+});

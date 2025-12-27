@@ -6,7 +6,10 @@ import { cn } from '@/utils/cn';
 import { ConsistentHashRing } from '@/utils/datastructures/consistentHashRing';
 import { Button } from '@/components/atoms/Button';
 
-export const ShardingVisualizer: React.FC = () => {
+/**
+ * ShardingVisualizer - React 18 optimized with React.memo
+ */
+export const ShardingVisualizer = React.memo(() => {
     const { theme } = useTheme();
     const [ring, setRing] = useState(new ConsistentHashRing(5));
     const [nodes, setNodes] = useState<string[]>(['Shard-A', 'Shard-B', 'Shard-C']);

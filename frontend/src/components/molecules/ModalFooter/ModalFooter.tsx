@@ -12,7 +12,7 @@ export interface ModalFooterProps {
   children: React.ReactNode;
 }
 
-export const ModalFooter: React.FC<ModalFooterProps> = ({ children }) => {
+export function ModalFooter({ children }: ModalFooterProps) {
   const { theme } = useTheme();
   
   return (

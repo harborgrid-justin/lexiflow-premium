@@ -4,7 +4,7 @@
  * @description Section header with title, subtitle, and optional action button
  */
 
-import React from 'react';
+import React, { useId } from 'react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
@@ -14,21 +14,25 @@ export interface SectionHeaderProps {
   action?: React.ReactNode;
 }
 
-export const SectionHeader: React.FC<SectionHeaderProps> = ({ 
+/**
+ * SectionHeader - React 18 optimized with React.memo and useId
+ */
+export const SectionHeader = React.memo<SectionHeaderProps>(({ 
   title, 
   subtitle, 
   action 
 }) => {
   const { theme } = useTheme();
+  const headingId = useId();
   
   return (
     <div className="flex justify-between items-center mb-4">
       <div>
-        <h3 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.primary)}>
+        <h3 id={headingId} className={cn("font-bold text-sm uppercase tracking-wide", theme.text.primary)}>
           {title}
         </h3>
         {subtitle && (
-          <p className={cn("text-xs mt-0.5", theme.text.secondary)}>
+          <p aria-describedby={headingId} className={cn("text-xs mt-0.5", theme.text.secondary)}>
             {subtitle}
           </p>
         )}
@@ -36,4 +40,4 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
       {action}
     </div>
   );
-};
+});

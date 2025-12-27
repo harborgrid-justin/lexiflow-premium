@@ -20,9 +20,9 @@ interface MessengerChatListProps {
   formatTime: (iso: string) => string;
 }
 
-export const MessengerChatList: React.FC<MessengerChatListProps> = ({
+export function MessengerChatList({
   conversations, activeConvId, searchTerm, setSearchTerm, handleSelectConversation, formatTime
-}) => {
+}: MessengerChatListProps) {
   const { theme } = useTheme();
   const { openWindow } = useWindow();
 

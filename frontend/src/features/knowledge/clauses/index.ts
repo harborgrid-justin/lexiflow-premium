@@ -2,5 +2,5 @@
 
 export * from './ClauseAnalytics';
 export * from './ClauseHistoryModal';
-export * from './ClauseLibrary';
+export { default as ClauseLibrary } from './ClauseLibrary';
 export * from './ClauseList';

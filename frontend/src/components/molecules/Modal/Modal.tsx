@@ -51,15 +51,17 @@ interface ModalProps {
 // COMPONENT
 // ============================================================================
 
-export const Modal: React.FC<ModalProps> = ({ 
+export function Modal({ 
     isOpen, onClose, title, children, size = 'md', className = '', footer, closeOnBackdrop = true 
-}) => {
+}: ModalProps) {
   const [mounted, setMounted] = useState(false);
   const { theme } = useTheme();
-  const modalId = React.useId();
+  // React 18: useId generates stable, unique IDs (SSR-safe)
+  const titleId = React.useId();
+  const descriptionId = React.useId();
   const modalRef = useRef<HTMLDivElement>(null);
   
-  useScrollLock(modalId, isOpen);
+  useScrollLock(titleId, isOpen);
 
   useEffect(() => {
     setMounted(true);
@@ -121,7 +123,7 @@ export const Modal: React.FC<ModalProps> = ({
   const modalContent = (
     <div
         className={cn("fixed inset-0 flex items-center justify-center p-4 sm:p-6", tokens.zIndex.modal)}
-        aria-labelledby="modal-title"
+        aria-labelledby={titleId}
         role="dialog"
         aria-modal="true"
     >
@@ -145,7 +147,7 @@ export const Modal: React.FC<ModalProps> = ({
       )}>
         {/* Header */}
         <div className={cn("flex items-center justify-between px-6 py-4 border-b shrink-0", theme.surface.default, theme.border.default)}>
-          <h3 className={cn("text-lg font-bold leading-6 tracking-tight", theme.text.primary)} id="modal-title">
+          <h3 className={cn("text-lg font-bold leading-6 tracking-tight", theme.text.primary)} id={titleId}>
             {title}
           </h3>
           <button

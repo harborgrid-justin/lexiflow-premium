@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useMemo, useCallback, useEffect, useId, useDeferredValue } from 'react';
 import { Search, X, Command } from 'lucide-react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useTheme } from '@/providers/ThemeContext';
@@ -9,6 +9,9 @@ import { getRecentSearches, parseSearchSyntax } from './storage';
 import { useSearchHandlers, useKeyboardNav } from './hooks';
 import { getCategoryIcon, sanitizeHtml } from './helpers';
 
+/**
+ * EnhancedSearch - React 18 optimized with useId
+ */
 export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
   placeholder = "Search everything...",
   onSearch,
@@ -21,7 +24,9 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
   debounceDelay = 300
 }) => {
   const { theme } = useTheme();
+  const searchId = useId();
   const [query, setQuery] = useState('');
+  const deferredQuery = useDeferredValue(query);
   const [category, setCategory] = useState<SearchCategory>('all');
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -48,11 +53,11 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
     const categoryFiltered = category === 'all' 
       ? suggestions 
       : suggestions.filter(s => s.category === category);
-    return filterSuggestions(categoryFiltered, query, 10);
-  }, [suggestions, query, category]);
+    return filterSuggestions(categoryFiltered, deferredQuery, 10);
+  }, [suggestions, deferredQuery, category]);
 
   const displayItems = useMemo(() => {
-    if (!query) {
+    if (!deferredQuery) {
       return recentSearches.map(text => ({
         id: `recent-${text}`,
         text,
@@ -63,9 +68,9 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
     }
     return filteredSuggestions.map(item => ({
       ...item,
-      highlightedText: highlightMatch(item.text, query)
+      highlightedText: highlightMatch(item.text, deferredQuery)
     }));
-  }, [query, filteredSuggestions, recentSearches]);
+  }, [deferredQuery, filteredSuggestions, recentSearches]);
 
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

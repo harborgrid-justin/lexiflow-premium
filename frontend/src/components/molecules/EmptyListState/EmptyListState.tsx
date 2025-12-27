@@ -14,7 +14,10 @@ export interface EmptyListStateProps {
   icon?: React.ElementType;
 }
 
-export const EmptyListState: React.FC<EmptyListStateProps> = ({ label, message, icon: Icon }) => {
+/**
+ * EmptyListState - React 18 optimized with React.memo
+ */
+export const EmptyListState = React.memo<EmptyListStateProps>(({ label, message, icon: Icon }) => {
   const { theme } = useTheme();
   
   return (
@@ -24,4 +27,4 @@ export const EmptyListState: React.FC<EmptyListStateProps> = ({ label, message, 
       {message && <div className="text-xs mt-1 opacity-75">{message}</div>}
     </div>
   );
-};
+});

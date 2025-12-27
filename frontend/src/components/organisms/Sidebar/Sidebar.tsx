@@ -16,7 +16,10 @@ interface SidebarProps {
   onSwitchUser: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isOpen, onClose, currentUser, onSwitchUser }) => {
+/**
+ * Sidebar - React 18 optimized with React.memo
+ */
+export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, isOpen, onClose, currentUser, onSwitchUser }) => {
   const { theme } = useTheme();
 
   return (
@@ -59,4 +62,4 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, setActiveView, isO
       </div>
     </>
   );
-};
+});

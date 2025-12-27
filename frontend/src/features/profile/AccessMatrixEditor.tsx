@@ -31,7 +31,7 @@ import { Input } from '@/components/atoms';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
-import { useModalState } from '@hooks';
+import { useModalState } from '@/hooks/useModalState';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

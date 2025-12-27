@@ -28,7 +28,7 @@ interface EvidenceTypeIconProps {
   className?: string;
 }
 
-export const EvidenceTypeIcon: React.FC<EvidenceTypeIconProps> = ({ type, className = "h-5 w-5" }) => {
+export function EvidenceTypeIcon({ type, className = "h-5 w-5" }: EvidenceTypeIconProps) {
   switch(type) {
     case 'Physical': return <Box className={getIconClass(type, className)}/>;
     case 'Digital': return <Activity className={getIconClass(type, className)}/>;

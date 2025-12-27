@@ -7,6 +7,11 @@
 // NEW & RECOMMENDED HOOKS
 // ============================================================================
 
+// React 18 Optimizations
+export { useFormId, useFormIds, useAriaIds } from './useFormId';
+export { useOptimizedFilter, useMultiFilter, useOptimizedSort } from './useOptimizedFilter';
+export type { OptimizedFilterConfig, OptimizedFilterReturn } from './useOptimizedFilter';
+
 // Unified List Navigation (replaces useKeyboardNav + useKeyboardNavigation)
 export { useListNavigation } from './useListNavigation';
 export type { UseListNavigationConfig, UseListNavigationResult, NavigationMode } from './useListNavigation';

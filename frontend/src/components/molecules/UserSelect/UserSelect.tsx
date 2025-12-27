@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useId } from 'react';
 import { ChevronDown } from 'lucide-react';
 
 // ============================================================================
@@ -42,18 +42,24 @@ interface UserSelectProps {
   className?: string;
 }
 
-export const UserSelect: React.FC<UserSelectProps> = ({ label, value, onChange, options, className = '' }) => {
+/**
+ * UserSelect - React 18 optimized user dropdown with avatar display
+ * Uses useId for SSR-safe unique IDs
+ */
+export function UserSelect({ label, value, onChange, options, className = '' }: UserSelectProps) {
   const { theme } = useTheme();
+  const selectId = useId();
   const selectedUser = options.find(u => u.name === value || u.id === value);
 
   return (
     <div className={`relative ${className}`}>
-      {label && <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>{label}</label>}
+      {label && <label htmlFor={selectId} className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>{label}</label>}
       <div className="relative">
         <select
+          id={selectId}
           value={value}
           onChange={(e: React.ChangeEvent<HTMLSelectElement>) => onChange(e.target.value)}
-          title={label || "Select user"}
+          aria-label={label || "Select user"}
           className={cn(
             "w-full pl-10 pr-8 py-2.5 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer",
             theme.surface.default,

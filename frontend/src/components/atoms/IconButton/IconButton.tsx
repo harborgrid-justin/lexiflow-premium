@@ -44,7 +44,7 @@ export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEl
  * <IconButton icon={StopCircle} variant="danger" aria-label="Stop" rounded />
  * ``r
  */
-export const IconButton: React.FC<IconButtonProps> = ({
+export function IconButton({
   icon: Icon,
   variant = 'primary',
   size = 'md',
@@ -54,7 +54,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
   className,
   disabled,
   ...props
-}) => {
+}: IconButtonProps) {
   return (
     <button
       className={getButtonClasses(variant, size, rounded, className)}

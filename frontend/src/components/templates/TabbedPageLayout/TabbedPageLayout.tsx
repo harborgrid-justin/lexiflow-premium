@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, ReactNode } from 'react';
+import React, { useMemo, useCallback, ReactNode, useId } from 'react';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -25,10 +25,14 @@ interface TabbedPageLayoutProps {
   onTabChange: (tabId: string) => void;
 }
 
-export const TabbedPageLayout: React.FC<TabbedPageLayoutProps> = ({
+/**
+ * TabbedPageLayout - React 18 optimized with React.memo
+ */
+export const TabbedPageLayout = React.memo<TabbedPageLayoutProps>(({
   pageTitle, pageSubtitle, pageActions, tabConfig, children, activeTabId, onTabChange
 }) => {
   const { theme } = useTheme();
+  const regionId = useId();
 
   const activeParentTab = useMemo(() => 
     tabConfig.find(p => p.subTabs.some(s => s.id === activeTabId)) || tabConfig[0],
@@ -99,4 +103,4 @@ export const TabbedPageLayout: React.FC<TabbedPageLayoutProps> = ({
       </div>
     </div>
   );
-};
+});

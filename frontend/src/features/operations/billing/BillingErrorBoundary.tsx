@@ -20,16 +20,14 @@ interface State {
 }
 
 export class BillingErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      hasError: false,
-      error: null,
-      errorInfo: null,
-    };
-  }
+  public override state: State = {
+    hasError: false,
+    error: null,
+    errorInfo: null,
+  };
 
   static getDerivedStateFromError(error: Error): State {
+    // React 18: Must return complete State, not Partial<State>
     return {
       hasError: true,
       error,
@@ -37,7 +35,7 @@ export class BillingErrorBoundary extends Component<Props, State> {
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Log to error reporting service
     console.error('Billing Error Boundary caught error:', error, errorInfo);
     

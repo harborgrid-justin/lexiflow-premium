@@ -16,11 +16,11 @@ export interface CurrencyProps {
   hideSymbol?: boolean;
 }
 
-export const Currency: React.FC<CurrencyProps> = ({ 
+export function Currency({ 
   value, 
   className = "", 
   hideSymbol = false 
-}) => {
+}: CurrencyProps) {
   const { theme } = useTheme();
   const formatted = Formatters.currency(value);
   

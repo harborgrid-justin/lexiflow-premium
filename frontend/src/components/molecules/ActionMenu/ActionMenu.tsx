@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useId } from 'react';
 import { MoreVertical } from 'lucide-react';
 
 // ============================================================================
@@ -41,23 +41,27 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
+  const menuId = useId();
+  const buttonId = useId();
 
   useClickOutside(menuRef as React.RefObject<HTMLElement>, () => setIsOpen(false));
 
   return (
     <div className="relative inline-block text-left" ref={menuRef}>
       <button 
+        id={buttonId}
         onClick={(e: React.MouseEvent) => { e.stopPropagation(); setIsOpen(!isOpen); }}
         className={cn("p-1 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.text.secondary}`)}
         aria-label="More actions"
         aria-expanded={isOpen}
+        aria-controls={menuId}
       >
         <MoreVertical className="h-4 w-4" />
       </button>
 
       {isOpen && (
-        <div className={cn("absolute right-0 mt-2 w-40 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50 animate-in fade-in zoom-in-95 duration-100", theme.surface.default, theme.border.default, "border")}>
-          <div className="py-1" role="menu">
+        <div id={menuId} className={cn("absolute right-0 mt-2 w-40 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50 animate-in fade-in zoom-in-95 duration-100", theme.surface.default, theme.border.default, "border")}>
+          <div className="py-1" role="menu" aria-labelledby={buttonId}>
             {actions.map((action, index) => {
               const Icon = action.icon;
               return (

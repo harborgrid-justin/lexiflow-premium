@@ -51,7 +51,7 @@ interface WitnessPrepProps {
 // COMPONENT
 // ============================================================================
 
-export const WitnessPrep: React.FC<WitnessPrepProps> = ({ caseId: _caseId, warRoomData, initialWitnessId, onClearSelection }) => {
+export function WitnessPrep({ caseId: _caseId, warRoomData, initialWitnessId, onClearSelection }: WitnessPrepProps) {
   // ============================================================================
   // HOOKS & CONTEXT
   // ============================================================================

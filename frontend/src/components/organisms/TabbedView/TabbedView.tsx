@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useId } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -21,16 +21,20 @@ interface TabbedViewProps {
   children: React.ReactNode;
 }
 
-export const TabbedView: React.FC<TabbedViewProps> = ({ header, tabs, children }) => {
+/**
+ * TabbedView - React 18 optimized with React.memo and useId
+ */
+export const TabbedView = React.memo<TabbedViewProps>(({ header, tabs, children }) => {
+  const regionId = useId();
   return (
     <div className="h-full flex flex-col animate-fade-in">
       {header}
-      <div className="mb-4">
+      <div className="mb-4" role="navigation" aria-label="Tab navigation">
         {tabs}
       </div>
-      <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
+      <div id={regionId} role="region" aria-live="polite" className="flex-1 min-h-0 overflow-hidden flex flex-col">
         {children}
       </div>
     </div>
   );
-};
+});

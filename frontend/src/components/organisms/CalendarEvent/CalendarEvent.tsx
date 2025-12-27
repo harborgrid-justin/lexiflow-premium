@@ -33,7 +33,10 @@ export interface CalendarEventProps {
   isCompact?: boolean;
 }
 
-export const CalendarEvent: React.FC<CalendarEventProps> = ({
+/**
+ * CalendarEvent - React 18 optimized with React.memo
+ */
+export const CalendarEvent = React.memo<CalendarEventProps>(({
   title,
   time,
   variant = 'default',
@@ -68,4 +71,4 @@ export const CalendarEvent: React.FC<CalendarEventProps> = ({
       </div>
     </div>
   );
-};
+});

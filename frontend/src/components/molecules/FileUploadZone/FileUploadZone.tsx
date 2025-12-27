@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useRef } from 'react';
+import React, { useRef, useId } from 'react';
 import { UploadCloud, CheckCircle, Loader2, Link, ShieldCheck } from 'lucide-react';
 
 // ============================================================================
@@ -40,11 +40,16 @@ interface FileUploadZoneProps {
   multiple?: boolean;
 }
 
+/**
+ * FileUploadZone - React 18 optimized with useId
+ */
 export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
   file, processing, processStage, onFileSelect, generatedHash, multiple = false
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { theme } = useTheme();
+  const inputId = useId();
+  const labelId = useId();
 
   return (
     <div

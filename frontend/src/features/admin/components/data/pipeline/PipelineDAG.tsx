@@ -4,7 +4,10 @@ import { Database, Server, FileText, ArrowRight, Layers, Box, CheckCircle, Play,
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
-export const PipelineDAG: React.FC = () => {
+/**
+ * PipelineDAG - React 18 optimized with React.memo
+ */
+export const PipelineDAG = React.memo(() => {
     const { theme, mode } = useTheme();
     
     // Mock DAG structure for Enterprise Demo

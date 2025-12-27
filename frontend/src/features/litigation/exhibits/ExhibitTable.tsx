@@ -44,7 +44,7 @@ interface ExhibitTableProps {
   viewMode: 'list' | 'grid';
 }
 
-export const ExhibitTable: React.FC<ExhibitTableProps> = ({ exhibits, viewMode }) => {
+export function ExhibitTable({ exhibits, viewMode }: ExhibitTableProps) {
   const { theme } = useTheme();
   const { openWindow } = useWindow();
 

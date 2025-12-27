@@ -36,7 +36,7 @@ interface CopyButtonProps {
   size?: 'sm' | 'md';
 }
 
-export const CopyButton: React.FC<CopyButtonProps> = ({ text, label = "Copy", variant = "secondary", size = "sm" }) => {
+export function CopyButton({ text, label = "Copy", variant = "secondary", size = "sm" }: CopyButtonProps) {
   const { theme } = useTheme();
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);

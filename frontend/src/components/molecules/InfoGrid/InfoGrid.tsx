@@ -19,7 +19,7 @@ export interface InfoGridProps {
   cols?: number;
 }
 
-export const InfoGrid: React.FC<InfoGridProps> = ({ items, cols = 2 }) => {
+export function InfoGrid({ items, cols = 2 }: InfoGridProps) {
   const { theme } = useTheme();
   
   return (

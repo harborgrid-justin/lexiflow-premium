@@ -13,7 +13,10 @@ export interface TabStripProps {
   className?: string;
 }
 
-export const TabStrip: React.FC<TabStripProps> = ({ children, className }) => {
+/**
+ * TabStrip - React 18 optimized with React.memo
+ */
+export const TabStrip = React.memo<TabStripProps>(({ children, className }) => {
   const { theme } = useTheme();
   
   return (
@@ -21,4 +24,4 @@ export const TabStrip: React.FC<TabStripProps> = ({ children, className }) => {
       {children}
     </div>
   );
-};
+});

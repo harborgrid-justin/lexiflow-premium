@@ -49,7 +49,7 @@ interface DocumentManagerProps {
 // COMPONENT
 // ============================================================================
 
-export const DocumentManager: React.FC<DocumentManagerProps> = ({ currentUserRole = 'Associate', initialTab }) => {
+export function DocumentManager({ currentUserRole = 'Associate', initialTab }: DocumentManagerProps) {
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('docs_active_tab', initialTab || 'browse');
 

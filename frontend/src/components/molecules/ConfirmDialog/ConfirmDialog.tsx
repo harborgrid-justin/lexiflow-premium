@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useId } from 'react';
 import { AlertTriangle, Info } from 'lucide-react';
 
 // ============================================================================
@@ -40,11 +40,16 @@ interface ConfirmDialogProps {
   variant?: 'danger' | 'warning' | 'info';
 }
 
-export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
+/**
+ * ConfirmDialog - React 18 optimized with React.memo and useId
+ */
+export const ConfirmDialog = React.memo<ConfirmDialogProps>({
   isOpen, onClose, onConfirm, title, message, 
   confirmText = 'Confirm', cancelText = 'Cancel', variant = 'danger'
 }) => {
   const { theme } = useTheme();
+  const dialogId = useId();
+  const descriptionId = useId();
 
   const variantStyles = {
       danger: { bg: theme.status.error.bg, text: theme.status.error.text },
@@ -75,4 +80,4 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       </div>
     </Modal>
   );
-};
+});

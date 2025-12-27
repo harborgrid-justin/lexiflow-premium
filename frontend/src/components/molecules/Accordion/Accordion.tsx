@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import React, { useState, useId } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 // ============================================================================
@@ -36,22 +36,34 @@ interface AccordionItemProps {
 export const AccordionItem: React.FC<AccordionItemProps> = ({ title, children, defaultOpen = false, className = '', actions }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const { theme } = useTheme();
+  const contentId = useId();
+  const buttonId = useId();
 
   return (
     <div className={cn("border rounded-lg overflow-hidden", theme.surface.default, theme.border.default, className)}>
-      <div 
-        className={cn("p-4 flex items-center justify-between cursor-pointer transition-colors", theme.surface.highlight, `hover:${theme.surface.default}`)}
+      <button
+        id={buttonId}
+        aria-expanded={isOpen}
+        aria-controls={contentId}
+        className={cn("p-4 flex items-center justify-between cursor-pointer transition-colors w-full text-left", theme.surface.highlight, `hover:${theme.surface.default}`)}
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className={cn("font-medium select-none flex-1", theme.text.primary)}>{title}</div>
         <div className="flex items-center gap-3">
           {actions && <div onClick={e => e.stopPropagation()}>{actions}</div>}
-          <button className={cn("hover:text-blue-600 transition-colors", theme.text.tertiary)}>
+          <span className={cn("hover:text-blue-600 transition-colors", theme.text.tertiary)} aria-hidden="true">
             {isOpen ? <ChevronUp className="h-5 w-5"/> : <ChevronDown className="h-5 w-5"/>}
-          </button>
+          </span>
         </div>
-      </div>
-      <div className="accordion-content" data-state={isOpen ? 'open' : 'closed'}>
+      </button>
+      <div 
+        id={contentId}
+        role="region"
+        aria-labelledby={buttonId}
+        className="accordion-content" 
+        data-state={isOpen ? 'open' : 'closed'}
+        hidden={!isOpen}
+      >
         <div>
           <div className={cn("p-4 border-t", theme.border.default)}>
             {children}

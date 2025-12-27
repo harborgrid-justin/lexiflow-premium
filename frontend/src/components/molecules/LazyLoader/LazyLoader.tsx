@@ -28,7 +28,7 @@ interface LazyLoaderProps {
   message?: string;
 }
 
-export const LazyLoader: React.FC<LazyLoaderProps> = ({ message = "Loading..." }) => {
+export function LazyLoader({ message = "Loading..." }: LazyLoaderProps) {
   const { theme } = useTheme();
   const [isLowBandwidth, setIsLowBandwidth] = useState(false);
 

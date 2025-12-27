@@ -33,7 +33,10 @@ interface TagInputProps {
   placeholder?: string;
 }
 
-export const TagInput: React.FC<TagInputProps> = ({ tags, onAdd, onRemove, suggestions = [], placeholder = "Add tag..." }) => {
+/**
+ * TagInput - React 18 optimized with React.memo
+ */
+export const TagInput = React.memo<TagInputProps>(({ tags, onAdd, onRemove, suggestions = [], placeholder = "Add tag..." }) => {
   const { theme } = useTheme();
   const [input, setInput] = useState('');
 
@@ -89,4 +92,4 @@ export const TagInput: React.FC<TagInputProps> = ({ tags, onAdd, onRemove, sugge
       )}
     </div>
   );
-};
+});

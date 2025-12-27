@@ -15,7 +15,7 @@ interface TagManagementModalProps {
   allTags: string[];
 }
 
-export const TagManagementModal: React.FC<TagManagementModalProps> = ({ 
+export function TagManagementModal({ 
   document, onClose, onAddTag, onRemoveTag, allTags 
 }) => {
   const { theme } = useTheme();

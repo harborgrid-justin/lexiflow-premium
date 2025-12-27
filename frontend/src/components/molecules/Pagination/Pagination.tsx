@@ -32,7 +32,11 @@ interface PaginationProps {
   className?: string;
 }
 
-export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange, className = '' }) => {
+/**
+ * Pagination - React 18 optimized with React.memo
+ * Prevents unnecessary re-renders when parent state changes
+ */
+export const Pagination = React.memo<PaginationProps>(({ currentPage, totalPages, onPageChange, className = '' }) => {
   const { theme } = useTheme();
 
   return (
@@ -88,4 +92,4 @@ export const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages,
       </div>
     </div>
   );
-};
+});

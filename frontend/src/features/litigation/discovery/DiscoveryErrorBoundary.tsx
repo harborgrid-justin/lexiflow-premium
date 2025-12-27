@@ -117,16 +117,14 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
 };
 
 export class DiscoveryErrorBoundary extends Component<Props, State> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            hasError: false,
-            error: null,
-            errorInfo: null
-        };
-    }
+    public override state: State = {
+        hasError: false,
+        error: null,
+        errorInfo: null
+    };
 
     static getDerivedStateFromError(error: Error): State {
+        // React 18: getDerivedStateFromError must be static and return complete State
         return {
             hasError: true,
             error,
@@ -134,7 +132,7 @@ export class DiscoveryErrorBoundary extends Component<Props, State> {
         };
     }
 
-    componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
         // Log to a production error monitoring service (e.g., Sentry)
         console.error('Discovery Error Boundary caught:', error, errorInfo);
 

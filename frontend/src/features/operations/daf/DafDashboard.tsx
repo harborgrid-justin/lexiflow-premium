@@ -9,7 +9,7 @@ import { ShieldCheck, Database, Lock, Key } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
-export const DafDashboard: React.FC = () => {
+export function DafDashboard() {
   const { theme } = useTheme();
 
   return (

@@ -17,7 +17,7 @@ interface PreviewContentProps {
     isRedactionMode: boolean;
 }
 
-export const PreviewContent: React.FC<PreviewContentProps> = ({ document, previewUrl, isRedactionMode }) => {
+export function PreviewContent({ document, previewUrl, isRedactionMode }: PreviewContentProps) {
     const { theme } = useTheme();
     const isImage = document.type.includes('IMAGE') || document.type.includes('PNG') || document.type.includes('JPG');
     const isPDF = document.type.toUpperCase().includes('PDF') || document.title.toLowerCase().endsWith('.pdf');

@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { Trash2, Check } from 'lucide-react';
 
 // ============================================================================
@@ -36,7 +36,10 @@ interface SwipeableItemProps {
   disabled?: boolean;
 }
 
-export const SwipeableItem: React.FC<SwipeableItemProps> = ({
+/**
+ * SwipeableItem - React 18 optimized with React.memo and useCallback
+ */
+export const SwipeableItem = React.memo<SwipeableItemProps>(({
   children,
   onSwipeLeft,
   onSwipeRight,
@@ -140,4 +143,4 @@ export const SwipeableItem: React.FC<SwipeableItemProps> = ({
       </div>
     </div>
   );
-};
+});

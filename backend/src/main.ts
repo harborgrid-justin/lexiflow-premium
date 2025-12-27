@@ -50,6 +50,9 @@ async function bootstrap() {
     credentials: configService.get('cors.credentials'),
   });
 
+  // Global API Prefix - All routes will be prefixed with /api
+  app.setGlobalPrefix('api');
+
   // API Versioning - Enable URI-based versioning (e.g., /api/v1/...)
   app.enableVersioning({
     type: VersioningType.URI,

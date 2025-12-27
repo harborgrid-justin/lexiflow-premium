@@ -12,7 +12,10 @@ interface DependencyNode {
     impact: string;
 }
 
-export const ImpactAnalysis: React.FC = () => {
+/**
+ * ImpactAnalysis - React 18 optimized with React.memo
+ */
+export const ImpactAnalysis = React.memo(() => {
   const { theme } = useTheme();
 
   const dependencies: DependencyNode[] = [

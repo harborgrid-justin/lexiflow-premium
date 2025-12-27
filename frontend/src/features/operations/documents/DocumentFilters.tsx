@@ -14,7 +14,7 @@ interface DocumentFiltersProps {
   setCurrentFolder: (folder: string) => void;
 }
 
-export const DocumentFilters: React.FC<DocumentFiltersProps> = ({ currentFolder, setCurrentFolder }) => {
+export function DocumentFilters({ currentFolder, setCurrentFolder }: DocumentFiltersProps) {
   const { theme } = useTheme();
   
   // Enterprise Data Access

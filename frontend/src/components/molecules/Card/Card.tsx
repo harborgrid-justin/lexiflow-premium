@@ -45,7 +45,10 @@ interface CardProps {
 // COMPONENT
 // ============================================================================
 
-export const Card: React.FC<CardProps> = ({
+/**
+ * Card - React 18 optimized with React.memo
+ */
+export const Card = React.memo<CardProps>(({
   children,
   className = '',
   noPadding = false,
@@ -84,4 +87,6 @@ export const Card: React.FC<CardProps> = ({
       )}
     </div>
   );
-};
+});
+
+Card.displayName = 'Card';

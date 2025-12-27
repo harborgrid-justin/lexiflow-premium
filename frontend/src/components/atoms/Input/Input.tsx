@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useId } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -30,13 +30,27 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   error?: string;
 };
 
+/**
+ * Input component with React 18 accessibility enhancements
+ * Uses useId for SSR-safe, unique IDs
+ */
 export const Input = ({ label, error, className = '', ...props }: InputProps) => {
   const { theme, mode } = useTheme();
+  // React 18: useId generates stable, unique IDs for accessibility
+  const inputId = useId();
+  const errorId = useId();
   
   return (
     <div className="w-full">
-      {label && <label className={labelStyles(theme)}>{label}</label>}
+      {label && (
+        <label htmlFor={inputId} className={labelStyles(theme)}>
+          {label}
+        </label>
+      )}
       <input
+        id={inputId}
+        aria-invalid={error ? 'true' : 'false'}
+        aria-describedby={error ? errorId : undefined}
         className={cn(
           getInputStyles(theme, !!error, mode),
           className
@@ -44,7 +58,11 @@ export const Input = ({ label, error, className = '', ...props }: InputProps) =>
         style={mode === 'dark' ? { colorScheme: 'dark' } : {}}
         {...props}
       />
-      {error && <p className={errorStyles(theme)}>{error}</p>}
+      {error && (
+        <p id={errorId} role="alert" className={errorStyles(theme)}>
+          {error}
+        </p>
+      )}
     </div>
   );
 };

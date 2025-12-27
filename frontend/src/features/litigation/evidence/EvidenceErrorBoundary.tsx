@@ -19,23 +19,22 @@ interface State {
 }
 
 export class EvidenceErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      hasError: false,
-      error: null,
+  public override state: State = {
+    hasError: false,
+    error: null,
+    errorInfo: null
+  };
+
+  static getDerivedStateFromError(error: Error): State {
+    // React 18: Must return complete State, not Partial<State>
+    return {
+      hasError: true,
+      error,
       errorInfo: null
     };
   }
 
-  static getDerivedStateFromError(error: Error): Partial<State> {
-    return {
-      hasError: true,
-      error
-    };
-  }
-
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     console.error('Evidence Vault Error:', error, errorInfo);
     this.setState({
       error,

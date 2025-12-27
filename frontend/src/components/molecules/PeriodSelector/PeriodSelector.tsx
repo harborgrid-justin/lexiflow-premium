@@ -43,7 +43,11 @@ const DEFAULT_PERIODS: PeriodOption[] = [
   { value: 'ALL', label: 'All Time' },
 ];
 
-export const PeriodSelector: React.FC<PeriodSelectorProps> = ({ 
+/**
+ * PeriodSelector - React 18 optimized with React.memo
+ * Prevents unnecessary re-renders when parent updates
+ */
+export const PeriodSelector = React.memo<PeriodSelectorProps>(({ 
   periods = DEFAULT_PERIODS, 
   selected, 
   onChange, 
@@ -72,4 +76,4 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
       })}
     </div>
   );
-};
+});

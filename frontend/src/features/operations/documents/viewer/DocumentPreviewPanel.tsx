@@ -51,7 +51,7 @@ interface DocumentPreviewPanelProps {
   onCloseMobile?: () => void;
 }
 
-export const DocumentPreviewPanel: React.FC<DocumentPreviewPanelProps> = ({ 
+export function DocumentPreviewPanel({ 
   document, onViewHistory, onUpdate, userRole = 'Associate', isOrbital = false, onCloseMobile
 }) => {
   const { theme } = useTheme();

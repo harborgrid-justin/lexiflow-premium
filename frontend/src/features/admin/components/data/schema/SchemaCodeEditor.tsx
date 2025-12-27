@@ -9,7 +9,10 @@ interface SchemaCodeEditorProps {
     ddl: string;
 }
 
-export const SchemaCodeEditor: React.FC<SchemaCodeEditorProps> = ({ ddl }) => {
+/**
+ * SchemaCodeEditor - React 18 optimized with React.memo
+ */
+export const SchemaCodeEditor = React.memo<SchemaCodeEditorProps>(({ ddl }) => {
   const { theme, mode } = useTheme();
 
   const keywordColor = mode === 'dark' ? 'text-sky-400' : 'text-blue-600 font-medium';

@@ -36,7 +36,7 @@ import { getChartTheme } from '@/utils/chartConfig';
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const CRMDashboard: React.FC = () => {
+export function CRMDashboard() {
   const { theme, mode } = useTheme();
   const chartColors = ChartColorService.getPalette(mode);
   const chartTheme = getChartTheme(mode);

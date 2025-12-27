@@ -25,7 +25,7 @@ interface ComposeMessageModalProps {
   initialData?: Partial<CommunicationItem>;
 }
 
-export const ComposeMessageModal: React.FC<ComposeMessageModalProps> = ({ isOpen, onClose, onSend, initialData }) => {
+export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: ComposeMessageModalProps) {
   const { theme } = useTheme();
   const notify = useNotify();
   const { register, revoke } = useBlobRegistry();

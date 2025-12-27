@@ -199,3 +199,187 @@ Custom routing system (`services/holographicRouting.ts`) supports minimizable wi
 - Icons: Lucide React (imported from `lucide-react`)
 - Charts: Recharts (for analytics dashboards)
 - PDF: `pdfjs-dist` for document rendering
+
+## React 18 Best Practices (MANDATORY)
+
+### Component Patterns
+**✅ DO:**
+```typescript
+// Function declaration (preferred over React.FC)
+export function MyComponent({ prop1, prop2 }: MyComponentProps) {
+  return <div>...</div>;
+}
+
+// React.memo with displayName
+export const MemoizedCard = React.memo<CardProps>(({ title, children }) => {
+  return <Card title={title}>{children}</Card>;
+});
+MemoizedCard.displayName = 'MemoizedCard';
+```
+
+**❌ DON'T:**
+```typescript
+// Avoid React.FC (deprecated pattern, limits flexibility)
+export const MyComponent: React.FC<MyComponentProps> = ({ prop1, prop2 }) => {
+  return <div>...</div>;
+};
+
+// Avoid React.memo without displayName (debugging issues)
+export const Card = React.memo(({ title }) => <div>{title}</div>);
+```
+
+### Performance Optimization
+```typescript
+import { useTransition, useDeferredValue, useMemo, useCallback } from 'react';
+
+// Heavy filtering/searching - use useTransition
+function CaseList() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isPending, startTransition] = useTransition();
+  
+  const handleSearch = (value: string) => {
+    startTransition(() => {
+      setSearchTerm(value); // Non-blocking update
+    });
+  };
+  
+  const filtered = useMemo(() => 
+    cases.filter(c => c.title.includes(searchTerm)),
+    [cases, searchTerm]
+  );
+  
+  return (
+    <>
+      <input onChange={(e) => handleSearch(e.target.value)} />
+      {isPending && <Spinner />}
+      {filtered.map(c => <CaseCard key={c.id} case={c} />)}
+    </>
+  );
+}
+
+// Memoize expensive computations
+const metrics = useMemo(() => ({
+  total: cases.length,
+  active: cases.filter(c => c.status === 'Active').length
+}), [cases]);
+
+// Stable callbacks for event handlers
+const handleClick = useCallback((id: string) => {
+  navigate(`/case/${id}`);
+}, [navigate]);
+```
+
+### Accessibility with useId
+```typescript
+import { useId } from 'react';
+
+function FormField() {
+  const fieldId = useId();
+  const errorId = useId();
+  
+  return (
+    <>
+      <label htmlFor={fieldId}>Email</label>
+      <input 
+        id={fieldId} 
+        aria-describedby={errorId}
+        type="email" 
+      />
+      <span id={errorId} role="alert">Error message</span>
+    </>
+  );
+}
+
+// Use helper hooks from hooks/useFormId.ts
+import { useFormId, useAriaIds } from '@/hooks';
+
+function AccessibleField() {
+  const ids = useAriaIds('username');
+  return (
+    <>
+      <label id={ids.labelId} htmlFor={ids.fieldId}>Username</label>
+      <input 
+        id={ids.fieldId}
+        aria-labelledby={ids.labelId}
+        aria-describedby={`${ids.errorId} ${ids.helpId}`}
+      />
+      <span id={ids.errorId} role="alert">Error</span>
+      <span id={ids.helpId}>Help text</span>
+    </>
+  );
+}
+```
+
+### StrictMode Compatibility
+All useEffect hooks must handle double-invocation:
+```typescript
+// ✅ Proper cleanup
+useEffect(() => {
+  const controller = new AbortController();
+  
+  fetchData(controller.signal).then(setData);
+  
+  return () => {
+    controller.abort(); // Cleanup
+  };
+}, []);
+
+// ✅ Idempotent operations
+useEffect(() => {
+  const subscription = dataSource.subscribe(setData);
+  return () => subscription.unsubscribe();
+}, []);
+
+// ❌ Side effects without cleanup
+useEffect(() => {
+  setInterval(() => fetchData(), 1000); // Memory leak!
+}, []);
+```
+
+### Concurrent Features
+```typescript
+// Use Suspense for lazy loading
+const LazyComponent = lazy(() => import('./Component'));
+
+function App() {
+  return (
+    <Suspense fallback={<Spinner />}>
+      <LazyComponent />
+    </Suspense>
+  );
+}
+
+// Automatic batching (enabled by default in React 18)
+function handleClick() {
+  setCount(c => c + 1);
+  setFlag(f => !f);
+  // React batches these updates automatically
+}
+```
+
+### Custom Hooks for React 18
+Available performance hooks in `hooks/`:
+- `useFormId` - SSR-safe unique IDs for forms
+- `useOptimizedFilter` - Concurrent filtering with transitions
+- `useMultiFilter` - Multi-criteria filtering
+- `useOptimizedSort` - Non-blocking sorting
+
+Example:
+```typescript
+import { useOptimizedFilter } from '@/hooks';
+
+function DocumentList() {
+  const { filteredData, setFilterTerm, isPending } = useOptimizedFilter(
+    documents,
+    (docs, term) => docs.filter(d => d.title.includes(term))
+  );
+  
+  return (
+    <>
+      <input onChange={(e) => setFilterTerm(e.target.value)} />
+      {isPending && <LoadingSpinner />}
+      {filteredData.map(d => <DocCard key={d.id} doc={d} />)}
+    </>
+  );
+}
+```

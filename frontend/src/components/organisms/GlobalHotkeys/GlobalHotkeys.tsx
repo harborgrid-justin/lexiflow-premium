@@ -26,7 +26,10 @@ interface GlobalHotkeysProps {
   onNavigate: (path: string) => void;
 }
 
-export const GlobalHotkeys: React.FC<GlobalHotkeysProps> = ({ onToggleCommand, onNavigate }) => {
+/**
+ * GlobalHotkeys - React 18 optimized with React.memo
+ */
+export const GlobalHotkeys = React.memo<GlobalHotkeysProps>(({ onToggleCommand, onNavigate }) => {
   const notify = useNotify();
 
   useEffect(() => {
@@ -75,4 +78,4 @@ export const GlobalHotkeys: React.FC<GlobalHotkeysProps> = ({ onToggleCommand, o
   }, [onToggleCommand, onNavigate, notify]);
 
   return null;
-};
+});

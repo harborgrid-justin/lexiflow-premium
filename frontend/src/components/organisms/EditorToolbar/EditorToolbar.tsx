@@ -31,7 +31,10 @@ interface EditorToolbarProps {
   onSave?: () => void;
 }
 
-export const EditorToolbar: React.FC<EditorToolbarProps> = ({ wordCount, onCmd, onSave }) => {
+/**
+ * EditorToolbar - React 18 optimized with React.memo
+ */
+export const EditorToolbar = React.memo<EditorToolbarProps>(({ wordCount, onCmd, onSave }) => {
   const { theme } = useTheme();
   const btnClass = cn(
       "p-1.5 rounded transition-colors border border-transparent",
@@ -76,4 +79,4 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ wordCount, onCmd, 
       </div>
     </div>
   );
-};
+});

@@ -20,7 +20,7 @@ interface ClientDirectoryProps {
   onOpenPortal: (client: Client) => void;
 }
 
-export const ClientDirectory: React.FC<ClientDirectoryProps> = ({ clients: propClients, onOpenPortal }) => {
+export function ClientDirectory({ clients: propClients, onOpenPortal }: ClientDirectoryProps) {
   const { theme } = useTheme();
   const notify = useNotify();
   const [searchTerm, setSearchTerm] = useState('');

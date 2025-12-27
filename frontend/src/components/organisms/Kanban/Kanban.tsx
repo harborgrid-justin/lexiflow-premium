@@ -25,7 +25,10 @@ import { cn } from '@/utils/cn';
 // COMPONENT
 // ============================================================================
 
-export const KanbanBoard: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
+/**
+ * KanbanBoard - React 18 optimized with React.memo
+ */
+export const KanbanBoard = React.memo<{ children: React.ReactNode; className?: string }>(({ children, className = '' }) => (
   <div className={cn("flex flex-col h-full overflow-hidden", className)}>
     <div className="flex-1 overflow-x-auto overflow-y-hidden pb-4 snap-x snap-mandatory overscroll-contain">
       <div className="flex h-full gap-4 px-4 w-max">
@@ -33,7 +36,7 @@ export const KanbanBoard: React.FC<{ children: React.ReactNode; className?: stri
       </div>
     </div>
   </div>
-);
+));
 
 interface KanbanColumnProps {
   title: string;
@@ -44,7 +47,10 @@ interface KanbanColumnProps {
   action?: React.ReactNode;
 }
 
-export const KanbanColumn: React.FC<KanbanColumnProps> = ({ title, count, children, onDrop, isDragOver, action }) => {
+/**
+ * KanbanColumn - React 18 optimized with React.memo
+ */
+export const KanbanColumn = React.memo<KanbanColumnProps>(({ title, count, children, onDrop, isDragOver, action }) => {
   const { theme } = useTheme();
   
   return (
@@ -73,7 +79,7 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({ title, count, childr
       {action && <div className="p-2 pt-0">{action}</div>}
     </div>
   );
-};
+});
 
 interface KanbanCardProps {
   children: React.ReactNode;
@@ -83,7 +89,10 @@ interface KanbanCardProps {
   onClick?: () => void;
 }
 
-export const KanbanCard: React.FC<KanbanCardProps> = ({ children, onDragStart, isDragging, className = '', onClick }) => {
+/**
+ * KanbanCard - React 18 optimized with React.memo
+ */
+export const KanbanCard = React.memo<KanbanCardProps>(({ children, onDragStart, isDragging, className = '', onClick }) => {
   const { theme } = useTheme();
   
   return (
@@ -102,4 +111,4 @@ export const KanbanCard: React.FC<KanbanCardProps> = ({ children, onDragStart, i
       {children}
     </div>
   );
-};
+});

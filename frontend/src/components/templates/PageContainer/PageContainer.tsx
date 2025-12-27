@@ -6,7 +6,10 @@ interface PageContainerProps {
   className?: string;
 }
 
-export const PageContainer: React.FC<PageContainerProps> = ({ children, className = '' }) => {
+/**
+ * PageContainer - React 18 optimized with React.memo
+ */
+export const PageContainer = React.memo<PageContainerProps>(({ children, className = '' }) => {
   return (
     <div className="h-full overflow-y-auto custom-scrollbar p-6">
       <div className={`max-w-7xl mx-auto space-y-6 animate-fade-in ${className}`}>
@@ -14,4 +17,4 @@ export const PageContainer: React.FC<PageContainerProps> = ({ children, classNam
       </div>
     </div>
   );
-};
+});

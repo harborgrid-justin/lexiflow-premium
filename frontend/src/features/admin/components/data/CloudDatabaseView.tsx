@@ -18,9 +18,9 @@ import { DataSourceSelector } from './DataSourceSelector';
 import type { DataProvider } from './types';
 
 /**
- * Main view for managing cloud database connections
+ * Main view for managing cloud database connections - React 18 optimized with React.memo
  */
-export const CloudDatabaseView: React.FC = () => {
+export const CloudDatabaseView = React.memo(() => {
   const { theme } = useTheme();
   const { isAdding, setIsAdding, formData, setFormData } = useConnectionForm();
   const { selectedProvider, setSelectedProvider, resetForm } = useConnectionForm();

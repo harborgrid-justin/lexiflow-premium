@@ -12,7 +12,7 @@ interface PreviewHeaderProps {
     onToggleEncryption?: () => void;
 }
 
-export const PreviewHeader: React.FC<PreviewHeaderProps> = ({ document, onCloseMobile, onToggleEncryption }) => {
+export function PreviewHeader({ document, onCloseMobile, onToggleEncryption }: PreviewHeaderProps) {
     const { theme } = useTheme();
     return (
         <div className={cn("p-5 border-b relative shrink-0", theme.border.default, theme.surface.default)}>

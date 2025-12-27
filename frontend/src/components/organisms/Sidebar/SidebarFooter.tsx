@@ -49,7 +49,10 @@ interface SidebarFooterProps {
 // COMPONENT
 // ============================================================================
 
-export const SidebarFooter: React.FC<SidebarFooterProps> = ({ currentUser, onSwitchUser, onNavigate, activeView }) => {
+/**
+ * SidebarFooter - React 18 optimized with React.memo
+ */
+export const SidebarFooter = React.memo<SidebarFooterProps>(({ currentUser, onSwitchUser, onNavigate, activeView }) => {
   const { theme } = useTheme();
   const { isOrbitalEnabled, toggleOrbitalMode } = useWindow();
 

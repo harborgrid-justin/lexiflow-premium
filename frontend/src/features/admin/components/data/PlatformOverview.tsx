@@ -12,7 +12,10 @@ import { DataService } from '@/services/data/dataService';
 import { TenantConfig } from '@/types';
 import { useInterval } from '@/hooks/useInterval';
 
-export const PlatformOverview: React.FC = () => {
+/**
+ * PlatformOverview - React 18 optimized with React.memo
+ */
+export const PlatformOverview = React.memo(() => {
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
 

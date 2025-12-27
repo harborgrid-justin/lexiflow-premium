@@ -15,7 +15,10 @@ export interface StatusDotProps {
   className?: string;
 }
 
-export const StatusDot: React.FC<StatusDotProps> = ({ 
+/**
+ * StatusDot - React 18 optimized with React.memo
+ */
+export const StatusDot = React.memo<StatusDotProps>(({ 
   status, 
   size = "w-2.5 h-2.5", 
   className 
@@ -41,4 +44,4 @@ export const StatusDot: React.FC<StatusDotProps> = ({
       title={status} 
     />
   );
-};
+});

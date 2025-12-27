@@ -35,7 +35,10 @@ interface CalendarToolbarProps {
   actions?: React.ReactNode;
 }
 
-export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
+/**
+ * CalendarToolbar - React 18 optimized with React.memo
+ */
+export const CalendarToolbar = React.memo<CalendarToolbarProps>(({
   label,
   onPrev,
   onNext,
@@ -102,4 +105,4 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
       </div>
     </div>
   );
-};
+});

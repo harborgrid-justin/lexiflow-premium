@@ -5,7 +5,7 @@
  * Replaces repeated progress bar patterns across components
  */
 
-import React from 'react';
+import React, { useId } from 'react';
 import { cn } from '@/utils/cn';
 import { useTheme } from '@/providers/ThemeContext';
 
@@ -65,6 +65,7 @@ export const ProgressBarWithLabel: React.FC<ProgressBarWithLabelProps> = ({
   animated = true
 }) => {
   const { theme } = useTheme();
+  const progressId = useId();
   const clampedValue = Math.min(100, Math.max(0, value));
   
   // Map variant to theme colors

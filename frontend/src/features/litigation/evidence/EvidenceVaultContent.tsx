@@ -30,9 +30,9 @@ interface EvidenceVaultContentProps {
   onNavigate: (view: ViewMode) => void;
 }
 
-export const EvidenceVaultContent: React.FC<EvidenceVaultContentProps> = ({
+export function EvidenceVaultContent({
   view, evidenceItems, filteredItems, filters, setFilters, onItemClick, onIntakeClick, onIntakeComplete, onNavigate
-}) => {
+}: EvidenceVaultContentProps) {
     switch (view) {
       case 'dashboard': return <EvidenceDashboard onNavigate={onNavigate} />;
       case 'inventory': return <EvidenceInventory items={evidenceItems} filteredItems={filteredItems} filters={filters} setFilters={setFilters} onItemClick={onItemClick} onIntakeClick={onIntakeClick} />;

@@ -15,7 +15,7 @@ export interface CentredLoaderProps {
   message?: string;
 }
 
-export const CentredLoader: React.FC<CentredLoaderProps> = ({ className, message }) => {
+export function CentredLoader({ className, message }: CentredLoaderProps) {
   const { theme } = useTheme();
   
   return (

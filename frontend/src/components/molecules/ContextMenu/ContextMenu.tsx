@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useRef } from 'react';
+import React, { useRef, useId } from 'react';
 import { LucideIcon } from 'lucide-react';
 
 // ============================================================================
@@ -43,11 +43,15 @@ interface ContextMenuProps {
 export const ContextMenu: React.FC<ContextMenuProps> = ({ x, y, items, onClose }) => {
   const { theme } = useTheme();
   const menuRef = useRef<HTMLDivElement>(null);
+  const menuId = useId();
   useClickOutside(menuRef as React.RefObject<HTMLElement>, onClose);
 
   return (
     <div
       ref={menuRef}
+      id={menuId}
+      role="menu"
+      aria-label="Context menu"
       className={cn(
         "fixed z-[9999] w-52 rounded-xl shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-100 border backdrop-blur-sm bg-opacity-80",
         theme.surface.default,

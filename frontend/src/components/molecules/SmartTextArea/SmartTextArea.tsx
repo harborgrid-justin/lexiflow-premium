@@ -102,7 +102,7 @@ const getStatusIndicator = (percentUsed: number, isOverLimit: boolean, warningTh
 // COMPONENT
 // ============================================================================
 
-export const SmartTextArea: React.FC<SmartTextAreaProps> = ({
+export function SmartTextArea({
   label,
   error,
   maxLength,
@@ -117,7 +117,7 @@ export const SmartTextArea: React.FC<SmartTextAreaProps> = ({
   validate,
   className = '',
   ...props
-}) => {
+}: SmartTextAreaProps) {
   const { theme } = useTheme();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [internalValue, setInternalValue] = useState(value);

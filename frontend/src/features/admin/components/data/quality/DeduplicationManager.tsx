@@ -12,7 +12,10 @@ import { queryKeys } from '@/utils/queryKeys';
 import { DedupeCluster } from '@/types';
 import { useNotify } from '@/hooks/useNotify';
 
-export const DeduplicationManager: React.FC = () => {
+/**
+ * DeduplicationManager - React 18 optimized with React.memo
+ */
+export const DeduplicationManager = React.memo(() => {
     const { theme } = useTheme();
     const notify = useNotify();
 

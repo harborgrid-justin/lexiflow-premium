@@ -46,7 +46,7 @@ interface ServiceTrackerProps {
 // COMPONENT
 // ============================================================================
 
-export const ServiceTracker: React.FC<ServiceTrackerProps> = React.memo(({ jobs, onSelect, selectedId }) => {
+export const ServiceTracker = React.memo<ServiceTrackerProps>(({ jobs, onSelect, selectedId }) => {
   const { theme } = useTheme();
 
   const getMethodIcon = useCallback((method: string, _mailType?: string) => {
@@ -125,5 +125,6 @@ export const ServiceTracker: React.FC<ServiceTrackerProps> = React.memo(({ jobs,
     </div>
   );
 });
+ServiceTracker.displayName = 'ServiceTracker';
 
 ServiceTracker.displayName = 'ServiceTracker';

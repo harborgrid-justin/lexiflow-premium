@@ -37,7 +37,10 @@ interface ManagerLayoutProps {
   className?: string;
 }
 
-export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ 
+/**
+ * ManagerLayout - React 18 optimized with React.memo
+ */
+export const ManagerLayout = React.memo<ManagerLayoutProps>(({ 
   title, subtitle, actions, filterPanel, children, sidebar, className 
 }) => {
   const { theme } = useTheme();
@@ -69,4 +72,4 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({
       </div>
     </div>
   );
-};
+});

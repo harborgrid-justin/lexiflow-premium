@@ -30,7 +30,10 @@ interface BreadcrumbItem {
   onClick?: () => void;
 }
 
-export const Breadcrumbs: React.FC<{ items: BreadcrumbItem[] }> = ({ items }) => {
+/**
+ * Breadcrumbs - React 18 optimized with React.memo
+ */
+export const Breadcrumbs = React.memo<{ items: BreadcrumbItem[] }>(({ items }) => {
   const { theme } = useTheme();
   
   return (
@@ -57,4 +60,4 @@ export const Breadcrumbs: React.FC<{ items: BreadcrumbItem[] }> = ({ items }) =>
       ))}
     </nav>
   );
-};
+});

@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useId } from 'react';
 import { Search } from 'lucide-react';
 
 // ============================================================================
@@ -28,13 +28,15 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-export const SearchInput: React.FC<InputProps> = (props) => {
+export function SearchInput(props: InputProps) {
   const { theme } = useTheme();
+  const generatedId = useId();
+  const inputId = props.id || generatedId;
   
   return (
     <div className="relative">
       <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none", theme.text.tertiary)} />
-      <Input {...props} className={cn("pl-10", props.className)} />
+      <Input {...props} id={inputId} className={cn("pl-10", props.className)} />
     </div>
   );
 };

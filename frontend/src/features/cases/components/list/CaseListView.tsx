@@ -2,10 +2,10 @@
  * @module components/matters/MatterListView
  * @category Matter Management
  * @description Filterable matter list view with search and statistics
- * @optimization React.memo, useMemo for computed values, proper error handling
+ * @optimization React 18 - React.memo, useTransition for filters, useMemo for computed values, proper error handling
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useTransition } from 'react';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
@@ -24,7 +24,8 @@ import {
   ArrowUpCircle,
   FileText,
   Building2,
-  RefreshCw
+  RefreshCw,
+  Loader2
 } from 'lucide-react';
 import { PATHS } from '@/config/paths.config';
 import { cn } from '@/utils/cn';
@@ -34,7 +35,7 @@ interface CaseListViewProps {
   currentUserRole?: string;
 }
 
-export const CaseListView: React.FC<CaseListViewProps> = React.memo(({ filter = 'all' }) => {
+export const CaseListView = React.memo<CaseListViewProps>(({ filter = 'all' }) => {
   const navigate = useCallback((path: string) => {
     window.location.hash = `#/${path}`;
   }, []);
@@ -45,6 +46,9 @@ export const CaseListView: React.FC<CaseListViewProps> = React.memo(({ filter = 
   const [typeFilter, setTypeFilter] = useState<MatterType | 'all'>('all');
   const [practiceAreaFilter, setPracticeAreaFilter] = useState<PracticeArea | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
+  
+  // React 18 useTransition for non-blocking filter updates
+  const [isPending, startTransition] = useTransition();
 
   const { data: matters = [], isLoading: loading, isError, refetch } = useQuery<Matter[]>(
     queryKeys.cases.matters.all(),
@@ -52,6 +56,7 @@ export const CaseListView: React.FC<CaseListViewProps> = React.memo(({ filter = 
     { staleTime: 30000 } // Cache for 30 seconds
   );
 
+  // Memoize filtering logic for performance
   const filteredMatters = useMemo(() => {
     let filtered = [...matters];
 
@@ -89,6 +94,25 @@ export const CaseListView: React.FC<CaseListViewProps> = React.memo(({ filter = 
 
     return filtered;
   }, [matters, filter, searchTerm, statusFilter, priorityFilter, typeFilter, practiceAreaFilter]);
+  
+  // React 18 concurrent-safe filter updaters
+  const handleSearchChange = useCallback((value: string) => {
+    startTransition(() => {
+      setSearchTerm(value);
+    });
+  }, []);
+  
+  const handleStatusFilterChange = useCallback((value: MatterStatus | 'all') => {
+    startTransition(() => {
+      setStatusFilter(value);
+    });
+  }, []);
+  
+  const handlePriorityFilterChange = useCallback((value: MatterPriority | 'all') => {
+    startTransition(() => {
+      setPriorityFilter(value);
+    });
+  }, []);
 
   const getStatusIcon = (status: MatterStatus) => {
     switch (status) {
@@ -442,5 +466,7 @@ export const CaseListView: React.FC<CaseListViewProps> = React.memo(({ filter = 
     </div>
   );
 });
+
+CaseListView.displayName = 'CaseListView';
 
 CaseListView.displayName = 'CaseListView';

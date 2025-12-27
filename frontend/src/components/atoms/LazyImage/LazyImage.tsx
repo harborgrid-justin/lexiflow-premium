@@ -98,7 +98,7 @@ function decodeBlurHash(_hash: string, width: number = 32, height: number = 32):
 // COMPONENT
 // ============================================================================
 
-export const LazyImage: React.FC<LazyImageProps> = ({
+export function LazyImage({
   src,
   alt,
   blurHash,
@@ -113,7 +113,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   onError,
   className,
   ...props
-}) => {
+}: LazyImageProps) {
   const { theme } = useTheme();
   const [loadingState, setLoadingState] = useState<LoadingState>('idle');
   const [retryCount, setRetryCount] = useState(0);

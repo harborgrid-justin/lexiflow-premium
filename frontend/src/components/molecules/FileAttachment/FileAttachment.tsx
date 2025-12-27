@@ -39,7 +39,10 @@ interface FileAttachmentProps {
   variant?: 'card' | 'minimal'; // 'card' has border/bg, 'minimal' is transparent
 }
 
-export const FileAttachment: React.FC<FileAttachmentProps> = ({ 
+/**
+ * FileAttachment - React 18 optimized with React.memo
+ */
+export const FileAttachment = React.memo<FileAttachmentProps>(({ 
   name, size, type = 'doc', date, onDownload, onPreview, className = '', variant = 'card' 
 }) => {
   const { theme } = useTheme();
@@ -87,4 +90,4 @@ export const FileAttachment: React.FC<FileAttachmentProps> = ({
       </div>
     </div>
   );
-};
+});

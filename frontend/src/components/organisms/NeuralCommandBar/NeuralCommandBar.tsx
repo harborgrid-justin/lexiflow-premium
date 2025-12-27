@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useId } from 'react';
 import { Sparkles, Command, X, Zap, AlertCircle, CornerDownLeft } from 'lucide-react';
 
 // ============================================================================
@@ -42,10 +42,15 @@ interface NeuralCommandBarProps {
   onNeuralCommand?: (intent: IntentResult) => void;
 }
 
+/**
+ * NeuralCommandBar - React 18 optimized with useId and useMemo
+ */
 export const NeuralCommandBar: React.FC<NeuralCommandBarProps> = ({
   globalSearch, setGlobalSearch, onGlobalSearch, onSearchResultClick, onNeuralCommand
 }) => {
   const { theme } = useTheme();
+  const searchId = useId();
+  const resultsId = useId();
   const [showResults, setShowResults] = useState(false);
   const [isProcessingIntent, setIsProcessingIntent] = useState(false);
   const [results, setResults] = useState<GlobalSearchResult[]>([]);

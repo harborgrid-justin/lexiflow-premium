@@ -23,7 +23,7 @@ interface PolicyItem {
   status: string;
 }
 
-export const CompliancePolicies: React.FC = () => {
+export function CompliancePolicies() {
   const { theme } = useTheme();
   const { openWindow, closeWindow } = useWindow();
   

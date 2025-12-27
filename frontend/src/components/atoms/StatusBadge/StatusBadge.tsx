@@ -35,7 +35,10 @@ interface StatusBadgeProps {
  * Standardized Status Badge component.
  * Automatically determines color based on status text using the StatusRegistry.
  */
-export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className, variantOverride }) => {
+/**
+ * StatusBadge - React 18 optimized with React.memo
+ */
+export const StatusBadge = React.memo<StatusBadgeProps>(({ status, className, variantOverride }) => {
   const variant = variantOverride || StatusRegistry.getVariant(status);
   
   return (
@@ -43,4 +46,4 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className, var
       {status}
     </Badge>
   );
-};
+});

@@ -93,7 +93,10 @@ const SERVICE_COVERAGE: ServiceInfo[] = [
   { name: 'Analytics Dashboard', category: 'Analytics', hasBackend: true },
 ];
 
-const ServiceCoverageBadge: React.FC<ServiceCoverageProps> = ({ className = '', compact = false }) => {
+/**
+ * ServiceCoverageBadge - React 18 optimized with React.memo
+ */
+const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(({ className = '', compact = false }) => {
   const { isBackendApiEnabled } = useDataSource();
   
   const totalServices = SERVICE_COVERAGE.length;

@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import React, { useState, useId } from 'react';
 import { CheckSquare, Calendar, Link, Briefcase } from 'lucide-react';
 
 // ============================================================================
@@ -50,10 +50,15 @@ interface TaskCreationModalProps {
   onSave?: (task: WorkflowTask) => void;
 }
 
+/**
+ * TaskCreationModal - React 18 optimized with useId
+ */
 export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({ 
   isOpen, onClose, initialTitle, relatedModule, relatedItemId, relatedItemTitle, projects = [], onSave 
 }) => {
   const notify = useNotify();
+  const formId = useId();
+  const titleId = useId();
   
   // Fetch users from backend API
   const { data: users = [] } = useQuery<User[]>(

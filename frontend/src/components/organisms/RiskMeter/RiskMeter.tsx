@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useCallback } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -30,10 +30,13 @@ interface RiskMeterProps {
   type?: 'strength' | 'risk';
 }
 
-export const RiskMeter: React.FC<RiskMeterProps> = ({ value, label, type = 'strength' }) => {
+/**
+ * RiskMeter - React 18 optimized with React.memo and useCallback
+ */
+export const RiskMeter = React.memo<RiskMeterProps>(({ value, label, type = 'strength' }) => {
   const { theme } = useTheme();
 
-  const getColor = (val: number) => {
+  const getColor = useCallback((val: number) => {
     if (type === 'strength') {
       if (val >= 80) return theme.chart.colors.success; // Green
       if (val >= 50) return theme.chart.colors.primary; // Blue
@@ -43,7 +46,7 @@ export const RiskMeter: React.FC<RiskMeterProps> = ({ value, label, type = 'stre
       if (val >= 50) return theme.chart.colors.warning; // Amber
       return theme.chart.colors.success; // Green (Low risk is good)
     }
-  };
+  }, [type, theme]);
 
   return (
     <div className="space-y-2">
@@ -62,4 +65,4 @@ export const RiskMeter: React.FC<RiskMeterProps> = ({ value, label, type = 'stre
       </div>
     </div>
   );
-};
+});

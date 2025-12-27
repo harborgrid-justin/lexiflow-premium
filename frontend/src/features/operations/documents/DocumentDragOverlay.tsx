@@ -9,7 +9,7 @@ interface DocumentDragOverlayProps {
     onDragLeave?: (e: React.DragEvent) => void;
 }
 
-export const DocumentDragOverlay: React.FC<DocumentDragOverlayProps> = ({ onDrop, onDragLeave }) => {
+export function DocumentDragOverlay({ onDrop, onDragLeave }: DocumentDragOverlayProps) {
   const { theme } = useTheme();
 
   return (

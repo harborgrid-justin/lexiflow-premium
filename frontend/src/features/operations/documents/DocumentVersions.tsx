@@ -13,7 +13,7 @@ interface DocumentVersionsProps {
   onClose: () => void;
 }
 
-export const DocumentVersions: React.FC<DocumentVersionsProps> = ({ document, userRole, onRestore, onClose }) => {
+export function DocumentVersions({ document, userRole, onRestore, onClose }: DocumentVersionsProps) {
   const canRestore = userRole === 'Senior Partner' || userRole === 'Administrator';
   const { theme } = useTheme();
 

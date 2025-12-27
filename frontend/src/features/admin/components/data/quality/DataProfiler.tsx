@@ -10,7 +10,10 @@ import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataProfile } from '@/types';
 
-export const DataProfiler: React.FC = () => {
+/**
+ * DataProfiler - React 18 optimized with React.memo
+ */
+export const DataProfiler = React.memo(() => {
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
 

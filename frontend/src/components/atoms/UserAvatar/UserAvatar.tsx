@@ -34,7 +34,10 @@ interface UserAvatarProps {
   indicatorStatus?: User['status'];
 }
 
-export const UserAvatar: React.FC<UserAvatarProps> = ({ name, size = 'md', className = '', indicatorStatus }) => {
+/**
+ * UserAvatar - React 18 optimized with React.memo
+ */
+export const UserAvatar = React.memo<UserAvatarProps>(({ name, size = 'md', className = '', indicatorStatus }) => {
   const { theme } = useTheme();
 
   const sizeClasses = {
@@ -89,4 +92,4 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({ name, size = 'md', class
       )}
     </div>
   );
-};
+});

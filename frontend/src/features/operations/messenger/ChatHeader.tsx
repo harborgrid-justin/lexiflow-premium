@@ -41,7 +41,7 @@ interface ChatHeaderProps {
 // COMPONENT
 // ============================================================================
 
-export const ChatHeader: React.FC<ChatHeaderProps> = ({ conversation, onBack }) => {
+export function ChatHeader({ conversation, onBack }: ChatHeaderProps) {
   const { theme } = useTheme();
 
   return (

@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useId } from 'react';
 import { LucideIcon } from 'lucide-react';
 
 // ============================================================================
@@ -38,12 +38,16 @@ interface TabNavigationProps {
   className?: string;
 }
 
-export const TabNavigation: React.FC<TabNavigationProps> = ({ tabs, activeTab, onTabChange, className = '' }) => {
+/**
+ * TabNavigation - React 18 optimized with React.memo and useId
+ */
+export const TabNavigation = React.memo<TabNavigationProps>(({ tabs, activeTab, onTabChange, className = '' }) => {
   const { theme } = useTheme();
+  const navId = useId();
   
   return (
     <div className={cn("border-b", theme.border.default, className)}>
-      <nav className="flex space-x-2 overflow-x-auto no-scrollbar px-2" aria-label="Tabs">
+      <nav id={navId} className="flex space-x-2 overflow-x-auto no-scrollbar px-2" aria-label="Tabs" role="tablist">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -67,4 +71,4 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({ tabs, activeTab, o
       </nav>
     </div>
   );
-};
+});

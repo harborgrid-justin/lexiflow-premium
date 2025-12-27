@@ -13,7 +13,11 @@ export interface TagListProps {
   limit?: number;
 }
 
-export const TagList: React.FC<TagListProps> = ({ 
+/**
+ * TagList - React 18 optimized with React.memo
+ * Prevents unnecessary re-renders when parent updates
+ */
+export const TagList = React.memo<TagListProps>(({ 
   tags, 
   limit = 3 
 }) => {
@@ -47,4 +51,4 @@ export const TagList: React.FC<TagListProps> = ({
       )}
     </div>
   );
-};
+});

@@ -25,7 +25,10 @@ export interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
   as?: 'span' | 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'label';
 }
 
-export const Text: React.FC<TextProps> = ({
+/**
+ * Text - React 18 optimized with React.memo
+ */
+export const Text = React.memo<TextProps>(({
   variant = 'body',
   size = 'md',
   weight = 'normal',
@@ -50,4 +53,4 @@ export const Text: React.FC<TextProps> = ({
       {children}
     </Component>
   );
-};
+});

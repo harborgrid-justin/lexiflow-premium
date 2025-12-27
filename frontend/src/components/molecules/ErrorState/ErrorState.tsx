@@ -41,7 +41,10 @@ export interface ErrorStateProps {
  * <ErrorState title="Connection Error" message="Please check your network" />
  * ```
  */
-export const ErrorState: React.FC<ErrorStateProps> = ({
+/**
+ * ErrorState - React 18 optimized with React.memo
+ */
+export const ErrorState = React.memo<ErrorStateProps>(({
   title = 'Error',
   message = 'Something went wrong',
   onRetry,
@@ -79,4 +82,4 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
       )}
     </div>
   );
-};
+});

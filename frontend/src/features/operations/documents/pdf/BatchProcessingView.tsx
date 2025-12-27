@@ -4,7 +4,7 @@ import { Cpu } from 'lucide-react';
 import { EmptyState } from '@/components/molecules/EmptyState';
 import { Button } from '@/components/atoms/Button';
 
-export const BatchProcessingView: React.FC = () => {
+export function BatchProcessingView() {
     return (
         <div className="h-full flex items-center justify-center p-8">
             <EmptyState 

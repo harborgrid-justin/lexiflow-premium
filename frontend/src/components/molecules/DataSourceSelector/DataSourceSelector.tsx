@@ -4,7 +4,7 @@
  * Shows backend availability status and only enables backend option when available
  */
 
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Database, Cloud, HardDrive, Wifi, WifiOff, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
 import { useDataSource } from '@/providers/DataSourceContext';
 import { useBackendHealth } from '@/hooks/useBackendHealth';
@@ -42,7 +42,7 @@ const DATA_SOURCE_OPTIONS: DataSourceOption[] = [
   },
 ];
 
-export const DataSourceSelector: React.FC = () => {
+export function DataSourceSelector() {
   const { currentSource, switchDataSource } = useDataSource();
   const { status, isAvailable, isHealthy, latency, version, error, refresh } = useBackendHealth();
   const [isRefreshing, setIsRefreshing] = useState(false);

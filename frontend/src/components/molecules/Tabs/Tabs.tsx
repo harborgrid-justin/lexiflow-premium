@@ -38,7 +38,7 @@ interface TabsProps {
   variant?: 'pills' | 'underline' | 'segmented';
 }
 
-export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange, className = '', variant = 'segmented' }) => {
+export function Tabs({ tabs, activeTab, onChange, className = '', variant = 'segmented' }: TabsProps) {
   const { theme } = useTheme();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   

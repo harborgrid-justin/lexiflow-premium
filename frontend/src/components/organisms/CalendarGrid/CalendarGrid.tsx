@@ -30,7 +30,10 @@ interface CalendarGridProps {
   onDateClick?: (date: Date) => void;
 }
 
-export const CalendarGrid: React.FC<CalendarGridProps> = ({
+/**
+ * CalendarGrid - React 18 optimized with React.memo
+ */
+export const CalendarGrid = React.memo<CalendarGridProps>(({
   currentDate,
   renderCell,
   onDateClick
@@ -124,4 +127,4 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
       </div>
     </div>
   );
-};
+});

@@ -4,7 +4,7 @@
  * @description Animated metric card with sparkline support, trend indicators, and live status
  */
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -20,7 +20,7 @@ export interface MetricCardProps {
   sparklineData?: number[];
 }
 
-export const MetricCard: React.FC<MetricCardProps> = ({ 
+export function MetricCard({ 
   label, 
   value, 
   icon: Icon, 
@@ -29,7 +29,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   className = "", 
   isLive = false, 
   sparklineData 
-}) => {
+}: MetricCardProps) {
   const { theme } = useTheme();
   
   // Normalize value to handle undefined, null, and NaN

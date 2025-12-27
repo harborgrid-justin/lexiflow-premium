@@ -11,7 +11,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 
-export const RecentFiles: React.FC = () => {
+export function RecentFiles() {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery

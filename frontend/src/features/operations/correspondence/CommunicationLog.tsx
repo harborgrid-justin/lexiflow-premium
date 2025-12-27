@@ -47,7 +47,7 @@ interface CommunicationLogProps {
 // COMPONENT
 // ============================================================================
 
-export const CommunicationLog: React.FC<CommunicationLogProps> = React.memo(({ items, onSelect, selectedId }) => {
+export const CommunicationLog = React.memo<CommunicationLogProps>(({ items, onSelect, selectedId }) => {
   const { theme } = useTheme();
   const [focusedIndex, setFocusedIndex] = useState(0);
 
@@ -154,5 +154,6 @@ export const CommunicationLog: React.FC<CommunicationLogProps> = React.memo(({ i
     </div>
   );
 });
+CommunicationLog.displayName = 'CommunicationLog';
 
 CommunicationLog.displayName = 'CommunicationLog';

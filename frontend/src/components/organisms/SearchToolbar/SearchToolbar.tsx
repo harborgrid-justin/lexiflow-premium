@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useId } from 'react';
 import { Search, Clock } from 'lucide-react';
 
 // ============================================================================
@@ -37,10 +37,11 @@ interface SearchToolbarProps {
   className?: string;
 }
 
-export const SearchToolbar: React.FC<SearchToolbarProps> = ({ value, onChange, placeholder = "Search (Press /)...", actions, className = "" }) => {
+export function SearchToolbar({ value, onChange, placeholder = "Search (Press /)...", actions, className = "" }: SearchToolbarProps) {
   const { theme } = useTheme();
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const inputId = useId();
   const [showHistory, setShowHistory] = useState(false);
   const history = SearchService.getHistory();
 
@@ -80,6 +81,8 @@ export const SearchToolbar: React.FC<SearchToolbarProps> = ({ value, onChange, p
         <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)} />
         <input 
           ref={inputRef}
+          id={inputId}
+          aria-label="Search input"
           className={cn(
             "w-full pl-9 pr-4 py-2 border rounded-md text-sm outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500",
             theme.surface.highlight,

@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
+import React, { useId } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -25,13 +25,21 @@ import { labelStyles, getTextAreaStyles } from './TextArea.styles';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-export const TextArea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement> & { label?: string }> = ({ label, className = '', ...props }) => {
+
+/**
+ * TextArea - React 18 optimized textarea component
+ * Uses useId for SSR-safe unique IDs
+ */
+export function TextArea({ label, className = '', ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement> & { label?: string }) {
   const { theme } = useTheme();
+  const textareaId = useId();
   
   return (
     <div className="w-full">
-      {label && <label className={labelStyles(theme)}>{label}</label>}
+      {label && <label htmlFor={textareaId} className={labelStyles(theme)}>{label}</label>}
       <textarea
+        id={textareaId}
+        aria-label={label || props['aria-label']}
         className={cn(
           getTextAreaStyles(theme),
           className

@@ -23,7 +23,10 @@ export interface StackProps extends React.HTMLAttributes<HTMLDivElement> {
   wrap?: boolean;
 }
 
-export const Stack: React.FC<StackProps> = ({
+/**
+ * Stack - React 18 optimized with React.memo
+ */
+export const Stack = React.memo<StackProps>(({
   direction = 'vertical',
   spacing = 'md',
   align = 'stretch',
@@ -48,4 +51,4 @@ export const Stack: React.FC<StackProps> = ({
       {children}
     </div>
   );
-};
+});

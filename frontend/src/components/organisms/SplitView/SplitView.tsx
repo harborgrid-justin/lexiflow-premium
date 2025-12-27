@@ -31,7 +31,10 @@ interface SplitViewProps {
   className?: string;
 }
 
-export const SplitView: React.FC<SplitViewProps> = ({ 
+/**
+ * SplitView - React 18 optimized with React.memo
+ */
+export const SplitView = React.memo<SplitViewProps>(({ 
   sidebar, 
   content, 
   showSidebarOnMobile = true, 
@@ -64,4 +67,4 @@ export const SplitView: React.FC<SplitViewProps> = ({
       </div>
     </div>
   );
-};
+});

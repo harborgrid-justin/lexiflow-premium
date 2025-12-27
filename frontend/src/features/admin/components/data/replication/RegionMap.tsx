@@ -8,7 +8,10 @@ interface RegionMapProps {
   primaryRegion: string;
 }
 
-export const RegionMap: React.FC<RegionMapProps> = ({ primaryRegion }) => {
+/**
+ * RegionMap - React 18 optimized with React.memo
+ */
+export const RegionMap = React.memo<RegionMapProps>(({ primaryRegion }) => {
   const { theme, mode } = useTheme();
   const isPrimaryEast = primaryRegion === 'US-East';
 

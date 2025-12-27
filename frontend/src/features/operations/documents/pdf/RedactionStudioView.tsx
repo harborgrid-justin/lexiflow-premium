@@ -14,7 +14,7 @@ import { cn } from '@/utils/cn';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { ErrorState } from '@/components/molecules/ErrorState';
 
-export const RedactionStudioView: React.FC = () => {
+export function RedactionStudioView() {
     const { theme } = useTheme();
     const documentSelection = useSingleSelection<LegalDocument>(null, (a, b) => a.id === b.id);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);

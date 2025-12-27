@@ -9,7 +9,10 @@ import { queryKeys } from '@/utils/queryKeys';
 import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';
 
-export const AccessMatrix: React.FC = () => {
+/**
+ * AccessMatrix - React 18 optimized with React.memo
+ */
+export const AccessMatrix = React.memo(() => {
   const { theme } = useTheme();
   const notify = useNotify();
 

@@ -13,7 +13,10 @@ export interface TruncatedTextProps {
   className?: string;
 }
 
-export const TruncatedText: React.FC<TruncatedTextProps> = ({ 
+/**
+ * TruncatedText - React 18 optimized with React.memo
+ */
+export const TruncatedText = React.memo<TruncatedTextProps>(({ 
   text, 
   limit = 50, 
   className = "" 
@@ -27,4 +30,4 @@ export const TruncatedText: React.FC<TruncatedTextProps> = ({
       {text.substring(0, limit)}...
     </span>
   );
-};
+});

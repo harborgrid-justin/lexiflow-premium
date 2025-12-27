@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import React, { useState, useId } from 'react';
 import { Clock, Wand2, DollarSign } from 'lucide-react';
 
 // ============================================================================
@@ -44,11 +44,16 @@ interface TimeEntryModalProps {
   onSave: (entry: TimeEntryPayload) => void;
 }
 
+/**
+ * TimeEntryModal - React 18 optimized with useId
+ */
 export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose, caseId, onSave }) => {
   const [desc, setDesc] = useState('');
   const [duration, setDuration] = useState('0.5');
   const [isRefining, setIsRefining] = useState(false);
   const { theme } = useTheme();
+  const modalId = useId();
+  const descId = useId();
 
   const handleRefine = async () => {
     if (!desc) return;

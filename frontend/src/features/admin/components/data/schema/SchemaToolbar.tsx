@@ -11,7 +11,10 @@ interface SchemaToolbarProps {
   onAutoArrange: () => void;
 }
 
-export const SchemaToolbar: React.FC<SchemaToolbarProps> = ({ activeTab, setActiveTab, onAutoArrange }) => {
+/**
+ * SchemaToolbar - React 18 optimized with React.memo
+ */
+export const SchemaToolbar = React.memo<SchemaToolbarProps>(({ activeTab, setActiveTab, onAutoArrange }) => {
   const { theme } = useTheme();
 
   return (
@@ -29,4 +32,4 @@ export const SchemaToolbar: React.FC<SchemaToolbarProps> = ({ activeTab, setActi
         </div>
     </div>
   );
-};
+});

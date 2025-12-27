@@ -24,7 +24,7 @@ interface DocumentAssemblyProps {
   windowId?: string; // Optional ID for window management
 }
 
-export const DocumentAssembly: React.FC<DocumentAssemblyProps> = ({ onClose, caseTitle, onSave, windowId }) => {
+export function DocumentAssembly({ onClose, caseTitle, onSave, windowId }: DocumentAssemblyProps) {
   const { theme } = useTheme();
   const [step, setStep] = useState(1);
   const [template, setTemplate] = useState('');

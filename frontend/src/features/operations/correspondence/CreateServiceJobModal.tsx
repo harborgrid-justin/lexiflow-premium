@@ -19,7 +19,7 @@ interface CreateServiceJobModalProps {
   onSave: (job: ServiceJob) => void;
 }
 
-export const CreateServiceJobModal: React.FC<CreateServiceJobModalProps> = ({ isOpen, onClose, onSave }) => {
+export function CreateServiceJobModal({ isOpen, onClose, onSave }: CreateServiceJobModalProps) {
   const { theme } = useTheme();
   const notify = useNotify();
   const [formData, setFormData] = useState<Partial<ServiceJob>>({

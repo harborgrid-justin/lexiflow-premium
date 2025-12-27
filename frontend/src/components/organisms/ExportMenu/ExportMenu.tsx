@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useId } from 'react';
 import { Download, FileText, Table, FileCode } from 'lucide-react';
 
 // ============================================================================
@@ -33,10 +33,14 @@ interface ExportMenuProps {
   onExport: (format: 'pdf' | 'csv' | 'xml') => void;
 }
 
-export const ExportMenu: React.FC<ExportMenuProps> = ({ onExport }) => {
+/**
+ * ExportMenu - React 18 optimized with React.memo and useId
+ */
+export const ExportMenu = React.memo<ExportMenuProps>(({ onExport }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
+  const menuId = useId();
 
   useClickOutside(menuRef as React.RefObject<HTMLElement>, () => setIsOpen(false));
 
@@ -83,4 +87,4 @@ export const ExportMenu: React.FC<ExportMenuProps> = ({ onExport }) => {
       )}
     </div>
   );
-};
+});

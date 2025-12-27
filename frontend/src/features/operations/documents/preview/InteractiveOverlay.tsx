@@ -32,7 +32,7 @@ interface InteractiveOverlayProps {
   onFieldsUpdate?: (fields: Field[]) => void;
 }
 
-export const InteractiveOverlay: React.FC<InteractiveOverlayProps> = ({ 
+export function InteractiveOverlay({ 
   activeTool, dimensions, onFieldClick, existingFields = [], onFieldsUpdate 
 }) => {
   const { theme } = useTheme();

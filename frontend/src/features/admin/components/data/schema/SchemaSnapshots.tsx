@@ -5,7 +5,10 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms/Button';
 
-export const SchemaSnapshots: React.FC = () => {
+/**
+ * SchemaSnapshots - React 18 optimized with React.memo
+ */
+export const SchemaSnapshots = React.memo(() => {
     const { theme } = useTheme();
 
     const snapshots = [

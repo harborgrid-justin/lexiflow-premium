@@ -25,7 +25,7 @@ import { MetricCard } from '@/components/molecules/MetricCard';
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const ComplianceRisk: React.FC = () => {
+export function ComplianceRisk() {
   const [metrics, setMetrics] = useState({ high: 0, missingDocs: 0, violations: 0 });
 
   useEffect(() => {

@@ -40,7 +40,7 @@ export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
   gap?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
-export const Box: React.FC<BoxProps> = ({
+export function Box({
   spacing = 'none',
   bg,
   rounded = 'none',
@@ -53,7 +53,7 @@ export const Box: React.FC<BoxProps> = ({
   className,
   children,
   ...props
-}) => {
+}: BoxProps) {
   const classes = cn(
     spacingClasses[spacing],
     bg && bgClasses[bg],

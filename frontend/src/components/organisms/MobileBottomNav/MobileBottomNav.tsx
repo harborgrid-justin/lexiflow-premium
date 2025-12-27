@@ -41,7 +41,10 @@ interface MobileBottomNavProps {
 // ========================================
 // COMPONENT
 // ========================================
-export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeView, setActiveView }) => {
+/**
+ * MobileBottomNav - React 18 optimized with React.memo
+ */
+export const MobileBottomNav = React.memo<MobileBottomNavProps>(({ activeView, setActiveView }) => {
   const { theme } = useTheme();
 
   // Show only the most important navigation items on mobile
@@ -93,6 +96,6 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeView, se
       </div>
     </div>
   );
-};
+});
 
 export default MobileBottomNav;

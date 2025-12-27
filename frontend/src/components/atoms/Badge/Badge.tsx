@@ -31,7 +31,10 @@ export interface BadgeProps {
   className?: string;
 }
 
-export const Badge: React.FC<BadgeProps> = ({ variant = 'neutral', children, className = '' }) => {
+/**
+ * Badge - React 18 optimized with React.memo
+ */
+export const Badge = React.memo<BadgeProps>(({ variant = 'neutral', children, className = '' }) => {
   const { theme } = useTheme();
 
   return (
@@ -43,4 +46,4 @@ export const Badge: React.FC<BadgeProps> = ({ variant = 'neutral', children, cla
       {children}
     </span>
   );
-};
+});

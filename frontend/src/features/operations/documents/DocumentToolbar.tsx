@@ -19,7 +19,7 @@ interface DocumentToolbarProps {
   onClearSelection: () => void;
 }
 
-export const DocumentToolbar: React.FC<DocumentToolbarProps> = ({
+export function DocumentToolbar({
   selectedDocsCount,
   searchTerm,
   setSearchTerm,

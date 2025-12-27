@@ -22,7 +22,7 @@ interface AcrobatToolbarProps {
   totalPages: number;
 }
 
-export const AcrobatToolbar: React.FC<AcrobatToolbarProps> = ({
+export function AcrobatToolbar({
   activeTool, setActiveTool,
   scale, setScale,
   rotation, setRotation,

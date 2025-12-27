@@ -36,7 +36,10 @@ interface StatsProps {
     items: StatItem[];
 }
 
-export const Stats: React.FC<StatsProps> = ({ items }) => {
+/**
+ * Stats - React 18 optimized with React.memo
+ */
+export const Stats = React.memo<StatsProps>(({ items }) => {
     const { theme } = useTheme();
 
     return (
@@ -54,4 +57,4 @@ export const Stats: React.FC<StatsProps> = ({ items }) => {
             ))}
         </div>
     );
-};
+});

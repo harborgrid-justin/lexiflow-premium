@@ -1,0 +1,312 @@
+name: Test Suite
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'backend/**'
+      - '.github/workflows/test.yml'
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'backend/**'
+      - '.github/workflows/test.yml'
+
+jobs:
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            backend/node_modules
+            ~/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('backend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}-
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Run unit tests
+        working-directory: ./backend
+        run: npm run test -- --coverage --maxWorkers=2
+        env:
+          NODE_ENV: test
+          JWT_SECRET: test-jwt-secret-key-for-ci-testing-only
+          JWT_REFRESH_SECRET: test-refresh-secret-key-for-ci-testing-only
+          ENCRYPTION_KEY: test-encryption-key-32-chars!!
+
+      - name: Check coverage thresholds
+        working-directory: ./backend
+        run: npm run test:cov -- --coverageThreshold='{"global":{"branches":80,"functions":80,"lines":80,"statements":80}}'
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./backend/coverage/lcov.info
+          flags: backend-unit
+          name: backend-unit-${{ matrix.node-version }}
+          fail_ci_if_error: false
+
+      - name: Generate coverage report
+        if: always()
+        working-directory: ./backend
+        run: |
+          if [ -d "coverage" ]; then
+            echo "## Unit Test Coverage Report" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "| Metric | Coverage |" >> $GITHUB_STEP_SUMMARY
+            echo "|--------|----------|" >> $GITHUB_STEP_SUMMARY
+            if [ -f "coverage/coverage-summary.json" ]; then
+              cat coverage/coverage-summary.json | jq -r '.total | "| Statements | \(.statements.pct)% |", "| Branches | \(.branches.pct)% |", "| Functions | \(.functions.pct)% |", "| Lines | \(.lines.pct)% |"' >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: lexiflow_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Wait for services
+        run: |
+          timeout 30 bash -c 'until pg_isready -h localhost -p 5432 -U postgres; do sleep 1; done'
+          timeout 30 bash -c 'until redis-cli -h localhost -p 6379 ping; do sleep 1; done'
+
+      - name: Run database migrations
+        working-directory: ./backend
+        run: npm run migration:run || true
+        env:
+          NODE_ENV: test
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
+          DATABASE_USER: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE_NAME: lexiflow_test
+
+      - name: Run E2E tests
+        working-directory: ./backend
+        run: npm run test:e2e
+        env:
+          NODE_ENV: test
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
+          DATABASE_USER: postgres
+          DATABASE_PASSWORD: postgres
+          DATABASE_NAME: lexiflow_test
+          REDIS_HOST: localhost
+          REDIS_PORT: 6379
+          JWT_SECRET: test-jwt-secret-key-for-ci-testing-only
+          JWT_REFRESH_SECRET: test-refresh-secret-key-for-ci-testing-only
+          ENCRYPTION_KEY: test-encryption-key-32-chars!!
+
+      - name: Upload E2E test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-results
+          path: backend/test-results/
+          retention-days: 7
+
+  lint-and-format:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: ./backend
+        run: npm run lint
+
+      - name: Check code formatting
+        working-directory: ./backend
+        run: npx prettier --check "src/**/*.ts" "test/**/*.ts"
+
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Run npm audit
+        working-directory: ./backend
+        run: npm audit --production --audit-level=moderate
+        continue-on-error: true
+
+      - name: Check for vulnerable dependencies
+        working-directory: ./backend
+        run: |
+          npm audit --json > audit-results.json || true
+          if [ -f audit-results.json ]; then
+            CRITICAL=$(cat audit-results.json | jq '.metadata.vulnerabilities.critical // 0')
+            HIGH=$(cat audit-results.json | jq '.metadata.vulnerabilities.high // 0')
+            if [ "$CRITICAL" -gt 0 ] || [ "$HIGH" -gt 5 ]; then
+              echo "❌ Found $CRITICAL critical and $HIGH high severity vulnerabilities"
+              exit 1
+            fi
+          fi
+
+  coverage-report:
+    name: Coverage Report
+    runs-on: ubuntu-latest
+    needs: [unit-tests]
+    if: github.event_name == 'pull_request'
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download coverage artifacts
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+
+      - name: Comment PR with coverage
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const coveragePath = './backend/coverage/coverage-summary.json';
+
+            if (fs.existsSync(coveragePath)) {
+              const coverage = JSON.parse(fs.readFileSync(coveragePath, 'utf8'));
+              const total = coverage.total;
+
+              const comment = `## 📊 Test Coverage Report
+
+              | Metric | Coverage | Status |
+              |--------|----------|--------|
+              | Statements | ${total.statements.pct}% | ${total.statements.pct >= 80 ? '✅' : '❌'} |
+              | Branches | ${total.branches.pct}% | ${total.branches.pct >= 80 ? '✅' : '❌'} |
+              | Functions | ${total.functions.pct}% | ${total.functions.pct >= 80 ? '✅' : '❌'} |
+              | Lines | ${total.lines.pct}% | ${total.lines.pct >= 80 ? '✅' : '❌'} |
+
+              **Coverage Threshold:** 80% (All metrics must meet or exceed this threshold)
+              `;
+
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
+
+  test-summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [unit-tests, e2e-tests, lint-and-format, security-scan]
+    if: always()
+    timeout-minutes: 5
+
+    steps:
+      - name: Check test results
+        run: |
+          if [ "${{ needs.unit-tests.result }}" != "success" ]; then
+            echo "❌ Unit tests failed"
+            exit 1
+          fi
+
+          if [ "${{ needs.e2e-tests.result }}" != "success" ]; then
+            echo "❌ E2E tests failed"
+            exit 1
+          fi
+
+          if [ "${{ needs.lint-and-format.result }}" != "success" ]; then
+            echo "❌ Lint and format checks failed"
+            exit 1
+          fi
+
+          if [ "${{ needs.security-scan.result }}" != "success" ]; then
+            echo "⚠️  Security scan found issues"
+          fi
+
+          echo "✅ All critical tests passed"

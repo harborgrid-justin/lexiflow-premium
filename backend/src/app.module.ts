@@ -14,9 +14,14 @@ import resourceLimitsConfig from './config/resource-limits.config';
 import { getDatabaseConfig } from './config/database.config';
 import { validationSchema, validationOptions } from './config/env.validation';
 
-// Core Modules
+// Core Coordination Module (Enterprise Infrastructure Orchestration)
+import { CoreModule } from './core/core.module';
+
+// Core Modules (most now imported via CoreModule)
 import { CommonModule } from './common/common.module';
 import { DatabaseModule } from './config/database.module';
+import { SecurityModule } from './security/security.module';
+import { ErrorsModule } from './errors/errors.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
@@ -116,6 +121,9 @@ import { VersioningModule } from './versioning/versioning.module';
 // Queue Processing System
 import { QueuesModule } from './queues/queues.module';
 
+// Performance Optimization Module
+import { PerformanceModule } from './performance/performance.module';
+
 // App Controller & Service
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -192,23 +200,21 @@ if (isRedisEnabled) {
       limit: MasterConfig.RATE_LIMIT_LIMIT,
     }]),
 
-    // Core Infrastructure Modules
-    CommonModule,
+    // Core Coordination Module - Enterprise Infrastructure
+    // Orchestrates: Security, Auth, Users, Authorization, Compliance,
+    // Monitoring, Health, Performance, API Security, Common, Errors
+    // Provides: Bootstrap, Shutdown, Configuration Validation
+    CoreModule,
+
+    // Database Module (database connection configuration)
     DatabaseModule,
 
     // Telemetry & Observability
     // Note: OpenTelemetry telemetry is available but optional
     // Uncomment to enable: TelemetryModule,
 
-    // Health Monitoring
-    HealthModule,
-
     // Real-time Updates
     RealtimeModule,
-
-    // Authentication & Authorization
-    AuthModule,
-    UsersModule,
 
     // Case Management System
     CasesModule,
@@ -238,8 +244,7 @@ if (isRedisEnabled) {
     // Billing & Finance
     BillingModule,
 
-    // Compliance & Audit
-    ComplianceModule,
+    // Note: ComplianceModule is imported via CoreModule
 
     // Communications
     CommunicationsModule,
@@ -281,7 +286,7 @@ if (isRedisEnabled) {
     PipelinesModule,
     SyncModule,
     BackupsModule,
-    MonitoringModule,
+    // Note: MonitoringModule and PerformanceModule are imported via CoreModule
     AiOpsModule,
     AiDataopsModule,
     VersioningModule,

@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth.controller';
 import { TokenBlacklistAdminController } from './token-blacklist-admin.controller';
 import { AuthService } from './auth.service';
@@ -14,11 +15,19 @@ import { RefreshStrategy } from './strategies/refresh.strategy';
 import { TokenBlacklistService } from './token-blacklist.service';
 import { TokenBlacklistCleanupService } from './token-blacklist-cleanup.service';
 import { TokenBlacklistGuard } from './guards/token-blacklist.guard';
+import { SessionManagementService } from './services/session.management.service';
+import { BruteForceProtectionService } from './services/brute.force.protection.service';
+import { PasswordPolicyService } from './services/password.policy.service';
+import { TokenSecurityService } from './services/token.security.service';
+import { Session } from './entities/session.entity';
+import { LoginAttempt } from './entities/login-attempt.entity';
+import { RefreshToken } from './entities/refresh-token.entity';
 
 @Module({
   imports: [
     ConfigModule,
     PassportModule,
+    TypeOrmModule.forFeature([Session, LoginAttempt, RefreshToken]),
     // Configure JWT globally with async configuration for proper dependency injection
     // @see https://docs.nestjs.com/techniques/configuration#async-configuration
     JwtModule.registerAsync({
@@ -44,6 +53,10 @@ import { TokenBlacklistGuard } from './guards/token-blacklist.guard';
     TokenBlacklistService,
     TokenBlacklistCleanupService,
     TokenBlacklistGuard,
+    SessionManagementService,
+    BruteForceProtectionService,
+    PasswordPolicyService,
+    TokenSecurityService,
   ],
   exports: [
     JwtModule,
@@ -52,6 +65,10 @@ import { TokenBlacklistGuard } from './guards/token-blacklist.guard';
     TokenStorageService,
     TokenBlacklistService,
     TokenBlacklistGuard,
+    SessionManagementService,
+    BruteForceProtectionService,
+    PasswordPolicyService,
+    TokenSecurityService,
   ],
 })
 export class AuthModule {}

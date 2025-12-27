@@ -3,14 +3,17 @@ import {
   Post,
   Get,
   Put,
+  Delete,
   Body,
   Head,
+  Param,
   UseGuards,
   HttpCode,
   HttpStatus,
   Request,
+  Req,
 } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse} from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiParam} from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -21,11 +24,19 @@ import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { VerifyMfaDto } from './dto/verify-mfa.dto';
 import { UpdateUserDto } from '../users/dto/update-user.dto';
+import {
+  SessionListResponseDto,
+  RevokeSessionDto,
+  RevokeSessionResponseDto,
+  SessionStatsResponseDto,
+  TrustDeviceDto,
+} from './dto/session.dto';
 import { JwtAuthGuard } from './guards';
 import { Public } from '../common/decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthenticatedUser } from './interfaces/authenticated-user.interface';
 import { UsersService } from '../users/users.service';
+import { SessionManagementService } from './services/session.management.service';
 
 interface RequestWithTokenPayload extends Request {
   user?: {
@@ -40,6 +51,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
+    private readonly sessionManagementService: SessionManagementService,
   ) {}
 
   @Public()
@@ -242,6 +254,139 @@ export class AuthController {
     await this.usersService.setMfaEnabled(userId, false);
     await this.usersService.setTotpSecret(userId, '');
     return { message: 'MFA disabled successfully' };
+  }
+
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard)
+  @Get('sessions')
+  @ApiOperation({ summary: 'Get all active sessions for current user' })
+  @ApiResponse({
+    status: 200,
+    description: 'Active sessions retrieved successfully',
+    type: SessionListResponseDto,
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async getSessions(
+    @CurrentUser('id') userId: string,
+    @Req() req: RequestWithTokenPayload,
+  ): Promise<SessionListResponseDto> {
+    const currentSessionId = req.user?.jti;
+    const sessions = await this.sessionManagementService.getActiveSessions(
+      userId,
+      currentSessionId,
+    );
+
+    return {
+      sessions,
+      total: sessions.length,
+    };
+  }
+
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard)
+  @Get('sessions/stats')
+  @ApiOperation({ summary: 'Get session statistics for current user' })
+  @ApiResponse({
+    status: 200,
+    description: 'Session statistics retrieved successfully',
+    type: SessionStatsResponseDto,
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async getSessionStats(
+    @CurrentUser('id') userId: string,
+  ): Promise<SessionStatsResponseDto> {
+    return this.sessionManagementService.getUserSessionStats(userId);
+  }
+
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard)
+  @Delete('sessions/:id')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Revoke a specific session' })
+  @ApiParam({
+    name: 'id',
+    description: 'Session ID to revoke',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Session revoked successfully',
+    type: RevokeSessionResponseDto,
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Session not found' })
+  async revokeSession(
+    @Param('id') sessionId: string,
+    @CurrentUser('id') userId: string,
+    @Body() revokeDto?: RevokeSessionDto,
+  ): Promise<RevokeSessionResponseDto> {
+    await this.sessionManagementService.revokeSession(
+      sessionId,
+      userId,
+      revokeDto?.reason,
+    );
+
+    return {
+      message: 'Session revoked successfully',
+      count: 1,
+    };
+  }
+
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard)
+  @Delete('sessions')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Revoke all sessions except the current one' })
+  @ApiResponse({
+    status: 200,
+    description: 'All other sessions revoked successfully',
+    type: RevokeSessionResponseDto,
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async revokeAllOtherSessions(
+    @CurrentUser('id') userId: string,
+    @Req() req: RequestWithTokenPayload,
+    @Body() revokeDto?: RevokeSessionDto,
+  ): Promise<RevokeSessionResponseDto> {
+    const currentSessionId = req.user?.jti || '';
+    const count = await this.sessionManagementService.revokeAllOtherSessions(
+      userId,
+      currentSessionId,
+      revokeDto?.reason,
+    );
+
+    return {
+      message: `Revoked ${count} session(s) successfully`,
+      count,
+    };
+  }
+
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard)
+  @Post('sessions/trust-device')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Mark a device/session as trusted' })
+  @ApiResponse({
+    status: 200,
+    description: 'Device marked as trusted successfully',
+  })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiResponse({ status: 404, description: 'Session not found' })
+  async trustDevice(
+    @CurrentUser('id') userId: string,
+    @Body() trustDeviceDto: TrustDeviceDto,
+  ) {
+    await this.sessionManagementService.markDeviceAsTrusted(
+      trustDeviceDto.sessionId,
+      userId,
+    );
+
+    return { message: 'Device marked as trusted successfully' };
   }
 }
 

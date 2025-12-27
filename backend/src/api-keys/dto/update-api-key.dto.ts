@@ -1,6 +1,2 @@
-import { PartialType, OmitType } from '@nestjs/swagger';
-import { CreateApiKeyDto } from './create-api-key.dto';
-
-export class UpdateApiKeyDto extends PartialType(
-  OmitType(CreateApiKeyDto, [] as const),
-) {}
+// Re-export from api-security module for backwards compatibility
+export { UpdateApiKeyDto } from '../../api-security/dto';

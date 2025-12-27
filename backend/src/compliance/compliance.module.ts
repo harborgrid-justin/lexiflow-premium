@@ -23,6 +23,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ComplianceCheck } from './entities/compliance-check.entity';
 import { AuditLog } from './entities/audit-log.entity';
 import { ComplianceRule } from './entities/compliance-rule.entity';
+import { Consent } from './entities/consent.entity';
+import { DataRetentionPolicy, DataRetentionRecord } from './entities/dataRetention.entity';
 
 // Main controller & service
 import { ComplianceController } from './compliance.controller';
@@ -54,9 +56,26 @@ import { PermissionsService } from './permissions/permissions.service';
 import { ComplianceReportingController } from './reporting/compliance-reporting.controller';
 import { ComplianceReportingService } from './reporting/compliance-reporting.service';
 
+// Enterprise Compliance Services
+import { GdprComplianceService } from './services/gdprCompliance.service';
+import { AuditTrailService } from './services/auditTrail.service';
+import { DataRetentionService } from './services/dataRetention.service';
+import { DataClassificationService } from './services/dataClassification.service';
+
+// User Entity (needed for GDPR service)
+import { User } from '../users/entities/user.entity';
+
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ComplianceCheck, AuditLog, ComplianceRule]),
+    TypeOrmModule.forFeature([
+      ComplianceCheck,
+      AuditLog,
+      ComplianceRule,
+      Consent,
+      DataRetentionPolicy,
+      DataRetentionRecord,
+      User,
+    ]),
   ],
   controllers: [
     ComplianceController,
@@ -70,7 +89,7 @@ import { ComplianceReportingService } from './reporting/compliance-reporting.ser
   providers: [
     // Main Service
     ComplianceService,
-    
+
     // Services
     AuditLogsService,
     ConflictChecksService,
@@ -79,6 +98,12 @@ import { ComplianceReportingService } from './reporting/compliance-reporting.ser
     PermissionsService,
     ComplianceReportingService,
 
+    // Enterprise Compliance Services
+    GdprComplianceService,
+    AuditTrailService,
+    DataRetentionService,
+    DataClassificationService,
+
     // Guards and Interceptors
     AuditLogInterceptor,
     EthicalWallGuard,
@@ -86,7 +111,7 @@ import { ComplianceReportingService } from './reporting/compliance-reporting.ser
   exports: [
     // Export main service
     ComplianceService,
-    
+
     // Export services so they can be used in other modules
     AuditLogsService,
     ConflictChecksService,
@@ -94,6 +119,12 @@ import { ComplianceReportingService } from './reporting/compliance-reporting.ser
     RlsPoliciesService,
     PermissionsService,
     ComplianceReportingService,
+
+    // Export enterprise compliance services
+    GdprComplianceService,
+    AuditTrailService,
+    DataRetentionService,
+    DataClassificationService,
 
     // Export guards and interceptors
     AuditLogInterceptor,

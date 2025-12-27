@@ -28,9 +28,8 @@ export class PermissionsGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    if (process.env.NODE_ENV === 'development') {
-      return true;
-    }
+    // SECURITY: Permission checks are NEVER bypassed regardless of environment
+    // Use @Public() decorator for routes that should be accessible without permission checks
 
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),

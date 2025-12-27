@@ -1,4 +1,5 @@
 import { Entity, Column, Index, Unique, OneToOne, OneToMany } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { BaseEntity } from '../../common/base/base.entity';
 import { UserProfile } from './user-profile.entity';
 import { Session } from '../../auth/entities/session.entity';
@@ -40,6 +41,7 @@ export class User extends BaseEntity {
   @Index()
   email!: string;
 
+  @Exclude({ toPlainOnly: true })
   @Column({ name: 'password_hash', type: 'varchar', length: 255, nullable: true })
   passwordHash!: string;
 
@@ -92,6 +94,7 @@ export class User extends BaseEntity {
   @Column({ name: 'two_factor_enabled', type: 'boolean', default: false })
   twoFactorEnabled!: boolean;
 
+  @Exclude({ toPlainOnly: true })
   @Column({ name: 'totp_secret', type: 'varchar', length: 255, nullable: true })
   totpSecret!: string;
 

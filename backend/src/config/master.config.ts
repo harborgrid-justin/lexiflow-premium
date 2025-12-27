@@ -27,9 +27,9 @@ export const DB_ACQUIRE_TIMEOUT = 60000; // 60 seconds
 export const DB_EVICTION_RUN_INTERVAL = 10000; // 10 seconds
 
 // Cache Settings
-export const DB_CACHE_ENABLED = false;
+export const DB_CACHE_ENABLED = true;
 export const DB_CACHE_DURATION = 30000; // 30 seconds
-export const DB_CACHE_TYPE = 'database';
+export const DB_CACHE_TYPE = 'redis';
 
 // Transaction Settings
 export const DB_MAX_QUERY_EXECUTION_TIME = 60000; // 60 seconds
@@ -442,7 +442,7 @@ export const REALTIME_NAMESPACE = '/events';
 export const REALTIME_MAX_HTTP_BUFFER_SIZE = 1e6; // 1MB
 export const REALTIME_PING_TIMEOUT_MS = 60000; // 60 seconds
 export const REALTIME_PING_INTERVAL_MS = 25000; // 25 seconds
-export const REALTIME_CORS_ORIGIN = process.env.CORS_ORIGIN || '*';
+export const REALTIME_CORS_ORIGIN = process.env.CORS_ORIGIN || (process.env.NODE_ENV === 'production' ? false : true);
 
 // =============================================================================
 // TIMEOUT INTERCEPTOR CONFIGURATION

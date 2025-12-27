@@ -1,4 +1,4 @@
-import { Module, MiddlewareConsumer, NestModule, ClassSerializerInterceptor } from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
@@ -7,7 +7,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import * as MasterConfig from './config/master.config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
+import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import * as path from 'path';
 import configuration from './config/configuration';
 import resourceLimitsConfig from './config/resource-limits.config';
@@ -24,20 +24,23 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 // Health & Monitoring
 import { HealthModule } from './health/health.module';
 
-// Telemetry & Observability
-// Note: OpenTelemetry telemetry module is available but optional
-// Uncomment to enable: import { TelemetryModule } from './telemetry/telemetry.module';
-
 // Real-time Communication
 import { RealtimeModule } from './realtime/realtime.module';
 
-// Enterprise Infrastructure
+// Enterprise Infrastructure - Middleware
+import { RequestIdMiddleware } from './common/middleware/request-id.middleware';
 import { SanitizationMiddleware } from './common/middleware/sanitization.middleware';
+
+// Enterprise Infrastructure - Interceptors
 import { CorrelationIdInterceptor } from './common/interceptors/correlation-id.interceptor';
+import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import { ResponseTransformInterceptor } from './common/interceptors/response-transform.interceptor';
+
+// Enterprise Infrastructure - Filters
 import { EnterpriseExceptionFilter } from './common/filters/enterprise-exception.filter';
 
-// Case Management Modules
+// All other module imports...
 import { CasesModule } from './cases/cases.module';
 import { PartiesModule } from './parties/parties.module';
 import { CaseTeamsModule } from './case-teams/case-teams.module';
@@ -46,8 +49,6 @@ import { MotionsModule } from './motions/motions.module';
 import { DocketModule } from './docket/docket.module';
 import { ProjectsModule } from './projects/projects.module';
 import { MattersModule } from './matters/matters.module';
-
-// Document Management Modules
 import { FileStorageModule } from './file-storage/file-storage.module';
 import { DocumentsModule } from './documents/documents.module';
 import { DocumentVersionsModule } from './document-versions/document-versions.module';
@@ -56,34 +57,20 @@ import { PleadingsModule } from './pleadings/pleadings.module';
 import { OcrModule } from './ocr/ocr.module';
 import { ProcessingJobsModule } from './processing-jobs/processing-jobs.module';
 import { DraftingModule } from './drafting/drafting.module';
-
-// Discovery Module
 import { DiscoveryModule } from './discovery/discovery.module';
 import { ProductionModule } from './production/production.module';
 import { EvidenceModule } from './evidence/evidence.module';
-
-// Billing Modules
 import { BillingModule } from './billing/billing.module';
-
-// Compliance Modules
 import { ComplianceModule } from './compliance/compliance.module';
-
-// Communications Modules
 import { CommunicationsModule } from './communications/communications.module';
-
-// Analytics & Search Modules
 import { AnalyticsModule } from './analytics/analytics.module';
 import { SearchModule } from './search/search.module';
 import { ReportsModule } from './reports/reports.module';
 import { MetricsModule } from './metrics/metrics.module';
-
-// Integration Modules
 import { GraphQLModule } from './graphql/graphql.module';
 import { IntegrationsModule } from './integrations/integrations.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
 import { ApiKeysModule } from './api-keys/api-keys.module';
-
-// New Service Modules - Final 13
 import { TasksModule } from './tasks/tasks.module';
 import { RisksModule } from './risks/risks.module';
 import { HRModule } from './hr/hr.module';
@@ -101,8 +88,6 @@ import { AnalyticsDashboardModule } from './analytics-dashboard/analytics-dashbo
 import { KnowledgeModule } from './knowledge/knowledge.module';
 import { JurisdictionsModule } from './jurisdictions/jurisdictions.module';
 import { LegalEntitiesModule } from './legal-entities/legal-entities.module';
-
-// Data Platform Modules - Production Infrastructure
 import { SchemaManagementModule } from './schema-management/schema-management.module';
 import { QueryWorkbenchModule } from './query-workbench/query-workbench.module';
 import { PipelinesModule } from './pipelines/pipelines.module';
@@ -112,11 +97,7 @@ import { MonitoringModule } from './monitoring/monitoring.module';
 import { AiOpsModule } from './ai-ops/ai-ops.module';
 import { AiDataopsModule } from './ai-dataops/ai-dataops.module';
 import { VersioningModule } from './versioning/versioning.module';
-
-// Queue Processing System
 import { QueuesModule } from './queues/queues.module';
-
-// App Controller & Service
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -152,65 +133,43 @@ if (isRedisEnabled) {
 
 @Module({
   imports: [
-    // Configuration with Joi validation
-    // @see https://docs.nestjs.com/techniques/configuration#schema-validation
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: path.resolve(__dirname, '../.env'),
       load: [configuration, resourceLimitsConfig],
       validationSchema,
       validationOptions,
-      cache: true, // Cache environment variables for better performance
-      expandVariables: true, // Support ${VAR} syntax in .env files
+      cache: true,
+      expandVariables: true,
     }),
 
-    // Database
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: getDatabaseConfig,
     }),
 
-    // JWT configured globally in AuthModule
-
-    // Conditionally load Bull/Redis
     ...conditionalImports,
 
-    // Scheduler for cron jobs
     ScheduleModule.forRoot(),
 
-    // Event Emitter for Domain Events
     EventEmitterModule.forRoot({
       wildcard: true,
       delimiter: '.',
       maxListeners: 10,
     }),
 
-    // Rate Limiting
     ThrottlerModule.forRoot([{
       ttl: MasterConfig.RATE_LIMIT_TTL,
       limit: MasterConfig.RATE_LIMIT_LIMIT,
     }]),
 
-    // Core Infrastructure Modules
     CommonModule,
     DatabaseModule,
-
-    // Telemetry & Observability
-    // Note: OpenTelemetry telemetry is available but optional
-    // Uncomment to enable: TelemetryModule,
-
-    // Health Monitoring
     HealthModule,
-
-    // Real-time Updates
     RealtimeModule,
-
-    // Authentication & Authorization
     AuthModule,
     UsersModule,
-
-    // Case Management System
     CasesModule,
     PartiesModule,
     CaseTeamsModule,
@@ -219,8 +178,6 @@ if (isRedisEnabled) {
     DocketModule,
     ProjectsModule,
     MattersModule,
-
-    // Document Management System
     FileStorageModule,
     DocumentsModule,
     DocumentVersionsModule,
@@ -229,34 +186,20 @@ if (isRedisEnabled) {
     OcrModule,
     ProcessingJobsModule,
     DraftingModule,
-
-    // Discovery & E-Discovery
     DiscoveryModule,
     ProductionModule,
     EvidenceModule,
-
-    // Billing & Finance
     BillingModule,
-
-    // Compliance & Audit
     ComplianceModule,
-
-    // Communications
     CommunicationsModule,
-
-    // Analytics, Search & Reporting
     AnalyticsModule,
     SearchModule,
     ReportsModule,
     MetricsModule,
-
-    // Integration & APIs
     GraphQLModule,
     IntegrationsModule,
     WebhooksModule,
     ApiKeysModule,
-
-    // Final 13 Services - Completing 100% Backend Coverage
     TasksModule,
     RisksModule,
     HRModule,
@@ -274,8 +217,6 @@ if (isRedisEnabled) {
     JurisdictionsModule,
     KnowledgeModule,
     LegalEntitiesModule,
-
-    // Data Platform - Production Infrastructure
     SchemaManagementModule,
     QueryWorkbenchModule,
     PipelinesModule,
@@ -285,13 +226,12 @@ if (isRedisEnabled) {
     AiOpsModule,
     AiDataopsModule,
     VersioningModule,
-
-    // Queue Processing System
     QueuesModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
+
     // Global Guards
     {
       provide: APP_GUARD,
@@ -301,23 +241,29 @@ if (isRedisEnabled) {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
-    // Global Interceptors
+
+    // Global Interceptors - ORDER MATTERS!
+    // 1. Correlation ID - Must be first to generate ID for all other interceptors
     {
       provide: APP_INTERCEPTOR,
       useClass: CorrelationIdInterceptor,
     },
+    // 2. Logging - Needs correlation ID from step 1
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+    // 3. Timeout - Should wrap the actual handler
+    {
+      provide: APP_INTERCEPTOR,
+      useFactory: () => new TimeoutInterceptor(MasterConfig.REQUEST_TIMEOUT_MS),
+    },
+    // 4. Response Transform - Should be last to transform final response
     {
       provide: APP_INTERCEPTOR,
       useClass: ResponseTransformInterceptor,
     },
-    {
-      provide: APP_INTERCEPTOR,
-      useFactory: (reflector: Reflector) => new ClassSerializerInterceptor(reflector, {
-        excludeExtraneousValues: false,
-        enableImplicitConversion: true,
-      }),
-      inject: [Reflector],
-    },
+
     // Global Filters
     {
       provide: APP_FILTER,
@@ -327,8 +273,22 @@ if (isRedisEnabled) {
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    // Middleware execution order - CRITICAL for proper request processing
+
+    // 1. Request ID Generation - MUST be first
+    consumer
+      .apply(RequestIdMiddleware)
+      .forRoutes('*');
+
+    // 2. Sanitization - Apply after ID generation, before business logic
     consumer
       .apply(SanitizationMiddleware)
+      .exclude(
+        // Exclude endpoints that handle raw data or have their own validation
+        { path: 'health', method: RequestMethod.GET },
+        { path: 'api/docs', method: RequestMethod.ALL },
+        { path: 'api/docs/(.*)', method: RequestMethod.ALL },
+      )
       .forRoutes('*');
   }
 }

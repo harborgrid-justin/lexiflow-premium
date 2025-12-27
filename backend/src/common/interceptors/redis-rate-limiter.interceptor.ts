@@ -12,7 +12,7 @@ import { Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { Observable } from 'rxjs';
 import { createClient, RedisClientType } from 'redis';
-import { RATE_LIMIT_KEY, RateLimitOptions } from '../decorators/rate-limit.decorator';
+import { RATE_LIMIT_KEY, RateLimitOptions } from '@common/decorators/rate-limit.decorator';
 import { Logger } from '@nestjs/common';
 
 /**

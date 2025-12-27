@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DraftingTemplate, TemplateStatus } from './entities/template.entity';
 import { GeneratedDocument, GeneratedDocumentStatus } from './entities/generated-document.entity';
-import { Clause } from '../clauses/entities/clause.entity';
+import { Clause } from '@clauses/entities/clause.entity';
 import { CreateTemplateDto } from './dto/create-template.dto';
 import { UpdateTemplateDto } from './dto/update-template.dto';
 import { GenerateDocumentDto } from './dto/generate-document.dto';

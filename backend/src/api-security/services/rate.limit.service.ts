@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { createClient, RedisClientType } from 'redis';
-import * as MasterConfig from '../../config/master.config';
+import * as MasterConfig from '@config/master.config';
 
 export enum UserRole {
   ADMIN = 'admin',

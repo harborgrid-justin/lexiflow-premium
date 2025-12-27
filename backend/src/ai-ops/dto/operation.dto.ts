@@ -1,6 +1,6 @@
 import { IsEnum, IsString, IsObject, IsOptional } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { AIOperationType, AIOperationStatus } from '../entities/ai-operation.entity';
+import { AIOperationType, AIOperationStatus } from '@ai-ops/entities/ai-operation.entity';
 
 export class ExecuteOperationDto {
   @ApiProperty({

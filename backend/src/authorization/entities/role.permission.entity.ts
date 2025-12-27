@@ -1,7 +1,7 @@
 import { Entity, Column, Index, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../common/base/base.entity';
+import { BaseEntity } from '@common/base/base.entity';
 import { Permission } from './permission.entity';
-import { UserRole } from '../../users/entities/user.entity';
+import { UserRole } from '@users/entities/user.entity';
 
 export enum GrantType {
   ALLOW = 'allow',

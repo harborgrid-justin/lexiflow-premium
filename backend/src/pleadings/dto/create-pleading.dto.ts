@@ -9,7 +9,7 @@ import {
   IsArray,
   IsDateString,
 } from 'class-validator';
-import { PleadingType, PleadingStatus } from '../entities/pleading.entity';
+import { PleadingType, PleadingStatus } from '@pleadings/entities/pleading.entity';
 
 export class CreatePleadingDto {
   @ApiProperty({ description: 'Pleading title' })

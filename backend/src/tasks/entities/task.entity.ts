@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from '@common/base/base.entity';
-import { TaskStatus, TaskPriority } from '../dto/create-task.dto';
+import { TaskStatus, TaskPriority } from '@tasks/dto/create-task.dto';
 import { Case } from '@cases/entities/case.entity';
 
 @Entity('tasks')

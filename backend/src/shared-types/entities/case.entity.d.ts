@@ -1,5 +1,5 @@
 import { BaseEntity, CaseId, ClientId, UserId } from './base.entity';
-import { CaseStatus, CaseType } from '../enums/case.enums';
+import { CaseStatus, CaseType } from '@shared-types/enums/case.enums';
 export interface Case extends BaseEntity {
     title: string;
     caseNumber: string;

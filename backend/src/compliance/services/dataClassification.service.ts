@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AuditLog } from '../entities/audit-log.entity';
+import { AuditLog } from '@compliance/entities/audit-log.entity';
 
 export enum DataSensitivityLevel {
   PUBLIC = 'public',
@@ -21,7 +21,7 @@ export enum DataCategory {
   METADATA = 'metadata',
 }
 
-interface ClassificationResult {
+export interface ClassificationResult {
   entityType: string;
   entityId: string;
   sensitivityLevel: DataSensitivityLevel;

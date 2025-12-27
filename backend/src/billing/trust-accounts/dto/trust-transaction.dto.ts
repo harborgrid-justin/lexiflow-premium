@@ -1,5 +1,5 @@
 import { IsString, IsNumber, IsOptional, IsEnum, IsArray, Min, IsBoolean } from 'class-validator';
-import { TransactionType } from '../entities/trust-transaction.entity';
+import { TransactionType } from '@billing/trust-accounts/entities/trust-transaction.entity';
 
 export class CreateTransactionDto {
   @IsEnum(TransactionType)

@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { OcrService } from './ocr.service';
-import { DocumentsService } from '../documents/documents.service';
-import { FileStorageService } from '../file-storage/file-storage.service';
+import { DocumentsService } from '@documents/documents.service';
+import { FileStorageService } from '@file-storage/file-storage.service';
 import { describe, expect, jest } from '@jest/globals';
 
 describe('OcrService', () => {

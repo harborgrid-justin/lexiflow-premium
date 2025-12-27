@@ -1,12 +1,12 @@
 import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
-import { Consent, ConsentStatus } from '../entities/consent.entity';
-import { User } from '../../users/entities/user.entity';
-import { AuditLog } from '../entities/audit-log.entity';
-import { DataExportRequestDto, DataDeletionRequestDto, ConsentDto, RevokeConsentDto } from '../dto/compliance.dto';
+import { Consent, ConsentStatus } from '@compliance/entities/consent.entity';
+import { User } from '@users/entities/user.entity';
+import { AuditLog } from '@compliance/entities/audit-log.entity';
+import { DataExportRequestDto, DataDeletionRequestDto, ConsentDto, RevokeConsentDto } from '@compliance/dto/compliance.dto';
 
-interface DataExportResult {
+export interface DataExportResult {
   userId: string;
   exportDate: Date;
   format: string;
@@ -27,7 +27,7 @@ interface DataExportResult {
   };
 }
 
-interface DataDeletionResult {
+export interface DataDeletionResult {
   userId: string;
   deletionDate: Date;
   deletedCategories: string[];
@@ -37,7 +37,7 @@ interface DataDeletionResult {
   details: Record<string, unknown>;
 }
 
-interface DataProcessingRecord {
+export interface DataProcessingRecord {
   userId: string;
   processingActivities: Array<{
     activity: string;

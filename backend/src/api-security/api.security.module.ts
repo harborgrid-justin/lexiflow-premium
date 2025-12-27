@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
-import { ApiKeysModule } from '../api-keys/api-keys.module';
+import { ApiKeysModule } from '@api-keys/api-keys.module';
 import {
   RateLimitService,
   RequestValidationService,

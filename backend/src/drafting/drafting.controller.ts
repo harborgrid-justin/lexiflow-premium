@@ -12,10 +12,10 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { DraftingService } from './drafting.service';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
-import { RequestWithUser } from '../common/interfaces/request-with-user.interface';
-import { Public } from '../common/decorators/public.decorator';
+import { RequestWithUser } from '@common/interfaces/request-with-user.interface';
+import { Public } from '@common/decorators/public.decorator';
 import { CreateTemplateDto } from './dto/create-template.dto';
 import { UpdateTemplateDto } from './dto/update-template.dto';
 import { GenerateDocumentDto } from './dto/generate-document.dto';

@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DocumentVersionsController } from './document-versions.controller';
 import { DocumentVersionsService } from './document-versions.service';
 import { DocumentVersion } from './entities/document-version.entity';
-import { FileStorageModule } from '../file-storage/file-storage.module';
+import { FileStorageModule } from '@file-storage/file-storage.module';
 
 @Module({
   imports: [

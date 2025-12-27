@@ -1,7 +1,7 @@
 import { IsString, IsEnum, IsOptional, IsDate, IsUUID, IsNotEmpty, MaxLength } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { CaseType, CaseStatus } from '../entities/case.entity';
+import { CaseType, CaseStatus } from '@cases/entities/case.entity';
 
 export class CreateCaseDto {
   @ApiProperty({ 

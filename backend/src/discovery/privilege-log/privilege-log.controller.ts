@@ -14,7 +14,7 @@ import {
   CacheInterceptor,
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '@auth/jwt-auth.guard';
 import { PrivilegeLogService } from './privilege-log.service';
 import { CreatePrivilegeLogEntryDto } from './dto/create-privilege-log-entry.dto';
 import { UpdatePrivilegeLogEntryDto } from './dto/update-privilege-log-entry.dto';

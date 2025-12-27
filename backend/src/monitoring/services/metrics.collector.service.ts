@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { PerformanceMetric } from '../entities/performance-metric.entity';
+import { PerformanceMetric } from '@monitoring/entities/performance-metric.entity';
 import * as os from 'os';
 
 export interface MetricPoint {

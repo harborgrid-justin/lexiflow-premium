@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Public } from '../common/decorators/public.decorator';
-import { MemoryMonitoringService } from '../common/services/memory-monitoring.service';
+import { Public } from '@common/decorators/public.decorator';
+import { MemoryMonitoringService } from '@common/services/memory-monitoring.service';
 import * as v8 from 'v8';
 import * as os from 'os';
 

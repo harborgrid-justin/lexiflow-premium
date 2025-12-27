@@ -2,7 +2,7 @@ import { Resolver, Query, Mutation, Args, ID, Subscription } from '@nestjs/graph
 import { UseGuards, Logger, Inject } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
 import { ConfigService } from '@nestjs/config';
-import { CaseType, CaseConnection, CaseMetrics } from '../types/case.type';
+import { CaseType, CaseConnection, CaseMetrics } from '@graphql/types/case.type';
 import {
   CreateCaseInput,
   UpdateCaseInput,
@@ -11,13 +11,13 @@ import {
   AddTeamMemberInput,
   CreateMotionInput,
   CreateDocketEntryInput,
-} from '../inputs/case.input';
-import { PaginationInput } from '../inputs/pagination.input';
-import { CurrentUser } from '../../auth/decorators/current-user.decorator';
-import { GqlAuthGuard } from '../../auth/guards/gql-auth.guard';
-import { CasesService } from '../../cases/cases.service';
-import { CaseStatus } from '../../cases/entities/case.entity';
-import { AuthenticatedUser } from '../../auth/interfaces/authenticated-user.interface';
+} from '@graphql/inputs/case.input';
+import { PaginationInput } from '@graphql/inputs/pagination.input';
+import { CurrentUser } from '@auth/decorators/current-user.decorator';
+import { GqlAuthGuard } from '@auth/guards/gql-auth.guard';
+import { CasesService } from '@cases/cases.service';
+import { CaseStatus } from '@cases/entities/case.entity';
+import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface';
 
 // TODO: For production horizontal scaling, replace with RedisPubSub:
 // import { RedisPubSub } from 'graphql-redis-subscriptions';

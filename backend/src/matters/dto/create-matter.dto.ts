@@ -13,7 +13,7 @@ import {
   Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { MatterStatus, MatterType, MatterPriority } from '../entities/matter.entity';
+import { MatterStatus, MatterType, MatterPriority } from '@matters/entities/matter.entity';
 
 export class CreateMatterDto {
   @IsString()

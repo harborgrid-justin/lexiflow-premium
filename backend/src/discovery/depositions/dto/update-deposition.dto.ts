@@ -9,7 +9,7 @@ import {
   IsBoolean,
   MaxLength,
 } from 'class-validator';
-import { DepositionMethod, DepositionStatus } from '../entities/deposition.entity';
+import { DepositionMethod, DepositionStatus } from '@discovery/depositions/entities/deposition.entity';
 
 export class UpdateDepositionDto {
   @IsOptional()

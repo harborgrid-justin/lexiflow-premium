@@ -6,7 +6,7 @@ import { InvoiceItem } from './entities/invoice-item.entity';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto, RecordPaymentDto } from './dto/update-invoice.dto';
 import { InvoiceFilterDto } from './dto/invoice-filter.dto';
-import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
+import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
 
 @Injectable()
 export class InvoicesService {

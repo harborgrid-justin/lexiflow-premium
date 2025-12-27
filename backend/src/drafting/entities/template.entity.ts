@@ -5,8 +5,8 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { BaseEntity } from '../../common/base/base.entity';
-import { User } from '../../users/entities/user.entity';
+import { BaseEntity } from '@common/base/base.entity';
+import { User } from '@users/entities/user.entity';
 
 export enum TemplateCategory {
   COMPLAINT = 'complaint',

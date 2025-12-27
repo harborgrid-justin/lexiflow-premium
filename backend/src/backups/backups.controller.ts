@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation  , ApiResponse }from '@nestjs/swagger';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { BackupsService } from './backups.service';
-import { Public } from '../common/decorators/public.decorator';
+import { Public } from '@common/decorators/public.decorator';
 import { CreateBackupSnapshotDto } from './dto/create-backup-snapshot.dto';
 import { CreateBackupScheduleDto } from './dto/create-backup-schedule.dto';
 import { UpdateBackupScheduleDto } from './dto/update-backup-schedule.dto';

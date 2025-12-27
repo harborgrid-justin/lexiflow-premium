@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule as NestGraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
-import * as PathsConfig from '../config/paths.config';
+import * as PathsConfig from '@config/paths.config';
 import { DateTimeScalar } from './scalars/date.scalar';
 import { JSONScalar } from './scalars/json.scalar';
 import { MoneyScalar } from './scalars/money.scalar';
@@ -12,12 +12,12 @@ import { UserResolver } from './resolvers/user.resolver';
 import { BillingResolver } from './resolvers/billing.resolver';
 import { DiscoveryResolver } from './resolvers/discovery.resolver';
 import { DataLoaderModule } from './dataloaders/dataloader.module';
-import { BillingModule } from '../billing/billing.module';
-import { CasesModule } from '../cases/cases.module';
-import { DocumentsModule } from '../documents/documents.module';
-import { UsersModule } from '../users/users.module';
-import { AuthModule } from '../auth/auth.module';
-import { DiscoveryModule } from '../discovery/discovery.module';
+import { BillingModule } from '@billing/billing.module';
+import { CasesModule } from '@cases/cases.module';
+import { DocumentsModule } from '@documents/documents.module';
+import { UsersModule } from '@users/users.module';
+import { AuthModule } from '@auth/auth.module';
+import { DiscoveryModule } from '@discovery/discovery.module';
 
 /**
  * GraphQL Module

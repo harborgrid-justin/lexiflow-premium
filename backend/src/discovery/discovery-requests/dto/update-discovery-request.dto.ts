@@ -8,7 +8,7 @@ import {
   IsUUID,
   MaxLength,
 } from 'class-validator';
-import { DiscoveryRequestType, DiscoveryRequestStatus } from '../entities/discovery-request.entity';
+import { DiscoveryRequestType, DiscoveryRequestStatus } from '@discovery/discovery-requests/entities/discovery-request.entity';
 
 export class UpdateDiscoveryRequestDto {
   @IsOptional()

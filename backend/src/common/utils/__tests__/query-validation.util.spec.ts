@@ -1,4 +1,4 @@
-import { validateSortField, validateSortOrder } from '../query-validation.util';
+import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
 
 describe('Query Validation Utilities', () => {
   describe('validateSortField', () => {

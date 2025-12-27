@@ -1,5 +1,5 @@
 import { IsString, IsNumber, IsOptional, IsBoolean, IsEnum, IsArray, Min } from 'class-validator';
-import { ExpenseStatus, ExpenseCategory } from '../entities/expense.entity';
+import { ExpenseStatus, ExpenseCategory } from '@billing/expenses/entities/expense.entity';
 
 export class CreateExpenseDto {
   @IsString()

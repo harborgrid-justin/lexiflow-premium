@@ -9,7 +9,7 @@ import {
   IsEmail,
   MaxLength,
 } from 'class-validator';
-import { CustodianStatus } from '../entities/custodian.entity';
+import { CustodianStatus } from '@discovery/custodians/entities/custodian.entity';
 
 export class UpdateCustodianDto {
   @IsOptional()

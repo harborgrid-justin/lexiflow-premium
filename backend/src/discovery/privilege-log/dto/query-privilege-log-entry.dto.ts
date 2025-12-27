@@ -1,6 +1,6 @@
 import { IsOptional, IsEnum, IsUUID, IsString, IsNumber, Min } from 'class-validator';
 import { Type } from 'class-transformer';
-import { PrivilegeType, PrivilegeStatus } from '../entities/privilege-log-entry.entity';
+import { PrivilegeType, PrivilegeStatus } from '@discovery/privilege-log/entities/privilege-log-entry.entity';
 
 export class QueryPrivilegeLogEntryDto {
   @IsOptional()

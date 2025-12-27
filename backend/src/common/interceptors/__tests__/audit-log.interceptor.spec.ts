@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ExecutionContext, CallHandler } from '@nestjs/common';
 import { of, throwError } from 'rxjs';
-import { AuditLogInterceptor } from '../audit-log.interceptor';
-import { AuditLogsService } from '../../../compliance/audit-logs/audit-logs.service';
+import { AuditLogInterceptor } from '@common/interceptors/audit-log.interceptor';
+import { AuditLogsService } from '@compliance/audit-logs/audit-logs.service';
 import { Reflector } from '@nestjs/core';
 
 describe('AuditLogInterceptor', () => {

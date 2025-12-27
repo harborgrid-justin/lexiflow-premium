@@ -13,7 +13,7 @@ import {
   SimilarCaseDto,
   PredictionAccuracyDto,
 } from './dto/outcome-predictions.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 
 @ApiTags('Analytics - Outcome Predictions')
 

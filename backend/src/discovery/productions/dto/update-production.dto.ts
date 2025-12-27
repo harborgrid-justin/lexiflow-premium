@@ -9,7 +9,7 @@ import {
   IsBoolean,
   MaxLength,
 } from 'class-validator';
-import { ProductionFormat, ProductionStatus } from '../entities/production.entity';
+import { ProductionFormat, ProductionStatus } from '@discovery/productions/entities/production.entity';
 
 export class UpdateProductionDto {
   @IsOptional()

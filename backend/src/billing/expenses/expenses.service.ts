@@ -5,7 +5,7 @@ import { Expense, ExpenseStatus } from './entities/expense.entity';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { ExpenseFilterDto } from './dto/expense-filter.dto';
-import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
+import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
 
 @Injectable()
 export class ExpensesService {

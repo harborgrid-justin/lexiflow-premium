@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as PathsConfig from '../paths.config';
+import * as PathsConfig from '@config/paths.config';
 
 export async function seedDocuments(dataSource: DataSource): Promise<void> {
   console.log('Seeding documents...');

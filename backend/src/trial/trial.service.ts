@@ -6,8 +6,8 @@ import { WitnessPrepSession } from './entities/witness-prep-session.entity';
 import { CreateTrialEventDto } from './dto/create-trial-event.dto';
 import { UpdateTrialEventDto } from './dto/update-trial-event.dto';
 import { CreateWitnessPrepDto } from './dto/create-witness-prep.dto';
-import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
-import { validateDateRange, validatePagination} from '../common/utils/query-validation.util';
+import { calculateOffset, calculateTotalPages } from '@common/utils/math.utils';
+import { validateDateRange, validatePagination} from '@common/utils/query-validation.util';
 
 @Injectable()
 export class TrialService {

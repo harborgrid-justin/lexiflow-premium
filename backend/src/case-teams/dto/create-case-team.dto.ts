@@ -1,6 +1,6 @@
 import { IsString, IsEnum, IsOptional, IsUUID, IsNotEmpty, MaxLength, IsEmail, IsNumber, IsDate, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
-import { TeamMemberRole } from '../entities/case-team.entity';
+import { TeamMemberRole } from '@case-teams/entities/case-team.entity';
 
 export class CreateCaseTeamDto {
   @IsUUID()

@@ -4,10 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { UnauthorizedException, BadRequestException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '@users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { Role } from '../common/enums/role.enum';
+import { Role } from '@common/enums/role.enum';
 import { describe, it, expect, jest } from '@jest/globals';
 
 jest.mock('bcrypt');

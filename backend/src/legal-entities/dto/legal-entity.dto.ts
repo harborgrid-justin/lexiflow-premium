@@ -1,6 +1,6 @@
 import { IsString, IsEnum, IsOptional, IsArray, IsObject, IsDate } from 'class-validator';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { LegalEntityType, LegalEntityStatus } from '../entities/legal-entity.entity';
+import { LegalEntityType, LegalEntityStatus } from '@legal-entities/entities/legal-entity.entity';
 
 interface LegalEntityRelationship {
   id?: string;

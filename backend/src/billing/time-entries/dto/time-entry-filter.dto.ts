@@ -1,6 +1,6 @@
 import { IsOptional, IsString, IsEnum, IsBoolean, IsDateString } from 'class-validator';
 import { Type } from 'class-transformer';
-import { TimeEntryStatus } from '../entities/time-entry.entity';
+import { TimeEntryStatus } from '@billing/time-entries/entities/time-entry.entity';
 import { CreateTimeEntryDto } from './create-time-entry.dto';
 
 export class TimeEntryFilterDto {

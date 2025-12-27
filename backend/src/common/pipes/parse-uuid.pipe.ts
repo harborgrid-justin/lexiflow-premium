@@ -1,5 +1,5 @@
 import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
-import { ValidationException } from '../exceptions';
+import { ValidationException } from '@common/exceptions';
 import { validate } from 'uuid';
 
 @Injectable()

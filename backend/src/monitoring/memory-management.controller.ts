@@ -7,9 +7,9 @@
 
 import { Controller, Get, Post, UseGuards, HttpCode, Query, Body } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { Roles } from '../common/decorators/roles.decorator';
-import { RolesGuard } from '../common/guards/roles.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+import { Roles } from '@common/decorators/roles.decorator';
+import { RolesGuard } from '@common/guards/roles.guard';
 import { 
   getMemoryStats, 
   checkMemoryThresholds, 
@@ -17,8 +17,8 @@ import {
   MemoryStats,
   MemoryThresholds,
   DEFAULT_MEMORY_THRESHOLDS,
-} from '../common/utils/memory-management.utils';
-import { MemoryLeakDetectorService } from '../common/services/memory-leak-detector.service';
+} from '@common/utils/memory-management.utils';
+import { MemoryLeakDetectorService } from '@common/services/memory-leak-detector.service';
 import * as v8 from 'v8';
 
 @ApiTags('Memory Management')

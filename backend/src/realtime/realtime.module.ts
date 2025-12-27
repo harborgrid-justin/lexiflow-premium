@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RealtimeGateway } from './realtime.gateway';
-import { WsRateLimitGuard } from '../common/guards/ws-rate-limit.guard';
-import { WsRoomLimitGuard } from '../common/guards/ws-room-limit.guard';
+import { WsRateLimitGuard } from '@common/guards/ws-rate-limit.guard';
+import { WsRoomLimitGuard } from '@common/guards/ws-room-limit.guard';
 
 /**
  * Realtime Module

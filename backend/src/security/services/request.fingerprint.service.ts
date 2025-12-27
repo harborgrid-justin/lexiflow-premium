@@ -6,7 +6,7 @@ import {
   FINGERPRINT_SALT_LENGTH,
   FINGERPRINT_COMPONENTS,
   SESSION_FINGERPRINT_MISMATCH_THRESHOLD,
-} from '../constants/security.constants';
+} from '@security/constants/security.constants';
 
 export interface FingerprintData {
   fingerprint: string;
@@ -51,26 +51,6 @@ export class RequestFingerprintService implements OnModuleDestroy {
     this.fingerprintCache.clear();
   }
 
-  private cleanupCache() {
-    const now = Date.now();
-    for (const [key, data] of this.fingerprintCache.entries()) {
-      if (now - data.timestamp > this.CACHE_TTL) {
-        this.fingerprintCache.delete(key);
-      }
-    }
-    
-    if (this.fingerprintCache.size > this.MAX_CACHE_SIZE) {
-      const entries = Array.from(this.fingerprintCache.entries());
-      // Remove oldest 20%
-      const toRemove = Math.floor(this.MAX_CACHE_SIZE * 0.2);
-      for (let i = 0; i < toRemove; i++) {
-        if (entries[i]) {
-          this.fingerprintCache.delete(entries[i][0]);
-        }
-      }
-    }
-  }
-
   /**
    * Extract fingerprint components from request
    */
@@ -94,19 +74,21 @@ export class RequestFingerprintService implements OnModuleDestroy {
     if (forwarded) {
       // Take the first IP if multiple are present
       const ips = Array.isArray(forwarded) ? forwarded[0] : forwarded;
-      return ips.split(',')[0].trim();
+      if (ips) {
+        return ips.split(',')[0]?.trim() || 'unknown';
+      }
     }
 
     // Check X-Real-IP header (nginx)
     const realIp = req.headers['x-real-ip'];
     if (realIp) {
-      return Array.isArray(realIp) ? realIp[0] : realIp;
+      return (Array.isArray(realIp) ? realIp[0] : realIp) || 'unknown';
     }
 
     // Check CF-Connecting-IP (Cloudflare)
     const cfIp = req.headers['cf-connecting-ip'];
     if (cfIp) {
-      return Array.isArray(cfIp) ? cfIp[0] : cfIp;
+      return (Array.isArray(cfIp) ? cfIp[0] : cfIp) || 'unknown';
     }
 
     // Fallback to connection remote address
@@ -370,7 +352,7 @@ export class RequestFingerprintService implements OnModuleDestroy {
   /**
    * Clean up old fingerprints from cache
    */
-  cleanupCache(maxAge = 86400000): void {
+  private cleanupCache(maxAge = 86400000): void {
     // Default max age: 24 hours
     const now = Date.now();
     let cleaned = 0;
@@ -424,19 +406,19 @@ export class RequestFingerprintService implements OnModuleDestroy {
     if (userAgent.includes('Chrome')) {
       browser = 'Chrome';
       const match = userAgent.match(/Chrome\/(\d+)/);
-      version = match ? match[1] : 'unknown';
+      version = match?.[1] || 'unknown';
     } else if (userAgent.includes('Firefox')) {
       browser = 'Firefox';
       const match = userAgent.match(/Firefox\/(\d+)/);
-      version = match ? match[1] : 'unknown';
+      version = match?.[1] || 'unknown';
     } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
       browser = 'Safari';
       const match = userAgent.match(/Version\/(\d+)/);
-      version = match ? match[1] : 'unknown';
+      version = match?.[1] || 'unknown';
     } else if (userAgent.includes('Edge')) {
       browser = 'Edge';
       const match = userAgent.match(/Edge\/(\d+)/);
-      version = match ? match[1] : 'unknown';
+      version = match?.[1] || 'unknown';
     }
 
     // Detect mobile

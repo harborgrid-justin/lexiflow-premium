@@ -1,5 +1,5 @@
-import { Role } from '../enums/role.enum';
-import { Permission } from '../enums/permission.enum';
+import { Role } from '@common/enums/role.enum';
+import { Permission } from '@common/enums/permission.enum';
 
 export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
   [Role.SUPER_ADMIN]: [

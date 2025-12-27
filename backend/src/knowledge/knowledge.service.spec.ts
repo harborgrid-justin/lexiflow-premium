@@ -3,7 +3,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { KnowledgeService } from './knowledge.service';
 import { KnowledgeArticle } from './entities/knowledge-article.entity';
-import { EntityNotFoundException } from '../common/exceptions';
+import { EntityNotFoundException } from '@common/exceptions';
 import { CreateKnowledgeArticleDto, UpdateKnowledgeArticleDto } from './dto';
 
 describe('KnowledgeService', () => {

@@ -5,7 +5,7 @@ import { Project } from './entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectFilterDto, PaginatedProjectResponseDto } from './dto/project-filter.dto';
-import { validateSortField, validateSortOrder, sanitizeSearchQuery, validatePagination } from '../common/utils/query-validation.util';
+import { validateSortField, validateSortOrder, sanitizeSearchQuery, validatePagination } from '@common/utils/query-validation.util';
 
 @Injectable()
 export class ProjectsService {

@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import * as MasterConfig from '../config/master.config';
-import { calculateOffset, calculateTotalPages, calculateExecutionTime } from '../common/utils/math.utils';
+import * as MasterConfig from '@config/master.config';
+import { calculateOffset, calculateTotalPages, calculateExecutionTime } from '@common/utils/math.utils';
 import {
   SearchQueryDto,
   SearchEntityType,
@@ -28,7 +28,6 @@ import {
 @Injectable()
 export class SearchService implements OnModuleDestroy {
   private readonly logger = new Logger(SearchService.name);
-  private readonly MAX_SEARCH_RESULTS = 10000;
   private readonly MAX_PAGE_SIZE = 100;
   private readonly MAX_CACHE_ENTRIES = 5000;
   private readonly CACHE_TTL_MS = 900000; // 15 minutes

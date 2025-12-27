@@ -1,4 +1,4 @@
-import { MatterStatus, MatterType, MatterPriority } from '../entities/matter.entity';
+import { MatterStatus, MatterType, MatterPriority } from '@matters/entities/matter.entity';
 
 export class MatterResponseDto {
   id!: string;

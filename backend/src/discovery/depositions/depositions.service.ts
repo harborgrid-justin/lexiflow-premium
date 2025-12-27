@@ -8,7 +8,7 @@ import { Deposition } from './entities/deposition.entity';
 import { CreateDepositionDto } from './dto/create-deposition.dto';
 import { UpdateDepositionDto } from './dto/update-deposition.dto';
 import { QueryDepositionDto } from './dto/query-deposition.dto';
-import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
+import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
 
 @Injectable()
 export class DepositionsService {

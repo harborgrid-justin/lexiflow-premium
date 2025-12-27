@@ -213,5 +213,5 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
         )}
     </div>
   );
-};
+});
 

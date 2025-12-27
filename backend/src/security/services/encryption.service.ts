@@ -4,13 +4,12 @@ import * as crypto from 'crypto';
 import {
   ENCRYPTION_ALGORITHM,
   ENCRYPTION_IV_LENGTH,
-  ENCRYPTION_AUTH_TAG_LENGTH,
   ENCRYPTION_SALT_LENGTH,
   PBKDF2_ITERATIONS,
   PBKDF2_KEY_LENGTH,
   PBKDF2_DIGEST,
   ENCRYPTION_KEY_LENGTH,
-} from '../constants/security.constants';
+} from '@security/constants/security.constants';
 
 /**
  * Enterprise Encryption Service
@@ -88,7 +87,8 @@ export class EncryptionService {
 
       return result;
     } catch (error) {
-      this.logger.error(`Encryption failed: ${error.message}`, error.stack);
+      const err = error instanceof Error ? error : new Error(String(error));
+      this.logger.error(`Encryption failed: ${err.message}`, err.stack);
       throw new Error('Failed to encrypt data');
     }
   }
@@ -106,6 +106,9 @@ export class EncryptionService {
       }
 
       const [saltB64, ivB64, authTagB64, encryptedData] = parts;
+      if (!saltB64 || !ivB64 || !authTagB64 || !encryptedData) {
+        throw new Error('Invalid ciphertext components');
+      }
 
       // Decode components
       const salt = Buffer.from(saltB64, 'base64');
@@ -125,7 +128,8 @@ export class EncryptionService {
 
       return decrypted;
     } catch (error) {
-      this.logger.error(`Decryption failed: ${error.message}`, error.stack);
+      const err = error instanceof Error ? error : new Error(String(error));
+      this.logger.error(`Decryption failed: ${err.message}`, err.stack);
       throw new Error('Failed to decrypt data');
     }
   }
@@ -167,7 +171,9 @@ export class EncryptionService {
         try {
           result[field] = this.decrypt(String(result[field]), password) as any;
         } catch (error) {
-          this.logger.error(`Failed to decrypt field ${String(field)}: ${error.message}`);
+          const err = error as Error;
+          const err = error instanceof Error ? error : new Error(String(error));
+          this.logger.error(`Failed to decrypt field ${String(field)}: ${err.message}`);
           // Keep encrypted value if decryption fails
         }
       }
@@ -200,7 +206,9 @@ export class EncryptionService {
   verifyHash(data: string, hashedData: string): boolean {
     try {
       const [saltHex, expectedHash] = hashedData.split(':');
-      const salt = Buffer.from(saltHex, 'hex');
+      if (!saltHex || !expectedHash) {
+        throw new Error('Invalid hash format');
+      }
       const actualHash = crypto.createHash('sha512').update(data + saltHex).digest('hex');
 
       // Use timing-safe comparison
@@ -209,7 +217,8 @@ export class EncryptionService {
         Buffer.from(expectedHash, 'hex')
       );
     } catch (error) {
-      this.logger.error(`Hash verification failed: ${error.message}`);
+      const err = error as Error;
+      this.logger.error(`Hash verification failed: ${err.message}`);
       return false;
     }
   }
@@ -286,9 +295,11 @@ export class EncryptionService {
     for (const field of sensitiveFields) {
       if (encrypted[field] !== null && encrypted[field] !== undefined) {
         try {
-          encrypted[field] = this.encrypt(String(encrypted[field]));
+          (encrypted as any)[field] = this.encrypt(String(encrypted[field]));
         } catch (error) {
-          this.logger.error(`Failed to encrypt field ${field}: ${error.message}`);
+          const err = error as Error;
+          const err = error instanceof Error ? error : new Error(String(error));
+          this.logger.error(`Failed to encrypt field ${field}: ${err.message}`);
         }
       }
     }
@@ -308,9 +319,11 @@ export class EncryptionService {
     for (const field of sensitiveFields) {
       if (decrypted[field] !== null && decrypted[field] !== undefined) {
         try {
-          decrypted[field] = this.decrypt(String(decrypted[field]));
+          (decrypted as any)[field] = this.decrypt(String(decrypted[field]));
         } catch (error) {
-          this.logger.error(`Failed to decrypt field ${field}: ${error.message}`);
+          const err = error as Error;
+          const err = error instanceof Error ? error : new Error(String(error));
+          this.logger.error(`Failed to decrypt field ${field}: ${err.message}`);
           // Keep encrypted value if decryption fails
         }
       }
@@ -369,7 +382,8 @@ export class EncryptionService {
       // Re-encrypt with new key
       return this.encrypt(plaintext, newPassword);
     } catch (error) {
-      this.logger.error(`Key rotation failed: ${error.message}`, error.stack);
+      const err = error as Error;
+      this.logger.error(`Key rotation failed: ${err.message}`, err.stack);
       throw new Error('Failed to rotate encryption key');
     }
   }

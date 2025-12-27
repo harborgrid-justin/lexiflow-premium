@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { DraftingTemplate, TemplateCategory, TemplateStatus } from '../../drafting/entities/template.entity';
+import { DraftingTemplate, TemplateCategory, TemplateStatus } from '@drafting/entities/template.entity';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 

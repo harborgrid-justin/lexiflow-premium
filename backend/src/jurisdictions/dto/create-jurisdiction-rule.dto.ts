@@ -1,6 +1,6 @@
 import { IsString, IsEnum, IsOptional, IsArray, IsBoolean, IsDateString, IsUUID } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { RuleType } from '../entities/jurisdiction-rule.entity';
+import { RuleType } from '@jurisdictions/entities/jurisdiction-rule.entity';
 
 export class CreateJurisdictionRuleDto {
   @ApiProperty({ description: 'Jurisdiction ID this rule belongs to' })

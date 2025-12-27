@@ -4,7 +4,7 @@ import { SyncController } from './sync.controller';
 import { SyncService } from './sync.service';
 import { SyncQueue } from './entities/sync-queue.entity';
 import { SyncConflict } from './entities/sync-conflict.entity';
-import { AuthModule } from '../auth/auth.module';
+import { AuthModule } from '@auth/auth.module';
 
 /**
  * Sync Module

@@ -1,7 +1,7 @@
 import { Entity, Column, Index, ManyToOne, JoinColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { BaseEntity } from '../../common/base/base.entity';
-import { User } from '../../users/entities/user.entity';
+import { BaseEntity } from '@common/base/base.entity';
+import { User } from '@users/entities/user.entity';
 
 export enum ConsentType {
   MARKETING = 'marketing',

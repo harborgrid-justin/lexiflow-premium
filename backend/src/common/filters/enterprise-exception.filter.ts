@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { QueryFailedError } from 'typeorm';
-import { BusinessException } from '../../errors/exceptions/business.exceptions';
-import { ErrorCategory, ErrorSeverity, ErrorCodes } from '../../errors/constants/error.codes.constant';
+import { BusinessException } from '@errors/exceptions/business.exceptions';
+import { ErrorCategory, ErrorSeverity, ErrorCodes } from '@errors/constants/error.codes.constant';
 
 /**
  * Enhanced Error Response

@@ -5,7 +5,7 @@ import { ESISource } from './entities/esi-source.entity';
 import { CreateESISourceDto } from './dto/create-esi-source.dto';
 import { UpdateESISourceDto } from './dto/update-esi-source.dto';
 import { QueryESISourceDto } from './dto/query-esi-source.dto';
-import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
+import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
 
 @Injectable()
 export class ESISourcesService {

@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateExpenseDto } from './create-expense.dto';
 import { IsOptional, IsString, IsEnum } from 'class-validator';
-import { ExpenseStatus } from '../entities/expense.entity';
+import { ExpenseStatus } from '@billing/expenses/entities/expense.entity';
 
 export class UpdateExpenseDto extends PartialType(CreateExpenseDto) {
   @IsOptional()

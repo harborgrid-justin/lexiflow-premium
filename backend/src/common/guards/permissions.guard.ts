@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { InsufficientPermissionsException } from '../exceptions';
-import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { InsufficientPermissionsException } from '@common/exceptions';
+import { IS_PUBLIC_KEY } from '@common/decorators/public.decorator';
 
 interface UserWithPermissions {
   permissions?: string[];

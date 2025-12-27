@@ -1,14 +1,14 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
-import { Permission, PermissionStatus } from '../entities/permission.entity';
-import { RolePermission, GrantType } from '../entities/role.permission.entity';
-import { UserRole } from '../../users/entities/user.entity';
+import { Permission, PermissionStatus } from '@authorization/entities/permission.entity';
+import { RolePermission, GrantType } from '@authorization/entities/role.permission.entity';
+import { UserRole } from '@users/entities/user.entity';
 import {
   extractResourceFromPermission,
   extractActionFromPermission,
   extractScopeFromPermission,
-} from '../constants/permissions.constant';
+} from '@authorization/constants/permissions.constant';
 
 interface PermissionCheckContext {
   userId: string;

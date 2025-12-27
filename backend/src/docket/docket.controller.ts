@@ -13,7 +13,7 @@ import {
   CacheInterceptor,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
-import { Public } from '../common/decorators/public.decorator';
+import { Public } from '@common/decorators/public.decorator';
 import { DocketService } from './docket.service';
 import { CreateDocketEntryDto } from './dto/create-docket-entry.dto';
 import { UpdateDocketEntryDto } from './dto/update-docket-entry.dto';

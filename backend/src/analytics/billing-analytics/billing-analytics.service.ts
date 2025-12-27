@@ -11,8 +11,8 @@ import {
   PracticeAreaRealization,
   AttorneyRealization,
 } from './dto/billing-analytics.dto';
-import { BillingAnalyticsService as RealBillingAnalyticsService } from '../../billing/analytics/billing-analytics.service';
-import { AnalyticsFilterDto } from '../../billing/analytics/dto/analytics-filter.dto';
+import { BillingAnalyticsService as RealBillingAnalyticsService } from '@billing/analytics/billing-analytics.service';
+import { AnalyticsFilterDto } from '@billing/analytics/dto/analytics-filter.dto';
 
 @Injectable()
 export class BillingAnalyticsService {

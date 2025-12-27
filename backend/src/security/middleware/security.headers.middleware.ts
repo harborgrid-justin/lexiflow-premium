@@ -1,6 +1,6 @@
 import { Injectable, NestMiddleware, Logger } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { SecurityHeadersService } from '../services/security.headers.service';
+import { SecurityHeadersService } from '@security/services/security.headers.service';
 
 /**
  * Security Headers Middleware
@@ -8,8 +8,6 @@ import { SecurityHeadersService } from '../services/security.headers.service';
  */
 @Injectable()
 export class SecurityHeadersMiddleware implements NestMiddleware {
-  private readonly logger = new Logger(SecurityHeadersMiddleware.name);
-
   constructor(private readonly securityHeadersService: SecurityHeadersService) {}
 
   use(req: Request, res: Response, next: NextFunction): void {

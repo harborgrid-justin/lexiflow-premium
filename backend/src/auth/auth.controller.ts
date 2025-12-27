@@ -23,7 +23,7 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { VerifyMfaDto } from './dto/verify-mfa.dto';
-import { UpdateUserDto } from '../users/dto/update-user.dto';
+import { UpdateUserDto } from '@users/dto/update-user.dto';
 import {
   SessionListResponseDto,
   RevokeSessionDto,
@@ -32,10 +32,10 @@ import {
   TrustDeviceDto,
 } from './dto/session.dto';
 import { JwtAuthGuard } from './guards';
-import { Public } from '../common/decorators/public.decorator';
+import { Public } from '@common/decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthenticatedUser } from './interfaces/authenticated-user.interface';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '@users/users.service';
 import { SessionManagementService } from './services/session.management.service';
 
 interface RequestWithTokenPayload extends Request {

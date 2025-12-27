@@ -1,5 +1,5 @@
 import { Module, Global } from '@nestjs/common';
-import { CommonModule } from '../common/common.module';
+import { CommonModule } from '@common/common.module';
 
 // Services
 import { ErrorReportingService } from './services/error.reporting.service';
@@ -10,7 +10,7 @@ import { ErrorRecoveryService } from './services/error.recovery.service';
 import { TimeoutRecoveryInterceptor } from './interceptors/timeout.recovery.interceptor';
 
 // Re-export from common module filter
-import { EnterpriseExceptionFilter } from '../common/filters/enterprise-exception.filter';
+import { EnterpriseExceptionFilter } from '@common/filters/enterprise-exception.filter';
 
 /**
  * Errors Module

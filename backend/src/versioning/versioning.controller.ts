@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation  , ApiResponse }from '@nestjs/swagger';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { VersioningService } from './versioning.service';
-import { Public } from '../common/decorators/public.decorator';
+import { Public } from '@common/decorators/public.decorator';
 
 @ApiTags('Versioning')
 @ApiBearerAuth('JWT-auth')

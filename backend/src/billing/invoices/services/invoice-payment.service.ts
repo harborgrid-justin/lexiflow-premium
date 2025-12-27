@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Invoice } from '../entities/invoice.entity';
-import { TransactionManagerService } from '../../../common/services/transaction-manager.service';
+import { Invoice } from '@billing/invoices/entities/invoice.entity';
+import { TransactionManagerService } from '@common/services/transaction-manager.service';
 
 @Injectable()
 export class InvoicePaymentService {

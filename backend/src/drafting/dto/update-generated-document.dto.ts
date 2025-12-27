@@ -1,6 +1,6 @@
 import { IsString, IsEnum, IsOptional, IsObject, IsArray } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { GeneratedDocumentStatus } from '../entities/generated-document.entity';
+import { GeneratedDocumentStatus } from '@drafting/entities/generated-document.entity';
 
 export class UpdateGeneratedDocumentDto {
   @ApiProperty({ required: false })

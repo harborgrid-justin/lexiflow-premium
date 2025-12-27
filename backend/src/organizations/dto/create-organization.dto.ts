@@ -1,7 +1,7 @@
 import { IsString, IsEnum, IsOptional, IsEmail, IsDate, IsNotEmpty, MaxLength } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { OrganizationType, OrganizationStatus } from '../entities/organization.entity';
+import { OrganizationType, OrganizationStatus } from '@organizations/entities/organization.entity';
 
 export class CreateOrganizationDto {
   @ApiProperty({ 

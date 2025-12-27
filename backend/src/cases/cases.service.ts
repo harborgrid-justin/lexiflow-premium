@@ -8,7 +8,7 @@ import { CaseFilterDto } from './dto/case-filter.dto';
 import { PaginatedCaseResponseDto, CaseResponseDto } from './dto/case-response.dto';
 import { CaseStatsDto } from './dto/case-stats.dto';
 
-import { validateSortField, validateSortOrder } from '../common/utils/query-validation.util';
+import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
 
 /**
  * Cases Service with Memory Optimizations

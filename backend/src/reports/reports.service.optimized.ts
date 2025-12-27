@@ -1,6 +1,4 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 /**
  * Reports Service with Advanced Memory Engineering
@@ -28,7 +26,6 @@ export class ReportsService implements OnModuleDestroy {
   
   // Memory limits
   private readonly MAX_TEMPLATE_CACHE = 500;
-  private readonly MAX_GENERATED_CACHE = 200;
   private readonly MAX_CHUNK_SIZE = 10000;
   private readonly CACHE_TTL_MS = 3600000; // 60 minutes
   private readonly MAX_BATCH_SIZE = 100;
@@ -189,7 +186,7 @@ export class ReportsService implements OnModuleDestroy {
   /**
    * Stream large report generation
    */
-  private async *streamReport(streamId: string, template: any, options: any, totalRecords: number): AsyncGenerator<any> {
+  private async *streamReport(_streamId: string, template: any, options: any, totalRecords: number): AsyncGenerator<any> {
     this.logger.log(`Streaming report ${options.templateId} with ${totalRecords} records`);
     
     // Yield header

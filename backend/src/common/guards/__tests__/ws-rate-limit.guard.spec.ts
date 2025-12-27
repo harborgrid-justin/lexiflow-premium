@@ -1,6 +1,6 @@
 import { ExecutionContext } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { WsRateLimitGuard } from '../ws-rate-limit.guard';
+import { WsRateLimitGuard } from '@common/guards/ws-rate-limit.guard';
 import { Socket } from 'socket.io';
 
 describe('WsRateLimitGuard', () => {

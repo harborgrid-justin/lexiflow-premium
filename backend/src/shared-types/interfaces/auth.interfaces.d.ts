@@ -1,5 +1,5 @@
-import { UserId } from '../entities/base.entity';
-import { UserRole, UserStatus } from '../enums/user.enums';
+import { UserId } from '@shared-types/entities/base.entity';
+import { UserRole, UserStatus } from '@shared-types/enums/user.enums';
 export interface LoginCredentials {
     email: string;
     password: string;

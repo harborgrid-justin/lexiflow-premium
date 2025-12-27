@@ -1,6 +1,6 @@
 import { IsOptional, IsString, IsEnum, IsBoolean, IsDateString } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ExpenseStatus, ExpenseCategory } from '../entities/expense.entity';
+import { ExpenseStatus, ExpenseCategory } from '@billing/expenses/entities/expense.entity';
 
 export class ExpenseFilterDto {
   @IsOptional()

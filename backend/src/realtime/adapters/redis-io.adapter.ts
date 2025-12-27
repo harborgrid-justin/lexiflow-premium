@@ -1,9 +1,15 @@
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { ServerOptions } from 'socket.io';
-import { createAdapter } from '@socket.io/redis-adapter';
+// Conditional import - install @socket.io/redis-adapter if needed for horizontal scaling
+// import { createAdapter } from '@socket.io/redis-adapter';
 import { createClient } from 'redis';
 import { INestApplicationContext, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+
+// Placeholder for redis adapter when package is not installed
+const createAdapter = (...args: any[]): any => {
+  throw new Error('@socket.io/redis-adapter not installed. Install with: npm install @socket.io/redis-adapter');
+};
 
 /**
  * Redis Adapter for Socket.IO
@@ -45,7 +51,10 @@ export class RedisIoAdapter extends IoAdapter {
    */
   async connectToRedis(): Promise<void> {
     try {
-      const config = this.configService || this.app.get(ConfigService);
+      const config = this.configService || this.app.get(ConfigService, { strict: false });
+      if (!config) {
+        throw new Error('ConfigService not available');
+      }
 
       // Get Redis configuration
       const redisUrl = config.get<string>('redis.url');

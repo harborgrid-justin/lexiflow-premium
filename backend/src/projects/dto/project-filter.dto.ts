@@ -1,6 +1,6 @@
 import { IsEnum, IsOptional, IsString, IsInt, Min, IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ProjectStatus, ProjectPriority } from '../entities/project.entity';
+import { ProjectStatus, ProjectPriority } from '@projects/entities/project.entity';
 
 export class ProjectFilterDto {
   @IsString()

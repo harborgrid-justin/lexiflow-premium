@@ -14,7 +14,7 @@ import {
   CaseDiscoveryMetricsDto,
   DiscoveryProductionVolumeDto,
 } from './dto/discovery-analytics.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 
 @ApiTags('Analytics - Discovery')
 

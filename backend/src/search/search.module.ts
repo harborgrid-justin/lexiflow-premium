@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
 import { SearchController } from './search.controller';
 import { SearchService } from './search.service';
 

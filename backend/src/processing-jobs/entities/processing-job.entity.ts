@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   Index,
 } from 'typeorm';
-import { JobType, JobStatus } from '../dto/job-status.dto';
+import { JobType, JobStatus } from '@processing-jobs/dto/job-status.dto';
 
 @Entity('processing_jobs')
 @Index(['status'])

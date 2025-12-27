@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ErrorCategory, ErrorSeverity } from '../constants/error.codes.constant';
+import { ErrorCategory, ErrorSeverity } from '@errors/constants/error.codes.constant';
 
 /**
  * Error Report

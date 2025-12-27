@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { RetryService } from '../../common/services/retry.service';
-import { ErrorCodes } from '../constants/error.codes.constant';
+import { RetryService } from '@common/services/retry.service';
+import { ErrorCodes } from '@errors/constants/error.codes.constant';
 
 /**
  * Failed Operation

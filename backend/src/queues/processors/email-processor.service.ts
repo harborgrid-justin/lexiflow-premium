@@ -1,7 +1,7 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
-import { QUEUE_NAMES } from '../constants';
+import { QUEUE_NAMES } from '@queues/constants';
 
 export interface EmailJob {
   to: string | string[];

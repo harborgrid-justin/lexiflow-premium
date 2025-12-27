@@ -2,7 +2,7 @@ import DataLoader from 'dataloader';
 import { Injectable, Scope } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
+import { User } from '@users/entities/user.entity';
 
 /**
  * UserLoader - DataLoader for batching and caching user queries

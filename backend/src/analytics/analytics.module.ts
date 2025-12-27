@@ -6,8 +6,8 @@ import { AnalyticsEvent } from './entities/analytics-event.entity';
 import { Dashboard } from './entities/dashboard.entity';
 
 // Import BillingModule to access real billing analytics
-import { BillingModule } from '../billing/billing.module';
-import { AuthModule } from '../auth/auth.module';
+import { BillingModule } from '@billing/billing.module';
+import { AuthModule } from '@auth/auth.module';
 
 // Main service
 import { AnalyticsService } from './analytics.service';

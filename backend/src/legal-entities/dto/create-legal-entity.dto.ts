@@ -1,7 +1,7 @@
 import { IsString, IsEnum, IsOptional, IsEmail, IsDate, IsNotEmpty, MaxLength } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { LegalEntityType, LegalEntityStatus } from '../entities/legal-entity.entity';
+import { LegalEntityType, LegalEntityStatus } from '@legal-entities/entities/legal-entity.entity';
 
 export class CreateLegalEntityDto {
   @ApiProperty({ 

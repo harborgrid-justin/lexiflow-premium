@@ -1,5 +1,5 @@
 import { Entity, Column, Index, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../common/base/base.entity';
+import { BaseEntity } from '@common/base/base.entity';
 import { EvidenceItem } from './evidence-item.entity';
 
 export enum ChainOfCustodyAction {

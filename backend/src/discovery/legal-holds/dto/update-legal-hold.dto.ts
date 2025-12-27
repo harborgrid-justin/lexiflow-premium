@@ -9,7 +9,7 @@ import {
   IsBoolean,
   MaxLength,
 } from 'class-validator';
-import { LegalHoldStatus } from '../entities/legal-hold.entity';
+import { LegalHoldStatus } from '@discovery/legal-holds/entities/legal-hold.entity';
 
 export class UpdateLegalHoldDto {
   @IsOptional()

@@ -1,6 +1,6 @@
 import { IsString, IsEnum, IsOptional, IsUUID, IsNotEmpty, MaxLength, IsDate } from 'class-validator';
 import { Type } from 'class-transformer';
-import { MotionType, MotionStatus } from '../entities/motion.entity';
+import { MotionType, MotionStatus } from '@motions/entities/motion.entity';
 
 export class CreateMotionDto {
   @IsUUID()

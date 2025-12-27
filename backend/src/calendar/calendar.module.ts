@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CalendarController } from './calendar.controller';
 import { CalendarService } from './calendar.service';
 import { CalendarEvent } from './entities/calendar-event.entity';
-import { AuthModule } from '../auth/auth.module';
+import { AuthModule } from '@auth/auth.module';
 
 /**
  * Calendar Module

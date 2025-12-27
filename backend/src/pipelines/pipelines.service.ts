@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ETLPipeline, PipelineStatus as EntityPipelineStatus } from '../etl-pipelines/entities/pipeline.entity';
+import { ETLPipeline, PipelineStatus as EntityPipelineStatus } from '@etl-pipelines/entities/pipeline.entity';
 import { CreatePipelineDto, UpdatePipelineDto, PipelineStatus } from './dto/create-pipeline.dto';
 
 @Injectable()

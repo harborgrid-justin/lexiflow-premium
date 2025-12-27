@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { WsRoomLimitGuard } from '../ws-room-limit.guard';
+import { WsRoomLimitGuard } from '@common/guards/ws-room-limit.guard';
 import { Socket } from 'socket.io';
 
 describe('WsRoomLimitGuard', () => {

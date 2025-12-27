@@ -1,12 +1,12 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThanOrEqual, MoreThanOrEqual, In, IsNull, Not } from 'typeorm';
-import { DataRetentionPolicy, DataRetentionRecord, RetentionPolicyStatus, RetentionAction } from '../entities/dataRetention.entity';
-import { CreateRetentionPolicyDto, RetentionStatusQueryDto, LegalHoldDto, RemoveLegalHoldDto } from '../dto/compliance.dto';
-import { AuditLog } from '../entities/audit-log.entity';
+import { DataRetentionPolicy, DataRetentionRecord, RetentionPolicyStatus, RetentionAction } from '@compliance/entities/dataRetention.entity';
+import { CreateRetentionPolicyDto, RetentionStatusQueryDto, LegalHoldDto, RemoveLegalHoldDto } from '@compliance/dto/compliance.dto';
+import { AuditLog } from '@compliance/entities/audit-log.entity';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
-interface RetentionStatusResult {
+export interface RetentionStatusResult {
   data: DataRetentionRecord[];
   total: number;
   page: number;

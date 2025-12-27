@@ -1,6 +1,6 @@
 import { IsOptional, IsEnum, IsUUID, IsString, IsNumber, Min } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ESISourceType, ESISourceStatus } from '../entities/esi-source.entity';
+import { ESISourceType, ESISourceStatus } from '@discovery/esi-sources/entities/esi-source.entity';
 
 export class QueryESISourceDto {
   @IsOptional()

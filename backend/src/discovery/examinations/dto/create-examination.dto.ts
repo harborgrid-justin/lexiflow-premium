@@ -8,7 +8,7 @@ import {
   IsUUID,
   MaxLength,
 } from 'class-validator';
-import { ExaminationType } from '../entities/examination.entity';
+import { ExaminationType } from '@discovery/examinations/entities/examination.entity';
 
 export class CreateExaminationDto {
   @IsUUID()

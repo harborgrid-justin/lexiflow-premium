@@ -1,7 +1,7 @@
 import { IsString, IsEnum, IsOptional, IsUUID, IsDate, IsNotEmpty, IsBoolean, IsArray } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { CalendarEventType } from '../entities/calendar-event.entity';
+import { CalendarEventType } from '@calendar/entities/calendar-event.entity';
 
 export class CreateCalendarEventDto {
   @ApiProperty({ 

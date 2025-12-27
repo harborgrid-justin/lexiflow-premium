@@ -1,7 +1,7 @@
 import { IsString, IsEnum, IsOptional, IsBoolean, IsNumber, IsObject, IsNotEmpty } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { AlertSeverity } from '../entities/system-alert.entity';
+import { AlertSeverity } from '@monitoring/entities/system-alert.entity';
 
 export class GetMetricsQueryDto {
   @ApiPropertyOptional({ description: 'Metric name filter' })

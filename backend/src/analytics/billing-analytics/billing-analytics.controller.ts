@@ -14,7 +14,7 @@ import {
   ArAgingDto,
   RealizationAnalysisDto,
 } from './dto/billing-analytics.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 
 @ApiTags('Analytics - Billing')
 

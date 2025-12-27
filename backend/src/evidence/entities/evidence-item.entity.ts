@@ -1,6 +1,6 @@
 import { Entity, Column, Index, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
-import { BaseEntity } from '../../common/base/base.entity';
-import { Case } from '../../cases/entities/case.entity';
+import { BaseEntity } from '@common/base/base.entity';
+import { Case } from '@cases/entities/case.entity';
 import { ChainOfCustodyEvent } from './chain-of-custody-event.entity';
 
 export enum EvidenceType {

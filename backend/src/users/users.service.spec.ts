@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException, ConflictException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from './users.service';
-import { Role } from '../common/enums/role.enum';
+import { Role } from '@common/enums/role.enum';
 import { expect, jest } from '@jest/globals';
 
 jest.mock('bcrypt', () => ({

@@ -12,7 +12,7 @@ import {
   checkMemoryThresholds, 
   DEFAULT_MEMORY_THRESHOLDS,
   MemoryThresholds,
-} from '../../common/utils/memory-management.utils';
+} from '@common/utils/memory-management.utils';
 import * as v8 from 'v8';
 import * as os from 'os';
 

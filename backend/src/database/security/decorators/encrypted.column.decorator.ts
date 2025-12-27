@@ -1,5 +1,5 @@
 import { Column, ColumnOptions, ValueTransformer } from 'typeorm';
-import { ColumnEncryptionService } from '../services/column.encryption.service';
+import { ColumnEncryptionService } from '@database/security/services/column.encryption.service';
 
 let encryptionService: ColumnEncryptionService | null = null;
 

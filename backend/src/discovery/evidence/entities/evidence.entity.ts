@@ -1,5 +1,5 @@
 import { Entity, Column, Index } from 'typeorm';
-import { BaseEntity } from '../../../common/base/base.entity';
+import { BaseEntity } from '@common/base/base.entity';
 
 export enum EvidenceType {
   DOCUMENT = 'Document',

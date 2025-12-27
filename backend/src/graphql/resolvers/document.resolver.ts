@@ -1,17 +1,17 @@
 import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { DocumentType, DocumentConnection } from '../types/document.type';
+import { DocumentType, DocumentConnection } from '@graphql/types/document.type';
 import {
   UploadDocumentInput,
   UpdateDocumentInput,
   DocumentFilterInput,
   CreateDocumentVersionInput,
-} from '../inputs/document.input';
-import { PaginationInput } from '../inputs/pagination.input';
-import { CurrentUser } from '../../auth/decorators/current-user.decorator';
-import { GqlAuthGuard } from '../../auth/guards/gql-auth.guard';
-import { DocumentsService } from '../../documents/documents.service';
-import { AuthenticatedUser } from '../../auth/interfaces/authenticated-user.interface';
+} from '@graphql/inputs/document.input';
+import { PaginationInput } from '@graphql/inputs/pagination.input';
+import { CurrentUser } from '@auth/decorators/current-user.decorator';
+import { GqlAuthGuard } from '@auth/guards/gql-auth.guard';
+import { DocumentsService } from '@documents/documents.service';
+import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface';
 
 @Resolver(() => DocumentType)
 export class DocumentResolver {

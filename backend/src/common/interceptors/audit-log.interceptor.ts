@@ -11,8 +11,8 @@ import { Reflector } from '@nestjs/core';
 import {
   AUDIT_LOG_KEY,
   AuditLogOptions,
-} from '../decorators/audit-log.decorator';
-import { AuditLogService, AuditAction } from '../services/audit-log.service';
+} from '@common/decorators/audit-log.decorator';
+import { AuditLogService, AuditAction } from '@common/services/audit-log.service';
 
 interface RequestUser {
   id: string;

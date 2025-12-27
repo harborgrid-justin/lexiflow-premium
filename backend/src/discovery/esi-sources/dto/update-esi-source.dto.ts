@@ -9,7 +9,7 @@ import {
   IsBoolean,
   MaxLength,
 } from 'class-validator';
-import { ESISourceType, ESISourceStatus } from '../entities/esi-source.entity';
+import { ESISourceType, ESISourceStatus } from '@discovery/esi-sources/entities/esi-source.entity';
 
 export class UpdateESISourceDto {
   @IsOptional()

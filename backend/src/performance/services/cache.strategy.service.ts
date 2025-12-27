@@ -309,7 +309,6 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
       }
     }, 60000); // Run every minute
   }
-  }
 
   /**
    * Generate deterministic cache key from parameters
@@ -500,12 +499,6 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  private startCleanupInterval(): void {
-    setInterval(() => {
-      this.cleanupExpiredEntries();
-    }, 60000); // Every minute
-  }
-
   private cleanupExpiredEntries(): void {
     const now = Date.now();
     let count = 0;
@@ -543,21 +536,9 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
     };
   }
 
-  async onModuleDestroy(): Promise<void> {
-    this.logger.log('CacheStrategyService cleanup');
-    
-    if (this.warmingInterval) {
-      clearInterval(this.warmingInterval);
-      this.warmingInterval = null;
-    }
-    
-    this.memoryCache.clear();
-    this.metadata.clear();
-    this.tagIndex.clear();
-    
-    this.logger.log('CacheStrategyService cleanup complete');
-  }
 }
+
+// Remove duplicate onModuleDestroy - already defined earlier
 
 // Interfaces
 

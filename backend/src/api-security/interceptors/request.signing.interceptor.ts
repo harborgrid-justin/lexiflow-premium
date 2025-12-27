@@ -14,7 +14,7 @@ import { Observable } from 'rxjs';
 import { Request } from 'express';
 import * as crypto from 'crypto';
 import { createClient, RedisClientType } from 'redis';
-import * as MasterConfig from '../../config/master.config';
+import * as MasterConfig from '@config/master.config';
 
 export const REQUIRE_SIGNATURE_KEY = 'requireSignature';
 export const RequireSignature = () => SetMetadata(REQUIRE_SIGNATURE_KEY, true);

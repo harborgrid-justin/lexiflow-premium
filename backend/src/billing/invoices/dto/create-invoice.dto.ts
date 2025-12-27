@@ -1,7 +1,7 @@
 import { IsString, IsNumber, IsOptional, IsEnum, IsArray, IsBoolean, Min } from 'class-validator';
 import { Type } from 'class-transformer';
-import { InvoiceStatus, BillingModel } from '../entities/invoice.entity';
-import { InvoiceItemType } from '../entities/invoice-item.entity';
+import { InvoiceStatus, BillingModel } from '@billing/invoices/entities/invoice.entity';
+import { InvoiceItemType } from '@billing/invoices/entities/invoice-item.entity';
 
 export class CreateInvoiceItemDto {
   @IsEnum(InvoiceItemType)

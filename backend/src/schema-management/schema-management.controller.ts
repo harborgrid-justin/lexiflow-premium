@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Delete, Body, Param, Head, HttpCode, HttpStatus, UseGuards, Req } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { SchemaManagementService } from './schema-management.service';
 import { CreateMigrationDto, CreateSnapshotDto, CreateTableDto } from './dto/create-migration.dto';
-import { Public } from '../common/decorators/public.decorator';
+import { Public } from '@common/decorators/public.decorator';
 
 @ApiTags('Schema Management')
 @ApiBearerAuth('JWT-auth')

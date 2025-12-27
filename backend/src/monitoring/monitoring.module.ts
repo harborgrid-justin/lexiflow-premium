@@ -6,14 +6,14 @@ import { MetricsController } from './controllers/metrics.controller';
 import { MemoryManagementController } from './memory-management.controller';
 import { PerformanceMetric } from './entities/performance-metric.entity';
 import { SystemAlert } from './entities/system-alert.entity';
-import { AuthModule } from '../auth/auth.module';
+import { AuthModule } from '@auth/auth.module';
 import { StructuredLoggerService } from './services/structured.logger.service';
 import { MetricsCollectorService } from './services/metrics.collector.service';
 import { AlertingService } from './services/alerting.service';
 import { DistributedTracingService } from './services/distributed.tracing.service';
 import { HealthAggregatorService } from './services/health.aggregator.service';
 import { PerformanceInterceptor } from './interceptors/performance.interceptor';
-import { MemoryManagementModule } from '../common/memory-management.module';
+import { MemoryManagementModule } from '@common/memory-management.module';
 
 /**
  * Monitoring Module

@@ -1,10 +1,10 @@
 import { applyDecorators, UseGuards, UseInterceptors, SetMetadata } from '@nestjs/common';
 import { ApiTags, ApiSecurity, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../../common/guards/roles.guard';
-import { PermissionsGuard } from '../../common/guards/permissions.guard';
-import { AuditLogInterceptor } from '../../compliance/audit-logs/audit-log.interceptor';
-import { PerformanceInterceptor } from '../../monitoring/interceptors/performance.interceptor';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+import { RolesGuard } from '@common/guards/roles.guard';
+import { PermissionsGuard } from '@common/guards/permissions.guard';
+import { AuditLogInterceptor } from '@compliance/audit-logs/audit-log.interceptor';
+import { PerformanceInterceptor } from '@monitoring/interceptors/performance.interceptor';
 
 /**
  * Metadata keys for enterprise decorators

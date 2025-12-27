@@ -1,10 +1,10 @@
 import { Processor, Process } from '@nestjs/bull';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
-import { ProcessingJobsService } from '../processing-jobs.service';
-import { OcrService } from '../../ocr/ocr.service';
+import { ProcessingJobsService } from '@processing-jobs/processing-jobs.service';
+import { OcrService } from '@ocr/ocr.service';
 import { DocumentsService } from '@documents/documents.service';
-import { JobType, JobStatus } from '../dto/job-status.dto';
+import { JobType, JobStatus } from '@processing-jobs/dto/job-status.dto';
 
 @Processor('document-processing')
 export class DocumentProcessor {

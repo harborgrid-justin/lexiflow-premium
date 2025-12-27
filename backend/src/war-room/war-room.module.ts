@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { WarRoomController } from './war-room.controller';
 import { WarRoomService } from './war-room.service';
 import { Advisor, Expert, CaseStrategy } from './entities/war-room.entity';
-import { AuthModule } from '../auth/auth.module';
+import { AuthModule } from '@auth/auth.module';
 
 /**
  * War Room Module

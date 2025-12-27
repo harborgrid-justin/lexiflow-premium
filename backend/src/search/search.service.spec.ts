@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SearchService } from './search.service';
-import { Case } from '../cases/entities/case.entity';
-import { Document } from '../documents/entities/document.entity';
+import { Case } from '@cases/entities/case.entity';
+import { Document } from '@documents/entities/document.entity';
 import { SearchQueryDto, SearchEntityType } from './dto/search-query.dto';
 
 describe('SearchService', () => {

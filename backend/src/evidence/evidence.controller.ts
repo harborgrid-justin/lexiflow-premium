@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { EvidenceService } from './evidence.service';
 import { EvidenceItem, EvidenceType, EvidenceStatus } from './entities/evidence-item.entity';
 import { ChainOfCustodyEvent } from './entities/chain-of-custody-event.entity';

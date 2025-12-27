@@ -1,9 +1,9 @@
 import { Entity, Column, OneToMany, ManyToOne, JoinColumn, Index } from 'typeorm';
-import { BaseEntity } from '../../common/base/base.entity';
-import { Client } from '../../clients/entities/client.entity';
-import { EvidenceItem } from '../../evidence/entities/evidence-item.entity';
-import { ConflictCheck } from '../../compliance/conflict-checks/entities/conflict-check.entity';
-import { Party } from '../../parties/entities/party.entity';
+import { BaseEntity } from '@common/base/base.entity';
+import { Client } from '@clients/entities/client.entity';
+import { EvidenceItem } from '@evidence/entities/evidence-item.entity';
+import { ConflictCheck } from '@compliance/conflict-checks/entities/conflict-check.entity';
+import { Party } from '@parties/entities/party.entity';
 
 export enum CaseType {
   CIVIL = 'Civil',

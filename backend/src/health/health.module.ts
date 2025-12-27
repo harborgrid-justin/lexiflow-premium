@@ -4,7 +4,7 @@ import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
 import { HealthController } from './health.controller';
 import { RedisHealthIndicator } from './redis-health.indicator';
-import { TelemetryHealthIndicator } from '../telemetry/telemetry-health.indicator';
+import { TelemetryHealthIndicator } from '@telemetry/telemetry-health.indicator';
 import { RedisHealthIndicator as ImprovedRedisHealthIndicator } from './indicators/redis.health';
 import { DiskHealthIndicator } from './indicators/disk.health';
 import { MemoryHealthIndicator } from './indicators/memory.health';

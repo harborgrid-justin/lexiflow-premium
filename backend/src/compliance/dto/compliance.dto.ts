@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsUUID, IsOptional, IsEnum, IsBoolean, IsArray, IsDateString, IsObject, IsNumber, Min } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ConsentType } from '../entities/consent.entity';
+import { ConsentType } from '@compliance/entities/consent.entity';
 
 export class DataExportRequestDto {
   @ApiProperty({ description: 'User ID for data export' })

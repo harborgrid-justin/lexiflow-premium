@@ -1,9 +1,9 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Role } from '../../common/enums/role.enum';
-import { ROLES_KEY } from '../decorators/roles.decorator';
-import { AuthenticatedUser } from '../interfaces/authenticated-user.interface';
-import { IS_PUBLIC_KEY } from '../../common/decorators/public.decorator';
+import { Role } from '@common/enums/role.enum';
+import { ROLES_KEY } from '@auth/decorators/roles.decorator';
+import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface';
+import { IS_PUBLIC_KEY } from '@common/decorators/public.decorator';
 
 interface RequestWithUser {
   user?: AuthenticatedUser;

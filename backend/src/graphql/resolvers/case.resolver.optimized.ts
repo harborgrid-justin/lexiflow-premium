@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args, ID, Subscription } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
-import { CaseType, CaseConnection, CaseMetrics } from '../types/case.type';
+import { CaseType, CaseConnection, CaseMetrics } from '@graphql/types/case.type';
 import {
   CreateCaseInput,
   UpdateCaseInput,
@@ -10,8 +10,8 @@ import {
   AddTeamMemberInput,
   CreateMotionInput,
   CreateDocketEntryInput,
-} from '../inputs/case.input';
-import { PaginationInput } from '../inputs/pagination.input';
+} from '@graphql/inputs/case.input';
+import { PaginationInput } from '@graphql/inputs/pagination.input';
 import { CurrentUser } from '@auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from '@auth/guards/gql-auth.guard';
 import { CasesService } from '@cases/cases.service';

@@ -5,7 +5,7 @@ import { NotFoundException, BadRequestException } from '@nestjs/common';
 import { DocumentsService } from './documents.service';
 import { Document } from './entities/document.entity';
 import { DocumentType, DocumentStatus } from './interfaces/document.interface';
-import { FileStorageService } from '../file-storage/file-storage.service';
+import { FileStorageService } from '@file-storage/file-storage.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { DocumentFilterDto } from './dto/document-filter.dto';

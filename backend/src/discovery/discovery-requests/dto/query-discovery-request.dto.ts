@@ -1,6 +1,6 @@
 import { IsOptional, IsEnum, IsUUID, IsString, IsNumber, Min } from 'class-validator';
 import { Type } from 'class-transformer';
-import { DiscoveryRequestType, DiscoveryRequestStatus } from '../entities/discovery-request.entity';
+import { DiscoveryRequestType, DiscoveryRequestStatus } from '@discovery/discovery-requests/entities/discovery-request.entity';
 
 export class QueryDiscoveryRequestDto {
   @IsOptional()

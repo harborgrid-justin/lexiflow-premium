@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, Logger, OnModuleDestroy } from '@nestjs/
 import { Cron, CronExpression } from '@nestjs/schedule';
 import * as crypto from 'crypto';
 import axios from 'axios';
-import * as MasterConfig from '../config/master.config';
+import * as MasterConfig from '@config/master.config';
 import { CreateWebhookDto, UpdateWebhookDto, WebhookEvent, WebhookPayload, WebhookDelivery } from './dto';
 
 export interface Webhook {
@@ -309,7 +309,10 @@ export class WebhooksService implements OnModuleDestroy {
     if (webhookDeliveries.length > this.MAX_DELIVERIES_PER_WEBHOOK) {
       const toRemove = webhookDeliveries.length - this.MAX_DELIVERIES_PER_WEBHOOK;
       for (let i = 0; i < toRemove; i++) {
-        this.deliveries.delete(webhookDeliveries[i].id);
+        const delivery = webhookDeliveries[i];
+        if (delivery) {
+          this.deliveries.delete(delivery.id);
+        }
       }
       this.logger.warn(`Removed ${toRemove} oldest deliveries for webhook ${webhookId}`);
     }

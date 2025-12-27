@@ -7,7 +7,7 @@
 
 import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import * as v8 from 'v8';
-import { getMemoryStats, MemoryStats } from '../utils/memory-management.utils';
+import { getMemoryStats, MemoryStats } from '@common/utils/memory-management.utils';
 
 export interface HeapSnapshot {
   timestamp: number;

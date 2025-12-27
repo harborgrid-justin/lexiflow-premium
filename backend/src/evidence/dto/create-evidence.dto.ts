@@ -1,7 +1,7 @@
 import { IsString, IsNotEmpty, IsEnum, IsOptional, IsNumber, IsDate, IsObject, IsBoolean } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { EvidenceType, EvidenceStatus } from '../entities/evidence-item.entity';
+import { EvidenceType, EvidenceStatus } from '@evidence/entities/evidence-item.entity';
 
 export class CreateEvidenceItemDto {
   @ApiProperty({ description: 'Case ID this evidence belongs to' })

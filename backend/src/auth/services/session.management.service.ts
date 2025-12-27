@@ -8,7 +8,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThan, MoreThan } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { Session } from '../entities/session.entity';
+import { Session } from '@auth/entities/session.entity';
 import * as UAParser from 'ua-parser-js';
 
 export interface SessionInfo {

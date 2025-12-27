@@ -10,3 +10,6 @@ export interface CacheOptions {
 
 export const Cacheable = (options: CacheOptions = {}) =>
   SetMetadata(CACHE_KEY, { ttl: 300, ...options });
+
+// Alias for backward compatibility
+export const Cache = Cacheable;

@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { DiscoveryRequestType, DepositionType, LegalHoldType, PrivilegeLogEntryType } from '../types/discovery.type';
+import { DiscoveryRequestType, DepositionType, LegalHoldType, PrivilegeLogEntryType } from '@graphql/types/discovery.type';
 import {
   CreateDiscoveryRequestInput,
   UpdateDiscoveryRequestInput,
@@ -8,13 +8,13 @@ import {
   UpdateDepositionInput,
   CreateLegalHoldInput,
   CreatePrivilegeLogEntryInput,
-} from '../inputs/discovery.input';
-import { CurrentUser } from '../../auth/decorators/current-user.decorator';
-import { GqlAuthGuard } from '../../auth/guards/gql-auth.guard';
-import { DiscoveryService } from '../../discovery/discovery.service';
-import { DepositionsService } from '../../discovery/depositions/depositions.service';
-import { PrivilegeLogService } from '../../discovery/privilege-log/privilege-log.service';
-import { AuthenticatedUser } from '../../auth/interfaces/authenticated-user.interface';
+} from '@graphql/inputs/discovery.input';
+import { CurrentUser } from '@auth/decorators/current-user.decorator';
+import { GqlAuthGuard } from '@auth/guards/gql-auth.guard';
+import { DiscoveryService } from '@discovery/discovery.service';
+import { DepositionsService } from '@discovery/depositions/depositions.service';
+import { PrivilegeLogService } from '@discovery/privilege-log/privilege-log.service';
+import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface';
 
 @Resolver(() => DiscoveryRequestType)
 export class DiscoveryResolver {

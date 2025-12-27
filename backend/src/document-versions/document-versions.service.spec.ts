@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { DocumentVersionsService } from './document-versions.service';
 import { DocumentVersion } from './entities/document-version.entity';
-import { FileStorageService } from '../file-storage/file-storage.service';
+import { FileStorageService } from '@file-storage/file-storage.service';
 import { describe, expect, it, jest } from '@jest/globals';
 
 describe('DocumentVersionsService', () => {

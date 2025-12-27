@@ -2,8 +2,8 @@ import DataLoader from 'dataloader';
 import { Injectable, Scope } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
-import { Document } from '../../documents/entities/document.entity';
-import { DocumentVersion } from '../../document-versions/entities/document-version.entity';
+import { Document } from '@documents/entities/document.entity';
+import { DocumentVersion } from '@document-versions/entities/document-version.entity';
 
 /**
  * DocumentLoader - DataLoader for batching and caching document queries

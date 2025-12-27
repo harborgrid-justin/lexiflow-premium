@@ -1,5 +1,5 @@
 import { IsString, IsOptional, IsEnum } from 'class-validator';
-import { EvidenceType, AdmissibilityStatus } from '../entities/evidence.entity';
+import { EvidenceType, AdmissibilityStatus } from '@discovery/evidence/entities/evidence.entity';
 
 export class QueryEvidenceDto {
   @IsString()

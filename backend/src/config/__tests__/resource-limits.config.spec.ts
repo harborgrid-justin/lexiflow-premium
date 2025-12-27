@@ -1,4 +1,4 @@
-import resourceLimitsConfig from '../resource-limits.config';
+import resourceLimitsConfig from '@config/resource-limits.config';
 
 describe('Resource Limits Configuration', () => {
   let originalEnv: NodeJS.ProcessEnv;

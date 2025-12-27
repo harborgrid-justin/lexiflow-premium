@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from '../auth/auth.module';
+import { AuthModule } from '@auth/auth.module';
 import { AiDataopsController } from './ai-dataops.controller';
 import { AiDataopsService } from './ai-dataops.service';
 import { VectorEmbedding, AIModel } from './entities/ai.entity';

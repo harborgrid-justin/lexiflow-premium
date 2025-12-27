@@ -6,7 +6,7 @@ import {
   IsObject,
   IsArray,
 } from 'class-validator';
-import { DocumentType, DocumentStatus } from '../interfaces/document.interface';
+import { DocumentType, DocumentStatus } from '@documents/interfaces/document.interface';
 
 export class UpdateDocumentDto {
   @ApiPropertyOptional({ description: 'Document title' })

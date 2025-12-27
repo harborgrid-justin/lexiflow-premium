@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as MasterConfig from '@config/master.config';
 import { FindManyOptions, Repository, SelectQueryBuilder } from 'typeorm';
-import { validateSortOrder } from '../utils/query-validation.util';
+import { validateSortOrder } from '@common/utils/query-validation.util';
 
 /**
  * Pagination Types

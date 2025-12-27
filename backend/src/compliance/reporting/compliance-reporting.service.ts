@@ -11,10 +11,10 @@ import {
   GenerateEthicalWallsReportDto,
   EthicalWallsReportData,
 } from './dto/compliance-report.dto';
-import { AuditLogsService } from '../audit-logs/audit-logs.service';
-import { ConflictChecksService } from '../conflict-checks/conflict-checks.service';
-import { EthicalWallsService } from '../ethical-walls/ethical-walls.service';
-import { PermissionsService } from '../permissions/permissions.service';
+import { AuditLogsService } from '@compliance/audit-logs/audit-logs.service';
+import { ConflictChecksService } from '@compliance/conflict-checks/conflict-checks.service';
+import { EthicalWallsService } from '@compliance/ethical-walls/ethical-walls.service';
+import { PermissionsService } from '@compliance/permissions/permissions.service';
 
 @Injectable()
 export class ComplianceReportingService {

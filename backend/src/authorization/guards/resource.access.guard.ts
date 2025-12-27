@@ -1,9 +1,9 @@
 import { Injectable, CanActivate, ExecutionContext, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { InsufficientPermissionsException } from '../../common/exceptions';
-import { PermissionService } from '../services/permission.service';
-import { PolicyService, PolicyEvaluationContext } from '../services/policy.service';
-import { UserRole } from '../../users/entities/user.entity';
+import { InsufficientPermissionsException } from '@common/exceptions';
+import { PermissionService } from '@authorization/services/permission.service';
+import { PolicyService, PolicyEvaluationContext } from '@authorization/services/policy.service';
+import { UserRole } from '@users/entities/user.entity';
 import {
   PERMISSIONS_KEY,
   REQUIRE_ALL_PERMISSIONS_KEY,
@@ -13,8 +13,8 @@ import {
   PERMISSION_POLICY_KEY,
   RESOURCE_TYPE_KEY,
   BYPASS_PERMISSION_CHECK_KEY,
-} from '../decorators/permissions.decorator';
-import { IS_PUBLIC_KEY } from '../../common/decorators/public.decorator';
+} from '@authorization/decorators/permissions.decorator';
+import { IS_PUBLIC_KEY } from '@common/decorators/public.decorator';
 
 interface RequestWithUser {
   user?: {

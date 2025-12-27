@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Delete, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards, Req } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { QueryWorkbenchService } from './query-workbench.service';
 import { ExecuteQueryDto, SaveQueryDto } from './dto/execute-query.dto';
-import { Public } from '../common/decorators/public.decorator';
+import { Public } from '@common/decorators/public.decorator';
 
 @ApiTags('Query Workbench')
 @ApiBearerAuth('JWT-auth')

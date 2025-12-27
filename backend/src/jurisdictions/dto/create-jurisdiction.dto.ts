@@ -1,6 +1,6 @@
 import { IsString, IsEnum, IsOptional, IsObject} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { JurisdictionSystem, JurisdictionType } from '../entities/jurisdiction.entity';
+import { JurisdictionSystem, JurisdictionType } from '@jurisdictions/entities/jurisdiction.entity';
 
 export class CreateJurisdictionDto {
   @ApiProperty({ description: 'Name of the jurisdiction' })

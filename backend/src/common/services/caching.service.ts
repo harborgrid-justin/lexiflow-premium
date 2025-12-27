@@ -1,7 +1,7 @@
 import { Injectable, OnModuleDestroy, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Jurisdiction } from '../../jurisdictions/entities/jurisdiction.entity';
+import { Jurisdiction } from '@jurisdictions/entities/jurisdiction.entity';
 
 @Injectable()
 export class CachingService implements OnModuleDestroy {

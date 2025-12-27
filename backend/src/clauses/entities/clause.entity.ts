@@ -3,7 +3,7 @@ import {
   Column,
   Index,
 } from 'typeorm';
-import { BaseEntity } from '../../common/base/base.entity';
+import { BaseEntity } from '@common/base/base.entity';
 
 export enum ClauseCategory {
   GENERAL = 'general',

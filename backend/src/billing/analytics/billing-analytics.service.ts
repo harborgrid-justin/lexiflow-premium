@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, IsNull } from 'typeorm';
-import { TimeEntry, TimeEntryStatus } from '../time-entries/entities/time-entry.entity';
-import { Expense, ExpenseStatus } from '../expenses/entities/expense.entity';
-import { Invoice, InvoiceStatus } from '../invoices/entities/invoice.entity';
+import { TimeEntry, TimeEntryStatus } from '@billing/time-entries/entities/time-entry.entity';
+import { Expense, ExpenseStatus } from '@billing/expenses/entities/expense.entity';
+import { Invoice, InvoiceStatus } from '@billing/invoices/entities/invoice.entity';
 import {
   AnalyticsFilterDto,
   WipStatsResponse,

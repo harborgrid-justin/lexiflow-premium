@@ -10,12 +10,12 @@ import * as bcrypt from 'bcrypt';
 import { authenticator } from 'otplib';
 import * as qrcode from 'qrcode';
 import { v4 as uuidv4 } from 'uuid';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '@users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { AuthenticatedUser } from './interfaces/authenticated-user.interface';
-import { Role } from '../common/enums/role.enum';
+import { Role } from '@common/enums/role.enum';
 import { TokenBlacklistService } from './token-blacklist.service';
 import { TokenStorageService } from './token-storage.service';
 

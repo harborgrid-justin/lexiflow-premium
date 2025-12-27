@@ -8,7 +8,7 @@ import {
   IsUUID,
   MaxLength,
 } from 'class-validator';
-import { DepositionMethod } from '../entities/deposition.entity';
+import { DepositionMethod } from '@discovery/depositions/entities/deposition.entity';
 
 export class CreateDepositionDto {
   @IsUUID()

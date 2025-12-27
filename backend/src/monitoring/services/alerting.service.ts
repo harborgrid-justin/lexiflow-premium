@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { SystemAlert, AlertSeverity } from '../entities/system-alert.entity';
+import { SystemAlert, AlertSeverity } from '@monitoring/entities/system-alert.entity';
 import { StructuredLoggerService } from './structured.logger.service';
 import { MetricsCollectorService } from './metrics.collector.service';
 import axios from 'axios';

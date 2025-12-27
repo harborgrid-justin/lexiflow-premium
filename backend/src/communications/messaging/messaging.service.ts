@@ -1,6 +1,6 @@
 import { Injectable} from '@nestjs/common';
 import { CreateConversationDto, CreateMessageDto, MessageQueryDto } from './dto';
-import { validatePagination } from '../../common/utils/query-validation.util';
+import { validatePagination } from '@common/utils/query-validation.util';
 
 /**
  * Messaging Service

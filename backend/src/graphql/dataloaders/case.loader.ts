@@ -2,7 +2,7 @@ import DataLoader from 'dataloader';
 import { Injectable, Scope } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
-import { Case } from '../../cases/entities/case.entity';
+import { Case } from '@cases/entities/case.entity';
 
 /**
  * CaseLoader - DataLoader for batching and caching case queries

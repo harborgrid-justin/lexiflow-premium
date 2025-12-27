@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { ErrorCodes, ErrorCodeDefinition } from '../constants/error.codes.constant';
+import { ErrorCodes, ErrorCodeDefinition } from '@errors/constants/error.codes.constant';
 
 /**
  * Base Business Exception

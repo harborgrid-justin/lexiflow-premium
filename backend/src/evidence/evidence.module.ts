@@ -4,7 +4,7 @@ import { EvidenceItem } from './entities/evidence-item.entity';
 import { ChainOfCustodyEvent } from './entities/chain-of-custody-event.entity';
 import { EvidenceController } from './evidence.controller';
 import { EvidenceService } from './evidence.service';
-import { AuthModule } from '../auth/auth.module';
+import { AuthModule } from '@auth/auth.module';
 
 /**
  * Evidence Module

@@ -9,7 +9,7 @@ import {
   IsBoolean,
   MaxLength,
 } from 'class-validator';
-import { ESISourceType } from '../entities/esi-source.entity';
+import { ESISourceType } from '@discovery/esi-sources/entities/esi-source.entity';
 
 export class CreateESISourceDto {
   @IsUUID()

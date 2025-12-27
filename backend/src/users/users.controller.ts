@@ -9,25 +9,22 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
-  UseInterceptors,
-  CacheInterceptor,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { PermissionsGuard } from '../common/guards/permissions.guard';
-import { Permissions } from '../auth/decorators/permissions.decorator';
-import { Permission } from '../common/enums/permission.enum';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+import { RolesGuard } from '@auth/guards/roles.guard';
+import { PermissionsGuard } from '@common/guards/permissions.guard';
+import { Permissions } from '@auth/decorators/permissions.decorator';
+import { Permission } from '@common/enums/permission.enum';
 
 @ApiTags('Users')
 @ApiBearerAuth('JWT-auth')
 
 @Controller('users')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
-@UseInterceptors(CacheInterceptor)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

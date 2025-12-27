@@ -10,9 +10,9 @@ import {
 import { Server, Socket } from 'socket.io';
 import { Logger, Injectable, UseGuards, OnModuleDestroy } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as MasterConfig from '../config/master.config';
-import { WsRateLimitGuard } from '../common/guards/ws-rate-limit.guard';
-import { WsRoomLimitGuard } from '../common/guards/ws-room-limit.guard';
+import * as MasterConfig from '@config/master.config';
+import { WsRateLimitGuard } from '@common/guards/ws-rate-limit.guard';
+import { WsRoomLimitGuard } from '@common/guards/ws-room-limit.guard';
 
 /**
  * WebSocket Event Types
@@ -103,6 +103,7 @@ export class RealtimeGateway implements OnGatewayConnection, OnGatewayDisconnect
         const socket = this.server.sockets.sockets.get(socketId);
         if (socket) {
           socket.disconnect(true);
+          this.logger.debug(`Disconnected client ${clientInfo.userId || 'anonymous'}`);
         }
       } catch (error) {
         this.logger.error(`Error disconnecting client ${socketId}: ${error}`);

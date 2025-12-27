@@ -4,7 +4,7 @@ import { JurisdictionsController } from './jurisdictions.controller';
 import { JurisdictionsService } from './jurisdictions.service';
 import { Jurisdiction } from './entities/jurisdiction.entity';
 import { JurisdictionRule } from './entities/jurisdiction-rule.entity';
-import { AuthModule } from '../auth/auth.module';
+import { AuthModule } from '@auth/auth.module';
 
 /**
  * Jurisdictions Module

@@ -7,7 +7,7 @@ import {
   IsArray,
   IsBoolean,
 } from 'class-validator';
-import { ClauseCategory } from '../entities/clause.entity';
+import { ClauseCategory } from '@clauses/entities/clause.entity';
 
 export class UpdateClauseDto {
   @ApiPropertyOptional({ description: 'Clause title' })

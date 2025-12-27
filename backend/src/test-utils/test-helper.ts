@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import configuration from '../config/configuration';
+import configuration from '@config/configuration';
 
 export class TestHelper {
   static app: INestApplication;

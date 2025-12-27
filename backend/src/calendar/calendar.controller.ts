@@ -3,7 +3,7 @@ import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagg
 import { CalendarService } from './calendar.service';
 import { CreateCalendarEventDto, UpdateCalendarEventDto } from './dto/calendar.dto';
 import { QueryCalendarEventsDto, CalendarEventType } from './dto/query-calendar-events.dto';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 
 @ApiTags('Calendar')
 @ApiBearerAuth('JWT-auth')

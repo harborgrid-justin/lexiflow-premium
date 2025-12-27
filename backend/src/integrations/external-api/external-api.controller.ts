@@ -1,10 +1,10 @@
 import { Controller, Post, Get, Body, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { ExternalApiService } from './external-api.service';
-import { PacerService } from '../pacer/pacer.service';
-import { CalendarService } from '../calendar/calendar.service';
-import { PacerSearchDto, PacerIntegrationSyncDto } from '../pacer/dto';
-import { CalendarIntegrationEventDto, CalendarSyncDto } from '../calendar/dto';
+import { PacerService } from '@integrations/pacer/pacer.service';
+import { CalendarService } from '@integrations/calendar/calendar.service';
+import { PacerSearchDto, PacerIntegrationSyncDto } from '@integrations/pacer/dto';
+import { CalendarIntegrationEventDto, CalendarSyncDto } from '@integrations/calendar/dto';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { CurrentUser } from '@auth/decorators/current-user.decorator';
 import { JwtPayload } from '@auth/interfaces/jwt-payload.interface';

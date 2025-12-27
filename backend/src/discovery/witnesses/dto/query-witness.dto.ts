@@ -1,6 +1,6 @@
 import { IsOptional, IsUUID, IsEnum, IsString } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { WitnessType, WitnessStatus } from '../entities/witness.entity';
+import { WitnessType, WitnessStatus } from '@discovery/witnesses/entities/witness.entity';
 
 export class QueryWitnessDto {
   @ApiPropertyOptional({ 

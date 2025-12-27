@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CitationsController } from './citations.controller';
 import { CitationsService } from './citations.service';
 import { Citation } from './entities/citation.entity';
-import { AuthModule } from '../auth/auth.module';
+import { AuthModule } from '@auth/auth.module';
 
 /**
  * Citations Module

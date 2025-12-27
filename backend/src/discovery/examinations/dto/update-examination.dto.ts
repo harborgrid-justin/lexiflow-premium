@@ -9,7 +9,7 @@ import {
   IsBoolean,
   MaxLength,
 } from 'class-validator';
-import { ExaminationType, ExaminationStatus } from '../entities/examination.entity';
+import { ExaminationType, ExaminationStatus } from '@discovery/examinations/entities/examination.entity';
 
 export class UpdateExaminationDto {
   @IsOptional()

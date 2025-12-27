@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RefreshToken } from '../entities/refresh-token.entity';
+import { RefreshToken } from '@auth/entities/refresh-token.entity';
 import { v4 as uuidv4 } from 'uuid';
 import * as crypto from 'crypto';
 

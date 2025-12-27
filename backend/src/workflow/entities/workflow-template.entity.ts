@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { WorkflowCategory } from '../dto/create-workflow-template.dto';
+import { WorkflowCategory } from '@workflow/dto/create-workflow-template.dto';
 
 @Entity('workflow_templates')
 export class WorkflowTemplate {

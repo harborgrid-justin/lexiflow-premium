@@ -1,6 +1,6 @@
 import { IsOptional, IsEnum, IsUUID, IsString, IsNumber, Min } from 'class-validator';
 import { Type } from 'class-transformer';
-import { DepositionMethod, DepositionStatus } from '../entities/deposition.entity';
+import { DepositionMethod, DepositionStatus } from '@discovery/depositions/entities/deposition.entity';
 
 export class QueryDepositionDto {
   @IsOptional()

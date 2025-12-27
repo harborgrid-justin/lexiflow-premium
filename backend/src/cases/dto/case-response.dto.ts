@@ -1,4 +1,4 @@
-import { CaseType, CaseStatus } from '../entities/case.entity';
+import { CaseType, CaseStatus } from '@cases/entities/case.entity';
 
 export class CaseResponseDto {
   id!: string;

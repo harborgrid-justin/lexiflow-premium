@@ -121,10 +121,6 @@ export class PleadingsService {
     this.logger.log(`Pleading updated: ${id}`);
     return result.raw[0];
   }
-    this.logger.log(`Pleading updated: ${id}`);
-
-    return updatedPleading;
-  }
 
   /**
    * Delete a pleading

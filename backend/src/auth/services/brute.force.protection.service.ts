@@ -8,7 +8,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, MoreThan } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { LoginAttempt } from '../entities/login-attempt.entity';
+import { LoginAttempt } from '@auth/entities/login-attempt.entity';
 
 export interface BruteForceConfig {
   maxAttempts: number;

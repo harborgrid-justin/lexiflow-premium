@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { OcrService } from './ocr.service';
-import { FileStorageModule } from '../file-storage/file-storage.module';
+import { FileStorageModule } from '@file-storage/file-storage.module';
 
 @Module({
   imports: [ConfigModule, FileStorageModule],

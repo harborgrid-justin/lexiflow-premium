@@ -8,7 +8,7 @@ import {
   IsBoolean,
   MaxLength,
 } from 'class-validator';
-import { InterviewType } from '../entities/custodian-interview.entity';
+import { InterviewType } from '@discovery/custodian-interviews/entities/custodian-interview.entity';
 
 export class CreateCustodianInterviewDto {
   @IsUUID()

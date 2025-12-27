@@ -1,5 +1,5 @@
-import { PaginationDto } from '../dto/pagination.dto';
-import { PaginatedResponseDto } from '../dto/api-response.dto';
+import { PaginationDto } from '@common/dto/pagination.dto';
+import { PaginatedResponseDto } from '@common/dto/api-response.dto';
 
 export class PaginationUtil {
   /**

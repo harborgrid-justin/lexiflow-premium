@@ -2,8 +2,8 @@ import { Controller, Get, Post, Put, Delete, Body, Param, Query, HttpCode, HttpS
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { MessengerService } from './messenger.service';
 import { MessengerConversationDto, MessengerMessageDto, UpdateConversationDto } from './dto/messenger.dto';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+import { CurrentUser } from '@common/decorators/current-user.decorator';
 import { GetContactsDto } from './dto/get-contacts.dto';
 import { GetConversationsDto } from './dto/get-conversations.dto';
 import { GetMessagesDto } from './dto/get-messages.dto';

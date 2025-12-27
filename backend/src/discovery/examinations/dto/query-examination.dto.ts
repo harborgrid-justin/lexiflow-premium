@@ -1,6 +1,6 @@
 import { IsOptional, IsEnum, IsUUID, IsString, IsNumber, Min } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ExaminationType, ExaminationStatus } from '../entities/examination.entity';
+import { ExaminationType, ExaminationStatus } from '@discovery/examinations/entities/examination.entity';
 
 export class QueryExaminationDto {
   @IsOptional()

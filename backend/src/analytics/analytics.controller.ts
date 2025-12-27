@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { AnalyticsService } from './analytics.service';
 import { AnalyticsEvent } from './entities/analytics-event.entity';
 import { Dashboard } from './entities/dashboard.entity';
-import { Public } from '../common/decorators/public.decorator';
+import { Public } from '@common/decorators/public.decorator';
 import { CreateAnalyticsEventDto } from './dto/create-analytics-event.dto';
 import { CreateDashboardDto } from './dto/create-dashboard.dto';
 import { AnalyticsGenerateReportDto, GenerateReportResponseDto } from './dto/generate-report.dto';

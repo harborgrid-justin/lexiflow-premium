@@ -11,10 +11,10 @@ import { Server, Socket } from 'socket.io';
 import { Logger, OnModuleDestroy, Injectable, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { JwtPayload } from '../../auth/interfaces/jwt-payload.interface';
-import { WsRateLimitGuard } from '../../common/guards/ws-rate-limit.guard';
-import { WsRoomLimitGuard } from '../../common/guards/ws-room-limit.guard';
-import * as MasterConfig from '../../config/master.config';
+import { JwtPayload } from '@auth/interfaces/jwt-payload.interface';
+import { WsRateLimitGuard } from '@common/guards/ws-rate-limit.guard';
+import { WsRoomLimitGuard } from '@common/guards/ws-room-limit.guard';
+import * as MasterConfig from '@config/master.config';
 
 /**
  * Messaging WebSocket Gateway

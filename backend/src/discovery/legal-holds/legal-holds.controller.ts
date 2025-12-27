@@ -16,7 +16,7 @@ import {
   CacheTTL,
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '@auth/jwt-auth.guard';
 import { LegalHoldsService } from './legal-holds.service';
 import { CreateLegalHoldDto } from './dto/create-legal-hold.dto';
 import { UpdateLegalHoldDto } from './dto/update-legal-hold.dto';

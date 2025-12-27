@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import * as crypto from 'crypto';
 import axios, { AxiosError } from 'axios';
-import * as MasterConfig from '../../config/master.config';
+import * as MasterConfig from '@config/master.config';
 
 export interface WebhookPayload {
   event: string;

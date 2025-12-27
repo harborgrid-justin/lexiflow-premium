@@ -9,7 +9,7 @@ import {
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Request, Response } from 'express';
-import { StructuredLoggerService } from '../../monitoring/services/structured.logger.service';
+import { StructuredLoggerService } from '@monitoring/services/structured.logger.service';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {

@@ -7,9 +7,9 @@ import {
 import { Observable } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Request, Response } from 'express';
-import { StructuredLoggerService } from '../services/structured.logger.service';
-import { MetricsCollectorService } from '../services/metrics.collector.service';
-import { DistributedTracingService } from '../services/distributed.tracing.service';
+import { StructuredLoggerService } from '@monitoring/services/structured.logger.service';
+import { MetricsCollectorService } from '@monitoring/services/metrics.collector.service';
+import { DistributedTracingService } from '@monitoring/services/distributed.tracing.service';
 
 /**
  * Performance Interceptor

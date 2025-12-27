@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { TokenBlacklistService } from '../token-blacklist.service';
-import { JwtPayload } from '../interfaces/jwt-payload.interface';
+import { TokenBlacklistService } from '@auth/token-blacklist.service';
+import { JwtPayload } from '@auth/interfaces/jwt-payload.interface';
 
 interface RequestWithToken {
   headers: {

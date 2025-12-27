@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException, UnauthorizedException, OnModuleDestroy, Logger, ForbiddenException } from '@nestjs/common';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
-import * as MasterConfig from '../../config/master.config';
-import { CreateApiKeyDto, UpdateApiKeyDto, ApiKeyScope, ApiKeyRotationPolicy } from '../../api-security/dto';
+import * as MasterConfig from '@config/master.config';
+import { CreateApiKeyDto, UpdateApiKeyDto, ApiKeyScope, ApiKeyRotationPolicy } from '@api-security/dto';
 
 export interface ApiKey {
   id: string;

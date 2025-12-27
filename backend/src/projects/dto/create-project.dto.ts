@@ -1,6 +1,6 @@
 import { IsString, IsEnum, IsOptional, IsUUID, IsNotEmpty, MaxLength, IsDate, IsNumber, Min, Max } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ProjectStatus, ProjectPriority } from '../entities/project.entity';
+import { ProjectStatus, ProjectPriority } from '@projects/entities/project.entity';
 
 export class CreateProjectDto {
   @IsUUID()

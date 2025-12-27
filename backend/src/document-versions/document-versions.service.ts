@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DocumentVersion } from './entities/document-version.entity';
 import { CreateVersionDto } from './dto/create-version.dto';
-import { FileStorageService } from '../file-storage/file-storage.service';
+import { FileStorageService } from '@file-storage/file-storage.service';
 
 @Injectable()
 export class DocumentVersionsService {

@@ -9,7 +9,7 @@ import {
   IsBoolean,
   MaxLength,
 } from 'class-validator';
-import { PrivilegeType, PrivilegeStatus } from '../entities/privilege-log-entry.entity';
+import { PrivilegeType, PrivilegeStatus } from '@discovery/privilege-log/entities/privilege-log-entry.entity';
 
 export class UpdatePrivilegeLogEntryDto {
   @IsOptional()

@@ -1,6 +1,6 @@
 import { IsString, IsEnum, IsOptional, IsArray, IsBoolean } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { TemplateCategory, TemplateStatus, TemplateVariable, ClauseReference } from '../entities/template.entity';
+import { TemplateCategory, TemplateStatus, TemplateVariable, ClauseReference } from '@drafting/entities/template.entity';
 
 export class CreateTemplateDto {
   @ApiProperty()

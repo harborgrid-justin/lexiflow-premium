@@ -1,6 +1,6 @@
 import { IsOptional, IsEnum, IsUUID, IsString, IsNumber, Min, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
-import { CustodianStatus } from '../entities/custodian.entity';
+import { CustodianStatus } from '@discovery/custodians/entities/custodian.entity';
 
 export class QueryCustodianDto {
   @IsOptional()

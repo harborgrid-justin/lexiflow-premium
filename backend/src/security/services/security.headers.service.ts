@@ -7,7 +7,7 @@ import {
   PERMISSIONS_POLICY,
   NONCE_LENGTH,
   NONCE_ENCODING,
-} from '../constants/security.constants';
+} from '@security/constants/security.constants';
 
 /**
  * Security Headers Service
@@ -101,7 +101,8 @@ export class SecurityHeadersService {
       res.setHeader('X-Security-Hardened', 'true');
 
     } catch (error) {
-      this.logger.error(`Failed to apply security headers: ${error.message}`, error.stack);
+      const err = error as Error;
+      this.logger.error(`Failed to apply security headers: ${err.message}`, err.stack);
     }
   }
 
@@ -140,7 +141,8 @@ export class SecurityHeadersService {
       res.removeHeader('Server');
 
     } catch (error) {
-      this.logger.error(`Failed to apply API security headers: ${error.message}`, error.stack);
+      const err = error as Error;
+      this.logger.error(`Failed to apply API security headers: ${err.message}`, err.stack);
     }
   }
 
@@ -162,7 +164,8 @@ export class SecurityHeadersService {
       res.setHeader('Expires', '0');
 
     } catch (error) {
-      this.logger.error(`Failed to apply download security headers: ${error.message}`, error.stack);
+      const err = error as Error;
+      this.logger.error(`Failed to apply download security headers: ${err.message}`, err.stack);
     }
   }
 
@@ -213,7 +216,8 @@ export class SecurityHeadersService {
       res.setHeader('X-Frame-Options', 'DENY');
 
     } catch (error) {
-      this.logger.error(`Failed to apply WebSocket security headers: ${error.message}`, error.stack);
+      const err = error as Error;
+      this.logger.error(`Failed to apply WebSocket security headers: ${err.message}`, err.stack);
     }
   }
 
@@ -230,7 +234,8 @@ export class SecurityHeadersService {
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     } catch (error) {
-      this.logger.error(`Failed to apply CSP report headers: ${error.message}`, error.stack);
+      const err = error as Error;
+      this.logger.error(`Failed to apply CSP report headers: ${err.message}`, err.stack);
     }
   }
 
@@ -265,7 +270,8 @@ export class SecurityHeadersService {
       res.setHeader('Strict-Transport-Security', SECURITY_HEADERS['Strict-Transport-Security']);
 
     } catch (error) {
-      this.logger.error(`Failed to apply GraphQL security headers: ${error.message}`, error.stack);
+      const err = error as Error;
+      this.logger.error(`Failed to apply GraphQL security headers: ${err.message}`, err.stack);
     }
   }
 
@@ -295,7 +301,8 @@ export class SecurityHeadersService {
 
       res.setHeader(sanitizedName, sanitizedValue);
     } catch (error) {
-      this.logger.error(`Failed to add custom security header: ${error.message}`, error.stack);
+      const err = error as Error;
+      this.logger.error(`Failed to add custom security header: ${err.message}`, err.stack);
     }
   }
 

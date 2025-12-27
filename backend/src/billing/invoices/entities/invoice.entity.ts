@@ -6,9 +6,9 @@ import {
   JoinColumn,
   VersionColumn,
 } from 'typeorm';
-import { BaseEntity } from '../../../common/base/base.entity';
-import { Client } from '../../../clients/entities/client.entity';
-import { Case } from '../../../cases/entities/case.entity';
+import { BaseEntity } from '@common/base/base.entity';
+import { Client } from '@clients/entities/client.entity';
+import { Case } from '@cases/entities/case.entity';
 
 export enum InvoiceStatus {
   DRAFT = 'Draft',

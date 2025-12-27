@@ -1,9 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
-import { AuditLog } from '../entities/audit-log.entity';
+import { AuditLog } from '@compliance/entities/audit-log.entity';
 import { createHash, createHmac } from 'crypto';
-import { AuditReportQueryDto } from '../dto/compliance.dto';
+import { AuditReportQueryDto } from '@compliance/dto/compliance.dto';
 
 interface AuditChainEntry {
   id: string;
@@ -13,7 +13,7 @@ interface AuditChainEntry {
   data: string;
 }
 
-interface IntegrityCheckResult {
+export interface IntegrityCheckResult {
   valid: boolean;
   totalEntries: number;
   checkedEntries: number;
@@ -23,7 +23,7 @@ interface IntegrityCheckResult {
   verificationDate: Date;
 }
 
-interface AuditSearchResult {
+export interface AuditSearchResult {
   data: AuditLog[];
   total: number;
   page: number;

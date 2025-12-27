@@ -8,7 +8,7 @@
 import { Entity, Column, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BaseEntity } from '../../common/base/base.entity';
+import { BaseEntity } from '@common/base/base.entity';
 import {
   EncryptedColumn,
   EncryptedSSN,

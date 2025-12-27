@@ -1,6 +1,6 @@
 import { IsString, IsEnum, IsOptional, IsUUID, IsNotEmpty, MaxLength, IsDate, IsInt, IsNumber, Min, Max } from 'class-validator';
 import { Type } from 'class-transformer';
-import { PhaseType, PhaseStatus } from '../entities/case-phase.entity';
+import { PhaseType, PhaseStatus } from '@case-phases/entities/case-phase.entity';
 
 export class CreateCasePhaseDto {
   @IsUUID()

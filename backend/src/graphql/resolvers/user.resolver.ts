@@ -1,13 +1,13 @@
 import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { UserType, AuthPayload } from '../types/user.type';
-import { LoginInput, RegisterInput, UpdateUserInput, UserFilterInput, ChangePasswordInput } from '../inputs/user.input';
-import { CurrentUser } from '../../auth/decorators/current-user.decorator';
-import { GqlAuthGuard } from '../../auth/guards/gql-auth.guard';
-import { Public } from '../../auth/decorators/public.decorator';
-import { UsersService } from '../../users/users.service';
-import { AuthService } from '../../auth/auth.service';
-import { AuthenticatedUser } from '../../auth/interfaces/authenticated-user.interface';
+import { UserType, AuthPayload } from '@graphql/types/user.type';
+import { LoginInput, RegisterInput, UpdateUserInput, UserFilterInput, ChangePasswordInput } from '@graphql/inputs/user.input';
+import { CurrentUser } from '@auth/decorators/current-user.decorator';
+import { GqlAuthGuard } from '@auth/guards/gql-auth.guard';
+import { Public } from '@auth/decorators/public.decorator';
+import { UsersService } from '@users/users.service';
+import { AuthService } from '@auth/auth.service';
+import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface';
 
 @Resolver(() => UserType)
 export class UserResolver {

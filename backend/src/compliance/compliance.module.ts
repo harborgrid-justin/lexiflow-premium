@@ -63,7 +63,7 @@ import { DataRetentionService } from './services/dataRetention.service';
 import { DataClassificationService } from './services/dataClassification.service';
 
 // User Entity (needed for GDPR service)
-import { User } from '../users/entities/user.entity';
+import { User } from '@users/entities/user.entity';
 
 @Module({
   imports: [

@@ -1,6 +1,6 @@
 import { IsOptional, IsEnum, IsUUID, IsString, IsNumber, Min } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ProductionStatus, ProductionFormat } from '../entities/production.entity';
+import { ProductionStatus, ProductionFormat } from '@discovery/productions/entities/production.entity';
 
 export class QueryProductionDto {
   @IsOptional()

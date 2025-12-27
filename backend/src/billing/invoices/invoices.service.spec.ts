@@ -8,8 +8,8 @@ import {
 } from '@nestjs/common';
 import { InvoicesService } from './invoices.service';
 import { Invoice, InvoiceStatus } from './entities/invoice.entity';
-import { TimeEntry } from '../time-entries/entities/time-entry.entity';
-import { Expense } from '../expenses/entities/expense.entity';
+import { TimeEntry } from '@billing/time-entries/entities/time-entry.entity';
+import { Expense } from '@billing/expenses/entities/expense.entity';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { InvoicePaymentService } from './services/invoice-payment.service';

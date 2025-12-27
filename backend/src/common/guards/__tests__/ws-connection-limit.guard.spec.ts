@@ -1,6 +1,6 @@
 import { ExecutionContext } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { WsConnectionLimitGuard } from '../ws-connection-limit.guard';
+import { WsConnectionLimitGuard } from '@common/guards/ws-connection-limit.guard';
 import { Socket } from 'socket.io';
 
 describe('WsConnectionLimitGuard', () => {

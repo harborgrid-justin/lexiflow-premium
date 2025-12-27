@@ -2,11 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Response } from 'express';
 import { DocumentsController } from './documents.controller';
 import { DocumentsService } from './documents.service';
-import { ProcessingJobsService } from '../processing-jobs/processing-jobs.service';
+import { ProcessingJobsService } from '@processing-jobs/processing-jobs.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { DocumentFilterDto } from './dto/document-filter.dto';
-import { JobType } from '../processing-jobs/dto/job-status.dto';
+import { JobType } from '@processing-jobs/dto/job-status.dto';
 import { DocumentType, DocumentStatus } from './interfaces/document.interface';
 import { describe, expect, jest, it, beforeEach } from '@jest/globals';
 

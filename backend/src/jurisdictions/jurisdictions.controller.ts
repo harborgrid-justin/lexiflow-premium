@@ -6,11 +6,11 @@ import { UpdateJurisdictionDto } from './dto/update-jurisdiction.dto';
 import { CreateJurisdictionRuleDto } from './dto/create-jurisdiction-rule.dto';
 import { UpdateJurisdictionRuleDto } from './dto/update-jurisdiction-rule.dto';
 import { JurisdictionSystem } from './entities/jurisdiction.entity';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../common/guards/roles.guard';
-import { Roles } from '../common/decorators/roles.decorator';
-import { UserRole } from '../users/entities/user.entity';
-import { Public } from '../common/decorators/public.decorator';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+import { RolesGuard } from '@common/guards/roles.guard';
+import { Roles } from '@common/decorators/roles.decorator';
+import { UserRole } from '@users/entities/user.entity';
+import { Public } from '@common/decorators/public.decorator';
 
 @ApiTags('Jurisdictions')
 @ApiBearerAuth('JWT-auth')

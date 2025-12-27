@@ -15,7 +15,7 @@ import {
   CacheTTL,
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '@auth/jwt-auth.guard';
 import { CustodiansService } from './custodians.service';
 import { CreateCustodianDto } from './dto/create-custodian.dto';
 import { UpdateCustodianDto } from './dto/update-custodian.dto';

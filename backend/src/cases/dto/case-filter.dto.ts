@@ -1,6 +1,6 @@
 import { IsEnum, IsOptional, IsString, IsInt, Min, IsBoolean, IsUUID } from 'class-validator';
 import { Type } from 'class-transformer';
-import { CaseType, CaseStatus } from '../entities/case.entity';
+import { CaseType, CaseStatus } from '@cases/entities/case.entity';
 
 export class CaseFilterDto {
   @IsString()

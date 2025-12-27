@@ -1,6 +1,6 @@
 import { IsString, IsNumber, IsOptional, IsBoolean, IsEnum, Min, Max } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { TimeEntryStatus } from '../entities/time-entry.entity';
+import { TimeEntryStatus } from '@billing/time-entries/entities/time-entry.entity';
 
 export class CreateTimeEntryDto {
   @ApiProperty({

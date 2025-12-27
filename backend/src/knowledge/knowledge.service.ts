@@ -1,10 +1,10 @@
 import { Injectable, Logger} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository} from 'typeorm';
-import * as MasterConfig from '../config/master.config';
+import * as MasterConfig from '@config/master.config';
 import { KnowledgeArticle } from './entities/knowledge-article.entity';
 import { CreateKnowledgeArticleDto, UpdateKnowledgeArticleDto, QueryKnowledgeDto } from './dto';
-import { EntityNotFoundException } from '../common/exceptions';
+import { EntityNotFoundException } from '@common/exceptions';
 
 @Injectable()
 export class KnowledgeService {

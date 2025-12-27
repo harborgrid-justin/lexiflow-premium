@@ -1,6 +1,6 @@
 import { Entity, Column, Index } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { BaseEntity } from '../../common/base/base.entity';
+import { BaseEntity } from '@common/base/base.entity';
 
 export enum RetentionPolicyStatus {
   ACTIVE = 'active',

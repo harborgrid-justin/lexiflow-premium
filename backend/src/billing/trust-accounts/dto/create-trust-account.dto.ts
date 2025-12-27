@@ -1,5 +1,5 @@
 import { IsString, IsNumber, IsOptional, IsEnum, IsBoolean, Min } from 'class-validator';
-import { TrustAccountType, TrustAccountStatus } from '../entities/trust-account.entity';
+import { TrustAccountType, TrustAccountStatus } from '@billing/trust-accounts/entities/trust-account.entity';
 
 export class CreateTrustAccountDto {
   @IsString()

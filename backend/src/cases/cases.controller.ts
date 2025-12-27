@@ -14,7 +14,7 @@ import {
   CacheInterceptor,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
-import { Public } from '../common/decorators/public.decorator';
+import { Public } from '@common/decorators/public.decorator';
 import { CaseImportService, ImportOptions } from './case-import.service';
 import { CasesService } from './cases.service';
 import { CreateCaseDto } from './dto/create-case.dto';

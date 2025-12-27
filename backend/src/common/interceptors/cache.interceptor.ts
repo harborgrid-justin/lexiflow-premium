@@ -8,8 +8,8 @@ import {
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Reflector } from '@nestjs/core';
-import { CACHE_KEY, CacheOptions } from '../decorators/cache.decorator';
-import { CacheManagerService } from '../services/cache-manager.service';
+import { CACHE_KEY, CacheOptions } from '@common/decorators/cache.decorator';
+import { CacheManagerService } from '@common/services/cache-manager.service';
 
 @Injectable()
 export class CacheInterceptor implements NestInterceptor {

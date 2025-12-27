@@ -1,8 +1,8 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, ForbiddenException, SetMetadata, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
-import { ApiKeyService } from '../../api-keys/services/api.key.service';
-import { ApiKeyScope } from '../dto';
+import { ApiKeyService } from '@api-keys/services/api.key.service';
+import { ApiKeyScope } from '@api-security/dto';
 
 export const REQUIRED_SCOPES_KEY = 'requiredScopes';
 export const RequiredScopes = (...scopes: ApiKeyScope[]) => SetMetadata(REQUIRED_SCOPES_KEY, scopes);

@@ -1,13 +1,13 @@
 import { Resolver, Query, Mutation, Args, ID } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { TimeEntryType, InvoiceType, RateTableType, FeeAgreementType } from '../types/billing.type';
+import { TimeEntryType, InvoiceType, RateTableType, FeeAgreementType } from '@graphql/types/billing.type';
 import {
   CreateTimeEntryInput,
   UpdateTimeEntryInput,
   TimeEntryFilterInput,
   CreateInvoiceInput,
   InvoiceFilterInput,
-} from '../inputs/billing.input';
+} from '@graphql/inputs/billing.input';
 import { CurrentUser } from '@auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from '@auth/guards/gql-auth.guard';
 import { BillingService } from '@billing/billing.service';

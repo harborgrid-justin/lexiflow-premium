@@ -1,4 +1,4 @@
-export { DocumentType, DocumentStatus } from '../../common/enums/document.enum';
+export { DocumentType, DocumentStatus } from '@common/enums/document.enum';
 
 export interface DocumentMetadata {
   author?: string;

@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Delete, Body, Param, Query, UseGuards, Head, HttpCode, HttpStatus, Req } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiParam , ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { ComplianceService } from './compliance.service';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../common/guards/roles.guard';
-import { Roles } from '../common/decorators/roles.decorator';
-import { UserRole } from '../users/entities/user.entity';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+import { RolesGuard } from '@common/guards/roles.guard';
+import { Roles } from '@common/decorators/roles.decorator';
+import { UserRole } from '@users/entities/user.entity';
 import { RunCheckDto, GenerateComplianceReportDto, ExportAuditLogsDto } from './dto';
 import {
   DataExportRequestDto,

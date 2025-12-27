@@ -1,7 +1,7 @@
 import { IsString, IsEnum, IsOptional, IsUUID, IsNotEmpty, MaxLength, IsDate, IsInt, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { DocketEntryType } from '../entities/docket-entry.entity';
+import { DocketEntryType } from '@docket/entities/docket-entry.entity';
 
 export class CreateDocketEntryDto {
   @ApiProperty({ description: 'Case ID' })

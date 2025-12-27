@@ -5,7 +5,7 @@ import { TimeEntry, TimeEntryStatus } from './entities/time-entry.entity';
 import { CreateTimeEntryDto } from './dto/create-time-entry.dto';
 import { UpdateTimeEntryDto } from './dto/update-time-entry.dto';
 import { TimeEntryFilterDto } from './dto/time-entry-filter.dto';
-import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
+import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
 
 @Injectable()
 export class TimeEntriesService {

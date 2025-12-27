@@ -9,7 +9,7 @@ import {
   ReportFormat,
   DownloadReportDto,
 } from './dto/reports.dto';
-import { validatePagination } from '../common/utils/query-validation.util';
+import { validatePagination } from '@common/utils/query-validation.util';
 
 @Injectable()
 export class ReportsService implements OnModuleDestroy {

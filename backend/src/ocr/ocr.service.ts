@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { FileStorageService } from '../file-storage/file-storage.service';
+import { FileStorageService } from '@file-storage/file-storage.service';
 import { OcrRequestDto, OcrResultDto } from './dto/ocr-request.dto';
 
 @Injectable()

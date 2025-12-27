@@ -5,8 +5,8 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { BaseEntity } from '../../common/base/base.entity';
-import { Document } from '../../documents/entities/document.entity';
+import { BaseEntity } from '@common/base/base.entity';
+import { Document } from '@documents/entities/document.entity';
 
 @Entity('document_versions')
 @Index(['documentId', 'version'])

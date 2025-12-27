@@ -11,7 +11,7 @@ import {
   HttpStatus,
   Head,
 } from '@nestjs/common';
-import { Public } from '../../common/decorators/public.decorator';
+import { Public } from '@common/decorators/public.decorator';
 import { ApiTags, ApiBearerAuth, ApiResponse }from '@nestjs/swagger';
 import { TrustAccountsService } from './trust-accounts.service';
 import { CreateTrustAccountDto } from './dto/create-trust-account.dto';

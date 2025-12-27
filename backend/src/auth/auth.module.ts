@@ -8,7 +8,7 @@ import { AuthController } from './auth.controller';
 import { TokenBlacklistAdminController } from './token-blacklist-admin.controller';
 import { AuthService } from './auth.service';
 import { TokenStorageService } from './token-storage.service';
-import { UsersModule } from '../users/users.module';
+import { UsersModule } from '@users/users.module';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshStrategy } from './strategies/refresh.strategy';

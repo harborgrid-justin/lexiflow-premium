@@ -15,7 +15,7 @@ import { CasePhasesService } from './case-phases.service';
 import { CreateCasePhaseDto } from './dto/create-case-phase.dto';
 import { UpdateCasePhaseDto } from './dto/update-case-phase.dto';
 import { CasePhase } from './entities/case-phase.entity';
-import { Public } from '../common/decorators/public.decorator';
+import { Public } from '@common/decorators/public.decorator';
 
 @ApiTags('Case Phases')
 @ApiBearerAuth('JWT-auth')

@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue, Job } from 'bull';
-import { QUEUE_NAMES } from '../constants';
+import { QUEUE_NAMES } from '@queues/constants';
 
 /**
  * Global error handler for Bull queues

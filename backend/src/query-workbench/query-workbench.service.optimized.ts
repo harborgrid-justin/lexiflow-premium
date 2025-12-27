@@ -29,7 +29,6 @@ export class QueryWorkbenchService implements OnModuleDestroy {
   // Memory limits
   private readonly MAX_RESULT_CACHE = 2000;
   private readonly MAX_HISTORY_SIZE = 1000;
-  private readonly MAX_QUERY_PLAN_CACHE = 500;
   private readonly CACHE_TTL_MS = 900000; // 15 minutes
   private readonly MAX_RESULT_SET_SIZE = 100000;
   private readonly MAX_QUERY_TIMEOUT_MS = 300000; // 5 minutes

@@ -1,5 +1,5 @@
 import { BaseEntity, CaseId, DocumentId, UserId } from './base.entity';
-import { DocumentStatus, DocumentType, DocumentAccessLevel } from '../enums/document.enums';
+import { DocumentStatus, DocumentType, DocumentAccessLevel } from '@shared-types/enums/document.enums';
 export interface Document extends BaseEntity {
     title: string;
     description?: string;

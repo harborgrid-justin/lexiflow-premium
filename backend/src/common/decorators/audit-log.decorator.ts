@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import { AuditAction } from '../services/audit-log.service';
+import { AuditAction } from '@common/services/audit-log.service';
 
 export const AUDIT_LOG_KEY = 'AUDIT_LOG';
 

@@ -1,6 +1,6 @@
 import { IsString, IsEnum, IsOptional, IsUUID, IsEmail, IsNotEmpty, MaxLength, IsArray, IsBoolean } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { WitnessType, WitnessStatus } from '../entities/witness.entity';
+import { WitnessType, WitnessStatus } from '@discovery/witnesses/entities/witness.entity';
 
 export class CreateWitnessDto {
   @ApiProperty({ 

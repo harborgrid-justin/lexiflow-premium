@@ -44,12 +44,14 @@ export { ValidationPipe } from '@common/pipes/validation.pipe';
  * Usage:
  * ```typescript
  * @Get(':id')
- * async getById(@Param('id', ParseUuidPipe) id: string) { ... }
+ * async getById(@Param('id', ParseUUIDPipe) id: string) { ... }
  * ```
  *
  * Throws BadRequestException if parameter is not a valid UUID
  */
-export { ParseUuidPipe } from '@common/pipes/parse-uuid.pipe';
+export { ParseUUIDPipe } from '@common/pipes/parse-uuid.pipe';
+// Alias for backward compatibility
+export { ParseUUIDPipe as ParseUuidPipe } from '@common/pipes/parse-uuid.pipe';
 
 // =============================================================================
 // PIPE USAGE GUIDELINES

@@ -1,6 +1,6 @@
 import { IsOptional, IsEnum, IsUUID, IsString, IsNumber, Min } from 'class-validator';
 import { Type } from 'class-transformer';
-import { InterviewType, InterviewStatus } from '../entities/custodian-interview.entity';
+import { InterviewType, InterviewStatus } from '@discovery/custodian-interviews/entities/custodian-interview.entity';
 
 export class QueryCustodianInterviewDto {
   @IsOptional()

@@ -6,8 +6,8 @@
  */
 
 import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { ResourceAccessGuard } from '../guards/resource.access.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+import { ResourceAccessGuard } from '@authorization/guards/resource.access.guard';
 import {
   RequirePermissions,
   RequireAllPermissions,
@@ -16,9 +16,9 @@ import {
   PermissionPolicy,
   ResourceType,
   PermissionRules,
-} from '../decorators/permissions.decorator';
-import { PERMISSIONS } from '../constants/permissions.constant';
-import { CurrentUser } from '../../common/decorators/current-user.decorator';
+} from '@authorization/decorators/permissions.decorator';
+import { PERMISSIONS } from '@authorization/constants/permissions.constant';
+import { CurrentUser } from '@common/decorators/current-user.decorator';
 
 interface User {
   id: string;
@@ -215,9 +215,9 @@ export class UsersExampleController {
  */
 
 import { Injectable } from '@nestjs/common';
-import { PermissionService } from '../services/permission.service';
-import { PolicyService, PolicyEvaluationContext } from '../services/policy.service';
-import { UserRole } from '../../users/entities/user.entity';
+import { PermissionService } from '@authorization/services/permission.service';
+import { PolicyService, PolicyEvaluationContext } from '@authorization/services/policy.service';
+import { UserRole } from '@users/entities/user.entity';
 
 @Injectable()
 export class AuthorizationExampleService {

@@ -5,7 +5,7 @@
  * All paths should be imported from this file to ensure consistency.
  * 
  * Usage:
- *   import * as PathsConfig from '../config/paths.config';
+ *   import * as PathsConfig from '@config/paths.config';
  *   const uploadPath = PathsConfig.UPLOAD_DIR;
  */
 

@@ -4,8 +4,8 @@ import { Repository} from 'typeorm';
 import { WorkflowTemplate } from './entities/workflow-template.entity';
 import { CreateWorkflowTemplateDto, WorkflowCategory } from './dto/create-workflow-template.dto';
 import { UpdateWorkflowTemplateDto } from './dto/update-workflow-template.dto';
-import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
-import { validateSortField, validateSortOrder, sanitizeSearchQuery } from '../common/utils/query-validation.util';
+import { calculateOffset, calculateTotalPages } from '@common/utils/math.utils';
+import { validateSortField, validateSortOrder, sanitizeSearchQuery } from '@common/utils/query-validation.util';
 
 @Injectable()
 export class WorkflowService implements OnModuleDestroy {
@@ -135,11 +135,11 @@ export class WorkflowService implements OnModuleDestroy {
   }
 
   async remove(id: string): Promise<void> {
-    await this.workflowRepository.delete(id);
-    this.templateCache.delete(id);
-  }
     const workflow = await this.findOne(id);
-    await this.workflowRepository.remove(workflow);
+    if (workflow) {
+      await this.workflowRepository.remove(workflow);
+    }
+    this.templateCache.delete(id);
   }
 
   async instantiate(id: string, caseId: string) {

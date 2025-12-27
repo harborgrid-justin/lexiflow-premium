@@ -12,7 +12,7 @@ import {
 import { ApiTags, ApiOperation, ApiQuery, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { ProcessingJobsService } from './processing-jobs.service';
 import { JobType, JobStatus } from './dto/job-status.dto';
-import { Public } from '../common/decorators/public.decorator';
+import { Public } from '@common/decorators/public.decorator';
 
 @ApiTags('Processing Jobs')
 @ApiBearerAuth('JWT-auth')

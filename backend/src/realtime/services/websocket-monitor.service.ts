@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
-import { RealtimeGateway } from '../realtime.gateway';
+import { RealtimeGateway } from '@realtime/realtime.gateway';
 import { WsRateLimitGuard } from '@common/guards/ws-rate-limit.guard';
 import { WsRoomLimitGuard } from '@common/guards/ws-room-limit.guard';
 

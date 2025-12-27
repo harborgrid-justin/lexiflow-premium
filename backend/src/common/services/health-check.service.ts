@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { formatBytes } from '../utils/format.utils';
+import { formatBytes } from '@common/utils/format.utils';
 
 export interface HealthCheckResult {
   status: 'healthy' | 'degraded' | 'unhealthy';

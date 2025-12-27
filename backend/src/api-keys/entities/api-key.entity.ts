@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { ApiKeyScope, ApiKeyRotationPolicy } from '../../api-security/dto';
+import { ApiKeyScope, ApiKeyRotationPolicy } from '@api-security/dto';
 
 @Entity('api_keys')
 export class ApiKey {

@@ -8,7 +8,7 @@ import {
   IsBoolean,
   MaxLength,
 } from 'class-validator';
-import { ProductionFormat } from '../entities/production.entity';
+import { ProductionFormat } from '@discovery/productions/entities/production.entity';
 
 export class CreateProductionDto {
   @IsUUID()

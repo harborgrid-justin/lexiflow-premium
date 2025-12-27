@@ -14,13 +14,10 @@ import {
   IP_MAX_FAILED_LOGINS,
   IP_MAX_REQUESTS_PER_MINUTE,
   IP_MAX_REQUESTS_PER_HOUR,
-  IP_FAILED_LOGIN_WINDOW,
-  SUSPICIOUS_IP_RATE_LIMIT,
   SUSPICIOUS_IP_BLOCK_THRESHOLD,
   REDIS_BLOCKED_IP_PREFIX,
   REDIS_SUSPICIOUS_IP_PREFIX,
-  PRIVATE_IP_RANGES,
-} from '../constants/security.constants';
+} from '@security/constants/security.constants';
 
 export interface IpReputationData {
   failedLogins: number;
@@ -122,8 +119,14 @@ export class IpReputationGuard implements CanActivate {
     // Check if IP should be blocked based on behavior
     const shouldBlock = await this.shouldBlockIp(ip);
     if (shouldBlock.block) {
-      await this.blockIp(ip, shouldBlock.reason, shouldBlock.duration);
-      this.logger.warn(`Blocking IP ${ip}: ${shouldBlock.reason}`);
+      const reason = shouldBlock.reason || 'Suspicious activity detected';
+      const duration = shouldBlock.duration;
+      if (duration) {
+        await this.blockIp(ip, reason, duration);
+      } else {
+        await this.blockIp(ip, reason);
+      }
+      this.logger.warn(`Blocking IP ${ip}: ${reason}`);
 
       throw new ForbiddenException(
         'Access denied. Your IP address has been temporarily blocked due to suspicious activity.'
@@ -141,19 +144,24 @@ export class IpReputationGuard implements CanActivate {
     const forwarded = req.headers['x-forwarded-for'];
     if (forwarded) {
       const ips = Array.isArray(forwarded) ? forwarded[0] : forwarded;
-      return ips.split(',')[0].trim();
+      if (ips) {
+        const firstIp = ips.split(',')[0];
+        return firstIp ? firstIp.trim() : 'unknown';
+      }
     }
 
     // Check X-Real-IP header (nginx)
     const realIp = req.headers['x-real-ip'];
     if (realIp) {
-      return Array.isArray(realIp) ? realIp[0] : realIp;
+      const ip = Array.isArray(realIp) ? realIp[0] : realIp;
+      return ip || 'unknown';
     }
 
     // Check CF-Connecting-IP (Cloudflare)
     const cfIp = req.headers['cf-connecting-ip'];
     if (cfIp) {
-      return Array.isArray(cfIp) ? cfIp[0] : cfIp;
+      const ip = Array.isArray(cfIp) ? cfIp[0] : cfIp;
+      return ip || 'unknown';
     }
 
     // Fallback to connection remote address
@@ -182,8 +190,11 @@ export class IpReputationGuard implements CanActivate {
     if (ip.startsWith('10.')) return true;
     if (ip.startsWith('192.168.')) return true;
     if (ip.startsWith('172.')) {
-      const secondOctet = parseInt(ip.split('.')[1], 10);
-      if (secondOctet >= 16 && secondOctet <= 31) return true;
+      const parts = ip.split('.');
+      if (parts.length > 1 && parts[1]) {
+        const secondOctet = parseInt(parts[1], 10);
+        if (secondOctet >= 16 && secondOctet <= 31) return true;
+      }
     }
     if (ip.startsWith('127.')) return true;
 
@@ -214,7 +225,7 @@ export class IpReputationGuard implements CanActivate {
   /**
    * Track request from IP
    */
-  private async trackRequest(ip: string, request: Request): Promise<void> {
+  private async trackRequest(ip: string, _request: Request): Promise<void> {
     const key = `${REDIS_SUSPICIOUS_IP_PREFIX}${ip}`;
     const data = await this.cacheManager.get<IpReputationData>(key) || this.createEmptyReputationData();
 

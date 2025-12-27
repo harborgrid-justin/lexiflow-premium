@@ -6,10 +6,10 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { BaseEntity } from '../../common/base/base.entity';
-import { DocumentType, DocumentStatus } from '../interfaces/document.interface';
-import { User } from '../../users/entities/user.entity';
-import { Case } from '../../cases/entities/case.entity';
+import { BaseEntity } from '@common/base/base.entity';
+import { DocumentType, DocumentStatus } from '@documents/interfaces/document.interface';
+import { User } from '@users/entities/user.entity';
+import { Case } from '@cases/entities/case.entity';
 import { DocumentReviewer } from './document-reviewer.entity';
 
 @Entity('documents')

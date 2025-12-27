@@ -9,8 +9,6 @@ import {
   Query,
   ParseUUIDPipe,
   ParseIntPipe,
-  UseInterceptors,
-  CacheInterceptor,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { PleadingsService } from './pleadings.service';

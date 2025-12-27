@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as fs from 'fs/promises';
 import * as MasterConfig from '@config/master.config';
 import * as PathsConfig from '@config/paths.config';
-import { calculateChecksum, generateUniqueFilename, isAllowedMimeType } from '../utils/file.utils';
+import { calculateChecksum, generateUniqueFilename, isAllowedMimeType } from '@common/utils/file.utils';
 
 /**
  * File Upload Configuration

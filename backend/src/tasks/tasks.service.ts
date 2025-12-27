@@ -4,8 +4,8 @@ import { Repository, FindOptionsWhere} from 'typeorm';
 import { Task } from './entities/task.entity';
 import { CreateTaskDto, TaskStatus, TaskPriority } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
-import { sanitizeSearchQuery } from '../common/utils/query-validation.util';
+import { calculateOffset, calculateTotalPages } from '@common/utils/math.utils';
+import { sanitizeSearchQuery } from '@common/utils/query-validation.util';
 
 @Injectable()
 export class TasksService {

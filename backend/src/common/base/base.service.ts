@@ -2,7 +2,7 @@ import { Logger, NotFoundException } from '@nestjs/common';
 import { BaseRepository } from './base.repository';
 import { DeepPartial, FindManyOptions, FindOneOptions } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { EventBusService, DomainEvent } from '../services/event-bus.service';
+import { EventBusService, DomainEvent } from '@common/services/event-bus.service';
 
 import { ObjectLiteral } from 'typeorm';
 

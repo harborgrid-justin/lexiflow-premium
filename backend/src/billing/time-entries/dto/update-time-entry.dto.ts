@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateTimeEntryDto } from './create-time-entry.dto';
 import { IsOptional, IsString, IsEnum } from 'class-validator';
-import { TimeEntryStatus } from '../entities/time-entry.entity';
+import { TimeEntryStatus } from '@billing/time-entries/entities/time-entry.entity';
 
 export class UpdateTimeEntryDto extends PartialType(CreateTimeEntryDto) {
   @IsOptional()

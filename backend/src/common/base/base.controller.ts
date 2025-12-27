@@ -11,11 +11,11 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { BaseService } from './base.service';
 import { BaseRepository } from './base.repository';
-import { QueryPaginationDto } from '../dto/query-pagination.dto';
-import { StandardResponseDto } from '../dto/standard-response.dto';
+import { QueryPaginationDto } from '@common/dto/query-pagination.dto';
+import { StandardResponseDto } from '@common/dto/standard-response.dto';
 import { DeepPartial } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 

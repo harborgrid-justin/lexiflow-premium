@@ -1,5 +1,5 @@
 import { IsString, IsEnum, IsOptional, IsUUID, IsNotEmpty, MaxLength, IsEmail } from 'class-validator';
-import { PartyType, PartyRole } from '../entities/party.entity';
+import { PartyType, PartyRole } from '@parties/entities/party.entity';
 
 export class CreatePartyDto {
   @IsUUID()

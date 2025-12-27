@@ -11,9 +11,9 @@ import { Document } from './entities/document.entity';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { DocumentFilterDto } from './dto/document-filter.dto';
-import { FileStorageService } from '../file-storage/file-storage.service';
-import { TransactionManagerService } from '../common/services/transaction-manager.service';
-import { validateSortField, validateSortOrder } from '../common/utils/query-validation.util';
+import { FileStorageService } from '@file-storage/file-storage.service';
+import { TransactionManagerService } from '@common/services/transaction-manager.service';
+import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
 
 @Injectable()
 export class DocumentsService implements OnModuleDestroy {

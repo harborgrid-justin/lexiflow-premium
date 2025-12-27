@@ -203,9 +203,9 @@ export * from './pipes';
  *
  * Before:
  * ```typescript
- * import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
- * import { DateUtil } from '../common/utils/date.util';
- * import { Role } from '../common/enums/role.enum';
+ * import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+ * import { DateUtil } from '@common/utils/date.util';
+ * import { Role } from '@common/enums/role.enum';
  * ```
  *
  * After:

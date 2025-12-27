@@ -1,7 +1,7 @@
 import { IsEmail, IsString, MinLength, MaxLength, IsEnum, IsOptional, IsNotEmpty, Matches } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { Role } from '../../common/enums/role.enum';
+import { Role } from '@common/enums/role.enum';
 
 /**
  * Registration DTO with enterprise-grade validation

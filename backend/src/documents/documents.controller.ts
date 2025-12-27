@@ -23,9 +23,9 @@ import { DocumentsService } from './documents.service';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { DocumentFilterDto } from './dto/document-filter.dto';
-import { ProcessingJobsService } from '../processing-jobs/processing-jobs.service';
-import { JobType } from '../processing-jobs/dto/job-status.dto';
-import { OcrRequestDto } from '../ocr/dto/ocr-request.dto';
+import { ProcessingJobsService } from '@processing-jobs/processing-jobs.service';
+import { JobType } from '@processing-jobs/dto/job-status.dto';
+import { OcrRequestDto } from '@ocr/dto/ocr-request.dto';
 
 @ApiTags('documents')
 @ApiBearerAuth('JWT-auth')

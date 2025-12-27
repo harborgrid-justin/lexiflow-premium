@@ -1,7 +1,7 @@
 import { IsString, IsNotEmpty, IsOptional, IsDate, IsEnum } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { ChainOfCustodyAction } from '../entities/chain-of-custody-event.entity';
+import { ChainOfCustodyAction } from '@evidence/entities/chain-of-custody-event.entity';
 
 export class CreateChainOfCustodyDto {
   @ApiProperty({ description: 'Evidence item ID' })

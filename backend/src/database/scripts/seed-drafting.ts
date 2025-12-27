@@ -13,7 +13,7 @@
  */
 
 import { DataSource } from 'typeorm';
-import { seedDraftingTemplates } from '../seeds/drafting-templates.seed';
+import { seedDraftingTemplates } from '@database/seeds/drafting-templates.seed';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 

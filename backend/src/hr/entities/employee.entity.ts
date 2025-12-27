@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { EmployeeRole, EmployeeStatus } from '../dto/create-employee.dto';
+import { EmployeeRole, EmployeeStatus } from '@hr/dto/create-employee.dto';
 import { TimeOffRequest } from './time-off-request.entity';
 
 @Entity('employees')

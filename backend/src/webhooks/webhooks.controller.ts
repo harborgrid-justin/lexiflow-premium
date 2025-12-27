@@ -14,10 +14,10 @@ import {
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { WebhooksService } from './webhooks.service';
 import { CreateWebhookDto, UpdateWebhookDto } from './dto';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { JwtPayload } from '../auth/interfaces/jwt-payload.interface';
-import { Public } from '../common/decorators/public.decorator';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+import { CurrentUser } from '@auth/decorators/current-user.decorator';
+import { JwtPayload } from '@auth/interfaces/jwt-payload.interface';
+import { Public } from '@common/decorators/public.decorator';
 
 @ApiTags('Webhooks')
 

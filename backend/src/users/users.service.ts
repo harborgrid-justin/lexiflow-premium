@@ -7,12 +7,12 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import * as MasterConfig from '../config/master.config';
+import * as MasterConfig from '@config/master.config';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthenticatedUser } from '../auth/interfaces/authenticated-user.interface';
-import { ROLE_PERMISSIONS } from '../common/constants/role-permissions.constant';
-import { Role } from '../common/enums/role.enum';
+import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface';
+import { ROLE_PERMISSIONS } from '@common/constants/role-permissions.constant';
+import { Role } from '@common/enums/role.enum';
 import { User, UserRole, UserStatus } from './entities/user.entity';
 
 @Injectable()

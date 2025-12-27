@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body, Param, Query, Head, UseGuards, HttpCode, HttpStatus, UseInterceptors, CacheInterceptor } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { DiscoveryService } from './discovery.service';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../common/guards/roles.guard';
-import { Roles } from '../common/decorators/roles.decorator';
-import { UserRole } from '../users/entities/user.entity';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+import { RolesGuard } from '@common/guards/roles.guard';
+import { Roles } from '@common/decorators/roles.decorator';
+import { UserRole } from '@users/entities/user.entity';
 import { CreateDiscoveryRequestDto } from './discovery-requests/dto/create-discovery-request.dto';
 import { QueryDiscoveryRequestDto } from './discovery-requests/dto/query-discovery-request.dto';
 import { CreateDiscoveryEvidenceDto } from './evidence/dto/create-evidence.dto';

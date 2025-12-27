@@ -9,7 +9,7 @@ import {
   IsBoolean,
   MaxLength,
 } from 'class-validator';
-import { PrivilegeType } from '../entities/privilege-log-entry.entity';
+import { PrivilegeType } from '@discovery/privilege-log/entities/privilege-log-entry.entity';
 
 export class CreatePrivilegeLogEntryDto {
   @IsUUID()

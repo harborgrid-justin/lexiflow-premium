@@ -8,7 +8,7 @@ import { DiscoveryRequest } from './entities/discovery-request.entity';
 import { CreateDiscoveryRequestDto } from './dto/create-discovery-request.dto';
 import { UpdateDiscoveryRequestDto } from './dto/update-discovery-request.dto';
 import { QueryDiscoveryRequestDto } from './dto/query-discovery-request.dto';
-import { validateSortField, validateSortOrder } from '../../common/utils/query-validation.util';
+import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
 
 @Injectable()
 export class DiscoveryRequestsService {

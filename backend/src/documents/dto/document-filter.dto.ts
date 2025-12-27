@@ -9,7 +9,7 @@ import {
   IsDateString,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { DocumentType, DocumentStatus } from '../interfaces/document.interface';
+import { DocumentType, DocumentStatus } from '@documents/interfaces/document.interface';
 
 export class DocumentFilterDto {
   @ApiPropertyOptional({ description: 'Filter by case ID' })

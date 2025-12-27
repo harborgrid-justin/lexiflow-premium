@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CircuitBreakerService, CircuitState } from '../../common/services/circuit-breaker.service';
+import { CircuitBreakerService, CircuitState } from '@common/services/circuit-breaker.service';
 
 /**
  * Service Health Status

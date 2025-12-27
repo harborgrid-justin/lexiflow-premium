@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { Public } from '../common/decorators/public.decorator';
+import { Public } from '@common/decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import {
   HealthCheckService,
@@ -10,7 +10,7 @@ import {
 import { RedisHealthIndicator as ImprovedRedisHealthIndicator } from './indicators/redis.health';
 import { DiskHealthIndicator } from './indicators/disk.health';
 import { MemoryHealthIndicator } from './indicators/memory.health';
-import * as MasterConfig from '../config/master.config';
+import * as MasterConfig from '@config/master.config';
 
 /**
  * Health Check Controller

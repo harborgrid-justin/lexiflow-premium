@@ -1,5 +1,5 @@
 import { IsString, IsNumber, IsOptional, IsEnum, IsBoolean, Min } from 'class-validator';
-import { FeeAgreementType, FeeAgreementStatus } from '../entities/fee-agreement.entity';
+import { FeeAgreementType, FeeAgreementStatus } from '@billing/fee-agreements/entities/fee-agreement.entity';
 
 export class CreateFeeAgreementDto {
   @IsString()

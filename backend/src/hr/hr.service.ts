@@ -6,8 +6,8 @@ import { TimeOffRequest } from './entities/time-off-request.entity';
 import { CreateEmployeeDto, EmployeeStatus } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { CreateTimeOffDto, TimeOffStatus } from './dto/create-time-off.dto';
-import { calculateOffset, calculateTotalPages } from '../common/utils/math.utils';
-import { validateSortField, validateSortOrder, sanitizeSearchQuery } from '../common/utils/query-validation.util';
+import { calculateOffset, calculateTotalPages } from '@common/utils/math.utils';
+import { validateSortField, validateSortOrder, sanitizeSearchQuery } from '@common/utils/query-validation.util';
 
 @Injectable()
 export class HRService {

@@ -9,7 +9,7 @@ import {
   IsBoolean,
   MaxLength,
 } from 'class-validator';
-import { InterviewType, InterviewStatus } from '../entities/custodian-interview.entity';
+import { InterviewType, InterviewStatus } from '@discovery/custodian-interviews/entities/custodian-interview.entity';
 
 export class UpdateCustodianInterviewDto {
   @IsOptional()

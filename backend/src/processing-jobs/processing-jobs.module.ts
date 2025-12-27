@@ -5,8 +5,8 @@ import { ProcessingJobsController } from './processing-jobs.controller';
 import { ProcessingJobsService } from './processing-jobs.service';
 import { ProcessingJob } from './entities/processing-job.entity';
 import { DocumentProcessor } from './processors/document-processor';
-import { OcrModule } from '../ocr/ocr.module';
-import { DocumentsModule } from '../documents/documents.module';
+import { OcrModule } from '@ocr/ocr.module';
+import { DocumentsModule } from '@documents/documents.module';
 
 /**
  * Processing Jobs Module

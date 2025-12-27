@@ -5,9 +5,9 @@ import {
   JoinColumn,
   Index,
 } from 'typeorm';
-import { BaseEntity } from '../../../common/base/base.entity';
-import { User } from '../../../users/entities/user.entity';
-import { Case } from '../../../cases/entities/case.entity';
+import { BaseEntity } from '@common/base/base.entity';
+import { User } from '@users/entities/user.entity';
+import { Case } from '@cases/entities/case.entity';
 
 export enum TimeEntryStatus {
   DRAFT = 'Draft',

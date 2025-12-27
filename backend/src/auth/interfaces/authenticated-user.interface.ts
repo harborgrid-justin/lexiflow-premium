@@ -1,5 +1,5 @@
-import { Role } from '../../common/enums/role.enum';
-import { Permission } from '../../common/enums/permission.enum';
+import { Role } from '@common/enums/role.enum';
+import { Permission } from '@common/enums/permission.enum';
 
 export interface AuthenticatedUser {
   id: string;

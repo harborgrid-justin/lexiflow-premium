@@ -1,9 +1,9 @@
 import { Injectable, CanActivate, ExecutionContext, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { InsufficientPermissionsException } from '../exceptions';
-import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
-import { ROLES_KEY } from '../decorators/roles.decorator';
-import { UserRole } from '../../users/entities/user.entity';
+import { InsufficientPermissionsException } from '@common/exceptions';
+import { IS_PUBLIC_KEY } from '@common/decorators/public.decorator';
+import { ROLES_KEY } from '@common/decorators/roles.decorator';
+import { UserRole } from '@users/entities/user.entity';
 
 interface UserWithRole {
   id?: string;

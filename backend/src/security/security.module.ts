@@ -5,7 +5,7 @@ import { SecurityHeadersService } from './services/security.headers.service';
 import { RequestFingerprintService } from './services/request.fingerprint.service';
 import { IpReputationGuard } from './guards/ip.reputation.guard';
 import { SecurityHeadersMiddleware } from './middleware/security.headers.middleware';
-import { RedisCacheManagerService } from '../common/services/redis-cache-manager.service';
+import { RedisCacheManagerService } from '@common/services/redis-cache-manager.service';
 
 /**
  * Security Module

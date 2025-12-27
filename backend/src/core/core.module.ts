@@ -8,17 +8,17 @@ import { ShutdownService } from './services/shutdown.service';
 import { ConfigurationValidatorService } from './services/configuration.validator.service';
 
 // Import Enterprise Modules (in dependency order)
-import { CommonModule } from '../common/common.module';
-import { SecurityModule } from '../security/security.module';
-import { ErrorsModule } from '../errors/errors.module';
-import { AuthModule } from '../auth/auth.module';
-import { UsersModule } from '../users/users.module';
-import { AuthorizationModule } from '../authorization/authorization.module';
-import { ComplianceModule } from '../compliance/compliance.module';
-import { MonitoringModule } from '../monitoring/monitoring.module';
-import { HealthModule } from '../health/health.module';
-import { PerformanceModule } from '../performance/performance.module';
-import { ApiSecurityModule } from '../api-security/api.security.module';
+import { CommonModule } from '@common/common.module';
+import { SecurityModule } from '@security/security.module';
+import { ErrorsModule } from '@errors/errors.module';
+import { AuthModule } from '@auth/auth.module';
+import { UsersModule } from '@users/users.module';
+import { AuthorizationModule } from '@authorization/authorization.module';
+import { ComplianceModule } from '@compliance/compliance.module';
+import { MonitoringModule } from '@monitoring/monitoring.module';
+import { HealthModule } from '@health/health.module';
+import { PerformanceModule } from '@performance/performance.module';
+import { ApiSecurityModule } from '@api-security/api.security.module';
 
 /**
  * Core Module

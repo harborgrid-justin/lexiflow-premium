@@ -13,8 +13,8 @@ import {
 import { ApiResponse, ApiOperation }from '@nestjs/swagger';
 import { ProductionService } from './production.service';
 import { CreateProductionDto, UpdateProductionDto } from './dto';
-import { ProductionStatus } from '../discovery/productions/entities/production.entity';
-import { Public } from '../common/decorators/public.decorator';
+import { ProductionStatus } from '@discovery/productions/entities/production.entity';
+import { Public } from '@common/decorators/public.decorator';
 
 
 @Controller('production')

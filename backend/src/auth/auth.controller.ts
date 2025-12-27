@@ -53,8 +53,7 @@ export class AuthController {
   }
 
   @Public()
-  // Temporarily disabled for development
-  // @Throttle({ default: { ttl: 60000, limit: 20 } }) // 20 registrations per minute
+  @Throttle({ default: { ttl: 60000, limit: 20 } })
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Register a new user account' })
@@ -69,8 +68,7 @@ export class AuthController {
   }
 
   @Public()
-  // Temporarily disabled for development
-  // @Throttle({ default: { ttl: 60000, limit: 20 } }) // 20 login attempts per minute
+  @Throttle({ default: { ttl: 60000, limit: 20 } })
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login with email and password' })

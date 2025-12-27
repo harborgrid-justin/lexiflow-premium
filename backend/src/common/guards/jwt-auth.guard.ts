@@ -38,9 +38,8 @@ export class JwtAuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    if (process.env.NODE_ENV === 'development') {
-      return true;
-    }
+    // SECURITY: Authentication is NEVER bypassed regardless of environment
+    // Use @Public() decorator for routes that should be accessible without authentication
 
     const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
       context.getHandler(),

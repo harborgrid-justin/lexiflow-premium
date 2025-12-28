@@ -43,7 +43,7 @@ export class EvidenceService {
         'admissibility',
         'custodian',
         'status',
-        'acquiredDate',
+        // 'acquiredDate', // Field not in Evidence entity
         'createdAt',
         'updatedAt',
       ],

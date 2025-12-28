@@ -10,12 +10,11 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
-  UseInterceptors,
-  CacheInterceptor,
-  CacheTTL,
+  // CacheInterceptor, // Removed in newer NestJS versions
+  // CacheTTL, // Removed in newer NestJS versions
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
-import { JwtAuthGuard } from '@auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../../auth/guards';
 import { CustodiansService } from './custodians.service';
 import { CreateCustodianDto } from './dto/create-custodian.dto';
 import { UpdateCustodianDto } from './dto/update-custodian.dto';
@@ -24,7 +23,7 @@ import { QueryCustodianDto } from './dto/query-custodian.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('custodians')
-@UseInterceptors(CacheInterceptor)
+// @UseInterceptors(CacheInterceptor) // Removed in newer NestJS versions
 export class CustodiansController {
   constructor(private readonly custodiansService: CustodiansService) {}
 

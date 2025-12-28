@@ -127,7 +127,7 @@ export class GracefulDegradationService {
         const fallbackResponse = await this.applyFallback<T>(
           serviceName,
           config,
-          error,
+          error as Error,
         );
 
         this.logger.warn(

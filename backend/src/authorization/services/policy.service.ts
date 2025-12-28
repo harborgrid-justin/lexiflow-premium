@@ -492,6 +492,13 @@ export class PolicyService {
 
       case PolicyEvaluationMode.FIRST_APPLICABLE:
         const firstPolicy = policies[0];
+        if (!firstPolicy) {
+          return {
+            decision: 'deny',
+            matchedPolicies: [],
+            reason: 'No applicable policy found',
+          };
+        }
         return {
           decision: firstPolicy.effect === PolicyEffect.ALLOW ? 'allow' : 'deny',
           matchedPolicies: [firstPolicy.id],

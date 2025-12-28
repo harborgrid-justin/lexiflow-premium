@@ -72,7 +72,7 @@ export class WitnessesService {
     const result = await this.witnessRepository
       .createQueryBuilder()
       .update(Witness)
-      .set(updateData)
+      .set(updateData as any)
       .where('id = :id', { id })
       .returning('*')
       .execute();

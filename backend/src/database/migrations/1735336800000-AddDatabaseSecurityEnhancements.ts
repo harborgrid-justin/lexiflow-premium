@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, TableColumn } from 'typeorm';
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AddDatabaseSecurityEnhancements1735336800000 implements MigrationInterface {
   name = 'AddDatabaseSecurityEnhancements1735336800000';
@@ -10,14 +10,14 @@ export class AddDatabaseSecurityEnhancements1735336800000 implements MigrationIn
       await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "pgcrypto"');
       console.log('✓ Enabled pgcrypto extension for encryption');
     } catch (error) {
-      console.warn('Could not enable pgcrypto extension:', error.message);
+      console.warn('Could not enable pgcrypto extension:', (error as Error).message);
     }
 
     try {
       await queryRunner.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
       console.log('✓ Enabled uuid-ossp extension');
     } catch (error) {
-      console.warn('Could not enable uuid-ossp extension:', error.message);
+      console.warn('Could not enable uuid-ossp extension:', (error as Error).message);
     }
 
     await queryRunner.query(`

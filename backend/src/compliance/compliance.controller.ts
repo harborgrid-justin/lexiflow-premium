@@ -120,7 +120,7 @@ export class ComplianceController {
   @ApiResponse({ status: 404, description: 'Resource not found' })
   async getCheckById(@Param('id') id: string) {
     const checks = await this.complianceService.getChecksByCaseId(id);
-    return checks[0] || null;
+    return checks.data?.[0] || null;
   }
 
   @Get('audit-logs/:id')

@@ -26,7 +26,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
   async findById(id: string | number, options?: FindOneOptions<T>): Promise<T | null> {
     this.logger.debug(`Finding entity by ID: ${id}`);
     return this.repository.findOne({
-      where: { id } as FindOptionsWhere<T>,
+      where: { id } as unknown as FindOptionsWhere<T>,
       ...options,
     });
   }
@@ -101,7 +101,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
    */
   async exists(id: string | number): Promise<boolean> {
     this.logger.debug(`Checking if entity exists: ${id}`);
-    const count = await this.repository.count({ where: { id } as FindOptionsWhere<T> });
+    const count = await this.repository.count({ where: { id } as unknown as FindOptionsWhere<T> });
     return count > 0;
   }
 

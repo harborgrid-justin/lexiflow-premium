@@ -40,7 +40,8 @@ export class AiDataopsService implements OnModuleDestroy {
   // LRU caches with TTL
   private embeddingCache: Map<string, { data: VectorEmbedding; timestamp: number; accessCount: number }> = new Map();
   private modelCache: Map<string, { data: AIModel; timestamp: number }> = new Map();
-  private similarityResultCache: Map<string, { data: VectorEmbedding[] | Record<string, unknown>; timestamp: number }> = new Map();
+  private similarityResultCache: Map<string, { data: VectorEmbedding[]; timestamp: number }> = new Map();
+  private statsCache: Map<string, { data: any; timestamp: number }> = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
@@ -458,7 +459,7 @@ export class AiDataopsService implements OnModuleDestroy {
       timestamp: new Date().toISOString(),
     };
     
-    this.similarityResultCache.set(cacheKey, {
+    this.statsCache.set(cacheKey, {
       data: stats,
       timestamp: Date.now(),
     });

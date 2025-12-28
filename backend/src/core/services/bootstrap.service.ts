@@ -2,7 +2,7 @@ import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
 import { ConfigurationValidatorService } from './configuration.validator.service';
-import { MODULE_INITIALIZATION_ORDER, CRITICAL_MODULES } from '../constants/module.order.constant';
+import { CRITICAL_MODULES } from '../constants/module.order.constant';
 import { ModuleStartupResult } from '../interfaces/module.config.interface';
 
 /**
@@ -34,7 +34,7 @@ export class BootstrapService implements OnApplicationBootstrap {
       await this.runBootstrapSequence();
       this.printBootstrapSummary();
     } catch (error) {
-      this.logger.error('Bootstrap sequence failed:', error.stack);
+      this.logger.error('Bootstrap sequence failed:', error instanceof Error ? error.stack : String(error));
       throw error;
     }
   }
@@ -94,7 +94,7 @@ export class BootstrapService implements OnApplicationBootstrap {
 
       this.logger.log('✓ Configuration validated successfully');
     } catch (error) {
-      this.logger.error('Configuration validation failed:', error.message);
+      this.logger.error('Configuration validation failed:', error instanceof Error ? error.message : String(error));
       throw error;
     }
   }
@@ -133,10 +133,10 @@ export class BootstrapService implements OnApplicationBootstrap {
         module: 'Database',
         success: false,
         duration: Date.now() - startTime,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
 
-      this.logger.error('Database connection verification failed:', error.message);
+      this.logger.error('Database connection verification failed:', error instanceof Error ? error.message : String(error));
       throw error;
     }
   }
@@ -209,14 +209,15 @@ export class BootstrapService implements OnApplicationBootstrap {
       this.logger.log('✓ Redis connection verified');
       this.logger.log(`  Version: ${version}`);
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.logger.warn('⚠ Redis connection failed - some features may be limited');
-      this.logger.warn(`  Error: ${error.message}`);
+      this.logger.warn(`  Error: ${errorMessage}`);
 
       this.startupResults.push({
         module: 'Redis',
         success: false,
         duration: Date.now() - startTime,
-        error: error.message,
+        error: errorMessage,
       });
 
       // Redis failure is not critical - continue startup
@@ -253,12 +254,13 @@ export class BootstrapService implements OnApplicationBootstrap {
         this.logger.warn('⚠ Some health checks failed (non-critical)');
       }
     } catch (error) {
-      this.logger.warn('Health checks failed:', error.message);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      this.logger.warn('Health checks failed:', errorMessage);
       this.startupResults.push({
         module: 'HealthChecks',
         success: false,
         duration: Date.now() - startTime,
-        error: error.message,
+        error: errorMessage,
       });
     }
   }
@@ -399,8 +401,9 @@ export class BootstrapService implements OnApplicationBootstrap {
    * Check Node.js version
    */
   private checkNodeVersion(): any {
-    const version = process.version;
-    const majorVersion = parseInt(version.slice(1).split('.')[0]);
+    const version = process.version || 'v0.0.0';
+    const versionString = version.slice(1).split('.')[0] || '0';
+    const majorVersion = parseInt(versionString, 10);
 
     // Node.js 18+ is recommended
     const healthy = majorVersion >= 18;

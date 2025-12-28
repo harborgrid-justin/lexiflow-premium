@@ -19,7 +19,6 @@ export class ColumnEncryptionService {
   private readonly logger = new Logger(ColumnEncryptionService.name);
   private readonly algorithm = 'aes-256-gcm';
   private readonly ivLength = 16;
-  private readonly authTagLength = 16;
   private readonly currentKeyVersion = 1;
 
   private encryptionKeys: Map<number, Buffer> = new Map();
@@ -128,7 +127,7 @@ export class ColumnEncryptionService {
     }
   }
 
-  async rotateKey(columnName: string, entityClass: any, repository: any): Promise<number> {
+  async rotateKey(columnName: string, _entityClass: any, repository: any): Promise<number> {
     this.logger.log(`Starting key rotation for column ${columnName}`);
 
     let rotatedCount = 0;

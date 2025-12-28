@@ -152,7 +152,7 @@ export class PasswordPolicyService {
       const emailParts = email.toLowerCase().split('@');
       const username = emailParts[0];
 
-      if (password.toLowerCase().includes(username)) {
+      if (username && password.toLowerCase().includes(username)) {
         errors.push('Password must not contain your email address');
       }
     }

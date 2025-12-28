@@ -98,7 +98,7 @@ export class AuditSubscriber implements EntitySubscriberInterface {
 
     const metadata = this.dataSource.getMetadata(entity.constructor);
     const primaryColumn = metadata.primaryColumns[0];
-    return entity[primaryColumn.propertyName] || 'unknown';
+    return primaryColumn?.propertyName ? entity[primaryColumn.propertyName] : 'unknown';
   }
 
   private calculateChanges(before: Record<string, any>, after: Record<string, any>): Record<string, { old: any; new: any }> {
@@ -318,7 +318,7 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         this.logger.debug('Audit log entry (repository not found)', log);
       }
     } catch (error) {
-      this.logger.warn('Could not persist audit log, logging to console', { log, error: error.message });
+      this.logger.warn('Could not persist audit log, logging to console', { log, error: (error as Error).message });
     }
   }
 

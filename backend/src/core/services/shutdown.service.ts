@@ -1,7 +1,6 @@
 import { Injectable, Logger, OnApplicationShutdown, BeforeApplicationShutdown } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
-import { MODULE_SHUTDOWN_ORDER, MODULE_SHUTDOWN_TIMEOUT } from '../constants/module.order.constant';
 import { ModuleShutdownResult } from '../interfaces/module.config.interface';
 
 /**
@@ -46,7 +45,7 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
   /**
    * Main shutdown hook - called during application shutdown
    */
-  async onApplicationShutdown(signal?: string) {
+  async onApplicationShutdown() {
     if (!this.isShuttingDown) {
       this.isShuttingDown = true;
       this.logger.log('Shutdown initiated without beforeApplicationShutdown');
@@ -56,7 +55,8 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
       await this.runShutdownSequence();
       this.printShutdownSummary();
     } catch (error) {
-      this.logger.error('Shutdown sequence encountered errors:', error.stack);
+      const errorMessage = error instanceof Error ? error.stack : String(error);
+      this.logger.error('Shutdown sequence encountered errors:', errorMessage);
     } finally {
       if (this.shutdownTimeout) {
         clearTimeout(this.shutdownTimeout);
@@ -116,9 +116,9 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
         module: 'InFlightRequests',
         success: false,
         duration: Date.now() - startTime,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
-      this.logger.error('Failed to complete in-flight requests:', error.message);
+      this.logger.error('Failed to complete in-flight requests:', error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -165,9 +165,9 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
         module: 'Queues',
         success: false,
         duration: Date.now() - startTime,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
-      this.logger.error('Failed to drain queues:', error.message);
+      this.logger.error('Failed to drain queues:', error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -190,7 +190,7 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
           await this.closeRedisConnection();
           closed.push('Redis');
         } catch (error) {
-          this.logger.error('Failed to close Redis connection:', error.message);
+          this.logger.error('Failed to close Redis connection:', error instanceof Error ? error.message : String(error));
         }
       }
 
@@ -207,9 +207,9 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
         module: 'ExternalConnections',
         success: false,
         duration: Date.now() - startTime,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
-      this.logger.error('Failed to close external connections:', error.message);
+      this.logger.error('Failed to close external connections:', error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -277,9 +277,9 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
         module: 'Database',
         success: false,
         duration: Date.now() - startTime,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
-      this.logger.error('Failed to close database connection:', error.message);
+      this.logger.error('Failed to close database connection:', error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -315,9 +315,9 @@ export class ShutdownService implements BeforeApplicationShutdown, OnApplication
         module: 'Resources',
         success: false,
         duration: Date.now() - startTime,
-        error: error.message,
+        error: error instanceof Error ? error.message : String(error),
       });
-      this.logger.error('Failed to cleanup resources:', error.message);
+      this.logger.error('Failed to cleanup resources:', error instanceof Error ? error.message : String(error));
     }
   }
 

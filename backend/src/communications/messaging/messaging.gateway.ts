@@ -68,7 +68,6 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
-    private wsRateLimitGuard: WsRateLimitGuard,
     private wsRoomLimitGuard: WsRoomLimitGuard,
   ) {}
 

@@ -289,7 +289,7 @@ export class ConfigurationValidatorService implements OnModuleInit {
       this.addIssue(
         ConfigIssueSeverity.ERROR,
         'database',
-        `Database connection failed: ${error.message}`,
+        `Database connection failed: ${error instanceof Error ? error.message : String(error)}`,
         undefined,
         'Verify database is running and credentials are correct'
       );
@@ -370,7 +370,7 @@ export class ConfigurationValidatorService implements OnModuleInit {
       this.addIssue(
         ConfigIssueSeverity.WARNING,
         'redis',
-        `Redis connection failed: ${error.message}`,
+        `Redis connection failed: ${error instanceof Error ? error.message : String(error)}`,
         undefined,
         'Verify Redis is running and credentials are correct'
       );

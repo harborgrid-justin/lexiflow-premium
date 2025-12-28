@@ -236,7 +236,8 @@ export class PerformanceInterceptor implements NestInterceptor {
    */
   private normalizePath(path: string): string {
     const safePath = path || '';
-    return safePath.split('?')[0] // Remove query params
+    const pathWithoutQuery = safePath.split('?')[0];
+    return (pathWithoutQuery || '')
       .replace(/\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi, '/:id') // UUID
       .replace(/\/\d+/g, '/:id'); // Numeric IDs
   }

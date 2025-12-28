@@ -117,11 +117,9 @@ export class AuditService implements OnModuleDestroy {
   
   // Memory limits
   private readonly MAX_ENTRY_CACHE = 10000;
-  private readonly MAX_SUMMARY_CACHE = 1000;
   private readonly CIRCULAR_BUFFER_SIZE = 50000;
   private readonly CACHE_TTL_MS = 600000; // 10 minutes
   private readonly MAX_BATCH_SIZE = 1000;
-  private readonly STREAMING_THRESHOLD = 10000;
   
   // Caches
   private entryCache: Map<string, CachedData<AuditBufferEntry>> = new Map();
@@ -312,7 +310,7 @@ export class AuditService implements OnModuleDestroy {
         if (options.entityId && entry.entityId !== options.entityId) return false;
         if (options.action && entry.action !== options.action) return false;
         return true;
-      });
+      }).filter((entry): entry is AuditBufferEntry => entry !== undefined);
       
       yield* results;
     } else {
@@ -324,13 +322,13 @@ export class AuditService implements OnModuleDestroy {
         
         const batch: AuditBufferEntry[] = Array.from({ length: batchSize }, (_, i) => ({
           entryId: `audit_${offset + i}`,
-          action: ['CREATE', 'READ', 'UPDATE', 'DELETE'][Math.floor(Math.random() * 4)],
-          entityType: ['Case', 'Document', 'User', 'Motion'][Math.floor(Math.random() * 4)],
+          action: (['CREATE', 'READ', 'UPDATE', 'DELETE'][Math.floor(Math.random() * 4)] as string),
+          entityType: (['Case', 'Document', 'User', 'Motion'][Math.floor(Math.random() * 4)] as string),
           entityId: `entity_${Math.floor(Math.random() * 1000)}`,
           userId: options.userId || `user_${Math.floor(Math.random() * 100)}`,
-          timestamp: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
           ipAddress: `192.168.1.${Math.floor(Math.random() * 255)}`,
           userAgent: 'Mozilla/5.0',
+          timestamp: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
         }));
         
         yield* batch;

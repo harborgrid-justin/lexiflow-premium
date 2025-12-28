@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Query, Head, UseGuards, HttpCode, HttpStatus, UseInterceptors, CacheInterceptor } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, Head, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { DiscoveryService } from './discovery.service';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
@@ -12,10 +12,8 @@ import { QueryEvidenceDto } from './evidence/dto/query-evidence.dto';
 
 @ApiTags('Discovery')
 @ApiBearerAuth('JWT-auth')
-
 @Controller('discovery')
 @UseGuards(JwtAuthGuard, RolesGuard)
-@UseInterceptors(CacheInterceptor)
 export class DiscoveryController {
   constructor(private readonly discoveryService: DiscoveryService) {}
 

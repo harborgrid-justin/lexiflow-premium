@@ -183,7 +183,7 @@ export function sanitizeFilters<T extends Record<string, unknown>>(filters: T): 
 
   for (const [key, value] of Object.entries(filters)) {
     if (value !== undefined && value !== null && value !== '') {
-      cleaned[key as keyof T] = value;
+      (cleaned as any)[key] = value;
     }
   }
 

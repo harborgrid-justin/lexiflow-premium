@@ -449,10 +449,12 @@ export class DataClassificationService {
     if (path.length === 0) return;
 
     const [current, ...rest] = path;
+    if (!current) return;
     const arrayMatch = current.match(/^(.+)\[(\d+)\]$/);
 
     if (arrayMatch) {
       const [, key, index] = arrayMatch;
+      if (!key || !index) return;
       const arr = obj[key];
       if (Array.isArray(arr) && arr[parseInt(index)]) {
         if (rest.length === 0) {

@@ -1,17 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
+import { Repository, LessThanOrEqual } from 'typeorm';
 import { AuditLog } from '@compliance/entities/audit-log.entity';
-import { createHash, createHmac } from 'crypto';
+import { createHmac } from 'crypto';
 import { AuditReportQueryDto } from '@compliance/dto/compliance.dto';
-
-interface AuditChainEntry {
-  id: string;
-  timestamp: Date;
-  hash: string;
-  previousHash: string;
-  data: string;
-}
 
 export interface IntegrityCheckResult {
   valid: boolean;

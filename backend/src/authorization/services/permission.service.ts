@@ -1,14 +1,9 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Permission, PermissionStatus } from '@authorization/entities/permission.entity';
 import { RolePermission, GrantType } from '@authorization/entities/role.permission.entity';
 import { UserRole } from '@users/entities/user.entity';
-import {
-  extractResourceFromPermission,
-  extractActionFromPermission,
-  extractScopeFromPermission,
-} from '@authorization/constants/permissions.constant';
 
 interface PermissionCheckContext {
   userId: string;
@@ -109,8 +104,7 @@ export class PermissionService implements OnModuleDestroy {
 
       if (!applicablePermission) {
         const hasDirectUserPermission = await this.checkDirectUserPermission(
-          context.userId,
-          permissionCode
+          context.userId as string
         );
 
         if (!hasDirectUserPermission) {
@@ -138,6 +132,13 @@ export class PermissionService implements OnModuleDestroy {
         return {
           granted: false,
           reason: timeValidation.reason,
+        };
+      }
+
+      if (!applicablePermission) {
+        return {
+          granted: false,
+          reason: 'No applicable permission found',
         };
       }
 
@@ -324,10 +325,8 @@ export class PermissionService implements OnModuleDestroy {
     }
   }
 
-  private async checkDirectUserPermission(
-    userId: string,
-    permissionCode: string
-  ): Promise<boolean> {
+  private async checkDirectUserPermission(userId: string): Promise<boolean> {
+    void userId;
     return false;
   }
 
@@ -367,7 +366,7 @@ export class PermissionService implements OnModuleDestroy {
 
       if (startTime && endTime) {
         const currentTime = timestamp.toTimeString().split(' ')[0];
-        if (currentTime < startTime || currentTime > endTime) {
+        if (currentTime && (currentTime < startTime || currentTime > endTime)) {
           return {
             valid: false,
             reason: 'Permission not allowed at this time',
@@ -384,8 +383,9 @@ export class PermissionService implements OnModuleDestroy {
     rolePermission: RolePermission | undefined,
     context: PermissionCheckContext
   ): { valid: boolean; reason?: string } {
+    void rolePermission;
     if (permission.constraints?.locationRestrictions) {
-      const { allowedCountries, deniedCountries, allowedIpRanges } =
+      const { allowedCountries, deniedCountries } =
         permission.constraints.locationRestrictions;
 
       if (allowedCountries && context.location) {

@@ -35,10 +35,8 @@ export class DiscoveryAnalyticsService implements OnModuleDestroy {
   // Memory limits
   private readonly MAX_FUNNEL_CACHE = 5000;
   private readonly MAX_TIMELINE_CACHE = 3000;
-  private readonly MAX_METRICS_CACHE = 2000;
   private readonly CACHE_TTL_MS = 1800000; // 30 minutes
   private readonly MAX_BATCH_SIZE = 100;
-  private readonly MAX_TIMELINE_EVENTS = 10000;
   
   // LRU caches
   private funnelCache: Map<string, { data: DiscoveryFunnelDto; timestamp: number }> = new Map();
@@ -169,7 +167,7 @@ export class DiscoveryAnalyticsService implements OnModuleDestroy {
   }
   
   private getFunnelCacheKey(query: DiscoveryAnalyticsQueryDto): string {
-    return `funnel_${query.caseId || 'all'}_${query.startDate?.toISOString() || ''}_${query.endDate?.toISOString() || ''}`;
+    return `funnel_${query.caseId || 'all'}_${query.startDate || ''}_${query.endDate || ''}`;
   }
 
   private async generateFunnel(): Promise<DiscoveryFunnelDto> {
@@ -240,7 +238,7 @@ export class DiscoveryAnalyticsService implements OnModuleDestroy {
    */
   async getDiscoveryTimeline(query: DiscoveryAnalyticsQueryDto): Promise<DiscoveryTimelineDto> {
     try {
-      const cacheKey = `timeline_${query.caseId || 'all'}_${query.startDate?.toISOString() || ''}`;
+      const cacheKey = `timeline_${query.caseId || 'all'}_${query.startDate || ''}`;
       
       // Check cache
       const cached = this.timelineCache.get(cacheKey);
@@ -304,6 +302,7 @@ export class DiscoveryAnalyticsService implements OnModuleDestroy {
         daysUntil: 78,
         status: 'on-track',
         completionPercentage: 60,
+        dependencies: [],
       },
       {
         name: 'Finalize Document Production',
@@ -311,14 +310,16 @@ export class DiscoveryAnalyticsService implements OnModuleDestroy {
         daysUntil: 88,
         status: 'at-risk',
         completionPercentage: 45,
+        dependencies: ['Complete All Depositions'],
       },
     ];
 
     return {
       events,
       upcomingMilestones,
-      criticalPathItems: events.filter(e => e.isCritical),
-      totalEvents: events.length,
+      criticalPath: events.filter(e => e.isCritical),
+      overdueCount: 0,
+      overallStatus: 'on-schedule' as const,
     };
   }
   
@@ -336,18 +337,20 @@ export class DiscoveryAnalyticsService implements OnModuleDestroy {
     // Mock metrics
     const metrics: CaseDiscoveryMetricsDto = {
       caseId,
-      totalRequests: 45,
-      completedRequests: 32,
-      pendingRequests: 13,
-      totalDocumentsProduced: 12450,
-      documentsReviewed: 10230,
-      reviewProgress: 82.2,
-      avgResponseTimeDays: 28,
-      objectionRate: 24.4,
-      privilegeClaimedCount: 234,
-      responsiveDocumentCount: 3450,
-      costToDate: 125000,
-      projectedCompletionDate: new Date('2025-03-15'),
+      requestsSent: 45,
+      requestsReceived: 32,
+      responseRate: 71.1,
+      documentsProduced: 12450,
+      documentsReceived: 10230,
+      depositionsScheduled: 15,
+      depositionsCompleted: 12,
+      avgResponseTime: 28,
+      objectionsCount: 8,
+      motionsToCompel: 3,
+      disputesCount: 5,
+      esiSourcesCount: 42,
+      totalCost: 125000,
+      costPerDocument: 10.04,
     };
     
     this.metricsCache.set(cacheKey, {
@@ -362,7 +365,7 @@ export class DiscoveryAnalyticsService implements OnModuleDestroy {
    * Get production volume analytics with streaming
    */
   async getProductionVolume(query: DiscoveryAnalyticsQueryDto): Promise<DiscoveryProductionVolumeDto[]> {
-    const cacheKey = `volume_${query.caseId || 'all'}_${query.startDate?.toISOString() || ''}`;
+    const cacheKey = `volume_${query.caseId || 'all'}_${query.startDate || ''}`;
     
     const cached = this.volumeCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
@@ -371,11 +374,25 @@ export class DiscoveryAnalyticsService implements OnModuleDestroy {
     
     // Mock volume data
     const volumes: DiscoveryProductionVolumeDto[] = Array.from({ length: 12 }, (_, i) => ({
-      period: `2024-${String(i + 1).padStart(2, '0')}`,
-      documentsProduced: Math.floor(Math.random() * 5000) + 1000,
-      pagesProduced: Math.floor(Math.random() * 50000) + 10000,
-      productionSets: Math.floor(Math.random() * 10) + 1,
-      avgDocumentSize: Math.random() * 100 + 50,
+      totalDocuments: Math.floor(Math.random() * 5000) + 1000,
+      documentsByType: {
+        'Email': Math.floor(Math.random() * 2000) + 500,
+        'PDF': Math.floor(Math.random() * 1500) + 300,
+        'Spreadsheet': Math.floor(Math.random() * 500) + 100,
+      },
+      documentsByCustodian: {
+        'Custodian A': Math.floor(Math.random() * 2000) + 500,
+        'Custodian B': Math.floor(Math.random() * 1500) + 300,
+      },
+      documentsByDateRange: [
+        { range: `2024-${String(i + 1).padStart(2, '0')}`, count: Math.floor(Math.random() * 2000) + 500, percentage: 0.4 },
+      ],
+      fileSizeStats: {
+        totalBytes: Math.floor(Math.random() * 500000000) + 100000000,
+        avgBytes: Math.floor(Math.random() * 100000) + 50000,
+        totalGB: Math.random() * 100 + 50,
+      },
+      productionBatches: [],
     }));
     
     this.volumeCache.set(cacheKey, {

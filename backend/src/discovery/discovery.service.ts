@@ -26,8 +26,9 @@ export interface PaginatedResult<T> {
  */
 @Injectable()
 export class DiscoveryService {
-  findAll(): Promise<any[]> {
-    return this.findAllRequests();
+  async findAll(): Promise<any[]> {
+    const result = await this.findAllRequests();
+    return Array.isArray(result) ? result : result.data || [];
   }
 
   findOne(id: string): Promise<any> {
@@ -213,9 +214,10 @@ export class DiscoveryService {
     const requests = await this.findRequestsByCaseId(caseId);
     const holds = await this.findHoldsByCaseId(caseId);
     
-    const totalRequests = requests.length;
-    const completedRequests = requests.filter(r => r.status === DiscoveryRequestStatus.COMPLETED).length;
-    const pendingRequests = requests.filter(r => 
+    const requestArray = Array.isArray(requests) ? requests : requests.data || [];
+    const totalRequests = requestArray.length;
+    const completedRequests = requestArray.filter((r: any) => r.status === DiscoveryRequestStatus.COMPLETED).length;
+    const pendingRequests = requestArray.filter((r: any) => 
       r.status !== DiscoveryRequestStatus.COMPLETED && 
       r.status !== DiscoveryRequestStatus.OBJECTED
     ).length;
@@ -226,7 +228,7 @@ export class DiscoveryService {
       totalRequests,
       pendingRequests,
       completedRequests,
-      overdueRequests: requests.filter(r => 
+      overdueRequests: requestArray.filter((r: any) => 
         r.dueDate && new Date(r.dueDate) < new Date() && 
         r.status !== DiscoveryRequestStatus.COMPLETED
       ).length,

@@ -176,7 +176,7 @@ export class SecureClientService {
     limit: number,
     offset: number,
   ): Promise<any[]> {
-    const safeTable = this.sanitizationService.sanitizeTableName(tableName);
+    this.sanitizationService.sanitizeTableName(tableName);
 
     this.sanitizationService.validateWhereClause(whereClause);
 
@@ -204,11 +204,11 @@ export class SecureClientService {
   }
 
   async encryptSensitiveField(value: string): Promise<string> {
-    return this.encryptionService.encrypt(value);
+    return this.encryptionService.encrypt(value) || '';
   }
 
   async decryptSensitiveField(encryptedValue: string): Promise<string> {
-    return this.encryptionService.decrypt(encryptedValue);
+    return this.encryptionService.decrypt(encryptedValue) || '';
   }
 
   async hashForSearch(value: string): Promise<string> {
@@ -312,10 +312,3 @@ export class QuerySecurityService {
     };
   }
 }
-
-export {
-  SecureClient,
-  SecureClientService,
-  DatabaseSecurityHealthService,
-  QuerySecurityService,
-};

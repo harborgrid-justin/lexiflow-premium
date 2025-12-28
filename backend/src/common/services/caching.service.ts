@@ -41,9 +41,10 @@ export class CachingService implements OnModuleDestroy {
       // Maps preserve insertion order, so first items are oldest.
       // Let's remove the first 10%
       const toRemove = Math.ceil(this.MAX_CACHE_SIZE * 0.1);
-      for (let i = 0; i < toRemove; i++) {
-        if (entries[i]) {
-          this.cache.delete(entries[i][0]);
+      for (let i = 0; i < toRemove && i < entries.length; i++) {
+        const entry = entries[i];
+        if (entry) {
+          this.cache.delete(entry[0]);
         }
       }
       this.logger.warn(`Cache size limit reached. Evicted ${toRemove} entries.`);

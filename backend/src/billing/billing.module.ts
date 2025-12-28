@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
 import { TimeEntriesModule } from './time-entries/time-entries.module';
 import { InvoicesModule } from './invoices/invoices.module';
 import { RateTablesModule } from './rate-tables/rate-tables.module';

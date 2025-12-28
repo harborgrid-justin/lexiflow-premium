@@ -21,11 +21,11 @@ export class JSONScalar implements CustomScalar<JSONValue, JSONValue> {
   description = 'JSON custom scalar type';
 
   parseValue(value: unknown): JSONValue {
-    return value;
+    return value as JSONValue;
   }
 
   serialize(value: unknown): JSONValue {
-    return value;
+    return value as JSONValue;
   }
 
   parseLiteral(ast: ValueNode): JSONValue {

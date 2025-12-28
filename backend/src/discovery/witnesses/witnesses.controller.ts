@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Patch, UseGuards, UseInterceptors, CacheInterceptor } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Patch, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { WitnessesService } from './witnesses.service';
@@ -7,7 +7,6 @@ import { Witness, WitnessType, WitnessStatus } from './entities/witness.entity';
 @ApiTags('discovery/witnesses')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
-@UseInterceptors(CacheInterceptor)
 @Controller('witnesses')
 export class WitnessesController {
   constructor(private readonly witnessesService: WitnessesService) {}
@@ -29,7 +28,8 @@ export class WitnessesController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(): Promise<Witness[]> {
-    return this.witnessesService.findAll();
+    const result = await this.witnessesService.findAll();
+    return Array.isArray(result) ? result : result.items || [];
   }
 
   @Get('case/:caseId')

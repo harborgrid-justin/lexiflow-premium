@@ -396,7 +396,7 @@ export function isValidPermission(permission: string): boolean {
  * Example: 'cases:read:own' => 'cases'
  */
 export function extractResourceFromPermission(permission: string): string {
-  return permission.split(':')[0];
+  return permission.split(':')[0] ?? '';
 }
 
 /**

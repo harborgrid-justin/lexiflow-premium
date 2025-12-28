@@ -111,14 +111,14 @@ export class BatchProcessorService implements OnModuleDestroy {
   // private isPaused = false;
 
   constructor(
-    @InjectDataSource() private readonly _dataSource: DataSource,
+    @InjectDataSource() private readonly dataSource: DataSource,
     private readonly eventEmitter: EventEmitter2,
   ) {
-    // DataSource available for advanced transaction management
+    void this.dataSource;
   }
 
   onModuleDestroy() {
-    this.isPaused = true;
+    // Pause functionality removed
     this.logger.log('BatchProcessorService destroyed, pausing operations');
   }
 

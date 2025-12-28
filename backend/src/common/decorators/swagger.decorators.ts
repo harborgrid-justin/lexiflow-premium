@@ -257,7 +257,7 @@ export const ApiUuidParam = (name: string, description: string) => {
 /**
  * Bulk operation decorator
  */
-export const ApiBulkOperation = (summary: string, type: Function) => {
+export const ApiBulkOperation = (summary: string) => {
   return applyDecorators(
     ApiOperation({ summary }),
     ApiBearerAuth('JWT-auth'),
@@ -272,7 +272,7 @@ export const ApiBulkOperation = (summary: string, type: Function) => {
           failed: { type: 'number', example: 2 },
           results: {
             type: 'array',
-            items: type,
+            items: { type: 'object' },
           },
         },
       },

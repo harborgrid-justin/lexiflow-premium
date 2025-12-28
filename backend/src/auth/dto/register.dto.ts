@@ -64,9 +64,9 @@ export class RegisterDto {
   lastName!: string;
 
   @ApiPropertyOptional({
-    description: 'User role (defaults to USER if not specified)',
+    description: 'User role (defaults to GUEST if not specified)',
     enum: Role,
-    example: Role.USER,
+    example: Role.GUEST,
   })
   @IsEnum(Role, { message: 'Invalid role specified' })
   @IsOptional()

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
-// import { HttpModule } from '@nestjs/axios'; // Module not installed
+// // HttpModule import removed - not available in current @nestjs version // Module not installed
 import { ConfigModule } from '@nestjs/config';
 import { HealthController } from './health.controller';
 import { RedisHealthIndicator } from './redis-health.indicator';
@@ -18,7 +18,7 @@ import { MemoryHealthIndicator } from './indicators/memory.health';
 @Module({
   imports: [
     TerminusModule,
-    HttpModule, // For HTTP health checks
+    // HttpModule, // For HTTP health checks - not available in current version
     ConfigModule,
   ],
   controllers: [HealthController],

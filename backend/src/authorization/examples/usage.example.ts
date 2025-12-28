@@ -5,7 +5,7 @@
  * across different controllers and services in the application.
  */
 
-import { Controller, Get, Post, Put, Delete, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { ResourceAccessGuard } from '@authorization/guards/resource.access.guard';
 import {
@@ -18,12 +18,6 @@ import {
   PermissionRules,
 } from '@authorization/decorators/permissions.decorator';
 import { PERMISSIONS } from '@authorization/constants/permissions.constant';
-import { CurrentUser } from '@common/decorators/current-user.decorator';
-
-interface User {
-  id: string;
-  role: string;
-}
 
 @Controller('cases')
 @UseGuards(JwtAuthGuard, ResourceAccessGuard)
@@ -34,7 +28,7 @@ export class CasesExampleController {
    */
   @Get()
   @RequirePermissions(PERMISSIONS.CASES.READ)
-  async findAll(@CurrentUser() user: User) {
+  async findAll() {
     return { message: 'List all cases' };
   }
 
@@ -44,7 +38,7 @@ export class CasesExampleController {
    */
   @Post()
   @RequireAllPermissions(PERMISSIONS.CASES.CREATE, PERMISSIONS.CASES.ASSIGN)
-  async create(@Body() createDto: any, @CurrentUser() user: User) {
+  async create() {
     return { message: 'Create case' };
   }
 
@@ -55,7 +49,7 @@ export class CasesExampleController {
   @Get(':id')
   @RequireAnyPermission(PERMISSIONS.CASES.READ_OWN, PERMISSIONS.CASES.READ_ALL)
   @ResourceType('cases')
-  async findOne(@Param('id') id: string, @CurrentUser() user: User) {
+  async findOne() {
     return { message: 'Get case by ID' };
   }
 
@@ -67,11 +61,7 @@ export class CasesExampleController {
   @RequirePermissions(PERMISSIONS.CASES.UPDATE)
   @RequireOwnership({ field: 'createdBy', allowDelegation: true })
   @ResourceType('cases')
-  async update(
-    @Param('id') id: string,
-    @Body() updateDto: any,
-    @CurrentUser() user: User
-  ) {
+  async update() {
     return { message: 'Update case' };
   }
 
@@ -83,7 +73,7 @@ export class CasesExampleController {
   @RequirePermissions(PERMISSIONS.CASES.DELETE)
   @PermissionPolicy('sensitive-data-access', { requireMfa: true })
   @ResourceType('cases')
-  async remove(@Param('id') id: string, @CurrentUser() user: User) {
+  async remove() {
     return { message: 'Delete case' };
   }
 
@@ -94,11 +84,11 @@ export class CasesExampleController {
   @Post(':id/close')
   @PermissionRules({
     anyOf: [PERMISSIONS.CASES.CLOSE, PERMISSIONS.CASES.UPDATE],
-    requireOwnership: { field: 'createdBy', allowTeamMembers: true },
+    requireOwnership: { field: 'createdBy', allowDelegation: true },
     resourceType: 'cases',
     policy: { name: 'standard-access' },
   })
-  async closeCase(@Param('id') id: string, @CurrentUser() user: User) {
+  async closeCase() {
     return { message: 'Close case' };
   }
 }
@@ -112,7 +102,7 @@ export class DocumentsExampleController {
   @Post('upload')
   @RequirePermissions(PERMISSIONS.DOCUMENTS.UPLOAD)
   @PermissionPolicy('standard-access')
-  async upload(@Body() uploadDto: any, @CurrentUser() user: User) {
+  async upload() {
     return { message: 'Upload document' };
   }
 
@@ -123,7 +113,7 @@ export class DocumentsExampleController {
   @RequireAnyPermission(PERMISSIONS.DOCUMENTS.DOWNLOAD, PERMISSIONS.DOCUMENTS.READ_ALL)
   @RequireOwnership({ allowDelegation: true })
   @ResourceType('documents')
-  async download(@Param('id') id: string, @CurrentUser() user: User) {
+  async download() {
     return { message: 'Download document' };
   }
 
@@ -134,7 +124,7 @@ export class DocumentsExampleController {
   @RequirePermissions(PERMISSIONS.DOCUMENTS.REDACT)
   @PermissionPolicy('sensitive-data-access', { requireMfa: true })
   @ResourceType('documents')
-  async redact(@Param('id') id: string, @CurrentUser() user: User) {
+  async redact() {
     return { message: 'Redact document' };
   }
 }
@@ -147,7 +137,7 @@ export class BillingExampleController {
    */
   @Get('my-invoices')
   @RequirePermissions(PERMISSIONS.BILLING.READ_OWN)
-  async getMyInvoices(@CurrentUser() user: User) {
+  async getMyInvoices() {
     return { message: 'Get user invoices' };
   }
 
@@ -157,7 +147,7 @@ export class BillingExampleController {
   @Post('invoices/:id/approve')
   @RequireAllPermissions(PERMISSIONS.BILLING.APPROVE, PERMISSIONS.BILLING.UPDATE)
   @PermissionPolicy('admin-override')
-  async approveInvoice(@Param('id') id: string, @CurrentUser() user: User) {
+  async approveInvoice() {
     return { message: 'Approve invoice' };
   }
 
@@ -167,7 +157,7 @@ export class BillingExampleController {
   @Post('payments')
   @RequirePermissions(PERMISSIONS.BILLING.PAYMENT)
   @PermissionPolicy('sensitive-data-access', { requireMfa: true, requiresApproval: true })
-  async processPayment(@Body() paymentDto: any, @CurrentUser() user: User) {
+  async processPayment() {
     return { message: 'Process payment' };
   }
 }
@@ -181,7 +171,7 @@ export class UsersExampleController {
   @Post()
   @RequireAllPermissions(PERMISSIONS.USERS.CREATE, PERMISSIONS.USERS.INVITE)
   @PermissionPolicy('admin-override')
-  async createUser(@Body() createDto: any, @CurrentUser() user: User) {
+  async createUser() {
     return { message: 'Create user' };
   }
 
@@ -191,11 +181,7 @@ export class UsersExampleController {
   @Put(':id/roles')
   @RequirePermissions(PERMISSIONS.USERS.MANAGE_ROLES)
   @PermissionPolicy('sensitive-data-access', { requireMfa: true })
-  async updateRoles(
-    @Param('id') id: string,
-    @Body() rolesDto: any,
-    @CurrentUser() user: User
-  ) {
+  async updateRoles() {
     return { message: 'Update user roles' };
   }
 
@@ -205,7 +191,7 @@ export class UsersExampleController {
   @Post(':id/impersonate')
   @RequirePermissions(PERMISSIONS.USERS.IMPERSONATE)
   @PermissionPolicy('admin-override')
-  async impersonateUser(@Param('id') id: string, @CurrentUser() user: User) {
+  async impersonateUser() {
     return { message: 'Impersonate user' };
   }
 }

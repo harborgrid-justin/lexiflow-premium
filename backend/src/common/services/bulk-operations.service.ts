@@ -80,12 +80,12 @@ export class BulkOperationsService {
           batch.forEach((item, idx) => {
             result.failed.push({
               item,
-              error: error.message,
+              error: (error as Error).message,
               index: i + idx,
             });
           });
           result.failedCount += batch.length;
-          this.logger.warn(`Batch failed, continuing: ${error.message}`);
+          this.logger.warn(`Batch failed, continuing: ${(error as Error).message}`);
         } else {
           throw error;
         }
@@ -143,7 +143,7 @@ export class BulkOperationsService {
         batch.forEach((item, idx) => {
           result.failed.push({
             item,
-            error: error.message,
+            error: (error as Error).message,
             index: i + idx,
           });
         });
@@ -184,15 +184,15 @@ export class BulkOperationsService {
           });
         } else {
           if (options.softDelete) {
-            await repository.softDelete(batch);
+            await repository.softDelete(batch as any);
           } else {
-            await repository.delete(batch);
+            await repository.delete(batch as any);
           }
         }
 
         deletedCount += batch.length;
       } catch (error: unknown) {
-        errors.push(`Batch ${i}-${i + batch.length}: ${error.message}`);
+        errors.push(`Batch ${i}-${i + batch.length}: ${(error as Error).message}`);
       }
     }
 
@@ -240,7 +240,7 @@ export class BulkOperationsService {
         batch.forEach((item, idx) => {
           result.failed.push({
             item,
-            error: error.message,
+            error: (error as Error).message,
             index: i + idx,
           });
         });

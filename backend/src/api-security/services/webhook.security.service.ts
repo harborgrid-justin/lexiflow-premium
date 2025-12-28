@@ -203,8 +203,8 @@ export class WebhookSecurityService implements OnModuleDestroy {
 
   private calculateRetryDelay(attempt: number): number {
     // Use configured delays if available
-    if (MasterConfig.WEBHOOK_RETRY_DELAYS && MasterConfig.WEBHOOK_RETRY_DELAYS[attempt - 1]) {
-      return MasterConfig.WEBHOOK_RETRY_DELAYS[attempt - 1];
+    if (MasterConfig.WEBHOOK_RETRY_DELAYS && MasterConfig.WEBHOOK_RETRY_DELAYS[attempt - 1] !== undefined) {
+      return MasterConfig.WEBHOOK_RETRY_DELAYS[attempt - 1]!;
     }
 
     // Exponential backoff: 2^attempt * 1000ms with max of 15 minutes

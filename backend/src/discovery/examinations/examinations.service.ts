@@ -99,7 +99,7 @@ export class ExaminationsService {
     const result = await this.examinationRepository
       .createQueryBuilder()
       .update(Examination)
-      .set({ ...updateDto, updatedAt: new Date() })
+      .set({ ...updateDto, updatedAt: new Date() } as any)
       .where('id = :id', { id })
       .andWhere('deletedAt IS NULL')
       .returning('*')

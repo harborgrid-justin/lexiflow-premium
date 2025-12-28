@@ -48,9 +48,17 @@ export class CasesService implements OnModuleDestroy {
   }
 
   /**
+   * Check if cached data is still valid based on TTL
+   */
+  private isCacheValid(timestamp: number, ttlMs: number): boolean {
+    return Date.now() - timestamp < ttlMs;
+  }
+
+  /**
    * Enforce LRU cache limits to prevent memory bloat
    * Evicts 10% of oldest entries when cache exceeds limits
    */
+
   private enforceCacheLRU(cache: Map<any, any>, maxSize: number): void {
     if (cache.size > maxSize) {
       const entriesToRemove = Math.ceil(maxSize * 0.1); // Remove 10% of entries

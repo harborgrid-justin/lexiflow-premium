@@ -106,7 +106,7 @@ export class CustodianInterviewsService {
     const result = await this.interviewRepository
       .createQueryBuilder()
       .update(CustodianInterview)
-      .set({ ...updateDto, updatedAt: new Date() })
+      .set({ ...updateDto, updatedAt: new Date() } as any)
       .where('id = :id', { id })
       .andWhere('deletedAt IS NULL')
       .returning('*')

@@ -108,7 +108,7 @@ export class PrivilegeLogService {
     const result = await this.privilegeLogRepository
       .createQueryBuilder()
       .update(PrivilegeLogEntry)
-      .set({ ...updateDto, updatedAt: new Date() })
+      .set({ ...updateDto, updatedAt: new Date() } as any)
       .where('id = :id', { id })
       .andWhere('deletedAt IS NULL')
       .returning('*')

@@ -10,11 +10,9 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
-  UseInterceptors,
-  CacheInterceptor,
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
-import { JwtAuthGuard } from '@auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../../auth/guards';
 import { ExaminationsService } from './examinations.service';
 import { CreateExaminationDto } from './dto/create-examination.dto';
 import { UpdateExaminationDto } from './dto/update-examination.dto';
@@ -23,7 +21,6 @@ import { QueryExaminationDto } from './dto/query-examination.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('examinations')
-@UseInterceptors(CacheInterceptor)
 export class ExaminationsController {
   constructor(private readonly examinationsService: ExaminationsService) {}
 

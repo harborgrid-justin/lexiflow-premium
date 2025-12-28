@@ -9,8 +9,6 @@ import {
   Query,
   HttpCode,
   HttpStatus,
-  UseInterceptors,
-  CacheInterceptor,
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
 import { ESISourcesService } from './esi-sources.service';
@@ -20,7 +18,6 @@ import { QueryESISourceDto } from './dto/query-esi-source.dto';
 
 
 @Controller('esi-sources')
-@UseInterceptors(CacheInterceptor)
 export class ESISourcesController {
   constructor(private readonly esiSourcesService: ESISourcesService) {}
 

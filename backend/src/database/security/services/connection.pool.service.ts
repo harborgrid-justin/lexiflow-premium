@@ -57,7 +57,6 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
   private readonly healthCheckIntervalMs: number;
   private readonly metricsIntervalMs: number;
   private readonly leakDetectionIntervalMs: number;
-  private readonly connectionTimeoutMs: number;
   private readonly idleTimeoutMs: number;
   private readonly maxConnectionAge: number;
 
@@ -68,7 +67,6 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
     this.healthCheckIntervalMs = this.configService.get<number>('DB_HEALTH_CHECK_INTERVAL') || 30000;
     this.metricsIntervalMs = this.configService.get<number>('DB_METRICS_INTERVAL') || 60000;
     this.leakDetectionIntervalMs = this.configService.get<number>('DB_LEAK_DETECTION_INTERVAL') || 120000;
-    this.connectionTimeoutMs = this.configService.get<number>('DB_CONNECTION_TIMEOUT') || 10000;
     this.idleTimeoutMs = this.configService.get<number>('DB_IDLE_TIMEOUT') || 30000;
     this.maxConnectionAge = this.configService.get<number>('DB_MAX_CONNECTION_AGE') || 3600000;
   }
@@ -184,7 +182,7 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
       };
     } catch (error) {
       this.logger.error('Health check error', error);
-      errors.push(`Health check failed: ${error.message}`);
+      errors.push(`Health check failed: ${(error as Error).message}`);
 
       return {
         isHealthy: false,
@@ -217,7 +215,7 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
     const now = Date.now();
     let leakedCount = 0;
 
-    for (const [connection, info] of this.activeConnections.entries()) {
+    for (const [_connection, info] of this.activeConnections.entries()) {
       const age = now - info.acquiredAt.getTime();
       const idleTime = now - info.lastActivity.getTime();
 

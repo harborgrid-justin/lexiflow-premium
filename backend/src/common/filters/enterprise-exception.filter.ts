@@ -357,7 +357,7 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
     const forwarded = request.headers['x-forwarded-for'];
 
     if (forwarded) {
-      return Array.isArray(forwarded) ? forwarded[0] : forwarded.split(',')[0];
+      return Array.isArray(forwarded) ? (forwarded[0] || 'unknown') : (forwarded.split(',')[0] || 'unknown');
     }
 
     return request.ip || request.socket.remoteAddress || 'unknown';
@@ -459,7 +459,8 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
    */
   private logError(
     exception: unknown,
-    request: Request,
+    // request parameter kept for potential future use
+    _request: Request,
     errorResponse: EnhancedErrorResponse,
   ): void {
     const logContext = {

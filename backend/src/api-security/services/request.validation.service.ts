@@ -307,19 +307,19 @@ export class RequestValidationService {
       switch (config.type) {
         case 'string':
           fieldSchema = Joi.string();
-          if (config.min) fieldSchema = fieldSchema.min(config.min);
-          if (config.max) fieldSchema = fieldSchema.max(config.max);
-          if (config.pattern) fieldSchema = fieldSchema.pattern(config.pattern);
-          if (config.email) fieldSchema = fieldSchema.email();
-          if (config.uri) fieldSchema = fieldSchema.uri();
+          if (config.min) fieldSchema = (fieldSchema as Joi.StringSchema).min(config.min as number);
+          if (config.max) fieldSchema = (fieldSchema as Joi.StringSchema).max(config.max as number);
+          if (config.pattern) fieldSchema = (fieldSchema as Joi.StringSchema).pattern(config.pattern);
+          if (config.email) fieldSchema = (fieldSchema as Joi.StringSchema).email();
+          if (config.uri) fieldSchema = (fieldSchema as Joi.StringSchema).uri();
           break;
 
         case 'number':
           fieldSchema = Joi.number();
-          if (config.min !== undefined) fieldSchema = fieldSchema.min(config.min);
-          if (config.max !== undefined) fieldSchema = fieldSchema.max(config.max);
-          if (config.integer) fieldSchema = fieldSchema.integer();
-          if (config.positive) fieldSchema = fieldSchema.positive();
+          if (config.min !== undefined) fieldSchema = (fieldSchema as Joi.NumberSchema).min(config.min as number);
+          if (config.max !== undefined) fieldSchema = (fieldSchema as Joi.NumberSchema).max(config.max as number);
+          if (config.integer) fieldSchema = (fieldSchema as Joi.NumberSchema).integer();
+          if (config.positive) fieldSchema = (fieldSchema as Joi.NumberSchema).positive();
           break;
 
         case 'boolean':
@@ -328,15 +328,15 @@ export class RequestValidationService {
 
         case 'date':
           fieldSchema = Joi.date();
-          if (config.min) fieldSchema = fieldSchema.min(config.min);
-          if (config.max) fieldSchema = fieldSchema.max(config.max);
+          if (config.min) fieldSchema = (fieldSchema as Joi.DateSchema).min(config.min);
+          if (config.max) fieldSchema = (fieldSchema as Joi.DateSchema).max(config.max);
           break;
 
         case 'array':
           fieldSchema = Joi.array();
-          if (config.items) fieldSchema = fieldSchema.items(config.items);
-          if (config.min) fieldSchema = fieldSchema.min(config.min);
-          if (config.max) fieldSchema = fieldSchema.max(config.max);
+          if (config.items) fieldSchema = (fieldSchema as Joi.ArraySchema).items(config.items);
+          if (config.min) fieldSchema = (fieldSchema as Joi.ArraySchema).min(config.min as number);
+          if (config.max) fieldSchema = (fieldSchema as Joi.ArraySchema).max(config.max as number);
           break;
 
         case 'object':

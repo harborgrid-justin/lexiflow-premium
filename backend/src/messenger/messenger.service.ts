@@ -136,12 +136,12 @@ export class MessengerService {
     if (!message) throw new NotFoundException(`Message ${messageId} not found`);
 
     // Add user to readBy array if not already present
-    const readBy = (message.readBy || []) as ReadByEntry[];
+    const readBy = (message.readBy || []) as unknown as ReadByEntry[];
     const alreadyRead = readBy.some((r: ReadByEntry) => r.userId === userId);
 
     if (!alreadyRead) {
       readBy.push({ userId, readAt: new Date() });
-      message.readBy = readBy;
+      message.readBy = readBy as any;
       message.readCount = readBy.length;
       await this.messageRepository.save(message);
     }

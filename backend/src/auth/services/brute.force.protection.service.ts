@@ -187,7 +187,6 @@ export class BruteForceProtectionService {
       ipAddress,
       userAgent,
       success: true,
-      failureReason: null,
       createdAt: new Date(),
     });
 
@@ -489,7 +488,7 @@ export class BruteForceProtectionService {
     }
 
     const index = Math.min(attemptCount, this.delayMultipliers.length - 1);
-    return this.delayMultipliers[index];
+    return this.delayMultipliers[index] ?? 0;
   }
 
   /**

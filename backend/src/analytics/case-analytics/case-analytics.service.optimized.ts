@@ -202,8 +202,6 @@ export class CaseAnalyticsService implements OnModuleDestroy {
   
   // Memory limits
   private readonly MAX_METRICS_CACHE = 3000;
-  private readonly MAX_TREND_CACHE = 500;
-  private readonly MAX_COHORT_CACHE = 200;
   private readonly CACHE_TTL_MS = 1200000; // 20 minutes
   private readonly MAX_BATCH_SIZE = 500;
   private readonly MAX_TIME_SERIES_POINTS = 1000;

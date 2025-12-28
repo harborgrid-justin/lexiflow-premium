@@ -36,7 +36,7 @@ import { RefreshToken } from './entities/refresh-token.entity';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('app.jwt.secret') ?? 'default-jwt-secret',
         signOptions: {
-          expiresIn: configService.get<string>('app.jwt.expiresIn') ?? '15m',
+          expiresIn: parseInt(configService.get<string>('app.jwt.expiresIn') ?? '900', 10),
         },
       }),
     }),

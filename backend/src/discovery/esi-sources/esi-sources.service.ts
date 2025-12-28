@@ -105,7 +105,7 @@ export class ESISourcesService {
     const result = await this.esiSourceRepository
       .createQueryBuilder()
       .update(ESISource)
-      .set({ ...updateDto, updatedAt: new Date() })
+      .set({ ...updateDto, updatedAt: new Date() } as any)
       .where('id = :id', { id })
       .andWhere('deletedAt IS NULL')
       .returning('*')

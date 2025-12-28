@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Repository, In } from 'typeorm';
+import { Repository, In, ObjectLiteral } from 'typeorm';
 
 /**
  * Batch Loader Service
@@ -31,7 +31,7 @@ export class BatchLoaderService {
    * Load multiple entities by IDs in a single query
    * Returns a Map for O(1) lookup
    */
-  async loadMany<T>(
+  async loadMany<T extends ObjectLiteral>(
     repository: Repository<T>,
     ids: any[],
     options: {
@@ -90,7 +90,7 @@ export class BatchLoaderService {
   /**
    * Load entities by a specific field (not just ID)
    */
-  async loadManyByField<T>(
+  async loadManyByField<T extends ObjectLiteral>(
     repository: Repository<T>,
     fieldName: string,
     values: any[],
@@ -156,7 +156,7 @@ export class BatchLoaderService {
   /**
    * Load with custom where conditions
    */
-  async loadManyWithConditions<T>(
+  async loadManyWithConditions<T extends ObjectLiteral>(
     repository: Repository<T>,
     conditions: any[],
     options: {
@@ -217,7 +217,7 @@ export class BatchLoaderService {
   /**
    * Efficiently load counts for multiple IDs
    */
-  async loadCounts<T>(
+  async loadCounts<T extends ObjectLiteral>(
     repository: Repository<T>,
     fieldName: string,
     values: any[],

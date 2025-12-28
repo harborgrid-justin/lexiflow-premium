@@ -182,8 +182,8 @@ export class CompressionService {
       return false;
     }
 
-    const safeContentType = contentType || '';
-    const normalizedType = safeContentType ? safeContentType.toLowerCase().split(';')[0].trim() : '';
+    const typeParts = contentType.toLowerCase().split(';');
+    const normalizedType = (typeParts[0] || '').trim();
 
     // Check exclusions first
     if (config.excludeContentTypes) {
@@ -349,12 +349,14 @@ export class CompressionService {
         });
 
       case 'brotli':
-        return await this.promisify<any>(zlib.brotliCompress)(buffer, {
-          params: {
-            [zlib.constants.BROTLI_PARAM_QUALITY]: level,
-            [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT,
-          },
-        } as any);
+        return await new Promise<Buffer>((resolve, reject) => {
+          zlib.brotliCompress(buffer, {
+            params: {
+              [zlib.constants.BROTLI_PARAM_QUALITY]: level,
+              [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT,
+            },
+          } as any, (err: Error | null, result: Buffer) => err ? reject(err) : resolve(result));
+        });
 
       case 'deflate':
         return await this.promisify(zlib.deflate)(buffer, {

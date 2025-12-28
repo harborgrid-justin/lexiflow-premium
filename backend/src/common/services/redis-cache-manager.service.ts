@@ -293,7 +293,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
   async getStats(): Promise<CacheStats> {
     if (this.useRedis()) {
       try {
-        const info = await this.redisClient!.info('stats');
+        await this.redisClient!.info('stats');
         const dbSize = await this.redisClient!.dbSize();
 
         return {

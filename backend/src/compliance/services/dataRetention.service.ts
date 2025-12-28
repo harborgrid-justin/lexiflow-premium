@@ -1,6 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, LessThanOrEqual, MoreThanOrEqual, In, IsNull, Not } from 'typeorm';
+import { Repository, LessThanOrEqual } from 'typeorm';
 import { DataRetentionPolicy, DataRetentionRecord, RetentionPolicyStatus, RetentionAction } from '@compliance/entities/dataRetention.entity';
 import { CreateRetentionPolicyDto, RetentionStatusQueryDto, LegalHoldDto, RemoveLegalHoldDto } from '@compliance/dto/compliance.dto';
 import { AuditLog } from '@compliance/entities/audit-log.entity';
@@ -97,7 +97,6 @@ export class DataRetentionService {
   }
 
   async getActivePolicies(): Promise<DataRetentionPolicy[]> {
-    const now = new Date();
     return this.policyRepository.find({
       where: {
         status: RetentionPolicyStatus.ACTIVE,
@@ -157,6 +156,10 @@ export class DataRetentionService {
     if (existingRecord) {
       this.logger.debug(`Retention record already exists for ${entityType}:${entityId}`);
       return existingRecord;
+    }
+
+    if (!applicablePolicy) {
+      throw new Error(`No retention policy found for entity type: ${entityType}`);
     }
 
     const retentionExpiresAt = new Date(createdDate);
@@ -296,7 +299,9 @@ export class DataRetentionService {
       record.legalHoldBy = placedBy;
       record.legalHoldAt = new Date();
       record.status = 'hold';
-      record.notes = dto.notes;
+      if (dto.notes) {
+        record.notes = dto.notes;
+      }
       record.metadata = { ...record.metadata, relatedCaseId: dto.relatedCaseId };
     }
 

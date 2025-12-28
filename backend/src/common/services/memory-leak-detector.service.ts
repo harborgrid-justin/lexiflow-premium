@@ -189,8 +189,11 @@ export class MemoryLeakDetectorService implements OnModuleInit, OnModuleDestroy 
     let totalGrowth = 0;
     
     for (let i = 1; i < recentSnapshots.length; i++) {
-      const prev = recentSnapshots[i - 1].stats.heapUsedMB;
-      const curr = recentSnapshots[i].stats.heapUsedMB;
+      const prevSnapshot = recentSnapshots[i - 1];
+      const currSnapshot = recentSnapshots[i];
+      if (!prevSnapshot || !currSnapshot) continue;
+      const prev = prevSnapshot.stats.heapUsedMB;
+      const curr = currSnapshot.stats.heapUsedMB;
       const growth = curr - prev;
       
       if (growth < 0) {
@@ -212,7 +215,7 @@ export class MemoryLeakDetectorService implements OnModuleInit, OnModuleDestroy 
         severity,
         description: `Steady heap growth detected: ${totalGrowth.toFixed(1)}MB over ${this.config.retentionCheckCount} checks`,
         currentValue: currentSnapshot.stats.heapUsedMB,
-        previousValue: recentSnapshots[0].stats.heapUsedMB,
+        previousValue: recentSnapshots[0]?.stats.heapUsedMB ?? 0,
         threshold: this.config.heapGrowthThresholdMB,
         timestamp: Date.now(),
       };
@@ -230,6 +233,9 @@ export class MemoryLeakDetectorService implements OnModuleInit, OnModuleDestroy 
     }
     
     const previousSnapshot = this.snapshots[this.snapshots.length - 2];
+    if (!previousSnapshot) {
+      return null;
+    }
     
     // Check for large increase in array buffers (often indicates retained data)
     const prevBuffers = previousSnapshot.stats.arrayBuffers;

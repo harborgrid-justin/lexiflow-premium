@@ -10,9 +10,8 @@ import {
   Head,
   HttpCode,
   HttpStatus,
-  UseInterceptors,
-  CacheInterceptor,
-  CacheTTL,
+  // CacheInterceptor, // Removed in newer NestJS versions
+  // CacheTTL, // Removed in newer NestJS versions
 } from '@nestjs/common';
 import { ApiResponse }from '@nestjs/swagger';
 import { DepositionsService } from './depositions.service';
@@ -22,7 +21,7 @@ import { QueryDepositionDto } from './dto/query-deposition.dto';
 
 
 @Controller('depositions')
-@UseInterceptors(CacheInterceptor)
+// @UseInterceptors(CacheInterceptor) // Removed in newer NestJS versions
 export class DepositionsController {
   constructor(private readonly depositionsService: DepositionsService) {}
 

@@ -200,7 +200,7 @@ export class ResourceAccessGuard implements CanActivate {
     }
 
     if (delegationRequired) {
-      const hasDelegation = await this.validateDelegation(user, resource);
+      const hasDelegation = await this.validateDelegation(resource);
 
       if (!hasDelegation) {
         this.logger.warn(
@@ -317,11 +317,11 @@ export class ResourceAccessGuard implements CanActivate {
     }
 
     if (ownershipRequirement.allowDelegation) {
-      return this.validateDelegation(user, resource);
+      return this.validateDelegation(resource);
     }
 
     if (ownershipRequirement.allowTeamMembers) {
-      return this.validateTeamMembership(user, resource);
+      return this.validateTeamMembership(resource);
     }
 
     const isAdmin = [UserRole.SUPER_ADMIN, UserRole.ADMIN].includes(user.role);
@@ -333,7 +333,6 @@ export class ResourceAccessGuard implements CanActivate {
   }
 
   private async validateDelegation(
-    user: AuthenticatedUser,
     resource: ResourceWithOwner | null
   ): Promise<boolean> {
     if (!resource) {
@@ -344,7 +343,6 @@ export class ResourceAccessGuard implements CanActivate {
   }
 
   private async validateTeamMembership(
-    user: AuthenticatedUser,
     resource: ResourceWithOwner | null
   ): Promise<boolean> {
     if (!resource) {

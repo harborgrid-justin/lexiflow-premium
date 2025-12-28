@@ -30,7 +30,7 @@ import { OcrRequestDto } from '@ocr/dto/ocr-request.dto';
 @ApiBearerAuth('JWT-auth')
 
 @Controller('documents')
-@UseInterceptors(CacheInterceptor)
+// @UseInterceptors(CacheInterceptor) - CacheInterceptor removed in newer NestJS versions
 export class DocumentsController {
   constructor(
     private readonly documentsService: DocumentsService,

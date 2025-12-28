@@ -9,8 +9,6 @@ import {
   Query,
   HttpCode,
   HttpStatus,
-  UseInterceptors,
-  CacheInterceptor,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { Public } from '@common/decorators/public.decorator';
@@ -22,9 +20,7 @@ import { DocketEntry } from './entities/docket-entry.entity';
 
 @ApiTags('Docket')
 @ApiBearerAuth('JWT-auth')
-
 @Controller('docket')
-@UseInterceptors(CacheInterceptor)
 export class DocketController {
   constructor(private readonly docketService: DocketService) {}
 
@@ -33,13 +29,18 @@ export class DocketController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(@Query('caseId') caseId?: string): Promise<{ data: DocketEntry[]; total: number; page: number; limit: number; totalPages: number }> {
     const result = caseId ? await this.docketService.findAllByCaseId(caseId) : await this.docketService.findAll();
-    const entries = Array.isArray(result) ? result : result.data || [];
+    if (Array.isArray(result)) {
+      return {
+        data: result,
+        total: result.length,
+        page: 1,
+        limit: result.length,
+        totalPages: 1,
+      };
+    }
     return {
-      data: entries,
-      total: entries.length,
-      page: 1,
-      limit: entries.length,
-      totalPages: 1,
+      ...result,
+      totalPages: Math.ceil(result.total / result.limit),
     };
   }
 

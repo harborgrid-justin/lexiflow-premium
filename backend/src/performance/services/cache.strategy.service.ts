@@ -73,9 +73,9 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
 
   constructor(
     private readonly redisCache: RedisCacheManagerService,
-    private readonly _configService: ConfigService,
+    private readonly configService: ConfigService,
   ) {
-    // ConfigService available for dynamic configuration
+    void this.configService;
   }
 
   async onModuleInit() {
@@ -498,24 +498,6 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
     const entry = this.memoryCache.get(key);
     if (entry) {
       entry.lastAccess = Date.now();
-    }
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private _cleanupExpiredEntries(): void {
-    const now = Date.now();
-    let count = 0;
-
-    for (const [key, entry] of this.memoryCache.entries()) {
-      if (now > entry.expiresAt) {
-        this.memoryCache.delete(key);
-        this.metadata.delete(key);
-        count++;
-      }
-    }
-
-    if (count > 0) {
-      this.logger.debug(`Cleaned up ${count} expired cache entries`);
     }
   }
 

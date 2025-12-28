@@ -70,32 +70,36 @@ export class LoggingInterceptor implements NestInterceptor {
         next: (_data) => {
           const responseTime = Date.now() - now;
 
-          this.logger.log(`Request completed: ${method} ${url}`, {
-            method,
-            url,
-            statusCode: response.statusCode,
-            duration: responseTime,
-            correlationId,
-            userId,
-          });
+          if (this.logger) {
+            this.logger.log(`Request completed: ${method} ${url}`, {
+              method,
+              url,
+              statusCode: response.statusCode,
+              duration: responseTime,
+              correlationId,
+              userId,
+            });
+          }
         },
         error: (error) => {
           const responseTime = Date.now() - now;
 
-          this.logger.error(
-            `Request failed: ${method} ${url}`,
-            error.stack,
-            {
-              method,
-              url,
-              duration: responseTime,
-              errorMessage: error.message,
-              errorName: error.name,
-              statusCode: error.status || error.statusCode || 500,
-              correlationId,
-              userId,
-            },
-          );
+          if (this.logger) {
+            this.logger.error(
+              `Request failed: ${method} ${url}`,
+              error.stack,
+              {
+                method,
+                url,
+                duration: responseTime,
+                errorMessage: error.message,
+                errorName: error.name,
+                statusCode: error.status || error.statusCode || 500,
+                correlationId,
+                userId,
+              },
+            );
+          }
         },
       }),
     );

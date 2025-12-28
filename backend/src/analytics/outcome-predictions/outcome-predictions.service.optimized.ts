@@ -34,10 +34,8 @@ export class OutcomePredictionsService implements OnModuleDestroy {
   
   // Memory optimization limits
   private readonly MAX_PREDICTION_CACHE = 2000;
-  private readonly MAX_SIMILAR_CASES_CACHE = 1000;
   private readonly CACHE_TTL_MS = 3600000; // 60 minutes
   private readonly MAX_FEATURE_BATCH_SIZE = 100;
-  private readonly MAX_SIMILAR_CASES_SEARCH = 10000;
   
   // LRU caches
   private predictionCache: Map<string, { data: OutcomePredictionDto; timestamp: number; accessCount: number }> = new Map();
@@ -281,13 +279,14 @@ export class OutcomePredictionsService implements OnModuleDestroy {
     // Mock similar cases
     const similarCases: SimilarCaseDto[] = Array.from({ length: safeLimit }, (_, i) => ({
       caseId: `case-${i + 1}`,
+      caseNumber: `2024-CV-${1000 + i}`,
       caseTitle: `Similar Case ${i + 1}`,
+      title: `Similar Case ${i + 1}`,
       similarityScore: 85 - i * 2,
       outcome: PredictedOutcome.SETTLEMENT,
       settlementAmount: 500000 + Math.random() * 200000,
-      duration: 150 + Math.random() * 100,
+      duration: Math.floor(150 + Math.random() * 100),
       matchingFactors: ['Judge', 'Case Type', 'Jurisdiction'],
-      relevanceExplanation: `Shares ${3 - Math.floor(i / 3)} key characteristics`,
     }));
     
     // Cache results
@@ -316,23 +315,23 @@ export class OutcomePredictionsService implements OnModuleDestroy {
     // Mock accuracy metrics
     const accuracy: PredictionAccuracyDto = {
       overallAccuracy: 76.5,
+      accuracyByConfidence: {
+        [ConfidenceLevel.VERY_HIGH]: { predictions: 145, correct: 128, accuracy: 88.3 },
+        [ConfidenceLevel.HIGH]: { predictions: 412, correct: 350, accuracy: 85.0 },
+        [ConfidenceLevel.MODERATE]: { predictions: 623, correct: 485, accuracy: 77.9 },
+        [ConfidenceLevel.LOW]: { predictions: 212, correct: 135, accuracy: 63.7 },
+        [ConfidenceLevel.VERY_LOW]: { predictions: 55, correct: 21, accuracy: 38.2 },
+      },
       accuracyByOutcome: {
-        [PredictedOutcome.PLAINTIFF_WIN]: 72.3,
-        [PredictedOutcome.DEFENDANT_WIN]: 68.9,
-        [PredictedOutcome.SETTLEMENT]: 82.1,
-        [PredictedOutcome.DISMISSAL]: 70.4,
-        [PredictedOutcome.UNCERTAIN]: 45.2,
+        [PredictedOutcome.PLAINTIFF_WIN]: { predictions: 450, correct: 325, accuracy: 72.3 },
+        [PredictedOutcome.DEFENDANT_WIN]: { predictions: 380, correct: 262, accuracy: 68.9 },
+        [PredictedOutcome.SETTLEMENT]: { predictions: 290, correct: 238, accuracy: 82.1 },
+        [PredictedOutcome.DISMISSAL]: { predictions: 97, correct: 68, accuracy: 70.4 },
+        [PredictedOutcome.UNCERTAIN]: { predictions: 30, correct: 14, accuracy: 45.2 },
       },
       totalPredictions: 1247,
-      correctPredictions: 954,
-      confidenceLevelDistribution: {
-        [ConfidenceLevel.HIGH]: 412,
-        [ConfidenceLevel.MEDIUM]: 623,
-        [ConfidenceLevel.LOW]: 212,
-      },
-      avgConfidenceScore: 68.4,
-      modelVersion: this.MODEL_VERSION,
-      calculatedAt: new Date(),
+      validatedPredictions: 954,
+      lastModelUpdate: new Date(),
     };
     
     this.accuracyCache.set(cacheKey, {

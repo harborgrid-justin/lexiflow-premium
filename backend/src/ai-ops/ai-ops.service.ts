@@ -27,7 +27,6 @@ export class AiOpsService implements OnModuleDestroy {
   
   // Memory limits
   private readonly MAX_SIMILARITY_CACHE = 5000;
-  private readonly MAX_MODEL_CACHE = 1000;
   private readonly CACHE_TTL_MS = 1200000; // 20 minutes
   private readonly MAX_BATCH_SIZE = 500;
   private readonly MAX_VECTOR_CORPUS_SIZE = 100000;
@@ -356,7 +355,7 @@ export class AiOpsService implements OnModuleDestroy {
             results.push({ doc, similarity });
           }
         } catch (error) {
-          this.logger.warn(`Failed to compute similarity for doc ${doc.id}: ${error.message}`);
+          this.logger.warn(`Failed to compute similarity for doc ${doc.id}: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
       }
       

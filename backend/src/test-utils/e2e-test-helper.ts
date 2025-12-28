@@ -1,6 +1,5 @@
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-// import type { Response } from 'supertest';
 
 interface AuthResponse {
   body: {
@@ -8,15 +7,6 @@ interface AuthResponse {
       accessToken: string;
     };
   };
-}
-
-// type SuperTestRequest = any;
-
-interface RequestMethods {
-  post: (url: string) => Test;
-  get: (url: string) => Test;
-  put: (url: string) => Test;
-  delete: (url: string) => Test;
 }
 
 export class E2ETestHelper {
@@ -29,10 +19,10 @@ export class E2ETestHelper {
     password: string = 'Admin123!',
   ): Promise<string> {
     const server = app.getHttpServer();
-    const testRequest = request(server) as unknown as RequestMethods;
-    const postRequest = testRequest.post('/auth/login');
-    const sendRequest = postRequest.send({ email, password });
-    const response = (await sendRequest.expect(200)) as unknown as AuthResponse;
+    const response = (await request(server)
+      .post('/auth/login')
+      .send({ email, password })
+      .expect(200)) as unknown as AuthResponse;
 
     return response.body.data.accessToken;
   }
@@ -46,10 +36,9 @@ export class E2ETestHelper {
     token: string,
   ): Promise<any> {
     const server = app.getHttpServer();
-    const testRequest = request(server) as unknown as RequestMethods;
-    const getRequest = testRequest.get(path);
-    const result = getRequest.set('Authorization', `Bearer ${token}`);
-    return result as unknown as Promise<any>;
+    return request(server)
+      .get(path)
+      .set('Authorization', `Bearer ${token}`);
   }
 
   /**
@@ -62,11 +51,10 @@ export class E2ETestHelper {
     body: unknown,
   ): Promise<any> {
     const server = app.getHttpServer();
-    const testRequest = request(server) as unknown as RequestMethods;
-    const postRequest = testRequest.post(path);
-    const authRequest = postRequest.set('Authorization', `Bearer ${token}`);
-    const result = authRequest.send(body);
-    return result as unknown as Promise<any>;
+    return request(server)
+      .post(path)
+      .set('Authorization', `Bearer ${token}`)
+      .send(body);
   }
 
   /**
@@ -79,11 +67,10 @@ export class E2ETestHelper {
     body: unknown,
   ): Promise<any> {
     const server = app.getHttpServer();
-    const testRequest = request(server) as unknown as RequestMethods;
-    const putRequest = testRequest.put(path);
-    const authRequest = putRequest.set('Authorization', `Bearer ${token}`);
-    const result = authRequest.send(body);
-    return result as unknown as Promise<any>;
+    return request(server)
+      .put(path)
+      .set('Authorization', `Bearer ${token}`)
+      .send(body);
   }
 
   /**
@@ -95,10 +82,9 @@ export class E2ETestHelper {
     token: string,
   ): Promise<any> {
     const server = app.getHttpServer();
-    const testRequest = request(server) as unknown as RequestMethods;
-    const deleteRequest = testRequest.delete(path);
-    const result = deleteRequest.set('Authorization', `Bearer ${token}`);
-    return result as unknown as Promise<any>;
+    return request(server)
+      .delete(path)
+      .set('Authorization', `Bearer ${token}`);
   }
 
   /**

@@ -179,8 +179,8 @@ export class DataMaskingService {
 
     const [localPart, domain] = value.split('@');
 
-    if (localPart.length <= 2) {
-      return `${this.maskChar.repeat(localPart.length)}@${domain}`;
+    if (!localPart || localPart.length <= 2) {
+      return `${this.maskChar.repeat(localPart?.length || 0)}@${domain}`;
     }
 
     const visibleChars = Math.min(2, localPart.length - 1);

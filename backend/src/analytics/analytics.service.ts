@@ -102,8 +102,11 @@ export class AnalyticsService implements OnModuleDestroy {
       const entries = Array.from(this.analyticsCache.entries());
       entries.sort((a, b) => a[1].timestamp - b[1].timestamp);
       const toRemove = Math.floor(this.MAX_CACHE_ENTRIES * 0.1);
-      for (let i = 0; i < toRemove; i++) {
-        this.analyticsCache.delete(entries[i][0]);
+      for (let i = 0; i < toRemove && i < entries.length; i++) {
+        const entry = entries[i];
+        if (entry) {
+          this.analyticsCache.delete(entry[0]);
+        }
       }
     }
   }
@@ -111,10 +114,10 @@ export class AnalyticsService implements OnModuleDestroy {
   /**
    * Get cached data or compute and cache result
    */
-  private getCachedData<T>(cacheKey: string, computeFn: () => Promise<T>): Promise<T> {
+  private getCachedData<T extends AnalyticsCacheData>(cacheKey: string, computeFn: () => Promise<T>): Promise<T> {
     const cached = this.analyticsCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
-      return Promise.resolve(cached.data);
+      return Promise.resolve(cached.data as T);
     }
 
     return computeFn().then(data => {

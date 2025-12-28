@@ -111,10 +111,13 @@ export class ApiKeyScopeGuard implements CanActivate {
 
   private getClientIp(request: Request): string {
     // Check for forwarded IP (behind proxy/load balancer)
-    const forwardedFor = request.headers['x-forwarded-for'] as string;
-    if (forwardedFor) {
+    const forwardedFor = request.headers['x-forwarded-for'];
+    if (forwardedFor && typeof forwardedFor === 'string') {
       // Get the first IP in the chain
-      return forwardedFor.split(',')[0].trim();
+      const firstIp = forwardedFor.split(',')[0];
+      if (firstIp) {
+        return firstIp.trim();
+      }
     }
 
     // Check for real IP (some proxies use this)

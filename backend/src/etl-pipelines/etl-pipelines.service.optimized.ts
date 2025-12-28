@@ -1,8 +1,8 @@
-import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy, Inject } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, QueryRunner } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-// import { Readable } from 'stream';
+// 
 
 /**
  * ETL Pipelines Service with PhD-Level Memory Engineering
@@ -46,8 +46,9 @@ export class EtlPipelinesService implements OnModuleDestroy {
   
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,
-    private readonly _eventEmitter: EventEmitter2,
+    @Inject(EventEmitter2) private readonly eventEmitter: EventEmitter2,
   ) {
+    void this.eventEmitter;
     this.startMemoryManagement();
   }
   

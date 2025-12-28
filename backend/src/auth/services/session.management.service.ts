@@ -153,32 +153,33 @@ export class SessionManagementService implements OnModuleDestroy {
       deviceFingerprint.ipAddress,
     );
 
-    const session = this.sessionRepository.create({
+    const sessionData = {
       userId,
       token,
       refreshToken,
       refreshTokenExpiresAt,
       deviceInfo: JSON.stringify({
         type: deviceInfo.type || 'unknown',
-        vendor: deviceInfo.vendor || null,
-        model: deviceInfo.model || null,
+        vendor: deviceInfo.vendor || undefined,
+        model: deviceInfo.model || undefined,
       }),
-      deviceType: deviceInfo.type || deviceFingerprint.deviceType || null,
+      deviceType: deviceInfo.type || deviceFingerprint.deviceType || undefined,
       userAgent: deviceFingerprint.userAgent,
       ipAddress: deviceFingerprint.ipAddress,
-      browser: browserInfo.name || null,
+      browser: browserInfo.name || undefined,
       os: `${osInfo.name || 'Unknown'} ${osInfo.version || ''}`.trim(),
-      location: deviceFingerprint.location || null,
-      country: deviceFingerprint.country || null,
-      city: deviceFingerprint.city || null,
+      location: deviceFingerprint.location || undefined,
+      country: deviceFingerprint.country || undefined,
+      city: deviceFingerprint.city || undefined,
       expiresAt,
       isActive: true,
       isTrusted,
       lastActivityAt: new Date(),
       metadata: metadata || {},
-    });
-
-    const createdSession = await this.sessionRepository.save(session);
+    };
+    
+    const sessionEntity = this.sessionRepository.create(sessionData);
+    const createdSession = await this.sessionRepository.save(sessionEntity);
 
     // Enforce session limits
     await this.enforceSessionLimits(userId);

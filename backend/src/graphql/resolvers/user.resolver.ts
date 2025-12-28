@@ -59,7 +59,7 @@ export class UserResolver {
     return {
       accessToken: result.accessToken,
       refreshToken: result.refreshToken,
-      user: result.user as UserType,
+      user: result.user as unknown as UserType,
       expiresIn: 3600, // Default 1 hour
     };
   }
@@ -72,13 +72,13 @@ export class UserResolver {
       password: input.password,
       firstName: input.firstName,
       lastName: input.lastName,
-      role: input.role,
+      role: (input as any).role,
     };
     const result = await this.authService.register(registerDto);
     return {
       accessToken: result.accessToken,
       refreshToken: result.refreshToken,
-      user: result.user as UserType,
+      user: result.user as unknown as UserType,
       expiresIn: 3600, // Default 1 hour
     };
   }
@@ -91,12 +91,12 @@ export class UserResolver {
   ): Promise<UserType> {
     // Verify user has permission to update (simplified for now)
     const updateDto = {
-      email: input.email,
+      email: (input as any).email,
       firstName: input.firstName,
       lastName: input.lastName,
-      role: input.role,
-      isActive: input.isActive,
-      mfaEnabled: input.mfaEnabled,
+      role: (input as any).role,
+      isActive: (input as any).isActive,
+      mfaEnabled: (input as any).mfaEnabled,
     };
     const updatedUser = await this.userService.update(id, updateDto);
     return updatedUser as unknown as UserType;

@@ -134,7 +134,9 @@ export function replaceWeakMap<K extends object, V>(): WeakMap<K, V> {
 /**
  * Clear multiple data structures
  */
-export function clearDataStructures(structures: Array<Map<any, any> | Set<any> | any[]>): void {
+export function clearDataStructures(
+  structures: Array<Map<unknown, unknown> | Set<unknown> | unknown[]>,
+): void {
   for (const structure of structures) {
     if (structure instanceof Map) {
       clearMap(structure);
@@ -279,10 +281,10 @@ export function mbToBytes(mb: number): number {
 /**
  * Estimate object size in bytes (rough approximation)
  */
-export function estimateObjectSize(obj: any): number {
+export function estimateObjectSize(obj: unknown): number {
   const seen = new WeakSet();
-  
-  function sizeOf(obj: any): number {
+
+  function sizeOf(obj: unknown): number {
     if (obj === null || obj === undefined) return 0;
     
     // Primitives
@@ -308,9 +310,9 @@ export function estimateObjectSize(obj: any): number {
       
       // Objects
       for (const key in obj) {
-        if (obj.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
           size += key.length * 2; // Key size
-          size += sizeOf(obj[key]); // Value size
+          size += sizeOf((obj as Record<string, unknown>)[key]); // Value size
         }
       }
       
@@ -404,7 +406,7 @@ export class MemorySafeCache<K, V> {
  * Graceful shutdown handler
  */
 export async function setupGracefulShutdown(
-  app: any,
+  app: { close: () => Promise<void> },
   signals: NodeJS.Signals[] = ['SIGTERM', 'SIGINT'],
 ): Promise<void> {
   for (const signal of signals) {

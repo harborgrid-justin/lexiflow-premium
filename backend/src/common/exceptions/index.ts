@@ -5,7 +5,7 @@ export class BaseException extends HttpException {
     message: string,
     status: HttpStatus,
     public readonly code?: string,
-    public readonly details?: any,
+    public readonly details?: Record<string, unknown>,
   ) {
     super(
       {
@@ -43,7 +43,7 @@ export class DuplicateEntityException extends BaseException {
 }
 
 export class ValidationException extends BaseException {
-  constructor(message: string, errors?: any) {
+  constructor(message: string, errors?: unknown) {
     super(
       message,
       HttpStatus.BAD_REQUEST,
@@ -74,7 +74,7 @@ export class ForbiddenException extends BaseException {
 }
 
 export class BusinessLogicException extends BaseException {
-  constructor(message: string, details?: any) {
+  constructor(message: string, details?: Record<string, unknown>) {
     super(
       message,
       HttpStatus.UNPROCESSABLE_ENTITY,
@@ -85,7 +85,7 @@ export class BusinessLogicException extends BaseException {
 }
 
 export class ExternalServiceException extends BaseException {
-  constructor(serviceName: string, message: string, details?: any) {
+  constructor(serviceName: string, message: string, details?: Record<string, unknown>) {
     super(
       `External service error: ${serviceName} - ${message}`,
       HttpStatus.SERVICE_UNAVAILABLE,
@@ -96,7 +96,7 @@ export class ExternalServiceException extends BaseException {
 }
 
 export class DatabaseException extends BaseException {
-  constructor(operation: string, message: string, details?: any) {
+  constructor(operation: string, message: string, details?: Record<string, unknown>) {
     super(
       `Database operation failed: ${operation} - ${message}`,
       HttpStatus.INTERNAL_SERVER_ERROR,
@@ -151,7 +151,7 @@ export class RateLimitException extends BaseException {
 }
 
 export class ConflictCheckException extends BaseException {
-  constructor(message: string, conflicts: any[]) {
+  constructor(message: string, conflicts: unknown[]) {
     super(
       message,
       HttpStatus.CONFLICT,

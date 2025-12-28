@@ -1,12 +1,28 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FileStorageService } from '@file-storage/file-storage.service';
-import { OcrRequestDto, OcrResultDto } from './dto/ocr-request.dto';
+import {
+  OcrRequestDto,
+  OcrResultDto,
+  OcrProgressDto,
+  DetectLanguageDto,
+  LanguageDetectionResultDto,
+  ExtractStructuredDataOptionsDto,
+  StructuredDataResultDto,
+  BatchProcessRequestDto,
+  BatchProcessResultDto,
+  OcrStatsDto,
+} from './dto/ocr-request.dto';
+import {
+  TesseractWorker,
+  TesseractLoggerMessage,
+  TesseractCreateWorkerOptions,
+} from './interfaces/tesseract.interface';
 
 @Injectable()
 export class OcrService {
   private readonly logger = new Logger(OcrService.name);
-  private worker: any = null;
+  private worker: TesseractWorker | null = null;
   private readonly ocrEnabled: boolean;
   private initializationAttempted: boolean = false;
 
@@ -34,9 +50,10 @@ export class OcrService {
       this.logger.log('Initializing Tesseract OCR worker...');
       const { createWorker } = await import('tesseract.js');
       const languages = this.configService.get<string>('OCR_LANGUAGES') || 'eng';
-      this.worker = await createWorker(languages, 1, {
-        logger: (m: any) => this.logger.debug(JSON.stringify(m)),
-      });
+      const options: TesseractCreateWorkerOptions = {
+        logger: (m: TesseractLoggerMessage) => this.logger.debug(JSON.stringify(m)),
+      };
+      this.worker = (await createWorker(languages, 1, options)) as TesseractWorker;
       this.logger.log('Tesseract OCR worker initialized successfully');
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
@@ -99,10 +116,7 @@ export class OcrService {
   /**
    * Extract text from image buffer
    */
-  async extractTextFromBuffer(
-    buffer: Buffer,
-    _languages: string[] = ['eng'],
-  ): Promise<string> {
+  async extractTextFromBuffer(buffer: Buffer): Promise<string> {
     if (!this.ocrEnabled || !this.worker) {
       throw new Error('OCR service is not enabled or not initialized');
     }
@@ -162,7 +176,7 @@ export class OcrService {
     return this.getSupportedLanguages().includes(lang);
   }
 
-  async getOcrProgress(jobId: string): Promise<any> {
+  async getOcrProgress(jobId: string): Promise<OcrProgressDto> {
     return {
       jobId,
       progress: 100,
@@ -170,14 +184,23 @@ export class OcrService {
     };
   }
 
-  async detectLanguage(_data: any): Promise<any> {
+  async detectLanguage(data: DetectLanguageDto): Promise<LanguageDetectionResultDto> {
+    // Basic language detection implementation
+    // In a real implementation, this would analyze the text/buffer
+    this.logger.debug('Detecting language', data);
     return {
       language: 'eng',
       confidence: 0.95,
     };
   }
 
-  async extractStructuredData(documentId: string, _options: any): Promise<any> {
+  async extractStructuredData(
+    documentId: string,
+    options: ExtractStructuredDataOptionsDto,
+  ): Promise<StructuredDataResultDto> {
+    // Basic structured data extraction implementation
+    // In a real implementation, this would extract tables, forms, entities, etc.
+    this.logger.debug('Extracting structured data', { documentId, options });
     return {
       documentId,
       data: {},
@@ -185,7 +208,7 @@ export class OcrService {
     };
   }
 
-  async batchProcess(batchDto: any): Promise<any> {
+  async batchProcess(batchDto: BatchProcessRequestDto): Promise<BatchProcessResultDto> {
     return {
       batchId: 'batch-' + Date.now(),
       status: 'queued',
@@ -193,7 +216,7 @@ export class OcrService {
     };
   }
 
-  getOcrStats(): any {
+  getOcrStats(): OcrStatsDto {
     return {
       totalProcessed: 0,
       totalPages: 0,

@@ -8,7 +8,7 @@ import { CacheStrategyService } from './cache.strategy.service';
  */
 export interface QueryAnalysis {
   sql: string;
-  parameters: any[];
+  parameters: unknown[];
   estimatedCost: number;
   warnings: QueryWarning[];
   recommendations: string[];
@@ -350,7 +350,7 @@ export class QueryOptimizerService implements OnModuleDestroy {
 
   private async estimateQueryCost(
     sql: string,
-    parameters: any[],
+    parameters: unknown[],
   ): Promise<number> {
     try {
       // Use EXPLAIN for PostgreSQL

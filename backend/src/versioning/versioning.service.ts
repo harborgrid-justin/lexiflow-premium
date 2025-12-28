@@ -75,14 +75,14 @@ export class VersioningService {
     return version;
   }
 
-  async getBranches(entityType: string, entityId: string) {
+  async getBranches(entityType: string, entityId: string): Promise<string[]> {
     const result = await this.versionRepository
       .createQueryBuilder('version')
       .select('DISTINCT version.branch', 'branch')
       .where('version.entityType = :entityType', { entityType })
       .andWhere('version.entityId = :entityId', { entityId })
       .andWhere('version.branch IS NOT NULL')
-      .getRawMany();
+      .getRawMany<{ branch: string }>();
 
     return result.map(r => r.branch);
   }

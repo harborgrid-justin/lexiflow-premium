@@ -86,11 +86,11 @@ export class TokenStorageService implements OnModuleDestroy {
     }
 
     try {
-      const redisUrl = this.configService.get('redis.url');
-      const redisHost = this.configService.get('redis.host', 'localhost');
-      const redisPort = this.configService.get('redis.port', 6379);
-      const redisPassword = this.configService.get('redis.password');
-      const redisUsername = this.configService.get('redis.username', 'default');
+      const redisUrl = this.configService.get<string>('redis.url');
+      const redisHost = this.configService.get<string>('redis.host') ?? 'localhost';
+      const redisPort = this.configService.get<number>('redis.port') ?? 6379;
+      const redisPassword = this.configService.get<string>('redis.password');
+      const redisUsername = this.configService.get<string>('redis.username') ?? 'default';
 
       // Use URL if provided (for cloud Redis), otherwise use host/port
       this.redisClient = redisUrl
@@ -177,6 +177,17 @@ export class TokenStorageService implements OnModuleDestroy {
   }
 
   /**
+   * Get Redis client with proper type narrowing
+   * Returns the Redis client only if connected, otherwise null
+   */
+  private getRedisClient(): RedisClientType | null {
+    if (this.isRedisConnected && this.redisClient !== null) {
+      return this.redisClient;
+    }
+    return null;
+  }
+
+  /**
    * Store refresh token
    */
   async storeRefreshToken(
@@ -187,11 +198,12 @@ export class TokenStorageService implements OnModuleDestroy {
     const key = `auth:refresh:${tokenId}`;
     const userKey = `auth:refresh:user:${data.userId}`;
 
-    if (this.useRedis()) {
+    const redisClient = this.getRedisClient();
+    if (redisClient) {
       try {
-        await this.redisClient!.setEx(key, ttlSeconds, JSON.stringify(data));
-        await this.redisClient!.sAdd(userKey, tokenId);
-        await this.redisClient!.expire(userKey, ttlSeconds);
+        await redisClient.setEx(key, ttlSeconds, JSON.stringify(data));
+        await redisClient.sAdd(userKey, tokenId);
+        await redisClient.expire(userKey, ttlSeconds);
         this.logger.debug(`Stored refresh token in Redis: ${tokenId}`);
       } catch (error) {
         this.logger.error('Failed to store refresh token in Redis:', error);
@@ -208,7 +220,10 @@ export class TokenStorageService implements OnModuleDestroy {
     if (!this.userRefreshTokens.has(data.userId)) {
       this.userRefreshTokens.set(data.userId, new Set());
     }
-    this.userRefreshTokens.get(data.userId)!.add(tokenId);
+    const userTokens = this.userRefreshTokens.get(data.userId);
+    if (userTokens) {
+      userTokens.add(tokenId);
+    }
 
     this.logger.debug(`Stored refresh token in memory: ${tokenId}`);
   }
@@ -219,10 +234,11 @@ export class TokenStorageService implements OnModuleDestroy {
   async getRefreshToken(tokenId: string): Promise<RefreshTokenData | null> {
     const key = `auth:refresh:${tokenId}`;
 
-    if (this.useRedis()) {
+    const redisClient = this.getRedisClient();
+    if (redisClient) {
       try {
-        const data = await this.redisClient!.get(key);
-        return data && typeof data === 'string' ? JSON.parse(data) : null;
+        const data = await redisClient.get(key);
+        return data && typeof data === 'string' ? (JSON.parse(data) as RefreshTokenData) : null;
       } catch (error) {
         this.logger.error('Failed to get refresh token from Redis:', error);
         return this.fallbackGetRefreshToken(tokenId);
@@ -252,15 +268,16 @@ export class TokenStorageService implements OnModuleDestroy {
   async deleteRefreshToken(tokenId: string): Promise<void> {
     const key = `auth:refresh:${tokenId}`;
 
-    if (this.useRedis()) {
+    const redisClient = this.getRedisClient();
+    if (redisClient) {
       try {
         // Get token data to find userId
         const data = await this.getRefreshToken(tokenId);
         if (data) {
           const userKey = `auth:refresh:user:${data.userId}`;
-          await this.redisClient!.sRem(userKey, tokenId);
+          await redisClient.sRem(userKey, tokenId);
         }
-        await this.redisClient!.del(key);
+        await redisClient.del(key);
         this.logger.debug(`Deleted refresh token from Redis: ${tokenId}`);
       } catch (error) {
         this.logger.error('Failed to delete refresh token from Redis:', error);
@@ -289,14 +306,15 @@ export class TokenStorageService implements OnModuleDestroy {
   async deleteUserRefreshTokens(userId: string): Promise<void> {
     const userKey = `auth:refresh:user:${userId}`;
 
-    if (this.useRedis()) {
+    const redisClient = this.getRedisClient();
+    if (redisClient) {
       try {
-        const tokenIds = await this.redisClient!.sMembers(userKey);
+        const tokenIds = await redisClient.sMembers(userKey);
 
         if (tokenIds.length > 0) {
-          const keys = tokenIds.map((id) => `auth:refresh:${id}`);
-          await this.redisClient!.del(keys);
-          await this.redisClient!.del(userKey);
+          const keys = tokenIds.map((id: string) => `auth:refresh:${id}`);
+          await redisClient.del(keys);
+          await redisClient.del(userKey);
           this.logger.debug(`Deleted ${tokenIds.length} refresh tokens for user ${userId} from Redis`);
         }
       } catch (error) {
@@ -330,9 +348,10 @@ export class TokenStorageService implements OnModuleDestroy {
   ): Promise<void> {
     const key = `auth:reset:${token}`;
 
-    if (this.useRedis()) {
+    const redisClient = this.getRedisClient();
+    if (redisClient) {
       try {
-        await this.redisClient!.setEx(key, ttlSeconds, JSON.stringify(data));
+        await redisClient.setEx(key, ttlSeconds, JSON.stringify(data));
         this.logger.debug(`Stored reset token in Redis: ${token.substring(0, 10)}...`);
       } catch (error) {
         this.logger.error('Failed to store reset token in Redis:', error);
@@ -354,10 +373,11 @@ export class TokenStorageService implements OnModuleDestroy {
   async getResetToken(token: string): Promise<ResetTokenData | null> {
     const key = `auth:reset:${token}`;
 
-    if (this.useRedis()) {
+    const redisClient = this.getRedisClient();
+    if (redisClient) {
       try {
-        const data = await this.redisClient!.get(key);
-        return data && typeof data === 'string' ? JSON.parse(data) : null;
+        const data = await redisClient.get(key);
+        return data && typeof data === 'string' ? (JSON.parse(data) as ResetTokenData) : null;
       } catch (error) {
         this.logger.error('Failed to get reset token from Redis:', error);
         return this.fallbackGetResetToken(token);
@@ -387,9 +407,10 @@ export class TokenStorageService implements OnModuleDestroy {
   async deleteResetToken(token: string): Promise<void> {
     const key = `auth:reset:${token}`;
 
-    if (this.useRedis()) {
+    const redisClient = this.getRedisClient();
+    if (redisClient) {
       try {
-        await this.redisClient!.del(key);
+        await redisClient.del(key);
         this.logger.debug(`Deleted reset token from Redis: ${token.substring(0, 10)}...`);
       } catch (error) {
         this.logger.error('Failed to delete reset token from Redis:', error);
@@ -415,9 +436,10 @@ export class TokenStorageService implements OnModuleDestroy {
   ): Promise<void> {
     const key = `auth:mfa:${token}`;
 
-    if (this.useRedis()) {
+    const redisClient = this.getRedisClient();
+    if (redisClient) {
       try {
-        await this.redisClient!.setEx(key, ttlSeconds, JSON.stringify(data));
+        await redisClient.setEx(key, ttlSeconds, JSON.stringify(data));
         this.logger.debug(`Stored MFA token in Redis: ${token.substring(0, 10)}...`);
       } catch (error) {
         this.logger.error('Failed to store MFA token in Redis:', error);
@@ -439,10 +461,11 @@ export class TokenStorageService implements OnModuleDestroy {
   async getMfaToken(token: string): Promise<MfaTokenData | null> {
     const key = `auth:mfa:${token}`;
 
-    if (this.useRedis()) {
+    const redisClient = this.getRedisClient();
+    if (redisClient) {
       try {
-        const data = await this.redisClient!.get(key);
-        return data && typeof data === 'string' ? JSON.parse(data) : null;
+        const data = await redisClient.get(key);
+        return data && typeof data === 'string' ? (JSON.parse(data) as MfaTokenData) : null;
       } catch (error) {
         this.logger.error('Failed to get MFA token from Redis:', error);
         return this.fallbackGetMfaToken(token);
@@ -472,9 +495,10 @@ export class TokenStorageService implements OnModuleDestroy {
   async deleteMfaToken(token: string): Promise<void> {
     const key = `auth:mfa:${token}`;
 
-    if (this.useRedis()) {
+    const redisClient = this.getRedisClient();
+    if (redisClient) {
       try {
-        await this.redisClient!.del(key);
+        await redisClient.del(key);
         this.logger.debug(`Deleted MFA token from Redis: ${token.substring(0, 10)}...`);
       } catch (error) {
         this.logger.error('Failed to delete MFA token from Redis:', error);

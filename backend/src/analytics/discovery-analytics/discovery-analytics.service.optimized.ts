@@ -1,6 +1,4 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import {
   DiscoveryAnalyticsQueryDto,
   DiscoveryFunnelDto,
@@ -151,9 +149,9 @@ export class DiscoveryAnalyticsService implements OnModuleDestroy {
         this.logger.debug(`Cache hit for funnel ${cacheKey}`);
         return cached.data;
       }
-      
+
       // Generate funnel (mock implementation)
-      const funnel = await this.generateFunnel(query);
+      const funnel = await this.generateFunnel();
       
       // Cache result
       this.funnelCache.set(cacheKey, {
@@ -173,8 +171,8 @@ export class DiscoveryAnalyticsService implements OnModuleDestroy {
   private getFunnelCacheKey(query: DiscoveryAnalyticsQueryDto): string {
     return `funnel_${query.caseId || 'all'}_${query.startDate?.toISOString() || ''}_${query.endDate?.toISOString() || ''}`;
   }
-  
-  private async generateFunnel(query: DiscoveryAnalyticsQueryDto): Promise<DiscoveryFunnelDto> {
+
+  private async generateFunnel(): Promise<DiscoveryFunnelDto> {
     // Mock implementation with realistic data
     const funnel: DiscoveryFunnelDto = {
       requestsSent: 145,
@@ -249,9 +247,9 @@ export class DiscoveryAnalyticsService implements OnModuleDestroy {
       if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
         return cached.data;
       }
-      
+
       // Generate timeline
-      const timeline = await this.generateTimeline(query);
+      const timeline = await this.generateTimeline();
       
       // Cache result
       this.timelineCache.set(cacheKey, {
@@ -267,8 +265,8 @@ export class DiscoveryAnalyticsService implements OnModuleDestroy {
       throw error;
     }
   }
-  
-  private async generateTimeline(query: DiscoveryAnalyticsQueryDto): Promise<DiscoveryTimelineDto> {
+
+  private async generateTimeline(): Promise<DiscoveryTimelineDto> {
     const events: TimelineEvent[] = [
       {
         id: '1',

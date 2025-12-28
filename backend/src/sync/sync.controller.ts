@@ -19,7 +19,7 @@ export class SyncController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Health check' })
   @ApiResponse({ status: 200, description: 'Service is healthy' })
-  health() {
+  health(): { status: string; service: string } {
     return { status: 'ok', service: 'sync' };
   }
 
@@ -27,7 +27,7 @@ export class SyncController {
   @ApiOperation({ summary: 'Get sync status' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getStatus() {
+  async getStatus(): Promise<unknown> {
     return await this.syncService.getStatus();
   }
 
@@ -35,7 +35,7 @@ export class SyncController {
   @ApiOperation({ summary: 'Get sync queue' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getQueue(@Query('status') status?: SyncStatus, @Query() pagination?: any) {
+  async getQueue(@Query('status') status?: SyncStatus, @Query() pagination?: Record<string, unknown>): Promise<unknown> {
     return await this.syncService.getQueue({ status, ...pagination });
   }
 
@@ -43,7 +43,7 @@ export class SyncController {
   @ApiOperation({ summary: 'Get sync conflicts' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getConflicts(@Query() query: any) {
+  async getConflicts(@Query() query: Record<string, unknown>): Promise<unknown> {
     return await this.syncService.getConflicts(query);
   }
 
@@ -57,7 +57,7 @@ export class SyncController {
   async resolveConflict(
     @Param('id') id: string,
     @Body() body: { resolution: 'local' | 'remote' | 'merge'; userId: string },
-  ) {
+  ): Promise<unknown> {
     return await this.syncService.resolveConflict(id, body.resolution, body.userId);
   }
 
@@ -68,7 +68,7 @@ export class SyncController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async retryFailed(@Body() body: { ids: string[] }) {
+  async retryFailed(@Body() body: { ids: string[] }): Promise<unknown> {
     return await this.syncService.retryFailed(body.ids);
   }
 
@@ -79,7 +79,7 @@ export class SyncController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async clearCompleted() {
+  async clearCompleted(): Promise<unknown> {
     return await this.syncService.clearCompleted();
   }
 }

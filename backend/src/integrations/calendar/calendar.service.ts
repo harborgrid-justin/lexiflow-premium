@@ -43,8 +43,8 @@ export class CalendarService implements OnModuleDestroy {
   /**
    * Create a calendar event
    */
-  async createEvent(createEventDto: CalendarIntegrationEventDto, _userId: string): Promise<CalendarEvent> {
-    this.logger.log('Creating calendar event:', createEventDto);
+  async createEvent(createEventDto: CalendarIntegrationEventDto, userId: string): Promise<CalendarEvent> {
+    this.logger.log(`Creating calendar event for user ${userId}:`, createEventDto);
 
     try {
       // Calendar API integration with Google Calendar, Outlook, etc.
@@ -71,17 +71,18 @@ export class CalendarService implements OnModuleDestroy {
       this.logger.log(`Calendar event created: ${event.id}`);
 
       return event;
-    } catch (error: any) {
-      this.logger.error('Failed to create calendar event:', error.message);
-      throw new BadRequestException('Failed to create calendar event: ' + error.message);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error('Failed to create calendar event:', errorMessage);
+      throw new BadRequestException('Failed to create calendar event: ' + errorMessage);
     }
   }
 
   /**
    * Sync calendar events
    */
-  async sync(syncDto: CalendarSyncDto, _userId: string): Promise<CalendarEvent[]> {
-    this.logger.log('Syncing calendar events:', syncDto);
+  async sync(syncDto: CalendarSyncDto, userId: string): Promise<CalendarEvent[]> {
+    this.logger.log(`Syncing calendar events for user ${userId}:`, syncDto);
 
     try {
       // Calendar API sync implementation supporting multiple providers
@@ -102,9 +103,10 @@ export class CalendarService implements OnModuleDestroy {
 
       this.logger.log(`Synced ${events.length} calendar events`);
       return events;
-    } catch (error: any) {
-      this.logger.error('Calendar sync failed:', error.message);
-      throw new BadRequestException('Failed to sync calendar: ' + error.message);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error('Calendar sync failed:', errorMessage);
+      throw new BadRequestException('Failed to sync calendar: ' + errorMessage);
     }
   }
 
@@ -172,6 +174,6 @@ export class CalendarService implements OnModuleDestroy {
    * Generate a unique ID
    */
   private generateId(): string {
-    return `cal_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `cal_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
 }

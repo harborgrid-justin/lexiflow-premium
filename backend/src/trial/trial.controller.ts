@@ -19,7 +19,7 @@ export class TrialController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async health() {
+  async health(): Promise<{ status: string; service: string }> {
     return { status: 'ok', service: 'trial' };
   }
 
@@ -29,7 +29,7 @@ export class TrialController {
   @ApiResponse({ status: 200, description: 'Events retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getEvents(@Query() query: any) {
+  async getEvents(@Query() query: Record<string, unknown>): Promise<unknown> {
     return await this.trialService.findAllEvents(query);
   }
 
@@ -41,7 +41,7 @@ export class TrialController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createEvent(@Body() createDto: CreateTrialEventDto) {
+  async createEvent(@Body() createDto: CreateTrialEventDto): Promise<unknown> {
     return await this.trialService.createEvent(createDto);
   }
 
@@ -52,7 +52,7 @@ export class TrialController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async updateEvent(@Param('id') id: string, @Body() updateDto: UpdateTrialEventDto) {
+  async updateEvent(@Param('id') id: string, @Body() updateDto: UpdateTrialEventDto): Promise<unknown> {
     return await this.trialService.updateEvent(id, updateDto);
   }
 
@@ -63,7 +63,7 @@ export class TrialController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async deleteEvent(@Param('id') id: string) {
+  async deleteEvent(@Param('id') id: string): Promise<void> {
     await this.trialService.removeEvent(id);
   }
 
@@ -73,7 +73,7 @@ export class TrialController {
   @ApiResponse({ status: 200, description: 'Sessions retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getWitnessPrep(@Query() query: any) {
+  async getWitnessPrep(@Query() query: Record<string, unknown>): Promise<unknown> {
     return await this.trialService.findAllWitnessPrep(query);
   }
 
@@ -85,7 +85,7 @@ export class TrialController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createWitnessPrep(@Body() createDto: CreateWitnessPrepDto) {
+  async createWitnessPrep(@Body() createDto: CreateWitnessPrepDto): Promise<unknown> {
     return await this.trialService.createWitnessPrep(createDto);
   }
 }

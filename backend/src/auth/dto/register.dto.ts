@@ -17,7 +17,7 @@ export class RegisterDto {
   })
   @IsEmail({}, { message: 'Please provide a valid email address' })
   @IsNotEmpty({ message: 'Email is required' })
-  @Transform(({ value }) => value?.toLowerCase().trim())
+  @Transform(({ value }: { value: string }) => value?.toLowerCase().trim())
   email!: string;
 
   @ApiProperty({
@@ -47,7 +47,7 @@ export class RegisterDto {
   @IsNotEmpty({ message: 'First name is required' })
   @MinLength(2, { message: 'First name must be at least 2 characters' })
   @MaxLength(100, { message: 'First name cannot exceed 100 characters' })
-  @Transform(({ value }) => value?.trim())
+  @Transform(({ value }: { value: string }) => value?.trim())
   firstName!: string;
 
   @ApiProperty({
@@ -60,7 +60,7 @@ export class RegisterDto {
   @IsNotEmpty({ message: 'Last name is required' })
   @MinLength(2, { message: 'Last name must be at least 2 characters' })
   @MaxLength(100, { message: 'Last name cannot exceed 100 characters' })
-  @Transform(({ value }) => value?.trim())
+  @Transform(({ value }: { value: string }) => value?.trim())
   lastName!: string;
 
   @ApiPropertyOptional({

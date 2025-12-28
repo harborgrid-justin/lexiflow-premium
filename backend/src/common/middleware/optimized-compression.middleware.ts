@@ -20,9 +20,10 @@ import * as MasterConfig from '@config/master.config';
  */
 @Injectable()
 export class OptimizedCompressionMiddleware implements NestMiddleware {
-  private compressionMiddleware: any;
+  private compressionMiddleware: (req: Request, res: Response, next: NextFunction) => void;
 
   constructor() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
     this.compressionMiddleware = compression({
       // Only compress responses above threshold
       threshold: MasterConfig.COMPRESSION_THRESHOLD || 1024, // 1KB

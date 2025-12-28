@@ -1,7 +1,6 @@
-import { Module, MiddlewareConsumer, NestModule, ClassSerializerInterceptor } from '@nestjs/common';
+import { Module, MiddlewareConsumer, NestModule, ClassSerializerInterceptor, DynamicModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
 import { BullModule } from '@nestjs/bull';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
@@ -19,18 +18,10 @@ import { validationSchema, validationOptions } from './config/env.validation';
 import { CoreModule } from './core/core.module';
 
 // Core Modules (most now imported via CoreModule)
-import { CommonModule } from './common/common.module';
 import { MemoryModule } from './common/memory.module';
 import { MemoryManagementModule } from './common/memory-management.module';
 import { DatabaseModule } from './config/database.module';
-import { SecurityModule } from './security/security.module';
-import { ErrorsModule } from './errors/errors.module';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
-
-// Health & Monitoring
-import { HealthModule } from './health/health.module';
 
 // Telemetry & Observability
 // Note: OpenTelemetry telemetry module is available but optional
@@ -75,9 +66,6 @@ import { EvidenceModule } from './evidence/evidence.module';
 // Billing Modules
 import { BillingModule } from './billing/billing.module';
 
-// Compliance Modules
-import { ComplianceModule } from './compliance/compliance.module';
-
 // Communications Modules
 import { CommunicationsModule } from './communications/communications.module';
 
@@ -118,16 +106,12 @@ import { QueryWorkbenchModule } from './query-workbench/query-workbench.module';
 import { PipelinesModule } from './pipelines/pipelines.module';
 import { SyncModule } from './sync/sync.module';
 import { BackupsModule } from './backups/backups.module';
-import { MonitoringModule } from './monitoring/monitoring.module';
 import { AiOpsModule } from './ai-ops/ai-ops.module';
 import { AiDataopsModule } from './ai-dataops/ai-dataops.module';
 import { VersioningModule } from './versioning/versioning.module';
 
 // Queue Processing System
 import { QueuesModule } from './queues/queues.module';
-
-// Performance Optimization Module
-import { PerformanceModule } from './performance/performance.module';
 
 // App Controller & Service
 import { AppController } from './app.controller';
@@ -137,23 +121,23 @@ import { AppService } from './app.service';
 const isRedisEnabled = process.env.REDIS_ENABLED !== 'false' && process.env.DEMO_MODE !== 'true';
 
 // Conditionally include Bull module
-const conditionalImports: any[] = [];
+const conditionalImports: DynamicModule[] = [];
 if (isRedisEnabled) {
   conditionalImports.push(
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const redisUrl = configService.get('redis.url');
+        const redisUrl = configService.get<string>('redis.url');
         if (redisUrl) {
           return { url: redisUrl };
         }
         return {
           redis: {
-            host: configService.get('redis.host'),
-            port: configService.get('redis.port'),
-            password: configService.get('redis.password'),
-            username: configService.get('redis.username'),
+            host: configService.get<string>('redis.host'),
+            port: configService.get<number>('redis.port'),
+            password: configService.get<string>('redis.password'),
+            username: configService.get<string>('redis.username'),
           },
         };
       },

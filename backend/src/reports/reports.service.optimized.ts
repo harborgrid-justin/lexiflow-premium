@@ -1,8 +1,20 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
+import {
+  ReportTemplate,
+  ReportGenerationOptions,
+  ScheduleReportOptions,
+  BatchReportRequest,
+  GeneratedReport,
+  CacheEntry,
+  ScheduledReport,
+  MemoryStatistics,
+  StreamReportChunk,
+  ReportDataRecord,
+} from './interfaces/report.interfaces';
 
 /**
  * Reports Service with Advanced Memory Engineering
- * 
+ *
  * MEMORY OPTIMIZATIONS:
  * - Streaming report generation for large datasets
  * - LRU cache for report templates: 500 templates, 60-min TTL
@@ -12,7 +24,7 @@ import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
  * - Compressed report archives
  * - Batch processing for multi-report generation
  * - Cached report scheduling and delivery
- * 
+ *
  * PERFORMANCE CHARACTERISTICS:
  * - Template rendering: <100ms with cache
  * - Report generation: <2sec for 10K records
@@ -23,27 +35,27 @@ import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 @Injectable()
 export class ReportsService implements OnModuleDestroy {
   private readonly logger = new Logger(ReportsService.name);
-  
+
   // Memory limits
   private readonly MAX_TEMPLATE_CACHE = 500;
   private readonly MAX_CHUNK_SIZE = 10000;
   private readonly CACHE_TTL_MS = 3600000; // 60 minutes
   private readonly MAX_BATCH_SIZE = 100;
   private readonly STREAMING_THRESHOLD = 5000;
-  
+
   // Caches
-  private templateCache: Map<string, { data: any; timestamp: number }> = new Map();
-  private generatedCache: Map<string, { data: any; timestamp: number }> = new Map();
-  private scheduleCache: Map<string, { data: any; timestamp: number }> = new Map();
+  private templateCache: Map<string, CacheEntry<ReportTemplate>> = new Map();
+  private generatedCache: Map<string, CacheEntry<GeneratedReport>> = new Map();
+  private scheduleCache: Map<string, CacheEntry<ScheduledReport>> = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
-  
+
   // Active streams
   private activeStreams: Set<string> = new Set();
 
   constructor(
-    // @InjectRepository(ReportTemplate) private templateRepository: Repository<any>,
-    // @InjectRepository(ReportSchedule) private scheduleRepository: Repository<any>,
-    // @InjectRepository(GeneratedReport) private reportRepository: Repository<any>,
+    // @InjectRepository(ReportTemplate) private templateRepository: Repository<ReportTemplate>,
+    // @InjectRepository(ReportSchedule) private scheduleRepository: Repository<ScheduledReport>,
+    // @InjectRepository(GeneratedReport) private reportRepository: Repository<GeneratedReport>,
   ) {
     this.startMemoryManagement();
   }
@@ -115,18 +127,20 @@ export class ReportsService implements OnModuleDestroy {
   /**
    * Get report template with caching
    */
-  async getTemplate(templateId: string): Promise<any> {
+  async getTemplate(templateId: string): Promise<ReportTemplate> {
     const cached = this.templateCache.get(templateId);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       return cached.data;
     }
-    
+
     // Mock template
-    const template = {
-      templateId,
+    const types = ['PDF', 'Excel', 'CSV'];
+    const categories = ['Financial', 'Case Summary', 'Analytics'];
+    const template: ReportTemplate = {
+      id: templateId,
       name: `Report Template ${templateId.slice(0, 8)}`,
-      type: ['PDF', 'Excel', 'CSV'][Math.floor(Math.random() * 3)],
-      category: ['Financial', 'Case Summary', 'Analytics'][Math.floor(Math.random() * 3)],
+      type: types[Math.floor(Math.random() * types.length)] as string,
+      category: categories[Math.floor(Math.random() * categories.length)],
       sections: [
         { id: 'header', type: 'header', config: {} },
         { id: 'summary', type: 'summary', config: { aggregations: ['count', 'sum'] } },
@@ -146,33 +160,29 @@ export class ReportsService implements OnModuleDestroy {
         recipients: ['legal@example.com'],
       },
     };
-    
+
     this.templateCache.set(templateId, {
       data: template,
       timestamp: Date.now(),
     });
-    
+
     return template;
   }
   
   /**
    * Generate report with streaming for large datasets
    */
-  async generateReport(options: {
-    templateId: string;
-    parameters: any;
-    format?: 'PDF' | 'Excel' | 'CSV';
-  }): Promise<any> {
+  async generateReport(options: ReportGenerationOptions): Promise<GeneratedReport | AsyncGenerator<StreamReportChunk>> {
     const streamId = `stream_${Date.now()}_${Math.random()}`;
     this.activeStreams.add(streamId);
-    
+
     try {
       const template = await this.getTemplate(options.templateId);
-      
+
       // Mock data generation
       const recordCount = Math.floor(Math.random() * 10000) + 1000;
       const shouldStream = recordCount > this.STREAMING_THRESHOLD;
-      
+
       if (shouldStream) {
         return await this.streamReport(streamId, template, options, recordCount);
       } else {
@@ -186,9 +196,9 @@ export class ReportsService implements OnModuleDestroy {
   /**
    * Stream large report generation
    */
-  private async *streamReport(_streamId: string, template: any, options: any, totalRecords: number): AsyncGenerator<any> {
+  private async *streamReport(_streamId: string, template: ReportTemplate, options: ReportGenerationOptions, totalRecords: number): AsyncGenerator<StreamReportChunk> {
     this.logger.log(`Streaming report ${options.templateId} with ${totalRecords} records`);
-    
+
     // Yield header
     yield {
       type: 'header',
@@ -197,20 +207,21 @@ export class ReportsService implements OnModuleDestroy {
       totalRecords,
       estimatedSize: `${(totalRecords * 0.5 / 1024).toFixed(2)}MB`,
     };
-    
+
     // Stream data in chunks
     for (let offset = 0; offset < totalRecords; offset += this.MAX_CHUNK_SIZE) {
       const chunkSize = Math.min(this.MAX_CHUNK_SIZE, totalRecords - offset);
-      
+
       // Mock data chunk
-      const chunk = Array.from({ length: chunkSize }, (_, i) => ({
+      const statuses = ['Active', 'Closed', 'Pending'];
+      const chunk: ReportDataRecord[] = Array.from({ length: chunkSize }, (_, i) => ({
         id: `record_${offset + i}`,
         case: `Case ${Math.floor(Math.random() * 1000)}`,
-        status: ['Active', 'Closed', 'Pending'][Math.floor(Math.random() * 3)],
+        status: statuses[Math.floor(Math.random() * statuses.length)] as string,
         amount: Math.floor(Math.random() * 100000),
         date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
       }));
-      
+
       yield {
         type: 'data',
         offset,
@@ -218,41 +229,42 @@ export class ReportsService implements OnModuleDestroy {
         data: chunk,
         progress: ((offset + chunkSize) / totalRecords * 100).toFixed(1),
       };
-      
+
       // Periodic GC for large reports
       if (global.gc && offset % (this.MAX_CHUNK_SIZE * 5) === 0) {
         global.gc();
       }
     }
-    
+
     // Yield summary
     yield {
       type: 'summary',
       totalRecords,
       processingTime: Math.floor(Math.random() * 5000) + 1000,
-      format: options.format || template.type,
+      format: options.format || (typeof template.type === 'string' ? template.type : 'PDF'),
     };
   }
   
   /**
    * Generate small report (non-streaming)
    */
-  private async generateSmallReport(template: any, options: any, recordCount: number): Promise<any> {
+  private async generateSmallReport(template: ReportTemplate, options: ReportGenerationOptions, recordCount: number): Promise<GeneratedReport> {
     // Mock report data
-    const data = Array.from({ length: recordCount }, (_, i) => ({
+    const statuses = ['Active', 'Closed', 'Pending'];
+    const data: ReportDataRecord[] = Array.from({ length: recordCount }, (_, i) => ({
       id: `record_${i}`,
       case: `Case ${Math.floor(Math.random() * 1000)}`,
-      status: ['Active', 'Closed', 'Pending'][Math.floor(Math.random() * 3)],
+      status: statuses[Math.floor(Math.random() * statuses.length)] as string,
       amount: Math.floor(Math.random() * 100000),
       date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
     }));
-    
-    const report = {
+
+    const report: GeneratedReport = {
       reportId: `report_${Date.now()}`,
       template: template.name,
       parameters: options.parameters,
       generatedAt: new Date(),
-      format: options.format || template.type,
+      format: options.format || (typeof template.type === 'string' ? template.type : 'PDF'),
       data,
       summary: {
         totalRecords: recordCount,
@@ -264,28 +276,23 @@ export class ReportsService implements OnModuleDestroy {
         },
       },
     };
-    
+
     // Cache generated report
     this.generatedCache.set(report.reportId, {
       data: report,
       timestamp: Date.now(),
     });
-    
+
     return report;
   }
   
   /**
    * Schedule report generation
    */
-  async scheduleReport(options: {
-    templateId: string;
-    frequency: 'daily' | 'weekly' | 'monthly';
-    parameters: any;
-    recipients: string[];
-  }): Promise<any> {
+  async scheduleReport(options: ScheduleReportOptions): Promise<ScheduledReport> {
     const scheduleId = `schedule_${Date.now()}`;
-    
-    const schedule = {
+
+    const schedule: ScheduledReport = {
       scheduleId,
       templateId: options.templateId,
       frequency: options.frequency,
@@ -295,13 +302,14 @@ export class ReportsService implements OnModuleDestroy {
       lastRun: null,
       nextRun: this.calculateNextRun(options.frequency),
       createdAt: new Date(),
+      createdBy: options.userId,
     };
-    
+
     this.scheduleCache.set(scheduleId, {
       data: schedule,
       timestamp: Date.now(),
     });
-    
+
     this.logger.log(`Scheduled report ${scheduleId} for ${options.frequency} execution`);
     return schedule;
   }
@@ -326,27 +334,24 @@ export class ReportsService implements OnModuleDestroy {
   /**
    * Batch report generation
    */
-  async batchGenerateReports(requests: Array<{
-    templateId: string;
-    parameters: any;
-  }>): Promise<any[]> {
-    const results: any[] = [];
-    
+  async batchGenerateReports(requests: BatchReportRequest[]): Promise<Array<GeneratedReport | AsyncGenerator<StreamReportChunk>>> {
+    const results: Array<GeneratedReport | AsyncGenerator<StreamReportChunk>> = [];
+
     for (let i = 0; i < requests.length; i += this.MAX_BATCH_SIZE) {
       const batch = requests.slice(i, i + this.MAX_BATCH_SIZE);
-      
+
       const batchResults = await Promise.all(
         batch.map(request => this.generateReport(request))
       );
-      
+
       results.push(...batchResults);
-      
+
       // Periodic GC
       if (global.gc && i % 200 === 0) {
         global.gc();
       }
     }
-    
+
     this.logger.log(`Completed batch generation of ${results.length} reports`);
     return results;
   }
@@ -376,7 +381,7 @@ export class ReportsService implements OnModuleDestroy {
   /**
    * Get memory statistics
    */
-  getMemoryStats(): any {
+  getMemoryStats(): MemoryStatistics {
     return {
       templatesCached: this.templateCache.size,
       generatedCached: this.generatedCache.size,

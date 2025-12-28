@@ -136,7 +136,7 @@ export class WebhooksService implements OnModuleDestroy {
   /**
    * Trigger a webhook event
    */
-  async trigger(event: WebhookEvent, data: any): Promise<void> {
+  async trigger(event: WebhookEvent, data: unknown): Promise<void> {
     const webhooks = Array.from(this.webhooks.values()).filter(
       w => w.active && w.events.includes(event),
     );
@@ -195,16 +195,16 @@ export class WebhooksService implements OnModuleDestroy {
       delivery.lastAttemptAt = new Date();
       delivery.response = {
         statusCode: response.status,
-        body: response.data,
+        body: response.data as Record<string, unknown>,
         headers: response.headers as Record<string, string>,
       };
 
       this.logger.log(`Webhook delivered successfully: ${delivery.id} to ${webhook.url}`);
-    } catch (error: any) {
+    } catch (error: unknown) {
       delivery.status = 'failed';
       delivery.attempts += 1;
       delivery.lastAttemptAt = new Date();
-      delivery.error = error.message;
+      delivery.error = error instanceof Error ? error.message : 'Unknown error';
 
       if (delivery.attempts < this.maxRetries) {
         const retryDelay = this.retryDelays[delivery.attempts - 1];
@@ -215,7 +215,7 @@ export class WebhooksService implements OnModuleDestroy {
 
       this.logger.error(
         `Webhook delivery failed: ${delivery.id} to ${webhook.url}`,
-        error.stack,
+        error instanceof Error ? error.stack : undefined,
       );
     }
 

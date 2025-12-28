@@ -4,6 +4,7 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto, TaskStatus, TaskPriority } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+import { RequestWithUser } from '@common/interfaces/request-with-user.interface';
 
 @ApiTags('Tasks')
 @ApiBearerAuth('JWT-auth')
@@ -24,7 +25,7 @@ export class TasksController {
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(@Query() query: any) {
+  async findAll(@Query() query: Record<string, unknown>): Promise<unknown> {
     return await this.tasksService.findAll(query);
   }
 
@@ -33,7 +34,7 @@ export class TasksController {
   @ApiQuery({ name: 'caseId', required: false })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getStats(@Query('caseId') caseId?: string) {
+  async getStats(@Query('caseId') caseId?: string): Promise<unknown> {
     return await this.tasksService.getTaskStats(caseId);
   }
 
@@ -43,7 +44,7 @@ export class TasksController {
   @ApiResponse({ status: 404, description: 'Task not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<unknown> {
     return await this.tasksService.findOne(id);
   }
 
@@ -55,7 +56,7 @@ export class TasksController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async create(@Body() createDto: CreateTaskDto, @Req() req: any) {
+  async create(@Body() createDto: CreateTaskDto, @Req() req: RequestWithUser): Promise<unknown> {
     const userId = req.user?.id || 'system';
     return await this.tasksService.create(createDto, userId);
   }
@@ -67,7 +68,7 @@ export class TasksController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async bulkUpdate(@Body() body: { updates: Array<{ id: string; updates: UpdateTaskDto }> }) {
+  async bulkUpdate(@Body() body: { updates: Array<{ id: string; updates: UpdateTaskDto }> }): Promise<unknown> {
     return await this.tasksService.bulkUpdate(body.updates);
   }
 
@@ -78,7 +79,7 @@ export class TasksController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async update(@Param('id') id: string, @Body() updateDto: UpdateTaskDto) {
+  async update(@Param('id') id: string, @Body() updateDto: UpdateTaskDto): Promise<unknown> {
     return await this.tasksService.update(id, updateDto);
   }
 
@@ -89,7 +90,7 @@ export class TasksController {
   @ApiResponse({ status: 404, description: 'Task not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string): Promise<void> {
     await this.tasksService.remove(id);
   }
 }

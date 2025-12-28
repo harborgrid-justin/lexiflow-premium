@@ -3,13 +3,17 @@ import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 import { QUEUE_NAMES } from '@queues/constants';
 
+export interface EmailTemplateData {
+  [key: string]: string | number | boolean | null | undefined | EmailTemplateData | EmailTemplateData[];
+}
+
 export interface EmailJob {
   to: string | string[];
   subject: string;
   html?: string;
   text?: string;
   templateId?: string;
-  templateData?: any;
+  templateData?: EmailTemplateData;
   priority?: 'high' | 'normal' | 'low';
 }
 

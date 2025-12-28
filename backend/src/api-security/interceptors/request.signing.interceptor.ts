@@ -16,6 +16,12 @@ import * as crypto from 'crypto';
 import { createClient, RedisClientType } from 'redis';
 import * as MasterConfig from '@config/master.config';
 
+interface RequestWithApiKey extends Request {
+  apiKey?: {
+    secret?: string;
+  };
+}
+
 export const REQUIRE_SIGNATURE_KEY = 'requireSignature';
 export const RequireSignature = () => SetMetadata(REQUIRE_SIGNATURE_KEY, true);
 
@@ -100,7 +106,7 @@ export class RequestSigningInterceptor implements NestInterceptor, OnModuleInit,
     }
   }
 
-  async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
+  async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<unknown>> {
     const skipSignature = this.reflector.getAllAndOverride<boolean>(SKIP_SIGNATURE_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -261,7 +267,7 @@ export class RequestSigningInterceptor implements NestInterceptor, OnModuleInit,
   private getSigningSecret(request: Request): string {
     // In production, retrieve from API key or configuration
     // For now, use environment variable or default
-    const secret = process.env.WEBHOOK_SIGNING_SECRET || (request as any).apiKey?.secret;
+    const secret = process.env.WEBHOOK_SIGNING_SECRET || (request as RequestWithApiKey).apiKey?.secret;
 
     if (!secret) {
       throw new UnauthorizedException('No signing secret available');
@@ -273,7 +279,7 @@ export class RequestSigningInterceptor implements NestInterceptor, OnModuleInit,
   createSignatureHeaders(
     method: string,
     path: string,
-    body: any,
+    body: unknown,
     queryString: string,
     secret: string,
   ): { signature: string; timestamp: string; nonce: string } {

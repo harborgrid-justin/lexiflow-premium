@@ -10,9 +10,9 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { Roles } from '@common/decorators/roles.decorator';
 import { RolesGuard } from '@common/guards/roles.guard';
-import { 
-  getMemoryStats, 
-  checkMemoryThresholds, 
+import {
+  getMemoryStats,
+  checkMemoryThresholds,
   forceGarbageCollection,
   MemoryStats,
   MemoryThresholds,
@@ -20,6 +20,36 @@ import {
 } from '@common/utils/memory-management.utils';
 import { MemoryLeakDetectorService } from '@common/services/memory-leak-detector.service';
 import * as v8 from 'v8';
+
+export interface MemoryLeak {
+  id: string;
+  timestamp: Date;
+  heapGrowthMB: number;
+  heapUsedMB: number;
+  heapTotalMB: number;
+  details?: string;
+}
+
+export interface MemoryLeakStatistics {
+  totalLeaksDetected: number;
+  lastCheckTime: Date;
+  averageHeapGrowth: number;
+}
+
+export interface MemorySnapshot {
+  timestamp: Date;
+  heapUsedMB: number;
+  heapTotalMB: number;
+  rssMB: number;
+  externalMB: number;
+}
+
+export interface LeakDetectorConfig {
+  enabled?: boolean;
+  checkIntervalMs?: number;
+  heapGrowthThresholdMB?: number;
+  autoGcOnLeak?: boolean;
+}
 
 @ApiTags('Memory Management')
 @Controller('api/monitoring/memory')
@@ -143,12 +173,12 @@ export class MemoryManagementController {
   @ApiOperation({ summary: 'Get detected memory leaks' })
   @ApiResponse({ status: 200, description: 'Memory leak report' })
   getLeaks(@Query('limit') limit?: number): {
-    recentLeaks: any[];
-    statistics: any;
+    recentLeaks: MemoryLeak[];
+    statistics: MemoryLeakStatistics;
     snapshots: number;
   } {
     const leakLimit = limit ? Number(limit) : 10;
-    
+
     return {
       recentLeaks: this.leakDetector.getRecentLeaks(leakLimit),
       statistics: this.leakDetector.getStatistics(),
@@ -163,29 +193,29 @@ export class MemoryManagementController {
   @ApiResponse({ status: 200, description: 'Leak check completed' })
   async checkLeaks(): Promise<{
     leaksDetected: number;
-    leaks: any[];
+    leaks: MemoryLeak[];
     timestamp: number;
   }> {
     const leaks = await this.leakDetector.checkForLeaks();
-    
+
     return {
       leaksDetected: leaks.length,
       leaks,
       timestamp: Date.now(),
     };
   }
-  
+
   @Post('leaks/snapshot')
   @Roles('admin', 'developer')
   @HttpCode(200)
   @ApiOperation({ summary: 'Take memory snapshot' })
   @ApiResponse({ status: 200, description: 'Snapshot taken' })
   takeSnapshot(): {
-    snapshot: any;
+    snapshot: MemorySnapshot;
     message: string;
   } {
     const snapshot = this.leakDetector.takeSnapshot();
-    
+
     return {
       snapshot,
       message: 'Memory snapshot taken',
@@ -215,19 +245,14 @@ export class MemoryManagementController {
   @ApiOperation({ summary: 'Configure leak detector' })
   @ApiResponse({ status: 200, description: 'Configuration updated' })
   configureLeakDetector(
-    @Body() config: {
-      enabled?: boolean;
-      checkIntervalMs?: number;
-      heapGrowthThresholdMB?: number;
-      autoGcOnLeak?: boolean;
-    },
+    @Body() config: LeakDetectorConfig,
   ): {
     success: boolean;
     message: string;
-    config: any;
+    config: LeakDetectorConfig;
   } {
     this.leakDetector.configure(config);
-    
+
     return {
       success: true,
       message: 'Leak detector configuration updated',

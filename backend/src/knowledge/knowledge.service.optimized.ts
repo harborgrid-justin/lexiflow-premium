@@ -1,6 +1,104 @@
-import { Injectable, Logger, OnModuleDestroy, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like, In } from 'typeorm';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
+
+// Interfaces for type safety
+interface KnowledgeArticleData {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  tags: string[];
+  views: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface SearchResult {
+  id: string;
+  title: string;
+  excerpt: string;
+  relevanceScore: number;
+  category: string;
+  tags: string[];
+  views: number;
+}
+
+interface SearchOptions {
+  limit?: number;
+  offset?: number;
+  category?: string;
+  tags?: string[];
+}
+
+interface TagCloudItem {
+  tag: string;
+  count: number;
+  weight: number;
+}
+
+interface CategoryTreeNode {
+  id: string;
+  name: string;
+  articleCount?: number;
+  children?: CategoryTreeNode[];
+}
+
+interface RelatedArticle {
+  id: string;
+  title: string;
+  similarity: number;
+  category: string;
+}
+
+interface PopularArticle {
+  id: string;
+  title: string;
+  views: number;
+  rating: number;
+  category: string;
+}
+
+interface CacheEntry<T> {
+  data: T;
+  timestamp: number;
+  accessCount: number;
+}
+
+interface SearchCacheEntry {
+  results: SearchResult[];
+  timestamp: number;
+}
+
+interface TagCacheEntry {
+  tags: TagCloudItem[];
+  timestamp: number;
+}
+
+interface CategoryCacheEntry {
+  tree: CategoryTreeNode;
+  timestamp: number;
+}
+
+interface RelatedArticlesCacheEntry {
+  articles: RelatedArticle[];
+  timestamp: number;
+}
+
+interface BatchIndexResult {
+  indexed: number;
+  failed: number;
+}
+
+interface MemoryStats {
+  articlesCached: number;
+  searchesCached: number;
+  tagsCached: number;
+  categoriesCached: number;
+  relatedCached: number;
+  memoryUsage: {
+    heapUsedMB: string;
+    heapTotalMB: string;
+  };
+}
 
 /**
  * Knowledge Base Service with Advanced Memory Engineering
@@ -35,18 +133,14 @@ export class KnowledgeService implements OnModuleDestroy {
   private readonly MAX_RELATED_ARTICLES = 50;
   
   // LRU caches
-  private articleCache: Map<string, { data: any; timestamp: number; accessCount: number }> = new Map();
-  private searchCache: Map<string, { results: any[]; timestamp: number }> = new Map();
-  private tagCache: Map<string, { tags: any[]; timestamp: number }> = new Map();
-  private categoryCache: Map<string, { tree: any; timestamp: number }> = new Map();
-  private relatedArticlesCache: Map<string, { articles: any[]; timestamp: number }> = new Map();
+  private articleCache: Map<string, CacheEntry<KnowledgeArticleData | PopularArticle[]>> = new Map();
+  private searchCache: Map<string, SearchCacheEntry> = new Map();
+  private tagCache: Map<string, TagCacheEntry> = new Map();
+  private categoryCache: Map<string, CategoryCacheEntry> = new Map();
+  private relatedArticlesCache: Map<string, RelatedArticlesCacheEntry> = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
-  constructor(
-    // @InjectRepository(KnowledgeArticle) private articleRepository: Repository<any>,
-    // @InjectRepository(ArticleTag) private tagRepository: Repository<any>,
-    // @InjectRepository(ArticleCategory) private categoryRepository: Repository<any>,
-  ) {
+  constructor() {
     this.startMemoryManagement();
   }
   
@@ -142,16 +236,19 @@ export class KnowledgeService implements OnModuleDestroy {
   /**
    * Get article by ID with LFU caching
    */
-  async getArticle(id: string): Promise<any> {
+  async getArticle(id: string): Promise<KnowledgeArticleData> {
     const cached = this.articleCache.get(id);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       cached.accessCount++;
       this.logger.debug(`Cache hit for article ${id}`);
+      if (Array.isArray(cached.data)) {
+        throw new Error('Invalid cache entry type');
+      }
       return cached.data;
     }
-    
+
     // Mock article retrieval
-    const article = {
+    const article: KnowledgeArticleData = {
       id,
       title: `Knowledge Article ${id}`,
       content: `Content for article ${id}...`,
@@ -161,38 +258,33 @@ export class KnowledgeService implements OnModuleDestroy {
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    
+
     // Cache with access tracking
     this.articleCache.set(id, {
       data: article,
       timestamp: Date.now(),
       accessCount: 1,
     });
-    
+
     return article;
   }
   
   /**
    * Search articles with full-text search and caching
    */
-  async searchArticles(query: string, options?: {
-    limit?: number;
-    offset?: number;
-    category?: string;
-    tags?: string[];
-  }): Promise<{ results: any[]; total: number }> {
+  async searchArticles(query: string, options?: SearchOptions): Promise<{ results: SearchResult[]; total: number }> {
     const limit = Math.min(options?.limit || 20, 100);
     const offset = options?.offset || 0;
     const cacheKey = `search_${query}_${limit}_${offset}_${options?.category || ''}_${options?.tags?.join(',') || ''}`;
-    
+
     // Check cache
     const cached = this.searchCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       return { results: cached.results, total: cached.results.length };
     }
-    
+
     // Mock search results
-    const results = Array.from({ length: Math.min(limit, 20) }, (_, i) => ({
+    const results: SearchResult[] = Array.from({ length: Math.min(limit, 20) }, (_, i) => ({
       id: `article-${i + offset}`,
       title: `${query} - Article ${i + offset}`,
       excerpt: `This article discusses ${query} in detail...`,
@@ -201,83 +293,83 @@ export class KnowledgeService implements OnModuleDestroy {
       tags: options?.tags || ['knowledge'],
       views: Math.floor(Math.random() * 500),
     }));
-    
+
     // Cache results
     this.searchCache.set(cacheKey, {
       results,
       timestamp: Date.now(),
     });
-    
+
     return { results, total: results.length };
   }
   
   /**
    * Get related articles with lazy loading
    */
-  async getRelatedArticles(articleId: string, limit: number = 10): Promise<any[]> {
+  async getRelatedArticles(articleId: string, limit: number = 10): Promise<RelatedArticle[]> {
     const safeLimit = Math.min(limit, this.MAX_RELATED_ARTICLES);
     const cacheKey = `related_${articleId}_${safeLimit}`;
-    
+
     const cached = this.relatedArticlesCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       return cached.articles;
     }
-    
+
     // Mock related articles
-    const relatedArticles = Array.from({ length: safeLimit }, (_, i) => ({
+    const relatedArticles: RelatedArticle[] = Array.from({ length: safeLimit }, (_, i) => ({
       id: `related-${articleId}-${i}`,
       title: `Related Article ${i}`,
       similarity: 0.85 - (i * 0.05),
       category: 'Related',
     }));
-    
+
     this.relatedArticlesCache.set(cacheKey, {
       articles: relatedArticles,
       timestamp: Date.now(),
     });
-    
+
     return relatedArticles;
   }
   
   /**
    * Get tag cloud with caching
    */
-  async getTagCloud(limit: number = 50): Promise<Array<{ tag: string; count: number; weight: number }>> {
+  async getTagCloud(limit: number = 50): Promise<TagCloudItem[]> {
     const cacheKey = `tags_${limit}`;
-    
+
     const cached = this.tagCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       return cached.tags;
     }
-    
+
     // Mock tag cloud
-    const tags = Array.from({ length: Math.min(limit, 100) }, (_, i) => ({
+    const tags: TagCloudItem[] = Array.from({ length: Math.min(limit, 100) }, (_, i) => ({
       tag: `tag-${i}`,
       count: Math.floor(Math.random() * 100) + 1,
       weight: Math.random(),
     })).sort((a, b) => b.count - a.count);
-    
+
     this.tagCache.set(cacheKey, {
       tags,
       timestamp: Date.now(),
     });
-    
+
     return tags;
   }
-  
+
   /**
    * Get category tree with caching
    */
-  async getCategoryTree(): Promise<any> {
+  async getCategoryTree(): Promise<CategoryTreeNode> {
     const cacheKey = 'category_tree';
-    
+
     const cached = this.categoryCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       return cached.tree;
     }
-    
+
     // Mock category tree
-    const tree = {
+    const tree: CategoryTreeNode = {
       id: 'root',
       name: 'All Categories',
       children: [
@@ -301,36 +393,36 @@ export class KnowledgeService implements OnModuleDestroy {
         },
       ],
     };
-    
+
     this.categoryCache.set(cacheKey, {
       tree,
       timestamp: Date.now(),
     });
-    
+
     return tree;
   }
   
   /**
    * Batch index articles with memory management
    */
-  async batchIndexArticles(articleIds: string[]): Promise<{ indexed: number; failed: number }> {
+  async batchIndexArticles(articleIds: string[]): Promise<BatchIndexResult> {
     let indexed = 0;
     let failed = 0;
-    
+
     for (let i = 0; i < articleIds.length; i += this.MAX_BATCH_SIZE) {
       const batch = articleIds.slice(i, i + this.MAX_BATCH_SIZE);
-      
+
       try {
         // Mock batch indexing
-        await Promise.all(batch.map(id => this.indexArticle(id)));
+        await Promise.all(batch.map(() => this.indexArticle()));
         indexed += batch.length;
-        
+
         // Invalidate related caches
         batch.forEach(id => {
           this.articleCache.delete(id);
           this.searchCache.clear(); // Invalidate all search results
         });
-        
+
         // Force GC periodically
         if (global.gc && i % 1000 === 0) {
           global.gc();
@@ -340,12 +432,12 @@ export class KnowledgeService implements OnModuleDestroy {
         failed += batch.length;
       }
     }
-    
+
     this.logger.log(`Batch indexing complete: ${indexed} indexed, ${failed} failed`);
     return { indexed, failed };
   }
   
-  private async indexArticle(id: string): Promise<void> {
+  private async indexArticle(): Promise<void> {
     // Mock indexing operation
     await new Promise(resolve => setTimeout(resolve, 10));
   }
@@ -353,75 +445,87 @@ export class KnowledgeService implements OnModuleDestroy {
   /**
    * Get popular articles with caching
    */
-  async getPopularArticles(limit: number = 10): Promise<any[]> {
+  async getPopularArticles(limit: number = 10): Promise<PopularArticle[]> {
     const cacheKey = `popular_${limit}`;
-    
+
     const cached = this.articleCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < 300000) { // 5-minute cache
-      return cached.data;
+      if (Array.isArray(cached.data)) {
+        return cached.data;
+      }
+      throw new Error('Invalid cache entry type');
     }
-    
+
     // Mock popular articles
-    const articles = Array.from({ length: Math.min(limit, 50) }, (_, i) => ({
+    const articles: PopularArticle[] = Array.from({ length: Math.min(limit, 50) }, (_, i) => ({
       id: `popular-${i}`,
       title: `Popular Article ${i}`,
       views: 1000 - (i * 50),
       rating: 4.5 - (i * 0.1),
       category: 'Popular',
     }));
-    
+
     this.articleCache.set(cacheKey, {
       data: articles,
       timestamp: Date.now(),
       accessCount: 1,
     });
-    
+
     return articles;
   }
-  
+
   /**
    * Create article with cache invalidation
    */
-  async createArticle(data: any): Promise<any> {
+  async createArticle(data: Partial<KnowledgeArticleData>): Promise<KnowledgeArticleData> {
     // Mock article creation
-    const article = {
+    const article: KnowledgeArticleData = {
       id: `article-${Date.now()}`,
-      ...data,
+      title: data.title || 'Untitled',
+      content: data.content || '',
+      category: data.category || 'General',
+      tags: data.tags || [],
+      views: data.views || 0,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    
+
     // Invalidate relevant caches
     this.searchCache.clear();
     this.tagCache.clear();
     this.categoryCache.clear();
-    
+
     return article;
   }
-  
+
   /**
    * Update article with cache invalidation
    */
-  async updateArticle(id: string, data: any): Promise<any> {
+  async updateArticle(id: string, data: Partial<KnowledgeArticleData>): Promise<KnowledgeArticleData> {
     // Invalidate article cache
     this.articleCache.delete(id);
     this.relatedArticlesCache.delete(`related_${id}_10`);
     this.searchCache.clear();
-    
+
     // Mock update
-    const article = {
+    const article: KnowledgeArticleData = {
       id,
-      ...data,
+      title: data.title || 'Untitled',
+      content: data.content || '',
+      category: data.category || 'General',
+      tags: data.tags || [],
+      views: data.views || 0,
+      createdAt: new Date(),
       updatedAt: new Date(),
     };
-    
+
     return article;
   }
-  
+
   /**
    * Get memory statistics
    */
-  getMemoryStats(): any {
+  getMemoryStats(): MemoryStats {
     return {
       articlesCached: this.articleCache.size,
       searchesCached: this.searchCache.size,

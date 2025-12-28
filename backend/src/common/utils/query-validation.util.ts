@@ -178,7 +178,7 @@ export function validateDateRange(
  * @param filters - Raw filter object
  * @returns Cleaned filter object
  */
-export function sanitizeFilters<T extends Record<string, any>>(filters: T): Partial<T> {
+export function sanitizeFilters<T extends Record<string, unknown>>(filters: T): Partial<T> {
   const cleaned: Partial<T> = {};
 
   for (const [key, value] of Object.entries(filters)) {
@@ -198,7 +198,7 @@ export function sanitizeFilters<T extends Record<string, any>>(filters: T): Part
  * @returns Validated enum value
  */
 export function validateEnum<T>(
-  value: any,
+  value: unknown,
   allowedValues: T[],
   defaultValue?: T,
 ): T | undefined {
@@ -224,7 +224,7 @@ export function validateEnum<T>(
  * @returns Validated numeric value
  */
 export function validateNumericRange(
-  value: any,
+  value: unknown,
   min: number,
   max: number,
   defaultValue?: number,
@@ -258,13 +258,13 @@ export function validateNumericRange(
  * @param sortOrder - Sort order
  * @returns QueryBuilder with orderBy applied
  */
-export function applySafeSort(
-  queryBuilder: any,
+export function applySafeSort<T>(
+  queryBuilder: T & { orderBy: (field: string, order: 'ASC' | 'DESC') => T },
   alias: string,
   entityType: string,
   sortBy?: string,
   sortOrder?: string,
-): any {
+): T {
   const safeSortField = validateSortField(entityType, sortBy);
   const safeSortOrder = validateSortOrder(sortOrder);
 

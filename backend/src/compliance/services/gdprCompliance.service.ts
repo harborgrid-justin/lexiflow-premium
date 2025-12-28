@@ -177,7 +177,7 @@ export class GdprComplianceService {
       this.logger.warn(`User ${request.userId} has active consents, will anonymize instead of delete`);
     }
 
-    let recordsDeleted = 0;
+    const recordsDeleted = 0;
     let recordsAnonymized = 0;
     const deletedCategories: string[] = [];
 

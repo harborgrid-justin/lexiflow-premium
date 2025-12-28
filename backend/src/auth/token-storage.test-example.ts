@@ -19,7 +19,7 @@ describe('TokenStorageService', () => {
         {
           provide: ConfigService,
           useValue: {
-            get: jest.fn((key: string, defaultValue?: any) => {
+            get: jest.fn((key: string, defaultValue?: string | number) => {
               const config: Record<string, string | number> = {
                 'REDIS_ENABLED': 'false', // Use in-memory for tests
                 'redis.host': 'localhost',
@@ -208,7 +208,7 @@ describe('TokenStorageService', () => {
           {
             provide: ConfigService,
             useValue: {
-              get: jest.fn((key: string, defaultValue?: any) => {
+              get: jest.fn((key: string, defaultValue?: string | number) => {
                 const config: Record<string, string | number> = {
                   'REDIS_ENABLED': 'true', // Use Redis for this test
                   'redis.host': 'localhost',

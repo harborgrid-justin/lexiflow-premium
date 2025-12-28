@@ -4,6 +4,15 @@ import { Request } from 'express';
 import { ApiKeyService } from '@api-keys/services/api.key.service';
 import { ApiKeyScope } from '@api-security/dto';
 
+interface RequestWithApiKey extends Request {
+  apiKey?: {
+    id: string;
+    name: string;
+    scopes: string[];
+    userId: string;
+  };
+}
+
 export const REQUIRED_SCOPES_KEY = 'requiredScopes';
 export const RequiredScopes = (...scopes: ApiKeyScope[]) => SetMetadata(REQUIRED_SCOPES_KEY, scopes);
 
@@ -30,7 +39,7 @@ export class ApiKeyScopeGuard implements CanActivate {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest<Request>();
+    const request = context.switchToHttp().getRequest<RequestWithApiKey>();
 
     // Extract API key from header
     const apiKey = this.extractApiKey(request);
@@ -56,7 +65,7 @@ export class ApiKeyScopeGuard implements CanActivate {
       });
 
       // Attach API key info to request for use in controllers
-      (request as any).apiKey = {
+      request.apiKey = {
         id: validatedKey.id,
         name: validatedKey.name,
         scopes: validatedKey.scopes,

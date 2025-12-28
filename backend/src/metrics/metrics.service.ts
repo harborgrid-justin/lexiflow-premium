@@ -8,6 +8,17 @@ export interface MetricData {
   timestamp: Date;
 }
 
+export interface SystemMetrics {
+  memory: {
+    rss: number;
+    heapTotal: number;
+    heapUsed: number;
+    external: number;
+  };
+  uptime: number;
+  timestamp: Date;
+}
+
 /**
  * Metrics Service with Memory Optimizations
  * 
@@ -141,7 +152,7 @@ export class MetricsService implements OnModuleDestroy {
     return output;
   }
 
-  getSystemMetrics(): any {
+  getSystemMetrics(): SystemMetrics {
     const memUsage = process.memoryUsage();
     const uptime = process.uptime();
 

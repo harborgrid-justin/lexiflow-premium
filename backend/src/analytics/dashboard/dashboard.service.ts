@@ -22,11 +22,9 @@ import {
 export class DashboardService {
   private readonly logger = new Logger(DashboardService.name);
 
-  constructor(
-    // @InjectRepository(Case) private caseRepository: Repository<any>,
-    // @InjectRepository(Task) private taskRepository: Repository<any>,
-    // Inject repositories when entities are available
-  ) {}
+  // @InjectRepository(Case) private caseRepository: Repository<any>,
+  // @InjectRepository(Task) private taskRepository: Repository<any>,
+  // Inject repositories when entities are available
 
   /**
    * Get complete dashboard data
@@ -323,7 +321,7 @@ export class DashboardService {
           pending: 2,
         },
         recentCases,
-        casesNeedingAttention: recentCases.filter(c => c.daysUntilDeadline! < 10),
+        casesNeedingAttention: recentCases.filter(c => c.daysUntilDeadline !== undefined && c.daysUntilDeadline < 10),
         myBillableHours: 1850,
         myUtilizationRate: 88,
       };

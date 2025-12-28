@@ -9,20 +9,20 @@ export class Snapshot {
   name!: string;
 
   @Column({ nullable: true })
-  description!: string;
+  description?: string;
 
   @Column({ type: 'jsonb' })
-  schema: Record<string, unknown> = {};
+  schema!: Record<string, unknown>;
 
   @Column({ type: 'bigint' })
   sizeBytes!: number;
 
   @Column({ type: 'jsonb', nullable: true })
-  tables!: string[];
+  tables?: string[];
 
   @CreateDateColumn()
   createdAt!: Date;
 
   @Column({ nullable: true })
-  createdBy!: string;
+  createdBy?: string;
 }

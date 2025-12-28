@@ -2,8 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SystemAlert, AlertSeverity } from '@monitoring/entities/system-alert.entity';
-import { StructuredLoggerService } from './structured.logger.service';
-import { MetricsCollectorService } from './metrics.collector.service';
+import { StructuredLoggerService, LogMetadata } from './structured.logger.service';
+import {
+  MetricsCollectorService,
+  MetricsSnapshot,
+  RequestStatistics,
+  DatabaseStatistics
+} from './metrics.collector.service';
 import axios from 'axios';
 
 export interface AlertThreshold {
@@ -14,10 +19,24 @@ export interface AlertThreshold {
   windowMinutes?: number;
 }
 
+export interface WebhookConfig {
+  url: string;
+}
+
+export interface SlackConfig {
+  webhookUrl: string;
+}
+
+export interface EmailConfig {
+  recipients: string[];
+}
+
+export type AlertChannelConfig = WebhookConfig | SlackConfig | EmailConfig;
+
 export interface AlertChannel {
   type: 'email' | 'webhook' | 'slack';
   enabled: boolean;
-  config: any;
+  config: AlertChannelConfig;
 }
 
 export interface AlertRule {
@@ -28,6 +47,18 @@ export interface AlertRule {
   enabled: boolean;
   cooldownMinutes: number;
   channels: AlertChannel[];
+}
+
+export interface AlertStatistics {
+  total: number;
+  active: number;
+  acknowledged: number;
+  critical: number;
+  high: number;
+  rules: {
+    total: number;
+    enabled: number;
+  };
 }
 
 /**
@@ -330,9 +361,9 @@ export class AlertingService {
    */
   private getMetricValue(
     metricName: string,
-    snapshot: any,
-    requestStats: any,
-    dbStats: any,
+    snapshot: MetricsSnapshot,
+    requestStats: Record<string, RequestStatistics>,
+    dbStats: DatabaseStatistics,
   ): number | null {
     // System metrics
     if (snapshot.gauges[metricName] !== undefined) {
@@ -341,13 +372,13 @@ export class AlertingService {
 
     // Request metrics
     if (metricName === 'error.rate') {
-      const totalRequests = Object.values(requestStats).reduce((sum: number, stat: any) => sum + stat.count, 0);
-      const totalErrors = Object.values(requestStats).reduce((sum: number, stat: any) => sum + stat.errors, 0);
+      const totalRequests = Object.values(requestStats).reduce((sum, stat) => sum + stat.count, 0);
+      const totalErrors = Object.values(requestStats).reduce((sum, stat) => sum + stat.errors, 0);
       return totalRequests > 0 ? totalErrors / totalRequests : 0;
     }
 
     if (metricName === 'response.time.p95') {
-      const p95Values = Object.values(requestStats).map((stat: any) => stat.p95);
+      const p95Values = Object.values(requestStats).map((stat) => stat.p95);
       return p95Values.length > 0 ? Math.max(...p95Values) : 0;
     }
 
@@ -431,7 +462,7 @@ export class AlertingService {
     message: string;
     severity: AlertSeverity;
     source: string;
-    metadata?: any;
+    metadata?: LogMetadata;
   }): Promise<SystemAlert> {
     const alert = this.alertRepository.create({
       ...data,
@@ -449,13 +480,13 @@ export class AlertingService {
     try {
       switch (channel.type) {
         case 'webhook':
-          await this.sendWebhookAlert(alert, channel.config);
+          await this.sendWebhookAlert(alert, channel.config as WebhookConfig);
           break;
         case 'slack':
-          await this.sendSlackAlert(alert, channel.config);
+          await this.sendSlackAlert(alert, channel.config as SlackConfig);
           break;
         case 'email':
-          await this.sendEmailAlert(alert, channel.config);
+          await this.sendEmailAlert(alert, channel.config as EmailConfig);
           break;
       }
     } catch (error) {
@@ -463,16 +494,16 @@ export class AlertingService {
         `Failed to send alert to ${channel.type}`,
         error instanceof Error ? error.message : String(error),
         {
-        alertId: alert.id,
-        channel: channel.type,
-      });
+          alertId: alert.id,
+          channel: channel.type,
+        });
     }
   }
 
   /**
    * Send alert via webhook
    */
-  private async sendWebhookAlert(alert: SystemAlert, config: any): Promise<void> {
+  private async sendWebhookAlert(alert: SystemAlert, config: WebhookConfig): Promise<void> {
     if (!config.url) {
       return;
     }
@@ -498,7 +529,7 @@ export class AlertingService {
   /**
    * Send alert to Slack
    */
-  private async sendSlackAlert(alert: SystemAlert, config: any): Promise<void> {
+  private async sendSlackAlert(alert: SystemAlert, config: SlackConfig): Promise<void> {
     if (!config.webhookUrl) {
       return;
     }
@@ -546,7 +577,7 @@ export class AlertingService {
   /**
    * Send alert via email
    */
-  private async sendEmailAlert(alert: SystemAlert, config: any): Promise<void> {
+  private async sendEmailAlert(alert: SystemAlert, config: EmailConfig): Promise<void> {
     // Email integration would be implemented here
     // For now, just log that we would send an email
     this.logger.log('Email alert would be sent', {
@@ -628,7 +659,7 @@ export class AlertingService {
   /**
    * Get alert statistics
    */
-  async getAlertStats(): Promise<any> {
+  async getAlertStats(): Promise<AlertStatistics> {
     const totalAlerts = await this.alertRepository.count();
     const activeAlerts = await this.alertRepository.count({ where: { resolved: false } });
     const acknowledgedAlerts = await this.alertRepository.count({ where: { acknowledged: true } });

@@ -1,7 +1,6 @@
-import { Injectable, Logger} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository} from 'typeorm';
-import * as MasterConfig from '@config/master.config';
+import { Repository } from 'typeorm';
 import { KnowledgeArticle } from './entities/knowledge-article.entity';
 import { CreateKnowledgeArticleDto, UpdateKnowledgeArticleDto, QueryKnowledgeDto } from './dto';
 import { EntityNotFoundException } from '@common/exceptions';
@@ -129,7 +128,7 @@ export class KnowledgeService {
       .createQueryBuilder('article')
       .select('DISTINCT article.category', 'category')
       .where('article.category IS NOT NULL')
-      .getRawMany();
+      .getRawMany<{ category: string }>();
 
     return result.map((r) => r.category);
   }
@@ -139,19 +138,19 @@ export class KnowledgeService {
       .createQueryBuilder('article')
       .select('UNNEST(article.tags)', 'tag')
       .distinct(true)
-      .getRawMany();
+      .getRawMany<{ tag: string }>();
 
     return result.map((r) => r.tag);
   }
 
-  async getPopular(limit: number = MasterConfig.SEARCH_PREVIEW_LIMIT): Promise<KnowledgeArticle[]> {
+  async getPopular(limit: number = 10): Promise<KnowledgeArticle[]> {
     return this.articleRepository.find({
       order: { viewCount: 'DESC', createdAt: 'DESC' },
       take: limit,
     });
   }
 
-  async getRecent(limit: number = MasterConfig.SEARCH_PREVIEW_LIMIT): Promise<KnowledgeArticle[]> {
+  async getRecent(limit: number = 10): Promise<KnowledgeArticle[]> {
     return this.articleRepository.find({
       order: { createdAt: 'DESC' },
       take: limit,

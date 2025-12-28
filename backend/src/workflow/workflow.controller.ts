@@ -4,6 +4,7 @@ import { WorkflowService } from './workflow.service';
 import { CreateWorkflowTemplateDto } from './dto/create-workflow-template.dto';
 import { UpdateWorkflowTemplateDto } from './dto/update-workflow-template.dto';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+import { IWorkflowQueryFilters } from './interfaces/workflow.interfaces';
 
 @ApiTags('Workflow Templates')
 @ApiBearerAuth('JWT-auth')
@@ -24,7 +25,7 @@ export class WorkflowController {
   @ApiResponse({ status: 200, description: 'Templates retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(@Query() query?: any) {
+  async findAll(@Query() query: IWorkflowQueryFilters) {
     return await this.workflowService.findAll(query || {});
   }
 

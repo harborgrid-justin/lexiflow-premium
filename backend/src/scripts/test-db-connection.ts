@@ -2,6 +2,21 @@ import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import * as path from 'path';
 
+interface VersionResult {
+  version: string;
+}
+
+interface DbInfoResult {
+  database: string;
+  user: string;
+  server_address: string | null;
+  server_port: number | null;
+}
+
+interface TableResult {
+  tablename: string;
+}
+
 // Load environment variables
 config({ path: path.join(__dirname, '../../.env') });
 
@@ -38,36 +53,40 @@ async function testConnection() {
     console.log('✅ Connection initialized successfully!\n');
 
     console.log('⏳ Running test query...');
-    const result = await dataSource.query('SELECT version()');
+    const result = await dataSource.query<VersionResult[]>('SELECT version()');
     console.log('✅ Query successful!');
-    console.log('📊 PostgreSQL Version:', result[0].version);
+    if (result[0]) {
+      console.log('📊 PostgreSQL Version:', result[0].version);
+    }
     console.log('');
 
     console.log('⏳ Checking database information...');
-    const dbInfo = await dataSource.query(`
-      SELECT 
+    const dbInfo = await dataSource.query<DbInfoResult[]>(`
+      SELECT
         current_database() as database,
         current_user as user,
         inet_server_addr() as server_address,
         inet_server_port() as server_port
     `);
     console.log('✅ Database Info:');
-    console.log('   - Database:', dbInfo[0].database);
-    console.log('   - User:', dbInfo[0].user);
-    console.log('   - Server:', dbInfo[0].server_address || 'N/A');
-    console.log('   - Port:', dbInfo[0].server_port || 'N/A');
+    if (dbInfo[0]) {
+      console.log('   - Database:', dbInfo[0].database);
+      console.log('   - User:', dbInfo[0].user);
+      console.log('   - Server:', dbInfo[0].server_address || 'N/A');
+      console.log('   - Port:', dbInfo[0].server_port || 'N/A');
+    }
     console.log('');
 
     console.log('⏳ Checking existing tables...');
-    const tables = await dataSource.query(`
-      SELECT tablename 
-      FROM pg_catalog.pg_tables 
+    const tables = await dataSource.query<TableResult[]>(`
+      SELECT tablename
+      FROM pg_catalog.pg_tables
       WHERE schemaname = 'public'
       ORDER BY tablename
     `);
     console.log(`✅ Found ${tables.length} tables in public schema:`);
     if (tables.length > 0) {
-      tables.forEach((table: any) => {
+      tables.forEach((table: TableResult) => {
         console.log(`   - ${table.tablename}`);
       });
     } else {

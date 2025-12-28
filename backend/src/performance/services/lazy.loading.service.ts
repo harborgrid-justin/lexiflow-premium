@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Repository, SelectQueryBuilder, FindOptionsWhere, ObjectLiteral } from 'typeorm';
-import * as MasterConfig from '@config/master.config';
+import MasterConfig from '@config/master.config';
 
 /**
  * Pagination Type
@@ -32,7 +32,7 @@ export interface CursorPaginationOptions {
  */
 export interface KeysetPaginationOptions {
   lastId?: string | number;
-  lastValue?: any;
+  lastValue?: unknown;
   limit?: number;
   sortBy?: string;
   sortOrder?: 'ASC' | 'DESC';
@@ -292,16 +292,16 @@ export class LazyLoadingService {
   /**
    * Batch load multiple entities efficiently (N+1 prevention)
    */
-  async batchLoad<T, R>(
+  async batchLoad<T, R, K = unknown>(
     entities: T[],
-    loader: (ids: any[]) => Promise<R[]>,
-    idExtractor: (entity: T) => any,
+    loader: (ids: K[]) => Promise<R[]>,
+    idExtractor: (entity: T) => K,
     resultMapper: (entity: T, results: R[]) => R,
-  ): Promise<Map<any, R>> {
+  ): Promise<Map<K, R>> {
     const ids = entities.map(idExtractor);
     const results = await loader(ids);
 
-    const resultMap = new Map<any, R>();
+    const resultMap = new Map<K, R>();
 
     for (const entity of entities) {
       const id = idExtractor(entity);
@@ -423,12 +423,12 @@ export class LazyLoadingService {
 
   // Private helper methods
 
-  private encodeCursor(cursor: { field: string; value: any }): string {
+  private encodeCursor(cursor: { field: string; value: unknown }): string {
     const json = JSON.stringify(cursor);
     return Buffer.from(json).toString('base64');
   }
 
-  private decodeCursor(encoded: string): { field: string; value: any } | null {
+  private decodeCursor(encoded: string): { field: string; value: unknown } | null {
     try {
       const json = Buffer.from(encoded, 'base64').toString('utf-8');
       return JSON.parse(json);

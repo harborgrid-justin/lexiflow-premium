@@ -4,7 +4,7 @@ import * as Joi from 'joi';
 export interface ValidationResult {
   valid: boolean;
   errors?: string[];
-  sanitized?: any;
+  sanitized?: unknown;
 }
 
 export interface DeepValidationOptions {
@@ -21,7 +21,7 @@ export class RequestValidationService {
   // SQL injection patterns
   private readonly sqlInjectionPatterns = [
     /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|EXEC|EXECUTE|UNION|DECLARE)\b)/gi,
-    /(;|\-\-|\/\*|\*\/|xp_|sp_)/gi,
+    /(;|--|\/\*|\*\/|xp_|sp_)/gi,
     /('|('')|;|--|\/\*|\*\/)/gi,
     /(\bOR\b.*=.*|1=1|'=')/gi,
   ];
@@ -43,9 +43,9 @@ export class RequestValidationService {
 
   // Path traversal patterns
   private readonly pathTraversalPatterns = [
-    /\.\.[\/\\]/g,
-    /\.\.[\\\/]/g,
-    /%2e%2e[\/\\]/gi,
+    /\.\.[/\\]/g,
+    /\.\.[/\\]/g,
+    /%2e%2e[/\\]/gi,
     /\.\.%2f/gi,
     /\.\.%5c/gi,
   ];
@@ -57,7 +57,7 @@ export class RequestValidationService {
     /`.*`/g,
   ];
 
-  validateWithSchema(data: any, schema: Joi.Schema): ValidationResult {
+  validateWithSchema(data: unknown, schema: Joi.Schema): ValidationResult {
     const { error, value } = schema.validate(data, {
       abortEarly: false,
       stripUnknown: true,
@@ -79,7 +79,7 @@ export class RequestValidationService {
     };
   }
 
-  validateDeep(data: any, options?: DeepValidationOptions): ValidationResult {
+  validateDeep(data: unknown, options?: DeepValidationOptions): ValidationResult {
     const opts: Required<DeepValidationOptions> = {
       maxDepth: options?.maxDepth || 10,
       maxArrayLength: options?.maxArrayLength || 1000,
@@ -89,7 +89,7 @@ export class RequestValidationService {
 
     const errors: string[] = [];
 
-    const validate = (obj: any, path: string = '', depth: number = 0): any => {
+    const validate = (obj: unknown, path: string = '', depth: number = 0): unknown => {
       if (depth > opts.maxDepth) {
         errors.push(`Maximum depth exceeded at ${path}`);
         return obj;
@@ -118,7 +118,7 @@ export class RequestValidationService {
       }
 
       if (typeof obj === 'object') {
-        const sanitized: any = {};
+        const sanitized: Record<string, unknown> = {};
 
         for (const [key, value] of Object.entries(obj)) {
           const sanitizedKey = this.sanitizeString(key);
@@ -218,6 +218,7 @@ export class RequestValidationService {
     let sanitized = input.replace(/\0/g, '');
 
     // Remove control characters except newline, tab, and carriage return
+    // eslint-disable-next-line no-control-regex
     sanitized = sanitized.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
 
     // Normalize unicode
@@ -240,7 +241,7 @@ export class RequestValidationService {
       .replace(/\//g, '&#x2F;');
   }
 
-  validateBusinessRules(data: any, rules: BusinessRule[]): ValidationResult {
+  validateBusinessRules(data: unknown, rules: BusinessRule[]): ValidationResult {
     const errors: string[] = [];
 
     for (const rule of rules) {
@@ -262,7 +263,7 @@ export class RequestValidationService {
     };
   }
 
-  validateAndSanitize(data: any, options?: DeepValidationOptions): any {
+  validateAndSanitize(data: unknown, options?: DeepValidationOptions): unknown {
     // Deep validation and sanitization
     const deepResult = this.validateDeep(data, options);
 
@@ -271,7 +272,7 @@ export class RequestValidationService {
     }
 
     // Check for security threats in all string values
-    const checkSecurity = (obj: any): void => {
+    const checkSecurity = (obj: unknown): void => {
       if (typeof obj === 'string') {
         if (this.detectSqlInjection(obj)) {
           throw new BadRequestException('SQL injection attempt detected');
@@ -298,10 +299,10 @@ export class RequestValidationService {
   }
 
   createJoiSchema(definition: SchemaDefinition): Joi.Schema {
-    const schema: any = {};
+    const schema: Record<string, Joi.Schema> = {};
 
     for (const [field, config] of Object.entries(definition)) {
-      let fieldSchema: any;
+      let fieldSchema: Joi.Schema;
 
       switch (config.type) {
         case 'string':
@@ -365,7 +366,7 @@ export class RequestValidationService {
 
 export interface BusinessRule {
   name: string;
-  validate: (data: any) => { valid: boolean; message?: string };
+  validate: (data: unknown) => { valid: boolean; message?: string };
 }
 
 export interface SchemaDefinition {
@@ -382,7 +383,7 @@ export interface FieldConfig {
   uri?: boolean;
   integer?: boolean;
   positive?: boolean;
-  items?: any;
-  properties?: any;
-  default?: any;
+  items?: Joi.Schema;
+  properties?: Record<string, Joi.Schema>;
+  default?: unknown;
 }

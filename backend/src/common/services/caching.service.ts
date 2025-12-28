@@ -6,7 +6,7 @@ import { Jurisdiction } from '@jurisdictions/entities/jurisdiction.entity';
 @Injectable()
 export class CachingService implements OnModuleDestroy {
   private readonly logger = new Logger(CachingService.name);
-  private cache = new Map<string, { value: any; expiry: number }>();
+  private cache = new Map<string, { value: unknown; expiry: number }>();
   private cleanupInterval: NodeJS.Timeout;
   private readonly MAX_CACHE_SIZE = 5000;
 

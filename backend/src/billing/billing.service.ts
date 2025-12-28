@@ -250,13 +250,13 @@ export class BillingService {
         totalBilled: Math.round(totalBilled),
         month: `${currentMonth} ${currentYear}`
       };
-    } catch (error) {
+    } catch {
       // Return default values if database queries fail (e.g., tables not initialized)
       const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
                          'July', 'August', 'September', 'October', 'November', 'December'];
       const currentMonth = monthNames[new Date().getMonth()];
       const currentYear = new Date().getFullYear();
-      
+
       return {
         realization: 0,
         totalBilled: 0,

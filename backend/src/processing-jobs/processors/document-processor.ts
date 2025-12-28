@@ -5,6 +5,12 @@ import { ProcessingJobsService } from '@processing-jobs/processing-jobs.service'
 import { OcrService } from '@ocr/ocr.service';
 import { DocumentsService } from '@documents/documents.service';
 import { JobType, JobStatus } from '@processing-jobs/dto/job-status.dto';
+import {
+  JobQueueData,
+  OcrProcessingResult,
+  MetadataExtractionResult,
+  RedactionResult,
+} from '@processing-jobs/interfaces/processing-job.interfaces';
 
 @Processor('document-processing')
 export class DocumentProcessor {
@@ -17,7 +23,7 @@ export class DocumentProcessor {
   ) {}
 
   @Process(JobType.OCR)
-  async handleOcrJob(job: Job): Promise<void> {
+  async handleOcrJob(job: Job<JobQueueData>): Promise<void> {
     const { jobId, documentId, parameters } = job.data;
 
     try {
@@ -60,15 +66,17 @@ export class DocumentProcessor {
       );
 
       // Complete job
+      const result: OcrProcessingResult = {
+        text: ocrResult.text,
+        confidence: ocrResult.confidence,
+        wordCount: ocrResult.wordCount,
+      };
+
       await this.processingJobsService.updateJobStatus(
         jobId,
         JobStatus.COMPLETED,
         100,
-        {
-          text: ocrResult.text,
-          confidence: ocrResult.confidence,
-          wordCount: ocrResult.wordCount,
-        },
+        result,
       );
 
       this.logger.log(`OCR job completed: ${jobId}`);
@@ -86,7 +94,7 @@ export class DocumentProcessor {
   }
 
   @Process(JobType.METADATA_EXTRACTION)
-  async handleMetadataExtractionJob(job: Job): Promise<void> {
+  async handleMetadataExtractionJob(job: Job<JobQueueData>): Promise<void> {
     const { jobId } = job.data;
 
     try {
@@ -101,11 +109,15 @@ export class DocumentProcessor {
       // Implement metadata extraction logic here
       // This is a placeholder for future implementation
 
+      const result: MetadataExtractionResult = {
+        message: 'Metadata extraction completed',
+      };
+
       await this.processingJobsService.updateJobStatus(
         jobId,
         JobStatus.COMPLETED,
         100,
-        { message: 'Metadata extraction completed' },
+        result,
       );
 
       this.logger.log(`Metadata extraction job completed: ${jobId}`);
@@ -123,7 +135,7 @@ export class DocumentProcessor {
   }
 
   @Process(JobType.REDACTION)
-  async handleRedactionJob(job: Job): Promise<void> {
+  async handleRedactionJob(job: Job<JobQueueData>): Promise<void> {
     const { jobId } = job.data;
 
     try {
@@ -138,11 +150,15 @@ export class DocumentProcessor {
       // Implement redaction logic here
       // This is a placeholder for future implementation
 
+      const result: RedactionResult = {
+        message: 'Redaction completed',
+      };
+
       await this.processingJobsService.updateJobStatus(
         jobId,
         JobStatus.COMPLETED,
         100,
-        { message: 'Redaction completed' },
+        result,
       );
 
       this.logger.log(`Redaction job completed: ${jobId}`);

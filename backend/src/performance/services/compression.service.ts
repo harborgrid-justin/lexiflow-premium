@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as zlib from 'zlib';
-import * as MasterConfig from '@config/master.config';
+import MasterConfig from '@config/master.config';
 
 /**
  * Compression Configuration
@@ -225,7 +225,7 @@ export class CompressionService {
   async compressResponse(
     req: Request,
     res: Response,
-    data: any,
+    data: unknown,
     config: CompressionConfig = {},
   ): Promise<void> {
     const contentType = res.getHeader('Content-Type') as string;
@@ -355,10 +355,12 @@ export class CompressionService {
     }
   }
 
-  private promisify(fn: Function) {
-    return (...args: any[]): Promise<Buffer> => {
+  private promisify<T extends unknown[]>(
+    fn: (...args: [...T, (error: Error | null, result: Buffer) => void]) => void,
+  ) {
+    return (...args: T): Promise<Buffer> => {
       return new Promise((resolve, reject) => {
-        fn(...args, (error: Error, result: Buffer) => {
+        fn(...args, (error: Error | null, result: Buffer) => {
           if (error) {
             reject(error);
           } else {

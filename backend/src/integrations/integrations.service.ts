@@ -1,12 +1,20 @@
-import { Injectable, BadRequestException, NotFoundException, OnModuleDestroy } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, OnModuleDestroy, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Integration } from './entities/integration.entity';
+import { Integration, IntegrationStatus } from './entities/integration.entity';
 import { CreateIntegrationDto } from './dto/create-integration.dto';
 import { UpdateIntegrationDto } from './dto/update-integration.dto';
 
+interface SyncHistoryEntry {
+  timestamp: Date;
+  status: 'success' | 'failed';
+  recordsProcessed?: number;
+  error?: string;
+}
+
 @Injectable()
 export class IntegrationsService implements OnModuleDestroy {
+  private readonly logger = new Logger(IntegrationsService.name);
   // Memory optimization: Cache for integrations
   private readonly integrationCache = new Map<string, Integration>();
   private readonly MAX_CACHE_SIZE = 50;
@@ -46,7 +54,7 @@ export class IntegrationsService implements OnModuleDestroy {
   
   async connect(id: string, credentials: { accessToken: string; refreshToken: string }): Promise<Integration> {
     const integration = await this.findOne(id);
-    integration.status = 'active' as any;
+    integration.status = IntegrationStatus.ACTIVE;
     integration.credentials = credentials;
     integration.lastSyncedAt = new Date();
     const saved = await this.integrationRepository.save(integration);
@@ -56,7 +64,7 @@ export class IntegrationsService implements OnModuleDestroy {
   
   async disconnect(id: string): Promise<Integration> {
     const integration = await this.findOne(id);
-    integration.status = 'disconnected' as any;
+    integration.status = IntegrationStatus.DISCONNECTED;
     integration.credentials = undefined;
     const saved = await this.integrationRepository.save(integration);
     this.integrationCache.delete(id); // Invalidate cache
@@ -65,7 +73,7 @@ export class IntegrationsService implements OnModuleDestroy {
   
   async refreshCredentials(id: string): Promise<Integration> {
     const integration = await this.findOne(id);
-    if (integration.status !== 'active') {
+    if (integration.status !== IntegrationStatus.ACTIVE) {
       throw new BadRequestException('Integration must be active to refresh credentials');
     }
     integration.credentials = { accessToken: 'refreshed-token', refreshToken: 'refreshed-refresh' };
@@ -105,11 +113,13 @@ export class IntegrationsService implements OnModuleDestroy {
     return this.integrationRepository.find({ where: { provider } });
   }
   
-  testConnection(_id: string): { success: boolean; message: string; latency: number } {
+  testConnection(id: string): { success: boolean; message: string; latency: number } {
+    this.logger.log(`Testing connection for integration ${id}`);
     return { success: true, message: 'Connection successful', latency: 50 };
   }
-  
-  getSyncHistory(_id: string): any[] {
+
+  getSyncHistory(id: string): SyncHistoryEntry[] {
+    this.logger.log(`Retrieving sync history for integration ${id}`);
     return [];
   }
   
@@ -118,8 +128,9 @@ export class IntegrationsService implements OnModuleDestroy {
   }
 
   async findOne(id: string): Promise<Integration> {
-    if (this.integrationCache.has(id)) {
-      return this.integrationCache.get(id)!;
+    const cached = this.integrationCache.get(id);
+    if (cached) {
+      return cached;
     }
 
     const integration = await this.integrationRepository.findOne({ where: { id } });

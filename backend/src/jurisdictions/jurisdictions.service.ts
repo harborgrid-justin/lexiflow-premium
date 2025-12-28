@@ -7,6 +7,7 @@ import { CreateJurisdictionDto } from './dto/create-jurisdiction.dto';
 import { UpdateJurisdictionDto } from './dto/update-jurisdiction.dto';
 import { CreateJurisdictionRuleDto } from './dto/create-jurisdiction-rule.dto';
 import { UpdateJurisdictionRuleDto } from './dto/update-jurisdiction-rule.dto';
+import { JurisdictionMapNode } from './interfaces/map-node.interface';
 
 @Injectable()
 export class JurisdictionsService {
@@ -315,12 +316,12 @@ export class JurisdictionsService {
     return this.findBySystem(JurisdictionSystem.LOCAL);
   }
 
-  async getMapNodes(): Promise<any[]> {
+  async getMapNodes(): Promise<JurisdictionMapNode[]> {
     const result = await this.findAll(1, 1000); // Get all jurisdictions
     const jurisdictions = result.data;
-    
+
     // Convert to map visualization format
-    return jurisdictions.map((j, _index) => ({
+    return jurisdictions.map((j) => ({
       id: j.id,
       label: j.code || j.name.substring(0, 15),
       type: j.system.toLowerCase(),

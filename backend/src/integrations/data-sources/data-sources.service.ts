@@ -1,6 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { TestConnectionDto } from './dto/test-connection.dto';
 
+export interface DataSourceConnection {
+  id: string;
+  name: string;
+  type: string;
+  status: 'active' | 'syncing' | 'inactive' | 'error';
+}
+
 @Injectable()
 export class DataSourcesService {
   private readonly logger = new Logger(DataSourcesService.name);
@@ -11,7 +18,7 @@ export class DataSourcesService {
     return { success: true, message: 'Connection successful (Simulated)' };
   }
 
-  async listConnections(): Promise<any[]> {
+  async listConnections(): Promise<DataSourceConnection[]> {
     return [
       { id: '1', name: 'Primary Warehouse', type: 'Snowflake', status: 'active' },
       { id: '2', name: 'Legacy Archive', type: 'PostgreSQL', status: 'syncing' },

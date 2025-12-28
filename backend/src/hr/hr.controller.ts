@@ -3,8 +3,46 @@ import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagg
 import { HRService } from './hr.service';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
-import { CreateTimeOffDto } from './dto/create-time-off.dto';
+import { CreateTimeOffDto, TimeOffStatus } from './dto/create-time-off.dto';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+
+// Query parameter interfaces
+interface EmployeeQueryParams {
+  status?: string;
+  department?: string;
+  role?: string;
+  search?: string;
+  sortBy?: string;
+  sortOrder?: string;
+  page?: number;
+  limit?: number;
+}
+
+interface TimeOffQueryParams {
+  employeeId?: string;
+  status?: TimeOffStatus;
+  page?: number;
+  limit?: number;
+}
+
+interface UtilizationQueryParams {
+  employeeId?: string;
+  department?: string;
+  startDate?: string;
+  endDate?: string;
+}
+
+interface DenyTimeOffBody {
+  reason?: string;
+}
+
+interface AuthenticatedRequest {
+  user?: {
+    id: string;
+    email: string;
+    role: string;
+  };
+}
 
 @ApiTags('HR')
 @ApiBearerAuth('JWT-auth')
@@ -29,7 +67,7 @@ export class HRController {
   @ApiResponse({ status: 200, description: 'Employees retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getEmployees(@Query() query: any) {
+  async getEmployees(@Query() query: EmployeeQueryParams) {
     return await this.hrService.findAllEmployees(query);
   }
 
@@ -82,7 +120,7 @@ export class HRController {
   @ApiOperation({ summary: 'Get time off requests' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getTimeOffRequests(@Query() query: any) {
+  async getTimeOffRequests(@Query() query: TimeOffQueryParams) {
     return await this.hrService.findAllTimeOffRequests(query);
   }
 
@@ -106,7 +144,7 @@ export class HRController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async approveTimeOff(@Param('id') id: string, @Req() req: any) {
+  async approveTimeOff(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
     const approverId = req.user?.id || 'system';
     return await this.hrService.approveTimeOff(id, approverId);
   }
@@ -119,7 +157,7 @@ export class HRController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async denyTimeOff(@Param('id') id: string, @Body() body: { reason?: string }, @Req() req: any) {
+  async denyTimeOff(@Param('id') id: string, @Body() body: DenyTimeOffBody, @Req() req: AuthenticatedRequest) {
     const approverId = req.user?.id || 'system';
     return await this.hrService.denyTimeOff(id, approverId, body.reason);
   }
@@ -130,7 +168,7 @@ export class HRController {
   @ApiResponse({ status: 200, description: 'Utilization metrics retrieved' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getUtilization(@Query() query: any) {
+  async getUtilization(@Query() query: UtilizationQueryParams) {
     return await this.hrService.getUtilization(query);
   }
 }

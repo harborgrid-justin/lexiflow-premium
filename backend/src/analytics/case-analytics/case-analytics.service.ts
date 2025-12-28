@@ -12,11 +12,9 @@ import {
 export class CaseAnalyticsService {
   private readonly logger = new Logger(CaseAnalyticsService.name);
 
-  constructor(
-    // @InjectRepository(Case) private caseRepository: Repository<any>,
-    // @InjectRepository(TimeEntry) private timeEntryRepository: Repository<any>,
-    // Inject repositories when entities are available
-  ) {}
+  // @InjectRepository(Case) private caseRepository: Repository<any>,
+  // @InjectRepository(TimeEntry) private timeEntryRepository: Repository<any>,
+  // Inject repositories when entities are available
 
   /**
    * Get overall case metrics

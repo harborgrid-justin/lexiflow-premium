@@ -4,6 +4,15 @@ import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { LegalEntitiesService } from './legal-entities.service';
 import { CreateLegalEntityDto, UpdateLegalEntityDto } from './dto/legal-entity.dto';
 
+interface LegalEntityQueryParams {
+  entityType?: string;
+  status?: string;
+  jurisdiction?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
 @ApiTags('Legal Entities')
 @ApiBearerAuth('JWT-auth')
 @UseGuards(JwtAuthGuard)
@@ -14,7 +23,7 @@ export class LegalEntitiesController {
   @Get()
   @ApiOperation({ summary: 'Get all legal entities' })
   @ApiResponse({ status: 200, description: 'Entities retrieved successfully' })
-  async findAll(@Query() query: any) {
+  async findAll(@Query() query: LegalEntityQueryParams) {
     return await this.legalEntitiesService.findAll(query);
   }
 

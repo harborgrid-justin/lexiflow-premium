@@ -1,9 +1,25 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Motion, MotionStatus } from './entities/motion.entity';
+import { Motion, MotionStatus, MotionType } from './entities/motion.entity';
 import { CreateMotionDto } from './dto/create-motion.dto';
 import { UpdateMotionDto } from './dto/update-motion.dto';
+
+interface MotionRuling {
+  decision: string;
+  date: Date;
+  judge?: string;
+  notes?: string;
+  [key: string]: unknown;
+}
+
+interface MotionSearchQuery {
+  query?: string;
+  caseId?: string;
+  type?: string;
+  status?: string;
+  [key: string]: unknown;
+}
 
 @Injectable()
 export class MotionsService {
@@ -48,7 +64,7 @@ export class MotionsService {
     return this.motionRepository.save(motion);
   }
 
-  async update(id: string, updateMotionDto: UpdateMotionDto, _userId?: string): Promise<Motion> {
+  async update(id: string, updateMotionDto: UpdateMotionDto): Promise<Motion> {
     const motion = await this.findOne(id);
     Object.assign(motion, updateMotionDto);
     // Note: updatedBy tracking handled by BaseEntity updatedAt
@@ -90,24 +106,24 @@ export class MotionsService {
     return this.motionRepository.save(motion);
   }
 
-  async recordRuling(id: string, ruling: any): Promise<Motion> {
+  async recordRuling(id: string, ruling: MotionRuling): Promise<Motion> {
     const motion = await this.findOne(id);
     motion.ruling = ruling;
-    motion.status = 'decided' as any;
+    motion.status = MotionStatus.GRANTED;
     motion.rulingDate = new Date();
     return this.motionRepository.save(motion);
   }
 
   async findByType(caseId: string, type: string): Promise<Motion[]> {
     return this.motionRepository.find({
-      where: { caseId, type: type as any },
+      where: { caseId, type: type as MotionType },
       order: { createdAt: 'DESC' },
     });
   }
 
   async findByStatus(caseId: string, status: string): Promise<Motion[]> {
     return this.motionRepository.find({
-      where: { caseId, status: status as any },
+      where: { caseId, status: status as MotionStatus },
       order: { createdAt: 'DESC' },
     });
   }
@@ -123,7 +139,7 @@ export class MotionsService {
 
   async getPendingResponses(): Promise<Motion[]> {
     return this.motionRepository.find({
-      where: { status: 'pending' as any },
+      where: { status: MotionStatus.PENDING },
       order: { createdAt: 'ASC' },
     });
   }
@@ -137,19 +153,19 @@ export class MotionsService {
     return this.motionRepository.save(motion);
   }
 
-  async search(query: any): Promise<Motion[]> {
+  async search(query: MotionSearchQuery): Promise<Motion[]> {
     const qb = this.motionRepository.createQueryBuilder('motion');
-    
+
     if (query.query) {
       qb.where('motion.title LIKE :query OR motion.description LIKE :query', {
         query: `%${query.query}%`,
       });
     }
-    
+
     if (query.caseId) {
       qb.andWhere('motion.caseId = :caseId', { caseId: query.caseId });
     }
-    
+
     return qb.orderBy('motion.createdAt', 'DESC').getMany();
   }
 }

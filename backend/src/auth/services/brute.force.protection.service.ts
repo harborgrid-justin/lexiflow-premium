@@ -1,9 +1,6 @@
 import {
   Injectable,
   Logger,
-  UnauthorizedException,
-  HttpException,
-  HttpStatus,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, MoreThan } from 'typeorm';
@@ -519,7 +516,7 @@ export class BruteForceProtectionService {
     // const data = await response.json();
     // return data.success;
 
-    this.logger.warn('CAPTCHA validation not implemented - accepting all tokens');
+    this.logger.warn(`CAPTCHA validation not implemented - accepting token: ${token.substring(0, 10)}...`);
     return true;
   }
 

@@ -2,6 +2,180 @@ import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+// Judge profile interface
+export interface JudgeProfile {
+  judgeId: string;
+  name: string;
+  courtName: string;
+  appointed: Date;
+  yearsOnBench: number;
+  caseTypes: string[];
+  bar: string[];
+  education: string[];
+  rating: string;
+  bio: string;
+}
+
+// Judge statistics interfaces
+export interface CaseStatsByType {
+  civil: number;
+  criminal: number;
+  other: number;
+}
+
+export interface CaseStats {
+  total: number;
+  active: number;
+  closed: number;
+  byType: CaseStatsByType;
+}
+
+export interface RulingStats {
+  total: number;
+  plaintiff: number;
+  defendant: number;
+  mixed: number;
+  appealRate: string;
+  reversalRate: string;
+}
+
+export interface PerformanceMetrics {
+  averageDaysToTrial: number;
+  averageDaysToRuling: number;
+  settlementRate: string;
+  trialRate: string;
+}
+
+export interface WorkloadMetrics {
+  currentCases: number;
+  casesPerMonth: string;
+  hearingsPerWeek: string;
+}
+
+export interface JudgeStatsPeriod {
+  start: Date;
+  end: Date;
+}
+
+export interface JudgeStatistics {
+  judgeId: string;
+  period: JudgeStatsPeriod;
+  cases: CaseStats;
+  rulings: RulingStats;
+  performance: PerformanceMetrics;
+  workload: WorkloadMetrics;
+}
+
+// Judicial tendencies interfaces
+export interface LegalTendencies {
+  favorPlaintiff: string;
+  favorDefendant: string;
+  strictOnProcedure: string;
+  settlementOriented: string;
+}
+
+export interface SentencingTendencies {
+  lenient: string;
+  moderate: string;
+  strict: string;
+  averageSentenceMonths: number;
+}
+
+export interface MotionTendencies {
+  grantsSummaryJudgment: string;
+  grantsMotionToDismiss: string;
+  allowsAmendments: string;
+  sanctions: string;
+}
+
+export interface JudicialPreferences {
+  earlyMediation: boolean;
+  strictDeadlines: boolean;
+  detailedBriefs: boolean;
+  oralArguments: boolean;
+}
+
+export interface JudicialTendencies {
+  judgeId: string;
+  legalTendencies: LegalTendencies;
+  sentencingTendencies: SentencingTendencies;
+  motionTendencies: MotionTendencies;
+  preferences: JudicialPreferences;
+  predictability: string;
+  confidence: string;
+}
+
+// Citation network interfaces
+export interface NetworkNode {
+  id: string;
+  type: string;
+  label: string;
+  citations: number;
+}
+
+export interface NetworkEdge {
+  source: string;
+  target: string;
+  weight: number;
+  type: string;
+}
+
+export interface NetworkMetrics {
+  centrality: string;
+  influence: string;
+  connectivity: string;
+}
+
+export interface CitationNetwork {
+  judgeId: string;
+  nodes: NetworkNode[];
+  edges: NetworkEdge[];
+  metrics: NetworkMetrics;
+}
+
+// Comparison interfaces
+export interface JudgeComparison {
+  judges: JudgeProfile[];
+  statistics: JudgeStatistics[];
+  tendencies: JudicialTendencies[];
+  comparison: {
+    averageCaseload: number;
+    averageRulingTime: number;
+    mostLenient: string;
+    mostPredictable: string;
+  };
+}
+
+// Memory statistics interface
+export interface MemoryStatistics {
+  judgesCached: number;
+  statsCached: number;
+  networksCached: number;
+  tendenciesCached: number;
+  memoryUsage: {
+    heapUsedMB: string;
+    heapTotalMB: string;
+  };
+}
+
+// Cache entry interface
+export interface CacheEntry<T> {
+  data: T;
+  timestamp: number;
+}
+
+// Query options interfaces
+export interface StatsQueryOptions {
+  startDate?: Date;
+  endDate?: Date;
+  caseType?: string;
+}
+
+export interface NetworkQueryOptions {
+  maxDepth?: number;
+  maxNodes?: number;
+}
+
 /**
  * Judge Statistics Service with Advanced Memory Engineering
  * 
@@ -35,10 +209,10 @@ export class JudgeStatsService implements OnModuleDestroy {
   private readonly MAX_RULINGS_HISTORY = 500;
   
   // Caches
-  private judgeCache: Map<string, { data: any; timestamp: number }> = new Map();
-  private statsCache: Map<string, { data: any; timestamp: number }> = new Map();
-  private networkCache: Map<string, { data: any; timestamp: number }> = new Map();
-  private tendencyCache: Map<string, { data: any; timestamp: number }> = new Map();
+  private judgeCache: Map<string, CacheEntry<JudgeProfile>> = new Map();
+  private statsCache: Map<string, CacheEntry<JudgeStatistics>> = new Map();
+  private networkCache: Map<string, CacheEntry<CitationNetwork>> = new Map();
+  private tendencyCache: Map<string, CacheEntry<JudicialTendencies>> = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
@@ -116,7 +290,7 @@ export class JudgeStatsService implements OnModuleDestroy {
   /**
    * Get judge profile with caching
    */
-  async getJudgeProfile(judgeId: string): Promise<any> {
+  async getJudgeProfile(judgeId: string): Promise<JudgeProfile> {
     const cached = this.judgeCache.get(judgeId);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       return cached.data;
@@ -147,11 +321,7 @@ export class JudgeStatsService implements OnModuleDestroy {
   /**
    * Get judge statistics with incremental updates
    */
-  async getJudgeStats(judgeId: string, options?: {
-    startDate?: Date;
-    endDate?: Date;
-    caseType?: string;
-  }): Promise<any> {
+  async getJudgeStats(judgeId: string, options?: StatsQueryOptions): Promise<JudgeStatistics> {
     const cacheKey = `stats_${judgeId}_${options?.startDate?.toISOString() || 'all'}`;
     
     const cached = this.statsCache.get(cacheKey);
@@ -208,7 +378,7 @@ export class JudgeStatsService implements OnModuleDestroy {
   /**
    * Get judicial tendencies with ML-based prediction
    */
-  async getJudicialTendencies(judgeId: string): Promise<any> {
+  async getJudicialTendencies(judgeId: string): Promise<JudicialTendencies> {
     const cached = this.tendencyCache.get(judgeId);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       return cached.data;
@@ -256,10 +426,7 @@ export class JudgeStatsService implements OnModuleDestroy {
   /**
    * Get citation network for judge
    */
-  async getCitationNetwork(judgeId: string, options?: {
-    maxDepth?: number;
-    maxNodes?: number;
-  }): Promise<any> {
+  async getCitationNetwork(judgeId: string, options?: NetworkQueryOptions): Promise<CitationNetwork> {
     const cacheKey = `network_${judgeId}`;
     
     const cached = this.networkCache.get(cacheKey);
@@ -302,7 +469,7 @@ export class JudgeStatsService implements OnModuleDestroy {
   /**
    * Compare judges
    */
-  async compareJudges(judgeIds: string[]): Promise<any> {
+  async compareJudges(judgeIds: string[]): Promise<JudgeComparison> {
     const profiles = await Promise.all(
       judgeIds.map(id => this.getJudgeProfile(id))
     );
@@ -335,8 +502,8 @@ export class JudgeStatsService implements OnModuleDestroy {
   /**
    * Batch judge statistics
    */
-  async batchJudgeStats(judgeIds: string[]): Promise<Map<string, any>> {
-    const results = new Map<string, any>();
+  async batchJudgeStats(judgeIds: string[]): Promise<Map<string, JudgeStatistics>> {
+    const results = new Map<string, JudgeStatistics>();
     
     for (let i = 0; i < judgeIds.length; i += this.MAX_BATCH_SIZE) {
       const batch = judgeIds.slice(i, i + this.MAX_BATCH_SIZE);
@@ -344,7 +511,7 @@ export class JudgeStatsService implements OnModuleDestroy {
       const batchResults = await Promise.all(
         batch.map(async judgeId => {
           const stats = await this.getJudgeStats(judgeId);
-          return [judgeId, stats] as [string, any];
+          return [judgeId, stats] as [string, JudgeStatistics];
         })
       );
       
@@ -363,7 +530,7 @@ export class JudgeStatsService implements OnModuleDestroy {
   /**
    * Get memory statistics
    */
-  getMemoryStats(): any {
+  getMemoryStats(): MemoryStatistics {
     return {
       judgesCached: this.judgeCache.size,
       statsCached: this.statsCache.size,

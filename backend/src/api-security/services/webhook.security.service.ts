@@ -6,8 +6,8 @@ import * as MasterConfig from '@config/master.config';
 export interface WebhookPayload {
   event: string;
   timestamp: number;
-  data: any;
-  metadata?: Record<string, any>;
+  data: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface WebhookDelivery {
@@ -88,7 +88,7 @@ export class WebhookSecurityService implements OnModuleDestroy {
     }
   }
 
-  async sendWebhook(webhookId: string, event: string, data: any, metadata?: Record<string, any>): Promise<WebhookDelivery> {
+  async sendWebhook(webhookId: string, event: string, data: Record<string, unknown>, metadata?: Record<string, unknown>): Promise<WebhookDelivery> {
     const webhook = this.webhooks.get(webhookId);
 
     if (!webhook) {
@@ -140,7 +140,6 @@ export class WebhookSecurityService implements OnModuleDestroy {
     delivery.lastAttemptAt = new Date();
     delivery.updatedAt = new Date();
 
-    const payloadString = JSON.stringify(delivery.payload);
     const timeoutMs = webhook.timeoutMs || MasterConfig.WEBHOOK_TIMEOUT_MS;
 
     try {

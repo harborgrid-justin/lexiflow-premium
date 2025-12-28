@@ -180,7 +180,11 @@ export class RateLimitService implements OnModuleInit, OnModuleDestroy {
     windowStart: number,
   ): Promise<RateLimitResult> {
     try {
-      const multi = this.redisClient!.multi();
+      if (!this.redisClient) {
+        return this.checkRateLimitFallback(key, config, now);
+      }
+
+      const multi = this.redisClient.multi();
 
       // Remove old entries (sliding window)
       multi.zRemRangeByScore(key, 0, windowStart);

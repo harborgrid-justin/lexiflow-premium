@@ -1,11 +1,100 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+
+interface NotificationChannels {
+  email: boolean;
+  push: boolean;
+  sms: boolean;
+  inApp: boolean;
+}
+
+interface NotificationTypes {
+  case_update?: boolean;
+  deadline?: boolean;
+  mention?: boolean;
+  system?: boolean;
+  [key: string]: boolean | undefined;
+}
+
+interface QuietHours {
+  enabled: boolean;
+  start: string;
+  end: string;
+}
+
+interface NotificationPreferences {
+  userId: string;
+  channels: NotificationChannels;
+  types: NotificationTypes;
+  quietHours: QuietHours;
+}
+
+interface QueuedNotification {
+  notificationId: string;
+  userId: string;
+  type: string;
+  title: string;
+  message: string;
+  data?: Record<string, unknown>;
+  priority?: number;
+  createdAt: Date;
+  status: 'queued' | 'delivered' | 'skipped' | 'failed';
+  deliveredAt?: Date;
+  error?: string;
+}
+
+interface PriorityQueueEntry {
+  priority: number;
+  notification: QueuedNotification;
+}
+
+interface NotificationTemplate {
+  type: string;
+  emailSubject: string;
+  emailBody: string;
+  pushTitle: string;
+  pushBody: string;
+  smsBody: string;
+  [key: string]: string;
+}
+
+interface RenderedNotification {
+  type: string;
+  emailSubject?: string;
+  emailBody?: string;
+  pushTitle?: string;
+  pushBody?: string;
+  smsBody?: string;
+  [key: string]: string | undefined;
+}
+
+interface NotificationHistoryEntry extends QueuedNotification {
+  archivedAt: Date;
+}
+
+interface CacheEntry<T> {
+  data: T;
+  timestamp: number;
+}
+
+interface MemoryStats {
+  queueUtilization: string;
+  queuePercentage: string;
+  preferencesCached: number;
+  templatesCached: number;
+  historyUtilization: string;
+  activeSubscriptions: number;
+  isProcessing: boolean;
+  memoryUsage: {
+    heapUsedMB: string;
+    heapTotalMB: string;
+    queueMemoryMB: string;
+  };
+}
 
 /**
  * Notifications Service with Advanced Memory Engineering
- * 
+ *
  * MEMORY OPTIMIZATIONS:
  * - Priority queue with circular buffer: 100K notifications
  * - LRU cache for user preferences: 5K users, 30-min TTL
@@ -15,7 +104,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
  * - Lazy-loaded delivery status tracking
  * - Compressed notification archives
  * - Real-time subscription management
- * 
+ *
  * PERFORMANCE CHARACTERISTICS:
  * - Delivery throughput: 10K notifications/sec
  * - Template rendering: <50ms with cache
@@ -37,17 +126,17 @@ export class NotificationsService implements OnModuleDestroy {
   private readonly DELIVERY_BATCH_SIZE = 100;
   
   // Priority queue (circular buffer)
-  private notificationQueue: Array<{ priority: number; notification: any }> = [];
+  private notificationQueue: Array<PriorityQueueEntry | null> = [];
   private queueWriteIndex = 0;
-  
+
   // Caches
-  private preferenceCache: Map<string, { data: any; timestamp: number }> = new Map();
-  private templateCache: Map<string, { data: any; timestamp: number }> = new Map();
-  private historyBuffer: Array<any> = [];
+  private preferenceCache: Map<string, CacheEntry<NotificationPreferences>> = new Map();
+  private templateCache: Map<string, CacheEntry<NotificationTemplate>> = new Map();
+  private historyBuffer: Array<NotificationHistoryEntry | null> = [];
   private historyWriteIndex = 0;
-  
+
   // Real-time subscriptions
-  private subscriptions: Map<string, Set<(notification: any) => void>> = new Map();
+  private subscriptions: Map<string, Set<(notification: QueuedNotification) => void>> = new Map();
   
   private cleanupInterval: NodeJS.Timeout | null = null;
   private processingInterval: NodeJS.Timeout | null = null;
@@ -96,8 +185,8 @@ export class NotificationsService implements OnModuleDestroy {
   }
   
   private initializeQueues(): void {
-    this.notificationQueue = new Array(this.MAX_QUEUE_SIZE);
-    this.historyBuffer = new Array(this.MAX_HISTORY_SIZE);
+    this.notificationQueue = new Array<PriorityQueueEntry | null>(this.MAX_QUEUE_SIZE).fill(null);
+    this.historyBuffer = new Array<NotificationHistoryEntry | null>(this.MAX_HISTORY_SIZE).fill(null);
     this.queueWriteIndex = 0;
     this.historyWriteIndex = 0;
     this.logger.log(
@@ -163,7 +252,7 @@ export class NotificationsService implements OnModuleDestroy {
     type: string;
     title: string;
     message: string;
-    data?: any;
+    data?: Record<string, unknown>;
     priority?: number;
   }): Promise<string> {
     const notificationId = `notif_${Date.now()}_${Math.random()}`;
@@ -212,7 +301,7 @@ export class NotificationsService implements OnModuleDestroy {
       pending.forEach(entry => {
         const index = this.notificationQueue.indexOf(entry);
         if (index >= 0) {
-          this.notificationQueue[index] = null as any;
+          this.notificationQueue[index] = null;
         }
       });
       
@@ -226,7 +315,7 @@ export class NotificationsService implements OnModuleDestroy {
   /**
    * Batch deliver notifications
    */
-  private async batchDeliver(notifications: any[]): Promise<void> {
+  private async batchDeliver(notifications: QueuedNotification[]): Promise<void> {
     const deliveryPromises = notifications.map(async notification => {
       try {
         // Get user preferences
@@ -256,7 +345,7 @@ export class NotificationsService implements OnModuleDestroy {
       } catch (error) {
         this.logger.error(`Failed to deliver notification ${notification.notificationId}:`, error);
         notification.status = 'failed';
-        notification.error = error.message;
+        notification.error = error instanceof Error ? error.message : String(error);
       }
     });
     
@@ -268,7 +357,7 @@ export class NotificationsService implements OnModuleDestroy {
   /**
    * Get user preferences with caching
    */
-  async getUserPreferences(userId: string): Promise<any> {
+  async getUserPreferences(userId: string): Promise<NotificationPreferences> {
     const cached = this.preferenceCache.get(userId);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       return cached.data;
@@ -307,7 +396,7 @@ export class NotificationsService implements OnModuleDestroy {
   /**
    * Check if notification should be delivered
    */
-  private shouldDeliver(notification: any, preferences: any): boolean {
+  private shouldDeliver(notification: QueuedNotification, preferences: NotificationPreferences): boolean {
     // Check type preference
     if (preferences.types && preferences.types[notification.type] === false) {
       return false;
@@ -328,7 +417,7 @@ export class NotificationsService implements OnModuleDestroy {
   /**
    * Render notification with template caching
    */
-  private async renderNotification(notification: any): Promise<any> {
+  private async renderNotification(notification: QueuedNotification): Promise<RenderedNotification> {
     const templateKey = `${notification.type}_template`;
     
     const cached = this.templateCache.get(templateKey);
@@ -357,8 +446,8 @@ export class NotificationsService implements OnModuleDestroy {
   /**
    * Apply template variables
    */
-  private applyTemplate(template: any, notification: any): any {
-    const rendered: any = {};
+  private applyTemplate(template: NotificationTemplate, notification: QueuedNotification): RenderedNotification {
+    const rendered: Record<string, string | undefined> = {};
     
     for (const [key, value] of Object.entries(template)) {
       if (typeof value === 'string') {
@@ -376,8 +465,8 @@ export class NotificationsService implements OnModuleDestroy {
   /**
    * Deliver notification to channels
    */
-  private async deliver(userId: string, rendered: any, channels: any): Promise<void> {
-    const deliveryPromises: Promise<any>[] = [];
+  private async deliver(userId: string, rendered: RenderedNotification, channels: NotificationChannels): Promise<void> {
+    const deliveryPromises: Promise<void>[] = [];
     
     if (channels.email) {
       deliveryPromises.push(this.deliverEmail(userId, rendered));
@@ -395,30 +484,34 @@ export class NotificationsService implements OnModuleDestroy {
     await Promise.all(deliveryPromises);
   }
   
-  private async deliverEmail(userId: string, rendered: any): Promise<void> {
-    // Mock email delivery
+  private async deliverEmail(userId: string, rendered: RenderedNotification): Promise<void> {
+    // Mock email delivery - Future: send email using rendered.emailSubject, rendered.emailBody
+    this.logger.debug(`Mock email delivery for user ${userId}: ${rendered.emailSubject || rendered.type}`);
     await new Promise(resolve => setTimeout(resolve, 10));
   }
-  
-  private async deliverPush(userId: string, rendered: any): Promise<void> {
-    // Mock push delivery
+
+  private async deliverPush(userId: string, rendered: RenderedNotification): Promise<void> {
+    // Mock push delivery - Future: send push notification using rendered.pushTitle, rendered.pushBody
+    this.logger.debug(`Mock push delivery for user ${userId}: ${rendered.pushTitle || rendered.type}`);
     await new Promise(resolve => setTimeout(resolve, 5));
   }
-  
-  private async deliverSMS(userId: string, rendered: any): Promise<void> {
-    // Mock SMS delivery
+
+  private async deliverSMS(userId: string, rendered: RenderedNotification): Promise<void> {
+    // Mock SMS delivery - Future: send SMS using rendered.smsBody
+    this.logger.debug(`Mock SMS delivery for user ${userId}: ${rendered.smsBody || rendered.type}`);
     await new Promise(resolve => setTimeout(resolve, 20));
   }
-  
-  private async deliverInApp(userId: string, rendered: any): Promise<void> {
-    // Mock in-app delivery (instant)
+
+  private async deliverInApp(userId: string, rendered: RenderedNotification): Promise<void> {
+    // Mock in-app delivery - Future: send in-app notification using rendered data
+    this.logger.debug(`Mock in-app delivery for user ${userId}: ${rendered.type}`);
     await new Promise(resolve => setTimeout(resolve, 1));
   }
   
   /**
    * Add notification to history buffer
    */
-  private addToHistory(notification: any): void {
+  private addToHistory(notification: QueuedNotification): void {
     this.historyBuffer[this.historyWriteIndex] = {
       ...notification,
       archivedAt: new Date(),
@@ -429,12 +522,15 @@ export class NotificationsService implements OnModuleDestroy {
   /**
    * Subscribe to real-time notifications
    */
-  subscribe(userId: string, callback: (notification: any) => void): () => void {
+  subscribe(userId: string, callback: (notification: QueuedNotification) => void): () => void {
     if (!this.subscriptions.has(userId)) {
       this.subscriptions.set(userId, new Set());
     }
-    
-    this.subscriptions.get(userId)!.add(callback);
+
+    const userSubs = this.subscriptions.get(userId);
+    if (userSubs) {
+      userSubs.add(callback);
+    }
     
     // Return unsubscribe function
     return () => {
@@ -451,7 +547,7 @@ export class NotificationsService implements OnModuleDestroy {
   /**
    * Notify subscribers
    */
-  private notifySubscribers(userId: string, notification: any): void {
+  private notifySubscribers(userId: string, notification: QueuedNotification): void {
     const userSubs = this.subscriptions.get(userId);
     if (userSubs) {
       userSubs.forEach(callback => {
@@ -467,8 +563,8 @@ export class NotificationsService implements OnModuleDestroy {
   /**
    * Get user notification history
    */
-  async getHistory(userId: string, limit: number = 50): Promise<any[]> {
-    const history: any[] = [];
+  async getHistory(userId: string, limit: number = 50): Promise<NotificationHistoryEntry[]> {
+    const history: NotificationHistoryEntry[] = [];
     
     let index = this.historyWriteIndex - 1;
     if (index < 0) index = this.MAX_HISTORY_SIZE - 1;
@@ -489,7 +585,7 @@ export class NotificationsService implements OnModuleDestroy {
   /**
    * Get memory statistics
    */
-  getMemoryStats(): any {
+  getMemoryStats(): MemoryStats {
     const queueUtilization = this.notificationQueue.filter(n => n).length;
     const historyUtilization = this.historyBuffer.filter(h => h).length;
     

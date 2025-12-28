@@ -1,8 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe, Logger, VersioningType } from '@nestjs/common';
+import { ValidationPipe, Logger, VersioningType, INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
-import * as compression from 'compression';
+import compression, { CompressionFilter } from 'compression';
+import { Request, Response } from 'express';
 import { AppModule } from './app.module';
 import { EnterpriseExceptionFilter } from './common/filters/enterprise-exception.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
@@ -10,7 +11,6 @@ import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import { validationPipeConfig } from './config/validation';
 import { setupSwagger } from './config/swagger.config';
 import { initTelemetry, shutdownTelemetry } from './telemetry';
-import { ShutdownService } from './core/services/shutdown.service';
 import * as MasterConfig from './config/master.config';
 
 /**
@@ -107,24 +107,34 @@ async function bootstrap() {
   }));
 
   // Compression with optimized settings
-  app.use(compression.default({
+  // Define proper types for compression with filter property
+  interface CompressionFunction {
+    (options?: compression.CompressionOptions): ReturnType<typeof compression>;
+    filter: CompressionFilter;
+  }
+
+  const compressionFilter: CompressionFilter = (req: Request, res: Response): boolean => {
+    if (req.headers['x-no-compression']) {
+      return false;
+    }
+    // Call default compression filter to check content-type, etc.
+    const compressionWithFilter = compression as unknown as CompressionFunction;
+    return compressionWithFilter.filter(req, res);
+  };
+
+  app.use(compression({
     level: 6,
     threshold: 1024,
     memLevel: 8,
-    filter: (req: any, res: any) => {
-      if (req.headers['x-no-compression']) {
-        return false;
-      }
-      return compression.default.filter(req, res);
-    },
+    filter: compressionFilter,
   }));
 
   const configService = app.get(ConfigService);
 
   // CORS Configuration
   app.enableCors({
-    origin: configService.get('cors.origin'),
-    credentials: configService.get('cors.credentials'),
+    origin: configService.get<string | string[] | boolean>('cors.origin'),
+    credentials: configService.get<boolean>('cors.credentials'),
   });
 
   // Global API Prefix - All routes will be prefixed with /api
@@ -153,10 +163,10 @@ async function bootstrap() {
   setupSwagger(app);
 
   // Start server on all interfaces (0.0.0.0) to accept connections from any IP
-  const port = configService.get('port');
+  const port = configService.get<number>('port');
   await app.listen(port, '0.0.0.0');
 
-  const env = configService.get('nodeEnv');
+  const env = configService.get<string>('nodeEnv');
   const telemetryStatus = process.env.OTEL_ENABLED === 'true' ? 'Enabled' : 'Disabled';
 
   // Log security features initialization
@@ -176,9 +186,9 @@ async function bootstrap() {
 ║                                                                   ║
 ║   Server: http://localhost:${port}                                     ║
 ║   API Docs: http://localhost:${port}/api/docs                          ║
-║   Version: ${APP_VERSION.padEnd(54)}║
-║   Environment: ${env.padEnd(53)}║
-║   Telemetry: ${telemetryStatus.padEnd(53)}║
+║   Version: ${String(APP_VERSION).padEnd(54)}║
+║   Environment: ${String(env).padEnd(53)}║
+║   Telemetry: ${String(telemetryStatus).padEnd(53)}║
 ║                                                                   ║
 ║   Enterprise Infrastructure:                                      ║
 ║   ✓ Core Coordination Module (Bootstrap & Shutdown)              ║
@@ -238,7 +248,7 @@ async function bootstrap() {
 /**
  * Setup graceful shutdown handlers for SIGTERM and SIGINT
  */
-function setupShutdownHandlers(app: any, logger: Logger) {
+function setupShutdownHandlers(app: INestApplication, logger: Logger) {
   const shutdownHandler = async (signal: string) => {
     logger.log('');
     logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
@@ -247,9 +257,6 @@ function setupShutdownHandlers(app: any, logger: Logger) {
     logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
     try {
-      // Get shutdown service from the application context
-      const shutdownService = app.get(ShutdownService);
-
       // Trigger graceful shutdown
       await app.close();
 

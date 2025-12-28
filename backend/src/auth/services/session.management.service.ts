@@ -9,7 +9,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThan, MoreThan } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Session } from '@auth/entities/session.entity';
-import * as UAParser from 'ua-parser-js';
+import UAParser from 'ua-parser-js';
+
+interface UAParserResult {
+  name?: string;
+  version?: string;
+}
+
+interface UADeviceResult {
+  type?: string;
+  vendor?: string;
+  model?: string;
+}
 
 export interface SessionInfo {
   id: string;
@@ -119,9 +130,9 @@ export class SessionManagementService implements OnModuleDestroy {
     metadata?: Record<string, unknown>,
   ): Promise<Session> {
     const parser = new UAParser(deviceFingerprint.userAgent);
-    const browserInfo = parser.getBrowser();
-    const osInfo = parser.getOS();
-    const deviceInfo = parser.getDevice();
+    const browserInfo = this.extractBrowserInfo(parser);
+    const osInfo = this.extractOSInfo(parser);
+    const deviceInfo = this.extractDeviceInfo(parser);
 
     const expiresAt = new Date();
     expiresAt.setHours(expiresAt.getHours() + this.sessionExpiryHours);
@@ -180,6 +191,52 @@ export class SessionManagementService implements OnModuleDestroy {
   }
 
   /**
+   * Extract browser information from UAParser with proper typing
+   */
+  private extractBrowserInfo(parser: UAParser): UAParserResult {
+    try {
+      const result = parser.getBrowser();
+      return {
+        name: result.name,
+        version: result.version,
+      };
+    } catch {
+      return {};
+    }
+  }
+
+  /**
+   * Extract OS information from UAParser with proper typing
+   */
+  private extractOSInfo(parser: UAParser): UAParserResult {
+    try {
+      const result = parser.getOS();
+      return {
+        name: result.name,
+        version: result.version,
+      };
+    } catch {
+      return {};
+    }
+  }
+
+  /**
+   * Extract device information from UAParser with proper typing
+   */
+  private extractDeviceInfo(parser: UAParser): UADeviceResult {
+    try {
+      const result = parser.getDevice();
+      return {
+        type: result.type,
+        vendor: result.vendor,
+        model: result.model,
+      };
+    } catch {
+      return {};
+    }
+  }
+
+  /**
    * Get all active sessions for a user
    */
   async getActiveSessions(userId: string, currentSessionId?: string): Promise<SessionInfo[]> {
@@ -218,8 +275,9 @@ export class SessionManagementService implements OnModuleDestroy {
    * Get session by ID
    */
   async getSessionById(sessionId: string): Promise<Session | null> {
-    if (this.sessionCache.has(sessionId)) {
-      return this.sessionCache.get(sessionId)!;
+    const cachedSession = this.sessionCache.get(sessionId);
+    if (cachedSession) {
+      return cachedSession;
     }
 
     const session = await this.sessionRepository.findOne({
@@ -433,7 +491,6 @@ export class SessionManagementService implements OnModuleDestroy {
   async isNewDevice(
     userId: string,
     userAgent: string,
-    ipAddress: string,
   ): Promise<boolean> {
     const existingSessionCount = await this.sessionRepository.count({
       where: {

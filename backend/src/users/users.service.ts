@@ -55,11 +55,11 @@ export class UsersService implements OnModuleInit {
           console.info('[UsersService] Default admin user created successfully');
         }
       }
-    } catch (error) {
+    } catch {
       // Silently fail if table doesn't exist yet (during initial schema creation)
       // The admin will be created on next restart or can be seeded manually
       if (process.env.NODE_ENV !== 'production') {
-         
+
         console.info('[UsersService] Skipping default admin creation - database schema not ready yet');
       }
     }
@@ -157,7 +157,14 @@ export class UsersService implements OnModuleInit {
     }
 
     // Build update object
-    const updateData: any = {};
+    const updateData: Partial<{
+      email: string;
+      firstName: string;
+      lastName: string;
+      role: UserRole;
+      status: UserStatus;
+      twoFactorEnabled: boolean;
+    }> = {};
     if (updateUserDto.email) updateData.email = updateUserDto.email;
     if (updateUserDto.firstName) updateData.firstName = updateUserDto.firstName;
     if (updateUserDto.lastName) updateData.lastName = updateUserDto.lastName;
@@ -181,7 +188,12 @@ export class UsersService implements OnModuleInit {
       throw new NotFoundException('User not found');
     }
 
-    return this.toAuthenticatedUser(result.raw[0]);
+    const rawResult = result.raw as User[];
+    if (!rawResult[0]) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.toAuthenticatedUser(rawResult[0]);
   }
 
   async remove(id: string): Promise<void> {
@@ -271,7 +283,8 @@ export class UsersService implements OnModuleInit {
   }
 
   // Map between old Role enum and new UserRole enum
-  private mapToUserRole(role: any): UserRole {
+  private mapToUserRole(role: string | Role): UserRole {
+    const roleStr = String(role);
     const roleMapping: Record<string, UserRole> = {
       super_admin: UserRole.SUPER_ADMIN,
       admin: UserRole.ADMIN,
@@ -282,7 +295,7 @@ export class UsersService implements OnModuleInit {
       client: UserRole.CLIENT,
       client_user: UserRole.CLIENT,
     };
-    return roleMapping[role] || UserRole.STAFF;
+    return roleMapping[roleStr] || UserRole.STAFF;
   }
 
   private mapFromUserRole(userRole: UserRole): Role {

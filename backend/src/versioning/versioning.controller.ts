@@ -18,7 +18,7 @@ export class VersioningController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Health check' })
   @ApiResponse({ status: 200, description: 'Service is healthy' })
-  health() {
+  health(): { status: string; service: string } {
     return { status: 'ok', service: 'versioning' };
   }
 
@@ -29,7 +29,7 @@ export class VersioningController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createVersion(@Body() body: any) {
+  async createVersion(@Body() body: Record<string, unknown>): Promise<unknown> {
     return await this.versioningService.createVersion(body);
   }
 
@@ -40,8 +40,8 @@ export class VersioningController {
   async getVersionHistory(
     @Param('entityType') entityType: string,
     @Param('entityId') entityId: string,
-    @Query() query: any,
-  ) {
+    @Query() query: Record<string, unknown>,
+  ): Promise<unknown> {
     return await this.versioningService.getVersionHistory(entityType, entityId, query);
   }
 
@@ -52,7 +52,7 @@ export class VersioningController {
   async getBranches(
     @Param('entityType') entityType: string,
     @Param('entityId') entityId: string,
-  ) {
+  ): Promise<unknown> {
     return await this.versioningService.getBranches(entityType, entityId);
   }
 
@@ -63,7 +63,7 @@ export class VersioningController {
   async getTags(
     @Param('entityType') entityType: string,
     @Param('entityId') entityId: string,
-  ) {
+  ): Promise<unknown> {
     return await this.versioningService.getTags(entityType, entityId);
   }
 
@@ -72,7 +72,7 @@ export class VersioningController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async getVersion(@Param('id') id: string) {
+  async getVersion(@Param('id') id: string): Promise<unknown> {
     return await this.versioningService.getVersion(id);
   }
 
@@ -83,7 +83,7 @@ export class VersioningController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async tagVersion(@Param('id') id: string, @Body() body: { tag: string }) {
+  async tagVersion(@Param('id') id: string, @Body() body: { tag: string }): Promise<unknown> {
     return await this.versioningService.tagVersion(id, body.tag);
   }
 
@@ -92,7 +92,7 @@ export class VersioningController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async compareVersions(@Param('id1') id1: string, @Param('id2') id2: string) {
+  async compareVersions(@Param('id1') id1: string, @Param('id2') id2: string): Promise<unknown> {
     return await this.versioningService.compareVersions(id1, id2);
   }
 }

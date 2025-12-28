@@ -10,18 +10,28 @@ import {
   DownloadReportDto,
 } from './dto/reports.dto';
 import { validatePagination } from '@common/utils/query-validation.util';
+import {
+  ReportTemplate,
+  ReportRecord,
+  ReportGenerationRequest,
+  ScheduledReport,
+  ReportStatusResponse,
+  ExportReportResult,
+  DownloadReportResult,
+  ReportCancellationResult,
+} from './interfaces/report.interfaces';
 
 @Injectable()
 export class ReportsService implements OnModuleDestroy {
   private readonly logger = new Logger(ReportsService.name);
-  private reportTemplates: any[] = [];
-  private reports: Map<string, any> = new Map();
+  private reportTemplates: ReportTemplate[] = [];
+  private reports: Map<string, ReportRecord> = new Map();
   private readonly MAX_REPORTS_IN_MEMORY = 1000;
   private readonly REPORT_TTL_MS = 24 * 60 * 60 * 1000;
   private cleanupInterval: NodeJS.Timeout;
 
   constructor(
-    // @InjectRepository(Report) private reportRepository: Repository<any>,
+    // @InjectRepository(Report) private reportRepository: Repository<ReportRecord>,
     // Inject repositories when entities are available
   ) {
     this.initializeTemplates();
@@ -84,7 +94,7 @@ export class ReportsService implements OnModuleDestroy {
   /**
    * Get list of available report templates
    */
-  async getGeneratedReports(): Promise<any[]> {
+  async getGeneratedReports(): Promise<ReportRecord[]> {
     this.logger.debug('Fetching all generated reports');
     this.cleanupOldReports();
     return Array.from(this.reports.values()).sort(
@@ -92,7 +102,7 @@ export class ReportsService implements OnModuleDestroy {
     );
   }
 
-  async getReportsByType(type: string): Promise<any[]> {
+  async getReportsByType(type: string): Promise<ReportRecord[]> {
     this.logger.debug(`Fetching reports of type: ${type}`);
     return Array.from(this.reports.values())
       .filter(report => report.type === type)
@@ -498,11 +508,11 @@ export class ReportsService implements OnModuleDestroy {
     */
   }
 
-  async findAll(): Promise<any[]> {
+  async findAll(): Promise<ReportRecord[]> {
     return Array.from(this.reports.values());
   }
 
-  async findById(id: string): Promise<any> {
+  async findById(id: string): Promise<ReportRecord> {
     const report = this.reports.get(id);
     if (!report) {
       throw new NotFoundException(`Report with ID ${id} not found`);
@@ -510,7 +520,7 @@ export class ReportsService implements OnModuleDestroy {
     return report;
   }
 
-  async generate(generateDto: any, userId: string): Promise<any> {
+  async generate(generateDto: ReportGenerationRequest, userId: string): Promise<ReportRecord> {
     // Memory optimization: Check limits before generating
     if (this.reports.size >= this.MAX_REPORTS_IN_MEMORY) {
       this.cleanupOldReports();
@@ -521,14 +531,21 @@ export class ReportsService implements OnModuleDestroy {
     }
 
     const reportId = this.generateReportId();
-    const report = {
+    const report: ReportRecord = {
       id: reportId,
-      ...generateDto,
+      type: generateDto.type,
+      title: generateDto.title,
+      description: generateDto.description,
       status: 'pending',
+      format: generateDto.format || ReportFormat.PDF,
       generatedBy: userId,
       generatedAt: new Date(),
       createdAt: new Date(),
       updatedAt: new Date(),
+      startDate: generateDto.startDate ? new Date(generateDto.startDate) : undefined,
+      endDate: generateDto.endDate ? new Date(generateDto.endDate) : undefined,
+      filters: generateDto.filters,
+      parameters: generateDto.parameters,
     };
     this.reports.set(reportId, report);
     return report;
@@ -540,7 +557,7 @@ export class ReportsService implements OnModuleDestroy {
     this.reports.delete(id);
   }
 
-  async download(id: string): Promise<any> {
+  async download(id: string): Promise<DownloadReportResult> {
     const report = await this.findById(id);
     return {
       id: report.id,
@@ -549,19 +566,19 @@ export class ReportsService implements OnModuleDestroy {
     };
   }
 
-  async findByType(type: string): Promise<any[]> {
+  async findByType(type: string): Promise<ReportRecord[]> {
     return Array.from(this.reports.values()).filter(r => r.type === type);
   }
 
-  async findByUser(userId: string): Promise<any[]> {
+  async findByUser(userId: string): Promise<ReportRecord[]> {
     return Array.from(this.reports.values()).filter(r => r.generatedBy === userId);
   }
 
-  async getTemplates(): Promise<any[]> {
+  async getTemplates(): Promise<ReportTemplate[]> {
     return this.reportTemplates;
   }
 
-  async getTemplateById(id: string): Promise<any> {
+  async getTemplateById(id: string): Promise<ReportTemplate> {
     const template = this.reportTemplates.find(t => t.id === id);
     if (!template) {
       throw new NotFoundException(`Template with ID ${id} not found`);
@@ -569,19 +586,41 @@ export class ReportsService implements OnModuleDestroy {
     return template;
   }
 
-  async createTemplate(createDto: any, _userId: string): Promise<any> {
-    return { id: 'template-' + Date.now(), ...createDto };
-  }
-
-  async scheduleReport(scheduleDto: any, _userId?: string): Promise<any> {
-    return {
-      scheduleId: 'schedule-' + Date.now(),
-      nextRun: new Date(Date.now() + 86400000),
-      ...scheduleDto
+  async createTemplate(createDto: Partial<ReportTemplate>, _userId: string): Promise<ReportTemplate> {
+    const template: ReportTemplate = {
+      id: 'template-' + Date.now(),
+      name: createDto.name || 'New Template',
+      type: createDto.type || ReportType.CUSTOM,
+      description: createDto.description,
+      category: createDto.category,
+      defaultFormat: createDto.defaultFormat,
+      sections: createDto.sections,
+      parameters: createDto.parameters,
+      scheduling: createDto.scheduling,
+      isSystem: false,
+      createdBy: _userId,
+      createdAt: new Date(),
     };
+    return template;
   }
 
-  async getScheduledReports(userId: string): Promise<any[]> {
+  async scheduleReport(scheduleDto: Partial<ScheduledReport>, _userId?: string): Promise<ScheduledReport> {
+    const schedule: ScheduledReport = {
+      scheduleId: 'schedule-' + Date.now(),
+      templateId: scheduleDto.templateId || '',
+      frequency: scheduleDto.frequency || 'daily',
+      parameters: scheduleDto.parameters || {},
+      recipients: scheduleDto.recipients || [],
+      enabled: scheduleDto.enabled !== undefined ? scheduleDto.enabled : true,
+      lastRun: null,
+      nextRun: scheduleDto.nextRun || new Date(Date.now() + 86400000),
+      createdAt: new Date(),
+      createdBy: _userId,
+    };
+    return schedule;
+  }
+
+  async getScheduledReports(userId: string): Promise<ReportRecord[]> {
     this.logger.debug(`Fetching scheduled reports for user: ${userId}`);
     // In production, this would query a scheduled_reports table
     // For now, filter reports with status 'scheduled' and matching userId
@@ -590,15 +629,15 @@ export class ReportsService implements OnModuleDestroy {
       .sort((a, b) => new Date(a.scheduledAt || a.createdAt).getTime() - new Date(b.scheduledAt || b.createdAt).getTime());
   }
 
-  async cancelScheduledReport(scheduleId: string, _userId: string): Promise<any> {
+  async cancelScheduledReport(scheduleId: string, _userId: string): Promise<ReportCancellationResult> {
     return { id: scheduleId, status: 'cancelled', success: true };
   }
 
-  async getReportStatus(id: string): Promise<any> {
+  async getReportStatus(id: string): Promise<ReportStatusResponse> {
     return { id, status: 'completed', progress: 100 };
   }
 
-  async exportReport(id: string, format: string): Promise<any> {
+  async exportReport(id: string, format: string): Promise<ExportReportResult> {
     return { id, format, filePath: `/reports/${id}.${format}`, url: `/reports/download/${id}` };
   }
 

@@ -1,14 +1,36 @@
 import { Injectable, Logger } from '@nestjs/common';
 
+export interface IntegrationConfig {
+  [key: string]: string | number | boolean | null | undefined;
+}
+
 export interface IntegrationStatus {
   name: string;
   enabled: boolean;
   status: 'connected' | 'disconnected' | 'error';
   lastSync?: Date;
   error?: string;
-  config?: {
-    [key: string]: any;
-  };
+  config?: IntegrationConfig;
+}
+
+export interface IntegrationSettings {
+  username?: string | null;
+  baseUrl?: string | null;
+  apiKey?: string | null;
+  clientId?: string | null;
+  region?: string | null;
+  bucket?: string | null;
+  node?: string | null;
+  host?: string | null;
+  port?: string | null;
+}
+
+export interface IntegrationConfigResponse {
+  name: string;
+  enabled: boolean;
+  lastSync: Date;
+  status: string;
+  settings: IntegrationSettings;
 }
 
 /**
@@ -138,8 +160,9 @@ export class ExternalApiService {
           this.logger.warn(`Unknown integration: ${integrationName}`);
           return false;
       }
-    } catch (error: any) {
-      this.logger.error(`Integration test failed for ${integrationName}:`, error.message);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Integration test failed for ${integrationName}:`, errorMessage);
       return false;
     }
   }
@@ -147,11 +170,11 @@ export class ExternalApiService {
   /**
    * Get integration configuration
    */
-  async getIntegrationConfig(integrationName: string): Promise<any> {
+  async getIntegrationConfig(integrationName: string): Promise<IntegrationConfigResponse> {
     this.logger.log(`Getting config for integration: ${integrationName}`);
 
     // Mock configuration retrieval
-    const config = {
+    const config: IntegrationConfigResponse = {
       name: integrationName,
       enabled: true,
       lastSync: new Date(),

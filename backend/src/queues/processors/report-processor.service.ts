@@ -3,10 +3,21 @@ import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 import { QUEUE_NAMES } from '@queues/constants';
 
+export interface ReportFilters {
+  dateFrom?: string;
+  dateTo?: string;
+  status?: string | string[];
+  category?: string | string[];
+  assignedTo?: string | string[];
+  tags?: string[];
+  searchTerm?: string;
+  customFields?: Record<string, unknown>;
+}
+
 export interface ReportJob {
   reportType: string;
   userId: string;
-  filters?: any;
+  filters?: ReportFilters;
   format?: 'pdf' | 'excel' | 'csv';
 }
 

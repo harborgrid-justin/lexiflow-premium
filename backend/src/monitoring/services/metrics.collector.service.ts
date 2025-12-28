@@ -22,6 +22,51 @@ export interface HistogramData {
   p99: number;
 }
 
+export interface MetricsSnapshot {
+  counters: Record<string, number>;
+  gauges: Record<string, number>;
+  histograms: Record<string, HistogramData>;
+  timestamp: string;
+}
+
+export interface RequestStatistics {
+  count: number;
+  errors: number;
+  errorRate: number;
+  avgDuration: number;
+  minDuration: number;
+  maxDuration: number;
+  p50: number;
+  p95: number;
+  p99: number;
+}
+
+export interface DatabaseStatistics {
+  totalQueries: number;
+  totalErrors: number;
+  errorRate: number;
+  avgDuration: number;
+  minDuration: number;
+  maxDuration: number;
+  p50: number;
+  p95: number;
+  p99: number;
+}
+
+export interface CacheStatistics {
+  hits: number;
+  misses: number;
+  total: number;
+  hitRatio: number;
+}
+
+export interface MetricToSave {
+  metricName: string;
+  value: number;
+  unit: string;
+  timestamp: Date;
+}
+
 /**
  * Metrics Collector Service
  * Collects and aggregates application metrics for monitoring and observability
@@ -355,7 +400,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
   /**
    * Get current metrics snapshot
    */
-  getMetricsSnapshot(): any {
+  getMetricsSnapshot(): MetricsSnapshot {
     return {
       counters: Object.fromEntries(this.counters),
       gauges: Object.fromEntries(this.gauges),
@@ -443,8 +488,8 @@ export class MetricsCollectorService implements OnModuleDestroy {
   /**
    * Get request statistics by endpoint
    */
-  getRequestStats(): any {
-    const stats: any = {};
+  getRequestStats(): Record<string, RequestStatistics> {
+    const stats: Record<string, RequestStatistics> = {};
 
     this.requestCounts.forEach((count, endpoint) => {
       const durations = this.requestDurations.get(endpoint) || [];
@@ -471,7 +516,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
   /**
    * Get database statistics
    */
-  getDatabaseStats(): any {
+  getDatabaseStats(): DatabaseStatistics {
     const sorted = [...this.queryDurations].sort((a, b) => a - b);
     const sum = this.queryDurations.reduce((a, b) => a + b, 0);
 
@@ -491,7 +536,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
   /**
    * Get cache statistics
    */
-  getCacheStats(): any {
+  getCacheStats(): CacheStatistics {
     const total = this.cacheHits + this.cacheMisses;
     return {
       hits: this.cacheHits,
@@ -525,13 +570,13 @@ export class MetricsCollectorService implements OnModuleDestroy {
     const snapshot = this.getMetricsSnapshot();
     const timestamp = new Date();
 
-    const metricsToSave: any[] = [];
+    const metricsToSave: MetricToSave[] = [];
 
     // Save counters
     for (const [name, value] of Object.entries(snapshot.counters)) {
       metricsToSave.push({
         metricName: name,
-        value: value as number,
+        value,
         unit: 'count',
         timestamp,
       });
@@ -541,7 +586,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
     for (const [name, value] of Object.entries(snapshot.gauges)) {
       metricsToSave.push({
         metricName: name,
-        value: value as number,
+        value,
         unit: 'gauge',
         timestamp,
       });

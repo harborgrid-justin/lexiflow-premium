@@ -25,8 +25,7 @@ export class StreamProcessingMiddleware implements NestMiddleware {
     );
   }
 
-  use(req: Request, unusedResponse: Response, next: NextFunction): void {
-    void unusedResponse;
+  use(req: Request, _res: Response, next: NextFunction): void {
     const contentLength = parseInt(req.get('content-length') || '0', 10);
 
     if (contentLength > this.streamThreshold) {

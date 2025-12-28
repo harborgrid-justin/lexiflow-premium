@@ -34,9 +34,9 @@ export class AiOpsService implements OnModuleDestroy {
   private readonly SIMILARITY_THRESHOLD = 0.7;
   
   // Caches
-  private similarityCache: Map<string, { results: any[]; timestamp: number }> = new Map();
+  private similarityCache: Map<string, { results: { results: VectorEmbedding[]; count: number; processedVectors: number }; timestamp: number }> = new Map();
   private modelCache: Map<string, { data: AIModel; timestamp: number }> = new Map();
-  private embeddingStatsCache: Map<string, { stats: any; timestamp: number }> = new Map();
+  private embeddingStatsCache: Map<string, { stats: Record<string, unknown>; timestamp: number }> = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
@@ -444,14 +444,6 @@ export class AiOpsService implements OnModuleDestroy {
 
     return dotProduct / (magnitudeA * magnitudeB);
   }
-    const magnitudeB = Math.sqrt(vecB.reduce((sum, b) => sum + b * b, 0));
-
-    if (magnitudeA === 0 || magnitudeB === 0) {
-      return 0;
-    }
-
-    return dotProduct / (magnitudeA * magnitudeB);
-  }
 
   /**
    * Get models with caching
@@ -539,13 +531,13 @@ export class AiOpsService implements OnModuleDestroy {
     const result = await this.modelRepository
       .createQueryBuilder('model')
       .select('SUM(model.usageCount)', 'totalUsage')
-      .getRawOne();
+      .getRawOne() as { totalUsage?: string | number } | undefined;
 
     const stats = {
       totalEmbeddings,
       totalModels,
       activeModels,
-      totalUsage: parseInt(result?.totalUsage || '0'),
+      totalUsage: parseInt(String(result?.totalUsage || '0')),
       cacheMetrics: {
         similarityResultsCached: this.similarityCache.size,
         modelsCached: this.modelCache.size,

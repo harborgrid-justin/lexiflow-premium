@@ -16,16 +16,18 @@ import {
 } from '@authorization/decorators/permissions.decorator';
 import { IS_PUBLIC_KEY } from '@common/decorators/public.decorator';
 
+interface AuthenticatedUser {
+  id: string;
+  role: UserRole;
+  organizationId?: string;
+  departmentId?: string;
+  permissions?: string[];
+}
+
 interface RequestWithUser {
-  user?: {
-    id: string;
-    role: UserRole;
-    organizationId?: string;
-    departmentId?: string;
-    permissions?: string[];
-  };
+  user?: AuthenticatedUser;
   params?: Record<string, string>;
-  body?: any;
+  body?: Record<string, unknown>;
   query?: Record<string, string>;
   ip?: string;
   headers?: Record<string, string>;
@@ -38,7 +40,18 @@ interface ResourceWithOwner {
   ownerId?: string;
   organizationId?: string;
   status?: string;
-  [key: string]: any;
+  [key: string]: unknown;
+}
+
+interface OwnershipRequirement {
+  field?: string;
+  allowDelegation?: boolean;
+  allowTeamMembers?: boolean;
+}
+
+interface PolicyConfig {
+  name: string;
+  config?: Record<string, unknown>;
 }
 
 @Injectable()
@@ -92,7 +105,7 @@ export class ResourceAccessGuard implements CanActivate {
       [context.getHandler(), context.getClass()]
     );
 
-    const ownershipRequirement = this.reflector.getAllAndOverride<any>(
+    const ownershipRequirement = this.reflector.getAllAndOverride<OwnershipRequirement>(
       REQUIRE_OWNERSHIP_KEY,
       [context.getHandler(), context.getClass()]
     );
@@ -102,7 +115,7 @@ export class ResourceAccessGuard implements CanActivate {
       [context.getHandler(), context.getClass()]
     );
 
-    const policyConfig = this.reflector.getAllAndOverride<any>(
+    const policyConfig = this.reflector.getAllAndOverride<PolicyConfig>(
       PERMISSION_POLICY_KEY,
       [context.getHandler(), context.getClass()]
     );
@@ -251,7 +264,12 @@ export class ResourceAccessGuard implements CanActivate {
       return null;
     }
 
-    if (request.body && request.body.id === resourceId) {
+    // Log resource access for audit purposes
+    if (resourceType) {
+      this.logger.debug(`Accessing resource type: ${resourceType}, id: ${resourceId}`);
+    }
+
+    if (request.body && typeof request.body === 'object' && request.body.id === resourceId) {
       return request.body as ResourceWithOwner;
     }
 
@@ -262,16 +280,17 @@ export class ResourceAccessGuard implements CanActivate {
 
   private extractOwnerId(
     resource: ResourceWithOwner | null,
-    ownershipRequirement: any
+    ownershipRequirement: OwnershipRequirement | null
   ): string | undefined {
     if (!resource || !ownershipRequirement) {
       return undefined;
     }
 
     const ownerField = ownershipRequirement.field || 'createdBy';
+    const ownerValue = resource[ownerField];
 
     return (
-      resource[ownerField] ||
+      (typeof ownerValue === 'string' ? ownerValue : undefined) ||
       resource.createdBy ||
       resource.userId ||
       resource.ownerId
@@ -279,9 +298,9 @@ export class ResourceAccessGuard implements CanActivate {
   }
 
   private async validateOwnership(
-    user: any,
+    user: AuthenticatedUser,
     resource: ResourceWithOwner | null,
-    ownershipRequirement: any
+    ownershipRequirement: OwnershipRequirement
   ): Promise<boolean> {
     if (!resource) {
       return true;
@@ -314,7 +333,7 @@ export class ResourceAccessGuard implements CanActivate {
   }
 
   private async validateDelegation(
-    user: any,
+    user: AuthenticatedUser,
     resource: ResourceWithOwner | null
   ): Promise<boolean> {
     if (!resource) {
@@ -325,7 +344,7 @@ export class ResourceAccessGuard implements CanActivate {
   }
 
   private async validateTeamMembership(
-    user: any,
+    user: AuthenticatedUser,
     resource: ResourceWithOwner | null
   ): Promise<boolean> {
     if (!resource) {
@@ -336,7 +355,7 @@ export class ResourceAccessGuard implements CanActivate {
   }
 
   private buildPolicyContext(
-    user: any,
+    user: AuthenticatedUser,
     resource: ResourceWithOwner | null,
     request: RequestWithUser,
     resourceType?: string

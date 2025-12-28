@@ -5,7 +5,7 @@ import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from '@opentelemetry/semantic
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
-import { StructuredLoggerService } from './structured.logger.service';
+import { StructuredLoggerService, HttpRequest, HttpResponse } from './structured.logger.service';
 
 export interface TraceContext {
   traceId: string;
@@ -48,7 +48,8 @@ export class DistributedTracingService implements OnModuleInit {
       await this.initializeTracing();
       this.logger.log('OpenTelemetry initialized successfully');
     } catch (error) {
-      this.logger.error('Failed to initialize OpenTelemetry', error.message);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      this.logger.error('Failed to initialize OpenTelemetry', errorMessage);
     }
   }
 
@@ -94,7 +95,8 @@ export class DistributedTracingService implements OnModuleInit {
         await this.sdk?.shutdown();
         this.logger.log('OpenTelemetry shut down successfully');
       } catch (error) {
-        this.logger.error('Error shutting down OpenTelemetry', error.message);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        this.logger.error('Error shutting down OpenTelemetry', errorMessage);
       }
     });
   }
@@ -135,11 +137,14 @@ export class DistributedTracingService implements OnModuleInit {
           span.setStatus({ code: SpanStatusCode.OK });
           return result;
         } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : String(error);
           span.setStatus({
             code: SpanStatusCode.ERROR,
-            message: error.message,
+            message: errorMessage,
           });
-          span.recordException(error);
+          if (error instanceof Error) {
+            span.recordException(error);
+          }
           throw error;
         } finally {
           span.end();
@@ -151,23 +156,28 @@ export class DistributedTracingService implements OnModuleInit {
   /**
    * Create a span for HTTP request
    */
-  startHttpRequestSpan(req: any): Span {
+  startHttpRequestSpan(req: HttpRequest): Span {
+    const userAgent = Array.isArray(req.headers?.['user-agent'])
+      ? req.headers['user-agent'][0]
+      : req.headers?.['user-agent'];
+
+    const traceParent = Array.isArray(req.headers?.['traceparent'])
+      ? req.headers['traceparent'][0]
+      : req.headers?.['traceparent'];
+
     const span = this.startSpan(`HTTP ${req.method} ${req.route?.path || req.url}`, {
       attributes: {
         'http.method': req.method,
         'http.url': req.url,
         'http.route': req.route?.path || req.url,
         'http.target': req.url,
-        'http.host': req.hostname,
-        'http.scheme': req.protocol,
-        'http.user_agent': req.headers?.['user-agent'] || 'unknown',
-        'http.client_ip': req.ip || req.connection?.remoteAddress,
-        'net.peer.ip': req.ip || req.connection?.remoteAddress,
+        'http.user_agent': userAgent || 'unknown',
+        'http.client_ip': req.ip || req.connection?.remoteAddress || 'unknown',
+        'net.peer.ip': req.ip || req.connection?.remoteAddress || 'unknown',
       },
     });
 
     // Extract trace context from headers if present
-    const traceParent = req.headers['traceparent'];
     if (traceParent) {
       this.injectTraceContext(span, traceParent);
     }
@@ -178,7 +188,7 @@ export class DistributedTracingService implements OnModuleInit {
   /**
    * End HTTP request span with response details
    */
-  endHttpRequestSpan(span: Span, res: any, error?: Error): void {
+  endHttpRequestSpan(span: Span, res: HttpResponse, error?: Error): void {
     span.setAttributes({
       'http.status_code': res.statusCode,
       'http.status_text': res.statusMessage || '',
@@ -329,7 +339,7 @@ export class DistributedTracingService implements OnModuleInit {
           'trace.parent.flags': parts[3],
         });
       }
-    } catch (error) {
+    } catch {
       this.logger.warn('Failed to inject trace context', { traceParent });
     }
   }

@@ -68,9 +68,9 @@ export class PartiesService {
 
   async update(id: string, updatePartyDto: UpdatePartyDto): Promise<Party> {
     await this.findOne(id);
-    const updateData: any = { ...updatePartyDto };
+    const updateData: Partial<Party> = { ...updatePartyDto };
     if (updatePartyDto.metadata) {
-      updateData.metadata = JSON.stringify(updatePartyDto.metadata);
+      updateData.metadata = JSON.stringify(updatePartyDto.metadata) as unknown as Record<string, unknown>;
     }
     await this.partyRepository.update(id, updateData);
     return this.findOne(id);

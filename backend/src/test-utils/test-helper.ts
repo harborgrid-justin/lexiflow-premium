@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe, Provider, Type, DynamicModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import configuration from '@config/configuration';
@@ -12,8 +12,8 @@ export class TestHelper {
    * Create a test application
    */
   static async createTestApp(
-    imports: any[] = [],
-    providers: any[] = [],
+    imports: Array<Type<unknown> | DynamicModule> = [],
+    providers: Provider[] = [],
   ): Promise<INestApplication> {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
@@ -58,7 +58,7 @@ export class TestHelper {
   /**
    * Get service from test module
    */
-  static getService<T>(token: any): T {
+  static getService<T>(token: Type<T> | string | symbol): T {
     return TestHelper.module.get<T>(token);
   }
 
@@ -137,9 +137,9 @@ export class TestHelper {
   /**
    * Create mock config service
    */
-  static createMockConfigService(config: Record<string, any> = {}) {
+  static createMockConfigService(config: Record<string, unknown> = {}) {
     return {
-      get: jest.fn((key: string, defaultValue?: any) => {
+      get: jest.fn((key: string, defaultValue?: unknown) => {
         return config[key] || defaultValue;
       }),
     };

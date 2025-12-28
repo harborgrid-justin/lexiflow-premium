@@ -15,6 +15,18 @@ interface PacerConfig {
   enabled?: boolean;
 }
 
+interface DocketSheetEntry {
+  date: string;
+  description: string;
+  number: number;
+}
+
+interface DocketSheetResponse {
+  caseNumber: string;
+  court: string;
+  entries: DocketSheetEntry[];
+}
+
 @Injectable()
 export class PacerService {
   private readonly logger = new Logger(PacerService.name);
@@ -76,9 +88,10 @@ export class PacerService {
           docketEntries: [],
         }
       ];
-    } catch (error: any) {
-      this.logger.error('PACER search failed:', error.message);
-      throw new BadRequestException('Failed to search PACER: ' + error.message);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error('PACER search failed:', errorMessage);
+      throw new BadRequestException('Failed to search PACER: ' + errorMessage);
     }
   }
 
@@ -115,9 +128,10 @@ export class PacerService {
             },
         ],
       };
-    } catch (error: any) {
-      this.logger.error('PACER sync failed:', error.message);
-      throw new BadRequestException('Failed to sync from PACER: ' + error.message);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error('PACER sync failed:', errorMessage);
+      throw new BadRequestException('Failed to sync from PACER: ' + errorMessage);
     }
   }
 
@@ -135,16 +149,17 @@ export class PacerService {
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       return Buffer.from(`Mock PDF content for document at ${documentUrl}`);
-    } catch (error: any) {
-      this.logger.error('PACER document download failed:', error.message);
-      throw new BadRequestException('Failed to download document: ' + error.message);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error('PACER document download failed:', errorMessage);
+      throw new BadRequestException('Failed to download document: ' + errorMessage);
     }
   }
 
   /**
    * Get docket sheet for a case
    */
-  async getDocketSheet(caseNumber: string, court: string): Promise<any> {
+  async getDocketSheet(caseNumber: string, court: string): Promise<DocketSheetResponse> {
     this.logger.log(`Getting docket sheet for ${caseNumber} in ${court}`);
 
     try {
@@ -159,9 +174,10 @@ export class PacerService {
             { date: '2024-01-02', description: 'Summons Issued', number: 2 },
         ],
       };
-    } catch (error: any) {
-      this.logger.error('Failed to get docket sheet:', error.message);
-      throw new BadRequestException('Failed to get docket sheet: ' + error.message);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error('Failed to get docket sheet:', errorMessage);
+      throw new BadRequestException('Failed to get docket sheet: ' + errorMessage);
     }
   }
 
@@ -193,11 +209,12 @@ export class PacerService {
         message: 'PACER connection successful',
         authenticated: true,
       };
-    } catch (error: any) {
-      this.logger.error('PACER connection test failed:', error.message);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error('PACER connection test failed:', errorMessage);
       return {
         success: false,
-        message: 'Connection failed: ' + error.message,
+        message: 'Connection failed: ' + errorMessage,
         authenticated: false,
       };
     }
@@ -244,17 +261,18 @@ export class PacerService {
   async scheduleSyncForCase(
     caseId: string,
     caseNumber: string,
-    _court?: string, // Unused but kept for API compatibility
+    court?: string,
   ): Promise<{
     success: boolean;
     message: string;
     syncId?: string;
     scheduledAt?: Date;
   }> {
-    this.logger.log(`Scheduling PACER sync for case ${caseNumber} (${caseId})`);
+    const courtInfo = court ? ` in ${court}` : '';
+    this.logger.log(`Scheduling PACER sync for case ${caseNumber} (${caseId})${courtInfo}`);
 
     try {
-      const syncId = `sync-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const syncId = `sync-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
       const scheduledAt = new Date();
 
       await new Promise(resolve => setTimeout(resolve, 200));
@@ -265,9 +283,10 @@ export class PacerService {
         syncId,
         scheduledAt,
       };
-    } catch (error: any) {
-      this.logger.error('Failed to schedule sync:', error.message);
-      throw new BadRequestException('Failed to schedule sync: ' + error.message);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error('Failed to schedule sync:', errorMessage);
+      throw new BadRequestException('Failed to schedule sync: ' + errorMessage);
     }
   }
 }

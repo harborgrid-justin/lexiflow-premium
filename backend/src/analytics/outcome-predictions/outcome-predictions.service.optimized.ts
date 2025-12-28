@@ -1,6 +1,4 @@
-import { Injectable, Logger, OnModuleDestroy, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import {
   OutcomePredictionDto,
   AnalyzeOutcomeDto,

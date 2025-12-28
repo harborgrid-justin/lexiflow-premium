@@ -24,7 +24,7 @@ import { Case, LegalDocument, WorkflowStage, TimeEntry, TimelineEvent, Party, Pr
 import { GeminiService } from '@/services';
 import { DataService } from '@/services';
 import { useQuery, useMutation, queryClient } from './useQueryHooks';
-import { queryKeys } from '../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 import { useNotify } from './useNotify';
 import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config';
 

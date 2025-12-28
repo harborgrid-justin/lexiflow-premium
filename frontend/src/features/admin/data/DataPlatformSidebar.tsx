@@ -25,7 +25,7 @@ import { Server, ChevronDown, ChevronRight, Layers } from 'lucide-react';
 import { useTheme } from '@providers/ThemeContext';
 
 // Utils & Constants
-import { cn } from '@utils/cn';
+import { cn } from '@/utils/cn';
 import { DATA_PLATFORM_MENU } from '@config/tabs.config';
 
 // Types

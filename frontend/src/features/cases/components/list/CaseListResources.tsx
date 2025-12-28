@@ -26,7 +26,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { cn } from '@/utils/cn';
 
 export const CaseListResources: React.FC = () => {

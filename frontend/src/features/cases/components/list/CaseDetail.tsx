@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { queryClient } from '@/services/infrastructure/queryClient';

@@ -6,7 +6,7 @@
  */
 
 import { BaseEventHandler } from './BaseEventHandler';
-import { db } from '@services/data/db';
+import { db } from '@/services/data/db';
 import type { SystemEventPayloads } from '@/types/integration-types';
 import { SystemEventType } from '@/types/integration-types';
 
@@ -53,7 +53,7 @@ export class CitationSavedHandler extends BaseEventHandler<SystemEventPayloads[t
   private async createPleadingSuggestions(
     citation: SystemEventPayloads[typeof SystemEventType.CITATION_SAVED]['citation']
   ): Promise<number> {
-    const { DataService } = await import('@/services/data/dataService');
+    const { DataService } = await import('@/services');
 
     const activePleadings = await DataService.pleadings.getByIndex('status', 'Draft');
     const casePleadings = activePleadings.filter((pl: any) => pl.caseId === citation.caseId);

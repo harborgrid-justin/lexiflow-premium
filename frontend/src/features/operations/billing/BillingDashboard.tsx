@@ -18,7 +18,7 @@ import { RefreshCw } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { useMutation } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 
 // Hooks
 import { useNotify } from '@/hooks/useNotify';

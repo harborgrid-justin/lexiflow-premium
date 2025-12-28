@@ -4,10 +4,10 @@
  */
 
 import { User } from '@/types';
-import { Repository } from '@services/core/Repository';
-import { STORES } from '@services/data/db';
+import { Repository } from '@/services/core/Repository';
+import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { UsersApiService } from '@/api/users-api';
+import { UsersApiService } from '@/api/auth';
 
 export const USER_QUERY_KEYS = {
     all: () => ['users'] as const,

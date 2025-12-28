@@ -30,7 +30,7 @@ import React, { useState, useRef } from 'react';
 // Services & Data
 import { DocumentService } from '@/services';
 import { queryClient } from '@/services';
-import { queryKeys } from '../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useNotify } from './useNotify';

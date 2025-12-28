@@ -7,7 +7,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import type { JudgeProfile } from '@/types';
 import { RulesView } from '@/config/tabs.config';
 

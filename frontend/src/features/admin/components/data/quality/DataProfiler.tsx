@@ -6,7 +6,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 import { Hash, AlignLeft, Calendar, CheckCircle2, AlertTriangle, Loader2 } from 'lucide-react';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataProfile } from '@/types';
 

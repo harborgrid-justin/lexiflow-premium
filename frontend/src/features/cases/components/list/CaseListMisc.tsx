@@ -28,7 +28,7 @@ import { Tabs } from '@/components/molecules/Tabs';
 import { MetricCard } from '@/components/molecules/MetricCard';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/utils/cn';
 

@@ -25,7 +25,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
 import { Pathfinding } from '@/utils/pathfinding';
 import { cn } from '@/utils/cn';

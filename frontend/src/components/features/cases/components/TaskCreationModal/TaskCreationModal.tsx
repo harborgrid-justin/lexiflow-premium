@@ -17,7 +17,7 @@ import { CheckSquare, Calendar, Link, Briefcase } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { useQuery } from '@/hooks/useQueryHooks';

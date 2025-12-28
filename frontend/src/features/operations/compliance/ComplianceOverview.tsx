@@ -6,7 +6,7 @@ import { Card } from '@/components/molecules/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useChartTheme } from '@/components/organisms/ChartHelpers';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { Loader2 } from 'lucide-react';

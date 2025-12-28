@@ -9,7 +9,7 @@ import { useWindow } from '@/providers/WindowContext';
 import { Button } from '@/components/atoms/Button/Button';
 import { AccessRequestManager } from './catalog/AccessRequestManager';
 import { DataDictionary } from './catalog/DataDictionary';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 interface DataDomain {

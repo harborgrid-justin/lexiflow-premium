@@ -2,7 +2,7 @@
  * ? Migrated to backend API (2025-12-21)
  */
 import { delay } from '@/utils/async';
-import { JurisdictionAPI } from '@/api/jurisdiction-api';
+import { JurisdictionAPI } from '@/api/analytics/jurisdiction-api';
 
 export const JurisdictionService = {
     getAll: async () => {

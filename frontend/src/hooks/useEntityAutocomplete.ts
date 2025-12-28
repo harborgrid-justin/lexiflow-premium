@@ -19,7 +19,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDebounce } from './useDebounce';
-import { queryClient } from '@services/infrastructure/queryClient';
+import { queryClient } from '@/services/infrastructure/queryClient';
 
 /**
  * Configuration for entity autocomplete

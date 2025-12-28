@@ -35,7 +35,7 @@ import { useState, useCallback, useEffect, useTransition, useRef } from 'react';
 import { DataService } from '@/services';
 import { ModuleRegistry } from '@/services';
 import { HolographicRouting } from '@/services';
-import { queryKeys } from '../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 import { Seeder } from '@/services';
 import { queryClient } from '@/services';
 import { GlobalSearchResult } from '@/services';

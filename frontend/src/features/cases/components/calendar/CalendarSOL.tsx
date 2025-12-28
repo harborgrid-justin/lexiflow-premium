@@ -17,7 +17,7 @@ import { AlertTriangle, ShieldAlert, MapPin, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Components

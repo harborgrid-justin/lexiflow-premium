@@ -12,7 +12,7 @@ import { useModalState } from '@/hooks';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 
 interface Custodian {
   id: string;

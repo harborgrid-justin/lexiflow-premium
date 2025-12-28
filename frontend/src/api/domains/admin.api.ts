@@ -3,19 +3,19 @@
  * Documents, processing jobs, OCR, monitoring, health, analytics
  */
 
-import { DocumentsApiService } from '../documents-api';
-import { DocumentVersionsApiService } from '../document-versions-api';
+import { DocumentsApiService } from '../admin/documents-api';
+import { DocumentVersionsApiService } from '../admin/document-versions-api';
 import { ProcessingJobsApiService } from '../admin/processing-jobs-api';
-import { OCRApiService } from '../ocr-api';
-import { MonitoringApiService } from '../monitoring-api';
-import { HealthApiService } from '../health-api';
-import { AnalyticsApiService } from '../analytics-api';
-import { AuditLogsApiService } from '../audit-logs-api';
-import { VersioningApiService } from '../versioning-api';
-import { SyncApiService } from '../sync-api';
-import { BackupsApiService } from '../backups-api';
-import { ServiceJobsApiService } from '../service-jobs-api';
-import { MetricsApiService } from '../metrics-api';
+import { OCRApiService } from '../admin/ocr-api';
+import { MonitoringApiService } from '../admin/monitoring-api';
+import { HealthApiService } from '../admin/health-api';
+import { AnalyticsApiService } from '../analytics/analytics-api';
+import { AuditLogsApiService } from '../admin/audit-logs-api';
+import { VersioningApiService } from '../admin/versioning-api';
+import { SyncApiService } from '../admin/sync-api';
+import { BackupsApiService } from '../admin/backups-api';
+import { ServiceJobsApiService } from '../admin/service-jobs-api';
+import { MetricsApiService } from '../admin/metrics-api';
 
 // Export singleton instances
 export const adminApi = {

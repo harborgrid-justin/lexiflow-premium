@@ -3,12 +3,12 @@
  * Auth, users, permissions, API keys, ethical walls
  */
 
-import { AuthApiService } from '../auth-api';
-import { UsersApiService } from '../users-api';
-import { ApiKeysApiService } from '../api-keys-api';
-import { PermissionsApiService } from '../permissions-api';
-import { EthicalWallsApiService } from '../ethical-walls-api';
-import { TokenBlacklistAdminApiService } from '../token-blacklist-admin-api';
+import { AuthApiService } from '../auth/auth-api';
+import { UsersApiService } from '../auth/users-api';
+import { ApiKeysApiService } from '../auth/api-keys-api';
+import { PermissionsApiService } from '../auth/permissions-api';
+import { EthicalWallsApiService } from '../auth/ethical-walls-api';
+import { TokenBlacklistAdminApiService } from '../auth/token-blacklist-admin-api';
 
 // Export service classes
 export {

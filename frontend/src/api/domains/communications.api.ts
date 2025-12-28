@@ -3,11 +3,11 @@
  * Clients, correspondence, messaging, notifications
  */
 
-import { ClientsApiService } from '../clients-api';
-import { CommunicationsApiService } from '../communications-api';
-import { CorrespondenceApiService } from '../correspondence-api';
-import { MessagingApiService } from '../messaging-api';
-import { NotificationsApiService } from '../notifications-api';
+import { ClientsApiService } from '../communications/clients-api';
+import { CommunicationsApiService } from '../communications/communications-api';
+import { CorrespondenceApiService } from '../communications/correspondence-api';
+import { MessagingApiService } from '../communications/messaging-api';
+import { NotificationsApiService } from '../communications/notifications-api';
 
 // Export singleton instances
 export const communicationsApi = {

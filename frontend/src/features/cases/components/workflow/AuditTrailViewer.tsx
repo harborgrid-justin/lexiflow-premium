@@ -3,7 +3,7 @@ import React from 'react';
 import { History, User, Check, AlertCircle, RefreshCw, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { AuditLogEntry } from '@/types';
 import { useQuery, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)

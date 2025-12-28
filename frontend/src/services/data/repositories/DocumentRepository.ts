@@ -30,11 +30,11 @@ import {
     LegalDocument, DocumentId, CaseId, DocumentVersion, 
     FileChunk, EvidenceItem 
 } from '@/types';
-import { db, STORES } from '@services/data/db';
-import { Repository } from '@services/core/Repository';
-import { BlobManager } from '@services/infrastructure/blobManager';
+import { db, STORES } from '@/services/data/db';
+import { Repository } from '@/services/core/Repository';
+import { BlobManager } from '@/services/infrastructure/blobManager';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { DocumentsApiService } from '@/api/documents-api';
+import { DocumentsApiService } from '@/api/admin';
 
 const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
 

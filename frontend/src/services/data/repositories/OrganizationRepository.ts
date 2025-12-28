@@ -4,10 +4,10 @@
  */
 
 import { Organization } from '@/types';
-import { Repository } from '@services/core/Repository';
-import { STORES } from '@services/data/db';
+import { Repository } from '@/services/core/Repository';
+import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { OrganizationsApiService } from '@/api/organizations-api';
+import { OrganizationsApiService } from '@/api/integrations';
 
 export const ORGANIZATION_QUERY_KEYS = {
     all: () => ['organizations'] as const,

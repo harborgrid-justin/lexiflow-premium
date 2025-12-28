@@ -1,7 +1,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { Clause } from '@/types';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { Button } from '@/components/atoms/Button';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { Book, Copy, History, Loader2, BookOpen, Check } from 'lucide-react';

@@ -19,7 +19,7 @@ export class LeadStageChangedHandler extends BaseEventHandler<SystemEventPayload
     // Only trigger conflict checks for specific stages
     if (payload.stage === 'Engagement' || payload.stage === 'Conflict Check') {
       // Dynamic import to avoid circular dependency
-      const { DataService } = await import('@/services/data/dataService');
+      const { DataService } = await import('@/services');
       
       await DataService.compliance.runConflictCheck(payload.clientName);
       actions.push('Triggered Automated Conflict Check');

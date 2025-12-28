@@ -5,7 +5,7 @@ import { Button } from '@/components/atoms/Button';
 import { Badge } from '@/components/atoms/Badge';
 import { Landmark, ArrowUpRight, ArrowDownLeft, Plus, FileText } from 'lucide-react';
 import { FirmExpense } from '@/types';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';

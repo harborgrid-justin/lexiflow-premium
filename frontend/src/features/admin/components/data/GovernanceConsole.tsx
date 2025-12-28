@@ -10,7 +10,7 @@ import { Button } from '@/components/atoms/Button/Button';
 import { AccessGovernance } from './governance/AccessGovernance';
 import { ModalFooter } from '@/components/molecules/ModalFooter/ModalFooter';
 import { GovernanceDashboard } from './governance/GovernanceDashboard';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { GovernancePolicy } from '@/types';
 import type { GovernanceRule as ImportedGovernanceRule } from '@/types/data-infrastructure';

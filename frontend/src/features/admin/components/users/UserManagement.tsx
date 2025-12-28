@@ -13,7 +13,7 @@ import { useModalState } from '@/hooks';
 import { useSelection } from '@/hooks/useSelectionState';
 import { getTodayString } from '@/utils/dateUtils';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { queryKeys } from '@/utils/queryKeys';
 
 interface UserData {

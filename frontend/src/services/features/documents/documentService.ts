@@ -12,9 +12,9 @@
 // ============================================================================
 // Services & Data
 
-import { db, STORES } from '@services/data/db';
-import { BlobManager } from '@services/infrastructure/blobManager';
-import { CryptoService } from '@services/infrastructure/cryptoService';
+import { db, STORES } from '@/services/data/db';
+import { BlobManager } from '@/services/infrastructure/blobManager';
+import { CryptoService } from '@/services/infrastructure/cryptoService';
 
 // Utils & Constants
 import { Formatters } from '@/utils/formatters';

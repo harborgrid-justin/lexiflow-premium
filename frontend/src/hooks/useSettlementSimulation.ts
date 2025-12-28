@@ -21,7 +21,7 @@
  */
 
 import { useState, useCallback, useMemo } from 'react';
-import { SimulationEngine, SimulationMetrics as EngineMetrics } from '../utils/simulationEngine';
+import { SimulationEngine, SimulationMetrics as EngineMetrics } from '@/utils/simulationEngine';
 import { Scheduler } from '@/utils';
 
 // ============================================================================

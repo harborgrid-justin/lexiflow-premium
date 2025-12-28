@@ -7,7 +7,7 @@ import { OrgListItem, GroupListItem, UserListItem } from './HierarchyRows';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { queryKeys } from '@/utils/queryKeys';
 
 export const AdminHierarchy: React.FC = () => {

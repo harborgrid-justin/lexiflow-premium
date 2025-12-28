@@ -23,7 +23,7 @@ export class ServiceCompletedHandler extends BaseEventHandler<SystemEventPayload
       return this.createSuccess([]);
     }
 
-    const { DataService } = await import('@/services/data/dataService');
+    const { DataService } = await import('@/services');
 
     const todayDate = new Date().toISOString().split('T')[0];
     const entry: DocketEntry = {

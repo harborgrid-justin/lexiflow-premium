@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ComplianceDashboard } from '../../../../features/operations/compliance/ComplianceDashboard';
+import { ComplianceDashboard } from '@/features/operations/compliance/ComplianceDashboard';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 

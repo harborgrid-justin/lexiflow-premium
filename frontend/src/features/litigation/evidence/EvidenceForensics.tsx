@@ -18,7 +18,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { EvidenceItem } from '@/types';
 import { evidenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { queryClient } from '@/hooks/useQueryHooks';

@@ -34,7 +34,7 @@ import { useToggle } from '@/hooks/useToggle';
 
 // Data & Types
 import { CaseId, TrialExhibit } from '@/types';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { getTodayString } from '@/utils/dateUtils';

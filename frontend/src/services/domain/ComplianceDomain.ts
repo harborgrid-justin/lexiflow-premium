@@ -77,8 +77,8 @@
 import { Risk, ConflictCheck, EthicalWall, ComplianceMetrics, CaseId, GroupId, UserId } from '@/types';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { complianceApi } from "@/api/domains/compliance.api";
-import type { ConflictCheck as ApiConflictCheck } from '@/api/conflict-checks-api';
-import type { EthicalWall as ApiEthicalWall } from '@/api/compliance-api';
+import type { ConflictCheck as ApiConflictCheck } from '@/api/compliance';
+import type { EthicalWall as ApiEthicalWall } from '@/api/compliance';
 
 /**
  * Query keys for React Query integration

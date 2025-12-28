@@ -39,7 +39,7 @@ import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useModalState } from '@/hooks/useModalState';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)

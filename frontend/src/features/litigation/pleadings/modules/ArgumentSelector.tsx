@@ -2,7 +2,7 @@
 import React from 'react';
 import { Target, GripVertical, CheckCircle, ArrowRight } from 'lucide-react';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
 import { Case, LegalArgument } from '@/types';

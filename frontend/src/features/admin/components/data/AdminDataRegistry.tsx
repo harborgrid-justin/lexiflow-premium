@@ -5,7 +5,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 
 interface DataFile {
     name: string;

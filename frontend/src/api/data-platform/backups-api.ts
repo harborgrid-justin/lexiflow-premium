@@ -6,7 +6,7 @@
  * @responsibility Manage database backups and restore operations
  */
 
-import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
+import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
 
 /**
  * Backup snapshot interface

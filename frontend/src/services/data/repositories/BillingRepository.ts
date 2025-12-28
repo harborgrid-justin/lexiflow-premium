@@ -1,9 +1,9 @@
 
 import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData, UserId, FirmExpense } from '@/types';
 import { delay } from '@/utils/async';
-import { Repository } from '@services/core/Repository';
-import { STORES, db } from '@services/data/db';
-import { ChainService } from '@services/infrastructure/chainService';
+import { Repository } from '@/services/core/Repository';
+import { STORES, db } from '@/services/data/db';
+import { ChainService } from '@/services/infrastructure/chainService';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from "@/types/integration-types";
 export class BillingRepository extends Repository<TimeEntry> {

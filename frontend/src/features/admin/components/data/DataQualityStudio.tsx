@@ -4,7 +4,7 @@ import { Sparkles, RefreshCw, FileSearch, Plus, Settings, Edit2, Loader2, GitMer
 import { JSX } from 'react/jsx-runtime';
 
 import { useTheme } from '@/providers/ThemeContext';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataAnomaly, QualityMetricHistory } from '@/types';
 import { cn } from '@/utils/cn';

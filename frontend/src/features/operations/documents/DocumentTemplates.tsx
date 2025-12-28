@@ -3,7 +3,7 @@ import React from 'react';
 import { FileText, Wand2, ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';

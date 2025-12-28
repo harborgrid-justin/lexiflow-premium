@@ -10,12 +10,12 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@services/data/dataService';
-import { queryKeys } from '../utils/queryKeys';
+import { DataService } from '@/services';
+import { queryKeys } from '@/utils/queryKeys';
 
 // CRITICAL FIX: Import useQuery from the Hooks layer, not the Infrastructure layer
 import { useQuery } from './useQueryHooks'; 
-import type { QueryState } from '../services/infrastructure/queryTypes';
+import type { QueryState } from '@/services/infrastructure/queryTypes';
 
 // Types
 import { 

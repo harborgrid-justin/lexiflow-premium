@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
 import { useDebounce } from '@/hooks/useDebounce';
 import { DocketEntry } from '@/types';

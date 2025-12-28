@@ -27,13 +27,13 @@
  */
 
 import { PleadingDocument, PleadingTemplate, FormattingRule, PleadingSection, Case, CaseId, UserId } from '@/types';
-import { Repository } from '@services/core/Repository';
-import { STORES, db } from '@services/data/db';
+import { Repository } from '@/services/core/Repository';
+import { STORES, db } from '@/services/data/db';
 import { IdGenerator } from '@/utils/idGenerator';
 import { createTemplateContext, hydrateTemplateSections } from '@/utils/templateEngine';
 import { validateTemplate } from '@/utils/validation';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { PleadingsApiService } from '@/api/pleadings-api';
+import { PleadingsApiService } from '@/api/litigation';
 
 /**
  * Query keys for React Query integration

@@ -22,7 +22,7 @@ import { ProjectModal } from './ProjectModal';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces

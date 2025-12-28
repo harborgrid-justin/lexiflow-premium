@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Power, ShieldAlert, CheckCircle, Loader2 } from 'lucide-react';
 
 import { useTheme } from '@/providers/ThemeContext';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms/Button';

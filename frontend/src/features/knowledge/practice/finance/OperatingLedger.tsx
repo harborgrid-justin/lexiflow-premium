@@ -8,7 +8,7 @@ import { Landmark, ArrowUpRight, ArrowDownLeft, PieChart, CreditCard } from 'luc
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { Formatters } from '@/utils/formatters';
 
 interface OperatingLedgerProps {

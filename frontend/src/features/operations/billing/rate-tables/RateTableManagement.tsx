@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { DollarSign, Plus, Edit, Trash2, Users, Clock } from 'lucide-react';
 import { useTheme } from '@providers/ThemeContext';
-import { cn } from '@utils/cn';
+import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms/Button';
 import { Badge } from '@/components/atoms/Badge';
 import { Modal } from '@/components/molecules/Modal';
 import { Input } from '@/components/atoms';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { useNotify } from '@hooks/useNotify';
-import { useModalState } from '@hooks/useModalState';
-import { useSelection } from '@hooks/useSelectionState';
-import { getTodayString } from '@utils/dateUtils';
-import { useQuery, useMutation, queryClient } from '@hooks/useQueryHooks';
-import { queryKeys } from '@utils/queryKeys';
-import { DataService } from '@services/data/dataService';
+import { useNotify } from '@/hooks/useNotify';
+import { useModalState } from '@/hooks/useModalState';
+import { useSelection } from '@/hooks/useSelectionState';
+import { getTodayString } from '@/utils/dateUtils';
+import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { queryKeys } from '@/utils/queryKeys';
+import { DataService } from '@/services';
 
 interface RateTable {
   id: string;

@@ -1,12 +1,5 @@
+// types/index.ts - Centralized type barrel export
+// This file re-exports all types from the root types.ts barrel.
+// Always import types from '@/types' (not '@/types/...') for consistency.
 
-export * from './enums';
-export * from './models';
-export * from './integration-types';
-export * from './ai';
-export * from './pleading-types';
-export * from './pacer';
-export * from './workflow-advanced-types';
-export * from './workflow-types';
-export * from './workflow';
-export * from './trust-accounts';
-
+export * from '../types';

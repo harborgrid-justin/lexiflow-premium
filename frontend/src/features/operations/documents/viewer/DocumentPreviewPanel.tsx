@@ -18,7 +18,7 @@ import { Wand2, AlertCircle, Lock, Unlock, ExternalLink, Eraser, ShieldAlert, X 
 // ============================================================================
 // Services & Data
 import { DocumentService } from '@/services/features/documents/documentService';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';

@@ -86,3 +86,7 @@ export const dataPlatformApi = {
   aiOps: new AiOpsApiService(),
   versioning: new VersioningApiService(),
 };
+
+// Export newly organized services
+export * from './data-sources-api';
+export * from './rls-policies-api';

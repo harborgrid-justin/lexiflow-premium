@@ -5,7 +5,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { ConnectionCard } from './ConnectionCard';
 import { ConnectionForm } from './ConnectionForm';
 import type { DataConnection, ConnectionFormData, ConnectionStatus, TestConnectionResult } from './types';

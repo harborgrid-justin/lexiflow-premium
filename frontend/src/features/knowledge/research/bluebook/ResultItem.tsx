@@ -3,7 +3,7 @@ import { Copy, Eye, EyeOff, Trash2, CheckCircle2, AlertTriangle } from 'lucide-r
 import { Badge } from '@/components/atoms/Badge';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { ValidationSeverity } from '@types/bluebook';
+import { ValidationSeverity } from '@/types/bluebook';
 import type { FormattingResult } from './types';
 
 interface ResultItemProps {

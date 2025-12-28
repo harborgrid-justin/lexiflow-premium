@@ -18,10 +18,10 @@
  */
 
 import { Citation } from '@/types';
-import { Repository } from '@services/core/Repository';
-import { STORES } from '@services/data/db';
+import { Repository } from '@/services/core/Repository';
+import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { CitationsApiService } from '@/api/citations-api';
+import { CitationsApiService } from '@/api/analytics';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
 

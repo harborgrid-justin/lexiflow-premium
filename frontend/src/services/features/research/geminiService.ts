@@ -278,13 +278,13 @@
 
 import { GoogleGenerativeAI, GenerateContentResult } from "@google/generative-ai";
 import { ParsedDocket } from '@/types';
-import { SearchResult } from '@/api/search/search-api';
-import { Prompts } from "@services/ai/prompts";
-import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema, ShepardizeSchema, StrategyGraphSchema, LinterResultSchema } from "@services/ai/schemas";
+import type { SearchResult } from '@/types';
+import { Prompts } from '@/services/ai/prompts";
+import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema, ShepardizeSchema, StrategyGraphSchema, LinterResultSchema } from '@/services/ai/schemas";
 import { safeParseJSON, withRetry } from '@/utils/apiUtils';
 import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, GroundingChunk, ShepardizeResult } from '@/types/ai';
 
-export * from '@/types/ai';
+// Note: Import AI types from @/types, don't re-export them
 
 // =============================================================================
 // CLIENT FACTORY (Private)

@@ -18,10 +18,10 @@
  */
 
 import { Clause } from '@/types';
-import { Repository } from '@services/core/Repository';
-import { STORES } from '@services/data/db';
+import { Repository } from '@/services/core/Repository';
+import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { ClausesApiService } from '@/api/clauses-api';
+import { ClausesApiService } from '@/api/analytics';
 
 export const CLAUSE_QUERY_KEYS = {
     all: () => ['clauses'] as const,

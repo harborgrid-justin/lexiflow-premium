@@ -7,7 +7,7 @@ import {
 import {
   LegalRuleType
   } from './enums';
-import { SearchResult } from '@/api/search/search-api';
+import type { SearchResult } from './search';
 
 export interface Citation extends BaseEntity, Record<string, unknown> {
   // Backend: citations table

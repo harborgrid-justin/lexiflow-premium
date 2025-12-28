@@ -95,13 +95,13 @@
  */
 
 import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData } from '@/types';
-import { Repository } from '@services/core/Repository';
+import { Repository } from '@/services/core/Repository';
 import { STORES, db } from '@/services/data/db';
 import { delay } from '@/utils/async';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
 // Backend API Integration (Primary Data Source)
-import { BillingApiService } from '@/api/billing-api';
+import { BillingApiService } from '@/api/billing';
 import { apiClient } from '@/services/infrastructure/apiClient';
 
 /**

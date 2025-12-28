@@ -44,7 +44,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useModalState } from '@/hooks';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { cn } from '@/utils/cn';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)

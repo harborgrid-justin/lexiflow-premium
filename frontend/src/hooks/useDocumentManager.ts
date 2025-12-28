@@ -71,7 +71,7 @@ import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 import { DataService } from '@/services';
 import { DocumentService } from '@/services';
 import { useQuery, useMutation, queryClient } from './useQueryHooks';
-import { queryKeys } from '../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useWorkerSearch } from './useWorkerSearch';

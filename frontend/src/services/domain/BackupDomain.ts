@@ -48,7 +48,7 @@
 
 import { BackupSnapshot, ArchiveStats, SnapshotType } from '@/types';
 import { delay } from '@/utils/async';
-import { BackupsApiService } from '@/api/backups-api';
+import { BackupsApiService } from '@/api/admin';
 
 // =============================================================================
 // REACT QUERY KEYS

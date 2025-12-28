@@ -28,10 +28,10 @@
 
 import { EvidenceItem, CaseId } from '@/types';
 import { delay } from '@/utils/async';
-import { Repository } from '@services/core/Repository';
-import { STORES } from '@services/data/db';
+import { Repository } from '@/services/core/Repository';
+import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { EvidenceApiService } from '@/api/evidence-api';
+import { EvidenceApiService } from '@/api/discovery';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
 

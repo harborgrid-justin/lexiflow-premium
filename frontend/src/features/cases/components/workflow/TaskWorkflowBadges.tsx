@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@utils/cn';
+import { cn } from '@/utils/cn';
 
 interface TaskWorkflowBadgesProps {
   status: string | 'Pending' | 'In Progress' | 'Review' | 'Done';

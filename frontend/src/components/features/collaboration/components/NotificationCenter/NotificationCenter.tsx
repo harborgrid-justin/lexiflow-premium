@@ -14,7 +14,7 @@ import { Bell, Check, Trash2, Settings, CheckCheck } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 
 // Hooks & Context
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';

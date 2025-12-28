@@ -121,7 +121,7 @@ import type {
   WSMessageType,
   WSMessage,
   CollaborationConfig
-} from '@/services';
+} from './collaboration/types';
 
 /**
  * Union type for all possible WebSocket message payloads

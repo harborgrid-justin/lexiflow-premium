@@ -26,7 +26,7 @@ import { Card } from '@/components/molecules/Card/Card';
 import { Button } from '@/components/atoms/Button/Button';
 
 // Services & Data
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

@@ -18,6 +18,9 @@ export * from './types/compliance-risk';
 export * from './types/query-keys';
 export * from './types/api-responses';
 export * from './types/dto-types';
+export * from './types/search';
+export * from './types/errors';
+export * from './types/notifications';
 
 export interface PaginatedResponse<T> {
   data: T[];

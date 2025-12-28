@@ -1,8 +1,8 @@
 // services/repositories/MatterRepository.ts
-import { Repository } from '@services/core/Repository';
-import { STORES } from '@services/data/db';
+import { Repository } from '@/services/core/Repository';
+import { STORES } from '@/services/data/db';
 import { Matter, MatterId, MatterStatus } from '@/types';
-import { casesApi } from '@/api/cases-api';
+import { casesApi } from '@/api/litigation/cases-api';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
 export class MatterRepository extends Repository<Matter> {

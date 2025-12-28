@@ -4,7 +4,7 @@ import { Modal } from '@/components/molecules/Modal';
 import { Button } from '@/components/atoms/Button';
 import { Input, TextArea } from '@/components/atoms';
 import { ServiceJob, UserId } from '@/types';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '@/providers/ThemeContext';

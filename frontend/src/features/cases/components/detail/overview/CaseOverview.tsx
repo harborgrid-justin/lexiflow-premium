@@ -27,7 +27,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useCaseOverview } from '@/hooks/useCaseOverview';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/utils/cn';
 

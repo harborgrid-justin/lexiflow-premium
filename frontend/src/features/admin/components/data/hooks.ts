@@ -7,7 +7,7 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import type { 
   DataSourceConnection, 
   ConnectionFormData, 

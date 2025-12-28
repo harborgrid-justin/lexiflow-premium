@@ -4,12 +4,12 @@
  */
 
 import { Risk } from '@/types';
-import { Repository } from '@services/core/Repository';
-import { STORES } from '@services/data/db';
+import { Repository } from '@/services/core/Repository';
+import { STORES } from '@/services/data/db';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { RisksApiService } from '@/api/risks-api';
+import { RisksApiService } from '@/api/workflow';
 
 export const RISK_QUERY_KEYS = {
     all: () => ['risks'] as const,

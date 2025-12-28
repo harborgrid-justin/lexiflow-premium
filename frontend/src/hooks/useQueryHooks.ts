@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-export { queryClient } from '../services/infrastructure/queryClient';
+export { queryClient } from '@/services/infrastructure/queryClient';
 import { queryClient } from '@/services';
 import type { 
   QueryKey, 
@@ -7,7 +7,7 @@ import type {
   UseQueryOptions, 
   UseMutationOptions, 
   MutationContext 
-} from '../services/infrastructure/queryTypes';
+} from '@/services/infrastructure/queryTypes';
 
 export function useQuery<T>(
   key: QueryKey, 

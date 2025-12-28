@@ -27,10 +27,10 @@
  */
 
 import { Client, ClientId } from '@/types';
-import { Repository } from '@services/core/Repository';
-import { STORES } from '@services/data/db';
+import { Repository } from '@/services/core/Repository';
+import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { ClientsApiService } from '@/api/clients-api';
+import { ClientsApiService } from '@/api/communications';
 
 /**
  * Query keys for React Query integration

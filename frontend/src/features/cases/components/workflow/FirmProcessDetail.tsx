@@ -8,7 +8,7 @@ import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
 import { WorkflowAnalyticsDashboard } from './WorkflowAnalyticsDashboard';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { ErrorState } from '@/components/molecules/ErrorState';
 

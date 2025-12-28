@@ -5,7 +5,7 @@ import { DollarSign, TrendingDown, AlertTriangle, Loader2 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, CartesianGrid } from 'recharts';
 
 import { useTheme } from '@/providers/ThemeContext';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { CostMetric, CostForecast } from '@/types';
 import { cn } from '@/utils/cn';

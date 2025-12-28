@@ -4,11 +4,11 @@
  */
 
 import { PACERApiService } from '../integrations/pacer-api';
-import { WebhooksApiService } from '../webhooks-api';
-import { IntegrationsApiService } from '../integrations-api';
-import { OrganizationsApiService } from '../organizations-api';
-import { ExternalAPIService } from '../external-api-api';
-import { PipelinesApiService } from '../pipelines-api';
+import { WebhooksApiService } from '../integrations/webhooks-api';
+import { IntegrationsApiService } from '../integrations/integrations-api';
+import { OrganizationsApiService } from '../integrations/organizations-api';
+import { ExternalAPIService } from '../integrations/external-api-api';
+import { PipelinesApiService } from '../data-platform/pipelines-api';
 
 // Export service classes
 export {

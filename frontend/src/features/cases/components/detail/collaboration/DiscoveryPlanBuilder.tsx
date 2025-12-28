@@ -22,7 +22,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/utils/cn';
 

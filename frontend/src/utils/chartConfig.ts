@@ -8,7 +8,7 @@
  */
 
 import { CSSProperties } from 'react';
-import { ChartColorService } from '../services/theme/chartColorService';
+import { ChartColorService } from '@/services/theme/chartColorService';
 import { ThemeMode } from '@theme/tokens.ts';
 
 // ============================================================================

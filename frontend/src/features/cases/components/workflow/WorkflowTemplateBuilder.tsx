@@ -14,7 +14,7 @@ import { Save, Rocket, ArrowLeft, Loader2 } from 'lucide-react';
 import { useWorkflowBuilder } from '@/hooks/useWorkflowBuilder';
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
 import { useToggle } from '@/hooks/useToggle';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useNotify } from '@/hooks/useNotify';
 
 interface WorkflowTemplateBuilderProps {

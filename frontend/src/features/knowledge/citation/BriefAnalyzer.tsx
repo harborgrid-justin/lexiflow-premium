@@ -33,7 +33,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers/WindowContext';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { GeminiService, BriefCritique } from '@/services/features/research/geminiService';
 import { AnalysisEngine, ConflictResult } from '@/services/features/analysis/analysisEngine';
 import { cn } from '@/utils/cn';

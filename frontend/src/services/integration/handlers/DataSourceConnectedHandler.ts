@@ -6,7 +6,7 @@
  */
 
 import { BaseEventHandler } from './BaseEventHandler';
-import { db } from '@services/data/db';
+import { db } from '@/services/data/db';
 import type { SystemEventPayloads } from '@/types/integration-types';
 import type { UserId } from '@/types';
 import { SystemEventType } from '@/types/integration-types';

@@ -9,10 +9,10 @@
  */
 
 import React, { useState } from 'react';
-import { useTheme } from '@providers/ThemeContext';
-import { ChartColorService } from '@services/theme/chartColorService';
+import { useTheme } from '@/providers/ThemeContext';
+import { ChartColorService } from '@/services/theme/chartColorService';
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
-import { getChartTheme } from '@utils/chartConfig';
+import { getChartTheme } from '@/utils/chartConfig';
 import { Sun, Moon, Palette, CheckCircle2, XCircle } from 'lucide-react';
 import { cn } from '@/utils/cn';
 

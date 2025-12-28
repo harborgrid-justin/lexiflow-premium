@@ -32,7 +32,7 @@ import { Button } from '@/components/atoms/Button';
 import { Tabs } from '@/components/molecules/Tabs';
 import { Card } from '@/components/molecules/Card';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useNotify } from '@/hooks/useNotify';
 import type {
   EnhancedWorkflowInstance,

@@ -22,7 +22,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/utils/cn';
 

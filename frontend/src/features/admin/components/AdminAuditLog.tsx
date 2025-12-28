@@ -11,7 +11,7 @@ import {useToast} from '@/providers/ToastContext';
 import {VirtualList} from '@/components/organisms/VirtualList/VirtualList';
 import {useWindow} from '@/providers/WindowContext';
 import {useQuery} from '@/hooks/useQueryHooks';
-import {DataService} from '@/services/data/dataService';
+import {DataService} from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
 import {AuditLogControls} from './audit/AuditLogControls';
 import {DEBUG_API_SIMULATION_DELAY_MS} from '@/config/master.config';

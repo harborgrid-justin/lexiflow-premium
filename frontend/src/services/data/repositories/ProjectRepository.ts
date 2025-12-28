@@ -1,6 +1,6 @@
 import { Project } from '@/types';
-import { Repository } from '@services/core/Repository';
-import { STORES } from '@services/data/db';
+import { Repository } from '@/services/core/Repository';
+import { STORES } from '@/services/data/db';
 
 export class ProjectRepository extends Repository<Project> {
     constructor() {

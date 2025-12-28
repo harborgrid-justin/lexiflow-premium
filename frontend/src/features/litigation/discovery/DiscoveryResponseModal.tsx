@@ -8,7 +8,7 @@ import { DiscoveryRequest } from '@/types';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
 // ✅ Migrated to backend API (2025-12-21)

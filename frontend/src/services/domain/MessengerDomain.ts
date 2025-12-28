@@ -4,7 +4,7 @@
  */
 
 import { api } from '@/api';
-import type { Conversation, Message } from '@/api/messaging-api';
+import type { Conversation, Message } from '@/api/communications';
 
 export const MessengerService = {
   getAll: async () => {

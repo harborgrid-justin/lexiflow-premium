@@ -3,18 +3,18 @@
  * Evidence, custodians, depositions, legal holds, productions, privilege log
  */
 
-import { EvidenceApiService } from '../evidence-api';
-import { CustodiansApiService } from '../custodians-api';
-import { ExaminationsApiService } from '../examinations-api';
-import { WitnessesApiService } from '../witnesses-api';
-import { DepositionsApiService } from '../depositions-api';
-import { LegalHoldsApiService } from '../legal-holds-api';
-import { ProductionsApiService } from '../productions-api';
-import { DiscoveryRequestsApiService } from '../discovery-requests-api';
-import { ESISourcesApiService } from '../esi-sources-api';
-import { PrivilegeLogApiService } from '../privilege-log-api';
-import { CustodianInterviewsApiService } from '../custodian-interviews-api';
-import { DiscoveryApiService } from '../discovery-api';
+import { EvidenceApiService } from '../discovery/evidence-api';
+import { CustodiansApiService } from '../discovery/custodians-api';
+import { ExaminationsApiService } from '../discovery/examinations-api';
+import { WitnessesApiService } from '../discovery/witnesses-api';
+import { DepositionsApiService } from '../discovery/depositions-api';
+import { LegalHoldsApiService } from '../discovery/legal-holds-api';
+import { ProductionsApiService } from '../discovery/productions-api';
+import { DiscoveryRequestsApiService } from '../discovery/discovery-requests-api';
+import { ESISourcesApiService } from '../discovery/esi-sources-api';
+import { PrivilegeLogApiService } from '../discovery/privilege-log-api';
+import { CustodianInterviewsApiService } from '../discovery/custodian-interviews-api';
+import { DiscoveryApiService } from '../discovery/discovery-api';
 
 // Export service classes
 export {

@@ -4,7 +4,7 @@ import { Card } from '@/components/molecules/Card';
 import { ToggleLeft, ToggleRight, Settings, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { useNotify } from '@/hooks/useNotify';

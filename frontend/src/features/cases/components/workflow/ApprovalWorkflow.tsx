@@ -5,7 +5,7 @@ import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/molecules/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { ApprovalRequest } from './types';

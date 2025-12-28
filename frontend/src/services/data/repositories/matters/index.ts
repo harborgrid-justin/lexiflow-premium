@@ -2,5 +2,5 @@
  * Matters Repository Export
  */
 
-export { MatterRepository } from '../MatterRepository';
+export { MatterRepository } from '@/services/data/repositories/MatterRepository';
 

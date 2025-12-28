@@ -17,7 +17,7 @@ import {CheckSquare, ArrowRight, Loader2} from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import {useQuery} from '@hooks/useQueryHooks';
+import {useQuery} from '@/hooks/useQueryHooks';
 import {DataService} from '@/services';
 import {STORES} from '@/services';
 

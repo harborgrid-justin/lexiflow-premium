@@ -8,7 +8,7 @@ import {
 import { ClientIntakeModal } from './ClientIntakeModal';
 import { ClientPortalModal } from './ClientPortalModal';
 import { Button } from '@/components/atoms/Button';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts/TabbedPageLayout';

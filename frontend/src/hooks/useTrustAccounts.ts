@@ -16,7 +16,7 @@
  */
 
 import {queryClient, useMutation, useQuery} from './useQueryHooks';
-import {trustAccountsApi} from '../api/trust-accounts-api';
+import { trustAccountsApi } from '@/api/trust-accounts-api';
 import type {
     CreateTrustAccountDto,
     DepositDto,
@@ -26,8 +26,8 @@ import type {
     TrustAccountValidationResult,
     TrustTransactionEntity,
     WithdrawalDto,
-} from '../types/trust-accounts';
-import {PaymentMethod, TrustAccountStatus} from '../types/trust-accounts';
+} from '@/types';
+import { PaymentMethod, TrustAccountStatus } from '@/types';
 import {useCallback, useMemo, useState} from 'react';
 
 /**

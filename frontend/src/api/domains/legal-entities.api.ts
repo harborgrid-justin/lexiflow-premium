@@ -3,7 +3,7 @@
  * Entity management and relationship mapping
  */
 
-import { apiClient } from '@services/infrastructure/apiClient';
+import { apiClient } from '@/services/infrastructure/apiClient';
 
 export interface EntityRelationship {
   id: string;

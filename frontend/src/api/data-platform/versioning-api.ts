@@ -6,7 +6,7 @@
  * @responsibility Manage data version control
  */
 
-import { apiClient, type PaginatedResponse } from '@services/infrastructure/apiClient';
+import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
 
 /**
  * Data version interface

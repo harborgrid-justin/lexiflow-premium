@@ -6,7 +6,7 @@ import { Button } from '@/components/atoms/Button';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { TaskCreationModal } from '@/components/organisms/TaskCreationModal';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';

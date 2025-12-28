@@ -26,10 +26,10 @@
  */
 
 import { WorkflowTask, CaseId, UserId, TaskStatusBackend, TaskPriorityBackend, BaseEntity } from '@/types';
-import { Repository } from '@services/core/Repository';
-import { STORES } from '@services/data/db';
+import { Repository } from '@/services/core/Repository';
+import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { TasksApiService } from '@/api/tasks-api';
+import { TasksApiService } from '@/api/workflow';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
 

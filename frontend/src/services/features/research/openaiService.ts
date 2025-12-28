@@ -5,11 +5,11 @@
 
 import OpenAI from 'openai';
 import { ParsedDocket } from '@/types';
-import { SearchResult } from '@/api/search/search-api';
+import type { SearchResult } from '@/types';
 import { withRetry } from '@/utils/apiUtils';
 import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, ShepardizeResult } from '@/types/ai';
 
-export * from '@/types/ai';
+// Note: Import AI types from @/types, don't re-export them
 
 // =============================================================================
 // CLIENT FACTORY

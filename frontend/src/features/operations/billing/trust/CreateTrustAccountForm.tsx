@@ -22,8 +22,8 @@ import { Card } from '@/components/molecules/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useCreateTrustAccount, useTrustAccountValidation } from '@/hooks/useTrustAccounts';
-import type { CreateTrustAccountDto, TrustAccountType, TrustAccountStatus } from '@types/trust-accounts';
-import { TrustAccountType as AccountType } from '@types/trust-accounts';
+import type { CreateTrustAccountDto, TrustAccountType, TrustAccountStatus } from '@/types/trust-accounts';
+import { TrustAccountType as AccountType } from '@/types/trust-accounts';
 
 /**
  * Form Steps Enum

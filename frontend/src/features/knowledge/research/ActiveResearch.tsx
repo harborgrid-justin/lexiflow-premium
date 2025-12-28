@@ -3,7 +3,7 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import { ResearchSession, UserId } from '@/types';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { ResearchSidebar } from './ResearchSidebar';
 import { ResearchResults } from './ResearchResults';
 import { ResearchInput } from './ResearchInput';

@@ -3,7 +3,7 @@ import React, { useState, useMemo, useCallback, useEffect, useTransition } from 
 import { Plus, RefreshCw, Play, Loader2, AlertTriangle } from 'lucide-react';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { Button } from '@/components/atoms/Button';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
 import { EmptyState } from '@/components/molecules/EmptyState';
 

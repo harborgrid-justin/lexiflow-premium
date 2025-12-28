@@ -6,7 +6,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useNotify } from '@/hooks/useNotify';
 import { RolePermission, PermissionLevel } from '@/types';
 

@@ -23,8 +23,8 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Formatters } from '@/utils/formatters';
 import { useTrustAccounts } from '@/hooks/useTrustAccounts';
-import type { TrustAccount } from '@types/trust-accounts';
-import { TrustAccountStatus } from '@types/trust-accounts';
+import type { TrustAccount } from '@/types/trust-accounts';
+import { TrustAccountStatus } from '@/types/trust-accounts';
 
 /**
  * Dashboard Statistics Card Props

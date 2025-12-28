@@ -68,7 +68,7 @@ import { useState, useMemo, useCallback } from 'react';
 // Services & Data
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { queryKeys } from '../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks
 import { useDebounce } from './useDebounce';

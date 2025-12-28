@@ -33,11 +33,11 @@
 // API & Query Keys
 import { api } from '@/api';
 import { queryKeys } from '@/utils/queryKeys';
-import { queryClient } from '@services/infrastructure/queryClient';
+import { queryClient } from '@/services/infrastructure/queryClient';
 
 // Types
 import { LegalRule } from '@/types';
-import type { JurisdictionRule, CreateJurisdictionRuleDto } from '@/api/jurisdiction-api';
+import type { JurisdictionRule, CreateJurisdictionRuleDto } from '@/api/analytics';
 
 // ============================================================================
 // TYPE MAPPING UTILITIES

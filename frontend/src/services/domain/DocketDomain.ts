@@ -45,7 +45,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 import { DocketEntry, DocketId, CaseId } from '@/types';
-import { Repository } from '@services/core/Repository';
+import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { SystemEventType } from "@/types/integration-types";
@@ -55,7 +55,7 @@ import { delay } from '@/utils/async';
 
 // Backend API Integration (Primary Data Source)
 import { isBackendApiEnabled } from '@/api';
-import { DocketApiService } from '@/api/docket-api';
+import { DocketApiService } from '@/api/litigation';
 import { apiClient } from '@/services/infrastructure/apiClient';
 
 // ============================================================================

@@ -12,7 +12,7 @@ import { useModalState } from '@/hooks';
 import { getTodayString } from '@/utils/dateUtils';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 
 interface FeeAgreement {
   id: string;

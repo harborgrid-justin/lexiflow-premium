@@ -30,7 +30,7 @@ import { getTodayString } from '@/utils/dateUtils';
 import { ChainService } from '@/services/infrastructure/chainService';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { EvidenceItem, ChainOfCustodyEvent, UserId } from '@/types';
 import { evidenceQueryKeys } from '@/services/infrastructure/queryKeys';
 import { validateCustodyEventSafe, CustodyActionType } from '@/services/validation/evidenceSchemas';

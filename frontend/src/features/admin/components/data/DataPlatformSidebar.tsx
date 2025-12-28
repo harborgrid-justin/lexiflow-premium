@@ -6,7 +6,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DATA_PLATFORM_MENU, MenuItem } from '@/config/tabs.config';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { TenantConfig } from '@/types';
 
 interface DataPlatformSidebarProps {

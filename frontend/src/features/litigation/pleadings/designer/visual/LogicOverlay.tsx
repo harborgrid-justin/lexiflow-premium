@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useRef } from 'react';
-import { PleadingDocument, PleadingSection } from '@types/pleading-types';
+import { PleadingDocument, PleadingSection } from '@/types/pleading-types';
 import { useTheme } from '@/providers/ThemeContext';
 
 interface LogicOverlayProps {

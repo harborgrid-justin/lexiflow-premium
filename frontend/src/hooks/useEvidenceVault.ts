@@ -60,7 +60,7 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 // Services & Data
 import { DataService } from '@/services';
 import { useQuery, useMutation, queryClient } from './useQueryHooks';
-import { queryKeys } from '../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Types
 import { EvidenceItem, ChainOfCustodyEvent, CaseId } from '@/types';

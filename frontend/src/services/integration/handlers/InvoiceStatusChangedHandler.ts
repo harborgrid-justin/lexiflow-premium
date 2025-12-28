@@ -6,7 +6,7 @@
  */
 
 import { BaseEventHandler } from './BaseEventHandler';
-import { ChainService } from '@services/infrastructure/chainService';
+import { ChainService } from '@/services/infrastructure/chainService';
 import type { SystemEventPayloads, IntegrationResult } from '@/types/integration-types';
 import type { UserId } from '@/types';
 import { SystemEventType } from '@/types/integration-types';
@@ -39,7 +39,7 @@ export class InvoiceStatusChangedHandler extends BaseEventHandler<SystemEventPay
     actions: string[],
     errors: string[]
   ): Promise<void> {
-    const { DataService } = await import('@/services/data/dataService');
+    const { DataService } = await import('@/services');
     
     // Check if workflow services are available
     if (!DataService.playbooks || !DataService.workflow || typeof DataService.workflow.deploy !== 'function') {

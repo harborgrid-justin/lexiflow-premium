@@ -5,8 +5,8 @@ import { Button } from '@/components/atoms/Button';
 import { Badge } from '@/components/atoms/Badge';
 import { RefreshCw, Link as LinkIcon, Settings, Plus, Loader2 } from 'lucide-react';
 import { useTheme } from '@providers/ThemeContext';
-import { cn } from '@utils/cn';
-import { DataService } from '@services/data/dataService';
+import { cn } from '@/utils/cn';
+import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 export const AdminIntegrations: React.FC = () => {

@@ -25,7 +25,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers/WindowContext';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/utils/cn';
 

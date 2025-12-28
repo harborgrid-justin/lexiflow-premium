@@ -20,7 +20,7 @@ import {AlertCircle, TrendingUp, FileText, ArrowRight} from 'lucide-react';
 import {DataService} from '@/services';
 
 // CRITICAL FIX: Import from the Hooks layer to avoid the SyntaxError
-import {useQuery} from '@hooks/useQueryHooks';
+import {useQuery} from '@/hooks/useQueryHooks';
 
 // Hooks & Context
 import {useTheme} from '@/providers';

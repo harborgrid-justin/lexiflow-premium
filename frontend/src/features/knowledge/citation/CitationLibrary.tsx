@@ -32,7 +32,7 @@ import { useWindow } from '@/providers/WindowContext';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 // Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { cn } from '@/utils/cn';
 // ✅ Migrated to backend API (2025-12-21)
 

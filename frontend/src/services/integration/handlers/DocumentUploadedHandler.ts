@@ -23,7 +23,7 @@ export class DocumentUploadedHandler extends BaseEventHandler<SystemEventPayload
     }
     
     // Dynamic import to avoid circular dependency
-    const { DataService } = await import('@/services/data/dataService');
+    const { DataService } = await import('@/services');
     
     const evidenceItem: EvidenceItem = {
       id: `ev-auto-${Date.now()}` as EvidenceId,

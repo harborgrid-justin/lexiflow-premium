@@ -29,7 +29,7 @@ import { PreferencePane } from './PreferencePane';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 
 // Services & Data
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

@@ -30,7 +30,7 @@ import {
   Trash2,
   X
 } from 'lucide-react';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { queryClient } from '@/services/infrastructure/queryClient';

@@ -17,7 +17,7 @@ import { AlertTriangle, FileText, ShieldAlert } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 
 // Components
 import { MetricCard } from '@/components/molecules/MetricCard';

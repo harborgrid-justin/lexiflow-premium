@@ -24,7 +24,7 @@
  * - Type-safe operations
  */
 
-import { Repository } from '@services/core/Repository';
+import { Repository } from '@/services/core/Repository';
 import { delay } from '@/utils/async';
 import { 
     Deposition, ESISource, ProductionSet, CustodianInterview, 
@@ -32,7 +32,7 @@ import {
     Examination, Vendor, Transcript, SanctionMotion, StipulationRequest,
     ReviewBatch, ProcessingJob, CalendarEventItem, LegalDocument, CaseId
 } from '@/types';
-import { db, STORES } from '@services/data/db';
+import { db, STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { discoveryApi } from '@/api/domains/discovery.api';
 

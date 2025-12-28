@@ -4,10 +4,10 @@
  */
 
 import { Juror, Witness, TrialExhibit, Fact, Case } from '@/types';
-import { Repository } from '@services/core/Repository';
-import { STORES, db } from '@services/data/db';
+import { Repository } from '@/services/core/Repository';
+import { STORES, db } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { TrialApiService } from '@/api/trial-api';
+import { TrialApiService } from '@/api/trial';
 
 export const TRIAL_QUERY_KEYS = {
     exhibits: {

@@ -10,7 +10,7 @@ import {
     WorkflowTask,
     WorkflowTemplateData
 } from '@/types';
-import {db, STORES} from '@services/data/db';
+import {db, STORES} from '@/services/data/db';
 import {StorageUtils} from '@/utils/storage';
 
 export const WorkflowRepository = {

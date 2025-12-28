@@ -17,8 +17,8 @@
  * - Proper error handling and logging
  */
 
-import { Repository } from '@services/core/Repository';
-import { STORES } from '@services/data/db';
+import { Repository } from '@/services/core/Repository';
+import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { WitnessesApiService, Witness } from '@/api/witnesses-api';
 

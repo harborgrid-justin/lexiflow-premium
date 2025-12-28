@@ -5,7 +5,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 export const JurisdictionInternational: React.FC = () => {

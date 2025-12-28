@@ -37,7 +37,7 @@ import { useModalState } from '@/hooks';
 import { useToggle } from '@/hooks/useToggle';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { cn } from '@/utils/cn';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';

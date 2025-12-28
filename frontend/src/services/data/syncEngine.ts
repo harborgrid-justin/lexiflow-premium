@@ -125,7 +125,7 @@
 import { StorageUtils } from '@/utils/storage';
 import { LinearHash } from '@/utils/datastructures/linearHash';
 import { SYNC_CACHE_MAX_SIZE } from '@/config/master.config';
-import { apiClient } from '@services/infrastructure/apiClient';
+import { apiClient } from '@/services/infrastructure/apiClient';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
 // ═══════════════════════════════════════════════════════════════════════════

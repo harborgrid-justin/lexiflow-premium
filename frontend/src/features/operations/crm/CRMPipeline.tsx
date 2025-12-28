@@ -4,7 +4,7 @@ import { useModalState } from '@/hooks/useModalState';
 import { KanbanBoard, KanbanColumn, KanbanCard } from '@/components/organisms/Kanban';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
 

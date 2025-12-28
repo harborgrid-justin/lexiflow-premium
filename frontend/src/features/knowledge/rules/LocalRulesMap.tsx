@@ -7,7 +7,7 @@ import { cn } from '@/utils/cn';
 import { MapPin, Book, Loader2 } from 'lucide-react';
 import { groupJurisdictionsByState, StateGroup, CourtLevel } from './localRulesMap.utils';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
 
 export const LocalRulesMap: React.FC = () => {

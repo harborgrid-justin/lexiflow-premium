@@ -5,7 +5,7 @@ import { Plus, FileText, LayoutTemplate, Clock } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useModalState } from '@/hooks';
-import { DataService } from '@/services/data/dataService';
+import { DataService } from '@/services';
 import { PleadingDocument, PleadingTemplate, PleadingSection } from '@/types/pleading-types';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';

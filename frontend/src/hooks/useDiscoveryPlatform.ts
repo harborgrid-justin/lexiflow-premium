@@ -32,23 +32,23 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 // Services & Data
 import { DataService } from '@/services';
 import { useQuery, useMutation, queryClient } from './useQueryHooks';
-import { queryKeys } from '../utils/queryKeys';
+import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useSessionStorage } from './useSessionStorage';
 import { useNotify } from './useNotify';
 
 // Utils & Constants
-import { getParentTabForView, getFirstTabOfParent, isDetailView } from '../utils/discoveryNavigation';
+import { getParentTabForView, getFirstTabOfParent, isDetailView } from '@/utils/discoveryNavigation';
 
 // Types
 import { DiscoveryRequest } from '@/types';
-import type { DiscoveryView } from '../utils/discoveryNavigation';
+import type { DiscoveryView } from '@/utils/discoveryNavigation';
 
 // ============================================================================
 // RE-EXPORTS (for backwards compatibility)
 // ============================================================================
-export type { DiscoveryView } from '@utils/discoveryNavigation';
+export type { DiscoveryView } from '@/utils/discoveryNavigation';
 
 // ============================================================================
 // TYPES

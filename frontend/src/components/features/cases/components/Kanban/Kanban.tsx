@@ -112,3 +112,6 @@ export const KanbanCard = React.memo<KanbanCardProps>(({ children, onDragStart, 
     </div>
   );
 });
+
+// Default export for backward compatibility
+export default KanbanBoard;

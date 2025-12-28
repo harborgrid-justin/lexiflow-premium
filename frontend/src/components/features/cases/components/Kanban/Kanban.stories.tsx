@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Kanban } from './Kanban';
+import { KanbanBoard } from './Kanban';
 
-const meta: Meta<typeof Kanban> = {
-  title: 'Components/Organisms/Kanban/Kanban',
-  component: Kanban,
+const meta: Meta<typeof KanbanBoard> = {
+  title: 'Components/Organisms/Kanban/KanbanBoard',
+  component: KanbanBoard,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',

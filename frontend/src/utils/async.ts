@@ -39,6 +39,29 @@ export const yieldToMain = (): Promise<void> => {
 };
 
 /**
+ * Map array items asynchronously with Promise.all
+ */
+export async function asyncMap<T, U>(
+  items: T[],
+  fn: (item: T) => Promise<U>
+): Promise<U[]> {
+  return Promise.all(items.map(fn));
+}
+
+/**
+ * Filter array items asynchronously
+ */
+export async function asyncFilter<T>(
+  items: T[],
+  fn: (item: T) => Promise<boolean>
+): Promise<T[]> {
+  const results = await Promise.all(items.map(async (item) => {
+    return (await fn(item)) ? item : null;
+  }));
+  return results.filter((item): item is T => item !== null);
+}
+
+/**
  * Retry an async operation with exponential backoff.
  *
  * @param fn - Async function to retry

@@ -53,7 +53,8 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
   const { theme } = useTheme();
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const canvasId = useId();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _canvasId = useId();
   
   const [pdfDoc, setPdfDoc] = useState<pdfjsLib.PDFDocumentProxy | null>(null);
   const [pageNum, setPageNum] = useState(1);

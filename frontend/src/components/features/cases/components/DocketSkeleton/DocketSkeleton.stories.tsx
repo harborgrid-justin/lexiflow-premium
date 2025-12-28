@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { DocketSkeleton } from './DocketSkeleton';
+import { DocketTableSkeleton } from './DocketSkeleton';
 
-const meta: Meta<typeof DocketSkeleton> = {
-  title: 'Components/Organisms/DocketSkeleton/DocketSkeleton',
-  component: DocketSkeleton,
+const meta: Meta<typeof DocketTableSkeleton> = {
+  title: 'Components/Organisms/DocketSkeleton/DocketTableSkeleton',
+  component: DocketTableSkeleton,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -11,7 +11,7 @@ const meta: Meta<typeof DocketSkeleton> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof DocketSkeleton>;
+type Story = StoryObj<typeof DocketTableSkeleton>;
 
 export const Default: Story = {
   args: {},

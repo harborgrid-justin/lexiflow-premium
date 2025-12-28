@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useRef, useState, useEffect, useMemo, useImperativeHandle, forwardRef, useId, useDeferredValue } from 'react';
+import React, { useRef, useState, useEffect, useMemo, useImperativeHandle, forwardRef, useDeferredValue } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

@@ -2,23 +2,12 @@
 // Miscellaneous types - split from compatibility.ts
 
 import {
-  BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
-  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId,
-  WorkflowTemplateId, CaseId, Money, JurisdictionObject, MetadataRecord, JsonValue
+  BaseEntity, UserId, OrgId, GroupId, DocumentId, EntityId, CaseId
 } from './primitives';
 import {
-  CaseStatus, UserRole, MatterType, BillingModel,
-  OrganizationType, RiskCategory, RiskLevel, RiskStatus,
-  CommunicationType, CommunicationDirection, ServiceStatus,
-  ExhibitStatus, ExhibitParty, MotionType, MotionStatus, MotionOutcome,
-  DocketEntryType, DiscoveryType, DiscoveryStatus,
-  EvidenceType, AdmissibilityStatus, ConferralResult,
-  ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, 
-  ServiceMethod, EntityType, EntityRole, CurrencyCode, LedesActivityCode, 
-  OcrStatus, TaskDependencyType
+  ServiceMethod, EntityType, EntityRole, ServiceStatus, NavCategory
 } from './enums';
-import { LucideIcon } from 'lucide-react';
-import React, { FC, LazyExoticComponent } from 'react';
+import React, { LazyExoticComponent } from 'react';
 import type { Case, Party } from './case';
 import type { Motion, DocketEntry } from './motion-docket';
 import type { EvidenceItem } from './evidence';

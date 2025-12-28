@@ -51,7 +51,7 @@ import { useCaseDetail } from '@/hooks/useCaseDetail';
 // INTERNAL DEPENDENCIES - SERVICES & UTILS
 // ============================================================================
 import { cn } from '@/utils/cn';
-import { CASE_DETAIL_TABS } from '../features/cases/components/detail/CaseDetailConfig';
+import { CASE_DETAIL_TABS } from '@/features/cases/components/detail/CaseDetailConfig';
 
 // ============================================================================
 // TYPES & INTERFACES

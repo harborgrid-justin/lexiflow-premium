@@ -40,7 +40,8 @@ export const ExportMenu = React.memo<ExportMenuProps>(({ onExport }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
-  const menuId = useId();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _menuId = useId();
 
   useClickOutside(menuRef as React.RefObject<HTMLElement>, () => setIsOpen(false));
 

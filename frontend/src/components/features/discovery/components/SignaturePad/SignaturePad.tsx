@@ -41,7 +41,8 @@ export const SignaturePad = React.memo<SignaturePadProps>(({
 }) => {
   const { theme } = useTheme();
   const [localSigning, setLocalSigning] = useState(false);
-  const signatureId = useId();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _signatureId = useId();
 
   const handleClick = () => {
     if (value) return; 

@@ -43,6 +43,11 @@ const InnerApp: React.FC = () => {
     appStatusMessage,
   } = useAppController();
 
+  // Create wrapper functions to match expected signatures
+  const handleSwitchUser = () => switchUser(0); // Switch to first user by default
+  const handleSelectCaseFromObject = (c: Case) => selectCase(c.id);
+  const handleSelectCaseById = (id: string) => selectCase(id);
+
   if (isAppLoading || !currentUser) {
     return (
       <div className="h-screen w-screen overflow-hidden">
@@ -64,7 +69,7 @@ const InnerApp: React.FC = () => {
             isOpen={isSidebarOpen}
             onClose={() => toggleSidebar()}
             currentUser={currentUser}
-            onSwitchUser={switchUser}
+            onSwitchUser={handleSwitchUser}
           />
         </ErrorBoundary>
       }
@@ -76,7 +81,7 @@ const InnerApp: React.FC = () => {
             setGlobalSearch={updateSearch}
             onGlobalSearch={() => {}}
             currentUser={currentUser}
-            onSwitchUser={switchUser}
+            onSwitchUser={handleSwitchUser}
             onSearchResultClick={(result: any) => selectCase(result.id)}
             onNeuralCommand={(cmd: any) => console.log('Neural command:', cmd)}
           />
@@ -89,8 +94,8 @@ const InnerApp: React.FC = () => {
           activeView={activeView}
           currentUser={currentUser}
           selectedCase={selectedCase}
-          handleSelectCase={selectCase}
-          handleSelectCaseById={selectCase}
+          handleSelectCase={handleSelectCaseFromObject}
+          handleSelectCaseById={handleSelectCaseById}
           navigateToCaseTab={(caseId: string, tab: string) => selectCase(caseId, tab)}
           handleBackToMain={() => navigateToView('dashboard')}
           setActiveView={navigateToView}

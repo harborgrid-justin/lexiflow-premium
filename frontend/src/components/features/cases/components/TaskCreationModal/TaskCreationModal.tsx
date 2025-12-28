@@ -57,8 +57,10 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
   isOpen, onClose, initialTitle, relatedModule, relatedItemId, relatedItemTitle, projects = [], onSave 
 }) => {
   const notify = useNotify();
-  const formId = useId();
-  const titleId = useId();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _formId = useId();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _titleId = useId();
   
   // Fetch users from backend API
   const { data: users = [] } = useQuery<User[]>(

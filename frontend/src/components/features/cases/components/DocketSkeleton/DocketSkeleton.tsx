@@ -223,3 +223,6 @@ export const DocketFilterSkeleton: React.FC = () => {
     </div>
   );
 };
+
+// Default export for backward compatibility
+export default DocketTableSkeleton;

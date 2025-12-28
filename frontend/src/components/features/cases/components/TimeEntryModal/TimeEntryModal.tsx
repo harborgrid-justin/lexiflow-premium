@@ -52,8 +52,10 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
   const [duration, setDuration] = useState('0.5');
   const [isRefining, setIsRefining] = useState(false);
   const { theme } = useTheme();
-  const modalId = useId();
-  const descId = useId();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _modalId = useId();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _descId = useId();
 
   const handleRefine = async () => {
     if (!desc) return;

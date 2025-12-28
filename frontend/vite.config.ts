@@ -66,11 +66,11 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
 
     // 6. Production Build (Rolldown & Oxc Optimized)
     build: {
-      target: 'baseline',
+      target: 'esnext',
       outDir: 'dist',
       sourcemap: mode === 'development',
       minify: mode === 'production' ? 'esbuild' : false,
-      cssMinify: 'lightningcss', // Use Lightning CSS to compress final output
+      cssMinify: mode === 'production' ? true : false, // Use esbuild for CSS minification
       chunkSizeWarningLimit: 800,
       rollupOptions: {
         output: {

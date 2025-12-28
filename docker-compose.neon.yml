@@ -1,0 +1,209 @@
+# =============================================================================
+# LexiFlow Premium - Neon PostgreSQL Production Deployment
+# =============================================================================
+# Enterprise-grade orchestration with Neon serverless PostgreSQL
+# 12-Agent System: 10 Workers + 1 Coordinator + 1 Scratchpad Manager
+# =============================================================================
+
+name: lexiflow-premium-neon
+
+services:
+  # ===========================================================================
+  # Redis 7 - Caching, Session Store, and Agent Communication
+  # ===========================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: lexiflow-redis-neon
+    restart: unless-stopped
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+      --save 60 1000
+      --save 300 100
+    ports:
+      - "6379:6379"
+    networks:
+      - lexiflow-neon-network
+    volumes:
+      - redis-neon-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    labels:
+      - "com.lexiflow.service=redis"
+      - "com.lexiflow.deployment=neon"
+
+  # ===========================================================================
+  # Backend - NestJS API Server with 12 Enterprise Agents
+  # ===========================================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: lexiflow-premium-backend:neon
+    container_name: lexiflow-backend-neon
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      # Neon PostgreSQL Connection (pooled endpoint)
+      DATABASE_URL: postgresql://neondb_owner:npg_u71zdejvgHOR@ep-morning-violet-ahjfqnv2-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+      DB_HOST: ep-morning-violet-ahjfqnv2-pooler.c-3.us-east-1.aws.neon.tech
+      DB_PORT: "5432"
+      DB_USERNAME: neondb_owner
+      DB_PASSWORD: npg_u71zdejvgHOR
+      DB_DATABASE: neondb
+      DB_SSL: "true"
+      DB_FORCE_SSL: "true"
+      DB_POOL_SIZE: "10"
+      DB_POOL_MIN: "2"
+      DB_POOL_MAX: "10"
+      DB_CONNECTION_TIMEOUT: "15000"
+      DB_FALLBACK_SQLITE: "false"
+      DB_SYNCHRONIZE: "false"
+      DB_MIGRATIONS_RUN: "true"
+
+      # Application
+      NODE_ENV: production
+      PORT: "5000"
+
+      # Security
+      JWT_SECRET: ${JWT_SECRET:-lexiflow_enterprise_jwt_secret_neon_production_2025}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-lexiflow_enterprise_refresh_secret_neon_production_2025}
+      JWT_EXPIRATION: "24h"
+      BCRYPT_ROUNDS: "12"
+
+      # Enterprise Agents System (12 Agents Total)
+      ENTERPRISE_AGENTS_ENABLED: "true"
+      AGENT_HEARTBEAT_INTERVAL: "5000"
+      AGENT_HEALTH_CHECK_INTERVAL: "10000"
+      AGENT_MAX_AGENTS: "12"
+      AGENT_ENABLE_COORDINATOR: "true"
+      AGENT_ENABLE_SCRATCHPAD: "true"
+      AGENT_AUTO_START: "true"
+      AGENT_COORDINATION_INTERVAL_MS: "30000"
+
+      # Redis Cache
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+
+      # Logging
+      LOG_LEVEL: info
+      LOG_FORMAT: json
+
+      # CORS - Allow Neon endpoints
+      CORS_ORIGIN: "*"
+
+      # Rate Limiting
+      THROTTLE_TTL: "60"
+      THROTTLE_LIMIT: "100"
+
+      # Demo Mode
+      DEMO_MODE: "false"
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - lexiflow-neon-network
+    volumes:
+      - backend-neon-uploads:/app/uploads
+      - backend-neon-logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 90s
+    labels:
+      - "com.lexiflow.service=backend"
+      - "com.lexiflow.deployment=neon"
+      - "com.lexiflow.agents=12"
+
+  # ===========================================================================
+  # Database Seeder - Seeds Neon PostgreSQL with Enterprise Data
+  # ===========================================================================
+  seeder:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lexiflow-seeder-neon
+    environment:
+      DATABASE_URL: postgresql://neondb_owner:npg_u71zdejvgHOR@ep-morning-violet-ahjfqnv2-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+      DB_HOST: ep-morning-violet-ahjfqnv2-pooler.c-3.us-east-1.aws.neon.tech
+      DB_PORT: "5432"
+      DB_USERNAME: neondb_owner
+      DB_PASSWORD: npg_u71zdejvgHOR
+      DB_DATABASE: neondb
+      DB_SSL: "true"
+      NODE_ENV: production
+      SEED_DEMO_DATA: "true"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - lexiflow-neon-network
+    command: ["node", "dist/src/database/scripts/seed-all.js"]
+    restart: "no"
+    labels:
+      - "com.lexiflow.service=seeder"
+      - "com.lexiflow.deployment=neon"
+
+  # ===========================================================================
+  # Frontend - React/Vite with Nginx (API Proxy to Neon-backed Backend)
+  # ===========================================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ""
+        VITE_API_PREFIX: /api/v1
+        VITE_USE_BACKEND_API: "true"
+        VITE_ENV: production
+    image: lexiflow-premium-frontend:neon
+    container_name: lexiflow-frontend-neon
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - lexiflow-neon-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    labels:
+      - "com.lexiflow.service=frontend"
+      - "com.lexiflow.deployment=neon"
+
+# =============================================================================
+# Networks
+# =============================================================================
+networks:
+  lexiflow-neon-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.29.0.0/16
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  redis-neon-data:
+    driver: local
+  backend-neon-uploads:
+    driver: local
+  backend-neon-logs:
+    driver: local

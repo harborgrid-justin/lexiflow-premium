@@ -42,6 +42,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.6.0",
+    "react-is": "^19.2.3",
     "react-router-dom": "^7.10.1",
     "react-window": "^2.2.3",
     "recharts": "^3.6.0",

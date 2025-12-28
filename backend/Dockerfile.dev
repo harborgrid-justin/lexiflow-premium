@@ -1,0 +1,36 @@
+# =============================================================================
+# LexiFlow Premium Backend - Development Dockerfile
+# =============================================================================
+# Watch mode enabled development container with debugging support
+# =============================================================================
+
+FROM node:22-alpine
+
+WORKDIR /app
+
+# Install dependencies for native modules
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    libc6-compat \
+    curl
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including devDependencies)
+RUN npm install --legacy-peer-deps
+
+# Copy source code
+COPY . .
+
+# Expose API port and debugger port
+EXPOSE 5000 9229
+
+# Environment
+ENV NODE_ENV=development
+ENV PORT=5000
+
+# Start development server with watch mode and debugging
+CMD ["npm", "run", "start:dev"]

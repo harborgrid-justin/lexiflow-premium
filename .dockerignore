@@ -1,0 +1,44 @@
+# =============================================================================
+# LexiFlow Premium - Project-level Docker Ignore
+# =============================================================================
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+!README.md
+docs
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.travis.yml
+
+# Local environment files
+.env
+.env.*
+!.env.example
+!.env.docker.example
+
+# Logs
+*.log
+logs
+
+# Temporary files
+tmp
+temp
+.tmp
+.temp

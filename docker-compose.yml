@@ -1,0 +1,158 @@
+# =============================================================================
+# LexiFlow Premium - Docker Compose Production Configuration
+# =============================================================================
+# Complete orchestration for frontend, backend, and supporting services
+# Based on Docker Compose best practices 2025
+# =============================================================================
+
+name: lexiflow-premium
+
+services:
+  # ===========================================================================
+  # Frontend - React/Vite with Nginx
+  # ===========================================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://backend:5000
+        VITE_API_PREFIX: /api/v1
+        VITE_USE_BACKEND_API: "true"
+        VITE_ENV: production
+    image: lexiflow-premium-frontend:latest
+    container_name: lexiflow-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - lexiflow-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "com.lexiflow.service=frontend"
+      - "com.lexiflow.version=1.0.0"
+
+  # ===========================================================================
+  # Backend - NestJS API Server
+  # ===========================================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: lexiflow-premium-backend:latest
+    container_name: lexiflow-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      # Database - Neon PostgreSQL
+      DATABASE_URL: ${DATABASE_URL}
+      DB_SSL: "true"
+      DB_POOL_SIZE: "20"
+      DB_FALLBACK_SQLITE: "false"
+
+      # Application
+      NODE_ENV: production
+      PORT: "5000"
+
+      # Security
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: "24h"
+      BCRYPT_ROUNDS: "12"
+
+      # Enterprise Agents
+      ENTERPRISE_AGENTS_ENABLED: "true"
+      AGENT_HEARTBEAT_INTERVAL: "5000"
+      AGENT_HEALTH_CHECK_INTERVAL: "10000"
+
+      # Redis Cache
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+
+      # Logging
+      LOG_LEVEL: info
+      LOG_FORMAT: json
+
+      # CORS
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost}
+
+      # Rate Limiting
+      THROTTLE_TTL: "60"
+      THROTTLE_LIMIT: "100"
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - lexiflow-network
+    volumes:
+      - backend-uploads:/app/uploads
+      - backend-logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "com.lexiflow.service=backend"
+      - "com.lexiflow.version=1.0.0"
+
+  # ===========================================================================
+  # Redis - Caching and Session Store
+  # ===========================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: lexiflow-redis
+    restart: unless-stopped
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --save 60 1000
+      --save 300 100
+    ports:
+      - "6379:6379"
+    networks:
+      - lexiflow-network
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    labels:
+      - "com.lexiflow.service=redis"
+
+# =============================================================================
+# Networks
+# =============================================================================
+networks:
+  lexiflow-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  backend-uploads:
+    driver: local
+  backend-logs:
+    driver: local
+  redis-data:
+    driver: local

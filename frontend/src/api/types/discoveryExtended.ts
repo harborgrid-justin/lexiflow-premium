@@ -1,6 +1,19 @@
+/**
+ * Discovery Extended Data Mock Data
+ * Includes depositions, ESI sources, production sets, and custodian interviews
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.discovery APIs instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/discovery/entities/
+ */
 
 import { Deposition, ESISource, ProductionSet, CustodianInterview, UUID, CaseId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.discovery instead
+ */
 export const MOCK_DEPOSITIONS: Deposition[] = [
     {
         id: 'DEP-001' as UUID,

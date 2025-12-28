@@ -1,5 +1,16 @@
+/**
+ * Judge Profile API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.jurisdiction.getJudges() instead.
+ * This constant is only for seeding and testing purposes.
+ */
+
 import { JudgeProfile, UUID } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.jurisdiction instead
+ */
 export const MOCK_JUDGES: JudgeProfile[] = [
     {
         id: 'j1' as UUID,

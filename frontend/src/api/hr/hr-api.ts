@@ -4,26 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-
-export interface StaffMember {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone?: string;
-  role: 'attorney' | 'paralegal' | 'legal_assistant' | 'admin' | 'partner' | 'associate' | 'of_counsel';
-  department?: string;
-  title?: string;
-  barNumber?: string;
-  barStates?: string[];
-  status: 'active' | 'inactive' | 'on_leave' | 'terminated';
-  hireDate?: string;
-  terminationDate?: string;
-  billableRate?: number;
-  metadata?: Record<string, any>;
-  createdAt?: string;
-  updatedAt?: string;
-}
+import type { StaffMember } from '@/types';
 
 export interface StaffFilters {
   role?: StaffMember['role'];

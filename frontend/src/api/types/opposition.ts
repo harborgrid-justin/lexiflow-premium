@@ -1,3 +1,14 @@
+/**
+ * Opposition Party Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.trial.getOpposition() instead.
+ * This constant is only for seeding and testing purposes.
+ */
+
+/**
+ * @deprecated MOCK DATA - Use DataService.trial instead
+ */
 export const MOCK_OPPOSITION = [
     { 
         id: 'opp-1', 

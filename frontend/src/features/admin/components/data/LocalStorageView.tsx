@@ -86,4 +86,6 @@ export const LocalStorageView = React.memo(() => {
       </div>
     </div>
   );
-};
+});
+
+LocalStorageView.displayName = 'LocalStorageView';

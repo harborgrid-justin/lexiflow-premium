@@ -1,6 +1,16 @@
+/**
+ * Conferral Session API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.pleadings.getConferrals() instead.
+ * This constant is only for seeding and testing purposes.
+ */
 
 import { ConferralSession, UUID, CaseId, MotionId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.pleadings instead
+ */
 export const MOCK_CONFERRALS: ConferralSession[] = [
   {
     id: 'conf-1' as UUID,

@@ -1,6 +1,18 @@
+/**
+ * Audit Log Entry API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.admin.getAuditLogs() with queryKeys.admin.auditLogs() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/audit/entities/audit-log.entity.ts
+ */
 
 import { AuditLogEntry, UUID, UserId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.admin instead
+ */
 export const MOCK_AUDIT_LOGS: AuditLogEntry[] = [
     { id: 'l1' as UUID, timestamp: '2024-03-12 14:30:22', userId: 'usr-partner-alex' as UserId, user: 'Alexandra H.', action: 'VIEW_DOC', resource: 'D-001 (Confidential)', ip: '192.168.1.45' },
     { id: 'l2' as UUID, timestamp: '2024-03-12 14:28:10', userId: 'usr-assoc-james' as UserId, user: 'James Doe', action: 'EXPORT_REPORT', resource: 'Billing_Q1', ip: '192.168.1.22' },

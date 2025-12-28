@@ -1,6 +1,18 @@
+/**
+ * Time Entry API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.billing.getTimeEntries() with queryKeys.billing.timeEntries() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/billing/entities/time-entry.entity.ts
+ */
 
 import { TimeEntry, UUID, CaseId, UserId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.billing instead
+ */
 export const MOCK_TIME_ENTRIES: TimeEntry[] = [
     {
       id: '1' as UUID,

@@ -1,6 +1,18 @@
+/**
+ * Docket Entry API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.docket.getAll() with queryKeys.docket.all() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/docket/entities/docket-entry.entity.ts
+ */
 
 import { DocketEntry, DocketId, CaseId, DocumentId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.docket instead
+ */
 export const MOCK_DOCKET_ENTRIES: DocketEntry[] = [
   // CASE: 1:24-cv-01442-LMB-IDD
   {

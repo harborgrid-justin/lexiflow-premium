@@ -1,5 +1,16 @@
+/**
+ * Opposing Counsel Profile API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.trial.getOpposingCounsel() instead.
+ * This constant is only for seeding and testing purposes.
+ */
+
 import { OpposingCounselProfile, UUID } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.trial instead
+ */
 export const MOCK_COUNSEL: OpposingCounselProfile[] = [
     {
         id: 'oc-1' as UUID,

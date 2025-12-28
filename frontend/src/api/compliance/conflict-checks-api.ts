@@ -4,26 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-
-export interface ConflictCheck {
-  id: string;
-  clientName: string;
-  opposingParties?: string[];
-  caseType?: string;
-  status: 'pending' | 'clear' | 'conflict_found' | 'requires_review';
-  conflicts?: {
-    type: 'client' | 'opposing_party' | 'related_matter' | 'ethical_wall';
-    description: string;
-    severity: 'low' | 'medium' | 'high';
-    relatedCaseId?: string;
-  }[];
-  checkedBy?: string;
-  checkedAt: string;
-  approvedBy?: string;
-  approvedAt?: string;
-  notes?: string;
-  metadata?: Record<string, any>;
-}
+import type { ConflictCheck } from '@/types';
 
 export class ConflictChecksApiService {
   private readonly baseUrl = '/api/v1/compliance/conflicts';

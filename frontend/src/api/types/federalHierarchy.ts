@@ -1,9 +1,23 @@
+/**
+ * Federal Court Hierarchy Data
+ * Defines the structure of US Federal Court system
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.jurisdiction.getFederalHierarchy() instead.
+ * This constant is only for seeding and testing purposes.
+ */
+
 import { MOCK_JURISDICTIONS } from './jurisdiction';
 
-export interface CourtNode {
-    name: string;
-    districts?: string[];
-}
+/**
+ * Represents a court node in the federal hierarchy
+ * @property name - Official circuit or court name
+ * @property districts - Optional array of district court names within the circuit
+ */
+export type CourtNode = {
+    readonly name: string;
+    readonly districts?: readonly string[];
+};
 
 export const FEDERAL_CIRCUITS: CourtNode[] = [
     {
@@ -68,15 +82,25 @@ export const getCourtHierarchy = () => {
 };
 
 
-export interface StateJurisdictionLevel {
-  name: string;
-  courts: string[];
-}
-export interface StateJurisdiction {
-  id: string;
-  name: string;
-  levels: StateJurisdictionLevel[];
-}
+/**
+ * Represents a level in state court hierarchy (e.g., Supreme, Appellate, Trial)
+ */
+export type StateJurisdictionLevel = {
+  readonly name: string;
+  readonly courts: readonly string[];
+};
+
+/**
+ * Represents a complete state court system
+ * @property id - Two-letter state code (e.g., 'CA', 'NY')
+ * @property name - Full state name
+ * @property levels - Hierarchical court structure from highest to lowest
+ */
+export type StateJurisdiction = {
+  readonly id: string;
+  readonly name: string;
+  readonly levels: readonly StateJurisdictionLevel[];
+};
 
 const stateCourts = MOCK_JURISDICTIONS.filter((j) => j.system === 'State');
 const stateNames: Record<string, string> = {

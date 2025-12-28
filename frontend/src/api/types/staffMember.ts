@@ -1,6 +1,18 @@
+/**
+ * Staff Member API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.hr.getStaff() with queryKeys.hr.staff() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/hr/entities/employee.entity.ts
+ */
 
 import { StaffMember, UUID, UserId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.hr instead
+ */
 export const MOCK_STAFF: StaffMember[] = [
   { 
     id: 's1' as UUID, 

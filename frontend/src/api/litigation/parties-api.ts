@@ -8,7 +8,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-import type { Party } from '@/types'; // Use centralized type definition
+import type { Party, PartyFilters } from '@/types';
 
 // Backend PartyType enum values
 export type PartyTypeBackend = 
@@ -69,12 +69,6 @@ export interface CreatePartyDto {
 
 // DTO for updating a party
 export interface UpdatePartyDto extends Partial<CreatePartyDto> {}
-
-export interface PartyFilters {
-  caseId?: string;
-  type?: PartyTypeBackend;
-  role?: PartyRoleBackend;
-}
 
 export class PartiesApiService {
   private readonly baseUrl = '/parties';

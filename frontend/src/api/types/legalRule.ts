@@ -1,6 +1,16 @@
+/**
+ * Legal Rules Mock Data (FRE, FRCP, etc.)
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.knowledge.getRules() instead.
+ * This constant is only for seeding and testing purposes.
+ */
 
 import { LegalRule } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.knowledge instead
+ */
 export const MOCK_RULES: LegalRule[] = [
   // --- FEDERAL RULES OF EVIDENCE (FRE) ---
   

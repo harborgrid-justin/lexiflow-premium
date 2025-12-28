@@ -1,6 +1,18 @@
+/**
+ * Workflow Template Library Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.workflow.getTemplates() with queryKeys.workflow.templates() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/workflow/entities/workflow-template.entity.ts
+ */
 
 import { WorkflowTemplateData, WorkflowTemplateId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.workflow instead
+ */
 export const TEMPLATE_LIBRARY: WorkflowTemplateData[] = [
   // LITIGATION
   {

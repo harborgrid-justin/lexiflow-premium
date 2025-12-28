@@ -1,5 +1,17 @@
+/**
+ * Knowledge Base Mock Data
+ * Includes wiki articles, precedents, and Q&A items
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.knowledge APIs instead.
+ * This constant is only for seeding and testing purposes.
+ */
+
 import { WikiArticle, Precedent, QAItem, DocumentId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.knowledge instead
+ */
 export const MOCK_WIKI_ARTICLES: WikiArticle[] = [
   {
     id: 'ca-employment',

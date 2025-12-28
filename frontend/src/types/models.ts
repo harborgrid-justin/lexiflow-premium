@@ -4,6 +4,9 @@
 // Re-export primitives & base types
 export * from './primitives';
 
+// Re-export auth & security types
+export * from './auth';
+
 // Re-export system & infrastructure types
 export * from './system';
 
@@ -13,6 +16,13 @@ export * from './data-quality';
 
 // Re-export case & litigation types
 export * from './case';
+export * from './case-team';
+
+// Re-export statistics & analytics
+export * from './statistics';
+
+// Re-export DTOs
+export * from './dto';
 
 // Re-export financial & billing types
 export * from './financial';

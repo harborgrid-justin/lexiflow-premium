@@ -1,6 +1,16 @@
+/**
+ * Data Dictionary Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.admin.getDataDictionary() instead.
+ * This constant is only for seeding and testing purposes.
+ */
 
 import { DataDictionaryItem } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.admin instead
+ */
 export const MOCK_DATA_DICTIONARY: DataDictionaryItem[] = [
     {
         id: 'dd-001',

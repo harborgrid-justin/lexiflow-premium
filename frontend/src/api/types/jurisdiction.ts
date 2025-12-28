@@ -1,3 +1,14 @@
+/**
+ * Jurisdiction Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.jurisdiction.getAll() instead.
+ * This constant is only for seeding and testing purposes.
+ */
+
+/**
+ * @deprecated MOCK DATA - Use DataService.jurisdiction instead
+ */
 export const MOCK_JURISDICTIONS = [
     { id: 'fed-scotus', system: 'Federal', type: 'Highest', name: 'U.S. Supreme Court', region: 'SCOTUS' },
     { id: 'fed-ca9', system: 'Federal', type: 'Appellate', name: '9th Circuit Court of Appeals', region: '9th' },

@@ -270,10 +270,10 @@ export class NotificationsApiService {
   /**
    * Get unread notifications only
    * 
-   * @returns Promise<Notification[]> Array of unread notifications
+   * @returns Promise<ApiNotification[]> Array of unread notifications
    * @throws Error if fetch fails
    */
-  async getUnread(): Promise<Notification[]> {
+  async getUnread(): Promise<ApiNotification[]> {
     return this.getAll({ read: false });
   }
 
@@ -295,15 +295,13 @@ export class NotificationsApiService {
   /**
    * Get notifications by type
    *
-   * @param type - Notification type
-   * @returns Promise<Notification[]> Array of notifications of specified type
+   * @param notificationType - Notification type
+   * @returns Promise<ApiNotification[]> Array of notifications of specified type
    * @throws Error if validation fails or fetch fails
    */
-  async getByType(type: string): Promise<Notification[]> {
-    if (!type || false) {
-      throw new Error('[NotificationsApiService.getByType] type is required');
-    }
-    return this.getAll({ type });
+  async getByType(notificationType: string): Promise<ApiNotification[]> {
+    const all = await this.getAll();
+    return all.filter(n => n.type === notificationType);
   }
 
   /**

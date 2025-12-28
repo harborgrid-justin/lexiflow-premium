@@ -4,29 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-
-export interface Exhibit {
-  id: string;
-  caseId: string;
-  exhibitNumber: string;
-  title: string;
-  description?: string;
-  exhibitType: 'documentary' | 'physical' | 'demonstrative' | 'testimonial';
-  party: 'plaintiff' | 'defendant' | 'third_party' | 'joint';
-  status: 'identified' | 'marked' | 'offered' | 'admitted' | 'excluded' | 'withdrawn';
-  documentId?: string;
-  witnessId?: string;
-  markedDate?: string;
-  offeredDate?: string;
-  admittedDate?: string;
-  ruling?: string;
-  objections?: string[];
-  tags?: string[];
-  notes?: string;
-  metadata?: Record<string, any>;
-  createdAt?: string;
-  updatedAt?: string;
-}
+import type { Exhibit } from '@/types';
 
 export interface ExhibitFilters {
   caseId?: string;

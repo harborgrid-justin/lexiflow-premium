@@ -1,6 +1,16 @@
+/**
+ * Joint Discovery Plan API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.discovery.getJointPlans() instead.
+ * This constant is only for seeding and testing purposes.
+ */
 
 import { JointPlan, UUID, CaseId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.discovery instead
+ */
 export const MOCK_JOINT_PLANS: JointPlan[] = [
   {
     id: 'plan-1' as UUID,

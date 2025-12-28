@@ -1,6 +1,18 @@
+/**
+ * Conversation API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.correspondence.getConversations() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/communications/entities/conversation.entity.ts
+ */
 
 import { Conversation, Message, UserId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.correspondence instead
+ */
 export const MOCK_CONVERSATIONS: Conversation[] = [
     {
         id: 'conv-1', name: 'John Doe (GC)', role: 'Client', status: 'online', unread: 2, isExternal: true,

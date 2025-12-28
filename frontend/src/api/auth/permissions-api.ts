@@ -4,25 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-
-export interface Permission {
-  id: string;
-  resource: string;
-  action: 'create' | 'read' | 'update' | 'delete' | 'execute' | '*';
-  effect: 'allow' | 'deny';
-  conditions?: {
-    type: string;
-    operator: string;
-    value: unknown;
-  }[];
-  metadata?: Record<string, any>;
-}
-
-export interface RolePermissions {
-  roleId: string;
-  roleName: string;
-  permissions: Permission[];
-}
+import type { Permission, RolePermissions } from '@/types';
 
 export class PermissionsApiService {
   private readonly baseUrl = '/permissions';
@@ -43,3 +25,4 @@ export class PermissionsApiService {
     return apiClient.get<Permission[]>(`${this.baseUrl}/users/${userId}`);
   }
 }
+

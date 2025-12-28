@@ -29,4 +29,74 @@ export interface LegalHold extends BaseEntity { custodian: string; dept: string;
 
 export interface PrivilegeLogEntry extends BaseEntity { date: string; author: string; recipient: string; type: string; basis: string; desc: string; }
 
+export interface Custodian extends BaseEntity {
+  caseId: string;
+  name: string;
+  email?: string;
+  department?: string;
+  title?: string;
+  legalHoldStatus?: 'pending' | 'acknowledged' | 'released';
+  dataSources?: string[];
+  interviewDate?: string;
+  notes?: string;
+  metadata?: Record<string, any>;
+}
+
+export interface Production extends BaseEntity {
+  caseId: string;
+  productionNumber: string;
+  title: string;
+  producingParty: string;
+  receivingParty: string;
+  productionDate?: string;
+  documentCount?: number;
+  nativeCount?: number;
+  imageCount?: number;
+  status: 'pending' | 'produced' | 'received' | 'reviewed';
+  notes?: string;
+  metadata?: Record<string, any>;
+}
+
+export interface Witness extends BaseEntity {
+  caseId: string;
+  name: string;
+  witnessType: 'fact' | 'expert' | 'character' | 'impeachment';
+  status: 'identified' | 'contacted' | 'interviewed' | 'deposed' | 'unavailable';
+  contactInfo?: {
+    email?: string;
+    phone?: string;
+    address?: string;
+  };
+  expectedTestimony?: string;
+  notes?: string;
+  metadata?: Record<string, any>;
+}
+
+export interface DiscoveryProcess extends BaseEntity {
+  caseId: string;
+  processName: string;
+  status: 'planning' | 'in_progress' | 'completed' | 'on_hold';
+  startDate?: string;
+  targetCompletionDate?: string;
+  actualCompletionDate?: string;
+  documents?: number;
+  custodians?: number;
+  productions?: number;
+  notes?: string;
+  metadata?: Record<string, any>;
+}
+
+export interface DiscoveryAnalytics {
+  totalDocuments: number;
+  reviewedDocuments: number;
+  privilegedDocuments: number;
+  productionDocuments: number;
+  custodianCount: number;
+  activeHolds: number;
+  completedDepositions: number;
+  pendingRequests: number;
+  reviewProgress: number;
+  avgReviewRate: number;
+}
+
 export interface ConferralSession extends BaseEntity { caseId: CaseId; topic: string; date: string; method: ConferralMethod; participants: string[]; notes: string; result: ConferralResult; nextSteps?: string; linkedMotionId?: MotionId; }

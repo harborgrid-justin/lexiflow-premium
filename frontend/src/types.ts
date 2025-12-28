@@ -1,4 +1,3 @@
-
 export * from './types/enums';
 export * from './types/models';
 export * from './types/integration-types';
@@ -21,6 +20,7 @@ export * from './types/dto-types';
 export * from './types/search';
 export * from './types/errors';
 export * from './types/notifications';
+export * from './types/filters';
 
 export interface PaginatedResponse<T> {
   data: T[];

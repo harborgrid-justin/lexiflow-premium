@@ -4,33 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-
-export interface CasePhase {
-  id: string;
-  caseId: string;
-  phaseName: 'investigation' | 'pleadings' | 'discovery' | 'motion_practice' | 'settlement' | 'trial_prep' | 'trial' | 'post_trial' | 'appeal';
-  status: 'not_started' | 'in_progress' | 'completed' | 'skipped';
-  startDate?: string;
-  endDate?: string;
-  estimatedDuration?: number;
-  actualDuration?: number;
-  milestones?: {
-    name: string;
-    dueDate?: string;
-    completedDate?: string;
-    status: 'pending' | 'completed';
-  }[];
-  notes?: string;
-  metadata?: Record<string, never>;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface CasePhaseFilters {
-  caseId?: string;
-  phaseName?: CasePhase['phaseName'];
-  status?: CasePhase['status'];
-}
+import type { CasePhase, CasePhaseFilters } from '@/types';
 
 export class CasePhasesApiService {
   private readonly baseUrl = '/case-phases';

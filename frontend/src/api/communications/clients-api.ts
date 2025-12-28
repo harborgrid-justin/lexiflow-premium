@@ -29,6 +29,8 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
+import type { Client } from '@/types';
+import { ClientStatus } from '@/types/financial';
 
 /**
  * Query keys for React Query integration
@@ -49,90 +51,7 @@ export const CLIENTS_QUERY_KEYS = {
     invoices: (clientId: string) => ['clients', clientId, 'invoices'] as const,
 } as const;
 
-// Aligned with backend client.entity.ts - 40+ comprehensive fields
-export interface Client {
-  id: string;
-  clientNumber: string;
-  name?: string;
-  clientType?: 'individual' | 'corporation' | 'partnership' | 'llc' | 'nonprofit' | 'government' | 'other';
-  status: 'active' | 'inactive' | 'prospective' | 'former' | 'blocked';
-  
-  // Contact Information
-  email?: string;
-  phone?: string;
-  fax?: string;
-  website?: string;
-  
-  // Primary Address
-  address?: string;
-  city?: string;
-  state?: string;
-  zipCode?: string;
-  country?: string;
-  
-  // Billing Address (separate from primary)
-  billingAddress?: string;
-  billingCity?: string;
-  billingState?: string;
-  billingZipCode?: string;
-  billingCountry?: string;
-  
-  // Business Information
-  taxId?: string;
-  industry?: string;
-  establishedDate?: Date;
-  
-  // Primary Contact
-  primaryContactName?: string;
-  primaryContactEmail?: string;
-  primaryContactPhone?: string;
-  primaryContactTitle?: string;
-  
-  // Account Management
-  accountManagerId?: string;
-  referralSource?: string;
-  clientSince?: Date;
-  
-  // Billing & Financial
-  paymentTerms: 'net_15' | 'net_30' | 'net_45' | 'net_60' | 'due_on_receipt' | 'custom';
-  preferredPaymentMethod?: string;
-  creditLimit: number;
-  currentBalance: number;
-  totalBilled: number;
-  totalPaid: number;
-  
-  // Statistics
-  totalCases: number;
-  activeCases: number;
-  
-  // Flags
-  isVip: boolean;
-  requiresConflictCheck: boolean;
-  lastConflictCheckDate?: Date;
-  
-  // Retainer
-  hasRetainer: boolean;
-  retainerAmount?: number;
-  retainerBalance?: number;
-  
-  // Extensibility
-  customFields?: Record<string, unknown>;
-  tags?: string[];
-  notes?: string;
-  metadata?: Record<string, unknown>;
-  
-  // Portal Access
-  portalToken?: string;
-  portalTokenExpiry?: Date;
-  
-  // Relationships
-  cases?: unknown[];
-  invoices?: unknown[];
-  
-  // Timestamps
-  createdAt?: string;
-  updatedAt?: string;
-}
+// Client type imported from @/types - see types/client.ts for full definition
 
 export interface ClientFilters {
   status?: Client['status'];
@@ -333,7 +252,7 @@ export class ClientsApiService {
    * @throws Error if fetch fails
    */
   async getActiveClients(): Promise<Client[]> {
-    return this.getAll({ status: 'active' });
+    return this.getAll({ status: ClientStatus.ACTIVE });
   }
 
   /**

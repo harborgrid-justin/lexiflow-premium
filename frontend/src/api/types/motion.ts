@@ -1,6 +1,18 @@
+/**
+ * Motion API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.pleadings.getMotions() with queryKeys.pleadings.motions() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/motions/entities/motion.entity.ts
+ */
 
 import { Motion, MotionId, CaseId, DocumentId, EvidenceId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.pleadings instead
+ */
 export const MOCK_MOTIONS: Motion[] = [
   // CASE: 1:24-cv-01442-LMB-IDD
   {

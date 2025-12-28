@@ -4,29 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-
-export interface Motion {
-  id: string;
-  caseId: string;
-  type: string;
-  title: string;
-  status: 'draft' | 'filed' | 'pending' | 'granted' | 'denied' | 'withdrawn';
-  filedDate?: string;
-  hearingDate?: string;
-  decidedDate?: string;
-  outcome?: string;
-  documentId?: string;
-  notes?: string;
-  metadata?: Record<string, any>;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface MotionFilters {
-  caseId?: string;
-  type?: string;
-  status?: Motion['status'];
-}
+import type { Motion, MotionFilters } from '@/types';
 
 export class MotionsApiService {
   private readonly baseUrl = '/motions';

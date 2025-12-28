@@ -1,8 +1,20 @@
+/**
+ * Workflow Task API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.workflow.getTasks() with queryKeys.workflow.tasks() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/workflow/entities/workflow-task.entity.ts
+ */
 
 import { WorkflowTask, TaskId, UserId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
 
 const CID = '1:24-cv-01442-LMB-IDD' as CaseId;
 
+/**
+ * @deprecated MOCK DATA - Use DataService.workflow instead
+ */
 export const MOCK_TASKS: WorkflowTask[] = [
     // --- EXISTING MOCK TASKS ---
     { 

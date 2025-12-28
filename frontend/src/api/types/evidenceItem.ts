@@ -1,6 +1,18 @@
+/**
+ * Evidence Item API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.evidence.getAll() with queryKeys.evidence.all() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/evidence/entities/evidence.entity.ts
+ */
 
 import { EvidenceItem, EvidenceId, UUID, CaseId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.evidence instead
+ */
 export const MOCK_EVIDENCE: EvidenceItem[] = [
   {
     id: 'EV-001' as EvidenceId,

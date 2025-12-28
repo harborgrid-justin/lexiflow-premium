@@ -1,4 +1,14 @@
+/**
+ * CRM (Client Relationship Management) Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.crm APIs instead.
+ * This constant is only for seeding and testing purposes.
+ */
 
+/**
+ * @deprecated MOCK DATA - Use DataService.crm instead
+ */
 export const MOCK_LEADS = [
     { id: 'lead-1', client: 'Future Corp', title: 'Major Litigation Matter', value: '$500,000', date: '2024-03-10', stage: 'New Lead' },
     { id: 'lead-2', client: 'Innovate LLC', title: 'Series B Funding Round', value: '$250,000', date: '2024-03-08', stage: 'Conflict Check' },

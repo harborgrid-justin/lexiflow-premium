@@ -1,10 +1,17 @@
+/**
+ * Group API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.admin.getGroups() with queryKeys.admin.groups() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/groups/entities/group.entity.ts
+ */
 
 import { Group, GroupId, OrgId } from '@/types';
 
 /**
- * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
- * Use DataService.groups.getAll() with queryKeys.groups.all() instead
- * This constant is only for seeding and testing purposes.
+ * @deprecated MOCK DATA - Use DataService.admin instead
  */
 export const MOCK_GROUPS: Group[] = [
   // LexiFlow Groups

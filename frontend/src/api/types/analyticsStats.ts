@@ -1,4 +1,14 @@
+/**
+ * Analytics Statistics Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.analytics APIs instead.
+ * This constant is only for seeding and testing purposes.
+ */
 
+/**
+ * @deprecated MOCK DATA - Use DataService.analytics instead
+ */
 export const MOCK_JUDGE_STATS = [
     { name: 'Motion to Dismiss', grant: 65, deny: 35 },
     { name: 'Summary Judgment', grant: 42, deny: 58 },

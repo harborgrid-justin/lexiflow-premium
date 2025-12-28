@@ -10,79 +10,195 @@ import {
 import { TrustSubLedger } from './trust-accounts';
 
 // --- CLUSTER 3: FINANCIAL & BILLING ---
-export interface FeeAgreement { type: BillingModel; rate?: Money; contingencyPercent?: number; retainerRequired?: Money; splitRules?: SplitBillingRule[]; }
-export interface SplitBillingRule { clientId: string; percentage: number; }
-export interface RateTable extends BaseEntity { timekeeperId: string; rate: Money; effectiveDate: string; expiryDate?: string; level: string; }
-export interface TimeEntry extends BaseEntity { 
+
+/**
+ * Split billing rule for multi-client matters
+ * Defines percentage allocation across clients
+ */
+export type SplitBillingRule = {
+  readonly clientId: string;
+  readonly percentage: number;
+};
+
+/**
+ * Fee agreement entity
+ * Defines billing arrangement and rates for a matter
+ * 
+ * @property type - Billing model (Hourly, Fixed Fee, Contingency, etc.)
+ * @property rate - Hourly rate or fixed fee amount
+ * @property contingencyPercent - Success fee percentage (0-100)
+ * @property retainerRequired - Upfront retainer amount
+ * @property splitRules - Multi-client cost allocation rules
+ */
+export type FeeAgreement = { 
+  readonly type: BillingModel; 
+  readonly rate?: Money; 
+  readonly contingencyPercent?: number; 
+  readonly retainerRequired?: Money; 
+  readonly splitRules?: readonly SplitBillingRule[]; 
+};
+
+/**
+ * Rate table entity
+ * Time-bound billing rate assignments for timekeepers
+ * 
+ * @property effectiveDate - Start date for rate application
+ * @property expiryDate - End date (null for current rate)
+ * @property level - Seniority level (Partner, Associate, Paralegal)
+ */
+export type RateTable = BaseEntity & { 
+  readonly timekeeperId: string; 
+  readonly rate: Money; 
+  readonly effectiveDate: string; 
+  readonly expiryDate?: string; 
+  readonly level: string; 
+};
+/**
+ * Time entry status discriminated union
+ * Tracks lifecycle from draft through billing
+ */
+export type TimeEntryStatus = 
+  | 'Draft' 
+  | 'Submitted' 
+  | 'Approved' 
+  | 'Billed' 
+  | 'Written Off';
+
+/**
+ * Time entry entity
+ * @see Backend: time-entries/entities/time-entry.entity.ts
+ * 
+ * Represents billable time with LEDES coding and approval workflow.
+ * Aligned with backend TimeEntry entity schema.
+ * 
+ * @property duration - Time in hours (decimal, e.g., 1.5 = 90 minutes)
+ * @property rate - Hourly rate in currency units
+ * @property total - Calculated amount (duration × rate)
+ * @property ledesCode - LEDES Uniform Task-Based Management System code
+ * @property billable - Whether entry should be invoiced
+ * @property status - Current approval/billing state
+ */
+export type TimeEntry = BaseEntity & { 
   // Core fields (aligned with backend TimeEntry entity)
-  caseId: CaseId; // Backend: varchar (case_id)
-  userId: UserId; // Backend: varchar (user_id)
-  date: string; // Backend: date (required)
-  duration: number; // Backend: decimal(10,2) in hours
-  description: string; // Backend: text (required)
-  activity?: string; // Backend: varchar(100) e.g., "Research", "Court Appearance"
-  ledesCode?: string; // Backend: varchar(20) LEDES billing code
-  rate: number; // Backend: decimal(10,2) hourly rate
-  total: number; // Backend: decimal(10,2) duration * rate
-  status: 'Draft' | 'Submitted' | 'Approved' | 'Billed' | 'Written Off' | string; // Backend: enum TimeEntryStatus
-  billable: boolean; // Backend: boolean, default true
-  invoiceId?: string; // Backend: uuid
-  rateTableId?: string; // Backend: uuid
-  internalNotes?: string; // Backend: text
-  taskCode?: string; // Backend: varchar(255)
-  discount?: number; // Backend: decimal(5,2) percentage
-  discountedTotal?: number; // Backend: decimal(10,2)
-  approvedBy?: string; // Backend: uuid
-  approvedAt?: string; // Backend: timestamp
-  billedBy?: string; // Backend: uuid
-  billedAt?: string; // Backend: timestamp
+  readonly caseId: CaseId; // Backend: varchar (case_id)
+  readonly userId: UserId; // Backend: varchar (user_id)
+  readonly date: string; // Backend: date (required)
+  readonly duration: number; // Backend: decimal(10,2) in hours
+  readonly description: string; // Backend: text (required)
+  readonly activity?: string; // Backend: varchar(100) e.g., "Research", "Court Appearance"
+  readonly ledesCode?: string; // Backend: varchar(20) LEDES billing code
+  readonly rate: number; // Backend: decimal(10,2) hourly rate
+  readonly total: number; // Backend: decimal(10,2) duration * rate
+  readonly status: TimeEntryStatus | string; // Backend: enum TimeEntryStatus
+  readonly billable: boolean; // Backend: boolean, default true
+  readonly invoiceId?: string; // Backend: uuid
+  readonly rateTableId?: string; // Backend: uuid
+  readonly internalNotes?: string; // Backend: text
+  readonly taskCode?: string; // Backend: varchar(255)
+  readonly discount?: number; // Backend: decimal(5,2) percentage
+  readonly discountedTotal?: number; // Backend: decimal(10,2)
+  readonly approvedBy?: string; // Backend: uuid
+  readonly approvedAt?: string; // Backend: timestamp
+  readonly billedBy?: string; // Backend: uuid
+  readonly billedAt?: string; // Backend: timestamp
   
   // Frontend-specific
-  ledesActivity?: LedesActivityCode; // Alias for ledesCode
-}
-export interface TimeEntryPayload { caseId: string; date: string; duration: number; description: string; rate: number; total: number; status: 'Unbilled'; }
-export interface Invoice extends BaseEntity { 
+  readonly ledesActivity?: LedesActivityCode; // Alias for ledesCode
+};
+/**
+ * Time entry creation payload
+ * Simplified DTO for creating unbilled time entries
+ */
+export type TimeEntryPayload = { 
+  readonly caseId: string; 
+  readonly date: string; 
+  readonly duration: number; 
+  readonly description: string; 
+  readonly rate: number; 
+  readonly total: number; 
+  readonly status: 'Unbilled'; 
+};
+
+/**
+ * Invoice billing model type
+ */
+export type InvoiceBillingModel = 
+  | 'Hourly' 
+  | 'Fixed Fee' 
+  | 'Contingency' 
+  | 'Hybrid' 
+  | 'Retainer';
+
+/**
+ * Invoice status discriminated union
+ * Tracks invoice lifecycle from draft through payment
+ */
+export type InvoiceStatus = 
+  | 'Draft' 
+  | 'Sent' 
+  | 'Viewed' 
+  | 'Partial' 
+  | 'Paid' 
+  | 'Overdue' 
+  | 'Written Off';
+
+/**
+ * Invoice entity
+ * @see Backend: invoices/entities/invoice.entity.ts
+ * 
+ * Represents client invoices with line items, payments, and status tracking.
+ * Aligned with backend Invoice entity schema.
+ * 
+ * @property invoiceNumber - Unique identifier (auto-generated or custom)
+ * @property billingModel - Charging structure for this invoice
+ * @property status - Current payment/delivery state
+ * @property subtotal - Sum of line items before tax/discount
+ * @property totalAmount - Final amount due (subtotal + tax - discount)
+ * @property balanceDue - Remaining unpaid amount
+ * @property currency - ISO 4217 currency code (default: USD)
+ */
+export type Invoice = BaseEntity & { 
   // Core fields (aligned with backend Invoice entity)
-  invoiceNumber: string; // Backend: varchar unique (required)
-  caseId: CaseId; // Backend: varchar (case_id)
-  clientId: string; // Backend: varchar (client_id)
-  clientName: string; // Backend: varchar(255)
-  matterDescription: string; // Backend: varchar(500)
-  invoiceDate: string; // Backend: date (required)
-  dueDate: string; // Backend: date (required)
-  periodStart?: string; // Backend: date
-  periodEnd?: string; // Backend: date
-  billingModel: 'Hourly' | 'Fixed Fee' | 'Contingency' | 'Hybrid' | 'Retainer'; // Backend: enum BillingModel
-  status: 'Draft' | 'Sent' | 'Viewed' | 'Partial' | 'Paid' | 'Overdue' | 'Written Off' | string; // Backend: enum InvoiceStatus
-  subtotal: number; // Backend: decimal(10,2), default 0
-  taxAmount: number; // Backend: decimal(10,2), default 0
-  taxRate?: number; // Backend: decimal(5,2), default 0
-  discountAmount: number; // Backend: decimal(10,2), default 0
-  totalAmount: number; // Backend: decimal(10,2), default 0
-  paidAmount: number; // Backend: decimal(10,2), default 0
-  balanceDue: number; // Backend: decimal(10,2), default 0
-  timeCharges: number; // Backend: decimal(10,2), default 0
-  expenseCharges: number; // Backend: decimal(10,2), default 0
-  notes?: string; // Backend: text
-  terms?: string; // Backend: text
-  billingAddress?: string; // Backend: varchar(500)
-  jurisdiction?: string; // Backend: varchar(50)
-  currency: string; // Backend: varchar(3), default 'USD'
-  sentAt?: string; // Backend: timestamp
-  sentBy?: string; // Backend: uuid
-  viewedAt?: string; // Backend: timestamp
-  paidAt?: string; // Backend: timestamp
-  paymentMethod?: string; // Backend: varchar(100)
-  paymentReference?: string; // Backend: varchar(255)
+  readonly invoiceNumber: string; // Backend: varchar unique (required)
+  readonly caseId: CaseId; // Backend: varchar (case_id)
+  readonly clientId: string; // Backend: varchar (client_id)
+  readonly clientName: string; // Backend: varchar(255)
+  readonly matterDescription: string; // Backend: varchar(500)
+  readonly invoiceDate: string; // Backend: date (required)
+  readonly dueDate: string; // Backend: date (required)
+  readonly periodStart?: string; // Backend: date
+  readonly periodEnd?: string; // Backend: date
+  readonly billingModel: InvoiceBillingModel; // Backend: enum BillingModel
+  readonly status: InvoiceStatus | string; // Backend: enum InvoiceStatus
+  readonly subtotal: number; // Backend: decimal(10,2), default 0
+  readonly taxAmount: number; // Backend: decimal(10,2), default 0
+  readonly taxRate?: number; // Backend: decimal(5,2), default 0
+  readonly discountAmount: number; // Backend: decimal(10,2), default 0
+  readonly totalAmount: number; // Backend: decimal(10,2), default 0
+  readonly paidAmount: number; // Backend: decimal(10,2), default 0
+  readonly balanceDue: number; // Backend: decimal(10,2), default 0
+  readonly timeCharges: number; // Backend: decimal(10,2), default 0
+  readonly expenseCharges: number; // Backend: decimal(10,2), default 0
+  readonly notes?: string; // Backend: text
+  readonly terms?: string; // Backend: text
+  readonly billingAddress?: string; // Backend: varchar(500)
+  readonly jurisdiction?: string; // Backend: varchar(50)
+  readonly currency: string; // Backend: varchar(3), default 'USD'
+  readonly sentAt?: string; // Backend: timestamp
+  readonly sentBy?: string; // Backend: uuid
+  readonly viewedAt?: string; // Backend: timestamp
+  readonly paidAt?: string; // Backend: timestamp
+  readonly paymentMethod?: string; // Backend: varchar(100)
+  readonly paymentReference?: string; // Backend: varchar(255)
   
   // Frontend-specific (legacy)
-  client?: string; // Alias for clientName
-  matter?: string; // Alias for matterDescription
-  date?: string; // Alias for invoiceDate
-  amount?: number; // Alias for totalAmount
-  items?: string[];
-  taxJurisdiction?: string; // Alias for jurisdiction
-}
+  readonly client?: string; // Alias for clientName
+  readonly matter?: string; // Alias for matterDescription
+  readonly date?: string; // Alias for invoiceDate
+  readonly amount?: number; // Alias for totalAmount
+  readonly items?: readonly string[];
+  readonly taxJurisdiction?: string; // Alias for jurisdiction
+};
 
 /**
  * @deprecated Moved to types/trust-accounts.ts for full backend synchronization

@@ -4,16 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-
-export interface BlacklistedToken {
-  id: string;
-  token: string;
-  userId?: string;
-  reason: 'logout' | 'expired' | 'security' | 'admin';
-  blacklistedAt: string;
-  expiresAt: string;
-  metadata?: Record<string, any>;
-}
+import type { BlacklistedToken } from '@/types';
 
 export class TokenBlacklistAdminApiService {
   private readonly baseUrl = '/token-blacklist-admin';
@@ -39,3 +30,4 @@ export class TokenBlacklistAdminApiService {
     return apiClient.post(`${this.baseUrl}/cleanup`, {});
   }
 }
+

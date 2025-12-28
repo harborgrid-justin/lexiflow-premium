@@ -1,6 +1,18 @@
+/**
+ * Workflow Stage API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.workflow.getStages() with queryKeys.workflow.stages() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/workflow/entities/workflow-stage.entity.ts
+ */
 
 import { WorkflowStage, TaskId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.workflow instead
+ */
 export const MOCK_STAGES: WorkflowStage[] = [
     { 
         id: 'stage-1', 

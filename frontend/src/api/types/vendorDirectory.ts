@@ -1,4 +1,14 @@
+/**
+ * Vendor Directory Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.operations.getVendorDirectory() instead.
+ * This constant is only for seeding and testing purposes.
+ */
 
+/**
+ * @deprecated MOCK DATA - Use DataService.operations instead
+ */
 export const MOCK_VENDOR_DIRECTORY = [
     { id: 'vnd-dir-1', name: 'Westlaw', category: 'Research', rating: 4.8, status: 'Preferred', contact: 'support@westlaw.com' },
     { id: 'vnd-dir-2', name: 'Clio', category: 'Software', rating: 4.5, status: 'Active', contact: 'sales@clio.com' },

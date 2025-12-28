@@ -9,7 +9,11 @@ import { TaskDependencyType, UserRole, StageStatus } from './enums';
 
 
 // --- CLUSTER 6: WORKFLOW & AUTOMATION ---
-// Backend Task entity enums (from tasks/dto/create-task.dto.ts)
+
+/**
+ * Task status discriminated union
+ * Backend alignment: tasks/dto/create-task.dto.ts
+ */
 export enum TaskStatusBackend {
   TODO = 'To Do',
   IN_PROGRESS = 'In Progress',
@@ -18,14 +22,27 @@ export enum TaskStatusBackend {
   CANCELLED = 'Cancelled'
 }
 
+/**
+ * Task priority levels
+ * Backend alignment: tasks/dto/create-task.dto.ts
+ * Note: Backend uses CRITICAL instead of URGENT
+ */
 export enum TaskPriorityBackend {
   LOW = 'Low',
   MEDIUM = 'Medium',
   HIGH = 'High',
-  CRITICAL = 'Critical' // Backend uses CRITICAL not URGENT
+  CRITICAL = 'Critical'
 }
 
-export interface WorkflowTask extends Omit<BaseEntity, 'createdBy'> { 
+/**
+ * Workflow task entity
+ * @see Backend: tasks/entities/task.entity.ts
+ * @see Shared: packages/shared-types/src/entities/task.entity.ts
+ * 
+ * Extends BaseEntity with workflow-specific fields.
+ * Properties marked as "Frontend extension" are not persisted in backend.
+ */
+export type WorkflowTask = Omit<BaseEntity, 'createdBy'> & { 
   id: TaskId;
   // Core fields (EXACTLY aligned with backend Task entity)
   title: string;
@@ -66,67 +83,128 @@ export interface WorkflowTask extends Omit<BaseEntity, 'createdBy'> {
   slaId?: string; // Frontend extension
 }
 
-// Backward compatibility alias
+/**
+ * Backward compatibility alias
+ * @deprecated Use WorkflowTask directly
+ */
 export type Task = WorkflowTask;
 
-// Basic/Legacy SLA and Approval types (renamed to avoid conflict with advanced types)
-export interface SLAConfigBasic extends BaseEntity { name: string; targetHours: number; warningThresholdHours: number; businessHoursOnly: boolean; }
-export interface ApprovalChainBasic extends BaseEntity { name: string; steps: { role: UserRole; userId?: UserId; order: number }[]; }
-export interface WorkflowStage { id: string; title: string; status: StageStatus | string; tasks: WorkflowTask[]; }
-export interface WorkflowTemplateData extends BaseEntity { id: WorkflowTemplateId; title: string; category: string; complexity: 'Low' | 'Medium' | 'High'; duration: string; tags: string[]; auditReady: boolean; stages: string[]; }
+/**
+ * Workflow stage complexity classification
+ */
+export type WorkflowComplexity = 'Low' | 'Medium' | 'High';
 
-// Workflow Process Types
-export interface WorkflowProcess extends BaseEntity {
-  id: string;
-  name: string;
-  description?: string;
-  status: 'Active' | 'Paused' | 'Completed' | 'Archived';
-  templateId?: WorkflowTemplateId;
-  caseId?: CaseId;
-  projectId?: ProjectId;
-  startDate?: string;
-  dueDate?: string;
-  completedDate?: string;
-  completionPercentage: number;
-  priority?: 'Low' | 'Medium' | 'High' | 'Urgent';
-  assignedTo?: UserId[];
-  ownerId?: UserId;
-  stages?: WorkflowStage[];
-  tasks?: WorkflowTask[];
-  metadata?: MetadataRecord;
-}
+/**
+ * Basic SLA configuration
+ * For advanced SLA features, see workflow-advanced-types.ts
+ */
+export type SLAConfigBasic = BaseEntity & {
+  readonly name: string;
+  readonly targetHours: number;
+  readonly warningThresholdHours: number;
+  readonly businessHoursOnly: boolean;
+};
 
-// Workflow Analytics Types
-// Task API Response Types
-export interface TaskStatistics {
-  total: number;
-  byStatus: Record<TaskStatusBackend, number>;
-  byPriority: Record<TaskPriorityBackend, number>;
-  overdue: number;
-  completedThisWeek: number;
-  completedThisMonth: number;
-  averageCompletionTime: number; // in hours
-  averageEstimateAccuracy: number; // percentage
-}
+/**
+ * Basic approval chain configuration  
+ * For advanced approval features, see workflow-advanced-types.ts
+ */
+export type ApprovalChainBasic = BaseEntity & {
+  readonly name: string;
+  readonly steps: ReadonlyArray<{
+    readonly role: UserRole;
+    readonly userId?: UserId;
+    readonly order: number;
+  }>;
+};
 
-export interface TaskFiltersExtended {
-  caseId?: string;
-  status?: TaskStatusBackend | TaskStatusBackend[];
-  priority?: TaskPriorityBackend | TaskPriorityBackend[];
-  assignedTo?: string | string[];
-  createdBy?: string;
-  parentTaskId?: string;
-  tags?: string[];
-  dueDateFrom?: string;
-  dueDateTo?: string;
-  overdue?: boolean;
-  hasSubtasks?: boolean;
-  search?: string;
-  sortBy?: 'dueDate' | 'priority' | 'status' | 'createdAt' | 'title';
-  sortOrder?: 'asc' | 'desc';
-  page?: number;
-  limit?: number;
-}
+/**
+ * Workflow stage representation
+ * Contains grouped tasks with status tracking
+ */
+export type WorkflowStage = {
+  readonly id: string;
+  readonly title: string;
+  readonly status: StageStatus | string;
+  readonly tasks: readonly WorkflowTask[];
+};
+
+/**
+ * Workflow template metadata
+ * Used for template library and workflow initialization
+ */
+export type WorkflowTemplateData = BaseEntity & {
+  readonly id: WorkflowTemplateId;
+  readonly title: string;
+  readonly category: string;
+  readonly complexity: WorkflowComplexity;
+  readonly duration: string;
+  readonly tags: readonly string[];
+  readonly auditReady: boolean;
+  readonly stages: readonly string[];
+};
+
+/**
+ * Workflow process instance
+ * Represents an active workflow with execution state
+ */
+export type WorkflowProcess = BaseEntity & {
+  readonly id: string;
+  readonly name: string;
+  readonly description?: string;
+  readonly status: 'Active' | 'Paused' | 'Completed' | 'Archived';
+  readonly templateId?: WorkflowTemplateId;
+  readonly caseId?: CaseId;
+  readonly projectId?: ProjectId;
+  readonly startDate?: string;
+  readonly dueDate?: string;
+  readonly completedDate?: string;
+  readonly completionPercentage: number;
+  readonly priority?: 'Low' | 'Medium' | 'High' | 'Urgent';
+  readonly assignedTo?: readonly UserId[];
+  readonly ownerId?: UserId;
+  readonly stages?: readonly WorkflowStage[];
+  readonly tasks?: readonly WorkflowTask[];
+  readonly metadata?: MetadataRecord;
+};
+
+/**
+ * Task statistics aggregation
+ * Used for analytics and reporting dashboards
+ */
+export type TaskStatistics = {
+  readonly total: number;
+  readonly byStatus: Readonly<Record<TaskStatusBackend, number>>;
+  readonly byPriority: Readonly<Record<TaskPriorityBackend, number>>;
+  readonly overdue: number;
+  readonly completedThisWeek: number;
+  readonly completedThisMonth: number;
+  readonly averageCompletionTime: number; // in hours
+  readonly averageEstimateAccuracy: number; // percentage
+};
+
+/**
+ * Extended task filtering options
+ * Used for advanced task search and analytics queries
+ */
+export type TaskFiltersExtended = {
+  readonly caseId?: string;
+  readonly status?: TaskStatusBackend | readonly TaskStatusBackend[];
+  readonly priority?: TaskPriorityBackend | readonly TaskPriorityBackend[];
+  readonly assignedTo?: string | readonly string[];
+  readonly createdBy?: string;
+  readonly parentTaskId?: string;
+  readonly tags?: readonly string[];
+  readonly dueDateFrom?: string;
+  readonly dueDateTo?: string;
+  readonly overdue?: boolean;
+  readonly hasSubtasks?: boolean;
+  readonly search?: string;
+  readonly sortBy?: 'dueDate' | 'priority' | 'status' | 'createdAt' | 'title';
+  readonly sortOrder?: 'asc' | 'desc';
+  readonly page?: number;
+  readonly limit?: number;
+};
 
 export interface TaskBulkOperationResult {
   success: number;

@@ -4,33 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-
-export interface Organization {
-  id: string;
-  name: string;
-  legalName?: string;
-  organizationType: 'corporation' | 'llc' | 'partnership' | 'sole_proprietorship' | 'nonprofit' | 'government_agency' | 'trust' | 'estate' | 'other';
-  taxId?: string;
-  registrationNumber?: string;
-  jurisdiction?: string;
-  status?: 'active' | 'inactive' | 'dissolved' | 'merged' | 'acquired' | 'bankrupt';
-  foundedDate?: string;
-  address?: {
-    street?: string;
-    city?: string;
-    state?: string;
-    zip?: string;
-    country?: string;
-  };
-  contact?: {
-    phone?: string;
-    email?: string;
-    website?: string;
-  };
-  metadata?: Record<string, any>;
-  createdAt?: string;
-  updatedAt?: string;
-}
+import type { Organization } from '@/types';
 
 export interface OrganizationFilters {
   organizationType?: Organization['organizationType'];

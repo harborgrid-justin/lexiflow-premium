@@ -1,4 +1,14 @@
+/**
+ * Discovery Document Templates Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.discovery.getDocTemplates() instead.
+ * This constant is only for seeding and testing purposes.
+ */
 
+/**
+ * @deprecated MOCK DATA - Use DataService.discovery instead
+ */
 export const MOCK_DISCOVERY_DOCS = {
   minutes: {
     id: 'DOC-MIN-001',

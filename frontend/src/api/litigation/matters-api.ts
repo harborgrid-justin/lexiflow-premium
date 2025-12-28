@@ -4,15 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-import { Matter, MatterId } from '@/types';
-
-export interface MatterFilters {
-  status?: string;
-  clientId?: string;
-  leadAttorneyId?: string;
-  practiceArea?: string;
-  search?: string;
-}
+import { Matter, MatterId, MatterFilters } from '@/types';
 
 export interface MatterStatistics {
   total: number;

@@ -4,37 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-
-export interface LegalHold {
-  id: string;
-  caseId: string;
-  name: string;
-  description?: string;
-  status: 'active' | 'released' | 'expired';
-  effectiveDate: string;
-  releaseDate?: string;
-  custodians: string[];
-  dataTypes: string[];
-  preservationInstructions?: string;
-  acknowledgments?: {
-    custodianId: string;
-    acknowledgedAt: string;
-    acknowledgedBy: string;
-  }[];
-  reminders?: {
-    frequency: 'daily' | 'weekly' | 'monthly';
-    nextReminderDate: string;
-  };
-  metadata?: Record<string, any>;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface LegalHoldFilters {
-  caseId?: string;
-  status?: LegalHold['status'];
-  custodianId?: string;
-}
+import type { LegalHold, LegalHoldFilters } from '@/types';
 
 export class LegalHoldsApiService {
   private readonly baseUrl = '/legal-holds';

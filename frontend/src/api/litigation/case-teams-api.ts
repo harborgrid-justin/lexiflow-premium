@@ -4,27 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-
-export interface CaseTeamMember {
-  id: string;
-  caseId: string;
-  userId: string;
-  userName?: string;
-  role: 'lead_attorney' | 'associate' | 'paralegal' | 'legal_assistant' | 'consultant' | 'expert' | 'support';
-  permissions?: string[];
-  billableRate?: number;
-  assignedDate: string;
-  removedDate?: string;
-  isActive: boolean;
-  metadata?: Record<string, any>;
-}
-
-export interface CaseTeamFilters {
-  caseId?: string;
-  userId?: string;
-  role?: CaseTeamMember['role'];
-  isActive?: boolean;
-}
+import type { CaseTeamMember, CaseTeamFilters } from '@/types';
 
 export class CaseTeamsApiService {
   private readonly baseUrl = '/case-teams';

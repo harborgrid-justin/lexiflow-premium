@@ -27,30 +27,7 @@
  */
 
 import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
-
-export interface Pleading {
-  id: string;
-  caseId: string;
-  type: 'complaint' | 'answer' | 'reply' | 'counterclaim' | 'cross_claim' | 'amended_complaint' | 'amended_answer';
-  title: string;
-  filedDate?: string;
-  filedBy?: string;
-  documentId?: string;
-  status: 'draft' | 'filed' | 'served' | 'responded' | 'withdrawn';
-  dueDate?: string;
-  claims?: string[];
-  defenses?: string[];
-  notes?: string;
-  metadata?: Record<string, any>;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface PleadingFilters {
-  caseId?: string;
-  type?: Pleading['type'];
-  status?: Pleading['status'];
-}
+import type { Pleading, PleadingFilters } from '@/types';
 
 /**
  * Query keys for React Query integration

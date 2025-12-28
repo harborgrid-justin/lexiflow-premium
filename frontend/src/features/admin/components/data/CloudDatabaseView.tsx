@@ -41,7 +41,9 @@ export const CloudDatabaseView = React.memo(() => {
       />
     </div>
   );
-};
+});
+
+CloudDatabaseView.displayName = 'CloudDatabaseView';
 
 interface CloudDatabaseContentProps {
   theme: ThemeContextType['theme'];

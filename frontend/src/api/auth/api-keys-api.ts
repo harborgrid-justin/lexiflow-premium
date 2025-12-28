@@ -4,18 +4,7 @@
  */
 
 import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
-
-export interface ApiKey {
-  id: string;
-  name: string;
-  key: string;
-  scopes: string[];
-  status: 'active' | 'revoked';
-  expiresAt?: string;
-  lastUsedAt?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { ApiKey } from '@/types';
 
 export class ApiKeysApiService {
   async getAll(): Promise<ApiKey[]> {
@@ -43,3 +32,4 @@ export class ApiKeysApiService {
     return apiClient.get<{ id: string; label: string; description: string }[]>('/admin/api-keys/scopes');
   }
 }
+

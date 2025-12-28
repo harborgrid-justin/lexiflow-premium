@@ -1,6 +1,19 @@
+/**
+ * Case API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.cases.getAll() with queryKeys.cases.all() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/cases/entities/case.entity.ts
+ * Shared types: packages/shared-types/src/entities/case.entity.ts
+ */
 
 import { Case, CaseStatus, CaseId, UserId, EntityId, OrgId, PartyId, MatterType } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.cases instead
+ */
 export const MOCK_CASES: Case[] = [
   // MAIN APPEAL CASE
   {

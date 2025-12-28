@@ -1,5 +1,16 @@
+/**
+ * Advisor API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.trial.getAdvisors() instead.
+ * This constant is only for seeding and testing purposes.
+ */
+
 import { UUID } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.trial instead
+ */
 export const MOCK_ADVISORS = [
     { 
         id: 'exp-1', 

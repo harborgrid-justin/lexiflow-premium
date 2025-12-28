@@ -1,6 +1,16 @@
+/**
+ * Dashboard Data Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.analytics.getDashboard() instead.
+ * This constant is only for seeding and testing purposes.
+ */
 
 import { Briefcase, Clock, FileText, AlertTriangle } from 'lucide-react';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.analytics instead
+ */
 export const DASHBOARD_STATS = [
     { label: 'Active Cases', value: '142', icon: Briefcase, color: 'text-blue-600', bg: 'bg-blue-100' },
     { label: 'Pending Motions', value: '28', icon: FileText, color: 'text-indigo-600', bg: 'bg-indigo-100' },

@@ -1,6 +1,19 @@
+/**
+ * Document API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.documents.getAll() with queryKeys.documents.all() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/documents/entities/document.entity.ts
+ * Shared types: packages/shared-types/src/entities/document.entity.ts
+ */
 
 import { LegalDocument, DocumentId, CaseId, UserId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.documents instead
+ */
 export const MOCK_DOCUMENTS: LegalDocument[] = [
     // NEW FORM DOCS
     {

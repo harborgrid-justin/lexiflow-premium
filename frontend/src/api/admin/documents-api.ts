@@ -29,12 +29,7 @@
 
 import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
 import type {
-  Case,
-  DocketEntry,
   LegalDocument,
-  EvidenceItem,
-  TimeEntry,
-  User,
 } from '@/types';
 
 /**

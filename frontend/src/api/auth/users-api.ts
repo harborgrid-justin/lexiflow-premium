@@ -29,58 +29,16 @@
  */
 
 import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
-import type { User, UserRole } from '@/types';
+import type { User, UserRole, CreateUserDto, UpdateUserDto, UserStatistics, ChangePasswordDto } from '@/types';
 
-// DTOs for user operations
-export interface CreateUserDto {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
-  department?: string;
-  title?: string;
-  phone?: string;
-  extension?: string;
-  mobilePhone?: string;
-  office?: string;
-  avatarUrl?: string;
-  isActive?: boolean;
-}
-
-export interface UpdateUserDto {
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  role?: UserRole;
-  department?: string;
-  title?: string;
-  phone?: string;
-  extension?: string;
-  mobilePhone?: string;
-  office?: string;
-  avatarUrl?: string;
-  isActive?: boolean;
-}
-
+/**
+ * User filters for querying
+ */
 export interface UserFilters {
   role?: UserRole;
   department?: string;
   isActive?: boolean;
   search?: string;
-}
-
-export interface UserStatistics {
-  total: number;
-  active: number;
-  inactive: number;
-  byRole: Record<string, number>;
-  byDepartment: Record<string, number>;
-}
-
-export interface ChangePasswordDto {
-  currentPassword: string;
-  newPassword: string;
 }
 
 /**
@@ -389,3 +347,4 @@ export class UsersApiService {
     return this.getAll({ department });
   }
 }
+

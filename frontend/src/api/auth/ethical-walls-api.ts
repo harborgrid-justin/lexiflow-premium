@@ -4,34 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-
-export interface EthicalWall {
-  id: string;
-  name: string;
-  description?: string;
-  status: 'active' | 'inactive' | 'pending_approval';
-  reason: string;
-  affectedUsers: string[];
-  affectedCases: string[];
-  restrictedResources: {
-    type: 'case' | 'document' | 'client' | 'matter';
-    id: string;
-  }[];
-  startDate: string;
-  endDate?: string;
-  createdBy?: string;
-  approvedBy?: string;
-  approvedAt?: string;
-  metadata?: Record<string, any>;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface EthicalWallFilters {
-  status?: EthicalWall['status'];
-  userId?: string;
-  caseId?: string;
-}
+import type { EthicalWall, EthicalWallFilters } from '@/types';
 
 export class EthicalWallsApiService {
   private readonly baseUrl = '/ethical-walls';
@@ -70,3 +43,4 @@ export class EthicalWallsApiService {
     return apiClient.delete(`${this.baseUrl}/${id}`);
   }
 }
+

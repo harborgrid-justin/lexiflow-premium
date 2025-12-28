@@ -97,14 +97,51 @@ export interface Case extends BaseEntity {
   solTriggerDate?: string;
 }
 
-export interface Party extends BaseEntity { 
-  id: PartyId;
+/**
+ * Party type discriminated union for type safety
+ * @see Backend: parties/entities/party.entity.ts
+ */
+export type PartyType = 
+  | 'Plaintiff' 
+  | 'Defendant' 
+  | 'Petitioner' 
+  | 'Respondent' 
+  | 'Appellant' 
+  | 'Appellee' 
+  | 'Third Party' 
+  | 'Witness' 
+  | 'Expert Witness' 
+  | 'Other' 
+  | 'Individual' 
+  | 'Corporation' 
+  | 'Government';
+
+/**
+ * Party role in case
+ */
+export type PartyRole = 
+  | 'Primary' 
+  | 'Co-Party' 
+  | 'Interested Party' 
+  | 'Guardian' 
+  | 'Representative' 
+  | string;
+
+/**
+ * Party entity representing individuals or organizations involved in a case
+ * @see Backend: parties/entities/party.entity.ts
+ * 
+ * Represents plaintiffs, defendants, witnesses, and other case participants.
+ * Includes attorney representation and contact information.
+ */
+export type Party = BaseEntity & { 
+  readonly id: PartyId;
   // Core fields (aligned with backend Party entity)
-  caseId: CaseId; // Backend: uuid (required), FK to cases
-  name: string; // Backend: varchar(255)
-  description?: string; // Backend: varchar(500) - e.g., 'A Community Association'
-  type: 'Plaintiff' | 'Defendant' | 'Petitioner' | 'Respondent' | 'Appellant' | 'Appellee' | 'Third Party' | 'Witness' | 'Expert Witness' | 'Other' | 'Individual' | 'Corporation' | 'Government'; // Backend: enum PartyType
-  role: 'Primary' | 'Co-Party' | 'Interested Party' | 'Guardian' | 'Representative' | string; // Backend: enum PartyRole
+  readonly caseId: CaseId; // Backend: uuid (required), FK to cases
+  readonly name: string; // Backend: varchar(255)
+  readonly description?: string; // Backend: varchar(500) - e.g., 'A Community Association'
+  readonly type: PartyType; // Backend: enum PartyType
+  readonly role: PartyRole; // Backend: enum PartyRole
   
   // Organization
   organization?: string; // Backend: varchar(255)
@@ -142,16 +179,48 @@ export interface Party extends BaseEntity {
   representationType?: string;
   attorneys?: Attorney[];
   pacerData?: JsonValue;
-  aliases?: string[];
-  taxId?: string;
-}
-export interface Attorney { name: string; firm?: string; email?: string; phone?: string; address?: string; type?: string; }
-export interface CaseTeamMember { userId: UserId; role: 'Lead' | 'Support' | 'Paralegal'; rateOverride?: Money; }
+  readonly aliases?: readonly string[];
+  readonly taxId?: string;
+};
 
-// Matter Management (EXACTLY aligned with backend Matter entity)
-// Backend: matters table - matters.entity.ts
-export interface Matter extends BaseEntity {
-  id: MatterId;
+/**
+ * Attorney representation information
+ * Value object for party legal counsel
+ */
+export type Attorney = {
+  readonly name: string;
+  readonly firm?: string;
+  readonly email?: string;
+  readonly phone?: string;
+  readonly address?: string;
+  readonly type?: string;
+};
+
+/**
+ * Case team member role assignment
+ * Associates users with cases and billing rates
+ */
+export type CaseTeamMember = {
+  readonly userId: UserId;
+  readonly role: 'Lead' | 'Support' | 'Paralegal';
+  readonly rateOverride?: Money;
+};
+
+/**
+ * Matter Management entity
+ * @see Backend: matters/entities/matter.entity.ts
+ * @see Backend: matters table
+ * 
+ * Represents client matters with billing, assignment, and lifecycle tracking.
+ * EXACTLY aligned with backend Matter entity field names and types.
+ * 
+ * @property matterNumber - Unique matter identifier (required, indexed)
+ * @property status - Lifecycle state (INTAKE → ACTIVE → CLOSED)
+ * @property matterType - Classification (LITIGATION, TRANSACTIONAL, etc.)
+ * @property priority - Urgency level for resource allocation
+ */
+export type Matter = BaseEntity & {
+  readonly id: MatterId;
   
   // Core Identification (backend field names)
   matterNumber: string; // Backend: matternumber varchar unique (required)

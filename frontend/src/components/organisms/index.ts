@@ -3,47 +3,53 @@
  * @category Organisms
  * @description Complex composed components organized by business domain.
  * 
- * DOMAIN ORGANIZATION:
- * - core/           - Infrastructure, monitoring, and foundational UI
- * - navigation/     - Application navigation and routing
- * - cases/          - Case management components
- * - calendar/       - Calendar and scheduling
- * - discovery/      - Document review and discovery
- * - search/         - Search and filtering
- * - collaboration/  - Team collaboration and notifications
- * 
  * ARCHITECTURE PRINCIPLES:
  * 1. Organisms are complex components composed of molecules and atoms
  * 2. Domain-organized for better discoverability and maintenance
- * 3. Each domain has its own index.ts with documentation
- * 4. Components within domains are feature-rich and business-focused
+ * 3. Components are feature-rich and business-focused
  * 
- * USAGE OPTIONS:
+ * USAGE:
  * ```tsx
- * // Option 1: Import from domain (recommended)
- * import { Table, ErrorBoundary } from '@/components/organisms/core';
- * import { Sidebar, NeuralCommandBar } from '@/components/organisms/navigation';
- * 
- * // Option 2: Import from root barrel (backwards compatible)
- * import { Table, Sidebar } from '@/components/organisms';
+ * import { Table, ErrorBoundary, Sidebar } from '@/components/organisms';
  * ```
  */
 
 // ============================================================================
-// CORE & INFRASTRUCTURE
+// CORE INFRASTRUCTURE
 // ============================================================================
-export * from './core';
+export * from './Table';
+export * from './ErrorBoundary';
+export * from './BackendHealthMonitor';
+export * from './BackendStatusIndicator';
+export * from './ConnectionStatus';
+export * from './ConnectivityHUD';
+export * from './ServiceCoverageIndicator';
 
 // ============================================================================
-// NAVIGATION
+// NAVIGATION & INTERACTION
 // ============================================================================
-export * from './navigation';
+export * from './Sidebar';
+export * from './NeuralCommandBar';
+export * from './FilterPanel';
+export * from './PageHeader';
+export * from './GlobalHotkeys';
+export * from './HolographicDock';
+export * from './TabNavigation';
+export * from './MobileBottomNav';
+export * from './AppHeader';
+
+// ============================================================================
+// LAYOUT & VIEWS
+// ============================================================================
+export * from './SplitView';
+export * from './TabbedView';
+export * from './VirtualList';
+export * from './VirtualGrid';
+export * from './SwipeableItem';
+export * from './InfiniteScrollTrigger';
 
 // ============================================================================
 // DOMAIN COMPONENTS
 // ============================================================================
 export * from './cases';
-export * from './calendar';
 export * from './discovery';
-export * from './search';
-export * from './collaboration';

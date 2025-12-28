@@ -1,4 +1,14 @@
+/**
+ * Firm Business Process Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.workflow.getProcesses() instead.
+ * This constant is only for seeding and testing purposes.
+ */
 
+/**
+ * @deprecated MOCK DATA - Use DataService.workflow instead
+ */
 export const BUSINESS_PROCESSES = [
   // Existing Core Processes
   { id: 'bp1', name: 'New Client Onboarding', status: 'Active', triggers: 'CRM: New Lead', tasks: 12, completed: 8, owner: 'Admin Team' },

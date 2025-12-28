@@ -1,6 +1,18 @@
+/**
+ * Client API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.crm.getClients() with queryKeys.crm.clients() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/clients/entities/client.entity.ts
+ */
 
 import { Client, EntityId, CaseId, ClientStatus, PaymentTerms } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.crm instead
+ */
 export const MOCK_CLIENTS: Client[] = [
     {
         id: '1' as EntityId,

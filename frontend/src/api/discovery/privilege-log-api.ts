@@ -4,33 +4,7 @@
  */
 
 import { apiClient } from '@/services/infrastructure/apiClient';
-
-export interface PrivilegeLogEntry {
-  id: string;
-  caseId: string;
-  productionId?: string;
-  documentId?: string;
-  batesNumber?: string;
-  date?: string;
-  author?: string;
-  recipients?: string[];
-  ccRecipients?: string[];
-  subject?: string;
-  description?: string;
-  privilegeType: 'attorney_client' | 'work_product' | 'common_interest' | 'settlement' | 'other';
-  withheldInFull: boolean;
-  withheldInPart?: boolean;
-  redactedPortion?: string;
-  metadata?: Record<string, any>;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface PrivilegeLogFilters {
-  caseId?: string;
-  productionId?: string;
-  privilegeType?: PrivilegeLogEntry['privilegeType'];
-}
+import type { PrivilegeLogEntry, PrivilegeLogFilters } from '@/types';
 
 export class PrivilegeLogApiService {
   private readonly baseUrl = '/privilege-log';

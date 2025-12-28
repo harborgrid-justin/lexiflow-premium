@@ -1,6 +1,18 @@
+/**
+ * Invoice API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.billing.getInvoices() with queryKeys.billing.invoices() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/billing/entities/invoice.entity.ts
+ */
 
 import { Invoice, UUID } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.billing instead
+ */
 export const MOCK_INVOICES: Invoice[] = [
     {
         id: 'INV-2024-001' as UUID,

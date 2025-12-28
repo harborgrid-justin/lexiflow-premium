@@ -43,27 +43,56 @@ export type JsonValue = JsonPrimitive | JsonObject | JsonArray;
  */
 export type MetadataRecord = Record<string, JsonValue>;
 
-export interface Money {
-  amount: number;
-  currency: CurrencyCode;
-  precision: number;
-}
+/**
+ * Money value object
+ * Immutable representation of currency amounts
+ * @property amount - Numeric amount in the smallest currency unit
+ * @property currency - ISO 4217 currency code
+ * @property precision - Decimal places for display formatting
+ */
+export type Money = {
+  readonly amount: number;
+  readonly currency: CurrencyCode;
+  readonly precision: number;
+};
 
-export interface JurisdictionObject {
-  country: string;
-  state: string;
-  courtLevel: 'Federal' | 'State' | 'Appellate' | 'Supreme';
-  division?: string;
-  county?: string;
-}
+/**
+ * Jurisdiction value object
+ * Represents legal jurisdiction hierarchy
+ * @property country - Country code (e.g., 'US')
+ * @property state - State/province code (e.g., 'CA')
+ * @property courtLevel - Type of court in jurisdiction
+ * @property division - Optional district/division identifier
+ * @property county - Optional county identifier for local courts
+ */
+export type JurisdictionObject = {
+  readonly country: string;
+  readonly state: string;
+  readonly courtLevel: 'Federal' | 'State' | 'Appellate' | 'Supreme';
+  readonly division?: string;
+  readonly county?: string;
+};
 
-export interface BaseEntity {
-  id: string;
-  createdAt?: string; // ISO 8601 date string from backend Date
-  updatedAt?: string; // ISO 8601 date string from backend Date
-  deletedAt?: string; // ISO 8601 date string from backend Date (soft delete)
-  createdBy?: UserId;
-  updatedBy?: UserId;
-  version?: number;
-  isEncrypted?: boolean;
-}
+/**
+ * Base entity pattern for all domain objects
+ * Provides common fields for persistence, auditing, and soft deletion
+ * 
+ * @property id - Unique identifier (UUID v4)
+ * @property createdAt - ISO 8601 timestamp of creation
+ * @property updatedAt - ISO 8601 timestamp of last modification
+ * @property deletedAt - ISO 8601 timestamp of soft deletion (null if active)
+ * @property createdBy - User ID who created the entity
+ * @property updatedBy - User ID who last modified the entity
+ * @property version - Optimistic locking version number
+ * @property isEncrypted - Whether entity data is encrypted at rest
+ */
+export type BaseEntity = {
+  readonly id: string;
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
+  readonly deletedAt?: string;
+  readonly createdBy?: UserId;
+  readonly updatedBy?: UserId;
+  readonly version?: number;
+  readonly isEncrypted?: boolean;
+};

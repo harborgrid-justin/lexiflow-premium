@@ -64,3 +64,8 @@ export {
   formatLastSync,
   calculateCoverage
 } from './utils';
+
+// Re-export sub-modules
+export * from './lineage';
+export * from './quality';
+export * from './query';

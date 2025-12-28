@@ -1,6 +1,18 @@
+/**
+ * Clause API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.documents.getClauses() with queryKeys.documents.clauses() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/clauses/entities/clause.entity.ts
+ */
 
 import { Clause, UUID, UserId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.documents instead
+ */
 export const MOCK_CLAUSES: Clause[] = [
     {
       id: '1' as UUID, title: 'Indemnification (Pro-Buyer)', name: 'Indemnification (Pro-Buyer)', category: 'Liability',

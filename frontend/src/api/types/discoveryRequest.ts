@@ -1,6 +1,18 @@
+/**
+ * Discovery Request API Mock Data
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * Use DataService.discovery.getRequests() with queryKeys.discovery.requests() instead.
+ * This constant is only for seeding and testing purposes.
+ * 
+ * Backend alignment: /backend/src/discovery/entities/discovery-request.entity.ts
+ */
 
 import { DiscoveryRequest, UUID, CaseId } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - Use DataService.discovery instead
+ */
 export const MOCK_DISCOVERY: DiscoveryRequest[] = [
   {
     id: 'DR-001' as UUID,

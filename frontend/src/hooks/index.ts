@@ -131,3 +131,16 @@ export type { LoadingState, UseAdaptiveLoadingOptions, UseAdaptiveLoadingReturn 
 // ============================================================================
 export * from './useVirtualizedDocket';
 export * from './useLiveDocketFeed';
+
+// ============================================================================
+// ADDITIONAL HOOKS (Previously Missing)
+// ============================================================================
+export * from './useBackendDiscovery';
+export * from './useDataServiceCleanup';
+export * from './useDocumentDragDrop';
+export * from './useEntityAutocomplete';
+export * from './useKeyboardNavigation';
+export * from './usePerformanceTracking';
+export * from './useQueryHooks';
+export * from './useSync';
+export * from './useTrustAccounts';

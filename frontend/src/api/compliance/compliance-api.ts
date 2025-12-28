@@ -47,24 +47,8 @@ export interface ComplianceCheck {
   updatedAt?: string;
 }
 
-export interface ComplianceEthicalWall {
-  id: string;
-  name: string;
-  reason: string;
-  status: 'active' | 'inactive' | 'lifted';
-  restrictedParties: string[];
-  excludedUsers: string[];
-  caseIds?: string[];
-  effectiveDate: string;
-  liftedDate?: string;
-  notes?: string;
-  metadata?: Record<string, any>;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-// Alias export for backward compatibility
-export type EthicalWall = ComplianceEthicalWall;
+// EthicalWall type imported from @/types - see compliance-risk.ts
+import type { EthicalWall } from '@/types';
 
 /**
  * Query keys for React Query integration
@@ -227,15 +211,15 @@ export class ComplianceApiService {
     /**
      * Get all ethical walls
      * 
-     * @returns Promise<ComplianceEthicalWall[]> Array of ethical walls
+     * @returns Promise<EthicalWall[]> Array of ethical walls
      * @throws Error if fetch fails
      * 
      * @example
      * const walls = await service.getEthicalWalls();
      */
-    async getEthicalWalls(): Promise<ComplianceEthicalWall[]> {
+    async getEthicalWalls(): Promise<EthicalWall[]> {
         try {
-            return await apiClient.get<ComplianceEthicalWall[]>(`${this.baseUrl}/ethical-walls`);
+            return await apiClient.get<EthicalWall[]>(`${this.baseUrl}/ethical-walls`);
         } catch (error) {
             console.error('[ComplianceApiService.getEthicalWalls] Error:', error);
             throw new Error('Failed to fetch ethical walls');
@@ -246,17 +230,17 @@ export class ComplianceApiService {
      * Get ethical wall by ID
      * 
      * @param id - Ethical wall ID
-     * @returns Promise<ComplianceEthicalWall> Ethical wall data
+     * @returns Promise<EthicalWall> Ethical wall data
      * @throws Error if id is invalid or fetch fails
      * 
      * @example
      * const wall = await service.getEthicalWallById('wall-123');
      */
-    async getEthicalWallById(id: string): Promise<ComplianceEthicalWall> {
+    async getEthicalWallById(id: string): Promise<EthicalWall> {
         this.validateId(id, 'getEthicalWallById');
 
         try {
-            return await apiClient.get<ComplianceEthicalWall>(`${this.baseUrl}/ethical-walls/${id}`);
+            return await apiClient.get<EthicalWall>(`${this.baseUrl}/ethical-walls/${id}`);
         } catch (error) {
             console.error('[ComplianceApiService.getEthicalWallById] Error:', error);
             throw new Error(`Failed to fetch ethical wall with id: ${id}`);
@@ -267,7 +251,7 @@ export class ComplianceApiService {
      * Create a new ethical wall
      * 
      * @param data - Ethical wall configuration
-     * @returns Promise<ComplianceEthicalWall> Created ethical wall
+     * @returns Promise<EthicalWall> Created ethical wall
      * @throws Error if validation fails or creation fails
      * 
      * @example
@@ -278,7 +262,7 @@ export class ComplianceApiService {
      *   excludedUsers: ['user1']
      * });
      */
-    async createEthicalWall(data: Partial<ComplianceEthicalWall>): Promise<ComplianceEthicalWall> {
+    async createEthicalWall(data: Partial<EthicalWall>): Promise<EthicalWall> {
         this.validateObject(data, 'data', 'createEthicalWall');
 
         if (!data.name) {

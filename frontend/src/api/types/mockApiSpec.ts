@@ -1,7 +1,18 @@
+/**
+ * API Service Specification Mock Data
+ * Defines mock API endpoints and their specifications
+ * 
+ * @deprecated MOCK DATA - DO NOT IMPORT DIRECTLY
+ * This is used for API documentation and testing purposes only.
+ */
+
 // data/mockApiSpec.ts
 import { API_PREFIX } from '@/config';
 import { ApiServiceSpec } from '@/types';
 
+/**
+ * @deprecated MOCK DATA - For documentation purposes only
+ */
 export const MOCK_API_SPEC: ApiServiceSpec[] = [
   {
     name: 'cases',

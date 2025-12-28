@@ -1,39 +1,102 @@
 /**
- * useSettlementSimulation.ts
+ * @module hooks/useSettlementSimulation
+ * @category Hooks - Analytics
  * 
- * Custom hook for Monte Carlo settlement simulation
- * Separates simulation logic from presentation
+ * Provides Monte Carlo settlement simulation for legal case analysis.
+ * Calculates expected values and risk percentiles.
+ * 
+ * @example
+ * ```typescript
+ * const simulation = useSettlementSimulation({
+ *   initialParams: {
+ *     low: 500000,
+ *     high: 1500000,
+ *     liabilityProb: 75
+ *   }
+ * });
+ * 
+ * <button onClick={simulation.runSimulation}>Run Simulation</button>
+ * <div>Expected Value: ${simulation.metrics.ev}</div>
+ * ```
  */
 
 import { useState, useCallback, useMemo } from 'react';
 import { SimulationEngine, SimulationMetrics as EngineMetrics } from '../utils/simulationEngine';
 import { Scheduler } from '@/utils';
 
-interface SimulationMetrics {
-  ev: number;    // Expected value
-  p25: number;   // 25th percentile (conservative)
-  p75: number;   // 75th percentile (aggressive)
+// ============================================================================
+// TYPES
+// ============================================================================
+
+export interface SimulationMetrics {
+  /** Expected value */
+  ev: number;
+  /** 25th percentile (conservative) */
+  p25: number;
+  /** 75th percentile (aggressive) */
+  p75: number;
 }
 
-interface SimulationResult {
+export interface SimulationResult {
+  /** Value range label */
   range: string;
+  /** Number of results in range */
   count: number;
+  /** Representative value */
   value: number;
 }
 
-interface SimulationParams {
+export interface SimulationParams {
+  /** Low estimate */
   low: number;
+  /** High estimate */
   high: number;
+  /** Liability probability (0-100) */
   liabilityProb: number;
+  /** Number of iterations */
   iterations: number;
 }
 
-interface UseSettlementSimulationOptions {
+export interface UseSettlementSimulationOptions {
+  /** Initial parameter values */
   initialParams?: Partial<SimulationParams>;
+  /** Auto-run simulation on mount */
   autoRunOnMount?: boolean;
 }
 
-export const useSettlementSimulation = (options: UseSettlementSimulationOptions = {}) => {
+/**
+ * Return type for useSettlementSimulation hook
+ */
+export interface UseSettlementSimulationReturn {
+  /** Current simulation parameters */
+  params: SimulationParams;
+  /** Update single parameter */
+  updateParam: (key: keyof SimulationParams, value: number) => void;
+  /** Update multiple parameters */
+  updateParams: (newParams: Partial<SimulationParams>) => void;
+  /** Whether simulation is running */
+  isCalculating: boolean;
+  /** Simulation results */
+  results: SimulationResult[];
+  /** Calculated metrics */
+  metrics: SimulationMetrics;
+  /** Run simulation with current parameters */
+  runSimulation: () => Promise<void>;
+}
+
+// ============================================================================
+// HOOK
+// ============================================================================
+
+/**
+ * Manages Monte Carlo settlement simulation.
+ * 
+ * @param options - Configuration options
+ * @returns Object with simulation state and control methods
+ */
+export function useSettlementSimulation(
+  options: UseSettlementSimulationOptions = {}
+): UseSettlementSimulationReturn {
   const {
     initialParams = {},
     autoRunOnMount = true
@@ -102,4 +165,4 @@ export const useSettlementSimulation = (options: UseSettlementSimulationOptions 
     metrics,
     runSimulation
   };
-};
+}

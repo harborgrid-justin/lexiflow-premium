@@ -17,8 +17,15 @@ import React from 'react';
 // ========================================
 // TYPES & INTERFACES
 // ========================================
+
+/**
+ * Drag type
+ */
 type DragType = 'pan' | 'item';
 
+/**
+ * Drag state
+ */
 interface DragState {
   type: DragType;
   id?: string;
@@ -27,15 +34,39 @@ interface DragState {
   initialPos: { x: number; y: number };
 }
 
+/**
+ * Props for useCanvasDrag
+ */
 interface UseCanvasDragProps {
+  /** Callback when item position updates */
   onUpdateItemPos?: (id: string, pos: { x: number, y: number }) => void;
+  /** Current zoom level */
   zoom?: number;
+}
+
+/**
+ * Return type for useCanvasDrag hook
+ */
+export interface UseCanvasDragReturn {
+  /** Current pan state */
+  pan: { x: number; y: number };
+  /** Set pan state */
+  setPan: (pan: { x: number; y: number }) => void;
+  /** Handle mouse down */
+  handleMouseDown: (e: React.MouseEvent, type: DragType, itemId?: string, currentItemPos?: { x: number, y: number }) => void;
 }
 
 // ========================================
 // HOOK
 // ========================================
-export const useCanvasDrag = ({ onUpdateItemPos, zoom = 1 }: UseCanvasDragProps = {}) => {
+
+/**
+ * Canvas drag-and-drop with pan and item dragging.
+ * 
+ * @param props - Configuration options
+ * @returns Object with pan state and drag handler
+ */
+export function useCanvasDrag({ onUpdateItemPos, zoom = 1 }: UseCanvasDragProps = {}): UseCanvasDragReturn {
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const dragState = useRef<DragState | null>(null);
   const onUpdateItemPosRef = useRef(onUpdateItemPos);

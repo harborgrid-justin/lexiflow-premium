@@ -191,10 +191,10 @@ function validateIdKey<T extends Record<string, unknown>>(items: T[], idKey: key
  * - Ctrl/Cmd + click: Add to selection (browser default)
  * - Compatible with screen readers when used with proper ARIA
  */
-export const useSelection = <T extends object>(
+export function useSelection<T extends object>(
   items: T[],
   idKey: keyof T = 'id' as keyof T
-): UseSelectionReturn<T> => {
+): UseSelectionReturn<T> {
   // Validate inputs in development
   if (process.env.NODE_ENV !== 'production') {
     validateItems(items);
@@ -340,4 +340,4 @@ export const useSelection = <T extends object>(
     isAllSelected,
     isIndeterminate,
   };
-};
+}

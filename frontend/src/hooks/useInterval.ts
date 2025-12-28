@@ -1,37 +1,11 @@
 /**
- * @module useInterval
- * @description Enterprise-grade React hook for interval timing with automatic cleanup
+ * @module hooks/useInterval
+ * @category Hooks - Timing
  * 
- * Provides production-ready interval management with:
- * - Automatic cleanup on unmount (prevents memory leaks)
- * - Stable callback references via useRef (avoids interval recreation)
- * - Pause/resume support via null delay
- * - Type-safe callback signature
- * - No stale closure issues
+ * Enterprise-grade interval timing with automatic cleanup.
+ * Provides stable callback references and pause/resume support.
  * 
- * @architecture
- * - Pattern: React Hooks + Ref-based callback storage
- * - Cleanup: useEffect return function clears interval automatically
- * - Callback stability: Latest callback stored in ref, not in effect dependencies
- * - Pause mechanism: Setting delay to null clears interval
- * 
- * @performance
- * - Interval recreation: Only on delay change (not on callback change)
- * - Memory: O(1) - single ref + single interval ID
- * - CPU: Minimal overhead from useEffect synchronization
- * 
- * @benefits
- * - Avoids stale closures (callback ref always has latest function)
- * - Prevents interval recreation on every render
- * - Automatic cleanup prevents memory leaks
- * - TypeScript type safety
- * 
- * @security
- * - Callback validation prevents null/undefined execution
- * - Cleanup guarantees prevent orphaned intervals
- * - No eval() or unsafe operations
- * 
- * @usage
+ * @example
  * ```typescript
  * // Basic interval
  * useInterval(() => {
@@ -43,18 +17,7 @@
  * useInterval(() => {
  *   fetchData();
  * }, isPaused ? null : 5000);
- * 
- * // Dynamic callback (no interval recreation)
- * const [count, setCount] = useState(0);
- * useInterval(() => {
- *   setCount(c => c + 1); // Latest count always used
- * }, 1000);
  * ```
- * 
- * @see {@link https://overreacted.io/making-setinterval-declarative-with-react-hooks/}
- * 
- * @created 2024-05-10
- * @modified 2025-12-22
  */
 
 // =============================================================================

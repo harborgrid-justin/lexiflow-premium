@@ -57,8 +57,8 @@ export function useLiveDocketFeed({
   reconnectDelay = DEFAULT_RECONNECT_DELAY,
   onEntry,
   onNewEntry,
-  reconnectInterval,
-  maxReconnectAttempts
+  reconnectInterval: _reconnectInterval,
+  maxReconnectAttempts: _maxReconnectAttempts
 }: LiveDocketFeedConfig = {}): LiveDocketFeedResult {
   const [status, setStatus] = useState<ConnectionStatus>('disconnected');
   const [error, setError] = useState<string | null>(null);

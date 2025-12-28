@@ -1,14 +1,31 @@
 /**
- * useKeyboardShortcuts.ts
- * 
- * React hook for managing keyboard shortcuts in canvas operations.
- * 
  * @module hooks/useKeyboardShortcuts
+ * @category Hooks - UI Interactions
+ * 
+ * Provides keyboard shortcut registration and handling.
+ * Supports modifier keys and prevents conflicts with input fields.
+ * 
+ * @example
+ * ```typescript
+ * useKeyboardShortcuts({
+ *   onUndo: () => history.undo(),
+ *   onRedo: () => history.redo(),
+ *   onDelete: () => deleteSelection(),
+ *   onSave: () => saveDocument()
+ * });
+ * ```
  */
 
 import { useEffect, useCallback } from 'react';
 import { KEYBOARD_SHORTCUTS } from '@/types/canvas-constants';
 
+// ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * Predefined keyboard shortcut handlers
+ */
 export interface KeyboardShortcutHandlers {
   onUndo?: () => void;
   onRedo?: () => void;
@@ -23,6 +40,9 @@ export interface KeyboardShortcutHandlers {
   onSave?: () => void;
 }
 
+/**
+ * Custom shortcut configuration
+ */
 export interface ShortcutConfig {
   key: string;
   cmd?: boolean;
@@ -35,8 +55,12 @@ export interface ShortcutConfig {
   description?: string;
 }
 
+// ============================================================================
+// UTILITIES
+// ============================================================================
+
 /**
- * Check if keyboard shortcut matches
+ * Check if keyboard event matches shortcut pattern
  */
 function matchesShortcut(event: KeyboardEvent, shortcut: string): boolean {
   const parts = shortcut.toLowerCase().split('+');

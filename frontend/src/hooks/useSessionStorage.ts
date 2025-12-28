@@ -1,11 +1,20 @@
 /**
  * @module hooks/useSessionStorage
  * @category Hooks - Storage
- * @description Session storage hook with useState-like API, automatic serialization/deserialization,
- * and cross-tab synchronization via storage events. Provides persistent state that survives page
- * refreshes but not browser restarts.
  * 
- * NO THEME USAGE: Utility hook for session storage persistence
+ * Provides persistent state using sessionStorage.
+ * Data survives page refreshes but not browser restarts.
+ * 
+ * @example
+ * ```typescript
+ * const [filters, updateFilters] = useSessionStorage('case-filters', {
+ *   status: 'All',
+ *   search: ''
+ * });
+ * 
+ * // Update like useState
+ * updateFilters({ status: 'Active', search: 'contract' });
+ * ```
  */
 
 // ============================================================================
@@ -14,9 +23,33 @@
 import React, { useState, useEffect } from 'react';
 
 // ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * Return type for useSessionStorage hook
+ * Compatible with useState signature
+ */
+export type UseSessionStorageReturn<T> = [
+  T,
+  (value: T | ((val: T) => T)) => void
+];
+
+// ============================================================================
 // HOOK
 // ============================================================================
-export function useSessionStorage<T>(key: string, initialValue: T): [T, React.Dispatch<React.SetStateAction<T>>] {
+
+/**
+ * Manages state persisted in sessionStorage.
+ * 
+ * @param key - Storage key
+ * @param initialValue - Initial/fallback value
+ * @returns Tuple of [value, setValue]
+ */
+export function useSessionStorage<T>(
+  key: string,
+  initialValue: T
+): UseSessionStorageReturn<T> {
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
   const [storedValue, setStoredValue] = useState<T>(() => {

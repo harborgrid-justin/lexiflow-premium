@@ -1,16 +1,12 @@
 /**
- * useEntityAutocomplete Hook
+ * @module hooks/useEntityAutocomplete
+ * @category Hooks - Autocomplete
  * 
- * Generic type-safe autocomplete hook for entity selection with quick-add capability.
- * 
- * Architecture:
- * - Generic over TEntity to ensure type safety across different entity types
- * - Debounced search to minimize API calls (300ms default)
- * - LRU cache to prevent redundant fetches
- * - Optimistic updates when creating new entities
- * - Automatic query invalidation after mutations
+ * Generic type-safe autocomplete for entity selection with quick-add.
+ * Provides debounced search, LRU cache, and optimistic updates.
  * 
  * @example
+ * ```typescript
  * const parties = useEntityAutocomplete({
  *   fetchFn: (search) => api.parties.search({ query: search }),
  *   createFn: (data) => api.parties.create(data),
@@ -18,12 +14,16 @@
  *   getValue: (party) => party.id,
  *   queryKey: ['parties']
  * });
+ * ```
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDebounce } from './useDebounce';
 import { queryClient } from '@services/infrastructure/queryClient';
 
+/**
+ * Configuration for entity autocomplete
+ */
 export interface EntityAutocompleteConfig<TEntity, TCreateData = Partial<TEntity>> {
   /** Function to fetch entities based on search query */
   fetchFn: (search: string) => Promise<TEntity[]>;

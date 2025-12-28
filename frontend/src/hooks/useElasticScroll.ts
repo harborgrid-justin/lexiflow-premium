@@ -1,7 +1,24 @@
 /**
  * @module hooks/useElasticScroll
- * @category Hooks
- * @description Physics-based elastic scrolling with momentum, boundaries, and smooth anchors.
+ * @category Hooks - Scroll
+ * 
+ * Physics-based elastic scrolling with momentum and boundaries.
+ * Provides smooth anchor navigation and scroll shadows.
+ * 
+ * @example
+ * ```tsx
+ * const {
+ *   scrollState,
+ *   scrollToAnchor,
+ *   containerRef,
+ *   topShadowStyle,
+ *   bottomShadowStyle
+ * } = useElasticScroll({
+ *   friction: 0.9,
+ *   elasticity: 0.4,
+ *   showShadows: true
+ * });
+ * ```
  */
 
 import React, { useEffect, useRef, useCallback, useState } from 'react';
@@ -87,7 +104,7 @@ export function useElasticScroll(config: ElasticScrollConfig = {}): UseElasticSc
     minVelocity = 0.1,
     maxVelocity = 50,
     scrollPadding = 20,
-    snapToAnchors = false,
+    snapToAnchors: _snapToAnchors = false,
     showShadows = true
   } = config;
 

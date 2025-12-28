@@ -1,8 +1,27 @@
 /**
- * useSLAMonitoring.ts
+ * @module hooks/useSLAMonitoring
+ * @category Hooks - Operations
  * 
- * Custom hook for real-time SLA monitoring
- * Separates SLA calculation logic from presentation
+ * Provides real-time SLA monitoring for task deadlines.
+ * Automatically updates status and progress indicators.
+ * 
+ * @example
+ * ```typescript
+ * const slaMonitor = useSLAMonitoring({
+ *   maxItems: 10,
+ *   updateInterval: 1000,
+ *   slaWindowDays: 5
+ * });
+ * 
+ * {slaMonitor.slas.map(sla => (
+ *   <SLACard
+ *     key={sla.id}
+ *     status={sla.status}
+ *     progress={sla.progress}
+ *     deadline={slaMonitor.formatDeadline(sla.dueTime)}
+ *   />
+ * ))}
+ * ```
  */
 
 import { useState, useEffect, useCallback } from 'react';
@@ -12,21 +31,60 @@ import { queryKeys } from '../utils/queryKeys';
 import { useInterval } from './useInterval';
 import { Task } from '@/types';
 
+// ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * SLA monitoring item
+ */
 export interface SLAItem {
+  /** Task ID */
   id: string;
+  /** Task name */
   task: string;
+  /** Due time (timestamp) */
   dueTime: number;
+  /** Current SLA status */
   status: 'On Track' | 'At Risk' | 'Breached';
+  /** Progress percentage (0-100) */
   progress: number;
 }
 
-interface UseSLAMonitoringOptions {
+export interface UseSLAMonitoringOptions {
+  /** Maximum items to monitor */
   maxItems?: number;
+  /** Update interval in milliseconds */
   updateInterval?: number;
+  /** SLA window in days */
   slaWindowDays?: number;
 }
 
-export const useSLAMonitoring = (options: UseSLAMonitoringOptions = {}) => {
+/**
+ * Return type for useSLAMonitoring hook
+ */
+export interface UseSLAMonitoringReturn {
+  /** Current SLA items */
+  slas: SLAItem[];
+  /** Whether data is loading */
+  isLoading: boolean;
+  /** Format deadline for display */
+  formatDeadline: (dueTime: number) => string;
+}
+
+// ============================================================================
+// HOOK
+// ============================================================================
+
+/**
+ * Monitors task SLAs with real-time updates.
+ * 
+ * @param options - Configuration options
+ * @returns Object with SLA items and utilities
+ */
+export function useSLAMonitoring(
+  options: UseSLAMonitoringOptions = {}
+): UseSLAMonitoringReturn {
   const {
     maxItems = 10,
     updateInterval = 1000,
@@ -119,4 +177,4 @@ export const useSLAMonitoring = (options: UseSLAMonitoringOptions = {}) => {
     isLoading,
     formatDeadline
   };
-};
+}

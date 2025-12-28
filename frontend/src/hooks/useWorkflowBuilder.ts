@@ -1,12 +1,26 @@
 /**
  * @module hooks/useWorkflowBuilder
  * @category Hooks - Workflow
- * @description Generic workflow builder hook managing nodes, connections, and visual graph structure. Supports
- * template initialization (converts stage list to node graph), node CRUD (add/update/delete with type-specific
- * config like decision ports), and connection CRUD with self-connection prevention and duplicate detection.
- * Provides base workflow building capabilities for all workflow types (not litigation-specific).
  * 
- * NO THEME USAGE: Business logic hook for workflow graph building
+ * Generic workflow builder managing nodes, connections, and visual graph structure.
+ * Supports template initialization and node/connection CRUD operations.
+ * 
+ * @example
+ * ```typescript
+ * const builder = useWorkflowBuilder(template);
+ * 
+ * // Add node
+ * const nodeId = builder.addNode('Task', 100, 200, 'My Task');
+ * 
+ * // Add connection
+ * builder.addConnection('start', nodeId);
+ * 
+ * // Update node
+ * builder.updateNode(nodeId, { label: 'Updated Task' });
+ * 
+ * // Delete node
+ * builder.deleteNode(nodeId);
+ * ```
  */
 
 // ============================================================================
@@ -24,9 +38,44 @@ import { WorkflowNode, WorkflowConnection, NodeType, LITIGATION_PORTS } from '@/
 import { WorkflowTemplateData } from '@/types';
 
 // ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * Return type for useWorkflowBuilder hook
+ */
+export interface UseWorkflowBuilderReturn {
+  /** Workflow nodes */
+  nodes: WorkflowNode[];
+  /** Workflow connections */
+  connections: WorkflowConnection[];
+  /** Add node */
+  addNode: (type: NodeType, x: number, y: number, label?: string) => string;
+  /** Update node */
+  updateNode: (id: string, updates: Partial<WorkflowNode>) => void;
+  /** Delete node */
+  deleteNode: (id: string) => void;
+  /** Add connection */
+  addConnection: (from: string, to: string, fromPort?: string) => void;
+  /** Update connection */
+  updateConnection: (id: string, updates: Partial<WorkflowConnection>) => void;
+  /** Delete connection */
+  deleteConnection: (id: string) => void;
+}
+
+// ============================================================================
 // HOOK
 // ============================================================================
-export const useWorkflowBuilder = (initialTemplate?: WorkflowTemplateData | null) => {
+
+/**
+ * Generic workflow builder.
+ * 
+ * @param initialTemplate - Optional template for initialization
+ * @returns Object with workflow state and operations
+ */
+export function useWorkflowBuilder(
+  initialTemplate?: WorkflowTemplateData | null
+): UseWorkflowBuilderReturn {
   const [nodes, setNodes] = useState<WorkflowNode[]>(() => {
     if (initialTemplate) {
       const generatedNodes: WorkflowNode[] = [{ id: 'start', type: 'Start', label: 'Start', x: 50, y: 300, config: {} }];

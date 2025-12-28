@@ -1,12 +1,26 @@
 /**
  * @module hooks/useCaseOverview
  * @category Hooks - Case Management
- * @description Case overview management hook with time tracking, case linking, and appeal transfer workflows.
- * Manages time entry modal, linked cases modal, transfer modal states, loads related cases, and provides
- * handlers for time logging (with SyncEngine mutation), case linking, and appeal case creation with
- * automatic navigation prompt.
  * 
- * NO THEME USAGE: Business logic hook for case overview operations
+ * Manages case overview operations including time tracking, case linking, and appeal transfers.
+ * Provides modal states and handlers for case overview workflows.
+ * 
+ * @example
+ * ```typescript
+ * const overview = useCaseOverview(caseData, handleTimeAdded, handleNavigate);
+ * 
+ * // Open modals
+ * <button onClick={() => overview.openTimeModal()}>Log Time</button>
+ * <button onClick={() => overview.openLinkModal()}>Link Cases</button>
+ * <button onClick={() => overview.openTransferModal()}>Transfer to Appeal</button>
+ * 
+ * // Handle operations
+ * <TimeModal 
+ *   isOpen={overview.showTimeModal}
+ *   onClose={overview.closeTimeModal}
+ *   onSave={overview.handleSaveTime}
+ * />
+ * ```
  */
 
 // ============================================================================
@@ -27,9 +41,60 @@ import { useSync } from './useSync';
 import { Case, TimeEntry, TimeEntryPayload, UserId, UUID, CaseId, CaseStatus, MatterType } from '@/types';
 
 // ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * Return type for useCaseOverview hook
+ */
+export interface UseCaseOverviewReturn {
+  /** Time modal visibility */
+  showTimeModal: boolean;
+  /** Open time modal */
+  openTimeModal: () => void;
+  /** Close time modal */
+  closeTimeModal: () => void;
+  /** Link modal visibility */
+  showLinkModal: boolean;
+  /** Open link modal */
+  openLinkModal: () => void;
+  /** Close link modal */
+  closeLinkModal: () => void;
+  /** Transfer modal visibility */
+  showTransferModal: boolean;
+  /** Open transfer modal */
+  openTransferModal: () => void;
+  /** Close transfer modal */
+  closeTransferModal: () => void;
+  /** Linked cases */
+  linkedCases: Case[];
+  /** Available cases to link */
+  availableCases: Case[];
+  /** Save time entry */
+  handleSaveTime: (entry: TimeEntryPayload) => void;
+  /** Link case */
+  handleLinkCase: (c: Case) => void;
+  /** Transfer to appeal */
+  handleTransferToAppeal: () => Promise<void>;
+}
+
+// ============================================================================
 // HOOK
 // ============================================================================
-export const useCaseOverview = (caseData: Case, onTimeEntryAdded: (entry: TimeEntry) => void, onNavigateToCase?: (c: Case) => void) => {
+
+/**
+ * Manages case overview operations and modal states.
+ * 
+ * @param caseData - Case data object
+ * @param onTimeEntryAdded - Callback when time entry is added
+ * @param onNavigateToCase - Optional callback for case navigation
+ * @returns Object with overview state and handlers
+ */
+export function useCaseOverview(
+  caseData: Case, 
+  onTimeEntryAdded: (entry: TimeEntry) => void, 
+  onNavigateToCase?: (c: Case) => void
+): UseCaseOverviewReturn {
     const { performMutation } = useSync();
     const [showTimeModal, setShowTimeModal] = useState(false);
     const [showLinkModal, setShowLinkModal] = useState(false);
@@ -95,9 +160,15 @@ export const useCaseOverview = (caseData: Case, onTimeEntryAdded: (entry: TimeEn
     };
 
     return {
-        showTimeModal, setShowTimeModal,
-        showLinkModal, setShowLinkModal,
-        showTransferModal, setShowTransferModal,
+        showTimeModal,
+        openTimeModal: () => setShowTimeModal(true),
+        closeTimeModal: () => setShowTimeModal(false),
+        showLinkModal,
+        openLinkModal: () => setShowLinkModal(true),
+        closeLinkModal: () => setShowLinkModal(false),
+        showTransferModal,
+        openTransferModal: () => setShowTransferModal(true),
+        closeTransferModal: () => setShowTransferModal(false),
         linkedCases,
         availableCases,
         handleSaveTime,

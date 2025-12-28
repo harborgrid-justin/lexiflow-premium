@@ -1,63 +1,115 @@
 
-import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect, useRef, useMemo } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef, useMemo, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Minus, Maximize2 } from 'lucide-react';
 import { ErrorBoundary } from "@/components";
-import { useTheme } from './ThemeContext';
 import { cn } from '@/utils/cn';
+import type {
+  WindowInstance,
+  WindowStateValue,
+  WindowActionsValue,
+  WindowProviderProps,
+  DragState,
+} from './WindowContext.types';
 
-export interface WindowInstance {
-  id: string;
-  title: string;
-  component: ReactNode;
-  isMinimized: boolean;
-  isOpen: boolean;
-  zIndex: number;
-  position: { x: number; y: number };
-  size: { width: number, height: number };
-}
+/**
+ * WindowContext - Application-level window management (orbital mode)
+ * 
+ * Best Practices Applied:
+ * - BP1: Cross-cutting concern (window management) justifies context usage
+ * - BP2: Narrow interface with minimal surface area
+ * - BP3: Split read/write contexts for performance
+ * - BP4: No raw context export; only hooks
+ * - BP6: Avoid high-frequency state (drag handled via ref, not state)
+ * - BP7: Explicit memoization of provider values
+ * - BP9: Co-locate provider and type definitions
+ * - BP10: Stabilize function references
+ * - BP11: Strict TypeScript contracts
+ */
 
-interface WindowContextType {
-  windows: WindowInstance[];
-  openWindow: (id: string, title: string, component: ReactNode) => void;
-  closeWindow: (id: string) => void;
-  minimizeWindow: (id: string) => void;
-  restoreWindow: (id: string) => void;
-  currentMaxZIndex: number;
-  isOrbitalEnabled: boolean;
-  toggleOrbitalMode: () => void;
-}
+// Re-export types for convenience
+export type { WindowInstance } from './WindowContext.types';
 
-const WindowContext = createContext<WindowContextType | undefined>(undefined);
+// BP3: Split contexts for state and actions
+const WindowStateContext = createContext<WindowStateValue | undefined>(undefined);
+const WindowActionsContext = createContext<WindowActionsValue | undefined>(undefined);
 
 // Maximum number of windows to prevent memory leaks
 const MAX_WINDOWS = 20;
 
-export const useWindow = () => {
-  const context = useContext(WindowContext);
+// BP4: Export only custom hooks, not raw contexts
+export function useWindowState(): WindowStateValue {
+  const context = useContext(WindowStateContext);
+  // BP5: Fail fast when provider is missing
   if (!context) {
-    throw new Error('useWindow must be used within a WindowProvider');
+    throw new Error('useWindowState must be used within a WindowProvider');
   }
   return context;
-};
+}
+
+export function useWindowActions(): WindowActionsValue {
+  const context = useContext(WindowActionsContext);
+  // BP5: Fail fast when provider is missing
+  if (!context) {
+    throw new Error('useWindowActions must be used within a WindowProvider');
+  }
+  return context;
+}
+
+// Convenience hook for consumers that need both (backward compatibility)
+export function useWindow() {
+  return {
+    ...useWindowState(),
+    ...useWindowActions(),
+  };
+}
+
 
 // Base Z-Index for Windows (below Modals and Toasts)
 const BASE_WINDOW_Z = 1000;
 
-export const WindowProvider = ({ children }: { children: ReactNode }) => {
-  const { theme } = useTheme();
+/**
+ * WindowProvider
+ * 
+ * BP13: Responsibilities:
+ * - Manage window instances (open, close, minimize, restore)
+ * - Handle window dragging (via refs to avoid high-frequency re-renders)
+ * - Z-index management for window stacking
+ * - Orbital mode toggle (dockable windows vs full-screen modals)
+ * 
+ * Lifecycle:
+ * - Creates portal root for windows on mount
+ * - Attaches global mouse handlers for drag operations
+ * - Cleans up event listeners on unmount
+ */
+export const WindowProvider = ({ 
+  children, 
+  initialOrbitalMode, 
+  maxWindows = MAX_WINDOWS,
+  theme: themeProp
+}: WindowProviderProps) => {
+  // Use theme from props or fallback to basic classes
+  const theme = themeProp || {
+    surface: { default: 'bg-white dark:bg-slate-800', muted: 'bg-slate-100 dark:bg-slate-700' },
+    border: { default: 'border-slate-200 dark:border-slate-600' },
+    accent: { primary: 'bg-blue-500' },
+    text: { secondary: 'text-slate-700 dark:text-slate-300', tertiary: 'text-slate-500 dark:text-slate-400' },
+    interactive: { hover: 'hover:bg-slate-200 dark:hover:bg-slate-600' }
+  };
   const [windows, setWindows] = useState<WindowInstance[]>([]);
   const [maxZIndex, setMaxZIndex] = useState(BASE_WINDOW_Z);
   const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
   
   // Settings State
   const [isOrbitalEnabled, setIsOrbitalEnabled] = useState(() => {
+      if (initialOrbitalMode !== undefined) return initialOrbitalMode;
       if (typeof window !== 'undefined') {
           return localStorage.getItem('lexiflow_orbital_mode') !== 'false';
       }
       return true;
   });
 
+  // BP10: Stabilize function references with useCallback
   const toggleOrbitalMode = useCallback(() => {
       setIsOrbitalEnabled(prev => {
           const newVal = !prev;
@@ -66,12 +118,13 @@ export const WindowProvider = ({ children }: { children: ReactNode }) => {
       });
   }, []);
 
-  // Drag State
-  const dragRef = useRef<{ id: string | null; startX: number; startY: number; initialX: number; initialY: number }>({
+  // BP6: Drag State handled via ref to avoid high-frequency re-renders
+  const dragRef = useRef<DragState>({
       id: null, startX: 0, startY: 0, initialX: 0, initialY: 0
   });
 
   useEffect(() => {
+      // BP13: Lifecycle - create portal root and attach mouse handlers
       let root = document.getElementById('window-layer');
       if (!root) {
           root = document.createElement('div');
@@ -121,11 +174,13 @@ export const WindowProvider = ({ children }: { children: ReactNode }) => {
       };
   }, []);
 
+  // BP10: Stabilize function references with useCallback
   const bringToFront = useCallback((id: string) => {
     setMaxZIndex(prev => prev + 1);
     setWindows(prev => prev.map(w => w.id === id ? { ...w, zIndex: maxZIndex + 1 } : w));
   }, [maxZIndex]);
 
+  // BP10: Stabilize function references with useCallback
   const openWindow = useCallback((id: string, title: string, component: ReactNode) => {
     setWindows(prev => {
       const existing = prev.find(w => w.id === id);
@@ -135,14 +190,14 @@ export const WindowProvider = ({ children }: { children: ReactNode }) => {
 
       // Safety check: if we've reached max windows, close the oldest one
       let windowsList = prev;
-      if (prev.length >= MAX_WINDOWS) {
+      if (prev.length >= maxWindows) {
         // Find oldest window (lowest zIndex among open windows)
         const openWindows = prev.filter(w => w.isOpen);
-        if (openWindows.length >= MAX_WINDOWS) {
+        if (openWindows.length >= maxWindows) {
           const oldestWindow = openWindows.reduce((oldest, current) =>
             current.zIndex < oldest.zIndex ? current : oldest
           );
-          console.warn(`[WindowContext] Maximum window limit (${MAX_WINDOWS}) reached. Closing oldest window: ${oldestWindow.title}`);
+          console.warn(`[WindowContext] Maximum window limit (${maxWindows}) reached. Closing oldest window: ${oldestWindow.title}`);
           windowsList = prev.filter(w => w.id !== oldestWindow.id);
         }
       }
@@ -166,16 +221,19 @@ export const WindowProvider = ({ children }: { children: ReactNode }) => {
       }];
     });
     setMaxZIndex(prev => prev + 1);
-  }, [maxZIndex]);
+  }, [maxZIndex, maxWindows]);
 
+  // BP10: Stabilize function references with useCallback
   const closeWindow = useCallback((id: string) => {
     setWindows(prev => prev.filter(w => w.id !== id));
   }, []);
 
+  // BP10: Stabilize function references with useCallback
   const minimizeWindow = useCallback((id: string) => {
     setWindows(prev => prev.map(w => w.id === id ? { ...w, isMinimized: true } : w));
   }, []);
 
+  // BP10: Stabilize function references with useCallback
   const restoreWindow = useCallback((id: string) => {
     setWindows(prev => prev.map(w => w.id === id ? { ...w, isMinimized: false, zIndex: maxZIndex + 1 } : w));
     setMaxZIndex(prev => prev + 1);
@@ -196,20 +254,27 @@ export const WindowProvider = ({ children }: { children: ReactNode }) => {
       document.body.style.cursor = 'grabbing';
   };
 
-  const contextValue = useMemo(() => ({
+  // BP7: Memoize provider values explicitly - state context
+  const stateValue = useMemo<WindowStateValue>(() => ({
     windows, 
+    currentMaxZIndex: maxZIndex, 
+    isOrbitalEnabled
+  }), [windows, maxZIndex, isOrbitalEnabled]);
+
+  // BP7: Memoize provider values explicitly - actions context
+  const actionsValue = useMemo<WindowActionsValue>(() => ({
     openWindow, 
     closeWindow, 
     minimizeWindow, 
     restoreWindow, 
-    currentMaxZIndex: maxZIndex, 
-    isOrbitalEnabled, 
     toggleOrbitalMode
-  }), [windows, openWindow, closeWindow, minimizeWindow, restoreWindow, maxZIndex, isOrbitalEnabled, toggleOrbitalMode]);
+  }), [openWindow, closeWindow, minimizeWindow, restoreWindow, toggleOrbitalMode]);
 
+  // BP3 & BP8: Multiple providers for split read/write
   return (
-    <WindowContext.Provider value={contextValue}>
-      {children}
+    <WindowStateContext.Provider value={stateValue}>
+      <WindowActionsContext.Provider value={actionsValue}>
+        {children}
       
       {portalRoot && windows.map(win => (
           win.isOpen && !win.isMinimized && createPortal(
@@ -300,6 +365,7 @@ export const WindowProvider = ({ children }: { children: ReactNode }) => {
           portalRoot
       )}
 
-    </WindowContext.Provider>
+    </WindowActionsContext.Provider>
+    </WindowStateContext.Provider>
   );
 };

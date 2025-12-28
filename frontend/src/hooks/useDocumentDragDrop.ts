@@ -39,9 +39,39 @@ import { useNotify } from './useNotify';
 import { CaseId } from '@/types';
 
 // ========================================
+// TYPES
+// ========================================
+
+/**
+ * Return type for useDocumentDragDrop hook
+ */
+export interface UseDocumentDragDropReturn {
+  /** Whether drag is active */
+  isDragging: boolean;
+  /** Whether upload is in progress */
+  isUploading: boolean;
+  /** Set uploading state */
+  setIsUploading: (uploading: boolean) => void;
+  /** Handle drag enter */
+  handleDragEnter: (e: React.DragEvent) => void;
+  /** Handle drag leave */
+  handleDragLeave: (e: React.DragEvent) => void;
+  /** Handle drop */
+  handleDrop: (e: React.DragEvent) => Promise<void>;
+}
+
+// ========================================
 // HOOK
 // ========================================
-export const useDocumentDragDrop = (currentFolder: string) => {
+
+/**
+ * Document drag-and-drop handler.
+ * 
+ * @deprecated Use useDocumentManager with enableDragDrop option instead
+ * @param currentFolder - Current folder context
+ * @returns Drag-drop event handlers
+ */
+export function useDocumentDragDrop(currentFolder: string): UseDocumentDragDropReturn {
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const dragCounter = useRef(0);
@@ -78,7 +108,7 @@ export const useDocumentDragDrop = (currentFolder: string) => {
                 }
                 queryClient.invalidate(queryKeys.documents.all());
                 notify.success(`Uploaded ${e.dataTransfer.files.length} documents.`);
-             } catch (error) {
+             } catch {
                  notify.error("Failed to upload dropped files.");
              } finally {
                  setIsUploading(false);

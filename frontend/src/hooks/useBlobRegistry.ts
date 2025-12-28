@@ -1,17 +1,21 @@
 /**
  * @module hooks/useBlobRegistry
  * @category Hooks - Memory Management
- * @description Blob URL lifecycle management hook preventing memory leaks from Blob/File object URLs.
- * Maintains Set-based registry of active URLs, provides register/revoke methods, and ensures automatic
- * cleanup on unmount. Critical for managing binary data previews (PDFs, images, videos) without permanent
- * heap leaks until document unload.
  * 
- * SYSTEMS ENGINEERING NOTE:
- * This registry manages the lifecycle of Blob URLs (pointers to binary data in memory).
- * Failure to revoke these URLs causes permanent memory leaks in the browser's heap
- * until the document is unloaded. This hook ensures strict cleanup on component unmount or url replacement.
+ * Manages Blob URL lifecycle to prevent memory leaks.
+ * Automatically revokes URLs on unmount.
  * 
- * NO THEME USAGE: Memory management utility hook
+ * @example
+ * ```typescript
+ * const blobRegistry = useBlobRegistry();
+ * 
+ * // Create preview URL
+ * const previewUrl = blobRegistry.register(pdfBlob);
+ * <iframe src={previewUrl} />
+ * 
+ * // Manual cleanup when done
+ * blobRegistry.revoke(previewUrl);
+ * ```
  */
 
 // ============================================================================
@@ -20,9 +24,29 @@
 import { useEffect, useRef, useCallback } from 'react';
 
 // ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * Return type for useBlobRegistry hook
+ */
+export interface UseBlobRegistryReturn {
+  /** Register blob and get URL */
+  register: (blob: Blob | File) => string;
+  /** Revoke blob URL */
+  revoke: (url: string) => void;
+}
+
+// ============================================================================
 // HOOK
 // ============================================================================
-export const useBlobRegistry = () => {
+
+/**
+ * Manages Blob URL lifecycle with automatic cleanup.
+ * 
+ * @returns Object with register and revoke methods
+ */
+export function useBlobRegistry(): UseBlobRegistryReturn {
   const registry = useRef<Set<string>>(new Set());
 
   const register = useCallback((blob: Blob | File): string => {
@@ -49,4 +73,4 @@ export const useBlobRegistry = () => {
   }, []);
 
   return { register, revoke };
-};
+}

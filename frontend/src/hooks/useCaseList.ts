@@ -121,16 +121,46 @@ export interface CaseFilters {
 
 /**
  * Return type for useCaseList hook
- * Exposed for type inference in consuming components
+ * Provides comprehensive case list management interface
  */
-export type UseCaseListReturn = ReturnType<typeof useCaseList>;
+export interface UseCaseListReturn {
+  /** Currently filtered list of cases */
+  filteredCases: Case[];
+  /** Current status filter value */
+  statusFilter: string;
+  /** Update status filter */
+  setStatusFilter: (status: string) => void;
+  /** Current type filter value */
+  typeFilter: string;
+  /** Update type filter */
+  setTypeFilter: (type: string) => void;
+  /** Current search term */
+  searchTerm: string;
+  /** Update search term (debounced) */
+  setSearchTerm: (term: string) => void;
+  /** Date range start filter */
+  dateFrom: string;
+  /** Update date range start */
+  setDateFrom: (date: string) => void;
+  /** Date range end filter */
+  dateTo: string;
+  /** Update date range end */
+  setDateTo: (date: string) => void;
+  /** Reset all filters to defaults */
+  resetFilters: () => void;
+  /** Whether data is currently loading */
+  isLoading: boolean;
+  /** Whether an error occurred */
+  isError: boolean;
+}
 
 // ============================================================================
 // HOOK IMPLEMENTATION
 // ============================================================================
 
 /**
- * Case list management hook
+ * Case list management hook with comprehensive filtering and search.
+ * Must be used within DataService provider context.
  * 
  * @returns Case list management interface
  * @throws Never throws - all errors are handled internally with fallbacks
@@ -147,7 +177,7 @@ export type UseCaseListReturn = ReturnType<typeof useCaseList>;
  * const cases = caseList.filteredCases;
  * ```
  */
-export const useCaseList = () => {
+export function useCaseList(): UseCaseListReturn {
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================
@@ -385,29 +415,8 @@ export const useCaseList = () => {
   // RETURN INTERFACE
   // ============================================================================
 
-  /**
-   * Return comprehensive case list management interface
-   * All handlers are memoized for optimal performance
-   * 
-   * @deprecated Modal state management removed as of 2025-12-22.
-   * 
-   * @returns {Object} Case list management interface
-   * @property {string} statusFilter - Current status filter
-   * @property {Function} setStatusFilter - Status filter setter (safe)
-   * @property {string} typeFilter - Current type filter
-   * @property {Function} setTypeFilter - Type filter setter (safe)
-   * @property {string} searchTerm - Current search term
-   * @property {Function} setSearchTerm - Search term setter (safe)
-   * @property {string} dateFrom - Date range start
-   * @property {Function} setDateFrom - Date range start setter (safe)
-   * @property {string} dateTo - Date range end
-   * @property {Function} setDateTo - Date range end setter (safe)
-   * @property {Case[]} filteredCases - Filtered case list
-   * @property {Function} resetFilters - Reset all filters
-   * @property {boolean} isLoading - Loading state indicator
-   * @property {boolean} isError - Error state indicator
-   */
   return {
+    filteredCases,
     statusFilter,
     setStatusFilter: setStatusFilterSafe,
     typeFilter,
@@ -418,9 +427,8 @@ export const useCaseList = () => {
     setDateFrom: setDateFromSafe,
     dateTo,
     setDateTo: setDateToSafe,
-    filteredCases,
     resetFilters,
     isLoading,
     isError
   };
-};
+}

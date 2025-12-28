@@ -1,13 +1,28 @@
 /**
  * @module hooks/useListNavigation
  * @category Hooks - Keyboard Navigation
- * @description Unified keyboard navigation hook supporting both simple dropdown/modal navigation
- * and full WCAG 2.1 AA compliant list navigation. Replaces useKeyboardNav and useKeyboardNavigation
- * with a single, flexible API that supports:
- * - Simple mode: Arrow keys, Enter, Escape (for dropdowns, command bars)
- * - Full mode: + Home, End, PageUp/Down, Space, scroll-into-view, focus management
  * 
- * NO THEME USAGE: Utility hook for keyboard interaction logic
+ * Unified keyboard navigation for dropdowns and WCAG 2.1 AA compliant lists.
+ * Supports simple mode (arrow keys, Enter, Escape) and full mode (all keyboard shortcuts).
+ * 
+ * @example
+ * ```typescript
+ * // Simple mode for dropdown
+ * const nav = useListNavigation({
+ *   items: options,
+ *   mode: 'simple',
+ *   onActivate: (item) => selectOption(item),
+ *   onClose: () => setIsOpen(false)
+ * });
+ * 
+ * <div onKeyDown={nav.handleKeyDown}>
+ *   {options.map((opt, i) => (
+ *     <div key={i} className={nav.focusedIndex === i ? 'focused' : ''}>
+ *       {opt.label}
+ *     </div>
+ *   ))}
+ * </div>
+ * ```
  */
 
 // ============================================================================
@@ -19,8 +34,14 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 // TYPES & INTERFACES
 // ============================================================================
 
+/**
+ * Navigation mode
+ */
 export type NavigationMode = 'simple' | 'full';
 
+/**
+ * Configuration for useListNavigation hook
+ */
 export interface UseListNavigationConfig<T> {
   /** Array of items to navigate through */
   items: T[];

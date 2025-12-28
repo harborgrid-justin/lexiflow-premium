@@ -1,11 +1,24 @@
 /**
  * @module hooks/useSort
  * @category Hooks - Data Utilities
- * @description Sorting hook with configurable initial key and direction. Provides memoized sorted
- * items array and requestSort function for toggling sort direction (asc ↔ desc) on column clicks.
- * Uses Array.sort with generic comparison logic.
  * 
- * NO THEME USAGE: Utility hook for sorting logic
+ * Provides client-side sorting with toggle functionality.
+ * Useful for table columns and list views.
+ * 
+ * @example
+ * ```typescript
+ * const { items: sortedCases, requestSort, sortConfig } = useSort(
+ *   cases,
+ *   'filingDate',
+ *   'desc'
+ * );
+ * 
+ * <th onClick={() => requestSort('caseNumber')}>
+ *   Case Number {sortConfig.key === 'caseNumber' && (
+ *     sortConfig.direction === 'asc' ? '↑' : '↓'
+ *   )}
+ * </th>
+ * ```
  */
 
 // ============================================================================
@@ -16,17 +29,51 @@ import { useState, useMemo } from 'react';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-type Direction = 'asc' | 'desc';
 
-interface SortConfig<T> {
+/**
+ * Sort direction
+ */
+export type SortDirection = 'asc' | 'desc';
+
+/**
+ * Sort configuration
+ */
+export interface SortConfig<T> {
+  /** Key to sort by */
   key: keyof T;
-  direction: Direction;
+  /** Sort direction */
+  direction: SortDirection;
+}
+
+/**
+ * Return type for useSort hook
+ */
+export interface UseSortReturn<T> {
+  /** Sorted items array */
+  items: T[];
+  /** Request sort by key (toggles direction if same key) */
+  requestSort: (key: keyof T) => void;
+  /** Current sort configuration */
+  sortConfig: SortConfig<T>;
 }
 
 // ============================================================================
 // HOOK
 // ============================================================================
-export const useSort = <T extends Record<string, unknown>>(items: T[], initialKey: keyof T, initialDirection: Direction = 'asc') => {
+
+/**
+ * Manages client-side sorting of array data.
+ * 
+ * @param items - Array of items to sort
+ * @param initialKey - Initial sort key
+ * @param initialDirection - Initial sort direction (default: 'asc')
+ * @returns Object with sorted items, requestSort method, and current config
+ */
+export function useSort<T extends Record<string, unknown>>(
+  items: T[],
+  initialKey: keyof T,
+  initialDirection: SortDirection = 'asc'
+): UseSortReturn<T> {
   const [sortConfig, setSortConfig] = useState<SortConfig<T>>({
     key: initialKey,
     direction: initialDirection,
@@ -52,7 +99,7 @@ export const useSort = <T extends Record<string, unknown>>(items: T[], initialKe
   }, [items, sortConfig]);
 
   const requestSort = (key: keyof T) => {
-    let direction: Direction = 'asc';
+    let direction: SortDirection = 'asc';
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
     }
@@ -60,4 +107,4 @@ export const useSort = <T extends Record<string, unknown>>(items: T[], initialKe
   };
 
   return { items: sortedItems, requestSort, sortConfig };
-};
+}

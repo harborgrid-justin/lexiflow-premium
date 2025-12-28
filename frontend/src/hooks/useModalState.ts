@@ -1,33 +1,45 @@
 /**
- * useModalState.ts
+ * @module hooks/useModalState
+ * @category Hooks - UI State
  * 
- * Reusable hook for managing modal open/close state
- * Replaces 50+ instances of useState(false) for modals
+ * Provides modal state management with intent-based controls.
+ * Lightweight alternative to useModal without data payload support.
+ * 
+ * @example
+ * ```typescript
+ * const createModal = useModalState();
+ * const editModal = useModalState();
+ * 
+ * <Button onClick={createModal.open}>Create</Button>
+ * <Modal isOpen={createModal.isOpen} onClose={createModal.close}>
+ *   Create form content
+ * </Modal>
+ * ```
  */
 
 import { useState, useCallback } from 'react';
 
+/**
+ * Return type for useModalState hook
+ */
 export interface UseModalStateReturn {
+  /** Whether modal is currently open */
   isOpen: boolean;
+  /** Open modal */
   open: () => void;
+  /** Close modal */
   close: () => void;
+  /** Toggle modal open/closed */
   toggle: () => void;
 }
 
 /**
- * useModalState - Unified modal state management
+ * Manages modal open/closed state.
  * 
- * @example
- * ```tsx
- * const createModal = useModalState();
- * const editModal = useModalState();
- * const deleteModal = useModalState();
- * 
- * <Button onClick={createModal.open}>Create</Button>
- * <Modal isOpen={createModal.isOpen} onClose={createModal.close}>...</Modal>
- * ```
+ * @param initialState - Initial open state (default: false)
+ * @returns Object with isOpen state and control methods
  */
-export const useModalState = (initialState = false): UseModalStateReturn => {
+export function useModalState(initialState = false): UseModalStateReturn {
   const [isOpen, setIsOpen] = useState(initialState);
 
   const open = useCallback(() => setIsOpen(true), []);
@@ -40,4 +52,4 @@ export const useModalState = (initialState = false): UseModalStateReturn => {
     close,
     toggle
   };
-};
+}

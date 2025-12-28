@@ -50,7 +50,8 @@ export interface UseFilterAndSearchReturn<T> {
 // ============================================================================
 
 /**
- * useFilterAndSearch - Unified filtering and search logic
+ * Unified filtering and search logic for collections.
+ * Eliminates repeated filter/search logic across components.
  * 
  * @example
  * ```tsx
@@ -64,12 +65,12 @@ export interface UseFilterAndSearchReturn<T> {
  * });
  * ```
  */
-export const useFilterAndSearch = <T extends Record<string, unknown>>({
+export function useFilterAndSearch<T extends Record<string, unknown>>({
   items,
   config,
   initialCategory = 'All',
   initialSearch = ''
-}: UseFilterAndSearchOptions<T>): UseFilterAndSearchReturn<T> => {
+}: UseFilterAndSearchOptions<T>): UseFilterAndSearchReturn<T> {
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [category, setCategory] = useState(initialCategory);
 
@@ -129,4 +130,4 @@ export const useFilterAndSearch = <T extends Record<string, unknown>>({
     setCategory,
     categories
   };
-};
+}

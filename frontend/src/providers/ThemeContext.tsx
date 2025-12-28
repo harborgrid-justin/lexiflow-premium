@@ -1,39 +1,69 @@
 
-import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { tokens, ThemeMode } from '@theme/tokens.ts';
 import { DEFAULT_THEME, THEME_STORAGE_KEY } from '@/config';
+import type {
+  ThemeStateValue,
+  ThemeActionsValue,
+  ThemeProviderProps,
+} from './ThemeContext.types';
 
-export interface ThemeContextType {
-  mode: ThemeMode;
-  toggleTheme: () => void;
-  setTheme: (mode: ThemeMode) => void;
-  theme: typeof tokens.colors.light;
-  isDark: boolean;
-}
+/**
+ * ThemeContext - Application-level theming boundary
+ * 
+ * Best Practices Applied:
+ * - BP1: Cross-cutting concern (theming) justifies context usage
+ * - BP2: Narrow interface with minimal surface area
+ * - BP3: Split read/write contexts for performance
+ * - BP4: No raw context export; only hooks
+ * - BP7: Explicit memoization of provider values
+ * - BP9: Co-locate provider and type definitions
+ * - BP11: Strict TypeScript contracts
+ */
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+// BP3: Split contexts for state and actions
+const ThemeStateContext = createContext<ThemeStateValue | undefined>(undefined);
+const ThemeActionsContext = createContext<ThemeActionsValue | undefined>(undefined);
 
-export const useTheme = (): ThemeContextType => {
-  const context = useContext(ThemeContext);
+// BP4: Export only custom hooks, not raw contexts
+export function useThemeState(): ThemeStateValue {
+  const context = useContext(ThemeStateContext);
+  // BP5: Fail fast when provider is missing
   if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    throw new Error('useThemeState must be used within a ThemeProvider');
   }
   return context;
-};
-
-interface ThemeProviderProps {
-  children: ReactNode;
 }
 
-export const ThemeProvider = ({ children }: ThemeProviderProps) => {
+export function useThemeActions(): ThemeActionsValue {
+  const context = useContext(ThemeActionsContext);
+  // BP5: Fail fast when provider is missing
+  if (!context) {
+    throw new Error('useThemeActions must be used within a ThemeProvider');
+  }
+  return context;
+}
+
+// Convenience hook for consumers that need both (backward compatibility)
+export function useTheme() {
+  return {
+    ...useThemeState(),
+    ...useThemeActions(),
+  };
+}
+
+export const ThemeProvider = ({ children, initialMode }: ThemeProviderProps) => {
   // Principle 35/38: Deterministic First Render
   // Start with a stable default (e.g. 'light') during initial render/hydration
   // to avoid mismatched markup. Sync with storage/preference in effect.
-  const [mode, setMode] = useState<ThemeMode>(DEFAULT_THEME === 'auto' ? 'light' : DEFAULT_THEME);
+  const [mode, setMode] = useState<ThemeMode>(
+    initialMode || (DEFAULT_THEME === 'auto' ? 'light' : DEFAULT_THEME)
+  );
 
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // BP13: Document lifecycle - theme initialization from storage/preference
     setMounted(true);
     // Sync with localStorage or system preference after mount
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -49,6 +79,7 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     }
   }, []);
 
+  // BP10: Stabilize function references with useCallback
   const toggleTheme = useCallback(() => {
     setMode((prevMode) => {
       const newMode = prevMode === 'light' ? 'dark' : 'light';
@@ -57,12 +88,14 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     });
   }, []);
 
+  // BP10: Stabilize function references with useCallback
   const setTheme = useCallback((newMode: ThemeMode) => {
     setMode(newMode);
     localStorage.setItem(THEME_STORAGE_KEY, newMode);
   }, []);
 
   useEffect(() => {
+    // BP13: Document lifecycle - DOM manipulation for theme application
     // Only apply class changes if mounted to avoid side-effects during render phase (though useEffect is post-render)
     if (!mounted) return;
     
@@ -77,20 +110,25 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     }
   }, [mode, mounted]);
 
-  const value = useMemo(() => ({
+  // BP7: Memoize provider values explicitly - state context
+  const stateValue = useMemo(() => ({
     mode,
-    toggleTheme,
-    setTheme,
     theme: tokens.colors[mode],
     isDark: mode === 'dark',
-  }), [mode, toggleTheme, setTheme]);
+  }), [mode]);
 
-  // Optional: Prevent flash if critical, but standard pattern accepts initial light theme
-  // For strict hydration safety, we render children immediately.
-  
+  // BP7: Memoize provider values explicitly - actions context
+  const actionsValue = useMemo(() => ({
+    toggleTheme,
+    setTheme,
+  }), [toggleTheme, setTheme]);
+
+  // BP3 & BP8: Multiple providers for split read/write
   return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeStateContext.Provider value={stateValue}>
+      <ThemeActionsContext.Provider value={actionsValue}>
+        {children}
+      </ThemeActionsContext.Provider>
+    </ThemeStateContext.Provider>
   );
 };

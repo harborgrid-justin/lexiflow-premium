@@ -20,9 +20,34 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 const EVENT_OPTIONS: AddEventListenerOptions = { passive: true };
 
 // ========================================
+// TYPES
+// ========================================
+
+/**
+ * Return type for useAutoTimeCapture hook
+ */
+export interface UseAutoTimeCaptureReturn {
+  /** Active time in seconds */
+  activeTime: number;
+  /** Whether user is idle */
+  isIdle: boolean;
+}
+
+// ========================================
 // HOOK
 // ========================================
-export const useAutoTimeCapture = (currentPath: string, currentCaseId?: string | null) => {
+
+/**
+ * Passive time tracking with idle detection.
+ * 
+ * @param currentPath - Current page path
+ * @param currentCaseId - Optional current case ID
+ * @returns Object with active time and idle state
+ */
+export function useAutoTimeCapture(
+  currentPath: string, 
+  currentCaseId?: string | null
+): UseAutoTimeCaptureReturn {
   const [activeTime, setActiveTime] = useState(0);
   const [isIdle, setIsIdle] = useState(false);
   const lastActivity = useRef(Date.now());

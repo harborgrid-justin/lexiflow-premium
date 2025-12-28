@@ -1,11 +1,26 @@
 /**
  * @module hooks/useSecureMessenger
  * @category Hooks - Messaging
- * @description Secure messenger hook managing conversations, messages, contacts, and file attachments
- * with privilege mode support. Handles conversation sorting, filtering, draft persistence, optimistic
- * UI updates, and deferred file indexing via Scheduler for performance.
  * 
- * NO THEME USAGE: Business logic hook for messaging state management
+ * Secure messenger managing conversations, messages, and file attachments.
+ * Handles conversation sorting, filtering, and draft persistence.
+ * 
+ * @example
+ * ```typescript
+ * const messenger = useSecureMessenger();
+ * 
+ * // Select conversation
+ * messenger.selectConversation(convId);
+ * 
+ * // Send message
+ * messenger.sendMessage();
+ * 
+ * // Handle attachments
+ * messenger.handleFileSelect(files);
+ * 
+ * // Toggle privilege mode
+ * messenger.setPrivilegedMode(true);
+ * ```
  */
 
 // ============================================================================
@@ -30,9 +45,65 @@ import { Contact } from '@/api';
 export type { Conversation, Message, Attachment, Contact };
 
 // ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * Return type for useSecureMessenger hook
+ */
+export interface UseSecureMessengerReturn {
+  /** Current view */
+  view: 'chats' | 'contacts' | 'files' | 'archived';
+  /** Set view */
+  setView: (view: 'chats' | 'contacts' | 'files' | 'archived') => void;
+  /** All conversations */
+  conversations: Conversation[];
+  /** Contacts list */
+  contactsList: Contact[];
+  /** All file attachments */
+  allFiles: Attachment[];
+  /** Active conversation ID */
+  activeConvId: string | null;
+  /** Select conversation */
+  selectConversation: (id: string | null) => void;
+  /** Active conversation */
+  activeConv: Conversation | undefined;
+  /** Search term */
+  searchTerm: string;
+  /** Set search term */
+  setSearchTerm: (term: string) => void;
+  /** Message input text */
+  inputText: string;
+  /** Set input text */
+  setInputText: (text: string) => void;
+  /** Pending attachments */
+  pendingAttachments: Attachment[];
+  /** Handle file selection */
+  handleFileSelect: (files: FileList | null) => void;
+  /** Remove attachment */
+  removeAttachment: (id: string) => void;
+  /** Send message */
+  sendMessage: () => void;
+  /** Privileged mode flag */
+  isPrivilegedMode: boolean;
+  /** Set privileged mode */
+  setPrivilegedMode: (enabled: boolean) => void;
+  /** Sorted conversations */
+  sortedConversations: Conversation[];
+  /** Filtered conversations */
+  filteredConversations: Conversation[];
+}
+
+// ============================================================================
 // HOOK
 // ============================================================================
-export const useSecureMessenger = () => {
+
+/**
+ * Secure messenger state management.
+ * 
+ * @returns Object with messenger state and operations
+ */
+export function useSecureMessenger(): UseSecureMessengerReturn {
   const [view, setView] = useState<'chats' | 'contacts' | 'files' | 'archived'>('chats');
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [contactsList, setContactsList] = useState<Contact[]>([]);

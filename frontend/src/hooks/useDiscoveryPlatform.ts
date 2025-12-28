@@ -1,12 +1,24 @@
 /**
  * @module hooks/useDiscoveryPlatform
  * @category Hooks - Discovery
- * @description Discovery platform state management hook with tab navigation, request tracking, deadline
- * syncing, and deep linking support. Manages activeTab with session storage persistence, contextId for
- * detail views, and parent tab derivation for hierarchical navigation. Provides handlers for tab changes,
- * navigation, back navigation, and response saving with cache invalidation.
  * 
- * NO THEME USAGE: Business logic hook for discovery platform state
+ * Discovery platform state management with tab navigation and request tracking.
+ * Manages session-persisted tabs and deep linking support.
+ * 
+ * @example
+ * ```typescript
+ * const discovery = useDiscoveryPlatform('dashboard', caseId);
+ * 
+ * // Tab navigation
+ * <ParentTabs onChange={discovery.handleParentTabChange} />
+ * <SubTabs active={discovery.activeTab} />
+ * 
+ * // Navigate to detail
+ * discovery.handleNavigate('requestDetail', requestId);
+ * 
+ * // Save response
+ * await discovery.handleSaveResponse(reqId, responseText);
+ * ```
  */
 
 // ============================================================================
@@ -39,9 +51,52 @@ import type { DiscoveryView } from '../utils/discoveryNavigation';
 export type { DiscoveryView } from '@utils/discoveryNavigation';
 
 // ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * Return type for useDiscoveryPlatform hook
+ */
+export interface UseDiscoveryPlatformReturn {
+  /** Active tab/view */
+  activeTab: DiscoveryView;
+  /** Set active tab */
+  setActiveTab: (tab: DiscoveryView) => void;
+  /** Context ID for detail views */
+  contextId: string | null;
+  /** All discovery requests */
+  requests: DiscoveryRequest[];
+  /** Active parent tab */
+  activeParentTab: any;
+  /** Handle parent tab change */
+  handleParentTabChange: (parentId: string) => void;
+  /** Navigate to view */
+  handleNavigate: (targetView: DiscoveryView, id?: string) => void;
+  /** Go back to list view */
+  handleBack: () => void;
+  /** Save response */
+  handleSaveResponse: (reqId: string, text: string) => Promise<void>;
+  /** Sync deadlines mutation */
+  syncDeadlines: () => void;
+  /** Whether syncing is in progress */
+  isSyncing: boolean;
+}
+
+// ============================================================================
 // HOOK
 // ============================================================================
-export const useDiscoveryPlatform = (initialTab?: DiscoveryView, caseId?: string) => {
+
+/**
+ * Discovery platform state management.
+ * 
+ * @param initialTab - Initial tab to display
+ * @param caseId - Optional case ID for scoping
+ * @returns Object with discovery platform state and handlers
+ */
+export function useDiscoveryPlatform(
+  initialTab?: DiscoveryView, 
+  caseId?: string
+): UseDiscoveryPlatformReturn {
   const notify = useNotify();
   
   // State Management
@@ -94,7 +149,7 @@ export const useDiscoveryPlatform = (initialTab?: DiscoveryView, caseId?: string
     setContextId(null);
   }, [activeTab, setActiveTab]);
 
-  const handleSaveResponse = useCallback(async (reqId: string, text: string) => {
+  const handleSaveResponse = useCallback(async (reqId: string, _text: string) => {
       await DataService.discovery.updateRequestStatus(reqId, 'Responded');
       queryClient.invalidate(queryKeys.discovery.byCaseId(caseId || 'all'));
       notify.success(`Response saved for ${reqId}.`);
@@ -107,7 +162,7 @@ export const useDiscoveryPlatform = (initialTab?: DiscoveryView, caseId?: string
     requests,
     isSyncing,
     activeParentTab,
-    syncDeadlines,
+    syncDeadlines: () => syncDeadlines(undefined),
     handleParentTabChange,
     handleNavigate,
     handleBack,

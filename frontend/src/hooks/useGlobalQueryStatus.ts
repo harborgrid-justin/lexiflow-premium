@@ -1,10 +1,16 @@
 /**
  * @module hooks/useGlobalQueryStatus
  * @category Hooks - Data Management
- * @description Global query fetching status hook subscribing to QueryClient updates. Tracks if
- * any queries are currently fetching for global loading indicator display.
  * 
- * NO THEME USAGE: Utility hook for query status tracking
+ * Tracks global query fetching status for loading indicators.
+ * Subscribes to QueryClient updates.
+ * 
+ * @example
+ * ```typescript
+ * const { isFetching } = useGlobalQueryStatus();
+ * 
+ * {isFetching && <GlobalLoadingSpinner />}
+ * ```
  */
 
 // ========================================
@@ -19,9 +25,27 @@ import { useState, useEffect } from 'react';
 import { queryClient } from '@/services';
 
 // ========================================
+// TYPES
+// ========================================
+
+/**
+ * Return type for useGlobalQueryStatus hook
+ */
+export interface UseGlobalQueryStatusReturn {
+  /** Whether any queries are currently fetching */
+  isFetching: boolean;
+}
+
+// ========================================
 // HOOK
 // ========================================
-export const useGlobalQueryStatus = () => {
+
+/**
+ * Tracks global query fetching status.
+ * 
+ * @returns Object with isFetching flag
+ */
+export function useGlobalQueryStatus(): UseGlobalQueryStatusReturn {
     const [isFetching, setIsFetching] = useState(false);
 
     useEffect(() => {
@@ -33,5 +57,5 @@ export const useGlobalQueryStatus = () => {
     }, []);
 
     return { isFetching };
-};
+}
 

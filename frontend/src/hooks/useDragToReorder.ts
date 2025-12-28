@@ -1,15 +1,25 @@
 /**
  * @module hooks/useDragToReorder
- * @category Hooks
- * @description Reusable drag-and-drop hook for list reordering with keyboard support.
+ * @category Hooks - Drag & Drop
  * 
- * FEATURES:
- * - HTML5 Drag API integration
- * - Visual feedback (ghost preview, drop zones)
- * - Undo/redo support
- * - Keyboard accessibility (Alt+Up/Down)
- * - Bulk reordering
- * - Touch support
+ * Reusable drag-and-drop for list reordering with keyboard support.
+ * Supports undo/redo, bulk operations, and accessibility.
+ * 
+ * @example
+ * ```typescript
+ * const {
+ *   items,
+ *   handleDragStart,
+ *   handleDragOver,
+ *   handleDrop,
+ *   undo,
+ *   redo
+ * } = useDragToReorder({
+ *   items: tasks,
+ *   onReorder: setTasks,
+ *   enableUndo: true
+ * });
+ * ```
  */
 
 import React, { useState, useCallback, useRef, useEffect, DragEvent, KeyboardEvent } from 'react';

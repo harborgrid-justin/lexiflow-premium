@@ -1,12 +1,21 @@
 /**
  * @module hooks/useWorkerSearch
  * @category Hooks - Search
- * @description Worker-based full-text search hook with race condition protection via request IDs. Manages
- * SearchWorker lifecycle, dispatches UPDATE (data change) and SEARCH (query change) messages, and filters
- * results by configured fields. Provides isSearching flag and filteredItems with non-blocking search
- * execution. Only accepts results matching latest requestId to prevent stale result display.
  * 
- * NO THEME USAGE: Search utility hook with Web Worker integration
+ * Worker-based full-text search with race condition protection.
+ * Manages SearchWorker lifecycle and non-blocking search execution.
+ * 
+ * @example
+ * ```typescript
+ * const { filteredItems, isSearching } = useWorkerSearch({
+ *   items: documents,
+ *   query: searchTerm,
+ *   fields: ['title', 'content', 'author']
+ * });
+ * 
+ * {isSearching && <Spinner />}
+ * {filteredItems.map(item => <Item key={item.id} {...item} />)}
+ * ```
  */
 
 // ============================================================================
@@ -23,17 +32,43 @@ import { SearchWorker } from '@/services';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
+
+/**
+ * Props for useWorkerSearch hook
+ */
 interface UseWorkerSearchProps<T> {
+  /** Items to search */
   items: T[];
+  /** Search query */
   query: string;
+  /** Fields to search in */
   fields?: (keyof T)[];
+  /** ID key for item identity */
   idKey?: keyof T;
+}
+
+/**
+ * Return type for useWorkerSearch hook
+ */
+export interface UseWorkerSearchReturn<T> {
+  /** Filtered items matching search */
+  filteredItems: T[];
+  /** Whether search is in progress */
+  isSearching: boolean;
 }
 
 // ============================================================================
 // HOOK
 // ============================================================================
-export const useWorkerSearch = <T>({ items, query, fields, idKey = 'id' as keyof T }: UseWorkerSearchProps<T>) => {
+
+/**
+ * Worker-based full-text search with race condition protection.
+ * 
+ * @param props - Configuration options
+ * @returns Object with filtered items and searching state
+ */
+export function useWorkerSearch<T>(props: UseWorkerSearchProps<T>): UseWorkerSearchReturn<T> {
+  const { items, query, fields, idKey = 'id' as keyof T } = props;
   const [filteredItems, setFilteredItems] = useState<T[]>(items);
   const [isSearching, setIsSearching] = useState(false);
   const workerRef = useRef<Worker | null>(null);

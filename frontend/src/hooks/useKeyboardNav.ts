@@ -16,17 +16,49 @@ import React, { useState, useEffect, useCallback } from 'react';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
+
+/**
+ * Props for useKeyboardNav
+ */
 interface UseKeyboardNavProps<T> {
+  /** Items to navigate */
   items: T[];
+  /** Whether list is open */
   isOpen: boolean;
+  /** Select callback */
   onSelect: (item: T) => void;
+  /** Close callback */
   onClose: () => void;
+}
+
+/**
+ * Return type for useKeyboardNav hook
+ */
+export interface UseKeyboardNavReturn {
+  /** Active index */
+  activeIndex: number;
+  /** Set active index */
+  setActiveIndex: (index: number) => void;
+  /** Keyboard event handler */
+  handleKeyDown: (e: React.KeyboardEvent) => void;
 }
 
 // ============================================================================
 // HOOK
 // ============================================================================
-export const useKeyboardNav = <T>({ items, isOpen, onSelect, onClose }: UseKeyboardNavProps<T>) => {
+
+/**
+ * Keyboard navigation for dropdown/list components.
+ * 
+ * @param props - Configuration options
+ * @returns Object with active index and keyboard handler
+ */
+export function useKeyboardNav<T>({
+  items,
+  isOpen,
+  onSelect,
+  onClose
+}: UseKeyboardNavProps<T>): UseKeyboardNavReturn {
   const [activeIndex, setActiveIndex] = useState<number>(-1);
 
   // Reset index when list changes or closes

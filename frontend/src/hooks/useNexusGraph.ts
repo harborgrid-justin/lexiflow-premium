@@ -127,10 +127,37 @@ const createPhysicsWorker = () => {
   return worker;
 };
 
-export const useNexusGraph = (
+// ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * Return type for useNexusGraph hook
+ */
+export interface UseNexusGraphReturn {
+  /** Serialized node positions for rendering */
+  nodesMeta: SerializedNode[];
+  /** Whether physics simulation is stable */
+  isStable: boolean;
+  /** Reheat simulation for re-animation */
+  reheat: () => void;
+}
+
+// ============================================================================
+// HOOK
+// ============================================================================
+
+/**
+ * Force-directed graph physics using Web Worker.
+ * 
+ * @param containerRef - Ref to container element
+ * @param initialData - Initial nodes and links
+ * @returns Object with node positions and stability state
+ */
+export function useNexusGraph(
   containerRef: React.RefObject<HTMLDivElement>, 
   initialData: { nodes: SimulationNode[], links: { source: string; target: string }[] }
-) => {
+): UseNexusGraphReturn {
   const physicsState = useRef({
     buffer: new Float32Array(0),
     links: [] as NexusLink[],

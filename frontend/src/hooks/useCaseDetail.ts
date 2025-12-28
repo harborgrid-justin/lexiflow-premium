@@ -1,3 +1,23 @@
+/**
+ * @module hooks/useCaseDetail
+ * @category Hooks - Case Management
+ * 
+ * Manages detailed case view with multiple data queries and AI operations.
+ * Provides workflow generation, document analysis, and legal drafting.
+ * 
+ * @example
+ * ```typescript
+ * const detail = useCaseDetail(caseData, 'Overview');
+ * 
+ * // Tab navigation
+ * <Tabs activeTab={detail.activeTab} onChange={detail.setActiveTab} />
+ * 
+ * // AI features
+ * await detail.generateAIWorkflow();
+ * await detail.analyzeWithAI(documentId);
+ * await detail.draftDocument('pleading', 'Motion to dismiss...');
+ * ```
+ */
 
 import { useState, useMemo } from 'react';
 import { Case, LegalDocument, WorkflowStage, TimeEntry, TimelineEvent, Party, Project, WorkflowTask, Motion } from '@/types';
@@ -8,7 +28,70 @@ import { queryKeys } from '../utils/queryKeys';
 import { useNotify } from './useNotify';
 import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config';
 
-export const useCaseDetail = (caseData: Case, initialTab: string = 'Overview') => {
+// ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * Return type for useCaseDetail hook
+ */
+export interface UseCaseDetailReturn {
+  /** Active tab name */
+  activeTab: string;
+  /** Set active tab */
+  setActiveTab: (tab: string) => void;
+  /** Documents for this case */
+  documents: LegalDocument[];
+  /** Whether documents are loading */
+  loadingDocs: boolean;
+  /** Workflow stages */
+  stages: WorkflowStage[];
+  /** All tasks */
+  allTasks: WorkflowTask[];
+  /** Billing entries */
+  billingEntries: TimeEntry[];
+  /** Motions */
+  motions: Motion[];
+  /** Projects */
+  projects: Project[];
+  /** Parties */
+  parties: Party[];
+  /** Set parties */
+  setParties: (parties: Party[]) => void;
+  /** Timeline events */
+  timelineEvents: TimelineEvent[];
+  /** Generate AI workflow */
+  generateAIWorkflow: () => Promise<void>;
+  /** Whether workflow is generating */
+  generatingWorkflow: boolean;
+  /** Analyze document with AI */
+  analyzeWithAI: (docId: string) => Promise<void>;
+  /** Currently analyzing document ID */
+  analyzingId: string | null;
+  /** Draft document prompt */
+  draftPrompt: string;
+  /** Set draft prompt */
+  setDraftPrompt: (prompt: string) => void;
+  /** Draft result */
+  draftResult: string;
+  /** Draft document with AI */
+  draftDocument: (docType: string, prompt: string) => Promise<void>;
+  /** Whether drafting is in progress */
+  isDrafting: boolean;
+}
+
+// ============================================================================
+// HOOK
+// ============================================================================
+
+/**
+ * Manages detailed case view with AI-powered operations.
+ * 
+ * @param caseData - Case data object
+ * @param initialTab - Initial tab to display
+ * @returns Object with case detail state and operations
+ */
+export function useCaseDetail(caseData: Case, initialTab: string = 'Overview'): UseCaseDetailReturn {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [generatingWorkflow, setGeneratingWorkflow] = useState(false);
   const [analyzingId, setAnalyzingId] = useState<string | null>(null);

@@ -1,10 +1,20 @@
 /**
  * @module hooks/useDebounce
  * @category Hooks - Performance
- * @description Debounces value changes with configurable delay using setTimeout. Commonly used
- * for search inputs and other rapid-fire updates to reduce unnecessary re-renders and API calls.
  * 
- * NO THEME USAGE: Utility hook for debouncing logic
+ * Provides value and callback debouncing to reduce unnecessary re-renders and API calls.
+ * 
+ * @example
+ * ```typescript
+ * // Debounce search term
+ * const debouncedSearch = useDebounce(searchTerm, 300);
+ * 
+ * // Debounce callback
+ * const debouncedSave = useDebouncedCallback(
+ *   (data) => saveToApi(data),
+ *   500
+ * );
+ * ```
  */
 
 // ========================================
@@ -13,8 +23,17 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 // ========================================
-// HOOK
+// HOOK - VALUE DEBOUNCING
 // ========================================
+
+/**
+ * Debounces a value, updating only after the specified delay.
+ * Useful for search inputs and real-time filtering.
+ * 
+ * @param value - Value to debounce
+ * @param delay - Debounce delay in milliseconds
+ * @returns Debounced value
+ */
 export function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
@@ -31,13 +50,28 @@ export function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
+// ========================================
+// HOOK - CALLBACK DEBOUNCING
+// ========================================
+
 /**
- * Debounces a callback function
+ * Return type for useDebouncedCallback
+ */
+export type DebouncedCallback<T extends (...args: unknown[]) => void> = 
+  (...args: Parameters<T>) => void;
+
+/**
+ * Debounces a callback function, executing only after the specified delay.
+ * Useful for expensive operations like API calls or complex computations.
+ * 
+ * @param callback - Function to debounce
+ * @param delay - Debounce delay in milliseconds
+ * @returns Debounced callback function
  */
 export function useDebouncedCallback<T extends (...args: unknown[]) => void>(
   callback: T,
   delay: number
-): (...args: Parameters<T>) => void {
+): DebouncedCallback<T> {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const callbackRef = useRef(callback);
 

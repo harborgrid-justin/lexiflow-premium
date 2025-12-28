@@ -42,15 +42,15 @@ export type FieldValidation = {
   isValidated: boolean;
 };
 
-export type FormValidationState<T extends Record<string, any>> = {
+export type FormValidationState<T extends Record<string, unknown>> = {
   [K in keyof T]: FieldValidation;
 };
 
-export type ValidationSchema<T extends Record<string, any>> = {
+export type ValidationSchema<T extends Record<string, unknown>> = {
   [K in keyof T]?: ValidationRule<T[K]>[];
 };
 
-export interface UseFormValidationOptions<T extends Record<string, any>> {
+export interface UseFormValidationOptions<T extends Record<string, unknown>> {
   /** Validation schema for all fields */
   schema: ValidationSchema<T>;
   /** Initial form values */
@@ -99,7 +99,7 @@ export interface UseFormValidationReturn<T extends Record<string, any>> {
 /**
  * Debounce helper
  */
-function debounce<T extends (...args: unknown[]) => any>(
+function debounce<T extends (...args: unknown[]) => void>(
   func: T,
   delay: number
 ): (...args: Parameters<T>) => void {
@@ -135,7 +135,7 @@ function calculateCompletionPercentage<T extends Record<string, any>>(
 // HOOK
 // ============================================================================
 
-export function useFormValidation<T extends Record<string, any>>({
+export function useFormValidation<T extends Record<string, unknown>>({
   schema,
   initialValues,
   debounceDelay = SEARCH_DEBOUNCE_MS,
@@ -229,7 +229,7 @@ export function useFormValidation<T extends Record<string, any>>({
       const field = fieldKey as keyof T;
       if (!debouncedValidators.current.has(field)) {
         const validator = debounce(
-          ((value: T[keyof T]) => validateFieldImmediate(field, value)) as (...args: unknown[]) => any,
+          ((value: T[keyof T]) => validateFieldImmediate(field, value)) as (...args: unknown[]) => void,
           debounceDelay
         );
         debouncedValidators.current.set(field, validator);
@@ -450,13 +450,13 @@ export const ValidationRules = {
 
   dateAfter: (compareField: string, message?: string): ValidationRule<string> => ({
     name: 'dateAfter',
-    validate: (value: string, allValues?: Record<string, any>) => {
+    validate: (value: string, allValues?: Record<string, unknown>) => {
       if (!value || !allValues) return null;
       const compareValue = allValues[compareField];
       if (!compareValue) return null;
       
       const date1 = new Date(value);
-      const date2 = new Date(compareValue);
+      const date2 = new Date(compareValue as string | number | Date);
       
       return date1 <= date2 
         ? message || `Must be after ${compareField}`
@@ -464,8 +464,8 @@ export const ValidationRules = {
     },
   }),
 
-  custom: <T = any>(
-    validateFn: (value: T, allValues?: Record<string, any>) => string | null,
+  custom: <T = unknown>(
+    validateFn: (value: T, allValues?: Record<string, unknown>) => string | null,
     name: string = 'custom'
   ): ValidationRule<T> => ({
     name,

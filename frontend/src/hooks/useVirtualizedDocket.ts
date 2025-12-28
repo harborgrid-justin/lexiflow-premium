@@ -38,7 +38,7 @@ export function useVirtualizedDocket<T>({
   items,
   estimatedItemHeight,
   overscan = 5,
-  containerHeight = '100%'
+  containerHeight: _containerHeight = '100%'
 }: VirtualizedDocketConfig<T>): VirtualizedDocketResult<T> {
   const [scrollTop, setScrollTop] = useState(0);
   const [containerHeightPx, setContainerHeightPx] = useState(600);
@@ -108,7 +108,6 @@ export function useVirtualizedDocket<T>({
     const startIndex = Math.max(0, findStartIndex(scrollTop) - overscan);
     
     let endIndex = startIndex;
-    const currentHeight = 0;
     const targetHeight = scrollTop + containerHeightPx + (estimatedItemHeight * overscan);
     
     while (endIndex < items.length && itemOffsets[endIndex] < targetHeight) {
@@ -191,6 +190,8 @@ export function useVirtualizedDocket<T>({
         scrollContainer.removeEventListener('scroll', handleScroll);
       };
     }
+    
+    return undefined;
   }, []);
   
   /**

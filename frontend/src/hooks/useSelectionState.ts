@@ -16,7 +16,7 @@ export interface UseSelectionReturn<T> {
 }
 
 /**
- * useSelection - Single item selection management
+ * Single item selection management with toggle support.
  * 
  * @example
  * ```tsx
@@ -26,7 +26,7 @@ export interface UseSelectionReturn<T> {
  * {selection.selected && <UserDetail user={selection.selected} />}
  * ```
  */
-export const useSelection = <T>(initialValue: T | null = null): UseSelectionReturn<T> => {
+export function useSelection<T>(initialValue: T | null = null): UseSelectionReturn<T> {
   const [selected, setSelected] = useState<T | null>(initialValue);
 
   const select = useCallback((item: T) => {
@@ -57,10 +57,10 @@ export const useSelection = <T>(initialValue: T | null = null): UseSelectionRetu
     toggle,
     isSelected
   };
-};
+}
 
 /**
- * useMultiSelection - Multiple item selection management
+ * Multiple item selection management with batch operations.
  */
 export interface UseMultiSelectionReturn<T> {
   selected: T[];
@@ -72,7 +72,7 @@ export interface UseMultiSelectionReturn<T> {
   isSelected: (item: T, compareFn?: (a: T, b: T) => boolean) => boolean;
 }
 
-export const useMultiSelection = <T>(initialValue: T[] = []): UseMultiSelectionReturn<T> => {
+export function useMultiSelection<T>(initialValue: T[] = []): UseMultiSelectionReturn<T> {
   const [selected, setSelected] = useState<T[]>(initialValue);
 
   const select = useCallback((item: T) => {
@@ -114,4 +114,4 @@ export const useMultiSelection = <T>(initialValue: T[] = []): UseMultiSelectionR
     toggle,
     isSelected
   };
-};
+}

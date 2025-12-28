@@ -1,12 +1,26 @@
 /**
  * @module hooks/useLitigationBuilder
  * @category Hooks - Litigation
- * @description Specialized litigation strategy workflow builder with playbook loading, node/connection
- * management, and case deployment. Transforms visual workflow graph (nodes/connections) into Gantt
- * phases/tasks with date calculation based on node X position. Supports decision nodes with ports,
- * phase containers, and deployToCase mutation for strategy-to-plan conversion.
  * 
- * NO THEME USAGE: Business logic hook for litigation workflow building
+ * Specialized litigation strategy workflow builder with playbook loading.
+ * Transforms visual workflow graph into Gantt phases/tasks.
+ * 
+ * @example
+ * ```typescript
+ * const builder = useLitigationBuilder({ navigateToCaseTab });
+ * 
+ * // Load playbook
+ * builder.loadPlaybook(playbook);
+ * 
+ * // Manage nodes
+ * builder.addNode('Task', 100, 200, 'Discovery');
+ * builder.updateNode(nodeId, { label: 'Updated' });
+ * builder.deleteNode(nodeId);
+ * 
+ * // Deploy to case
+ * builder.selectCase(caseId);
+ * builder.deployToCase();
+ * ```
  */
 
 // ============================================================================
@@ -39,15 +53,68 @@ import { Case, CasePhase, WorkflowTask, CaseId, TaskId, TaskStatusBackend, TaskP
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
+
+/**
+ * Props for useLitigationBuilder hook
+ */
 interface UseLitigationBuilderProps {
+  /** Navigate to case tab after deployment */
   navigateToCaseTab: (caseId: string, tab: string) => void;
+}
+
+/**
+ * Return type for useLitigationBuilder hook
+ */
+export interface UseLitigationBuilderReturn {
+  /** Workflow nodes */
+  nodes: WorkflowNode[];
+  /** Set nodes */
+  setNodes: (nodes: WorkflowNode[]) => void;
+  /** Workflow connections */
+  connections: WorkflowConnection[];
+  /** Set connections */
+  setConnections: (connections: WorkflowConnection[]) => void;
+  /** Selected case ID */
+  selectedCaseId: string | null;
+  /** Set selected case ID */
+  setSelectedCaseId: (caseId: string | null) => void;
+  /** Select case */
+  selectCase: (caseId: string | null) => void;
+  /** Validation errors */
+  validationErrors: string[];
+  /** All cases */
+  cases: Case[];
+  /** Deploy to case */
+  deployToCase: () => void;
+  /** Whether deploying */
+  isDeploying: boolean;
+  /** Load playbook */
+  loadPlaybook: (playbook: Playbook) => void;
+  /** Clear canvas */
+  clearCanvas: () => void;
+  /** Add node */
+  addNode: (type: NodeType, x: number, y: number, label?: string) => string;
+  /** Update node */
+  updateNode: (id: string, updates: Partial<WorkflowNode>) => void;
+  /** Delete node */
+  deleteNode: (id: string) => void;
+  /** Add connection */
+  addConnection: (from: string, to: string, fromPort?: string) => void;
+  /** Delete connection */
+  deleteConnection: (id: string) => void;
 }
 
 // ============================================================================
 // HOOK
 // ============================================================================
-// This is a specialized version of useWorkflowBuilder for the Litigation module
-export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilderProps) => {
+
+/**
+ * Litigation strategy workflow builder.
+ * 
+ * @param props - Configuration options
+ * @returns Object with workflow builder state and operations
+ */
+export function useLitigationBuilder({ navigateToCaseTab }: UseLitigationBuilderProps): UseLitigationBuilderReturn {
   const [nodes, setNodes] = useState<WorkflowNode[]>([
     { id: 'start', type: 'Start', label: 'Start', x: 50, y: 200, config: {} },
     { id: 'end', type: 'End', label: 'End', x: 550, y: 200, config: {} },
@@ -161,9 +228,6 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
     const newConnections: WorkflowConnection[] = [];
 
     newNodes.push({ id: 'start', type: 'Start', label: 'Start', x: 50, y: 400, config: {} });
-    
-    const lastNodeId = 'start';
-    const yOffset = 400;
 
     playbook.stages.forEach((stage, idx) => {
       const stageNodeId = `phase-${idx}`;
@@ -229,22 +293,42 @@ export const useLitigationBuilder = ({ navigateToCaseTab }: UseLitigationBuilder
     setConnections(prev => [...prev, newConnection]);
   }, []);
   
-  const updateConnection = useCallback((id: string, updates: Partial<WorkflowConnection>) => {
-    setConnections(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
-  }, []);
-  
   const deleteConnection = useCallback((id: string) => {
     setConnections(prev => prev.filter(c => c.id !== id));
   }, []);
 
+  const clearCanvas = useCallback(() => {
+    setNodes([
+      { id: 'start', type: 'Start', label: 'Start', x: 50, y: 200, config: {} },
+      { id: 'end', type: 'End', label: 'End', x: 550, y: 200, config: {} },
+    ]);
+    setConnections([
+      { id: 'c1', from: 'start', to: 'end' }
+    ]);
+  }, []);
+
+  const selectCase = useCallback((caseId: string | null) => {
+    setSelectedCaseId(caseId);
+  }, []);
+
   return {
-    nodes, connections, addNode, updateNode, deleteNode, 
-    addConnection, updateConnection, deleteConnection, loadFromPlaybook,
-    cases,
+    nodes,
+    setNodes,
+    connections,
+    setConnections,
     selectedCaseId,
     setSelectedCaseId,
+    selectCase,
+    validationErrors,
+    cases,
     deployToCase,
     isDeploying,
-    validationErrors
+    loadPlaybook: loadFromPlaybook,
+    clearCanvas,
+    addNode,
+    updateNode,
+    deleteNode,
+    addConnection,
+    deleteConnection
   };
 };

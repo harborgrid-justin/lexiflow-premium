@@ -185,7 +185,7 @@ function removeScrollLock(): void {
  * - Duplicate lockIds will cause incorrect unlock behavior
  * - isLocked changes trigger effect re-run (intentional)
  */
-export const useScrollLock = (lockId: string, isLocked: boolean): void => {
+export function useScrollLock(lockId: string, isLocked: boolean): void {
   // Validate inputs in development
   if (process.env.NODE_ENV !== 'production') {
     validateLockId(lockId);
@@ -223,4 +223,4 @@ export const useScrollLock = (lockId: string, isLocked: boolean): void => {
       }
     };
   }, [isLocked, lockId]);
-};
+}

@@ -1,11 +1,21 @@
 /**
  * @module hooks/useNotify
  * @category Hooks - UI Utilities
- * @description Toast notification convenience hook wrapping ToastContext with semantic methods
- * (success, error, info, warning). Provides stable callback references via useCallback for
- * use in effect dependencies and event handlers.
  * 
- * NO THEME USAGE: Wrapper hook for toast notifications
+ * Provides toast notification interface with semantic methods.
+ * Must be used within ToastProvider.
+ * 
+ * @example
+ * ```typescript
+ * const notify = useNotify();
+ * 
+ * notify.success('Case created successfully');
+ * notify.error('Failed to save document');
+ * notify.info('Background sync in progress');
+ * notify.warning('Session expires in 5 minutes');
+ * ```
+ * 
+ * @throws {Error} If used outside ToastProvider context
  */
 
 // ============================================================================
@@ -20,10 +30,42 @@ import { useCallback } from 'react';
 import { useToast } from '@/providers';
 
 // ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * Return type for useNotify hook
+ * Provides semantic notification methods
+ */
+export interface UseNotifyReturn {
+  /** Display success notification */
+  success: (message: string) => void;
+  /** Display error notification */
+  error: (message: string) => void;
+  /** Display info notification */
+  info: (message: string) => void;
+  /** Display warning notification */
+  warning: (message: string) => void;
+}
+
+// ============================================================================
 // HOOK
 // ============================================================================
-export const useNotify = () => {
-  const { addToast } = useToast();
+
+/**
+ * Provides toast notification interface.
+ * 
+ * @returns Object with semantic notification methods
+ * @throws {Error} If used outside ToastProvider
+ */
+export function useNotify(): UseNotifyReturn {
+  const toastContext = useToast();
+  
+  if (!toastContext || !toastContext.addToast) {
+    throw new Error('useNotify must be used within ToastProvider');
+  }
+  
+  const { addToast } = toastContext;
 
   const success = useCallback((message: string) => {
     addToast(message, 'success');
@@ -42,4 +84,4 @@ export const useNotify = () => {
   }, [addToast]);
 
   return { success, error, info, warning };
-};
+}

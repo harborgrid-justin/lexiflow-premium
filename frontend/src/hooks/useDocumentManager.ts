@@ -129,34 +129,98 @@ export interface DocumentStats {
 
 /**
  * Return type for useDocumentManager hook
- * Exposed for type inference in consuming components
  */
-export type UseDocumentManagerReturn = ReturnType<typeof useDocumentManager>;
+export interface UseDocumentManagerReturn {
+  /** Filtered documents */
+  filtered: LegalDocument[];
+  /** Search term */
+  searchTerm: string;
+  /** Set search term */
+  setSearchTerm: (term: string) => void;
+  /** Active module filter */
+  activeModuleFilter: string;
+  /** Set active module filter */
+  setActiveModuleFilter: (module: string) => void;
+  /** Selected document IDs */
+  selectedDocs: string[];
+  /** Set selected document IDs */
+  setSelectedDocs: (docs: string[]) => void;
+  /** Toggle document selection */
+  toggleSelection: (id: string) => void;
+  /** Clear all selections */
+  clearSelection: () => void;
+  /** Selected document for history */
+  selectedDocForHistory: LegalDocument | null;
+  /** Set selected document for history */
+  setSelectedDocForHistory: (doc: LegalDocument | null) => void;
+  /** Show version history */
+  showVersionHistory: (doc: LegalDocument) => void;
+  /** Close version history */
+  closeVersionHistory: () => void;
+  /** AI processing state */
+  isProcessingAI: boolean;
+  /** Bulk summarize with AI */
+  bulkSummarize: () => Promise<void>;
+  /** Current folder */
+  currentFolder: string;
+  /** Navigate to folder */
+  navigateToFolder: (folder: string) => void;
+  /** Details panel open */
+  isDetailsOpen: boolean;
+  /** Toggle details panel */
+  toggleDetails: () => void;
+  /** Document statistics */
+  stats: DocumentStats;
+  /** Add tag to document */
+  addTag: (docId: string, tag: string) => Promise<void>;
+  /** Remove tag from document */
+  removeTag: (docId: string, tag: string) => Promise<void>;
+  /** Whether searching */
+  isSearching: boolean;
+  /** Restore document version */
+  restoreVersion: (docId: string, versionId: string) => Promise<void>;
+  /** All documents (raw) */
+  documents: LegalDocument[];
+  /** Set documents (legacy compatibility) */
+  setDocuments: (docs: LegalDocument[] | ((prev: LegalDocument[]) => LegalDocument[])) => void;
+  /** Loading state */
+  isLoading: boolean;
+  /** Restore document version handler */
+  handleRestore: (version: DocumentVersion) => Promise<void>;
+  /** Bulk AI summarization handler */
+  handleBulkSummarize: () => Promise<void>;
+  /** All unique tags */
+  allTags: string[];
+  /** Set current folder */
+  setCurrentFolder: (folder: string) => void;
+  /** Set details panel open */
+  setIsDetailsOpen: (open: boolean) => void;
+  /** Preview document */
+  previewDoc: LegalDocument | null;
+  /** Set preview document */
+  setPreviewDoc: (doc: LegalDocument | null) => void;
+  /** Update document */
+  updateDocument: (id: string, updates: Partial<LegalDocument>) => void;
+  /** Drag-drop handlers (if enabled) */
+  isDragging?: boolean;
+  isUploading?: boolean;
+  handleDragEnter?: (e: React.DragEvent) => void;
+  handleDragLeave?: (e: React.DragEvent) => void;
+  handleDragOver?: (e: React.DragEvent) => void;
+  handleDrop?: (e: React.DragEvent) => Promise<void>;
+}
 
 // ============================================================================
 // HOOK IMPLEMENTATION
 // ============================================================================
 
 /**
- * Document manager hook
+ * Document manager hook.
  * 
  * @param options - Configuration options
  * @returns Document manager interface
- * @throws Never throws - all errors are handled internally with fallbacks
- * 
- * @example
- * ```typescript
- * const {
- *   filtered,
- *   searchTerm,
- *   setSearchTerm,
- *   toggleSelection,
- *   addTag,
- *   stats
- * } = useDocumentManager({ enableDragDrop: true });
- * ```
  */
-export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
+export function useDocumentManager(options: UseDocumentManagerOptions = {}): UseDocumentManagerReturn {
   const { enableDragDrop = false } = options;
 
   // ============================================================================
@@ -546,7 +610,7 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
    * @example
    * addTag('doc-123', 'priority');
    */
-  const addTag = useCallback((docId: string, tag: string) => {
+  const addTag = useCallback(async (docId: string, tag: string) => {
     if (!validateDocId(docId, 'addTag')) return;
 
     const sanitizedTag = validateTag(tag);
@@ -587,7 +651,7 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
    * @example
    * removeTag('doc-123', 'priority');
    */
-  const removeTag = useCallback((docId: string, tag: string) => {
+  const removeTag = useCallback(async (docId: string, tag: string) => {
     if (!validateDocId(docId, 'removeTag')) return;
 
     try {
@@ -776,42 +840,60 @@ export const useDocumentManager = (options: UseDocumentManagerOptions = {}) => {
    * @property {Function} handleDragOver - Drag over handler (if drag-drop enabled)
    * @property {Function} handleDrop - Drop handler (if drag-drop enabled)
    */
-  return {
+  const baseReturn = {
     searchTerm,
     setSearchTerm,
     activeModuleFilter,
     setActiveModuleFilter,
     selectedDocs,
     setSelectedDocs,
+    toggleSelection,
+    clearSelection: useCallback(() => setSelectedDocs([]), []),
     selectedDocForHistory,
     setSelectedDocForHistory,
-    documents,
-    setDocuments,
+    showVersionHistory: useCallback((doc: LegalDocument) => setSelectedDocForHistory(doc), []),
+    closeVersionHistory: useCallback(() => setSelectedDocForHistory(null), []),
     isProcessingAI,
+    bulkSummarize: handleBulkSummarize,
+    currentFolder,
+    navigateToFolder: useCallback((folder: string) => setCurrentFolder(folder), []),
+    isDetailsOpen,
+    toggleDetails: useCallback(() => setIsDetailsOpen(prev => !prev), []),
+    stats,
+    addTag,
+    removeTag,
+    isSearching,
+    restoreVersion: useCallback(async (docId: string, versionId: string) => {
+      const doc = documentsArray.find(d => d.id === docId);
+      const version = doc?.versions?.find(v => v.id === versionId);
+      if (version) await handleRestore(version);
+    }, [documentsArray, handleRestore]),
+    documents: documentsArray,
+    setDocuments,
     isLoading: isLoading || isSearching,
     handleRestore,
     handleBulkSummarize,
-    toggleSelection,
-    addTag,
-    removeTag,
     allTags,
     filtered,
-    stats,
-    currentFolder,
     setCurrentFolder,
-    isDetailsOpen,
     setIsDetailsOpen,
     previewDoc,
     setPreviewDoc,
     updateDocument,
-    // Drag & Drop (only if enabled)
-    ...(enableDragDrop && {
+  };
+
+  // Conditionally add drag-drop handlers if enabled
+  if (enableDragDrop) {
+    return {
+      ...baseReturn,
       isDragging,
       isUploading,
       handleDragEnter,
       handleDragLeave,
       handleDragOver,
       handleDrop
-    })
-  };
+    };
+  }
+
+  return baseReturn;
 };

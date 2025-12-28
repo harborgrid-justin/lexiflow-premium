@@ -1,11 +1,25 @@
 /**
  * @module hooks/useGanttDrag
  * @category Hooks - Workflow Management
- * @description Gantt chart drag-and-drop hook with move and resize modes (left/right handles).
- * Uses RAF for 60fps visual updates without React re-renders, then calculates date changes on
- * drop based on pixels-per-day ratio. Supports drag modes: move, resize-left, resize-right.
  * 
- * NO THEME USAGE: Utility hook for Gantt drag logic
+ * Gantt chart drag-and-drop with move and resize modes.
+ * Uses RAF for 60fps visual updates without React re-renders.
+ * 
+ * @example
+ * ```typescript
+ * const drag = useGanttDrag({
+ *   pixelsPerDay: 30,
+ *   tasks,
+ *   onTaskUpdate: (id, start, end) => updateTask(id, { start, end })
+ * });
+ * 
+ * <TaskBar
+ *   onMouseDown={(e) => drag.initDrag(e, task.id, 'move', e.currentTarget)}
+ * />
+ * <ResizeHandle
+ *   onMouseDown={(e) => drag.initDrag(e, task.id, 'resize-right', taskEl)}
+ * />
+ * ```
  */
 
 // ========================================
@@ -22,18 +36,43 @@ import { WorkflowTask } from '@/types';
 // ========================================
 // TYPES & INTERFACES
 // ========================================
+
+/**
+ * Drag mode type
+ */
 export type DragMode = 'move' | 'resize-left' | 'resize-right';
 
+/**
+ * Configuration for useGanttDrag
+ */
 interface DragOptions {
-    pixelsPerDay: number;
-    tasks: WorkflowTask[];
-    onTaskUpdate: (taskId: string, newStartDate: string, newDueDate: string) => void;
+  /** Pixels per day for date calculation */
+  pixelsPerDay: number;
+  /** Tasks array for date lookups */
+  tasks: WorkflowTask[];
+  /** Callback when task dates change */
+  onTaskUpdate: (taskId: string, newStartDate: string, newDueDate: string) => void;
+}
+
+/**
+ * Return type for useGanttDrag hook
+ */
+export interface UseGanttDragReturn {
+  /** Initialize drag operation */
+  initDrag: (e: React.MouseEvent, taskId: string, mode: DragMode, element: HTMLElement) => void;
 }
 
 // ========================================
 // HOOK
 // ========================================
-export const useGanttDrag = ({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions) => {
+
+/**
+ * Gantt chart drag-and-drop with smooth visual updates.
+ * 
+ * @param options - Configuration options
+ * @returns Object with initDrag method
+ */
+export function useGanttDrag({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions): UseGanttDragReturn {
     const dragRef = useRef<{
         taskId: string;
         mode: DragMode;
@@ -172,5 +211,5 @@ export const useGanttDrag = ({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions)
         window.addEventListener('mouseup', handleMouseUp);
     }, [handleMouseMove, handleMouseUp]);
 
-    return { onMouseDown };
+    return { initDrag: onMouseDown };
 };

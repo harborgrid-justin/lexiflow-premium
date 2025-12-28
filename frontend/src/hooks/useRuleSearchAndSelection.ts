@@ -29,23 +29,46 @@ import { SEARCH_DEBOUNCE_MS } from '@/config';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-interface UseRuleSearchAndSelectionResult {
+
+/**
+ * Return type for useRuleSearchAndSelection hook
+ */
+export interface UseRuleSearchAndSelectionReturn {
+  /** Search term */
   searchTerm: string;
+  /** Set search term */
   setSearchTerm: (term: string) => void;
+  /** Selected rule ID */
   selectedRuleId: string | null;
+  /** Set selected rule ID */
   setSelectedRuleId: (id: string | null) => void;
+  /** Expanded node IDs */
   expandedIds: Set<string>;
+  /** Toggle expansion */
   toggleExpand: (id: string) => void;
+  /** Display hierarchy (filtered) */
   displayHierarchy: LegalRule[];
+  /** Current expanded IDs */
   currentExpandedIds: Set<string>;
+  /** Whether search is loading */
   isLoadingSearch: boolean;
+  /** Selected rule object */
   selectedRule: LegalRule | undefined;
 }
 
 // ============================================================================
 // HOOK
 // ============================================================================
-export const useRuleSearchAndSelection = (rules: LegalRule[]): UseRuleSearchAndSelectionResult => {
+
+/**
+ * Rule search and hierarchical navigation.
+ * 
+ * @param rules - Flat list of legal rules
+ * @returns Object with search state and hierarchy
+ */
+export function useRuleSearchAndSelection(
+  rules: LegalRule[]
+): UseRuleSearchAndSelectionReturn {
   const [searchTerm, _setSearchTerm] = useState('');
   const [selectedRuleId, setSelectedRuleId] = useState<string | null>(null);
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());

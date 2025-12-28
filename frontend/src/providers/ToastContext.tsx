@@ -1,57 +1,83 @@
-import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 import { cn } from '@/utils';
 import { NOTIFICATION_ERROR_DISMISS_MS, NOTIFICATION_AUTO_DISMISS_MS } from '@/config';
+import type {
+  ToastType,
+  Toast,
+  ToastStateValue,
+  ToastActionsValue,
+  ToastProviderProps,
+  PriorityMap,
+} from './ToastContext.types';
 
-export type ToastType = 'success' | 'error' | 'info' | 'warning';
+/**
+ * ToastContext - Application-level notification boundary
+ * 
+ * Best Practices Applied:
+ * - BP1: Cross-cutting concern (notifications) justifies context usage
+ * - BP2: Narrow interface with minimal surface area
+ * - BP3: Split read/write contexts for performance
+ * - BP4: No raw context export; only hooks
+ * - BP6: No high-frequency state in context (toasts are user-triggered, not rapid)
+ * - BP7: Explicit memoization of provider values
+ * - BP9: Co-locate provider and type definitions
+ * - BP10: Stabilize function references
+ * - BP11: Strict TypeScript contracts
+ */
 
-interface Toast {
-  id: string;
-  message: string;
-  type: ToastType;
-  priority: number; // Higher is more important
-  timestamp: number;
-  count?: number; // For coalesced toasts
-}
+// Re-export types for convenience
+export type { ToastType } from './ToastContext.types';
 
-interface ToastContextType {
-  addToast: (message: string, type: ToastType) => void;
-  removeToast: (id: string) => void;
-  success: (message: string) => void;
-  error: (message: string) => void;
-  info: (message: string) => void;
-  warning: (message: string) => void;
-  // Legacy aliases
-  notifySuccess: (message: string) => void;
-  notifyError: (message: string) => void;
-}
+// BP3: Split contexts for state and actions
+const ToastStateContext = createContext<ToastStateValue | undefined>(undefined);
+const ToastActionsContext = createContext<ToastActionsValue | undefined>(undefined);
 
-const ToastContext = createContext<ToastContextType | undefined>(undefined);
-
-export const useToast = () => {
-  const context = useContext(ToastContext);
+// BP4: Export only custom hooks, not raw contexts
+export function useToastState(): ToastStateValue {
+  const context = useContext(ToastStateContext);
+  // BP5: Fail fast when provider is missing
   if (!context) {
-    throw new Error('useToast must be used within a ToastProvider');
+    throw new Error('useToastState must be used within a ToastProvider');
   }
   return context;
-};
+}
+
+export function useToastActions(): ToastActionsValue {
+  const context = useContext(ToastActionsContext);
+  // BP5: Fail fast when provider is missing
+  if (!context) {
+    throw new Error('useToastActions must be used within a ToastProvider');
+  }
+  return context;
+}
+
+// Convenience hook for consumers that need both (backward compatibility)
+export function useToast() {
+  return {
+    ...useToastState(),
+    ...useToastActions(),
+  };
+}
 
 // Priority mapping
-const PRIORITY_MAP: Record<ToastType, number> = {
+const PRIORITY_MAP: PriorityMap = {
     'error': 3,
     'warning': 2,
     'success': 1,
     'info': 0
 };
 
-export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
+export const ToastProvider = ({ 
+  children, 
+  maxVisible = 3, 
+  maxQueue = 50 
+}: ToastProviderProps) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const queueRef = useRef<Toast[]>([]);
   const timeoutIdsRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
-  const MAX_VISIBLE_TOASTS = 3;
-  const MAX_QUEUE_SIZE = 50; // Maximum queued toasts to prevent memory leaks
 
-  // Cleanup all timeouts on unmount
+  // BP13: Document lifecycle - cleanup all timeouts on unmount
   useEffect(() => {
     return () => {
       timeoutIdsRef.current.forEach(id => clearTimeout(id));
@@ -59,10 +85,11 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
+  // BP10: Stabilize function references with useCallback
   const processQueue = useCallback(() => {
     setToasts(prev => {
         // If we have space
-        if (prev.length < MAX_VISIBLE_TOASTS && queueRef.current.length > 0) {
+        if (prev.length < maxVisible && queueRef.current.length > 0) {
             // Get highest priority items from queue
             // Queue sort: Priority Desc, then Timestamp Asc
             queueRef.current.sort((a, b) => {
@@ -83,15 +110,23 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
         }
         return prev;
     });
-  }, []);
+  }, [maxVisible]);
 
   // Trigger processing whenever toasts state changes (slot frees up)
   useEffect(() => {
-    if (toasts.length < MAX_VISIBLE_TOASTS) {
+    if (toasts.length < maxVisible) {
         processQueue();
     }
-  }, [toasts.length, processQueue]);
+  }, [toasts.length, processQueue, maxVisible]);
 
+  // BP10: Stabilize function references with useCallback
+  const removeToast = useCallback((id: string) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+  }, []);
+
+  // BP10: Stabilize function references with useCallback
+  const addToast = useCallback((message: string, type: ToastType = 'info') => {
+  // BP10: Stabilize function references with useCallback
   const addToast = useCallback((message: string, type: ToastType = 'info') => {
     // DEDUPLICATION: Check if identical toast is already visible or in queue
     const isDuplicateVisible = toasts.some(t => t.message === message && t.type === type);
@@ -103,7 +138,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     // Safety check: if queue is at max capacity, remove lowest priority oldest items
-    if (queueRef.current.length >= MAX_QUEUE_SIZE) {
+    if (queueRef.current.length >= maxQueue) {
         // Sort by priority (ascending) then timestamp (ascending) to find least important
         queueRef.current.sort((a, b) => {
             if (a.priority !== b.priority) return a.priority - b.priority;
@@ -112,7 +147,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
 
         // Remove oldest, lowest priority item
         const removed = queueRef.current.shift();
-        console.warn(`[ToastContext] Queue at capacity (${MAX_QUEUE_SIZE}), dropped toast: ${removed?.message}`);
+        console.warn(`[ToastContext] Queue at capacity (${maxQueue}), dropped toast: ${removed?.message}`);
     }
 
     const id = Math.random().toString(36).substring(2, 9);
@@ -126,32 +161,37 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
 
     queueRef.current.push(newToast);
     processQueue();
-  }, [toasts, processQueue, MAX_QUEUE_SIZE]);
+  }, [toasts, processQueue, maxQueue]);
 
-  const removeToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
-  }, []);
-
-  // Helper methods
+  // BP10: Stabilize function references - helper methods
   const success = useCallback((message: string) => addToast(message, 'success'), [addToast]);
   const error = useCallback((message: string) => addToast(message, 'error'), [addToast]);
   const info = useCallback((message: string) => addToast(message, 'info'), [addToast]);
   const warning = useCallback((message: string) => addToast(message, 'warning'), [addToast]);
 
+  // BP7: Memoize provider values explicitly - state context
+  const stateValue = useMemo<ToastStateValue>(() => ({
+    toasts,
+  }), [toasts]);
+
+  // BP7: Memoize provider values explicitly - actions context
+  const actionsValue = useMemo<ToastActionsValue>(() => ({
+    addToast,
+    removeToast,
+    success,
+    error,
+    info,
+    warning,
+    notifySuccess: success,
+    notifyError: error,
+  }), [addToast, removeToast, success, error, info, warning]);
+
   return (
-    <ToastContext.Provider value={{
-      addToast,
-      removeToast,
-      success,
-      error,
-      info,
-      warning,
-      notifySuccess: success,
-      notifyError: error,
-    }}>
-      {children}
-      <div className="fixed bottom-4 right-4 z-[6000] flex flex-col gap-2 pointer-events-none">
-        {toasts.map((toast) => (
+    <ToastStateContext.Provider value={stateValue}>
+      <ToastActionsContext.Provider value={actionsValue}>
+        {children}
+        <div className="fixed bottom-4 right-4 z-[6000] flex flex-col gap-2 pointer-events-none">
+          {toasts.map((toast) => (
           <div
             key={toast.id}
             className={cn(
@@ -180,6 +220,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
           </div>
         ))}
       </div>
-    </ToastContext.Provider>
+      </ToastActionsContext.Provider>
+    </ToastStateContext.Provider>
   );
 };

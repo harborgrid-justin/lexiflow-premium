@@ -1,33 +1,42 @@
 /**
- * React Performance Hook with Memory Tracking
- * Production-ready hook for tracking component performance
- * 
  * @module hooks/usePerformanceTracking
- */
-
-import { useEffect, useRef } from 'react';
-import { memoryMonitor } from '../utils/memoryMonitor';
-
-export interface PerformanceTrackingOptions {
-  componentName: string;
-  enabled?: boolean;
-  warnThreshold?: number; // milliseconds
-}
-
-/**
- * Hook to track component render performance
+ * @category Hooks - Performance
+ * 
+ * Tracks component render performance with memory monitoring.
+ * Warns when renders exceed threshold.
  * 
  * @example
- * ```tsx
+ * ```typescript
  * function MyComponent() {
  *   usePerformanceTracking({
  *     componentName: 'MyComponent',
- *     warnThreshold: 16, // Warn if render takes > 16ms
+ *     warnThreshold: 16, // Warn if render > 16ms
  *   });
  *   
  *   return <div>...</div>;
  * }
  * ```
+ */
+
+import { useEffect, useRef } from 'react';
+import { memoryMonitor } from '../utils/memoryMonitor';
+
+/**
+ * Options for performance tracking
+ */
+export interface PerformanceTrackingOptions {
+  /** Component name for logging */
+  componentName: string;
+  /** Enable tracking (default: dev mode only) */
+  enabled?: boolean;
+  /** Warn threshold in milliseconds */
+  warnThreshold?: number;
+}
+
+/**
+ * Tracks component render performance.
+ * 
+ * @param options - Configuration options
  */
 export function usePerformanceTracking(options: PerformanceTrackingOptions): void {
   const {

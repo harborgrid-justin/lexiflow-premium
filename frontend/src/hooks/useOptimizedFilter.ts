@@ -27,7 +27,7 @@
 
 import { useState, useTransition, useMemo, useCallback } from 'react';
 
-export interface OptimizedFilterConfig<T> {
+export interface OptimizedFilterConfig {
   /** Initial filter term */
   initialTerm?: string;
   /** Debounce delay in ms (optional) */
@@ -58,7 +58,7 @@ export interface OptimizedFilterReturn<T> {
 export function useOptimizedFilter<T>(
   data: T[],
   filterFn: (data: T[], term: string) => T[],
-  config: OptimizedFilterConfig<T> = {}
+  config: OptimizedFilterConfig = {}
 ): OptimizedFilterReturn<T> {
   const { initialTerm = '' } = config;
   
@@ -120,7 +120,7 @@ export function useOptimizedFilter<T>(
  * }
  * ```
  */
-export function useMultiFilter<T, F extends Record<string, any>>(
+export function useMultiFilter<T, F extends Record<string, unknown>>(
   data: T[],
   filterFn: (data: T[], filters: F) => T[],
   initialFilters: F

@@ -83,8 +83,6 @@ export interface UseModalReturn<T = unknown> {
   close: () => void;
   /** Current data payload (null when closed) */
   data: T | null;
-  /** Manually set data without opening modal */
-  setData: Dispatch<SetStateAction<T | null>>;
 }
 
 // =============================================================================
@@ -158,7 +156,7 @@ function validateInitialState(initialState: unknown): void {
  * - Data automatically cleared on close (prevents stale state)
  * - No manual cleanup needed (React handles unmount)
  */
-export const useModal = <T = unknown>(initialState: boolean = false): UseModalReturn<T> => {
+export function useModal<T = unknown>(initialState: boolean = false): UseModalReturn<T> {
   // Validate inputs in development
   if (process.env.NODE_ENV !== 'production') {
     validateInitialState(initialState);
@@ -195,5 +193,5 @@ export const useModal = <T = unknown>(initialState: boolean = false): UseModalRe
     setData(null);
   }, []);
 
-  return { isOpen, open, close, data, setData };
-};
+  return { isOpen, open, close, data };
+}

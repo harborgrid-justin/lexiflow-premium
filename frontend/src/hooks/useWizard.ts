@@ -1,11 +1,22 @@
 /**
  * @module hooks/useWizard
  * @category Hooks - UI Utilities
- * @description Multi-step wizard navigation hook with next/back/goTo controls and boundary helpers.
- * Manages currentStep state with clamping (1 to totalSteps), provides isFirst/isLast flags for
- * UI conditional rendering (e.g., hiding Back button on first step, showing Submit on last).
  * 
- * NO THEME USAGE: Utility hook for wizard step management
+ * Provides multi-step wizard navigation with boundary detection.
+ * Useful for onboarding flows, multi-step forms, and guided processes.
+ * 
+ * @example
+ * ```typescript
+ * const wizard = useWizard(3);
+ * 
+ * <WizardStep active={wizard.currentStep === 1}>Step 1</WizardStep>
+ * <WizardStep active={wizard.currentStep === 2}>Step 2</WizardStep>
+ * <WizardStep active={wizard.currentStep === 3}>Step 3</WizardStep>
+ * 
+ * {!wizard.isFirst && <Button onClick={wizard.back}>Back</Button>}
+ * {!wizard.isLast && <Button onClick={wizard.next}>Next</Button>}
+ * {wizard.isLast && <Button onClick={handleSubmit}>Submit</Button>}
+ * ```
  */
 
 // ============================================================================
@@ -14,9 +25,39 @@
 import { useState } from 'react';
 
 // ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * Return type for useWizard hook
+ */
+export interface UseWizardReturn {
+  /** Current step number (1-indexed) */
+  currentStep: number;
+  /** Advance to next step */
+  next: () => void;
+  /** Go back to previous step */
+  back: () => void;
+  /** Jump to specific step */
+  goTo: (step: number) => void;
+  /** Whether on first step */
+  isFirst: boolean;
+  /** Whether on last step */
+  isLast: boolean;
+}
+
+// ============================================================================
 // HOOK
 // ============================================================================
-export const useWizard = (totalSteps: number, initialStep: number = 1) => {
+
+/**
+ * Manages multi-step wizard navigation.
+ * 
+ * @param totalSteps - Total number of steps in wizard
+ * @param initialStep - Initial step number (default: 1)
+ * @returns Object with current step, navigation methods, and boundary flags
+ */
+export function useWizard(totalSteps: number, initialStep: number = 1): UseWizardReturn {
   const [currentStep, setCurrentStep] = useState(initialStep);
 
   const next = () => setCurrentStep(prev => Math.min(prev + 1, totalSteps));

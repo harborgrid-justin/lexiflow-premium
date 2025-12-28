@@ -85,17 +85,35 @@ import {
 
 /**
  * Return type for useBackendHealth hook
- * Exposed for type inference in consuming components
  */
-export type UseBackendHealthReturn = ReturnType<typeof useBackendHealth>;
+export interface UseBackendHealthReturn {
+  /** Backend availability status */
+  isAvailable: boolean;
+  /** Backend health status */
+  isHealthy: boolean;
+  /** Latency in milliseconds */
+  latency: number | null;
+  /** Backend version */
+  version: string | null;
+  /** Timestamp of last health check */
+  lastChecked: Date | string;
+  /** Full status object */
+  status: BackendStatus;
+  /** Loading state */
+  isLoading: boolean;
+  /** Error state */
+  error: Error | null;
+  /** Refresh health status */
+  refresh: () => Promise<BackendStatus>;
+}
 
 // ============================================================================
 // HOOK IMPLEMENTATION
 // ============================================================================
 
 /**
- * Backend health monitoring hook
- * Provides reactive access to backend service health and availability
+ * Backend health monitoring hook.
+ * Provides reactive access to backend service health and availability.
  * 
  * @returns Backend health monitoring interface
  * @throws Never throws - all errors are handled internally with fallbacks
@@ -123,7 +141,7 @@ export type UseBackendHealthReturn = ReturnType<typeof useBackendHealth>;
  * await refresh();
  * ```
  */
-export function useBackendHealth() {
+export function useBackendHealth(): UseBackendHealthReturn {
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================
@@ -156,6 +174,12 @@ export function useBackendHealth() {
       return fallbackStatus;
     }
   });
+
+  /**
+   * Loading state
+   * Tracks whether a health check is currently in progress
+   */
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // ============================================================================
   // SUBSCRIPTION & LIFECYCLE
@@ -208,7 +232,7 @@ export function useBackendHealth() {
       // Return empty cleanup function on subscription failure
       return () => {};
     }
-  }, []); // Empty dependency array - subscribe once on mount
+  }, [status.available, status.healthy]); // Empty dependency array - subscribe once on mount
 
   // ============================================================================
   // MANUAL REFRESH
@@ -237,6 +261,7 @@ export function useBackendHealth() {
   const refresh = useCallback(async (): Promise<BackendStatus> => {
     try {
       console.log('[useBackendHealth] Manual refresh triggered');
+      setIsLoading(true);
       
       // Trigger health check via service
       const updatedStatus = await backendDiscovery.refresh();
@@ -258,6 +283,8 @@ export function useBackendHealth() {
       
       // Return current status on error
       return status;
+    } finally {
+      setIsLoading(false);
     }
   }, [status]);
 
@@ -278,11 +305,14 @@ export function useBackendHealth() {
       }
 
       // Check required fields
-
+      if (typeof status.available !== 'boolean' || typeof status.healthy !== 'boolean') {
+        console.error('[useBackendHealth] Invalid required fields:', status);
+        return false;
+      }
 
       // lastChecked can be Date object or ISO string
       if (!status.lastChecked || 
-          (true && !(true))) {
+          (!(status.lastChecked instanceof Date) && typeof status.lastChecked !== 'string')) {
         console.error('[useBackendHealth] Invalid lastChecked field:', status.lastChecked);
         return false;
       }
@@ -314,9 +344,9 @@ export function useBackendHealth() {
   const isAvailable = status.available;
   const isHealthy = status.healthy;
   const lastChecked = status.lastChecked;
-  const latency = status.latency;
-  const version = status.version;
-  const error = status.error;
+  const latency = status.latency ?? null;
+  const version = status.version ?? null;
+  const error = status.error ? new Error(status.error) : null;
 
   // ============================================================================
   // RETURN INTERFACE
@@ -344,6 +374,7 @@ export function useBackendHealth() {
     latency,
     version,
     error,
+    isLoading,
     refresh,
   };
 }

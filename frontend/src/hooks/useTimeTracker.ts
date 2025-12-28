@@ -101,9 +101,31 @@ export interface UseTimeTrackerOptions {
 
 /**
  * Return type for useTimeTracker hook
- * Exposed for type inference in consuming components
  */
-export type UseTimeTrackerReturn = ReturnType<typeof useTimeTracker>;
+export interface UseTimeTrackerReturn {
+  /** Whether timer is active */
+  isActive: boolean;
+  /** Elapsed seconds */
+  seconds: number;
+  /** Formatted time string (HH:MM:SS) */
+  formattedTime: string;
+  /** Calculated billable amount */
+  billableAmount: number;
+  /** Start timer */
+  start: () => void;
+  /** Pause timer */
+  pause: () => void;
+  /** Stop timer and log entry */
+  stop: () => Promise<void>;
+  /** Reset timer */
+  reset: () => void;
+  /** Current case ID */
+  caseId: string;
+  /** Current user ID */
+  userId: string;
+  /** Hourly rate */
+  rate: number;
+}
 
 // ============================================================================
 // CONSTANTS
@@ -123,25 +145,12 @@ const TIMER_INTERVAL_MS = 1000;
 // ============================================================================
 
 /**
- * Time tracker hook
+ * Time tracker hook.
  * 
  * @param options - Configuration options for time tracking
  * @returns Time tracker interface
- * @throws Never throws - all errors are handled internally with fallbacks
- * 
- * @example
- * ```typescript
- * const {
- *   isActive,
- *   formattedTime,
- *   start,
- *   pause,
- *   stop,
- *   reset
- * } = useTimeTracker({ caseId: 'case-123', rate: 500 });
- * ```
  */
-export const useTimeTracker = (options: UseTimeTrackerOptions = {}) => {
+export function useTimeTracker(options: UseTimeTrackerOptions = {}): UseTimeTrackerReturn {
   // ============================================================================
   // CONFIGURATION & DEPENDENCIES
   // ============================================================================

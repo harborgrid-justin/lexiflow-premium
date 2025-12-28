@@ -54,7 +54,7 @@ export interface UseCommandHistoryReturn {
  */
 export function useCommandHistory(maxSize?: number): UseCommandHistoryReturn {
   const historyRef = useRef(new CommandHistory(maxSize));
-  const [updateTrigger, setUpdateTrigger] = useState(0);
+  const [_updateTrigger, setUpdateTrigger] = useState(0);
 
   // Force re-render helper
   const forceUpdate = useCallback(() => {

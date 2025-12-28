@@ -1,9 +1,26 @@
 /**
  * @module hooks/useAppController
  * @category Hooks - Application
- * @description Main application controller hook managing navigation, case selection, user context, global search,
- * sidebar state, and app initialization. 
- * * NO THEME USAGE: Application-level state management hook
+ * 
+ * Main application controller managing navigation, user context, and global state.
+ * Handles app initialization, authentication, and routing.
+ * 
+ * @example
+ * ```typescript
+ * const app = useAppController();
+ * 
+ * // Navigation
+ * app.navigateToView(PATHS.CASES);
+ * 
+ * // User switching
+ * app.switchUser(1);
+ * 
+ * // Global search
+ * app.updateSearch('contract');
+ * 
+ * // Case selection
+ * app.selectCase(caseId, 'Documents');
+ * ```
  */
 
 // ============================================================================
@@ -38,9 +55,55 @@ import { PATHS } from '@/config';
 import { Case, AppView } from '@/types';
 
 // ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * Return type for useAppController hook
+ */
+export interface UseAppControllerReturn {
+  /** Active view path */
+  activeView: AppView;
+  /** Navigate to view */
+  navigateToView: (view: AppView, tab?: string) => void;
+  /** Selected case ID */
+  selectedCaseId: string | null;
+  /** Selected case object */
+  selectedCase: Case | null;
+  /** Select case */
+  selectCase: (caseId: string | null, tab?: string) => void;
+  /** Current user */
+  currentUser: any;
+  /** Switch user */
+  switchUser: (index: number) => void;
+  /** Sidebar open state */
+  isSidebarOpen: boolean;
+  /** Toggle sidebar */
+  toggleSidebar: () => void;
+  /** Global search query */
+  globalSearch: string;
+  /** Update search */
+  updateSearch: (query: string) => void;
+  /** Is app loading */
+  isAppLoading: boolean;
+  /** Is authenticated */
+  isAuthenticated: boolean;
+  /** App status message */
+  appStatusMessage: string;
+  /** Initial tab for case detail */
+  initialTab?: string;
+}
+
+// ============================================================================
 // HOOK
 // ============================================================================
-export const useAppController = () => {
+
+/**
+ * Main application controller.
+ * 
+ * @returns Object with app state and navigation methods
+ */
+export function useAppController(): UseAppControllerReturn {
   const [activeView, setActiveView] = useSessionStorage<AppView>(`lexiflow_active_view`, PATHS.DASHBOARD);
   const [selectedCaseId, setSelectedCaseId] = useSessionStorage<string | null>(`lexiflow_selected_case_id`, null);
   const [selectedCase, setSelectedCase] = useState<Case | null>(null);

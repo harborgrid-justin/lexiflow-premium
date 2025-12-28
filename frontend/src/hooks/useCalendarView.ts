@@ -1,12 +1,22 @@
 /**
  * @module hooks/useCalendarView
  * @category Hooks - Calendar
- * @description Calendar view state management hook with month navigation, event loading, and day-based
- * event filtering. Manages currentMonth state, loads events from DataService, provides changeMonth/goToToday
- * navigation helpers, and calculates daysInMonth/firstDay for grid layout. Memoized getEventsForDay
- * returns events matching YYYY-MM-DD format for efficient day cell rendering.
  * 
- * NO THEME USAGE: Utility hook for calendar state management
+ * Manages calendar view state with month navigation and event loading.
+ * Provides day-based event filtering for grid rendering.
+ * 
+ * @example
+ * ```typescript
+ * const calendar = useCalendarView();
+ * 
+ * <button onClick={() => calendar.changeMonth(-1)}>Previous</button>
+ * <button onClick={() => calendar.changeMonth(1)}>Next</button>
+ * <button onClick={calendar.goToToday}>Today</button>
+ * 
+ * {Array.from({ length: calendar.daysInMonth }).map((_, day) => (
+ *   <Day events={calendar.getEventsForDay(day + 1)} />
+ * ))}
+ * ```
  */
 
 // ============================================================================
@@ -24,9 +34,43 @@ import { DataService } from '@/services';
 import { CalendarEventItem } from '@/types';
 
 // ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * Return type for useCalendarView hook
+ */
+export interface UseCalendarViewReturn {
+  /** Current month being displayed */
+  currentMonth: Date;
+  /** All loaded events */
+  events: CalendarEventItem[];
+  /** Number of days in current month */
+  daysInMonth: number;
+  /** First day of month (0 = Sunday) */
+  firstDay: number;
+  /** Get events for specific day */
+  getEventsForDay: (day: number) => CalendarEventItem[];
+  /** Navigate months */
+  changeMonth: (offset: number) => void;
+  /** Jump to today */
+  goToToday: () => void;
+  /** Formatted month label */
+  monthLabel: string;
+  /** Whether events are loading */
+  isLoading: boolean;
+}
+
+// ============================================================================
 // HOOK
 // ============================================================================
-export const useCalendarView = () => {
+
+/**
+ * Manages calendar view state and navigation.
+ * 
+ * @returns Object with calendar state and controls
+ */
+export function useCalendarView(): UseCalendarViewReturn {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [events, setEvents] = useState<CalendarEventItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -77,4 +121,4 @@ export const useCalendarView = () => {
     monthLabel,
     isLoading
   };
-};
+}

@@ -1,11 +1,23 @@
 /**
  * @module hooks/useReadAnalytics
  * @category Hooks - Analytics
- * @description Viewport-based read tracking with IntersectionObserver. Monitors time spent visible (50% threshold),
- * fires onRead callback after configurable threshold, and tracks per-session duration with idle cap (60s max).
- * Provides ref for element observation, isRead flag, and cumulative duration counter.
  * 
- * NO THEME USAGE: Utility hook for read analytics tracking
+ * Tracks viewport-based read time with IntersectionObserver.
+ * Monitors time spent visible and fires callback after threshold.
+ * 
+ * @example
+ * ```typescript
+ * const analytics = useReadAnalytics('article-123', {
+ *   thresholdMs: 3000,
+ *   onRead: (id, duration) => {
+ *     console.log(`Article ${id} read for ${duration}ms`);
+ *   }
+ * });
+ * 
+ * <article ref={analytics.ref}>
+ *   Content tracked for reading time
+ * </article>
+ * ```
  */
 
 // ============================================================================
@@ -16,15 +28,44 @@ import { useEffect, useRef, useState } from 'react';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
+
+/**
+ * Options for read analytics tracking
+ */
 interface ReadAnalyticsOptions {
-    thresholdMs?: number;
-    onRead?: (id: string, duration: number) => void;
+  /** Threshold in milliseconds before marking as read */
+  thresholdMs?: number;
+  /** Callback when threshold is met */
+  onRead?: (id: string, duration: number) => void;
+}
+
+/**
+ * Return type for useReadAnalytics hook
+ */
+export interface UseReadAnalyticsReturn {
+  /** Ref to attach to tracked element */
+  ref: React.RefObject<HTMLDivElement>;
+  /** Whether threshold has been met */
+  isRead: boolean;
+  /** Cumulative duration in seconds */
+  duration: number;
 }
 
 // ============================================================================
 // HOOK
 // ============================================================================
-export const useReadAnalytics = (id: string, options: ReadAnalyticsOptions = {}) => {
+
+/**
+ * Tracks read analytics for viewport-visible content.
+ * 
+ * @param id - Unique identifier for content
+ * @param options - Configuration options
+ * @returns Object with ref, isRead flag, and duration
+ */
+export function useReadAnalytics(
+  id: string,
+  options: ReadAnalyticsOptions = {}
+): UseReadAnalyticsReturn {
     const ref = useRef<HTMLDivElement>(null);
     const [isRead, setIsRead] = useState(false);
     const [duration, setDuration] = useState(0);

@@ -158,33 +158,53 @@ export interface EvidenceFilters {
 
 /**
  * Return type for useEvidenceVault hook
- * Exposed for type inference in consuming components
  */
-export type UseEvidenceVaultReturn = ReturnType<typeof useEvidenceVault>;
+export interface UseEvidenceVaultReturn {
+  /** Current view mode */
+  view: ViewMode;
+  /** Set view mode */
+  setView: (view: ViewMode) => void;
+  /** Active detail tab */
+  activeTab: DetailTab;
+  /** Set active detail tab */
+  setActiveTab: (tab: DetailTab) => void;
+  /** Selected evidence item */
+  selectedItem: EvidenceItem | null;
+  /** Select evidence item */
+  selectItem: (item: EvidenceItem | null) => void;
+  /** All evidence items */
+  allItems: EvidenceItem[];
+  /** Filtered evidence items */
+  filteredItems: EvidenceItem[];
+  /** Active filters */
+  filters: EvidenceFilters;
+  /** Update filter */
+  updateFilter: <K extends keyof EvidenceFilters>(key: K, value: EvidenceFilters[K]) => void;
+  /** Clear all filters */
+  clearFilters: () => void;
+  /** Handle custody update */
+  handleCustodyUpdate: (event: ChainOfCustodyEvent) => Promise<void>;
+  /** Handle intake complete */
+  handleIntakeComplete: (item: EvidenceItem) => Promise<void>;
+  /** Whether items are loading */
+  isLoading: boolean;
+  /** Navigate to detail view */
+  viewDetail: (item: EvidenceItem) => void;
+  /** Go back to list */
+  goBack: () => void;
+}
 
 // ============================================================================
 // HOOK IMPLEMENTATION
 // ============================================================================
 
 /**
- * Evidence vault management hook
+ * Evidence vault management hook.
  * 
  * @param caseId - Optional case ID for scoped evidence access
  * @returns Evidence vault management interface
- * @throws Never throws - all errors are handled internally with fallbacks
- * 
- * @example
- * ```typescript
- * // Case-scoped usage
- * const { 
- *   view, 
- *   setView, 
- *   filteredItems, 
- *   handleIntakeComplete 
- * } = useEvidenceVault('case-123');
- * ```
  */
-export const useEvidenceVault = (caseId?: string) => {
+export function useEvidenceVault(caseId?: string): UseEvidenceVaultReturn {
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================

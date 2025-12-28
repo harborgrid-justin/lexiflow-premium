@@ -79,7 +79,7 @@ export interface UseProgressReturn {
 
 export function useProgress({
   steps: initialSteps = [],
-  estimatedDuration,
+  estimatedDuration: _estimatedDuration,
   autoResetDelay,
   onComplete,
   onCancel,
@@ -100,6 +100,29 @@ export function useProgress({
 
   const cancelledRef = useRef(false);
   const autoResetTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  /**
+   * Reset to initial state
+   */
+  const reset = useCallback(() => {
+    if (autoResetTimerRef.current) {
+      clearTimeout(autoResetTimerRef.current);
+    }
+    
+    cancelledRef.current = false;
+    setProgressState(0);
+    setStatus('idle');
+    setStartTime(null);
+    setErrorState(null);
+    
+    if (initialSteps.length > 0) {
+      setSteps(initialSteps.map(step => ({
+        ...step,
+        status: 'pending' as const,
+        progress: 0,
+      })));
+    }
+  }, [initialSteps]);
 
   /**
    * Start progress tracking
@@ -143,7 +166,7 @@ export function useProgress({
         }, autoResetDelay);
       }
     }
-  }, [status, autoResetDelay, onComplete]);
+  }, [status, onComplete, autoResetDelay, reset]);
 
   /**
    * Update specific step
@@ -205,12 +228,12 @@ export function useProgress({
 
       return newSteps;
     });
-  }, [autoResetDelay, onComplete]);
+  }, [autoResetDelay, onComplete, reset]);
 
   /**
    * Mark as complete
    */
-  const complete = useCallback((message?: string) => {
+  const complete = useCallback((_message?: string) => {
     if (cancelledRef.current) return;
     
     setProgressState(100);
@@ -232,7 +255,7 @@ export function useProgress({
         reset();
       }, autoResetDelay);
     }
-  }, [steps.length, autoResetDelay, onComplete]);
+  }, [steps.length, onComplete, autoResetDelay, reset]);
 
   /**
    * Set error
@@ -271,29 +294,6 @@ export function useProgress({
     
     onCancel?.();
   }, [status, onCancel]);
-
-  /**
-   * Reset to initial state
-   */
-  const reset = useCallback(() => {
-    if (autoResetTimerRef.current) {
-      clearTimeout(autoResetTimerRef.current);
-    }
-    
-    cancelledRef.current = false;
-    setProgressState(0);
-    setStatus('idle');
-    setStartTime(null);
-    setErrorState(null);
-    
-    if (initialSteps.length > 0) {
-      setSteps(initialSteps.map(step => ({
-        ...step,
-        status: 'pending' as const,
-        progress: 0,
-      })));
-    }
-  }, [initialSteps]);
 
   // Cleanup on unmount
   useEffect(() => {

@@ -1,10 +1,23 @@
 /**
  * @module hooks/useMultiSelection
  * @category Hooks - UI Utilities
- * @description Simplified multi-selection hook with toggle, select all, and clear functionality.
- * Tracks an array of selected items with convenient helpers for checking selection state.
  * 
- * NO THEME USAGE: Utility hook for selection state management
+ * Simplified multi-selection with toggle, select all, and clear.
+ * Tracks selected items with convenient state helpers.
+ * 
+ * @example
+ * ```typescript
+ * const selection = useMultiSelection<Document>([], (a, b) => a.id === b.id);
+ * 
+ * // Toggle selection
+ * <checkbox onChange={() => selection.toggle(doc)} checked={selection.isSelected(doc)} />
+ * 
+ * // Select all
+ * <button onClick={() => selection.selectAll(documents)}>Select All</button>
+ * 
+ * // Clear
+ * <button onClick={selection.clear}>Clear</button>
+ * ```
  */
 
 // ============================================================================
@@ -15,7 +28,11 @@ import { useState, useCallback } from 'react';
 // ============================================================================
 // TYPES
 // ============================================================================
-export interface MultiSelection<T> {
+
+/**
+ * Return type for useMultiSelection hook
+ */
+export interface UseMultiSelectionReturn<T> {
   /** Array of currently selected items */
   selected: T[];
   /** Select a single item (adds to selection) */
@@ -39,10 +56,18 @@ export interface MultiSelection<T> {
 // ============================================================================
 // HOOK
 // ============================================================================
-export const useMultiSelection = <T = unknown>(
+
+/**
+ * Manages multi-selection state with toggle, select all, and clear.
+ * 
+ * @param initialSelection - Initial selected items
+ * @param compareFn - Function to compare items for equality
+ * @returns Object with selection state and operations
+ */
+export function useMultiSelection<T = unknown>(
   initialSelection: T[] = [],
   compareFn: (a: T, b: T) => boolean = (a, b) => a === b
-): MultiSelection<T> => {
+): UseMultiSelectionReturn<T> {
   const [selected, setSelected] = useState<T[]>(initialSelection);
 
   const select = useCallback((item: T) => {
@@ -113,10 +138,13 @@ export interface SingleSelection<T> {
   isSelected: (item: T) => boolean;
 }
 
-export const useSingleSelection = <T = unknown>(
+/**
+ * Manages single item selection with custom comparison function.
+ */
+export function useSingleSelection<T = unknown>(
   initialSelection: T | null = null,
   compareFn: (a: T, b: T) => boolean = (a, b) => a === b
-): SingleSelection<T> => {
+): SingleSelection<T> {
   const [selected, setSelected] = useState<T | null>(initialSelection);
 
   const select = useCallback((item: T | null) => {
@@ -137,4 +165,4 @@ export const useSingleSelection = <T = unknown>(
     deselect,
     isSelected
   };
-};
+}

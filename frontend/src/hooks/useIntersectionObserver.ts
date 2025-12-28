@@ -1,11 +1,20 @@
 /**
  * @module hooks/useIntersectionObserver
  * @category Hooks - Performance
- * @description Intersection Observer hook for lazy loading and visibility tracking. Supports
- * freeze-once-visible mode for one-time triggers. Returns IntersectionObserverEntry with
- * isIntersecting state for conditional rendering.
  * 
- * NO THEME USAGE: Utility hook for visibility detection
+ * Provides Intersection Observer for lazy loading and visibility tracking.
+ * Supports freeze-once-visible mode for one-time triggers.
+ * 
+ * @example
+ * ```typescript
+ * const elementRef = useRef<HTMLDivElement>(null);
+ * const entry = useIntersectionObserver(elementRef, {
+ *   threshold: 0.5,
+ *   freezeOnceVisible: true
+ * });
+ * 
+ * const isVisible = entry?.isIntersecting;
+ * ```
  */
 
 // ========================================
@@ -16,13 +25,26 @@ import React, { useEffect, useState, useCallback } from 'react';
 // ========================================
 // TYPES & INTERFACES
 // ========================================
+
+/**
+ * Options for Intersection Observer
+ */
 interface IntersectionObserverArgs extends IntersectionObserverInit {
+  /** Freeze state once element becomes visible */
   freezeOnceVisible?: boolean;
 }
 
 // ========================================
 // HOOK
 // ========================================
+
+/**
+ * Observes element intersection with viewport.
+ * 
+ * @param elementRef - Reference to element to observe
+ * @param options - Observer configuration
+ * @returns Current intersection entry or undefined
+ */
 export function useIntersectionObserver(
   elementRef: React.RefObject<Element>,
   {

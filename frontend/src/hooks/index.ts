@@ -27,18 +27,18 @@ export { usePanZoom, type PanZoomState, type PanZoomControls } from './usePanZoo
 // CORE LOGIC & UTILITIES
 // ============================================================================
 export * from './useAppController';
-export * from './useAutoSave';
+export { useAutoSave, type UseAutoSaveOptions, type UseAutoSaveReturn, AutoSaveError } from './useAutoSave';
 export * from './useAutoTimeCapture';
 export * from './useBlobRegistry';
 export * from './useClickOutside';
-export * from './useDebounce';
+export { useDebounce, useDebouncedCallback, type DebouncedCallback } from './useDebounce';
 export * from './useGlobalQueryStatus';
 export * from './useHistory'; // State-based undo/redo - see JSDoc for when to use
 export * from './useHoverIntent';
 export * from './useIntersectionObserver';
 export * from './useInterval';
 export * from './useModal';
-export * from './useNotify';
+export { useNotify, type UseNotifyReturn } from './useNotify';
 export * from './useReadAnalytics';
 export * from './useScrollLock';
 // Multi-selection hook (primary selection hook with shift-click support)
@@ -51,8 +51,8 @@ export { useSelection as useSingleSelection, useMultiSelection, type UseMultiSel
 export type { UseSelectionReturn as UseSingleSelectionReturn } from './useSelectionState';
 
 export * from './useSessionStorage';
-export * from './useSort';
-export * from './useToggle';
+export { useSort, type UseSortReturn, type SortConfig, type SortDirection } from './useSort';
+export { useToggle, type UseToggleReturn } from './useToggle';
 export * from './useWizard';
 export * from './useWorkerSearch';
 export * from './useTimeTracker';
@@ -60,7 +60,7 @@ export * from './useSettlementSimulation';
 export * from './useSLAMonitoring';
 export * from './useFilterAndSearch';
 export * from './useModalState';
-export * from './useArrayState';
+export { useArrayState, type UseArrayStateReturn } from './useArrayState';
 
 // ============================================================================
 // DOMAIN SPECIFIC HOOKS

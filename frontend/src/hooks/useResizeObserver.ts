@@ -1,29 +1,42 @@
 /**
  * @module hooks/useResizeObserver
  * @category Hooks - UI Utilities
- * @description Custom hook for observing element resize events
  * 
- * BEST PRACTICES:
- * - Custom hook for reusability (Practice #3)
- * - Strict effect management with proper cleanup (Practice #9)
- * - Type-safe architecture (Practice #5)
+ * Observes element resize events with ResizeObserver API.
+ * Provides current dimensions with automatic cleanup.
+ * 
+ * @example
+ * ```typescript
+ * const containerRef = useRef<HTMLDivElement>(null);
+ * const { width, height } = useResizeObserver(containerRef);
+ * 
+ * <div ref={containerRef}>
+ *   Size: {width}x{height}
+ * </div>
+ * ```
  */
 
 import { useEffect, useRef, useState, RefObject } from 'react';
 
+/**
+ * Dimensions interface
+ */
 export interface Dimensions {
+  /** Width in pixels */
   width: number;
+  /** Height in pixels */
   height: number;
 }
 
 /**
- * Hook to observe element dimensions using ResizeObserver
+ * Observes element dimensions using ResizeObserver.
+ * 
  * @param ref - Reference to element to observe
  * @returns Current dimensions of the element
  */
-export const useResizeObserver = <T extends HTMLElement>(
+export function useResizeObserver<T extends HTMLElement>(
   ref: RefObject<T>
-): Dimensions => {
+): Dimensions {
   const [dimensions, setDimensions] = useState<Dimensions>({ width: 0, height: 0 });
   
   useEffect(() => {

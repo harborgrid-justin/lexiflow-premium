@@ -14,8 +14,42 @@ export interface LogContext {
   url?: string;
   statusCode?: number;
   duration?: number;
-  [key: string]: any;
+  context?: string;
+  securityEvent?: string;
+  businessEvent?: string;
+  trace?: string;
+  [key: string]: string | number | boolean | undefined;
 }
+
+export interface HttpRequest {
+  method: string;
+  url: string;
+  ip?: string;
+  connection?: { remoteAddress?: string };
+  headers?: Record<string, string | string[] | undefined>;
+  correlationId?: string;
+  user?: {
+    id?: string;
+    email?: string;
+  };
+  route?: {
+    path?: string;
+  };
+}
+
+export interface HttpResponse {
+  statusCode: number;
+  statusMessage?: string;
+  get?: (name: string) => string | number | string[] | undefined;
+}
+
+export type QueryParam = string | number | boolean | Date | null | undefined;
+
+export interface LogMetadata {
+  [key: string]: string | number | boolean | undefined | LogMetadata | LogMetadata[];
+}
+
+export type RedactableData = string | number | boolean | null | undefined | RedactableData[] | { [key: string]: RedactableData };
 
 /**
  * Structured Logger Service
@@ -151,12 +185,12 @@ export class StructuredLoggerService implements NestLoggerService {
   /**
    * Redact PII from log data
    */
-  private redactPII(data: any): any {
+  private redactPII(data: RedactableData): RedactableData {
     if (data === null || data === undefined) {
       return data;
     }
 
-    if (typeof data === 'string') {
+    if (typeof data === 'string' || typeof data === 'number' || typeof data === 'boolean') {
       return data;
     }
 
@@ -165,7 +199,7 @@ export class StructuredLoggerService implements NestLoggerService {
     }
 
     if (typeof data === 'object') {
-      const redacted: any = {};
+      const redacted: Record<string, RedactableData> = {};
       for (const [key, value] of Object.entries(data)) {
         const lowerKey = key.toLowerCase();
         if (this.piiFields.some((field) => lowerKey.includes(field.toLowerCase()))) {
@@ -207,7 +241,7 @@ export class StructuredLoggerService implements NestLoggerService {
   /**
    * Build log metadata with context enrichment
    */
-  private buildMetadata(context?: string | LogContext, additionalMeta?: any): any {
+  private buildMetadata(context?: string | LogContext, additionalMeta?: LogMetadata): LogMetadata {
     const currentContext = this.getContext();
     let contextData: LogContext = {};
 
@@ -217,7 +251,7 @@ export class StructuredLoggerService implements NestLoggerService {
       contextData = context;
     }
 
-    const metadata = {
+    const metadata: LogMetadata = {
       ...currentContext,
       ...contextData,
       ...additionalMeta,
@@ -226,7 +260,7 @@ export class StructuredLoggerService implements NestLoggerService {
       service: 'lexiflow-backend',
     };
 
-    return this.redactPII(metadata);
+    return this.redactPII(metadata) as LogMetadata;
   }
 
   /**
@@ -272,7 +306,7 @@ export class StructuredLoggerService implements NestLoggerService {
   /**
    * Log with custom level and metadata
    */
-  logWithMetadata(level: string, message: string, metadata: any): void {
+  logWithMetadata(level: string, message: string, metadata: LogMetadata): void {
     const enrichedMetadata = this.buildMetadata(undefined, metadata);
     this.logger.log(level, message, enrichedMetadata);
   }
@@ -280,12 +314,16 @@ export class StructuredLoggerService implements NestLoggerService {
   /**
    * Log HTTP request
    */
-  logRequest(req: any): void {
+  logRequest(req: HttpRequest): void {
+    const userAgent = Array.isArray(req.headers?.['user-agent'])
+      ? req.headers['user-agent'][0]
+      : req.headers?.['user-agent'];
+
     const metadata = this.buildMetadata({
       method: req.method,
       url: req.url,
       ip: req.ip || req.connection?.remoteAddress,
-      userAgent: req.headers?.['user-agent'],
+      userAgent,
       correlationId: req.correlationId,
       userId: req.user?.id,
       userEmail: req.user?.email,
@@ -297,7 +335,7 @@ export class StructuredLoggerService implements NestLoggerService {
   /**
    * Log HTTP response
    */
-  logResponse(req: any, res: any, duration: number): void {
+  logResponse(req: HttpRequest, res: HttpResponse, duration: number): void {
     const metadata = this.buildMetadata({
       method: req.method,
       url: req.url,
@@ -318,7 +356,7 @@ export class StructuredLoggerService implements NestLoggerService {
   /**
    * Log database query
    */
-  logQuery(query: string, params: any[], duration: number): void {
+  logQuery(query: string, params: QueryParam[], duration: number): void {
     const metadata = this.buildMetadata({
       query: query.substring(0, 200), // Truncate long queries
       paramCount: params.length,
@@ -335,7 +373,7 @@ export class StructuredLoggerService implements NestLoggerService {
   /**
    * Log security event
    */
-  logSecurityEvent(event: string, details: any): void {
+  logSecurityEvent(event: string, details: LogMetadata): void {
     const metadata = this.buildMetadata({
       securityEvent: event,
       ...details,
@@ -347,7 +385,7 @@ export class StructuredLoggerService implements NestLoggerService {
   /**
    * Log business event
    */
-  logBusinessEvent(event: string, details: any): void {
+  logBusinessEvent(event: string, details: LogMetadata): void {
     const metadata = this.buildMetadata({
       businessEvent: event,
       ...details,

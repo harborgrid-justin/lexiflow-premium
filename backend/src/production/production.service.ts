@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository} from 'typeorm';
+import { Repository, QueryDeepPartialEntity } from 'typeorm';
 import { Production, ProductionStatus } from '@discovery/productions/entities/production.entity';
 import { CreateProductionDto, UpdateProductionDto } from './dto';
 
@@ -10,6 +10,17 @@ export interface ProductionStatistics {
   totalDocuments: number;
   totalPages: number;
   totalSize: number;
+}
+
+interface ProductionUpdateData {
+  status?: ProductionStatus;
+  totalDocuments?: number;
+  totalPages?: number;
+  totalSize?: number;
+  outputPath?: string;
+  metadata?: Record<string, unknown>;
+  searchCriteria?: Record<string, unknown>;
+  [key: string]: unknown;
 }
 
 @Injectable()
@@ -60,15 +71,41 @@ export class ProductionService {
 
   async update(id: string, updateProductionDto: UpdateProductionDto): Promise<Production> {
     await this.findOne(id);
-    const updateData: Partial<Production> = { ...updateProductionDto } as Partial<Production>;
-    if (updateProductionDto.metadata) {
-      updateData.metadata = updateProductionDto.metadata as any;
+
+    const updateData: ProductionUpdateData = {};
+
+    // Map known properties from DTO
+    if (updateProductionDto.status !== undefined) {
+      updateData.status = updateProductionDto.status;
     }
-    // Handle searchCriteria separately for TypeORM compatibility
+    if (updateProductionDto.totalDocuments !== undefined) {
+      updateData.totalDocuments = updateProductionDto.totalDocuments;
+    }
+    if (updateProductionDto.totalPages !== undefined) {
+      updateData.totalPages = updateProductionDto.totalPages;
+    }
+    if (updateProductionDto.totalSize !== undefined) {
+      updateData.totalSize = updateProductionDto.totalSize;
+    }
+    if (updateProductionDto.outputPath !== undefined) {
+      updateData.outputPath = updateProductionDto.outputPath;
+    }
+    if (updateProductionDto.metadata !== undefined) {
+      updateData.metadata = updateProductionDto.metadata;
+    }
+
+    // Handle searchCriteria if present in the DTO
     if ('searchCriteria' in updateProductionDto) {
-      updateData.searchCriteria = updateProductionDto.searchCriteria as any;
+      const dtoWithSearchCriteria = updateProductionDto as UpdateProductionDto & {
+        searchCriteria?: Record<string, unknown>
+      };
+      updateData.searchCriteria = dtoWithSearchCriteria.searchCriteria;
     }
-    await this.productionRepository.update(id, updateData as any);
+
+    await this.productionRepository.update(
+      id,
+      updateData as QueryDeepPartialEntity<Production>
+    );
     return this.findOne(id);
   }
 

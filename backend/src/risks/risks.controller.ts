@@ -1,10 +1,21 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { RisksService } from './risks.service';
-import { CreateRiskDto, RiskImpact, RiskProbability } from './dto/create-risk.dto';
+import { CreateRiskDto, RiskImpact, RiskProbability, RiskStatus } from './dto/create-risk.dto';
 import { UpdateRiskDto } from './dto/update-risk.dto';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { Public } from '@common/decorators/public.decorator';
+
+interface RiskQueryParams {
+  status?: RiskStatus;
+  impact?: RiskImpact;
+  probability?: RiskProbability;
+  caseId?: string;
+  sortBy?: string;
+  sortOrder?: 'ASC' | 'DESC';
+  page?: number;
+  limit?: number;
+}
 
 @ApiTags('Risks')
 @ApiBearerAuth('JWT-auth')
@@ -30,7 +41,7 @@ export class RisksController {
   @ApiQuery({ name: 'probability', enum: RiskProbability, required: false })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(@Query() query: any) {
+  async findAll(@Query() query: RiskQueryParams) {
     return await this.risksService.findAll(query);
   }
 

@@ -19,7 +19,7 @@ export class WarRoomController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Health check' })
   @ApiResponse({ status: 200, description: 'Service is healthy' })
-  health() {
+  health(): { status: string; service: string } {
     return { status: 'ok', service: 'war-room' };
   }
 
@@ -28,7 +28,7 @@ export class WarRoomController {
   @ApiResponse({ status: 200, description: 'Advisors retrieved' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getAdvisors(@Query() query: any) {
+  async getAdvisors(@Query() query: Record<string, unknown>): Promise<unknown> {
     return await this.warRoomService.findAllAdvisors(query);
   }
 
@@ -38,7 +38,7 @@ export class WarRoomController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async getAdvisor(@Param('id') id: string) {
+  async getAdvisor(@Param('id') id: string): Promise<unknown> {
     return await this.warRoomService.findOneAdvisor(id);
   }
 
@@ -50,7 +50,7 @@ export class WarRoomController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createAdvisor(@Body() createDto: CreateAdvisorDto) {
+  async createAdvisor(@Body() createDto: CreateAdvisorDto): Promise<unknown> {
     return await this.warRoomService.createAdvisor(createDto);
   }
 
@@ -61,7 +61,7 @@ export class WarRoomController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async deleteAdvisor(@Param('id') id: string) {
+  async deleteAdvisor(@Param('id') id: string): Promise<void> {
     await this.warRoomService.removeAdvisor(id);
   }
 
@@ -70,7 +70,7 @@ export class WarRoomController {
   @ApiResponse({ status: 200, description: 'Experts retrieved' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getExperts(@Query() query: any) {
+  async getExperts(@Query() query: Record<string, unknown>): Promise<unknown> {
     return await this.warRoomService.findAllExperts(query);
   }
 
@@ -80,7 +80,7 @@ export class WarRoomController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async getExpert(@Param('id') id: string) {
+  async getExpert(@Param('id') id: string): Promise<unknown> {
     return await this.warRoomService.findOneExpert(id);
   }
 
@@ -92,7 +92,7 @@ export class WarRoomController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createExpert(@Body() createDto: CreateExpertDto) {
+  async createExpert(@Body() createDto: CreateExpertDto): Promise<unknown> {
     return await this.warRoomService.createExpert(createDto);
   }
 
@@ -103,7 +103,7 @@ export class WarRoomController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async deleteExpert(@Param('id') id: string) {
+  async deleteExpert(@Param('id') id: string): Promise<void> {
     await this.warRoomService.removeExpert(id);
   }
 
@@ -112,7 +112,7 @@ export class WarRoomController {
   @ApiResponse({ status: 200, description: 'War room data retrieved' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getWarRoomData(@Param('caseId') caseId: string) {
+  async getWarRoomData(@Param('caseId') caseId: string): Promise<unknown> {
     return await this.warRoomService.getWarRoomData(caseId);
   }
 
@@ -121,7 +121,7 @@ export class WarRoomController {
   @ApiResponse({ status: 200, description: 'Strategy retrieved' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getStrategy(@Param('caseId') caseId: string) {
+  async getStrategy(@Param('caseId') caseId: string): Promise<unknown> {
     return await this.warRoomService.getStrategy(caseId);
   }
 
@@ -131,7 +131,7 @@ export class WarRoomController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async updateStrategy(@Param('caseId') caseId: string, @Body() updateDto: UpdateStrategyDto) {
+  async updateStrategy(@Param('caseId') caseId: string, @Body() updateDto: UpdateStrategyDto): Promise<unknown> {
     return await this.warRoomService.updateStrategy(caseId, updateDto);
   }
 }

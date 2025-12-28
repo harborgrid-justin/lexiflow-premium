@@ -3,6 +3,11 @@ import { ApiTags, ApiBearerAuth, ApiOperation, ApiParam, ApiResponse } from '@ne
 import { OcrService } from './ocr.service';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { Public } from '@common/decorators/public.decorator';
+import {
+  DetectLanguageDto,
+  ExtractStructuredDataOptionsDto,
+  BatchProcessRequestDto,
+} from './dto/ocr-request.dto';
 
 @ApiTags('OCR')
 @ApiBearerAuth('JWT-auth')
@@ -58,7 +63,7 @@ export class OcrController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async detectLanguage(@Body() body: any) {
+  async detectLanguage(@Body() body: DetectLanguageDto) {
     return this.ocrService.detectLanguage(body);
   }
 
@@ -71,7 +76,10 @@ export class OcrController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async extractStructuredData(@Param('documentId') documentId: string, @Body() options: any) {
+  async extractStructuredData(
+    @Param('documentId') documentId: string,
+    @Body() options: ExtractStructuredDataOptionsDto,
+  ) {
     return this.ocrService.extractStructuredData(documentId, options);
   }
 
@@ -82,7 +90,7 @@ export class OcrController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async batchProcess(@Body() batchDto: any) {
+  async batchProcess(@Body() batchDto: BatchProcessRequestDto) {
     return this.ocrService.batchProcess(batchDto);
   }
 

@@ -16,6 +16,15 @@ import { MattersService } from './matters.service';
 import { CreateMatterDto } from './dto/create-matter.dto';
 import { UpdateMatterDto } from './dto/update-matter.dto';
 import { MatterResponseDto, MatterListResponseDto } from './dto/matter-response.dto';
+import {
+  MatterStatistics,
+  MatterKPIs,
+  PipelineStage,
+  CalendarEvent,
+  RevenueAnalytics,
+  RiskInsight,
+  FinancialOverview,
+} from './interfaces/analytics.interface';
 
 @Controller('matters')
 export class MattersController {
@@ -70,21 +79,21 @@ export class MattersController {
   @Get('statistics')
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getStatistics(@Query('userId') userId?: string): Promise<any> {
+  async getStatistics(@Query('userId') userId?: string): Promise<MatterStatistics> {
     return this.mattersService.getStatistics(userId);
   }
 
   @Get('kpis')
   @ApiResponse({ status: 200, description: 'Matter KPIs' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getKPIs(@Query('dateRange') dateRange?: string): Promise<any> {
+  async getKPIs(@Query('dateRange') dateRange?: string): Promise<MatterKPIs> {
     return this.mattersService.getKPIs(dateRange);
   }
 
   @Get('pipeline')
   @ApiResponse({ status: 200, description: 'Intake pipeline stages' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getPipeline(@Query('dateRange') dateRange?: string): Promise<any> {
+  async getPipeline(@Query('dateRange') dateRange?: string): Promise<PipelineStage[]> {
     return this.mattersService.getPipeline(dateRange);
   }
 
@@ -95,28 +104,28 @@ export class MattersController {
     @Query('startDate') startDate: string,
     @Query('endDate') endDate?: string,
     @Query('matterIds') matterIds?: string,
-  ): Promise<any> {
+  ): Promise<CalendarEvent[]> {
     return this.mattersService.getCalendarEvents(startDate, endDate, matterIds);
   }
 
   @Get('analytics/revenue')
   @ApiResponse({ status: 200, description: 'Revenue analytics' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getRevenueAnalytics(@Query('dateRange') dateRange?: string): Promise<any> {
+  async getRevenueAnalytics(@Query('dateRange') dateRange?: string): Promise<RevenueAnalytics> {
     return this.mattersService.getRevenueAnalytics(dateRange);
   }
 
   @Get('insights/risk')
   @ApiResponse({ status: 200, description: 'Risk assessment data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getRiskInsights(@Query('matterIds') matterIds?: string): Promise<any> {
+  async getRiskInsights(@Query('matterIds') matterIds?: string): Promise<RiskInsight[]> {
     return this.mattersService.getRiskInsights(matterIds);
   }
 
   @Get('financials/overview')
   @ApiResponse({ status: 200, description: 'Financial overview' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getFinancialOverview(@Query('dateRange') dateRange?: string): Promise<any> {
+  async getFinancialOverview(@Query('dateRange') dateRange?: string): Promise<FinancialOverview> {
     return this.mattersService.getFinancialOverview(dateRange);
   }
 

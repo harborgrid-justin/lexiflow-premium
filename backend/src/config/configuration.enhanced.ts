@@ -5,7 +5,7 @@ export default () => ({
 
   // CORS
   cors: {
-    origin: process.env.CORS_ORIGIN || ((_origin: any, callback: any) => {
+    origin: process.env.CORS_ORIGIN || ((_origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
       // Allow all origins in development (for accessing from any IP)
       // In production, set CORS_ORIGIN environment variable to restrict
       callback(null, true);

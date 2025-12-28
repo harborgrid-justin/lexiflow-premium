@@ -3,10 +3,22 @@ import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 import { QUEUE_NAMES } from '@queues/constants';
 
+export interface DocumentProcessingOptions {
+  locale?: string;
+  format?: string;
+  quality?: number;
+  extractImages?: boolean;
+  extractTables?: boolean;
+  ocrLanguage?: string;
+  analysisDepth?: 'basic' | 'detailed' | 'comprehensive';
+  indexFields?: string[];
+  metadata?: Record<string, unknown>;
+}
+
 export interface DocumentProcessingJob {
   documentId: string;
   operation: 'ocr' | 'extract' | 'analyze' | 'index';
-  options?: any;
+  options?: DocumentProcessingOptions;
 }
 
 @Processor(QUEUE_NAMES.DOCUMENT_PROCESSING)

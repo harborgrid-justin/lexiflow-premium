@@ -2,10 +2,11 @@ import { Injectable, NotFoundException, OnModuleDestroy } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository} from 'typeorm';
 import { WorkflowTemplate } from './entities/workflow-template.entity';
-import { CreateWorkflowTemplateDto, WorkflowCategory } from './dto/create-workflow-template.dto';
+import { CreateWorkflowTemplateDto } from './dto/create-workflow-template.dto';
 import { UpdateWorkflowTemplateDto } from './dto/update-workflow-template.dto';
 import { calculateOffset, calculateTotalPages } from '@common/utils/math.utils';
 import { validateSortField, validateSortOrder, sanitizeSearchQuery } from '@common/utils/query-validation.util';
+import { IWorkflowQueryFilters, IPaginatedWorkflowResponse, IWorkflowInstantiationResult, IWorkflowTask } from './interfaces/workflow.interfaces';
 
 @Injectable()
 export class WorkflowService implements OnModuleDestroy {
@@ -55,15 +56,7 @@ export class WorkflowService implements OnModuleDestroy {
     return await this.workflowRepository.save(workflow);
   }
 
-  async findAll(filters: {
-    category?: WorkflowCategory;
-    isActive?: boolean;
-    search?: string;
-    sortBy?: string;
-    sortOrder?: string;
-    page?: number;
-    limit?: number;
-  }) {
+  async findAll(filters: IWorkflowQueryFilters): Promise<IPaginatedWorkflowResponse<WorkflowTemplate>> {
     const { category, isActive, search, sortBy, sortOrder, page = 1, limit = 50 } = filters;
     
     const queryBuilder = this.workflowRepository.createQueryBuilder('workflow');
@@ -101,12 +94,13 @@ export class WorkflowService implements OnModuleDestroy {
   }
 
   async findOne(id: string): Promise<WorkflowTemplate> {
-    if (this.templateCache.has(id)) {
-      return this.templateCache.get(id)!;
+    const cachedTemplate = this.templateCache.get(id);
+    if (cachedTemplate) {
+      return cachedTemplate;
     }
 
     const workflow = await this.workflowRepository.findOne({ where: { id } });
-    
+
     if (!workflow) {
       throw new NotFoundException(`Workflow template with ID ${id} not found`);
     }
@@ -142,7 +136,7 @@ export class WorkflowService implements OnModuleDestroy {
     this.templateCache.delete(id);
   }
 
-  async instantiate(id: string, caseId: string) {
+  async instantiate(id: string, caseId: string): Promise<IWorkflowInstantiationResult> {
     const workflow = await this.findOne(id);
 
     // Increment usage count
@@ -150,14 +144,14 @@ export class WorkflowService implements OnModuleDestroy {
     await this.workflowRepository.save(workflow);
 
     // Generate tasks from stages
-    const tasks = workflow.stages.map((stage, _index) => ({
+    const tasks: IWorkflowTask[] = workflow.stages.map((stage) => ({
       title: stage.name,
       description: stage.description || '',
       caseId,
       status: 'To Do',
       priority: 'Medium',
       order: stage.order,
-      dueDate: stage.durationDays 
+      dueDate: stage.durationDays
         ? new Date(Date.now() + stage.durationDays * 24 * 60 * 60 * 1000).toISOString()
         : null,
       workflowTemplateId: workflow.id,

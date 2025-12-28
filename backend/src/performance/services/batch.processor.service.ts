@@ -2,7 +2,7 @@ import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, Repository, ObjectLiteral, EntityTarget } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import * as MasterConfig from '@config/master.config';
+import MasterConfig from '@config/master.config';
 import { Readable } from 'stream';
 
 /**
@@ -22,7 +22,7 @@ export interface BatchConfig {
 /**
  * Batch Processing Result
  */
-export interface BatchResult<T = any> {
+export interface BatchResult<T = unknown> {
   total: number;
   processed: number;
   successful: number;
@@ -52,7 +52,7 @@ export interface BatchProgress {
  */
 export interface BatchError {
   index: number;
-  item: any;
+  item: unknown;
   error: string;
   attempts: number;
   timestamp: number;
@@ -71,7 +71,7 @@ export interface BatchInsertOptions<T> extends BatchConfig {
  * Batch Update Options
  */
 export interface BatchUpdateOptions extends BatchConfig {
-  conditions?: Record<string, any>;
+  conditions?: Record<string, unknown>;
   partial?: boolean;
 }
 
@@ -257,7 +257,7 @@ export class BatchProcessorService implements OnModuleDestroy {
    */
   async batchUpdate<T extends ObjectLiteral>(
     repository: Repository<T>,
-    updates: Array<{ id: any; data: Partial<T> }>,
+    updates: Array<{ id: string | number; data: Partial<T> }>,
     options: BatchUpdateOptions = {},
   ): Promise<BatchResult> {
     const startTime = Date.now();
@@ -311,7 +311,7 @@ export class BatchProcessorService implements OnModuleDestroy {
    */
   async batchDelete<T extends ObjectLiteral>(
     repository: Repository<T>,
-    ids: any[],
+    ids: Array<string | number>,
     options: BatchConfig = {},
   ): Promise<BatchResult> {
     const startTime = Date.now();
@@ -461,7 +461,7 @@ export class BatchProcessorService implements OnModuleDestroy {
         .createQueryBuilder()
         .insert()
         .into(repository.target)
-        .values(chunk as any);
+        .values(chunk);
 
       if (options.conflictAction === 'update' && options.conflictColumns) {
         queryBuilder.orUpdate(
@@ -476,30 +476,30 @@ export class BatchProcessorService implements OnModuleDestroy {
       return chunk as T[];
     }
 
-    return await repository.save(chunk as any);
+    return await repository.save(chunk);
   }
 
   private async updateChunk<T extends ObjectLiteral>(
     repository: Repository<T>,
-    chunk: Array<{ id: any; data: Partial<T> }>,
+    chunk: Array<{ id: string | number; data: Partial<T> }>,
     options: BatchUpdateOptions,
   ): Promise<void> {
     if (options.useTransaction) {
       await repository.manager.transaction(async (manager) => {
         for (const { id, data } of chunk) {
-          await manager.update(repository.target, id, data as any);
+          await manager.update(repository.target, id, data);
         }
       });
     } else {
       for (const { id, data } of chunk) {
-        await repository.update(id, data as any);
+        await repository.update(id, data);
       }
     }
   }
 
   private async deleteChunk<T extends ObjectLiteral>(
     repository: Repository<T>,
-    chunk: any[],
+    chunk: Array<string | number>,
     options: BatchConfig,
   ): Promise<void> {
     if (options.useTransaction) {
@@ -607,9 +607,9 @@ export class BatchProcessorService implements OnModuleDestroy {
 
   private handleChunkError(
     result: BatchResult,
-    chunk: any[],
+    chunk: unknown[],
     chunkIndex: number,
-    error: any,
+    error: Error,
     options: BatchConfig,
   ): void {
     this.logger.error(

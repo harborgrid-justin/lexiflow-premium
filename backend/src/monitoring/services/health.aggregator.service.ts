@@ -25,12 +25,76 @@ export interface HealthStatus {
   };
 }
 
+export interface DatabaseDetails {
+  poolSize?: number;
+  activeConnections?: number;
+  idleConnections?: number;
+}
+
+export interface RedisDetails {
+  enabled: boolean;
+}
+
+export interface MemoryDetails {
+  system: {
+    total: number;
+    free: number;
+    used: number;
+    usagePercent: number;
+  };
+  process: {
+    heapTotal: number;
+    heapUsed: number;
+    heapUsagePercent: number;
+    rss: number;
+    external: number;
+  };
+}
+
+export interface CpuDetails {
+  usage: number;
+  cores: number;
+  model: string;
+  loadAverage: number[];
+}
+
+export interface DiskDetails {
+  tmpDir: string;
+}
+
+export interface QueueDetails {
+  enabled: boolean;
+}
+
+export interface ExternalServicesDetails {
+  services: string[];
+}
+
+export type HealthCheckDetails =
+  | DatabaseDetails
+  | RedisDetails
+  | MemoryDetails
+  | CpuDetails
+  | DiskDetails
+  | QueueDetails
+  | ExternalServicesDetails;
+
 export interface HealthCheck {
   status: 'up' | 'down' | 'degraded';
   responseTime?: number;
   message?: string;
-  details?: any;
+  details?: HealthCheckDetails;
   lastChecked: string;
+}
+
+export interface ReadinessChecks {
+  database: HealthCheck;
+  redis: HealthCheck;
+}
+
+export interface ReadinessResponse {
+  ready: boolean;
+  checks: ReadinessChecks;
 }
 
 /**
@@ -116,10 +180,12 @@ export class HealthAggregatorService {
     if (result.status === 'fulfilled') {
       return result.value;
     } else {
-      this.logger.error(`Health check failed: ${name}`, result.reason?.message);
+      const error = result.reason;
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      this.logger.error(`Health check failed: ${name}`, errorMessage);
       return {
         status: 'down',
-        message: result.reason?.message || 'Health check failed',
+        message: errorMessage || 'Health check failed',
         lastChecked: new Date().toISOString(),
       };
     }
@@ -136,26 +202,39 @@ export class HealthAggregatorService {
       await this.dataSource.query('SELECT 1');
       const responseTime = Date.now() - startTime;
 
-      // Check connection pool
-      const poolSize = (this.dataSource.driver as any).master?.totalCount || 0;
-      const idleCount = (this.dataSource.driver as any).master?.idleCount || 0;
+      // Check connection pool with safe type checking
+      interface DriverMaster {
+        totalCount?: number;
+        idleCount?: number;
+      }
+
+      interface DataSourceDriver {
+        master?: DriverMaster;
+      }
+
+      const driver = this.dataSource.driver as unknown as DataSourceDriver;
+      const poolSize = driver.master?.totalCount || 0;
+      const idleCount = driver.master?.idleCount || 0;
       const activeCount = poolSize - idleCount;
+
+      const details: DatabaseDetails = {
+        poolSize,
+        activeConnections: activeCount,
+        idleConnections: idleCount,
+      };
 
       return {
         status: responseTime < 1000 ? 'up' : 'degraded',
         responseTime,
         message: responseTime < 1000 ? 'Database is healthy' : 'Database response is slow',
-        details: {
-          poolSize,
-          activeConnections: activeCount,
-          idleConnections: idleCount,
-        },
+        details,
         lastChecked: new Date().toISOString(),
       };
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       return {
         status: 'down',
-        message: `Database connection failed: ${error.message}`,
+        message: `Database connection failed: ${errorMessage}`,
         lastChecked: new Date().toISOString(),
       };
     }
@@ -182,19 +261,22 @@ export class HealthAggregatorService {
 
       const responseTime = Date.now() - startTime;
 
+      const details: RedisDetails = {
+        enabled: redisEnabled,
+      };
+
       return {
         status: 'up',
         responseTime,
         message: 'Redis is healthy',
-        details: {
-          enabled: redisEnabled,
-        },
+        details,
         lastChecked: new Date().toISOString(),
       };
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       return {
         status: 'down',
-        message: `Redis connection failed: ${error.message}`,
+        message: `Redis connection failed: ${errorMessage}`,
         lastChecked: new Date().toISOString(),
       };
     }
@@ -223,24 +305,26 @@ export class HealthAggregatorService {
       message = 'High memory usage';
     }
 
+    const details: MemoryDetails = {
+      system: {
+        total: totalMemory,
+        free: freeMemory,
+        used: usedMemory,
+        usagePercent: Math.round(usagePercent * 100) / 100,
+      },
+      process: {
+        heapTotal: processMemory.heapTotal,
+        heapUsed: processMemory.heapUsed,
+        heapUsagePercent: Math.round(heapUsagePercent * 100) / 100,
+        rss: processMemory.rss,
+        external: processMemory.external,
+      },
+    };
+
     return {
       status,
       message,
-      details: {
-        system: {
-          total: totalMemory,
-          free: freeMemory,
-          used: usedMemory,
-          usagePercent: Math.round(usagePercent * 100) / 100,
-        },
-        process: {
-          heapTotal: processMemory.heapTotal,
-          heapUsed: processMemory.heapUsed,
-          heapUsagePercent: Math.round(heapUsagePercent * 100) / 100,
-          rss: processMemory.rss,
-          external: processMemory.external,
-        },
-      },
+      details,
       lastChecked: new Date().toISOString(),
     };
   }
@@ -273,15 +357,17 @@ export class HealthAggregatorService {
       message = 'High CPU usage';
     }
 
+    const details: CpuDetails = {
+      usage: Math.round(cpuUsage * 100) / 100,
+      cores: cpus.length,
+      model: cpus[0]?.model || 'unknown',
+      loadAverage: os.loadavg(),
+    };
+
     return {
       status,
       message,
-      details: {
-        usage: Math.round(cpuUsage * 100) / 100,
-        cores: cpus.length,
-        model: cpus[0]?.model || 'unknown',
-        loadAverage: os.loadavg(),
-      },
+      details,
       lastChecked: new Date().toISOString(),
     };
   }
@@ -294,15 +380,17 @@ export class HealthAggregatorService {
     try {
       const tmpDir = os.tmpdir();
 
+      const details: DiskDetails = {
+        tmpDir,
+      };
+
       return {
         status: 'up',
         message: 'Disk space is healthy',
-        details: {
-          tmpDir,
-        },
+        details,
         lastChecked: new Date().toISOString(),
       };
-    } catch (error) {
+    } catch {
       return {
         status: 'degraded',
         message: 'Unable to check disk space',
@@ -319,18 +407,21 @@ export class HealthAggregatorService {
       // Would check Bull queue status if available
       // For now, return healthy
 
+      const details: QueueDetails = {
+        enabled: true,
+      };
+
       return {
         status: 'up',
         message: 'Queue is healthy',
-        details: {
-          enabled: true,
-        },
+        details,
         lastChecked: new Date().toISOString(),
       };
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       return {
         status: 'down',
-        message: `Queue health check failed: ${error.message}`,
+        message: `Queue health check failed: ${errorMessage}`,
         lastChecked: new Date().toISOString(),
       };
     }
@@ -343,12 +434,14 @@ export class HealthAggregatorService {
     // Would check external API endpoints if configured
     // For now, return healthy
 
+    const details: ExternalServicesDetails = {
+      services: [],
+    };
+
     return {
       status: 'up',
       message: 'External services are healthy',
-      details: {
-        services: [],
-      },
+      details,
       lastChecked: new Date().toISOString(),
     };
   }
@@ -380,7 +473,7 @@ export class HealthAggregatorService {
   /**
    * Get readiness status (can accept traffic)
    */
-  async getReadiness(): Promise<{ ready: boolean; checks: any }> {
+  async getReadiness(): Promise<ReadinessResponse> {
     const health = await this.getHealth();
 
     // System is ready if database is up and overall status is not unhealthy

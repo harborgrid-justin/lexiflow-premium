@@ -1,8 +1,37 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { LegalEntity } from './entities/legal-entity.entity';
+import { LegalEntity, LegalEntityType, LegalEntityStatus } from './entities/legal-entity.entity';
 import { CreateLegalEntityDto, UpdateLegalEntityDto } from './dto/legal-entity.dto';
+
+interface LegalEntityFilters {
+  entityType?: string;
+  status?: string;
+  jurisdiction?: string;
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
+interface LegalEntityRelationshipExtended extends Record<string, unknown> {
+  sourceEntityId: string;
+  sourceEntityName: string;
+}
+
+interface LegalEntityStats {
+  total: number;
+  active: number;
+  corporations: number;
+  individuals: number;
+}
+
+interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
 
 @Injectable()
 export class LegalEntitiesService {
@@ -11,14 +40,7 @@ export class LegalEntitiesService {
     private readonly legalEntityRepository: Repository<LegalEntity>,
   ) {}
 
-  async findAll(filters?: {
-    entityType?: string;
-    status?: string;
-    jurisdiction?: string;
-    search?: string;
-    page?: number;
-    limit?: number;
-  }) {
+  async findAll(filters?: LegalEntityFilters): Promise<PaginatedResult<LegalEntity>> {
     const { entityType, status, jurisdiction, search, page = 1, limit = 100 } = filters || {};
     
     const queryBuilder = this.legalEntityRepository.createQueryBuilder('entity');
@@ -83,15 +105,15 @@ export class LegalEntitiesService {
     await this.legalEntityRepository.remove(entity);
   }
 
-  async getRelationships(id: string) {
+  async getRelationships(id: string): Promise<Record<string, unknown>[]> {
     const entity = await this.findOne(id);
     return entity.relationships || [];
   }
 
-  async getAllRelationships() {
+  async getAllRelationships(): Promise<LegalEntityRelationshipExtended[]> {
     // Get all entities and aggregate their relationships
     const entities = await this.legalEntityRepository.find();
-    const allRelationships = entities.flatMap(entity => 
+    const allRelationships = entities.flatMap(entity =>
       (entity.relationships || []).map(rel => ({
         ...rel,
         sourceEntityId: entity.id,
@@ -101,11 +123,11 @@ export class LegalEntitiesService {
     return allRelationships;
   }
 
-  async getStats() {
+  async getStats(): Promise<LegalEntityStats> {
     const total = await this.legalEntityRepository.count();
-    const active = await this.legalEntityRepository.count({ where: { status: 'active' as any } });
-    const corporations = await this.legalEntityRepository.count({ where: { entityType: 'corporation' as any } });
-    const individuals = await this.legalEntityRepository.count({ where: { entityType: 'individual' as any } });
+    const active = await this.legalEntityRepository.count({ where: { status: LegalEntityStatus.ACTIVE } });
+    const corporations = await this.legalEntityRepository.count({ where: { entityType: LegalEntityType.CORPORATION } });
+    const individuals = await this.legalEntityRepository.count({ where: { entityType: LegalEntityType.INDIVIDUAL } });
 
     return {
       total,

@@ -1,5 +1,7 @@
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsArray, ValidateNested } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { SchemaColumnDefinition } from '../interfaces';
 
 export class CreateMigrationDto {
   @ApiProperty({ description: 'Migration name' })
@@ -35,6 +37,8 @@ export class CreateSnapshotDto {
   description?: string;
 
   @ApiPropertyOptional({ description: 'Tables to include' })
+  @IsArray()
+  @IsString({ each: true })
   @IsOptional()
   tables?: string[];
 }
@@ -45,17 +49,12 @@ export class CreateTableDto {
   @IsNotEmpty()
   name!: string;
 
-  @ApiProperty({ description: 'Table columns' })
+  @ApiProperty({ description: 'Table columns', type: 'array' })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => Object)
   @IsNotEmpty()
-  columns!: {
-    name: string;
-    type: string;
-    pk?: boolean;
-    notNull?: boolean;
-    unique?: boolean;
-    fk?: string;
-    defaultValue?: string;
-  }[];
+  columns!: SchemaColumnDefinition[];
 
   @ApiPropertyOptional({ description: 'Table description' })
   @IsString()

@@ -1,6 +1,22 @@
 import { INestApplication } from '@nestjs/common';
 // TODO: Install @types/supertest: npm i --save-dev @types/supertest
 import request from 'supertest';
+import type { Response, Test } from 'supertest';
+
+interface AuthResponse {
+  body: {
+    data: {
+      accessToken: string;
+    };
+  };
+}
+
+interface RequestMethods {
+  post: (url: string) => Test;
+  get: (url: string) => Test;
+  put: (url: string) => Test;
+  delete: (url: string) => Test;
+}
 
 export class E2ETestHelper {
   /**
@@ -11,10 +27,11 @@ export class E2ETestHelper {
     email: string = 'admin@lexiflow.com',
     password: string = 'Admin123!',
   ): Promise<string> {
-    const response = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({ email, password })
-      .expect(200);
+    const server = app.getHttpServer();
+    const testRequest = request(server) as unknown as RequestMethods;
+    const postRequest = testRequest.post('/auth/login') as unknown as Test;
+    const sendRequest = postRequest.send({ email, password }) as unknown as Test;
+    const response = (await sendRequest.expect(200)) as unknown as AuthResponse;
 
     return response.body.data.accessToken;
   }
@@ -26,10 +43,12 @@ export class E2ETestHelper {
     app: INestApplication,
     path: string,
     token: string,
-  ) {
-    return request(app.getHttpServer())
-      .get(path)
-      .set('Authorization', `Bearer ${token}`);
+  ): Promise<Response> {
+    const server = app.getHttpServer();
+    const testRequest = request(server) as unknown as RequestMethods;
+    const getRequest = testRequest.get(path) as unknown as Test;
+    const result = getRequest.set('Authorization', `Bearer ${token}`) as unknown as Test;
+    return result as unknown as Promise<Response>;
   }
 
   /**
@@ -39,12 +58,14 @@ export class E2ETestHelper {
     app: INestApplication,
     path: string,
     token: string,
-    body: any,
-  ) {
-    return request(app.getHttpServer())
-      .post(path)
-      .set('Authorization', `Bearer ${token}`)
-      .send(body);
+    body: unknown,
+  ): Promise<Response> {
+    const server = app.getHttpServer();
+    const testRequest = request(server) as unknown as RequestMethods;
+    const postRequest = testRequest.post(path) as unknown as Test;
+    const authRequest = postRequest.set('Authorization', `Bearer ${token}`) as unknown as Test;
+    const result = authRequest.send(body) as unknown as Test;
+    return result as unknown as Promise<Response>;
   }
 
   /**
@@ -54,12 +75,14 @@ export class E2ETestHelper {
     app: INestApplication,
     path: string,
     token: string,
-    body: any,
-  ) {
-    return request(app.getHttpServer())
-      .put(path)
-      .set('Authorization', `Bearer ${token}`)
-      .send(body);
+    body: unknown,
+  ): Promise<Response> {
+    const server = app.getHttpServer();
+    const testRequest = request(server) as unknown as RequestMethods;
+    const putRequest = testRequest.put(path) as unknown as Test;
+    const authRequest = putRequest.set('Authorization', `Bearer ${token}`) as unknown as Test;
+    const result = authRequest.send(body) as unknown as Test;
+    return result as unknown as Promise<Response>;
   }
 
   /**
@@ -69,16 +92,18 @@ export class E2ETestHelper {
     app: INestApplication,
     path: string,
     token: string,
-  ) {
-    return request(app.getHttpServer())
-      .delete(path)
-      .set('Authorization', `Bearer ${token}`);
+  ): Promise<Response> {
+    const server = app.getHttpServer();
+    const testRequest = request(server) as unknown as RequestMethods;
+    const deleteRequest = testRequest.delete(path) as unknown as Test;
+    const result = deleteRequest.set('Authorization', `Bearer ${token}`) as unknown as Test;
+    return result as unknown as Promise<Response>;
   }
 
   /**
    * Assert standard response format
    */
-  static assertStandardResponse(response: any, expectedSuccess: boolean = true) {
+  static assertStandardResponse(response: Response, expectedSuccess: boolean = true): void {
     expect(response.body).toHaveProperty('success', expectedSuccess);
     expect(response.body).toHaveProperty('message');
     expect(response.body).toHaveProperty('timestamp');
@@ -87,23 +112,38 @@ export class E2ETestHelper {
   /**
    * Assert paginated response format
    */
-  static assertPaginatedResponse(response: any) {
-    expect(response.body.data).toHaveProperty('data');
-    expect(response.body.data).toHaveProperty('total');
-    expect(response.body.data).toHaveProperty('page');
-    expect(response.body.data).toHaveProperty('limit');
-    expect(response.body.data).toHaveProperty('totalPages');
-    expect(Array.isArray(response.body.data.data)).toBe(true);
+  static assertPaginatedResponse(response: Response): void {
+    const responseBody = response.body as {
+      data: {
+        data: unknown[];
+        total: number;
+        page: number;
+        limit: number;
+        totalPages: number;
+      };
+    };
+    expect(responseBody.data).toHaveProperty('data');
+    expect(responseBody.data).toHaveProperty('total');
+    expect(responseBody.data).toHaveProperty('page');
+    expect(responseBody.data).toHaveProperty('limit');
+    expect(responseBody.data).toHaveProperty('totalPages');
+    expect(Array.isArray(responseBody.data.data)).toBe(true);
   }
 
   /**
    * Assert validation error response
    */
-  static assertValidationError(response: any, expectedErrors: number) {
+  static assertValidationError(response: Response, expectedErrors: number): void {
+    const responseBody = response.body as {
+      success: boolean;
+      error: {
+        errors: unknown[];
+      };
+    };
     expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body.error).toHaveProperty('errors');
-    expect(response.body.error.errors.length).toBeGreaterThanOrEqual(
+    expect(responseBody).toHaveProperty('success', false);
+    expect(responseBody.error).toHaveProperty('errors');
+    expect(responseBody.error.errors.length).toBeGreaterThanOrEqual(
       expectedErrors,
     );
   }
@@ -111,7 +151,7 @@ export class E2ETestHelper {
   /**
    * Assert unauthorized response
    */
-  static assertUnauthorized(response: any) {
+  static assertUnauthorized(response: Response): void {
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty('success', false);
   }
@@ -119,7 +159,7 @@ export class E2ETestHelper {
   /**
    * Assert not found response
    */
-  static assertNotFound(response: any) {
+  static assertNotFound(response: Response): void {
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty('success', false);
   }

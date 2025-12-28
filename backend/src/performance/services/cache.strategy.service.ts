@@ -34,7 +34,7 @@ export interface CacheWarmingConfig {
   interval: number;
   keys: Array<{
     key: string;
-    fetcher: () => Promise<any>;
+    fetcher: () => Promise<unknown>;
     ttl: number;
   }>;
 }
@@ -313,13 +313,13 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
   /**
    * Generate deterministic cache key from parameters
    */
-  generateKey(prefix: string, params: Record<string, any>): string {
+  generateKey(prefix: string, params: Record<string, unknown>): string {
     const sortedParams = Object.keys(params)
       .sort()
       .reduce((acc, key) => {
         acc[key] = params[key];
         return acc;
-      }, {} as Record<string, any>);
+      }, {} as Record<string, unknown>);
 
     const paramsString = JSON.stringify(sortedParams);
     const hash = crypto.createHash('md5').update(paramsString).digest('hex');
@@ -543,9 +543,10 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
 // Interfaces
 
 interface MemoryCacheEntry {
-  value: any;
+  value: unknown;
   expiresAt: number;
   lastAccess: number;
+  size?: number;
 }
 
 interface MemoryCacheStats {
@@ -555,9 +556,15 @@ interface MemoryCacheStats {
   tags: number;
 }
 
+interface RedisStats {
+  keys: number;
+  memoryUsage?: number;
+  hitRate?: number;
+}
+
 interface CacheStats {
   memory: MemoryCacheStats;
-  redis: any;
+  redis: RedisStats;
   totalKeys: number;
 }
 

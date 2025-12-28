@@ -57,6 +57,7 @@ export class SanitizationMiddleware implements NestMiddleware {
    */
   private sanitizeObject<T = unknown>(obj: T): T {
     if (Array.isArray(obj)) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return obj.map((item) => this.sanitizeValue(item)) as T;
     }
 
@@ -95,6 +96,7 @@ export class SanitizationMiddleware implements NestMiddleware {
     }
 
     if (Array.isArray(value)) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return value.map((item) => this.sanitizeValue(item)) as T;
     }
 

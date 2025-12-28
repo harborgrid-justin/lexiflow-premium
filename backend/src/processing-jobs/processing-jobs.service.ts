@@ -5,6 +5,12 @@ import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { ProcessingJob } from './entities/processing-job.entity';
 import { JobType, JobStatus, JobStatusDto } from './dto/job-status.dto';
+import {
+  JobQueueData,
+  ProcessingResult,
+  JobStatistics,
+  JobStatusStatistic,
+} from './interfaces/processing-job.interfaces';
 
 @Injectable()
 export class ProcessingJobsService {
@@ -39,11 +45,12 @@ export class ProcessingJobsService {
       const savedJob = await this.jobRepository.save(job);
 
       // Add to queue
-      await this.documentQueue.add(type, {
+      const queueData: JobQueueData = {
         jobId: savedJob.id,
         documentId,
         parameters,
-      });
+      };
+      await this.documentQueue.add(type, queueData);
 
       this.logger.log(`Job created: ${savedJob.id} (${type})`);
 
@@ -205,15 +212,7 @@ export class ProcessingJobsService {
   /**
    * Get job statistics
    */
-  async getStatistics(): Promise<{
-    total: number;
-    pending: number;
-    processing: number;
-    completed: number;
-    failed: number;
-    cancelled: number;
-    byStatus: Array<{ status: JobStatus; count: number }>;
-  }> {
+  async getStatistics(): Promise<JobStatistics> {
     const [total, pending, processing, completed, failed, cancelled] = await Promise.all([
       this.jobRepository.count(),
       this.jobRepository.count({ where: { status: JobStatus.PENDING } }),
@@ -223,12 +222,17 @@ export class ProcessingJobsService {
       this.jobRepository.count({ where: { status: JobStatus.CANCELLED } }),
     ]);
 
-    const byStatus = await this.jobRepository
+    const rawByStatus = await this.jobRepository
       .createQueryBuilder('job')
       .select('job.status', 'status')
       .addSelect('COUNT(*)', 'count')
       .groupBy('job.status')
       .getRawMany();
+
+    const byStatus: JobStatusStatistic[] = rawByStatus.map((item: { status: string; count: string }) => ({
+      status: item.status as JobStatus,
+      count: parseInt(item.count, 10),
+    }));
 
     return {
       total,
@@ -266,7 +270,7 @@ export class ProcessingJobsService {
     return this.jobRepository.save(job);
   }
 
-  async setResult(id: string, result: any): Promise<ProcessingJob> {
+  async setResult(id: string, result: ProcessingResult): Promise<ProcessingJob> {
     await this.jobRepository.update(id, { result, status: JobStatus.COMPLETED, completedAt: new Date() });
     return this.findOne(id);
   }

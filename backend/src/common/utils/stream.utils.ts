@@ -208,7 +208,7 @@ export function estimateObjectSize(obj: unknown): number {
       }
 
       return Object.keys(value).reduce((acc, key) => {
-        return acc + key.length * 2 + sizeOf((value as Record<string, any>)[key]);
+        return acc + key.length * 2 + sizeOf((value as Record<string, unknown>)[key]);
       }, 0);
     }
 

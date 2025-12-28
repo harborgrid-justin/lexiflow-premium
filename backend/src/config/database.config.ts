@@ -2,7 +2,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import * as MasterConfig from './master.config';
 import * as fs from 'fs';
-import * as path from 'path';
+import { TlsOptions, PeerCertificate } from 'tls';
 
 /**
  * Enhanced database configuration factory for TypeORM with enterprise security
@@ -54,7 +54,7 @@ export const getDatabaseConfig = (
       cache: {
         // TypeORM Query Result Caching
         duration: MasterConfig.DB_CACHE_DURATION, // 30 seconds
-        type: MasterConfig.DB_CACHE_TYPE as any, // 'redis'
+        type: MasterConfig.DB_CACHE_TYPE as 'database' | 'redis', // 'redis'
         alwaysEnabled: true, // Always use cache when available
         ignoreErrors: true, // Don't fail queries if cache unavailable
         // Note: Redis cache must be configured separately via cache-manager
@@ -94,7 +94,7 @@ export const getDatabaseConfig = (
     cache: {
       // TypeORM Query Result Caching
       duration: MasterConfig.DB_CACHE_DURATION, // 30 seconds
-      type: MasterConfig.DB_CACHE_TYPE as any, // 'redis'
+      type: MasterConfig.DB_CACHE_TYPE as 'database' | 'redis', // 'redis'
       alwaysEnabled: true, // Always use cache when available
       ignoreErrors: true, // Don't fail queries if cache unavailable
       // Note: Redis cache must be configured separately via cache-manager
@@ -114,12 +114,12 @@ export const getDatabaseConfig = (
  * Enhanced SSL configuration with certificate validation
  * Supports custom CA certificates for enterprise deployments
  */
-function getSecureSSLConfig(configService: ConfigService): boolean | any {
+function getSecureSSLConfig(configService: ConfigService): boolean | TlsOptions {
   if (!MasterConfig.DB_SSL) {
     return false;
   }
 
-  const sslConfig: any = {
+  const sslConfig: TlsOptions = {
     rejectUnauthorized: MasterConfig.DB_SSL_REJECT_UNAUTHORIZED,
   };
 
@@ -142,7 +142,11 @@ function getSecureSSLConfig(configService: ConfigService): boolean | any {
     console.log('✓ Loaded client key for database SSL');
   }
 
-  sslConfig.checkServerIdentity = (host: string, cert: any) => {
+  // Type assertion needed because TypeScript's TlsOptions definition doesn't include checkServerIdentity
+  // but it's a valid property according to Node.js documentation
+  (sslConfig as TlsOptions & {
+    checkServerIdentity?: (host: string, cert: PeerCertificate) => Error | undefined;
+  }).checkServerIdentity = (host: string, cert: PeerCertificate) => {
     const serverName = configService.get<string>('DB_SSL_SERVER_NAME') || host;
     if (cert.subject.CN !== serverName && !cert.subjectaltname?.includes(serverName)) {
       return new Error(`Server identity check failed: ${serverName}`);
@@ -157,7 +161,7 @@ function getSecureSSLConfig(configService: ConfigService): boolean | any {
  * Enhanced connection pool configuration with performance & security settings
  * Optimized for enterprise-scale legal document management
  */
-function getEnhancedPoolConfig(configService: ConfigService): Record<string, any> {
+function getEnhancedPoolConfig(configService: ConfigService): Record<string, unknown> {
   return {
     // Connection Pool Settings - Optimized for High Concurrency
     max: MasterConfig.DB_POOL_MAX, // 20 connections max
@@ -221,8 +225,8 @@ function getEnhancedPoolConfig(configService: ConfigService): Record<string, any
  * Database security configuration
  * Enforces prepared statements, query timeouts, and connection encryption
  */
-function getDatabaseSecurityConfig(configService: ConfigService): Record<string, any> {
-  const securityConfig: Record<string, any> = {
+function getDatabaseSecurityConfig(configService: ConfigService): Record<string, unknown> {
+  const securityConfig: Record<string, unknown> = {
     preparedStatementCacheSize: configService.get<number>('DB_PREPARED_STATEMENT_CACHE') || 100,
 
     ssl_min_protocol_version: 'TLSv1.2',
@@ -252,17 +256,17 @@ function getDatabaseSecurityConfig(configService: ConfigService): Record<string,
  */
 export function validateDatabaseConfig(config: TypeOrmModuleOptions): void {
   if (config.type === 'postgres') {
-    const extra = (config as any).extra || {};
+    const extra = (config as { extra?: Record<string, unknown> }).extra || {};
 
     if (MasterConfig.DB_SSL && !config.ssl) {
       console.warn('⚠️  WARNING: SSL is disabled but DB_SSL is true in configuration');
     }
 
-    if (extra.max < extra.min) {
+    if (typeof extra.max === 'number' && typeof extra.min === 'number' && extra.max < extra.min) {
       throw new Error('Database pool max connections cannot be less than min connections');
     }
 
-    if (extra.connectionTimeoutMillis > 60000) {
+    if (typeof extra.connectionTimeoutMillis === 'number' && extra.connectionTimeoutMillis > 60000) {
       console.warn('⚠️  WARNING: Connection timeout is very high (>60s)');
     }
 

@@ -3,12 +3,22 @@ import { Logger } from '@nestjs/common';
 import { Job } from 'bull';
 import { QUEUE_NAMES } from '@queues/constants';
 
+export interface NotificationData {
+  actionUrl?: string;
+  actionLabel?: string;
+  imageUrl?: string;
+  expiresAt?: string;
+  category?: string;
+  tags?: string[];
+  metadata?: Record<string, unknown>;
+}
+
 export interface NotificationJob {
   userId: string | string[];
   type: 'email' | 'sms' | 'push' | 'in-app';
   title: string;
   message: string;
-  data?: any;
+  data?: NotificationData;
   priority?: 'high' | 'normal' | 'low';
 }
 

@@ -46,7 +46,8 @@ export class CaseImportService {
     try {
       return await operation();
     } catch (error) {
-      if (retries > 0 && (error as any)?.status === 429) {
+      const statusCode = error && typeof error === 'object' && 'status' in error ? (error as { status: number }).status : undefined;
+      if (retries > 0 && statusCode === 429) {
         this.logger.warn(`Rate limited. Retrying in ${delay}ms... (${retries} retries left)`);
         await new Promise(resolve => setTimeout(resolve, delay));
         return this.retryOperation(operation, retries - 1, delay * 2);
@@ -128,7 +129,7 @@ export class CaseImportService {
     const text = response.text();
     
     try {
-      const parsed = JSON.parse(text) as any;
+      const parsed = JSON.parse(text) as Record<string, unknown>;
       // Normalize field names in case AI returns variations
       const normalized: ParsedCaseData = {
         title: parsed.title || parsed.caseName || parsed.case_name,
@@ -249,8 +250,7 @@ export class CaseImportService {
       for (const [key, pattern] of Object.entries(patterns)) {
         const match = trimmedLine.match(pattern);
         if (match && match[1]) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          data[key as keyof ParsedCaseData] = match[1].trim() as any;
+          (data as Record<string, string>)[key] = match[1].trim();
           break;
         }
       }

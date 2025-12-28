@@ -9,7 +9,10 @@ import {
   Query,
   ParseUUIDPipe,
   ParseIntPipe,
+  UseInterceptors,
+  DefaultValuePipe,
 } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ApiTags, ApiOperation, ApiQuery, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { PleadingsService } from './pleadings.service';
 import { CreatePleadingDto } from './dto/create-pleading.dto';
@@ -20,7 +23,6 @@ import { PleadingStatus } from './entities/pleading.entity';
 
 @ApiTags('Pleadings')
 @ApiBearerAuth('JWT-auth')
-
 @Controller('pleadings')
 @UseInterceptors(CacheInterceptor)
 export class PleadingsController {
@@ -66,8 +68,10 @@ export class PleadingsController {
   @ApiResponse({ status: 200, description: 'Upcoming hearings retrieved' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getUpcomingHearings(@Query('daysAhead', ParseIntPipe) daysAhead?: number) {
-    return await this.pleadingsService.getUpcomingHearings(daysAhead || 30);
+  async getUpcomingHearings(
+    @Query('daysAhead', new DefaultValuePipe(30), ParseIntPipe) daysAhead: number,
+  ) {
+    return await this.pleadingsService.getUpcomingHearings(daysAhead);
   }
 
   @Post('from-template')

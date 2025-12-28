@@ -1,9 +1,16 @@
 import { Controller, Get, Header } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Public } from '@common/decorators/public.decorator';
-import { MetricsCollectorService } from '@monitoring/services/metrics.collector.service';
-import { HealthAggregatorService } from '@monitoring/services/health.aggregator.service';
-import { AlertingService } from '@monitoring/services/alerting.service';
+import {
+  MetricsCollectorService,
+  MetricsSnapshot,
+  RequestStatistics,
+  DatabaseStatistics,
+  CacheStatistics
+} from '@monitoring/services/metrics.collector.service';
+import { HealthAggregatorService, HealthStatus } from '@monitoring/services/health.aggregator.service';
+import { AlertingService, AlertRule, AlertStatistics } from '@monitoring/services/alerting.service';
+import { SystemAlert } from '@monitoring/entities/system-alert.entity';
 
 /**
  * Metrics Controller
@@ -63,7 +70,13 @@ http_request_duration_ms_sum{method="GET",path="/api/v1/users"} 45678`,
     status: 200,
     description: 'Metrics retrieved successfully',
   })
-  getMetricsJson() {
+  getMetricsJson(): {
+    snapshot: MetricsSnapshot;
+    requests: Record<string, RequestStatistics>;
+    database: DatabaseStatistics;
+    cache: CacheStatistics;
+    timestamp: string;
+  } {
     return {
       snapshot: this.metricsCollector.getMetricsSnapshot(),
       requests: this.metricsCollector.getRequestStats(),
@@ -91,7 +104,7 @@ http_request_duration_ms_sum{method="GET",path="/api/v1/users"} 45678`,
     status: 503,
     description: 'Service is unhealthy',
   })
-  async getDetailedHealth() {
+  async getDetailedHealth(): Promise<HealthStatus> {
     return await this.healthAggregator.getHealth();
   }
 
@@ -113,7 +126,7 @@ http_request_duration_ms_sum{method="GET",path="/api/v1/users"} 45678`,
     status: 503,
     description: 'Service is not ready',
   })
-  async getReadiness() {
+  async getReadiness(): Promise<{ status: string; ready: boolean; checks: unknown }> {
     const readiness = await this.healthAggregator.getReadiness();
 
     if (!readiness.ready) {
@@ -140,7 +153,7 @@ http_request_duration_ms_sum{method="GET",path="/api/v1/users"} 45678`,
     status: 200,
     description: 'Service is alive',
   })
-  getLiveness() {
+  getLiveness(): { alive: boolean } {
     return this.healthAggregator.getLiveness();
   }
 
@@ -157,7 +170,10 @@ http_request_duration_ms_sum{method="GET",path="/api/v1/users"} 45678`,
     status: 200,
     description: 'Request statistics retrieved successfully',
   })
-  getRequestStats() {
+  getRequestStats(): {
+    requests: Record<string, RequestStatistics>;
+    timestamp: string;
+  } {
     return {
       requests: this.metricsCollector.getRequestStats(),
       timestamp: new Date().toISOString(),
@@ -177,7 +193,10 @@ http_request_duration_ms_sum{method="GET",path="/api/v1/users"} 45678`,
     status: 200,
     description: 'Database statistics retrieved successfully',
   })
-  getDatabaseStats() {
+  getDatabaseStats(): {
+    database: DatabaseStatistics;
+    timestamp: string;
+  } {
     return {
       database: this.metricsCollector.getDatabaseStats(),
       timestamp: new Date().toISOString(),
@@ -197,7 +216,10 @@ http_request_duration_ms_sum{method="GET",path="/api/v1/users"} 45678`,
     status: 200,
     description: 'Cache statistics retrieved successfully',
   })
-  getCacheStats() {
+  getCacheStats(): {
+    cache: CacheStatistics;
+    timestamp: string;
+  } {
     return {
       cache: this.metricsCollector.getCacheStats(),
       timestamp: new Date().toISOString(),
@@ -217,7 +239,10 @@ http_request_duration_ms_sum{method="GET",path="/api/v1/users"} 45678`,
     status: 200,
     description: 'Alert statistics retrieved successfully',
   })
-  async getAlertStats() {
+  async getAlertStats(): Promise<{
+    alerts: AlertStatistics;
+    timestamp: string;
+  }> {
     return {
       alerts: await this.alertingService.getAlertStats(),
       timestamp: new Date().toISOString(),
@@ -237,7 +262,10 @@ http_request_duration_ms_sum{method="GET",path="/api/v1/users"} 45678`,
     status: 200,
     description: 'Active alerts retrieved successfully',
   })
-  async getActiveAlerts() {
+  async getActiveAlerts(): Promise<{
+    alerts: SystemAlert[];
+    timestamp: string;
+  }> {
     return {
       alerts: await this.alertingService.getActiveAlerts(),
       timestamp: new Date().toISOString(),
@@ -257,7 +285,10 @@ http_request_duration_ms_sum{method="GET",path="/api/v1/users"} 45678`,
     status: 200,
     description: 'Alert rules retrieved successfully',
   })
-  getAlertRules() {
+  getAlertRules(): {
+    rules: AlertRule[];
+    timestamp: string;
+  } {
     return {
       rules: this.alertingService.getRules(),
       timestamp: new Date().toISOString(),
@@ -277,7 +308,20 @@ http_request_duration_ms_sum{method="GET",path="/api/v1/users"} 45678`,
     status: 200,
     description: 'System information retrieved successfully',
   })
-  getSystemInfo() {
+  getSystemInfo(): {
+    system: {
+      platform: NodeJS.Platform;
+      arch: string;
+      nodeVersion: string;
+      uptime: number;
+      pid: number;
+    };
+    environment: {
+      nodeEnv: string;
+      timezone: string;
+    };
+    timestamp: string;
+  } {
     return {
       system: {
         platform: process.platform,

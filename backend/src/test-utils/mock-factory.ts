@@ -1,6 +1,102 @@
 import { faker } from '@faker-js/faker';
 import { v4 as uuidv4 } from 'uuid';
 
+interface MockUser {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  role: string;
+  phone: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface MockCase {
+  id: string;
+  caseNumber: string;
+  title: string;
+  description: string;
+  caseType: string;
+  status: string;
+  priority: string;
+  courtName: string;
+  jurisdiction: string;
+  filingDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface MockClient {
+  id: string;
+  clientType: string;
+  firstName: string | null;
+  lastName: string | null;
+  companyName: string | null;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface MockDocument {
+  id: string;
+  title: string;
+  description: string;
+  documentType: string;
+  fileName: string;
+  filePath: string;
+  fileSize: number;
+  mimeType: string;
+  version: number;
+  isTemplate: boolean;
+  tags: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface MockTimeEntry {
+  id: string;
+  description: string;
+  hours: number;
+  billableRate: number;
+  date: Date;
+  isBillable: boolean;
+  taskType: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface MockEmail {
+  id: string;
+  from: string;
+  to: string[];
+  cc: string[];
+  bcc: string[];
+  subject: string;
+  body: string;
+  htmlBody: string;
+  sentAt: Date;
+  isRead: boolean;
+}
+
+interface MockNotification {
+  id: string;
+  title: string;
+  message: string;
+  type: string;
+  isRead: boolean;
+  createdAt: Date;
+}
+
 /**
  * Mock factory for generating test data
  */
@@ -8,7 +104,7 @@ export class MockFactory {
   /**
    * Generate a mock user
    */
-  static createMockUser(overrides?: Partial<any>) {
+  static createMockUser(overrides?: Partial<MockUser>): MockUser {
     return {
       id: uuidv4(),
       email: faker.internet.email(),
@@ -33,7 +129,7 @@ export class MockFactory {
   /**
    * Generate a mock case
    */
-  static createMockCase(overrides?: Partial<any>) {
+  static createMockCase(overrides?: Partial<MockCase>): MockCase {
     const caseTypes = [
       'CIVIL',
       'CRIMINAL',
@@ -72,7 +168,7 @@ export class MockFactory {
   /**
    * Generate a mock client
    */
-  static createMockClient(overrides?: Partial<any>) {
+  static createMockClient(overrides?: Partial<MockClient>): MockClient {
     const isIndividual = faker.datatype.boolean();
 
     return {
@@ -98,7 +194,7 @@ export class MockFactory {
   /**
    * Generate a mock document
    */
-  static createMockDocument(overrides?: Partial<any>) {
+  static createMockDocument(overrides?: Partial<MockDocument>): MockDocument {
     const documentTypes = [
       'COMPLAINT',
       'ANSWER',
@@ -134,7 +230,7 @@ export class MockFactory {
   /**
    * Generate a mock time entry
    */
-  static createMockTimeEntry(overrides?: Partial<any>) {
+  static createMockTimeEntry(overrides?: Partial<MockTimeEntry>): MockTimeEntry {
     const billableRates = [150, 200, 250, 300, 350, 400, 450, 500];
 
     return {
@@ -194,7 +290,7 @@ export class MockFactory {
   /**
    * Generate mock email
    */
-  static createMockEmail(overrides?: Partial<any>) {
+  static createMockEmail(overrides?: Partial<MockEmail>): MockEmail {
     return {
       id: uuidv4(),
       from: faker.internet.email(),
@@ -213,7 +309,7 @@ export class MockFactory {
   /**
    * Generate mock notification
    */
-  static createMockNotification(overrides?: Partial<any>) {
+  static createMockNotification(overrides?: Partial<MockNotification>): MockNotification {
     return {
       id: uuidv4(),
       title: faker.lorem.sentence(),

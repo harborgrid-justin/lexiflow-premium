@@ -8,6 +8,7 @@
 import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { createHash } from 'crypto';
 import { WorkflowTemplate } from './entities/workflow-template.entity';
 import {
   ConditionalBranchingConfig,
@@ -53,7 +54,7 @@ export class WorkflowAdvancedService {
    */
   async evaluateConditionalBranching(
     config: ConditionalBranchingConfig,
-    context: Record<string, any>,
+    context: Record<string, unknown>,
   ): Promise<{ branchId: string; matched: boolean; evaluationTime: number }> {
     const startTime = Date.now();
     this.logger.log(`Evaluating conditional branching for node ${config.nodeId}`);
@@ -65,8 +66,8 @@ export class WorkflowAdvancedService {
 
     try {
       const evaluationPromise = this._evaluateBranches(config, context);
-      const result = await Promise.race([evaluationPromise, timeoutPromise]) as any;
-      
+      const result = await Promise.race([evaluationPromise, timeoutPromise]) as { branchId: string; matched: boolean };
+
       const evaluationTime = Date.now() - startTime;
       this.logger.log(`Conditional evaluation completed in ${evaluationTime}ms: ${result.branchId}`);
 
@@ -93,13 +94,13 @@ export class WorkflowAdvancedService {
 
   private async _evaluateBranches(
     config: ConditionalBranchingConfig,
-    context: Record<string, any>,
+    context: Record<string, unknown>,
   ): Promise<{ branchId: string; matched: boolean }> {
     const sortedBranches = config.branches.sort((a: ConditionalBranchDto, b: ConditionalBranchDto) => a.priority - b.priority);
 
     for (const branch of sortedBranches) {
       const ruleResults = branch.rules.map((rule: ConditionalRuleDto) => this._evaluateRule(rule, context));
-      const branchMatches = this._applyLogic(ruleResults, branch.logic as any);
+      const branchMatches = this._applyLogic(ruleResults, branch.logic);
 
       if (branchMatches) {
         if (branch.fallthrough && config.evaluationStrategy === 'all_match') {
@@ -112,7 +113,7 @@ export class WorkflowAdvancedService {
     return { branchId: config.defaultBranchId || '', matched: false };
   }
 
-  private _evaluateRule(rule: any, context: Record<string, any>): boolean {
+  private _evaluateRule(rule: ConditionalRuleDto, context: Record<string, unknown>): boolean {
     const fieldValue = this._resolveFieldValue(rule.field, context);
 
     switch (rule.operator) {
@@ -133,9 +134,9 @@ export class WorkflowAdvancedService {
       case 'not_in':
         return Array.isArray(rule.value) && !rule.value.includes(fieldValue);
       case 'regex':
-        return new RegExp(rule.value).test(String(fieldValue));
+        return new RegExp(String(rule.value)).test(String(fieldValue));
       case 'custom':
-        return this._evaluateCustomExpression(rule.customExpression, context);
+        return this._evaluateCustomExpression(rule.customExpression || '', context);
       default:
         return false;
     }
@@ -158,20 +159,154 @@ export class WorkflowAdvancedService {
     }
   }
 
-  private _resolveFieldValue(field: string, context: Record<string, any>): any {
-    return field.split('.').reduce((obj, key) => obj?.[key], context);
+  private _resolveFieldValue(field: string, context: Record<string, unknown>): unknown {
+    return field.split('.').reduce((obj: Record<string, unknown> | unknown, key: string) => {
+      if (obj && typeof obj === 'object' && key in obj) {
+        return (obj as Record<string, unknown>)[key];
+      }
+      return undefined;
+    }, context);
   }
 
-  private _evaluateCustomExpression(expression: string, context: Record<string, any>): boolean {
+  /**
+   * SECURITY: Safe expression evaluator using predefined handlers
+   * Replaces dangerous eval/Function() with a whitelist-based approach
+   * Supports: comparisons, logical operators, field access
+   */
+  private _evaluateCustomExpression(expression: string, context: Record<string, unknown>): boolean {
     try {
-      // Sandboxed evaluation with limited scope
-      const func = new Function('context', `return ${expression}`);
-      return Boolean(func(context));
+      // Sanitize expression - remove dangerous patterns
+      const sanitized = expression.trim();
+
+      // Check for dangerous patterns - block immediately
+      const dangerousPatterns = [
+        /\beval\b/i,
+        /\bFunction\b/i,
+        /\brequire\b/i,
+        /\bimport\b/i,
+        /\bprocess\b/i,
+        /\b__proto__\b/i,
+        /\bconstructor\b/i,
+        /\[\s*["'].*["']\s*\]/,  // bracket notation
+      ];
+
+      for (const pattern of dangerousPatterns) {
+        if (pattern.test(sanitized)) {
+          this.logger.error(`Blocked dangerous expression pattern: ${sanitized}`);
+          return false;
+        }
+      }
+
+      // Use safe predefined expression handlers
+      return this._evaluateSafeExpression(sanitized, context);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       this.logger.warn(`Custom expression evaluation failed: ${errorMessage}`);
       return false;
     }
+  }
+
+  /**
+   * Evaluate safe expressions using predefined handlers
+   * Supports: field comparisons, logical operators, basic math
+   */
+  private _evaluateSafeExpression(expression: string, context: Record<string, unknown>): boolean {
+    // Handle simple field access: context.field.subfield
+    const fieldAccessMatch = expression.match(/^context\.([a-zA-Z0-9_.]+)$/);
+    if (fieldAccessMatch) {
+      const value = this._resolveFieldValue(fieldAccessMatch[1] || '', context);
+      return Boolean(value);
+    }
+
+    // Handle comparisons: context.field == 'value'
+    const comparisonMatch = expression.match(/^context\.([a-zA-Z0-9_.]+)\s*(===|==|!==|!=|>|<|>=|<=)\s*(.+)$/);
+    if (comparisonMatch) {
+      const field = comparisonMatch[1] || '';
+      const operator = comparisonMatch[2] || '';
+      const valueStr = comparisonMatch[3]?.trim() || '';
+
+      const fieldValue = this._resolveFieldValue(field, context);
+      const compareValue = this._parseValue(valueStr);
+
+      return this._compareValues(fieldValue, operator, compareValue);
+    }
+
+    // Handle logical AND/OR: expr1 && expr2
+    if (expression.includes('&&') || expression.includes('||')) {
+      return this._evaluateLogicalExpression(expression, context);
+    }
+
+    // If no pattern matches, log and return false for safety
+    this.logger.warn(`Expression pattern not supported: ${expression}`);
+    return false;
+  }
+
+  /**
+   * Parse value from string (handles strings, numbers, booleans, null)
+   */
+  private _parseValue(valueStr: string): unknown {
+    // String literals
+    if ((valueStr.startsWith("'") && valueStr.endsWith("'")) ||
+        (valueStr.startsWith('"') && valueStr.endsWith('"'))) {
+      return valueStr.slice(1, -1);
+    }
+
+    // Numbers
+    if (/^-?\d+(\.\d+)?$/.test(valueStr)) {
+      return Number(valueStr);
+    }
+
+    // Booleans
+    if (valueStr === 'true') return true;
+    if (valueStr === 'false') return false;
+
+    // Null
+    if (valueStr === 'null') return null;
+
+    return valueStr;
+  }
+
+  /**
+   * Compare two values with operator
+   */
+  private _compareValues(left: unknown, operator: string, right: unknown): boolean {
+    switch (operator) {
+      case '===':
+      case '==':
+        return left === right;
+      case '!==':
+      case '!=':
+        return left !== right;
+      case '>':
+        return Number(left) > Number(right);
+      case '<':
+        return Number(left) < Number(right);
+      case '>=':
+        return Number(left) >= Number(right);
+      case '<=':
+        return Number(left) <= Number(right);
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * Evaluate logical expressions (AND/OR)
+   */
+  private _evaluateLogicalExpression(expression: string, context: Record<string, unknown>): boolean {
+    // Split on && first (higher precedence)
+    if (expression.includes('&&')) {
+      const parts = expression.split('&&').map(p => p.trim());
+      return parts.every(part => this._evaluateSafeExpression(part, context));
+    }
+
+    // Split on ||
+    if (expression.includes('||')) {
+      const parts = expression.split('||').map(p => p.trim());
+      return parts.some(part => this._evaluateSafeExpression(part, context));
+    }
+
+    return false;
   }
 
   // ============================================================================
@@ -183,12 +318,12 @@ export class WorkflowAdvancedService {
    */
   async executeParallelBranches(
     config: ParallelExecutionConfig,
-    context: Record<string, any>,
+    context: Record<string, unknown>,
   ): Promise<{
     completedBranches: string[];
     failedBranches: string[];
     executionTime: number;
-    metrics: Record<string, any>;
+    metrics: Record<string, unknown>;
   }> {
     const startTime = Date.now();
     this.logger.log(`Executing parallel branches for node ${config.nodeId}`);
@@ -201,8 +336,8 @@ export class WorkflowAdvancedService {
       const results = await this._applyJoinStrategy(branchExecutions, config);
       
       const completedBranches = results
-        .filter(r => r.status === 'fulfilled')
-        .map(r => (r as any).value.branchId);
+        .filter((r): r is PromiseFulfilledResult<{ branchId: string; result: unknown }> => r.status === 'fulfilled')
+        .map(r => r.value.branchId);
       
       const failedBranches = results
         .filter(r => r.status === 'rejected')
@@ -237,10 +372,10 @@ export class WorkflowAdvancedService {
   }
 
   private async _executeBranchWithRetry(
-    branch: any,
-    context: Record<string, any>,
+    branch: ParallelBranchDto,
+    context: Record<string, unknown>,
     config: ParallelExecutionConfig,
-  ): Promise<{ branchId: string; result: any }> {
+  ): Promise<{ branchId: string; result: unknown }> {
     const maxRetries = branch.maxRetries || 0;
     let lastError: Error | null = null;
 
@@ -274,38 +409,47 @@ export class WorkflowAdvancedService {
   }
 
   private async _applyJoinStrategy(
-    branchExecutions: Promise<any>[],
+    branchExecutions: Promise<{ branchId: string; result: unknown }>[],
     config: ParallelExecutionConfig,
-  ): Promise<any[]> {
+  ): Promise<PromiseSettledResult<{ branchId: string; result: unknown }>[]> {
     switch (config.joinStrategy) {
       case 'wait_all':
         return Promise.allSettled(branchExecutions);
-      
+
       case 'wait_any':
-        return Promise.race(branchExecutions).then(result => [{ status: 'fulfilled', value: result }]);
-      
-      case 'wait_majority':
+        return Promise.race(branchExecutions).then(result => [{
+          status: 'fulfilled' as const,
+          value: result
+        }]);
+
+      case 'wait_majority': {
         const threshold = Math.ceil(branchExecutions.length / 2);
         return this._waitForThreshold(branchExecutions, threshold);
-      
-      case 'wait_custom':
+      }
+
+      case 'wait_custom': {
         const customThreshold = Math.ceil(branchExecutions.length * (config.customThreshold || 0.5));
         return this._waitForThreshold(branchExecutions, customThreshold);
-      
-      case 'timed_join':
+      }
+
+      case 'timed_join': {
         const timeout = config.timeout || 30000;
         return Promise.race([
           Promise.allSettled(branchExecutions),
-          this._delay(timeout).then(() => []),
+          this._delay(timeout).then(() => [] as PromiseSettledResult<{ branchId: string; result: unknown }>[]),
         ]);
-      
+      }
+
       default:
         return Promise.allSettled(branchExecutions);
     }
   }
 
-  private async _waitForThreshold(executions: Promise<any>[], threshold: number): Promise<any[]> {
-    const results: any[] = [];
+  private async _waitForThreshold(
+    executions: Promise<{ branchId: string; result: unknown }>[],
+    threshold: number
+  ): Promise<PromiseSettledResult<{ branchId: string; result: unknown }>[]> {
+    const results: PromiseSettledResult<{ branchId: string; result: unknown }>[] = [];
     
     for (const execution of executions) {
       try {
@@ -323,7 +467,7 @@ export class WorkflowAdvancedService {
     return results;
   }
 
-  private async _executeBranchNodes(nodeIds: string[], _context: Record<string, any>): Promise<any> {
+  private async _executeBranchNodes(nodeIds: string[], _context: Record<string, unknown>): Promise<{ success: boolean; nodeIds: string[] }> {
     // Simulate node execution
     await this._delay(Math.random() * 1000);
     return { success: true, nodeIds };
@@ -415,9 +559,8 @@ export class WorkflowAdvancedService {
     return diff;
   }
 
-  private _calculateChecksum(data: any): string {
-    const crypto = require('crypto');
-    return crypto.createHash('sha256').update(JSON.stringify(data)).digest('hex');
+  private _calculateChecksum(data: unknown): string {
+    return createHash('sha256').update(JSON.stringify(data)).digest('hex');
   }
 
   private async _getWorkflowVersion(_workflowId: string, _version: string): Promise<WorkflowVersion> {
@@ -425,42 +568,42 @@ export class WorkflowAdvancedService {
     return {} as WorkflowVersion; // Placeholder
   }
 
-  private _findAddedNodes(nodesA: any[], nodesB: any[]): any[] {
+  private _findAddedNodes(nodesA: Array<{ id: string }>, nodesB: Array<{ id: string }>): Array<{ id: string }> {
     const idsA = new Set(nodesA.map(n => n.id));
     return nodesB.filter(n => !idsA.has(n.id));
   }
 
-  private _findRemovedNodes(nodesA: any[], nodesB: any[]): any[] {
+  private _findRemovedNodes(nodesA: Array<{ id: string }>, nodesB: Array<{ id: string }>): Array<{ id: string }> {
     const idsB = new Set(nodesB.map(n => n.id));
     return nodesA.filter(n => !idsB.has(n.id));
   }
 
-  private _findModifiedNodes(nodesA: any[], nodesB: any[]): any[] {
-    const modified: any[] = [];
+  private _findModifiedNodes(nodesA: Array<{ id: string }>, nodesB: Array<{ id: string }>): Array<{ old: { id: string }; new: { id: string } }> {
+    const modified: Array<{ old: { id: string }; new: { id: string } }> = [];
     const mapB = new Map(nodesB.map(n => [n.id, n]));
-    
+
     for (const nodeA of nodesA) {
       const nodeB = mapB.get(nodeA.id);
       if (nodeB && JSON.stringify(nodeA) !== JSON.stringify(nodeB)) {
         modified.push({ old: nodeA, new: nodeB });
       }
     }
-    
+
     return modified;
   }
 
-  private _findAddedConnections(connsA: any[], connsB: any[]): any[] {
+  private _findAddedConnections(connsA: Array<{ from: string; to: string }>, connsB: Array<{ from: string; to: string }>): Array<{ from: string; to: string }> {
     const idsA = new Set(connsA.map(c => `${c.from}-${c.to}`));
     return connsB.filter(c => !idsA.has(`${c.from}-${c.to}`));
   }
 
-  private _findRemovedConnections(connsA: any[], connsB: any[]): any[] {
+  private _findRemovedConnections(connsA: Array<{ from: string; to: string }>, connsB: Array<{ from: string; to: string }>): Array<{ from: string; to: string }> {
     const idsB = new Set(connsB.map(c => `${c.from}-${c.to}`));
     return connsA.filter(c => !idsB.has(`${c.from}-${c.to}`));
   }
 
-  private _findConfigChanges(configA: any, configB: any): any[] {
-    const changes: any[] = [];
+  private _findConfigChanges(configA: Record<string, unknown>, configB: Record<string, unknown>): Array<{ key: string; oldValue: unknown; newValue: unknown }> {
+    const changes: Array<{ key: string; oldValue: unknown; newValue: unknown }> = [];
     const allKeys = new Set([...Object.keys(configA || {}), ...Object.keys(configB || {})]);
     
     for (const key of allKeys) {
@@ -551,7 +694,7 @@ export class WorkflowAdvancedService {
     return slaStatus;
   }
 
-  private _calculateBusinessHoursElapsed(start: Date, end: Date, _businessHours: any): number {
+  private _calculateBusinessHoursElapsed(start: Date, end: Date, _businessHours: { start: string; end: string; timezone: string }): number {
     // Sophisticated business hours calculation
     return end.getTime() - start.getTime(); // Simplified
   }
@@ -562,7 +705,7 @@ export class WorkflowAdvancedService {
     for (const level of levels) {
       if (slaStatus.percentageUsed >= level.triggerAt) {
         this.logger.warn(`SLA escalation level ${level.level} triggered for node ${slaStatus.nodeId}`);
-        
+
         // Execute escalation actions
         for (const action of level.actions) {
           await this._executeEscalationAction(action, slaStatus);
@@ -577,7 +720,7 @@ export class WorkflowAdvancedService {
     }
   }
 
-  private async _executeEscalationAction(action: any, slaStatus: SLAStatus): Promise<void> {
+  private async _executeEscalationAction(action: { type: string; config?: Record<string, unknown> }, slaStatus: SLAStatus): Promise<void> {
     switch (action.type) {
       case 'email':
         this.logger.log(`Sending escalation email for ${slaStatus.nodeId}`);
@@ -615,7 +758,7 @@ export class WorkflowAdvancedService {
     }
 
     // Record decision
-    instance.decisions.push(decision as any);
+    instance.decisions.push(decision);
 
     // Check if level requirements met
     const levelDecisions = instance.decisions.filter((d) => d.level === instance.currentLevel);
@@ -667,7 +810,7 @@ export class WorkflowAdvancedService {
     return {} as ApprovalChain; // Placeholder
   }
 
-  private async _executeWorkflowAction(action: any, _context: any): Promise<void> {
+  private async _executeWorkflowAction(action: { type: string; config?: Record<string, unknown> }, _context: unknown): Promise<void> {
     this.logger.log(`Executing workflow action: ${action.type}`);
   }
 
@@ -692,7 +835,7 @@ export class WorkflowAdvancedService {
       nodes: instance.nodes,
       connections: instance.connections,
       completedNodes: instance.completedNodes,
-      pendingNodes: instance.nodes.filter((n: any) => !instance.completedNodes.includes(n.id)).map((n: any) => n.id),
+      pendingNodes: instance.nodes.filter((n) => !instance.completedNodes.includes(n.id as string)).map((n) => n.id as string),
       currentNodes: instance.currentNodes,
       variables: instance.variables,
       context: instance.context,
@@ -796,24 +939,24 @@ export class WorkflowAdvancedService {
   private async _generateCompensatingActions(
     instance: EnhancedWorkflowInstance,
     targetState: WorkflowState,
-  ): Promise<any[]> {
-    const actions: any[] = [];
+  ): Promise<Array<{ type: string; nodeId: string; action: string; data: unknown }>> {
+    const actions: Array<{ type: string; nodeId: string; action: string; data: unknown }> = [];
     const currentNodes = instance.nodes || [];
     const targetNodes = targetState.nodes || [];
-    
+
     // Generate undo actions for nodes that were executed
     for (const node of currentNodes) {
-      const nodeAny = node as any;
-      if (nodeAny.status === 'completed' && !targetNodes.find((n: any) => n.id === nodeAny.id)) {
+      const nodeWithStatus = node as { id: string; status?: string; outputData?: unknown };
+      if (nodeWithStatus.status === 'completed' && !targetNodes.find((n) => (n as { id: string }).id === nodeWithStatus.id)) {
         actions.push({
           type: 'compensate',
-          nodeId: nodeAny.id,
+          nodeId: nodeWithStatus.id,
           action: 'undo',
-          data: nodeAny.outputData,
+          data: nodeWithStatus.outputData,
         });
       }
     }
-    
+
     return actions;
   }
 
@@ -860,30 +1003,50 @@ export class WorkflowAdvancedService {
     };
   }
 
-  private async _getWorkflowExecutions(workflowId: string, start: Date, end: Date): Promise<any[]> {
+  private async _getWorkflowExecutions(workflowId: string, start: Date, end: Date): Promise<Array<{ status: string; nodes?: Array<{ id: string; name?: string; status?: string; duration?: number }> }>> {
     // In a production environment, this would query a workflow_executions table
     // For now, return mock data structure that matches expected format
     this.logger.debug(`Fetching executions for workflow ${workflowId} from ${start} to ${end}`);
-    
+
     // TODO: Replace with actual repository query when workflow_executions entity is created
     // Example: return this.executionRepository.find({ where: { workflowId, createdAt: Between(start, end) } });
-    
+
     return [];
   }
 
-  private _calculatePerformanceSummary(_executions: any[]): any {
+  private _calculatePerformanceSummary(_executions: Array<{ status: string }>): { totalExecutions: number; successfulExecutions: number; failedExecutions: number; averageDuration: number; successRate: number } {
     return {
       totalExecutions: _executions.length,
-      successfulExecutions: _executions.filter((e: any) => e.status === 'completed').length,
-      failedExecutions: _executions.filter((e: any) => e.status === 'failed').length,
+      successfulExecutions: _executions.filter((e) => e.status === 'completed').length,
+      failedExecutions: _executions.filter((e) => e.status === 'failed').length,
       averageDuration: 3600000,
       successRate: 95,
     };
   }
 
-  private _calculateNodeMetrics(executions: any[]): any[] {
-    const nodeMap = new Map<string, any>();
-    
+  private _calculateNodeMetrics(executions: Array<{ nodes?: Array<{ id: string; name?: string; status?: string; duration?: number }> }>): Array<{
+    nodeId: string;
+    nodeName: string;
+    executions: number;
+    successCount: number;
+    failureCount: number;
+    totalDuration: number;
+    averageDuration: number;
+    minDuration: number;
+    maxDuration: number;
+  }> {
+    const nodeMap = new Map<string, {
+      nodeId: string;
+      nodeName: string;
+      executions: number;
+      successCount: number;
+      failureCount: number;
+      totalDuration: number;
+      averageDuration: number;
+      minDuration: number;
+      maxDuration: number;
+    }>();
+
     for (const execution of executions) {
       const nodes = execution.nodes || [];
       for (const node of nodes) {
@@ -900,29 +1063,36 @@ export class WorkflowAdvancedService {
             maxDuration: 0,
           });
         }
-        
+
         const metrics = nodeMap.get(node.id);
-        metrics.executions++;
-        
-        if (node.status === 'completed') metrics.successCount++;
-        if (node.status === 'failed') metrics.failureCount++;
-        
-        const duration = node.duration || 0;
-        metrics.totalDuration += duration;
-        metrics.minDuration = Math.min(metrics.minDuration, duration);
-        metrics.maxDuration = Math.max(metrics.maxDuration, duration);
+        if (metrics) {
+          metrics.executions++;
+
+          if (node.status === 'completed') metrics.successCount++;
+          if (node.status === 'failed') metrics.failureCount++;
+
+          const duration = node.duration || 0;
+          metrics.totalDuration += duration;
+          metrics.minDuration = Math.min(metrics.minDuration, duration);
+          metrics.maxDuration = Math.max(metrics.maxDuration, duration);
+        }
       }
     }
-    
+
     // Calculate averages
     for (const metrics of nodeMap.values()) {
       metrics.averageDuration = metrics.executions > 0 ? metrics.totalDuration / metrics.executions : 0;
     }
-    
+
     return Array.from(nodeMap.values());
   }
 
-  private _detectBottlenecks(nodeMetrics: any[]): WorkflowBottleneck[] {
+  private _detectBottlenecks(nodeMetrics: Array<{
+    nodeId: string;
+    averageDuration: number;
+    executions: number;
+    failureCount: number;
+  }>): WorkflowBottleneck[] {
     const bottlenecks: WorkflowBottleneck[] = [];
     
     // Calculate average duration across all nodes
@@ -959,7 +1129,10 @@ export class WorkflowAdvancedService {
     return bottlenecks;
   }
 
-  private _generateOptimizationSuggestions(bottlenecks: any[], nodeMetrics: any[]): OptimizationSuggestion[] {
+  private _generateOptimizationSuggestions(
+    bottlenecks: Array<{ nodeId: string; type: string }>,
+    nodeMetrics: Array<{ nodeId: string }>
+  ): OptimizationSuggestion[] {
     const suggestions: OptimizationSuggestion[] = [];
     
     for (const bottleneck of bottlenecks) {
@@ -1073,7 +1246,7 @@ export class WorkflowAdvancedService {
   /**
    * Process incoming trigger event
    */
-  async processTriggerEvent(triggerId: string, payload: Record<string, any>): Promise<TriggerEvent> {
+  async processTriggerEvent(triggerId: string, payload: Record<string, unknown>): Promise<TriggerEvent> {
     this.logger.log(`Processing trigger event for ${triggerId}`);
 
     const trigger: ExternalTrigger = await this._getTrigger(triggerId);
@@ -1117,15 +1290,15 @@ export class WorkflowAdvancedService {
     return {} as ExternalTrigger; // Placeholder
   }
 
-  private _applyTriggerFilters(_payload: any, _filters: any[]): boolean {
+  private _applyTriggerFilters(_payload: Record<string, unknown>, _filters: Array<{ field: string; operator: string; value: unknown }>): boolean {
     return true; // Simplified
   }
 
-  private _applyTransformation(payload: any, _transformation: any): any {
+  private _applyTransformation(payload: Record<string, unknown>, _transformation: { type: string; config?: Record<string, unknown> }): Record<string, unknown> {
     return payload; // Simplified
   }
 
-  private async _startWorkflowFromTrigger(trigger: ExternalTrigger, _payload: any): Promise<string> {
+  private async _startWorkflowFromTrigger(trigger: ExternalTrigger, _payload: Record<string, unknown>): Promise<string> {
     this.logger.log(`Starting workflow from trigger ${trigger.id}`);
     return `workflow-instance-${Date.now()}`;
   }

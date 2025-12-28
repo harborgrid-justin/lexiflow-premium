@@ -15,7 +15,7 @@ export class Migration {
   down!: string;
 
   @Column({ nullable: true })
-  description!: string;
+  description?: string;
 
   @Column({ type: 'boolean', default: false })
   applied!: boolean;
@@ -24,8 +24,8 @@ export class Migration {
   createdAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  appliedAt!: Date;
+  appliedAt?: Date | null;
 
   @Column({ nullable: true })
-  appliedBy!: string;
+  appliedBy?: string;
 }

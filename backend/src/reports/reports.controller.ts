@@ -16,7 +16,7 @@ import {
   ApiBearerAuth,
   ApiParam,
   ApiQuery,
- }from '@nestjs/swagger';
+} from '@nestjs/swagger';
 import { ReportsService } from './reports.service';
 import {
   GenerateReportDto,
@@ -25,6 +25,14 @@ import {
   ReportTemplateDto,
   DownloadReportDto,
 } from './dto/reports.dto';
+import {
+  ReportRecord,
+  ReportTemplate,
+  ScheduledReport,
+  ReportCancellationResult,
+  ReportStatusResponse,
+  ExportReportResult,
+} from './interfaces/report.interfaces';
 
 @ApiTags('Reports')
 
@@ -51,7 +59,7 @@ export class ReportsController {
   @ApiOperation({ summary: 'Get list of generated reports' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(): Promise<any[]> {
+  async findAll(): Promise<ReportRecord[]> {
     return this.reportsService.findAll();
   }
 
@@ -59,7 +67,7 @@ export class ReportsController {
   @ApiOperation({ summary: 'Get reports by type' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findByType(@Param('type') type: string): Promise<any[]> {
+  async findByType(@Param('type') type: string): Promise<ReportRecord[]> {
     return this.reportsService.findByType(type);
   }
 
@@ -68,7 +76,7 @@ export class ReportsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async getTemplateById(@Param('id') id: string): Promise<any> {
+  async getTemplateById(@Param('id') id: string): Promise<ReportTemplate> {
     return this.reportsService.getTemplateById(id);
   }
 
@@ -78,7 +86,7 @@ export class ReportsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createTemplate(@Body() createDto: any, @Query('userId') userId: string): Promise<any> {
+  async createTemplate(@Body() createDto: Partial<ReportTemplate>, @Query('userId') userId: string): Promise<ReportTemplate> {
     return this.reportsService.createTemplate(createDto, userId);
   }
 
@@ -88,7 +96,7 @@ export class ReportsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async scheduleReport(@Body() scheduleDto: any, @Query('userId') userId: string): Promise<any> {
+  async scheduleReport(@Body() scheduleDto: Partial<ScheduledReport>, @Query('userId') userId: string): Promise<ScheduledReport> {
     return this.reportsService.scheduleReport(scheduleDto, userId);
   }
 
@@ -96,7 +104,7 @@ export class ReportsController {
   @ApiOperation({ summary: 'Get scheduled reports for user' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getScheduledReports(@Param('userId') userId: string): Promise<any[]> {
+  async getScheduledReports(@Param('userId') userId: string): Promise<ReportRecord[]> {
     return this.reportsService.getScheduledReports(userId);
   }
 
@@ -105,7 +113,7 @@ export class ReportsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async cancelScheduledReport(@Param('id') id: string, @Query('userId') userId: string): Promise<void> {
+  async cancelScheduledReport(@Param('id') id: string, @Query('userId') userId: string): Promise<ReportCancellationResult> {
     return this.reportsService.cancelScheduledReport(id, userId);
   }
 
@@ -114,7 +122,7 @@ export class ReportsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async getReportStatus(@Param('id') id: string): Promise<any> {
+  async getReportStatus(@Param('id') id: string): Promise<ReportStatusResponse> {
     return this.reportsService.getReportStatus(id);
   }
 
@@ -125,8 +133,8 @@ export class ReportsController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async exportReport(@Param('id') id: string, @Body() exportDto: { format: string }): Promise<any> {
-    return this.reportsService.exportReport(id, exportDto.format as any);
+  async exportReport(@Param('id') id: string, @Body() exportDto: { format: string }): Promise<ExportReportResult> {
+    return this.reportsService.exportReport(id, exportDto.format);
   }
 
   @Get('list')

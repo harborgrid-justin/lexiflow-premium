@@ -14,7 +14,7 @@ export interface BulkOperationResult<T> {
 }
 
 export interface BulkOperationError {
-  item: any;
+  item: unknown;
   error: string;
   index: number;
 }
@@ -75,7 +75,7 @@ export class BulkOperationsService {
 
         result.successCount += batch.length;
         this.logger.log(`Processed batch ${Math.floor(i / batchSize) + 1}`);
-      } catch (error: any) {
+      } catch (error: unknown) {
         if (options.continueOnError) {
           batch.forEach((item, idx) => {
             result.failed.push({
@@ -107,7 +107,7 @@ export class BulkOperationsService {
    */
   async bulkUpdate<T extends ObjectLiteral>(
     repository: Repository<T>,
-    items: Array<{ id: any; updates: Partial<T> }>,
+    items: Array<{ id: string | number; updates: Partial<T> }>,
     options: {
       batchSize?: number;
       useTransaction?: boolean;
@@ -139,7 +139,7 @@ export class BulkOperationsService {
         }
 
         result.successCount += batch.length;
-      } catch (error: any) {
+      } catch (error: unknown) {
         batch.forEach((item, idx) => {
           result.failed.push({
             item,
@@ -159,7 +159,7 @@ export class BulkOperationsService {
    */
   async bulkDelete<T extends ObjectLiteral>(
     repository: Repository<T>,
-    ids: any[],
+    ids: Array<string | number>,
     options: {
       batchSize?: number;
       useTransaction?: boolean;
@@ -191,7 +191,7 @@ export class BulkOperationsService {
         }
 
         deletedCount += batch.length;
-      } catch (error: any) {
+      } catch (error: unknown) {
         errors.push(`Batch ${i}-${i + batch.length}: ${error.message}`);
       }
     }
@@ -236,7 +236,7 @@ export class BulkOperationsService {
           .execute();
 
         result.successCount += batch.length;
-      } catch (error: any) {
+      } catch (error: unknown) {
         batch.forEach((item, idx) => {
           result.failed.push({
             item,

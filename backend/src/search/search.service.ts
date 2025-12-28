@@ -31,9 +31,9 @@ export class SearchService implements OnModuleDestroy {
   private readonly MAX_PAGE_SIZE = 100;
   private readonly MAX_CACHE_ENTRIES = 5000;
   private readonly CACHE_TTL_MS = 900000; // 15 minutes
-  
+
   // Add search result cache tracking with TTL
-  private searchCache: Map<string, { data: any; timestamp: number }> = new Map();
+  private searchCache: Map<string, { data: SearchResultDto; timestamp: number }> = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
@@ -209,7 +209,7 @@ export class SearchService implements OnModuleDestroy {
    * Search cases with full-text search
    */
   async searchCases(query: SearchQueryDto): Promise<{ results: SearchResultItem[]; total: number }> {
-    const { query: searchQuery } = query;
+    const { query: searchQuery, status } = query;
 
     // Mock implementation - replace with actual TypeORM query when entities are available
     // Example PostgreSQL full-text search query:

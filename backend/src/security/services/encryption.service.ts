@@ -138,7 +138,7 @@ export class EncryptionService {
    * Encrypt an object field by field
    * Returns object with encrypted values
    */
-  encryptObject<T extends Record<string, any>>(
+  encryptObject<T extends Record<string, unknown>>(
     obj: T,
     fieldsToEncrypt: (keyof T)[],
     password?: string
@@ -148,7 +148,7 @@ export class EncryptionService {
     for (const field of fieldsToEncrypt) {
       if (result[field] !== null && result[field] !== undefined) {
         const value = String(result[field]);
-        result[field] = this.encrypt(value, password) as any;
+        result[field] = this.encrypt(value, password) as T[keyof T];
       }
     }
 
@@ -159,7 +159,7 @@ export class EncryptionService {
    * Decrypt an object field by field
    * Returns object with decrypted values
    */
-  decryptObject<T extends Record<string, any>>(
+  decryptObject<T extends Record<string, unknown>>(
     obj: T,
     fieldsToDecrypt: (keyof T)[],
     password?: string
@@ -169,9 +169,8 @@ export class EncryptionService {
     for (const field of fieldsToDecrypt) {
       if (result[field] !== null && result[field] !== undefined) {
         try {
-          result[field] = this.decrypt(String(result[field]), password) as any;
+          result[field] = this.decrypt(String(result[field]), password) as T[keyof T];
         } catch (error) {
-          const err = error as Error;
           const err = error instanceof Error ? error : new Error(String(error));
           this.logger.error(`Failed to decrypt field ${String(field)}: ${err.message}`);
           // Keep encrypted value if decryption fails
@@ -216,9 +215,7 @@ export class EncryptionService {
         Buffer.from(actualHash, 'hex'),
         Buffer.from(expectedHash, 'hex')
       );
-    } catch (error) {
-      const err = error as Error;
-      this.logger.error(`Hash verification failed: ${err.message}`);
+    } catch {
       return false;
     }
   }
@@ -286,7 +283,7 @@ export class EncryptionService {
    * Encrypt sensitive fields in a database entity
    * This is a helper for automatic field-level encryption
    */
-  encryptSensitiveFields<T extends Record<string, any>>(
+  encryptSensitiveFields<T extends Record<string, unknown>>(
     entity: T,
     sensitiveFields: string[]
   ): T {
@@ -295,9 +292,8 @@ export class EncryptionService {
     for (const field of sensitiveFields) {
       if (encrypted[field] !== null && encrypted[field] !== undefined) {
         try {
-          (encrypted as any)[field] = this.encrypt(String(encrypted[field]));
+          encrypted[field] = this.encrypt(String(encrypted[field]));
         } catch (error) {
-          const err = error as Error;
           const err = error instanceof Error ? error : new Error(String(error));
           this.logger.error(`Failed to encrypt field ${field}: ${err.message}`);
         }
@@ -310,7 +306,7 @@ export class EncryptionService {
   /**
    * Decrypt sensitive fields in a database entity
    */
-  decryptSensitiveFields<T extends Record<string, any>>(
+  decryptSensitiveFields<T extends Record<string, unknown>>(
     entity: T,
     sensitiveFields: string[]
   ): T {
@@ -319,9 +315,8 @@ export class EncryptionService {
     for (const field of sensitiveFields) {
       if (decrypted[field] !== null && decrypted[field] !== undefined) {
         try {
-          (decrypted as any)[field] = this.decrypt(String(decrypted[field]));
+          decrypted[field] = this.decrypt(String(decrypted[field]));
         } catch (error) {
-          const err = error as Error;
           const err = error instanceof Error ? error : new Error(String(error));
           this.logger.error(`Failed to decrypt field ${field}: ${err.message}`);
           // Keep encrypted value if decryption fails
@@ -382,7 +377,7 @@ export class EncryptionService {
       // Re-encrypt with new key
       return this.encrypt(plaintext, newPassword);
     } catch (error) {
-      const err = error as Error;
+      const err = error instanceof Error ? error : new Error(String(error));
       this.logger.error(`Key rotation failed: ${err.message}`, err.stack);
       throw new Error('Failed to rotate encryption key');
     }

@@ -1,10 +1,184 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between } from 'typeorm';
+
+/**
+ * Case metrics interface
+ */
+interface CaseMetrics {
+  caseId: string;
+  status: string;
+  daysOpen: number;
+  totalHours: number;
+  totalBilled: number;
+  documentsCount: number;
+  motionsCount: number;
+  hearingsCount: number;
+  docketEntriesCount: number;
+  averageResponseTime: number;
+  costPerDay: number;
+  efficiency: number;
+  predictedOutcome: string;
+  riskScore: number;
+}
+
+/**
+ * Trend data point interface
+ */
+interface TrendDataPoint {
+  date: Date;
+  value: number;
+  change: number;
+}
+
+/**
+ * Trend summary interface
+ */
+interface TrendSummary {
+  average: number;
+  min: number;
+  max: number;
+  trend: string;
+  changePercent: number;
+}
+
+/**
+ * Trend analysis interface
+ */
+interface TrendAnalysis {
+  metric: string;
+  groupBy: string;
+  data: TrendDataPoint[];
+  summary: TrendSummary;
+}
+
+/**
+ * Cohort item interface
+ */
+interface CohortItem {
+  name: string;
+  size: number;
+  metricValue: number;
+  retention: number;
+  performance: number;
+}
+
+/**
+ * Cohort analysis interface
+ */
+interface CohortAnalysis {
+  cohortField: string;
+  metric: string;
+  cohorts: CohortItem[];
+}
+
+/**
+ * Aggregation result interface
+ */
+interface AggregationResult {
+  group: string;
+  count: number;
+  sum: number;
+  average: number;
+  min: number;
+  max: number;
+}
+
+/**
+ * Aggregated metrics interface
+ */
+interface AggregatedMetrics {
+  groupBy: string[];
+  metrics: string[];
+  results: AggregationResult[];
+}
+
+/**
+ * Percentile statistics interface
+ */
+interface PercentileStats {
+  p50: number;
+  p75: number;
+  p90: number;
+  p95: number;
+  p99: number;
+}
+
+/**
+ * Success rate by case type interface
+ */
+interface SuccessRateByType {
+  civil: number;
+  criminal: number;
+  family: number;
+}
+
+/**
+ * Success rate interface
+ */
+interface SuccessRate {
+  overall: number;
+  byType: SuccessRateByType;
+}
+
+/**
+ * Efficiency metrics interface
+ */
+interface EfficiencyMetrics {
+  hoursPerCase: number;
+  documentsPerCase: number;
+  motionsPerCase: number;
+}
+
+/**
+ * Performance benchmarks interface
+ */
+interface PerformanceBenchmarks {
+  caseResolutionTime: PercentileStats;
+  costPerCase: PercentileStats;
+  successRate: SuccessRate;
+  efficiency: EfficiencyMetrics;
+}
+
+/**
+ * Memory usage interface
+ */
+interface MemoryUsage {
+  heapUsedMB: string;
+  heapTotalMB: string;
+}
+
+/**
+ * Memory stats interface
+ */
+interface MemoryStats {
+  metricsCached: number;
+  trendsCached: number;
+  cohortsCached: number;
+  aggregationsCached: number;
+  memoryUsage: MemoryUsage;
+}
+
+/**
+ * Cached entry interface
+ */
+interface CachedEntry<T> {
+  data: T;
+  timestamp: number;
+}
+
+/**
+ * Filter options for aggregated metrics
+ */
+interface AggregationFilters {
+  startDate?: Date;
+  endDate?: Date;
+  status?: string;
+  practiceArea?: string;
+  [key: string]: unknown;
+}
 
 /**
  * Case Analytics Service with Advanced Memory Engineering
- * 
+ *
  * MEMORY OPTIMIZATIONS:
  * - LRU cache for case metrics: 3K cases, 20-min TTL
  * - Streaming aggregation for large datasets
@@ -14,7 +188,7 @@ import { Repository, Between } from 'typeorm';
  * - Cached cohort analysis results
  * - Batch processing for multi-case analytics
  * - Compressed historical data storage
- * 
+ *
  * PERFORMANCE CHARACTERISTICS:
  * - Metrics calculation: <200ms with cache
  * - Trend analysis: <500ms for 1-year window
@@ -35,10 +209,10 @@ export class CaseAnalyticsService implements OnModuleDestroy {
   private readonly MAX_TIME_SERIES_POINTS = 1000;
   
   // Caches
-  private metricsCache: Map<string, { data: any; timestamp: number }> = new Map();
-  private trendCache: Map<string, { data: any; timestamp: number }> = new Map();
-  private cohortCache: Map<string, { data: any; timestamp: number }> = new Map();
-  private aggregationCache: Map<string, { data: any; timestamp: number }> = new Map();
+  private metricsCache: Map<string, CachedEntry<CaseMetrics>> = new Map();
+  private trendCache: Map<string, CachedEntry<TrendAnalysis>> = new Map();
+  private cohortCache: Map<string, CachedEntry<CohortAnalysis>> = new Map();
+  private aggregationCache: Map<string, CachedEntry<AggregatedMetrics | PerformanceBenchmarks>> = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
@@ -116,7 +290,7 @@ export class CaseAnalyticsService implements OnModuleDestroy {
   /**
    * Get case metrics with caching
    */
-  async getCaseMetrics(caseId: string): Promise<any> {
+  async getCaseMetrics(caseId: string): Promise<CaseMetrics> {
     const cached = this.metricsCache.get(caseId);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       return cached.data;
@@ -156,7 +330,7 @@ export class CaseAnalyticsService implements OnModuleDestroy {
     endDate: Date;
     groupBy?: 'day' | 'week' | 'month';
     metric?: string;
-  }): Promise<any> {
+  }): Promise<TrendAnalysis> {
     const cacheKey = `trend_${options.startDate.toISOString()}_${options.endDate.toISOString()}_${options.groupBy}_${options.metric}`;
     
     const cached = this.trendCache.get(cacheKey);
@@ -199,7 +373,7 @@ export class CaseAnalyticsService implements OnModuleDestroy {
     metric: string;
     startDate?: Date;
     endDate?: Date;
-  }): Promise<any> {
+  }): Promise<CohortAnalysis> {
     const cacheKey = `cohort_${options.cohortField}_${options.metric}`;
     
     const cached = this.cohortCache.get(cacheKey);
@@ -235,13 +409,13 @@ export class CaseAnalyticsService implements OnModuleDestroy {
   async getAggregatedMetrics(options: {
     groupBy: string[];
     metrics: string[];
-    filters?: any;
-  }): Promise<any> {
+    filters?: AggregationFilters;
+  }): Promise<AggregatedMetrics> {
     const cacheKey = `agg_${options.groupBy.join('_')}_${options.metrics.join('_')}`;
-    
+
     const cached = this.aggregationCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
-      return cached.data;
+      return cached.data as AggregatedMetrics;
     }
     
     // Mock aggregated metrics
@@ -269,16 +443,16 @@ export class CaseAnalyticsService implements OnModuleDestroy {
   /**
    * Batch case metrics calculation
    */
-  async batchCaseMetrics(caseIds: string[]): Promise<Map<string, any>> {
-    const results = new Map<string, any>();
-    
+  async batchCaseMetrics(caseIds: string[]): Promise<Map<string, CaseMetrics>> {
+    const results = new Map<string, CaseMetrics>();
+
     for (let i = 0; i < caseIds.length; i += this.MAX_BATCH_SIZE) {
       const batch = caseIds.slice(i, i + this.MAX_BATCH_SIZE);
-      
+
       const batchResults = await Promise.all(
         batch.map(async caseId => {
           const metrics = await this.getCaseMetrics(caseId);
-          return [caseId, metrics] as [string, any];
+          return [caseId, metrics] as [string, CaseMetrics];
         })
       );
       
@@ -297,12 +471,12 @@ export class CaseAnalyticsService implements OnModuleDestroy {
   /**
    * Get performance benchmarks
    */
-  async getPerformanceBenchmarks(): Promise<any> {
+  async getPerformanceBenchmarks(): Promise<PerformanceBenchmarks> {
     const cacheKey = 'benchmarks_global';
-    
+
     const cached = this.aggregationCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < 300000) { // 5-min cache
-      return cached.data;
+      return cached.data as PerformanceBenchmarks;
     }
     
     // Mock benchmarks
@@ -347,7 +521,7 @@ export class CaseAnalyticsService implements OnModuleDestroy {
   /**
    * Get memory statistics
    */
-  getMemoryStats(): any {
+  getMemoryStats(): MemoryStats {
     return {
       metricsCached: this.metricsCache.size,
       trendsCached: this.trendCache.size,

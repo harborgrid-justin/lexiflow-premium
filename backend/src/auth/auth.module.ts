@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth.controller';
@@ -34,9 +34,9 @@ import { RefreshToken } from './entities/refresh-token.entity';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('app.jwt.secret'),
+        secret: configService.get<string>('app.jwt.secret') ?? 'default-jwt-secret',
         signOptions: {
-          expiresIn: configService.get<string>('app.jwt.expiresIn'),
+          expiresIn: configService.get<string>('app.jwt.expiresIn') ?? '15m',
         },
       }),
     }),

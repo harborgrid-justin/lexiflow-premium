@@ -1,7 +1,6 @@
 import {
   Injectable,
   Logger,
-  BadRequestException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
@@ -348,7 +347,6 @@ export class PasswordPolicyService {
 
       // Use k-anonymity: only send first 5 characters
       const hashPrefix = hash.substring(0, 5);
-      const hashSuffix = hash.substring(5);
 
       // Query HaveIBeenPwned API
       const apiUrl = `https://api.pwnedpasswords.com/range/${hashPrefix}`;
@@ -361,6 +359,7 @@ export class PasswordPolicyService {
 
       // TODO: Implement actual API call
       // Example implementation:
+      // const hashSuffix = hash.substring(5);
       // const response = await fetch(apiUrl);
       // const data = await response.text();
       // const lines = data.split('\n');

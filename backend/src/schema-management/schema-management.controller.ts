@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Delete, Body, Param, Head, HttpCode, HttpStatus, UseGuards, Req } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { SchemaManagementService } from './schema-management.service';
 import { CreateMigrationDto, CreateSnapshotDto, CreateTableDto } from './dto/create-migration.dto';
 import { Public } from '@common/decorators/public.decorator';
+import { RequestWithUser } from './interfaces';
 
 @ApiTags('Schema Management')
 @ApiBearerAuth('JWT-auth')
@@ -58,7 +59,7 @@ export class SchemaManagementController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createMigration(@Body() dto: CreateMigrationDto, @Req() req: any) {
+  async createMigration(@Body() dto: CreateMigrationDto, @Req() req: RequestWithUser) {
     const userId = req.user?.id || 'system';
     return await this.schemaService.createMigration(dto, userId);
   }
@@ -70,7 +71,7 @@ export class SchemaManagementController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async applyMigration(@Param('id') id: string, @Req() req: any) {
+  async applyMigration(@Param('id') id: string, @Req() req: RequestWithUser) {
     const userId = req.user?.id || 'system';
     return await this.schemaService.applyMigration(id, userId);
   }
@@ -111,7 +112,7 @@ export class SchemaManagementController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createSnapshot(@Body() dto: CreateSnapshotDto, @Req() req: any) {
+  async createSnapshot(@Body() dto: CreateSnapshotDto, @Req() req: RequestWithUser) {
     const userId = req.user?.id || 'system';
     return await this.schemaService.createSnapshot(dto, userId);
   }

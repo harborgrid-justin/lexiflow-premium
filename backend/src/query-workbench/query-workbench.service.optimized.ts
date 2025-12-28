@@ -1,6 +1,19 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, QueryRunner } from 'typeorm';
+import {
+  QueryResultRow,
+  OptimizedQueryExecutionResult,
+  ResultCacheEntry,
+  QueryPlanCacheEntry,
+  ActiveQueryInfo,
+  QueryHistoryEntry,
+  ActiveQueryStatus,
+  BatchQueryInput,
+  BatchQueryResult,
+  MemoryStats,
+  QueryPlan,
+} from './interfaces/query-workbench.interfaces';
 
 /**
  * Query Workbench Service with Advanced Memory Engineering
@@ -35,10 +48,10 @@ export class QueryWorkbenchService implements OnModuleDestroy {
   private readonly MAX_BATCH_QUERIES = 10;
   
   // Caches
-  private resultCache: Map<string, { data: any[]; timestamp: number; rowCount: number }> = new Map();
-  private queryHistory: Array<{ query: string; timestamp: number; duration: number; rows: number }> = [];
-  private queryPlanCache: Map<string, { plan: any; timestamp: number }> = new Map();
-  private activeQueries: Map<string, { queryRunner: QueryRunner; startTime: number }> = new Map();
+  private resultCache: Map<string, ResultCacheEntry> = new Map();
+  private queryHistory: QueryHistoryEntry[] = [];
+  private queryPlanCache: Map<string, QueryPlanCacheEntry> = new Map();
+  private activeQueries: Map<string, ActiveQueryInfo> = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
@@ -58,7 +71,9 @@ export class QueryWorkbenchService implements OnModuleDestroy {
     // Cancel all active queries
     for (const [queryId, query] of this.activeQueries.entries()) {
       this.logger.log(`Cancelling active query ${queryId}...`);
-      query.queryRunner.release().catch(() => {});
+      query.queryRunner.release().catch((error) => {
+        this.logger.warn(`Failed to release query runner: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      });
     }
     
     const resultSize = this.resultCache.size;
@@ -121,11 +136,13 @@ export class QueryWorkbenchService implements OnModuleDestroy {
   
   private cancelTimedOutQueries(): void {
     const now = Date.now();
-    
+
     for (const [queryId, query] of this.activeQueries.entries()) {
       if (now - query.startTime > this.MAX_QUERY_TIMEOUT_MS) {
         this.logger.warn(`Cancelling timed-out query ${queryId}`);
-        query.queryRunner.release().catch(() => {});
+        query.queryRunner.release().catch((error) => {
+          this.logger.warn(`Failed to release timed-out query runner: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        });
         this.activeQueries.delete(queryId);
       }
     }
@@ -143,15 +160,10 @@ export class QueryWorkbenchService implements OnModuleDestroy {
   /**
    * Execute query with caching and streaming
    */
-  async executeQuery(sql: string, params?: any[]): Promise<{
-    data: any[];
-    rowCount: number;
-    duration: number;
-    cached: boolean;
-  }> {
+  async executeQuery(sql: string, params?: (string | number | boolean | null)[]): Promise<OptimizedQueryExecutionResult> {
     const startTime = Date.now();
     const cacheKey = this.generateCacheKey(sql, params);
-    
+
     // Check cache
     const cached = this.resultCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
@@ -163,18 +175,18 @@ export class QueryWorkbenchService implements OnModuleDestroy {
         cached: true,
       };
     }
-    
+
     // Execute query
     const queryId = `query_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const queryRunner = this.dataSource.createQueryRunner();
-    
+
     try {
       await queryRunner.connect();
       this.activeQueries.set(queryId, { queryRunner, startTime });
-      
+
       // Execute with timeout
       const result = await this.executeWithTimeout(queryRunner, sql, params);
-      
+
       // Cache if result set is reasonable size
       if (result.length <= this.MAX_RESULT_SET_SIZE / 10) {
         this.resultCache.set(cacheKey, {
@@ -183,9 +195,9 @@ export class QueryWorkbenchService implements OnModuleDestroy {
           rowCount: result.length,
         });
       }
-      
+
       const duration = Date.now() - startTime;
-      
+
       // Add to history
       this.queryHistory.push({
         query: sql.substring(0, 200),
@@ -193,7 +205,7 @@ export class QueryWorkbenchService implements OnModuleDestroy {
         duration,
         rows: result.length,
       });
-      
+
       return {
         data: result,
         rowCount: result.length,
@@ -213,17 +225,17 @@ export class QueryWorkbenchService implements OnModuleDestroy {
   private async executeWithTimeout(
     queryRunner: QueryRunner,
     sql: string,
-    params?: any[]
-  ): Promise<any[]> {
+    params?: (string | number | boolean | null)[]
+  ): Promise<QueryResultRow[]> {
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('Query execution timeout'));
       }, this.MAX_QUERY_TIMEOUT_MS);
-      
+
       queryRunner.query(sql, params)
         .then(result => {
           clearTimeout(timeout);
-          resolve(result);
+          resolve(result as QueryResultRow[]);
         })
         .catch(error => {
           clearTimeout(timeout);
@@ -237,32 +249,32 @@ export class QueryWorkbenchService implements OnModuleDestroy {
    */
   async *streamQuery(
     sql: string,
-    params?: any[],
+    params?: (string | number | boolean | null)[],
     batchSize: number = 1000
-  ): AsyncGenerator<any[], void, unknown> {
+  ): AsyncGenerator<QueryResultRow[], void, unknown> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
-    
+
     try {
       // Get total count
       const countSql = `SELECT COUNT(*) as total FROM (${sql}) as subquery`;
-      const countResult = await queryRunner.query(countSql, params);
-      const total = parseInt(countResult[0]?.total || '0');
-      
+      const countResult = await queryRunner.query(countSql, params) as QueryResultRow[];
+      const total = parseInt(String(countResult[0]?.total || '0'));
+
       // Stream in batches
       let offset = 0;
       while (offset < total) {
         const paginatedSql = `${sql} LIMIT ${batchSize} OFFSET ${offset}`;
-        const batch = await queryRunner.query(paginatedSql, params);
-        
+        const batch = await queryRunner.query(paginatedSql, params) as QueryResultRow[];
+
         if (batch.length === 0) {
           break;
         }
-        
+
         yield batch;
-        
+
         offset += batchSize;
-        
+
         // Periodic GC
         if (global.gc && offset % 10000 === 0) {
           global.gc();
@@ -276,13 +288,13 @@ export class QueryWorkbenchService implements OnModuleDestroy {
   /**
    * Execute batch queries with resource limits
    */
-  async executeBatch(queries: Array<{ sql: string; params?: any[] }>): Promise<any[]> {
+  async executeBatch(queries: BatchQueryInput[]): Promise<BatchQueryResult[]> {
     if (queries.length > this.MAX_BATCH_QUERIES) {
       throw new Error(`Batch size ${queries.length} exceeds maximum ${this.MAX_BATCH_QUERIES}`);
     }
-    
-    const results = [];
-    
+
+    const results: BatchQueryResult[] = [];
+
     for (const query of queries) {
       try {
         const result = await this.executeQuery(query.sql, query.params);
@@ -294,32 +306,33 @@ export class QueryWorkbenchService implements OnModuleDestroy {
         });
       }
     }
-    
+
     return results;
   }
   
   /**
    * Get query plan with caching
    */
-  async getQueryPlan(sql: string, params?: any[]): Promise<any> {
+  async getQueryPlan(sql: string, params?: (string | number | boolean | null)[]): Promise<QueryPlan> {
     const cacheKey = this.generateCacheKey(sql, params);
-    
+
     const cached = this.queryPlanCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       return cached.plan;
     }
-    
+
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
-    
+
     try {
-      const plan = await queryRunner.query(`EXPLAIN (FORMAT JSON) ${sql}`, params);
-      
+      const planResult = await queryRunner.query(`EXPLAIN (FORMAT JSON) ${sql}`, params) as QueryPlan[];
+      const plan = planResult[0];
+
       this.queryPlanCache.set(cacheKey, {
         plan,
         timestamp: Date.now(),
       });
-      
+
       return plan;
     } finally {
       await queryRunner.release();
@@ -329,7 +342,7 @@ export class QueryWorkbenchService implements OnModuleDestroy {
   /**
    * Get query history
    */
-  getQueryHistory(limit: number = 50): any[] {
+  getQueryHistory(limit: number = 50): QueryHistoryEntry[] {
     return this.queryHistory
       .slice(-Math.min(limit, this.MAX_HISTORY_SIZE))
       .reverse();
@@ -338,7 +351,7 @@ export class QueryWorkbenchService implements OnModuleDestroy {
   /**
    * Get active queries
    */
-  getActiveQueries(): any[] {
+  getActiveQueries(): ActiveQueryStatus[] {
     return Array.from(this.activeQueries.entries()).map(([id, query]) => ({
       id,
       startTime: query.startTime,
@@ -368,7 +381,7 @@ export class QueryWorkbenchService implements OnModuleDestroy {
     this.logger.log('All caches cleared');
   }
   
-  private generateCacheKey(sql: string, params?: any[]): string {
+  private generateCacheKey(sql: string, params?: (string | number | boolean | null)[]): string {
     const paramStr = params ? JSON.stringify(params) : '';
     return `${sql}_${paramStr}`;
   }
@@ -376,7 +389,7 @@ export class QueryWorkbenchService implements OnModuleDestroy {
   /**
    * Get memory statistics
    */
-  getMemoryStats(): any {
+  getMemoryStats(): MemoryStats {
     return {
       resultsCached: this.resultCache.size,
       historyEntries: this.queryHistory.length,

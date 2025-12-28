@@ -1,7 +1,68 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+
+export interface MessengerMessage {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  content: string;
+  timestamp: Date;
+  read: boolean;
+}
+
+export interface ConversationData {
+  id: string;
+  participants: string[];
+  lastMessage: string;
+  lastMessageAt: Date;
+  unreadCount: number;
+}
+
+export interface CachedConversation {
+  data: ConversationData;
+  timestamp: number;
+}
+
+export interface MessageBufferItem {
+  message: MessengerMessage;
+  timestamp: number;
+}
+
+export interface QueuedMessage {
+  message: MessengerMessage;
+  priority: number;
+  timestamp: number;
+}
+
+export interface UnreadCountCache {
+  count: number;
+  timestamp: number;
+}
+
+export interface SendMessageData {
+  conversationId: string;
+  senderId: string;
+  content: string;
+  priority?: number;
+}
+
+export interface GetMessagesOptions {
+  limit?: number;
+  before?: Date;
+}
+
+export interface MemoryStats {
+  conversationsCached: number;
+  totalMessagesBuffered: number;
+  queuedMessages: number;
+  activeSubscribers: number;
+  memoryUsage: {
+    heapUsedMB: string;
+    heapTotalMB: string;
+  };
+}
+
+export type MessageCallback = (message: MessengerMessage) => void;
 
 /**
  * Messenger Service with Advanced Memory Engineering
@@ -37,11 +98,11 @@ export class MessengerService implements OnModuleDestroy {
   private readonly MAX_QUEUE_SIZE = 50000;
   
   // Caches and buffers
-  private conversationCache: Map<string, { data: any; timestamp: number }> = new Map();
-  private messageBuffer: Map<string, Array<{ message: any; timestamp: number }>> = new Map();
-  private unreadCountCache: Map<string, { count: number; timestamp: number }> = new Map();
-  private messageQueue: Array<{ message: any; priority: number; timestamp: number }> = [];
-  private deliverySubscribers: Map<string, Set<(message: any) => void>> = new Map();
+  private conversationCache: Map<string, CachedConversation> = new Map();
+  private messageBuffer: Map<string, MessageBufferItem[]> = new Map();
+  private unreadCountCache: Map<string, UnreadCountCache> = new Map();
+  private messageQueue: QueuedMessage[] = [];
+  private deliverySubscribers: Map<string, Set<MessageCallback>> = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
   private processingQueue = false;
 
@@ -160,12 +221,7 @@ export class MessengerService implements OnModuleDestroy {
   /**
    * Send message with queuing and backpressure
    */
-  async sendMessage(data: {
-    conversationId: string;
-    senderId: string;
-    content: string;
-    priority?: number;
-  }): Promise<any> {
+  async sendMessage(data: SendMessageData): Promise<MessengerMessage> {
     const message = {
       id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       conversationId: data.conversationId,
@@ -254,7 +310,7 @@ export class MessengerService implements OnModuleDestroy {
   /**
    * Deliver message to subscribers
    */
-  private async deliverMessage(message: any): Promise<void> {
+  private async deliverMessage(message: MessengerMessage): Promise<void> {
     const subscribers = this.deliverySubscribers.get(message.conversationId) || new Set();
     
     for (const callback of subscribers) {
@@ -269,7 +325,7 @@ export class MessengerService implements OnModuleDestroy {
   /**
    * Get conversation with caching
    */
-  async getConversation(conversationId: string): Promise<any> {
+  async getConversation(conversationId: string): Promise<ConversationData> {
     const cached = this.conversationCache.get(conversationId);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       return cached.data;
@@ -297,17 +353,18 @@ export class MessengerService implements OnModuleDestroy {
    */
   async getMessages(
     conversationId: string,
-    options?: { limit?: number; before?: Date }
-  ): Promise<any[]> {
+    options?: GetMessagesOptions
+  ): Promise<MessengerMessage[]> {
     const limit = Math.min(options?.limit || 50, 500);
     const buffer = this.messageBuffer.get(conversationId) || [];
-    
+
     let messages = buffer.map(item => item.message);
-    
+
     if (options?.before) {
-      messages = messages.filter(m => new Date(m.timestamp) < options.before!);
+      const beforeDate = options.before;
+      messages = messages.filter(m => new Date(m.timestamp) < beforeDate);
     }
-    
+
     return messages.slice(-limit);
   }
   
@@ -335,7 +392,7 @@ export class MessengerService implements OnModuleDestroy {
   /**
    * Subscribe to conversation messages
    */
-  subscribe(conversationId: string, callback: (message: any) => void): () => void {
+  subscribe(conversationId: string, callback: MessageCallback): () => void {
     const subscribers = this.deliverySubscribers.get(conversationId) || new Set();
     subscribers.add(callback);
     this.deliverySubscribers.set(conversationId, subscribers);
@@ -360,7 +417,7 @@ export class MessengerService implements OnModuleDestroy {
   /**
    * Get memory statistics
    */
-  getMemoryStats(): any {
+  getMemoryStats(): MemoryStats {
     const totalMessages = Array.from(this.messageBuffer.values())
       .reduce((sum, buffer) => sum + buffer.length, 0);
     

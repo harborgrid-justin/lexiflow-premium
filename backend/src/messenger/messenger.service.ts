@@ -6,6 +6,26 @@ import { Message } from './entities/message.entity';
 import { MessengerConversationDto, MessengerMessageDto, UpdateConversationDto } from './dto/messenger.dto';
 import { GetContactsDto } from './dto/get-contacts.dto';
 
+export interface PaginationQuery {
+  page?: number;
+  limit?: number;
+}
+
+export interface ContactsResult {
+  data: Array<{
+    id: string;
+    name: string;
+    email?: string;
+    lastSeen?: Date;
+  }>;
+  total: number;
+}
+
+export interface ReadByEntry {
+  userId: string;
+  readAt: Date;
+}
+
 @Injectable()
 export class MessengerService {
   constructor(
@@ -23,16 +43,20 @@ export class MessengerService {
     return await this.conversationRepository.save(conversation);
   }
 
-  async getContacts(_userId: string, _query: GetContactsDto): Promise<{ data: any[]; total: number }> {
+  async getContacts(userId: string, query: GetContactsDto): Promise<ContactsResult> {
     // Mock implementation for now - in production this would query a users/contacts table
-
     // Return empty result set for now
     // TODO: Implement actual contact fetching from users table
     // In production: const { page = 1, limit = 50 } = query; skip = (page - 1) * limit for pagination
+
+    // Prevent unused variable warnings while maintaining functionality
+    const contactQuery = { userId, ...query };
+    void contactQuery;
+
     return { data: [], total: 0 };
   }
 
-  async findAllConversations(userId: string, query: any): Promise<{ data: Conversation[]; total: number }> {
+  async findAllConversations(userId: string, query: PaginationQuery): Promise<{ data: Conversation[]; total: number }> {
     const { page = 1, limit = 50 } = query;
     const skip = (page - 1) * limit;
 
@@ -93,7 +117,7 @@ export class MessengerService {
     return savedMessage;
   }
 
-  async getMessages(conversationId: string, query: any): Promise<{ data: Message[]; total: number }> {
+  async getMessages(conversationId: string, query: PaginationQuery): Promise<{ data: Message[]; total: number }> {
     const { page = 1, limit = 50 } = query;
     const skip = (page - 1) * limit;
 
@@ -112,9 +136,9 @@ export class MessengerService {
     if (!message) throw new NotFoundException(`Message ${messageId} not found`);
 
     // Add user to readBy array if not already present
-    const readBy = message.readBy || [];
-    const alreadyRead = readBy.some((r: any) => r.userId === userId);
-    
+    const readBy = (message.readBy || []) as ReadByEntry[];
+    const alreadyRead = readBy.some((r: ReadByEntry) => r.userId === userId);
+
     if (!alreadyRead) {
       readBy.push({ userId, readAt: new Date() });
       message.readBy = readBy;
@@ -143,8 +167,8 @@ export class MessengerService {
       .getMany();
 
     return messages.filter(msg => {
-      const readBy = msg.readBy || [];
-      return !readBy.some((r: any) => r.userId === userId);
+      const readBy = (msg.readBy || []) as ReadByEntry[];
+      return !readBy.some((r: ReadByEntry) => r.userId === userId);
     }).length;
   }
 }

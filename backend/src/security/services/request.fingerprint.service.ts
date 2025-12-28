@@ -163,7 +163,8 @@ export class RequestFingerprintService implements OnModuleDestroy {
       // Compare fingerprints using timing-safe comparison
       return this.secureCompare(current.fingerprint, storedFingerprint);
     } catch (error) {
-      this.logger.error(`Fingerprint verification failed: ${error.message}`, error.stack);
+      const err = error instanceof Error ? error : new Error(String(error));
+      this.logger.error(`Fingerprint verification failed: ${err.message}`, err.stack);
       return false;
     }
   }
@@ -320,7 +321,14 @@ export class RequestFingerprintService implements OnModuleDestroy {
   /**
    * Get fingerprint metadata for logging/auditing
    */
-  getFingerprintMetadata(req: Request): Record<string, any> {
+  getFingerprintMetadata(req: Request): {
+    ip: string;
+    userAgent: string;
+    platform: string | undefined;
+    deviceId: string;
+    acceptLanguage: string;
+    timestamp: string;
+  } {
     const components = this.extractComponents(req);
     const deviceId = this.generateDeviceId(req);
 

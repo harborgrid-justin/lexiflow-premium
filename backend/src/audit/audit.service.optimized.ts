@@ -1,7 +1,95 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+
+export interface AuditEntry {
+  id: string;
+  userId: string;
+  entityType: string;
+  entityId: string;
+  action: string;
+  changes?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
+  createdAt: Date;
+}
+
+export interface AuditQueryFilters {
+  userId?: string;
+  entityType?: string;
+  entityId?: string;
+  action?: string;
+  startDate?: Date;
+  endDate?: Date;
+}
+
+export interface AuditStats {
+  totalEntries: number;
+  byAction: Record<string, number>;
+  byEntityType: Record<string, number>;
+}
+
+interface CachedData<T> {
+  data: T;
+  timestamp: number;
+}
+
+interface AuditBufferEntry {
+  entryId: string;
+  action: string;
+  entityType: string;
+  entityId: string;
+  userId: string;
+  metadata?: Record<string, unknown>;
+  timestamp: Date;
+  ipAddress: string;
+  userAgent: string;
+}
+
+interface AuditSummary {
+  period: {
+    start: Date;
+    end: Date;
+    days: number;
+  };
+  totals: {
+    entries: number;
+    users: number;
+    entities: number;
+  };
+  byAction: Record<string, number>;
+  byEntityType: Record<string, number>;
+  topUsers: Array<{
+    userId: string;
+    actions: number;
+  }>;
+}
+
+interface ComplianceCheck {
+  rule: string;
+  passed: boolean;
+  details: string;
+}
+
+interface ComplianceResult {
+  entityType: string;
+  entityId: string;
+  checkedAt: Date;
+  status: string;
+  checks: ComplianceCheck[];
+  score: number;
+}
+
+interface MemoryStats {
+  entriesCached: number;
+  summariesCached: number;
+  complianceCached: number;
+  bufferWriteIndex: number;
+  bufferUtilization: string;
+  memoryUsage: {
+    heapUsedMB: string;
+    heapTotalMB: string;
+    bufferMemoryMB: string;
+  };
+}
 
 /**
  * Audit Service with Advanced Memory Engineering
@@ -36,12 +124,12 @@ export class AuditService implements OnModuleDestroy {
   private readonly STREAMING_THRESHOLD = 10000;
   
   // Caches
-  private entryCache: Map<string, { data: any; timestamp: number }> = new Map();
-  private summaryCache: Map<string, { data: any; timestamp: number }> = new Map();
-  private complianceCache: Map<string, { data: any; timestamp: number }> = new Map();
-  
+  private entryCache: Map<string, CachedData<AuditBufferEntry>> = new Map();
+  private summaryCache: Map<string, CachedData<AuditSummary>> = new Map();
+  private complianceCache: Map<string, CachedData<ComplianceResult>> = new Map();
+
   // Circular buffer for real-time trail
-  private auditBuffer: Array<any> = [];
+  private auditBuffer: Array<AuditBufferEntry | undefined> = [];
   private bufferWriteIndex = 0;
   
   private cleanupInterval: NodeJS.Timeout | null = null;
@@ -80,7 +168,7 @@ export class AuditService implements OnModuleDestroy {
   }
   
   private initializeCircularBuffer(): void {
-    this.auditBuffer = new Array(this.CIRCULAR_BUFFER_SIZE);
+    this.auditBuffer = new Array<AuditBufferEntry | undefined>(this.CIRCULAR_BUFFER_SIZE);
     this.bufferWriteIndex = 0;
     this.logger.log(`Initialized circular buffer with ${this.CIRCULAR_BUFFER_SIZE} slots`);
   }
@@ -133,7 +221,7 @@ export class AuditService implements OnModuleDestroy {
     entityType: string;
     entityId: string;
     userId: string;
-    metadata?: any;
+    metadata?: Record<string, unknown>;
   }): Promise<string> {
     const entryId = `audit_${Date.now()}_${Math.random()}`;
     
@@ -164,7 +252,7 @@ export class AuditService implements OnModuleDestroy {
   /**
    * Get audit entry with caching
    */
-  async getEntry(entryId: string): Promise<any> {
+  async getEntry(entryId: string): Promise<AuditBufferEntry> {
     const cached = this.entryCache.get(entryId);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       return cached.data;
@@ -181,7 +269,7 @@ export class AuditService implements OnModuleDestroy {
     }
     
     // Mock database lookup
-    const entry = {
+    const entry: AuditBufferEntry = {
       entryId,
       action: 'READ',
       entityType: 'Case',
@@ -189,6 +277,7 @@ export class AuditService implements OnModuleDestroy {
       userId: 'user123',
       timestamp: new Date(),
       ipAddress: '192.168.1.100',
+      userAgent: 'Mozilla/5.0',
     };
     
     this.entryCache.set(entryId, {
@@ -209,7 +298,7 @@ export class AuditService implements OnModuleDestroy {
     entityType?: string;
     entityId?: string;
     action?: string;
-  }): AsyncGenerator<any> {
+  }): AsyncGenerator<AuditBufferEntry> {
     // Check if we should use circular buffer for recent queries
     const isRecentQuery = !options.startDate || 
       (Date.now() - options.startDate.getTime() < 3600000); // Last hour
@@ -233,7 +322,7 @@ export class AuditService implements OnModuleDestroy {
       for (let offset = 0; offset < totalRecords; offset += this.MAX_BATCH_SIZE) {
         const batchSize = Math.min(this.MAX_BATCH_SIZE, totalRecords - offset);
         
-        const batch = Array.from({ length: batchSize }, (_, i) => ({
+        const batch: AuditBufferEntry[] = Array.from({ length: batchSize }, (_, i) => ({
           entryId: `audit_${offset + i}`,
           action: ['CREATE', 'READ', 'UPDATE', 'DELETE'][Math.floor(Math.random() * 4)],
           entityType: ['Case', 'Document', 'User', 'Motion'][Math.floor(Math.random() * 4)],
@@ -241,6 +330,7 @@ export class AuditService implements OnModuleDestroy {
           userId: options.userId || `user_${Math.floor(Math.random() * 100)}`,
           timestamp: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
           ipAddress: `192.168.1.${Math.floor(Math.random() * 255)}`,
+          userAgent: 'Mozilla/5.0',
         }));
         
         yield* batch;
@@ -260,7 +350,7 @@ export class AuditService implements OnModuleDestroy {
     startDate: Date;
     endDate: Date;
     groupBy?: 'day' | 'week' | 'month';
-  }): Promise<any> {
+  }): Promise<AuditSummary> {
     const cacheKey = `summary_${options.startDate.toISOString()}_${options.endDate.toISOString()}_${options.groupBy || 'day'}`;
     
     const cached = this.summaryCache.get(cacheKey);
@@ -270,8 +360,8 @@ export class AuditService implements OnModuleDestroy {
     
     // Mock summary
     const days = Math.ceil((options.endDate.getTime() - options.startDate.getTime()) / (24 * 60 * 60 * 1000));
-    
-    const summary = {
+
+    const summary: AuditSummary = {
       period: {
         start: options.startDate,
         end: options.endDate,
@@ -311,7 +401,7 @@ export class AuditService implements OnModuleDestroy {
   /**
    * Check compliance with caching
    */
-  async checkCompliance(entityType: string, entityId: string): Promise<any> {
+  async checkCompliance(entityType: string, entityId: string): Promise<ComplianceResult> {
     const cacheKey = `compliance_${entityType}_${entityId}`;
     
     const cached = this.complianceCache.get(cacheKey);
@@ -320,7 +410,7 @@ export class AuditService implements OnModuleDestroy {
     }
     
     // Mock compliance check
-    const compliance = {
+    const compliance: ComplianceResult = {
       entityType,
       entityId,
       checkedAt: new Date(),
@@ -356,8 +446,8 @@ export class AuditService implements OnModuleDestroy {
   /**
    * Batch compliance checks
    */
-  async batchComplianceChecks(entities: Array<{ type: string; id: string }>): Promise<Map<string, any>> {
-    const results = new Map<string, any>();
+  async batchComplianceChecks(entities: Array<{ type: string; id: string }>): Promise<Map<string, ComplianceResult>> {
+    const results = new Map<string, ComplianceResult>();
     
     for (let i = 0; i < entities.length; i += this.MAX_BATCH_SIZE) {
       const batch = entities.slice(i, i + this.MAX_BATCH_SIZE);
@@ -365,7 +455,7 @@ export class AuditService implements OnModuleDestroy {
       const batchResults = await Promise.all(
         batch.map(async entity => {
           const result = await this.checkCompliance(entity.type, entity.id);
-          return [`${entity.type}_${entity.id}`, result] as [string, any];
+          return [`${entity.type}_${entity.id}`, result] as [string, ComplianceResult];
         })
       );
       
@@ -384,13 +474,13 @@ export class AuditService implements OnModuleDestroy {
   /**
    * Get recent entries from circular buffer
    */
-  getRecentEntries(limit: number = 100): any[] {
+  getRecentEntries(limit: number = 100): AuditBufferEntry[] {
     const safeLimit = Math.min(limit, this.CIRCULAR_BUFFER_SIZE);
-    const entries: any[] = [];
-    
+    const entries: AuditBufferEntry[] = [];
+
     let index = this.bufferWriteIndex - 1;
     if (index < 0) index = this.CIRCULAR_BUFFER_SIZE - 1;
-    
+
     for (let i = 0; i < safeLimit; i++) {
       const entry = this.auditBuffer[index];
       if (entry) entries.push(entry);
@@ -405,7 +495,7 @@ export class AuditService implements OnModuleDestroy {
   /**
    * Get memory statistics
    */
-  getMemoryStats(): any {
+  getMemoryStats(): MemoryStats {
     const bufferMemoryMB = (this.auditBuffer.filter(e => e).length * 500) / 1024 / 1024; // ~500 bytes per entry
     
     return {

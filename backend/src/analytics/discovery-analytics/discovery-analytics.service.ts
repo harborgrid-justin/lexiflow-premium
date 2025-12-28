@@ -13,11 +13,9 @@ import {
 export class DiscoveryAnalyticsService {
   private readonly logger = new Logger(DiscoveryAnalyticsService.name);
 
-  constructor(
-    // @InjectRepository(DiscoveryRequest) private discoveryRepository: Repository<any>,
-    // @InjectRepository(LegalDocument) private documentRepository: Repository<any>,
-    // Inject repositories when entities are available
-  ) {}
+  // @InjectRepository(DiscoveryRequest) private discoveryRepository: Repository<any>,
+  // @InjectRepository(LegalDocument) private documentRepository: Repository<any>,
+  // Inject repositories when entities are available
 
   /**
    * Get discovery funnel analytics

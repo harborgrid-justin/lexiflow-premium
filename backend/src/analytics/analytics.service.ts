@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleDestroy } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between } from 'typeorm';
 import { AnalyticsEvent } from './entities/analytics-event.entity';
 import { Dashboard } from './entities/dashboard.entity';
 import { CreateAnalyticsEventDto } from '@analytics/dto';
 import { CreateDashboardDto } from '@analytics/dto';
+import { UpdateDashboardDto } from './dto/update-dashboard.dto';
 import { AnalyticsGenerateReportDto, GenerateReportResponseDto, ReportFormat } from './dto/generate-report.dto';
 import {
   AnalyticsCaseMetricsDto,
@@ -13,20 +14,28 @@ import {
   TimeSeriesDataPointDto,
 } from './dto/metrics-response.dto';
 
-import { Injectable, NotFoundException, OnModuleDestroy } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Between } from 'typeorm';
-import { AnalyticsEvent } from './entities/analytics-event.entity';
-import { Dashboard } from './entities/dashboard.entity';
-import { CreateAnalyticsEventDto } from '@analytics/dto';
-import { CreateDashboardDto } from '@analytics/dto';
-import { AnalyticsGenerateReportDto, GenerateReportResponseDto, ReportFormat } from './dto/generate-report.dto';
-import {
-  AnalyticsCaseMetricsDto,
-  UserActivityMetricsDto,
-  AnalyticsBillingMetricsDto,
-  TimeSeriesDataPointDto,
-} from './dto/metrics-response.dto';
+/**
+ * Widget interface for dashboard widgets
+ */
+interface Widget {
+  id: string;
+  type: string;
+  title: string;
+  config: Record<string, unknown>;
+  position: { x: number; y: number };
+  size: { width: number; height: number };
+}
+
+
+/**
+ * Analytics cache data types
+ */
+type AnalyticsCacheData =
+  | AnalyticsCaseMetricsDto
+  | UserActivityMetricsDto
+  | AnalyticsBillingMetricsDto
+  | TimeSeriesDataPointDto[]
+  | Record<string, unknown>;
 
 /**
  * Analytics Service with Memory Optimizations
@@ -42,9 +51,9 @@ export class AnalyticsService implements OnModuleDestroy {
   private readonly MAX_CACHE_ENTRIES = 2000;
   private readonly CACHE_TTL_MS = 1800000; // 30 minutes
   private readonly MAX_EVENTS_PER_QUERY = 10000;
-  
+
   // LRU cache for expensive analytics computations
-  private analyticsCache: Map<string, { data: any; timestamp: number }> = new Map();
+  private analyticsCache: Map<string, { data: AnalyticsCacheData; timestamp: number }> = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(
@@ -124,11 +133,15 @@ export class AnalyticsService implements OnModuleDestroy {
       timestamp: new Date(),
     });
     const saved = await this.analyticsEventRepository.save(event);
-    const result = Array.isArray(saved) ? saved[0] : saved;
-    if (!result) {
-      throw new Error('Failed to save analytics event');
+    // TypeORM save can return array or single item, ensure we get a single item
+    if (Array.isArray(saved)) {
+      const result = saved[0];
+      if (!result) {
+        throw new Error('Failed to save analytics event');
+      }
+      return result;
     }
-    return result;
+    return saved;
   }
 
   async getEventsByType(eventType: string): Promise<AnalyticsEvent[]> {
@@ -337,18 +350,28 @@ export class AnalyticsService implements OnModuleDestroy {
       isPublic: data.isShared || false,
     });
     const saved = await this.dashboardRepository.save(dashboard);
-    const result = Array.isArray(saved) ? saved[0] : saved;
-    if (!result) {
-      throw new Error('Failed to save dashboard');
+    if (Array.isArray(saved)) {
+      const result = saved[0];
+      if (!result) {
+        throw new Error('Failed to save dashboard');
+      }
+      return result;
     }
-    return result;
+    return saved;
   }
 
-  async updateDashboard(id: string, data: UpdateDashboardData): Promise<Dashboard> {
+  async updateDashboard(id: string, data: UpdateDashboardDto): Promise<Dashboard> {
     const dashboard = await this.getDashboardById(id);
     Object.assign(dashboard, data);
     const saved = await this.dashboardRepository.save(dashboard);
-    return Array.isArray(saved) ? saved[0] : saved;
+    if (Array.isArray(saved)) {
+      const result = saved[0];
+      if (!result) {
+        throw new Error('Failed to update dashboard');
+      }
+      return result;
+    }
+    return saved;
   }
 
   async deleteDashboard(id: string): Promise<void> {
@@ -367,14 +390,28 @@ export class AnalyticsService implements OnModuleDestroy {
     const dashboard = await this.getDashboardById(dashboardId);
     dashboard.widgets.push(widget as unknown as Record<string, unknown>);
     const saved = await this.dashboardRepository.save(dashboard);
-    return Array.isArray(saved) ? saved[0] : saved;
+    if (Array.isArray(saved)) {
+      const result = saved[0];
+      if (!result) {
+        throw new Error('Failed to add widget to dashboard');
+      }
+      return result;
+    }
+    return saved;
   }
 
   async removeWidgetFromDashboard(dashboardId: string, widgetIndex: number): Promise<Dashboard> {
     const dashboard = await this.getDashboardById(dashboardId);
     dashboard.widgets.splice(widgetIndex, 1);
     const saved = await this.dashboardRepository.save(dashboard);
-    return Array.isArray(saved) ? saved[0] : saved;
+    if (Array.isArray(saved)) {
+      const result = saved[0];
+      if (!result) {
+        throw new Error('Failed to remove widget from dashboard');
+      }
+      return result;
+    }
+    return saved;
   }
 
   async generateReport(params: AnalyticsGenerateReportDto): Promise<GenerateReportResponseDto> {

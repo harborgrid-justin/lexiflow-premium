@@ -5,6 +5,15 @@ import { Matter } from './entities/matter.entity';
 import { CreateMatterDto } from './dto/create-matter.dto';
 import { UpdateMatterDto } from './dto/update-matter.dto';
 import { MatterResponseDto } from './dto/matter-response.dto';
+import {
+  MatterStatistics,
+  MatterKPIs,
+  PipelineStage,
+  CalendarEvent,
+  RevenueAnalytics,
+  RiskInsight,
+  FinancialOverview,
+} from './interfaces/analytics.interface';
 
 @Injectable()
 export class MattersService {
@@ -196,9 +205,9 @@ export class MattersService {
     return this.toResponseDto(matter);
   }
 
-  async getStatistics(userId?: string): Promise<any> {
+  async getStatistics(userId?: string): Promise<MatterStatistics> {
     const queryBuilder = this.mattersRepository.createQueryBuilder('matter');
-    
+
     if (userId) {
       queryBuilder.where('matter.userId = :userId', { userId });
     }
@@ -222,7 +231,9 @@ export class MattersService {
     };
   }
 
-  async getKPIs(_dateRange?: string): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getKPIs(dateRange?: string): Promise<MatterKPIs> {
+    // dateRange parameter reserved for future filtering implementation
     const matters = await this.mattersRepository.find();
     const activeMatters = matters.filter(m => m.status === 'ACTIVE');
     const intakeMatters = matters.filter(m => m.status === 'INTAKE');
@@ -263,9 +274,11 @@ export class MattersService {
     };
   }
 
-  async getPipeline(_dateRange?: string): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getPipeline(dateRange?: string): Promise<PipelineStage[]> {
+    // dateRange parameter reserved for future filtering implementation
     const matters = await this.mattersRepository.find();
-    
+
     // Define stages based on status
     // Assuming status maps to stages. Adjust as needed based on actual status enum.
     const stages = [
@@ -289,15 +302,19 @@ export class MattersService {
     });
   }
 
-  async getCalendarEvents(_startDate: string, _endDate?: string, _matterIds?: string): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getCalendarEvents(startDate: string, endDate?: string, matterIds?: string): Promise<CalendarEvent[]> {
+    // Parameters reserved for future implementation of calendar event filtering
     // Return empty array if no events found, or implement logic to fetch from tasks/deadlines
     // For now, returning empty array is better than mock data
     return [];
   }
 
-  async getRevenueAnalytics(_dateRange?: string): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getRevenueAnalytics(dateRange?: string): Promise<RevenueAnalytics> {
+    // dateRange parameter reserved for future filtering implementation
     const matters = await this.mattersRepository.find();
-    
+
     return {
       totalRevenue: matters.reduce((sum, m) => sum + (Number(m.estimatedValue) || 0), 0),
       byPracticeArea: {},
@@ -306,10 +323,10 @@ export class MattersService {
     };
   }
 
-  async getRiskInsights(matterIds?: string): Promise<any> {
+  async getRiskInsights(matterIds?: string): Promise<RiskInsight[]> {
     const matterIdArray = matterIds ? matterIds.split(',') : undefined;
-    let matters = [];
-    
+    let matters: Matter[] = [];
+
     if (matterIdArray) {
       matters = await this.mattersRepository.findByIds(matterIdArray);
     } else {
@@ -320,14 +337,16 @@ export class MattersService {
       matterId: matter.id,
       matterTitle: matter.title,
       riskScore: 0, // Placeholder
-      riskLevel: matter.priority === 'HIGH' ? 'high' : 'medium',
+      riskLevel: (matter.priority === 'HIGH' ? 'high' : 'medium') as 'low' | 'medium' | 'high',
       factors: [],
     }));
   }
 
-  async getFinancialOverview(_dateRange?: string): Promise<any> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getFinancialOverview(dateRange?: string): Promise<FinancialOverview> {
+    // dateRange parameter reserved for future filtering implementation
     const matters = await this.mattersRepository.find();
-    
+
     return {
       totalRevenue: matters.reduce((sum, m) => sum + (Number(m.estimatedValue) || 0), 0),
       billableHours: 0,

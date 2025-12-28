@@ -5,6 +5,15 @@ import { Repository, DataSource } from 'typeorm';
 import { Migration } from './entities/migration.entity';
 import { Snapshot } from './entities/snapshot.entity';
 import { CreateMigrationDto, CreateSnapshotDto, CreateTableDto } from './dto/create-migration.dto';
+import {
+  TableQueryResult,
+  TableInfo,
+  ColumnQueryResult,
+  PrimaryKeyInfo,
+  TableColumn,
+  AlterTableOperations,
+  SchemaSnapshotData,
+} from './interfaces';
 
 @Injectable()
 export class SchemaManagementService {
@@ -19,9 +28,9 @@ export class SchemaManagementService {
 
   // ==================== SCHEMA INSPECTION ====================
   
-  async getTables() {
+  async getTables(): Promise<TableInfo[]> {
     const query = `
-      SELECT 
+      SELECT
         table_name,
         (SELECT COUNT(*) FROM information_schema.columns WHERE table_name = t.table_name AND table_schema = 'public') as column_count
       FROM information_schema.tables t
@@ -29,12 +38,12 @@ export class SchemaManagementService {
       AND table_type = 'BASE TABLE'
       ORDER BY table_name;
     `;
-    
-    const tables = await this.dataSource.query(query);
-    
+
+    const tables = await this.dataSource.query<TableQueryResult[]>(query);
+
     // Get columns for each table
     const tablesWithColumns = await Promise.all(
-      tables.map(async (table: any) => {
+      tables.map(async (table: TableQueryResult): Promise<TableInfo> => {
         const columns = await this.getTableColumns(table.table_name);
         return {
           name: table.table_name,
@@ -43,18 +52,18 @@ export class SchemaManagementService {
         };
       })
     );
-    
+
     return tablesWithColumns;
   }
 
-  async getTableColumns(tableName: string) {
+  async getTableColumns(tableName: string): Promise<TableColumn[]> {
     // Validate table name to prevent SQL injection
     if (!this.isValidIdentifier(tableName)) {
       throw new BadRequestException('Invalid table name format');
     }
-    
+
     const query = `
-      SELECT 
+      SELECT
         column_name as name,
         data_type as type,
         is_nullable,
@@ -65,9 +74,9 @@ export class SchemaManagementService {
       AND table_name = $1
       ORDER BY ordinal_position;
     `;
-    
-    const columns = await this.dataSource.query(query, [tableName]);
-    
+
+    const columns = await this.dataSource.query<ColumnQueryResult[]>(query, [tableName]);
+
     // Get primary keys
     const pkQuery = `
       SELECT a.attname as column_name
@@ -75,32 +84,32 @@ export class SchemaManagementService {
       JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)
       WHERE i.indrelid = $1::regclass AND i.indisprimary;
     `;
-    
-    const pks = await this.dataSource.query(pkQuery, [tableName]);
-    const pkColumns = new Set(pks.map((pk: any) => pk.column_name));
 
-    return columns.map((col: any) => ({
+    const pks = await this.dataSource.query<PrimaryKeyInfo[]>(pkQuery, [tableName]);
+    const pkColumns = new Set(pks.map((pk: PrimaryKeyInfo) => pk.column_name));
+
+    return columns.map((col: ColumnQueryResult): TableColumn => ({
       ...col,
       pk: pkColumns.has(col.name),
       notNull: col.is_nullable === 'NO',
-      type: col.character_maximum_length 
-        ? `${col.type}(${col.character_maximum_length})` 
+      type: col.character_maximum_length
+        ? `${col.type}(${col.character_maximum_length})`
         : col.type,
     }));
   }
 
   // ==================== MIGRATIONS ====================
   
-  async createMigration(dto: CreateMigrationDto, userId: string) {
+  async createMigration(dto: CreateMigrationDto, userId: string): Promise<Migration> {
     const migration = this.migrationRepository.create({
       ...dto,
       appliedBy: userId,
     });
-    
+
     return await this.migrationRepository.save(migration);
   }
 
-  async getMigrations() {
+  async getMigrations(): Promise<Migration[]> {
     return await this.migrationRepository.find({
       order: { createdAt: 'DESC' },
     });
@@ -116,24 +125,24 @@ export class SchemaManagementService {
     return validPattern.test(name);
   }
   
-  async applyMigration(id: string, userId: string) {
+  async applyMigration(id: string, userId: string): Promise<Migration> {
     const migration = await this.migrationRepository.findOne({ where: { id } });
-    
+
     if (!migration) {
       throw new NotFoundException(`Migration ${id} not found`);
     }
-    
+
     if (migration.applied) {
       throw new BadRequestException('Migration already applied');
     }
-    
+
     try {
       await this.dataSource.query(migration.up);
-      
+
       migration.applied = true;
       migration.appliedAt = new Date();
       migration.appliedBy = userId;
-      
+
       return await this.migrationRepository.save(migration);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
@@ -141,23 +150,23 @@ export class SchemaManagementService {
     }
   }
 
-  async revertMigration(id: string) {
+  async revertMigration(id: string): Promise<Migration> {
     const migration = await this.migrationRepository.findOne({ where: { id } });
-    
+
     if (!migration) {
       throw new NotFoundException(`Migration ${id} not found`);
     }
-    
+
     if (!migration.applied) {
       throw new BadRequestException('Migration not applied');
     }
-    
+
     try {
       await this.dataSource.query(migration.down);
-      
+
       migration.applied = false;
-      migration.appliedAt = undefined as any;
-      
+      migration.appliedAt = null;
+
       return await this.migrationRepository.save(migration);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
@@ -167,48 +176,57 @@ export class SchemaManagementService {
 
   // ==================== SNAPSHOTS ====================
   
-  async createSnapshot(dto: CreateSnapshotDto, userId: string) {
+  async createSnapshot(dto: CreateSnapshotDto, userId: string): Promise<Snapshot> {
     const tables = await this.getTables();
-    const schemaData = {
-      tables: dto.tables && dto.tables.length > 0 ? tables.filter(t => dto.tables!.includes(t.name)) : tables,
+
+    // Filter tables based on provided table names or include all
+    let filteredTables = tables;
+    if (dto.tables && dto.tables.length > 0) {
+      const tableNames = dto.tables;
+      filteredTables = tables.filter(t => tableNames.includes(t.name));
+    }
+
+    const schemaData: SchemaSnapshotData = {
+      tables: filteredTables,
       timestamp: new Date().toISOString(),
     };
-    
+
     const snapshot = this.snapshotRepository.create({
-      ...dto,
-      schema: schemaData,
+      name: dto.name,
+      description: dto.description,
+      schema: schemaData as unknown as Record<string, unknown>,
       sizeBytes: JSON.stringify(schemaData).length,
       createdBy: userId,
     });
-    
+
     return await this.snapshotRepository.save(snapshot);
   }
 
-  async getSnapshots() {
+  async getSnapshots(): Promise<Snapshot[]> {
     return await this.snapshotRepository.find({
       order: { createdAt: 'DESC' },
       select: ['id', 'name', 'description', 'sizeBytes', 'createdAt', 'createdBy'],
     });
   }
 
-  async getSnapshot(id: string) {
+  async getSnapshot(id: string): Promise<Snapshot> {
     const snapshot = await this.snapshotRepository.findOne({ where: { id } });
-    
+
     if (!snapshot) {
       throw new NotFoundException(`Snapshot ${id} not found`);
     }
-    
+
     return snapshot;
   }
 
-  async deleteSnapshot(id: string) {
+  async deleteSnapshot(id: string): Promise<Snapshot> {
     const snapshot = await this.getSnapshot(id);
     return await this.snapshotRepository.remove(snapshot);
   }
 
   // ==================== TABLE OPERATIONS ====================
   
-  async createTable(dto: CreateTableDto) {
+  async createTable(dto: CreateTableDto): Promise<{ success: boolean; table: string }> {
     const columnDefs = dto.columns.map(col => {
       let def = `${col.name} ${col.type}`;
       if (col.pk) def += ' PRIMARY KEY';
@@ -217,11 +235,11 @@ export class SchemaManagementService {
       if (col.defaultValue) def += ` DEFAULT ${col.defaultValue}`;
       return def;
     }).join(', ');
-    
+
     const query = `CREATE TABLE IF NOT EXISTS ${dto.name} (${columnDefs})`;
-    
+
     await this.dataSource.query(query);
-    
+
     // Add foreign keys separately
     for (const col of dto.columns.filter(c => c.fk)) {
       if (col.fk) {
@@ -230,11 +248,11 @@ export class SchemaManagementService {
         await this.dataSource.query(fkQuery);
       }
     }
-    
+
     return { success: true, table: dto.name };
   }
 
-  async alterTable(tableName: string, alterations: any) {
+  async alterTable(tableName: string, alterations: AlterTableOperations): Promise<{ success: boolean; table: string; operations: number }> {
     // Validate table name to prevent SQL injection
     if (!this.isValidIdentifier(tableName)) {
       throw new BadRequestException('Invalid table name format');
@@ -299,12 +317,12 @@ export class SchemaManagementService {
     return { success: true, table: tableName, operations: operations.length };
   }
 
-  async dropTable(tableName: string) {
+  async dropTable(tableName: string): Promise<{ success: boolean; table: string }> {
     // Validate table name to prevent SQL injection
     if (!this.isValidIdentifier(tableName)) {
       throw new BadRequestException('Invalid table name format');
     }
-    
+
     // Use double quotes for identifier to prevent injection
     await this.dataSource.query(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
     return { success: true, table: tableName };

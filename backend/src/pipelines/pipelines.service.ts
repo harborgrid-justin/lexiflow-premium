@@ -4,6 +4,50 @@ import { Repository } from 'typeorm';
 import { ETLPipeline, PipelineStatus as EntityPipelineStatus } from '@etl-pipelines/entities/pipeline.entity';
 import { CreatePipelineDto, UpdatePipelineDto, PipelineStatus } from './dto/create-pipeline.dto';
 
+export interface PipelineConnectorConfig {
+  type: string;
+  config: Record<string, unknown>;
+}
+
+export interface PipelineTransformation extends Record<string, unknown> {
+  step?: string;
+  operation?: string;
+}
+
+export interface PipelineConfiguration {
+  source: PipelineConnectorConfig;
+  transformations: PipelineTransformation[];
+  destination: PipelineConnectorConfig;
+  schedule?: string;
+}
+
+export interface PipelineExecutionResult {
+  jobId: string;
+  status: string;
+}
+
+export interface PipelineQueryFilters {
+  type?: string;
+  status?: PipelineStatus;
+  page?: number;
+  limit?: number;
+}
+
+export interface PipelineListResponse {
+  data: ETLPipeline[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface PipelineStatsResponse {
+  total: number;
+  active: number;
+  failed: number;
+  paused: number;
+}
+
 @Injectable()
 export class PipelinesService {
   constructor(
@@ -12,10 +56,18 @@ export class PipelinesService {
   ) {}
 
   async create(createDto: CreatePipelineDto, userId?: string): Promise<ETLPipeline> {
+    // Map DTO status to entity status
+    const statusMap: Record<PipelineStatus, EntityPipelineStatus> = {
+      [PipelineStatus.ACTIVE]: EntityPipelineStatus.ACTIVE,
+      [PipelineStatus.PAUSED]: EntityPipelineStatus.PAUSED,
+      [PipelineStatus.FAILED]: EntityPipelineStatus.ERROR,
+      [PipelineStatus.DRAFT]: EntityPipelineStatus.DRAFT,
+    };
+
     const pipeline = this.pipelineRepository.create({
       name: createDto.name,
       description: createDto.description,
-      status: createDto.status as any, // Map from DTO enum to entity enum
+      status: createDto.status ? statusMap[createDto.status] : EntityPipelineStatus.DRAFT,
       config: {
         source: { type: createDto.sourceConnector, config: {} },
         transformations: [],
@@ -27,14 +79,9 @@ export class PipelinesService {
     return await this.pipelineRepository.save(pipeline);
   }
 
-  async findAll(filters?: {
-    type?: string;
-    status?: PipelineStatus;
-    page?: number;
-    limit?: number;
-  }) {
+  async findAll(filters?: PipelineQueryFilters): Promise<PipelineListResponse> {
     const { status, page = 1, limit = 50 } = filters || {};
-    
+
     const queryBuilder = this.pipelineRepository.createQueryBuilder('pipeline');
 
     // Note: type field doesn't exist in entity, removed filter
@@ -76,9 +123,9 @@ export class PipelinesService {
     await this.pipelineRepository.remove(pipeline);
   }
 
-  async execute(id: string): Promise<{ jobId: string; status: string }> {
+  async execute(id: string): Promise<PipelineExecutionResult> {
     const pipeline = await this.findOne(id);
-    
+
     // Update last run time
     pipeline.lastRunAt = new Date();
     pipeline.runsTotal += 1;
@@ -86,14 +133,14 @@ export class PipelinesService {
 
     // In production, this would trigger actual pipeline execution
     const jobId = `job-${Date.now()}`;
-    
+
     return {
       jobId,
       status: 'started',
     };
   }
 
-  async getStats() {
+  async getStats(): Promise<PipelineStatsResponse> {
     const total = await this.pipelineRepository.count();
     const active = await this.pipelineRepository.count({ where: { status: EntityPipelineStatus.ACTIVE } });
     const failed = await this.pipelineRepository.count({ where: { status: EntityPipelineStatus.ERROR } });

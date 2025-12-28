@@ -18,7 +18,7 @@ export class AiOpsController {
   @ApiResponse({ status: 200, description: 'Embeddings retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getEmbeddings(@Query() query: GetEmbeddingsQueryDto) {
+  async getEmbeddings(@Query() query: GetEmbeddingsQueryDto): Promise<unknown> {
     return await this.aiOpsService.getEmbeddings(query);
   }
 
@@ -30,7 +30,7 @@ export class AiOpsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async storeEmbedding(@Body() dto: StoreAiOpsEmbeddingDto) {
+  async storeEmbedding(@Body() dto: StoreAiOpsEmbeddingDto): Promise<unknown> {
     return await this.aiOpsService.storeEmbedding(dto);
   }
 
@@ -41,7 +41,7 @@ export class AiOpsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async searchSimilar(@Body() dto: SearchSimilarDto) {
+  async searchSimilar(@Body() dto: SearchSimilarDto): Promise<unknown> {
     return await this.aiOpsService.searchSimilar(dto.embedding, dto.limit);
   }
 
@@ -50,7 +50,7 @@ export class AiOpsController {
   @ApiResponse({ status: 200, description: 'Models retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getModels() {
+  async getModels(): Promise<unknown> {
     return await this.aiOpsService.getModels();
   }
 
@@ -62,7 +62,7 @@ export class AiOpsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async registerModel(@Body() dto: RegisterAiOpsModelDto) {
+  async registerModel(@Body() dto: RegisterAiOpsModelDto): Promise<unknown> {
     return await this.aiOpsService.registerModel(dto);
   }
 
@@ -73,7 +73,7 @@ export class AiOpsController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async updateModel(@Param('id') id: string, @Body() dto: UpdateAiOpsModelDto) {
+  async updateModel(@Param('id') id: string, @Body() dto: UpdateAiOpsModelDto): Promise<unknown> {
     return await this.aiOpsService.updateModel(id, dto);
   }
 
@@ -83,7 +83,7 @@ export class AiOpsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async deleteModel(@Param('id') id: string) {
+  async deleteModel(@Param('id') id: string): Promise<void> {
     await this.aiOpsService.deleteModel(id);
   }
 
@@ -91,7 +91,7 @@ export class AiOpsController {
   @ApiOperation({ summary: 'Get AI operations statistics' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getStats() {
+  async getStats(): Promise<unknown> {
     return await this.aiOpsService.getStats();
   }
 }

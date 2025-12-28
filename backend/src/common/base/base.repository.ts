@@ -1,4 +1,4 @@
-import { Repository, FindManyOptions, FindOneOptions, DeepPartial, ObjectLiteral } from 'typeorm';
+import { Repository, FindManyOptions, FindOneOptions, DeepPartial, ObjectLiteral, FindOptionsWhere } from 'typeorm';
 import { Logger } from '@nestjs/common';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
@@ -26,7 +26,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
   async findById(id: string | number, options?: FindOneOptions<T>): Promise<T | null> {
     this.logger.debug(`Finding entity by ID: ${id}`);
     return this.repository.findOne({
-      where: { id } as any,
+      where: { id } as FindOptionsWhere<T>,
       ...options,
     });
   }
@@ -101,7 +101,7 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
    */
   async exists(id: string | number): Promise<boolean> {
     this.logger.debug(`Checking if entity exists: ${id}`);
-    const count = await this.repository.count({ where: { id } as any });
+    const count = await this.repository.count({ where: { id } as FindOptionsWhere<T> });
     return count > 0;
   }
 

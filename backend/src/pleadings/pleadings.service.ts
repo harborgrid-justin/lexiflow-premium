@@ -119,7 +119,8 @@ export class PleadingsService {
     }
 
     this.logger.log(`Pleading updated: ${id}`);
-    return result.raw[0];
+    const rawResult = result.raw as Pleading[];
+    return rawResult[0];
   }
 
   /**
@@ -200,8 +201,18 @@ export class PleadingsService {
    * Find pleadings by type
    */
   async findByType(caseId: string, type: string): Promise<Pleading[]> {
+    const validTypes = Object.values(PleadingType) as string[];
+    const pleadingType = validTypes.includes(type)
+      ? (type as PleadingType)
+      : undefined;
+
+    const where: { caseId: string; type?: PleadingType } = { caseId };
+    if (pleadingType) {
+      where.type = pleadingType;
+    }
+
     return await this.pleadingRepository.find({
-      where: { caseId, type: type as any },
+      where,
       order: { createdAt: 'DESC' },
     });
   }

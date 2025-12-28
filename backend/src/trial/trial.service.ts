@@ -5,9 +5,33 @@ import { TrialEvent } from './entities/trial-event.entity';
 import { WitnessPrepSession } from './entities/witness-prep-session.entity';
 import { CreateTrialEventDto } from './dto/create-trial-event.dto';
 import { UpdateTrialEventDto } from './dto/update-trial-event.dto';
-import { CreateWitnessPrepDto } from './dto/create-witness-prep.dto';
+import { CreateWitnessPrepDto, WitnessPrepStatus } from './dto/create-witness-prep.dto';
 import { calculateOffset, calculateTotalPages } from '@common/utils/math.utils';
 import { validateDateRange, validatePagination} from '@common/utils/query-validation.util';
+
+interface TrialEventFilters {
+  caseId?: string;
+  type?: string;
+  startDate?: string;
+  endDate?: string;
+  page?: number;
+  limit?: number;
+}
+
+interface WitnessPrepFilters {
+  caseId?: string;
+  status?: WitnessPrepStatus;
+  page?: number;
+  limit?: number;
+}
+
+interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
 
 @Injectable()
 export class TrialService {
@@ -24,22 +48,15 @@ export class TrialService {
     return await this.trialEventRepository.save(event);
   }
 
-  async findAllEvents(filters: {
-    caseId?: string;
-    type?: string;
-    startDate?: string;
-    endDate?: string;
-    page?: number;
-    limit?: number;
-  }) {
+  async findAllEvents(filters: TrialEventFilters): Promise<PaginatedResponse<TrialEvent>> {
     const { caseId, type, startDate, endDate } = filters;
     const { page, limit } = validatePagination(filters.page, filters.limit);
-    
+
     const queryBuilder = this.trialEventRepository.createQueryBuilder('event');
 
     if (caseId) queryBuilder.andWhere('event.caseId = :caseId', { caseId });
     if (type) queryBuilder.andWhere('event.type = :type', { type });
-    
+
     const dateRange = validateDateRange(startDate, endDate);
     if (dateRange) {
       queryBuilder.andWhere('event.date BETWEEN :startDate AND :endDate', {
@@ -90,18 +107,13 @@ export class TrialService {
     return await this.witnessPrepRepository.save(session);
   }
 
-  async findAllWitnessPrep(filters: {
-    caseId?: string;
-    status?: string;
-    page?: number;
-    limit?: number;
-  }) {
+  async findAllWitnessPrep(filters: WitnessPrepFilters): Promise<PaginatedResponse<WitnessPrepSession>> {
     const { caseId, status } = filters;
     const { page, limit } = validatePagination(filters.page, filters.limit);
-    
+
     const where: FindOptionsWhere<WitnessPrepSession> = {};
     if (caseId) where.caseId = caseId;
-    if (status) where.status = status as any;
+    if (status) where.status = status;
 
     const [data, total] = await this.witnessPrepRepository.findAndCount({
       where,

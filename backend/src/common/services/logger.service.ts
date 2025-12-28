@@ -58,23 +58,23 @@ export class LoggerService {
     this.context = context;
   }
 
-  log(message: string, metadata?: any) {
+  log(message: string, metadata?: Record<string, unknown>) {
     this.logger.info(message, { context: this.context, ...metadata });
   }
 
-  error(message: string, trace?: string, metadata?: any) {
+  error(message: string, trace?: string, metadata?: Record<string, unknown>) {
     this.logger.error(message, { context: this.context, trace, ...metadata });
   }
 
-  warn(message: string, metadata?: any) {
+  warn(message: string, metadata?: Record<string, unknown>) {
     this.logger.warn(message, { context: this.context, ...metadata });
   }
 
-  debug(message: string, metadata?: any) {
+  debug(message: string, metadata?: Record<string, unknown>) {
     this.logger.debug(message, { context: this.context, ...metadata });
   }
 
-  verbose(message: string, metadata?: any) {
+  verbose(message: string, metadata?: Record<string, unknown>) {
     this.logger.verbose(message, { context: this.context, ...metadata });
   }
 }

@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiOperation , ApiResponse }from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
-import { PipelinesService } from './pipelines.service';
+import { PipelinesService, PipelineQueryFilters, PipelineListResponse, PipelineStatsResponse, PipelineExecutionResult } from './pipelines.service';
 import { CreatePipelineDto, UpdatePipelineDto } from './dto/create-pipeline.dto';
 import { Public } from '@common/decorators/public.decorator';
+import { ETLPipeline } from '@etl-pipelines/entities/pipeline.entity';
 
 @ApiTags('Pipelines')
 @ApiBearerAuth('JWT-auth')
@@ -28,7 +29,7 @@ export class PipelinesController {
   @ApiResponse({ status: 200, description: 'Pipelines retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(@Query() query: any) {
+  async findAll(@Query() query: PipelineQueryFilters): Promise<PipelineListResponse> {
     return await this.pipelinesService.findAll(query);
   }
 
@@ -36,7 +37,7 @@ export class PipelinesController {
   @ApiOperation({ summary: 'Get pipeline statistics' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async getStats() {
+  async getStats(): Promise<PipelineStatsResponse> {
     return await this.pipelinesService.getStats();
   }
 
@@ -45,7 +46,7 @@ export class PipelinesController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<ETLPipeline> {
     return await this.pipelinesService.findOne(id);
   }
 
@@ -56,7 +57,7 @@ export class PipelinesController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async create(@Body() createDto: CreatePipelineDto) {
+  async create(@Body() createDto: CreatePipelineDto): Promise<ETLPipeline> {
     return await this.pipelinesService.create(createDto);
   }
 
@@ -67,7 +68,7 @@ export class PipelinesController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async execute(@Param('id') id: string) {
+  async execute(@Param('id') id: string): Promise<PipelineExecutionResult> {
     return await this.pipelinesService.execute(id);
   }
 
@@ -77,7 +78,7 @@ export class PipelinesController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async update(@Param('id') id: string, @Body() updateDto: UpdatePipelineDto) {
+  async update(@Param('id') id: string, @Body() updateDto: UpdatePipelineDto): Promise<ETLPipeline> {
     return await this.pipelinesService.update(id, updateDto);
   }
 
@@ -87,7 +88,7 @@ export class PipelinesController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string): Promise<void> {
     await this.pipelinesService.remove(id);
   }
 }

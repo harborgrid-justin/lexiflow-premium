@@ -15,7 +15,7 @@ export interface CacheableOptions {
    * Cache key or key generator function
    * @example 'users:all' or (args) => `users:${args[0]}`
    */
-  key?: string | ((...args: any[]) => string);
+  key?: string | ((...args: unknown[]) => string);
 
   /**
    * Time to live in seconds
@@ -45,13 +45,13 @@ export interface CacheableOptions {
    * Condition to determine if result should be cached
    * @example (result) => result !== null
    */
-  condition?: (result: any) => boolean;
+  condition?: (result: unknown) => boolean;
 
   /**
    * Generate cache key from method arguments
    * @example (userId, role) => `user:${userId}:${role}`
    */
-  keyGenerator?: (...args: any[]) => string;
+  keyGenerator?: (...args: unknown[]) => string;
 }
 
 /**
@@ -62,7 +62,7 @@ export interface CacheEvictOptions {
    * Cache key(s) to evict
    * @example 'users:all' or ['users:all', 'users:count']
    */
-  key?: string | string[] | ((...args: any[]) => string | string[]);
+  key?: string | string[] | ((...args: unknown[]) => string | string[]);
 
   /**
    * Cache namespace
@@ -90,7 +90,7 @@ export interface CacheEvictOptions {
   /**
    * Condition to determine if cache should be evicted
    */
-  condition?: (result: any, ...args: any[]) => boolean;
+  condition?: (result: unknown, ...args: unknown[]) => boolean;
 }
 
 /**
@@ -100,7 +100,7 @@ export interface CachePutOptions {
   /**
    * Cache key
    */
-  key?: string | ((...args: any[]) => string);
+  key?: string | ((...args: unknown[]) => string);
 
   /**
    * Time to live in seconds
@@ -125,7 +125,7 @@ export interface CachePutOptions {
   /**
    * Condition to determine if result should be cached
    */
-  condition?: (result: any) => boolean;
+  condition?: (result: unknown) => boolean;
 }
 
 /**
@@ -160,14 +160,14 @@ export interface CachePutOptions {
  * async getPremiumUsers() { ... }
  */
 export function Cacheable(options: CacheableOptions = {}): MethodDecorator {
-  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+  return (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
 
     // Store metadata for interceptor
     SetMetadata(CACHEABLE_KEY, options)(target, propertyKey, descriptor);
 
     // Override method to handle caching logic
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (this: CacheableInstance, ...args: unknown[]) {
       const instance = this;
 
       // Check if cache strategy service is available
@@ -242,12 +242,12 @@ export function Cacheable(options: CacheableOptions = {}): MethodDecorator {
  * async deleteUser(userId: string) { ... }
  */
 export function CacheEvict(options: CacheEvictOptions = {}): MethodDecorator {
-  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+  return (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
 
     SetMetadata(CACHE_EVICT_KEY, options)(target, propertyKey, descriptor);
 
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (this: CacheableInstance, ...args: unknown[]) {
       const instance = this;
       const cacheStrategy = instance.cacheStrategy || instance.cacheStrategyService;
 
@@ -305,12 +305,12 @@ export function CacheEvict(options: CacheEvictOptions = {}): MethodDecorator {
  * async createUser(userData: CreateUserDto) { ... }
  */
 export function CachePut(options: CachePutOptions = {}): MethodDecorator {
-  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+  return (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     const originalMethod = descriptor.value;
 
     SetMetadata(CACHE_PUT_KEY, options)(target, propertyKey, descriptor);
 
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (this: CacheableInstance, ...args: unknown[]) {
       const instance = this;
       const cacheStrategy = instance.cacheStrategy || instance.cacheStrategyService;
 
@@ -342,7 +342,7 @@ export function CachePut(options: CachePutOptions = {}): MethodDecorator {
 
 function generateCacheKey(
   options: CacheableOptions | CachePutOptions,
-  args: any[],
+  args: unknown[],
   methodName: string,
 ): string {
   // Use keyGenerator if provided
@@ -363,10 +363,41 @@ function generateCacheKey(
   return `${methodName}${argsKey}`;
 }
 
+interface CacheStrategy {
+  get<T>(
+    key: string,
+    fetcher: () => Promise<T>,
+    config?: {
+      ttl?: number;
+      namespace?: string;
+      tier?: 'memory' | 'redis' | 'both';
+      tags?: string[];
+    },
+  ): Promise<T>;
+  set<T>(
+    key: string,
+    value: T,
+    config?: {
+      ttl?: number;
+      namespace?: string;
+      tier?: 'memory' | 'redis' | 'both';
+      tags?: string[];
+    },
+  ): Promise<void>;
+  delete(key: string, namespace?: string): Promise<void>;
+  clearNamespace(namespace: string): Promise<void>;
+  invalidateByTags(tags: string[]): Promise<number>;
+}
+
+interface CacheableInstance {
+  cacheStrategy?: CacheStrategy;
+  cacheStrategyService?: CacheStrategy;
+}
+
 async function evictCache(
-  cacheStrategy: any,
+  cacheStrategy: CacheStrategy,
   options: CacheEvictOptions,
-  args: any[],
+  args: unknown[],
 ): Promise<void> {
   // Evict all entries in namespace
   if (options.allEntries && options.namespace) {

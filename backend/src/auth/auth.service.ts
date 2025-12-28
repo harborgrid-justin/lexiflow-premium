@@ -484,13 +484,11 @@ export class AuthService {
     const refreshExpiresIn = parseInt(this.configService.get<string>('jwt.refreshExpiresIn') || '604800', 10);
 
     const [accessToken, refreshToken] = await Promise.all([
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      this.jwtService.signAsync(accessPayload as any, {
+      this.jwtService.signAsync(accessPayload as Record<string, unknown>, {
         secret: jwtSecret,
         expiresIn: accessExpiresIn,
       }),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      this.jwtService.signAsync(refreshPayload as any, {
+      this.jwtService.signAsync(refreshPayload as Record<string, unknown>, {
         secret: refreshSecret,
         expiresIn: refreshExpiresIn,
       }),

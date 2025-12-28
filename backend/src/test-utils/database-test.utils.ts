@@ -56,7 +56,7 @@ export class DatabaseTestUtils {
    */
   static async seedDatabase(
     dataSource: DataSource,
-    seedData: Record<string, any[]>,
+    seedData: Record<string, unknown[]>,
   ): Promise<void> {
     for (const [entityName, records] of Object.entries(seedData)) {
       const repository = dataSource.getRepository(entityName);
@@ -69,7 +69,7 @@ export class DatabaseTestUtils {
    */
   static async withTransaction<T>(
     dataSource: DataSource,
-    callback: (queryRunner: any) => Promise<T>,
+    callback: (queryRunner: import('typeorm').QueryRunner) => Promise<T>,
   ): Promise<T> {
     const queryRunner = dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -99,7 +99,7 @@ export class DatabaseTestUtils {
       try {
         await dataSource.query('SELECT 1');
         return;
-      } catch (error) {
+      } catch {
         if (i === maxRetries - 1) {
           throw new Error('Database connection timeout');
         }
@@ -112,7 +112,10 @@ export class DatabaseTestUtils {
 /**
  * Helper to create a test repository
  */
-export function createTestRepository<T extends ObjectLiteral>(dataSource: DataSource, entity: any) {
+export function createTestRepository<T extends ObjectLiteral>(
+  dataSource: DataSource,
+  entity: new () => T,
+) {
   return dataSource.getRepository<T>(entity);
 }
 
@@ -133,7 +136,7 @@ export async function countRecords(
 export async function findOneRecord<T>(
   dataSource: DataSource,
   entityName: string,
-  criteria: any,
+  criteria: Record<string, unknown>,
 ): Promise<T | null> {
   const repository = dataSource.getRepository(entityName);
   return repository.findOne({ where: criteria }) as Promise<T | null>;
@@ -145,7 +148,7 @@ export async function findOneRecord<T>(
 export async function findRecords<T>(
   dataSource: DataSource,
   entityName: string,
-  criteria?: any,
+  criteria?: Record<string, unknown>,
 ): Promise<T[]> {
   const repository = dataSource.getRepository(entityName);
   return (criteria ? repository.find({ where: criteria }) : repository.find()) as Promise<T[]>;

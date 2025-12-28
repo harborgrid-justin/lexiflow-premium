@@ -130,7 +130,7 @@ export const PermissionRules = (rules: {
   resourceType?: string;
   policy?: { name: string; config?: Record<string, unknown> };
 }): MethodDecorator => {
-  return (target: any, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
+  return (target: object, propertyKey: string | symbol, descriptor: PropertyDescriptor) => {
     if (rules.allOf && rules.allOf.length > 0) {
       RequireAllPermissions(...rules.allOf)(target, propertyKey, descriptor);
     }

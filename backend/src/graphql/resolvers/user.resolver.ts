@@ -19,22 +19,23 @@ export class UserResolver {
   @Query(() => [UserType], { name: 'users' })
   @UseGuards(GqlAuthGuard)
   async getUsers(@Args('filter', { nullable: true }) filter?: UserFilterInput): Promise<UserType[]> {
-    const users = await this.userService.findAll();
+    const result = await this.userService.findAll();
+    const users = result.data;
     // Apply filter if provided
     if (filter?.role && filter.role.length > 0) {
-      return users.filter(u => filter.role?.includes(u.role)) as any[];
+      return users.filter(u => filter.role?.includes(u.role)) as UserType[];
     }
     if (filter?.isActive !== undefined) {
-      return users.filter(u => u.isActive === filter.isActive) as any[];
+      return users.filter(u => u.isActive === filter.isActive) as UserType[];
     }
-    return users as any[];
+    return users as UserType[];
   }
 
   @Query(() => UserType, { name: 'user', nullable: true })
   @UseGuards(GqlAuthGuard)
   async getUser(@Args('id', { type: () => ID }) id: string): Promise<UserType | null> {
     const user = await this.userService.findById(id);
-    return user as any;
+    return user as UserType | null;
   }
 
   @Query(() => UserType, { name: 'me' })
@@ -44,20 +45,21 @@ export class UserResolver {
     if (!currentUser) {
       throw new Error('User not found');
     }
-    return currentUser as any;
+    return currentUser as UserType;
   }
 
   @Mutation(() => AuthPayload)
   @Public()
   async login(@Args('input') input: LoginInput): Promise<AuthPayload> {
-    const result = await this.authService.login(input as any);
+    const loginDto = { email: input.email, password: input.password };
+    const result = await this.authService.login(loginDto);
     if ('requiresMfa' in result) {
       throw new Error('MFA required - not yet supported in GraphQL API');
     }
     return {
       accessToken: result.accessToken,
       refreshToken: result.refreshToken,
-      user: result.user as any,
+      user: result.user as UserType,
       expiresIn: 3600, // Default 1 hour
     };
   }
@@ -65,11 +67,18 @@ export class UserResolver {
   @Mutation(() => AuthPayload)
   @Public()
   async register(@Args('input') input: RegisterInput): Promise<AuthPayload> {
-    const result = await this.authService.register(input as any);
+    const registerDto = {
+      email: input.email,
+      password: input.password,
+      firstName: input.firstName,
+      lastName: input.lastName,
+      role: input.role,
+    };
+    const result = await this.authService.register(registerDto);
     return {
       accessToken: result.accessToken,
       refreshToken: result.refreshToken,
-      user: result.user as any,
+      user: result.user as UserType,
       expiresIn: 3600, // Default 1 hour
     };
   }
@@ -79,11 +88,18 @@ export class UserResolver {
   async updateUser(
     @Args('id', { type: () => ID }) id: string,
     @Args('input') input: UpdateUserInput,
-    @CurrentUser() _user: AuthenticatedUser,
   ): Promise<UserType> {
     // Verify user has permission to update (simplified for now)
-    const updatedUser = await this.userService.update(id, input as any);
-    return updatedUser as any;
+    const updateDto = {
+      email: input.email,
+      firstName: input.firstName,
+      lastName: input.lastName,
+      role: input.role,
+      isActive: input.isActive,
+      mfaEnabled: input.mfaEnabled,
+    };
+    const updatedUser = await this.userService.update(id, updateDto);
+    return updatedUser as UserType;
   }
 
   @Mutation(() => Boolean)
@@ -108,7 +124,7 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   @UseGuards(GqlAuthGuard)
-  async disableMfa(@CurrentUser() _user: AuthenticatedUser): Promise<boolean> {
+  async disableMfa(): Promise<boolean> {
     // Note: This requires a verification code for security
     throw new Error('MFA disable requires verification code - use REST API endpoint');
   }

@@ -109,7 +109,7 @@ export const ApiPaginationQuery = () => {
 /**
  * Create operation decorator (POST)
  */
-export const ApiCreateOperation = (summary: string, type: any) => {
+export const ApiCreateOperation = (summary: string, type: Function) => {
   return applyDecorators(
     ApiOperation({ summary }),
     ApiBearerAuth('JWT-auth'),
@@ -142,7 +142,7 @@ export const ApiReadOperation = (summary: string, type: any, isPaginated = false
 /**
  * Update operation decorator (PUT/PATCH)
  */
-export const ApiUpdateOperation = (summary: string, type: any) => {
+export const ApiUpdateOperation = (summary: string, type: Function) => {
   return applyDecorators(
     ApiOperation({ summary }),
     ApiBearerAuth('JWT-auth'),
@@ -220,7 +220,7 @@ export const ApiFileUploadOperation = (summary: string, fieldName = 'file') => {
 /**
  * Search operation decorator
  */
-export const ApiSearchOperation = (summary: string, type: any) => {
+export const ApiSearchOperation = (summary: string, type: Function) => {
   return applyDecorators(
     ApiOperation({ summary }),
     ApiBearerAuth('JWT-auth'),
@@ -257,7 +257,7 @@ export const ApiUuidParam = (name: string, description: string) => {
 /**
  * Bulk operation decorator
  */
-export const ApiBulkOperation = (summary: string, type: any) => {
+export const ApiBulkOperation = (summary: string, type: Function) => {
   return applyDecorators(
     ApiOperation({ summary }),
     ApiBearerAuth('JWT-auth'),

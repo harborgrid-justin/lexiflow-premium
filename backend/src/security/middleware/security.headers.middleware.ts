@@ -1,6 +1,10 @@
-import { Injectable, NestMiddleware, Logger } from '@nestjs/common';
+import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { SecurityHeadersService } from '@security/services/security.headers.service';
+
+interface RequestWithCspNonce extends Request {
+  cspNonce?: string;
+}
 
 /**
  * Security Headers Middleware
@@ -15,7 +19,7 @@ export class SecurityHeadersMiddleware implements NestMiddleware {
     const nonce = this.securityHeadersService.generateNonce();
 
     // Store nonce in request for use in templates
-    (req as any).cspNonce = nonce;
+    (req as RequestWithCspNonce).cspNonce = nonce;
 
     // Determine which headers to apply based on route
     const path = req.path;

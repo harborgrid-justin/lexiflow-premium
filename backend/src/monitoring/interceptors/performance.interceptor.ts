@@ -7,9 +7,13 @@ import {
 import { Observable } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Request, Response } from 'express';
-import { StructuredLoggerService } from '@monitoring/services/structured.logger.service';
+import { StructuredLoggerService, HttpRequest, HttpResponse } from '@monitoring/services/structured.logger.service';
 import { MetricsCollectorService } from '@monitoring/services/metrics.collector.service';
 import { DistributedTracingService } from '@monitoring/services/distributed.tracing.service';
+
+interface RequestWithQuery extends Request {
+  dbQuery?: (...args: unknown[]) => unknown;
+}
 
 /**
  * Performance Interceptor
@@ -27,9 +31,9 @@ export class PerformanceInterceptor implements NestInterceptor {
     private readonly tracingService: DistributedTracingService,
   ) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const httpContext = context.switchToHttp();
-    const request = httpContext.getRequest<Request>();
+    const request = httpContext.getRequest<RequestWithQuery>();
     const response = httpContext.getResponse<Response>();
 
     const startTime = Date.now();
@@ -39,8 +43,22 @@ export class PerformanceInterceptor implements NestInterceptor {
     const method = request.method;
     const url = request.url;
     const path = request.route?.path || url;
-    const correlationId = (request as any).correlationId;
-    const userId = (request as any).user?.id;
+
+    interface RequestWithExtras extends Request {
+      correlationId?: string;
+      user?: {
+        id?: string;
+        email?: string;
+      };
+    }
+
+    const extendedRequest = request as RequestWithExtras;
+    const correlationId = extendedRequest.correlationId;
+    const userId = extendedRequest.user?.id;
+
+    const userAgent = Array.isArray(request.headers['user-agent'])
+      ? request.headers['user-agent'][0]
+      : request.headers['user-agent'];
 
     // Set logging context
     this.logger.setContext({
@@ -49,17 +67,30 @@ export class PerformanceInterceptor implements NestInterceptor {
       method,
       url,
       ip: request.ip,
-      userAgent: request.headers['user-agent'],
+      userAgent,
     });
 
+    // Create HttpRequest object for tracing
+    const httpRequest: HttpRequest = {
+      method: request.method,
+      url: request.url,
+      ip: request.ip,
+      connection: request.connection,
+      headers: request.headers as Record<string, string | string[] | undefined>,
+      correlationId: extendedRequest.correlationId,
+      user: extendedRequest.user,
+      route: request.route,
+    };
+
     // Start distributed tracing span
-    const span = this.tracingService.startHttpRequestSpan(request);
+    const span = this.tracingService.startHttpRequestSpan(httpRequest);
 
     // Track database queries (if available from request context)
     let dbQueryCount = 0;
-    const originalQuery = (request as any).dbQuery;
+    const requestWithQuery = request as RequestWithQuery;
+    const originalQuery = requestWithQuery.dbQuery;
     if (originalQuery) {
-      (request as any).dbQuery = (...args: any[]) => {
+      requestWithQuery.dbQuery = (...args: unknown[]) => {
         dbQueryCount++;
         return originalQuery(...args);
       };
@@ -70,6 +101,13 @@ export class PerformanceInterceptor implements NestInterceptor {
         const duration = Date.now() - startTime;
         const endMemory = process.memoryUsage();
         const memoryDelta = endMemory.heapUsed - startMemory.heapUsed;
+
+        // Create HttpResponse object
+        const httpResponse: HttpResponse = {
+          statusCode: response.statusCode,
+          statusMessage: response.statusMessage,
+          get: (name: string) => response.get(name),
+        };
 
         // Record metrics
         this.metricsCollector.recordRequest(method, path, response.statusCode, duration);
@@ -128,22 +166,22 @@ export class PerformanceInterceptor implements NestInterceptor {
         }
 
         // Log successful request
-        this.logger.logResponse(request, response, duration);
+        this.logger.logResponse(httpRequest, httpResponse, duration);
 
         // Add tracing attributes
         span.setAttributes({
           'request.duration_ms': duration,
           'request.memory_delta_bytes': memoryDelta,
           'request.db_query_count': dbQueryCount,
-          'http.response.body.size': response.get('content-length') || 0,
+          'http.response.body.size': Number(response.get('content-length')) || 0,
         });
 
         // End tracing span
-        this.tracingService.endHttpRequestSpan(span, response);
+        this.tracingService.endHttpRequestSpan(span, httpResponse);
 
         return data;
       }),
-      catchError((error) => {
+      catchError((error: Error & { status?: number; statusCode?: number }) => {
         const duration = Date.now() - startTime;
         const endMemory = process.memoryUsage();
         const memoryDelta = endMemory.heapUsed - startMemory.heapUsed;
@@ -162,14 +200,14 @@ export class PerformanceInterceptor implements NestInterceptor {
         // Log error
         this.logger.error(
           `Request failed: ${method} ${url}`,
-          error.stack,
+          error.stack || error.message,
           {
             method,
             url,
-            duration,
-            statusCode,
-            memoryDelta,
-            dbQueryCount,
+            duration: String(duration),
+            statusCode: String(statusCode),
+            memoryDelta: String(memoryDelta),
+            dbQueryCount: String(dbQueryCount),
             errorMessage: error.message,
             errorName: error.name,
             correlationId,
@@ -185,7 +223,8 @@ export class PerformanceInterceptor implements NestInterceptor {
         });
 
         // End tracing span with error
-        this.tracingService.endHttpRequestSpan(span, { statusCode }, error);
+        const errorResponse: HttpResponse = { statusCode };
+        this.tracingService.endHttpRequestSpan(span, errorResponse, error);
 
         throw error;
       }),

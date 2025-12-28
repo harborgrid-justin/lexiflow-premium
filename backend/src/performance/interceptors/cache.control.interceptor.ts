@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Request, Response } from 'express';
 import * as crypto from 'crypto';
-import * as MasterConfig from '@config/master.config';
+import MasterConfig from '@config/master.config';
 
 /**
  * Cache Control Configuration
@@ -80,7 +80,7 @@ export class CacheControlInterceptor implements NestInterceptor {
   private applyCacheHeaders(
     request: Request,
     response: Response,
-    data: any,
+    data: unknown,
   ): void {
     // Don't cache if already set or if error response
     if (response.getHeader('Cache-Control') || response.statusCode >= 400) {
@@ -192,7 +192,7 @@ export class CacheControlInterceptor implements NestInterceptor {
   /**
    * Generate ETag from response data
    */
-  private generateETag(data: any): string {
+  private generateETag(data: unknown): string {
     const hash = crypto.createHash('md5');
     const content = typeof data === 'string' ? data : JSON.stringify(data);
     hash.update(content);
@@ -307,7 +307,7 @@ export class CacheControlInterceptor implements NestInterceptor {
   /**
    * Extract Last-Modified date from data
    */
-  private getLastModified(data: any): Date | null {
+  private getLastModified(data: unknown): Date | null {
     if (!data) {
       return null;
     }

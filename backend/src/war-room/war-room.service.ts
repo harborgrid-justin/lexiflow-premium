@@ -6,6 +6,38 @@ import { CreateAdvisorDto, CreateExpertDto, UpdateStrategyDto } from './dto/war-
 import { validatePagination } from '@common/utils/query-validation.util';
 import { calculateOffset, calculateTotalPages } from '@common/utils/math.utils';
 
+/**
+ * Query filters for advisors
+ */
+interface AdvisorQueryFilters {
+  caseId?: string;
+  isActive?: string | boolean;
+  page?: number;
+  limit?: number;
+}
+
+/**
+ * Query filters for experts
+ */
+interface ExpertQueryFilters {
+  caseId?: string;
+  expertType?: string;
+  isActive?: string | boolean;
+  page?: number;
+  limit?: number;
+}
+
+/**
+ * War room data response interface
+ */
+interface WarRoomDataResponse {
+  caseId: string;
+  advisors: Advisor[];
+  experts: Expert[];
+  strategy: CaseStrategy;
+  lastUpdated: string;
+}
+
 @Injectable()
 export class WarRoomService {
   constructor(
@@ -23,11 +55,11 @@ export class WarRoomService {
     return await this.advisorRepository.save(advisor);
   }
 
-  async findAllAdvisors(query: any): Promise<{ data: Advisor[]; total: number; page: number; limit: number; totalPages: number }> {
+  async findAllAdvisors(query: AdvisorQueryFilters): Promise<{ data: Advisor[]; total: number; page: number; limit: number; totalPages: number }> {
     const { caseId, isActive } = query;
     const { page, limit } = validatePagination(query.page, query.limit);
 
-    const where: any = {};
+    const where: Partial<Advisor> = {};
     if (caseId) where.caseId = caseId;
     if (isActive !== undefined) where.isActive = isActive === 'true';
 
@@ -58,13 +90,13 @@ export class WarRoomService {
     return await this.expertRepository.save(expert);
   }
 
-  async findAllExperts(query: any): Promise<{ data: Expert[]; total: number; page: number; limit: number; totalPages: number }> {
+  async findAllExperts(query: ExpertQueryFilters): Promise<{ data: Expert[]; total: number; page: number; limit: number; totalPages: number }> {
     const { caseId, expertType, isActive } = query;
     const { page, limit } = validatePagination(query.page, query.limit);
 
-    const where: any = {};
+    const where: Partial<Expert> = {};
     if (caseId) where.caseId = caseId;
-    if (expertType) where.expertType = expertType;
+    if (expertType) where.expertType = expertType as Expert['expertType'];
     if (isActive !== undefined) where.isActive = isActive === 'true';
 
     const [data, total] = await this.expertRepository.findAndCount({
@@ -104,7 +136,7 @@ export class WarRoomService {
     return await this.strategyRepository.save(strategy);
   }
 
-  async getWarRoomData(caseId: string): Promise<any> {
+  async getWarRoomData(caseId: string): Promise<WarRoomDataResponse> {
     const [advisors, experts, strategy] = await Promise.all([
       this.advisorRepository.find({ where: { caseId, isActive: true } }),
       this.expertRepository.find({ where: { caseId, isActive: true } }),

@@ -1,13 +1,16 @@
 import { IoAdapter } from '@nestjs/platform-socket.io';
-import { ServerOptions } from 'socket.io';
+import { ServerOptions, Server } from 'socket.io';
 // Conditional import - install @socket.io/redis-adapter if needed for horizontal scaling
 // import { createAdapter } from '@socket.io/redis-adapter';
 import { createClient } from 'redis';
 import { INestApplicationContext, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
+type RedisClient = ReturnType<typeof createClient>;
+type AdapterConstructor = (nsp: unknown) => unknown;
+
 // Placeholder for redis adapter when package is not installed
-const createAdapter = (...args: any[]): any => {
+const createAdapter = (): AdapterConstructor => {
   throw new Error('@socket.io/redis-adapter not installed. Install with: npm install @socket.io/redis-adapter');
 };
 
@@ -33,10 +36,10 @@ const createAdapter = (...args: any[]): any => {
  * @extends IoAdapter
  */
 export class RedisIoAdapter extends IoAdapter {
-  private adapterConstructor: ReturnType<typeof createAdapter> | null = null;
+  private adapterConstructor: AdapterConstructor | null = null;
   private readonly logger = new Logger(RedisIoAdapter.name);
-  private pubClient?: ReturnType<typeof createClient>;
-  private subClient?: ReturnType<typeof createClient>;
+  private pubClient?: RedisClient;
+  private subClient?: RedisClient;
 
   constructor(
     private app: INestApplicationContext,
@@ -116,8 +119,8 @@ export class RedisIoAdapter extends IoAdapter {
   /**
    * Create Socket.IO server with Redis adapter
    */
-  createIOServer(port: number, options?: ServerOptions): any {
-    const server = super.createIOServer(port, options);
+  createIOServer(port: number, options?: ServerOptions): Server {
+    const server = super.createIOServer(port, options) as Server;
 
     if (this.adapterConstructor) {
       server.adapter(this.adapterConstructor);

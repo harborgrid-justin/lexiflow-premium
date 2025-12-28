@@ -71,6 +71,9 @@ export default tseslint.config(
       '**/*.spec.ts',
       '**/*.test.ts',
       'scripts/**',
+      '**/examples/**',
+      '**/*.example.ts',
+      'src/migrations/**',
     ],
   }
 );

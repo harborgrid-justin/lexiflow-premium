@@ -27,7 +27,7 @@ import { Motion } from '@/types';
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { MotionsApiService } from '@/api/motions-api';
+import { MotionsApiService } from '@/api/litigation';
 
 /**
  * Query keys for React Query integration

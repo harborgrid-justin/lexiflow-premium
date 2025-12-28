@@ -12,7 +12,7 @@ import { useModalState } from '@/hooks';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { ErrorState } from '@/components/molecules/ErrorState';
-import { WebhooksApiService } from '@/api/webhooks-api';
+import { WebhooksApiService } from '@/api/integrations';
 import type { SystemWebhookConfig } from '@/types/system';
 
 const webhooksApi = new WebhooksApiService();

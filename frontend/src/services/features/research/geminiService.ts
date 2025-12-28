@@ -279,8 +279,8 @@
 import { GoogleGenerativeAI, GenerateContentResult } from "@google/generative-ai";
 import { ParsedDocket } from '@/types';
 import type { SearchResult } from '@/types';
-import { Prompts } from '@/services/ai/prompts";
-import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema, ShepardizeSchema, StrategyGraphSchema, LinterResultSchema } from '@/services/ai/schemas";
+import { Prompts } from '@/services/ai/prompts';
+import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema, ShepardizeSchema, StrategyGraphSchema, LinterResultSchema } from '@/services/ai/schemas';
 import { safeParseJSON, withRetry } from '@/utils/apiUtils';
 import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, GroundingChunk, ShepardizeResult } from '@/types/ai';
 

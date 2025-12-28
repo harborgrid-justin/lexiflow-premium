@@ -13,7 +13,7 @@ import { Button } from '@/components/atoms/Button';
 import { TableData, TableColumn } from './schemaTypes';
 import { SchemaToolbar } from './SchemaToolbar';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { dataPlatformApi } from '@/api/data-platform-api';
+import { dataPlatformApi } from '@/api/data-platform';
 import { Loader2 } from 'lucide-react';
 import { Input, TextArea } from '@/components/atoms';
 

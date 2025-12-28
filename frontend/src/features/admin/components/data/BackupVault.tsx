@@ -10,7 +10,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { BackupMetrics } from './backup/BackupMetrics';
 import { SnapshotList } from './backup/SnapshotList';
 import { CreateSnapshotModal, RestoreSnapshotModal } from './backup/BackupModals';
-import { dataPlatformApi } from '@/api/data-platform-api';
+import { dataPlatformApi } from '@/api/data-platform';
 
 export const BackupVault: React.FC = () => {
   const { theme } = useTheme();

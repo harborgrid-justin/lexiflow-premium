@@ -42,7 +42,7 @@ import {
 
 // Services & Data
 import { DataService } from "@/services";
-import { useQuery } from '@/hooks/useQueryHooks";
+import { useQuery } from '@/hooks/useQueryHooks';
 import { STORES } from "@/services";
 import { queryKeys } from "@/utils/queryKeys";
 

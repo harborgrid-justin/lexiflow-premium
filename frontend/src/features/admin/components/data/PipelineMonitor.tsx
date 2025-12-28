@@ -8,7 +8,7 @@ import { Connector } from '@/types';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms/Button/Button';
 import { Tabs } from '@/components/molecules/Tabs/Tabs';
-import { dataPlatformApi, Pipeline } from '@/api/data-platform-api';
+import { dataPlatformApi, Pipeline } from '@/api/data-platform';
 
 import { PipelineDAG } from './pipeline/PipelineDAG';
 import { PipelineList } from './pipeline/PipelineList';

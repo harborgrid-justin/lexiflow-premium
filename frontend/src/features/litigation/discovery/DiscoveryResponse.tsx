@@ -30,7 +30,7 @@ import { useNotify } from "@/hooks";
 // Services & Utils
 import { GeminiService } from "@/services";
 import { cn } from "@/utils";
-import { validateDiscoveryRequestSafe } from '@/services/validation/discoverySchemas";
+import { validateDiscoveryRequestSafe } from '@/services/validation/discoverySchemas';
 
 // ============================================================================
 // TYPES & INTERFACES

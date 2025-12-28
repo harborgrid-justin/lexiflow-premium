@@ -16,7 +16,7 @@
  */
 
 import {queryClient, useMutation, useQuery} from './useQueryHooks';
-import { trustAccountsApi } from '@/api/trust-accounts-api';
+import { trustAccountsApi } from '@/api/billing/trust-accounts-api';
 import type {
     CreateTrustAccountDto,
     DepositDto,

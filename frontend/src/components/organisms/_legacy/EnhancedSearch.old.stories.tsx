@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { EnhancedSearch.old } from './EnhancedSearch.old';
+import { EnhancedSearch } from './EnhancedSearch.old';
 
-const meta: Meta<typeof EnhancedSearch.old> = {
-  title: 'Components/Organisms/_legacy/EnhancedSearch.old',
-  component: EnhancedSearch.old,
+const meta: Meta<typeof EnhancedSearch> = {
+  title: 'Components/Organisms/_legacy/EnhancedSearch',
+  component: EnhancedSearch,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',

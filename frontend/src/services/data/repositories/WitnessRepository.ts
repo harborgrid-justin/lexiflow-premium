@@ -20,7 +20,7 @@
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { WitnessesApiService, Witness } from '@/api/witnesses-api';
+import { WitnessesApiService, Witness } from '@/api/discovery';
 
 export const WITNESS_QUERY_KEYS = {
     all: () => ['witnesses'] as const,

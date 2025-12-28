@@ -11,7 +11,7 @@ import { Button } from '@/components/atoms/Button';
 import { VirtualList } from '@/components/organisms/VirtualList';
 import { SqlHelpers } from '@/utils/sqlHelpers';
 import { QuerySidebar } from './query/QuerySidebar';
-import { dataPlatformApi } from '@/api/data-platform-api';
+import { dataPlatformApi } from '@/api/data-platform';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 interface QueryConsoleProps {

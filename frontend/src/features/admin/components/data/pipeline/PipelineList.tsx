@@ -3,7 +3,7 @@ import React from 'react';
 import { Activity, XCircle, GitMerge, Clock, ChevronRight } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Pipeline } from '@/api/data-platform-api';
+import { Pipeline } from '@/api/data-platform';
 
 interface PipelineListProps {
   pipelines: Pipeline[];

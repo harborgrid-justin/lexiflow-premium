@@ -126,8 +126,6 @@ export const ToastProvider = ({
 
   // BP10: Stabilize function references with useCallback
   const addToast = useCallback((message: string, type: ToastType = 'info') => {
-  // BP10: Stabilize function references with useCallback
-  const addToast = useCallback((message: string, type: ToastType = 'info') => {
     // DEDUPLICATION: Check if identical toast is already visible or in queue
     const isDuplicateVisible = toasts.some(t => t.message === message && t.type === type);
     const isDuplicateQueued = queueRef.current.some(t => t.message === message && t.type === type);

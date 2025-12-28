@@ -5,7 +5,7 @@
 
 export { Badge } from './Badge';
 export { Button } from './Button';
-export { default as EnhancedSearch.old } from './EnhancedSearch.old';
+export { default as EnhancedSearch } from './EnhancedSearch.old';
 export { Inputs } from './Inputs';
 export { Primitives } from './Primitives';
 export * from './RefactoredCommon';

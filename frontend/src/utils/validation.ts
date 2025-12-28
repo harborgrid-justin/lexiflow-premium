@@ -107,8 +107,8 @@ export const ValidationService = {
    * @private
    * @throws Error if string is invalid
    */
-  validateString: (value: string, fieldName: string, methodName: string): void => {
-
+  validateString: (_value: string, _fieldName: string, _methodName: string): void => {
+    // Stub implementation - add validation logic if needed
   },
 
   /**

@@ -184,7 +184,7 @@ export function validateDocketEntry(entry: Partial<DocketEntry>): DocketValidati
     });
   }
 
-    if (entry.sequenceNumber < 0) {
+    if (entry.sequenceNumber !== undefined && entry.sequenceNumber < 0) {
         errors.push({
             field: 'sequenceNumber',
             message: 'Sequence number cannot be negative',

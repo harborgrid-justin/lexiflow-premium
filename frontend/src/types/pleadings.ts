@@ -2,7 +2,7 @@
 // Domain-specific types - split from compatibility.ts
 
 import {
-  BaseEntity, DocumentId, CaseId, MetadataRecord, JsonValue
+  BaseEntity, DocumentId, CaseId, MetadataRecord
 } from './primitives';
 
 

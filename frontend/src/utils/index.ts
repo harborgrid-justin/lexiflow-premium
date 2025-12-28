@@ -1,6 +1,6 @@
 // utils/index.ts
 
-export * from './apiUtils';
+export * from './apiUtils'; // Note: yieldToMain re-exported from here (duplicate exists in async.ts)
 export * from './bloomFilter';
 export * from './circuitBreaker';
 export * from './cn';
@@ -9,7 +9,7 @@ export * from './errorHandler';
 export * from './formatters';
 export * from './ganttHelpers';
 export * from './idGenerator';
-export * from './retryWithBackoff';
+export * from './retryWithBackoff'; // Note: retryWithBackoff re-exported from here (duplicate exists in async.ts)
 export * from './templateEngine';
 export * from './validation';
 export * from './layoutAlgorithms';
@@ -27,8 +27,8 @@ export * from './docketValidation';
 export * from './cacheManager';
 export * from './sanitize';
 
-// Additional utilities
-export * from './async';
+// Additional utilities - excluding yieldToMain and retryWithBackoff to avoid re-export ambiguity
+export { debounce, throttle, withTimeout, asyncMap, asyncFilter } from './async';
 export * from './caseConverter';
 export * from './chartConfig';
 export * from './dateUtils';

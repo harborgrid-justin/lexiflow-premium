@@ -37,15 +37,14 @@ export class MotionsApiService {
       title: data.title,
       type: data.type, // Should match backend MotionType enum
       status: data.status, // Should match backend MotionStatus enum
-      description: data.notes, // Backend uses 'description', frontend may use 'notes'
+      description: (data as any).notes || data.description, // Map notes → description for compatibility
       filedBy: data.filedBy,
       filedDate: data.filedDate ? new Date(data.filedDate) : undefined,
       hearingDate: data.hearingDate ? new Date(data.hearingDate) : undefined,
-      decisionDate: data.decidedDate ? new Date(data.decidedDate) : undefined,
-      decision: data.outcome, // Backend uses 'decision', frontend uses 'outcome'
+      decisionDate: (data as any).decidedDate || data.decisionDate ? new Date((data as any).decidedDate || data.decisionDate!) : undefined,
+      decision: data.outcome || data.decision, // Backend uses 'decision', frontend uses 'outcome'
       documentId: data.documentId,
-      notes: data.notes,
-      metadata: data.metadata,
+      metadata: (data as any).metadata,
     };
 
     // Remove undefined values

@@ -51,7 +51,7 @@ export type {
 // Data files - Federal hierarchy and structured data
 export { FEDERAL_CIRCUITS, getCourtHierarchy, STATE_JURISDICTIONS } from './federalHierarchy';
 export { MOCK_API_SPEC } from './mockApiSpec';
-export { MOCK_ORGS, MOCK_GROUPS, HIERARCHY_USERS } from './mockHierarchy';
+export { MOCK_ORGS as MOCK_ORGS_HIERARCHY, MOCK_GROUPS as MOCK_GROUPS_HIERARCHY, HIERARCHY_USERS } from './mockHierarchy';
 export { MOCK_WIKI_ARTICLES, MOCK_PRECEDENTS, MOCK_QA_ITEMS } from './mockKnowledge';
 export { LITIGATION_PLAYBOOKS } from './mockLitigationPlaybooks';
 export { MOCK_MOTIONS } from './mockMotions';
@@ -60,7 +60,7 @@ export { TEMPLATE_LIBRARY } from './workflowTemplates';
 // Core domain models - Case, Documents, Users
 export { MOCK_CASES } from './case';
 export { MOCK_DOCUMENTS } from './document';
-export { MOCK_USERS, HIERARCHY_USERS } from './user';
+export { MOCK_USERS } from './user';
 export { MOCK_TIME_ENTRIES } from './timeEntry';
 export { MOCK_DOCKET_ENTRIES } from './docketEntry';
 export { MOCK_CLAUSES } from './clause';
@@ -140,5 +140,6 @@ export { MOCK_JURISDICTIONS } from './jurisdiction';
 export { MOCK_STAGES } from './workflowStage';
 export { MOCK_TASKS } from './workflowTask';
 
-export * from './filters';
-export * from './dto';
+// Note: filters and dto moved to @/types package
+// export * from './filters';
+// export * from './dto';

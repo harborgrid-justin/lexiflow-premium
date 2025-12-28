@@ -40,7 +40,7 @@ export interface WitnessFilters {
 export class WitnessesApiService {
   private readonly baseUrl = '/discovery/witnesses';
 
-  async getAll(filters?: WitnessFilters): Promise<Witness[]> {
+  async getAll(_filters?: WitnessFilters): Promise<Witness[]> {
     return apiClient.get<Witness[]>(this.baseUrl);
   }
 

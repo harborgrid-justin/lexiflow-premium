@@ -8,7 +8,7 @@
  * Backend alignment: /backend/src/clauses/entities/clause.entity.ts
  */
 
-import { Clause, UUID, UserId } from '@/types';
+import type { Clause, UUID } from '@/types';
 
 /**
  * @deprecated MOCK DATA - Use DataService.documents instead

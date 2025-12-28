@@ -307,10 +307,10 @@ export class NotificationsApiService {
   /**
    * Get grouped notifications (for UI display)
    *
-   * @returns Promise<Notification[]> Array of notifications
+   * @returns Promise<ApiNotification[]> Array of notifications
    * @throws Error if fetch fails
    */
-  async getGrouped(): Promise<Notification[]> {
+  async getGrouped(): Promise<ApiNotification[]> {
     // For now, return all notifications - grouping logic can be client-side
     return this.getAll();
   }

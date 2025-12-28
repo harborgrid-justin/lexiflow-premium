@@ -26,12 +26,12 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
 
 // Components
-import { Modal } from '@/components/molecules/Modal';
-import { Input } from '@/components/atoms/Input';
-import { TextArea } from '@/components/atoms/TextArea';
-import { Button } from '@/components/atoms/Button';
-import { RuleSelector } from '@/components/molecules/RuleSelector';
-import { UserSelect } from '@/components/molecules/UserSelect';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { RuleSelector } from '@/components/ui/molecules/RuleSelector/RuleSelector';
+import { UserSelect } from '@/components/ui/molecules/UserSelect/UserSelect';
 
 // Types
 import { WorkflowTask, TaskId, ProjectId, CaseId, User, TaskStatusBackend, TaskPriorityBackend } from '@/types';

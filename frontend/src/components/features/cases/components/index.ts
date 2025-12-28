@@ -4,8 +4,10 @@
  */
 
 // Case-specific organisms
-export { DocketSkeleton } from './DocketSkeleton';
-export { Kanban } from './Kanban';
-export { RiskMeter } from './RiskMeter';
-export { TaskCreationModal } from './TaskCreationModal';
-export { TimeEntryModal } from './TimeEntryModal';
+export { DocketTableSkeleton, DocketCalendarSkeleton, DocketStatsSkeleton, DocketFilterSkeleton } from './DocketSkeleton/DocketSkeleton';
+export { default as DocketSkeleton } from './DocketSkeleton/DocketSkeleton';
+export { KanbanBoard, KanbanColumn, KanbanCard } from './Kanban/Kanban';
+export { default as Kanban } from './Kanban/Kanban';
+export { RiskMeter } from './RiskMeter/RiskMeter';
+export { TaskCreationModal } from './TaskCreationModal/TaskCreationModal';
+export { TimeEntryModal } from './TimeEntryModal/TimeEntryModal';

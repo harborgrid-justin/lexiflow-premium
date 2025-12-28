@@ -6,8 +6,6 @@
  * This constant is only for seeding and testing purposes.
  */
 
-import { UUID } from '@/types';
-
 /**
  * @deprecated MOCK DATA - Use DataService.trial instead
  */

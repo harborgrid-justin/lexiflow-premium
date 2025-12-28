@@ -2,23 +2,8 @@
 // Auto-generated from models.ts split
 
 import {
-  BaseEntity, UserId, OrgId, GroupId, DocumentId, EvidenceId,
-  TaskId, EntityId, PartyId, MotionId, DocketId, ProjectId,
-  WorkflowTemplateId, CaseId, Money, JurisdictionObject, MetadataRecord
+  BaseEntity, CaseId, EvidenceId
 } from './primitives';
-import {
-  CaseStatus, UserRole, MatterType, BillingModel,
-  OrganizationType, RiskCategory, RiskLevel, RiskStatus,
-  CommunicationType, CommunicationDirection, ServiceStatus,
-  ExhibitStatus, ExhibitParty, MotionType, MotionStatus, MotionOutcome,
-  DocketEntryType, DiscoveryType, DiscoveryStatus,
-  EvidenceType, AdmissibilityStatus, ConferralResult,
-  ConferralMethod, NavCategory, TaskStatus, StageStatus, LegalRuleType, 
-  ServiceMethod, EntityType, EntityRole, CurrencyCode, LedesActivityCode, 
-  OcrStatus, TaskDependencyType
-} from './enums';
-import { LucideIcon } from 'lucide-react';
-import type { FC, LazyExoticComponent } from 'react';
 
 // --- CLUSTER 5: TRIAL & STRATEGY ---
 

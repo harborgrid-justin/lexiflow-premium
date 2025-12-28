@@ -4,15 +4,17 @@
  */
 
 import { apiClient, type PaginatedResponse } from '@/services/infrastructure/apiClient';
-import type {
-  Case,
-  DocketEntry,
-  LegalDocument,
-  EvidenceItem,
-  TimeEntry,
-  User,
-} from '@/types';
-import type { SystemWebhookConfig } from '@/types/system';
+
+export interface SystemWebhookConfig {
+  id: string;
+  url: string;
+  events: string[];
+  secret?: string;
+  status: 'active' | 'inactive';
+  createdAt: string;
+  lastTriggered?: string;
+  failureCount: number;
+}
 
 export class WebhooksApiService {
   async getAll(filters?: { status?: string; page?: number; limit?: number }): Promise<SystemWebhookConfig[]> {

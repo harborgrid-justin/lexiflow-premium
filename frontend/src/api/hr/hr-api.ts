@@ -56,10 +56,10 @@ export class HRApiService {
     cases: number;
   }>> {
     try {
-      const staff = await this.getAll({ status: 'active' });
+      const staff = await this.getAll({ status: 'Active' });
       return staff.map(s => ({
-        name: `${s.firstName} ${s.lastName}`,
-        role: s.title || s.role,
+        name: s.name,
+        role: s.role,
         utilization: Math.floor(Math.random() * 40) + 60, // Mock: 60-100%
         cases: Math.floor(Math.random() * 10) + 1 // Mock: 1-10 cases
       }));

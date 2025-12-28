@@ -8,7 +8,7 @@
  * Backend alignment: /backend/src/communications/entities/conversation.entity.ts
  */
 
-import { Conversation, Message, UserId } from '@/types';
+import type { Conversation, UserId } from '@/types';
 
 /**
  * @deprecated MOCK DATA - Use DataService.correspondence instead

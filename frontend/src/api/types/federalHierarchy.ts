@@ -115,14 +115,14 @@ export const STATE_JURISDICTIONS: Record<string, StateJurisdiction> = stateCourt
         acc[stateId] = {
             id: stateId,
             name: stateNames[stateId] || stateId,
-            levels: []
+            levels: [] as StateJurisdictionLevel[]
         };
     }
     let level = acc[stateId].levels.find((l) => l.name === court.type);
     if (!level) {
         level = { name: court.type, courts: [] };
-        acc[stateId].levels.push(level);
+        (acc[stateId].levels as any).push(level);
     }
-    level.courts.push(court.name);
+    (level.courts as any).push(court.name);
     return acc;
 }, {} as Record<string, StateJurisdiction>)

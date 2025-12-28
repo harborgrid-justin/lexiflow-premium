@@ -1,5 +1,4 @@
 import { ApiClient } from '@/services';
-import { LegalDocument } from '@/types';
 
 export interface DraftingStats {
   drafts: number;

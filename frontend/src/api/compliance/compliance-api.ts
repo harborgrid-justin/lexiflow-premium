@@ -265,15 +265,15 @@ export class ComplianceApiService {
     async createEthicalWall(data: Partial<EthicalWall>): Promise<EthicalWall> {
         this.validateObject(data, 'data', 'createEthicalWall');
 
-        if (!data.name) {
-            throw new Error('[ComplianceApiService.createEthicalWall] Name is required');
+        if (!data.title) {
+            throw new Error('[ComplianceApiService.createEthicalWall] Title is required');
         }
-        if (!data.reason) {
-            throw new Error('[ComplianceApiService.createEthicalWall] Reason is required');
+        if (!data.caseId) {
+            throw new Error('[ComplianceApiService.createEthicalWall] Case ID is required');
         }
 
         try {
-            return await apiClient.post<ComplianceEthicalWall>(`${this.baseUrl}/ethical-walls`, data);
+            return await apiClient.post<EthicalWall>(`${this.baseUrl}/ethical-walls`, data);
         } catch (error) {
             console.error('[ComplianceApiService.createEthicalWall] Error:', error);
             throw new Error('Failed to create ethical wall');
@@ -285,15 +285,15 @@ export class ComplianceApiService {
      * 
      * @param id - Ethical wall ID
      * @param data - Partial ethical wall updates
-     * @returns Promise<ComplianceEthicalWall> Updated ethical wall
+     * @returns Promise<EthicalWall> Updated ethical wall
      * @throws Error if validation fails or update fails
      */
-    async updateEthicalWall(id: string, data: Partial<ComplianceEthicalWall>): Promise<ComplianceEthicalWall> {
+    async updateEthicalWall(id: string, data: Partial<EthicalWall>): Promise<EthicalWall> {
         this.validateId(id, 'updateEthicalWall');
         this.validateObject(data, 'data', 'updateEthicalWall');
 
         try {
-            return await apiClient.put<ComplianceEthicalWall>(`${this.baseUrl}/ethical-walls/${id}`, data);
+            return await apiClient.put<EthicalWall>(`${this.baseUrl}/ethical-walls/${id}`, data);
         } catch (error) {
             console.error('[ComplianceApiService.updateEthicalWall] Error:', error);
             throw new Error(`Failed to update ethical wall with id: ${id}`);
@@ -304,17 +304,17 @@ export class ComplianceApiService {
      * Lift (deactivate) an ethical wall
      * 
      * @param id - Ethical wall ID
-     * @returns Promise<ComplianceEthicalWall> Lifted ethical wall
+     * @returns Promise<EthicalWall> Lifted ethical wall
      * @throws Error if id is invalid or lift operation fails
      * 
      * @example
      * const liftedWall = await service.liftEthicalWall('wall-123');
      */
-    async liftEthicalWall(id: string): Promise<ComplianceEthicalWall> {
+    async liftEthicalWall(id: string): Promise<EthicalWall> {
         this.validateId(id, 'liftEthicalWall');
 
         try {
-            return await apiClient.post<ComplianceEthicalWall>(`${this.baseUrl}/ethical-walls/${id}/lift`, {});
+            return await apiClient.post<EthicalWall>(`${this.baseUrl}/ethical-walls/${id}/lift`, {});
         } catch (error) {
             console.error('[ComplianceApiService.liftEthicalWall] Error:', error);
             throw new Error(`Failed to lift ethical wall with id: ${id}`);

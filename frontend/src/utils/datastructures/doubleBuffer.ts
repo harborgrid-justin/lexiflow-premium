@@ -1,8 +1,8 @@
 
 // Double Buffer for smooth canvas animation
 export class DoubleBuffer<T> {
-    private readonly readBuffer: T;
-    private readonly writeBuffer: T;
+    private readBuffer: T;
+    private writeBuffer: T;
     private dirty: boolean = false;
 
     constructor(initialState: T) {

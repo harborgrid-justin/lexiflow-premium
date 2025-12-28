@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Sidebar } from '@/components/organisms/Sidebar/Sidebar';
-import { AppShell } from '@/components/layouts/AppShell/AppShell';
+import { AppShell } from '@/components/ui/layouts/AppShell/AppShell';
 import { AppHeader } from '@/components/organisms/AppHeader/AppHeader';
 import { 
   ThemeProvider, 
@@ -11,9 +11,9 @@ import {
 } from '@/providers';
 import { HolographicDock } from '@/components/organisms/HolographicDock/HolographicDock';
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
-import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { initializeModules } from '@/config';
-import { AppContentRenderer } from '@/components/layouts/AppContentRenderer';
+import { AppContentRenderer } from '@/components/ui/layouts/AppContentRenderer/AppContentRenderer';
 import { GlobalHotkeys } from '@/components/organisms/GlobalHotkeys/GlobalHotkeys';
 import { useAppController } from '@/hooks';
 import { useDataServiceCleanup } from './hooks/useDataServiceCleanup';
@@ -31,19 +31,13 @@ const InnerApp: React.FC = () => {
     activeView,
     selectedCase,
     isSidebarOpen,
-    setIsSidebarOpen,
+    toggleSidebar,
     currentUser,
     globalSearch,
-    setGlobalSearch,
-    handleNavigation,
-    handleSelectCase,
-    handleSelectCaseById,
-    navigateToCaseTab,
-    handleBackToMain,
-    handleSearchResultClick,
-    handleNeuralCommand,
-    handleSwitchUser,
-    focusSearch,
+    updateSearch,
+    navigateToView,
+    selectCase,
+    switchUser,
     initialTab,
     isAppLoading,
     appStatusMessage,
@@ -60,46 +54,46 @@ const InnerApp: React.FC = () => {
   return (
     <AppShell
       activeView={activeView}
-      onNavigate={handleNavigation}
+      onNavigate={navigateToView}
       selectedCaseId={selectedCase?.id || null}
       sidebar={
         <ErrorBoundary scope="Sidebar">
           <Sidebar
             activeView={selectedCase ? 'cases' : activeView}
-            setActiveView={handleNavigation}
+            setActiveView={navigateToView}
             isOpen={isSidebarOpen}
-            onClose={() => setIsSidebarOpen(false)}
+            onClose={() => toggleSidebar()}
             currentUser={currentUser}
-            onSwitchUser={handleSwitchUser}
+            onSwitchUser={switchUser}
           />
         </ErrorBoundary>
       }
       headerContent={
         <ErrorBoundary scope="Header">
           <AppHeader
-            onToggleSidebar={() => setIsSidebarOpen(true)}
+            onToggleSidebar={() => toggleSidebar()}
             globalSearch={globalSearch}
-            setGlobalSearch={setGlobalSearch}
+            setGlobalSearch={updateSearch}
             onGlobalSearch={() => {}}
             currentUser={currentUser}
-            onSwitchUser={handleSwitchUser}
-            onSearchResultClick={handleSearchResultClick}
-            onNeuralCommand={handleNeuralCommand}
+            onSwitchUser={switchUser}
+            onSearchResultClick={(result: any) => selectCase(result.id)}
+            onNeuralCommand={(cmd: any) => console.log('Neural command:', cmd)}
           />
         </ErrorBoundary>
       }
     >
-      <GlobalHotkeys onToggleCommand={focusSearch} onNavigate={handleNavigation} />
-      <ErrorBoundary scope="MainContent" onReset={handleBackToMain}>
+      <GlobalHotkeys onToggleCommand={() => updateSearch('')} onNavigate={navigateToView} />
+      <ErrorBoundary scope="MainContent" onReset={() => navigateToView('dashboard')}>
         <AppContentRenderer
           activeView={activeView}
           currentUser={currentUser}
           selectedCase={selectedCase}
-          handleSelectCase={handleSelectCase}
-          handleSelectCaseById={handleSelectCaseById}
-          navigateToCaseTab={navigateToCaseTab}
-          handleBackToMain={handleBackToMain}
-          setActiveView={handleNavigation}
+          handleSelectCase={selectCase}
+          handleSelectCaseById={selectCase}
+          navigateToCaseTab={(caseId: string, tab: string) => selectCase(caseId, tab)}
+          handleBackToMain={() => navigateToView('dashboard')}
+          setActiveView={navigateToView}
           initialTab={initialTab}
         />
       </ErrorBoundary>

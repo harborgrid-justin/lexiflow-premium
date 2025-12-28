@@ -61,7 +61,8 @@ export * from './domains/compliance.api';
 export * from './domains/integrations.api';
 export * from './domains/analytics.api';
 export * from './domains/admin.api';
-export * from './domains/data-platform.api';
+// Note: domains/data-platform.api exports dataPlatformApi (conflicts with data-platform/index.ts)
+// export * from './domains/data-platform.api';
 export * from './domains/hr.api';
 export * from './domains/legal-entities.api';
 export * from './domains/drafting.api';
@@ -78,8 +79,31 @@ export * from './communications';
 export * from './compliance';
 export * from './integrations';
 export * from './analytics';
-export * from './admin';
-export * from './data-platform';
+
+// Export admin services (excluding classes that data-platform also exports)
+export { 
+  ProcessingJobsApiService,
+  DocumentsApiService,
+  DocumentVersionsApiService,
+  OCRApiService,
+  HealthApiService,
+  AuditLogsApiService,
+  ServiceJobsApiService,
+  MetricsApiService
+} from './admin';
+// Re-export all admin types
+export type {
+  ProcessingJob,
+  OCRRequest,
+  OCRJob,
+  AuditLog,
+  ServiceJob,
+  SystemMetrics
+} from './admin';
+
+// Export data-platform (commented to avoid duplicates - services already exported from admin)
+// Use direct imports when needed: import { dataPlatformApi } from '@/api/domains/data-platform.api';
+// export * from './data-platform';
 export * from './hr';
 
 // Export type definitions

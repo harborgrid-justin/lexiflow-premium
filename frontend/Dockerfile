@@ -20,9 +20,6 @@ RUN apk add --no-cache libc6-compat python3 make g++
 # Copy package files
 COPY package*.json ./
 
-# Copy shared-types package (workspace dependency)
-COPY ../packages/shared-types ../packages/shared-types
-
 # Install dependencies with npm ci for deterministic builds
 RUN npm ci --legacy-peer-deps
 
@@ -39,11 +36,9 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy source code
 COPY . .
 
-# Copy shared-types for build
-COPY --from=deps /packages/shared-types ../packages/shared-types
-
 # Build arguments for environment configuration
-ARG VITE_API_URL=http://localhost:5000
+# Empty VITE_API_URL means use same origin (API calls go through Nginx proxy)
+ARG VITE_API_URL=""
 ARG VITE_API_PREFIX=/api/v1
 ARG VITE_USE_BACKEND_API=true
 ARG VITE_ENV=production

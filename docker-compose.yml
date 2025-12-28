@@ -16,7 +16,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: http://backend:5000
+        # Empty API_URL means use same origin (Nginx proxies /api/ to backend)
+        VITE_API_URL: ""
         VITE_API_PREFIX: /api/v1
         VITE_USE_BACKEND_API: "true"
         VITE_ENV: production

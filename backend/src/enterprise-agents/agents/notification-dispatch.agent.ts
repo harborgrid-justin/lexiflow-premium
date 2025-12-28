@@ -311,27 +311,30 @@ export class NotificationDispatchAgent extends BaseAgent {
     recipient: NotificationRecipient,
     payload: NotificationTaskPayload,
   ): Promise<void> {
+    const subject = payload.subject ?? 'Notification';
+    const priority = payload.priority ?? 'normal';
+
     switch (channel) {
       case NotificationChannel.EMAIL:
-        this.notifyLogger.debug(`Sending email to ${recipient.address}`);
+        this.notifyLogger.debug(`Sending email to ${recipient.address} - Subject: ${subject} (Priority: ${priority})`);
         break;
       case NotificationChannel.SMS:
-        this.notifyLogger.debug(`Sending SMS to ${recipient.address}`);
+        this.notifyLogger.debug(`Sending SMS to ${recipient.address} - Priority: ${priority}`);
         break;
       case NotificationChannel.PUSH:
-        this.notifyLogger.debug(`Sending push to ${recipient.id}`);
+        this.notifyLogger.debug(`Sending push to ${recipient.id} - Subject: ${subject} (Priority: ${priority})`);
         break;
       case NotificationChannel.IN_APP:
-        this.notifyLogger.debug(`Sending in-app notification to ${recipient.id}`);
+        this.notifyLogger.debug(`Sending in-app notification to ${recipient.id} - Template: ${payload.template ?? 'default'}`);
         break;
       case NotificationChannel.WEBHOOK:
-        this.notifyLogger.debug(`Calling webhook: ${recipient.address}`);
+        this.notifyLogger.debug(`Calling webhook: ${recipient.address} with template ${payload.template ?? 'default'}`);
         break;
       case NotificationChannel.SLACK:
-        this.notifyLogger.debug(`Sending Slack message to ${recipient.address}`);
+        this.notifyLogger.debug(`Sending Slack message to ${recipient.address} - Channel priority: ${priority}`);
         break;
       case NotificationChannel.TEAMS:
-        this.notifyLogger.debug(`Sending Teams message to ${recipient.address}`);
+        this.notifyLogger.debug(`Sending Teams message to ${recipient.address} - Priority: ${priority}`);
         break;
     }
   }
@@ -348,7 +351,7 @@ export class NotificationDispatchAgent extends BaseAgent {
   }
 
   private cancelAllScheduled(): void {
-    for (const [id, timeout] of this.scheduledNotifications) {
+    for (const [, timeout] of this.scheduledNotifications) {
       clearTimeout(timeout);
     }
     this.scheduledNotifications.clear();

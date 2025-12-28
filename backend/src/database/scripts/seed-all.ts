@@ -83,7 +83,7 @@ function randomDate(start: Date, end: Date): Date {
 }
 
 function randomElement<T>(array: T[]): T {
-  return array[Math.floor(Math.random() * array.length)];
+  return array[Math.floor(Math.random() * array.length)] as T;
 }
 
 function randomAmount(min: number, max: number): number {
@@ -122,12 +122,46 @@ const DEMO_CLIENTS = [
   { name: 'Anderson Media Group', clientType: 'corporate', industry: 'Media & Entertainment', email: 'legal@andersonmedia.com' },
 ];
 
-const CASE_TYPES = ['civil', 'corporate', 'family', 'criminal', 'bankruptcy', 'ip', 'employment', 'real_estate'];
-const CASE_STATUSES = ['open', 'active', 'discovery', 'trial', 'settled', 'closed'];
+// Case type and status definitions with practice area mappings
+const CASE_TYPES = ['civil', 'corporate', 'family', 'criminal', 'bankruptcy', 'ip', 'employment', 'real_estate'] as const;
+const CASE_STATUSES = ['open', 'active', 'discovery', 'trial', 'settled', 'closed'] as const;
 const JURISDICTIONS = ['California', 'New York', 'Texas', 'Florida', 'Illinois'];
 const COURTS = ['Superior Court', 'District Court', 'Federal Court', 'Appellate Court'];
 
-const DEMO_CASES = [
+type CaseType = typeof CASE_TYPES[number];
+type CaseStatus = typeof CASE_STATUSES[number];
+
+// Map case types to their practice areas for proper categorization
+const CASE_TYPE_TO_PRACTICE_AREA: Record<CaseType, string[]> = {
+  civil: ['Civil Litigation', 'Personal Injury', 'Contract Law'],
+  corporate: ['Corporate Finance', 'Mergers & Acquisitions', 'Securities'],
+  family: ['Family Law', 'Estate Planning', 'Divorce'],
+  criminal: ['Criminal Defense', 'White Collar Crime'],
+  bankruptcy: ['Bankruptcy', 'Debt Restructuring'],
+  ip: ['Intellectual Property', 'Patent Law', 'Trademark'],
+  employment: ['Employment Law', 'Labor Relations'],
+  real_estate: ['Real Estate', 'Property Law', 'Land Use'],
+};
+
+// Get a random practice area for a given case type (used for generating additional random cases)
+function _getPracticeAreaForType(caseType: CaseType): string {
+  const practiceAreas = CASE_TYPE_TO_PRACTICE_AREA[caseType];
+  return randomElement(practiceAreas);
+}
+void _getPracticeAreaForType;
+
+// Validate case type is valid
+function isValidCaseType(type: string): type is CaseType {
+  return CASE_TYPES.includes(type as CaseType);
+}
+
+// Validate case status is valid
+function isValidCaseStatus(status: string): status is CaseStatus {
+  return CASE_STATUSES.includes(status as CaseStatus);
+}
+
+// Core demo cases with realistic legal matters
+const DEMO_CASES: Array<{ title: string; type: CaseType; status: CaseStatus; practiceArea: string }> = [
   { title: 'Acme Corp v. Competitor Inc - Patent Infringement', type: 'ip', status: 'active', practiceArea: 'Intellectual Property' },
   { title: 'Smith Estate Administration', type: 'family', status: 'open', practiceArea: 'Estate Planning' },
   { title: 'Global Innovations - Series B Financing', type: 'corporate', status: 'active', practiceArea: 'Corporate Finance' },
@@ -135,12 +169,22 @@ const DEMO_CASES = [
   { title: 'Garcia Divorce Proceedings', type: 'family', status: 'active', practiceArea: 'Family Law' },
   { title: 'TechStart - Merger Due Diligence', type: 'corporate', status: 'active', practiceArea: 'Mergers & Acquisitions' },
   { title: 'Williams Trust Modification', type: 'family', status: 'open', practiceArea: 'Estate Planning' },
-  { title: 'Metro Healthcare Compliance Review', type: 'civil', status: 'active', practiceArea: 'Healthcare Law' },
-  { title: 'Chen Construction - Contract Dispute', type: 'civil', status: 'discovery', practiceArea: 'Construction Law' },
+  { title: 'Metro Healthcare Compliance Review', type: 'civil', status: 'active', practiceArea: 'Civil Litigation' },
+  { title: 'Chen Construction - Contract Dispute', type: 'civil', status: 'discovery', practiceArea: 'Contract Law' },
   { title: 'Anderson Media - Copyright Litigation', type: 'ip', status: 'trial', practiceArea: 'Intellectual Property' },
   { title: 'Class Action - Consumer Protection', type: 'civil', status: 'active', practiceArea: 'Civil Litigation' },
   { title: 'Real Estate Development Agreement', type: 'real_estate', status: 'active', practiceArea: 'Real Estate' },
 ];
+
+// Validate all demo cases have valid types and statuses
+for (const demoCase of DEMO_CASES) {
+  if (!isValidCaseType(demoCase.type)) {
+    throw new Error(`Invalid case type: ${demoCase.type}`);
+  }
+  if (!isValidCaseStatus(demoCase.status)) {
+    throw new Error(`Invalid case status: ${demoCase.status}`);
+  }
+}
 
 const DOCUMENT_TYPES = ['pleading', 'motion', 'contract', 'correspondence', 'discovery', 'brief', 'memorandum', 'exhibit'];
 const MOTION_TYPES = ['summary_judgment', 'dismiss', 'compel', 'protective_order', 'continuance', 'reconsider'];
@@ -175,7 +219,7 @@ async function seedClients(queryRunner: QueryRunner): Promise<Map<string, string
   const clientIds = new Map<string, string>();
 
   for (let i = 0; i < DEMO_CLIENTS.length; i++) {
-    const client = DEMO_CLIENTS[i];
+    const client = DEMO_CLIENTS[i]!;
     const id = generateId();
     const clientNumber = `CLI-${String(i + 1).padStart(4, '0')}`;
     clientIds.set(client.name, id);
@@ -198,11 +242,11 @@ async function seedCases(queryRunner: QueryRunner, clientIds: Map<string, string
   const userArray = Array.from(userIds.entries());
 
   for (let i = 0; i < DEMO_CASES.length; i++) {
-    const caseData = DEMO_CASES[i];
+    const caseData = DEMO_CASES[i]!;
     const id = generateId();
     const caseNumber = `2024-${String(i + 1).padStart(5, '0')}`;
-    const [clientName, clientId] = clientArray[i % clientArray.length];
-    const [userEmail, leadAttorneyId] = userArray.find(([email]) => email.includes('partner') || email.includes('senior')) || userArray[0];
+    const [, clientId] = clientArray[i % clientArray.length]!;
+    const [, leadAttorneyId] = userArray.find(([email]) => email.includes('partner') || email.includes('senior')) || userArray[0]!;
     caseIds.set(caseNumber, id);
 
     const filingDate = randomDate(new Date('2024-01-01'), new Date());
@@ -286,8 +330,8 @@ async function seedInvoices(queryRunner: QueryRunner, clientIds: Map<string, str
   for (let i = 0; i < 20; i++) {
     const id = generateId();
     const invoiceNumber = `INV-2024-${String(i + 1).padStart(5, '0')}`;
-    const [clientName, clientId] = randomElement(clientArray);
-    const [caseNumber, caseId] = randomElement(caseArray);
+    const [clientName, clientId] = randomElement(clientArray)!;
+    const [, caseId] = randomElement(caseArray)!;
     const subtotal = randomAmount(1000, 50000);
     const taxRate = 0.0875;
     const taxAmount = subtotal * taxRate;
@@ -313,7 +357,7 @@ async function seedParties(queryRunner: QueryRunner, caseIds: Map<string, string
   const caseArray = Array.from(caseIds.entries());
   let count = 0;
 
-  for (const [caseNumber, caseId] of caseArray) {
+  for (const [, caseId] of caseArray) {
     const partyCount = Math.floor(Math.random() * 4) + 2; // 2-5 parties per case
 
     for (let i = 0; i < partyCount; i++) {
@@ -421,7 +465,7 @@ async function seedCasePhases(queryRunner: QueryRunner, caseIds: Map<string, str
   const caseArray = Array.from(caseIds.entries());
   let count = 0;
 
-  for (const [caseNumber, caseId] of caseArray) {
+  for (const [, caseId] of caseArray) {
     const currentPhaseIndex = Math.floor(Math.random() * phases.length);
 
     for (let i = 0; i <= currentPhaseIndex; i++) {

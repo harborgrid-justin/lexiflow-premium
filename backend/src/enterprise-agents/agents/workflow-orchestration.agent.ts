@@ -332,10 +332,16 @@ export class WorkflowOrchestrationAgent extends BaseAgent {
   private async triggerEvent(payload: WorkflowTaskPayload): Promise<WorkflowResult> {
     const startTime = Date.now();
 
+    this.workflowLogger.log(`Triggering event for workflow ${payload.workflowId ?? 'unknown'}`);
+
     return {
       operationType: WorkflowOperationType.TRIGGER_EVENT,
+      workflowId: payload.workflowId,
       status: WorkflowStatus.COMPLETED,
       completedSteps: [],
+      output: {
+        triggeredAt: new Date().toISOString(),
+      },
       duration: Date.now() - startTime,
       errors: [],
     };

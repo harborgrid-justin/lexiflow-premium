@@ -314,10 +314,27 @@ export class CacheManagementAgent extends BaseAgent {
 
   private async warm(payload: CacheTaskPayload): Promise<CacheResult> {
     const startTime = Date.now();
+    let warmedCount = 0;
+
+    // Pre-populate cache with key if provided
+    if (payload.key && !this.l1Cache.has(payload.key)) {
+      const now = new Date();
+      this.l1Cache.set(payload.key, {
+        value: payload.value ?? null,
+        createdAt: now,
+        lastAccessedAt: now,
+        expiresAt: new Date(Date.now() + 3600000), // 1 hour TTL
+        accessCount: 0,
+        tags: [],
+        tier: CacheTier.L1_MEMORY,
+      });
+      warmedCount++;
+    }
 
     return {
       operationType: CacheOperationType.WARM,
-      hit: true,
+      hit: warmedCount > 0,
+      stats: { totalKeys: warmedCount } as CacheStats,
       duration: Date.now() - startTime,
       errors: [],
     };
@@ -325,11 +342,30 @@ export class CacheManagementAgent extends BaseAgent {
 
   private async flush(payload: CacheTaskPayload): Promise<CacheResult> {
     const startTime = Date.now();
-    const count = this.l1Cache.size;
-    this.l1Cache.clear();
-    this.hitCount = 0;
-    this.missCount = 0;
-    this.evictionCount = 0;
+    let count = 0;
+
+    // Flush specific key or all if none specified
+    if (payload.key) {
+      if (this.l1Cache.delete(payload.key)) {
+        count = 1;
+      }
+    } else if (payload.pattern) {
+      // Flush by pattern
+      const regex = new RegExp(payload.pattern.replace(/\*/g, '.*'));
+      for (const key of this.l1Cache.keys()) {
+        if (regex.test(key)) {
+          this.l1Cache.delete(key);
+          count++;
+        }
+      }
+    } else {
+      // Flush all
+      count = this.l1Cache.size;
+      this.l1Cache.clear();
+      this.hitCount = 0;
+      this.missCount = 0;
+      this.evictionCount = 0;
+    }
 
     return {
       operationType: CacheOperationType.FLUSH,
@@ -344,8 +380,15 @@ export class CacheManagementAgent extends BaseAgent {
     const startTime = Date.now();
     const totalHits = this.hitCount + this.missCount;
 
+    // Filter stats by pattern if provided
+    let relevantKeys = Array.from(this.l1Cache.keys());
+    if (payload.pattern) {
+      const regex = new RegExp(payload.pattern.replace(/\*/g, '.*'));
+      relevantKeys = relevantKeys.filter(key => regex.test(key));
+    }
+
     const stats: CacheStats = {
-      totalKeys: this.l1Cache.size,
+      totalKeys: relevantKeys.length,
       memoryUsedBytes: this.estimateMemoryUsage(),
       hitCount: this.hitCount,
       missCount: this.missCount,
@@ -363,13 +406,24 @@ export class CacheManagementAgent extends BaseAgent {
     };
   }
 
-  private async optimize(payload: CacheTaskPayload): Promise<CacheResult> {
+  private async optimize(_payload: CacheTaskPayload): Promise<CacheResult> {
     const startTime = Date.now();
     let optimizedCount = 0;
 
     const now = new Date();
+    const maxAgeMs = 24 * 60 * 60 * 1000; // 24 hours
+
     for (const [key, entry] of this.l1Cache) {
+      // Check if entry is expired
       if (entry.expiresAt && entry.expiresAt < now) {
+        this.l1Cache.delete(key);
+        optimizedCount++;
+        continue;
+      }
+
+      // Check if entry is too old
+      const age = now.getTime() - entry.createdAt.getTime();
+      if (age > maxAgeMs) {
         this.l1Cache.delete(key);
         optimizedCount++;
       }
@@ -378,7 +432,7 @@ export class CacheManagementAgent extends BaseAgent {
     return {
       operationType: CacheOperationType.OPTIMIZE,
       hit: true,
-      stats: { totalKeys: optimizedCount } as CacheStats,
+      stats: { totalKeys: this.l1Cache.size, removedKeys: optimizedCount } as unknown as CacheStats,
       duration: Date.now() - startTime,
       errors: [],
     };

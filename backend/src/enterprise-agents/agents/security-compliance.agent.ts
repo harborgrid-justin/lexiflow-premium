@@ -301,7 +301,7 @@ export class SecurityComplianceAgent extends BaseAgent {
   /**
    * Enforce security policies
    */
-  private async enforcePolicies(payload: SecurityTaskPayload): Promise<SecurityResult> {
+  private async enforcePolicies(_payload: SecurityTaskPayload): Promise<SecurityResult> {
     const startTime = Date.now();
     const result: SecurityResult = {
       operationType: SecurityOperationType.POLICY_ENFORCEMENT,
@@ -319,7 +319,7 @@ export class SecurityComplianceAgent extends BaseAgent {
   /**
    * Check compliance status
    */
-  private async checkCompliance(payload: SecurityTaskPayload): Promise<SecurityResult> {
+  private async checkCompliance(_payload: SecurityTaskPayload): Promise<SecurityResult> {
     const startTime = Date.now();
     const result: SecurityResult = {
       operationType: SecurityOperationType.COMPLIANCE_CHECK,
@@ -344,7 +344,7 @@ export class SecurityComplianceAgent extends BaseAgent {
   /**
    * Scan for vulnerabilities
    */
-  private async scanVulnerabilities(payload: SecurityTaskPayload): Promise<SecurityResult> {
+  private async scanVulnerabilities(_payload: SecurityTaskPayload): Promise<SecurityResult> {
     const startTime = Date.now();
     const result: SecurityResult = {
       operationType: SecurityOperationType.VULNERABILITY_SCAN,
@@ -367,7 +367,7 @@ export class SecurityComplianceAgent extends BaseAgent {
   /**
    * Verify encryption status
    */
-  private async verifyEncryption(payload: SecurityTaskPayload): Promise<SecurityResult> {
+  private async verifyEncryption(_payload: SecurityTaskPayload): Promise<SecurityResult> {
     const startTime = Date.now();
     const result: SecurityResult = {
       operationType: SecurityOperationType.ENCRYPTION_VERIFY,
@@ -385,7 +385,7 @@ export class SecurityComplianceAgent extends BaseAgent {
   /**
    * Monitor active sessions
    */
-  private async monitorSessions(payload: SecurityTaskPayload): Promise<SecurityResult> {
+  private async monitorSessions(_payload: SecurityTaskPayload): Promise<SecurityResult> {
     const startTime = Date.now();
     const result: SecurityResult = {
       operationType: SecurityOperationType.SESSION_MONITOR,

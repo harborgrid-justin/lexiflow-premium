@@ -138,7 +138,7 @@ export class HealthMonitoringAgent extends BaseAgent {
   private readonly componentStatus: Map<string, ComponentHealth> = new Map();
   private readonly activeAlerts: Map<string, Alert> = new Map();
   private readonly metricsHistory: SystemMetrics[] = [];
-  private readonly startTime = Date.now();
+  private readonly agentStartTime = Date.now();
   private monitoringInterval?: NodeJS.Timeout;
   private alertSequence = 0;
 
@@ -228,9 +228,20 @@ export class HealthMonitoringAgent extends BaseAgent {
 
   private async checkHealth(payload: HealthTaskPayload): Promise<HealthResult> {
     const startTime = Date.now();
-    const components = Array.from(this.componentStatus.values());
+
+    // Filter components if specific ones are requested
+    let components = Array.from(this.componentStatus.values());
+    if (payload.componentId) {
+      components = components.filter(c => c.id === payload.componentId);
+    }
+
     const metrics = this.getCurrentMetrics();
-    const alerts = Array.from(this.activeAlerts.values());
+
+    // Filter alerts by severity if specified
+    let alerts = Array.from(this.activeAlerts.values());
+    if (payload.alertSeverity) {
+      alerts = alerts.filter(a => a.severity === payload.alertSeverity);
+    }
 
     const overallStatus = this.calculateOverallStatus(components);
 
@@ -276,12 +287,14 @@ export class HealthMonitoringAgent extends BaseAgent {
     };
   }
 
-  private async collectMetrics(payload: HealthTaskPayload): Promise<HealthResult> {
+  private async collectMetrics(_payload: HealthTaskPayload): Promise<HealthResult> {
     const startTime = Date.now();
     const metrics = this.getCurrentMetrics();
 
     this.metricsHistory.push(metrics);
-    if (this.metricsHistory.length > 1000) {
+
+    // Keep max 1000 entries in history
+    while (this.metricsHistory.length > 1000) {
       this.metricsHistory.shift();
     }
 
@@ -347,7 +360,7 @@ export class HealthMonitoringAgent extends BaseAgent {
     return this.checkHealth(payload);
   }
 
-  private async runDiagnostics(payload: HealthTaskPayload): Promise<HealthResult> {
+  private async runDiagnostics(_payload: HealthTaskPayload): Promise<HealthResult> {
     const startTime = Date.now();
     const diagnostics: DiagnosticResult[] = [];
 
@@ -418,7 +431,7 @@ export class HealthMonitoringAgent extends BaseAgent {
       requestsPerSecond: 0,
       averageResponseTimeMs: 0,
       errorRate: 0,
-      uptime: Date.now() - this.startTime,
+      uptime: Date.now() - this.agentStartTime,
     };
   }
 
@@ -486,6 +499,6 @@ export class HealthMonitoringAgent extends BaseAgent {
   }
 
   public getUptime(): number {
-    return Date.now() - this.startTime;
+    return Date.now() - this.agentStartTime;
   }
 }

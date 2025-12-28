@@ -16,7 +16,7 @@
 
 import { Module, OnModuleInit, Logger } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { EventEmitterModule, EventEmitter2 } from '@nestjs/event-emitter';
 import { DataSource } from 'typeorm';
 
@@ -37,12 +37,22 @@ import { HealthMonitoringAgent } from './agents/health-monitoring.agent';
 import { CoordinatorAgent } from './coordinator/coordinator.agent';
 import { ScratchpadManagerAgent } from './scratchpad/scratchpad-manager.agent';
 
-import { AgentState } from './interfaces/agent.interfaces';
+
 
 /**
  * Enterprise Agent System Configuration
+ * Provides default configuration values that can be overridden by environment variables
  */
-const AGENT_SYSTEM_CONFIG = {
+interface AgentSystemConfig {
+  maxAgents: number;
+  enableCoordinator: boolean;
+  enableScratchpad: boolean;
+  autoStartAgents: boolean;
+  healthCheckIntervalMs: number;
+  coordinationIntervalMs: number;
+}
+
+const AGENT_SYSTEM_CONFIG: AgentSystemConfig = {
   maxAgents: 12,
   enableCoordinator: true,
   enableScratchpad: true,
@@ -207,13 +217,32 @@ export class EnterpriseAgentsModule implements OnModuleInit {
     private readonly healthMonitoringAgent: HealthMonitoringAgent,
     private readonly coordinatorAgent: CoordinatorAgent,
     private readonly scratchpadManagerAgent: ScratchpadManagerAgent,
-  ) {}
+  ) {
+    // Coordinator and scratchpad manager are available for orchestration
+    void this.coordinatorAgent;
+    void this.scratchpadManagerAgent;
+  }
+
+  /**
+   * Get runtime configuration merging defaults with environment overrides
+   */
+  private getConfig(): AgentSystemConfig {
+    return {
+      maxAgents: this.configService.get<number>('AGENT_MAX_AGENTS') ?? AGENT_SYSTEM_CONFIG.maxAgents,
+      enableCoordinator: this.configService.get<string>('AGENT_ENABLE_COORDINATOR') !== 'false' && AGENT_SYSTEM_CONFIG.enableCoordinator,
+      enableScratchpad: this.configService.get<string>('AGENT_ENABLE_SCRATCHPAD') !== 'false' && AGENT_SYSTEM_CONFIG.enableScratchpad,
+      autoStartAgents: this.configService.get<string>('AGENT_AUTO_START') !== 'false' && AGENT_SYSTEM_CONFIG.autoStartAgents,
+      healthCheckIntervalMs: this.configService.get<number>('AGENT_HEALTH_CHECK_INTERVAL_MS') ?? AGENT_SYSTEM_CONFIG.healthCheckIntervalMs,
+      coordinationIntervalMs: this.configService.get<number>('AGENT_COORDINATION_INTERVAL_MS') ?? AGENT_SYSTEM_CONFIG.coordinationIntervalMs,
+    };
+  }
 
   /**
    * Initialize all agents on module start
    */
   async onModuleInit(): Promise<void> {
     const enabled = this.configService.get<string>('ENTERPRISE_AGENTS_ENABLED') !== 'false';
+    const config = this.getConfig();
 
     if (!enabled) {
       this.logger.log('Enterprise Agents System is disabled');
@@ -224,11 +253,21 @@ export class EnterpriseAgentsModule implements OnModuleInit {
     this.logger.log('');
     this.logger.log('Enterprise Agent Architecture:');
     this.logger.log('  Pattern: Orchestrator-Worker with Event-Driven Communication');
-    this.logger.log('  Agents: 10 Workers + 1 Coordinator + 1 Scratchpad Manager');
+    this.logger.log(`  Max Agents: ${config.maxAgents}`);
+    this.logger.log(`  Coordinator Enabled: ${config.enableCoordinator}`);
+    this.logger.log(`  Scratchpad Enabled: ${config.enableScratchpad}`);
+    this.logger.log(`  Auto Start: ${config.autoStartAgents}`);
+    this.logger.log(`  Health Check Interval: ${config.healthCheckIntervalMs}ms`);
+    this.logger.log(`  Coordination Interval: ${config.coordinationIntervalMs}ms`);
     this.logger.log('');
 
     await this.registerAllAgents();
-    await this.startAllAgents();
+
+    if (config.autoStartAgents) {
+      await this.startAllAgents();
+    } else {
+      this.logger.log('Auto-start disabled. Agents registered but not started.');
+    }
 
     this.logSystemStatus();
   }

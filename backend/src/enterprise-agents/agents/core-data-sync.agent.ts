@@ -12,7 +12,7 @@
 
 import { Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { DataSource, EntityManager } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { BaseAgent, createAgentMetadata } from '../core/base-agent';
 import {
   AgentType,
@@ -317,8 +317,16 @@ export class CoreDataSyncAgent extends BaseAgent {
       duration: 0,
     };
 
-    for (const [key, conflict] of this.conflicts) {
+    // Get conflicts to resolve, optionally filtered by entity type from payload
+    const conflictsToResolve = payload.entityType
+      ? Array.from(this.conflicts.entries()).filter(([key]) => key.startsWith(payload.entityType!))
+      : Array.from(this.conflicts.entries());
+
+    result.recordsProcessed = conflictsToResolve.length;
+
+    for (const [key, conflict] of conflictsToResolve) {
       try {
+        // Use default resolution strategy
         const resolved = await this.resolveConflict(conflict);
         if (resolved) {
           result.conflictsResolved++;

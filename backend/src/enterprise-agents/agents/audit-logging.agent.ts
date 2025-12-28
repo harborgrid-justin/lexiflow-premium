@@ -342,14 +342,20 @@ export class AuditLoggingAgent extends BaseAgent {
 
   private async archiveLogs(payload: AuditTaskPayload): Promise<AuditResult> {
     const startTime = Date.now();
-    const cutoffDate = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+    // Use date range from payload or default to 90 days ago
+    const cutoffDate = payload.dateRange?.start ?? new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
 
     const toArchive = this.auditLogs.filter(log => log.timestamp < cutoffDate);
-    const archivedCount = toArchive.length;
+
+    // Filter by category if specified
+    const filteredLogs = payload.category
+      ? toArchive.filter(log => log.category === payload.category)
+      : toArchive;
 
     return {
       operationType: AuditOperationType.ARCHIVE_LOGS,
-      count: archivedCount,
+      count: filteredLogs.length,
+      logs: filteredLogs.slice(0, 10), // Return sample of archived logs
       duration: Date.now() - startTime,
       errors: [],
     };
@@ -358,10 +364,31 @@ export class AuditLoggingAgent extends BaseAgent {
   private async exportLogs(payload: AuditTaskPayload): Promise<AuditResult> {
     const startTime = Date.now();
 
+    // Filter logs based on payload criteria
+    let logsToExport = [...this.auditLogs];
+
+    if (payload.dateRange) {
+      logsToExport = logsToExport.filter(
+        log => log.timestamp >= payload.dateRange!.start && log.timestamp <= payload.dateRange!.end,
+      );
+    }
+
+    if (payload.category) {
+      logsToExport = logsToExport.filter(log => log.category === payload.category);
+    }
+
+    if (payload.severity) {
+      logsToExport = logsToExport.filter(log => log.severity === payload.severity);
+    }
+
+    const exportFormat = payload.metadata?.format ?? 'json';
+    const exportPath = `/exports/audit-${Date.now()}.${exportFormat}`;
+
     return {
       operationType: AuditOperationType.EXPORT_LOGS,
-      exportPath: `/exports/audit-${Date.now()}.json`,
-      count: this.auditLogs.length,
+      exportPath,
+      count: logsToExport.length,
+      logs: logsToExport.slice(0, 5), // Return sample of exported logs
       duration: Date.now() - startTime,
       errors: [],
     };

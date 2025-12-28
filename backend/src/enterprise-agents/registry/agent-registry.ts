@@ -19,7 +19,6 @@ import {
   AgentRegistrationRequest,
   AgentRegistrationResponse,
   AgentType,
-  AgentPriority,
 } from '../interfaces/agent.interfaces';
 import { AgentEventBus } from '../events/agent-event-bus';
 
@@ -429,7 +428,7 @@ export class AgentRegistry implements OnModuleInit, OnModuleDestroy {
   /**
    * Get agent configuration
    */
-  private getAgentConfig(metadata: AgentMetadata): Record<string, unknown> {
+  private getAgentConfig(_metadata: AgentMetadata): Record<string, unknown> {
     return {
       heartbeatIntervalMs: this.configService.get<number>('AGENT_HEARTBEAT_INTERVAL_MS') ?? 30000,
       healthCheckIntervalMs: this.configService.get<number>('AGENT_HEALTH_CHECK_INTERVAL_MS') ?? 60000,

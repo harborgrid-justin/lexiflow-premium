@@ -389,8 +389,22 @@ export class IntegrationBridgeAgent extends BaseAgent {
     headers?: Record<string, string>,
     body?: unknown,
   ): Promise<unknown> {
-    this.integrationLogger.debug(`API request: ${method} ${url}`);
-    return { success: true, url, method };
+    const requestHeaders = headers ?? {};
+    const hasBody = body !== undefined && body !== null;
+
+    this.integrationLogger.debug(
+      `API request: ${method} ${url} (Headers: ${Object.keys(requestHeaders).length}, Body: ${hasBody ? 'present' : 'none'})`,
+    );
+
+    // Simulate API request with headers and body
+    return {
+      success: true,
+      url,
+      method,
+      headersCount: Object.keys(requestHeaders).length,
+      hasBody,
+      timestamp: new Date().toISOString(),
+    };
   }
 
   private applyTransformRules(

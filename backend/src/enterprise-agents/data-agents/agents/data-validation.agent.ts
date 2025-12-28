@@ -14,6 +14,8 @@ import {
   DataAgentTask,
   DataAgentResult,
   DataValidationResult,
+  DataValidationError,
+  DataValidationWarning,
 } from '../interfaces/data-agent.interfaces';
 import { DataAgentRegistry } from '../registry/data-agent-registry';
 import { DataEventBus } from '../events/data-event-bus';
@@ -61,8 +63,8 @@ export class DataValidationAgent extends BaseDataAgent {
   }
 
   async validateData(entity: string, records: unknown[]): Promise<DataValidationResult> {
-    const errors = [];
-    const warnings = [];
+    const errors: DataValidationError[] = [];
+    const warnings: DataValidationWarning[] = [];
     let valid = 0;
     let invalid = 0;
 
@@ -87,27 +89,39 @@ export class DataValidationAgent extends BaseDataAgent {
     };
   }
 
-  private validateRecord(entity: string, record: unknown): { field: string; message: string }[] {
-    const errors = [];
+  private validateRecord(entity: string, record: unknown): DataValidationError[] {
+    const errors: DataValidationError[] = [];
     const rec = record as Record<string, unknown>;
+    const recordId = rec.id as string | undefined;
+
+    const addError = (field: string, message: string): void => {
+      errors.push({
+        field,
+        value: rec[field],
+        rule: 'required',
+        message,
+        severity: 'error',
+        recordId,
+      });
+    };
 
     // Common validations
     if (!rec.id) {
-      errors.push({ field: 'id', message: 'ID is required' });
+      addError('id', 'ID is required');
     }
 
     // Entity-specific validations
     switch (entity) {
       case 'user':
-        if (!rec.email) errors.push({ field: 'email', message: 'Email is required' });
-        if (!rec.firstName) errors.push({ field: 'firstName', message: 'First name is required' });
+        if (!rec.email) addError('email', 'Email is required');
+        if (!rec.firstName) addError('firstName', 'First name is required');
         break;
       case 'case':
-        if (!rec.title) errors.push({ field: 'title', message: 'Title is required' });
-        if (!rec.caseNumber) errors.push({ field: 'caseNumber', message: 'Case number is required' });
+        if (!rec.title) addError('title', 'Title is required');
+        if (!rec.caseNumber) addError('caseNumber', 'Case number is required');
         break;
       case 'client':
-        if (!rec.name) errors.push({ field: 'name', message: 'Name is required' });
+        if (!rec.name) addError('name', 'Name is required');
         break;
     }
 

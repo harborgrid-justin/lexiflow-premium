@@ -104,7 +104,7 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
   private cleanupInterval?: NodeJS.Timeout;
 
   private readonly maxEntries = 100000;
-  private readonly maxEntrySizeBytes = 1024 * 1024;
+  private readonly maxEntrySizeBytes = 1024 * 1024; // 1MB max entry size
   private readonly defaultTtlMs = 3600000;
 
   constructor(
@@ -230,6 +230,12 @@ export class ScratchpadManagerAgent extends BaseAgent implements IScratchpadMana
    * Write a value to the scratchpad
    */
   async write<T>(key: string, value: T, ttlMs?: number): Promise<ScratchpadEntry<T>> {
+    // Validate entry size
+    const valueSize = JSON.stringify(value).length * 2;
+    if (valueSize > this.maxEntrySizeBytes) {
+      throw new Error(`Entry size ${valueSize} bytes exceeds maximum allowed size of ${this.maxEntrySizeBytes} bytes`);
+    }
+
     if (this.entries.size >= this.maxEntries) {
       this.evictOldestEntry();
     }

@@ -12,7 +12,7 @@
 
 import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { v4 as uuidv4 } from 'uuid';
+
 import { BaseAgent, createAgentMetadata } from '../core/base-agent';
 import {
   ICoordinatorAgent,
@@ -25,9 +25,9 @@ import {
   AgentHealth,
   AgentRegistrationRequest,
   AgentRegistrationResponse,
-  AgentState,
+  
   TaskResult,
-  TaskStatus,
+  
   CoordinatorCommand,
   CoordinatorCommandPayload,
 } from '../interfaces/agent.interfaces';
@@ -110,9 +110,9 @@ export class CoordinatorAgent extends BaseAgent implements ICoordinatorAgent, On
   private readonly pendingTasks: Map<string, PendingTask> = new Map();
   private readonly taskAssignments: Map<string, string> = new Map();
   private coordinationInterval?: NodeJS.Timeout;
-  private readonly startTime = Date.now();
-  private completedTaskCount = 0;
-  private failedTaskCountCoord = 0;
+  private readonly coordStartTime = Date.now();
+  private coordCompletedTaskCount = 0;
+  private coordFailedTaskCount = 0;
 
   constructor(
     eventEmitter: EventEmitter2,
@@ -331,7 +331,7 @@ export class CoordinatorAgent extends BaseAgent implements ICoordinatorAgent, On
     for (const [taskId, entry] of this.pendingTasks) {
       if (entry.attempts >= entry.maxAttempts) {
         this.pendingTasks.delete(taskId);
-        this.failedTaskCountCoord++;
+        this.coordFailedTaskCount++;
         continue;
       }
 
@@ -434,19 +434,24 @@ export class CoordinatorAgent extends BaseAgent implements ICoordinatorAgent, On
       errorAgents: stats.errorAgents,
       pendingTasks: pendingTaskCount,
       processingTasks,
-      completedTasks: this.completedTaskCount,
-      failedTasks: this.failedTaskCountCoord,
+      completedTasks: this.coordCompletedTaskCount,
+      failedTasks: this.coordFailedTaskCount,
       systemHealth,
-      uptime: Date.now() - this.startTime,
+      uptime: Date.now() - this.coordStartTime,
       lastCoordinationTime: new Date(),
     };
   }
 
   private async handleRegisterAgent(payload: CoordinatorTaskPayload): Promise<CoordinatorResult> {
     const startTime = Date.now();
+    const agentId = payload.targetAgentId;
+
+    this.coordLogger.log(`Registering agent: ${agentId ?? 'unknown'}`);
+
     return {
       operationType: CoordinatorOperationType.REGISTER_AGENT,
       success: true,
+      agentId,
       duration: Date.now() - startTime,
       errors: [],
     };
@@ -533,8 +538,11 @@ export class CoordinatorAgent extends BaseAgent implements ICoordinatorAgent, On
     };
   }
 
-  private async handleScaleAgents(payload: CoordinatorTaskPayload): Promise<CoordinatorResult> {
+  private async handleScaleAgents(_payload: CoordinatorTaskPayload): Promise<CoordinatorResult> {
     const startTime = Date.now();
+
+    this.coordLogger.log('Scaling agents');
+
     return {
       operationType: CoordinatorOperationType.SCALE_AGENTS,
       success: true,
@@ -546,13 +554,13 @@ export class CoordinatorAgent extends BaseAgent implements ICoordinatorAgent, On
   private handleTaskCompleted(event: AgentEvent): void {
     const payload = event.payload as { taskId: string };
     this.taskAssignments.delete(payload.taskId);
-    this.completedTaskCount++;
+    this.coordCompletedTaskCount++;
   }
 
   private handleTaskFailed(event: AgentEvent): void {
     const payload = event.payload as { taskId: string };
     this.taskAssignments.delete(payload.taskId);
-    this.failedTaskCountCoord++;
+    this.coordFailedTaskCount++;
   }
 
   private handleAgentError(event: AgentEvent): void {

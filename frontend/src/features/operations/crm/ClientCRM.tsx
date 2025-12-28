@@ -11,7 +11,7 @@ import { Button } from '@/components/atoms/Button';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { TabbedPageLayout, TabConfigItem } from '@/components/templates/TabbedPageLayout';
+import { TabbedPageLayout, TabConfigItem } from '@/components/layouts/TabbedPageLayout';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/utils/cn';

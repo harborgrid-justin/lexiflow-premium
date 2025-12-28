@@ -19,7 +19,7 @@ import React from 'react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { JurisdictionGeoMap } from '@/features/knowledge/jurisdiction/JurisdictionGeoMap';
+import { JurisdictionGeoMap } from '@features/knowledge';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

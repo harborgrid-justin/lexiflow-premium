@@ -19,7 +19,7 @@ import React, { Suspense, lazy, useTransition } from 'react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout/TabbedPageLayout';
+import { TabbedPageLayout } from '@/components/layouts/TabbedPageLayout/TabbedPageLayout';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { AdminPanelContent } from './AdminPanelContent';
 

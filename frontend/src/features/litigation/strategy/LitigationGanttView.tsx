@@ -12,8 +12,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { Plus, TrendingUp } from 'lucide-react';
 
 // Internal Components
-import { PlanningSidebar } from '@/features/cases/components/detail/planning/PlanningSidebar';
-import { GanttTimeline } from '@/features/cases/components/detail/planning/GanttTimeline';
+import { PlanningSidebar, GanttTimeline } from '@features/cases';
 import { Button } from '@/components/atoms/Button';
 
 // Hooks & Context

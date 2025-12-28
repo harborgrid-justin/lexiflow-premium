@@ -21,7 +21,7 @@ import { UserCircle, Shield, Settings, Sliders, Activity } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout';
+import { TabbedPageLayout } from '@/components/layouts/TabbedPageLayout';
 import { ProfileOverview } from './ProfileOverview';
 import { AccessMatrixEditor } from './AccessMatrixEditor';
 import { SecurityPane } from './SecurityPane';

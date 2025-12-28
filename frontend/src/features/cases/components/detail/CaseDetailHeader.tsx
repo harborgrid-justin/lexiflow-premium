@@ -15,7 +15,7 @@ import { ArrowLeft, MapPin, ArrowUpRight, Calendar, Users, CheckSquare, MessageC
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms/Button';
 import { Badge } from '@/components/atoms/Badge';
-import { ClientPortalModal } from '@/features/operations/crm/ClientPortalModal';
+import { ClientPortalModal } from '@features/operations';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

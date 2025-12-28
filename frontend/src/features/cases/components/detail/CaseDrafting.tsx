@@ -13,8 +13,8 @@ import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { Cpu, Book, AlertTriangle, Check, Wand2, Search, History, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { AdvancedEditor } from '@/features/operations/documents/AdvancedEditor';
-import { ClauseList as ClausePanel } from '@/features/knowledge/clauses/ClauseList';
+import { AdvancedEditor } from '@features/operations';
+import { ClauseList as ClausePanel } from '@features/knowledge';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

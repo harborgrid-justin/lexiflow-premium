@@ -29,7 +29,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks';
 
 // Components
-import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout';
+import { TabbedPageLayout } from '@/components/layouts/TabbedPageLayout';
 import { Button } from '@/components/atoms/Button';
 import { Modal } from '@/components/molecules/Modal';
 import { Input } from '@/components/atoms';

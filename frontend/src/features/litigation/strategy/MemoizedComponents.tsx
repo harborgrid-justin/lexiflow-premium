@@ -9,7 +9,7 @@
 
 import React, { memo } from 'react';
 import { TypedWorkflowNode } from '@/types';
-import { WorkflowConnection } from '@/features/cases/components/workflow/builder/types';
+import { WorkflowConnection } from '@features/cases';
 
 interface MemoizedNodeProps {
   node: TypedWorkflowNode;

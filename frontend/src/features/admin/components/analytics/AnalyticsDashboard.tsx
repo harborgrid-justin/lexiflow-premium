@@ -19,7 +19,7 @@ import { Download } from 'lucide-react';
 // Components
 import { Button } from '@/components/atoms/Button/Button';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
-import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout/TabbedPageLayout';
+import { TabbedPageLayout } from '@/components/layouts/TabbedPageLayout/TabbedPageLayout';
 import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 
 // Hooks & Context

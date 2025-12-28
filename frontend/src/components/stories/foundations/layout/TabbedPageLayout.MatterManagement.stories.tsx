@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TabbedPageLayout, TabConfigItem } from '@/components/templates/TabbedPageLayout';
+import { TabbedPageLayout, TabConfigItem } from '@/components/layouts/TabbedPageLayout';
 import { Button } from '@/components/atoms/Button';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';

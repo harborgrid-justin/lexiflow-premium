@@ -20,7 +20,7 @@ import { Plus } from 'lucide-react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout';
+import { TabbedPageLayout } from '@/components/layouts/TabbedPageLayout';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { KnowledgeContent } from './KnowledgeContent';
 import { Button } from '@/components/atoms/Button';

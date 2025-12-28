@@ -26,7 +26,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { FileIcon } from '@/components/atoms';
 import { Button } from '@/components/atoms/Button';
 import { VirtualList } from '@/components/organisms/VirtualList';
-import { DocumentPreviewPanel } from '@/features/operations/documents/viewer/DocumentPreviewPanel';
+import { DocumentPreviewPanel } from '@features/operations';
 import { StatusBadge, EmptyListState } from '@/components/organisms/_legacy/RefactoredCommon';
 
 // Utils & Constants

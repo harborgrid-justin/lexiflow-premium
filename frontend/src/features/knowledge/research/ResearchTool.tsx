@@ -27,7 +27,7 @@ import { useSingleSelection } from '@/hooks/useMultiSelection';
 
 // Components
 import { LazyLoader } from '@/components/molecules/LazyLoader';
-import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout';
+import { TabbedPageLayout } from '@/components/layouts/TabbedPageLayout';
 import { ResearchToolContent } from './ResearchToolContent';
 
 // Utils & Config

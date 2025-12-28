@@ -1,28 +1,12 @@
-export * from './Button';
-export * from './Badge';
-export * from './Input';
-export * from './TextArea';
-export * from './Box';
-export * from './Stack';
-export * from './Text';
-export * from './SectionTitle';
-export * from './SectionHeader';
-export * from './LoadingSpinner';
-export * from './CentredLoader';
-export * from './ProgressBar';
-export * from './ProgressBarWithLabel';
-export * from './ProgressIndicator';
-export * from './StatusDot';
-export * from './StatusBadge';
-export * from './StatusIndicator';
-export * from './Currency';
-export * from './DateText';
-export * from './TruncatedText';
-export * from './HighlightedText';
-export * from './FileIcon';
-export * from './EvidenceTypeIcon';
-export * from './UserAvatar';
-export * from './CopyButton';
-export * from './IconButton';
-export * from './LazyImage';
-export * from './SafeContent';
+/**
+ * Atoms Layer - Re-export from ui/atoms
+ * 
+ * This is a convenience re-export layer. Actual components live in /components/ui/atoms/
+ * 
+ * Usage:
+ * import { Button } from '@/components/atoms';  // ← This works
+ * import { Button } from '@/components/ui/atoms';  // ← This also works
+ */
+
+export * from '../ui/atoms';
+

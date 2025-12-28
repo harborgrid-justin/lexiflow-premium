@@ -14,8 +14,7 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useWindow } from '@/providers/WindowContext';
 import { Formatters } from '@/utils/formatters';
 import { getTodayString } from '@/utils/dateUtils';
-import { OperatingLedger } from '@/features/knowledge/practice/finance/OperatingLedger';
-import { TrustLedger } from '@/features/knowledge/practice/finance/TrustLedger';
+import { OperatingLedger, TrustLedger } from '@features/knowledge';
 import { useNotify } from '@/hooks/useNotify';
 
 export const BillingLedger: React.FC = () => {

@@ -25,7 +25,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { NexusGraph } from '@/features/visual/NexusGraph';
+import { NexusGraph } from '@features/visual';
 import { Card } from '@/components/molecules/Card';
 import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Sidebar } from '@/components/organisms/Sidebar/Sidebar';
-import { AppShell } from '@/components/templates/AppShell/AppShell';
+import { AppShell } from '@/components/layouts/AppShell/AppShell';
 import { AppHeader } from '@/components/organisms/AppHeader/AppHeader';
 import { 
   ThemeProvider, 
@@ -13,7 +13,7 @@ import { HolographicDock } from '@/components/organisms/HolographicDock/Holograp
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
 import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
 import { initializeModules } from '@/config';
-import { AppContentRenderer } from '@/pages/AppContentRenderer';
+import { AppContentRenderer } from '@/components/layouts/AppContentRenderer';
 import { GlobalHotkeys } from '@/components/organisms/GlobalHotkeys/GlobalHotkeys';
 import { useAppController } from '@/hooks';
 import { useDataServiceCleanup } from './hooks/useDataServiceCleanup';

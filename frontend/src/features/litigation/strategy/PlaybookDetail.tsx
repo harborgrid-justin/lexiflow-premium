@@ -16,7 +16,7 @@ import { cn } from '@/utils/cn';
 
 import { Button } from '@/components/atoms/Button';
 import { Tabs } from '@/components/molecules/Tabs';
-import { ResearchTool } from '@/features/knowledge/research/ResearchTool';
+import { ResearchTool } from '@features/knowledge';
 import { WarRoom } from '../war-room/WarRoom';
 import { PlaybookDetailProps } from './types';
 

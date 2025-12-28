@@ -13,9 +13,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { getTodayString } from '@/utils/dateUtils';
-import { Step1TemplateSelection } from '@features/document-assembly/Step1TemplateSelection';
-import { Step2FormConfiguration } from '@features/document-assembly/Step2FormConfiguration';
-import { Step3DraftReview } from '@features/document-assembly/Step3DraftReview';
+import { Step1TemplateSelection, Step2FormConfiguration, Step3DraftReview } from '@features/document-assembly';
 
 interface DocumentAssemblyProps {
   onClose: () => void;

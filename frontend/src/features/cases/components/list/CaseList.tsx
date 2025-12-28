@@ -19,7 +19,7 @@ import { Plus, Download } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout';
+import { TabbedPageLayout } from '@/components/layouts/TabbedPageLayout';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { Button } from '@/components/atoms/Button';
 import { CaseListActive } from '@features/cases';

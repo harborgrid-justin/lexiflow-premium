@@ -25,7 +25,7 @@ import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { DocumentPreviewPanel } from '@/features/operations/documents/viewer/DocumentPreviewPanel';
+import { DocumentPreviewPanel } from '@features/operations';
 import { WallItemCard } from './cards/WallItemCard';
 
 // Utils & Constants

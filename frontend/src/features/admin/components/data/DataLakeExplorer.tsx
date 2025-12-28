@@ -11,7 +11,7 @@ import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms/Button/Button';
 import { Card } from '@/components/molecules/Card/Card';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
-import { DocumentPreviewPanel } from '@/features/operations/documents/viewer/DocumentPreviewPanel';
+import { DocumentPreviewPanel } from '@features/operations';documents/viewer/DocumentPreviewPanel';
 
 export function DataLakeExplorer(): React.ReactElement {
     const { theme } = useTheme();

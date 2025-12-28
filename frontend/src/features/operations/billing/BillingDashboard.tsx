@@ -29,7 +29,7 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Button } from '@/components/atoms/Button';
 import { PeriodSelector } from '@/components/molecules/PeriodSelector';
 import { ExportMenu } from '@/components/organisms/ExportMenu';
-import { TabbedPageLayout, TabConfigItem } from '@/components/templates/TabbedPageLayout';
+import { TabbedPageLayout, TabConfigItem } from '@/components/layouts/TabbedPageLayout';
 import { LazyLoader } from '@/components/molecules/LazyLoader';
 import { BillingDashboardContent } from '@features/operations';
 import { BillingErrorBoundary } from './BillingErrorBoundary';

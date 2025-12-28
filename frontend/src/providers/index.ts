@@ -28,6 +28,71 @@ export type { WindowInstance } from './WindowContext.types';
 export { DataSourceProvider, useDataSourceState, useDataSourceActions, useDataSource } from './DataSourceContext';
 export type { DataSourceType } from './DataSourceContext.types';
 
+// Repository infrastructure exports
+export type { 
+  BaseRepository, 
+  BatchRepository, 
+  SearchableRepository,
+  SearchOptions,
+  SearchResult,
+  CaseRepository,
+  DocumentRepository,
+  ComplianceRepository,
+  ConflictResult,
+  ScanResult,
+  RepositoryRegistry,
+  RepositoryFactory,
+  RepositoryConfig,
+  RepositoryLogger,
+  RepositoryTracer,
+  RepositoryMetrics,
+  Span,
+  AuthProvider,
+  DataOwnership,
+} from './repository/types';
+
+export type {
+  DataSourceConfig,
+  DataSourceEnvironmentConfig,
+  TimeoutConfig,
+  RetryConfig,
+  ObservabilityConfig,
+} from './repository/config';
+
+export { 
+  DataSourceConfigBuilder,
+  createConfigFromEnv,
+  createTestConfig,
+  DEFAULT_TIMEOUTS,
+  DEFAULT_RETRY,
+  DEFAULT_OBSERVABILITY,
+  ENVIRONMENT_CONFIGS,
+} from './repository/config';
+
+export {
+  RepositoryError,
+  UnauthorizedError,
+  ForbiddenError,
+  NotFoundError,
+  ValidationError,
+  ConflictError,
+  NetworkError,
+  TimeoutError,
+  ServerError,
+  RateLimitError,
+  BusinessRuleError,
+  ConcurrencyError,
+  ErrorFactory,
+  isRepositoryError,
+  isRetryableError,
+  getUserMessage,
+  getErrorSeverity,
+} from './repository/errors';
+
+export type {
+  ValidationFailure,
+} from './repository/errors';
+
 // ============================================================================
 // Type Exports (Consolidated)
 // ============================================================================

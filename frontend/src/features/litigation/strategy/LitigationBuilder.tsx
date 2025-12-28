@@ -12,7 +12,7 @@ import { Save, Rocket, Loader2 } from 'lucide-react';
 
 // Internal Components
 import { LazyLoader } from '@/components/molecules/LazyLoader';
-import { TabbedPageLayout } from '@/components/templates/TabbedPageLayout';
+import { TabbedPageLayout } from '@/components/layouts/TabbedPageLayout';
 import { Button } from '@/components/atoms/Button';
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
 

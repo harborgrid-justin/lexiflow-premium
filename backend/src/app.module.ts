@@ -113,6 +113,9 @@ import { VersioningModule } from './versioning/versioning.module';
 // Queue Processing System
 import { QueuesModule } from './queues/queues.module';
 
+// Enterprise Multi-Agent System
+import { EnterpriseAgentsModule } from './enterprise-agents/enterprise-agents.module';
+
 // App Controller & Service
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -286,6 +289,14 @@ if (isRedisEnabled) {
 
     // Queue Processing System
     QueuesModule,
+
+    // Enterprise Multi-Agent System (12 Agents)
+    // - 10 Worker Agents: CoreDataSync, SecurityCompliance, AnalyticsProcessing,
+    //   DocumentProcessing, WorkflowOrchestration, NotificationDispatch,
+    //   CacheManagement, AuditLogging, IntegrationBridge, HealthMonitoring
+    // - 1 Coordinator Agent: Central orchestrator
+    // - 1 Scratchpad Manager: Shared state management
+    EnterpriseAgentsModule,
   ],
   controllers: [AppController],
   providers: [

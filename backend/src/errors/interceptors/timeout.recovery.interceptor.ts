@@ -284,7 +284,7 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
     // Limit cache size
     if (this.responseCache.size > 100) {
       const firstKey = this.responseCache.keys().next().value;
-      this.responseCache.delete(firstKey);
+      if (firstKey) this.responseCache.delete(firstKey);
     }
   }
 

@@ -38,8 +38,10 @@ export interface SessionValidationResult {
 export class RequestFingerprintService implements OnModuleDestroy {
   private readonly logger = new Logger(RequestFingerprintService.name);
   private readonly fingerprintCache = new Map<string, FingerprintData>();
-  private readonly MAX_CACHE_SIZE = 10000;
-  private readonly CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+  // Reserved for future LRU cache size enforcement
+  // private readonly MAX_CACHE_SIZE = 10000;
+  // Reserved for future TTL-based cleanup
+  // private readonly CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
   private cleanupInterval: NodeJS.Timeout;
 
   constructor() {

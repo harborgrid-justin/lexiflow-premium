@@ -88,11 +88,11 @@ export class MetricsCollectorService implements OnModuleDestroy {
   private readonly MAX_REQUEST_DURATIONS = 1000;
   private readonly FLUSH_INTERVAL_MS = 300000; // 5 minutes
   
-  private metrics: Map<string, number[]> = new Map();
+  // Metrics map removed - using aggregated metrics only
   private counters: Map<string, number> = new Map();
   private gauges: Map<string, number> = new Map();
   private histograms: Map<string, number[]> = new Map();
-  private lastMetricFlush: Date = new Date();
+  // Last metric flush tracking removed
 
   // Request metrics
   private requestCounts: Map<string, number> = new Map();
@@ -180,7 +180,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
 
     cpus.forEach((cpu) => {
       for (const type in cpu.times) {
-        totalTick += cpu.times[type];
+        totalTick += (cpu.times as any)[type];
       }
       totalIdle += cpu.times.idle;
     });
@@ -343,8 +343,8 @@ export class MetricsCollectorService implements OnModuleDestroy {
    * Normalize URL path for metrics (remove IDs and query params)
    */
   private normalizePath(path: string): string {
-    return path
-      .split('?')[0] // Remove query params
+    const safePath = path || '';
+    return safePath.split('?')[0] // Remove query params
       .replace(/\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi, '/:id') // UUID
       .replace(/\/\d+/g, '/:id'); // Numeric IDs
   }
@@ -426,8 +426,8 @@ export class MetricsCollectorService implements OnModuleDestroy {
       stats[key] = {
         count: values.length,
         sum,
-        min: sorted[0],
-        max: sorted[sorted.length - 1],
+        min: sorted[0]!,
+        max: sorted[sorted.length - 1]!,
         avg: sum / values.length,
         p50: this.percentile(sorted, 0.5),
         p95: this.percentile(sorted, 0.95),
@@ -444,7 +444,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
   private percentile(sortedValues: number[], p: number): number {
     if (sortedValues.length === 0) return 0;
     const index = Math.ceil(sortedValues.length * p) - 1;
-    return sortedValues[Math.max(0, index)];
+    return sortedValues[Math.max(0, index)]!;
   }
 
   /**
@@ -594,7 +594,7 @@ export class MetricsCollectorService implements OnModuleDestroy {
 
     if (metricsToSave.length > 0) {
       await this.metricRepository.save(metricsToSave);
-      this.lastMetricFlush = timestamp;
+      // this.lastMetricFlush = timestamp; // Property removed
     }
   }
 }

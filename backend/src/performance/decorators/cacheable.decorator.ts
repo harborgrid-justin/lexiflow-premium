@@ -346,7 +346,7 @@ function generateCacheKey(
   methodName: string,
 ): string {
   // Use keyGenerator if provided
-  if (options.keyGenerator) {
+  if ('keyGenerator' in options && options.keyGenerator) {
     return options.keyGenerator(...args);
   }
 

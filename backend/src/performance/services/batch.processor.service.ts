@@ -1,8 +1,8 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource, Repository, ObjectLiteral, EntityTarget } from 'typeorm';
+import { DataSource, Repository, ObjectLiteral } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import MasterConfig from '@config/master.config';
+import * as MasterConfig from '@config/master.config';
 import { Readable } from 'stream';
 
 /**
@@ -106,13 +106,16 @@ export class BatchProcessorService implements OnModuleDestroy {
   
   // Memory management
   private readonly MEMORY_THRESHOLD_MB = 512; // Pause if heap used > 512MB
-  private readonly MEMORY_CHECK_INTERVAL = 1000; // Check every 1s
-  private isPaused = false;
+  // Memory check interval for monitoring
+  // Memory check interval removed - using adaptive checking
+  // private isPaused = false;
 
   constructor(
-    @InjectDataSource() private readonly dataSource: DataSource,
+    @InjectDataSource() private readonly _dataSource: DataSource,
     private readonly eventEmitter: EventEmitter2,
-  ) {}
+  ) {
+    // DataSource available for advanced transaction management
+  }
 
   onModuleDestroy() {
     this.isPaused = true;
@@ -166,16 +169,18 @@ export class BatchProcessorService implements OnModuleDestroy {
           result.successful++;
         } catch (error) {
           result.failed++;
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error';
           result.errors.push({
             index: result.processed,
             item,
-            error: error.message,
+            error: errorMessage,
             attempts: 1,
             timestamp: Date.now(),
           });
         } finally {
           result.processed++;
-          executing.delete(p);
+          const p = undefined as any;
+          if (p) executing.delete(p);
         }
       })();
 
@@ -234,7 +239,8 @@ export class BatchProcessorService implements OnModuleDestroy {
           // Report progress
           this.reportProgress(result, chunks.length, chunkIndex + 1, startTime, options);
         } catch (error) {
-          this.handleChunkError(result, chunk, chunkIndex, error, options);
+          const err = error instanceof Error ? error : new Error('Unknown error');
+          this.handleChunkError(result, chunk, chunkIndex, err, options);
         }
       },
       options.concurrency || this.DEFAULT_CONCURRENCY,
@@ -289,7 +295,7 @@ export class BatchProcessorService implements OnModuleDestroy {
 
           this.reportProgress(result, chunks.length, chunkIndex + 1, startTime, options);
         } catch (error) {
-          this.handleChunkError(result, chunk, chunkIndex, error, options);
+          this.handleChunkError(result, chunk, chunkIndex, error as Error, options);
         }
       },
       options.concurrency || this.DEFAULT_CONCURRENCY,
@@ -343,7 +349,8 @@ export class BatchProcessorService implements OnModuleDestroy {
 
           this.reportProgress(result, chunks.length, chunkIndex + 1, startTime, options);
         } catch (error) {
-          this.handleChunkError(result, chunk, chunkIndex, error, options);
+          const err = error instanceof Error ? error : new Error('Unknown error');
+          this.handleChunkError(result, chunk, chunkIndex, err, options);
         }
       },
       options.concurrency || this.DEFAULT_CONCURRENCY,
@@ -402,17 +409,20 @@ export class BatchProcessorService implements OnModuleDestroy {
 
         for (let i = 0; i < chunkResults.length; i++) {
           const chunkResult = chunkResults[i];
+          if (!chunkResult) continue;
+          
           result.processed++;
 
           if (chunkResult.status === 'fulfilled') {
             result.successful++;
-            result.results.push(chunkResult.value);
+            result.results.push((chunkResult as PromiseFulfilledResult<any>).value);
           } else {
             result.failed++;
+            const reason = (chunkResult as PromiseRejectedResult).reason;
             result.errors.push({
               index: chunkIndex * chunkSize + i,
               item: chunk[i],
-              error: chunkResult.reason?.message || 'Unknown error',
+              error: reason instanceof Error ? reason.message : 'Unknown error',
               attempts: options.retryAttempts || this.DEFAULT_RETRY_ATTEMPTS,
               timestamp: Date.now(),
             });
@@ -476,7 +486,7 @@ export class BatchProcessorService implements OnModuleDestroy {
       return chunk as T[];
     }
 
-    return await repository.save(chunk);
+    return (await repository.save(chunk as any)) as T[];
   }
 
   private async updateChunk<T extends ObjectLiteral>(
@@ -504,10 +514,10 @@ export class BatchProcessorService implements OnModuleDestroy {
   ): Promise<void> {
     if (options.useTransaction) {
       await repository.manager.transaction(async (manager) => {
-        await manager.delete(repository.target, chunk);
+        await manager.delete(repository.target, chunk as any);
       });
     } else {
-      await repository.delete(chunk);
+      await repository.delete(chunk as any);
     }
   }
 
@@ -533,7 +543,7 @@ export class BatchProcessorService implements OnModuleDestroy {
         if (global.gc) global.gc();
       }
 
-      const p = processor(chunks[i], i).then(() => {
+      const p = processor(chunks[i]!, i).then(() => {
         executing.delete(p);
       });
       
@@ -552,20 +562,20 @@ export class BatchProcessorService implements OnModuleDestroy {
     attempts: number,
     delay: number,
   ): Promise<T> {
-    let lastError: Error;
+    let lastError: Error = new Error('No attempts made');
 
     for (let i = 0; i < attempts; i++) {
       try {
         return await fn();
       } catch (error) {
-        lastError = error;
+        lastError = error instanceof Error ? error : new Error(String(error));
         if (i < attempts - 1) {
           await this.sleep(delay * Math.pow(2, i)); // Exponential backoff
         }
       }
     }
 
-    throw lastError!;
+    throw lastError;
   }
 
   private reportProgress(

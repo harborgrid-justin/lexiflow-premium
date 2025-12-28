@@ -19,7 +19,7 @@ import { validateSortField, validateSortOrder } from '@common/utils/query-valida
 export class DocumentsService implements OnModuleDestroy {
   private readonly logger = new Logger(DocumentsService.name);
   private readonly MAX_RESULTS = 1000;
-  private readonly STREAM_THRESHOLD = 10 * 1024 * 1024;
+  // private readonly STREAM_THRESHOLD = 10 * 1024 * 1024;
 
   constructor(
     @InjectRepository(Document)
@@ -211,7 +211,7 @@ export class DocumentsService implements OnModuleDestroy {
     const result = await this.documentRepository
       .createQueryBuilder()
       .update(Document)
-      .set(updateData)
+      .set(updateData as any)
       .where('id = :id', { id })
       .returning('*')
       .execute();

@@ -105,7 +105,7 @@ export class AlertingService {
           type: 'webhook',
           enabled: true,
           config: {
-            url: process.env.ALERT_WEBHOOK_URL,
+            url: process.env.ALERT_WEBHOOK_URL || '',
           },
         },
       ],
@@ -130,7 +130,7 @@ export class AlertingService {
           type: 'webhook',
           enabled: true,
           config: {
-            url: process.env.ALERT_WEBHOOK_URL,
+            url: process.env.ALERT_WEBHOOK_URL || '',
           },
         },
       ],
@@ -155,7 +155,7 @@ export class AlertingService {
           type: 'webhook',
           enabled: true,
           config: {
-            url: process.env.ALERT_WEBHOOK_URL,
+            url: process.env.ALERT_WEBHOOK_URL || '',
           },
         },
       ],
@@ -180,7 +180,7 @@ export class AlertingService {
           type: 'webhook',
           enabled: true,
           config: {
-            url: process.env.ALERT_WEBHOOK_URL,
+            url: process.env.ALERT_WEBHOOK_URL || '',
           },
         },
       ],
@@ -205,7 +205,7 @@ export class AlertingService {
           type: 'webhook',
           enabled: true,
           config: {
-            url: process.env.ALERT_WEBHOOK_URL,
+            url: process.env.ALERT_WEBHOOK_URL || '',
           },
         },
       ],
@@ -230,7 +230,7 @@ export class AlertingService {
           type: 'webhook',
           enabled: true,
           config: {
-            url: process.env.ALERT_WEBHOOK_URL,
+            url: process.env.ALERT_WEBHOOK_URL || '',
           },
         },
       ],
@@ -255,7 +255,7 @@ export class AlertingService {
           type: 'webhook',
           enabled: true,
           config: {
-            url: process.env.ALERT_WEBHOOK_URL,
+            url: process.env.ALERT_WEBHOOK_URL || '',
           },
         },
       ],
@@ -513,7 +513,7 @@ export class AlertingService {
       message: alert.message,
       severity: alert.severity,
       timestamp: alert.createdAt,
-      metadata: alert.metadata,
+      metadata: (alert as any).metadata,
     };
 
     await axios.post(config.url, payload, {
@@ -582,7 +582,7 @@ export class AlertingService {
     // For now, just log that we would send an email
     this.logger.log('Email alert would be sent', {
       alertId: alert.id,
-      recipients: config.recipients,
+      recipients: config.recipients as any,
     });
   }
 

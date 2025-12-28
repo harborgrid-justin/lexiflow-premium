@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import MasterConfig from '@config/master.config';
+import * as MasterConfig from '@config/master.config';
 
 /**
  * Connection Pool Metrics
@@ -156,7 +156,7 @@ export class ConnectionPoolOptimizerService implements OnModuleInit, OnModuleDes
           idleCount: number;
           waitingCount?: number;
         }
-        const pool = (driver as { master: PostgresPool }).master;
+        const pool = (driver as unknown as { master: PostgresPool }).master;
         if (pool && pool.totalCount !== undefined) {
           poolStats = {
             total: pool.totalCount,

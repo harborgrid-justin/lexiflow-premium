@@ -132,7 +132,7 @@ export class GracefulDegradationService {
 
         this.logger.warn(
           `Service ${serviceName} failed, using fallback: ${config.fallbackStrategy}`,
-          { error: error.message },
+          { error: error instanceof Error ? error.message : String(error) },
         );
 
         return fallbackResponse;
@@ -338,7 +338,7 @@ export class GracefulDegradationService {
     // Limit cache size
     if (this.responseCache.size > 1000) {
       const firstKey = this.responseCache.keys().next().value;
-      this.responseCache.delete(firstKey);
+      if (firstKey) this.responseCache.delete(firstKey);
     }
   }
 

@@ -35,7 +35,7 @@ export class PartiesController {
   @Get()
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(): Promise<Party[]> {
+  async findAll(): Promise<any> {
     return this.partiesService.findAll();
   }
 
@@ -43,7 +43,7 @@ export class PartiesController {
   @Get('case/:caseId')
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAllByCaseId(@Param('caseId') caseId: string): Promise<Party[]> {
+  async findAllByCaseId(@Param('caseId') caseId: string): Promise<any> {
     return this.partiesService.findAllByCaseId(caseId);
   }
 

@@ -20,11 +20,11 @@ export interface JSONArray extends Array<JSONValue> {}
 export class JSONScalar implements CustomScalar<JSONValue, JSONValue> {
   description = 'JSON custom scalar type';
 
-  parseValue(value: JSONValue): JSONValue {
+  parseValue(value: unknown): JSONValue {
     return value;
   }
 
-  serialize(value: JSONValue): JSONValue {
+  serialize(value: unknown): JSONValue {
     return value;
   }
 

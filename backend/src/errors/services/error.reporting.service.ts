@@ -171,7 +171,8 @@ export class ErrorReportingService {
         const hoursAgo = Math.floor((now - errorTime) / (60 * 60 * 1000));
 
         if (hoursAgo < hours) {
-          hourlyBuckets[hours - 1 - hoursAgo]++;
+          const index = hours - 1 - hoursAgo;
+          if (hourlyBuckets[index] !== undefined) hourlyBuckets[index]++;
         }
       });
 
@@ -312,7 +313,7 @@ export class ErrorReportingService {
       }
     } catch (error) {
       // Don't let monitoring failures affect application
-      this.logger.warn(`Failed to send error to monitoring: ${error.message}`);
+      this.logger.warn(`Failed to send error to monitoring: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
@@ -402,7 +403,8 @@ export class ErrorReportingService {
       if (sensitiveHeaders.includes(key.toLowerCase())) {
         sanitized[key] = '[REDACTED]';
       } else {
-        sanitized[key] = headers[key];
+        const value = headers[key];
+        if (value) sanitized[key] = value;
       }
     });
 

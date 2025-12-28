@@ -147,7 +147,7 @@ export class WebhooksService implements OnModuleDestroy {
       const payload: WebhookPayload = {
         event,
         timestamp: new Date(),
-        data,
+        data: data as Record<string, unknown>,
         webhookId: webhook.id,
         deliveryId: this.generateId(),
       };

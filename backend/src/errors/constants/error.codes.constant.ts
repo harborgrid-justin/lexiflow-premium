@@ -688,7 +688,7 @@ export class ErrorCodes {
   static getAllCodes(): Map<string, ErrorCodeDefinition> {
     const codes = new Map<string, ErrorCodeDefinition>();
 
-    Object.entries(ErrorCodes).forEach(([key, value]) => {
+    Object.entries(ErrorCodes).forEach(([_key, value]) => {
       if (typeof value === 'object' && 'code' in value) {
         codes.set(value.code, value);
       }

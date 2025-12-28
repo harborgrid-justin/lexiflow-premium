@@ -104,7 +104,7 @@ export class PleadingsService {
       ...updatePleadingDto,
       ...(userId ? { updatedBy: userId } : {}),
       updatedAt: new Date()
-    };
+    } as any;
 
     const result = await this.pleadingRepository
       .createQueryBuilder()
@@ -120,7 +120,7 @@ export class PleadingsService {
 
     this.logger.log(`Pleading updated: ${id}`);
     const rawResult = result.raw as Pleading[];
-    return rawResult[0];
+    return rawResult[0]!;
   }
 
   /**

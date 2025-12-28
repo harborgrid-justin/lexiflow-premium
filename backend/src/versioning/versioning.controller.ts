@@ -30,7 +30,7 @@ export class VersioningController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createVersion(@Body() body: Record<string, unknown>): Promise<unknown> {
-    return await this.versioningService.createVersion(body);
+    return await this.versioningService.createVersion(body as any);
   }
 
   @Get('history/:entityType/:entityId')

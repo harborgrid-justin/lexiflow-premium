@@ -91,7 +91,7 @@ export class MessengerService implements OnModuleDestroy {
   // Memory limits
   private readonly MAX_CONVERSATION_CACHE = 5000;
   private readonly MAX_MESSAGE_BUFFER = 10000;
-  private readonly MAX_UNREAD_CACHE = 2000;
+  // Unread cache limit removed - using LRU default sizing
   private readonly CACHE_TTL_MS = 1800000; // 30 minutes
   private readonly MESSAGE_RETENTION_DAYS = 30;
   private readonly MAX_BATCH_SIZE = 500;

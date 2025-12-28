@@ -204,8 +204,8 @@ export class PerformanceInterceptor implements NestInterceptor {
           {
             method,
             url,
-            duration: String(duration),
-            statusCode: String(statusCode),
+            duration: duration,
+            statusCode: statusCode,
             memoryDelta: String(memoryDelta),
             dbQueryCount: String(dbQueryCount),
             errorMessage: error.message,
@@ -235,8 +235,8 @@ export class PerformanceInterceptor implements NestInterceptor {
    * Normalize URL path for metrics (remove IDs and query params)
    */
   private normalizePath(path: string): string {
-    return path
-      .split('?')[0] // Remove query params
+    const safePath = path || '';
+    return safePath.split('?')[0] // Remove query params
       .replace(/\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi, '/:id') // UUID
       .replace(/\/\d+/g, '/:id'); // Numeric IDs
   }

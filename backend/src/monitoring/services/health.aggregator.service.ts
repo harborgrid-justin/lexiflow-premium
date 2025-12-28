@@ -339,7 +339,7 @@ export class HealthAggregatorService {
 
     cpus.forEach((cpu) => {
       for (const type in cpu.times) {
-        totalTick += cpu.times[type];
+        totalTick += (cpu.times as any)[type];
       }
       totalIdle += cpu.times.idle;
     });

@@ -73,8 +73,10 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
 
   constructor(
     private readonly redisCache: RedisCacheManagerService,
-    private readonly configService: ConfigService,
-  ) {}
+    private readonly _configService: ConfigService,
+  ) {
+    // ConfigService available for dynamic configuration
+  }
 
   async onModuleInit() {
     this.startCleanupInterval();
@@ -499,7 +501,8 @@ export class CacheStrategyService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  private cleanupExpiredEntries(): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private _cleanupExpiredEntries(): void {
     const now = Date.now();
     let count = 0;
 

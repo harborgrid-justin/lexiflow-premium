@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 import * as zlib from 'zlib';
-import MasterConfig from '@config/master.config';
+import * as MasterConfig from '@config/master.config';
 
 /**
  * Compression Configuration
@@ -124,19 +124,21 @@ export class CompressionService {
     }
 
     try {
-      const compressed = await this.compressBuffer(buffer, algorithm, level);
+      const compressAlg = algorithm === 'auto' ? 'gzip' : algorithm;
+      const compressed = await this.compressBuffer(buffer, compressAlg, level);
 
       // Update statistics
       this.updateStats(buffer.length, compressed.length);
 
       this.logger.debug(
-        `Compressed ${buffer.length} bytes to ${compressed.length} bytes using ${algorithm} ` +
+        `Compressed ${buffer.length} bytes to ${compressed.length} bytes using ${compressAlg} ` +
         `(${((1 - compressed.length / buffer.length) * 100).toFixed(1)}% reduction)`
       );
 
       return compressed;
     } catch (error) {
-      this.logger.error(`Compression failed: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Compression failed: ${errorMessage}`);
       return buffer;
     }
   }
@@ -151,16 +153,23 @@ export class CompressionService {
     try {
       switch (algorithm) {
         case 'gzip':
-          return await this.promisify(zlib.gunzip)(data);
+          return await new Promise<Buffer>((resolve, reject) => {
+            zlib.gunzip(data, (err, result) => err ? reject(err) : resolve(result));
+          });
         case 'brotli':
-          return await this.promisify(zlib.brotliDecompress)(data);
+          return await new Promise<Buffer>((resolve, reject) => {
+            zlib.brotliDecompress(data, (err, result) => err ? reject(err) : resolve(result));
+          });
         case 'deflate':
-          return await this.promisify(zlib.inflate)(data);
+          return await new Promise<Buffer>((resolve, reject) => {
+            zlib.inflate(data, (err, result) => err ? reject(err) : resolve(result));
+          });
         default:
           throw new Error(`Unsupported algorithm: ${algorithm}`);
       }
     } catch (error) {
-      this.logger.error(`Decompression failed: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Decompression failed: ${errorMessage}`);
       throw error;
     }
   }
@@ -173,7 +182,8 @@ export class CompressionService {
       return false;
     }
 
-    const normalizedType = contentType.toLowerCase().split(';')[0].trim();
+    const safeContentType = contentType || '';
+    const normalizedType = safeContentType ? safeContentType.toLowerCase().split(';')[0].trim() : '';
 
     // Check exclusions first
     if (config.excludeContentTypes) {
@@ -271,7 +281,8 @@ export class CompressionService {
 
       res.send(compressed);
     } catch (error) {
-      this.logger.error(`Response compression failed: ${error.message}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(`Response compression failed: ${errorMessage}`);
       res.send(data);
     }
   }
@@ -338,12 +349,12 @@ export class CompressionService {
         });
 
       case 'brotli':
-        return await this.promisify(zlib.brotliCompress)(buffer, {
+        return await this.promisify<any>(zlib.brotliCompress)(buffer, {
           params: {
             [zlib.constants.BROTLI_PARAM_QUALITY]: level,
             [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT,
           },
-        });
+        } as any);
 
       case 'deflate':
         return await this.promisify(zlib.deflate)(buffer, {

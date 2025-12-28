@@ -167,7 +167,7 @@ export class MessengerService {
       .getMany();
 
     return messages.filter(msg => {
-      const readBy = (msg.readBy || []) as ReadByEntry[];
+      const readBy = (msg.readBy || []) as any[];
       return !readBy.some((r: ReadByEntry) => r.userId === userId);
     }).length;
   }

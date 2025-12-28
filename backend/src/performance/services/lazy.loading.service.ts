@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Repository, SelectQueryBuilder, FindOptionsWhere, ObjectLiteral } from 'typeorm';
-import MasterConfig from '@config/master.config';
+import { Repository, SelectQueryBuilder, ObjectLiteral } from 'typeorm';
+import * as MasterConfig from '@config/master.config';
 
 /**
  * Pagination Type
@@ -190,8 +190,9 @@ export class LazyLoadingService {
     }
 
     // Generate cursors
-    const nextCursor = hasNextPage && data.length > 0
-      ? this.encodeCursor({ field: sortBy, value: data[data.length - 1][sortBy] })
+    const lastItem = data[data.length - 1];
+    const nextCursor = hasNextPage && data.length > 0 && lastItem
+      ? this.encodeCursor({ field: sortBy, value: lastItem[sortBy] })
       : undefined;
 
     const previousCursor = cursor
@@ -269,22 +270,21 @@ export class LazyLoadingService {
   /**
    * Lazy load related entities
    */
-  async lazyLoadRelation<T, R>(
+  async lazyLoadRelation<T extends Record<string, any>, R>(
     entity: T,
     relation: string,
     loader: DeferredLoader<R>,
-    config: LazyLoadConfig = {},
   ): Promise<R> {
     // Check if already loaded
     if (entity[relation] !== undefined && entity[relation] !== null) {
-      return entity[relation];
+      return entity[relation] as R;
     }
 
     // Load the relation
     const result = await loader();
 
-    // Cache the result on entity
-    entity[relation] = result;
+    // Cache the result on entity (safe with Record constraint)
+    (entity as any)[relation] = result;
 
     return result;
   }

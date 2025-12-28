@@ -23,12 +23,12 @@ export class UserResolver {
     const users = result.data;
     // Apply filter if provided
     if (filter?.role && filter.role.length > 0) {
-      return users.filter(u => filter.role?.includes(u.role)) as UserType[];
+      return users.filter(u => filter.role?.includes(u.role)) as unknown as UserType[];
     }
     if (filter?.isActive !== undefined) {
-      return users.filter(u => u.isActive === filter.isActive) as UserType[];
+      return users.filter(u => u.isActive === filter.isActive) as unknown as UserType[];
     }
-    return users as UserType[];
+    return users as unknown as UserType[];
   }
 
   @Query(() => UserType, { name: 'user', nullable: true })
@@ -45,7 +45,7 @@ export class UserResolver {
     if (!currentUser) {
       throw new Error('User not found');
     }
-    return currentUser as UserType;
+    return currentUser as unknown as UserType;
   }
 
   @Mutation(() => AuthPayload)
@@ -99,7 +99,7 @@ export class UserResolver {
       mfaEnabled: input.mfaEnabled,
     };
     const updatedUser = await this.userService.update(id, updateDto);
-    return updatedUser as UserType;
+    return updatedUser as unknown as UserType;
   }
 
   @Mutation(() => Boolean)

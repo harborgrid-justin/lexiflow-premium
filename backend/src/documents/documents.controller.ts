@@ -14,7 +14,6 @@ import {
   HttpCode,
   ParseUUIDPipe,
   Inject,
-  CacheInterceptor,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiConsumes, ApiBody, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';

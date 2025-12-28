@@ -72,7 +72,7 @@ export class PartiesService {
     if (updatePartyDto.metadata) {
       updateData.metadata = JSON.stringify(updatePartyDto.metadata) as unknown as Record<string, unknown>;
     }
-    await this.partyRepository.update(id, updateData);
+    await this.partyRepository.update(id, updateData as any);
     return this.findOne(id);
   }
 

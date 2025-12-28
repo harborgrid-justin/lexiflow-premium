@@ -34,7 +34,7 @@ export class MotionsController {
   @Get()
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(): Promise<Motion[]> {
+  async findAll(): Promise<any> {
     return this.motionsService.findAll();
   }
 
@@ -42,7 +42,7 @@ export class MotionsController {
   @Get('case/:caseId')
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAllByCaseId(@Param('caseId') caseId: string): Promise<Motion[]> {
+  async findAllByCaseId(@Param('caseId') caseId: string): Promise<any> {
     return this.motionsService.findAllByCaseId(caseId);
   }
 

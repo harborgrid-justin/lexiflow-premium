@@ -53,7 +53,7 @@ export class OcrService {
       const options: TesseractCreateWorkerOptions = {
         logger: (m: TesseractLoggerMessage) => this.logger.debug(JSON.stringify(m)),
       };
-      this.worker = (await createWorker(languages, 1, options)) as TesseractWorker;
+      this.worker = (await createWorker(languages, 1, options)) as unknown as TesseractWorker;
       this.logger.log('Tesseract OCR worker initialized successfully');
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';

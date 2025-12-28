@@ -23,19 +23,19 @@ export class LegalEntitiesController {
   @Get()
   @ApiOperation({ summary: 'Get all legal entities' })
   @ApiResponse({ status: 200, description: 'Entities retrieved successfully' })
-  async findAll(@Query() query: LegalEntityQueryParams) {
+  async findAll(@Query() query: LegalEntityQueryParams): Promise<any> {
     return await this.legalEntitiesService.findAll(query);
   }
 
   @Get('stats')
   @ApiOperation({ summary: 'Get entity statistics' })
-  async getStats() {
+  async getStats(): Promise<any> {
     return await this.legalEntitiesService.getStats();
   }
 
   @Get('relationships')
   @ApiOperation({ summary: 'Get all entity relationships' })
-  async getAllRelationships() {
+  async getAllRelationships(): Promise<any> {
     return await this.legalEntitiesService.getAllRelationships();
   }
 

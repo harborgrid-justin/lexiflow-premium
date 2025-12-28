@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
-import { HttpModule } from '@nestjs/axios';
+// import { HttpModule } from '@nestjs/axios'; // Module not installed
 import { ConfigModule } from '@nestjs/config';
 import { HealthController } from './health.controller';
 import { RedisHealthIndicator } from './redis-health.indicator';

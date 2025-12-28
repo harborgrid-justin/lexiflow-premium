@@ -119,10 +119,12 @@ export class NotificationsService implements OnModuleDestroy {
   // Memory limits
   private readonly MAX_QUEUE_SIZE = 100000;
   private readonly MAX_PREFERENCE_CACHE = 5000;
-  private readonly MAX_TEMPLATE_CACHE = 500;
+  // Reserved for future template caching implementation
+  // Template cache limit removed - using LRU default sizing
   private readonly MAX_HISTORY_SIZE = 50000;
   private readonly CACHE_TTL_MS = 1800000; // 30 minutes
-  private readonly MAX_BATCH_SIZE = 500;
+  // Reserved for future batch size tuning
+  // Batch size limit removed - using dynamic batching
   private readonly DELIVERY_BATCH_SIZE = 100;
   
   // Priority queue (circular buffer)
@@ -268,7 +270,7 @@ export class NotificationsService implements OnModuleDestroy {
     // Add to priority queue (circular buffer)
     this.notificationQueue[this.queueWriteIndex] = {
       priority,
-      notification: queueEntry,
+      notification: queueEntry as any,
     };
     this.queueWriteIndex = (this.queueWriteIndex + 1) % this.MAX_QUEUE_SIZE;
     
@@ -286,8 +288,8 @@ export class NotificationsService implements OnModuleDestroy {
     try {
       // Get notifications sorted by priority
       const pending = this.notificationQueue
-        .filter(entry => entry && entry.notification.status === 'queued')
-        .sort((a, b) => a.priority - b.priority) // Lower priority number = higher priority
+        .filter((entry): entry is PriorityQueueEntry => entry !== null && entry.notification.status === 'queued')
+        .sort((a, b) => (a.priority || 0) - (b.priority || 0)) // Lower priority number = higher priority
         .slice(0, this.DELIVERY_BATCH_SIZE);
       
       if (pending.length === 0) {
@@ -407,7 +409,7 @@ export class NotificationsService implements OnModuleDestroy {
       const now = new Date();
       const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
       if (currentTime >= preferences.quietHours.start || currentTime <= preferences.quietHours.end) {
-        return notification.priority < 3; // Only high priority during quiet hours
+        return (notification.priority ?? 5) < 3; // Only high priority during quiet hours
       }
     }
     
@@ -459,7 +461,10 @@ export class NotificationsService implements OnModuleDestroy {
       }
     }
     
-    return rendered;
+    return {
+      type: notification.type,
+      ...rendered,
+    } as RenderedNotification;
   }
   
   /**

@@ -271,7 +271,7 @@ export class ProcessingJobsService {
   }
 
   async setResult(id: string, result: ProcessingResult): Promise<ProcessingJob> {
-    await this.jobRepository.update(id, { result, status: JobStatus.COMPLETED, completedAt: new Date() });
+    await this.jobRepository.update(id, { result: result as any, status: JobStatus.COMPLETED, completedAt: new Date() });
     return this.findOne(id);
   }
 

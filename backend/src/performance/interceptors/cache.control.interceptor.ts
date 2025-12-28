@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Request, Response } from 'express';
 import * as crypto from 'crypto';
-import MasterConfig from '@config/master.config';
+import * as MasterConfig from '@config/master.config';
 
 /**
  * Cache Control Configuration
@@ -55,7 +55,7 @@ export interface CacheControlConfig {
 export class CacheControlInterceptor implements NestInterceptor {
   private readonly logger = new Logger(CacheControlInterceptor.name);
   private readonly defaultMaxAge = MasterConfig.CACHE_CONTROL_MAX_AGE || 3600;
-  private readonly enableEtag = MasterConfig.ENABLE_ETAG !== false;
+  private readonly enableEtag = Boolean(MasterConfig.ENABLE_ETAG);
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const ctx = context.switchToHttp();
@@ -314,10 +314,11 @@ export class CacheControlInterceptor implements NestInterceptor {
 
     // Check common date fields
     const dateFields = ['updatedAt', 'modifiedAt', 'lastModified', 'updated'];
+    const dataRecord = data as Record<string, any>;
 
     for (const field of dateFields) {
-      if (data[field]) {
-        const date = new Date(data[field]);
+      if (dataRecord[field]) {
+        const date = new Date(dataRecord[field]);
         if (!isNaN(date.getTime())) {
           return date;
         }
@@ -326,9 +327,9 @@ export class CacheControlInterceptor implements NestInterceptor {
 
     // Check nested objects
     if (typeof data === 'object' && !Array.isArray(data)) {
-      for (const key in data) {
-        if (typeof data[key] === 'object') {
-          const nested = this.getLastModified(data[key]);
+      for (const key in dataRecord) {
+        if (typeof dataRecord[key] === 'object') {
+          const nested = this.getLastModified(dataRecord[key]);
           if (nested) {
             return nested;
           }

@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args, ID, Subscription } from '@nestjs/graphql';
-import { UseGuards, Logger, Inject } from '@nestjs/common';
+import { UseGuards, Logger } from '@nestjs/common';
 import { PubSub } from 'graphql-subscriptions';
-import { ConfigService } from '@nestjs/config';
+// import { ConfigService } from '@nestjs/config';
 import { CaseType, CaseConnection, CaseMetrics } from '@graphql/types/case.type';
 import {
   CreateCaseInput,
@@ -16,7 +16,7 @@ import { PaginationInput } from '@graphql/inputs/pagination.input';
 import { CurrentUser } from '@auth/decorators/current-user.decorator';
 import { GqlAuthGuard } from '@auth/guards/gql-auth.guard';
 import { CasesService } from '@cases/cases.service';
-import { CaseStatus } from '@cases/entities/case.entity';
+// import { CaseStatus } from '@cases/entities/case.entity';
 import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface';
 
 // TODO: For production horizontal scaling, replace with RedisPubSub:
@@ -179,8 +179,7 @@ export class CaseResolver {
       return payload.id === variables.id;
     },
   })
-  caseUpdated(@Args('_id', { type: () => ID }) _id: string) {
-    // @ts-ignore - PubSub asyncIterator exists at runtime
+  caseUpdated(@Args('id', { type: () => ID }) id: string) {
     return pubSub.asyncIterator('caseUpdated');
   }
 }

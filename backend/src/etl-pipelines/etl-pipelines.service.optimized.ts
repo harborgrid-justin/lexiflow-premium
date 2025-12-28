@@ -2,7 +2,7 @@ import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource, QueryRunner } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Readable } from 'stream';
+// import { Readable } from 'stream';
 
 /**
  * ETL Pipelines Service with PhD-Level Memory Engineering
@@ -46,7 +46,7 @@ export class EtlPipelinesService implements OnModuleDestroy {
   
   constructor(
     @InjectDataSource() private readonly dataSource: DataSource,
-    private readonly eventEmitter: EventEmitter2,
+    private readonly _eventEmitter: EventEmitter2,
   ) {
     this.startMemoryManagement();
   }
@@ -165,7 +165,7 @@ export class EtlPipelinesService implements OnModuleDestroy {
       // Process in adaptive batches
       await this.processStreamWithBackpressure(
         stream,
-        config,
+        config as any,
         execution
       );
       
@@ -198,7 +198,7 @@ export class EtlPipelinesService implements OnModuleDestroy {
   /**
    * Create source data stream
    */
-  private async createSourceStream<T>(source: DataSource | any): Promise<AsyncIterable<T>> {
+  private async createSourceStream<T>(_source: DataSource | any): Promise<AsyncIterable<T>> {
     // Mock implementation - would connect to actual data source
     async function* generateMockData(): AsyncGenerator<T> {
       for (let i = 0; i < 1000; i++) {

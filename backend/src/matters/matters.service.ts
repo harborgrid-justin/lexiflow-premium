@@ -232,7 +232,7 @@ export class MattersService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getKPIs(dateRange?: string): Promise<MatterKPIs> {
+  async getKPIs(_dateRange?: string): Promise<MatterKPIs> {
     // dateRange parameter reserved for future filtering implementation
     const matters = await this.mattersRepository.find();
     const activeMatters = matters.filter(m => m.status === 'ACTIVE');
@@ -275,7 +275,7 @@ export class MattersService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getPipeline(dateRange?: string): Promise<PipelineStage[]> {
+  async getPipeline(_dateRange?: string): Promise<PipelineStage[]> {
     // dateRange parameter reserved for future filtering implementation
     const matters = await this.mattersRepository.find();
 
@@ -303,7 +303,7 @@ export class MattersService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getCalendarEvents(startDate: string, endDate?: string, matterIds?: string): Promise<CalendarEvent[]> {
+  async getCalendarEvents(_startDate: string, _endDate?: string, _matterIds?: string): Promise<CalendarEvent[]> {
     // Parameters reserved for future implementation of calendar event filtering
     // Return empty array if no events found, or implement logic to fetch from tasks/deadlines
     // For now, returning empty array is better than mock data
@@ -311,7 +311,7 @@ export class MattersService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getRevenueAnalytics(dateRange?: string): Promise<RevenueAnalytics> {
+  async getRevenueAnalytics(_dateRange?: string): Promise<RevenueAnalytics> {
     // dateRange parameter reserved for future filtering implementation
     const matters = await this.mattersRepository.find();
 
@@ -343,7 +343,7 @@ export class MattersService {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getFinancialOverview(dateRange?: string): Promise<FinancialOverview> {
+  async getFinancialOverview(_dateRange?: string): Promise<FinancialOverview> {
     // dateRange parameter reserved for future filtering implementation
     const matters = await this.mattersRepository.find();
 

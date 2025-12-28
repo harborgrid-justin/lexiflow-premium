@@ -76,7 +76,8 @@ export class MetricsService implements OnModuleDestroy {
       const keys = Array.from(this.metrics.keys());
       const toRemove = Math.floor(this.MAX_METRICS * 0.1); // Remove 10%
       for (let i = 0; i < toRemove; i++) {
-        this.metrics.delete(keys[i]);
+        const key = keys[i];
+        if (key) this.metrics.delete(key);
       }
       this.logger.debug(`Enforced memory limits, removed ${toRemove} metrics`);
     }

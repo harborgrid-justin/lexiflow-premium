@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger, VersioningType, INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import helmet from 'helmet';
-import compression, { CompressionFilter } from 'compression';
+import compression from 'compression';
 import { Request, Response } from 'express';
 import { AppModule } from './app.module';
 import { EnterpriseExceptionFilter } from './common/filters/enterprise-exception.filter';
@@ -109,11 +109,11 @@ async function bootstrap() {
   // Compression with optimized settings
   // Define proper types for compression with filter property
   interface CompressionFunction {
-    (options?: compression.CompressionOptions): ReturnType<typeof compression>;
-    filter: CompressionFilter;
+    (options?: any): ReturnType<typeof compression>;
+    filter: any;
   }
 
-  const compressionFilter: CompressionFilter = (req: Request, res: Response): boolean => {
+  const compressionFilter = (req: Request, res: Response): boolean => {
     if (req.headers['x-no-compression']) {
       return false;
     }
@@ -164,7 +164,7 @@ async function bootstrap() {
 
   // Start server on all interfaces (0.0.0.0) to accept connections from any IP
   const port = configService.get<number>('port');
-  await app.listen(port, '0.0.0.0');
+  await app.listen(port || 3000, '0.0.0.0');
 
   const env = configService.get<string>('nodeEnv');
   const telemetryStatus = process.env.OTEL_ENABLED === 'true' ? 'Enabled' : 'Disabled';
@@ -303,4 +303,4 @@ bootstrap().catch((error) => {
   console.error(error);
   console.error('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   process.exit(1);
-});
+});

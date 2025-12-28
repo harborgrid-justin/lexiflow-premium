@@ -30,7 +30,7 @@ export class DiscoveryResolver {
     @Args('caseId', { type: () => ID }) caseId: string,
   ): Promise<DiscoveryRequestType[]> {
     const requests = await this.discoveryService.findRequestsByCaseId(caseId);
-    return requests as any[];
+    return (requests as any).data || requests;
   }
 
   @Query(() => DiscoveryRequestType, { name: 'discoveryRequest', nullable: true })

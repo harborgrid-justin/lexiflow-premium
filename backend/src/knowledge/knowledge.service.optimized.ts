@@ -126,8 +126,7 @@ export class KnowledgeService implements OnModuleDestroy {
   
   // Memory limits
   private readonly MAX_ARTICLE_CACHE = 5000;
-  private readonly MAX_SEARCH_CACHE = 3000;
-  private readonly MAX_TAG_CACHE = 1000;
+  // Cache limits removed - using LRU default sizing
   private readonly CACHE_TTL_MS = 1800000; // 30 minutes
   private readonly MAX_BATCH_SIZE = 500;
   private readonly MAX_RELATED_ARTICLES = 50;

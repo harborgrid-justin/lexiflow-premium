@@ -100,7 +100,7 @@ export class WorkflowAdvancedService {
 
     for (const branch of sortedBranches) {
       const ruleResults = branch.rules.map((rule: ConditionalRuleDto) => this._evaluateRule(rule, context));
-      const branchMatches = this._applyLogic(ruleResults, branch.logic);
+      const branchMatches = this._applyLogic(ruleResults, branch.logic as 'AND' | 'OR' | 'XOR' | 'NAND' | 'NOR');
 
       if (branchMatches) {
         if (branch.fallthrough && config.evaluationStrategy === 'all_match') {
@@ -541,16 +541,16 @@ export class WorkflowAdvancedService {
     const diff: WorkflowDiff = {
       versionA,
       versionB,
-      addedNodes: this._findAddedNodes(vA.nodes, vB.nodes),
-      removedNodes: this._findRemovedNodes(vA.nodes, vB.nodes),
-      modifiedNodes: this._findModifiedNodes(vA.nodes, vB.nodes),
-      addedConnections: this._findAddedConnections(vA.connections, vB.connections),
-      removedConnections: this._findRemovedConnections(vA.connections, vB.connections),
-      nodesAdded: this._findAddedNodes(vA.nodes, vB.nodes),
-      nodesRemoved: this._findRemovedNodes(vA.nodes, vB.nodes),
-      nodesModified: this._findModifiedNodes(vA.nodes, vB.nodes),
-      connectionsAdded: this._findAddedConnections(vA.connections, vB.connections),
-      connectionsRemoved: this._findRemovedConnections(vA.connections, vB.connections),
+      addedNodes: this._findAddedNodes(vA.nodes as Array<{ id: string }>, vB.nodes as Array<{ id: string }>),
+      removedNodes: this._findRemovedNodes(vA.nodes as Array<{ id: string }>, vB.nodes as Array<{ id: string }>),
+      modifiedNodes: this._findModifiedNodes(vA.nodes as Array<{ id: string }>, vB.nodes as Array<{ id: string }>),
+      addedConnections: this._findAddedConnections(vA.connections as Array<{ from: string; to: string }>, vB.connections as Array<{ from: string; to: string }>),
+      removedConnections: this._findRemovedConnections(vA.connections as Array<{ from: string; to: string }>, vB.connections as Array<{ from: string; to: string }>),
+      nodesAdded: this._findAddedNodes(vA.nodes as Array<{ id: string }>, vB.nodes as Array<{ id: string }>),
+      nodesRemoved: this._findRemovedNodes(vA.nodes as Array<{ id: string }>, vB.nodes as Array<{ id: string }>),
+      nodesModified: this._findModifiedNodes(vA.nodes as Array<{ id: string }>, vB.nodes as Array<{ id: string }>),
+      connectionsAdded: this._findAddedConnections(vA.connections as Array<{ from: string; to: string }>, vB.connections as Array<{ from: string; to: string }>),
+      connectionsRemoved: this._findRemovedConnections(vA.connections as Array<{ from: string; to: string }>, vB.connections as Array<{ from: string; to: string }>),
       configChanges: this._findConfigChanges(vA.config, vB.config),
       breakingChanges: false, // Analyze if changes break existing workflows
       migrationRequired: false, // Determine if data migration needed
@@ -708,7 +708,7 @@ export class WorkflowAdvancedService {
 
         // Execute escalation actions
         for (const action of level.actions) {
-          await this._executeEscalationAction(action, slaStatus);
+          await this._executeEscalationAction(action as { type: string; config?: Record<string, unknown> }, slaStatus);
         }
 
         slaStatus.escalations.push({
@@ -758,7 +758,7 @@ export class WorkflowAdvancedService {
     }
 
     // Record decision
-    instance.decisions.push(decision);
+    instance.decisions.push(decision as any);
 
     // Check if level requirements met
     const levelDecisions = instance.decisions.filter((d) => d.level === instance.currentLevel);
@@ -775,7 +775,7 @@ export class WorkflowAdvancedService {
         // Execute onReject actions
         if (currentLevel.onReject) {
           for (const action of currentLevel.onReject) {
-            await this._executeWorkflowAction(action, instance);
+            await this._executeWorkflowAction(action as { type: string; config?: Record<string, unknown> }, instance);
           }
         }
         return { approved: false, chainComplete: true };
@@ -784,7 +784,7 @@ export class WorkflowAdvancedService {
       // Execute onApprove actions
       if (currentLevel.onApprove) {
         for (const action of currentLevel.onApprove) {
-          await this._executeWorkflowAction(action, instance);
+          await this._executeWorkflowAction(action as { type: string; config?: Record<string, unknown> }, instance);
         }
       }
 
@@ -994,7 +994,12 @@ export class WorkflowAdvancedService {
       failedExecutions: summary.failedExecutions,
       averageDuration: summary.averageDuration,
       medianDuration: summary.averageDuration,
-      nodeMetrics,
+      nodeMetrics: nodeMetrics.map(m => ({
+        nodeId: m.nodeId,
+        averageDuration: m.averageDuration,
+        failureRate: m.failureCount / m.executions,
+        executionCount: m.executions,
+      })),
       bottlenecks,
       suggestions,
       optimizationSuggestions: suggestions,
@@ -1252,7 +1257,7 @@ export class WorkflowAdvancedService {
     const trigger: ExternalTrigger = await this._getTrigger(triggerId);
 
     // Apply filters
-    const passesFilters = this._applyTriggerFilters(payload, trigger.filters || []);
+    const passesFilters = this._applyTriggerFilters(payload, (trigger.filters || []) as Array<{ field: string; operator: string; value: unknown }>);
     if (!passesFilters) {
       this.logger.log(`Event filtered out for trigger ${triggerId}`);
       return {
@@ -1268,7 +1273,7 @@ export class WorkflowAdvancedService {
     // Apply transformation
     let transformedPayload = payload;
     if (trigger.transformation) {
-      transformedPayload = this._applyTransformation(payload, trigger.transformation);
+      transformedPayload = this._applyTransformation(payload, trigger.transformation as { type: string; config?: Record<string, unknown> });
     }
 
     // Start workflow

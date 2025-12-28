@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { trace, context, SpanStatusCode, Span, Tracer } from '@opentelemetry/api';
-import { Resource } from '@opentelemetry/resources';
+// import { Resource } from '@opentelemetry/resources';
 import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from '@opentelemetry/semantic-conventions';
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
@@ -57,12 +57,14 @@ export class DistributedTracingService implements OnModuleInit {
    * Initialize OpenTelemetry tracing
    */
   private async initializeTracing(): Promise<void> {
-    const resource = new Resource({
-      [ATTR_SERVICE_NAME]: this.serviceName,
-      [ATTR_SERVICE_VERSION]: this.serviceVersion,
-      environment: process.env.NODE_ENV || 'development',
-      deployment: process.env.DEPLOYMENT_ID || 'local',
-    });
+    const resource = {
+      attributes: {
+        [ATTR_SERVICE_NAME]: this.serviceName,
+        [ATTR_SERVICE_VERSION]: this.serviceVersion,
+        environment: process.env.NODE_ENV || 'development',
+        deployment: process.env.DEPLOYMENT_ID || 'local',
+      }
+    };
 
     // Configure OTLP exporter
     const otlpExporter = new OTLPTraceExporter({
@@ -83,7 +85,7 @@ export class DistributedTracingService implements OnModuleInit {
 
     // Initialize SDK
     this.sdk = new NodeSDK({
-      resource,
+      resource: resource as any,
       spanProcessors: [spanProcessor],
     });
 
@@ -222,7 +224,7 @@ export class DistributedTracingService implements OnModuleInit {
         'db.system': 'postgresql',
         'db.operation': operation,
         'db.sql.table': table,
-        'db.statement': query ? query.substring(0, 500) : undefined,
+        ...(query ? { 'db.statement': query.substring(0, 500) } : {}),
       },
     });
 
@@ -300,7 +302,7 @@ export class DistributedTracingService implements OnModuleInit {
   recordException(error: Error, attributes?: Record<string, string | number | boolean>): void {
     const activeSpan = trace.getActiveSpan();
     if (activeSpan) {
-      activeSpan.recordException(error, attributes);
+      activeSpan.recordException(error, attributes as any);
       activeSpan.setStatus({
         code: SpanStatusCode.ERROR,
         message: error.message,

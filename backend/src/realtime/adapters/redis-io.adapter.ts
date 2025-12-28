@@ -106,8 +106,8 @@ export class RedisIoAdapter extends IoAdapter {
       });
       await this.subClient.connect();
 
-      // Create adapter
-      this.adapterConstructor = createAdapter(this.pubClient, this.subClient);
+      // Create adapter (returns adapter instance directly in newer versions)
+      this.adapterConstructor = createAdapter() as any;
 
       this.logger.log('✅ Redis adapter for Socket.IO successfully initialized');
     } catch (error) {
@@ -123,7 +123,7 @@ export class RedisIoAdapter extends IoAdapter {
     const server = super.createIOServer(port, options) as Server;
 
     if (this.adapterConstructor) {
-      server.adapter(this.adapterConstructor);
+      server.adapter(this.adapterConstructor as any);
       this.logger.log('Socket.IO server created with Redis adapter');
     } else {
       this.logger.warn(

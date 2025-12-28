@@ -180,8 +180,8 @@ export class MemoryManagementController {
     const leakLimit = limit ? Number(limit) : 10;
 
     return {
-      recentLeaks: this.leakDetector.getRecentLeaks(leakLimit),
-      statistics: this.leakDetector.getStatistics(),
+      recentLeaks: this.leakDetector.getRecentLeaks(leakLimit) as any,
+      statistics: this.leakDetector.getStatistics() as any,
       snapshots: this.leakDetector.getSnapshots().length,
     };
   }
@@ -200,7 +200,7 @@ export class MemoryManagementController {
 
     return {
       leaksDetected: leaks.length,
-      leaks,
+      leaks: leaks as any,
       timestamp: Date.now(),
     };
   }
@@ -217,7 +217,7 @@ export class MemoryManagementController {
     const snapshot = this.leakDetector.takeSnapshot();
 
     return {
-      snapshot,
+      snapshot: snapshot as any,
       message: 'Memory snapshot taken',
     };
   }

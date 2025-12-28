@@ -9,10 +9,9 @@ import {
   Query,
   ParseUUIDPipe,
   ParseIntPipe,
-  UseInterceptors,
+
   DefaultValuePipe,
 } from '@nestjs/common';
-import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ApiTags, ApiOperation, ApiQuery, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { PleadingsService } from './pleadings.service';
 import { CreatePleadingDto } from './dto/create-pleading.dto';
@@ -24,7 +23,6 @@ import { PleadingStatus } from './entities/pleading.entity';
 @ApiTags('Pleadings')
 @ApiBearerAuth('JWT-auth')
 @Controller('pleadings')
-@UseInterceptors(CacheInterceptor)
 export class PleadingsController {
   constructor(private readonly pleadingsService: PleadingsService) {}
 

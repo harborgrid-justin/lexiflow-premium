@@ -32,7 +32,8 @@ export class DocketController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAll(@Query('caseId') caseId?: string): Promise<{ data: DocketEntry[]; total: number; page: number; limit: number; totalPages: number }> {
-    const entries = caseId ? await this.docketService.findAllByCaseId(caseId) : await this.docketService.findAll();
+    const result = caseId ? await this.docketService.findAllByCaseId(caseId) : await this.docketService.findAll();
+    const entries = Array.isArray(result) ? result : result.data || [];
     return {
       data: entries,
       total: entries.length,
@@ -74,7 +75,8 @@ export class DocketController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async findAllByCaseId(@Param('caseId') caseId: string): Promise<DocketEntry[]> {
-    return this.docketService.findAllByCaseId(caseId);
+    const result = await this.docketService.findAllByCaseId(caseId);
+    return Array.isArray(result) ? result : (result as any).data || [];
   }
 
   @Post('cases/:caseId/docket')

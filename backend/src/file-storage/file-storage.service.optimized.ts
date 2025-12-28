@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+// import { InjectRepository } from '@nestjs/typeorm';
+// import { Repository } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 /**
@@ -30,7 +30,7 @@ export class FileStorageService implements OnModuleDestroy {
   // Memory limits
   private readonly MAX_METADATA_CACHE = 5000;
   private readonly MAX_CHUNK_SIZE = 1024 * 1024; // 1MB
-  private readonly MIN_CHUNK_SIZE = 64 * 1024; // 64KB
+  // private readonly MIN_CHUNK_SIZE = 64 * 1024; // 64KB
   private readonly CACHE_TTL_MS = 900000; // 15 minutes
   private readonly MAX_BUFFER_POOL_SIZE = 50;
   private readonly MAX_CONCURRENT_UPLOADS = 10;

@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleDestroy } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+// import { InjectRepository } from '@nestjs/typeorm';
+// import { Repository } from 'typeorm';
 
 // Judge profile interface
 export interface JudgeProfile {
@@ -202,11 +202,11 @@ export class JudgeStatsService implements OnModuleDestroy {
   
   // Memory limits
   private readonly MAX_JUDGE_CACHE = 2000;
-  private readonly MAX_STATS_CACHE = 1000;
-  private readonly MAX_NETWORK_CACHE = 100;
+  // private readonly MAX_STATS_CACHE = 1000;
+  // private readonly MAX_NETWORK_CACHE = 100;
   private readonly CACHE_TTL_MS = 1800000; // 30 minutes
   private readonly MAX_BATCH_SIZE = 200;
-  private readonly MAX_RULINGS_HISTORY = 500;
+  // private readonly MAX_RULINGS_HISTORY = 500;
   
   // Caches
   private judgeCache: Map<string, CacheEntry<JudgeProfile>> = new Map();
@@ -445,7 +445,7 @@ export class JudgeStatsService implements OnModuleDestroy {
         label: i === 0 ? 'Center Judge' : `Node ${i}`,
         citations: Math.floor(Math.random() * 50),
       })),
-      edges: Array.from({ length: maxNodes * 2 }, (_, i) => ({
+      edges: Array.from({ length: maxNodes * 2 }, () => ({
         source: `node_${Math.floor(Math.random() * maxNodes)}`,
         target: `node_${Math.floor(Math.random() * maxNodes)}`,
         weight: Math.random(),
@@ -491,10 +491,10 @@ export class JudgeStatsService implements OnModuleDestroy {
         averageRulingTime: stats.reduce((sum, s) => sum + s.performance.averageDaysToRuling, 0) / stats.length,
         mostLenient: tendencies.sort((a, b) => 
           parseFloat(b.sentencingTendencies.lenient) - parseFloat(a.sentencingTendencies.lenient)
-        )[0].judgeId,
+        )[0]?.judgeId || '',
         mostPredictable: tendencies.sort((a, b) => 
           parseFloat(b.predictability) - parseFloat(a.predictability)
-        )[0].judgeId,
+        )[0]?.judgeId || '',
       },
     };
   }

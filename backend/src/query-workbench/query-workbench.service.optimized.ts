@@ -326,7 +326,7 @@ export class QueryWorkbenchService implements OnModuleDestroy {
 
     try {
       const planResult = await queryRunner.query(`EXPLAIN (FORMAT JSON) ${sql}`, params) as QueryPlan[];
-      const plan = planResult[0];
+      const plan = planResult[0]!;
 
       this.queryPlanCache.set(cacheKey, {
         plan,

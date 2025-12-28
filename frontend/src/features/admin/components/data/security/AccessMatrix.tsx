@@ -117,4 +117,4 @@ export const AccessMatrix = React.memo(() => {
         </div>
     </div>
   );
-};
+});

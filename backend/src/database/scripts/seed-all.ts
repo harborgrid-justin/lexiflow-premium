@@ -19,19 +19,38 @@ import { v4 as uuidv4 } from 'uuid';
 // Configuration
 // =============================================================================
 
+/**
+ * Database configuration with Neon PostgreSQL optimization
+ * Supports both pooled and direct connections
+ * @see https://neon.com/docs/guides/typeorm
+ */
+const databaseUrl = process.env.DATABASE_URL;
+const isNeonConnection = databaseUrl?.includes('neon.tech') || false;
+const isPooledConnection = databaseUrl?.includes('-pooler') || false;
+
 const DB_CONFIG = {
   type: 'postgres' as const,
-  url: process.env.DATABASE_URL,
+  url: databaseUrl,
   host: process.env.DB_HOST || 'postgres',
   port: parseInt(process.env.DB_PORT || '5432', 10),
   username: process.env.DB_USERNAME || 'lexiflow',
   password: process.env.DB_PASSWORD || 'lexiflow_secure_2025',
   database: process.env.DB_DATABASE || 'lexiflow_db',
-  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+  // Neon requires SSL with channel binding
+  ssl: isNeonConnection || process.env.DB_SSL === 'true'
+    ? { rejectUnauthorized: false }
+    : false,
   synchronize: false,
   logging: process.env.LOG_LEVEL === 'debug',
   entities: ['dist/src/**/*.entity.js'],
   migrations: ['dist/src/database/migrations/*.js'],
+  // Connection pool settings optimized for Neon
+  extra: isNeonConnection ? {
+    max: isPooledConnection ? 5 : 10,
+    connectionTimeoutMillis: 15000,
+    idleTimeoutMillis: 60000,
+    application_name: 'lexiflow-seeder',
+  } : {},
 };
 
 // =============================================================================
@@ -493,7 +512,15 @@ async function seedCasePhases(queryRunner: QueryRunner, caseIds: Map<string, str
 
 async function main(): Promise<void> {
   logSection('LexiFlow Enterprise Data Seeder');
-  log(`Database: ${DB_CONFIG.host}:${DB_CONFIG.port}/${DB_CONFIG.database}`, 'info');
+
+  // Log connection information
+  if (isNeonConnection) {
+    log('Database Provider: Neon PostgreSQL (Serverless)', 'info');
+    log(`Connection Type: ${isPooledConnection ? 'Pooled (PgBouncer)' : 'Direct'}`, 'info');
+    log('SSL: Enabled with channel binding', 'info');
+  } else {
+    log(`Database: ${DB_CONFIG.host}:${DB_CONFIG.port}/${DB_CONFIG.database}`, 'info');
+  }
   log(`Environment: ${process.env.NODE_ENV || 'development'}`, 'info');
 
   const dataSource = new DataSource(DB_CONFIG);

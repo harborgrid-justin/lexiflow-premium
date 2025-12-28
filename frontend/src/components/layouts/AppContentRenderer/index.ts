@@ -4,4 +4,3 @@
  */
 
 export * from '../../ui/layouts/AppContentRenderer';
-export { default } from '../../ui/layouts/AppContentRenderer';

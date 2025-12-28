@@ -1,6 +1,7 @@
 import { StorageUtils } from '@/utils/storage';
 import { BTree } from '@/utils/datastructures/bTree';
 import { DB_NAME, DB_VERSION, DB_MAX_BUFFER_SIZE, DB_FORCE_FLUSH_THRESHOLD, DB_BTREE_ORDER } from '@/config/master.config';
+import { defaultWindowAdapter } from '@/services';
 
 export const STORES = {
   // Core entities (aligned with backend tables)
@@ -379,7 +380,7 @@ export class DatabaseManager {
               }
               this.flushBuffer();
           } else if (!this.flushTimer) {
-              this.flushTimer = window.setTimeout(this.flushBuffer, 16);
+              this.flushTimer = defaultWindowAdapter.setTimeout(this.flushBuffer, 16);
           }
       });
   }
@@ -436,7 +437,7 @@ export class DatabaseManager {
             }
             this.flushBuffer();
         } else if (!this.flushTimer) {
-            this.flushTimer = window.setTimeout(this.flushBuffer, 16);
+            this.flushTimer = defaultWindowAdapter.setTimeout(this.flushBuffer, 16);
         }
       });
   }

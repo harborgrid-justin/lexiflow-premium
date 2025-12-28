@@ -1,4 +1,5 @@
 import { StaffMember, TimeEntry } from '@/types';
+import { ValidationError, EntityNotFoundError, OperationError } from '@/services/core/errors';
 import { db, STORES } from '@/services/data/db';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from "@/types/integration-types";

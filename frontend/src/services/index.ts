@@ -4,6 +4,11 @@
 export * from './core/Repository';
 export * from './core/microORM';
 export * from './core/RepositoryFactory';
+export * from './core/errors';  // Domain error classes
+
+// ==================== INFRASTRUCTURE ADAPTERS ====================
+export * from './infrastructure/adapters/StorageAdapter';
+export * from './infrastructure/adapters/WindowAdapter';
 
 // ==================== DATA LAYER ====================
 export * from './data/dataService';

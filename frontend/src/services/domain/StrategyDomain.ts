@@ -8,7 +8,7 @@
  * @module services/domain/StrategyDomain
  * @architecture Backend-First Strategy Management
  * @author LexiFlow Engineering Team
- * @since 2025-12-22
+import { OperationError } from '@/services/core/errors'; * @since 2025-12-22
  * @status PRODUCTION READY
  * 
  * Provides litigation strategy creation, risk assessment, and tactical recommendations
@@ -77,7 +77,7 @@ export const StrategyService = {
         createdAt: new Date().toISOString()
       });
     }
-    throw new Error('[StrategyService] Backend API required for add operation');
+    throw new OperationError('[StrategyService] Backend API required for add operation');
   },
 
   update: async (id: string, updates: unknown) => {
@@ -87,7 +87,7 @@ export const StrategyService = {
         updatedAt: new Date().toISOString()
       });
     }
-    throw new Error('[StrategyService] Backend API required for update operation');
+    throw new OperationError('[StrategyService] Backend API required for update operation');
   },
   
   delete: async (id: string) => {
@@ -95,7 +95,7 @@ export const StrategyService = {
       await apiClient.delete(`/strategies/${id}`);
       return;
     }
-    throw new Error('[StrategyService] Backend API required for delete operation');
+    throw new OperationError('[StrategyService] Backend API required for delete operation');
   },
   
   // Strategy specific methods
@@ -119,7 +119,7 @@ export const StrategyService = {
       };
       return apiClient.post<Strategy>('/strategies', payload);
     }
-    throw new Error('[StrategyService] Backend API required for createStrategy');
+    throw new OperationError('[StrategyService] Backend API required for createStrategy');
   },
   
   analyzeRisks: async (strategyId: string): Promise<Risk[]> => {

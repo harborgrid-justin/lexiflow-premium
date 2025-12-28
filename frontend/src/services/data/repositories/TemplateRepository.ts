@@ -31,7 +31,7 @@ export class TemplateRepository extends Repository<WorkflowTemplateData> {
 
     override async add(item: WorkflowTemplateData): Promise<WorkflowTemplateData> {
         if (!item || typeof item !== 'object') {
-            throw new Error('[TemplateRepository.add] Invalid template data');
+            throw new ValidationError('[TemplateRepository.add] Invalid template data');
         }
         await super.add(item);
         return item;

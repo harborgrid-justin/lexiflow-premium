@@ -8,6 +8,8 @@
  * - Threat detection and prevention
  * - Security policy enforcement
  * - Access control validation
+
+import { ValidationError, OperationError } from '@/services/core/errors';
  * - Vulnerability scanning
  * - Security audit logging
  * 
@@ -113,7 +115,7 @@ export const SecurityService = {
             return [];
         } catch (error) {
             console.error('[SecurityService.getMalwareSignatures] Error:', error);
-            throw new Error('Failed to fetch malware signatures');
+            throw new OperationError('Failed to fetch malware signatures');
         }
     },
 
@@ -177,7 +179,7 @@ export const SecurityService = {
             return result;
         } catch (error) {
             console.error('[SecurityService.scanForMalware] Error:', error);
-            throw new Error('Failed to scan for malware');
+            throw new OperationError('Failed to scan for malware');
         }
     },
 
@@ -218,7 +220,7 @@ export const SecurityService = {
             };
         } catch (error) {
             console.error('[SecurityService.getThreatLevel] Error:', error);
-            throw new Error('Failed to fetch threat level');
+            throw new OperationError('Failed to fetch threat level');
         }
     },
 
@@ -248,7 +250,7 @@ export const SecurityService = {
             return [];
         } catch (error) {
             console.error('[SecurityService.getSecurityPolicies] Error:', error);
-            throw new Error('Failed to fetch security policies');
+            throw new OperationError('Failed to fetch security policies');
         }
     },
 
@@ -288,7 +290,7 @@ export const SecurityService = {
             return [];
         } catch (error) {
             console.error('[SecurityService.getAuditLogs] Error:', error);
-            throw new Error('Failed to fetch audit logs');
+            throw new OperationError('Failed to fetch audit logs');
         }
     },
 
@@ -318,7 +320,7 @@ export const SecurityService = {
             return [];
         } catch (error) {
             console.error('[SecurityService.getVulnerabilities] Error:', error);
-            throw new Error('Failed to fetch vulnerabilities');
+            throw new OperationError('Failed to fetch vulnerabilities');
         }
     }
 };

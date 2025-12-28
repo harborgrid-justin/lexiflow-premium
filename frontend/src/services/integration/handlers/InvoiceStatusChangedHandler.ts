@@ -7,6 +7,7 @@
 
 import { BaseEventHandler } from './BaseEventHandler';
 import { ChainService } from '@/services/infrastructure/chainService';
+import { defaultStorage } from '@/services';
 import type { SystemEventPayloads, IntegrationResult } from '@/types/integration-types';
 import type { UserId } from '@/types';
 import { SystemEventType } from '@/types/integration-types';
@@ -73,8 +74,8 @@ export class InvoiceStatusChangedHandler extends BaseEventHandler<SystemEventPay
     
     await ChainService.createEntry({
       timestamp: new Date().toISOString(),
-      user: localStorage.getItem('userName') || 'System',
-      userId: (localStorage.getItem('userId') || 'system') as UserId,
+      user: defaultStorage.getItem('userName') || 'System',
+      userId: (defaultStorage.getItem('userId') || 'system') as UserId,
       action: 'INVOICE_PAID',
       resource: `Invoice/${invoice.id}`,
       ip: 'internal',

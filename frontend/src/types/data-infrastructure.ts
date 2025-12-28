@@ -115,7 +115,8 @@ export enum ApiKeyScope {
   ADMIN = 'admin'
 }
 
-export interface ApiKey extends BaseEntity {
+// ApiKey is also defined in auth.ts - this is the backend-aligned version
+export interface BackendApiKey extends BaseEntity {
   // Backend: api_keys table
   name: string; // Backend: varchar (required)
   description?: string; // Backend: varchar

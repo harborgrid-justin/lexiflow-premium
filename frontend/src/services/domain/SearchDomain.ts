@@ -1,8 +1,8 @@
 /**
  * +---------------------------------------------------------------------------+
- * �                     LEXIFLOW SEARCH DOMAIN SERVICE                        �
- * �                  Enterprise Search & Indexing Layer v2.0                  �
- * �                       PhD-Level Systems Architecture                      �
+ * |                     LEXIFLOW SEARCH DOMAIN SERVICE                        |
+ * |                  Enterprise Search & Indexing Layer v2.0                  |
+ * |                       PhD-Level Systems Architecture                      |
  * +---------------------------------------------------------------------------+
  * 
  * @module services/domain/SearchDomain
@@ -71,7 +71,7 @@ export const SearchService = {
   
   getRecentSearches: async (): Promise<string[]> => {
     try {
-      const stored = localStorage.getItem(RECENT_SEARCHES_KEY);
+      const stored = defaultStorage.getItem(RECENT_SEARCHES_KEY);
       return stored ? JSON.parse(stored) : [];
     } catch {
       return [];
@@ -82,7 +82,7 @@ export const SearchService = {
     try {
       const recent = await SearchService.getRecentSearches();
       const updated = [query, ...recent.filter(q => q !== query)].slice(0, MAX_RECENT_SEARCHES);
-      localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+      defaultStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
       return true;
     } catch {
       return false;

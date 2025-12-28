@@ -386,7 +386,9 @@ export interface BaseFilters {
   search?: string;
 }
 
-export interface TimeEntryFilters extends BaseFilters {
+// TimeEntryFilters is also defined in filters/billing.ts
+// This version extends BaseFilters for API compatibility
+export interface ApiTimeEntryFilters extends BaseFilters {
   caseId?: string;
   userId?: string;
   status?: string;
@@ -395,7 +397,9 @@ export interface TimeEntryFilters extends BaseFilters {
   billable?: boolean;
 }
 
-export interface InvoiceFilters extends BaseFilters {
+// InvoiceFilters is also defined in filters/billing.ts
+// This version extends BaseFilters for API compatibility
+export interface ApiInvoiceFilters extends BaseFilters {
   caseId?: string;
   clientId?: string;
   status?: string;

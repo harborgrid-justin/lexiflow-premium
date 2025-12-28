@@ -287,8 +287,9 @@ export interface SystemWebhookConfig extends BaseEntity {
   failureCount: number;
 }
 
-// Notification types (re-exported from services for type consistency)
-export interface Notification {
+// Notification types are exported from ./notifications.ts
+// Re-export with different names to avoid conflicts
+export interface SystemNotificationItem {
   id: string;
   userId: string;
   type: 'info' | 'warning' | 'error' | 'success' | 'deadline' | 'system' | 'case_update' | 'document' | 'task';
@@ -307,9 +308,9 @@ export interface Notification {
   readAt?: string;
 }
 
-export interface NotificationGroup {
+export interface SystemNotificationGroup {
   groupKey: string;
-  notifications: Notification[];
+  notifications: SystemNotificationItem[];
   count: number;
   latestTimestamp: number;
   collapsed: boolean;

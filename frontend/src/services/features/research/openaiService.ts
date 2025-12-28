@@ -8,6 +8,8 @@ import { ParsedDocket } from '@/types';
 import type { SearchResult } from '@/types';
 import { withRetry } from '@/utils/apiUtils';
 import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, ShepardizeResult } from '@/types/ai';
+import { defaultStorage } from '@/services';
+import { MissingConfigurationError, ExternalServiceError, ApiTimeoutError } from '@/services/core/errors';
 
 // Note: Import AI types from @/types, don't re-export them
 
@@ -18,10 +20,10 @@ import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, ShepardizeR
 const getClient = () => {
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY || 
                  import.meta.env.OPENAI_API_KEY || 
-                 (typeof localStorage !== 'undefined' ? localStorage.getItem('openai_api_key') : null);
+                 (typeof localStorage !== 'undefined' ? defaultStorage.getItem('openai_api_key') : null);
   
   if (!apiKey) {
-    throw new Error('OpenAI API key not configured. Please set VITE_OPENAI_API_KEY environment variable or openai_api_key in localStorage.');
+    throw new MissingConfigurationError('OpenAI API key not configured. Please set VITE_OPENAI_API_KEY environment variable or openai_api_key in storage.');
   }
   
   return new OpenAI({ 

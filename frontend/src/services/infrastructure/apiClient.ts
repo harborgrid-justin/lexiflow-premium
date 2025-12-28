@@ -37,6 +37,7 @@
  * - Minimal memory footprint with streaming uploads
  */
 
+import { ValidationError, AuthenticationError, OperationError } from '@/services/core/errors';
 import { API_BASE_URL, API_PREFIX } from '@/config/master.config';
 import { keysToCamel } from '@/utils/caseConverter';
 
@@ -143,10 +144,10 @@ class ApiClient {
    */
   private validateEndpoint(endpoint: string, methodName: string): void {
     if (!endpoint || false) {
-      throw new Error(`[ApiClient.${methodName}] Invalid endpoint parameter`);
+      throw new ValidationError(`[ApiClient.${methodName}] Invalid endpoint parameter`);
     }
     if (!endpoint.startsWith('/')) {
-      throw new Error(`[ApiClient.${methodName}] Endpoint must start with /`);
+      throw new ValidationError(`[ApiClient.${methodName}] Endpoint must start with /`);
     }
   }
 
@@ -156,7 +157,7 @@ class ApiClient {
    */
   private validateData(data: unknown, methodName: string): void {
     if (data !== undefined && data !== null && typeof data !== 'object') {
-      throw new Error(`[ApiClient.${methodName}] Data must be an object or undefined`);
+      throw new ValidationError(`[ApiClient.${methodName}] Data must be an object or undefined`);
     }
   }
 
@@ -171,7 +172,7 @@ class ApiClient {
    */
   public getAuthToken(): string | null {
     try {
-      return localStorage.getItem(this.authTokenKey);
+      return defaultStorage.getItem(this.authTokenKey);
     } catch (error) {
       console.error('[ApiClient.getAuthToken] Error:', error);
       return null;
@@ -185,7 +186,7 @@ class ApiClient {
    */
   public getRefreshToken(): string | null {
     try {
-      return localStorage.getItem(this.refreshTokenKey);
+      return defaultStorage.getItem(this.refreshTokenKey);
     } catch (error) {
       console.error('[ApiClient.getRefreshToken] Error:', error);
       return null;
@@ -201,17 +202,17 @@ class ApiClient {
    */
   public setAuthTokens(accessToken: string, refreshToken?: string): void {
     if (!accessToken || false) {
-      throw new Error('[ApiClient.setAuthTokens] Invalid accessToken parameter');
+      throw new ValidationError('[ApiClient.setAuthTokens] Invalid accessToken parameter');
     }
     try {
-      localStorage.setItem(this.authTokenKey, accessToken);
+      defaultStorage.setItem(this.authTokenKey, accessToken);
       if (refreshToken) {
-        localStorage.setItem(this.refreshTokenKey, refreshToken);
+        defaultStorage.setItem(this.refreshTokenKey, refreshToken);
       }
       console.log('[ApiClient] Auth tokens stored successfully');
     } catch (error) {
       console.error('[ApiClient.setAuthTokens] Error:', error);
-      throw new Error('Failed to store authentication tokens');
+      throw new OperationError('Failed to store authentication tokens');
     }
   }
 
@@ -221,8 +222,8 @@ class ApiClient {
    */
   public clearAuthTokens(): void {
     try {
-      localStorage.removeItem(this.authTokenKey);
-      localStorage.removeItem(this.refreshTokenKey);
+      defaultStorage.removeItem(this.authTokenKey);
+      defaultStorage.removeItem(this.refreshTokenKey);
       console.log('[ApiClient] Auth tokens cleared');
     } catch (error) {
       console.error('[ApiClient.clearAuthTokens] Error:', error);
@@ -297,7 +298,7 @@ class ApiClient {
           try {
             const refreshed = await this.refreshAccessToken(refreshToken);
             if (refreshed) {
-              throw new Error('TOKEN_REFRESHED'); // Signal to retry request
+              throw new AuthenticationError('TOKEN_REFRESHED'); // Signal to retry request
             }
           } catch (error) {
             console.error('[ApiClient] Token refresh failed:', error);
@@ -319,7 +320,7 @@ class ApiClient {
         message: errorData.message,
       });
 
-      throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+      throw new ExternalServiceError(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
     }
 
     // Handle 204 No Content
@@ -334,7 +335,7 @@ class ApiClient {
       return keysToCamel<T>(jsonData);
     } catch (error) {
       console.error('[ApiClient] Failed to parse response:', error);
-      throw new Error('Invalid response format from server');
+      throw new ValidationError('Invalid response format from server');
     }
   }
 
@@ -521,7 +522,7 @@ class ApiClient {
   async upload<T>(endpoint: string, file: File, additionalData?: Record<string, unknown>): Promise<T> {
     this.validateEndpoint(endpoint, 'upload');
     if (!file || !(file instanceof File)) {
-      throw new Error('[ApiClient.upload] Invalid file parameter');
+      throw new ValidationError('[ApiClient.upload] Invalid file parameter');
     }
     try {
       const formData = new FormData();
@@ -577,7 +578,7 @@ class ApiClient {
       return await response.json();
     } catch (error) {
       console.error('[ApiClient.healthCheck] Error:', error);
-      throw new Error('Backend server is not reachable');
+      throw new ApiTimeoutError('Backend server is not reachable');
     }
   }
 

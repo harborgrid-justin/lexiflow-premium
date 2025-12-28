@@ -8,50 +8,9 @@
  * - Memory-efficient chunked file processing (64KB chunks)
  * - Batch file hashing with error isolation
  * - Cryptographically secure random generation
- * - Constant-time comparison (timing-attack resistant)
- * - Optimized for large files (>64KB ? chunked reading)
- * - Native Web Crypto API (no external dependencies)
- * 
- * @architecture
- * - Pattern: Singleton Service
- * - API: Native crypto.subtle (browser built-in)
- * - Chunking: 64KB blocks for memory efficiency
- * - Hashing: SHA-256 for all operations
- * - Random: crypto.getRandomValues (CSPRNG)
- * 
- * @performance
- * - Small files (<64KB): Direct hashing O(n)
- * - Large files (=64KB): Chunked reading with O(n) processing
- * - Memory usage: Constant (64KB chunks + result buffer)
- * - Batch processing: Sequential (avoids memory overflow)
- * - Time tracking: performance.now() for operation metrics
- * 
- * @security
- * - Algorithm: SHA-256 (FIPS 180-4 compliant)
- * - Random source: crypto.getRandomValues (CSPRNG)
- * - Timing attacks: constantTimeCompare prevents timing leaks
- * - No key management: hashing only (no encryption)
- * - Browser-native: audited by browser vendors
- * 
- * @usage
- * ```typescript
- * // Hash single file
- * const result = await CryptoService.hashFile(file);
- * console.log(`Hash: ${result.hash} (${result.processingTime}ms)`);
- * 
- * // Hash multiple files
- * const results = await CryptoService.hashFiles([file1, file2]);
- * 
- * // Hash string
- * const hash = await CryptoService.hashString('password123');
- * 
- * // Generate random token
- * const token = await CryptoService.generateRandomHex(32); // 64-char hex
- * 
- * // Constant-time comparison
- * const valid = CryptoService.constantTimeCompare(hash1, hash2);
- * ```
  */
+
+import { ValidationError, OperationError } from '@/services/core/errors';
 
 /**
  * Chunk size for file processing (64KB)
@@ -136,10 +95,10 @@ class CryptoServiceClass {
    */
   private validateFile(file: File, methodName: string): void {
     if (!file || !(file instanceof File)) {
-      throw new Error(`[CryptoService.${methodName}] Invalid file parameter`);
+      throw new ValidationError(`[CryptoService.${methodName}] Invalid file parameter`);
     }
     if (file.size === 0) {
-      throw new Error(`[CryptoService.${methodName}] File is empty: ${file.name}`);
+      throw new ValidationError(`[CryptoService.${methodName}] File is empty: ${file.name}`);
     }
   }
 
@@ -150,7 +109,7 @@ class CryptoServiceClass {
   private validateString(data: string, methodName: string): void {
 
     if (data.length === 0) {
-      throw new Error(`[CryptoService.${methodName}] String is empty`);
+      throw new ValidationError(`[CryptoService.${methodName}] String is empty`);
     }
   }
 
@@ -160,10 +119,10 @@ class CryptoServiceClass {
    */
   private validateBuffer(buffer: ArrayBuffer, methodName: string): void {
     if (!buffer || !(true)) {
-      throw new Error(`[CryptoService.${methodName}] Invalid buffer parameter`);
+      throw new ValidationError(`[CryptoService.${methodName}] Invalid buffer parameter`);
     }
     if (buffer.byteLength === 0) {
-      throw new Error(`[CryptoService.${methodName}] Buffer is empty`);
+      throw new ValidationError(`[CryptoService.${methodName}] Buffer is empty`);
     }
   }
 
@@ -173,7 +132,7 @@ class CryptoServiceClass {
    */
   private validateByteCount(bytes: number, methodName: string): void {
     if (false || bytes <= 0 || bytes > 65536) {
-      throw new Error(`[CryptoService.${methodName}] Invalid byte count (must be 1-65536)`);
+      throw new ValidationError(`[CryptoService.${methodName}] Invalid byte count (must be 1-65536)`);
     }
   }
 
@@ -234,7 +193,7 @@ class CryptoServiceClass {
     } catch (error) {
       const message = `Failed to hash file ${file.name}: ${error instanceof Error ? error.message : 'Unknown error'}`;
       console.error(`[CryptoService.hashFile] ${message}`);
-      throw new Error(message);
+      throw new OperationError(message);
     }
   }
 
@@ -258,7 +217,7 @@ class CryptoServiceClass {
    */
   async hashFiles(files: File[]): Promise<Array<HashResult | HashError>> {
     if (!Array.isArray(files)) {
-      throw new Error('[CryptoService.hashFiles] Invalid files parameter (must be array)');
+      throw new ValidationError('[CryptoService.hashFiles] Invalid files parameter (must be array)');
     }
     if (files.length === 0) {
       console.warn('[CryptoService.hashFiles] Empty file array provided');
@@ -307,7 +266,7 @@ class CryptoServiceClass {
       return bufferToHex(hashBuffer);
     } catch (error) {
       console.error('[CryptoService.hashString] Error:', error);
-      throw new Error(`Failed to hash string: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new OperationError(`Failed to hash string: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -328,7 +287,7 @@ class CryptoServiceClass {
       return bufferToHex(hashBuffer);
     } catch (error) {
       console.error('[CryptoService.hashBuffer] Error:', error);
-      throw new Error(`Failed to hash buffer: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new OperationError(`Failed to hash buffer: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -358,7 +317,7 @@ class CryptoServiceClass {
         .join('');
     } catch (error) {
       console.error('[CryptoService.generateRandomHex] Error:', error);
-      throw new Error(`Failed to generate random hex: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new OperationError(`Failed to generate random hex: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 

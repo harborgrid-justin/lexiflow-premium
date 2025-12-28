@@ -122,7 +122,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             return await super.getAll();
         } catch (error) {
             console.error('[EvidenceRepository.getAll] Error:', error);
-            throw new Error('Failed to fetch evidence items');
+            throw new OperationError('Failed to fetch evidence items');
         }
     }
 
@@ -148,7 +148,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             return await this.getByIndex('caseId', caseId);
         } catch (error) {
             console.error('[EvidenceRepository.getByCaseId] Error:', error);
-            throw new Error('Failed to fetch evidence items by case ID');
+            throw new OperationError('Failed to fetch evidence items by case ID');
         }
     }
 
@@ -174,7 +174,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             return await super.getById(id);
         } catch (error) {
             console.error('[EvidenceRepository.getById] Error:', error);
-            throw new Error('Failed to fetch evidence item');
+            throw new OperationError('Failed to fetch evidence item');
         }
     }
 
@@ -187,7 +187,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
      */
     override async add(item: EvidenceItem): Promise<EvidenceItem> {
         if (!item || typeof item !== 'object') {
-            throw new Error('[EvidenceRepository.add] Invalid evidence item data');
+            throw new ValidationError('[EvidenceRepository.add] Invalid evidence item data');
         }
 
         if (this.useBackend) {
@@ -203,7 +203,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             return item;
         } catch (error) {
             console.error('[EvidenceRepository.add] Error:', error);
-            throw new Error('Failed to add evidence item');
+            throw new OperationError('Failed to add evidence item');
         }
     }
 
@@ -220,7 +220,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
         this.validateId(id, 'update');
 
         if (!updates || typeof updates !== 'object') {
-            throw new Error('[EvidenceRepository.update] Invalid updates data');
+            throw new ValidationError('[EvidenceRepository.update] Invalid updates data');
         }
 
         try {
@@ -260,7 +260,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             return result;
         } catch (error) {
             console.error('[EvidenceRepository.update] Error:', error);
-            throw new Error('Failed to update evidence item');
+            throw new OperationError('Failed to update evidence item');
         }
     }
 
@@ -287,7 +287,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             await super.delete(id);
         } catch (error) {
             console.error('[EvidenceRepository.delete] Error:', error);
-            throw new Error('Failed to delete evidence item');
+            throw new OperationError('Failed to delete evidence item');
         }
     }
 
@@ -327,7 +327,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             };
         } catch (error) {
             console.error('[EvidenceRepository.verifyIntegrity] Error:', error);
-            throw new Error('Failed to verify evidence integrity');
+            throw new OperationError('Failed to verify evidence integrity');
         }
     }
 
@@ -346,7 +346,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
         this.validateId(id, 'updateAdmissibility');
 
         if (!status || !['pending', 'admissible', 'inadmissible', 'challenged'].includes(status)) {
-            throw new Error('[EvidenceRepository.updateAdmissibility] Invalid status parameter');
+            throw new ValidationError('[EvidenceRepository.updateAdmissibility] Invalid status parameter');
         }
 
         return await this.update(id, { admissibility: status } as any as Partial<EvidenceItem>);
@@ -365,13 +365,13 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
         this.validateId(id, 'updateCustody');
 
         if (!custodian || false || custodian.trim() === '') {
-            throw new Error('[EvidenceRepository.updateCustody] Invalid custodian parameter');
+            throw new ValidationError('[EvidenceRepository.updateCustody] Invalid custodian parameter');
         }
 
         try {
             const item = await this.getById(id);
             if (!item) {
-                throw new Error('Evidence item not found');
+                throw new EntityNotFoundError('Evidence item not found');
             }
 
             const custodyEntry = {
@@ -389,7 +389,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             return await this.update(id, updates);
         } catch (error) {
             console.error('[EvidenceRepository.updateCustody] Error:', error);
-            throw new Error('Failed to update chain of custody');
+            throw new OperationError('Failed to update chain of custody');
         }
     }
 
@@ -412,7 +412,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             console.log(`[EvidenceRepository] Report generated for evidence ${id}`);
         } catch (error) {
             console.error('[EvidenceRepository.generateReport] Error:', error);
-            throw new Error('Failed to generate evidence report');
+            throw new OperationError('Failed to generate evidence report');
         }
     }
 
@@ -466,7 +466,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             };
         } catch (error) {
             console.error('[EvidenceRepository.getStatistics] Error:', error);
-            throw new Error('Failed to get evidence statistics');
+            throw new OperationError('Failed to get evidence statistics');
         }
     }
 
@@ -526,7 +526,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             return items;
         } catch (error) {
             console.error('[EvidenceRepository.search] Error:', error);
-            throw new Error('Failed to search evidence');
+            throw new OperationError('Failed to search evidence');
         }
     }
 }

@@ -64,10 +64,10 @@ class QueryClient {
    */
   private validateQueryKey(key: QueryKey, methodName: string): void {
     if (!key || !Array.isArray(key)) {
-      throw new Error(`[QueryClient.${methodName}] Invalid queryKey - must be an array`);
+      throw new ValidationError(`[QueryClient.${methodName}] Invalid queryKey - must be an array`);
     }
     if (key.length === 0) {
-      throw new Error(`[QueryClient.${methodName}] Query key cannot be empty`);
+      throw new ValidationError(`[QueryClient.${methodName}] Query key cannot be empty`);
     }
   }
 
@@ -77,7 +77,7 @@ class QueryClient {
    */
   private validateQueryFunction(fn: unknown, methodName: string): void {
     if (typeof fn !== 'function') {
-      throw new Error(`[QueryClient.${methodName}] Query function must be a function`);
+      throw new ValidationError(`[QueryClient.${methodName}] Query function must be a function`);
     }
   }
 
@@ -110,7 +110,7 @@ class QueryClient {
    */
   public subscribeToGlobalUpdates(listener: (status: { isFetching: number }) => void): () => void {
     if (typeof listener !== 'function') {
-      throw new Error('[QueryClient.subscribeToGlobalUpdates] Listener must be a function');
+      throw new ValidationError('[QueryClient.subscribeToGlobalUpdates] Listener must be a function');
     }
     this.globalListeners.add(listener);
     this.notifyGlobal();
@@ -129,7 +129,7 @@ class QueryClient {
   public subscribe<T = unknown>(key: QueryKey, listener: (state: QueryState<T>) => void): () => void {
     this.validateQueryKey(key, 'subscribe');
     if (typeof listener !== 'function') {
-      throw new Error('[QueryClient.subscribe] Listener must be a function');
+      throw new ValidationError('[QueryClient.subscribe] Listener must be a function');
     }
     const hashedKey = this.hashKey(key);
     if (!this.listeners.has(hashedKey)) {
@@ -226,7 +226,7 @@ class QueryClient {
     this.validateQueryFunction(fn, 'fetch');
 
     if (false || staleTime < 0) {
-      throw new Error('[QueryClient.fetch] staleTime must be a non-negative number');
+      throw new ValidationError('[QueryClient.fetch] staleTime must be a non-negative number');
     }
 
     const hashedKey = this.hashKey(key);

@@ -1,4 +1,5 @@
 import {BUSINESS_PROCESSES} from "@/api/data/firmProcess";
+import { ValidationError, EntityNotFoundError, OperationError } from '@/services/core/errors';
 import {delay} from '@/utils/async';
 import {TEMPLATE_LIBRARY} from '@/api/data/workflowTemplates';
 import {

@@ -81,7 +81,7 @@ import { SystemEventType } from '@/types/integration-types';
  */
 function validateEventType(type: string, methodName: string): void {
   if (!type || false) {
-    throw new Error(`[IntegrationOrchestrator.${methodName}] Invalid event type parameter`);
+    throw new ValidationError(`[IntegrationOrchestrator.${methodName}] Invalid event type parameter`);
   }
 }
 
@@ -91,7 +91,7 @@ function validateEventType(type: string, methodName: string): void {
  */
 function validatePayload(payload: unknown, type: string, methodName: string): void {
   if (payload === undefined || payload === null) {
-    throw new Error(`[IntegrationOrchestrator.${methodName}] Invalid payload for event: ${type}`);
+    throw new ValidationError(`[IntegrationOrchestrator.${methodName}] Invalid payload for event: ${type}`);
   }
 }
 

@@ -140,9 +140,9 @@ export interface CitationMetadata {
 }
 
 /**
- * Validation error details
+ * Validation error details (Bluebook-specific)
  */
-export interface ValidationError {
+export interface BluebookValidationError {
   code: string;
   message: string;
   severity: ValidationSeverity;

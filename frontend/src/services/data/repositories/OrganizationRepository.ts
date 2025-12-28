@@ -58,7 +58,7 @@ export class OrganizationRepository extends Repository<Organization> {
 
     override async add(item: Organization): Promise<Organization> {
         if (!item || typeof item !== 'object') {
-            throw new Error('[OrganizationRepository.add] Invalid organization data');
+            throw new ValidationError('[OrganizationRepository.add] Invalid organization data');
         }
         if (this.useBackend) {
             try {
@@ -113,7 +113,7 @@ export class OrganizationRepository extends Repository<Organization> {
     }
     
     async getByType(type: string): Promise<Organization[]> {
-        if (!type) throw new Error('[OrganizationRepository.getByType] Invalid type');
+        if (!type) throw new ValidationError('[OrganizationRepository.getByType] Invalid type');
         if (this.useBackend) {
             try {
                 return await this.orgsApi.getByType(type as any) as any;
@@ -125,7 +125,7 @@ export class OrganizationRepository extends Repository<Organization> {
     }
     
     async getByJurisdiction(jurisdiction: string): Promise<Organization[]> {
-        if (!jurisdiction) throw new Error('[OrganizationRepository.getByJurisdiction] Invalid jurisdiction');
+        if (!jurisdiction) throw new ValidationError('[OrganizationRepository.getByJurisdiction] Invalid jurisdiction');
         if (this.useBackend) {
             try {
                 return await this.orgsApi.getByJurisdiction(jurisdiction) as any;

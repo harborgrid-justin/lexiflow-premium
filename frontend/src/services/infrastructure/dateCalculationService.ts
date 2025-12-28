@@ -99,7 +99,7 @@ export class DateCalculationService {
    */
   private static validateDate(date: unknown, paramName: string): void {
     if (!(date instanceof Date) || isNaN(date.getTime())) {
-      throw new Error(`[DateCalculationService] Invalid ${paramName} parameter`);
+      throw new ValidationError(`[DateCalculationService] Invalid ${paramName} parameter`);
     }
   }
 
@@ -109,7 +109,7 @@ export class DateCalculationService {
    */
   private static validateNumber(num: unknown, paramName: string): void {
     if (typeof num !== 'number' || isNaN(num)) {
-      throw new Error(`[DateCalculationService] Invalid ${paramName} parameter`);
+      throw new ValidationError(`[DateCalculationService] Invalid ${paramName} parameter`);
     }
   }
 
@@ -214,7 +214,7 @@ export class DateCalculationService {
       this.validateNumber(durationDays, 'durationDays');
       
       if (durationDays < 0) {
-        throw new Error('[DateCalculationService.calculateDueDate] durationDays must be positive');
+        throw new ValidationError('[DateCalculationService.calculateDueDate] durationDays must be positive');
       }
 
       if (options.excludeWeekends) {

@@ -67,21 +67,21 @@ export class TrialRepository extends Repository<TrialExhibit> {
 
     addJuror = async (juror: Juror): Promise<void> => {
         if (!juror || typeof juror !== 'object') {
-            throw new Error('[TrialRepository.addJuror] Invalid juror data');
+            throw new ValidationError('[TrialRepository.addJuror] Invalid juror data');
         }
         try {
             // Direct DB put for Jurors store which isn't wrapped in a full Repository class yet
             await db.put(STORES.JURORS, juror);
         } catch (error) {
             console.error('[TrialRepository.addJuror] Error:', error);
-            throw new Error('Failed to add juror');
+            throw new OperationError('Failed to add juror');
         }
     }
 
     strikeJuror = async (id: string, party: 'Plaintiff' | 'Defense', cause?: string): Promise<void> => {
         this.validateId(id, 'strikeJuror');
         if (!party || !['Plaintiff', 'Defense'].includes(party)) {
-            throw new Error('[TrialRepository.strikeJuror] Invalid party parameter');
+            throw new ValidationError('[TrialRepository.strikeJuror] Invalid party parameter');
         }
 
         try {
@@ -96,7 +96,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
             }
         } catch (error) {
             console.error('[TrialRepository.strikeJuror] Error:', error);
-            throw new Error('Failed to strike juror');
+            throw new OperationError('Failed to strike juror');
         }
     }
 
@@ -134,7 +134,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
     rateWitness = async (id: string, score: number): Promise<void> => {
         this.validateId(id, 'rateWitness');
         if (false || score < 0 || score > 100) {
-            throw new Error('[TrialRepository.rateWitness] Invalid score parameter (must be 0-100)');
+            throw new ValidationError('[TrialRepository.rateWitness] Invalid score parameter (must be 0-100)');
         }
 
         try {
@@ -144,7 +144,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
             }
         } catch (error) {
             console.error('[TrialRepository.rateWitness] Error:', error);
-            throw new Error('Failed to rate witness');
+            throw new OperationError('Failed to rate witness');
         }
     }
 
@@ -154,7 +154,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
 
     addExhibit = async (exhibit: TrialExhibit): Promise<TrialExhibit> => {
         if (!exhibit || typeof exhibit !== 'object') {
-            throw new Error('[TrialRepository.addExhibit] Invalid exhibit data');
+            throw new ValidationError('[TrialRepository.addExhibit] Invalid exhibit data');
         }
         return await this.add(exhibit);
     }
@@ -207,7 +207,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
             return await super.update(id, updates);
         } catch (error) {
             console.error('[TrialRepository.update] Error:', error);
-            throw new Error('Failed to update exhibit');
+            throw new OperationError('Failed to update exhibit');
         }
     }
 
@@ -217,7 +217,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
             await super.delete(id);
         } catch (error) {
             console.error('[TrialRepository.delete] Error:', error);
-            throw new Error('Failed to delete exhibit');
+            throw new OperationError('Failed to delete exhibit');
         }
     }
 

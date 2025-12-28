@@ -276,7 +276,7 @@
  * - Fallback models: Graceful degradation to gemini-2.5-flash on pro-preview failures
  */
 
-import { GoogleGenerativeAI, GenerateContentResult } from "@google/generative-ai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ParsedDocket } from '@/types';
 import type { SearchResult } from '@/types';
 import { Prompts } from '@/services/ai/prompts';
@@ -284,7 +284,8 @@ import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchem
 import { safeParseJSON, withRetry } from '@/utils/apiUtils';
 import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, GroundingChunk, ShepardizeResult } from '@/types/ai';
 
-// Note: Import AI types from @/types, don't re-export them
+// Re-export IntentResult for external use
+export type { IntentResult } from '@/types/ai';
 
 // =============================================================================
 // CLIENT FACTORY (Private)
@@ -299,10 +300,10 @@ const getClient = () => {
   // Check environment variables (Vite-prefixed and standard)
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY || 
                  import.meta.env.GEMINI_API_KEY || 
-                 (typeof localStorage !== 'undefined' ? localStorage.getItem('gemini_api_key') : null);
+                 (typeof localStorage !== 'undefined' ? defaultStorage.getItem('gemini_api_key') : null);
   
   if (!apiKey) {
-    throw new Error('Gemini API key not configured. Please set VITE_GEMINI_API_KEY environment variable or gemini_api_key in localStorage.');
+    throw new MissingConfigurationError('Gemini API key not configured. Please set VITE_GEMINI_API_KEY environment variable or gemini_api_key in storage.');
   }
   return new GoogleGenerativeAI(apiKey);
 };
@@ -331,7 +332,7 @@ export const GeminiService = {
                 const response = result.response;
                 const text = response.text();
                 
-                if (!text) throw new Error("No response text from Gemini");
+                if (!text) throw new ExternalServiceError("No response text from Gemini");
                 return safeParseJSON(text, { summary: "Analysis failed to parse", riskScore: 0 });
             } catch (e) {
                 console.error("Gemini Analysis Error:", e);
@@ -354,7 +355,7 @@ export const GeminiService = {
                 const result = await model.generateContent(Prompts.Critique(text));
                 const responseText = result.response.text();
                 
-                if (!responseText) throw new Error("No response text from Gemini");
+                if (!responseText) throw new ExternalServiceError("No response text from Gemini");
                 return safeParseJSON(responseText, {
                     score: 0,
                     strengths: [],
@@ -440,7 +441,7 @@ export const GeminiService = {
                 const result = await model.generateContent(Prompts.Intent(query));
                 const responseText = result.response.text();
                 
-                if (!responseText) throw new Error("No response text from Gemini");
+                if (!responseText) throw new ExternalServiceError("No response text from Gemini");
                 return safeParseJSON(responseText, { action: 'UNKNOWN', confidence: 0 });
             } catch (e) {
                 return { action: 'UNKNOWN', confidence: 0 };
@@ -462,7 +463,7 @@ export const GeminiService = {
                 const result = await model.generateContent(Prompts.Docket(text));
                 const responseText = result.response.text();
                 
-                if (!responseText) throw new Error("No response text from Gemini");
+                if (!responseText) throw new ExternalServiceError("No response text from Gemini");
                 return safeParseJSON<Partial<ParsedDocket>>(responseText, {});
             } catch(e) {
                 console.error("Docket Parse Error", e);
@@ -482,7 +483,7 @@ export const GeminiService = {
                 const result = await model.generateContent(Prompts.Research(query));
                 const response = result.response;
 
-                const sources: import('@/api/search/search-api').SearchResult[] = [];
+                const sources: SearchResult[] = [];
                 const candidates = response.candidates;
                 if (candidates && candidates[0]?.groundingMetadata?.groundingChunks) {
                     const chunks = candidates[0].groundingMetadata.groundingChunks as GroundingChunk[];
@@ -619,7 +620,7 @@ export const GeminiService = {
                 );
                 const responseText = result.response.text();
                 
-                if (!responseText) throw new Error("No response text from Gemini");
+                if (!responseText) throw new ExternalServiceError("No response text from Gemini");
                 return safeParseJSON<Partial<ParsedDocket>>(responseText, {});
             } catch(e) {
                 console.error("Extract Case Data Error:", e);

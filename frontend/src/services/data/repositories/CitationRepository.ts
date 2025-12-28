@@ -75,7 +75,7 @@ export class CitationRepository extends Repository<Citation> {
 
     add = async (item: Citation): Promise<Citation> => {
         if (!item || typeof item !== 'object') {
-            throw new Error('[CitationRepository.add] Invalid citation data');
+            throw new ValidationError('[CitationRepository.add] Invalid citation data');
         }
 
         let result: Citation;
@@ -140,7 +140,7 @@ export class CitationRepository extends Repository<Citation> {
 
     async validate(citationText: string): Promise<{ valid: boolean; formatted?: string; errors?: string[] }> {
         if (!citationText) {
-            throw new Error('[CitationRepository.validate] Invalid citationText');
+            throw new ValidationError('[CitationRepository.validate] Invalid citationText');
         }
         if (this.useBackend) {
             try {
@@ -162,7 +162,7 @@ export class CitationRepository extends Repository<Citation> {
             }
         }
         const citation = await this.getById(id);
-        if (!citation) throw new Error('Citation not found');
+        if (!citation) throw new EntityNotFoundError('Citation not found');
         return { ...citation, shepardized: true, shepardStatus: 'good_law' } as any;
     }
 

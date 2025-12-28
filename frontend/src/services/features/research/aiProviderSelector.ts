@@ -4,6 +4,7 @@
 
 import { GeminiService } from '../research/geminiService';
 import { OpenAIService } from './openaiService';
+import { defaultStorage } from '@/services';
 import type { AIServiceInterface } from './aiProvider';
 
 export type AIProvider = 'gemini' | 'openai';
@@ -11,14 +12,14 @@ export type AIProvider = 'gemini' | 'openai';
 // Get provider from localStorage or default to gemini
 export const getAIProvider = (): AIProvider => {
   if (typeof localStorage === 'undefined') return 'gemini';
-  const stored = localStorage.getItem('ai_provider');
+  const stored = defaultStorage.getItem('ai_provider');
   return (stored === 'openai' || stored === 'gemini') ? stored : 'gemini';
 };
 
 // Set provider in localStorage
 export const setAIProvider = (provider: AIProvider): void => {
   if (typeof localStorage !== 'undefined') {
-    localStorage.setItem('ai_provider', provider);
+    defaultStorage.setItem('ai_provider', provider);
     console.log(`[AIProvider] Switched to ${provider.toUpperCase()}`);
   }
 };
@@ -37,13 +38,13 @@ export const isProviderConfigured = (provider: AIProvider): boolean => {
     return !!(
       import.meta.env.VITE_GEMINI_API_KEY || 
       import.meta.env.GEMINI_API_KEY || 
-      localStorage.getItem('gemini_api_key')
+      defaultStorage.getItem('gemini_api_key')
     );
   } else {
     return !!(
       import.meta.env.VITE_OPENAI_API_KEY || 
       import.meta.env.OPENAI_API_KEY || 
-      localStorage.getItem('openai_api_key')
+      defaultStorage.getItem('openai_api_key')
     );
   }
 };
@@ -55,11 +56,11 @@ export const getProviderApiKey = (provider: AIProvider): string | null => {
   if (provider === 'gemini') {
     return import.meta.env.VITE_GEMINI_API_KEY || 
            import.meta.env.GEMINI_API_KEY || 
-           localStorage.getItem('gemini_api_key');
+           defaultStorage.getItem('gemini_api_key');
   } else {
     return import.meta.env.VITE_OPENAI_API_KEY || 
            import.meta.env.OPENAI_API_KEY || 
-           localStorage.getItem('openai_api_key');
+           defaultStorage.getItem('openai_api_key');
   }
 };
 
@@ -68,7 +69,7 @@ export const setProviderApiKey = (provider: AIProvider, apiKey: string): void =>
   if (typeof localStorage === 'undefined') return;
   
   const storageKey = provider === 'gemini' ? 'gemini_api_key' : 'openai_api_key';
-  localStorage.setItem(storageKey, apiKey);
+  defaultStorage.setItem(storageKey, apiKey);
 };
 
 // Get provider display name

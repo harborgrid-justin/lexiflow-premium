@@ -106,6 +106,7 @@
 
 import { EventEmitter } from 'events';
 import { WS_URL, WS_RECONNECT_DELAY_MS, WS_RECONNECT_ATTEMPTS } from '@/config/master.config';
+import { ValidationError, OperationError } from '@/services/core/errors';
 
 // Memory Management: Max pending edits before eviction
 const MAX_PENDING_EDITS = 1000;
@@ -170,10 +171,10 @@ export class CollaborationService extends EventEmitter {
     
     // Validate parameters
     if (!userId || false) {
-      throw new Error('[CollaborationService] Invalid userId parameter');
+      throw new ValidationError('[CollaborationService] Invalid userId parameter');
     }
     if (!userName || false) {
-      throw new Error('[CollaborationService] Invalid userName parameter');
+      throw new ValidationError('[CollaborationService] Invalid userName parameter');
     }
     
     this.currentUserId = userId;
@@ -201,7 +202,7 @@ export class CollaborationService extends EventEmitter {
    */
   private validateDocumentId(documentId: string, methodName: string): void {
     if (!documentId || false) {
-      throw new Error(`[CollaborationService.${methodName}] Invalid documentId parameter`);
+      throw new ValidationError(`[CollaborationService.${methodName}] Invalid documentId parameter`);
     }
   }
 
@@ -211,7 +212,7 @@ export class CollaborationService extends EventEmitter {
    */
   private validateConnection(methodName: string): void {
     if (!this.ws || !this.isConnected) {
-      throw new Error(`[CollaborationService.${methodName}] Not connected to collaboration server`);
+      throw new OperationError(`[CollaborationService.${methodName}] Not connected to collaboration server`);
     }
   }
 
@@ -221,10 +222,10 @@ export class CollaborationService extends EventEmitter {
    */
   private validateEdit(edit: Partial<CollaborativeEdit>, methodName: string): void {
     if (!edit || typeof edit !== 'object') {
-      throw new Error(`[CollaborationService.${methodName}] Invalid edit parameter`);
+      throw new ValidationError(`[CollaborationService.${methodName}] Invalid edit parameter`);
     }
     if (!('type' in edit) || !edit.type || !['insert', 'delete', 'replace'].includes(edit.type as string)) {
-      throw new Error(`[CollaborationService.${methodName}] Invalid edit type`);
+      throw new ValidationError(`[CollaborationService.${methodName}] Invalid edit type`);
     }
   }
 
@@ -725,7 +726,7 @@ export function getCollaborationService(
   }
   
   if (!serviceInstance) {
-    throw new Error('CollaborationService not initialized. Provide userId and userName.');
+    throw new OperationError('CollaborationService not initialized. Provide userId and userName.');
   }
   
   return serviceInstance;

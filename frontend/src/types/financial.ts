@@ -53,16 +53,7 @@ export type RateTable = BaseEntity & {
   readonly expiryDate?: string; 
   readonly level: string; 
 };
-/**
- * Time entry status discriminated union
- * Tracks lifecycle from draft through billing
- */
-export type TimeEntryStatus = 
-  | 'Draft' 
-  | 'Submitted' 
-  | 'Approved' 
-  | 'Billed' 
-  | 'Written Off';
+// TimeEntryStatus is exported from enums.ts
 
 /**
  * Time entry entity
@@ -129,18 +120,7 @@ export type InvoiceBillingModel =
   | 'Hybrid' 
   | 'Retainer';
 
-/**
- * Invoice status discriminated union
- * Tracks invoice lifecycle from draft through payment
- */
-export type InvoiceStatus = 
-  | 'Draft' 
-  | 'Sent' 
-  | 'Viewed' 
-  | 'Partial' 
-  | 'Paid' 
-  | 'Overdue' 
-  | 'Written Off';
+// InvoiceStatus is exported from enums.ts
 
 /**
  * Invoice entity

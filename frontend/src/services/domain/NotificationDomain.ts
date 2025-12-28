@@ -7,6 +7,7 @@
 
 import { communicationsApi } from '@/api/domains/communications.api';
 import { delay } from '@/utils/async';
+import { defaultStorage } from '@/services';
 
 interface Notification {
   id: string;
@@ -114,12 +115,12 @@ export const NotificationService = {
   
   subscribe: async (channel: string): Promise<boolean> => {
     try {
-      const stored = localStorage.getItem(SUBSCRIPTIONS_KEY);
+      const stored = defaultStorage.getItem(SUBSCRIPTIONS_KEY);
       const subscriptions = stored ? JSON.parse(stored) : [];
       
       if (!subscriptions.includes(channel)) {
         subscriptions.push(channel);
-        localStorage.setItem(SUBSCRIPTIONS_KEY, JSON.stringify(subscriptions));
+        defaultStorage.setItem(SUBSCRIPTIONS_KEY, JSON.stringify(subscriptions));
       }
       
       console.log(`[NotificationService] Subscribed to channel: ${channel}`);
@@ -131,11 +132,11 @@ export const NotificationService = {
   
   unsubscribe: async (channel: string): Promise<boolean> => {
     try {
-      const stored = localStorage.getItem(SUBSCRIPTIONS_KEY);
+      const stored = defaultStorage.getItem(SUBSCRIPTIONS_KEY);
       const subscriptions = stored ? JSON.parse(stored) : [];
       const updated = subscriptions.filter((c: string) => c !== channel);
       
-      localStorage.setItem(SUBSCRIPTIONS_KEY, JSON.stringify(updated));
+      defaultStorage.setItem(SUBSCRIPTIONS_KEY, JSON.stringify(updated));
       console.log(`[NotificationService] Unsubscribed from channel: ${channel}`);
       return true;
     } catch {

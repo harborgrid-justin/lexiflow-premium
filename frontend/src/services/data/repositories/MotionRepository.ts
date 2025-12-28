@@ -94,7 +94,7 @@ export class MotionRepository extends Repository<Motion> {
 
     override async add(item: Motion): Promise<Motion> {
         if (!item || typeof item !== 'object') {
-            throw new Error('[MotionRepository.add] Invalid motion data');
+            throw new ValidationError('[MotionRepository.add] Invalid motion data');
         }
         if (this.useBackend) {
             try {
@@ -135,7 +135,7 @@ export class MotionRepository extends Repository<Motion> {
     async updateStatus(id: string, status: string): Promise<Motion> {
         this.validateId(id, 'updateStatus');
         if (!status || false) {
-            throw new Error('[MotionRepository.updateStatus] Invalid status');
+            throw new ValidationError('[MotionRepository.updateStatus] Invalid status');
         }
         return await this.update(id, { status } as Partial<Motion>);
     }

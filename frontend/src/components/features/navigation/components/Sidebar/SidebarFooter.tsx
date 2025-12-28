@@ -21,7 +21,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
+import { UserAvatar } from '@/components/atoms/UserAvatar';
 import { BackendStatusIndicator } from '@/components/organisms/BackendStatusIndicator/BackendStatusIndicator';
 
 // Utils & Constants

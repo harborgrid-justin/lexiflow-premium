@@ -24,12 +24,12 @@ import { Menu, Bell, PlusCircle, UserPlus, Clock, FileText } from 'lucide-react'
 // Components
 import { ConnectivityHUD } from '@/components/organisms/ConnectivityHUD/ConnectivityHUD';
 import { NeuralCommandBar } from '@/components/organisms/NeuralCommandBar/NeuralCommandBar';
-import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
+import { UserAvatar } from '@/components/atoms/UserAvatar';
 import { ConnectionStatus } from '@/components/organisms/ConnectionStatus/ConnectionStatus';
 
 // Services & Data
 import { GlobalSearchResult } from '@/services/search/searchService';
-import { IntentResult } from '@/services/features/research/geminiService';
+import type { IntentResult } from '@/services/features/research/geminiService';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

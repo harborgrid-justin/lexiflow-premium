@@ -8,6 +8,8 @@
  * @example
  * ```tsx
  * import { RuleService, ruleQueryKeys } from './services/features/legal/ruleService';
+
+import { OperationError } from '@/services/core/errors';
  * import { useQuery, useMutation } from './hooks/useQueryHooks';
  * 
  * // Fetch all rules
@@ -113,7 +115,7 @@ export const RuleService = {
     const created = await api.jurisdiction.createRule(dto);
     
     if (!created) {
-      throw new Error('Failed to create rule');
+      throw new OperationError('Failed to create rule');
     }
     
     // Invalidate relevant queries
@@ -139,7 +141,7 @@ export const RuleService = {
     const updated = await api.jurisdiction.updateRule(id, updateDto);
     
     if (!updated) {
-      throw new Error('Failed to update rule');
+      throw new OperationError('Failed to update rule');
     }
     
     // Invalidate relevant queries
@@ -156,7 +158,7 @@ export const RuleService = {
     const success = await api.jurisdiction.deleteRule(id);
     
     if (!success) {
-      throw new Error('Failed to delete rule');
+      throw new OperationError('Failed to delete rule');
     }
     
     // Invalidate relevant queries

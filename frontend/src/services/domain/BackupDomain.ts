@@ -18,6 +18,8 @@
  * @performance
  * - Snapshot creation: ~1.5s (asynchronous)
  * - Snapshot listing: ~200ms
+
+import { ValidationError } from '@/services/core/errors';
  * - Archive stats: ~200ms (cached)
  * - Restoration: ~3s (includes validation)
  * 

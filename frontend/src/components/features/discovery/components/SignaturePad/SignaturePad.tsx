@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useId } from 'react';
+import React, { useState } from 'react';
 import { PenTool, CheckCircle, RefreshCcw, X } from 'lucide-react';
 
 // ============================================================================
@@ -41,8 +41,6 @@ export const SignaturePad = React.memo<SignaturePadProps>(({
 }) => {
   const { theme } = useTheme();
   const [localSigning, setLocalSigning] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _signatureId = useId();
 
   const handleClick = () => {
     if (value) return; 

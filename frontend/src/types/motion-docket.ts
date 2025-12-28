@@ -10,8 +10,7 @@ import {
   DocketEntryType
 } from './enums';
 
-export interface SearchResult { id: string; title: string; url?: string; type?: string; snippet?: string; }
-
+// SearchResult is exported from ./search.ts
 export interface FileChunk { id: string; pageNumber: number; contentPreview: string; hash: string; }
 
 export interface Motion extends BaseEntity { 

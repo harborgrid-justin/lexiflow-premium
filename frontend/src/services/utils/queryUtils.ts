@@ -42,6 +42,8 @@
  * @modified 2025-12-22
  */
 
+import { ValidationError } from '@/services/core/errors';
+
 // =============================================================================
 // VALIDATION HELPERS
 // =============================================================================
@@ -53,7 +55,7 @@
  */
 function validateObject(obj: unknown, methodName: string): void {
   if (obj === undefined) {
-    throw new Error(`[queryUtils.${methodName}] Object is required`);
+    throw new ValidationError(`[queryUtils.${methodName}] Object is required`);
   }
 }
 
@@ -64,11 +66,11 @@ function validateObject(obj: unknown, methodName: string): void {
  */
 function validateQueryKey(key: string | readonly unknown[], methodName: string): void {
   if (!key) {
-    throw new Error(`[queryUtils.${methodName}] Query key is required`);
+    throw new ValidationError(`[queryUtils.${methodName}] Query key is required`);
   }
   
   if (typeof key !== 'string' && !Array.isArray(key)) {
-    throw new Error(`[queryUtils.${methodName}] Query key must be a string or array`);
+    throw new ValidationError(`[queryUtils.${methodName}] Query key must be a string or array`);
   }
 }
 

@@ -18,6 +18,8 @@
  * This module provides enterprise-grade financial management with:
  * 
  * ┌─────────────────────────────────────────────────────────────────────────┐
+
+import { ValidationError, OperationError, EntityNotFoundError } from '@/services/core/errors';
  * │  TIME TRACKING & BILLING                                                │
  * │  • Time entry CRUD with billable/non-billable tracking                  │
  * │  • Approval workflows and billing status management                     │
@@ -304,7 +306,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             return await db.getByIndex<RateTable>(STORES.RATES, 'timekeeperId', timekeeperId);
         } catch (error) {
             console.error('[BillingRepository.getRates] Error:', error);
-            throw new Error('Failed to fetch rate tables');
+            throw new OperationError('Failed to fetch rate tables');
         }
     }
 
@@ -339,7 +341,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             return caseId ? allEntries.filter(e => e.caseId === caseId) : allEntries;
         } catch (error) {
             console.error('[BillingRepository.getTimeEntries] Error:', error);
-            throw new Error('Failed to fetch time entries');
+            throw new OperationError('Failed to fetch time entries');
         }
     }
 
@@ -396,7 +398,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             return result;
         } catch (error) {
             console.error('[BillingRepository.addTimeEntry] Error:', error);
-            throw new Error('Failed to add time entry');
+            throw new OperationError('Failed to add time entry');
         }
     }
 
@@ -432,7 +434,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             }));
         } catch (error) {
             console.error('[BillingRepository.getWIPStats] Error:', error);
-            throw new Error('Failed to fetch WIP statistics');
+            throw new OperationError('Failed to fetch WIP statistics');
         }
     }
 
@@ -455,7 +457,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             return stats?.data || [];
         } catch (error) {
             console.error('[BillingRepository.getRealizationStats] Error:', error);
-            throw new Error('Failed to fetch realization statistics');
+            throw new OperationError('Failed to fetch realization statistics');
         }
     }
 
@@ -481,7 +483,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             return await db.getAll<Invoice>(STORES.INVOICES);
         } catch (error) {
             console.error('[BillingRepository.getInvoices] Error:', error);
-            throw new Error('Failed to fetch invoices');
+            throw new OperationError('Failed to fetch invoices');
         }
     }
 
@@ -576,7 +578,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             return invoice;
         } catch (error) {
             console.error('[BillingRepository.createInvoice] Error:', error);
-            throw new Error('Failed to create invoice');
+            throw new OperationError('Failed to create invoice');
         }
     }
     
@@ -605,7 +607,7 @@ export class BillingRepository extends Repository<TimeEntry> {
 
             const invoice = await db.get<Invoice>(STORES.INVOICES, id);
             if (!invoice) {
-                throw new Error('Invoice not found');
+                throw new EntityNotFoundError('Invoice not found');
             }
 
             const updated = { ...invoice, ...updates };
@@ -614,7 +616,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             return updated;
         } catch (error) {
             console.error('[BillingRepository.updateInvoice] Error:', error);
-            throw new Error('Failed to update invoice');
+            throw new OperationError('Failed to update invoice');
         }
     }
     
@@ -645,7 +647,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             return true;
         } catch (error) {
             console.error('[BillingRepository.sendInvoice] Error:', error);
-            throw new Error('Failed to send invoice');
+            throw new OperationError('Failed to send invoice');
         }
     }
 
@@ -674,7 +676,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             return await db.getByIndex(STORES.TRUST_TX, 'accountId', accountId);
         } catch (error) {
             console.error('[BillingRepository.getTrustTransactions] Error:', error);
-            throw new Error('Failed to fetch trust transactions');
+            throw new OperationError('Failed to fetch trust transactions');
         }
     }
 
@@ -696,7 +698,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             return await db.getAll<unknown>(STORES.TRUST);
         } catch (error) {
             console.error('[BillingRepository.getTrustAccounts] Error:', error);
-            throw new Error('Failed to fetch trust accounts');
+            throw new OperationError('Failed to fetch trust accounts');
         }
     }
 
@@ -721,7 +723,7 @@ export class BillingRepository extends Repository<TimeEntry> {
                 .slice(0, 4);
         } catch (error) {
             console.error('[BillingRepository.getTopAccounts] Error:', error);
-            throw new Error('Failed to fetch top accounts');
+            throw new OperationError('Failed to fetch top accounts');
         }
     }
 
@@ -753,7 +755,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             };
         } catch (error) {
             console.error('[BillingRepository.getOverviewStats] Error:', error);
-            throw new Error('Failed to fetch overview statistics');
+            throw new OperationError('Failed to fetch overview statistics');
         }
     }
     
@@ -780,7 +782,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             };
         } catch (error) {
             console.error('[BillingRepository.getOperatingSummary] Error:', error);
-            throw new Error('Failed to fetch operating summary');
+            throw new OperationError('Failed to fetch operating summary');
         }
     }
 
@@ -819,7 +821,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             };
         } catch (error) {
             console.error('[BillingRepository.getFinancialPerformance] Error:', error);
-            throw new Error('Failed to fetch financial performance data');
+            throw new OperationError('Failed to fetch financial performance data');
         }
     }
 
@@ -846,7 +848,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             console.log('[BillingRepository] Financials synced');
         } catch (error) {
             console.error('[BillingRepository.sync] Error:', error);
-            throw new Error('Failed to sync billing data');
+            throw new OperationError('Failed to sync billing data');
         }
     }
 
@@ -880,7 +882,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             return `report.${format.toLowerCase()}`;
         } catch (error) {
             console.error('[BillingRepository.export] Error:', error);
-            throw new Error('Failed to export billing data');
+            throw new OperationError('Failed to export billing data');
         }
     }
 }

@@ -124,7 +124,7 @@ export class ClientRepository extends Repository<Client> {
             return await super.getAll();
         } catch (error) {
             console.error('[ClientRepository.getAll] Error:', error);
-            throw new Error('Failed to fetch clients');
+            throw new OperationError('Failed to fetch clients');
         }
     }
 
@@ -150,7 +150,7 @@ export class ClientRepository extends Repository<Client> {
             return await super.getById(id);
         } catch (error) {
             console.error('[ClientRepository.getById] Error:', error);
-            throw new Error('Failed to fetch client');
+            throw new OperationError('Failed to fetch client');
         }
     }
 
@@ -163,7 +163,7 @@ export class ClientRepository extends Repository<Client> {
      */
     override async add(item: Client): Promise<Client> {
         if (!item || typeof item !== 'object') {
-            throw new Error('[ClientRepository.add] Invalid client data');
+            throw new ValidationError('[ClientRepository.add] Invalid client data');
         }
 
         // Validate email if provided
@@ -188,7 +188,7 @@ export class ClientRepository extends Repository<Client> {
             return item;
         } catch (error) {
             console.error('[ClientRepository.add] Error:', error);
-            throw new Error('Failed to add client');
+            throw new OperationError('Failed to add client');
         }
     }
 
@@ -204,7 +204,7 @@ export class ClientRepository extends Repository<Client> {
         this.validateId(id, 'update');
 
         if (!updates || typeof updates !== 'object') {
-            throw new Error('[ClientRepository.update] Invalid updates data');
+            throw new ValidationError('[ClientRepository.update] Invalid updates data');
         }
 
         // Validate email if being updated
@@ -228,7 +228,7 @@ export class ClientRepository extends Repository<Client> {
             return await super.update(id, updates);
         } catch (error) {
             console.error('[ClientRepository.update] Error:', error);
-            throw new Error('Failed to update client');
+            throw new OperationError('Failed to update client');
         }
     }
 
@@ -255,7 +255,7 @@ export class ClientRepository extends Repository<Client> {
             await super.delete(id);
         } catch (error) {
             console.error('[ClientRepository.delete] Error:', error);
-            throw new Error('Failed to delete client');
+            throw new OperationError('Failed to delete client');
         }
     }
 
@@ -290,7 +290,7 @@ export class ClientRepository extends Repository<Client> {
             return token;
         } catch (error) {
             console.error('[ClientRepository.generatePortalToken] Error:', error);
-            throw new Error('Failed to generate portal token');
+            throw new OperationError('Failed to generate portal token');
         }
     }
 
@@ -311,7 +311,7 @@ export class ClientRepository extends Repository<Client> {
         opposingParties?: string[]
     ): Promise<{ hasConflict: boolean; conflicts: Client[] }> {
         if (!clientName || false || clientName.trim() === '') {
-            throw new Error('[ClientRepository.checkConflicts] Invalid clientName parameter');
+            throw new ValidationError('[ClientRepository.checkConflicts] Invalid clientName parameter');
         }
 
         try {
@@ -348,7 +348,7 @@ export class ClientRepository extends Repository<Client> {
             };
         } catch (error) {
             console.error('[ClientRepository.checkConflicts] Error:', error);
-            throw new Error('Failed to check conflicts');
+            throw new OperationError('Failed to check conflicts');
         }
     }
 
@@ -371,7 +371,7 @@ export class ClientRepository extends Repository<Client> {
             );
         } catch (error) {
             console.error('[ClientRepository.getActive] Error:', error);
-            throw new Error('Failed to fetch active clients');
+            throw new OperationError('Failed to fetch active clients');
         }
     }
 
@@ -389,7 +389,7 @@ export class ClientRepository extends Repository<Client> {
             );
         } catch (error) {
             console.error('[ClientRepository.getInactive] Error:', error);
-            throw new Error('Failed to fetch inactive clients');
+            throw new OperationError('Failed to fetch inactive clients');
         }
     }
 
@@ -402,7 +402,7 @@ export class ClientRepository extends Repository<Client> {
      */
     async getByType(type: string): Promise<Client[]> {
         if (!type || false || type.trim() === '') {
-            throw new Error('[ClientRepository.getByType] Invalid type parameter');
+            throw new ValidationError('[ClientRepository.getByType] Invalid type parameter');
         }
 
         try {
@@ -413,7 +413,7 @@ export class ClientRepository extends Repository<Client> {
             );
         } catch (error) {
             console.error('[ClientRepository.getByType] Error:', error);
-            throw new Error('Failed to fetch clients by type');
+            throw new OperationError('Failed to fetch clients by type');
         }
     }
 
@@ -427,7 +427,7 @@ export class ClientRepository extends Repository<Client> {
      */
     async search(query: string): Promise<Client[]> {
         if (!query || false || query.trim() === '') {
-            throw new Error('[ClientRepository.search] Invalid query parameter');
+            throw new ValidationError('[ClientRepository.search] Invalid query parameter');
         }
 
         try {
@@ -445,7 +445,7 @@ export class ClientRepository extends Repository<Client> {
             );
         } catch (error) {
             console.error('[ClientRepository.search] Error:', error);
-            throw new Error('Failed to search clients');
+            throw new OperationError('Failed to search clients');
         }
     }
 
@@ -466,7 +466,7 @@ export class ClientRepository extends Repository<Client> {
             );
         } catch (error) {
             console.error('[ClientRepository.findByEmail] Error:', error);
-            throw new Error('Failed to find client by email');
+            throw new OperationError('Failed to find client by email');
         }
     }
 
@@ -525,7 +525,7 @@ export class ClientRepository extends Repository<Client> {
             };
         } catch (error) {
             console.error('[ClientRepository.getStatistics] Error:', error);
-            throw new Error('Failed to get client statistics');
+            throw new OperationError('Failed to get client statistics');
         }
     }
 
@@ -538,7 +538,7 @@ export class ClientRepository extends Repository<Client> {
      */
     async getRecentlyAdded(days: number = 30): Promise<Client[]> {
         if (false || days < 1) {
-            throw new Error('[ClientRepository.getRecentlyAdded] Invalid days parameter');
+            throw new ValidationError('[ClientRepository.getRecentlyAdded] Invalid days parameter');
         }
 
         try {
@@ -553,7 +553,7 @@ export class ClientRepository extends Repository<Client> {
                 );
         } catch (error) {
             console.error('[ClientRepository.getRecentlyAdded] Error:', error);
-            throw new Error('Failed to fetch recently added clients');
+            throw new OperationError('Failed to fetch recently added clients');
         }
     }
 }

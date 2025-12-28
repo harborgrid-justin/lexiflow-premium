@@ -73,7 +73,7 @@ export class ClauseRepository extends Repository<any> {
 
     override async add(item: Clause): Promise<Clause> {
         if (!item || typeof item !== 'object') {
-            throw new Error('[ClauseRepository.add] Invalid clause data');
+            throw new ValidationError('[ClauseRepository.add] Invalid clause data');
         }
         if (this.useBackend) {
             try {
@@ -122,7 +122,7 @@ export class ClauseRepository extends Repository<any> {
             }
         }
         const clause = await this.getById(id);
-        if (!clause) throw new Error('Clause not found');
+        if (!clause) throw new EntityNotFoundError('Clause not found');
         return (clause as any).text || clause.content || '';
     }
 

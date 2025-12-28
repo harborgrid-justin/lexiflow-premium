@@ -117,9 +117,10 @@ export type DocumentVersion = BaseEntity & {
 };
 
 /**
- * Permission level for document access control
+ * Permission level for document access control (legacy)
+ * See data-quality.ts for full PermissionLevel type
  */
-export type PermissionLevel = 'Read' | 'Write' | 'None';
+export type DocumentPermissionLevel = 'Read' | 'Write' | 'None';
 
 /**
  * Access control list entry

@@ -74,7 +74,7 @@ export class RiskRepository extends Repository<Risk> {
 
     async add(item: Risk): Promise<Risk> {
         if (!item || typeof item !== 'object') {
-            throw new Error('[RiskRepository.add] Invalid risk data');
+            throw new ValidationError('[RiskRepository.add] Invalid risk data');
         }
 
         let result: Risk;

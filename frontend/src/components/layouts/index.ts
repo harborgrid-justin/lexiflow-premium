@@ -9,20 +9,14 @@
  */
 
 export * from '../ui/layouts';
-export { StackLayout } from './StackLayout';
 
-// ============================================================================
-// UTILITY LAYOUTS
-// ============================================================================
-export { CenteredLayout } from './CenteredLayout';
-
-// ============================================================================
-// ADVANCED FEATURES - Performance & Error Handling
-// ============================================================================
-export * from './withErrorBoundary';
-export * from './AsyncBoundary';
-export * from './LayoutComposer';
-export * from './PerformanceMonitor';
+// Re-export from ui/layouts - these are already exported via the wildcard above
+// export { StackLayout } from '../ui/layouts/StackLayout';
+// export { CenteredLayout } from '../ui/layouts/CenteredLayout';
+// export * from '../ui/layouts/withErrorBoundary';
+// export * from '../ui/layouts/AsyncBoundary';
+// export * from '../ui/layouts/LayoutComposer';
+// export * from '../ui/layouts/PerformanceMonitor';
 
 // ============================================================================
 // TYPE RE-EXPORTS

@@ -43,7 +43,7 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
 
     override async add(item: BriefAnalysisSession): Promise<BriefAnalysisSession> {
         if (!item || typeof item !== 'object') {
-            throw new Error('[AnalysisRepository.add] Invalid analysis session data');
+            throw new ValidationError('[AnalysisRepository.add] Invalid analysis session data');
         }
         await super.add(item);
         return item;

@@ -4,4 +4,3 @@
  */
 
 export * from '../../ui/layouts/AppShell';
-export { default } from '../../ui/layouts/AppShell';

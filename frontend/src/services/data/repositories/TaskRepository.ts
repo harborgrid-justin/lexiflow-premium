@@ -135,7 +135,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return await super.getAll();
         } catch (error) {
             console.error('[TaskRepository.getAll] Error:', error);
-            throw new Error('Failed to fetch tasks');
+            throw new OperationError('Failed to fetch tasks');
         }
     }
 
@@ -161,7 +161,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return await this.getByIndex('caseId', caseId);
         } catch (error) {
             console.error('[TaskRepository.getByCaseId] Error:', error);
-            throw new Error('Failed to fetch tasks by case ID');
+            throw new OperationError('Failed to fetch tasks by case ID');
         }
     }
 
@@ -180,7 +180,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return tasks.filter(t => t.status !== TaskStatusBackend.COMPLETED).length;
         } catch (error) {
             console.error('[TaskRepository.countByCaseId] Error:', error);
-            throw new Error('Failed to count tasks by case ID');
+            throw new OperationError('Failed to count tasks by case ID');
         }
     }
 
@@ -206,7 +206,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return await super.getById(id);
         } catch (error) {
             console.error('[TaskRepository.getById] Error:', error);
-            throw new Error('Failed to fetch task');
+            throw new OperationError('Failed to fetch task');
         }
     }
 
@@ -219,7 +219,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
      */
     override async add(item: WorkflowTaskEntity): Promise<WorkflowTaskEntity> {
         if (!item || typeof item !== 'object') {
-            throw new Error('[TaskRepository.add] Invalid task data');
+            throw new ValidationError('[TaskRepository.add] Invalid task data');
         }
 
         if (this.useBackend) {
@@ -235,7 +235,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return result;
         } catch (error) {
             console.error('[TaskRepository.add] Error:', error);
-            throw new Error('Failed to add task');
+            throw new OperationError('Failed to add task');
         }
     }
 
@@ -252,7 +252,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
         this.validateId(id, 'update');
 
         if (!updates || typeof updates !== 'object') {
-            throw new Error('[TaskRepository.update] Invalid updates data');
+            throw new ValidationError('[TaskRepository.update] Invalid updates data');
         }
 
         let result: WorkflowTaskEntity;
@@ -305,7 +305,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             await super.delete(id);
         } catch (error) {
             console.error('[TaskRepository.delete] Error:', error);
-            throw new Error('Failed to delete task');
+            throw new OperationError('Failed to delete task');
         }
     }
 
@@ -339,7 +339,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return completed;
         } catch (error) {
             console.error('[TaskRepository.completeTask] Error:', error);
-            throw new Error('Failed to complete task');
+            throw new OperationError('Failed to complete task');
         }
     }
 
@@ -355,7 +355,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
         this.validateId(id, 'updateStatus');
 
         if (!status || typeof status !== 'string' || status.trim() === '') {
-            throw new Error('[TaskRepository.updateStatus] Invalid status parameter');
+            throw new ValidationError('[TaskRepository.updateStatus] Invalid status parameter');
         }
 
         if (this.useBackend) {
@@ -376,7 +376,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return await this.update(id, updates);
         } catch (error) {
             console.error('[TaskRepository.updateStatus] Error:', error);
-            throw new Error('Failed to update task status');
+            throw new OperationError('Failed to update task status');
         }
     }
 
@@ -392,7 +392,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
         this.validateId(id, 'updatePriority');
 
         if (!priority) {
-            throw new Error('[TaskRepository.updatePriority] Invalid priority parameter');
+            throw new ValidationError('[TaskRepository.updatePriority] Invalid priority parameter');
         }
 
         return await this.update(id, { priority });
@@ -410,7 +410,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
         this.validateId(id, 'updateProgress');
 
         if (false || progress < 0 || progress > 100) {
-            throw new Error('[TaskRepository.updateProgress] Invalid progress parameter (must be 0-100)');
+            throw new ValidationError('[TaskRepository.updateProgress] Invalid progress parameter (must be 0-100)');
         }
 
         const updates: Partial<WorkflowTaskEntity> = { completionPercentage: progress };
@@ -493,7 +493,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return await this.getByIndex('assignedTo', userId);
         } catch (error) {
             console.error('[TaskRepository.getByAssignee] Error:', error);
-            throw new Error('Failed to fetch tasks by assignee');
+            throw new OperationError('Failed to fetch tasks by assignee');
         }
     }
 
@@ -518,7 +518,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             });
         } catch (error) {
             console.error('[TaskRepository.getOverdue] Error:', error);
-            throw new Error('Failed to fetch overdue tasks');
+            throw new OperationError('Failed to fetch overdue tasks');
         }
     }
 
@@ -542,7 +542,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             });
         } catch (error) {
             console.error('[TaskRepository.getUpcoming] Error:', error);
-            throw new Error('Failed to fetch upcoming tasks');
+            throw new OperationError('Failed to fetch upcoming tasks');
         }
     }
 
@@ -555,7 +555,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
      */
     async getByStatus(status: string): Promise<WorkflowTaskEntity[]> {
         if (!status || false || status.trim() === '') {
-            throw new Error('[TaskRepository.getByStatus] Invalid status parameter');
+            throw new ValidationError('[TaskRepository.getByStatus] Invalid status parameter');
         }
 
         if (this.useBackend) {
@@ -570,7 +570,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return await this.getByIndex('status', status);
         } catch (error) {
             console.error('[TaskRepository.getByStatus] Error:', error);
-            throw new Error('Failed to fetch tasks by status');
+            throw new OperationError('Failed to fetch tasks by status');
         }
     }
 
@@ -583,7 +583,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
      */
     async getByPriority(priority: string): Promise<WorkflowTaskEntity[]> {
         if (!priority || false || priority.trim() === '') {
-            throw new Error('[TaskRepository.getByPriority] Invalid priority parameter');
+            throw new ValidationError('[TaskRepository.getByPriority] Invalid priority parameter');
         }
 
         if (this.useBackend) {
@@ -598,7 +598,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return await this.getByIndex('priority', priority);
         } catch (error) {
             console.error('[TaskRepository.getByPriority] Error:', error);
-            throw new Error('Failed to fetch tasks by priority');
+            throw new OperationError('Failed to fetch tasks by priority');
         }
     }
 
@@ -646,7 +646,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return tasks;
         } catch (error) {
             console.error('[TaskRepository.search] Error:', error);
-            throw new Error('Failed to search tasks');
+            throw new OperationError('Failed to search tasks');
         }
     }
 
@@ -706,7 +706,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             };
         } catch (error) {
             console.error('[TaskRepository.getStatistics] Error:', error);
-            throw new Error('Failed to get task statistics');
+            throw new OperationError('Failed to get task statistics');
         }
     }
 }

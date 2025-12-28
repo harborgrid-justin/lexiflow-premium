@@ -41,7 +41,7 @@ export class RuleRepository extends Repository<LegalRule> {
 
     override async add(item: LegalRule): Promise<LegalRule> {
         if (!item || typeof item !== 'object') {
-            throw new Error('[RuleRepository.add] Invalid rule data');
+            throw new ValidationError('[RuleRepository.add] Invalid rule data');
         }
         await super.add(item);
         return item;
@@ -58,13 +58,13 @@ export class RuleRepository extends Repository<LegalRule> {
     }
 
     async getByJurisdiction(jurisdiction: string): Promise<LegalRule[]> {
-        if (!jurisdiction) throw new Error('[RuleRepository.getByJurisdiction] Invalid jurisdiction');
+        if (!jurisdiction) throw new ValidationError('[RuleRepository.getByJurisdiction] Invalid jurisdiction');
         const rules = await this.getAll();
         return rules.filter(r => r.jurisdiction === jurisdiction);
     }
 
     async getByCategory(category: string): Promise<LegalRule[]> {
-        if (!category) throw new Error('[RuleRepository.getByCategory] Invalid category');
+        if (!category) throw new ValidationError('[RuleRepository.getByCategory] Invalid category');
         const rules = await this.getAll();
         return rules.filter(r => r.category === category);
     }

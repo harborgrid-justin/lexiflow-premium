@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect, useRef, useMemo, useId } from 'react';
+import React, { useState, useEffect, useRef, useId } from 'react';
 import { Sparkles, Command, X, Zap, AlertCircle, CornerDownLeft } from 'lucide-react';
 
 // ============================================================================
@@ -18,7 +18,8 @@ import { Sparkles, Command, X, Zap, AlertCircle, CornerDownLeft } from 'lucide-r
 // ============================================================================
 // Services & Data
 import { GlobalSearchResult, SearchService } from '@/services/search/searchService';
-import { GeminiService, IntentResult } from '@/services/features/research/geminiService';
+import { GeminiService } from '@/services/features/research/geminiService';
+import type { IntentResult } from '@/services/features/research/geminiService';
 import { HolographicRouting } from '@/services/infrastructure/holographicRouting';
 
 // Hooks & Context
@@ -28,7 +29,7 @@ import { useListNavigation } from '@/hooks/useListNavigation';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Components
-import { HighlightedText } from '@/components/atoms/HighlightedText/HighlightedText';
+import { HighlightedText } from '@/components/atoms/HighlightedText';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -49,8 +50,8 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
   globalSearch, setGlobalSearch, onGlobalSearch, onSearchResultClick, onNeuralCommand
 }) => {
   const { theme } = useTheme();
-  const searchId = useId();
-  const resultsId = useId();
+  const _searchId = useId();
+  const _resultsId = useId();
   const [showResults, setShowResults] = useState(false);
   const [isProcessingIntent, setIsProcessingIntent] = useState(false);
   const [results, setResults] = useState<GlobalSearchResult[]>([]);

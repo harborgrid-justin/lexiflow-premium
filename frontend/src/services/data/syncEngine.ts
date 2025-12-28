@@ -319,7 +319,7 @@ let cleanupInterval: number | null = null;
 const startCleanupTimer = () => {
     if (cleanupInterval) return;
 
-    cleanupInterval = window.setInterval(() => {
+    cleanupInterval = defaultWindowAdapter.setInterval(() => {
         cleanupCache();
         enforceCacheLimit();
     }, 60 * 60 * 1000); // Every hour

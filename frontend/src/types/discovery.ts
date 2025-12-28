@@ -57,7 +57,9 @@ export interface Production extends BaseEntity {
   metadata?: Record<string, any>;
 }
 
-export interface Witness extends BaseEntity {
+// Witness is also defined in trial.ts with more details
+// This is a simplified discovery-focused version
+export interface DiscoveryWitness extends BaseEntity {
   caseId: string;
   name: string;
   witnessType: 'fact' | 'expert' | 'character' | 'impeachment';

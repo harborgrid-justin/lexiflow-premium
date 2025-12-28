@@ -2,16 +2,13 @@
 // Auto-generated from models.ts split
 
 import {
-  BaseEntity, CaseId, EvidenceId
+  BaseEntity, CaseId, EvidenceId, MetadataRecord
 } from './primitives';
 
 // --- CLUSTER 5: TRIAL & STRATEGY ---
 
-/**
- * Juror status discriminated union
- * Represents lifecycle states in jury selection and trial
- */
-export type JurorStatus = 'Panel' | 'Seated' | 'Struck' | 'Alternate' | 'Dismissed';
+// JurorStatus enum is in enums.ts - using string literal for backward compat
+export type JurorStatusLegacy = 'Panel' | 'Seated' | 'Struck' | 'Alternate' | 'Dismissed';
 
 /**
  * Party that struck a juror
@@ -57,21 +54,16 @@ export type Juror = BaseEntity & {
   readonly struckDate?: string;
 };
 
-/**
- * Witness type discriminated union
- */
-export type WitnessType = 
+// WitnessType enum is in enums.ts - using string literal for backward compat
+export type WitnessTypeLegacy = 
   | 'fact_witness' 
   | 'expert_witness' 
   | 'character_witness' 
   | 'rebuttal_witness' 
   | 'impeachment_witness';
 
-/**
- * Witness status lifecycle
- * Tracks progress from identification through testimony
- */
-export type WitnessStatus = 
+// WitnessStatus enum is in enums.ts - using string literal for backward compat
+export type WitnessStatusLegacy = 
   | 'identified' 
   | 'contacted' 
   | 'interviewed' 

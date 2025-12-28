@@ -6,6 +6,7 @@ import { adminApi } from "@/api/domains/admin.api";
 import { MOCK_API_SPEC } from '@/api/data/mockApiSpec';
 import { API_PREFIX } from '@/config/network/api.config';
 import { delay } from '@/utils/async';
+import { defaultStorage } from '@/services';
 
 export const AdminService = {
     // Real backend API access
@@ -35,7 +36,7 @@ export const AdminService = {
             // Use integrations API from backend
             const response = await fetch(`${API_PREFIX}/integrations`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
+                    'Authorization': `Bearer ${defaultStorage.getItem('authToken') || ''}`,
                 },
             });
 
@@ -69,7 +70,7 @@ export const AdminService = {
             // Attempt to fetch from backend
             const response = await fetch(`${API_PREFIX}/admin/security-settings`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
+                    'Authorization': `Bearer ${defaultStorage.getItem('authToken') || ''}`,
                 },
             });
 
@@ -148,7 +149,7 @@ export const AdminService = {
             // Use data quality API endpoint
             const response = await fetch(`${API_PREFIX}/data-platform/anomalies`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
+                    'Authorization': `Bearer ${defaultStorage.getItem('authToken') || ''}`,
                 },
             });
 
@@ -173,7 +174,7 @@ export const AdminService = {
             // Use data platform API endpoint
             const response = await fetch(`${API_PREFIX}/data-platform/domains`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
+                    'Authorization': `Bearer ${defaultStorage.getItem('authToken') || ''}`,
                 },
             });
 
@@ -203,7 +204,7 @@ export const AdminService = {
             // Fetch from backend data-sources API
             const response = await fetch(`${API_PREFIX}/integrations/data-sources`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
+                    'Authorization': `Bearer ${defaultStorage.getItem('authToken') || ''}`,
                 },
             });
             if (response.ok && response.headers.get('content-type')?.includes('application/json')) {

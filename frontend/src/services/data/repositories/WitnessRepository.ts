@@ -72,7 +72,7 @@ export class WitnessRepository extends Repository<Witness> {
     
     async getByType(witnessType: string): Promise<any[]> {
         if (!witnessType) {
-            throw new Error('[WitnessRepository.getByType] Invalid witnessType');
+            throw new ValidationError('[WitnessRepository.getByType] Invalid witnessType');
         }
         if (this.useBackend) {
             try {
@@ -87,7 +87,7 @@ export class WitnessRepository extends Repository<Witness> {
     
     async getByStatus(status: string): Promise<any[]> {
         if (!status) {
-            throw new Error('[WitnessRepository.getByStatus] Invalid status');
+            throw new ValidationError('[WitnessRepository.getByStatus] Invalid status');
         }
         if (this.useBackend) {
             try {
@@ -114,7 +114,7 @@ export class WitnessRepository extends Repository<Witness> {
 
     override async add(item: Witness): Promise<Witness> {
         if (!item || typeof item !== 'object') {
-            throw new Error('[WitnessRepository.add] Invalid witness data');
+            throw new ValidationError('[WitnessRepository.add] Invalid witness data');
         }
         if (this.useBackend) {
             try {
@@ -142,7 +142,7 @@ export class WitnessRepository extends Repository<Witness> {
     async updateStatus(id: string, status: string): Promise<Witness> {
         this.validateId(id, 'updateStatus');
         if (!status || false) {
-            throw new Error('[WitnessRepository.updateStatus] Invalid status');
+            throw new ValidationError('[WitnessRepository.updateStatus] Invalid status');
         }
         if (this.useBackend) {
             try {

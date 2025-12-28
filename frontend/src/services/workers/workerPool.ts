@@ -1,8 +1,11 @@
 /**
  * @module WorkerPool
  * @description Enterprise-grade Web Worker pool manager for efficient parallel processing
- * 
- * Provides production-ready worker pool management with:
+ *  * ARCHITECTURAL COMPLIANCE (2025-12-28):
+ * - Uses WindowAdapter for framework-agnostic timer/event handling
+ * - Uses domain-specific errors (ValidationError, WorkerPoolInitializationError, OperationError)
+ * - No direct window/localStorage references (portable to workers, SSR, tests)
+ *  * Provides production-ready worker pool management with:
  * - Fixed-size worker pool with automatic distribution
  * - Task queuing with timeout support
  * - Worker lifecycle management (acquire/release)
@@ -57,8 +60,11 @@
  * ```
  * 
  * @created 2024-03-10
- * @modified 2025-12-22
+ * @modified 2025-12-28
  */
+
+import { defaultWindowAdapter, type IWindowAdapter } from '@/services/infrastructure/adapters/WindowAdapter';
+import { ValidationError, WorkerPoolInitializationError, OperationError } from '@/services/core/errors';
 
 // =============================================================================
 // TYPES
@@ -84,7 +90,7 @@ interface WorkerTask<T = unknown> {
  */
 function validateFactory(factory: unknown, methodName: string): void {
   if (typeof factory !== 'function') {
-    throw new Error(`[WorkerPool.${methodName}] Factory must be a function`);
+    throw new ValidationError(`[WorkerPool.${methodName}] Factory must be a function`, { factory: typeof factory });
   }
 }
 
@@ -94,7 +100,7 @@ function validateFactory(factory: unknown, methodName: string): void {
  */
 function validatePoolSize(size: unknown, methodName: string): void {
   if (typeof size !== 'number' || size <= 0 || !Number.isInteger(size)) {
-    throw new Error(`[WorkerPool.${methodName}] Pool size must be a positive integer`);
+    throw new ValidationError(`[WorkerPool.${methodName}] Pool size must be a positive integer`, { size });
   }
 }
 
@@ -104,7 +110,7 @@ function validatePoolSize(size: unknown, methodName: string): void {
  */
 function validateWorker(worker: unknown, methodName: string): void {
   if (!worker || !(worker instanceof Worker)) {
-    throw new Error(`[WorkerPool.${methodName}] Invalid worker object`);
+    throw new ValidationError(`[WorkerPool.${methodName}] Invalid worker object`, { worker: typeof worker });
   }
 }
 
@@ -165,7 +171,7 @@ export class WorkerPool {
     }
     
     if (this.workers.length === 0) {
-      throw new Error('[WorkerPool] Failed to create any workers - pool initialization failed');
+      throw new WorkerPoolInitializationError(this.size);
     }
     
     console.log(`[WorkerPool] Successfully created ${this.workers.length}/${this.size} workers`);
@@ -304,7 +310,7 @@ export class WorkerPool {
     timeout?: number
   ): Promise<T> {
     if (typeof task !== 'function') {
-      throw new Error('[WorkerPool.execute] Task must be a function');
+      throw new ValidationError('[WorkerPool.execute] Task must be a function', { task: typeof task });
     }
 
     const worker = await this.acquire(timeout);
@@ -344,7 +350,7 @@ export class WorkerPool {
     tasks: Array<(worker: Worker) => Promise<T>>
   ): Promise<T[]> {
     if (!Array.isArray(tasks)) {
-      throw new Error('[WorkerPool.executeAll] Tasks must be an array');
+      throw new ValidationError('[WorkerPool.executeAll] Tasks must be an array', { tasks: typeof tasks });
     }
     
     return Promise.all(tasks.map(task => this.execute(task)));
@@ -449,6 +455,11 @@ export class WorkerPool {
 class WorkerPoolManager {
   private pools = new Map<string, WorkerPool>();
   private devStatsInterval: number | null = null;
+  private readonly windowAdapter: IWindowAdapter;
+
+  constructor(windowAdapter: IWindowAdapter = defaultWindowAdapter) {
+    this.windowAdapter = windowAdapter;
+  }
 
   /**
    * Get or create a named worker pool
@@ -505,7 +516,7 @@ class WorkerPoolManager {
    */
   private startDevStatsLogging(): void {
     if (this.devStatsInterval === null) {
-      this.devStatsInterval = window.setInterval(() => {
+      this.devStatsInterval = this.windowAdapter.setInterval(() => {
         const stats = this.getAllStats();
         const activePools = Object.entries(stats).filter(([, s]) => s.size > 0);
 
@@ -533,10 +544,10 @@ export const PoolManager = new WorkerPoolManager();
 // ============================================================================
 // AUTO-CLEANUP
 // ============================================================================
-if (typeof window !== 'undefined') {
-  window.addEventListener('beforeunload', () => {
+if (defaultWindowAdapter.isBrowser()) {
+  defaultWindowAdapter.addEventListener('beforeunload', (() => {
     PoolManager.terminateAll();
-  });
+  }) as EventListener);
 }
 
 // ============================================================================

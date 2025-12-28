@@ -197,10 +197,11 @@ export type Attorney = {
 };
 
 /**
- * Case team member role assignment
+ * Case team member role assignment (lightweight version)
  * Associates users with cases and billing rates
+ * For full team member details, see case-team.ts
  */
-export type CaseTeamMember = {
+export type CaseTeamMemberRole = {
   readonly userId: UserId;
   readonly role: 'Lead' | 'Support' | 'Paralegal';
   readonly rateOverride?: Money;

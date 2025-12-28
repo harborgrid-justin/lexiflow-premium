@@ -49,8 +49,9 @@ export interface NotificationDTO extends BaseNotification {
 /**
  * System notification (for backend-generated events)
  * Includes deadline and case_update types
+ * Note: Uses intersection instead of extends to avoid type incompatibility
  */
-export interface SystemNotification extends NotificationDTO {
+export interface SystemNotification extends Omit<NotificationDTO, 'type'> {
   type: 'info' | 'warning' | 'error' | 'success' | 'deadline' | 'system' | 'case_update' | 'document' | 'task';
 }
 

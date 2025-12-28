@@ -7,6 +7,8 @@
  * Case/Party/DocketEntry types with pacerData preservation.
  */
 
+import { ValidationError, FileProcessingError } from '@/services/core/errors';
+
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
@@ -28,7 +30,7 @@ export const XmlDocketParser = {
   }> => {
     // Validate input
     if (!xmlString || !xmlString.trim()) {
-      throw new Error('XML string is empty or undefined');
+      throw new ValidationError('XML string is empty or undefined');
     }
 
     let doc: Document;
@@ -42,13 +44,13 @@ export const XmlDocketParser = {
       // Check for XML parse errors
       const parserError = doc.querySelector('parsererror');
       if (parserError) {
-        throw new Error(`XML parsing error: ${parserError.textContent || 'Malformed XML'}`);
+        throw new FileProcessingError(`XML parsing error: ${parserError.textContent || 'Malformed XML'}`);
       }
     } catch (error) {
-      if (error instanceof Error && error.message.includes('XML parsing error')) {
+      if (error instanceof FileProcessingError) {
         throw error;
       }
-      throw new Error(`Failed to parse XML: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new FileProcessingError(`Failed to parse XML: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 
     // 1. Extract Case Info
@@ -59,7 +61,7 @@ export const XmlDocketParser = {
       
       // Require at minimum a stub node
       if (!stub) {
-        throw new Error('Missing required <stub> element in XML');
+        throw new ValidationError('Missing required <stub> element in XML');
       }
       
       const pacerData: Partial<PacerCase> = {
@@ -205,7 +207,7 @@ export const XmlDocketParser = {
 
     // Validate we have at least minimal data
     if (!caseInfo.id) {
-      throw new Error('Failed to extract case information from XML');
+      throw new ValidationError('Failed to extract case information from XML');
     }
 
     return { caseInfo, parties, docketEntries };

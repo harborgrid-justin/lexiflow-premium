@@ -133,7 +133,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
             return await super.getAll();
         } catch (error) {
             console.error('[PleadingRepository.getAll] Error:', error);
-            throw new Error('Failed to fetch pleadings');
+            throw new OperationError('Failed to fetch pleadings');
         }
     }
 
@@ -159,7 +159,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
             return await this.getByIndex('caseId', caseId);
         } catch (error) {
             console.error('[PleadingRepository.getByCaseId] Error:', error);
-            throw new Error('Failed to fetch pleadings by case ID');
+            throw new OperationError('Failed to fetch pleadings by case ID');
         }
     }
 
@@ -185,7 +185,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
             return await super.getById(id);
         } catch (error) {
             console.error('[PleadingRepository.getById] Error:', error);
-            throw new Error('Failed to fetch pleading');
+            throw new OperationError('Failed to fetch pleading');
         }
     }
 
@@ -198,7 +198,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
      */
     override async add(item: PleadingDocument): Promise<PleadingDocument> {
         if (!item || typeof item !== 'object') {
-            throw new Error('[PleadingRepository.add] Invalid pleading data');
+            throw new ValidationError('[PleadingRepository.add] Invalid pleading data');
         }
 
         if (this.useBackend) {
@@ -214,7 +214,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
             return item;
         } catch (error) {
             console.error('[PleadingRepository.add] Error:', error);
-            throw new Error('Failed to add pleading');
+            throw new OperationError('Failed to add pleading');
         }
     }
 
@@ -230,7 +230,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
         this.validateId(id, 'update');
 
         if (!updates || typeof updates !== 'object') {
-            throw new Error('[PleadingRepository.update] Invalid updates data');
+            throw new ValidationError('[PleadingRepository.update] Invalid updates data');
         }
 
         if (this.useBackend) {
@@ -245,7 +245,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
             return await super.update(id, updates);
         } catch (error) {
             console.error('[PleadingRepository.update] Error:', error);
-            throw new Error('Failed to update pleading');
+            throw new OperationError('Failed to update pleading');
         }
     }
 
@@ -272,7 +272,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
             await super.delete(id);
         } catch (error) {
             console.error('[PleadingRepository.delete] Error:', error);
-            throw new Error('Failed to delete pleading');
+            throw new OperationError('Failed to delete pleading');
         }
     }
 
@@ -291,7 +291,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
             return await db.getAll<PleadingTemplate>(STORES.PLEADING_TEMPLATES);
         } catch (error) {
             console.error('[PleadingRepository.getTemplates] Error:', error);
-            throw new Error('Failed to fetch pleading templates');
+            throw new OperationError('Failed to fetch pleading templates');
         }
     }
     
@@ -315,11 +315,11 @@ export class PleadingRepository extends Repository<PleadingDocument> {
         this.validateCaseId(caseId, 'createFromTemplate');
 
         if (!title || false || title.trim() === '') {
-            throw new Error('[PleadingRepository.createFromTemplate] Invalid title parameter');
+            throw new ValidationError('[PleadingRepository.createFromTemplate] Invalid title parameter');
         }
 
         if (!userId || false || userId.trim() === '') {
-            throw new Error('[PleadingRepository.createFromTemplate] Invalid userId parameter');
+            throw new ValidationError('[PleadingRepository.createFromTemplate] Invalid userId parameter');
         }
 
         try {
@@ -378,7 +378,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
             if (error instanceof Error) {
                 throw error;
             }
-            throw new Error('Failed to create pleading from template');
+            throw new OperationError('Failed to create pleading from template');
         }
     }
 
@@ -436,7 +436,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
             if (error instanceof VersionConflictError) {
                 throw error;
             }
-            throw new Error('Failed to update pleading with version check');
+            throw new OperationError('Failed to update pleading with version check');
         }
     }
 
@@ -488,7 +488,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
             };
         } catch (error) {
             console.error('[PleadingRepository.getFormattingRules] Error:', error);
-            throw new Error('Failed to get formatting rules');
+            throw new OperationError('Failed to get formatting rules');
         }
     }
 
@@ -523,7 +523,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
             if (error instanceof Error) {
                 throw error;
             }
-            throw new Error('Failed to generate PDF');
+            throw new OperationError('Failed to generate PDF');
         }
     }
 
@@ -575,7 +575,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
             return pleadings;
         } catch (error) {
             console.error('[PleadingRepository.search] Error:', error);
-            throw new Error('Failed to search pleadings');
+            throw new OperationError('Failed to search pleadings');
         }
     }
 }

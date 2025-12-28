@@ -6,6 +6,7 @@
  */
 
 import { EventEmitter } from 'events';
+import { WorkflowExecutionError, ValidationError, OperationError } from '@/services/core/errors';
 import type { WorkflowNode, WorkflowConnection } from '@/types/workflow-types';
 import type {
   EnhancedWorkflowInstance,
@@ -129,7 +130,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
       // Find start node
       const startNode = this.workflow.nodes.find((n: WorkflowNode) => n.type === 'Start');
       if (!startNode) {
-        throw new Error('No start node found in workflow');
+        throw new WorkflowExecutionError('No start node found in workflow');
       }
 
       // Setup auto-snapshots if enabled
@@ -342,7 +343,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
     if (this.options.enableApprovals && node.config.requiresApproval) {
       const approved = await this._handleApproval(node);
       if (!approved) {
-        throw new Error('Approval rejected');
+        throw new WorkflowExecutionError('Approval rejected');
       }
     }
 
@@ -481,7 +482,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
    */
   private async _retryNode(node: WorkflowNode, attemptNumber: number = 1): Promise<unknown> {
     if (attemptNumber > (this.options.maxRetries || 3)) {
-      throw new Error(`Max retries exceeded for node ${node.id}`);
+      throw new OperationError(`Max retries exceeded for node ${node.id}`);
     }
 
     await this._delay(1000 * attemptNumber); // Exponential backoff

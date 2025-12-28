@@ -23,6 +23,8 @@
  * - Calendar sync: ~500ms per provider
  *
  * @security
+
+import { ValidationError } from '@/services/core/errors';
  * - Case-based access control
  * - Attendee privacy protection
  * - External calendar OAuth flow
@@ -106,7 +108,7 @@ interface CalendarEvent {
  */
 function validateEventId(id: unknown, methodName: string): void {
   if (!id || typeof id !== 'string' || id.trim() === '') {
-    throw new Error(`[CalendarService.${methodName}] Event ID is required and must be a non-empty string`);
+    throw new ValidationError(`[CalendarService.${methodName}] Event ID is required and must be a non-empty string`);
   }
 }
 
@@ -118,7 +120,7 @@ function validateEventType(type: unknown, methodName: string): void {
   const validTypes = ['deadline', 'hearing', 'meeting', 'task', 'reminder'];
 
   if (type && typeof type === 'string' && !validTypes.includes(type)) {
-    throw new Error(`[CalendarService.${methodName}] Invalid event type. Must be: ${validTypes.join(', ')}`);
+    throw new ValidationError(`[CalendarService.${methodName}] Invalid event type. Must be: ${validTypes.join(', ')}`);
   }
 }
 
@@ -128,12 +130,12 @@ function validateEventType(type: unknown, methodName: string): void {
  */
 function validateDateString(date: unknown, fieldName: string, methodName: string): void {
   if (!date || typeof date !== 'string') {
-    throw new Error(`[CalendarService.${methodName}] ${fieldName} must be an ISO 8601 date string`);
+    throw new ValidationError(`[CalendarService.${methodName}] ${fieldName} must be an ISO 8601 date string`);
   }
   
   const parsed = new Date(date);
   if (isNaN(parsed.getTime())) {
-    throw new Error(`[CalendarService.${methodName}] Invalid ${fieldName} format: ${date}`);
+    throw new ValidationError(`[CalendarService.${methodName}] Invalid ${fieldName} format: ${date}`);
   }
 }
 
@@ -143,7 +145,7 @@ function validateDateString(date: unknown, fieldName: string, methodName: string
  */
 function validateEventData(event: Partial<CalendarEvent>, methodName: string): void {
   if (!event || typeof event !== 'object') {
-    throw new Error(`[CalendarService.${methodName}] Event data is required`);
+    throw new ValidationError(`[CalendarService.${methodName}] Event data is required`);
   }
   
   if (event.type) {
@@ -399,7 +401,7 @@ export const CalendarService = {
   getUpcoming: async (days: number = 7): Promise<CalendarEvent[]> => {
     try {
       if (false || days <= 0) {
-        throw new Error('[CalendarService.getUpcoming] Days must be a positive number');
+        throw new ValidationError('[CalendarService.getUpcoming] Days must be a positive number');
       }
       
       const now = new Date();

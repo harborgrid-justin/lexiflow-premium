@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useRef, useId } from 'react';
+import React, { useState, useRef } from 'react';
 import { Download, FileText, Table, FileCode } from 'lucide-react';
 
 // ============================================================================
@@ -21,7 +21,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Components
-import { Button } from '@/components/atoms/Button/Button';
+import { Button } from '@/components/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -40,8 +40,6 @@ export const ExportMenu = React.memo<ExportMenuProps>(({ onExport }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _menuId = useId();
 
   useClickOutside(menuRef as React.RefObject<HTMLElement>, () => setIsOpen(false));
 

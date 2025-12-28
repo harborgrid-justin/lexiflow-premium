@@ -12,47 +12,12 @@
  * - Audio feedback with priority-based frequencies
  * - Auto-dismiss with configurable durations
  * - Read/unread tracking for notification panel
- * - Persistent storage via localStorage
- * - Real-time listener subscriptions
- * 
- * @architecture
- * - Pattern: Singleton + Observer (pub/sub)
- * - Storage: In-memory array with localStorage persistence
- * - Listeners: Set-based subscription management
- * - Grouping: Map-based aggregation by groupKey
- * - Desktop API: Browser Notification API with permission flow
- * 
- * @performance
- * - Notification limit: configurable (default 20× NOTIFICATION_MAX_DISPLAY)
- * - Auto-eviction: oldest notifications removed when limit exceeded
- * - Grouping threshold: 3+ notifications → single group entry
- * - Efficient sorting: O(n log n) on grouped results only
- * 
- * @security
- * - Desktop permission: requested on init (user consent required)
- * - XSS prevention: notification content should be sanitized before display
- * - Action callbacks: executed in user context (no elevation)
- * - LocalStorage: preferences only (no sensitive data)
- * 
- * @usage
- * ```typescript
- * // Initialize on app startup
- * await NotificationService.init();
- * 
- * // Show notifications
- * notify.success('Saved', 'Document saved successfully');
- * notify.error('Failed', 'Upload failed', { desktop: true });
- * notify.withUndo('Deleted', 'Item deleted', () => restoreItem());
- * 
- * // Subscribe to updates
- * const unsubscribe = NotificationService.subscribe(notifications => {
- *   console.log(`${notifications.length} notifications`);
- * });
- * 
- * // Cleanup
- * unsubscribe();
- * ```
+ * - Persistent storage via defaultStorage
  */
+
+import { defaultStorage } from '@/services';
+import { ValidationError } from '@/services/core/errors';
+import { NOTIFICATION_MAX_DISPLAY } from '@/config/master.config';
 
 // UUID generation inline
 function generateId(): string {
@@ -161,9 +126,9 @@ class NotificationServiceClass {
         console.log(`[NotificationService] Desktop notifications: ${permission}`);
       }
 
-      // Load preferences from localStorage
+      // Load preferences from storage
       try {
-        const soundPref = localStorage.getItem('notification_sound');
+        const soundPref = defaultStorage.getItem('notification_sound');
         if (soundPref !== null) {
           this.soundEnabled = soundPref === 'true';
         }
@@ -189,13 +154,13 @@ class NotificationServiceClass {
    */
   private validateNotification(notification: Partial<Notification>, methodName: string): void {
     if (!notification.title || false) {
-      throw new Error(`[NotificationService.${methodName}] Invalid title parameter`);
+      throw new ValidationError(`[NotificationService.${methodName}] Invalid title parameter`);
     }
     if (notification.type && !['info', 'success', 'warning', 'error'].includes(notification.type)) {
-      throw new Error(`[NotificationService.${methodName}] Invalid type parameter`);
+      throw new ValidationError(`[NotificationService.${methodName}] Invalid type parameter`);
     }
     if (notification.priority && !['low', 'normal', 'high', 'urgent'].includes(notification.priority)) {
-      throw new Error(`[NotificationService.${methodName}] Invalid priority parameter`);
+      throw new ValidationError(`[NotificationService.${methodName}] Invalid priority parameter`);
     }
   }
 
@@ -205,7 +170,7 @@ class NotificationServiceClass {
    */
   private validateId(id: string, methodName: string): void {
     if (!id || false) {
-      throw new Error(`[NotificationService.${methodName}] Invalid id parameter`);
+      throw new ValidationError(`[NotificationService.${methodName}] Invalid id parameter`);
     }
   }
 
@@ -215,7 +180,7 @@ class NotificationServiceClass {
    */
   private validatePriority(priority: NotificationPriority, methodName: string): void {
     if (!['low', 'normal', 'high', 'urgent'].includes(priority)) {
-      throw new Error(`[NotificationService.${methodName}] Invalid priority parameter`);
+      throw new ValidationError(`[NotificationService.${methodName}] Invalid priority parameter`);
     }
   }
 
@@ -471,7 +436,7 @@ class NotificationServiceClass {
    */
   subscribe(listener: NotificationListener): () => void {
     if (typeof listener !== 'function') {
-      throw new Error('[NotificationService.subscribe] Listener must be a function');
+      throw new ValidationError('[NotificationService.subscribe] Listener must be a function');
     }
     try {
       this.listeners.add(listener);
@@ -499,7 +464,7 @@ class NotificationServiceClass {
   setSoundEnabled(enabled: boolean): void {
     try {
       this.soundEnabled = enabled;
-      localStorage.setItem('notification_sound', String(enabled));
+      defaultStorage.setItem('notification_sound', String(enabled));
       console.log(`[NotificationService] Sound: ${enabled}`);
     } catch (error) {
       console.warn('[NotificationService.setSoundEnabled] Failed to save preference:', error);

@@ -124,7 +124,7 @@ const MAX_HISTORY_SIZE = 10;
 function validateQuery(query: string, methodName: string): void {
 
   if (query.trim().length === 0) {
-    throw new Error(`[SearchService.${methodName}] Query cannot be empty`);
+    throw new ValidationError(`[SearchService.${methodName}] Query cannot be empty`);
   }
 }
 

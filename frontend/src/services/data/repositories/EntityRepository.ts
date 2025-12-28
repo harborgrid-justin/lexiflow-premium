@@ -113,7 +113,7 @@ export class EntityRepository extends Repository<LegalEntity> {
     
     async add(item: LegalEntity): Promise<LegalEntity> {
         if (!item || typeof item !== 'object') {
-            throw new Error('[EntityRepository.add] Invalid entity data');
+            throw new ValidationError('[EntityRepository.add] Invalid entity data');
         }
 
         const result = await super.add(item);
@@ -138,7 +138,7 @@ export class EntityRepository extends Repository<LegalEntity> {
     }
 
     async getByType(type: string): Promise<LegalEntity[]> {
-        if (!type) throw new Error('[EntityRepository.getByType] Invalid type');
+        if (!type) throw new ValidationError('[EntityRepository.getByType] Invalid type');
         const entities = await this.getAll();
         return entities.filter(e => e.type === type);
     }

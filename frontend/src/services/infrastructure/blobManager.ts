@@ -193,9 +193,9 @@ export const BlobManager = new BlobManagerService();
 // AUTO-CLEANUP ON PAGE UNLOAD
 // ============================================================================
 if (typeof window !== 'undefined') {
-  window.addEventListener('beforeunload', () => {
+  defaultWindowAdapter.addEventListener('beforeunload', (() => {
     BlobManager.revokeAll();
-  });
+  }) as EventListener);
   
   // Periodic cleanup of old URLs (every 2 minutes)
   setInterval(() => {

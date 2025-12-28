@@ -2,7 +2,7 @@
 // Miscellaneous types - split from compatibility.ts
 
 import {
-  BaseEntity, UserId, OrgId, GroupId, DocumentId, EntityId, CaseId
+  BaseEntity, UserId, OrgId, GroupId, DocumentId, EntityId, CaseId, MetadataRecord
 } from './primitives';
 import {
   ServiceMethod, EntityType, EntityRole, ServiceStatus, NavCategory
@@ -309,7 +309,7 @@ export interface StaffMember {
   startDate: string;
 }
 
-export interface SystemNotification extends BaseEntity { text: string; time: string; read: boolean; type?: string; }
+export interface MiscSystemNotification extends BaseEntity { text: string; time: string; read: boolean; type?: string; }
 
 export interface TimelineEvent {
   id: string;

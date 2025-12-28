@@ -13,7 +13,7 @@ import { DataProfile } from '@/types';
 /**
  * DataProfiler - React 18 optimized with React.memo
  */
-export const DataProfiler = React.memo(() => {
+export const DataProfiler = React.memo(function DataProfiler() {
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
 
@@ -89,4 +89,4 @@ export const DataProfiler = React.memo(() => {
         </div>
     </div>
   );
-};
+});

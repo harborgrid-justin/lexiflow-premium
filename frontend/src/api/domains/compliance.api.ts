@@ -3,10 +3,10 @@
  * Compliance checks, conflict checks, ethical walls, reporting
  */
 
-import { ComplianceApiService } from '@/api';
-import { ConflictChecksApiService } from '@/api';
-import { ReportsApiService } from '@/api';
-import { ComplianceReportingApiService } from '@/api';
+import { ComplianceApiService } from '../compliance-api';
+import { ConflictChecksApiService } from '../conflict-checks-api';
+import { ReportsApiService } from '../reports-api';
+import { ComplianceReportingApiService } from '../compliance-reporting-api';
 
 // Export singleton instances
 export const complianceApi = {

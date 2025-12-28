@@ -15,7 +15,7 @@ import { useNotify } from '@/hooks/useNotify';
 /**
  * DeduplicationManager - React 18 optimized with React.memo
  */
-export const DeduplicationManager = React.memo(() => {
+export const DeduplicationManager = React.memo(function DeduplicationManager() {
     const { theme } = useTheme();
     const notify = useNotify();
 
@@ -109,4 +109,4 @@ export const DeduplicationManager = React.memo(() => {
             </div>
         </div>
     );
-};
+});

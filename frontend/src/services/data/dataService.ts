@@ -149,36 +149,36 @@ import { JurisdictionService } from '@services/domain/JurisdictionDomain';
 // ═══════════════════════════════════════════════════════════════════════════
 
 // Document Management
-import { DocumentRepository } from '@/services';
-import { EvidenceRepository } from '@/services';
-import { PleadingRepository } from '@/services';
+import { DocumentRepository } from './repositories/DocumentRepository';
+import { EvidenceRepository } from './repositories/EvidenceRepository';
+import { PleadingRepository } from './repositories/PleadingRepository';
 
 // Workflow & Task Management
-import { TaskRepository } from '@/services';
-import { WorkflowRepository } from '@/services';
-import { ProjectRepository } from '@/services';
+import { TaskRepository } from './repositories/TaskRepository';
+import { WorkflowRepository } from './repositories/WorkflowRepository';
+import { ProjectRepository } from './repositories/ProjectRepository';
 
 // Legal Operations
-import { TrialRepository } from '@/services';
-import { MotionRepository } from '@/services';
-import { DiscoveryRepository } from '@/services';
+import { TrialRepository } from './repositories/TrialRepository';
+import { MotionRepository } from './repositories/MotionRepository';
+import { DiscoveryRepository } from './repositories/DiscoveryRepository';
 
 // Financial Management
-import { BillingRepository } from '@/services';
+import { BillingRepository } from './repositories/BillingRepository';
 
 // Human Resources
-import { HRRepository } from '@/services';
+import { HRRepository } from './repositories/HRRepository';
 
 // Entity Management
-import { ClientRepository } from '@/services';
-import { OrganizationRepository } from '@/services';
-import { WitnessRepository } from '@/services';
-import { EntityRepository } from '@/services';
+import { ClientRepository } from './repositories/ClientRepository';
+import { OrganizationRepository } from './repositories/OrganizationRepository';
+import { WitnessRepository } from './repositories/WitnessRepository';
+import { EntityRepository } from './repositories/EntityRepository';
 
 // Analytics & Research
-import { AnalysisRepository } from '@/services';
-import { CitationRepository } from '@/services';
-import { RiskRepository } from '@/services';
+import { AnalysisRepository } from './repositories/AnalysisRepository';
+import { CitationRepository } from './repositories/CitationRepository';
+import { RiskRepository } from './repositories/RiskRepository';
 import { DashboardService } from '@services/domain/DashboardDomain';
 import { WarRoomService } from '@services/domain/WarRoomDomain';
 

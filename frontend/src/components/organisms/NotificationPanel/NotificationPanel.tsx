@@ -27,7 +27,7 @@ interface Notification {
   priority?: 'low' | 'medium' | 'high' | 'urgent';
 }
 
-export const NotificationPanel = React.memo(() => {
+export const NotificationPanel = React.memo(function NotificationPanel() {
   const { theme } = useTheme();
   const panel = useModalState();
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -380,7 +380,7 @@ export const NotificationPanel = React.memo(() => {
       )}
     </>
   );
-};
+});
 
 export default NotificationPanel;
 

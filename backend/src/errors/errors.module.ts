@@ -7,7 +7,12 @@ import { GracefulDegradationService } from './services/graceful.degradation.serv
 import { ErrorRecoveryService } from './services/error.recovery.service';
 
 // Interceptors
-import { TimeoutRecoveryInterceptor } from './interceptors/timeout.recovery.interceptor';
+import { 
+  TimeoutRecoveryInterceptor,
+  TIMEOUT_MS_TOKEN,
+  RECOVERY_STRATEGY_TOKEN,
+  TimeoutRecoveryStrategy
+} from './interceptors/timeout.recovery.interceptor';
 
 // Re-export from common module filter
 import { EnterpriseExceptionFilter } from '@common/filters/enterprise-exception.filter';
@@ -114,6 +119,16 @@ import { EnterpriseExceptionFilter } from '@common/filters/enterprise-exception.
     ErrorReportingService,
     GracefulDegradationService,
     ErrorRecoveryService,
+
+    // Timeout configuration tokens
+    {
+      provide: TIMEOUT_MS_TOKEN,
+      useValue: 30000, // 30 seconds default
+    },
+    {
+      provide: RECOVERY_STRATEGY_TOKEN,
+      useValue: TimeoutRecoveryStrategy.THROW_ERROR,
+    },
 
     // Interceptors
     TimeoutRecoveryInterceptor,

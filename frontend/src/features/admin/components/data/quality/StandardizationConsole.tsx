@@ -13,7 +13,7 @@ import { useNotify } from '@/hooks/useNotify';
 /**
  * StandardizationConsole - React 18 optimized with React.memo
  */
-export const StandardizationConsole = React.memo(() => {
+export const StandardizationConsole = React.memo(function StandardizationConsole() {
     const { theme } = useTheme();
     const notify = useNotify();
     const [isRunning, setIsRunning] = useState(false);
@@ -121,4 +121,4 @@ export const StandardizationConsole = React.memo(() => {
             </div>
         </div>
     );
-};
+});

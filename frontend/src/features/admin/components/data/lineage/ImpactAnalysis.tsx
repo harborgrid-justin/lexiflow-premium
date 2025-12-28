@@ -15,7 +15,7 @@ interface DependencyNode {
 /**
  * ImpactAnalysis - React 18 optimized with React.memo
  */
-export const ImpactAnalysis = React.memo(() => {
+export const ImpactAnalysis = React.memo(function ImpactAnalysis() {
   const { theme } = useTheme();
 
   const dependencies: DependencyNode[] = [
@@ -61,4 +61,4 @@ export const ImpactAnalysis = React.memo(() => {
         </div>
     </div>
   );
-};
+});

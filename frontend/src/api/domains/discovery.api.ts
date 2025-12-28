@@ -3,18 +3,18 @@
  * Evidence, custodians, depositions, legal holds, productions, privilege log
  */
 
-import { EvidenceApiService } from '@/api';
-import { CustodiansApiService } from '@/api';
-import { ExaminationsApiService } from '@/api';
-import { WitnessesApiService } from '@/api';
-import { DepositionsApiService } from '@/api';
-import { LegalHoldsApiService } from '@/api';
-import { ProductionsApiService } from '@/api';
-import { DiscoveryRequestsApiService } from '@/api';
-import { ESISourcesApiService } from '@/api';
-import { PrivilegeLogApiService } from '@/api';
-import { CustodianInterviewsApiService } from '@/api';
-import { DiscoveryApiService } from '@/api';
+import { EvidenceApiService } from '../evidence-api';
+import { CustodiansApiService } from '../custodians-api';
+import { ExaminationsApiService } from '../examinations-api';
+import { WitnessesApiService } from '../witnesses-api';
+import { DepositionsApiService } from '../depositions-api';
+import { LegalHoldsApiService } from '../legal-holds-api';
+import { ProductionsApiService } from '../productions-api';
+import { DiscoveryRequestsApiService } from '../discovery-requests-api';
+import { ESISourcesApiService } from '../esi-sources-api';
+import { PrivilegeLogApiService } from '../privilege-log-api';
+import { CustodianInterviewsApiService } from '../custodian-interviews-api';
+import { DiscoveryApiService } from '../discovery-api';
 
 // Export service classes
 export {

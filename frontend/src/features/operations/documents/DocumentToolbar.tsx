@@ -30,7 +30,7 @@ export function DocumentToolbar({
   isProcessingAI,
   onBulkSummarize,
   onClearSelection
-}) => {
+}: DocumentToolbarProps) {
   const { theme } = useTheme();
   const { openWindow } = useWindow();
 

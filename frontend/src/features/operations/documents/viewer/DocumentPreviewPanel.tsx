@@ -53,7 +53,7 @@ interface DocumentPreviewPanelProps {
 
 export function DocumentPreviewPanel({ 
   document, onViewHistory, onUpdate, userRole = 'Associate', isOrbital = false, onCloseMobile
-}) => {
+}: DocumentPreviewPanelProps) {
   const { theme } = useTheme();
   const { openWindow } = useWindow();
   const notify = useNotify();

@@ -43,10 +43,10 @@ interface ConfirmDialogProps {
 /**
  * ConfirmDialog - React 18 optimized with React.memo and useId
  */
-export const ConfirmDialog = React.memo<ConfirmDialogProps>({
+export const ConfirmDialog = React.memo<ConfirmDialogProps>(function ConfirmDialog({
   isOpen, onClose, onConfirm, title, message, 
   confirmText = 'Confirm', cancelText = 'Cancel', variant = 'danger'
-}) => {
+}) {
   const { theme } = useTheme();
   const dialogId = useId();
   const descriptionId = useId();

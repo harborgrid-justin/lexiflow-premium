@@ -5,6 +5,7 @@ import {
   CallHandler,
   Logger,
   RequestTimeoutException,
+  Inject,
 } from '@nestjs/common';
 import { Observable, throwError, TimeoutError, of } from 'rxjs';
 import { catchError, timeout, map } from 'rxjs/operators';
@@ -49,6 +50,12 @@ export interface PartialResponse<T = any> {
 }
 
 /**
+ * Injection tokens for TimeoutRecoveryInterceptor
+ */
+export const TIMEOUT_MS_TOKEN = 'TIMEOUT_MS_TOKEN';
+export const RECOVERY_STRATEGY_TOKEN = 'RECOVERY_STRATEGY_TOKEN';
+
+/**
  * Timeout Recovery Interceptor
  * Handles request timeouts gracefully with recovery strategies
  * Provides partial responses, retry suggestions, and client notifications
@@ -60,8 +67,8 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
   private readonly cacheTTL = 300000; // 5 minutes
 
   constructor(
-    private readonly timeoutMs: number = 30000,
-    private readonly recoveryStrategy: TimeoutRecoveryStrategy = TimeoutRecoveryStrategy.THROW_ERROR,
+    @Inject(TIMEOUT_MS_TOKEN) private readonly timeoutMs: number = 30000,
+    @Inject(RECOVERY_STRATEGY_TOKEN) private readonly recoveryStrategy: TimeoutRecoveryStrategy = TimeoutRecoveryStrategy.THROW_ERROR,
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {

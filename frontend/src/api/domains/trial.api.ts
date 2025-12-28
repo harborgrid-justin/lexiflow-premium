@@ -3,8 +3,8 @@
  * Trial events, exhibits, witness preparation
  */
 
-import { TrialApiService } from '@/api';
-import { ExhibitsApiService } from '@/api';
+import { TrialApiService } from '../trial-api';
+import { ExhibitsApiService } from '../exhibits-api';
 
 // Export service classes
 export {

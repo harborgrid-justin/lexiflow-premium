@@ -22,7 +22,7 @@ interface QuerySidebarProps {
 /**
  * QuerySidebar - React 18 optimized with React.memo
  */
-export const QuerySidebar = React.memo<QuerySidebarProps>(({ activeTab, setActiveTab, schema }) => {
+export const QuerySidebar = React.memo<QuerySidebarProps>(function QuerySidebar({ activeTab, setActiveTab, schema }) {
   const { theme } = useTheme();
 
   return (
@@ -53,4 +53,4 @@ export const QuerySidebar = React.memo<QuerySidebarProps>(({ activeTab, setActiv
         </div>
     </div>
   );
-};
+});

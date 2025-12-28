@@ -96,7 +96,7 @@ const SERVICE_COVERAGE: ServiceInfo[] = [
 /**
  * ServiceCoverageBadge - React 18 optimized with React.memo
  */
-const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(({ className = '', compact = false }) => {
+const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCoverageBadge({ className = '', compact = false }) {
   const { isBackendApiEnabled } = useDataSource();
   
   const totalServices = SERVICE_COVERAGE.length;
@@ -184,7 +184,7 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(({ className = '',
       </div>
     </div>
   );
-};
+});
 
 export const ServiceCoverageIndicator: React.FC<{
   isOpen: boolean;

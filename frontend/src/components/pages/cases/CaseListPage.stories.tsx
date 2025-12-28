@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CaseListPage } from './CaseListPage';
 
 const meta: Meta<typeof CaseListPage> = {
@@ -15,6 +15,6 @@ type Story = StoryObj<typeof CaseListPage>;
 
 export const Default: Story = {
   args: {
-  "onSelectCase": "Sample Text"
+  onSelectCase: (caseId: string) => console.log('Selected case:', caseId)
 },
 };

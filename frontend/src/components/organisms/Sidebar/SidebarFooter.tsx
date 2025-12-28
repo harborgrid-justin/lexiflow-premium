@@ -52,7 +52,7 @@ interface SidebarFooterProps {
 /**
  * SidebarFooter - React 18 optimized with React.memo
  */
-export const SidebarFooter = React.memo<SidebarFooterProps>(({ currentUser, onSwitchUser, onNavigate, activeView }) => {
+export const SidebarFooter = React.memo<SidebarFooterProps>(function SidebarFooter({ currentUser, onSwitchUser, onNavigate, activeView }) {
   const { theme } = useTheme();
   const { isOrbitalEnabled, toggleOrbitalMode } = useWindow();
 
@@ -96,4 +96,4 @@ export const SidebarFooter = React.memo<SidebarFooterProps>(({ currentUser, onSw
       </div>
     </div>
   );
-};
+});

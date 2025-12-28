@@ -185,8 +185,14 @@ function getEnhancedPoolConfig(configService: ConfigService): Record<string, unk
     // Application identification
     application_name: configService.get<string>('APP_NAME') || 'lexiflow-premium',
 
-    // PostgreSQL Performance Tuning - Enterprise Optimizations
-    // These settings are passed directly to PostgreSQL for optimal performance
+    // PostgreSQL Performance Tuning - Disabled for Neon compatibility
+    // Neon doesn't support these startup parameters in pooled connections
+    // For unpooled connections, you can enable these options
+    // See: https://neon.tech/docs/connect/connection-errors#unsupported-startup-parameter
+    
+    // Note: If using a different PostgreSQL provider or unpooled Neon connection,
+    // you can uncomment the options below for performance optimization
+    /*
     options: [
       // Memory Settings (adjust based on available RAM)
       '-c shared_buffers=1GB', // Shared buffer cache
@@ -218,6 +224,7 @@ function getEnhancedPoolConfig(configService: ConfigService): Record<string, unk
       '-c log_statement=none',
       '-c log_duration=off',
     ].join(' '),
+    */
   };
 }
 

@@ -3,6 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { MessagingController } from './messaging.controller';
 import { MessagingService } from './messaging.service';
 import { MessagingGateway } from './messaging.gateway';
+import { WsRateLimitGuard } from '@common/guards/ws-rate-limit.guard';
+import { WsRoomLimitGuard } from '@common/guards/ws-room-limit.guard';
 
 /**
  * Messaging Module
@@ -21,7 +23,7 @@ import { MessagingGateway } from './messaging.gateway';
     // TypeOrmModule.forFeature([Conversation, Message, Attachment]),
   ],
   controllers: [MessagingController],
-  providers: [MessagingService, MessagingGateway],
+  providers: [MessagingService, MessagingGateway, WsRateLimitGuard, WsRoomLimitGuard],
   exports: [MessagingService, MessagingGateway],
 })
 export class MessagingModule {}

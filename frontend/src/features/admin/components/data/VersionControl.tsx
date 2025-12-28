@@ -40,7 +40,7 @@ interface VersionControlProps {
 /**
  * VersionControl - React 18 optimized with React.memo
  */
-export const VersionControl = React.memo<VersionControlProps>(({ initialTab = 'history' }) => {
+export const VersionControl = React.memo<VersionControlProps>(function VersionControl({ initialTab = 'history' }) {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState(initialTab);
 
@@ -251,4 +251,4 @@ export const VersionControl = React.memo<VersionControlProps>(({ initialTab = 'h
       </div>
     </div>
   );
-};
+});

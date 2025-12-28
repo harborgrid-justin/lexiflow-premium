@@ -15,7 +15,7 @@ import { useInterval } from '@/hooks/useInterval';
 /**
  * PlatformOverview - React 18 optimized with React.memo
  */
-export const PlatformOverview = React.memo(() => {
+export const PlatformOverview = React.memo(function PlatformOverview() {
   const { theme } = useTheme();
   const chartTheme = useChartTheme();
 
@@ -115,6 +115,6 @@ export const PlatformOverview = React.memo(() => {
         </div>
     </div>
   );
-};
+});
 
 export default PlatformOverview;

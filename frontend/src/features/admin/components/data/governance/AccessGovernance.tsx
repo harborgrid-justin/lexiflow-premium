@@ -44,7 +44,7 @@ export const AccessGovernance: React.FC = () => {
       const nextIndex = (levels.indexOf(current) + 1) % levels.length;
       const nextLevel = levels[nextIndex];
       
-      updatePermission({role, resource, level: nextLevel}).then(r =>);
+      updatePermission({role, resource, level: nextLevel});
   };
 
   const getPermissionStyle = (level: PermissionLevel) => {

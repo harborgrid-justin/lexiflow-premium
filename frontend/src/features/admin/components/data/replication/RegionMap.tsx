@@ -11,7 +11,7 @@ interface RegionMapProps {
 /**
  * RegionMap - React 18 optimized with React.memo
  */
-export const RegionMap = React.memo<RegionMapProps>(({ primaryRegion }) => {
+export const RegionMap = React.memo<RegionMapProps>(function RegionMap({ primaryRegion }) {
   const { theme, mode } = useTheme();
   const isPrimaryEast = primaryRegion === 'US-East';
 
@@ -73,4 +73,4 @@ export const RegionMap = React.memo<RegionMapProps>(({ primaryRegion }) => {
         </div>
     </div>
   );
-};
+});

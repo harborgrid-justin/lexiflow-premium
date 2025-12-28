@@ -34,7 +34,7 @@ interface InteractiveOverlayProps {
 
 export function InteractiveOverlay({ 
   activeTool, dimensions, onFieldClick, existingFields = [], onFieldsUpdate 
-}) => {
+}: InteractiveOverlayProps) {
   const { theme } = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [drawings, setDrawings] = useState<Drawing[]>([]);

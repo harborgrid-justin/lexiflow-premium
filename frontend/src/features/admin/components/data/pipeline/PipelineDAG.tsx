@@ -7,7 +7,7 @@ import { cn } from '@/utils/cn';
 /**
  * PipelineDAG - React 18 optimized with React.memo
  */
-export const PipelineDAG = React.memo(() => {
+export const PipelineDAG = React.memo(function PipelineDAG() {
     const { theme, mode } = useTheme();
     
     // Mock DAG structure for Enterprise Demo
@@ -67,4 +67,4 @@ export const PipelineDAG = React.memo(() => {
             </div>
         </div>
     );
-};
+});

@@ -3,14 +3,14 @@
  * Case management, docket, motions, pleadings, and parties
  */
 
-import { CasesApiService } from '@/api';
-import { DocketApiService } from '@/api';
-import { MotionsApiService } from '@/api';
-import { PleadingsApiService } from '@/api';
-import { PartiesApiService } from '@/api';
-import { CaseTeamsApiService } from '@/api';
-import { CasePhasesApiService } from '@/api';
-import { MattersApiService } from '@/api';
+import { CasesApiService } from '../cases-api';
+import { DocketApiService } from '../docket-api';
+import { MotionsApiService } from '../motions-api';
+import { PleadingsApiService } from '../pleadings-api';
+import { PartiesApiService } from '../parties-api';
+import { CaseTeamsApiService } from '../case-teams-api';
+import { CasePhasesApiService } from '../case-phases-api';
+import { MattersApiService } from '../matters-api';
 
 // Export service classes
 export {

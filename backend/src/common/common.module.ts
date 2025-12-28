@@ -23,6 +23,7 @@ import { PaginationService } from './services/pagination.service';
 import { TransactionManagerService } from './services/transaction-manager.service';
 import { BulkOperationsService } from './services/bulk-operations.service';
 import { CacheManagerService } from './services/cache-manager.service';
+import { RedisCacheManagerService } from './services/redis-cache-manager.service';
 import { AuditLogService } from './services/audit-log.service';
 import { QueueManagerService } from './services/queue-manager.service';
 import { FileUploadService } from './services/file-upload.service';
@@ -60,6 +61,7 @@ import { EmailService } from './services/email.service';
     TransactionManagerService,
     BulkOperationsService,
     CacheManagerService,
+    RedisCacheManagerService,
     AuditLogService,
     QueueManagerService,
     FileUploadService,
@@ -94,6 +96,7 @@ import { EmailService } from './services/email.service';
     TransactionManagerService,
     BulkOperationsService,
     CacheManagerService,
+    RedisCacheManagerService,
     AuditLogService,
     QueueManagerService,
     FileUploadService,

@@ -17,7 +17,7 @@ interface TagManagementModalProps {
 
 export function TagManagementModal({ 
   document, onClose, onAddTag, onRemoveTag, allTags 
-}) => {
+}: TagManagementModalProps) {
   const { theme } = useTheme();
   const [newTagInput, setNewTagInput] = useState('');
 

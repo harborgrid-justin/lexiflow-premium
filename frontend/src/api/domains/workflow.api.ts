@@ -3,12 +3,12 @@
  * Tasks, calendar, projects, workflow, risks
  */
 
-import { TasksApiService } from '@/api';
-import { CalendarApiService } from '@/api';
-import { WorkflowApiService } from '@/api';
-import { ProjectsApiService } from '@/api';
-import { RisksApiService } from '@/api';
-import { WarRoomApiService } from '@/api';
+import { TasksApiService } from '../tasks-api';
+import { CalendarApiService } from '../calendar-api';
+import { WorkflowApiService } from '../workflow-api';
+import { ProjectsApiService } from '../projects-api';
+import { RisksApiService } from '../risks-api';
+import { WarRoomApiService } from '../war-room-api';
 
 // Export service classes
 export {

@@ -28,7 +28,7 @@ export function AcrobatToolbar({
   rotation, setRotation,
   pageNum, setPageNum,
   totalPages
-}) => {
+}: AcrobatToolbarProps) {
   const { theme } = useTheme();
 
   const ToolButton = ({ tool, icon: Icon, label }: { tool: PDFTool; icon: React.ComponentType<{ className?: string }>; label: string }) => (

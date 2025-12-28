@@ -3,12 +3,12 @@
  * Data sources, RLS policies, schema management, query workbench
  */
 
-import { DataSourcesApiService } from '@/api/data-sources-api';
-import { RLSPoliciesApiService } from '@/api';
+import { DataSourcesApiService } from '../data-sources-api';
+import { RLSPoliciesApiService } from '../rls-policies-api';
 import { 
   SchemaManagementApiService,
   QueryWorkbenchApiService
-} from '@/api/data-platform-api';
+} from '../data-platform-api';
 
 // Export service classes
 export {

@@ -8,7 +8,7 @@ import { Button } from '@/components/atoms/Button';
 /**
  * MigrationHistory - React 18 optimized with React.memo
  */
-export const MigrationHistory = React.memo(() => {
+export const MigrationHistory = React.memo(function MigrationHistory() {
     const { theme } = useTheme();
 
     const migrations = [
@@ -53,4 +53,4 @@ export const MigrationHistory = React.memo(() => {
             </div>
         </div>
     );
-};
+});

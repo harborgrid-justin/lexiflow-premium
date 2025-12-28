@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CaseIntakePage } from './CaseIntakePage';
 
 const meta: Meta<typeof CaseIntakePage> = {
@@ -15,7 +15,7 @@ type Story = StoryObj<typeof CaseIntakePage>;
 
 export const Default: Story = {
   args: {
-  "onComplete": "Sample Text",
-  "onCancel": {}
+  "onComplete": (caseId: string) => { console.log('Case completed:', caseId); },
+  "onCancel": () => { console.log('Case cancelled'); }
 },
 };

@@ -8,7 +8,7 @@ import { Button } from '@/components/atoms/Button';
 /**
  * SchemaSnapshots - React 18 optimized with React.memo
  */
-export const SchemaSnapshots = React.memo(() => {
+export const SchemaSnapshots = React.memo(function SchemaSnapshots() {
     const { theme } = useTheme();
 
     const snapshots = [
@@ -54,4 +54,4 @@ export const SchemaSnapshots = React.memo(() => {
             </div>
         </div>
     );
-};
+});

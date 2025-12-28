@@ -9,7 +9,7 @@ import { Button } from '@/components/atoms/Button';
 /**
  * ShardingVisualizer - React 18 optimized with React.memo
  */
-export const ShardingVisualizer = React.memo(() => {
+export const ShardingVisualizer = React.memo(function ShardingVisualizer() {
     const { theme } = useTheme();
     const [ring, setRing] = useState(new ConsistentHashRing(5));
     const [nodes, setNodes] = useState<string[]>(['Shard-A', 'Shard-B', 'Shard-C']);
@@ -127,6 +127,4 @@ export const ShardingVisualizer = React.memo(() => {
             </div>
         </div>
     );
-};
-
-export default ShardingVisualizer;
+});

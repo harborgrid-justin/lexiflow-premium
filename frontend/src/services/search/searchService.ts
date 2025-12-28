@@ -68,7 +68,7 @@
 // ============================================================================
 // Services & Data
 import { DataService } from '@/services/data/dataService';
-import { SearchWorker } from '@/services';
+import { SearchWorker } from './searchWorker';
 
 // Utils & Constants
 import { StorageUtils } from '@/utils/storage';

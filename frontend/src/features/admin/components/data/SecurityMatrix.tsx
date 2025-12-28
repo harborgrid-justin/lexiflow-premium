@@ -14,7 +14,7 @@ interface SecurityMatrixProps {
 /**
  * SecurityMatrix - React 18 optimized with React.memo
  */
-export const SecurityMatrix = React.memo<SecurityMatrixProps>(({ initialTab = 'matrix' }) => {
+export const SecurityMatrix = React.memo<SecurityMatrixProps>(function SecurityMatrix({ initialTab = 'matrix' }) {
   const { theme } = useTheme();
   const [activeView, setActiveView] = useState<'matrix' | 'policies'>('matrix');
 
@@ -57,6 +57,6 @@ export const SecurityMatrix = React.memo<SecurityMatrixProps>(({ initialTab = 'm
         </div>
     </div>
   );
-};
+});
 
 export default SecurityMatrix;

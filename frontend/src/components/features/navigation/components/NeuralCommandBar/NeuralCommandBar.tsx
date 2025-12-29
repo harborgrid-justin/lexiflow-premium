@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect, useRef, useId } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles, Command, X, Zap, AlertCircle, CornerDownLeft } from 'lucide-react';
 
 // ============================================================================

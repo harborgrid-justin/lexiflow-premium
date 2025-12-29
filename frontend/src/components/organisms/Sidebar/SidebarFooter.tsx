@@ -21,7 +21,12 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { UserAvatar } from '@/components/atoms/UserAvatar/UserAvatar';
+// UserAvatar component not found - create a simple fallback
+const UserAvatar = ({ user, className }: { user?: { name?: string; [key: string]: any }; className?: string }) => (
+  <div className={cn("rounded-full bg-blue-500 text-white flex items-center justify-center text-xs w-8 h-8", className)}>
+    {user?.name?.[0] || 'U'}
+  </div>
+);
 import { BackendStatusIndicator } from '@/components/organisms/BackendStatusIndicator/BackendStatusIndicator';
 
 // Utils & Constants

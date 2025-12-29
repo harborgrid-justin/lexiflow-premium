@@ -24,8 +24,7 @@ import { Menu, Bell, PlusCircle, UserPlus, Clock, FileText } from 'lucide-react'
 // Components
 import { ConnectivityHUD } from '@/components/organisms/ConnectivityHUD/ConnectivityHUD';
 import { NeuralCommandBar } from '@/components/organisms/NeuralCommandBar/NeuralCommandBar';
-// UserAvatar component not found - create a simple fallback
-const UserAvatar = ({ user, className }: { user?: any; className?: string }) => (
+const UserAvatar = ({ user, className }: { user?: { name?: string; [key: string]: any }; className?: string }) => (
   <div className={cn("rounded-full bg-blue-500 text-white flex items-center justify-center", className)}>
     {user?.name?.[0] || 'U'}
   </div>

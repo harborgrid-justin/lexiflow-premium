@@ -44,7 +44,8 @@ export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
           ? `Backend online${latency ? ` (${latency}ms)` : ''}`
           : 'Backend degraded';
     
-    const timeSinceCheck = Math.floor((Date.now() - lastChecked.getTime()) / 1000);
+    const lastCheckedDate = typeof lastChecked === 'string' ? new Date(lastChecked) : lastChecked;
+    const timeSinceCheck = Math.floor((Date.now() - lastCheckedDate.getTime()) / 1000);
     return `${baseStatus}\nLast checked: ${timeSinceCheck}s ago`;
   };
 

@@ -119,7 +119,8 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
                   <div key={item.id}>
                     <button
                       onClick={() => setActiveView(item.id)}
-                      {...hoverHandlers(item)}
+                      onMouseEnter={() => onMouseEnter(item)}
+                      onMouseLeave={onMouseLeave}
                       className={styles.getNavItemButton(theme, !!(isActive || isChildActive))}
                     >
                       <Icon className={styles.getNavItemIcon(!!(isActive || isChildActive))} />

@@ -16,15 +16,16 @@
  * import { StatusDot, Currency } from './components/components/atoms';
  */
 
-export { StatusDot, type StatusDotProps } from '@/components/atoms/StatusDot';
-export { Currency, type CurrencyProps } from '@/components/atoms/Currency';
-export { DateText, type DateTextProps } from '@/components/atoms/DateText';
-export { FileIcon, type FileIconProps } from '@/components/atoms/FileIcon';
-export { LoadingSpinner, type LoadingSpinnerProps } from '@/components/atoms/LoadingSpinner';
-export { TagList, type TagListProps } from '@/components/molecules/TagList';
-export { SectionHeader, type SectionHeaderProps } from '@/components/atoms/SectionHeader';
-export { TruncatedText, type TruncatedTextProps } from '@/components/atoms/TruncatedText';
-export { MetricCard, type MetricCardProps } from '@/components/molecules/MetricCard';
-export { Box, type BoxProps } from '@/components/atoms/Box';
-export { Text, type TextProps } from '@/components/atoms/Text';
-export { Stack, type StackProps } from '@/components/atoms/Stack';
+// NOTE: The following components don't exist yet - commented out to avoid errors
+// export { StatusDot, type StatusDotProps } from '@/components/atoms/StatusDot';
+// export { Currency, type CurrencyProps } from '@/components/atoms/Currency';
+// export { DateText, type DateTextProps } from '@/components/atoms/DateText';
+// export { FileIcon, type FileIconProps } from '@/components/atoms/FileIcon';
+// export { LoadingSpinner, type LoadingSpinnerProps } from '@/components/atoms/LoadingSpinner';
+// export { TagList, type TagListProps } from '@/components/molecules/TagList';
+// export { SectionHeader, type SectionHeaderProps } from '@/components/atoms/SectionHeader';
+// export { TruncatedText, type TruncatedTextProps } from '@/components/atoms/TruncatedText';
+// export { MetricCard, type MetricCardProps } from '@/components/molecules/MetricCard';
+// export { Box, type BoxProps } from '@/components/atoms/Box';
+// export { Text, type TextProps } from '@/components/atoms/Text';
+// export { Stack, type StackProps } from '@/components/atoms/Stack';

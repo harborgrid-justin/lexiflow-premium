@@ -16,8 +16,9 @@
  * ```
  */
 
-export * from './PDFViewer';
-export * from './DiffViewer';
-export * from './EditorToolbar';
+// NOTE: Some components are in features/discovery, not organisms/discovery
+// export * from './PDFViewer';
+// export * from './DiffViewer';
+// export * from './EditorToolbar';
 export * from './SignaturePad';
 export * from './ExportMenu';

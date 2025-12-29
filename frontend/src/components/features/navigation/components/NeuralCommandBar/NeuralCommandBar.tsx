@@ -50,8 +50,6 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
   globalSearch, setGlobalSearch, onGlobalSearch, onSearchResultClick, onNeuralCommand
 }) => {
   const { theme } = useTheme();
-  const _searchId = useId();
-  const _resultsId = useId();
   const [showResults, setShowResults] = useState(false);
   const [isProcessingIntent, setIsProcessingIntent] = useState(false);
   const [results, setResults] = useState<GlobalSearchResult[]>([]);

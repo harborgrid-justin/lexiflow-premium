@@ -20,33 +20,33 @@ import React from 'react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
-// Re-export StatusBadge for compatibility
-export { StatusBadge } from '@/components/atoms/StatusBadge';
+// Re-export StatusBadge for compatibility (commented out - component doesn't exist)
+// export { StatusBadge } from '@/components/atoms/StatusBadge';
 
-// Re-export all layout components from their new locations
-export { CentredLoader } from '@/components/atoms/CentredLoader';
-export type { CentredLoaderProps } from '@/components/atoms/CentredLoader';
+// Re-export all layout components from their new locations (commented out - components don't exist yet)
+// export { CentredLoader } from '@/components/atoms/CentredLoader';
+// export type { CentredLoaderProps } from '@/components/atoms/CentredLoader';
 
-export { EmptyListState } from '@/components/molecules/EmptyListState';
-export type { EmptyListStateProps } from '@/components/molecules/EmptyListState';
+// export { EmptyListState } from '@/components/molecules/EmptyListState';
+// export type { EmptyListStateProps } from '@/components/molecules/EmptyListState';
 
-export { SectionTitle } from '@/components/atoms/SectionTitle';
-export type { SectionTitleProps } from '@/components/atoms/SectionTitle';
+// export { SectionTitle } from '@/components/atoms/SectionTitle';
+// export type { SectionTitleProps } from '@/components/atoms/SectionTitle';
 
-export { InfoGrid } from '@/components/molecules/InfoGrid';
-export type { InfoGridProps, InfoGridItem } from '@/components/molecules/InfoGrid';
+// export { InfoGrid } from '@/components/molecules/InfoGrid';
+// export type { InfoGridProps, InfoGridItem } from '@/components/molecules/InfoGrid';
 
-export { SearchInputBar } from '@/components/molecules/SearchInputBar';
-export type { SearchInputBarProps } from '@/components/molecules/SearchInputBar';
+// export { SearchInputBar } from '@/components/molecules/SearchInputBar';
+// export type { SearchInputBarProps } from '@/components/molecules/SearchInputBar';
 
-export { ActionRow } from '@/components/molecules/ActionRow';
-export type { ActionRowProps } from '@/components/molecules/ActionRow';
+// export { ActionRow } from '@/components/molecules/ActionRow';
+// export type { ActionRowProps } from '@/components/molecules/ActionRow';
 
-export { TabStrip } from '@/components/molecules/TabStrip';
-export type { TabStripProps } from '@/components/molecules/TabStrip';
+// export { TabStrip } from '@/components/molecules/TabStrip';
+// export type { TabStripProps } from '@/components/molecules/TabStrip';
 
-export { ModalFooter } from '@/components/molecules/ModalFooter';
-export type { ModalFooterProps } from '@/components/molecules/ModalFooter';
+// export { ModalFooter } from '@/components/molecules/ModalFooter';
+// export type { ModalFooterProps } from '@/components/molecules/ModalFooter';
 
 // 10. MetricTile: Simplified metric card for dense grids
 export const MetricTile: React.FC<{ label: string, value: string | number | React.ReactNode, icon?: React.ComponentType<{ className?: string }>, trend?: string, trendUp?: boolean, className?: string }> = ({ label, value, icon: Icon, trend, trendUp, className }) => {

@@ -42,18 +42,28 @@ export interface UseCaseDetailReturn {
   setActiveTab: (tab: string) => void;
   /** Documents for this case */
   documents: LegalDocument[];
+  /** Set documents */
+  setDocuments: (updater: LegalDocument[] | ((prev: LegalDocument[] | undefined) => LegalDocument[])) => void;
   /** Whether documents are loading */
-  loadingDocs: boolean;
+  loadingDocs?: boolean;
   /** Workflow stages */
   stages: WorkflowStage[];
   /** All tasks */
-  allTasks: WorkflowTask[];
+  allTasks?: WorkflowTask[];
   /** Billing entries */
   billingEntries: TimeEntry[];
+  /** Set billing entries */
+  setBillingEntries: (updater: TimeEntry[] | ((prev: TimeEntry[] | undefined) => TimeEntry[])) => void;
   /** Motions */
-  motions: Motion[];
+  motions?: Motion[];
   /** Projects */
   projects: Project[];
+  /** Add project */
+  addProject: (project: Project) => Promise<void>;
+  /** Add task to project */
+  addTaskToProject: (projectId: string, task: WorkflowTask) => void;
+  /** Update project task status */
+  updateProjectTaskStatus: (projectId: string, taskId: string) => Promise<void>;
   /** Parties */
   parties: Party[];
   /** Set parties */

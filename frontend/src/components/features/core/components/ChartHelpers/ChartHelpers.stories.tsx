@@ -1,9 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ChartHelpers } from './ChartHelpers';
+import { useChartTheme } from './ChartHelpers';
 
-const meta: Meta<typeof ChartHelpers> = {
+// Wrapper component for stories since useChartTheme is a hook
+const ChartHelpersDemo = () => {
+  const chartTheme = useChartTheme();
+  return <div><pre>{JSON.stringify(chartTheme, null, 2)}</pre></div>;
+};
+
+const meta: Meta<typeof ChartHelpersDemo> = {
   title: 'Components/Organisms/ChartHelpers/ChartHelpers',
-  component: ChartHelpers,
+  component: ChartHelpersDemo,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',

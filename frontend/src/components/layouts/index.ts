@@ -21,4 +21,4 @@ export * from '../ui/layouts';
 // ============================================================================
 // TYPE RE-EXPORTS
 // ============================================================================
-export type { TabConfigItem } from './TabbedPageLayout';
+export type { TabConfigItem } from '../ui/layouts/TabbedPageLayout/TabbedPageLayout';

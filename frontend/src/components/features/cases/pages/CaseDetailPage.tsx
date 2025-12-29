@@ -107,10 +107,15 @@ export const CaseDetail = ({
     draftResult,
     isDrafting,
     timelineEvents,
-    handleAnalyze,
-    handleDraft,
-    handleGenerateWorkflow
+    analyzeWithAI,
+    draftDocument,
+    generateAIWorkflow
   } = useCaseDetail(caseData, initialTab);
+
+  // Compatibility wrappers for UI that expects old method names
+  const handleAnalyze = (doc: any) => analyzeWithAI(doc.id);
+  const handleDraft = () => draftDocument('Motion/Clause', draftPrompt);
+  const handleGenerateWorkflow = () => generateAIWorkflow();
 
   // Handle parent tab navigation - switch to first sub-tab of clicked parent
   const handleParentTabChange = useCallback((parentId: string) => {
@@ -122,12 +127,12 @@ export const CaseDetail = ({
 
   // Handle adding time entry from overview
   const handleTimeEntryAdded = useCallback((entry: TimeEntry) => {
-    setBillingEntries(prev => [...(prev || []), entry]);
+    setBillingEntries((prev: TimeEntry[] | undefined) => [...(prev || []), entry]);
   }, [setBillingEntries]);
 
   // Handle document creation callback
   const handleDocumentCreated = useCallback((doc: LegalDocument) => {
-    setDocuments(prev => [...(prev || []), doc]);
+    setDocuments((prev: LegalDocument[] | undefined) => [...(prev || []), doc]);
   }, [setDocuments]);
 
   // Render active tab content

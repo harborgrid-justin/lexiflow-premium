@@ -11,7 +11,7 @@ const meta: Meta<typeof KanbanBoard> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Kanban>;
+type Story = StoryObj<typeof KanbanBoard>;
 
 export const Default: Story = {
   args: {

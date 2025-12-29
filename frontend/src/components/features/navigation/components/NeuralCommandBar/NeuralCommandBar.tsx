@@ -29,7 +29,7 @@ import { useListNavigation } from '@/hooks/useListNavigation';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Components
-import { HighlightedText } from '@/components/atoms/HighlightedText';
+import { HighlightedText } from '@/components/ui/atoms/HighlightedText/HighlightedText';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

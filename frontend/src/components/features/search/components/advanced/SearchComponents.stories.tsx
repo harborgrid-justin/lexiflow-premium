@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { SearchComponents } from './SearchComponents';
+import { CategoryFilter } from './SearchComponents';
 
-const meta: Meta<typeof SearchComponents> = {
-  title: 'Components/Organisms/search/SearchComponents',
-  component: SearchComponents,
+const meta: Meta<typeof CategoryFilter> = {
+  title: 'Components/Organisms/SearchComponents/SearchComponents',
+  component: CategoryFilter,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',

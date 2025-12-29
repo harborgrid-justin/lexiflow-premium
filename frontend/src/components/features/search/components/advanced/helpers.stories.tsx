@@ -1,9 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { helpers } from './helpers';
+import { getCategoryIcon, sanitizeHtml } from './helpers';
 
-const meta: Meta<typeof helpers> = {
-  title: 'Components/Organisms/search/helpers',
-  component: helpers,
+// Wrapper component for stories
+const HelpersDemo = () => {
+  return <div>
+    {getCategoryIcon('cases')}
+    <p>{sanitizeHtml('<div>test</div>')}</p>
+  </div>;
+};
+
+const meta: Meta<typeof HelpersDemo> = {
+  title: 'Components/Organisms/helpers/helpers',
+  component: HelpersDemo,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',

@@ -15,11 +15,11 @@ type Story = StoryObj<typeof CalendarEvent>;
 
 export const Default: Story = {
   args: {
-  "title": "Sample Text",
-  "time": "Sample Text",
-  "variant": {},
-  "onClick": {},
-  "icon": "<div>Sample Content</div>",
-  "isCompact": true
-},
+    title: "Sample Text",
+    time: "Sample Text",
+    variant: "default" as const,
+    onClick: () => {},
+    icon: undefined,
+    isCompact: false
+  },
 };

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Table } from './Table';
+import { TableContainer } from './Table';
 
-const meta: Meta<typeof Table> = {
+const meta: Meta<typeof TableContainer> = {
   title: 'Components/Organisms/Table/Table',
-  component: Table,
+  component: TableContainer,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',

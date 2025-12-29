@@ -9,6 +9,7 @@ import {
   SyncProvider, 
   DataSourceProvider 
 } from '@/providers';
+import type { Case } from '@/types';
 import { HolographicDock } from '@/components/organisms/HolographicDock/HolographicDock';
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';

@@ -76,7 +76,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
     return groups;
   }, [visibleItems]);
 
-  const { hoverHandlers } = useHoverIntent({
+  const { onMouseEnter, onMouseLeave } = useHoverIntent({
     onHover: (item: ModuleDefinition) => {
       // PERFORMANCE CRITICAL: Use Scheduler to ensure pre-fetching never blocks the UI thread.
       // This prevents the "stutter" when moving the mouse quickly over multiple sidebar items.

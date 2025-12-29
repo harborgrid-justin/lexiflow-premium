@@ -16,7 +16,7 @@
  * - Portable across SSR, workers, and test environments
  */
 
-import { API_BASE_URL, API_PREFIX } from '@/config/network/api.config';
+import { getApiBaseUrl, getApiPrefix } from '@/config/network/api.config';
 import { type IStorageAdapter, defaultStorage } from '@/services/infrastructure/adapters/StorageAdapter';
 
 const DEPRECATION_WARNING = `
@@ -140,7 +140,7 @@ export function isProduction(): boolean {
  * Get backend API base URL
  */
 export function getBackendUrl(): string {
-  return `${API_BASE_URL}${API_PREFIX}`;
+  return `${getApiBaseUrl()}${getApiPrefix()}`;
 }
 
 /**

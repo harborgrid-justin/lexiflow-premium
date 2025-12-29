@@ -25,9 +25,9 @@ export const FEATURE_EXPORT_IMPORT = true;
 export const FEATURE_BACKUP_RESTORE = true;
 
 // Development & Debugging
-import { APP_ENV } from '@/config';
+import { getAppEnv } from '../app.config';
 
-export const DEBUG_ENABLED = APP_ENV === 'development';
+export const getDebugEnabled = () => getAppEnv() === 'development';
 export const DEBUG_SHOW_QUERY_CACHE = false;
 export const DEBUG_API_SIMULATION_DELAY_MS = 1000; // Simulated API delay for demos
 export const DEBUG_SHOW_RENDER_COUNT = false;

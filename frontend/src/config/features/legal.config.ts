@@ -111,12 +111,12 @@ export const DATA_RETENTION_DAYS = 2555; // 7 years (legal requirement)
 export const DATA_SOFT_DELETE = true;
 export const DATA_PURGE_SCHEDULE_CRON = '0 2 * * 0'; // 2 AM every Sunday
 
-// Integration Endpoints
-export const INTEGRATION_PACER_URL = import.meta.env.VITE_PACER_URL || '';
-export const INTEGRATION_WESTLAW_URL = import.meta.env.VITE_WESTLAW_URL || '';
-export const INTEGRATION_LEXIS_URL = import.meta.env.VITE_LEXIS_URL || '';
-export const INTEGRATION_GOOGLE_CALENDAR_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
-export const INTEGRATION_OUTLOOK_CLIENT_ID = import.meta.env.VITE_OUTLOOK_CLIENT_ID || '';
+// Integration Endpoints - Lazy evaluation (only call when needed, not at module load)
+export const getPacerUrl = () => import.meta.env.VITE_PACER_URL || '';
+export const getWestlawUrl = () => import.meta.env.VITE_WESTLAW_URL || '';
+export const getLexisUrl = () => import.meta.env.VITE_LEXIS_URL || '';
+export const getGoogleClientId = () => import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+export const getOutlookClientId = () => import.meta.env.VITE_OUTLOOK_CLIENT_ID || '';
 
 // Backup & Recovery
 export const BACKUP_AUTO_ENABLED = true;

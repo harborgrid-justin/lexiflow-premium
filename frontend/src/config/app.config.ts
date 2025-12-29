@@ -5,7 +5,8 @@
 
 export const APP_NAME = 'LexiFlow';
 export const APP_VERSION = '1.0.0';
-export const APP_ENV = import.meta.env.VITE_ENV || import.meta.env.MODE || 'development';
+export const getAppEnv = () => import.meta.env.VITE_ENV || import.meta.env.MODE || 'development';
+// Note: Don't call getAppEnv() at module load - will be called lazily when needed
 export const APP_DESCRIPTION = 'Enterprise Legal OS - Case Management, Discovery & Operations';
 
 // Theme Settings
@@ -18,11 +19,11 @@ export const SUPPORTED_LOCALES = ['en-US', 'es-ES', 'fr-FR'];
 export const ENABLE_RTL = false;
 export const LOCALE_STORAGE_KEY = 'lexiflow-locale';
 
-// Export as object
+// Export as object with lazy getter
 export const APP_CONFIG = {
   name: APP_NAME,
   version: APP_VERSION,
-  env: APP_ENV,
+  get env() { return getAppEnv(); },
   description: APP_DESCRIPTION,
   theme: {
     default: DEFAULT_THEME,

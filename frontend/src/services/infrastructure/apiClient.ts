@@ -38,11 +38,11 @@
  */
 
 import { ValidationError, AuthenticationError, OperationError } from '@/services/core/errors';
-import { API_BASE_URL, API_PREFIX } from '@/config/master.config';
+import { getApiBaseUrl, getApiPrefix } from '@/config/network/api.config';
 import { keysToCamel } from '@/utils/caseConverter';
 import { defaultStorage } from './adapters/StorageAdapter';
 
-const BASE_URL = `${API_BASE_URL}${API_PREFIX}`;
+const getBaseUrl = () => `${getApiBaseUrl()}${getApiPrefix()}`;
 
 /**
  * Vite environment variables type definition
@@ -122,7 +122,7 @@ class ApiClient {
   private readonly HEALTH_CHECK_TIMEOUT = 5000; // 5 seconds
 
   constructor() {
-    this.baseURL = BASE_URL;
+    this.baseURL = getBaseUrl();
     this.authTokenKey = import.meta.env?.VITE_AUTH_TOKEN_KEY || 'lexiflow_auth_token';
     this.refreshTokenKey = import.meta.env?.VITE_AUTH_REFRESH_TOKEN_KEY || 'lexiflow_refresh_token';
     this.logInitialization();
@@ -571,7 +571,7 @@ class ApiClient {
    */
   async healthCheck(): Promise<{ status: string; timestamp: string }> {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/health`, {
+      const response = await fetch(`${getApiBaseUrl()}/api/health`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         signal: AbortSignal.timeout(this.HEALTH_CHECK_TIMEOUT),

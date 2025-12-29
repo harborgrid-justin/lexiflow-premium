@@ -63,10 +63,11 @@ const parseNumber = (value: string | undefined, defaultValue: number): number =>
 };
 
 /**
- * Central environment configuration
- * Immutable and validated configuration object
+ * Lazy initialization of environment config
  */
-export const ENV_CONFIG: EnvironmentConfig = {
+let _envConfig: EnvironmentConfig | null = null;
+
+const createEnvConfig = (): EnvironmentConfig => ({
   environment: getEnvironment(),
   dataSource: 'backend',
   apiBaseUrl: import.meta.env.VITE_API_BASE_URL || '/api',
@@ -81,7 +82,26 @@ export const ENV_CONFIG: EnvironmentConfig = {
     enableCSP: parseBoolean(import.meta.env.VITE_ENABLE_CSP, true),
     enableHTTPSOnly: parseBoolean(import.meta.env.VITE_ENABLE_HTTPS_ONLY, false),
   },
-} as const;
+});
+
+/**
+ * Central environment configuration
+ * Immutable and validated configuration object
+ * Lazy-initialized on first access
+ */
+export const getEnvConfig = (): EnvironmentConfig => {
+  if (!_envConfig) {
+    _envConfig = createEnvConfig();
+  }
+  return _envConfig;
+};
+
+// For backward compatibility, export as a constant but access via getter
+export const ENV_CONFIG = new Proxy({} as EnvironmentConfig, {
+  get(target, prop) {
+    return getEnvConfig()[prop as keyof EnvironmentConfig];
+  }
+});
 
 /**
  * Check if running in production environment

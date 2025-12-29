@@ -6,7 +6,8 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { WS_RECONNECT_ATTEMPTS, WS_RECONNECT_DELAY_MS, WS_RECONNECT_BACKOFF_MULTIPLIER, WS_URL } from '@/config';
+import { WS_RECONNECT_ATTEMPTS, WS_RECONNECT_DELAY_MS, WS_RECONNECT_BACKOFF_MULTIPLIER } from '@/config';
+import { getWsUrl } from '@/config/network/websocket.config';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -107,7 +108,7 @@ export function useLiveDocketFeed({
     setError(null);
     
     try {
-      const wsUrl = `${WS_URL}/docket/live?courtId=${courtId || ''}&caseId=${caseId || ''}`;
+      const wsUrl = `${getWsUrl()}/docket/live?courtId=${courtId || ''}&caseId=${caseId || ''}`;
       const ws = new WebSocket(wsUrl);
 
       ws.onopen = () => {

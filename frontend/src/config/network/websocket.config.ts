@@ -4,7 +4,11 @@
 // Real-time communication settings for WebSocket connections
 
 export const WS_ENABLED = false; // Set to true when backend WebSocket is ready
-export const WS_URL = import.meta.env.VITE_WS_URL || (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws';
+export const getWsUrl = () => {
+  if (typeof window === 'undefined') return '';
+  return import.meta.env.VITE_WS_URL || (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws';
+};
+// Note: Don't call getWsUrl() at module load - will be called lazily when needed
 export const WS_RECONNECT_ATTEMPTS = 5;
 export const WS_RECONNECT_DELAY_MS = 1000;
 export const WS_RECONNECT_BACKOFF_MULTIPLIER = 1.5;

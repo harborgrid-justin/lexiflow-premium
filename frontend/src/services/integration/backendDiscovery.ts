@@ -4,7 +4,7 @@
  * Does NOT automatically switch - user controls data source selection
  */
 
-import { API_BASE_URL } from '@/config/master.config';
+import { getApiBaseUrl } from '@/config/network/api.config';
 
 export interface BackendStatus {
   available: boolean;
@@ -27,7 +27,7 @@ class BackendDiscoveryService {
   private checkInterval: NodeJS.Timeout | null = null;
   private listeners: Set<BackendStatusCallback> = new Set();
   private readonly CHECK_INTERVAL_MS = 60000; // Check every 60 seconds (optimized for performance)
-  private readonly HEALTH_ENDPOINT = `${API_BASE_URL}/api/v1/health`; // Backend runs on port 5000
+  private readonly getHealthEndpoint = () => `${getApiBaseUrl()}/api/v1/health`; // Backend runs on port 5000
   private readonly TIMEOUT_MS = 3000; // 3 second timeout (faster failure detection)
   private notifyTimeout: NodeJS.Timeout | null = null; // Debounce notifications
 
@@ -73,7 +73,7 @@ class BackendDiscoveryService {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), this.TIMEOUT_MS);
 
-      const response = await fetch(this.HEALTH_ENDPOINT, {
+      const response = await fetch(this.getHealthEndpoint(), {
         method: 'GET',
         signal: controller.signal,
         headers: {

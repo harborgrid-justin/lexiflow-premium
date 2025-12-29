@@ -13,7 +13,7 @@ import type { Case } from '@/types';
 import { HolographicDock } from '@/components/organisms';
 import { ErrorBoundary } from '@/components/organisms';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
-import { initializeModules } from '@/config';
+import { initializeModules } from '@/config/modules';
 import { AppContentRenderer } from '@/components/ui/layouts/AppContentRenderer/AppContentRenderer';
 import { GlobalHotkeys } from '@/components/organisms';
 import { useAppController } from '@/hooks';

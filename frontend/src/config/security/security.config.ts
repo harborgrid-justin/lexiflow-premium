@@ -3,7 +3,7 @@
 // =============================================================================
 // Authentication, session management, encryption, and security policies
 
-import { APP_ENV } from '@/config';
+import { getAppEnv } from '../app.config';
 
 // Session Management
 export const SESSION_TIMEOUT_MS = 3600000; // 1 hour

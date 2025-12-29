@@ -46,13 +46,13 @@ export const CorrespondenceService = {
         // Mock job for type safety
         const job: ServiceJob = {
             id,
-            caseId: '' as any,
-            requestorId: '' as any,
+            caseId: '' as Record<string, unknown>,
+            requestorId: '' as Record<string, unknown>,
             documentTitle: '',
             targetPerson: '',
             targetAddress: '',
             serverName: '',
-            method: 'Personal' as any,
+            method: 'Personal' as Record<string, unknown>,
             status: 'DRAFT',
             dueDate: new Date().toISOString(),
             attempts: 0,

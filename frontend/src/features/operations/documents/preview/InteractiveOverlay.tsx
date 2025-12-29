@@ -94,7 +94,7 @@ export function InteractiveOverlay({
       // Place Field
       const newField: Field = {
         id: `f-${Date.now()}`,
-        type: activeTool as any,
+        type: activeTool as Record<string, unknown>,
         x: pos.x - 60, // Center anchor
         y: pos.y - 20,
         value: activeTool === 'date' ? new Date().toLocaleDateString() : ''

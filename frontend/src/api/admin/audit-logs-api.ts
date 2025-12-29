@@ -12,11 +12,11 @@ export interface AuditLog {
   action: string;
   entityType: string;
   entityId?: string;
-  changes?: Record<string, any>;
+  changes?: Record<string, unknown>;
   ipAddress?: string;
   userAgent?: string;
   timestamp: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface AuditLogFilters {

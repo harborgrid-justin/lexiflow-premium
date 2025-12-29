@@ -18,6 +18,6 @@ export const Default: Story = {
     isOpen: true,
     onClose: () => {},
     caseId: "case-1",
-    onSubmit: (entry: any) => { console.log(entry); },
+    onSubmit: (entry: unknown) => { console.log(entry); },
   },
 };

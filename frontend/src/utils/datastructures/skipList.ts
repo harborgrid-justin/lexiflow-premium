@@ -14,7 +14,7 @@ export class SkipList<T> {
     constructor(maxLevel = 16, p = 0.5) {
         this.maxLevel = maxLevel;
         this.p = p;
-        this.head = new SkipNode<T>(null as any, Array(maxLevel).fill(null));
+        this.head = new SkipNode<T>(null as Record<string, unknown>, Array(maxLevel).fill(null));
     }
 
     private randomLevel(): number {

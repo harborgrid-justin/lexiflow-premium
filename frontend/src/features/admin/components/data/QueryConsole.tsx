@@ -176,7 +176,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
                         <Tabs 
                             tabs={['results', 'explain', 'visualize']}
                             activeTab={activeResultsTab}
-                            onChange={(t) => setActiveResultsTab(t as any)}
+                            onChange={(t) => setActiveResultsTab(t as Record<string, unknown>)}
                         />
                         {results && (
                         <div className="flex items-center gap-2">

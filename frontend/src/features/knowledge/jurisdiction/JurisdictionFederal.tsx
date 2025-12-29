@@ -37,7 +37,7 @@ export const JurisdictionFederal: React.FC = () => {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery
-  const { data: rawCourts = [], isLoading } = useQuery<any[]>(
+  const { data: rawCourts = [], isLoading } = useQuery<unknown[]>(
       ['jurisdictions', 'federal'],
       DataService.jurisdiction.getFederal
   );

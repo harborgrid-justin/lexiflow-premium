@@ -21,7 +21,7 @@ describe('FileStorageService', () => {
 
   const mockConfigService = {
     get: jest.fn((key: string) => {
-      const config: Record<string, any> = {
+      const config: Record<string, unknown> = {
         UPLOAD_DIR: './uploads',
         MAX_FILE_SIZE: 52428800,
       };

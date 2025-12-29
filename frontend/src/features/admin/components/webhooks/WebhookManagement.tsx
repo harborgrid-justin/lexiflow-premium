@@ -32,8 +32,8 @@ export const WebhookManagement: React.FC = () => {
   // Fetch real webhooks from backend
   const { data: webhooks = [], isLoading, refetch } = useQuery(['webhooks'], async () => {
     const response = await webhooksApi.getAll();
-    const items = Array.isArray(response) ? response : (response as any).items || [];
-    return items.map((item: any) => ({
+    const items = Array.isArray(response) ? response : (response as Record<string, unknown>).items || [];
+    return items.map((item: unknown) => ({
       id: item.id,
       name: item.name,
       url: item.url,

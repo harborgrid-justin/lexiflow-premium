@@ -68,7 +68,7 @@ export const ArgumentCoreInfo: React.FC<ArgumentCoreInfoProps> = ({ argument, on
                     {['Draft', 'Active', 'Dismissed'].map(s => (
                         <button 
                             key={s}
-                            onClick={() => onUpdate({ ...argument, status: s as any })}
+                            onClick={() => onUpdate({ ...argument, status: s as Record<string, unknown> })}
                             className={cn(
                                 "px-3 py-1.5 text-xs rounded border transition-all",
                                 argument.status === s 

@@ -136,10 +136,10 @@ export class TransactionManagerService {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         return await this.executeInTransaction(operation);
-      } catch (error: any) {
+      } catch (error: unknown) {
         const isDeadlock =
-          error.code === '40P01' || // PostgreSQL deadlock
-          error.code === '40001'; // Serialization failure
+          (error as any).code === '40P01' || // PostgreSQL deadlock
+          (error as any).code === '40001'; // Serialization failure
 
         if (isDeadlock && attempt < maxRetries) {
           const delay = Math.pow(2, attempt) * 100; // Exponential backoff

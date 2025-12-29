@@ -136,7 +136,7 @@ const VirtualListComponent = <T extends any>(
 
   const resolveKey = (item: T, index: number) => {
       if (getItemKey) return getItemKey(item);
-      if (item && typeof item === 'object' && 'id' in item) return (item as any).id;
+      if (item && typeof item === 'object' && 'id' in item) return (item as Record<string, unknown>).id;
       return index;
   };
 

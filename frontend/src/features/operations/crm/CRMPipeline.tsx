@@ -24,7 +24,7 @@ export const CRMPipeline = ({ leads }: CRMPipelineProps) => {
       async ({ id, stage }: { id: string, stage: string }) => {
           // In a real scenario, we'd call an API endpoint. 
           // For local simulation, we update the cache directly to mimic optimistic UI
-          const current = queryClient.getQueryState<any[]>(['crm', 'leads'])?.data || [];
+          const current = queryClient.getQueryState<unknown[]>(['crm', 'leads'])?.data || [];
           const updated = current.map(l => l.id === id ? { ...l, stage } : l);
           // Determine which service method to call based on architecture
           // DataService.crm.updateLead(id, { stage }); 

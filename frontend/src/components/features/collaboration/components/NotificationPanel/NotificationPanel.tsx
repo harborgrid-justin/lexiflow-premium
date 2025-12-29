@@ -206,7 +206,7 @@ export const NotificationPanel = React.memo(function NotificationPanel() {
   /**
    * Render notification group
    */
-  const renderGroup = (group: any) => {
+  const renderGroup = (group: unknown) => {
     const isExpanded = expandedGroups.has(group.groupKey);
 
     return (

@@ -104,7 +104,7 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
           // Auto-create Evidence Item
           const evidence: EvidenceItem = {
             id: `ev-${Date.now()}` as EvidenceId,
-            trackingUuid: crypto.randomUUID() as any,
+            trackingUuid: crypto.randomUUID() as Record<string, unknown>,
             caseId: savedDoc.caseId,
             title: savedDoc.title,
             type: 'Document',

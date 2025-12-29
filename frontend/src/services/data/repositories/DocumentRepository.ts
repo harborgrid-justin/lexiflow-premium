@@ -197,7 +197,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
 
         if (this.useBackend) {
             try {
-                return await this.documentsApi.add(document as any);
+                return await this.documentsApi.add(document as Record<string, unknown>);
             } catch (error) {
                 console.warn('[DocumentRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -452,7 +452,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
         try {
             const results: LegalDocument[] = [];
             for (const file of files) {
-                const doc = await this.uploadDocument(file, metadata as any);
+                const doc = await this.uploadDocument(file, metadata as Record<string, unknown>);
                 results.push(doc);
             }
             return results;
@@ -574,7 +574,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
 
             // Create version snapshot
             const newVersion: DocumentVersion = {
-                id: `ver-${Date.now()}` as any,
+                id: `ver-${Date.now()}` as Record<string, unknown>,
                 versionNumber: (doc.versions?.length || 0) + 1,
                 uploadedBy: 'System',
                 uploadDate: new Date().toISOString(),
@@ -639,9 +639,9 @@ export class DocumentRepository extends Repository<LegalDocument> {
     /**
      * Get available document folders
      * 
-     * @returns Promise<any[]> Array of folder objects
+     * @returns Promise<unknown[]> Array of folder objects
      */
-    async getFolders(): Promise<any[]> {
+    async getFolders(): Promise<unknown[]> {
         return [
             { id: 'root', label: 'All Documents' },
             { id: 'case_docs', label: 'Case Files' },
@@ -655,10 +655,10 @@ export class DocumentRepository extends Repository<LegalDocument> {
     /**
      * Get document templates
      * 
-     * @returns Promise<any[]> Array of template documents
+     * @returns Promise<unknown[]> Array of template documents
      * @throws Error if fetch fails
      */
-    async getTemplates(): Promise<any[]> {
+    async getTemplates(): Promise<unknown[]> {
         try {
             const docs = await this.getAll();
             return docs

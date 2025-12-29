@@ -231,7 +231,7 @@ export class MattersService {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   async getKPIs(_dateRange?: string): Promise<MatterKPIs> {
     // dateRange parameter reserved for future filtering implementation
     const matters = await this.mattersRepository.find();
@@ -274,7 +274,7 @@ export class MattersService {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   async getPipeline(_dateRange?: string): Promise<PipelineStage[]> {
     // dateRange parameter reserved for future filtering implementation
     const matters = await this.mattersRepository.find();
@@ -302,7 +302,7 @@ export class MattersService {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   async getCalendarEvents(_startDate: string, _endDate?: string, _matterIds?: string): Promise<CalendarEvent[]> {
     // Parameters reserved for future implementation of calendar event filtering
     // Return empty array if no events found, or implement logic to fetch from tasks/deadlines
@@ -310,7 +310,7 @@ export class MattersService {
     return [];
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   async getRevenueAnalytics(_dateRange?: string): Promise<RevenueAnalytics> {
     // dateRange parameter reserved for future filtering implementation
     const matters = await this.mattersRepository.find();
@@ -342,7 +342,7 @@ export class MattersService {
     }));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   async getFinancialOverview(_dateRange?: string): Promise<FinancialOverview> {
     // dateRange parameter reserved for future filtering implementation
     const matters = await this.mattersRepository.find();

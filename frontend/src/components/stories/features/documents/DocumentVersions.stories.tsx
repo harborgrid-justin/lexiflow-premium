@@ -50,7 +50,7 @@ export default meta;
 type Story = StoryObj<typeof DocumentVersions>;
 
 const mockDocument: LegalDocument = {
-  id: '1' as any,
+  id: '1' as Record<string, unknown>,
   title: 'Motion to Dismiss - Updated.pdf',
   type: 'Pleading',
   status: 'Active',
@@ -58,13 +58,13 @@ const mockDocument: LegalDocument = {
   uploadDate: '2024-12-01',
   createdAt: '2024-12-01',
   updatedAt: '2024-12-20',
-  creatorId: 'user1' as any,
-  caseId: 'case1' as any,
+  creatorId: 'user1' as Record<string, unknown>,
+  caseId: 'case1' as Record<string, unknown>,
   content: '',
   tags: ['motion', 'dismiss', 'pleading'],
   versions: [
     {
-      id: 'v3' as any,
+      id: 'v3' as Record<string, unknown>,
       versionNumber: 3,
       uploadDate: '2024-12-15 2:30 PM',
       uploadedBy: 'Sarah Johnson',
@@ -72,7 +72,7 @@ const mockDocument: LegalDocument = {
       updatedAt: '2024-12-15'
     },
     {
-      id: 'v2' as any,
+      id: 'v2' as Record<string, unknown>,
       versionNumber: 2,
       uploadDate: '2024-12-10 10:15 AM',
       uploadedBy: 'Michael Chen',
@@ -80,7 +80,7 @@ const mockDocument: LegalDocument = {
       updatedAt: '2024-12-10'
     },
     {
-      id: 'v1' as any,
+      id: 'v1' as Record<string, unknown>,
       versionNumber: 1,
       uploadDate: '2024-12-01 9:00 AM',
       uploadedBy: 'Sarah Johnson',
@@ -151,7 +151,7 @@ export const ManyVersions: Story = {
       versions: [
         ...mockDocument.versions,
         {
-          id: 'v4' as any,
+          id: 'v4' as Record<string, unknown>,
           versionNumber: 4,
           uploadDate: '2024-12-18 4:20 PM',
           uploadedBy: 'David Rodriguez',
@@ -159,7 +159,7 @@ export const ManyVersions: Story = {
           updatedAt: '2024-12-18'
         },
         {
-          id: 'v5' as any,
+          id: 'v5' as Record<string, unknown>,
           versionNumber: 5,
           uploadDate: '2024-12-19 11:30 AM',
           uploadedBy: 'Sarah Johnson',
@@ -167,7 +167,7 @@ export const ManyVersions: Story = {
           updatedAt: '2024-12-19'
         },
         {
-          id: 'v6' as any,
+          id: 'v6' as Record<string, unknown>,
           versionNumber: 6,
           uploadDate: '2024-12-19 5:15 PM',
           uploadedBy: 'Michael Chen',

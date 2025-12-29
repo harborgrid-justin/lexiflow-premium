@@ -38,12 +38,12 @@ export const EvidenceCustodyLog: React.FC = () => {
     if (!data) return [];
     if (Array.isArray(data)) return data;
     // Handle paginated response with data property (backend pagination)
-    if (typeof data === 'object' && 'data' in data && Array.isArray((data as any).data)) {
-      return (data as any).data;
+    if (typeof data === 'object' && 'data' in data && Array.isArray((data as Record<string, unknown>).data)) {
+      return (data as Record<string, unknown>).data;
     }
     // Handle object with items property
-    if (typeof data === 'object' && 'items' in data && Array.isArray((data as any).items)) {
-      return (data as any).items;
+    if (typeof data === 'object' && 'items' in data && Array.isArray((data as Record<string, unknown>).items)) {
+      return (data as Record<string, unknown>).items;
     }
     console.warn('[EvidenceCustodyLog] Data is not an array:', data);
     return [];
@@ -58,7 +58,7 @@ export const EvidenceCustodyLog: React.FC = () => {
           itemTitle: item.title,
           caseId: item.caseId
         }))
-      ).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      ).sort((a: unknown, b: unknown) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [evidence]);
 
   const filteredEvents = useMemo(() => {

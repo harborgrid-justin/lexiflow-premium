@@ -18,7 +18,7 @@ export function DocumentFilters({ currentFolder, setCurrentFolder }: DocumentFil
   const { theme } = useTheme();
   
   // Enterprise Data Access
-  const { data: folders = [], isLoading } = useQuery<any[]>(
+  const { data: folders = [], isLoading } = useQuery<unknown[]>(
       ['documents', 'folders'],
       () => DataService.documents.getFolders()
   );

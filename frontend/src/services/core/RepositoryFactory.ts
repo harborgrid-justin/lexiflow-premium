@@ -49,7 +49,7 @@ export function createRepository<T extends BaseEntity>(
  * Ensures the same repository instance is used across the application.
  */
 class RepositoryRegistry {
-  private instances: Map<string, Repository<any>> = new Map();
+  private instances: Map<string, Repository<unknown>> = new Map();
 
   /**
    * Get or create a repository instance for a given store.

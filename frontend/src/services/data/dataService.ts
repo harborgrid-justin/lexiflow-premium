@@ -328,7 +328,7 @@ import { repositoryRegistry as legacyRepositoryRegistry } from '@/services/core/
  * Type safety is enforced at the property access level through the descriptors.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Required for dynamic property descriptor pattern
-const DataServiceBase: Record<string, any> = {};
+const DataServiceBase: Record<string, unknown> = {};
 
 Object.defineProperties(DataServiceBase, {
   
@@ -1031,7 +1031,7 @@ Object.defineProperties(DataServiceBase, {
       },
       add: async (rule: unknown) => {
         try {
-          return await api.jurisdiction?.createRule?.(rule as any);
+          return await api.jurisdiction?.createRule?.(rule as Record<string, unknown>);
         } catch (error) {
           console.error('[DataService.rules] Failed to create rule:', error);
           throw error;
@@ -1039,7 +1039,7 @@ Object.defineProperties(DataServiceBase, {
       },
       update: async (id: string, updates: unknown) => {
         try {
-          return await api.jurisdiction?.updateRule?.(id, updates as any);
+          return await api.jurisdiction?.updateRule?.(id, updates as Record<string, unknown>);
         } catch (error) {
           console.error('[DataService.rules] Failed to update rule:', error);
           throw error;

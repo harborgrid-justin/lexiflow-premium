@@ -18,7 +18,7 @@ import { z } from 'zod';
 import { PermissionsApiService } from '@/api/auth/permissions-api';
 import type { Permission } from '@/types';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 const _permissionSchema = z.object({
   resource: z.string().min(1, 'Resource is required'),
   action: z.enum(['create', 'read', 'update', 'delete', 'execute', '*']),
@@ -86,7 +86,7 @@ export const RoleManager: React.FC<RoleManagerProps> = ({
     try {
       const response = await permissionsService.getRolePermissions(roleId);
       setPermissions(response.permissions || []);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message || 'Failed to load permissions');
     } finally {
       setIsLoading(false);
@@ -106,7 +106,7 @@ export const RoleManager: React.FC<RoleManagerProps> = ({
       onPermissionsUpdated?.(response.permissions);
 
       setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message || 'Failed to update permissions');
     } finally {
       setIsSaving(false);

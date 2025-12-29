@@ -207,7 +207,7 @@ export class BillingApiService {
             // Transform frontend TimeEntry to backend CreateTimeEntryDto
             const createDto = {
                 caseId: entry.caseId,
-                userId: entry.userId || (entry as any).createdBy,
+                userId: entry.userId || (entry as Record<string, unknown>).createdBy,
                 date: entry.date, // Should be ISO date string YYYY-MM-DD
                 duration: entry.duration, // In hours
                 description: entry.description,
@@ -223,8 +223,8 @@ export class BillingApiService {
 
             // Remove undefined values
             Object.keys(createDto).forEach(key => {
-                if ((createDto as any)[key] === undefined) {
-                    delete (createDto as any)[key];
+                if ((createDto as Record<string, unknown>)[key] === undefined) {
+                    delete (createDto as Record<string, unknown>)[key];
                 }
             });
 
@@ -374,10 +374,10 @@ export class BillingApiService {
      * Get invoices with optional filters
      * 
      * @param filters - Optional filters for caseId, clientId, and status
-     * @returns Promise<any[]> Array of invoices
+     * @returns Promise<unknown[]> Array of invoices
      * @throws Error if fetch fails
      */
-    async getInvoices(filters?: { caseId?: string; clientId?: string; status?: string }): Promise<any[]> {
+    async getInvoices(filters?: { caseId?: string; clientId?: string; status?: string }): Promise<unknown[]> {
         try {
             const response = await apiClient.get<PaginatedResponse<unknown>>('/billing/invoices', filters);
             return response.data;
@@ -626,11 +626,11 @@ export class BillingApiService {
      * Get WIP (Work In Progress) statistics
      * Gracefully handles endpoint unavailability
      * 
-     * @returns Promise<any[]> WIP statistics
+     * @returns Promise<unknown[]> WIP statistics
      */
-    async getWIPStats(): Promise<any[]> {
+    async getWIPStats(): Promise<unknown[]> {
         try {
-            return await apiClient.get<any[]>('/billing/wip-stats');
+            return await apiClient.get<unknown[]>('/billing/wip-stats');
         } catch (error) {
             console.warn('[BillingApiService.getWIPStats] WIP stats endpoint not available, returning empty array');
             return [];
@@ -660,13 +660,13 @@ export class BillingApiService {
      * Gracefully handles endpoint unavailability
      * 
      * @param timekeeperId - Timekeeper ID
-     * @returns Promise<any[]> Rate information
+     * @returns Promise<unknown[]> Rate information
      */
-    async getRates(timekeeperId: string): Promise<any[]> {
+    async getRates(timekeeperId: string): Promise<unknown[]> {
         this.validateId(timekeeperId, 'getRates');
 
         try {
-            return await apiClient.get<any[]>(`/billing/rates/${timekeeperId}`);
+            return await apiClient.get<unknown[]>(`/billing/rates/${timekeeperId}`);
         } catch (error) {
             console.warn('[BillingApiService.getRates] Rates endpoint not available, returning empty array');
             return [];
@@ -692,9 +692,9 @@ export class BillingApiService {
      * Get top billing accounts
      * Gracefully handles endpoint unavailability
      * 
-     * @returns Promise<any[]> Top accounts by billing
+     * @returns Promise<unknown[]> Top accounts by billing
      */
-    async getTopAccounts(): Promise<any[]> {
+    async getTopAccounts(): Promise<unknown[]> {
         try {
             const response = await apiClient.get<PaginatedResponse<unknown>>('/clients', { sortBy: 'totalBilled', sortOrder: 'desc', limit: 4 });
             return response.data;

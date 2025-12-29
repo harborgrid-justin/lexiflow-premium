@@ -14,8 +14,8 @@ export interface ServiceJob {
   startedAt?: string;
   completedAt?: string;
   error?: string;
-  result?: Record<string, any>;
-  metadata?: Record<string, any>;
+  result?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
   retryCount?: number;
   maxRetries?: number;
 }
@@ -43,7 +43,7 @@ export class ServiceJobsApiService {
     return apiClient.get<ServiceJob>(`${this.baseUrl}/${id}`);
   }
 
-  async create(data: { jobType: ServiceJob['jobType']; priority?: ServiceJob['priority']; metadata?: Record<string, any> }): Promise<ServiceJob> {
+  async create(data: { jobType: ServiceJob['jobType']; priority?: ServiceJob['priority']; metadata?: Record<string, unknown> }): Promise<ServiceJob> {
     return apiClient.post<ServiceJob>(this.baseUrl, data);
   }
 

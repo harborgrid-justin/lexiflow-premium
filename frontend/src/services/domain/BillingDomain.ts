@@ -683,13 +683,13 @@ export class BillingRepository extends Repository<TimeEntry> {
     /**
      * Get all trust accounts
      * 
-     * @returns Promise<any[]> Array of trust accounts
+     * @returns Promise<unknown[]> Array of trust accounts
      * @throws Error if fetch fails
      * 
      * @example
      * const accounts = await repo.getTrustAccounts();
      */
-    async getTrustAccounts(): Promise<any[]> {
+    async getTrustAccounts(): Promise<unknown[]> {
         try {
             if (this.useBackend) {
 

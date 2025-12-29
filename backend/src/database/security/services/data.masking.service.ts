@@ -54,7 +54,7 @@ export class DataMaskingService {
     this.reversibleKey = crypto.scryptSync(key, 'masking-salt', 32);
   }
 
-  maskData(data: any, rules?: MaskingRule[]): any {
+  maskData(data: unknown, rules?: MaskingRule[]): any {
     if (data === null || data === undefined) {
       return data;
     }
@@ -70,14 +70,14 @@ export class DataMaskingService {
     }
 
     if (typeof data === 'object') {
-      return this.maskObject(data, maskingRules);
+      return this.maskObject(data as Record<string, unknown>, maskingRules);
     }
 
     return data;
   }
 
-  private maskObject(obj: Record<string, any>, rules: MaskingRule[]): Record<string, any> {
-    const masked: Record<string, any> = {};
+  private maskObject(obj: Record<string, unknown>, rules: MaskingRule[]): Record<string, unknown> {
+    const masked: Record<string, unknown> = {};
 
     for (const [key, value] of Object.entries(obj)) {
       const rule = rules.find(r => r.field.toLowerCase() === key.toLowerCase());
@@ -240,7 +240,7 @@ export class DataMaskingService {
     return masked + lastFour;
   }
 
-  maskForLogging(data: any): any {
+  maskForLogging(data: unknown): any {
     const loggingRules: MaskingRule[] = [
       { field: 'password', strategy: 'full' },
       { field: 'token', strategy: 'full' },
@@ -254,7 +254,7 @@ export class DataMaskingService {
     return this.maskData(data, loggingRules);
   }
 
-  maskForExport(data: any, exportType: 'public' | 'internal' | 'restricted' = 'public'): any {
+  maskForExport(data: unknown, exportType: 'public' | 'internal' | 'restricted' = 'public'): any {
     let rules: MaskingRule[];
 
     switch (exportType) {

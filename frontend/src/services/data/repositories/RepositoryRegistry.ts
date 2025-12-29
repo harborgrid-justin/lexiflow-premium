@@ -12,7 +12,7 @@
  * Registry for managing singleton repository instances
  */
 export class RepositoryRegistry {
-  private static instances = new Map<string, any>();
+  private static instances = new Map<string, unknown>();
 
   /**
    * Gets or creates a singleton repository instance
@@ -116,12 +116,12 @@ export function createRegistryFactory<T>(
  * });
  * ```
  */
-export function registerRepositories<TMap extends Record<string, any>>(
+export function registerRepositories<TMap extends Record<string, unknown>>(
   config: { [K in keyof TMap]: () => TMap[K] }
 ): { [K in keyof TMap]: () => TMap[K] } {
-  const factories: any = {};
+  const factories: unknown = {};
   for (const [key, factory] of Object.entries(config)) {
-    (factories as any)[key] = createRegistryFactory(key, factory as () => any);
+    (factories as Record<string, unknown>)[key] = createRegistryFactory(key, factory as () => unknown);
   }
   return factories as { [K in keyof TMap]: () => TMap[K] };
 }

@@ -113,7 +113,7 @@ export const CaseDetail = ({
   } = useCaseDetail(caseData, initialTab);
 
   // Compatibility wrappers for UI that expects old method names
-  const handleAnalyze = (doc: any) => analyzeWithAI(doc.id);
+  const handleAnalyze = (doc: unknown) => analyzeWithAI(doc.id);
   const handleDraft = () => draftDocument('Motion/Clause', draftPrompt);
   const handleGenerateWorkflow = () => generateAIWorkflow();
 

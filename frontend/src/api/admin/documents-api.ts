@@ -195,8 +195,8 @@ export class DocumentsApiService {
             
             // Remove undefined values
             Object.keys(createDto).forEach(key => {
-                if ((createDto as any)[key] === undefined) {
-                    delete (createDto as any)[key];
+                if ((createDto as Record<string, unknown>)[key] === undefined) {
+                    delete (createDto as Record<string, unknown>)[key];
                 }
             });
             
@@ -260,7 +260,7 @@ export class DocumentsApiService {
      * @example
      * const doc = await service.upload(file, { caseId: 'case-123', type: 'Pleading' });
      */
-    async upload(file: File, metadata: Record<string, any>): Promise<LegalDocument> {
+    async upload(file: File, metadata: Record<string, unknown>): Promise<LegalDocument> {
         this.validateFile(file, 'upload');
         this.validateObject(metadata, 'metadata', 'upload');
 
@@ -400,10 +400,10 @@ export class DocumentsApiService {
      * Get document versions
      * 
      * @param documentId - Document ID
-     * @returns Promise<any[]> Array of document versions
+     * @returns Promise<unknown[]> Array of document versions
      * @throws Error if documentId is invalid or fetch fails
      */
-    async getVersions(documentId: string): Promise<any[]> {
+    async getVersions(documentId: string): Promise<unknown[]> {
         this.validateId(documentId, 'getVersions');
 
         try {
@@ -479,12 +479,12 @@ export class DocumentsApiService {
     /**
      * Get document folders
      * 
-     * @returns Promise<any[]> Array of folders
+     * @returns Promise<unknown[]> Array of folders
      * @throws Error if fetch fails
      */
-    async getFolders(): Promise<any[]> {
+    async getFolders(): Promise<unknown[]> {
         try {
-            return await apiClient.get<any[]>('/documents/folders/list');
+            return await apiClient.get<unknown[]>('/documents/folders/list');
         } catch (error) {
             console.error('[DocumentsApiService.getFolders] Error:', error);
             throw new Error('Failed to fetch document folders');

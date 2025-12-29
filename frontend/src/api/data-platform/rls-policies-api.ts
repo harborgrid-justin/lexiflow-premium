@@ -14,7 +14,7 @@ export interface RLSPolicy {
   withCheck?: string; // SQL expression for new rows
   roles?: string[];
   enabled: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

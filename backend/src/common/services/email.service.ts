@@ -13,7 +13,7 @@ export interface EmailOptions {
   bcc?: string | string[];
   attachments?: Array<{
     filename: string;
-    content?: any;
+    content?: unknown;
     path?: string;
   }>;
 }
@@ -72,10 +72,10 @@ export class EmailService implements OnModuleInit {
             ? options.bcc.join(', ')
             : options.bcc
           : undefined,
-        attachments: options.attachments,
+        attachments: options.attachments as any,
       };
 
-      await this.transporter.sendMail(mailOptions);
+      await this.transporter.sendMail(mailOptions as any);
 
       this.logger.log(`Email sent to: ${mailOptions.to}`);
     } catch (error) {

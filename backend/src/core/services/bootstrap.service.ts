@@ -121,13 +121,13 @@ export class BootstrapService implements OnApplicationBootstrap {
         module: 'Database',
         success: true,
         duration: Date.now() - startTime,
-        metadata: dbInfo,
+        metadata: dbInfo as any,
       });
 
       this.logger.log('✓ Database connection verified');
-      this.logger.log(`  Database: ${dbInfo.database}`);
-      this.logger.log(`  Version: ${dbInfo.version}`);
-      this.logger.log(`  Connection pool: ${dbInfo.poolSize} connections`);
+      this.logger.log(`  Database: ${(dbInfo as any).database}`);
+      this.logger.log(`  Version: ${(dbInfo as any).version}`);
+      this.logger.log(`  Connection pool: ${(dbInfo as any).poolSize} connections`);
     } catch (error) {
       this.startupResults.push({
         module: 'Database',
@@ -351,7 +351,7 @@ export class BootstrapService implements OnApplicationBootstrap {
   /**
    * Get database information
    */
-  private async getDatabaseInfo(): Promise<any> {
+  private async getDatabaseInfo(): Promise<unknown> {
     const database = this.configService.get<string>('database.name');
     const poolSize = this.configService.get<number>('DB_POOL_MAX', 20);
 
@@ -389,7 +389,7 @@ export class BootstrapService implements OnApplicationBootstrap {
   /**
    * Check disk space
    */
-  private async checkDisk(): Promise<any> {
+  private async checkDisk(): Promise<unknown> {
     // Simplified disk check - in production, use proper disk space checking
     return {
       healthy: true,

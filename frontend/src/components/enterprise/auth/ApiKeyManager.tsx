@@ -80,7 +80,7 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
 
       setApiKeys(keys);
       setAvailableScopes(scopes);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setErrors({ general: err.message || 'Failed to load API keys' });
     } finally {
       setIsLoading(false);
@@ -145,7 +145,7 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
         scopes: [],
         expiresAt: '',
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       setErrors({ general: err.message || 'Failed to create API key' });
     } finally {
       setIsCreating(false);
@@ -163,7 +163,7 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
       const revokedKey = await apiKeysService.revoke(keyId);
       setApiKeys((prev) => prev.map((key) => (key.id === keyId ? revokedKey : key)));
       onKeyRevoked?.(revokedKey);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setErrors({ general: err.message || 'Failed to revoke API key' });
     } finally {
       setRevokingKeyId(null);
@@ -178,7 +178,7 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
     try {
       await apiKeysService.delete(keyId);
       setApiKeys((prev) => prev.filter((key) => key.id !== keyId));
-    } catch (err: any) {
+    } catch (err: unknown) {
       setErrors({ general: err.message || 'Failed to delete API key' });
     }
   };

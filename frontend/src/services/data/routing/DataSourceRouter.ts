@@ -84,7 +84,7 @@ export class DataSourceRouter {
       get: () => {
         if (this.shouldUseBackend() && apiPath) {
           // Access api object dynamically
-          const apiService = (api as any)[apiPath];
+          const apiService = (api as Record<string, unknown>)[apiPath];
           if (apiService) return apiService;
         }
         return fallbackFactory();
@@ -105,7 +105,7 @@ export class DataSourceRouter {
    * });
    * ```
    */
-  static createRouteMap<TMap extends Record<string, any>>(
+  static createRouteMap<TMap extends Record<string, unknown>>(
     config: {
       [K in keyof TMap]: {
         api: string | null;
@@ -113,9 +113,9 @@ export class DataSourceRouter {
       };
     }
   ): Record<keyof TMap, PropertyDescriptor> {
-    const descriptors: any = {};
+    const descriptors: unknown = {};
     for (const [key, { api: apiPath, fallback }] of Object.entries(config)) {
-      (descriptors as any)[key] = this.createPropertyDescriptor(apiPath, fallback);
+      (descriptors as Record<string, unknown>)[key] = this.createPropertyDescriptor(apiPath, fallback);
     }
     return descriptors as Record<keyof TMap, PropertyDescriptor>;
   }

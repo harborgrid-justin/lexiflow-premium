@@ -69,8 +69,8 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
         const result = await DataService.docket.getAll();
         // Handle both array and paginated response formats
         if (Array.isArray(result)) return result;
-        if (result && typeof result === 'object' && 'data' in result && Array.isArray((result as any).data)) {
-          return (result as any).data;
+        if (result && typeof result === 'object' && 'data' in result && Array.isArray((result as Record<string, unknown>).data)) {
+          return (result as Record<string, unknown>).data;
         }
         return [];
       }
@@ -191,7 +191,7 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   });
 
   const sortedEntries = useMemo(() => {
-      return [...filteredEntries].sort((a: any, b: any) => {
+      return [...filteredEntries].sort((a: unknown, b: unknown) => {
           const dateA = a.date || a.entryDate || a.dateFiled;
           const dateB = b.date || b.entryDate || b.dateFiled;
           return new Date(dateB).getTime() - new Date(dateA).getTime();

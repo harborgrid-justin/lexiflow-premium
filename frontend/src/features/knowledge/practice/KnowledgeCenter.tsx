@@ -45,7 +45,7 @@ export const KnowledgeCenter: React.FC = () => {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('wiki');
 
-    const { data: cleTracker = [] } = useQuery<any[]>(
+    const { data: cleTracker = [] } = useQuery<unknown[]>(
         ['cle-tracking', 'all'],
         DataService.operations.getCleTracking
     );

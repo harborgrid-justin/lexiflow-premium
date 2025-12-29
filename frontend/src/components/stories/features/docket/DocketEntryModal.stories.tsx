@@ -76,15 +76,15 @@ type Story = StoryObj<typeof meta>;
 
 // Mock data
 const mockFilingEntry: DocketEntry = {
-  id: 'docket-1' as any,
-  caseId: 'case-123' as any,
+  id: 'docket-1' as Record<string, unknown>,
+  caseId: 'case-123' as Record<string, unknown>,
   sequenceNumber: 42,
   dateFiled: '2024-12-15',
   entryDate: '2024-12-15',
   description: 'MOTION to Dismiss for Failure to State a Claim pursuant to Fed. R. Civ. P. 12(b)(6) filed by Defendant Acme Corporation. Motion argues that Plaintiff has failed to plausibly allege essential elements of negligence claim.',
   type: 'Filing' as DocketEntryType,
   filedBy: 'Defendant Acme Corp.',
-  documentId: 'doc-1' as any,
+  documentId: 'doc-1' as Record<string, unknown>,
   isSealed: false,
   metadata: {
     attorney: 'Sarah Johnson, Esq.',
@@ -97,15 +97,15 @@ const mockFilingEntry: DocketEntry = {
 };
 
 const mockOrderEntry: DocketEntry = {
-  id: 'docket-2' as any,
-  caseId: 'case-123' as any,
+  id: 'docket-2' as Record<string, unknown>,
+  caseId: 'case-123' as Record<string, unknown>,
   sequenceNumber: 43,
   dateFiled: '2024-12-18',
   entryDate: '2024-12-18',
   description: 'ORDER granting Defendant\'s Motion to Dismiss. Court finds that Plaintiff has failed to state a claim upon which relief can be granted. Case dismissed with prejudice. All pending motions denied as moot.',
   type: 'Order' as DocketEntryType,
   filedBy: 'Hon. Sarah Martinez',
-  documentId: 'doc-3' as any,
+  documentId: 'doc-3' as Record<string, unknown>,
   isSealed: false,
   metadata: {
     page_count: 12,
@@ -117,8 +117,8 @@ const mockOrderEntry: DocketEntry = {
 };
 
 const mockSealedEntry: DocketEntry = {
-  id: 'docket-3' as any,
-  caseId: 'case-123' as any,
+  id: 'docket-3' as Record<string, unknown>,
+  caseId: 'case-123' as Record<string, unknown>,
   sequenceNumber: 44,
   dateFiled: '2024-12-20',
   entryDate: '2024-12-20',
@@ -137,14 +137,14 @@ const mockSealedEntry: DocketEntry = {
 };
 
 const mockHearingEntry: DocketEntry = {
-  id: 'docket-4' as any,
-  caseId: 'case-123' as any,
+  id: 'docket-4' as Record<string, unknown>,
+  caseId: 'case-123' as Record<string, unknown>,
   sequenceNumber: 45,
   dateFiled: '2024-12-22',
   entryDate: '2024-12-22',
   description: 'NOTICE of Hearing on Motion for Summary Judgment scheduled for January 15, 2025 at 2:00 PM in Courtroom 4B. Parties shall submit proposed findings of fact and conclusions of law by January 8, 2025.',
   type: 'Hearing' as DocketEntryType,
-  documentId: 'doc-4' as any,
+  documentId: 'doc-4' as Record<string, unknown>,
   isSealed: false,
   metadata: {
     courtroom: '4B',

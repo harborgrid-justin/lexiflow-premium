@@ -118,7 +118,7 @@ export const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInse
                     {['Persuasive', 'Neutral', 'Aggressive'].map(t => (
                         <button
                             key={t}
-                            onClick={() => setTone(t as any)}
+                            onClick={() => setTone(t as Record<string, unknown>)}
                             className={cn(
                                 "flex-1 py-1.5 text-xs font-medium rounded border transition-colors",
                                 tone === t 

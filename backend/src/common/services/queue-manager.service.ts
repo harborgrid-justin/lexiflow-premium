@@ -210,7 +210,7 @@ export class QueueManagerService {
     const queue = this.getOrCreateQueue(queueName);
     const cleaned = await queue.clean(grace, status);
     this.logger.log(`Cleaned ${cleaned.length} ${status} jobs from ${queueName}`);
-    return cleaned.map((job: any) => String(job.id || job));
+    return cleaned.map((job: unknown) => String((job as any).id || job));
   }
 
   private getOrCreateQueue(queueName: string): Queue {
@@ -256,8 +256,8 @@ export interface JobStatus {
   id: string;
   state: string;
   progress: number | object;
-  data: any;
-  returnvalue: any;
+  data: unknown;
+  returnvalue: unknown;
   failedReason?: string;
   attemptsMade: number;
   processedOn?: number;

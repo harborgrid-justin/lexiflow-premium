@@ -89,7 +89,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
     // Check entity type
     if ('relatedEntityType' in notification) {
-      const entityType = (notification as any).relatedEntityType;
+      const entityType = (notification as Record<string, unknown>).relatedEntityType;
       switch (entityType) {
         case 'case':
           return <Briefcase className={cn(iconClass, 'text-blue-500')} />;

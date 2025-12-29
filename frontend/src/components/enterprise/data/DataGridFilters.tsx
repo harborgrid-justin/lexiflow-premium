@@ -41,7 +41,7 @@ export interface FilterConfig {
 
 export type FilterValue = string | number | FilterConfig;
 
-export interface DataGridFiltersProps<T extends Record<string, any>> {
+export interface DataGridFiltersProps<T extends Record<string, unknown>> {
   columns: ColumnDefinition<T>[];
   filters: Record<string, FilterValue>;
   onFilterChange: (filters: Record<string, FilterValue>) => void;
@@ -51,7 +51,7 @@ export interface DataGridFiltersProps<T extends Record<string, any>> {
 // COMPONENT
 // ============================================================================
 
-export function DataGridFilters<T extends Record<string, any>>({
+export function DataGridFilters<T extends Record<string, unknown>>({
   columns,
   filters,
   onFilterChange,
@@ -152,13 +152,13 @@ DataGridFilters.displayName = 'DataGridFilters';
 // FILTER INPUT COMPONENT
 // ============================================================================
 
-interface FilterInputProps<T extends Record<string, any>> {
+interface FilterInputProps<T extends Record<string, unknown>> {
   column: ColumnDefinition<T>;
   value?: FilterValue;
   onChange: (value: FilterValue) => void;
 }
 
-function FilterInput<T extends Record<string, any>>({
+function FilterInput<T extends Record<string, unknown>>({
   column,
   value,
   onChange,
@@ -194,7 +194,7 @@ function FilterInput<T extends Record<string, any>>({
 // TEXT FILTER
 // ============================================================================
 
-function TextFilter<T extends Record<string, any>>({
+function TextFilter<T extends Record<string, unknown>>({
   column,
   value,
   onChange,
@@ -228,7 +228,7 @@ function TextFilter<T extends Record<string, any>>({
 // NUMBER FILTER
 // ============================================================================
 
-function NumberFilter<T extends Record<string, any>>({
+function NumberFilter<T extends Record<string, unknown>>({
   column,
   value,
   onChange,
@@ -298,7 +298,7 @@ function NumberFilter<T extends Record<string, any>>({
 // DATE FILTER
 // ============================================================================
 
-function DateFilter<T extends Record<string, any>>({
+function DateFilter<T extends Record<string, unknown>>({
   column,
   value,
   onChange,
@@ -366,7 +366,7 @@ function DateFilter<T extends Record<string, any>>({
 // SELECT FILTER
 // ============================================================================
 
-function SelectFilter<T extends Record<string, any>>({
+function SelectFilter<T extends Record<string, unknown>>({
   column,
   value,
   onChange,

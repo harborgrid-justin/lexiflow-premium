@@ -193,7 +193,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   // ============================================================================
   const activeParentTab = useMemo(
     () =>
-      PARENT_TABS.find((p: any) => p.subTabs.some((s: any) => s.id === activeTab)) ||
+      PARENT_TABS.find((p: unknown) => p.subTabs.some((s: unknown) => s.id === activeTab)) ||
       PARENT_TABS[0],
     [activeTab],
   );
@@ -202,7 +202,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   // EVENT HANDLERS
   // ============================================================================
   const handleParentTabChange = useCallback((parentId: string) => {
-    const parent = PARENT_TABS.find((p: any) => p.id === parentId);
+    const parent = PARENT_TABS.find((p: unknown) => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
       setActiveTab(parent.subTabs[0].id as WarRoomView);
     }
@@ -224,7 +224,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
 
   useEffect(() => {
     if (!caseId && allCases.length > 0) {
-      if (!currentCaseId || !allCases.find((c: any) => c.id === currentCaseId)) {
+      if (!currentCaseId || !allCases.find((c: unknown) => c.id === currentCaseId)) {
         setCurrentCaseId(allCases[0].id);
       }
     }
@@ -232,7 +232,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
 
   // Get the current case object for display
   const currentCase = useMemo(() => {
-    return allCases.find((c: any) => c.id === currentCaseId);
+    return allCases.find((c: unknown) => c.id === currentCaseId);
   }, [allCases, currentCaseId]);
 
   useEffect(() => {
@@ -349,7 +349,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
               theme.text.primary,
             )}
           >
-            {allCases.map((c: any) => (
+            {allCases.map((c: unknown) => (
               <option key={c.id} value={c.id}>
                 {c.title}
               </option>
@@ -412,7 +412,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
                       `hover:${theme.border.default}`,
                     )}
                   >
-                    {allCases.map((c: any) => (
+                    {allCases.map((c: unknown) => (
                       <option key={c.id} value={c.id}>
                         {c.title}
                       </option>

@@ -26,7 +26,7 @@ export interface Project {
     progress?: number;
   }[];
   tags?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

@@ -35,7 +35,7 @@ export const OutcomeSimulator: React.FC = () => {
   const [liabilityProb, setLiabilityProb] = useState(75);
   const [iterations, setIterations] = useState(1000);
   const [isCalculating, setIsCalculating] = useState(false);
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<unknown[]>([]);
   const [metrics, setMetrics] = useState({ ev: 0, p25: 0, p75: 0 });
 
   const runSimulation = () => {

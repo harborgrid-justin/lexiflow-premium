@@ -50,14 +50,14 @@ export class AuditLogInterceptor implements NestInterceptor {
   private extractAuditInfo(
     method: string,
     url: string,
-    response: any,
-    _user: any,
+    response: unknown,
+    _user: unknown,
   ): {
     action: AuditAction;
     entityType: AuditEntityType;
     entityId: string;
     entityName?: string;
-    changes?: Record<string, any>;
+    changes?: Record<string, unknown>;
   } | null {
     // Map HTTP methods to audit actions
     const actionMap: Record<string, AuditAction> = {
@@ -79,7 +79,7 @@ export class AuditLogInterceptor implements NestInterceptor {
     if (!match) return null;
 
     const entityTypeStr = match[1];
-    const entityId = match[2] || response?.id || 'unknown';
+    const entityId = match[2] || (response as any)?.id || 'unknown';
 
     // Map URL paths to entity types
     const entityTypeMap: Record<string, AuditEntityType> = {
@@ -101,8 +101,8 @@ export class AuditLogInterceptor implements NestInterceptor {
       action,
       entityType,
       entityId,
-      entityName: response?.name || response?.title,
-      changes: method !== 'GET' ? response : undefined,
+      entityName: (response as any)?.name || (response as any)?.title,
+      changes: method !== 'GET' ? (response as any) : undefined,
     };
   }
 }

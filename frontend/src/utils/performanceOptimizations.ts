@@ -245,7 +245,7 @@ export function lazyWithErrorBoundary<T = any>(
       React.createElement(LazyComponent, {
         ...props,
         onError: setError,
-      } as any)
+      } as Record<string, unknown>)
     );
   };
 }
@@ -418,7 +418,7 @@ export function conditionallyRender<P>(
 
 // Helper functions
 
-function deepEqual(a: any, b: any): boolean {
+function deepEqual(a: unknown, b: unknown): boolean {
   if (a === b) return true;
   if (a == null || b == null) return false;
   if (typeof a !== typeof b) return false;
@@ -455,7 +455,7 @@ export const ComponentUtils = {
    * Set display name for component
    */
   setDisplayName<P>(Component: ComponentType<P>, name: string): ComponentType<P> {
-    (Component as any).displayName = name;
+    (Component as Record<string, unknown>).displayName = name;
     return Component;
   },
 

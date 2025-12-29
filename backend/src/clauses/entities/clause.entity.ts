@@ -72,12 +72,6 @@ export class Clause extends BaseEntity {
   @Column({ name: 'last_used_at', type: 'timestamp', nullable: true })
   lastUsedAt!: Date;
 
-  @Column({ name: 'created_by', type: 'uuid', nullable: true })
-  createdBy!: string;
-
-  @Column({ name: 'updated_by', type: 'uuid', nullable: true })
-  updatedBy!: string;
-
   @Column({ type: 'varchar', length: 200, nullable: true })
   jurisdiction!: string;
 
@@ -95,8 +89,8 @@ export class Clause extends BaseEntity {
   @Column({ name: 'is_standard', type: 'boolean', default: false })
   isStandard!: boolean;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  version!: string;
+  @Column({ name: 'clause_version', type: 'varchar', length: 100, nullable: true })
+  clauseVersion!: string;
 
   @Column({ type: 'text', nullable: true })
   alternatives!: string;

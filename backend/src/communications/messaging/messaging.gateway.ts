@@ -375,7 +375,7 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
    * Emit a new message to conversation participants
    * Called by MessagingService
    */
-  emitNewMessage(conversationId: string, message: any) {
+  emitNewMessage(conversationId: string, message: unknown) {
     this.server.to(`conversation:${conversationId}`).emit('message:new', message);
   }
 
@@ -458,7 +458,7 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
   /**
    * Send notification to specific user (all their connections)
    */
-  sendToUser(userId: string, event: string, data: any) {
+  sendToUser(userId: string, event: string, data: unknown) {
     const socketIds = this.userSockets.get(userId);
     if (socketIds && socketIds.size > 0) {
       socketIds.forEach((socketId) => {

@@ -62,7 +62,7 @@ export const MFASetup: React.FC<MFASetupProps> = ({
       setQrCode(response.qrCode);
       setSecret(response.secret);
       setStep('qr-display');
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message || 'Failed to initialize MFA setup');
     } finally {
       setIsLoading(false);
@@ -94,7 +94,7 @@ export const MFASetup: React.FC<MFASetupProps> = ({
       } else {
         setError('Invalid verification code. Please try again.');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message || 'Verification failed. Please try again.');
     } finally {
       setIsLoading(false);
@@ -114,7 +114,7 @@ export const MFASetup: React.FC<MFASetupProps> = ({
       setIsEnabled(false);
       setStep('qr-display');
       onSuccess?.();
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message || 'Failed to disable MFA');
     } finally {
       setIsLoading(false);

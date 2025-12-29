@@ -45,7 +45,7 @@ export interface ExportOptions {
     endDate: string;
   };
   /** Additional metadata */
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ReportExportProps {

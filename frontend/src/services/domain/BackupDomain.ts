@@ -78,7 +78,7 @@ export const BACKUP_QUERY_KEYS = {
 function validateSnapshotType(type: unknown, methodName: string): void {
   const validTypes: SnapshotType[] = ['Full', 'Incremental'];
 
-  if (!type || !validTypes.includes(type as any)) {
+  if (!type || !validTypes.includes(type as Record<string, unknown>)) {
     throw new Error(`[BackupService.${methodName}] Invalid snapshot type. Must be: ${validTypes.join(', ')}`);
   }
 }

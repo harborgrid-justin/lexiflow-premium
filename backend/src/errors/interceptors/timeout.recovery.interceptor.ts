@@ -63,7 +63,7 @@ export const RECOVERY_STRATEGY_TOKEN = 'RECOVERY_STRATEGY_TOKEN';
 @Injectable()
 export class TimeoutRecoveryInterceptor implements NestInterceptor {
   private readonly logger = new Logger(TimeoutRecoveryInterceptor.name);
-  private readonly responseCache: Map<string, { data: any; timestamp: number }> = new Map();
+  private readonly responseCache: Map<string, { data: unknown; timestamp: number }> = new Map();
   private readonly cacheTTL = 300000; // 5 minutes
 
   constructor(
@@ -277,7 +277,7 @@ export class TimeoutRecoveryInterceptor implements NestInterceptor {
   /**
    * Cache response for future use
    */
-  private cacheResponse(url: string, data: any): void {
+  private cacheResponse(url: string, data: unknown): void {
     // Only cache GET requests
     if (!url.toLowerCase().includes('get')) {
       return;

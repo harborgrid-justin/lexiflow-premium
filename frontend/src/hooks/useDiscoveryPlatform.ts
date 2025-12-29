@@ -67,7 +67,7 @@ export interface UseDiscoveryPlatformReturn {
   /** All discovery requests */
   requests: DiscoveryRequest[];
   /** Active parent tab */
-  activeParentTab: any;
+  activeParentTab: unknown;
   /** Handle parent tab change */
   handleParentTabChange: (parentId: string) => void;
   /** Navigate to view */

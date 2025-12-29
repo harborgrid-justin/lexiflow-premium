@@ -53,7 +53,7 @@ export const AdminSecurity: React.FC = () => {
   const [testIp, setTestIp] = useState('');
   const [checkResult, setCheckResult] = useState<'Safe' | 'Blocked' | null>(null);
   
-  const { data: controls = [] } = useQuery<any[]>(
+  const { data: controls = [] } = useQuery<unknown[]>(
       ['admin', 'security'],
       DataService.admin.getSecuritySettings
   );

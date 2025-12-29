@@ -17,7 +17,7 @@ export const MOCK_INVOICES: Invoice[] = [
     {
         id: 'INV-2024-001' as UUID,
         invoiceNumber: 'INV-2024-001',
-        caseId: 'C-2024-001' as any,
+        caseId: 'C-2024-001' as Record<string, unknown>,
         clientId: '1',
         clientName: 'TechCorp Industries',
         matterDescription: 'Martinez v. TechCorp',
@@ -38,7 +38,7 @@ export const MOCK_INVOICES: Invoice[] = [
     {
         id: 'INV-2024-002' as UUID,
         invoiceNumber: 'INV-2024-002',
-        caseId: 'C-2024-112' as any,
+        caseId: 'C-2024-112' as Record<string, unknown>,
         clientId: '2',
         clientName: 'OmniGlobal',
         matterDescription: 'Merger Acquisition',
@@ -59,7 +59,7 @@ export const MOCK_INVOICES: Invoice[] = [
     {
         id: 'INV-2024-003' as UUID,
         invoiceNumber: 'INV-2024-003',
-        caseId: 'C-2023-892' as any,
+        caseId: 'C-2023-892' as Record<string, unknown>,
         clientId: '3',
         clientName: 'StartUp Inc',
         matterDescription: 'Series A Funding',

@@ -126,7 +126,7 @@ export const FormsSigningView = () => {
 
     const handleSend = async () => {
         if (selectedDocument) {
-            const updatedDoc = { ...selectedDocument, status: 'Sent' as any };
+            const updatedDoc = { ...selectedDocument, status: 'Sent' as Record<string, unknown> };
             await DataService.documents.update(selectedDocument.id, updatedDoc);
             queryClient.invalidate(queryKeys.documents.all());
             setSelectedDocument(updatedDoc);

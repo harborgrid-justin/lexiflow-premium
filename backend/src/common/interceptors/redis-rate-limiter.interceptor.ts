@@ -245,10 +245,11 @@ export class RedisRateLimiterInterceptor
   /**
    * Generate rate limit key
    */
-  private getKey(request: any, options: RateLimitOptions): string {
-    const ip = request.ip || request.connection?.remoteAddress || 'unknown';
-    const userId = request.user?.id || 'anonymous';
-    const endpoint = `${request.method}:${request.path}`;
+  private getKey(request: unknown, options: RateLimitOptions): string {
+    const req = request as { ip?: string; connection?: { remoteAddress?: string }; user?: { id?: string }; method?: string; path?: string };
+    const ip = req.ip || req.connection?.remoteAddress || 'unknown';
+    const userId = req.user?.id || 'anonymous';
+    const endpoint = `${req.method}:${req.path}`;
     const prefix = options.keyPrefix || 'rl';
 
     return `${prefix}:${endpoint}:${userId}:${ip}`;

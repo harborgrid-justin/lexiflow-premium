@@ -64,7 +64,7 @@ export interface CreatePartyDto {
   primaryContactEmail?: string;
   primaryContactPhone?: string;
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // DTO for updating a party

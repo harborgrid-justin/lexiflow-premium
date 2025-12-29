@@ -124,7 +124,7 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isO
                                         {id: 'notes', label: 'Advisory Committee Notes', icon: FileText}
                                     ]} 
                                     activeTab={activeTab}
-                                    onChange={(t) => setActiveTab(t as any)}
+                                    onChange={(t) => setActiveTab(t as Record<string, unknown>)}
                                 />
                             </div>
                              <div className="flex-1 overflow-y-auto p-8">

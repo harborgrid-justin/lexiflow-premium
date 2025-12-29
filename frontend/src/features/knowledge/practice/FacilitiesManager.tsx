@@ -43,12 +43,12 @@ export const FacilitiesManager: React.FC = () => {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('locations');
 
-    const { data: tickets = [], isLoading: ticketsLoading } = useQuery<any[]>(
+    const { data: tickets = [], isLoading: ticketsLoading } = useQuery<unknown[]>(
         ['maintenance-tickets', 'all'],
         DataService.operations.getMaintenanceTickets
     );
     
-    const { data: locations = [], isLoading: locationsLoading } = useQuery<any[]>(
+    const { data: locations = [], isLoading: locationsLoading } = useQuery<unknown[]>(
         ['facilities', 'all'],
         DataService.operations.getFacilities
     );

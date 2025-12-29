@@ -57,11 +57,11 @@ export interface WorkflowTemplate {
     name: string;
     type: 'task' | 'approval' | 'notification' | 'automation';
     order: number;
-    config?: Record<string, any>;
+    config?: Record<string, unknown>;
     assignee?: string;
     dependencies?: string[];
   }[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -76,8 +76,8 @@ export interface WorkflowInstance {
   startedAt: string;
   completedAt?: string;
   progress?: number;
-  variables?: Record<string, any>;
-  metadata?: Record<string, any>;
+  variables?: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface WorkflowFilters {
@@ -334,7 +334,7 @@ export class WorkflowApiService {
             const url = queryString ? `${this.baseUrl}/instances?${queryString}` : `${this.baseUrl}/instances`;
             
             return await apiClient.get<WorkflowInstance[]>(url);
-        } catch (error: any) {
+        } catch (error: unknown) {
             // Graceful degradation: if endpoint doesn't exist yet, return empty array
             if (error?.message?.includes('404') || error?.message?.includes('Cannot GET')) {
                 console.warn('[WorkflowApiService.getInstances] Workflow instances endpoint not implemented yet, returning empty array');
@@ -380,7 +380,7 @@ export class WorkflowApiService {
      *   variables: { priority: 'high' }
      * });
      */
-    async startWorkflow(templateId: string, context: Record<string, any>): Promise<WorkflowInstance> {
+    async startWorkflow(templateId: string, context: Record<string, unknown>): Promise<WorkflowInstance> {
         this.validateId(templateId, 'startWorkflow');
         this.validateObject(context, 'context', 'startWorkflow');
 

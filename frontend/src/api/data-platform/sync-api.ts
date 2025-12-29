@@ -42,8 +42,8 @@ export interface SyncConflict {
   id: string;
   entityType: string;
   entityId: string;
-  localVersion: Record<string, any>;
-  remoteVersion: Record<string, any>;
+  localVersion: Record<string, unknown>;
+  remoteVersion: Record<string, unknown>;
   conflictType: string;
   resolved: boolean;
   resolution?: string;
@@ -77,7 +77,7 @@ export class SyncApiService {
   /**
    * Get sync queue items
    */
-  async getQueue(filters?: Record<string, any>): Promise<PaginatedResponse<SyncQueueItem>> {
+  async getQueue(filters?: Record<string, unknown>): Promise<PaginatedResponse<SyncQueueItem>> {
     try {
       return await apiClient.get<PaginatedResponse<SyncQueueItem>>('/sync/queue', filters);
     } catch (error) {
@@ -88,7 +88,7 @@ export class SyncApiService {
   /**
    * Get sync conflicts
    */
-  async getConflicts(filters?: Record<string, any>): Promise<PaginatedResponse<SyncConflict>> {
+  async getConflicts(filters?: Record<string, unknown>): Promise<PaginatedResponse<SyncConflict>> {
     try {
       return await apiClient.get<PaginatedResponse<SyncConflict>>('/sync/conflicts', filters);
     } catch (error) {

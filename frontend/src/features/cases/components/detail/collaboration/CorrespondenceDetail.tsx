@@ -123,7 +123,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
   const handleUpdateServiceStatus = async () => {
      if (!isService(item)) return;
      // Simulate update via direct object mod (in real app, use a PATCH mutation)
-     item.status = newStatus as any;
+     item.status = newStatus as Record<string, unknown>;
      item.signerName = signerName;
      item.servedDate = deliveryDate;
      // This would be: await DataService.correspondence.updateServiceJob(item.id, { status: newStatus, ... });
@@ -240,7 +240,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                                         title="Select current status"
                                         className="w-full p-2 text-sm border rounded bg-white"
                                         value={newStatus}
-                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewStatus(e.target.value as any)}
+                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewStatus(e.target.value as Record<string, unknown>)}
                                     >
                                         <option value="Out for Service">Out for Service</option>
                                         <option value="Served">Served / Delivered</option>

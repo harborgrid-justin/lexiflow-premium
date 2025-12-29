@@ -14,7 +14,7 @@ export const LocalRulesMap: React.FC = () => {
   const { theme } = useTheme();
 
   // Fetch state jurisdictions dynamically
-  const { data: jurisdictions = [], isLoading } = useQuery<any[]>(
+  const { data: jurisdictions = [], isLoading } = useQuery<unknown[]>(
       ['jurisdictions', 'state'],
       DataService.jurisdiction.getState
   );

@@ -47,7 +47,7 @@ export class WitnessRepository extends Repository<Witness> {
         }
     }
 
-    override async getAll(): Promise<any[]> {
+    override async getAll(): Promise<unknown[]> {
         if (this.useBackend) {
             try {
                 return await this.witnessesApi.getAll();
@@ -58,7 +58,7 @@ export class WitnessRepository extends Repository<Witness> {
         return await super.getAll();
     }
 
-    async getByCaseId(caseId: string): Promise<any[]> {
+    async getByCaseId(caseId: string): Promise<unknown[]> {
         this.validateId(caseId, 'getByCaseId');
         if (this.useBackend) {
             try {
@@ -70,13 +70,13 @@ export class WitnessRepository extends Repository<Witness> {
         return await this.getByIndex('caseId', caseId);
     }
     
-    async getByType(witnessType: string): Promise<any[]> {
+    async getByType(witnessType: string): Promise<unknown[]> {
         if (!witnessType) {
             throw new ValidationError('[WitnessRepository.getByType] Invalid witnessType');
         }
         if (this.useBackend) {
             try {
-                return await this.witnessesApi.getByType(witnessType as any);
+                return await this.witnessesApi.getByType(witnessType as Record<string, unknown>);
             } catch (error) {
                 console.warn('[WitnessRepository] Backend API unavailable', error);
             }
@@ -85,13 +85,13 @@ export class WitnessRepository extends Repository<Witness> {
         return all.filter(w => w.witnessType === witnessType);
     }
     
-    async getByStatus(status: string): Promise<any[]> {
+    async getByStatus(status: string): Promise<unknown[]> {
         if (!status) {
             throw new ValidationError('[WitnessRepository.getByStatus] Invalid status');
         }
         if (this.useBackend) {
             try {
-                return await this.witnessesApi.getByStatus(status as any);
+                return await this.witnessesApi.getByStatus(status as Record<string, unknown>);
             } catch (error) {
                 console.warn('[WitnessRepository] Backend API unavailable', error);
             }
@@ -131,7 +131,7 @@ export class WitnessRepository extends Repository<Witness> {
         this.validateId(id, 'update');
         if (this.useBackend) {
             try {
-                return await this.witnessesApi.update(id, updates as any) as any;
+                return await this.witnessesApi.update(id, updates as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[WitnessRepository] Backend API unavailable', error);
             }
@@ -146,7 +146,7 @@ export class WitnessRepository extends Repository<Witness> {
         }
         if (this.useBackend) {
             try {
-                return await this.witnessesApi.updateStatus(id, status as any) as any;
+                return await this.witnessesApi.updateStatus(id, status as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[WitnessRepository] Backend API unavailable', error);
             }

@@ -23,7 +23,7 @@ export interface Citation {
   shepardStatus?: 'good_law' | 'questioned' | 'criticized' | 'overruled';
   url?: string;
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

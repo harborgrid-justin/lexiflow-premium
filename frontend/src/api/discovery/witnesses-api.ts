@@ -26,7 +26,7 @@ export interface Witness {
   interviewedAt?: string;
   subpoenaedAt?: string;
   deposedAt?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

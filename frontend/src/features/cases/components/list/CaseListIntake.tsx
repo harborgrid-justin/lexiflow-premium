@@ -55,7 +55,7 @@ export const CaseListIntake: React.FC = () => {
           await DataService.crm.updateLead(id, { stage, updatedAt: new Date().toISOString() });
           
           // Return updated cache state
-          const current = queryClient.getQueryState<any[]>(['crm', 'leads'])?.data || [];
+          const current = queryClient.getQueryState<unknown[]>(['crm', 'leads'])?.data || [];
           const updated = current.map(l => l.id === id ? { ...l, stage, updatedAt: new Date().toISOString() } : l);
           return updated;
       },
@@ -85,7 +85,7 @@ export const CaseListIntake: React.FC = () => {
       },
       {
           onSuccess: (newLead) => {
-              const current = queryClient.getQueryState<any[]>(['crm', 'leads'])?.data || [];
+              const current = queryClient.getQueryState<unknown[]>(['crm', 'leads'])?.data || [];
               queryClient.setQueryData(['crm', 'leads'], [...current, newLead]);
               success('Lead added successfully');
               leadModal.close();

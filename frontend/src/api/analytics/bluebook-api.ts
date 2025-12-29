@@ -83,9 +83,9 @@ export class BluebookApiService {
   /**
    * Get citation templates
    */
-  async getTemplates(type?: string): Promise<any[]> {
+  async getTemplates(type?: string): Promise<unknown[]> {
     const params = type ? { type } : {};
-    return apiClient.get<any[]>(`${this.baseUrl}/templates`, params);
+    return apiClient.get<unknown[]>(`${this.baseUrl}/templates`, params);
   }
 
   /**

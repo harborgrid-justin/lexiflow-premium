@@ -143,7 +143,7 @@ export function useMemoizedValue<T>(
  * );
  * ```
  */
-export function useMemoizedCallback<T extends (...args: any[]) => any>(
+export function useMemoizedCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
   deps: DependencyList,
   config: MemoizationConfig = {},
@@ -223,7 +223,7 @@ export function useDeepMemo<T>(
  * @param deps - Dependencies (deep compared)
  * @returns Memoized callback
  */
-export function useDeepCallback<T extends (...args: any[]) => any>(
+export function useDeepCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
   deps: DependencyList,
 ): T {
@@ -399,7 +399,7 @@ export function useMemoWithStats<T>(
 
 // Helper functions
 
-function deepEqual(a: any, b: any): boolean {
+function deepEqual(a: unknown, b: unknown): boolean {
   if (a === b) return true;
   if (a == null || b == null) return false;
   if (typeof a !== typeof b) return false;

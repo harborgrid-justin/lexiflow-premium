@@ -39,7 +39,7 @@ export interface Custodian extends BaseEntity {
   dataSources?: string[];
   interviewDate?: string;
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface Production extends BaseEntity {
@@ -54,7 +54,7 @@ export interface Production extends BaseEntity {
   imageCount?: number;
   status: 'pending' | 'produced' | 'received' | 'reviewed';
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 // Witness is also defined in trial.ts with more details
@@ -71,7 +71,7 @@ export interface DiscoveryWitness extends BaseEntity {
   };
   expectedTestimony?: string;
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface DiscoveryProcess extends BaseEntity {
@@ -85,7 +85,7 @@ export interface DiscoveryProcess extends BaseEntity {
   custodians?: number;
   productions?: number;
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface DiscoveryAnalytics {

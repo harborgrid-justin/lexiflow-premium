@@ -9,13 +9,13 @@ export interface AIOperation {
   id: string;
   operationType: 'summarization' | 'classification' | 'extraction' | 'prediction' | 'generation';
   model: string;
-  input: Record<string, any>;
-  output?: Record<string, any>;
+  input: Record<string, unknown>;
+  output?: Record<string, unknown>;
   status: 'pending' | 'in_progress' | 'completed' | 'failed';
   confidence?: number;
   processingTime?: number;
   error?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   completedAt?: string;
 }
@@ -26,7 +26,7 @@ export class AIOpsApiService {
   async execute(data: {
     operationType: AIOperation['operationType'];
     model: string;
-    input: Record<string, any>;
+    input: Record<string, unknown>;
   }): Promise<AIOperation> {
     return apiClient.post<AIOperation>(`${this.baseUrl}/execute`, data);
   }

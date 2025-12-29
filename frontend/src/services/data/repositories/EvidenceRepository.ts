@@ -192,7 +192,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
 
         if (this.useBackend) {
             try {
-                return await this.evidenceApi.add(item as any);
+                return await this.evidenceApi.add(item as Record<string, unknown>);
             } catch (error) {
                 console.warn('[EvidenceRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -322,8 +322,8 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             return {
                 verified: true,
                 timestamp: new Date().toISOString(),
-                chainIntact: (item as any)?.chainOfCustodyIntact ?? true,
-                lastCustodian: (item as any)?.currentCustodian ?? item?.custodian
+                chainIntact: (item as Record<string, unknown>)?.chainOfCustodyIntact ?? true,
+                lastCustodian: (item as Record<string, unknown>)?.currentCustodian ?? item?.custodian
             };
         } catch (error) {
             console.error('[EvidenceRepository.verifyIntegrity] Error:', error);
@@ -349,7 +349,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             throw new ValidationError('[EvidenceRepository.updateAdmissibility] Invalid status parameter');
         }
 
-        return await this.update(id, { admissibility: status } as any as Partial<EvidenceItem>);
+        return await this.update(id, { admissibility: status } as Record<string, unknown> as Partial<EvidenceItem>);
     }
 
     /**
@@ -442,7 +442,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
 
             items.forEach(item => {
                 // Count by type
-                const type = item.type || (item as any).evidenceType || 'Unknown';
+                const type = item.type || (item as Record<string, unknown>).evidenceType || 'Unknown';
                 byType[type] = (byType[type] || 0) + 1;
 
                 // Count by status
@@ -450,7 +450,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
                 byStatus[status] = (byStatus[status] || 0) + 1;
 
                 // Count admissibility
-                if (item.admissibility?.toString() === 'ADMISSIBLE' || item.admissibility?.toString() === 'admissible' || (item as any).isAdmitted) {
+                if (item.admissibility?.toString() === 'ADMISSIBLE' || item.admissibility?.toString() === 'admissible' || (item as Record<string, unknown>).isAdmitted) {
                     admitted++;
                 } else if (item.admissibility?.toString() === 'PENDING' || item.admissibility?.toString() === 'pending') {
                     pending++;
@@ -496,15 +496,15 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
                 items = items.filter(item =>
                     item.title?.toLowerCase().includes(lowerQuery) ||
                     item.description?.toLowerCase().includes(lowerQuery) ||
-                    (item as any).evidenceNumber?.toLowerCase().includes(lowerQuery) ||
-                    (item as any).batesNumber?.toLowerCase().includes(lowerQuery)
+                    (item as Record<string, unknown>).evidenceNumber?.toLowerCase().includes(lowerQuery) ||
+                    (item as Record<string, unknown>).batesNumber?.toLowerCase().includes(lowerQuery)
                 );
             }
 
             if (criteria.type) {
                 items = items.filter(item =>
                     item.type === criteria.type ||
-                    (item as any).evidenceType === criteria.type
+                    (item as Record<string, unknown>).evidenceType === criteria.type
                 );
             }
 
@@ -518,7 +518,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
 
             if (criteria.custodian) {
                 items = items.filter(item =>
-                    (item as any).currentCustodian === criteria.custodian ||
+                    (item as Record<string, unknown>).currentCustodian === criteria.custodian ||
                     item.custodian === criteria.custodian
                 );
             }

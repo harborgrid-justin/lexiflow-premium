@@ -141,14 +141,14 @@ export class NotificationsService implements OnModuleDestroy {
       updatedAt: new Date(),
     };
 
-    this.notifications.set(notification.id, notification);
+    this.notifications.set((notification as any).id, notification);
     
     // Quick check to avoid growing too large between cleanups
     if (this.notifications.size > this.MAX_NOTIFICATIONS + 100) {
       this.cleanup();
     }
     
-    this.logger.log(`Notification created: ${notification.id} for user ${createDto.userId}`);
+    this.logger.log(`Notification created: ${(notification as any).id} for user ${createDto.userId}`);
 
     if (userPreferences.pushEnabled) {
       await this.sendPushNotification(notification);
@@ -331,14 +331,14 @@ export class NotificationsService implements OnModuleDestroy {
   /**
    * Send push notification (placeholder for actual implementation)
    */
-  private async sendPushNotification(notification: any): Promise<void> {
-    this.logger.debug(`Push notification would be sent: ${notification.id}`);
+  private async sendPushNotification(notification: unknown): Promise<void> {
+    this.logger.debug(`Push notification would be sent: ${(notification as any).id}`);
   }
 
   /**
    * Send email notification (placeholder for actual implementation)
    */
-  private async sendEmailNotification(notification: any): Promise<void> {
-    this.logger.debug(`Email notification would be sent: ${notification.id}`);
+  private async sendEmailNotification(notification: unknown): Promise<void> {
+    this.logger.debug(`Email notification would be sent: ${(notification as any).id}`);
   }
 }

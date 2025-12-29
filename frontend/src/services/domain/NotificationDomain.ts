@@ -26,7 +26,7 @@ export const NotificationService = {
   getAll: async () => communicationsApi.notifications?.getAll?.() || [],
   getById: async (id: string) => communicationsApi.notifications?.getById?.(id) || null,
   add: async (item: unknown) => {
-    const itemObj = item && typeof item === 'object' ? item as any : {};
+    const itemObj = item && typeof item === 'object' ? item as Record<string, unknown> : {};
     const notification = {
       ...itemObj,
       timestamp: itemObj.timestamp || new Date().toISOString(),
@@ -36,7 +36,7 @@ export const NotificationService = {
   },
   update: async (id: string, updates: unknown) => {
     // NotificationsApiService doesn't have update method, use markAsRead instead
-    const updatesObj = updates && typeof updates === 'object' ? updates as any : {};
+    const updatesObj = updates && typeof updates === 'object' ? updates as Record<string, unknown> : {};
     if (updatesObj.read === true) {
       return communicationsApi.notifications?.markAsRead?.(id) || {
         id,

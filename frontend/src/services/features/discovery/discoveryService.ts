@@ -155,14 +155,14 @@ export const DiscoveryService = {
     },
     addDeposition: async (dep: Deposition) => {
         try {
-            return await api.depositions.create(dep as any);
+            return await api.depositions.create(dep as Record<string, unknown>);
         } catch (error) {
             return dep;
         }
     },
     updateDepositionStatus: async (id: string, status: string) => {
         try {
-            return await api.depositions.update(id, { status: status as any });
+            return await api.depositions.update(id, { status: status as Record<string, unknown> });
         } catch (error) {
             return { id, status };
         }
@@ -179,14 +179,14 @@ export const DiscoveryService = {
     },
     addESISource: async (source: ESISource) => {
         try {
-            return await api.esiSources.create(source as any);
+            return await api.esiSources.create(source as Record<string, unknown>);
         } catch (error) {
             return source;
         }
     },
     updateESISourceStatus: async (id: string, status: string) => {
         try {
-            return await api.esiSources.update(id, { status: status as any });
+            return await api.esiSources.update(id, { status: status as Record<string, unknown> });
         } catch (error) {
             return { id, status };
         }
@@ -203,7 +203,7 @@ export const DiscoveryService = {
     },
     createProduction: async (prod: ProductionSet) => {
         try {
-            return await api.productions.create(prod as any);
+            return await api.productions.create(prod as Record<string, unknown>);
         } catch (error) {
             return prod;
         }
@@ -220,14 +220,14 @@ export const DiscoveryService = {
     },
     updateInterview: async (id: string, updates: Partial<CustodianInterview>) => {
         try {
-            return await api.custodianInterviews.update(id, updates as any);
+            return await api.custodianInterviews.update(id, updates as Record<string, unknown>);
         } catch (error) {
             return { id, ...updates };
         }
     },
     createInterview: async (interview: CustodianInterview) => {
         try {
-            return await api.custodianInterviews.create(interview as any);
+            return await api.custodianInterviews.create(interview as Record<string, unknown>);
         } catch (error) {
             return interview;
         }
@@ -244,14 +244,14 @@ export const DiscoveryService = {
     },
     addRequest: async (req: DiscoveryRequest) => {
         try {
-            return await api.discoveryRequests.create(req as any);
+            return await api.discoveryRequests.create(req as Record<string, unknown>);
         } catch (error) {
             return req;
         }
     },
     updateRequestStatus: async (id: string, status: string) => {
         try {
-            return await api.discoveryRequests.update(id, { status: status as any });
+            return await api.discoveryRequests.update(id, { status: status as Record<string, unknown> });
         } catch (error) {
             return { id, status };
         }

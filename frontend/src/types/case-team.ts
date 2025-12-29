@@ -15,5 +15,5 @@ export interface CaseTeamMember extends BaseEntity {
   assignedDate: string;
   removedDate?: string;
   isActive: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }

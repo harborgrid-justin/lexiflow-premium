@@ -18,8 +18,8 @@ export class ExhibitsController {
   @ApiResponse({ status: 200, description: 'Exhibits retrieved successfully' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(@Query() query: any) {
-    return await this.exhibitsService.findAll(query);
+  async findAll(@Query() query: unknown) {
+    return await this.exhibitsService.findAll(query as any);
   }
 
   @Get(':id')
@@ -52,8 +52,8 @@ export class ExhibitsController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Resource not found' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async markAdmitted(@Param('id') id: string, @Body() body: { date: string }, @Req() req: any) {
-    const admittedBy = req.user?.id || 'system';
+  async markAdmitted(@Param('id') id: string, @Body() body: { date: string }, @Req() req: unknown) {
+    const admittedBy = (req as any).user?.id || 'system';
     return await this.exhibitsService.markAdmitted(id, admittedBy, body.date);
   }
 

@@ -11,13 +11,13 @@ export interface Report {
   reportType: 'billing' | 'case_status' | 'time_tracking' | 'discovery' | 'compliance' | 'analytics' | 'custom';
   format: 'pdf' | 'excel' | 'csv' | 'html' | 'json';
   status: 'pending' | 'generating' | 'completed' | 'failed';
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
   generatedBy?: string;
   generatedAt?: string;
   fileUrl?: string;
   fileSize?: number;
   expiresAt?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -36,7 +36,7 @@ export interface ReportTemplate {
     options?: unknown[];
   }[];
   isPublic: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -45,8 +45,8 @@ export interface GenerateReportRequest {
   templateId?: string;
   reportType: Report['reportType'];
   format: Report['format'];
-  filters?: Record<string, any>;
-  parameters?: Record<string, any>;
+  filters?: Record<string, unknown>;
+  parameters?: Record<string, unknown>;
 }
 
 export class ReportsApiService {

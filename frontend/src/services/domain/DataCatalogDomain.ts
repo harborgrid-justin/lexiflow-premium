@@ -44,12 +44,12 @@ export const DataCatalogService = {
         return tables;
     },
 
-    getRegistryInfo: async (): Promise<any[]> => {
+    getRegistryInfo: async (): Promise<unknown[]> => {
         const stores = Object.values(STORES);
-        const info: any[] = [];
+        const info: unknown[] = [];
         for (const store of stores) {
             try {
-                const dbInstance = db as any;
+                const dbInstance = db as Record<string, unknown>;
                 const count = await dbInstance.count(store);
                 info.push({
                     name: store,
@@ -88,16 +88,16 @@ export const DataCatalogService = {
     getLineageGraph: async (): Promise<{ nodes: LineageNode[], links: LineageLink[] }> => {
         // Note: dataPlatform API is not yet available in the integrations API
         // This will need to be updated when the API is added
-        const entities: any[] = [];
-        const relationships: any[] = [];
+        const entities: unknown[] = [];
+        const relationships: unknown[] = [];
 
-        const nodes: LineageNode[] = entities.map((e: any) => ({
+        const nodes: LineageNode[] = entities.map((e: unknown) => ({
             id: e.id,
             label: e.name,
             type: e.type === 'Corporation' ? 'org' : 'party'
         }));
 
-        const links: LineageLink[] = relationships.map((r: any) => ({
+        const links: LineageLink[] = relationships.map((r: unknown) => ({
             source: r.sourceId,
             target: r.targetId,
             strength: r.weight || 0.5

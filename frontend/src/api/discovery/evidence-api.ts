@@ -27,17 +27,17 @@ export class EvidenceApiService {
       evidenceType: item.type,
       status: item.status,
       collectionDate: item.collectionDate ? new Date(item.collectionDate) : undefined,
-      collectionLocation: (item as any).collectionLocation,
+      collectionLocation: (item as Record<string, unknown>).collectionLocation,
       collectedBy: item.collectedBy,
       currentCustodian: item.custodian,
       storageLocation: item.location,
       chainOfCustody: item.chainOfCustody,
       chainOfCustodyIntact: true,
       filePath: item.location,
-      fileHash: (item as any).hash,
+      fileHash: (item as Record<string, unknown>).hash,
       fileSize: item.fileSize,
-      batesNumber: (item as any).batesNumber,
-      exhibitNumber: (item as any).exhibitNumber,
+      batesNumber: (item as Record<string, unknown>).batesNumber,
+      exhibitNumber: (item as Record<string, unknown>).exhibitNumber,
       isAdmitted: false,
       admissibilityStatus: item.admissibility,
       relevanceScore: item.relevanceScore,
@@ -47,8 +47,8 @@ export class EvidenceApiService {
 
     // Remove undefined values
     Object.keys(createDto).forEach(key => {
-      if ((createDto as any)[key] === undefined) {
-        delete (createDto as any)[key];
+      if ((createDto as Record<string, unknown>)[key] === undefined) {
+        delete (createDto as Record<string, unknown>)[key];
       }
     });
 

@@ -78,12 +78,12 @@ export class ComplianceService {
     return this.complianceCheckRepository.find();
   }
 
-  async findOne(id: string): Promise<any> {
+  async findOne(id: string): Promise<unknown> {
     return this.complianceCheckRepository.findOne({ where: { id } });
   }
 
-  async create(createDto: any): Promise<any> {
-    const check = this.complianceCheckRepository.create(createDto);
+  async create(createDto: unknown): Promise<unknown> {
+    const check = this.complianceCheckRepository.create(createDto as any);
     return this.complianceCheckRepository.save(check);
   }
 
@@ -100,9 +100,9 @@ export class ComplianceService {
     return { score, passed, failed, total };
   }
 
-  async createAuditLog(data: any): Promise<AuditLog> {
+  async createAuditLog(data: unknown): Promise<AuditLog> {
     const auditLog = this.auditLogRepository.create({
-      ...data,
+      ...(data as any),
       timestamp: new Date(),
     });
     const saved = await this.auditLogRepository.save(auditLog);
@@ -150,19 +150,19 @@ export class ComplianceService {
     });
   }
 
-  async searchAuditLogs(params: any): Promise<{ data: AuditLog[]; total: number }> {
+  async searchAuditLogs(params: unknown): Promise<{ data: AuditLog[]; total: number }> {
     const queryBuilder = this.auditLogRepository.createQueryBuilder('audit');
 
-    if (params.entityType) {
-      queryBuilder.andWhere('audit.entityType = :entityType', { entityType: params.entityType });
+    if ((params as any).entityType) {
+      queryBuilder.andWhere('audit.entityType = :entityType', { entityType: (params as any).entityType });
     }
 
-    if (params.action) {
-      queryBuilder.andWhere('audit.action = :action', { action: params.action });
+    if ((params as any).action) {
+      queryBuilder.andWhere('audit.action = :action', { action: (params as any).action });
     }
 
-    if (params.userId) {
-      queryBuilder.andWhere('audit.userId = :userId', { userId: params.userId });
+    if ((params as any).userId) {
+      queryBuilder.andWhere('audit.userId = :userId', { userId: (params as any).userId });
     }
 
     queryBuilder.orderBy('audit.timestamp', 'DESC');
@@ -186,7 +186,7 @@ export class ComplianceService {
     return rule;
   }
 
-  async updateRule(id: string, data: any): Promise<ComplianceRule> {
+  async updateRule(id: string, data: unknown): Promise<ComplianceRule> {
     const rule = await this.getRuleById(id);
     Object.assign(rule, data);
     const saved = await this.complianceRuleRepository.save(rule);
@@ -205,7 +205,7 @@ export class ComplianceService {
     });
   }
 
-  async generateComplianceReport(caseId: string): Promise<any> {
+  async generateComplianceReport(caseId: string): Promise<unknown> {
     const checks = await this.getChecksByCaseId(caseId);
     const score = await this.getComplianceScore(caseId);
 

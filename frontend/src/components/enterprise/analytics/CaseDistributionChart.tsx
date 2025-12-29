@@ -45,7 +45,7 @@ export interface CaseDistributionData {
   /** Custom color for this category */
   color?: string;
   /** Additional metadata */
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface CaseDistributionChartProps {
@@ -121,7 +121,7 @@ export const CaseDistributionChart: React.FC<CaseDistributionChartProps> = ({
   );
 
   // Custom label
-  const renderLabel = (entry: any) => {
+  const renderLabel = (entry: unknown) => {
     if (!showLabels) return null;
 
     const percent = entry.percent * 100;
@@ -158,7 +158,7 @@ export const CaseDistributionChart: React.FC<CaseDistributionChartProps> = ({
   };
 
   // Handle slice enter
-  const handleMouseEnter = (_: any, index: number) => {
+  const handleMouseEnter = (_: unknown, index: number) => {
     setActiveIndex(index);
   };
 
@@ -168,7 +168,7 @@ export const CaseDistributionChart: React.FC<CaseDistributionChartProps> = ({
   };
 
   // Handle slice click
-  const handleClick = (entry: any) => {
+  const handleClick = (entry: unknown) => {
     if (onSliceClick) {
       onSliceClick(entry);
     }

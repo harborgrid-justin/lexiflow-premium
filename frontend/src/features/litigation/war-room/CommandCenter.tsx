@@ -71,9 +71,9 @@ export function CommandCenter({ caseId, warRoomData, onNavigate }: CommandCenter
   // DERIVED STATE & MEMOIZED VALUES
   // ============================================================================
   const exhibitsTotal = warRoomData.evidence?.length || 0;
-  const exhibitsAdmitted = warRoomData.evidence?.filter((e: any) => e.status === 'Admitted').length || 0;
+  const exhibitsAdmitted = warRoomData.evidence?.filter((e: unknown) => e.status === 'Admitted').length || 0;
   const witnessCount = warRoomData.witnesses?.length || 0;
-  const tasksDue = warRoomData.tasks?.filter((t: any) => t.priority === 'High' && t.status !== 'Done').length || 0;
+  const tasksDue = warRoomData.tasks?.filter((t: unknown) => t.priority === 'High' && t.status !== 'Done').length || 0;
   const recentDocket = warRoomData.docket?.slice().reverse().slice(0, 5) || [];
   const sanctionsCount = sanctions.length;
 

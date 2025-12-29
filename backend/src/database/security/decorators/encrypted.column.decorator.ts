@@ -16,7 +16,7 @@ export function getEncryptionService(): ColumnEncryptionService {
   return encryptionService;
 }
 
-export interface EncryptedColumnOptions extends ColumnOptions {
+export interface EncryptedColumnOptions extends Omit<ColumnOptions, 'type'> {
   nullable?: boolean;
   length?: number;
   type?: any;
@@ -53,8 +53,8 @@ const encryptionTransformer: ValueTransformer = {
 };
 
 export function EncryptedColumn(options?: EncryptedColumnOptions): PropertyDecorator {
-  const columnOptions: ColumnOptions = {
-    type: 'text',
+  const columnOptions: any = {
+    type: 'text' as any,
     nullable: options?.nullable !== false,
     transformer: encryptionTransformer,
     ...options,
@@ -69,9 +69,9 @@ export interface SensitiveFieldOptions {
 }
 
 export function SensitiveField(options?: SensitiveFieldOptions): PropertyDecorator {
-  return (target: any, propertyKey: string | symbol) => {
+  return (target: unknown, propertyKey: string | symbol) => {
     const metadataKey = 'sensitiveFields';
-    const existingFields = Reflect.getMetadata(metadataKey, target.constructor) || [];
+    const existingFields = Reflect.getMetadata(metadataKey, (target as any).constructor) || [];
 
     existingFields.push({
       propertyKey,
@@ -79,14 +79,14 @@ export function SensitiveField(options?: SensitiveFieldOptions): PropertyDecorat
       auditAccess: options?.auditAccess === true,
     });
 
-    Reflect.defineMetadata(metadataKey, existingFields, target.constructor);
+    Reflect.defineMetadata(metadataKey, existingFields, (target as any).constructor);
   };
 }
 
-export function getSensitiveFields(target: any): string[] {
+export function getSensitiveFields(target: unknown): string[] {
   const metadataKey = 'sensitiveFields';
-  const fields = Reflect.getMetadata(metadataKey, target.constructor) || [];
-  return fields.map((f: any) => f.propertyKey);
+  const fields = Reflect.getMetadata(metadataKey, (target as any).constructor) || [];
+  return fields.map((f: unknown) => (f as any).propertyKey);
 }
 
 export function EncryptedSSN(options?: EncryptedColumnOptions): PropertyDecorator {

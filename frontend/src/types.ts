@@ -21,6 +21,7 @@ export * from './types/search';
 export * from './types/errors';
 export * from './types/notifications';
 export * from './types/filters';
+export * from './types/dashboard';
 
 export interface PaginatedResponse<T> {
   data: T[];

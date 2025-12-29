@@ -27,7 +27,7 @@ export interface Deposition {
   };
   duration?: number; // in minutes
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -56,8 +56,8 @@ export class DepositionsApiService {
     const response = await apiClient.get<Deposition[] | PaginatedResponse<Deposition>>(url);
     
     // Handle paginated response
-    if (response && typeof response === 'object' && 'items' in response && Array.isArray((response as any).items)) {
-        return (response as any).items;
+    if (response && typeof response === 'object' && 'items' in response && Array.isArray((response as Record<string, unknown>).items)) {
+        return (response as Record<string, unknown>).items;
     }
     
     // Handle direct array response

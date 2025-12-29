@@ -43,7 +43,7 @@ export const CaseStatusWidget: React.FC<CaseStatusWidgetProps> = ({
   const [expanded, setExpanded] = useState(true);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload }: unknown) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
@@ -69,7 +69,7 @@ export const CaseStatusWidget: React.FC<CaseStatusWidgetProps> = ({
     return null;
   };
 
-  const onPieEnter = (_: any, index: number) => {
+  const onPieEnter = (_: unknown, index: number) => {
     setActiveIndex(index);
   };
 

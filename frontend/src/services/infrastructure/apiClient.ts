@@ -378,7 +378,7 @@ class ApiClient {
    * @returns Promise<T> - Parsed response data
    * @throws Error if request fails or validation fails
    */
-  async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
+  async get<T>(endpoint: string, params?: Record<string, unknown>): Promise<T> {
     this.validateEndpoint(endpoint, 'get');
     try {
       const url = new URL(`${this.baseURL}${endpoint}`);

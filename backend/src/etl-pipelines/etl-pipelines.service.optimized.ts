@@ -39,7 +39,7 @@ export class EtlPipelinesService implements OnModuleDestroy {
   
   // Performance tracking
   private activePipelines: Map<string, PipelineExecution> = new Map();
-  private pipelineCache: Map<string, { config: any; timestamp: number }> = new Map();
+  private pipelineCache: Map<string, { config: unknown; timestamp: number }> = new Map();
   private transformationCache: Map<string, { fn: Function; timestamp: number }> = new Map();
   private checkpointStore: Map<string, { position: number; timestamp: number }> = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
@@ -389,7 +389,7 @@ export class EtlPipelinesService implements OnModuleDestroy {
 
 // Type definitions
 interface PipelineConfig<T> {
-  source: any;
+  source: unknown;
   validate?: (item: T) => boolean;
   transform?: (item: T) => Promise<T> | T;
   load?: (item: T, queryRunner: QueryRunner) => Promise<void>;
@@ -403,7 +403,7 @@ interface PipelineExecution {
   processed: number;
   successful: number;
   failed: number;
-  errors: Array<{ record: any; error: string; timestamp: number }>;
+  errors: Array<{ record: unknown; error: string; timestamp: number }>;
   cancelled: boolean;
 }
 
@@ -412,7 +412,7 @@ interface PipelineResult {
   processed: number;
   successful: number;
   failed: number;
-  errors: Array<{ record: any; error: string; timestamp: number }>;
+  errors: Array<{ record: unknown; error: string; timestamp: number }>;
   duration: number;
   throughput: number;
 }

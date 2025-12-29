@@ -833,7 +833,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                   Detected Bottlenecks
                 </h4>
                 <div className="space-y-2">
-                  {analytics?.bottlenecks?.map((bottleneck: any) => (
+                  {analytics?.bottlenecks?.map((bottleneck: unknown) => (
                     <div 
                       key={bottleneck.id}
                       className={cn("p-4 rounded-lg border-l-4", theme.surface.default, theme.border.default,
@@ -881,7 +881,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                   Optimization Suggestions
                 </h4>
                 <div className="space-y-2">
-                  {analytics?.optimizationSuggestions?.map((suggestion: any) => (
+                  {analytics?.optimizationSuggestions?.map((suggestion: unknown) => (
                     <div 
                       key={suggestion.id}
                       className={cn("p-4 rounded-lg border", theme.surface.default, theme.border.default)}

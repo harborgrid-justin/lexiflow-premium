@@ -201,58 +201,58 @@ export class MattersApiService {
   /**
    * Get matter KPIs (Key Performance Indicators)
    */
-  async getKPIs(dateRange?: string): Promise<any> {
+  async getKPIs(dateRange?: string): Promise<unknown> {
     const url = dateRange ? `${this.baseUrl}/kpis?dateRange=${dateRange}` : `${this.baseUrl}/kpis`;
-    const response = await apiClient.get<any>(url);
+    const response = await apiClient.get<unknown>(url);
     return response.data || response;
   }
 
   /**
    * Get intake pipeline stages
    */
-  async getPipeline(dateRange?: string): Promise<any> {
+  async getPipeline(dateRange?: string): Promise<unknown> {
     const url = dateRange ? `${this.baseUrl}/pipeline?dateRange=${dateRange}` : `${this.baseUrl}/pipeline`;
-    const response = await apiClient.get<any>(url);
+    const response = await apiClient.get<unknown>(url);
     return response.data || response;
   }
 
   /**
    * Get calendar events
    */
-  async getCalendarEvents(startDate: string, endDate?: string, matterIds?: string[]): Promise<any> {
+  async getCalendarEvents(startDate: string, endDate?: string, matterIds?: string[]): Promise<unknown> {
     const params = new URLSearchParams({ startDate });
     if (endDate) params.append('endDate', endDate);
     if (matterIds?.length) params.append('matterIds', matterIds.join(','));
-    const response = await apiClient.get<any>(`${this.baseUrl}/calendar/events?${params.toString()}`);
+    const response = await apiClient.get<unknown>(`${this.baseUrl}/calendar/events?${params.toString()}`);
     return response.data || response;
   }
 
   /**
    * Get revenue analytics
    */
-  async getRevenueAnalytics(dateRange?: string): Promise<any> {
+  async getRevenueAnalytics(dateRange?: string): Promise<unknown> {
     const url = dateRange ? `${this.baseUrl}/analytics/revenue?dateRange=${dateRange}` : `${this.baseUrl}/analytics/revenue`;
-    const response = await apiClient.get<any>(url);
+    const response = await apiClient.get<unknown>(url);
     return response.data || response;
   }
 
   /**
    * Get risk insights
    */
-  async getRiskInsights(matterIds?: string[]): Promise<any> {
+  async getRiskInsights(matterIds?: string[]): Promise<unknown> {
     const url = matterIds?.length 
       ? `${this.baseUrl}/insights/risk?matterIds=${matterIds.join(',')}`
       : `${this.baseUrl}/insights/risk`;
-    const response = await apiClient.get<any>(url);
+    const response = await apiClient.get<unknown>(url);
     return response.data || response;
   }
 
   /**
    * Get financial overview
    */
-  async getFinancialOverview(dateRange?: string): Promise<any> {
+  async getFinancialOverview(dateRange?: string): Promise<unknown> {
     const url = dateRange ? `${this.baseUrl}/financials/overview?dateRange=${dateRange}` : `${this.baseUrl}/financials/overview`;
-    const response = await apiClient.get<any>(url);
+    const response = await apiClient.get<unknown>(url);
     return response.data || response;
   }
 

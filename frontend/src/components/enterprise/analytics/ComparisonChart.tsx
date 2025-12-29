@@ -431,7 +431,7 @@ export const ComparisonChart: React.FC<ComparisonChartProps> = ({
             name={finalLabels.change}
             stroke={colorConfig.positive}
             strokeWidth={2}
-            dot={(props: any) => {
+            dot={(props: unknown) => {
               const { cx, cy, payload } = props;
               const isPositive = payload.change >= 0;
               return (

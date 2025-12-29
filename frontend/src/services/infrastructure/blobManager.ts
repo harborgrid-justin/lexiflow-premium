@@ -211,7 +211,7 @@ if (typeof window !== 'undefined') {
 // ============================================================================
 if (import.meta.env.DEV) {
   // Expose to window for debugging
-  (window as any).__blobManager = BlobManager;
+  (window as Record<string, unknown>).__blobManager = BlobManager;
   
   // Log warnings for URLs not cleaned up after 10 minutes
   setInterval(() => {

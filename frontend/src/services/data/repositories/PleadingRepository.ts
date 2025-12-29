@@ -123,7 +123,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
     override async getAll(): Promise<PleadingDocument[]> {
         if (this.useBackend) {
             try {
-                return await this.pleadingsApi.getAll() as any;
+                return await this.pleadingsApi.getAll() as Record<string, unknown>;
             } catch (error) {
                 console.warn('[PleadingRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -149,7 +149,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
 
         if (this.useBackend) {
             try {
-                return await this.pleadingsApi.getByCaseId(caseId) as any;
+                return await this.pleadingsApi.getByCaseId(caseId) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[PleadingRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -175,7 +175,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
 
         if (this.useBackend) {
             try {
-                return await this.pleadingsApi.getById(id) as any;
+                return await this.pleadingsApi.getById(id) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[PleadingRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -203,7 +203,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
 
         if (this.useBackend) {
             try {
-                return await this.pleadingsApi.create(item as any) as any;
+                return await this.pleadingsApi.create(item as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[PleadingRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -235,7 +235,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
 
         if (this.useBackend) {
             try {
-                return await this.pleadingsApi.update(id, updates as any) as any;
+                return await this.pleadingsApi.update(id, updates as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[PleadingRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -553,7 +553,7 @@ export class PleadingRepository extends Repository<PleadingDocument> {
             }
 
             if (criteria.type) {
-                pleadings = pleadings.filter(p => (p as any).type === criteria.type);
+                pleadings = pleadings.filter(p => (p as Record<string, unknown>).type === criteria.type);
             }
 
             if (criteria.status) {

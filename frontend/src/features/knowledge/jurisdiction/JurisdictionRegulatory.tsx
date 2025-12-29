@@ -12,7 +12,7 @@ export const JurisdictionRegulatory: React.FC = () => {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery
-  const { data: rawBodies = [], isLoading } = useQuery<any[]>(
+  const { data: rawBodies = [], isLoading } = useQuery<unknown[]>(
       ['jurisdiction', 'regulatory'],
       DataService.jurisdiction.getRegulatoryBodies
   );

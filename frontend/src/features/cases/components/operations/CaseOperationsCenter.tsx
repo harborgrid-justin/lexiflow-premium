@@ -62,17 +62,17 @@ export const CaseOperationsCenter: React.FC = () => {
 
     const today = new Date().toDateString();
     return {
-      active: (tasks || []).filter((t: any) => t.status === 'running' || t.status === 'paused').length,
+      active: (tasks || []).filter((t: unknown) => t.status === 'running' || t.status === 'paused').length,
       dueToday: 0, // Workflow instances don't have due dates
-      inProgress: (tasks || []).filter((t: any) => t.status === 'running').length,
-      completed: (tasks || []).filter((t: any) => t.status === 'completed').length,
+      inProgress: (tasks || []).filter((t: unknown) => t.status === 'running').length,
+      completed: (tasks || []).filter((t: unknown) => t.status === 'completed').length,
     };
   }, [tasks]);
 
   const filteredTasks = useMemo(() => {
     if (!tasks) return [];
     if (filterStatus === 'all') return tasks;
-    return (tasks || []).filter((t: any) => t.status.toLowerCase() === filterStatus);
+    return (tasks || []).filter((t: unknown) => t.status.toLowerCase() === filterStatus);
   }, [tasks, filterStatus]);
 
   return (
@@ -174,7 +174,7 @@ export const CaseOperationsCenter: React.FC = () => {
               </div>
             ) : (
               <div className="space-y-3">
-                {filteredTasks.slice(0, 10).map((task: any) => (
+                {filteredTasks.slice(0, 10).map((task: unknown) => (
                   <TaskItem key={task.id} task={task} isDark={isDark} />
                 ))}
               </div>
@@ -210,7 +210,7 @@ const StatCard: React.FC<{ title: string; value: string; isDark: boolean }> = ({
   </Card>
 );
 
-const TaskItem: React.FC<{ task: any; isDark: boolean }> = ({ task, isDark }) => (
+const TaskItem: React.FC<{ task: unknown; isDark: boolean }> = ({ task, isDark }) => (
   <div className={cn('p-4 rounded-lg border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-white')}>
     <div className="flex items-start justify-between">
       <div className="flex items-start gap-3 flex-1">
@@ -237,7 +237,7 @@ const TaskItem: React.FC<{ task: any; isDark: boolean }> = ({ task, isDark }) =>
   </div>
 );
 
-const ActivityItem: React.FC<{ member: any; isDark: boolean }> = ({ member, isDark }) => (
+const ActivityItem: React.FC<{ member: unknown; isDark: boolean }> = ({ member, isDark }) => (
   <div className="flex gap-3">
     <div className={cn('w-2 h-2 rounded-full mt-2', 'bg-blue-500')} />
     <div className="flex-1">

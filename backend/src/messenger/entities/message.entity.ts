@@ -51,9 +51,6 @@ export class Message extends BaseEntity {
   @Column({ name: 'is_edited', type: 'boolean', default: false })
   isEdited!: boolean;
 
-  @Column({ name: 'is_deleted', type: 'boolean', default: false })
-  isDeleted!: boolean;
-
   @Column({ name: 'read_by', type: 'jsonb', nullable: true })
   readBy!: Record<string, unknown>[];
 

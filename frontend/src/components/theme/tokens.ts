@@ -86,6 +86,7 @@ export const tokens = {
         subtle: 'border-slate-100',
         focused: 'border-blue-500 ring-2 ring-blue-500/20',
         error: 'border-rose-300 focus:border-rose-500 focus:ring-rose-200',
+        primary: 'border-blue-500',    // Compatibility alias
       },
 
       // 7. Interactive
@@ -149,6 +150,7 @@ export const tokens = {
       // Legacy Mappings (Backward Compatibility)
       primary: {
         DEFAULT: 'bg-blue-600',
+        main: 'bg-blue-600',        // Alias for DEFAULT
         hover: 'hover:bg-blue-700',
         light: 'bg-blue-50',
         text: 'text-blue-600',
@@ -183,6 +185,7 @@ export const tokens = {
         subtle: 'border-slate-800/50',
         focused: 'border-blue-500 ring-2 ring-blue-500/30',
         error: 'border-rose-800 focus:border-rose-500 focus:ring-rose-900',
+        primary: 'border-blue-500',    // Compatibility alias
       },
 
       // 7. Interactive
@@ -246,6 +249,7 @@ export const tokens = {
       // Legacy Mappings
       primary: {
         DEFAULT: 'bg-blue-500',
+        main: 'bg-blue-500',        // Alias for DEFAULT
         hover: 'hover:bg-blue-600',
         light: 'bg-blue-900/30',
         text: 'text-blue-400',

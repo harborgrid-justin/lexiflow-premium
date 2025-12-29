@@ -1,24 +1,41 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 import { RealtimeGateway } from './realtime.gateway';
+import { NotificationsGateway } from './gateways/notifications.gateway';
+import { DashboardGateway } from './gateways/dashboard.gateway';
+import { PresenceService } from './services/presence.service';
+import { WebSocketMonitorService } from './services/websocket-monitor.service';
 import { WsRateLimitGuard } from '@common/guards/ws-rate-limit.guard';
 import { WsRoomLimitGuard } from '@common/guards/ws-room-limit.guard';
 
 /**
  * Realtime Module
- * WebSocket gateway for real-time collaboration and notifications
- * Features:
- * - Real-time document collaboration
- * - Live case updates and notifications
- * - Presence detection (who's viewing what)
- * - Rate limiting and room-based access control
- * 
+ *
+ * Comprehensive WebSocket module for real-time features:
+ *
+ * Gateways:
+ * - RealtimeGateway (/events) - Main event gateway for cases, documents, etc.
+ * - NotificationsGateway (/notifications) - Real-time notification delivery
+ * - DashboardGateway (/dashboard) - Live dashboard metrics and updates
+ *
+ * Services:
+ * - PresenceService - User online/offline status tracking
+ * - WebSocketMonitorService - Connection monitoring and health checks
+ *
+ * Security:
+ * - JWT authentication required
+ * - Rate limiting on all events
+ * - Room-based access control
+ * - Connection limits per user
+ *
  * Uses Socket.IO for bi-directional WebSocket communication
  */
 @Module({
   imports: [
     ConfigModule,
+    ScheduleModule.forRoot(),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -30,7 +47,26 @@ import { WsRoomLimitGuard } from '@common/guards/ws-room-limit.guard';
       }),
     }),
   ],
-  providers: [RealtimeGateway, WsRateLimitGuard, WsRoomLimitGuard],
-  exports: [RealtimeGateway],
+  providers: [
+    // Gateways
+    RealtimeGateway,
+    NotificationsGateway,
+    DashboardGateway,
+
+    // Services
+    PresenceService,
+    WebSocketMonitorService,
+
+    // Guards
+    WsRateLimitGuard,
+    WsRoomLimitGuard,
+  ],
+  exports: [
+    RealtimeGateway,
+    NotificationsGateway,
+    DashboardGateway,
+    PresenceService,
+    WebSocketMonitorService,
+  ],
 })
 export class RealtimeModule {}

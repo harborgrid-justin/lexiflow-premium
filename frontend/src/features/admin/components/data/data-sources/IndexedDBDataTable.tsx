@@ -79,7 +79,7 @@ export const IndexedDBDataTable: React.FC<IndexedDBDataTableProps> = ({
                         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                           try {
                             setEditingData(JSON.parse(e.target.value));
-                          } catch {
+                          } catch (error) {
                             // Keep previous value if invalid JSON
                           }
                         }}

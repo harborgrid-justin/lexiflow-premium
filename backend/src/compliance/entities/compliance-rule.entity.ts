@@ -1,31 +1,74 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, Index } from 'typeorm';
+import { BaseEntity } from '@common/base/base.entity';
+
+export type ComplianceCategory =
+  | 'data_privacy'
+  | 'ethics'
+  | 'conflict_of_interest'
+  | 'client_protection'
+  | 'confidentiality'
+  | 'document_retention'
+  | 'financial'
+  | 'reporting'
+  | 'security'
+  | 'other';
+
+export type ComplianceSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
 
 @Entity('compliance_rules')
-export class ComplianceRule {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
-  @Column()
+@Index(['category', 'isActive'])
+@Index(['severity', 'isActive'])
+@Index(['isActive'])
+export class ComplianceRule extends BaseEntity {
+  @Column({ type: 'varchar', length: 255 })
+  @Index()
   name!: string;
 
-  @Column('text')
+  @Column({ type: 'text' })
   description!: string;
 
-  @Column()
-  category!: string;
+  @Column({
+    type: 'enum',
+    enum: [
+      'data_privacy',
+      'ethics',
+      'conflict_of_interest',
+      'client_protection',
+      'confidentiality',
+      'document_retention',
+      'financial',
+      'reporting',
+      'security',
+      'other',
+    ],
+  })
+  category!: ComplianceCategory;
 
-  @Column()
-  severity!: string;
+  @Column({
+    type: 'enum',
+    enum: ['critical', 'high', 'medium', 'low', 'info'],
+    default: 'medium',
+  })
+  severity!: ComplianceSeverity;
 
-  @Column({ default: true })
+  @Column({ name: 'is_active', type: 'boolean', default: true })
   isActive!: boolean;
 
-  @Column('jsonb', { nullable: true })
-  conditions: Record<string, unknown> | null = null;
+  @Column({ type: 'jsonb', nullable: true })
+  conditions!: Record<string, unknown> | null;
 
-  @CreateDateColumn()
-  createdAt!: Date;
+  @Column({ type: 'text', nullable: true })
+  documentation!: string | null;
 
-  @UpdateDateColumn()
-  updatedAt!: Date;
+  @Column({ name: 'regulatory_framework', type: 'varchar', length: 100, nullable: true })
+  regulatoryFramework!: string | null;
+
+  @Column({ name: 'check_frequency', type: 'varchar', length: 50, nullable: true })
+  checkFrequency!: string | null; // 'daily', 'weekly', 'monthly', 'quarterly', 'annually'
+
+  @Column({ name: 'auto_check_enabled', type: 'boolean', default: false })
+  autoCheckEnabled!: boolean;
+
+  @Column({ type: 'jsonb', nullable: true })
+  metadata!: Record<string, unknown> | null;
 }

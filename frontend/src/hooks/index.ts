@@ -144,3 +144,85 @@ export * from './usePerformanceTracking';
 export * from './useQueryHooks';
 export * from './useSync';
 export * from './useTrustAccounts';
+
+// ============================================================================
+// PERFORMANCE OPTIMIZATION HOOKS
+// ============================================================================
+export {
+  useMemoizedValue,
+  useMemoizedCallback,
+  useDeepMemo,
+  useDeepCallback,
+  useConstant,
+  useMemoCache,
+  useMemoWithStats,
+  type MemoizationConfig,
+  type MemoStats,
+} from './useMemoized';
+
+export {
+  useLazyComponent,
+  useLazyComponentWithState,
+  usePreloadableComponent,
+  useRouteComponents,
+  useIdleLazyComponent,
+  loadWithTimeout,
+  loadWithRetry,
+  prefetchComponents,
+  type ComponentImportFunc,
+  type LazyComponentState,
+  type PreloadableComponent,
+} from './useCodeSplitting';
+
+export {
+  useProgressiveImage,
+  useLazyImage,
+  useResponsiveImage,
+  useImagePreload,
+  useImageFormat,
+  useBlurhashPlaceholder,
+  useOptimizedImageProps,
+  type ImageLoadState,
+  type ResponsiveSource,
+} from './useImageOptimization';
+
+export {
+  useVirtualList,
+  useVirtualGrid,
+  useInfiniteVirtualList,
+  type VirtualItem,
+  type VirtualListConfig,
+  type VirtualListState,
+  type ScrollToOptions,
+} from './useVirtualList';
+
+// ============================================================================
+// WEBSOCKET & REAL-TIME COMMUNICATION HOOKS
+// ============================================================================
+export {
+  useWebSocket,
+  useWebSocketEvent,
+  ConnectionStatus,
+  type WebSocketOptions,
+  type EventListener,
+} from './useWebSocket';
+
+export {
+  useRealTimeData,
+  useNotifications,
+  useDashboard,
+  useTypingIndicator,
+  type RealTimeDataOptions,
+  type RealTimeDataState,
+} from './useRealTimeData';
+
+export {
+  usePresence,
+  useUserPresence,
+  useMultiUserPresence,
+  getPresenceStatusDisplay,
+  formatLastSeen,
+  PresenceStatus,
+  type UserPresence,
+  type PresenceOptions,
+} from './usePresence';

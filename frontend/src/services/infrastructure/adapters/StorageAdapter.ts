@@ -115,7 +115,7 @@ export class LocalStorageAdapter implements IStorageAdapter {
       window.localStorage.getItem(testKey);
       window.localStorage.removeItem(testKey);
       return true;
-    } catch {
+    } catch (error) {
       return false;
     }
   }
@@ -203,7 +203,7 @@ export class SessionStorageAdapter implements IStorageAdapter {
       window.sessionStorage.setItem(testKey, 'test');
       window.sessionStorage.removeItem(testKey);
       return true;
-    } catch {
+    } catch (error) {
       return false;
     }
   }

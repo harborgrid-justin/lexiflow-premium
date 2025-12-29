@@ -30,7 +30,7 @@ export type OrganizationType = 'LawFirm' | 'Corporate' | 'Government' | 'Court' 
 // Matter Management Enums (aligned with backend)
 // Backend Matter entity enums (from matters/entities/matter.entity.ts)
 export enum MatterStatus {
-  INTAKE = 'ACTIVE',  // Backend: INTAKE maps to ACTIVE in DB (no INTAKE in DB enum)
+  INTAKE = 'INTAKE',  // Backend: INTAKE maps to ACTIVE in DB (no INTAKE in DB enum)
   ACTIVE = 'ACTIVE',
   PENDING = 'PENDING',
   ON_HOLD = 'ON_HOLD',
@@ -42,7 +42,7 @@ export enum MatterType {
   LITIGATION = 'LITIGATION',
   TRANSACTIONAL = 'TRANSACTIONAL',
   ADVISORY = 'ADVISORY',
-  COMPLIANCE = 'CORPORATE', // Backend: No COMPLIANCE in DB, maps to CORPORATE
+  COMPLIANCE = 'COMPLIANCE', // Backend: No COMPLIANCE in DB, maps to CORPORATE
   INTELLECTUAL_PROPERTY = 'INTELLECTUAL_PROPERTY',
   EMPLOYMENT = 'EMPLOYMENT',
   REAL_ESTATE = 'REAL_ESTATE',

@@ -1,32 +1,66 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Index } from 'typeorm';
+import { Entity, Column, Index, ManyToOne, JoinColumn } from 'typeorm';
+import { BaseEntity } from '@common/base/base.entity';
+import { User } from '@users/entities/user.entity';
+
+export type SnapshotType = 'kpis' | 'case_metrics' | 'financial' | 'productivity' | 'team_performance' | 'billing_metrics';
+export type SnapshotPeriod = '1d' | '7d' | '30d' | '90d' | '365d' | 'ytd' | 'custom';
 
 @Entity('dashboard_snapshots')
 @Index(['userId', 'createdAt'])
 @Index(['snapshotType', 'createdAt'])
-export class DashboardSnapshot {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
-
-  @Column({ type: 'uuid', nullable: true })
+@Index(['snapshotDate'])
+@Index(['organizationId'])
+export class DashboardSnapshot extends BaseEntity {
+  @Column({ name: 'user_id', type: 'uuid', nullable: true })
   @Index()
-  userId!: string;
+  userId!: string | null;
 
-  @Column({ type: 'varchar', length: 100 })
-  snapshotType!: string; // 'kpis', 'case_metrics', 'financial', 'productivity'
+  @ManyToOne(() => User, { nullable: true })
+  @JoinColumn({ name: 'user_id' })
+  user!: User | null;
+
+  @Column({
+    name: 'snapshot_type',
+    type: 'enum',
+    enum: ['kpis', 'case_metrics', 'financial', 'productivity', 'team_performance', 'billing_metrics'],
+  })
+  snapshotType!: SnapshotType;
 
   @Column({ type: 'jsonb' })
   data!: Record<string, unknown>;
 
-  @Column({ type: 'date' })
+  @Column({ name: 'snapshot_date', type: 'date' })
   @Index()
   snapshotDate!: string;
 
-  @Column({ type: 'varchar', length: 20, nullable: true })
-  period!: string; // '1d', '7d', '30d', '90d', '365d'
+  @Column({
+    type: 'enum',
+    enum: ['1d', '7d', '30d', '90d', '365d', 'ytd', 'custom'],
+    nullable: true,
+  })
+  period!: SnapshotPeriod | null;
 
-  @CreateDateColumn()
-  createdAt!: Date;
+  @Column({ name: 'organization_id', type: 'uuid', nullable: true })
+  organizationId!: string | null;
 
-  @UpdateDateColumn()
-  updatedAt!: Date;
+  @Column({ name: 'case_id', type: 'uuid', nullable: true })
+  caseId!: string | null;
+
+  @Column({ name: 'project_id', type: 'uuid', nullable: true })
+  projectId!: string | null;
+
+  @Column({ name: 'start_date', type: 'date', nullable: true })
+  startDate!: string | null;
+
+  @Column({ name: 'end_date', type: 'date', nullable: true })
+  endDate!: string | null;
+
+  @Column({ name: 'is_public', type: 'boolean', default: false })
+  isPublic!: boolean;
+
+  @Column({ type: 'jsonb', nullable: true })
+  filters!: Record<string, unknown> | null;
+
+  @Column({ type: 'jsonb', nullable: true })
+  metadata!: Record<string, unknown> | null;
 }

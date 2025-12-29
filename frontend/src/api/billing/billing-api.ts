@@ -524,7 +524,7 @@ export class BillingApiService {
         this.validateId(accountId, 'getTrustTransactions');
         try {
             const response = await apiClient.get<TrustTransactionEntity[]>(
-                `/billing/trust-accounts/${accountId}/transactions`, 
+                `/billing/trust-accounts/${accountId}/transactions`,
                 filters
             );
             return Array.isArray(response) ? response : [];

@@ -282,7 +282,7 @@ class ApiClient {
       let errorData: ApiError;
       try {
         errorData = await response.json();
-      } catch {
+      } catch (error) {
         errorData = {
           message: response.statusText || 'An error occurred',
           statusCode: response.status,

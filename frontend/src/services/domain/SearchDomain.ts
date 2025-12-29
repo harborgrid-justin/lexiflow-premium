@@ -73,7 +73,7 @@ export const SearchService = {
     try {
       const stored = defaultStorage.getItem(RECENT_SEARCHES_KEY);
       return stored ? JSON.parse(stored) : [];
-    } catch {
+    } catch (error) {
       return [];
     }
   },
@@ -84,7 +84,7 @@ export const SearchService = {
       const updated = [query, ...recent.filter(q => q !== query)].slice(0, MAX_RECENT_SEARCHES);
       defaultStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
       return true;
-    } catch {
+    } catch (error) {
       return false;
     }
   },

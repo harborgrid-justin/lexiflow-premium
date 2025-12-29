@@ -111,11 +111,16 @@ export const ThemeProvider = ({ children, initialMode }: ThemeProviderProps) => 
   }, [mode, mounted]);
 
   // BP7: Memoize provider values explicitly - state context
+  const currentTheme = tokens.colors[mode];
   const stateValue = useMemo(() => ({
     mode,
-    theme: tokens.colors[mode],
+    theme: {
+      ...currentTheme,
+      // Compatibility layer for enterprise components that use theme.colors.xxx
+      colors: currentTheme,
+    },
     isDark: mode === 'dark',
-  }), [mode]);
+  }), [mode, currentTheme]);
 
   // BP7: Memoize provider values explicitly - actions context
   const actionsValue = useMemo(() => ({

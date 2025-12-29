@@ -88,7 +88,7 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
       if (!isSoundEnabled) return;
 
       // Create audio context for different notification types
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const audioContext = new (window.AudioContext || (window as Record<string, unknown>).webkitAudioContext)();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
 

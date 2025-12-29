@@ -12,12 +12,12 @@ export const useAdminData = (activeCategory: Category) => {
   const clausesQuery = useQuery(['clauses', 'all'], () => DataService.clauses.getAll());
   const docsQuery = useQuery(['documents', 'all'], () => DataService.documents.getAll());
 
-  const dataMap: Record<Category, any[]> = {
-      users: (usersQuery.data as any[]) || [],
-      cases: (casesQuery.data as any[]) || [],
-      clients: (clientsQuery.data as any[]) || [],
-      clauses: (clausesQuery.data as any[]) || [],
-      documents: (docsQuery.data as any[]) || []
+  const dataMap: Record<Category, unknown[]> = {
+      users: (usersQuery.data as unknown[]) || [],
+      cases: (casesQuery.data as unknown[]) || [],
+      clients: (clientsQuery.data as unknown[]) || [],
+      clauses: (clausesQuery.data as unknown[]) || [],
+      documents: (docsQuery.data as unknown[]) || []
   };
 
   // Generic Mutation Handler
@@ -29,7 +29,7 @@ export const useAdminData = (activeCategory: Category) => {
         return payload.item;
     },
     {
-        onSuccess: (savedItem: any, variables) => {
+        onSuccess: (savedItem: unknown, variables) => {
             const key = [
                 variables.category === 'users' ? 'users' :
                 variables.category === 'cases' ? 'cases' :
@@ -38,7 +38,7 @@ export const useAdminData = (activeCategory: Category) => {
                 'all'
             ];
 
-            const currentData = queryClient.getQueryState<any[]>(key)?.data || [];
+            const currentData = queryClient.getQueryState<unknown[]>(key)?.data || [];
             let newData;
             if (variables.isNew) {
                 newData = [savedItem, ...currentData];
@@ -63,7 +63,7 @@ export const useAdminData = (activeCategory: Category) => {
                 variables.category === 'clauses' ? 'clauses' : 'documents',
                 'all'
             ];
-            const currentData = queryClient.getQueryState<any[]>(key)?.data || [];
+            const currentData = queryClient.getQueryState<unknown[]>(key)?.data || [];
             queryClient.setQueryData(key, currentData.filter(i => i.id !== id));
           }
       }

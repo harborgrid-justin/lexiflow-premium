@@ -117,7 +117,7 @@ export function VendorManagement() {
       addVendor({
           id: `vnd-${Date.now()}`,
           name: newVendor.name,
-          serviceType: newVendor.serviceType as any || 'Court Reporting',
+          serviceType: newVendor.serviceType as Record<string, unknown> || 'Court Reporting',
           contactName: newVendor.contactName || '',
           phone: newVendor.phone || '',
           email: newVendor.email || '',

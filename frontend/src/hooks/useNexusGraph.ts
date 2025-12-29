@@ -188,7 +188,7 @@ export function useNexusGraph(
             const sIdx = idMap.get(l.source);
             const tIdx = idMap.get(l.target);
             if (sIdx !== undefined && tIdx !== undefined) {
-                return { sourceIndex: sIdx, targetIndex: tIdx, strength: (l as any).strength || 1 };
+                return { sourceIndex: sIdx, targetIndex: tIdx, strength: (l as Record<string, unknown>).strength || 1 };
             }
             return null;
         })

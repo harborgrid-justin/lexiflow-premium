@@ -32,7 +32,7 @@ import { cn } from '@/utils/cn';
 export const CaseListResources: React.FC = () => {
   const { theme } = useTheme();
   
-  const { data: resources = [], isLoading } = useQuery<any[]>(
+  const { data: resources = [], isLoading } = useQuery<unknown[]>(
       ['hr', 'utilization'],
       () => DataService.hr.getUtilizationMetrics()
   );

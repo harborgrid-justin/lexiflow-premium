@@ -16,8 +16,8 @@ export class CalendarService {
     return await this.calendarEventRepository.save(event);
   }
 
-  async findAll(query: any): Promise<{ data: CalendarEvent[]; total: number }> {
-    const { page = 1, limit = 50, startDate, endDate, eventType, caseId } = query;
+  async findAll(query: unknown): Promise<{ data: CalendarEvent[]; total: number }> {
+    const { page = 1, limit = 50, startDate, endDate, eventType, caseId } = query as { page?: number; limit?: number; startDate?: string; endDate?: string; eventType?: string; caseId?: string };
     const skip = (page - 1) * limit;
 
     const where: any = {};

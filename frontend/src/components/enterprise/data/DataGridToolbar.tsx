@@ -40,7 +40,7 @@ export interface ToolbarAction {
 
 export interface DataGridToolbarProps {
   enableFiltering?: boolean;
-  onExport?: (format: 'csv' | 'excel') => void;
+  onExport?: (format: 'csv' | 'excel' | 'pdf') => void;
   actions?: ToolbarAction[];
   title?: string;
   description?: string;
@@ -60,7 +60,7 @@ export function DataGridToolbar({
   const { theme } = useTheme();
   const [showExportMenu, setShowExportMenu] = useState(false);
 
-  const handleExport = useCallback((format: 'csv' | 'excel') => {
+  const handleExport = useCallback((format: 'csv' | 'excel' | 'pdf') => {
     onExport?.(format);
     setShowExportMenu(false);
   }, [onExport]);
@@ -171,6 +171,17 @@ export function DataGridToolbar({
                       <ExcelIcon />
                       Export as Excel
                     </button>
+                    <button
+                      onClick={() => handleExport('pdf')}
+                      className={cn(
+                        "w-full text-left px-4 py-2 text-sm transition-colors flex items-center gap-2",
+                        theme.text.primary,
+                        `hover:${theme.surface.highlight}`
+                      )}
+                    >
+                      <PdfIcon />
+                      Export as PDF
+                    </button>
                   </div>
                 </div>
               </>
@@ -188,7 +199,7 @@ DataGridToolbar.displayName = 'DataGridToolbar';
 // HELPER FUNCTIONS
 // ============================================================================
 
-function getActionVariantClasses(variant: 'primary' | 'secondary' | 'danger', theme: any): string {
+function getActionVariantClasses(variant: 'primary' | 'secondary' | 'danger', theme: ReturnType<typeof useTheme>['theme']): string {
   switch (variant) {
     case 'primary':
       return 'bg-blue-500 text-white border border-blue-500 hover:bg-blue-600';
@@ -258,6 +269,24 @@ function ExcelIcon() {
         strokeLinejoin="round"
         strokeWidth={2}
         d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+      />
+    </svg>
+  );
+}
+
+function PdfIcon() {
+  return (
+    <svg
+      className="w-4 h-4"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
       />
     </svg>
   );

@@ -324,13 +324,13 @@ export class ClientsApiService {
    * Backend: GET /clients/:id/cases
    * 
    * @param id - Client ID
-   * @returns Promise<any[]> Array of cases
+   * @returns Promise<unknown[]> Array of cases
    * @throws Error if validation fails or fetch fails
    */
-  async getCases(id: string): Promise<any[]> {
+  async getCases(id: string): Promise<unknown[]> {
     this.validateId(id, 'getCases');
     try {
-      return await apiClient.get<any[]>(`${this.baseUrl}/${id}/cases`);
+      return await apiClient.get<unknown[]>(`${this.baseUrl}/${id}/cases`);
     } catch (error) {
       console.error('[ClientsApiService.getCases] Error:', error);
       throw new Error(`Failed to fetch cases for client: ${id}`);
@@ -342,13 +342,13 @@ export class ClientsApiService {
    * Backend: GET /clients/:id/invoices
    * 
    * @param id - Client ID
-   * @returns Promise<any[]> Array of invoices
+   * @returns Promise<unknown[]> Array of invoices
    * @throws Error if validation fails or fetch fails
    */
-  async getInvoices(id: string): Promise<any[]> {
+  async getInvoices(id: string): Promise<unknown[]> {
     this.validateId(id, 'getInvoices');
     try {
-      return await apiClient.get<any[]>(`${this.baseUrl}/${id}/invoices`);
+      return await apiClient.get<unknown[]>(`${this.baseUrl}/${id}/invoices`);
     } catch (error) {
       console.error('[ClientsApiService.getInvoices] Error:', error);
       throw new Error(`Failed to fetch invoices for client: ${id}`);

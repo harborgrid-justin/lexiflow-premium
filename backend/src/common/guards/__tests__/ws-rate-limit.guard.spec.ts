@@ -15,8 +15,8 @@ describe('WsRateLimitGuard', () => {
 
     // Mock ConfigService
     configService = {
-      get: jest.fn((key: string, defaultValue: any) => {
-        const config: Record<string, any> = {
+      get: jest.fn((key: string, defaultValue: unknown) => {
+        const config: Record<string, unknown> = {
           'resourceLimits.websocket.rateLimit.maxEventsPerMinute': 10,
           'resourceLimits.websocket.rateLimit.windowMs': 60000,
         };
@@ -337,8 +337,8 @@ describe('WsRateLimitGuard', () => {
   describe('Configuration', () => {
     it('should use custom config values', () => {
       const customConfig = {
-        get: jest.fn((key: string, defaultValue: any) => {
-          const config: Record<string, any> = {
+        get: jest.fn((key: string, defaultValue: unknown) => {
+          const config: Record<string, unknown> = {
             'resourceLimits.websocket.rateLimit.maxEventsPerMinute': 50,
             'resourceLimits.websocket.rateLimit.windowMs': 30000,
           };
@@ -354,7 +354,7 @@ describe('WsRateLimitGuard', () => {
 
     it('should use default values when config returns undefined', () => {
       const emptyConfig = {
-        get: jest.fn((key: string, defaultValue: any) => defaultValue),
+        get: jest.fn((key: string, defaultValue: unknown) => defaultValue),
       } as any;
 
       const customGuard = new WsRateLimitGuard(emptyConfig);

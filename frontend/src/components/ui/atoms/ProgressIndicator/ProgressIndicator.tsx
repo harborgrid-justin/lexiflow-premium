@@ -96,7 +96,7 @@ function calculateETA(
 /**
  * Get progress bar color class
  */
-function getProgressColor(variant: string, theme: any): string {
+function getProgressColor(variant: string, theme: unknown): string {
   switch (variant) {
     case 'success':
       return theme.status.success.bg;

@@ -15,7 +15,7 @@ export interface KnowledgeArticle {
   status: 'draft' | 'published' | 'archived';
   viewCount?: number;
   lastViewedAt?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

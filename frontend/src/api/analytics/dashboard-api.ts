@@ -19,10 +19,10 @@ export interface DashboardConfig {
   widgets: {
     id: string;
     type: string;
-    config: Record<string, any>;
+    config: Record<string, unknown>;
   }[];
   isDefault: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

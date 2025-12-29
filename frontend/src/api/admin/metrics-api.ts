@@ -44,7 +44,7 @@ export class MetricsApiService {
     return apiClient.get<SystemMetrics[]>(`${this.baseUrl}/history?start=${startDate}&end=${endDate}&interval=${interval}`);
   }
 
-  async getAlerts(): Promise<any[]> {
-    return apiClient.get<any[]>(`${this.baseUrl}/alerts`);
+  async getAlerts(): Promise<unknown[]> {
+    return apiClient.get<unknown[]>(`${this.baseUrl}/alerts`);
   }
 }

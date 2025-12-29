@@ -62,7 +62,7 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
           `Client Portal: ${client}`,
           <ClientPortalModal
              client={{
-               id: (clientId || 'unknown') as any,
+               id: (clientId || 'unknown') as Record<string, unknown>,
                name: client,
                industry: 'General',
                status: ClientStatus.ACTIVE,

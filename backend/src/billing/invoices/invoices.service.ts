@@ -138,7 +138,7 @@ export class InvoicesService {
       order: { date: 'ASC' },
     });
 
-    return { ...invoice, items };
+    return { ...invoice, items } as Invoice & { items: InvoiceItem[] };
   }
 
   async update(id: string, updateInvoiceDto: UpdateInvoiceDto): Promise<Invoice> {

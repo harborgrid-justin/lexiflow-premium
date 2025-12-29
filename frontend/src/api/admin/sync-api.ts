@@ -23,7 +23,7 @@ export interface AdminSyncConflict {
   detectedAt: string;
   resolvedAt?: string;
   resolution?: 'local' | 'remote' | 'merge' | 'manual';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface SyncResult {
@@ -56,7 +56,7 @@ export class SyncApiService {
     });
   }
 
-  async getPendingChanges(): Promise<any[]> {
+  async getPendingChanges(): Promise<unknown[]> {
     return apiClient.get(`${this.baseUrl}/pending`);
   }
 }

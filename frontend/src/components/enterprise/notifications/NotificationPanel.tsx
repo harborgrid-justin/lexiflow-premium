@@ -83,7 +83,7 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
   const getNotificationIcon = (notification: UINotification) => {
     // Check for related entity type first
     if ('relatedEntityType' in notification) {
-      const entityType = (notification as any).relatedEntityType;
+      const entityType = (notification as Record<string, unknown>).relatedEntityType;
       switch (entityType) {
         case 'case':
           return <Briefcase className="h-5 w-5 text-blue-500" />;

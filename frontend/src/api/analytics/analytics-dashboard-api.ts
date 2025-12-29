@@ -15,13 +15,13 @@ export interface AnalyticsDashboard {
     type: 'chart' | 'metric' | 'table' | 'list';
     title: string;
     dataSource: string;
-    config: Record<string, any>;
+    config: Record<string, unknown>;
     position: { x: number; y: number; w: number; h: number };
   }[];
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
   refreshInterval?: number;
   isPublic: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -49,7 +49,7 @@ export class AnalyticsDashboardApiService {
     return apiClient.put<AnalyticsDashboard>(`${this.baseUrl}/${id}`, data);
   }
 
-  async getData(id: string, filters?: Record<string, any>): Promise<unknown> {
+  async getData(id: string, filters?: Record<string, unknown>): Promise<unknown> {
     return apiClient.post(`${this.baseUrl}/${id}/data`, { filters });
   }
 
@@ -59,19 +59,19 @@ export class AnalyticsDashboardApiService {
 
   // Dashboard KPIs and Metrics
   async getKPIs(params: { period?: string }): Promise<unknown> {
-    const queryString = new URLSearchParams(params as any).toString();
+    const queryString = new URLSearchParams(params as Record<string, unknown>).toString();
     return apiClient.get(`/analytics/dashboard/kpis?${queryString}`);
   }
 
-  async getTeamPerformance(params: Record<string, any>): Promise<unknown> {
+  async getTeamPerformance(params: Record<string, unknown>): Promise<unknown> {
     return apiClient.get('/analytics/dashboard/team/performance', params);
   }
 
-  async getFinancialMetrics(params: Record<string, any>): Promise<unknown> {
+  async getFinancialMetrics(params: Record<string, unknown>): Promise<unknown> {
     return apiClient.get('/analytics/dashboard/financial', params);
   }
 
-  async exportReport(format: string, params: Record<string, any>): Promise<unknown> {
+  async exportReport(format: string, params: Record<string, unknown>): Promise<unknown> {
     return apiClient.post('/analytics/dashboard/export', { format, ...params });
   }
 }

@@ -116,14 +116,14 @@ export const NewCaseIntakeForm: React.FC = () => {
         clientName: formData.clientName,
         clientEmail: formData.clientEmail,
         clientPhone: formData.clientPhone,
-        matterType: formData.matterType as any,
-        practiceArea: formData.practiceArea as any,
+        matterType: formData.matterType as Record<string, unknown>,
+        practiceArea: formData.practiceArea as Record<string, unknown>,
         description: formData.description,
         jurisdiction: formData.jurisdiction,
-        priority: formData.priority.toUpperCase() as any,
-        status: 'INTAKE' as any,
-        leadAttorneyId: formData.leadAttorneyId as any,
-        teamMembers: formData.supportTeam as any,
+        priority: formData.priority.toUpperCase() as Record<string, unknown>,
+        status: 'INTAKE' as Record<string, unknown>,
+        leadAttorneyId: formData.leadAttorneyId as Record<string, unknown>,
+        teamMembers: formData.supportTeam as Record<string, unknown>,
         billingType: formData.billingType,
         estimatedValue: parseFloat(formData.estimatedValue) || 0,
         retainerAmount: parseFloat(formData.retainerAmount) || 0,
@@ -235,7 +235,7 @@ export const NewCaseIntakeForm: React.FC = () => {
 };
 
 // Step Components
-const ClientInfoStep: React.FC<any> = ({ formData, setFormData }) => {
+const ClientInfoStep: React.FC<unknown> = ({ formData, setFormData }) => {
   const { mode } = useTheme();
   return (
   <div className="space-y-6">
@@ -316,7 +316,7 @@ const ClientInfoStep: React.FC<any> = ({ formData, setFormData }) => {
   );
 };
 
-const MatterDetailsStep: React.FC<any> = ({ formData, setFormData }) => {
+const MatterDetailsStep: React.FC<unknown> = ({ formData, setFormData }) => {
   const { mode } = useTheme();
   return (
   <div className="space-y-6">
@@ -405,7 +405,7 @@ const MatterDetailsStep: React.FC<any> = ({ formData, setFormData }) => {
   );
 };
 
-const ConflictCheckStep: React.FC<any> = ({ conflictCheck }) => {
+const ConflictCheckStep: React.FC<unknown> = ({ conflictCheck }) => {
   const { mode } = useTheme();
   return (
   <div className="space-y-6">
@@ -438,7 +438,7 @@ const ConflictCheckStep: React.FC<any> = ({ conflictCheck }) => {
               {conflictCheck.conflicts.length} potential conflict(s) detected. Please review before proceeding.
             </div>
             <div className="mt-4 space-y-2">
-              {conflictCheck.conflicts.map((matter: any) => (
+              {conflictCheck.conflicts.map((matter: unknown) => (
                 <div key={matter.id} className={cn('p-3 rounded border text-sm', mode === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
                   <div className={cn('font-medium', mode === 'dark' ? 'text-slate-200' : 'text-slate-800')}>
                     {matter.title}
@@ -457,7 +457,7 @@ const ConflictCheckStep: React.FC<any> = ({ conflictCheck }) => {
   );
 };
 
-const TeamAssignmentStep: React.FC<any> = ({ formData, setFormData, users }) => {
+const TeamAssignmentStep: React.FC<unknown> = ({ formData, setFormData, users }) => {
   const { mode } = useTheme();
   return (
   <div className="space-y-6">
@@ -479,7 +479,7 @@ const TeamAssignmentStep: React.FC<any> = ({ formData, setFormData, users }) => 
         )}
       >
         <option value="">Select attorney...</option>
-        {users?.filter((u: any) => u.role === 'ATTORNEY' || u.role === 'PARTNER').map((user: any) => (
+        {users?.filter((u: unknown) => u.role === 'ATTORNEY' || u.role === 'PARTNER').map((user: unknown) => (
           <option key={user.id} value={user.id}>
             {user.name || user.email} {user.role ? `- ${user.role}` : ''}
           </option>
@@ -490,7 +490,7 @@ const TeamAssignmentStep: React.FC<any> = ({ formData, setFormData, users }) => 
   );
 };
 
-const FinancialSetupStep: React.FC<any> = ({ formData, setFormData }) => {
+const FinancialSetupStep: React.FC<unknown> = ({ formData, setFormData }) => {
   const { mode } = useTheme();
   return (
   <div className="space-y-6">
@@ -539,7 +539,7 @@ const FinancialSetupStep: React.FC<any> = ({ formData, setFormData }) => {
   );
 };
 
-const ReviewStep: React.FC<any> = ({ formData }) => {
+const ReviewStep: React.FC<unknown> = ({ formData }) => {
   const { mode } = useTheme();
   return (
   <div className="space-y-6">

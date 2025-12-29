@@ -28,7 +28,7 @@ export interface EnhancedErrorResponse {
   severity: ErrorSeverity;
   retryable: boolean;
   validationErrors?: string[];
-  details?: Record<string, any>;
+  details?: Record<string, unknown>;
   stack?: string;
   requestContext?: {
     ip?: string;
@@ -397,8 +397,8 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
   /**
    * Sanitize error details for response
    */
-  private sanitizeDetails(details: Record<string, any>): Record<string, any> {
-    const sanitized: Record<string, any> = {};
+  private sanitizeDetails(details: Record<string, unknown>): Record<string, unknown> {
+    const sanitized: Record<string, unknown> = {};
     const sensitiveFields = ['password', 'token', 'secret', 'apiKey', 'accessToken'];
 
     Object.keys(details).forEach((key) => {
@@ -416,7 +416,7 @@ export class EnterpriseExceptionFilter implements ExceptionFilter {
    * Sanitize database error
    * SECURITY: Only return error type, do not expose schema details
    */
-  private sanitizeDatabaseError(exception: QueryFailedError): Record<string, any> {
+  private sanitizeDatabaseError(exception: QueryFailedError): Record<string, unknown> {
     const driverError = exception.driverError as any;
 
     // Log detailed database error for debugging (server-side only)

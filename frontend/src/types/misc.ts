@@ -243,7 +243,7 @@ export interface Message extends BaseEntity {
 export interface ModuleDefinition {
   id: string;
   label: string;
-  component: LazyExoticComponent<React.ComponentType<any>>;
+  component: LazyExoticComponent<React.ComponentType<unknown>>;
   requiresAdmin?: boolean;
   hidden?: boolean; // If true, don't show in sidebar navigation (e.g., Create Case)
   intentMatcher?: (intent: string, context: unknown) => boolean;

@@ -42,7 +42,7 @@ export interface ComplianceCheck {
   };
   performedBy?: string;
   performedAt: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

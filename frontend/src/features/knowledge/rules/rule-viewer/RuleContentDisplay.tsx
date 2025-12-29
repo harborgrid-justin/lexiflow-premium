@@ -6,7 +6,7 @@ import { History, FileText, Scale } from 'lucide-react';
 interface RuleContentDisplayProps {
   selectedRule: LegalRule;
   activeTab: string;
-  theme: any;
+  theme: unknown;
 }
 
 interface RuleTextSection {

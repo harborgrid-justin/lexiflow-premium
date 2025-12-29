@@ -76,7 +76,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
   // MEMOIZED VALUES
   // ============================================================================
   const allItems = useMemo<WallItem[]>(() => {
-      const docs = (warRoomData.documents || []).map((d: any) => ({
+      const docs = (warRoomData.documents || []).map((d: unknown) => ({
           id: d.id,
           title: d.title,
           type: d.type,
@@ -88,7 +88,7 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
           original: d
       }));
 
-      const ev = (warRoomData.evidence || []).map((e: any) => ({
+      const ev = (warRoomData.evidence || []).map((e: unknown) => ({
           id: e.id,
           title: e.title,
           type: e.type,

@@ -8,7 +8,7 @@ import { ErrorCodes } from '@errors/constants/error.codes.constant';
 export interface FailedOperation {
   id: string;
   operationType: string;
-  payload: any;
+  payload: unknown;
   error: Error;
   errorCode: string;
   attemptCount: number;
@@ -17,7 +17,7 @@ export interface FailedOperation {
   lastAttempt: string;
   nextRetry?: string;
   status: OperationStatus;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
 }
 
 /**
@@ -88,7 +88,7 @@ export class ErrorRecoveryService {
     operationType: string,
     operation: () => Promise<T>,
     strategy: Partial<RecoveryStrategy> = {},
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ): Promise<T> {
     const fullStrategy = this.buildStrategy(strategy);
 
@@ -137,11 +137,11 @@ export class ErrorRecoveryService {
    */
   queueFailedOperation(
     operationType: string,
-    payload: any,
+    payload: unknown,
     error: Error,
     errorCode: string,
     strategy: RecoveryStrategy,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ): FailedOperation {
     const id = this.generateOperationId();
     const now = new Date().toISOString();

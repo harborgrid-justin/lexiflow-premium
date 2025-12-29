@@ -17,7 +17,7 @@ export interface Pipeline {
   type: 'ETL' | 'ELT' | 'Streaming' | 'Batch';
   sourceConnector: string;
   targetConnector: string;
-  configuration: Record<string, any>;
+  configuration: Record<string, unknown>;
   status: 'Running' | 'Active' | 'Paused' | 'Failed' | 'Draft' | 'Success';
   schedule?: string;
   recordsProcessed: number;
@@ -38,7 +38,7 @@ export class PipelinesApiService {
   /**
    * Get all pipelines with optional filters
    */
-  async getAll(filters?: Record<string, any>): Promise<PaginatedResponse<Pipeline>> {
+  async getAll(filters?: Record<string, unknown>): Promise<PaginatedResponse<Pipeline>> {
     console.log('[PipelinesApi] getAll called with filters:', filters);
     try {
       return await apiClient.get<PaginatedResponse<Pipeline>>('/pipelines', filters);

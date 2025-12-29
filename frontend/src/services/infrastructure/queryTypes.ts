@@ -6,7 +6,7 @@
 /**
  * Query key type - array of serializable values
  */
-export type QueryKey = ReadonlyArray<string | number | boolean | Record<string, any> | null | undefined>;
+export type QueryKey = ReadonlyArray<string | number | boolean | Record<string, unknown> | null | undefined>;
 
 /**
  * Query function type with abort signal support
@@ -49,7 +49,7 @@ export interface UseQueryOptions<T = unknown> {
  * Mutation context
  */
 export interface MutationContext {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**

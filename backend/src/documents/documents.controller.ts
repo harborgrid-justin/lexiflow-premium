@@ -178,7 +178,7 @@ export class DocumentsController {
   @ApiResponse({ status: 409, description: 'Resource already exists' })
   async createRedaction(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() redactionParams: any,
+    @Body() redactionParams: unknown,
   ) {
     // Verify document exists
     await this.documentsService.findOne(id);
@@ -187,7 +187,7 @@ export class DocumentsController {
     const job = await this.processingJobsService.createJob(
       JobType.REDACTION,
       id,
-      redactionParams,
+      redactionParams as Record<string, unknown>,
     );
 
     return {

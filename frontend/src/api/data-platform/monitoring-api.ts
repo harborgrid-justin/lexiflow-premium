@@ -16,7 +16,7 @@ export interface PerformanceMetric {
   metricName: string;
   value: number;
   unit?: string;
-  tags?: Record<string, any>;
+  tags?: Record<string, unknown>;
   timestamp: string;
 }
 
@@ -90,7 +90,7 @@ export class MonitoringApiService {
     metricName: string;
     value: number;
     unit?: string;
-    tags?: Record<string, any>;
+    tags?: Record<string, unknown>;
   }): Promise<PerformanceMetric> {
     return await apiClient.post<PerformanceMetric>('/monitoring/metrics', data);
   }
@@ -98,7 +98,7 @@ export class MonitoringApiService {
   /**
    * Get system alerts
    */
-  async getAlerts(filters?: Record<string, any>): Promise<PaginatedResponse<SystemAlert>> {
+  async getAlerts(filters?: Record<string, unknown>): Promise<PaginatedResponse<SystemAlert>> {
     try {
       return await apiClient.get<PaginatedResponse<SystemAlert>>('/monitoring/alerts', filters);
     } catch (error) {

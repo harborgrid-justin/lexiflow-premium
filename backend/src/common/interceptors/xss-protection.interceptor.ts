@@ -92,7 +92,7 @@ export class XssProtectionInterceptor implements NestInterceptor {
     }
 
     if (typeof data === 'object' && data !== null) {
-      const sanitized: Record<string, any> = {};
+      const sanitized: Record<string, unknown> = {};
 
       for (const [key, value] of Object.entries(data)) {
         // Skip prototype pollution
@@ -182,7 +182,7 @@ export class SelectiveXssProtectionInterceptor implements NestInterceptor {
     }
 
     if (typeof data === 'object' && data !== null) {
-      const sanitized: Record<string, any> = {};
+      const sanitized: Record<string, unknown> = {};
 
       for (const [key, value] of Object.entries(data)) {
         // Skip prototype pollution

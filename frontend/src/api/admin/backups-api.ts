@@ -14,7 +14,7 @@ export interface Backup {
   startedAt: string;
   completedAt?: string;
   location?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export class BackupsApiService {

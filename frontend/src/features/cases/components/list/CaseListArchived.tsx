@@ -48,7 +48,7 @@ export const CaseListArchived: React.FC<CaseListArchivedProps> = ({ onSelectCase
   const [retrieveCaseId, setRetrieveCaseId] = React.useState<string | null>(null);
 
   // Enterprise Data Access
-  const { data: archivedCases = [], isLoading } = useQuery<any[]>(
+  const { data: archivedCases = [], isLoading } = useQuery<unknown[]>(
       ['cases', 'archived'],
       () => DataService.cases.getArchived()
   );

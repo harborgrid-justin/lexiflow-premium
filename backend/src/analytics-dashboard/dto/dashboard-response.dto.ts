@@ -305,7 +305,7 @@ export class ChartDataPointDto {
   @ApiPropertyOptional({ description: 'Additional metadata', type: 'object', additionalProperties: true })
   @IsOptional()
   @IsObject()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export class ChartDataResponseDto {

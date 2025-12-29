@@ -426,7 +426,7 @@ export class RedisCacheManagerService implements OnModuleInit, OnModuleDestroy {
 }
 
 interface CacheEntry {
-  value: any;
+  value: unknown;
   expiresAt: number;
   createdAt: number;
 }

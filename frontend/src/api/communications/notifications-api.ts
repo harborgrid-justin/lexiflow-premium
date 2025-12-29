@@ -48,7 +48,7 @@ export interface ApiNotification {
   relatedEntityType?: 'case' | 'document' | 'task' | 'calendar' | 'evidence' | 'docket';
   priority?: 'low' | 'medium' | 'high' | 'urgent';
   expiresAt?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: string;
   updatedAt?: string;
   readAt?: string;

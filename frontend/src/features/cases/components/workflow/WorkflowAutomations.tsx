@@ -38,7 +38,7 @@ export const WorkflowAutomations = () => {
   const { theme } = useTheme();
   
   // Load automations from IndexedDB via useQuery for accurate, cached data
-  const { data: automations = [], isLoading } = useQuery<any[]>(
+  const { data: automations = [], isLoading } = useQuery<unknown[]>(
     queryKeys.workflowsExtended.automations(),
     () => DataService.workflow.getAutomations()
   );

@@ -82,7 +82,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
       // This prevents the "stutter" when moving the mouse quickly over multiple sidebar items.
       Scheduler.defer(() => {
         // 1. Preload Component Code (Lazy Load chunks)
-        const component = item.component as any;
+        const component = item.component as Record<string, unknown>;
         if (component?.preload) component.preload();
         
         // 2. Preload Data (Heavy DB Ops)

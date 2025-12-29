@@ -12,7 +12,7 @@ export interface User {
     department?: string;
     barNumber?: string;
     permissions?: string[];
-    preferences?: Record<string, any>;
+    preferences?: Record<string, unknown>;
     avatarUrl?: string;
     lastLoginAt?: string;
     emailVerified?: boolean;

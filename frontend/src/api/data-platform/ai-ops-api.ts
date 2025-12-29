@@ -18,7 +18,7 @@ export interface VectorEmbedding {
   embedding: number[];
   model: string;
   content: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: string;
 }
 
@@ -31,7 +31,7 @@ export interface AIModel {
   type: string;
   provider: string;
   version: string;
-  configuration: Record<string, any>;
+  configuration: Record<string, unknown>;
   active: boolean;
   usageCount: number;
   lastUsed?: string;
@@ -48,7 +48,7 @@ export class AiOpsApiService {
   /**
    * Get vector embeddings
    */
-  async getEmbeddings(filters?: Record<string, any>): Promise<PaginatedResponse<VectorEmbedding>> {
+  async getEmbeddings(filters?: Record<string, unknown>): Promise<PaginatedResponse<VectorEmbedding>> {
     try {
       return await apiClient.get<PaginatedResponse<VectorEmbedding>>('/ai-ops/embeddings', filters);
     } catch (error) {

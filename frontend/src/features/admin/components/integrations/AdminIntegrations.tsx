@@ -13,7 +13,7 @@ export const AdminIntegrations: React.FC = () => {
   const { theme } = useTheme();
   
   // Enterprise Data Access
-  const { data: integrations = [], isLoading } = useQuery<any[]>(
+  const { data: integrations = [], isLoading } = useQuery<unknown[]>(
       ['admin', 'integrations'],
       DataService.admin.getIntegrations
   );

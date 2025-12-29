@@ -213,7 +213,7 @@ export class AnalyticsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async bulkImportEvents(@Body() importDto: BulkImportEventsDto): Promise<BulkImportResponseDto> {
-    return this.analyticsService.bulkImportEvents(importDto);
+    return this.analyticsService.bulkImportEvents(importDto) as any;
   }
 
   @Post('bulk/recalculate-metrics')
@@ -226,7 +226,7 @@ export class AnalyticsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async bulkRecalculateMetrics(@Body() recalculateDto: BulkRecalculateMetricsDto): Promise<BulkRecalculateResponseDto> {
-    return this.analyticsService.bulkRecalculateMetrics(recalculateDto);
+    return this.analyticsService.bulkRecalculateMetrics(recalculateDto as any) as any;
   }
 
   @Post('bulk/archive-events')
@@ -238,7 +238,7 @@ export class AnalyticsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async bulkArchiveEvents(@Body() archiveDto: BulkArchiveAnalyticsEventsDto): Promise<BulkArchiveResponseDto> {
-    return this.analyticsService.bulkArchiveEvents(archiveDto);
+    return this.analyticsService.bulkArchiveEvents(archiveDto) as any;
   }
 
   @Delete('bulk/delete-events')
@@ -250,7 +250,7 @@ export class AnalyticsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async bulkDeleteEvents(@Body() deleteDto: BulkDeleteAnalyticsEventsDto): Promise<BulkDeleteAnalyticsResponseDto> {
-    return this.analyticsService.bulkDeleteEvents(deleteDto);
+    return this.analyticsService.bulkDeleteEvents(deleteDto) as any;
   }
 
   // ============================================
@@ -267,7 +267,7 @@ export class AnalyticsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async exportAnalyticsData(@Body() exportDto: ExportAnalyticsDataDto): Promise<ExportAnalyticsResponseDto> {
-    return this.analyticsService.exportAnalyticsData(exportDto);
+    return this.analyticsService.exportAnalyticsData(exportDto) as any;
   }
 
   @Get('export/jobs')
@@ -281,7 +281,7 @@ export class AnalyticsController {
     @Query('page') page?: number,
     @Query('limit') limit?: number
   ): Promise<ListExportJobsResponseDto> {
-    return this.analyticsService.listExportJobs(page, limit);
+    return this.analyticsService.listExportJobs(page, limit) as any;
   }
 
   @Get('export/:jobId')
@@ -293,7 +293,7 @@ export class AnalyticsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async getExportJobStatus(@Param('jobId') jobId: string): Promise<ExportAnalyticsResponseDto> {
-    return this.analyticsService.getExportJobStatus(jobId);
+    return this.analyticsService.getExportJobStatus(jobId) as any;
   }
 
   @Delete('export/:jobId')

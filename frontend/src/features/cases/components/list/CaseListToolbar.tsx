@@ -81,7 +81,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
   const handleExport = async () => {
     try {
       setIsExporting(true);
-      const cases = queryClient.getQueryState(['cases'])?.data as any[] || [];
+      const cases = queryClient.getQueryState(['cases'])?.data as unknown[] || [];
       
       // Filter cases based on current filters
       const filteredCases = cases.filter(c => {
@@ -131,7 +131,7 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
     try {
       setIsExporting(true);
       setShowExportMenu(false);
-      const cases = queryClient.getQueryState(['cases'])?.data as any[] || [];
+      const cases = queryClient.getQueryState(['cases'])?.data as unknown[] || [];
       
       // Filter cases based on current filters
       const filteredCases = cases.filter(c => {

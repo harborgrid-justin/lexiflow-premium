@@ -40,7 +40,7 @@ export const filterRules = (
 /**
  * Generic filter function that searches across multiple string fields
  */
-export const filterByMultipleFields = <T extends Record<string, any>>(
+export const filterByMultipleFields = <T extends Record<string, unknown>>(
   items: T[],
   searchTerm: string,
   fields: (keyof T)[]

@@ -6,7 +6,7 @@ export interface DomainEvent {
   aggregateId: string;
   aggregateType: string;
   timestamp: Date;
-  data: any;
+  data: unknown;
   userId?: string;
   correlationId?: string;
 }

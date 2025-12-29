@@ -200,7 +200,7 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
             viewport: viewport,
           };
 
-      const newTask = page.render(renderContext as any);
+      const newTask = page.render(renderContext as Record<string, unknown>);
       renderTaskRef.current = newTask;
 
       await newTask.promise;

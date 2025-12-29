@@ -33,12 +33,12 @@ export const CaseListTrust: React.FC = () => {
   const { theme } = useTheme();
   
   // Performance Engine: Caching
-  const { data: trustLedger = [], isLoading } = useQuery<any[]>(
+  const { data: trustLedger = [], isLoading } = useQuery<unknown[]>(
       ['trust', 'all'],
       () => DataService.billing.getTrustAccounts()
   );
 
-  const totalBalance = Array.isArray(trustLedger) ? trustLedger.reduce((acc: any, curr) => acc + (curr.balance || 0), 0) : 0;
+  const totalBalance = Array.isArray(trustLedger) ? trustLedger.reduce((acc: unknown, curr) => acc + (curr.balance || 0), 0) : 0;
 
   if (isLoading) return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600"/></div>;
 

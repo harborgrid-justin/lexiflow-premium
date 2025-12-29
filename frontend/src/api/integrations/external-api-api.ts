@@ -11,14 +11,14 @@ export interface ExternalAPIConfig {
   provider: 'pacer' | 'westlaw' | 'lexisnexis' | 'bloomberg' | 'courtlink' | 'custom';
   baseUrl: string;
   authType: 'none' | 'basic' | 'bearer' | 'oauth2' | 'api_key';
-  credentials?: Record<string, any>;
+  credentials?: Record<string, unknown>;
   rateLimit?: {
     requestsPerSecond: number;
     requestsPerDay: number;
   };
   status: 'active' | 'inactive' | 'error';
   lastUsed?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

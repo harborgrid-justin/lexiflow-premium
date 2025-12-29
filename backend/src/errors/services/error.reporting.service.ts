@@ -12,7 +12,7 @@ export interface ErrorReport {
   category: ErrorCategory;
   severity: ErrorSeverity;
   stackTrace?: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   userContext?: UserContext;
   requestContext?: RequestContext;
   environment: string;
@@ -38,8 +38,8 @@ export interface RequestContext {
   url?: string;
   correlationId?: string;
   headers?: Record<string, string>;
-  query?: Record<string, any>;
-  body?: any;
+  query?: Record<string, unknown>;
+  body?: unknown;
 }
 
 /**
@@ -83,7 +83,7 @@ export class ErrorReportingService {
       severity?: ErrorSeverity;
       userContext?: UserContext;
       requestContext?: RequestContext;
-      additionalContext?: Record<string, any>;
+      additionalContext?: Record<string, unknown>;
     },
   ): Promise<void> {
     const report = this.createErrorReport(error, context);
@@ -216,7 +216,7 @@ export class ErrorReportingService {
       severity?: ErrorSeverity;
       userContext?: UserContext;
       requestContext?: RequestContext;
-      additionalContext?: Record<string, any>;
+      additionalContext?: Record<string, unknown>;
     },
   ): ErrorReport {
     return {
@@ -411,7 +411,7 @@ export class ErrorReportingService {
     return sanitized;
   }
 
-  private sanitizeBody(body: any): any {
+  private sanitizeBody(body: unknown): any {
     if (typeof body !== 'object') return body;
 
     const sensitiveFields = [
@@ -425,7 +425,7 @@ export class ErrorReportingService {
       'creditCard',
     ];
 
-    const sanitized = { ...body };
+    const sanitized: Record<string, unknown> = { ...body };
 
     sensitiveFields.forEach((field) => {
       if (field in sanitized) {

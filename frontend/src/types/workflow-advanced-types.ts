@@ -33,7 +33,7 @@ export interface ConditionalRule {
   id: string;
   field: string;
   operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in' | 'regex' | 'custom';
-  value: any;
+  value: unknown;
   valueType: 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object';
   caseSensitive?: boolean;
   customExpression?: string; // For advanced JavaScript expressions
@@ -61,7 +61,7 @@ export interface ConditionalBranchingConfig {
     lastModified: string;
     modifiedBy: UserId;
     testResults?: Array<{
-      input: Record<string, any>;
+      input: Record<string, unknown>;
       matchedBranch: string;
       timestamp: string;
     }>;
@@ -132,7 +132,7 @@ export interface WorkflowVersion extends BaseEntity {
   author: UserId;
   nodes: WorkflowNode[];
   connections: WorkflowConnection[];
-  config: Record<string, any>;
+  config: Record<string, unknown>;
   checksum: string; // SHA-256 hash of workflow structure
   parentVersionId?: string; // Previous version
   branchName?: string; // For workflow branching
@@ -151,16 +151,16 @@ export interface WorkflowDiff {
     nodeId: string;
     changes: Array<{
       field: string;
-      oldValue: any;
-      newValue: any;
+      oldValue: unknown;
+      newValue: unknown;
     }>;
   }>;
   connectionsAdded: WorkflowConnection[];
   connectionsRemoved: WorkflowConnection[];
   configChanges: Array<{
     path: string;
-    oldValue: any;
-    newValue: any;
+    oldValue: unknown;
+    newValue: unknown;
   }>;
   breakingChanges: boolean;
   migrationRequired: boolean;
@@ -172,11 +172,11 @@ export interface WorkflowMergeConflict {
   nodeId?: string;
   connectionId?: string;
   configPath?: string;
-  baseValue: any;
-  branchAValue: any;
-  branchBValue: any;
+  baseValue: unknown;
+  branchAValue: unknown;
+  branchBValue: unknown;
   resolution?: 'use_branch_a' | 'use_branch_b' | 'manual' | 'merge_both';
-  resolvedValue?: any;
+  resolvedValue?: unknown;
   resolvedBy?: UserId;
   resolvedAt?: string;
 }
@@ -222,7 +222,7 @@ export interface WorkflowTemplate extends BaseEntity {
   nodes: WorkflowNode[];
   connections: WorkflowConnection[];
   variables: WorkflowVariable[];
-  config: Record<string, any>;
+  config: Record<string, unknown>;
   semanticVersion: string;
   author: UserId;
   rating: number;
@@ -260,13 +260,13 @@ export interface WorkflowVariable {
   name: string;
   type: 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object' | 'user' | 'case' | 'document';
   required: boolean;
-  defaultValue?: any;
+  defaultValue?: unknown;
   description?: string;
   validation?: {
     pattern?: string; // Regex
     min?: number;
     max?: number;
-    options?: any[]; // For enum-like variables
+    options?: unknown[]; // For enum-like variables
   };
 }
 
@@ -323,11 +323,11 @@ export interface EscalationLevel {
   maxRepeats?: number;
 }
 
-export type EscalationAction = 
+export type EscalationAction =
   | { type: 'email'; to: string[]; template: string }
   | { type: 'sms'; to: string[]; message: string }
   | { type: 'slack'; channel: string; message: string }
-  | { type: 'webhook'; url: string; payload: Record<string, any> }
+  | { type: 'webhook'; url: string; payload: Record<string, unknown> }
   | { type: 'create_task'; assignee: UserId; priority: 'high' | 'urgent' }
   | { type: 'reassign_workflow'; to: UserId }
   | { type: 'trigger_workflow'; workflowId: string };
@@ -397,11 +397,11 @@ export interface ApprovalApprover {
   notifyBefore?: number; // Notify X minutes before timeout
 }
 
-export type WorkflowAction = 
-  | { type: 'email'; config: Record<string, any> }
-  | { type: 'notification'; config: Record<string, any> }
-  | { type: 'webhook'; config: Record<string, any> }
-  | { type: 'update_field'; field: string; value: any }
+export type WorkflowAction =
+  | { type: 'email'; config: Record<string, unknown> }
+  | { type: 'notification'; config: Record<string, unknown> }
+  | { type: 'webhook'; config: Record<string, unknown> }
+  | { type: 'update_field'; field: string; value: unknown }
   | { type: 'trigger_workflow'; workflowId: string }
   | { type: 'script'; code: string };
 
@@ -473,8 +473,8 @@ export interface WorkflowState {
   currentNodeId: string;
   completedNodes: string[];
   pendingNodes: string[];
-  variables: Record<string, any>;
-  context: Record<string, any>;
+  variables: Record<string, unknown>;
+  context: Record<string, unknown>;
   approvals: ApprovalInstance[];
   slaStatuses: SLAStatus[];
   parallelExecutions: Array<{
@@ -653,8 +653,8 @@ export interface AIWorkflowSuggestion {
   rationale: string;
   dataPoints: Array<{
     metric: string;
-    currentValue: any;
-    expectedValue: any;
+    currentValue: unknown;
+    expectedValue: unknown;
   }>;
   changes: AIWorkflowChange[];
   impact: {
@@ -678,7 +678,7 @@ export interface AIWorkflowSuggestion {
 export interface AIWorkflowChange {
   action: 'add_node' | 'remove_node' | 'modify_node' | 'add_connection' | 'remove_connection' | 'reorder' | 'parallelize' | 'add_approval';
   target?: string; // Node ID or connection ID
-  details: Record<string, any>;
+  details: Record<string, unknown>;
   reversible: boolean;
 }
 
@@ -694,7 +694,7 @@ export interface AIWorkflowModel {
     recall: number;
   };
   features: string[];
-  hyperparameters: Record<string, any>;
+  hyperparameters: Record<string, unknown>;
 }
 
 export interface AILearningFeedback {
@@ -776,7 +776,7 @@ export interface ApiPollConfig {
   endpoint: string;
   method: 'GET' | 'POST';
   headers?: Record<string, string>;
-  body?: Record<string, any>;
+  body?: Record<string, unknown>;
   pollInterval: number; // In milliseconds
   deduplicate: boolean;
   deduplicateField?: string; // Field to use for deduplication
@@ -816,7 +816,7 @@ export interface DatabaseConfig {
 export interface QueueConfig {
   type: 'queue';
   queueType: 'sqs' | 'rabbitmq' | 'kafka' | 'redis' | 'azure_queue';
-  connectionConfig: Record<string, any>;
+  connectionConfig: Record<string, unknown>;
   queueName: string;
   consumeStrategy: 'peek' | 'consume' | 'subscribe';
   acknowledgeOnSuccess: boolean;
@@ -832,14 +832,14 @@ export interface CustomConfig {
 export interface TriggerFilter {
   field: string;
   operator: 'equals' | 'not_equals' | 'contains' | 'regex' | 'greater_than' | 'less_than' | 'exists';
-  value: any;
+  value: unknown;
   caseSensitive?: boolean;
 }
 
 export interface DataTransformation {
   type: 'jmespath' | 'jsonata' | 'javascript' | 'template';
   expression: string;
-  outputSchema?: Record<string, any>;
+  outputSchema?: Record<string, unknown>;
   validateOutput: boolean;
 }
 
@@ -859,9 +859,9 @@ export interface TriggerEvent {
   id: string;
   triggerId: string;
   timestamp: string;
-  payload: Record<string, any>;
+  payload: Record<string, unknown>;
   headers?: Record<string, string>;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   processedAt?: string;
   workflowInstanceId?: string;
   status: 'received' | 'processing' | 'completed' | 'failed' | 'ignored';
@@ -898,10 +898,10 @@ export interface EnhancedWorkflowInstance extends BaseEntity {
   aiSuggestions: AIWorkflowSuggestion[];
   externalTriggers: ExternalTrigger[];
   triggerEvents: TriggerEvent[];
-  
+
   // Execution metadata
-  variables: Record<string, any>;
-  context: Record<string, any>;
+  variables: Record<string, unknown>;
+  context: Record<string, unknown>;
   startedAt?: string;
   completedAt?: string;
   pausedAt?: string;
@@ -921,14 +921,14 @@ export interface EnhancedWorkflowInstance extends BaseEntity {
     timestamp: string;
     userId: UserId;
     action: string;
-    details: Record<string, any>;
+    details: Record<string, unknown>;
   }>;
-  
+
   // Integration hooks
   webhookUrl?: string;
   callbackUrl?: string;
-  
-  metadata: Record<string, any>;
+
+  metadata: Record<string, unknown>;
 }
 
 // ============================================================================

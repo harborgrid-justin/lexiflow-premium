@@ -168,19 +168,21 @@ export class RateLimitGuard implements CanActivate {
    */
   private setRateLimitHeaders(
     response: Response,
-    result: any,
+    result: unknown,
     type: string,
   ): void {
-    response.setHeader(`X-RateLimit-Limit-${type}`, result.limit);
-    response.setHeader(`X-RateLimit-Remaining-${type}`, Math.max(0, result.remaining));
-    response.setHeader(`X-RateLimit-Reset-${type}`, result.resetAt.toISOString());
+    const rateLimitResult = result as { limit: number; remaining: number; resetAt: Date };
+    response.setHeader(`X-RateLimit-Limit-${type}`, rateLimitResult.limit);
+    response.setHeader(`X-RateLimit-Remaining-${type}`, Math.max(0, rateLimitResult.remaining));
+    response.setHeader(`X-RateLimit-Reset-${type}`, rateLimitResult.resetAt.toISOString());
   }
 
   /**
    * Throw rate limit exceeded error
    */
-  private throwRateLimitError(result: any): never {
-    const retryAfter = result.retryAfter || 60;
+  private throwRateLimitError(result: unknown): never {
+    const rateLimitResult = result as { retryAfter?: number; resetAt: Date };
+    const retryAfter = rateLimitResult.retryAfter || 60;
 
     throw new HttpException(
       {
@@ -188,7 +190,7 @@ export class RateLimitGuard implements CanActivate {
         message: 'Rate limit exceeded. Please try again later.',
         error: 'Too Many Requests',
         retryAfter,
-        resetAt: result.resetAt,
+        resetAt: rateLimitResult.resetAt,
       },
       HttpStatus.TOO_MANY_REQUESTS,
       {

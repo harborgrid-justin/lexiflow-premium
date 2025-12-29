@@ -51,7 +51,7 @@ export interface Trial {
     endDate?: string;
   }[];
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -263,17 +263,17 @@ export class TrialApiService {
    * Get trial events with optional filters
    * 
    * @param filters - Optional filters for caseId and trialId
-   * @returns Promise<any[]> Array of trial events
+   * @returns Promise<unknown[]> Array of trial events
    * @throws Error if fetch fails
    */
-  async getEvents(filters?: { caseId?: string; trialId?: string }): Promise<any[]> {
+  async getEvents(filters?: { caseId?: string; trialId?: string }): Promise<unknown[]> {
     try {
       const params = new URLSearchParams();
       if (filters?.caseId) params.append('caseId', filters.caseId);
       if (filters?.trialId) params.append('trialId', filters.trialId);
       const queryString = params.toString();
       const url = queryString ? `${this.baseUrl}/events?${queryString}` : `${this.baseUrl}/events`;
-      return await apiClient.get<any[]>(url);
+      return await apiClient.get<unknown[]>(url);
     } catch (error) {
       console.error('[TrialApiService.getEvents] Error:', error);
       throw new Error('Failed to fetch trial events');
@@ -358,17 +358,17 @@ export class TrialApiService {
    * Get witness preparation records with optional filters
    * 
    * @param filters - Optional filters for trialId and witnessId
-   * @returns Promise<any[]> Array of witness prep records
+   * @returns Promise<unknown[]> Array of witness prep records
    * @throws Error if fetch fails
    */
-  async getWitnessPrep(filters?: { trialId?: string; witnessId?: string }): Promise<any[]> {
+  async getWitnessPrep(filters?: { trialId?: string; witnessId?: string }): Promise<unknown[]> {
     try {
       const params = new URLSearchParams();
       if (filters?.trialId) params.append('trialId', filters.trialId);
       if (filters?.witnessId) params.append('witnessId', filters.witnessId);
       const queryString = params.toString();
       const url = queryString ? `${this.baseUrl}/witness-prep?${queryString}` : `${this.baseUrl}/witness-prep`;
-      return await apiClient.get<any[]>(url);
+      return await apiClient.get<unknown[]>(url);
     } catch (error) {
       console.error('[TrialApiService.getWitnessPrep] Error:', error);
       throw new Error('Failed to fetch witness preparation records');

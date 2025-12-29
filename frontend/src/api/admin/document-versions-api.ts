@@ -16,7 +16,7 @@ export interface DocumentVersion {
   createdBy?: string;
   createdAt: string;
   isCurrent: boolean;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export class DocumentVersionsApiService {

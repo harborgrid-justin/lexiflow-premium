@@ -2,12 +2,12 @@ import { DocketEntry } from '@/types';
 import { cacheRegistry } from '@/utils/cacheManager';
 
 // Initialize caches with 10-minute TTL
-const filingActivityCache = cacheRegistry.get<string, any>('docket-filing-activity', {
+const filingActivityCache = cacheRegistry.get<string, unknown>('docket-filing-activity', {
   maxSize: 50,
   ttlMs: 10 * 60 * 1000 // 10 minutes
 });
 
-const judgeRulingsCache = cacheRegistry.get<string, any>('docket-judge-rulings', {
+const judgeRulingsCache = cacheRegistry.get<string, unknown>('docket-judge-rulings', {
   maxSize: 50,
   ttlMs: 10 * 60 * 1000 // 10 minutes
 });

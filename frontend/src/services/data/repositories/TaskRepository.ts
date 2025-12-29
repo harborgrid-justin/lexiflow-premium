@@ -224,7 +224,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
 
         if (this.useBackend) {
             try {
-                return await this.tasksApi.create(item as any) as WorkflowTaskEntity;
+                return await this.tasksApi.create(item as Record<string, unknown>) as WorkflowTaskEntity;
             } catch (error) {
                 console.warn('[TaskRepository] Backend API unavailable, falling back to IndexedDB', error);
             }

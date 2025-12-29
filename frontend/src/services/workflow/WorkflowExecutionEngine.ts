@@ -122,7 +122,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Start workflow execution
    */
-  async execute(): Promise<{ success: boolean; result?: any; error?: string }> {
+  async execute(): Promise<{ success: boolean; result?: unknown; error?: string }> {
     try {
       this.state = 'running';
       this.emit('started', this.context);
@@ -253,7 +253,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
     }
 
     try {
-      let result: any;
+      let result: unknown;
 
       // Execute node based on type
       switch (node.type) {
@@ -298,7 +298,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
         // Parallel execution of next nodes
         return await this._executeParallelNodes(nextNodes);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.context.errors.push({
         nodeId: node.id,
         error: error.message,

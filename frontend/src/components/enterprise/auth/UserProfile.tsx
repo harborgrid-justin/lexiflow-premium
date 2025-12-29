@@ -178,7 +178,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
       onUpdate?.(updatedUser);
 
       setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setProfileErrors({ general: err.message || 'Failed to update profile' });
     } finally {
       setIsLoading(false);
@@ -216,7 +216,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
       setSuccessMessage('Password changed successfully');
 
       setTimeout(() => setSuccessMessage(''), 3000);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setPasswordErrors({ general: err.message || 'Failed to change password' });
     } finally {
       setIsLoading(false);

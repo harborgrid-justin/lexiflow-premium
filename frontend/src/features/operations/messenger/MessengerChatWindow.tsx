@@ -114,9 +114,9 @@ export const MessengerChatWindow = ({
           <div className={cn("h-full flex flex-col", theme.surface.default)}>
              <DocumentPreviewPanel 
                 document={{ 
-                    id: 'temp' as any, title: att.name, type: att.type === 'image' ? 'JPG' : 'PDF', 
+                    id: 'temp' as Record<string, unknown>, title: att.name, type: att.type === 'image' ? 'JPG' : 'PDF', 
                     content: 'Preview Content', uploadDate: '', lastModified: '', 
-                    tags: [], versions: [], caseId: 'N/A' as any 
+                    tags: [], versions: [], caseId: 'N/A' as Record<string, unknown> 
                 }} 
                 onViewHistory={() => {}} 
                 isOrbital={true} 

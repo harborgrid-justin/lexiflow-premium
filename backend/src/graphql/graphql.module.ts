@@ -43,7 +43,7 @@ import { DiscoveryModule } from '@discovery/discovery.module';
       introspection: process.env.NODE_ENV !== 'production',
 
       // Context for GraphQL requests
-      context: ({ req, res }: { req: any; res: any }) => ({ req, res }),
+      context: ({ req, res }: { req: unknown; res: any }) => ({ req, res }),
 
       // Subscriptions configuration
       subscriptions: {

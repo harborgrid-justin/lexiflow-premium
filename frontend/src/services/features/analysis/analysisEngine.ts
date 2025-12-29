@@ -355,7 +355,7 @@ export const AnalysisEngine = {
 
       // Build Index
       allCases.forEach(c => {
-          c.parties?.forEach((p: any) => {
+          c.parties?.forEach((p: unknown) => {
               const name = p.name.toLowerCase();
               if (!partiesMap.has(name)) partiesMap.set(name, []);
               partiesMap.get(name)?.push({ caseId: c.id, caseTitle: c.title, role: p.role });

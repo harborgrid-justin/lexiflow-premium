@@ -196,7 +196,7 @@ export class CacheManagerService implements OnModuleDestroy {
 }
 
 interface CacheEntry {
-  value: any;
+  value: unknown;
   expiresAt: number;
   createdAt: number;
 }

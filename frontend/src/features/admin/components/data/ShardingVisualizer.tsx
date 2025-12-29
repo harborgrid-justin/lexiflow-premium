@@ -68,7 +68,7 @@ export const ShardingVisualizer = React.memo(function ShardingVisualizer() {
         
         // Draw key
         if(key && mappedNode) {
-            const keyHash = (ring as any).hash(key);
+            const keyHash = (ring as Record<string, unknown>).hash(key);
             const angle = (keyHash / maxHash) * 2 * Math.PI;
             const x = center.x + radius * Math.cos(angle);
             const y = center.y + radius * Math.sin(angle);

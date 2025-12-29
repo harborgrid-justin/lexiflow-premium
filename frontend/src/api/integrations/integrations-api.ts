@@ -11,7 +11,7 @@ export interface Integration {
   type: string;
   provider: string;
   status: 'active' | 'inactive' | 'error' | 'disconnected';
-  config?: Record<string, any>;
+  config?: Record<string, unknown>;
   credentials?: {
     accessToken?: string;
     refreshToken?: string;
@@ -19,7 +19,7 @@ export interface Integration {
   };
   syncEnabled: boolean;
   lastSyncedAt?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
 }

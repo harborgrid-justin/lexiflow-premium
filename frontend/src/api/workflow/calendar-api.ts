@@ -83,7 +83,7 @@ export interface CalendarEvent extends BaseEntity {
     time: string;
     method: 'email' | 'notification' | 'sms';
   }[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 interface BaseEntity {

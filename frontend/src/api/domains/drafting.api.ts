@@ -98,15 +98,15 @@ export interface GeneratedDocument {
   templateId: string;
   template?: DraftingTemplate;
   caseId?: string;
-  case?: any;
+  case?: unknown;
   status: GeneratedDocumentStatus;
   content: string;
   variableValues: Record<string, unknown>;
   includedClauses?: string[];
   createdBy: string;
-  creator?: any;
+  creator?: unknown;
   reviewedBy?: string;
-  reviewer?: any;
+  reviewer?: unknown;
   reviewedAt?: string;
   approvalNotes?: string;
   wordCount: number;
@@ -650,7 +650,7 @@ export class DraftingValidationService {
   /**
    * Check for conflicts between selected clauses
    */
-  static validateClauses(clauses: any[]): ClauseValidationResult {
+  static validateClauses(clauses: unknown[]): ClauseValidationResult {
     const conflicts: ClauseConflict[] = [];
 
     // Check for mutual exclusivity

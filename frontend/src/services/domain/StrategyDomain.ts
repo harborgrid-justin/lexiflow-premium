@@ -136,7 +136,7 @@ export const StrategyService = {
     const strategy = await StrategyService.getById(strategyId);
 
     // Return existing risks plus generate some AI-suggested risks
-    const existingRisks: Risk[] = (strategy && Array.isArray((strategy as any).risks)) ? (strategy as any).risks : [];
+    const existingRisks: Risk[] = (strategy && Array.isArray((strategy as Record<string, unknown>).risks)) ? (strategy as Record<string, unknown>).risks : [];
     const suggestedRisks: Risk[] = [
       {
         id: `risk-${Date.now()}-1`,

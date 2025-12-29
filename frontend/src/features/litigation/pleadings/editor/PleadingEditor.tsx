@@ -47,7 +47,7 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
 
   const { mutate: saveDocument } = useMutation<PleadingDocument, PleadingDocument>(
       async (doc: PleadingDocument) => {
-          const result = await DataService.pleadings.update(doc.id, doc as any);
+          const result = await DataService.pleadings.update(doc.id, doc as Record<string, unknown>);
           return result as PleadingDocument;
       },
       {

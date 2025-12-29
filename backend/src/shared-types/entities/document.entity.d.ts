@@ -18,7 +18,7 @@ export interface Document extends BaseEntity {
     wordCount?: number;
     language?: string;
     tags?: string[];
-    customFields?: Record<string, any>;
+    customFields?: Record<string, unknown>;
     fullTextContent?: string;
     ocrProcessed?: boolean;
     ocrProcessedAt?: string;

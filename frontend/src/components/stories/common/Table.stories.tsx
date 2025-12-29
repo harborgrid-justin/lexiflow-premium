@@ -7,18 +7,18 @@ import React from "react";
  * Table component for displaying tabular data.
  */
 
-const TableDemo = ({ data, columns, selectable: _selectable, onRowClick }: any) => {
+const TableDemo = ({ data, columns, selectable: _selectable, onRowClick }: unknown) => {
   return (
     <TableContainer>
       <TableHeader>
-        {columns.map((col: any) => (
+        {columns.map((col: unknown) => (
           <TableHead key={col.key}>{col.header}</TableHead>
         ))}
       </TableHeader>
       <TableBody>
-        {data.map((row: any) => (
+        {data.map((row: unknown) => (
           <TableRow key={row.id} onClick={onRowClick ? () => onRowClick(row) : undefined}>
-            {columns.map((col: any) => (
+            {columns.map((col: unknown) => (
               <TableCell key={col.key}>{row[col.key]}</TableCell>
             ))}
           </TableRow>

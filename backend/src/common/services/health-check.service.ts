@@ -8,7 +8,7 @@ export interface HealthCheckResult {
       status: 'up' | 'down';
       message?: string;
       responseTime?: number;
-      details?: any;
+      details?: unknown;
     };
   };
   timestamp: string;

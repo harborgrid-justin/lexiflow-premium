@@ -36,7 +36,7 @@ export const AssetService = {
   getAll: async () => db.getAll(STORES.ASSETS),
   getById: async (id: string) => db.get(STORES.ASSETS, id),
   add: async (item: unknown) => {
-    const itemObj = item && typeof item === 'object' ? item as any : {};
+    const itemObj = item && typeof item === 'object' ? item as Record<string, unknown> : {};
     return db.put(STORES.ASSETS, {
       ...itemObj,
       status: itemObj.status || 'available',

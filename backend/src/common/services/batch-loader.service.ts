@@ -76,8 +76,9 @@ export class BatchLoaderService {
 
     // Create map for efficient lookup
     const entityMap = new Map<any, T>();
-    allEntities.forEach((entity: any) => {
-      entityMap.set(entity.id, entity);
+    allEntities.forEach((entity: unknown) => {
+      const ent = entity as any;
+      entityMap.set(ent.id, entity as T);
     });
 
     this.logger.debug(
@@ -138,12 +139,13 @@ export class BatchLoaderService {
 
     // Group by field value
     const entityMap = new Map<any, T[]>();
-    allEntities.forEach((entity: any) => {
-      const key = entity[fieldName];
+    allEntities.forEach((entity: unknown) => {
+      const ent = entity as any;
+      const key = ent[fieldName];
       if (!entityMap.has(key)) {
         entityMap.set(key, []);
       }
-      entityMap.get(key)!.push(entity);
+      entityMap.get(key)!.push(entity as T);
     });
 
     this.logger.debug(
@@ -241,8 +243,9 @@ export class BatchLoaderService {
       .getRawMany();
 
     const countMap = new Map<any, number>();
-    results.forEach((row: any) => {
-      countMap.set(row.key, parseInt(row.count));
+    results.forEach((row: unknown) => {
+      const r = row as { key: any; count: string };
+      countMap.set(r.key, parseInt(r.count));
     });
 
     // Fill in zeros for values with no results

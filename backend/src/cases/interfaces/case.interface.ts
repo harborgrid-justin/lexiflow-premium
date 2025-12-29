@@ -24,10 +24,10 @@ export interface ICase {
 }
 
 export interface ICaseService {
-  findAll(filter: any): Promise<{ data: ICase[]; total: number }>;
+  findAll(filter: unknown): Promise<{ data: ICase[]; total: number }>;
   findOne(id: string): Promise<ICase>;
-  create(data: any): Promise<ICase>;
-  update(id: string, data: any): Promise<ICase>;
+  create(data: unknown): Promise<ICase>;
+  update(id: string, data: unknown): Promise<ICase>;
   remove(id: string): Promise<void>;
   archive(id: string): Promise<ICase>;
 }

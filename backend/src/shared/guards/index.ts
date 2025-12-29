@@ -73,7 +73,7 @@ export { PermissionsGuard } from '@common/guards/permissions.guard';
  * ```typescript
  * @UseGuards(WsRateLimitGuard)
  * @SubscribeMessage('message')
- * handleMessage(client: Socket, payload: any) { ... }
+ * handleMessage(client: Socket, payload: unknown) { ... }
  * ```
  *
  * Prevents abuse of WebSocket message endpoints
@@ -232,6 +232,6 @@ export { IpReputationGuard } from '@security/guards/ip.reputation.guard';
  * ```typescript
  * @UseGuards(WsJwtAuthGuard, WsRateLimitGuard)
  * @SubscribeMessage('sendMessage')
- * handleMessage(client: Socket, payload: any) { ... }
+ * handleMessage(client: Socket, payload: unknown) { ... }
  * ```
  */

@@ -51,7 +51,7 @@ type Story = StoryObj<typeof meta>;
 // Mock data for stories
 const mockWarRoomData = {
   case: {
-    id: 'case-123' as any,
+    id: 'case-123' as Record<string, unknown>,
     caseNumber: 'CV-2024-001',
     title: 'Smith v. Johnson Corp.',
     status: CaseStatus.Active,

@@ -32,19 +32,19 @@ export class MotionsApiService {
 
   async create(data: Partial<Motion> & { filedBy?: string }): Promise<Motion> {
     // Transform frontend Motion to backend CreateMotionDto
-    const createDto: Record<string, any> = {
+    const createDto: Record<string, unknown> = {
       caseId: data.caseId,
       title: data.title,
       type: data.type, // Should match backend MotionType enum
       status: data.status, // Should match backend MotionStatus enum
-      description: (data as any).notes || data.description, // Map notes → description for compatibility
+      description: (data as Record<string, unknown>).notes || data.description, // Map notes → description for compatibility
       filedBy: data.filedBy,
       filedDate: data.filedDate ? new Date(data.filedDate) : undefined,
       hearingDate: data.hearingDate ? new Date(data.hearingDate) : undefined,
-      decisionDate: (data as any).decidedDate || data.decisionDate ? new Date((data as any).decidedDate || data.decisionDate!) : undefined,
+      decisionDate: (data as Record<string, unknown>).decidedDate || data.decisionDate ? new Date((data as Record<string, unknown>).decidedDate || data.decisionDate!) : undefined,
       decision: data.outcome || data.decision, // Backend uses 'decision', frontend uses 'outcome'
       documentId: data.documentId,
-      metadata: (data as any).metadata,
+      metadata: (data as Record<string, unknown>).metadata,
     };
 
     // Remove undefined values

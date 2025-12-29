@@ -80,7 +80,7 @@ export class PleadingsApiService {
             
             // Handle paginated response (support both 'items' and 'data' properties)
             if (response && typeof response === 'object' && !Array.isArray(response)) {
-                const items = (response as any).items || (response as any).data;
+                const items = (response as Record<string, unknown>).items || (response as Record<string, unknown>).data;
                 if (Array.isArray(items)) {
                     return items;
                 }

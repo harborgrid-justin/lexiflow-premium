@@ -68,7 +68,7 @@ export function WitnessPrep({ caseId: _caseId, warRoomData, initialWitnessId, on
   // MEMOIZED VALUES
   // ============================================================================
   const witnesses = useMemo(() => {
-      return (warRoomData.witnesses || []).map((p: any) => ({
+      return (warRoomData.witnesses || []).map((p: unknown) => ({
           id: p.id,
           name: p.name,
           role: p.role,

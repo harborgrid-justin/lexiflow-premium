@@ -343,7 +343,7 @@ describe('JwtAuthGuard', () => {
   });
 });
 
-function createMockExecutionContext(request?: any): ExecutionContext {
+function createMockExecutionContext(request?: unknown): ExecutionContext {
   const mockRequest = request || {
     headers: { authorization: 'Bearer valid-token' },
     user: null,

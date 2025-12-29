@@ -24,7 +24,7 @@ export interface Communication {
   duration?: number; // in minutes
   attachments?: string[];
   status?: 'sent' | 'received' | 'failed' | 'pending';
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

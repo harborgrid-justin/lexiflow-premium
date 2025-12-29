@@ -127,7 +127,7 @@ export class ColumnEncryptionService {
     }
   }
 
-  async rotateKey(columnName: string, _entityClass: any, repository: any): Promise<number> {
+  async rotateKey(columnName: string, _entityClass: unknown, repository: unknown): Promise<number> {
     this.logger.log(`Starting key rotation for column ${columnName}`);
 
     let rotatedCount = 0;
@@ -136,7 +136,7 @@ export class ColumnEncryptionService {
 
     try {
       while (true) {
-        const entities = await repository.find({
+        const entities = await (repository as any).find({
           take: batchSize,
           skip: offset,
         });
@@ -150,7 +150,7 @@ export class ColumnEncryptionService {
           if (encryptedValue) {
             const decrypted = this.decrypt(encryptedValue);
             entity[columnName] = this.encrypt(decrypted);
-            await repository.save(entity);
+            await (repository as any).save(entity);
             rotatedCount++;
           }
         }
@@ -166,14 +166,14 @@ export class ColumnEncryptionService {
     }
   }
 
-  encryptObject(obj: Record<string, any>): Record<string, any> {
-    const encrypted: Record<string, any> = {};
+  encryptObject(obj: Record<string, unknown>): Record<string, unknown> {
+    const encrypted: Record<string, unknown> = {};
 
     for (const [key, value] of Object.entries(obj)) {
       if (typeof value === 'string') {
         encrypted[key] = this.encrypt(value);
       } else if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
-        encrypted[key] = this.encryptObject(value);
+        encrypted[key] = this.encryptObject(value as Record<string, unknown>);
       } else {
         encrypted[key] = value;
       }
@@ -182,8 +182,8 @@ export class ColumnEncryptionService {
     return encrypted;
   }
 
-  decryptObject(obj: Record<string, any>): Record<string, any> {
-    const decrypted: Record<string, any> = {};
+  decryptObject(obj: Record<string, unknown>): Record<string, unknown> {
+    const decrypted: Record<string, unknown> = {};
 
     for (const [key, value] of Object.entries(obj)) {
       if (typeof value === 'string' && this.isEncrypted(value)) {
@@ -193,7 +193,7 @@ export class ColumnEncryptionService {
           decrypted[key] = value;
         }
       } else if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
-        decrypted[key] = this.decryptObject(value);
+        decrypted[key] = this.decryptObject(value as Record<string, unknown>);
       } else {
         decrypted[key] = value;
       }

@@ -31,7 +31,7 @@ export interface SearchSuggestion {
   id: string;
   text: string;
   category: SearchCategory;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   icon?: React.ReactNode;
 }
 
@@ -229,7 +229,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
         };
       })
       .filter((r): r is NonNullable<typeof r> => r !== null)
-      .sort((a: any, b: any) => (b?.score || 0) - (a?.score || 0))
+      .sort((a: unknown, b: unknown) => (b?.score || 0) - (a?.score || 0))
       .slice(0, maxSuggestions);
     
     return results;

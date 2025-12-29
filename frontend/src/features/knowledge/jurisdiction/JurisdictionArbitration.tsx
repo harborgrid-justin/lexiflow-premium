@@ -13,7 +13,7 @@ export const JurisdictionArbitration: React.FC = () => {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery
-  const { data: rawProviders = [], isLoading } = useQuery<any[]>(
+  const { data: rawProviders = [], isLoading } = useQuery<unknown[]>(
       ['jurisdiction', 'arbitration'],
       DataService.jurisdiction.getArbitrationProviders
   );

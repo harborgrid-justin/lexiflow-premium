@@ -172,8 +172,8 @@ export class AuditLogService implements OnModuleDestroy {
     userId: string,
     resource: string,
     resourceId: string,
-    oldData: any,
-    newData: any,
+    oldData: unknown,
+    newData: unknown,
   ): Promise<void> {
     const changes = this.calculateChanges(oldData, newData);
 
@@ -210,7 +210,7 @@ export class AuditLogService implements OnModuleDestroy {
   async logExport(
     userId: string,
     resource: string,
-    filters: any,
+    filters: unknown,
     recordCount: number,
   ): Promise<void> {
     await this.log({
@@ -309,7 +309,7 @@ export class AuditLogService implements OnModuleDestroy {
     }
   }
 
-  private calculateChanges(oldData: any, newData: any): Record<string, unknown> {
+  private calculateChanges(oldData: unknown, newData: unknown): Record<string, unknown> {
     const changes: Record<string, unknown> = {};
 
     const allKeys = new Set([
@@ -326,10 +326,12 @@ export class AuditLogService implements OnModuleDestroy {
         break;
       }
 
-      if (oldData?.[key] !== newData?.[key]) {
+      const oldObj = oldData as Record<string, any>;
+      const newObj = newData as Record<string, any>;
+      if (oldObj?.[key] !== newObj?.[key]) {
         changes[key] = {
-          old: oldData?.[key],
-          new: newData?.[key],
+          old: oldObj?.[key],
+          new: newObj?.[key],
         };
         changeCount++;
       }

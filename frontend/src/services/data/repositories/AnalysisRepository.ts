@@ -69,7 +69,7 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
         }
     }
     
-    async getCounselProfiles(): Promise<any[]> {
+    async getCounselProfiles(): Promise<unknown[]> {
         try {
             await delay(100);
             // Return empty array - this would typically fetch from a COUNSEL_PROFILES store
@@ -80,7 +80,7 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
         }
     }
     
-    async getPredictionData(): Promise<any[]> {
+    async getPredictionData(): Promise<unknown[]> {
         try {
             await delay(100);
             // Return empty array - this would typically fetch from a PREDICTIONS store
@@ -97,8 +97,8 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
         const lowerQuery = query.toLowerCase();
         return sessions.filter(s =>
             s.id?.toLowerCase().includes(lowerQuery) ||
-            (s as any).title?.toLowerCase().includes(lowerQuery) ||
-            (s as any).caseId?.toLowerCase().includes(lowerQuery)
+            (s as Record<string, unknown>).title?.toLowerCase().includes(lowerQuery) ||
+            (s as Record<string, unknown>).caseId?.toLowerCase().includes(lowerQuery)
         );
     }
 }

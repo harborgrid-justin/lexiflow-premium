@@ -17,12 +17,12 @@ export interface AuditLogEntry {
   userId?: string;
   userName?: string;
   timestamp: Date;
-  beforeValues?: Record<string, any>;
-  afterValues?: Record<string, any>;
-  changes?: Record<string, { old: any; new: any }>;
+  beforeValues?: Record<string, unknown>;
+  afterValues?: Record<string, unknown>;
+  changes?: Record<string, { old: unknown; new: any }>;
   ipAddress?: string;
   userAgent?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 @EventSubscriber()
@@ -78,8 +78,8 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     return !this.excludedEntities.includes(entityName);
   }
 
-  private maskSensitiveData(data: Record<string, any>): Record<string, any> {
-    const masked: Record<string, any> = { ...data };
+  private maskSensitiveData(data: Record<string, unknown>): Record<string, unknown> {
+    const masked: Record<string, unknown> = { ...data };
 
     for (const field of this.sensitiveFields) {
       if (masked[field] !== undefined) {
@@ -90,15 +90,15 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     return masked;
   }
 
-  private extractEntityId(entity: any, dataSource?: DataSource): string {
-    if (entity.id) return entity.id;
-    if (entity.uuid) return entity.uuid;
+  private extractEntityId(entity: unknown, dataSource?: DataSource): string {
+    if ((entity as any).id) return (entity as any).id;
+    if ((entity as any).uuid) return (entity as any).uuid;
 
     if (dataSource) {
       try {
-        const metadata = dataSource.getMetadata(entity.constructor);
+        const metadata = dataSource.getMetadata((entity as any).constructor);
         const primaryColumn = metadata.primaryColumns[0];
-        return primaryColumn?.propertyName ? entity[primaryColumn.propertyName] : 'unknown';
+        return primaryColumn?.propertyName ? (entity as any)[primaryColumn.propertyName] : 'unknown';
       } catch {
         return 'unknown';
       }
@@ -106,8 +106,8 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     return 'unknown';
   }
 
-  private calculateChanges(before: Record<string, any>, after: Record<string, any>): Record<string, { old: any; new: any }> {
-    const changes: Record<string, { old: any; new: any }> = {};
+  private calculateChanges(before: Record<string, unknown>, after: Record<string, unknown>): Record<string, { old: unknown; new: any }> {
+    const changes: Record<string, { old: unknown; new: any }> = {};
 
     const allKeys = new Set([...Object.keys(before), ...Object.keys(after)]);
 
@@ -127,7 +127,7 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     return changes;
   }
 
-  private serializeValue(value: any): any {
+  private serializeValue(value: unknown): any {
     if (value === undefined) return null;
     if (value === null) return null;
     if (value instanceof Date) return value.toISOString();
@@ -145,8 +145,8 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     entityName: string,
     entityId: string,
     action: AuditLogEntry['action'],
-    beforeValues?: Record<string, any>,
-    afterValues?: Record<string, any>,
+    beforeValues?: Record<string, unknown>,
+    afterValues?: Record<string, unknown>,
   ): void {
     const context = this.getUserContext();
 

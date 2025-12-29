@@ -314,13 +314,16 @@ export class CacheControlInterceptor implements NestInterceptor {
 
     // Check common date fields
     const dateFields = ['updatedAt', 'modifiedAt', 'lastModified', 'updated'];
-    const dataRecord = data as Record<string, any>;
+    const dataRecord = data as Record<string, unknown>;
 
     for (const field of dateFields) {
       if (dataRecord[field]) {
-        const date = new Date(dataRecord[field]);
-        if (!isNaN(date.getTime())) {
-          return date;
+        const value = dataRecord[field];
+        if (typeof value === 'string' || typeof value === 'number' || value instanceof Date) {
+          const date = new Date(value);
+          if (!isNaN(date.getTime())) {
+            return date;
+          }
         }
       }
     }

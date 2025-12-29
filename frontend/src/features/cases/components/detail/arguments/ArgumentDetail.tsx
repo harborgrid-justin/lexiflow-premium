@@ -103,7 +103,7 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
             <Tabs 
                 tabs={['core', 'authority', 'evidence', 'analysis']} 
                 activeTab={activeTab} 
-                onChange={(t) => setActiveTab(t as any)}
+                onChange={(t) => setActiveTab(t as Record<string, unknown>)}
                 variant="underline"
             />
         </div>
@@ -125,9 +125,9 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                     {isLinkingCitation && (
                         <div className={cn("p-3 rounded-lg border mb-4 max-h-48 overflow-y-auto", theme.surface.highlight, theme.border.default)}>
                             {allCitations.map(cit => (
-                                <div key={cit.id} onClick={() => toggleLink(cit.id, 'citation')} className={cn("flex items-center p-2 rounded cursor-pointer transition-colors", argument.relatedCitationIds.includes(cit.id as any) ? theme.surface.highlight : `hover:${theme.surface.default}`)}>
-                                    <div className={cn("w-4 h-4 border rounded mr-3 flex items-center justify-center", theme.surface.default, argument.relatedCitationIds.includes(cit.id as any) ? theme.action.primary.border : theme.border.default)}>
-                                        {argument.relatedCitationIds.includes(cit.id as any) && <div className={cn("w-2 h-2 rounded-full", theme.action.primary.bg)}/>}
+                                <div key={cit.id} onClick={() => toggleLink(cit.id, 'citation')} className={cn("flex items-center p-2 rounded cursor-pointer transition-colors", argument.relatedCitationIds.includes(cit.id as Record<string, unknown>) ? theme.surface.highlight : `hover:${theme.surface.default}`)}>
+                                    <div className={cn("w-4 h-4 border rounded mr-3 flex items-center justify-center", theme.surface.default, argument.relatedCitationIds.includes(cit.id as Record<string, unknown>) ? theme.action.primary.border : theme.border.default)}>
+                                        {argument.relatedCitationIds.includes(cit.id as Record<string, unknown>) && <div className={cn("w-2 h-2 rounded-full", theme.action.primary.bg)}/>}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <p className={cn("text-xs font-bold truncate", theme.text.primary)}>{cit.citation}</p>

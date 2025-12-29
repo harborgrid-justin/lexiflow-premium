@@ -351,60 +351,81 @@ export class AnalyticsDashboardService {
     };
   }
 
-  async getRealtimeMetrics(_query: any): Promise<any> {
+  async getRealtimeMetrics(_query: { metricTypes?: string[]; refreshInterval?: number; includeHistory?: boolean }): Promise<{ timestamp: string; metrics: unknown[] }> {
     return {
       timestamp: new Date().toISOString(),
       metrics: []
     };
   }
 
-  async getActiveUsersRealtime(): Promise<any> {
+  async getActiveUsersRealtime(): Promise<{ currentActiveUsers: number; peakActiveUsers: number; usersByRole: Record<string, number>; recentLogins: number; avgSessionDuration: number; timestamp: string }> {
     return {
-      activeUsers: 0,
+      currentActiveUsers: 0,
+      peakActiveUsers: 0,
+      usersByRole: {},
+      recentLogins: 0,
+      avgSessionDuration: 0,
       timestamp: new Date().toISOString()
     };
   }
 
-  async getSystemPerformanceRealtime(): Promise<any> {
+  async getSystemPerformanceRealtime(): Promise<{ cpuUsage: number; memoryUsage: number; databaseConnections: number; avgResponseTime: number; requestsPerMinute: number; errorRate: number; timestamp: string }> {
     return {
       cpuUsage: 0,
       memoryUsage: 0,
+      databaseConnections: 0,
+      avgResponseTime: 0,
+      requestsPerMinute: 0,
+      errorRate: 0,
       timestamp: new Date().toISOString()
     };
   }
 
-  async getCaseActivityRealtime(): Promise<any> {
+  async getCaseActivityRealtime(): Promise<{ casesCreatedToday: number; recentCaseUpdates: number; activeCases: number; documentsUploadedToday: number; tasksCompletedToday: number; timestamp: string }> {
     return {
-      recentActivity: [],
+      casesCreatedToday: 0,
+      recentCaseUpdates: 0,
+      activeCases: 0,
+      documentsUploadedToday: 0,
+      tasksCompletedToday: 0,
       timestamp: new Date().toISOString()
     };
   }
 
-  async getRevenueRealtime(): Promise<any> {
+  async getRevenueRealtime(): Promise<{ revenueToday: number; revenueThisWeek: number; revenueThisMonth: number; billableHoursToday: number; invoicesGeneratedToday: number; paymentsReceivedToday: number; timestamp: string }> {
     return {
-      currentRevenue: 0,
+      revenueToday: 0,
+      revenueThisWeek: 0,
+      revenueThisMonth: 0,
+      billableHoursToday: 0,
+      invoicesGeneratedToday: 0,
+      paymentsReceivedToday: 0,
       timestamp: new Date().toISOString()
     };
   }
 
-  async exportAnalyticsData(exportDto: any): Promise<any> {
+  async exportAnalyticsData(exportDto: { format?: string; dataType?: string; startDate?: string; endDate?: string }): Promise<{ jobId: string; status: string; format: string; createdAt: string; downloadUrl?: string }> {
     const { format = 'csv' } = exportDto;
     return {
-      url: `/exports/${Date.now()}.${format}`,
+      downloadUrl: `/exports/${Date.now()}.${format}`,
       jobId: `export-${Date.now()}`,
-      status: 'pending'
+      status: 'pending',
+      format: format,
+      createdAt: new Date().toISOString()
     };
   }
 
-  async getExportJobStatus(jobId: string): Promise<any> {
+  async getExportJobStatus(jobId: string): Promise<{ jobId: string; status: string; format: string; createdAt: string; downloadUrl?: string }> {
     return {
       jobId,
       status: 'completed',
-      url: `/exports/${jobId}.csv`
+      downloadUrl: `/exports/${jobId}.csv`,
+      format: 'csv',
+      createdAt: new Date().toISOString()
     };
   }
 
-  async bulkRefreshDashboards(refreshDto: any): Promise<any> {
+  async bulkRefreshDashboards(refreshDto: { dashboardIds?: string[]; forceRefresh?: boolean }): Promise<{ refreshedCount: number; failedCount: number; results: Record<string, unknown>; timestamp: string }> {
     const { dashboardIds = [] } = refreshDto;
     return {
       refreshedCount: dashboardIds.length,
@@ -414,12 +435,13 @@ export class AnalyticsDashboardService {
     };
   }
 
-  async bulkDeleteEvents(deleteDto: any): Promise<any> {
+  async bulkDeleteEvents(deleteDto: { eventIds?: string[]; softDelete?: boolean }): Promise<{ deletedCount: number; failedCount: number; failedIds: string[]; deletedIds: string[]; timestamp: string }> {
     const { eventIds = [] } = deleteDto;
     return {
       deletedCount: eventIds.length,
       failedCount: 0,
       failedIds: [],
+      deletedIds: eventIds,
       timestamp: new Date().toISOString()
     };
   }

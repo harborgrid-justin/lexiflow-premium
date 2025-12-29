@@ -190,7 +190,7 @@ export const TeamPerformanceChart: React.FC<TeamPerformanceChartProps> = ({
   };
 
   // Handle bar click
-  const handleBarClick = (data: any, metric: string) => {
+  const handleBarClick = (data: unknown, metric: string) => {
     if (onBarClick) {
       onBarClick(data, metric);
     }

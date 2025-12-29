@@ -43,7 +43,7 @@ export const StrategyBoard: React.FC = () => {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('okr');
 
-    const { data: okrs = [] } = useQuery<any[]>(
+    const { data: okrs = [] } = useQuery<unknown[]>(
         ['okrs', 'all'],
         DataService.operations.getOkrs
     );

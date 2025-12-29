@@ -39,7 +39,7 @@ export class RiskRepository extends Repository<Risk> {
     override async getAll(): Promise<Risk[]> {
         if (this.useBackend) {
             try {
-                return await this.risksApi.getAll() as any;
+                return await this.risksApi.getAll() as Record<string, unknown>;
             } catch (error) {
                 console.warn('[RiskRepository] Backend API unavailable', error);
             }
@@ -52,7 +52,7 @@ export class RiskRepository extends Repository<Risk> {
         if (this.useBackend) {
             try {
                 const risks = await this.risksApi.getAll({ caseId });
-                return risks as any;
+                return risks as Record<string, unknown>;
             } catch (error) {
                 console.warn('[RiskRepository] Backend API unavailable', error);
             }
@@ -64,7 +64,7 @@ export class RiskRepository extends Repository<Risk> {
         this.validateId(id, 'getById');
         if (this.useBackend) {
             try {
-                return await this.risksApi.getById(id) as any;
+                return await this.risksApi.getById(id) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[RiskRepository] Backend API unavailable', error);
             }
@@ -80,7 +80,7 @@ export class RiskRepository extends Repository<Risk> {
         let result: Risk;
         if (this.useBackend) {
             try {
-                result = await this.risksApi.create(item as any) as any;
+                result = await this.risksApi.create(item as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[RiskRepository] Backend API unavailable', error);
                 await super.add(item);
@@ -105,7 +105,7 @@ export class RiskRepository extends Repository<Risk> {
         this.validateId(id, 'update');
         if (this.useBackend) {
             try {
-                return await this.risksApi.update(id, updates) as any;
+                return await this.risksApi.update(id, updates) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[RiskRepository] Backend API unavailable', error);
             }

@@ -53,7 +53,7 @@ export const EntityAnalytics: React.FC<EntityAnalyticsProps> = ({ entities }) =>
         { name: 'Vendor', value: entities.filter(e => e.type === 'Vendor').length, color: colors[3] },
       ];
 
-      const rStats = entities.reduce((acc: any, e) => {
+      const rStats = entities.reduce((acc: unknown, e) => {
           if (e.riskScore > 75) acc.high++;
           else if (e.riskScore > 40) acc.medium++;
           else acc.low++;
@@ -61,7 +61,7 @@ export const EntityAnalytics: React.FC<EntityAnalyticsProps> = ({ entities }) =>
       }, { high: 0, medium: 0, low: 0 });
 
       const jCount = new Set(entities.map(e => e.jurisdiction || e.state)).size;
-      const highRiskEntities = entities.sort((a: any, b: any) => b.riskScore - a.riskScore).slice(0, 10).map(e => ({ name: e.name.substring(0, 10), score: e.riskScore }));
+      const highRiskEntities = entities.sort((a: unknown, b: unknown) => b.riskScore - a.riskScore).slice(0, 10).map(e => ({ name: e.name.substring(0, 10), score: e.riskScore }));
 
       return { typeStats: tStats, riskStats: rStats, jurisdictionCount: jCount, topHighRisk: highRiskEntities };
   }, [entities, colors]);

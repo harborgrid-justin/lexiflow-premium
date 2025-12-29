@@ -1,37 +1,89 @@
 import { Module, Global, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+
+// Core Services
 import { EncryptionService } from './services/encryption.service';
 import { SecurityHeadersService } from './services/security.headers.service';
 import { RequestFingerprintService } from './services/request.fingerprint.service';
+
+// Enhanced Services (v0.5.2)
+import { CorsSecurityService } from './services/cors.security.service';
+import { InputValidationService } from './services/input.validation.service';
+import { SecurityMonitoringService } from './services/security.monitoring.service';
+import { EnhancedAuditService } from './services/enhanced.audit.service';
+import { CspViolationService } from './services/csp.violation.service';
+
+// Guards
 import { IpReputationGuard } from './guards/ip.reputation.guard';
+import { AbacGuard } from './guards/abac.guard';
+
+// Middleware
 import { SecurityHeadersMiddleware } from './middleware/security.headers.middleware';
+
+// Controllers
+import { CspViolationController } from './controllers/csp.violation.controller';
+
+// Dependencies
 import { RedisCacheManagerService } from '@common/services/redis-cache-manager.service';
 
 /**
- * Security Module
- * Enterprise-grade security module providing OWASP Top 10 protections
+ * Enhanced Security Module (v0.5.2)
+ * Enterprise-grade security module providing comprehensive OWASP Top 10 protections
  *
- * Features:
+ * Core Features:
  * - AES-256-GCM encryption for sensitive data at rest
  * - Comprehensive security headers (CSP, HSTS, etc.)
  * - Request fingerprinting for session hijacking detection
  * - IP reputation tracking and blocking
- * - PBKDF2 key derivation
+ * - PBKDF2 key derivation with 100,000 iterations
  * - Automatic security headers middleware
  *
- * All services are exported as global providers for easy injection
+ * Enhanced Features (v0.5.2):
+ * - Dynamic CORS validation with origin pattern matching
+ * - Advanced input validation (XSS, SQL injection, NoSQL injection, etc.)
+ * - Real-time security event monitoring and alerting
+ * - Enhanced audit logging for sensitive operations (HIPAA, GDPR, SOC2)
+ * - Attribute-Based Access Control (ABAC) with context-aware policies
+ * - CSP violation reporting and analysis
+ * - Automated threat detection and response
+ * - Compliance reporting (HIPAA, GDPR, SOC2, CCPA)
+ *
+ * OWASP Top 10 Coverage:
+ * - A01:2021 – Broken Access Control (ABAC, RBAC, IP reputation)
+ * - A02:2021 – Cryptographic Failures (AES-256-GCM, PBKDF2)
+ * - A03:2021 – Injection (Input validation, parameterized queries)
+ * - A04:2021 – Insecure Design (Security architecture, defense in depth)
+ * - A05:2021 – Security Misconfiguration (Secure defaults, CSP, HSTS)
+ * - A06:2021 – Vulnerable Components (Regular updates, security scanning)
+ * - A07:2021 – Authentication Failures (Session management, brute force protection)
+ * - A08:2021 – Data Integrity Failures (HMAC signatures, audit trail)
+ * - A09:2021 – Security Logging Failures (Comprehensive audit logging, monitoring)
+ * - A10:2021 – SSRF (Input validation, network access controls)
+ *
+ * All services are exported as global providers for easy injection throughout the application.
  */
 @Global()
 @Module({
   imports: [ConfigModule],
+  controllers: [
+    CspViolationController,
+  ],
   providers: [
     // Core Security Services
     EncryptionService,
     SecurityHeadersService,
     RequestFingerprintService,
 
+    // Enhanced Security Services (v0.5.2)
+    CorsSecurityService,
+    InputValidationService,
+    SecurityMonitoringService,
+    EnhancedAuditService,
+    CspViolationService,
+
     // Guards
     IpReputationGuard,
+    AbacGuard,
 
     // Middleware
     SecurityHeadersMiddleware,
@@ -40,11 +92,23 @@ import { RedisCacheManagerService } from '@common/services/redis-cache-manager.s
     RedisCacheManagerService,
   ],
   exports: [
-    // Export all services for global use
+    // Core Services
     EncryptionService,
     SecurityHeadersService,
     RequestFingerprintService,
+
+    // Enhanced Services
+    CorsSecurityService,
+    InputValidationService,
+    SecurityMonitoringService,
+    EnhancedAuditService,
+    CspViolationService,
+
+    // Guards
     IpReputationGuard,
+    AbacGuard,
+
+    // Middleware
     SecurityHeadersMiddleware,
   ],
 })

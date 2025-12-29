@@ -61,7 +61,7 @@ export const ClauseHistoryModal: React.FC<ClauseHistoryModalProps> = ({ clause, 
             </div>
           ) : (
             <div className="space-y-4">
-              {clause.versions?.map((v: any) => {
+              {clause.versions?.map((v: unknown) => {
                 const version = v as ClauseVersion;
                 return (
                 <div key={version.id || version.version} className={cn("border rounded-lg p-4 transition-colors group", theme.border.default, `hover:${theme.surface.highlight}`)}>

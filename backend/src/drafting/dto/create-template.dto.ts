@@ -64,7 +64,7 @@ export class CreateTemplateDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  version?: string;
+  templateVersion?: string;
 
   @ApiProperty({ required: false })
   @IsOptional()

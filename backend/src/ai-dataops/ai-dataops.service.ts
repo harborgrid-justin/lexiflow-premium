@@ -41,7 +41,7 @@ export class AiDataopsService implements OnModuleDestroy {
   private embeddingCache: Map<string, { data: VectorEmbedding; timestamp: number; accessCount: number }> = new Map();
   private modelCache: Map<string, { data: AIModel; timestamp: number }> = new Map();
   private similarityResultCache: Map<string, { data: VectorEmbedding[]; timestamp: number }> = new Map();
-  private statsCache: Map<string, { data: any; timestamp: number }> = new Map();
+  private statsCache: Map<string, { data: unknown; timestamp: number }> = new Map();
   private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(

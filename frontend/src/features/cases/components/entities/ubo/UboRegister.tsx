@@ -41,7 +41,7 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
   const metrics = useMemo(() => ({
     entitiesTracked: stats?.corporations || corporations.length,
     ubosIdentified: corporations.reduce((sum, corp) => {
-      const apiCorp = corp as any;
+      const apiCorp = corp as Record<string, unknown>;
       return sum + (apiCorp.relationships?.length || 0);
     }, 0),
     verificationPending: corporations.filter(corp => corp.status !== 'active').length,
@@ -101,14 +101,14 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
           </TableHeader>
           <TableBody>
               {corporations.map(corp => {
-                const apiCorp = corp as any;
+                const apiCorp = corp as Record<string, unknown>;
                 const firstRelationship = apiCorp.relationships?.[0];
                 const ownershipPct = firstRelationship?.metadata?.ownershipPercentage as number || 0;
                 const controlType = firstRelationship?.relationshipType || 'Senior Officer';
                 const isVerified = corp.status === 'active';
 
                 return (
-                  <TableRow key={corp.id} onClick={() => onSelect(corp as any)} className="cursor-pointer">
+                  <TableRow key={corp.id} onClick={() => onSelect(corp as Record<string, unknown>)} className="cursor-pointer">
                       <TableCell className={cn("font-bold", theme.text.primary)}>
                           <div className="flex items-center gap-2">
                               <Building className="h-4 w-4 text-blue-500"/>

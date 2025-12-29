@@ -8,14 +8,14 @@ export interface ApiResponse<T = any> {
 export interface ApiError {
     code: string;
     message: string;
-    details?: any;
+    details?: unknown;
     stack?: string;
 }
 export interface ResponseMeta {
     requestId?: string;
     duration?: number;
     version?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 export interface SuccessResponse<T = any> extends ApiResponse<T> {
     success: true;
@@ -33,6 +33,6 @@ export interface BatchOperationResult<T = any> {
     failureCount: number;
 }
 export interface BatchOperationError {
-    item: any;
+    item: unknown;
     error: ApiError;
 }

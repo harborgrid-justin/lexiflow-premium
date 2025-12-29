@@ -72,9 +72,9 @@ export class SchemaManagementApiService {
   /**
    * Get columns for a specific table
    */
-  async getTableColumns(tableName: string): Promise<any[]> {
+  async getTableColumns(tableName: string): Promise<unknown[]> {
     try {
-      return await apiClient.get<any[]>(`/schema/tables/${tableName}/columns`);
+      return await apiClient.get<unknown[]>(`/schema/tables/${tableName}/columns`);
     } catch (error) {
       console.error('[SchemaManagementApi] Error fetching columns:', error);
       return [];
@@ -167,7 +167,7 @@ export class SchemaManagementApiService {
    */
   async createTable(data: {
     name: string;
-    columns: Record<string, any>[];
+    columns: Record<string, unknown>[];
     description?: string;
   }): Promise<{ success: boolean; table: string }> {
     return await apiClient.post('/schema/tables', data);

@@ -94,8 +94,8 @@ export class EventEmitter<T> {
  * emitter.emit('user:updated', updatedUser);
  * ```
  */
-export class TypedEventEmitter<TEvents extends Record<string, any>> {
-  private listeners: Map<keyof TEvents, Set<(data: any) => void>> = new Map();
+export class TypedEventEmitter<TEvents extends Record<string, unknown>> {
+  private listeners: Map<keyof TEvents, Set<(data: unknown) => void>> = new Map();
 
   /**
    * Subscribe to a specific event type.
@@ -233,7 +233,7 @@ export function createEventEmitter<T>(): EventEmitter<T> {
  * ```
  */
 export function createTypedEventEmitter<
-  TEvents extends Record<string, any>
+  TEvents extends Record<string, unknown>
 >(): TypedEventEmitter<TEvents> {
   return new TypedEventEmitter<TEvents>();
 }

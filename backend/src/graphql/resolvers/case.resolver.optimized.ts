@@ -202,13 +202,13 @@ export class CaseResolverOptimized {
       activeCases: parseInt(metrics.active_cases) || 0,
       closedCases: parseInt(metrics.closed_cases) || 0,
       pendingCases: parseInt(metrics.pending_cases) || 0,
-      byType: typeDistribution.map((row: any) => ({
-        type: row.type,
-        count: parseInt(row.count),
+      byType: typeDistribution.map((row: unknown) => ({
+        type: (row as any).type,
+        count: parseInt((row as any).count),
       })),
-      byStatus: statusDistribution.map((row: any) => ({
-        status: row.status,
-        count: parseInt(row.count),
+      byStatus: statusDistribution.map((row: unknown) => ({
+        status: (row as any).status,
+        count: parseInt((row as any).count),
       })),
     };
   }

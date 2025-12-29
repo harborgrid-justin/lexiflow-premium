@@ -23,8 +23,8 @@ import React from 'react';
 export type ColumnAlignment = 'left' | 'center' | 'right';
 export type EditorType = 'text' | 'number' | 'date' | 'select' | 'checkbox' | 'textarea';
 
-export interface CellContext<T> {
-  value: any;
+export interface CellContext<T, TValue = unknown> {
+  value: TValue;
   row: T;
 }
 
@@ -33,14 +33,14 @@ export interface EditorOption {
   value: string | number;
 }
 
-export interface ColumnDefinition<T extends Record<string, any>> {
+export interface ColumnDefinition<T extends Record<string, unknown>> {
   // Identification
   id: string;
   header: string;
   accessorKey?: string; // Path to the data (e.g., "user.name")
 
   // Rendering
-  cell?: (context: CellContext<T>) => React.ReactNode;
+  cell?: (context: CellContext<T, unknown>) => React.ReactNode;
   footer?: string | ((rows: T[]) => React.ReactNode);
 
   // Sizing
@@ -64,7 +64,7 @@ export interface ColumnDefinition<T extends Record<string, any>> {
   hidden?: boolean;
 
   // Meta
-  meta?: Record<string, any>;
+  meta?: Record<string, unknown>;
 }
 
 // ============================================================================
@@ -74,7 +74,7 @@ export interface ColumnDefinition<T extends Record<string, any>> {
 /**
  * Creates a column definition with type safety
  */
-export function createColumn<T extends Record<string, any>>(
+export function createColumn<T extends Record<string, unknown>>(
   definition: ColumnDefinition<T>
 ): ColumnDefinition<T> {
   return {
@@ -90,7 +90,7 @@ export function createColumn<T extends Record<string, any>>(
 /**
  * Creates multiple columns with type safety
  */
-export function createColumns<T extends Record<string, any>>(
+export function createColumns<T extends Record<string, unknown>>(
   definitions: ColumnDefinition<T>[]
 ): ColumnDefinition<T>[] {
   return definitions.map(createColumn);
@@ -103,7 +103,7 @@ export function createColumns<T extends Record<string, any>>(
 /**
  * Text column preset
  */
-export function textColumn<T extends Record<string, any>>(
+export function textColumn<T extends Record<string, unknown>>(
   id: string,
   header: string,
   accessorKey?: string,
@@ -121,7 +121,7 @@ export function textColumn<T extends Record<string, any>>(
 /**
  * Number column preset
  */
-export function numberColumn<T extends Record<string, any>>(
+export function numberColumn<T extends Record<string, unknown>>(
   id: string,
   header: string,
   accessorKey?: string,
@@ -146,7 +146,7 @@ export function numberColumn<T extends Record<string, any>>(
 /**
  * Currency column preset
  */
-export function currencyColumn<T extends Record<string, any>>(
+export function currencyColumn<T extends Record<string, unknown>>(
   id: string,
   header: string,
   accessorKey?: string,
@@ -174,7 +174,7 @@ export function currencyColumn<T extends Record<string, any>>(
 /**
  * Date column preset
  */
-export function dateColumn<T extends Record<string, any>>(
+export function dateColumn<T extends Record<string, unknown>>(
   id: string,
   header: string,
   accessorKey?: string,
@@ -212,7 +212,7 @@ export function dateColumn<T extends Record<string, any>>(
 /**
  * Boolean column preset (checkbox)
  */
-export function booleanColumn<T extends Record<string, any>>(
+export function booleanColumn<T extends Record<string, unknown>>(
   id: string,
   header: string,
   accessorKey?: string,
@@ -241,7 +241,7 @@ export function booleanColumn<T extends Record<string, any>>(
 /**
  * Status badge column preset
  */
-export function statusColumn<T extends Record<string, any>>(
+export function statusColumn<T extends Record<string, unknown>>(
   id: string,
   header: string,
   accessorKey?: string,
@@ -286,7 +286,7 @@ export function statusColumn<T extends Record<string, any>>(
 /**
  * Select column preset
  */
-export function selectColumn<T extends Record<string, any>>(
+export function selectColumn<T extends Record<string, unknown>>(
   id: string,
   header: string,
   options: EditorOption[],
@@ -310,7 +310,7 @@ export function selectColumn<T extends Record<string, any>>(
 /**
  * Action column preset (for buttons/actions)
  */
-export function actionColumn<T extends Record<string, any>>(
+export function actionColumn<T extends Record<string, unknown>>(
   id: string,
   header: string,
   render: (row: T) => React.ReactNode,
@@ -332,7 +332,7 @@ export function actionColumn<T extends Record<string, any>>(
 /**
  * Index column preset (row number)
  */
-export function indexColumn<T extends Record<string, any>>(
+export function indexColumn<T extends Record<string, unknown>>(
   header: string = '#',
   options?: Partial<ColumnDefinition<T>>
 ): ColumnDefinition<T> {
@@ -360,7 +360,7 @@ export function indexColumn<T extends Record<string, any>>(
 /**
  * Validates column definitions
  */
-export function validateColumns<T extends Record<string, any>>(
+export function validateColumns<T extends Record<string, unknown>>(
   columns: ColumnDefinition<T>[]
 ): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
@@ -395,13 +395,13 @@ export function validateColumns<T extends Record<string, any>>(
 /**
  * Extract the data type from column definitions
  */
-export type InferDataType<Columns extends readonly ColumnDefinition<any>[]> =
+export type InferDataType<Columns extends readonly ColumnDefinition<Record<string, unknown>>[]> =
   Columns extends readonly ColumnDefinition<infer T>[] ? T : never;
 
 /**
  * Type guard for checking if a column is editable
  */
-export function isEditableColumn<T extends Record<string, any>>(
+export function isEditableColumn<T extends Record<string, unknown>>(
   column: ColumnDefinition<T>
 ): column is ColumnDefinition<T> & { editable: true } {
   return column.editable === true;
@@ -410,7 +410,7 @@ export function isEditableColumn<T extends Record<string, any>>(
 /**
  * Type guard for checking if a column is sortable
  */
-export function isSortableColumn<T extends Record<string, any>>(
+export function isSortableColumn<T extends Record<string, unknown>>(
   column: ColumnDefinition<T>
 ): column is ColumnDefinition<T> & { sortable: true } {
   return column.sortable !== false;
@@ -419,7 +419,7 @@ export function isSortableColumn<T extends Record<string, any>>(
 /**
  * Type guard for checking if a column is filterable
  */
-export function isFilterableColumn<T extends Record<string, any>>(
+export function isFilterableColumn<T extends Record<string, unknown>>(
   column: ColumnDefinition<T>
 ): column is ColumnDefinition<T> & { filterable: true } {
   return column.filterable !== false;

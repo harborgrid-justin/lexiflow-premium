@@ -85,7 +85,7 @@ const validateDiscoveryRequest = (data: unknown): ValidationResult<Partial<Disco
   }
 
   const dataType = 'type' in data ? data.type : undefined;
-  if (!discoveryTypes.includes(dataType as any)) {
+  if (!discoveryTypes.includes(dataType as Record<string, unknown>)) {
     errors.push({ path: 'type', message: 'Invalid discovery type' });
   }
 
@@ -100,7 +100,7 @@ const validateDiscoveryRequest = (data: unknown): ValidationResult<Partial<Disco
   }
 
   const dataStatus = 'status' in data ? data.status : undefined;
-  if (!discoveryRequestStatuses.includes(dataStatus as any)) {
+  if (!discoveryRequestStatuses.includes(dataStatus as Record<string, unknown>)) {
     errors.push({ path: 'status', message: 'Invalid status' });
   }
 
@@ -147,7 +147,7 @@ const validatePrivilegeLogEntry = (data: unknown): ValidationResult<Partial<Priv
   }
 
   const dataBasis = 'basis' in data ? data.basis : undefined;
-  if (!privilegeBasisTypes.includes(dataBasis as any)) {
+  if (!privilegeBasisTypes.includes(dataBasis as Record<string, unknown>)) {
     errors.push({ path: 'basis', message: 'Invalid privilege basis' });
   }
 
@@ -226,7 +226,7 @@ const validateLegalHold = (data: unknown): ValidationResult<Partial<LegalHold>> 
     errors.push({ path: 'issued', message: 'Invalid issue date format (YYYY-MM-DD)' });
   }
 
-  if (!legalHoldStatuses.includes(record.status as any)) {
+  if (!legalHoldStatuses.includes(record.status as Record<string, unknown>)) {
     errors.push({ path: 'status', message: 'Invalid status' });
   }
 
@@ -314,11 +314,11 @@ const validateESISource = (data: unknown): ValidationResult<ESISource> => {
   }
 
   const validTypes = ['Email', 'Slack', 'Device', 'SharePoint', 'OneDrive', 'Database'];
-  if (!validTypes.includes(input.type as any)) {
+  if (!validTypes.includes(input.type as Record<string, unknown>)) {
     errors.push({ path: 'type', message: 'Invalid source type' });
   }
 
-  if (!esiCollectionStatuses.includes(input.status as any)) {
+  if (!esiCollectionStatuses.includes(input.status as Record<string, unknown>)) {
     errors.push({ path: 'status', message: 'Invalid status' });
   }
 

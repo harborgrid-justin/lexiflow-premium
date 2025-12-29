@@ -127,7 +127,7 @@ export class CorrespondenceService {
   /**
    * Track delivery status
    */
-  async updateDeliveryStatus(id: string, status: CorrespondenceStatus, metadata?: any) {
+  async updateDeliveryStatus(id: string, status: CorrespondenceStatus, metadata?: unknown) {
     // Update delivery status
     // Can be called by email/postal service webhooks
     return {

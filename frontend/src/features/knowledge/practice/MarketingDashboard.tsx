@@ -52,8 +52,8 @@ export const MarketingDashboard: React.FC = () => {
   );
 
   // Calculate totals
-  const totalPipelineValue = metrics.reduce((acc: any, curr) => acc + curr.revenue, 0);
-  const avgConversion = metrics.length > 0 ? (metrics.reduce((acc: any, curr) => acc + (curr.conversions/curr.leads), 0) / metrics.length) * 100 : 0;
+  const totalPipelineValue = metrics.reduce((acc: unknown, curr) => acc + curr.revenue, 0);
+  const avgConversion = metrics.length > 0 ? (metrics.reduce((acc: unknown, curr) => acc + (curr.conversions/curr.leads), 0) / metrics.length) * 100 : 0;
 
   return (
     <div className="space-y-6 animate-fade-in">

@@ -31,7 +31,7 @@ export const COLUMN_CONFIG: Record<Category, { header: string; key: string; type
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const EMPTY_TEMPLATES: Record<Category, any> = {
+export const EMPTY_TEMPLATES: Record<Category, unknown> = {
   users: { id: '', name: '', role: 'Associate', office: '' },
   cases: { id: '', title: '', client: '', status: 'Discovery', value: 0 },
   clients: { id: '', name: '', industry: '', status: 'Active', totalBilled: 0 },

@@ -31,7 +31,7 @@ export class CasesService implements OnModuleDestroy {
   // Caches for memory optimization
   private caseCache: Map<string, { data: CaseResponseDto; timestamp: number }> = new Map();
   private statsCache: { data: CaseStatsDto; timestamp: number } | null = null;
-  private metricsCache: { data: any; timestamp: number } | null = null;
+  private metricsCache: { data: unknown; timestamp: number } | null = null;
   private queryCache: Map<string, { data: PaginatedCaseResponseDto; timestamp: number }> = new Map();
 
   constructor(
@@ -158,7 +158,14 @@ export class CasesService implements OnModuleDestroy {
   }> {
     // Check cache first
     if (this.metricsCache && this.isCacheValid(this.metricsCache.timestamp, this.METRICS_CACHE_TTL_MS)) {
-      return this.metricsCache.data;
+      return this.metricsCache.data as {
+        totalCases: number;
+        activeCases: number;
+        closedCases: number;
+        pendingCases: number;
+        byType: Array<{ type: string; count: number }>;
+        byStatus: Array<{ status: string; count: number }>;
+      };
     }
 
     // Get total count

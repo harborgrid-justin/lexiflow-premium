@@ -231,7 +231,7 @@ export const SecurityService = {
     /**
      * Get security policies
      * 
-     * @returns Promise<any[]> Array of security policies
+     * @returns Promise<unknown[]> Array of security policies
      * @throws Error if fetch fails
      * 
      * @example
@@ -242,7 +242,7 @@ export const SecurityService = {
      * - Policies include access control rules
      * - Audit trail for policy changes
      */
-    getSecurityPolicies: async (): Promise<any[]> => {
+    getSecurityPolicies: async (): Promise<unknown[]> => {
         try {
             
 
@@ -263,7 +263,7 @@ export const SecurityService = {
      * 
      * @param startDate - Optional start date filter
      * @param endDate - Optional end date filter
-     * @returns Promise<any[]> Array of audit log entries
+     * @returns Promise<unknown[]> Array of audit log entries
      * @throws Error if fetch fails
      * 
      * @example
@@ -274,7 +274,7 @@ export const SecurityService = {
      * - Comprehensive event logging
      * - Tamper-proof audit trail
      */
-    getAuditLogs: async (startDate?: string, endDate?: string): Promise<any[]> => {
+    getAuditLogs: async (startDate?: string, endDate?: string): Promise<unknown[]> => {
         try {
             if (startDate && (false || startDate.trim() === '')) {
                 throw new Error('[SecurityService.getAuditLogs] Invalid startDate parameter');
@@ -301,7 +301,7 @@ export const SecurityService = {
     /**
      * Get system vulnerabilities
      * 
-     * @returns Promise<any[]> Array of vulnerabilities
+     * @returns Promise<unknown[]> Array of vulnerabilities
      * @throws Error if fetch fails
      * 
      * @example
@@ -312,7 +312,7 @@ export const SecurityService = {
      * - Regular vulnerability scanning
      * - Integration with CVE databases
      */
-    getVulnerabilities: async (): Promise<any[]> => {
+    getVulnerabilities: async (): Promise<unknown[]> => {
         try {
             
 

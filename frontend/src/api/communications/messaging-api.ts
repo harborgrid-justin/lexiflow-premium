@@ -17,7 +17,7 @@ export interface Message {
   attachments?: string[];
   sentAt: string;
   readAt?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface MessageFilters {
@@ -52,12 +52,12 @@ export class MessagingApiService {
   }
 
   // Contacts
-  async getContacts(filters?: Record<string, any>): Promise<Contact[]> {
+  async getContacts(filters?: Record<string, unknown>): Promise<Contact[]> {
     return apiClient.get<Contact[]>(`${this.baseUrl}/contacts`, filters);
   }
 
   // Conversations
-  async getConversations(filters?: Record<string, any>): Promise<Conversation[]> {
+  async getConversations(filters?: Record<string, unknown>): Promise<Conversation[]> {
     return apiClient.get<Conversation[]>(`${this.baseUrl}/conversations`, filters);
   }
 
@@ -116,7 +116,7 @@ export class MessagingApiService {
 
   async send(data: Partial<Message>): Promise<Message> {
     // Deprecated - use sendMessage() instead
-    return this.sendMessage(data as any);
+    return this.sendMessage(data as Record<string, unknown>);
   }
 
   async delete(id: string): Promise<void> {

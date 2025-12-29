@@ -122,8 +122,8 @@ export class DraftingTemplate extends BaseEntity {
   @Column({ name: 'last_used_at', type: 'timestamp', nullable: true })
   lastUsedAt!: Date;
 
-  @Column({ type: 'varchar', length: 50, nullable: true })
-  version!: string;
+  @Column({ name: 'template_version', type: 'varchar', length: 50, nullable: true })
+  templateVersion!: string;
 
   @Column({ name: 'parent_template_id', type: 'uuid', nullable: true })
   parentTemplateId!: string;

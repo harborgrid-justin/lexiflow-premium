@@ -10,7 +10,7 @@ import type { SearchResult } from '@/types';
 export interface SearchQuery {
   q: string;
   type?: 'all' | 'cases' | 'documents' | 'docket' | 'contacts' | 'tasks';
-  filters?: Record<string, any>;
+  filters?: Record<string, unknown>;
   page?: number;
   limit?: number;
 }

@@ -12,12 +12,12 @@ export interface DataSource {
   status: 'active' | 'inactive' | 'error';
   config: {
     url?: string;
-    credentials?: Record<string, any>;
+    credentials?: Record<string, unknown>;
     syncSchedule?: string;
     lastSync?: string;
   };
   capabilities?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

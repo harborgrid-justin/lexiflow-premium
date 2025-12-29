@@ -26,7 +26,7 @@ export interface JudgeStatistics {
     count: number;
     percentage: number;
   }[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export class JudgeStatsApiService {

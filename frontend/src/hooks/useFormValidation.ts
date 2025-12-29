@@ -63,7 +63,7 @@ export interface UseFormValidationOptions<T extends Record<string, unknown>> {
   interdependencyValidator?: (values: T) => Record<string, string | null>;
 }
 
-export interface UseFormValidationReturn<T extends Record<string, any>> {
+export interface UseFormValidationReturn<T extends Record<string, unknown>> {
   /** Current form values */
   values: T;
   /** Validation state for each field */
@@ -113,7 +113,7 @@ function debounce<T extends (...args: unknown[]) => void>(
 /**
  * Calculate form completion percentage
  */
-function calculateCompletionPercentage<T extends Record<string, any>>(
+function calculateCompletionPercentage<T extends Record<string, unknown>>(
   values: T,
   schema: ValidationSchema<T>
 ): number {

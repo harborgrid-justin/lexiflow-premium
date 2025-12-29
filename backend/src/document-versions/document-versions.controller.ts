@@ -94,16 +94,16 @@ export class DocumentVersionsController {
   async downloadVersion(
     @Param('documentId', ParseUUIDPipe) documentId: string,
     @Param('version', ParseIntPipe) version: number,
-    @Res() res: any,
+    @Res() res: unknown,
   ): Promise<void> {
     const { buffer, filename, mimeType } =
       await this.documentVersionsService.downloadVersion(documentId, version);
 
-    res.setHeader('Content-Type', mimeType);
-    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    res.setHeader('Content-Length', buffer.length.toString());
+    (res as any).setHeader('Content-Type', mimeType);
+    (res as any).setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    (res as any).setHeader('Content-Length', buffer.length.toString());
 
-    res.send(buffer);
+    (res as any).send(buffer);
   }
 
   @Get('compare')

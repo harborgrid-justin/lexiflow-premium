@@ -443,7 +443,7 @@ export class AnalyticsService implements OnModuleDestroy {
     };
   }
 
-  async bulkImportEvents(importDto: any): Promise<any> {
+  async bulkImportEvents(importDto: { events?: unknown[] }): Promise<{ importedCount: number; failedCount: number; timestamp: string }> {
     const { events = [] } = importDto;
     return {
       importedCount: events.length,
@@ -452,7 +452,7 @@ export class AnalyticsService implements OnModuleDestroy {
     };
   }
 
-  async bulkRecalculateMetrics(recalculateDto: any): Promise<any> {
+  async bulkRecalculateMetrics(recalculateDto: { metricIds?: string[] }): Promise<{ recalculatedCount: number; failedCount: number; timestamp: string }> {
     const { metricIds = [] } = recalculateDto;
     return {
       recalculatedCount: metricIds.length,
@@ -461,7 +461,7 @@ export class AnalyticsService implements OnModuleDestroy {
     };
   }
 
-  async bulkArchiveEvents(archiveDto: any): Promise<any> {
+  async bulkArchiveEvents(archiveDto: { eventIds?: string[] }): Promise<{ archivedCount: number; failedCount: number; failedIds: string[]; timestamp: string }> {
     const { eventIds = [] } = archiveDto;
     return {
       archivedCount: eventIds.length,
@@ -471,7 +471,7 @@ export class AnalyticsService implements OnModuleDestroy {
     };
   }
 
-  async bulkDeleteEvents(deleteDto: any): Promise<any> {
+  async bulkDeleteEvents(deleteDto: { eventIds?: string[] }): Promise<{ deletedCount: number; failedCount: number; failedIds: string[]; timestamp: string }> {
     const { eventIds = [] } = deleteDto;
     return {
       deletedCount: eventIds.length,
@@ -481,7 +481,7 @@ export class AnalyticsService implements OnModuleDestroy {
     };
   }
 
-  async exportAnalyticsData(exportDto: any): Promise<any> {
+  async exportAnalyticsData(exportDto: { format?: string; dataType?: string; startDate?: string; endDate?: string }): Promise<{ jobId: string; format: string; status: string; createdAt: string }> {
     const { format = 'csv' } = exportDto;
     return {
       jobId: `export-${Date.now()}`,
@@ -491,14 +491,14 @@ export class AnalyticsService implements OnModuleDestroy {
     };
   }
 
-  async listExportJobs(_page?: number, _limit?: number): Promise<any> {
+  async listExportJobs(_page?: number, _limit?: number): Promise<{ jobs: unknown[]; total: number }> {
     return {
       jobs: [],
       total: 0
     };
   }
 
-  async getExportJobStatus(jobId: string): Promise<any> {
+  async getExportJobStatus(jobId: string): Promise<{ jobId: string; status: string; url: string; completedAt: string }> {
     return {
       jobId,
       status: 'completed',
@@ -507,11 +507,10 @@ export class AnalyticsService implements OnModuleDestroy {
     };
   }
 
-  async cancelExportJob(jobId: string): Promise<any> {
+  async cancelExportJob(jobId: string): Promise<{ success: boolean; message: string }> {
     return {
-      jobId,
-      status: 'cancelled',
-      cancelledAt: new Date().toISOString()
+      success: true,
+      message: `Export job ${jobId} cancelled successfully`
     };
   }
 }

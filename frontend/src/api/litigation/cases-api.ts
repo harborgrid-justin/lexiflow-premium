@@ -350,13 +350,13 @@ export class CasesApiService {
      * 
      * @param content - Text content to parse
      * @param options - Parsing options
-     * @returns Promise<any> Parsed case data
+     * @returns Promise<unknown> Parsed case data
      */
-    async parse(content: string, options: { useAI: boolean; provider?: 'gemini' | 'openai'; apiKey?: string }): Promise<any> {
+    async parse(content: string, options: { useAI: boolean; provider?: 'gemini' | 'openai'; apiKey?: string }): Promise<unknown> {
         this.validateString(content, 'content', 'parse');
 
         try {
-            return await apiClient.post<any>('/cases/import/parse', { content, options });
+            return await apiClient.post<unknown>('/cases/import/parse', { content, options });
         } catch (error) {
             console.error('[CasesApiService.parse] Error:', error);
             throw new Error('Failed to parse case data');
@@ -409,7 +409,7 @@ export class CasesApiService {
      * Get archived cases
      * 
      * @param filters - Optional pagination filters
-     * @returns Promise<any[]> Archived cases
+     * @returns Promise<unknown[]> Archived cases
      * @throws Error if fetch fails
      */
     async getArchived(filters?: { page?: number; limit?: number }): Promise<ArchivedCase[]> {

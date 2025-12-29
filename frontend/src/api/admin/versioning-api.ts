@@ -10,12 +10,12 @@ export interface Version {
   entityId: string;
   entityType: string;
   versionNumber: number;
-  changes?: Record<string, any>;
+  changes?: Record<string, unknown>;
   changesSummary?: string;
   createdBy?: string;
   createdAt: string;
   tags?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface VersionFilters {
@@ -38,7 +38,7 @@ export class VersioningApiService {
     return apiClient.get<Version>(`${this.baseUrl}/${id}`);
   }
 
-  async createVersion(data: { entityId: string; entityType: string; changes: Record<string, any> }): Promise<Version> {
+  async createVersion(data: { entityId: string; entityType: string; changes: Record<string, unknown> }): Promise<Version> {
     return apiClient.post<Version>(this.baseUrl, data);
   }
 

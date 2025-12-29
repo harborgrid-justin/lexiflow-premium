@@ -409,8 +409,8 @@ export class PolicyService {
     }
   }
 
-  private getNestedValue(obj: any, path: string): any {
-    return path.split('.').reduce((current, key) => current?.[key], obj);
+  private getNestedValue(obj: unknown, path: string): any {
+    return path.split('.').reduce((current, key) => (current as any)?.[key], obj);
   }
 
   private getTimeAttribute(attribute: string, timestamp: Date): any {
@@ -430,16 +430,17 @@ export class PolicyService {
     }
   }
 
-  private getLocationAttribute(attribute: string, environment: any): any {
+  private getLocationAttribute(attribute: string, environment: unknown): any {
+    const env = environment as { country?: string; region?: string; location?: string; ipAddress?: string };
     switch (attribute) {
       case 'country':
-        return environment.country;
+        return env.country;
       case 'region':
-        return environment.region;
+        return env.region;
       case 'location':
-        return environment.location;
+        return env.location;
       case 'ipAddress':
-        return environment.ipAddress;
+        return env.ipAddress;
       default:
         return null;
     }

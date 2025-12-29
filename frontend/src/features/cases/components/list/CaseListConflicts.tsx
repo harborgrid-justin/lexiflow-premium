@@ -48,7 +48,7 @@ export const CaseListConflicts: React.FC<CaseListConflictsProps> = ({ onSelectCa
       async () => {
           const all = await DataService.compliance.getConflicts();
           // Return flagged or recent items
-          return all.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
+          return all.sort((a: unknown, b: unknown) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
       }
   );
 

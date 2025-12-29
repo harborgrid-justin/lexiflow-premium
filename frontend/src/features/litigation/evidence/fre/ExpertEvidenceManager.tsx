@@ -25,7 +25,7 @@ import { queryKeys } from '@/utils/queryKeys';
 
 export const ExpertEvidenceManager: React.FC = () => {
     const { theme } = useTheme();
-    const { data: experts = [] } = useQuery<any[]>(
+    const { data: experts = [] } = useQuery<unknown[]>(
         ['advisors', 'experts'],
         DataService.warRoom.getExperts
     );

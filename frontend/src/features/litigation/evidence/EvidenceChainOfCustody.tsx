@@ -65,7 +65,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
           
           // Log to internal immutable ledger
           const prevHash = selectedItem.chainOfCustody.length > 0 
-                           ? (selectedItem.chainOfCustody[0] as any).curr_hash || '0' 
+                           ? (selectedItem.chainOfCustody[0] as Record<string, unknown>).curr_hash || '0' 
                            : '0000000000000000000000000000000000000000000000000000000000000000'; // Genesis hash
           
           const chainedLog = await ChainService.createEntry({
@@ -186,10 +186,10 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
                   <span className="font-medium">{event.actor}</span> on {event.date}
                 </p>
                 {event.notes && <p className={cn("text-xs italic mt-2", theme.text.secondary)}>{event.notes}</p>}
-                {(event as any).hash && (
+                {(event as Record<string, unknown>).hash && (
                   <div className={cn("mt-2 p-2 rounded text-[10px] font-mono border break-all", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                      <Link className={cn("h-3 w-3 inline mr-1", theme.text.tertiary)}/>
-                     Hash: {(event as any).hash.substring(0, 12)}...
+                     Hash: {(event as Record<string, unknown>).hash.substring(0, 12)}...
                   </div>
                 )}
               </div>

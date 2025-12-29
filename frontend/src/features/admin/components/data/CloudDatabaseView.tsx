@@ -52,9 +52,9 @@ interface CloudDatabaseContentProps {
   selectedProvider: string | null;
   setSelectedProvider: (value: string | null) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  formData: any;
+  formData: unknown;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setFormData: (value: any) => void;
+  setFormData: (value: unknown) => void;
   resetForm: () => void;
 }
 
@@ -232,9 +232,9 @@ interface ConnectionFormProps {
   selectedProvider: string;
   providers: readonly DataProvider[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  formData: any;
+  formData: unknown;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setFormData: (value: any) => void;
+  setFormData: (value: unknown) => void;
   onCancel: () => void;
   onSubmit: (e: React.FormEvent) => void;
   isSubmitting: boolean;

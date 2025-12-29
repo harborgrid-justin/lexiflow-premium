@@ -20,7 +20,7 @@ export interface Clause {
   tags?: string[];
   isPublic: boolean;
   usageCount?: number;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -58,7 +58,7 @@ export class ClausesApiService {
     return apiClient.put<Clause>(`${this.baseUrl}/${id}`, data);
   }
 
-  async render(id: string, variables: Record<string, any>): Promise<{ text: string }> {
+  async render(id: string, variables: Record<string, unknown>): Promise<{ text: string }> {
     return apiClient.post(`${this.baseUrl}/${id}/render`, { variables });
   }
 

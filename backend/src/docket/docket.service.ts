@@ -124,10 +124,10 @@ export class DocketService {
       // const entries = await this.pacerService.getDocketSheet(...)
       // await this.saveDocketEntries(entries)
 
-    } catch (error: any) {
-      this.logger.error(`PACER sync failed: ${error.message}`);
+    } catch (error: unknown) {
+      this.logger.error(`PACER sync failed: ${(error as any).message}`);
       result.success = false;
-      result.errors = [error.message];
+      result.errors = [(error as any).message];
     }
 
     return result;

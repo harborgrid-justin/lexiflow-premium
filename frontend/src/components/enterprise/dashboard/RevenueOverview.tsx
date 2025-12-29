@@ -77,7 +77,7 @@ export const RevenueOverview: React.FC<RevenueOverviewProps> = ({
     return `$${value}`;
   };
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: unknown) => {
     if (active && payload && payload.length) {
       return (
         <div
@@ -88,7 +88,7 @@ export const RevenueOverview: React.FC<RevenueOverviewProps> = ({
           )}
         >
           <p className={cn('text-sm font-medium mb-2', theme.text.primary)}>{label}</p>
-          {payload.map((entry: any, index: number) => (
+          {payload.map((entry: unknown, index: number) => (
             <p key={index} className="text-xs" style={{ color: entry.color }}>
               {entry.name}: {formatCurrency(entry.value)}
             </p>

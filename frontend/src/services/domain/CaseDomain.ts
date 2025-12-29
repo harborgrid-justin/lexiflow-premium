@@ -302,7 +302,7 @@ export class CaseRepository extends Repository<Case> {
         await delay(300);
         const c = await this.getById(id);
         if (c) {
-            await this.update(id, { status: 'Closed' as any });
+            await this.update(id, { status: 'Closed' as Record<string, unknown> });
         }
     }
 

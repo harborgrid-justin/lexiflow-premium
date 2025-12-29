@@ -164,7 +164,7 @@ export class RlsPoliciesService {
     return result;
   }
 
-  private sanitizeValue(value: any): string {
+  private sanitizeValue(value: unknown): string {
     if (typeof value === 'string') {
       return `'${value.replace(/'/g, "''")}'`; // SQL escape single quotes
     }

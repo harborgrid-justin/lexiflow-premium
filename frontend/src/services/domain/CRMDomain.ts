@@ -148,8 +148,8 @@ export const CRMService = {
         const leads = await CRMService.getLeads();
 
         // Dynamic Calculation based on DB state
-        const pipelineValue = leads.reduce((acc: number, l: any) => acc + (parseFloat(l.value.replace(/[^0-9.]/g, '')) || 0), 0);
-        const bySource = leads.reduce((acc: Record<string, number>, l: any) => {
+        const pipelineValue = leads.reduce((acc: number, l: unknown) => acc + (parseFloat(l.value.replace(/[^0-9.]/g, '')) || 0), 0);
+        const bySource = leads.reduce((acc: Record<string, number>, l: unknown) => {
             acc[l.source || 'Referral'] = (acc[l.source || 'Referral'] || 0) + 1;
             return acc;
         }, {} as Record<string, number>);

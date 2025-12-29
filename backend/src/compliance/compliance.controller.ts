@@ -196,7 +196,7 @@ export class ComplianceController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  create(@Body() _createDto: any) {
+  create(@Body() _createDto: unknown) {
     throw new Error('Method not implemented.');
   }
 
@@ -233,13 +233,13 @@ export class ComplianceController {
   async deleteUserData(
     @Param('userId') userId: string,
     @Body() body: Partial<DataDeletionRequestDto>,
-    @Req() req: any,
+    @Req() req: unknown,
   ) {
     const request: DataDeletionRequestDto = {
       userId,
       reason: body.reason,
       softDelete: body.softDelete !== false,
-      requestedBy: req.user?.id,
+      requestedBy: (req as any).user?.id,
     };
     return this.gdprComplianceService.handleRightToBeForgotten(request);
   }
@@ -329,9 +329,9 @@ export class ComplianceController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async createRetentionPolicy(
     @Body() dto: CreateRetentionPolicyDto,
-    @Req() req: any,
+    @Req() req: unknown,
   ) {
-    return this.dataRetentionService.createPolicy(dto, req.user?.id || 'system');
+    return this.dataRetentionService.createPolicy(dto, (req as any).user?.id || 'system');
   }
 
   @Get('retention-report')
@@ -351,8 +351,8 @@ export class ComplianceController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async placeLegalHold(@Body() dto: LegalHoldDto, @Req() req: any) {
-    return this.dataRetentionService.placeLegalHold(dto, req.user?.id || 'system');
+  async placeLegalHold(@Body() dto: LegalHoldDto, @Req() req: unknown) {
+    return this.dataRetentionService.placeLegalHold(dto, (req as any).user?.id || 'system');
   }
 
   @Delete('legal-hold')
@@ -362,8 +362,8 @@ export class ComplianceController {
   @ApiResponse({ status: 404, description: 'Retention record not found' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async removeLegalHold(@Body() dto: RemoveLegalHoldDto, @Req() req: any) {
-    return this.dataRetentionService.removeLegalHold(dto, req.user?.id || 'system');
+  async removeLegalHold(@Body() dto: RemoveLegalHoldDto, @Req() req: unknown) {
+    return this.dataRetentionService.removeLegalHold(dto, (req as any).user?.id || 'system');
   }
 
   @Post('consent')
@@ -373,11 +373,11 @@ export class ComplianceController {
   @ApiResponse({ status: 400, description: 'Invalid request data' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
-  async grantConsent(@Body() dto: ConsentDto, @Req() req: any) {
+  async grantConsent(@Body() dto: ConsentDto, @Req() req: unknown) {
     return this.gdprComplianceService.grantConsent(
       dto,
-      req.ip,
-      req.headers['user-agent'],
+      (req as any).ip,
+      (req as any).headers['user-agent'],
     );
   }
 

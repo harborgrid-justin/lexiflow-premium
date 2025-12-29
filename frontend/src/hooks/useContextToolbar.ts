@@ -184,7 +184,7 @@ export function useContextToolbar(
 
     const saveTimer = setInterval(() => {
       try {
-        const statsObject: Record<string, any> = {};
+        const statsObject: Record<string, unknown> = {};
         actionStats.forEach((stat, id) => {
           statsObject[id] = {
             ...stat,

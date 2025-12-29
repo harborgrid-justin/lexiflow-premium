@@ -16,7 +16,7 @@ export interface DataVersion {
   entityType: string;
   entityId: string;
   version: number;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   branch?: string;
   tag?: string;
   commitMessage?: string;
@@ -35,7 +35,7 @@ export class VersioningApiService {
   async getHistory(
     entityType: string,
     entityId: string,
-    filters?: Record<string, any>,
+    filters?: Record<string, unknown>,
   ): Promise<PaginatedResponse<DataVersion>> {
     try {
       return await apiClient.get<PaginatedResponse<DataVersion>>(
@@ -53,7 +53,7 @@ export class VersioningApiService {
   async createVersion(data: {
     entityType: string;
     entityId: string;
-    data: Record<string, any>;
+    data: Record<string, unknown>;
     branch?: string;
     tag?: string;
     commitMessage?: string;
@@ -76,9 +76,9 @@ export class VersioningApiService {
   /**
    * Get all tags for an entity
    */
-  async getTags(entityType: string, entityId: string): Promise<any[]> {
+  async getTags(entityType: string, entityId: string): Promise<unknown[]> {
     try {
-      return await apiClient.get<any[]>(`/versioning/tags/${entityType}/${entityId}`);
+      return await apiClient.get<unknown[]>(`/versioning/tags/${entityType}/${entityId}`);
     } catch (error) {
       return [];
     }

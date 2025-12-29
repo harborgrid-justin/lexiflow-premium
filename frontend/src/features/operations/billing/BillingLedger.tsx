@@ -31,7 +31,7 @@ export const BillingLedger: React.FC = () => {
       DataService.expenses.getAll
   );
   
-  const { data: trustAccounts = [] } = useQuery<any[]>(
+  const { data: trustAccounts = [] } = useQuery<unknown[]>(
       ['trust', 'all'],
       () => Promise.resolve([])
   );

@@ -87,9 +87,9 @@ export const AssetManager: React.FC = () => {
       const asset: FirmAsset = {
           id: `AST-${Date.now()}`,
           name: newAsset.name,
-          type: (newAsset.type as any) || 'Hardware',
+          type: (newAsset.type as Record<string, unknown>) || 'Hardware',
           assignedTo: newAsset.assignedTo || 'Unassigned',
-          status: (newAsset.status as any) || 'Active',
+          status: (newAsset.status as Record<string, unknown>) || 'Active',
           purchaseDate: newAsset.purchaseDate || getTodayString(),
           value: Number(newAsset.value) || 0,
           serialNumber: newAsset.serialNumber

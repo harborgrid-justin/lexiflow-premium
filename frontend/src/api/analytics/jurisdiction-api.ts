@@ -168,9 +168,9 @@ export const JurisdictionAPI = {
     }
   },
 
-  async getMapNodes(): Promise<any[]> {
+  async getMapNodes(): Promise<unknown[]> {
     try {
-      return await apiClient.get<any[]>('/jurisdictions/map-nodes');
+      return await apiClient.get<unknown[]>('/jurisdictions/map-nodes');
     } catch (error) {
       console.error('Failed to fetch jurisdiction map nodes:', error);
       return [];

@@ -138,7 +138,7 @@ export class AnalyticsDashboardController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async getRealtimeMetrics(@Query() query: GetRealtimeMetricsDto): Promise<RealtimeMetricsResponseDto> {
-    return this.analyticsDashboardService.getRealtimeMetrics(query);
+    return this.analyticsDashboardService.getRealtimeMetrics(query) as any;
   }
 
   @Get('realtime/active-users')
@@ -194,7 +194,7 @@ export class AnalyticsDashboardController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async exportAnalyticsData(@Body() exportDto: BulkExportAnalyticsDto): Promise<BulkExportResponseDto> {
-    return this.analyticsDashboardService.exportAnalyticsData(exportDto);
+    return this.analyticsDashboardService.exportAnalyticsData(exportDto) as any;
   }
 
   @Get('export/:jobId')
@@ -205,7 +205,7 @@ export class AnalyticsDashboardController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async getExportJobStatus(@Param('jobId') jobId: string): Promise<BulkExportResponseDto> {
-    return this.analyticsDashboardService.getExportJobStatus(jobId);
+    return this.analyticsDashboardService.getExportJobStatus(jobId) as any;
   }
 
   @Post('bulk/refresh')
@@ -216,7 +216,7 @@ export class AnalyticsDashboardController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async bulkRefreshDashboards(@Body() refreshDto: BulkRefreshDashboardsDto): Promise<BulkRefreshResponseDto> {
-    return this.analyticsDashboardService.bulkRefreshDashboards(refreshDto);
+    return this.analyticsDashboardService.bulkRefreshDashboards(refreshDto) as any;
   }
 
   @Delete('bulk/events')

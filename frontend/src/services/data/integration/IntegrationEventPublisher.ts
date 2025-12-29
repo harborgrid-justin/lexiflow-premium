@@ -11,7 +11,7 @@
 import { SystemEventType } from '@/types/integration-types';
 import type { Case, DocketEntry, LegalDocument, TimeEntry } from '@/types';
 
-type EventHandler = (payload: any) => Promise<void>;
+type EventHandler = (payload: unknown) => Promise<void>;
 
 /**
  * Centralized event publisher for data layer integration events
@@ -114,14 +114,14 @@ export class IntegrationEventPublisher {
  * ) {}
  * ```
  */
-export function createIntegratedRepository<TBase extends new (...args: any[]) => any>(
+export function createIntegratedRepository<TBase extends new (...args: unknown[]) => unknown>(
   Repository: TBase,
   publishAdd?: (item: unknown) => Promise<void>,
   publishUpdate?: (id: string, item: unknown) => Promise<void>,
   publishDelete?: (id: string) => Promise<void>
 ) {
   return class IntegratedRepository extends Repository {
-    constructor(...args: any[]) {
+    constructor(...args: unknown[]) {
       super(...args);
     }
 

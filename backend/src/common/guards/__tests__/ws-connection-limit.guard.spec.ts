@@ -12,8 +12,8 @@ describe('WsConnectionLimitGuard', () => {
   beforeEach(() => {
     // Mock ConfigService
     configService = {
-      get: jest.fn((key: string, defaultValue: any) => {
-        const config: Record<string, any> = {
+      get: jest.fn((key: string, defaultValue: unknown) => {
+        const config: Record<string, unknown> = {
           'resourceLimits.websocket.maxConnectionsPerUser': 3,
           'resourceLimits.websocket.maxGlobalConnections': 10,
         };
@@ -256,8 +256,8 @@ describe('WsConnectionLimitGuard', () => {
   describe('Configuration', () => {
     it('should use config values from ConfigService', () => {
       const customConfig = {
-        get: jest.fn((key: string, defaultValue: any) => {
-          const config: Record<string, any> = {
+        get: jest.fn((key: string, defaultValue: unknown) => {
+          const config: Record<string, unknown> = {
             'resourceLimits.websocket.maxConnectionsPerUser': 5,
             'resourceLimits.websocket.maxGlobalConnections': 1000,
           };
@@ -273,7 +273,7 @@ describe('WsConnectionLimitGuard', () => {
 
     it('should use default values when config returns undefined', () => {
       const emptyConfig = {
-        get: jest.fn((key: string, defaultValue: any) => defaultValue),
+        get: jest.fn((key: string, defaultValue: unknown) => defaultValue),
       } as any;
 
       const customGuard = new WsConnectionLimitGuard(emptyConfig);

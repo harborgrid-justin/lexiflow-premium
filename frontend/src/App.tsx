@@ -83,8 +83,8 @@ const InnerApp: React.FC = () => {
             onGlobalSearch={() => {}}
             currentUser={currentUser}
             onSwitchUser={handleSwitchUser}
-            onSearchResultClick={(result: any) => selectCase(result.id)}
-            onNeuralCommand={(cmd: any) => console.log('Neural command:', cmd)}
+            onSearchResultClick={(result: unknown) => selectCase(result.id)}
+            onNeuralCommand={(cmd: unknown) => console.log('Neural command:', cmd)}
           />
         </ErrorBoundary>
       }

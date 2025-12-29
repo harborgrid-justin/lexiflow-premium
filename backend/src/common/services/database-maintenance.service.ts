@@ -128,7 +128,7 @@ export class DatabaseMaintenanceService {
       if (bloatedTables.length > 0) {
         this.logger.warn(
           `Found ${bloatedTables.length} bloated tables:`,
-          bloatedTables.map((t: any) => `${t.table_name} (${t.bloat_pct}% bloat)`),
+          bloatedTables.map((t: unknown) => `${(t as any).table_name} (${(t as any).bloat_pct}% bloat)`),
         );
 
         // Insert recommendations
@@ -234,7 +234,7 @@ export class DatabaseMaintenanceService {
         this.logger.warn(
           `Found ${unusedIndexes.length} unused indexes`,
           unusedIndexes.map(
-            (idx: any) => `${idx.schema_name}.${idx.index_name} (${idx.index_size})`,
+            (idx: unknown) => `${(idx as any).schema_name}.${(idx as any).index_name} (${(idx as any).index_size})`,
           ),
         );
       }

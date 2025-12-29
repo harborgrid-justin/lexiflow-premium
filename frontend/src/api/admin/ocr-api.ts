@@ -17,7 +17,7 @@ export interface OCRJob {
   error?: string;
   startedAt?: string;
   completedAt?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

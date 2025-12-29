@@ -227,11 +227,11 @@ export class DiscoveryRepository {
     /**
      * Get custodian statistics
      * 
-     * @returns Promise<any[]> Custodian statistics
+     * @returns Promise<unknown[]> Custodian statistics
      */
-    getCustodianStats = async (): Promise<any[]> => {
+    getCustodianStats = async (): Promise<unknown[]> => {
         try {
-            const stats = await db.get<any>(STORES.DISCOVERY_CUSTODIAN_STATS, 'custodian-main');
+            const stats = await db.get<unknown>(STORES.DISCOVERY_CUSTODIAN_STATS, 'custodian-main');
             return stats?.data || [];
         } catch (error) {
             console.error('[DiscoveryRepository.getCustodianStats] Error:', error);
@@ -247,14 +247,14 @@ export class DiscoveryRepository {
      * Get all custodians, optionally filtered by case
      * 
      * @param caseId - Optional case ID filter
-     * @returns Promise<any[]> Array of custodians
+     * @returns Promise<unknown[]> Array of custodians
      * @throws Error if caseId is invalid or fetch fails
      * 
      * @example
      * const allCustodians = await repo.getCustodians();
      * const caseCustodians = await repo.getCustodians('case-123');
      */
-    getCustodians = async (caseId?: string): Promise<any[]> => {
+    getCustodians = async (caseId?: string): Promise<unknown[]> => {
         this.validateCaseId(caseId, 'getCustodians');
 
         if (this.useBackend) {
@@ -266,8 +266,8 @@ export class DiscoveryRepository {
         }
 
         try {
-            const custodians = await db.getAll<any>(STORES.CUSTODIANS);
-            return caseId ? custodians.filter((c: any) => c.caseId === caseId) : custodians;
+            const custodians = await db.getAll<unknown>(STORES.CUSTODIANS);
+            return caseId ? custodians.filter((c: unknown) => c.caseId === caseId) : custodians;
         } catch (error) {
             console.error('[DiscoveryRepository.getCustodians] Error:', error);
             throw new OperationError('Failed to fetch custodians');
@@ -288,7 +288,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.custodians.create(custodian as any);
+                return await discoveryApi.custodians.create(custodian as Record<string, unknown>);
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -309,7 +309,7 @@ export class DiscoveryRepository {
      * @returns Promise<unknown> Updated custodian
      * @throws Error if validation fails or update fails
      */
-    updateCustodian = async (custodian: any): Promise<unknown> => {
+    updateCustodian = async (custodian: unknown): Promise<unknown> => {
         if (!custodian?.id) {
             throw new Error('[DiscoveryRepository.updateCustodian] Custodian ID required');
         }
@@ -374,7 +374,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.depositions.getAll(caseId ? { caseId } : undefined) as any;
+                return await discoveryApi.depositions.getAll(caseId ? { caseId } : undefined) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -403,7 +403,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.depositions.create(deposition as any) as any;
+                return await discoveryApi.depositions.create(deposition as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -434,7 +434,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.esiSources.getAll(caseId ? { caseId } : undefined) as any;
+                return await discoveryApi.esiSources.getAll(caseId ? { caseId } : undefined) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -463,7 +463,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.esiSources.create(source as any) as any;
+                return await discoveryApi.esiSources.create(source as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -495,7 +495,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.esiSources.updateStatus(id, status as any) as any;
+                return await discoveryApi.esiSources.updateStatus(id, status as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -506,7 +506,7 @@ export class DiscoveryRepository {
             if (!source) {
                 throw new EntityNotFoundError('ESI source not found');
             }
-            const updated = { ...source, status: status as any };
+            const updated = { ...source, status: status as Record<string, unknown> };
             await db.put(STORES.DISCOVERY_EXT_ESI, updated);
             return updated;
         } catch (error) {
@@ -531,7 +531,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.productions.getAll(caseId ? { caseId } : undefined) as any;
+                return await discoveryApi.productions.getAll(caseId ? { caseId } : undefined) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -560,7 +560,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.productions.create(production as any) as any;
+                return await discoveryApi.productions.create(production as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -606,7 +606,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.custodianInterviews.getAll(caseId ? { caseId } : undefined) as any;
+                return await discoveryApi.custodianInterviews.getAll(caseId ? { caseId } : undefined) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -635,7 +635,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.custodianInterviews.create(interview as any) as any;
+                return await discoveryApi.custodianInterviews.create(interview as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -666,7 +666,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.discoveryRequests.getAll(caseId ? { caseId } : undefined) as any;
+                return await discoveryApi.discoveryRequests.getAll(caseId ? { caseId } : undefined) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -695,7 +695,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.discoveryRequests.create(request as any) as any;
+                return await discoveryApi.discoveryRequests.create(request as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -727,7 +727,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.discoveryRequests.updateStatus(id, status as any) as any;
+                return await discoveryApi.discoveryRequests.updateStatus(id, status as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -738,7 +738,7 @@ export class DiscoveryRepository {
             if (!request) {
                 throw new EntityNotFoundError('Discovery request not found');
             }
-            const updated = { ...request, status: status as any };
+            const updated = { ...request, status: status as Record<string, unknown> };
             await db.put(STORES.REQUESTS, updated);
             return updated;
         } catch (error) {
@@ -821,7 +821,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.examinations.getAll(caseId ? { caseId } : undefined) as any;
+                return await discoveryApi.examinations.getAll(caseId ? { caseId } : undefined) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -850,7 +850,7 @@ export class DiscoveryRepository {
 
         if (this.useBackend) {
             try {
-                return await discoveryApi.examinations.create(examination as any) as any;
+                return await discoveryApi.examinations.create(examination as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -948,10 +948,10 @@ export class DiscoveryRepository {
     /**
      * Get all court reporters
      * 
-     * @returns Promise<any[]> Array of reporters
+     * @returns Promise<unknown[]> Array of reporters
      * @throws Error if fetch fails
      */
-    getReporters = async (): Promise<any[]> => {
+    getReporters = async (): Promise<unknown[]> => {
         try {
             return await db.getAll(STORES.REPORTERS);
         } catch (error) {
@@ -1051,9 +1051,9 @@ export class DiscoveryRepository {
     /**
      * Get Rule 27 petitions (mock implementation)
      * 
-     * @returns Promise<any[]> Array of petitions
+     * @returns Promise<unknown[]> Array of petitions
      */
-    getPetitions = async (): Promise<any[]> => {
+    getPetitions = async (): Promise<unknown[]> => {
         // Mock implementation - in production, this would call backend API
         await delay(100);
         return [];
@@ -1072,7 +1072,7 @@ export class DiscoveryRepository {
     getLegalHolds = async (): Promise<LegalHold[]> => {
         if (this.useBackend) {
             try {
-                return await discoveryApi.legalHolds.getAll() as any;
+                return await discoveryApi.legalHolds.getAll() as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -1095,7 +1095,7 @@ export class DiscoveryRepository {
     getPrivilegeLog = async (): Promise<PrivilegeLogEntry[]> => {
         if (this.useBackend) {
             try {
-                return await discoveryApi.privilegeLog.getAll() as any;
+                return await discoveryApi.privilegeLog.getAll() as Record<string, unknown>;
             } catch (error) {
                 console.warn('[DiscoveryRepository] Backend API unavailable, falling back to IndexedDB', error);
             }

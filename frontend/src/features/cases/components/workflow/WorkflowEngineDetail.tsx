@@ -120,7 +120,7 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
           <Tabs 
             tabs={['visualizer', 'tasks', 'audit', 'settings']} 
             activeTab={activeTab} 
-            onChange={(t) => setActiveTab(t as any)} 
+            onChange={(t) => setActiveTab(t as Record<string, unknown>)} 
             variant="underline"
             className="border-none"
           />

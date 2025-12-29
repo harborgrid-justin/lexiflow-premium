@@ -62,9 +62,9 @@ export class CommunicationsService {
     return communication;
   }
 
-  async create(data: any): Promise<Communication> {
-    this.logger.log(`Creating new communication for case: ${data.caseId}`);
-    const communication = this.communicationRepository.create(data);
+  async create(data: unknown): Promise<Communication> {
+    this.logger.log(`Creating new communication for case: ${(data as any).caseId}`);
+    const communication = this.communicationRepository.create(data as any);
     const saved = await this.communicationRepository.save(communication);
     const result = Array.isArray(saved) ? saved[0] : saved;
     if (!result) {
@@ -115,7 +115,7 @@ export class CommunicationsService {
     });
   }
 
-  async getCommunicationStats(caseId: string): Promise<any> {
+  async getCommunicationStats(caseId: string): Promise<unknown> {
     const result = await this.findByCaseId(caseId);
     const all = result.data;
     const byType: any = {};
@@ -153,15 +153,15 @@ export class CommunicationsService {
     return template;
   }
 
-  async createTemplate(data: any): Promise<Template> {
-    const template = this.templateRepository.create(data);
+  async createTemplate(data: unknown): Promise<Template> {
+    const template = this.templateRepository.create(data as any);
     const saved = await this.templateRepository.save(template);
     const result = Array.isArray(saved) ? saved[0] : saved;
     if (!result) throw new Error('Failed to save template');
     return result;
   }
 
-  async updateTemplate(id: string, data: any): Promise<Template> {
+  async updateTemplate(id: string, data: unknown): Promise<Template> {
     const template = await this.getTemplateById(id);
     Object.assign(template, data);
     const saved = await this.templateRepository.save(template);
@@ -189,24 +189,24 @@ export class CommunicationsService {
     });
   }
 
-  async renderTemplate(templateId: string, variables: any): Promise<{ subject: string; body: string }> {
+  async renderTemplate(templateId: string, variables: unknown): Promise<{ subject: string; body: string }> {
     const template = await this.getTemplateById(templateId);
     
     let subject = template.subject;
     let body = template.body;
 
     // Replace variables in template
-    Object.keys(variables).forEach(key => {
+    Object.keys(variables as any).forEach(key => {
       const regex = new RegExp(`{{${key}}}`, 'g');
-      subject = subject.replace(regex, variables[key]);
-      body = body.replace(regex, variables[key]);
+      subject = subject.replace(regex, (variables as any)[key]);
+      body = body.replace(regex, (variables as any)[key]);
     });
 
     return { subject, body };
   }
 
-  async createFromTemplate(params: any): Promise<Communication> {
-    const { templateId, caseId, variables, ...otherData } = params;
+  async createFromTemplate(params: unknown): Promise<Communication> {
+    const { templateId, caseId, variables, ...otherData } = params as any;
     const rendered = await this.renderTemplate(templateId, variables);
     
     const communication = this.communicationRepository.create({
@@ -249,7 +249,7 @@ export class CommunicationsService {
     });
   }
 
-  async getDeliveryStatus(id: string): Promise<any> {
+  async getDeliveryStatus(id: string): Promise<unknown> {
     this.logger.debug(`Fetching delivery status for communication ${id}`);
     const communication = await this.findById(id);
     

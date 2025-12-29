@@ -80,9 +80,9 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
       const perm: GranularPermission = {
           id: `perm-${Date.now()}`,
           resource: newPerm.resource,
-          action: newPerm.action as any,
-          effect: newPerm.effect as any,
-          scope: newPerm.scope as any,
+          action: newPerm.action as Record<string, unknown>,
+          effect: newPerm.effect as Record<string, unknown>,
+          scope: newPerm.scope as Record<string, unknown>,
           expiration: newPerm.expiration,
           conditions: []
       };

@@ -106,7 +106,7 @@ class BluebookFormatterClass {
 
       case 'STATUTE':
       case 'statute':
-        return this.formatStatute(citation as any, format);
+        return this.formatStatute(citation as Record<string, unknown>, format);
 
       case 'JOURNAL':
       case 'journal':
@@ -115,7 +115,7 @@ class BluebookFormatterClass {
         return this.formatSecondary(citation, italicizeCaseNames, useSmallCaps);
 
       default:
-        return (citation as any).fullCitation || '';
+        return (citation as Record<string, unknown>).fullCitation || '';
     }
   }
 
@@ -128,7 +128,7 @@ class BluebookFormatterClass {
     smallCaps: boolean,
     format: 'full' | 'short' | 'id'
   ): string {
-    const cit = citation as any;
+    const cit = citation as Record<string, unknown>;
     if (format === 'id') {
       return cit.shortCitation || 'Id.';
     }

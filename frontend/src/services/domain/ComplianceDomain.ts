@@ -236,7 +236,7 @@ export const ComplianceService = {
                         apiCheck.status === 'conflict_found' ? 'Flagged' : 
                         apiCheck.status === 'requires_review' ? 'Review' : 'Pending',
                 foundIn: apiCheck.conflicts?.map(c => c.description) || [],
-                checkedById: (apiCheck.checkedBy || 'system') as any,
+                checkedById: (apiCheck.checkedBy || 'system') as Record<string, unknown>,
                 checkedBy: apiCheck.checkedBy || 'System',
                 createdAt: apiCheck.checkedAt,
                 updatedAt: apiCheck.checkedAt
@@ -281,7 +281,7 @@ export const ComplianceService = {
                         backendResult.status === 'conflict_found' ? 'Flagged' : 
                         backendResult.status === 'requires_review' ? 'Review' : 'Pending',
                 foundIn: backendResult.conflicts?.map(c => c.description) || [],
-                checkedById: (backendResult.checkedBy || 'system') as any,
+                checkedById: (backendResult.checkedBy || 'system') as Record<string, unknown>,
                 checkedBy: backendResult.checkedBy || 'System',
                 createdAt: backendResult.checkedAt,
                 updatedAt: backendResult.checkedAt
@@ -428,7 +428,7 @@ export const ComplianceService = {
     /**
      * Get all compliance policies
      * 
-     * @returns Promise<any[]> Array of compliance policies
+     * @returns Promise<unknown[]> Array of compliance policies
      * @throws Error if fetch fails
      * 
      * @example
@@ -436,7 +436,7 @@ export const ComplianceService = {
      * 
      * @note Currently returns empty array pending policies API endpoint implementation
      */
-    getPolicies: async (): Promise<any[]> => {
+    getPolicies: async (): Promise<unknown[]> => {
         try {
             // Policies feature pending backend endpoint
             return [];

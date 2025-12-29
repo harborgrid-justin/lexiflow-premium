@@ -17,12 +17,12 @@ export interface ComplianceReport {
     description: string;
     recommendation?: string;
   }[];
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   generatedBy?: string;
   generatedAt: string;
   approvedBy?: string;
   approvedAt?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export class ComplianceReportingApiService {
@@ -32,7 +32,7 @@ export class ComplianceReportingApiService {
     reportType: ComplianceReport['reportType'];
     title: string;
     period: { start: string; end: string };
-    filters?: Record<string, any>;
+    filters?: Record<string, unknown>;
   }): Promise<ComplianceReport> {
     return apiClient.post<ComplianceReport>(`${this.baseUrl}/generate`, data);
   }

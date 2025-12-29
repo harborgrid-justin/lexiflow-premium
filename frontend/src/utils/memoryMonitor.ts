@@ -81,7 +81,7 @@ class FrontendMemoryMonitor {
       return null;
     }
 
-    const memory = (performance as any).memory;
+    const memory = (performance as Record<string, unknown>).memory;
     const snapshot: MemoryInfo = {
       usedJSHeapSize: memory.usedJSHeapSize,
       totalJSHeapSize: memory.totalJSHeapSize,
@@ -305,6 +305,6 @@ export const memoryMonitor = FrontendMemoryMonitor.getInstance();
 
 // Development mode helper
 if (import.meta.env.DEV) {
-  (window as any).__memoryMonitor = memoryMonitor;
+  (window as Record<string, unknown>).__memoryMonitor = memoryMonitor;
   console.log('[MemoryMonitor] Available globally as window.__memoryMonitor');
 }

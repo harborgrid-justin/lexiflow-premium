@@ -49,12 +49,12 @@ interface SimulationParametersPanelProps {
 
 interface SimulationResultsChartProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  results: any[];
+  results: unknown[];
   metrics: { ev: number; p25: number; p75: number };
   iterations: number;
   theme: ThemeContextType['theme'];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  chartTheme: any;
+  chartTheme: unknown;
 }
 
 interface SimulationMetricsDisplayProps {

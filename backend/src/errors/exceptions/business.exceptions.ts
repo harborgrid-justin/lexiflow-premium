@@ -9,11 +9,11 @@ export class BusinessException extends HttpException {
   public readonly errorCode: string;
   public readonly errorDefinition: ErrorCodeDefinition;
   public readonly timestamp: string;
-  public readonly context?: Record<string, any>;
+  public readonly context?: Record<string, unknown>;
 
   constructor(
     errorDefinition: ErrorCodeDefinition,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(
       {
@@ -65,7 +65,7 @@ export class ResourceNotFoundException extends BusinessException {
   constructor(
     resourceType: string,
     resourceId: string,
-    additionalContext?: Record<string, any>,
+    additionalContext?: Record<string, unknown>,
   ) {
     const errorDef = ErrorCodes.USER_NOT_FOUND;
     const customErrorDef: ErrorCodeDefinition = {
@@ -89,7 +89,7 @@ export class ResourceNotFoundException extends BusinessException {
 export class ValidationFailedException extends BusinessException {
   constructor(
     validationErrors: Array<{ field: string; message: string }>,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.VAL_INVALID_INPUT, {
       validationErrors,
@@ -128,7 +128,7 @@ export class SessionExpiredException extends BusinessException {
  * Thrown when a case is not found
  */
 export class CaseNotFoundException extends BusinessException {
-  constructor(caseId: string, context?: Record<string, any>) {
+  constructor(caseId: string, context?: Record<string, unknown>) {
     super(ErrorCodes.CASE_NOT_FOUND, { caseId, ...context });
   }
 }
@@ -138,7 +138,7 @@ export class CaseNotFoundException extends BusinessException {
  * Thrown when attempting to modify a closed case
  */
 export class CaseAlreadyClosedException extends BusinessException {
-  constructor(caseId: string, context?: Record<string, any>) {
+  constructor(caseId: string, context?: Record<string, unknown>) {
     super(ErrorCodes.CASE_ALREADY_CLOSED, { caseId, ...context });
   }
 }
@@ -151,7 +151,7 @@ export class InvalidStatusTransitionException extends BusinessException {
   constructor(
     currentStatus: string,
     targetStatus: string,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.CASE_INVALID_STATUS_TRANSITION, {
       currentStatus,
@@ -166,7 +166,7 @@ export class InvalidStatusTransitionException extends BusinessException {
  * Thrown when a document is not found
  */
 export class DocumentNotFoundException extends BusinessException {
-  constructor(documentId: string, context?: Record<string, any>) {
+  constructor(documentId: string, context?: Record<string, unknown>) {
     super(ErrorCodes.DOC_NOT_FOUND, { documentId, ...context });
   }
 }
@@ -179,7 +179,7 @@ export class DocumentLockedException extends BusinessException {
   constructor(
     documentId: string,
     lockedBy: string,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.DOC_LOCKED_BY_ANOTHER_USER, {
       documentId,
@@ -198,7 +198,7 @@ export class DocumentVersionConflictException extends BusinessException {
     documentId: string,
     currentVersion: number,
     attemptedVersion: number,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.DOC_VERSION_CONFLICT, {
       documentId,
@@ -217,7 +217,7 @@ export class FileTooLargeException extends BusinessException {
   constructor(
     fileSize: number,
     maxSize: number,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.DOC_FILE_TOO_LARGE, {
       fileSize,
@@ -237,7 +237,7 @@ export class InvalidFileTypeException extends BusinessException {
   constructor(
     fileType: string,
     allowedTypes: string[],
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.DOC_INVALID_FILE_TYPE, {
       fileType,
@@ -252,7 +252,7 @@ export class InvalidFileTypeException extends BusinessException {
  * Thrown when virus is detected in uploaded file
  */
 export class VirusDetectedException extends BusinessException {
-  constructor(fileName: string, virusName?: string, context?: Record<string, any>) {
+  constructor(fileName: string, virusName?: string, context?: Record<string, unknown>) {
     super(ErrorCodes.DOC_VIRUS_DETECTED, {
       fileName,
       virusName,
@@ -270,7 +270,7 @@ export class EthicalWallViolationException extends BusinessException {
     userId: string,
     resourceId: string,
     wallDescription: string,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.COMP_ETHICAL_WALL_VIOLATION, {
       userId,
@@ -289,7 +289,7 @@ export class DatabaseConstraintViolationException extends BusinessException {
   constructor(
     constraint: string,
     table?: string,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.DB_CONSTRAINT_VIOLATION, {
       constraint,
@@ -307,7 +307,7 @@ export class DuplicateEntryException extends BusinessException {
   constructor(
     field: string,
     value: string,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.DB_DUPLICATE_ENTRY, {
       field,
@@ -324,7 +324,7 @@ export class DuplicateEntryException extends BusinessException {
 export class ExternalServiceUnavailableException extends BusinessException {
   constructor(
     serviceName: string,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.EXT_SERVICE_UNAVAILABLE, {
       serviceName,
@@ -341,7 +341,7 @@ export class ExternalServiceTimeoutException extends BusinessException {
   constructor(
     serviceName: string,
     timeout: number,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.EXT_SERVICE_TIMEOUT, {
       serviceName,
@@ -359,7 +359,7 @@ export class ExternalServiceTimeoutException extends BusinessException {
 export class CircuitBreakerOpenException extends BusinessException {
   constructor(
     circuitName: string,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.SYS_CIRCUIT_BREAKER_OPEN, {
       circuitName,
@@ -373,7 +373,7 @@ export class CircuitBreakerOpenException extends BusinessException {
  * Thrown when database connection fails
  */
 export class DatabaseConnectionFailedException extends BusinessException {
-  constructor(context?: Record<string, any>) {
+  constructor(context?: Record<string, unknown>) {
     super(ErrorCodes.DB_CONNECTION_FAILED, context);
   }
 }
@@ -383,7 +383,7 @@ export class DatabaseConnectionFailedException extends BusinessException {
  * Thrown when database query times out
  */
 export class DatabaseTimeoutException extends BusinessException {
-  constructor(query?: string, timeout?: number, context?: Record<string, any>) {
+  constructor(query?: string, timeout?: number, context?: Record<string, unknown>) {
     super(ErrorCodes.DB_QUERY_TIMEOUT, {
       query: query ? query.substring(0, 100) : undefined,
       timeout,
@@ -400,7 +400,7 @@ export class PaymentFailedException extends BusinessException {
   constructor(
     paymentId: string,
     reason: string,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.BILL_PAYMENT_FAILED, {
       paymentId,
@@ -419,7 +419,7 @@ export class InsufficientTrustFundsException extends BusinessException {
     accountId: string,
     available: number,
     required: number,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.BILL_INSUFFICIENT_TRUST_FUNDS, {
       accountId,
@@ -440,7 +440,7 @@ export class AccountLockedException extends BusinessException {
     userId: string,
     lockReason: string,
     unlockAt?: Date,
-    context?: Record<string, any>,
+    context?: Record<string, unknown>,
   ) {
     super(ErrorCodes.AUTH_ACCOUNT_LOCKED, {
       userId,
@@ -456,7 +456,7 @@ export class AccountLockedException extends BusinessException {
  * Thrown when MFA is required but not provided
  */
 export class MfaRequiredException extends BusinessException {
-  constructor(userId: string, context?: Record<string, any>) {
+  constructor(userId: string, context?: Record<string, unknown>) {
     super(ErrorCodes.AUTH_MFA_REQUIRED, {
       userId,
       ...context,
@@ -469,7 +469,7 @@ export class MfaRequiredException extends BusinessException {
  * Thrown when provided MFA code is invalid
  */
 export class InvalidMfaCodeException extends BusinessException {
-  constructor(userId: string, context?: Record<string, any>) {
+  constructor(userId: string, context?: Record<string, unknown>) {
     super(ErrorCodes.AUTH_MFA_INVALID, {
       userId,
       ...context,
@@ -482,7 +482,7 @@ export class InvalidMfaCodeException extends BusinessException {
  * Thrown when authentication token has expired
  */
 export class TokenExpiredException extends BusinessException {
-  constructor(tokenType: string, context?: Record<string, any>) {
+  constructor(tokenType: string, context?: Record<string, unknown>) {
     super(ErrorCodes.AUTH_TOKEN_EXPIRED, {
       tokenType,
       ...context,
@@ -495,7 +495,7 @@ export class TokenExpiredException extends BusinessException {
  * Thrown when authentication token is invalid
  */
 export class TokenInvalidException extends BusinessException {
-  constructor(tokenType: string, reason?: string, context?: Record<string, any>) {
+  constructor(tokenType: string, reason?: string, context?: Record<string, unknown>) {
     super(ErrorCodes.AUTH_TOKEN_INVALID, {
       tokenType,
       reason,
@@ -509,7 +509,7 @@ export class TokenInvalidException extends BusinessException {
  * Thrown when system resources are exhausted
  */
 export class ResourceExhaustedException extends BusinessException {
-  constructor(resourceType: string, context?: Record<string, any>) {
+  constructor(resourceType: string, context?: Record<string, unknown>) {
     super(ErrorCodes.SYS_RESOURCE_EXHAUSTED, {
       resourceType,
       ...context,

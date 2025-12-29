@@ -148,7 +148,7 @@ export class DocketApiService {
 
         try {
             // Transform frontend DocketEntry to backend CreateDocketEntryDto
-            const createDto: Record<string, any> = {
+            const createDto: Record<string, unknown> = {
                 caseId: entry.caseId,
                 sequenceNumber: entry.sequenceNumber,
                 docketNumber: entry.docketNumber,

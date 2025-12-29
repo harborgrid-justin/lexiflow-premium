@@ -103,8 +103,8 @@ export const WithTemplate: Story = {
 export const Designer: StoryObj<Meta<typeof PleadingDesigner>> = {
   render: () => {
     const mockPleading: PleadingDocument = {
-      id: 'pleading-123' as any,
-      caseId: 'case-123' as any,
+      id: 'pleading-123' as Record<string, unknown>,
+      caseId: 'case-123' as Record<string, unknown>,
       title: 'Motion to Dismiss',
       status: 'Draft',
       filingStatus: 'Pre-Filing',

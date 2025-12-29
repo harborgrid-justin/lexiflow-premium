@@ -268,7 +268,7 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  trackConnectionAcquire(connection: any, acquireTime: number): void {
+  trackConnectionAcquire(connection: unknown, acquireTime: number): void {
     this.acquireTimes.push(acquireTime);
 
     const info: ConnectionInfo = {
@@ -282,12 +282,12 @@ export class ConnectionPoolService implements OnModuleInit, OnModuleDestroy {
     this.metrics.activeConnections = this.activeConnections.size;
   }
 
-  trackConnectionRelease(connection: any): void {
+  trackConnectionRelease(connection: unknown): void {
     this.activeConnections.delete(connection);
     this.metrics.activeConnections = this.activeConnections.size;
   }
 
-  trackQuery(connection: any, queryTime: number, success: boolean): void {
+  trackQuery(connection: unknown, queryTime: number, success: boolean): void {
     this.queryTimes.push(queryTime);
     this.metrics.totalQueries++;
 

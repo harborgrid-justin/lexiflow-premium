@@ -253,7 +253,7 @@ export function useNotifications() {
     // Listen for notification read
     const handleNotificationRead = (data: { notificationId: string }) => {
       setNotifications((prev) =>
-        prev.map((n: any) =>
+        prev.map((n: unknown) =>
           n.id === data.notificationId ? { ...n, read: true } : n,
         ),
       );
@@ -261,7 +261,7 @@ export function useNotifications() {
 
     // Listen for notification deleted
     const handleNotificationDeleted = (data: { notificationId: string }) => {
-      setNotifications((prev) => prev.filter((n: any) => n.id !== data.notificationId));
+      setNotifications((prev) => prev.filter((n: unknown) => n.id !== data.notificationId));
     };
 
     // Listen for unread count
@@ -293,16 +293,16 @@ export function useNotifications() {
   const markAllAsRead = useCallback(async () => {
     if (!socket || !isConnected) return;
     await emit('notification:mark-all-read', {});
-    setNotifications((prev) => prev.map((n: any) => ({ ...n, read: true })));
+    setNotifications((prev) => prev.map((n: unknown) => ({ ...n, read: true })));
   }, [socket, isConnected, emit]);
 
   const deleteNotification = useCallback(
     async (notificationId: string) => {
       if (!socket || !isConnected) return;
-      const notification = notifications.find((n: any) => n.id === notificationId);
+      const notification = notifications.find((n: unknown) => n.id === notificationId);
       await emit('notification:delete', {
         notificationId,
-        wasUnread: notification && !(notification as any).read,
+        wasUnread: notification && !(notification as Record<string, unknown>).read,
       });
     },
     [socket, isConnected, emit, notifications],
@@ -348,7 +348,7 @@ export function useDashboard() {
       setActivities((prev) => [activity, ...prev].slice(0, 50)); // Keep last 50
     };
 
-    const handleCaseStats = (stats: any) => {
+    const handleCaseStats = (stats: unknown) => {
       setCaseStats((prev) => new Map(prev).set(stats.caseId, stats));
     };
 

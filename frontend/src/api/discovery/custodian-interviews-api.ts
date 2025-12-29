@@ -20,7 +20,7 @@ export interface CustodianInterview {
   transcriptUrl?: string;
   followUpRequired?: boolean;
   followUpDate?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

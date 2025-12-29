@@ -12,7 +12,7 @@ export interface AnalyticsEvent {
   entityId?: string;
   userId?: string;
   timestamp: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface Dashboard {
@@ -31,7 +31,7 @@ export interface MetricData {
   name: string;
   value: number;
   timestamp: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface TimeSeriesData {

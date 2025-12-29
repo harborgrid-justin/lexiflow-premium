@@ -102,7 +102,7 @@ export class SecureClientService {
   async exportClientData(
     clientId: string,
     userRole: 'public' | 'internal' | 'restricted',
-  ): Promise<any> {
+  ): Promise<unknown> {
     const client = await this.findClientById(clientId);
 
     if (!client) {
@@ -146,7 +146,7 @@ export class SecureClientService {
     return totalRotated;
   }
 
-  async getDatabaseHealth(): Promise<any> {
+  async getDatabaseHealth(): Promise<unknown> {
     const health = await this.poolService.performHealthCheck();
     const metrics = await this.poolService.getPoolMetrics();
 
@@ -172,7 +172,7 @@ export class SecureClientService {
 
   async searchWithSanitization(
     tableName: string,
-    whereClause: Record<string, any>,
+    whereClause: Record<string, unknown>,
     limit: number,
     offset: number,
   ): Promise<any[]> {
@@ -246,7 +246,7 @@ export class DatabaseSecurityHealthService {
   async performHealthCheck(): Promise<{
     status: string;
     timestamp: Date;
-    database: any;
+    database: unknown;
   }> {
     const health = await this.poolService.performHealthCheck();
 
@@ -262,7 +262,7 @@ export class DatabaseSecurityHealthService {
     };
   }
 
-  async getPoolMetrics(): Promise<any> {
+  async getPoolMetrics(): Promise<unknown> {
     return await this.poolService.getPoolMetrics();
   }
 
@@ -303,7 +303,7 @@ export class QuerySecurityService {
   sanitizeUserInput(input: {
     tableName: string;
     columns: string[];
-    whereClause: Record<string, any>;
+    whereClause: Record<string, unknown>;
   }): any {
     return {
       tableName: this.sanitizer.sanitizeTableName(input.tableName),

@@ -60,7 +60,7 @@ export class MotionRepository extends Repository<Motion> {
     override async getAll(): Promise<Motion[]> {
         if (this.useBackend) {
             try {
-                return await this.motionsApi.getAll() as any;
+                return await this.motionsApi.getAll() as Record<string, unknown>;
             } catch (error) {
                 console.warn('[MotionRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -72,7 +72,7 @@ export class MotionRepository extends Repository<Motion> {
         this.validateId(caseId, 'getByCaseId');
         if (this.useBackend) {
             try {
-                return await this.motionsApi.getByCaseId(caseId) as any;
+                return await this.motionsApi.getByCaseId(caseId) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[MotionRepository] Backend API unavailable', error);
             }
@@ -84,7 +84,7 @@ export class MotionRepository extends Repository<Motion> {
         this.validateId(id, 'getById');
         if (this.useBackend) {
             try {
-                return await this.motionsApi.getById(id) as any;
+                return await this.motionsApi.getById(id) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[MotionRepository] Backend API unavailable', error);
             }
@@ -98,7 +98,7 @@ export class MotionRepository extends Repository<Motion> {
         }
         if (this.useBackend) {
             try {
-                return await this.motionsApi.create(item as any) as any;
+                return await this.motionsApi.create(item as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[MotionRepository] Backend API unavailable', error);
             }
@@ -111,7 +111,7 @@ export class MotionRepository extends Repository<Motion> {
         this.validateId(id, 'update');
         if (this.useBackend) {
             try {
-                return await this.motionsApi.update(id, updates as any) as any;
+                return await this.motionsApi.update(id, updates as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[MotionRepository] Backend API unavailable', error);
             }
@@ -149,7 +149,7 @@ export class MotionRepository extends Repository<Motion> {
             const lowerQuery = criteria.query.toLowerCase();
             motions = motions.filter(m =>
                 m.title?.toLowerCase().includes(lowerQuery) ||
-                (m as any).notes?.toLowerCase().includes(lowerQuery)
+                (m as Record<string, unknown>).notes?.toLowerCase().includes(lowerQuery)
             );
         }
         return motions;

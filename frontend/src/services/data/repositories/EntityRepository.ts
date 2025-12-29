@@ -48,7 +48,7 @@ export class EntityRepository extends Repository<LegalEntity> {
                         roles: [],
                         riskScore: 0,
                         tags: [],
-                    } as any;
+                    } as Record<string, unknown>;
                     return transformed;
                 });
             } catch (error) {
@@ -87,7 +87,7 @@ export class EntityRepository extends Repository<LegalEntity> {
                     roles: [],
                     riskScore: 0,
                     tags: [],
-                } as any;
+                } as Record<string, unknown>;
                 return transformed;
             } catch (error) {
                 console.error('[EntityRepository] Backend API unavailable', error);
@@ -97,7 +97,7 @@ export class EntityRepository extends Repository<LegalEntity> {
         return await super.getById(id);
     }
     
-    async getRelationships(id: string): Promise<any[]> {
+    async getRelationships(id: string): Promise<unknown[]> {
         this.validateId(id, 'getRelationships');
         if (this.useBackend && id !== 'all') {
             try {
@@ -149,7 +149,7 @@ export class EntityRepository extends Repository<LegalEntity> {
         const lowerQuery = query.toLowerCase();
         return entities.filter(e =>
             e.name?.toLowerCase().includes(lowerQuery) ||
-            (e as any).legalName?.toLowerCase().includes(lowerQuery)
+            (e as Record<string, unknown>).legalName?.toLowerCase().includes(lowerQuery)
         );
     }
 }

@@ -98,9 +98,9 @@ export class DraftingService {
       ...dto,
       createdBy: userId,
       updatedBy: userId,
-    });
+    } as unknown as DraftingTemplate);
 
-    return this.templateRepository.save(template);
+    return this.templateRepository.save(template) as Promise<DraftingTemplate>;
   }
 
   async getAllTemplates(

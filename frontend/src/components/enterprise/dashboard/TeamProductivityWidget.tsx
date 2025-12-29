@@ -72,7 +72,7 @@ export const TeamProductivityWidget: React.FC<TeamProductivityWidgetProps> = ({
     .sort((a, b) => b.efficiency - a.efficiency)
     .slice(0, 3);
 
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload }: unknown) => {
     if (active && payload && payload.length) {
       return (
         <div

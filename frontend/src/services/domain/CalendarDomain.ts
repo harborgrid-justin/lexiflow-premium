@@ -73,7 +73,7 @@ export const CALENDAR_QUERY_KEYS = {
   events: ['calendar', 'events'] as const,
   event: (id: string) => ['calendar', 'event', id] as const,
   upcoming: (days: number) => ['calendar', 'upcoming', days] as const,
-  filtered: (filters: Record<string, any>) => ['calendar', 'filtered', filters] as const,
+  filtered: (filters: Record<string, unknown>) => ['calendar', 'filtered', filters] as const,
 } as const;
 
 // =============================================================================

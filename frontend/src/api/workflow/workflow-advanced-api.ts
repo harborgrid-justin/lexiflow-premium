@@ -56,7 +56,7 @@ export class WorkflowAdvancedApiService {
   async evaluateConditionalBranching(
     workflowId: string,
     nodeId: string,
-    context: Record<string, any>,
+    context: Record<string, unknown>,
   ): Promise<{ branchId: string; matched: boolean; evaluationTime: number }> {
     return apiClient.post(`${this.baseUrl}/${workflowId}/conditional/${nodeId}/evaluate`, { context });
   }
@@ -85,8 +85,8 @@ export class WorkflowAdvancedApiService {
   async testConditionalRules(
     workflowId: string,
     config: ConditionalBranchingConfig,
-    testCases: Array<{ input: Record<string, any>; expectedBranch: string }>,
-  ): Promise<Array<{ input: Record<string, any>; actualBranch: string; passed: boolean }>> {
+    testCases: Array<{ input: Record<string, unknown>; expectedBranch: string }>,
+  ): Promise<Array<{ input: Record<string, unknown>; actualBranch: string; passed: boolean }>> {
     return apiClient.post(`${this.baseUrl}/${workflowId}/conditional/test`, { config, testCases });
   }
 
@@ -110,12 +110,12 @@ export class WorkflowAdvancedApiService {
   async executeParallelBranches(
     workflowId: string,
     configId: string,
-    context: Record<string, any>,
+    context: Record<string, unknown>,
   ): Promise<{
     completedBranches: string[];
     failedBranches: string[];
     executionTime: number;
-    metrics: Record<string, any>;
+    metrics: Record<string, unknown>;
   }> {
     return apiClient.post(`${this.baseUrl}/${workflowId}/parallel/${configId}/execute`, { context });
   }
@@ -130,7 +130,7 @@ export class WorkflowAdvancedApiService {
     totalExecutions: number;
     averageDuration: number;
     successRate: number;
-    branchMetrics: Record<string, any>;
+    branchMetrics: Record<string, unknown>;
   }> {
     return apiClient.get(`${this.baseUrl}/${workflowId}/parallel/${configId}/metrics`);
   }
@@ -608,7 +608,7 @@ export class WorkflowAdvancedApiService {
   async testExternalTrigger(
     workflowId: string,
     triggerId: string,
-    payload: Record<string, any>,
+    payload: Record<string, unknown>,
   ): Promise<TriggerEvent> {
     return apiClient.post(`${this.baseUrl}/${workflowId}/triggers/${triggerId}/test`, { payload });
   }
@@ -681,7 +681,7 @@ export class WorkflowAdvancedApiService {
    */
   async executeEnhanced(
     workflowId: string,
-    input?: Record<string, any>,
+    input?: Record<string, unknown>,
     options?: {
       dryRun?: boolean;
       enableSnapshots?: boolean;

@@ -20,7 +20,7 @@ export interface BreadcrumbItem {
   path: string;
   icon?: React.ReactNode;
   children?: BreadcrumbItem[]; // For dropdown navigation
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -139,7 +139,7 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
       }
 
       // Sort by access count and recency
-      updated.sort((a: any, b: any) => {
+      updated.sort((a: unknown, b: unknown) => {
         const scoreDiff = (b.accessCount * 2 + b.timestamp.getTime() / 1000000) -
                          (a.accessCount * 2 + a.timestamp.getTime() / 1000000);
         return scoreDiff;

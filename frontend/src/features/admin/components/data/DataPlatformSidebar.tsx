@@ -103,7 +103,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
               
               {hasChildren && isExpanded && item.children && (
                 <div className={cn("ml-4 pl-3 border-l space-y-1 mt-1 mb-1", theme.border.default)}>
-                  {(item.children as any).map((sub: any) => (
+                  {(item.children as Record<string, unknown>).map((sub: unknown) => (
                     <button
                       key={sub.id}
                       onClick={() => onChange(sub.id)}

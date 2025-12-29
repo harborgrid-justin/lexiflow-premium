@@ -25,7 +25,7 @@ import { queryClient } from '@/hooks/useQueryHooks';
 import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/master.config';
 
 // Lazy-loaded ChainService for blockchain operations (reduces bundle size ~80KB)
-let ChainServiceModule: any = null;
+let ChainServiceModule: unknown = null;
 const loadChainService = async () => {
   if (!ChainServiceModule) {
     ChainServiceModule = await import('@/services/infrastructure/chainService');
@@ -110,8 +110,8 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
         evidenceQueryKeys.evidence.verification(selectedItem.id)
       );
 
-      if (cached?.data && (cached.data as any).expiresAt > Date.now()) {
-        setVerifyData((cached.data as any).data);
+      if (cached?.data && (cached.data as Record<string, unknown>).expiresAt > Date.now()) {
+        setVerifyData((cached.data as Record<string, unknown>).data);
         setVerificationStatus('verified');
       }
     };

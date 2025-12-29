@@ -21,7 +21,7 @@ export interface ESISource {
   estimatedSize?: number;
   actualSize?: number;
   collectionDate?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

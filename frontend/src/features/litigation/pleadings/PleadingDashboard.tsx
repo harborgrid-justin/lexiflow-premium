@@ -65,7 +65,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
             : [];
 
         const doc: PleadingDocument = {
-            id: `plead-${Date.now()}` as any,
+            id: `plead-${Date.now()}` as Record<string, unknown>,
             title: newDocData.title,
             caseId: newDocData.caseId as CaseId,
             status: 'Draft',

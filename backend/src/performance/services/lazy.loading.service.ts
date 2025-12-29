@@ -270,7 +270,7 @@ export class LazyLoadingService {
   /**
    * Lazy load related entities
    */
-  async lazyLoadRelation<T extends Record<string, any>, R>(
+  async lazyLoadRelation<T extends Record<string, unknown>, R>(
     entity: T,
     relation: string,
     loader: DeferredLoader<R>,

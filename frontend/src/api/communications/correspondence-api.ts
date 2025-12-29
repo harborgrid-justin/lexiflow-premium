@@ -40,7 +40,7 @@ export interface Correspondence {
   documentId?: string;
   status: 'draft' | 'sent' | 'received' | 'filed';
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

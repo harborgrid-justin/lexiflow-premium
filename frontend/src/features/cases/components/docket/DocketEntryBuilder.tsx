@@ -129,7 +129,7 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
       );
       
       if (calculatedDeadlines.length > 0) {
-        entry.triggersDeadlines = calculatedDeadlines as any;
+        entry.triggersDeadlines = calculatedDeadlines as Record<string, unknown>;
         notifySuccess(`Generated ${calculatedDeadlines.length} deadline(s)`);
       }
     }

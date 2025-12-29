@@ -26,7 +26,7 @@ export interface DiscoveryRequest {
     status?: 'pending' | 'answered' | 'objected';
   }[];
   notes?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

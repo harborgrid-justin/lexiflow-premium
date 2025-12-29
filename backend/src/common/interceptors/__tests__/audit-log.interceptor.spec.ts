@@ -574,11 +574,11 @@ describe('AuditLogInterceptor', () => {
 function createMockExecutionContext(options: {
   method?: string;
   url?: string;
-  body?: any;
-  params?: any;
-  query?: any;
-  headers?: any;
-  user?: any;
+  body?: unknown;
+  params?: unknown;
+  query?: unknown;
+  headers?: unknown;
+  user?: unknown;
   ip?: string;
 }): ExecutionContext {
   const {

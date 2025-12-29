@@ -197,7 +197,7 @@ export class PaginationService {
     return Math.min(Math.max(1, limit), this.MAX_LIMIT);
   }
 
-  private encodeCursor(value: any): string {
+  private encodeCursor(value: unknown): string {
     return Buffer.from(String(value)).toString('base64');
   }
 

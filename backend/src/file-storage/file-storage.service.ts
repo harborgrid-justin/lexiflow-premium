@@ -31,7 +31,7 @@ export class FileStorageService implements OnModuleDestroy {
   private readonly minDiskSpace: number;
   private readonly allowedMimeTypes: string[];
   private readonly MAX_BUFFER_SIZE = 50 * 1024 * 1024;
-  private readonly pendingOperations = new Set<Promise<any>>();
+  private readonly pendingOperations = new Set<Promise<unknown>>();
 
   constructor(private configService: ConfigService) {
     this.uploadDir = PathsConfig.UPLOAD_DIR;
@@ -177,9 +177,9 @@ export class FileStorageService implements OnModuleDestroy {
         await unlink(absolutePath);
         this.logger.log(`File deleted: ${absolutePath}`);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Ignore ENOENT errors (file already deleted)
-      if (error.code === 'ENOENT') {
+      if ((error as any).code === 'ENOENT') {
         return;
       }
       this.logger.error(`Failed to delete file: ${filePath}`, error);
@@ -239,7 +239,7 @@ export class FileStorageService implements OnModuleDestroy {
     }
   }
 
-  async getFileInfo(filePath: string): Promise<any> {
+  async getFileInfo(filePath: string): Promise<unknown> {
     return this.getFileMetadata(filePath);
   }
 
@@ -268,7 +268,7 @@ export class FileStorageService implements OnModuleDestroy {
     }
   }
 
-  async getStorageStats(): Promise<any> {
+  async getStorageStats(): Promise<unknown> {
     return {
       totalFiles: 0,
       totalSize: 0,

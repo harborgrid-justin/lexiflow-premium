@@ -36,7 +36,7 @@ export class OrganizationRepository extends Repository<Organization> {
     override async getAll(): Promise<Organization[]> {
         if (this.useBackend) {
             try {
-                return await this.orgsApi.getAll() as any;
+                return await this.orgsApi.getAll() as Record<string, unknown>;
             } catch (error) {
                 console.warn('[OrganizationRepository] Backend API unavailable', error);
             }
@@ -48,7 +48,7 @@ export class OrganizationRepository extends Repository<Organization> {
         this.validateId(id, 'getById');
         if (this.useBackend) {
             try {
-                return await this.orgsApi.getById(id) as any;
+                return await this.orgsApi.getById(id) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[OrganizationRepository] Backend API unavailable', error);
             }
@@ -62,7 +62,7 @@ export class OrganizationRepository extends Repository<Organization> {
         }
         if (this.useBackend) {
             try {
-                return await this.orgsApi.create(item as any) as any;
+                return await this.orgsApi.create(item as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[OrganizationRepository] Backend API unavailable', error);
             }
@@ -75,7 +75,7 @@ export class OrganizationRepository extends Repository<Organization> {
         this.validateId(id, 'update');
         if (this.useBackend) {
             try {
-                return await this.orgsApi.update(id, updates as any) as any;
+                return await this.orgsApi.update(id, updates as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[OrganizationRepository] Backend API unavailable', error);
             }
@@ -100,7 +100,7 @@ export class OrganizationRepository extends Repository<Organization> {
         if (!searchTerm) return [];
         if (this.useBackend) {
             try {
-                return await this.orgsApi.search(searchTerm) as any;
+                return await this.orgsApi.search(searchTerm) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[OrganizationRepository] Backend API unavailable', error);
             }
@@ -116,7 +116,7 @@ export class OrganizationRepository extends Repository<Organization> {
         if (!type) throw new ValidationError('[OrganizationRepository.getByType] Invalid type');
         if (this.useBackend) {
             try {
-                return await this.orgsApi.getByType(type as any) as any;
+                return await this.orgsApi.getByType(type as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[OrganizationRepository] Backend API unavailable', error);
             }
@@ -128,7 +128,7 @@ export class OrganizationRepository extends Repository<Organization> {
         if (!jurisdiction) throw new ValidationError('[OrganizationRepository.getByJurisdiction] Invalid jurisdiction');
         if (this.useBackend) {
             try {
-                return await this.orgsApi.getByJurisdiction(jurisdiction) as any;
+                return await this.orgsApi.getByJurisdiction(jurisdiction) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[OrganizationRepository] Backend API unavailable', error);
             }

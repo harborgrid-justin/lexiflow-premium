@@ -10,8 +10,8 @@ describe('WsRoomLimitGuard', () => {
   beforeEach(() => {
     // Mock ConfigService
     configService = {
-      get: jest.fn((key: string, defaultValue: any) => {
-        const config: Record<string, any> = {
+      get: jest.fn((key: string, defaultValue: unknown) => {
+        const config: Record<string, unknown> = {
           'resourceLimits.websocket.maxRoomsPerUser': 5,
         };
         return config[key] !== undefined ? config[key] : defaultValue;
@@ -347,8 +347,8 @@ describe('WsRoomLimitGuard', () => {
   describe('Configuration', () => {
     it('should use custom config values', () => {
       const customConfig = {
-        get: jest.fn((key: string, defaultValue: any) => {
-          const config: Record<string, any> = {
+        get: jest.fn((key: string, defaultValue: unknown) => {
+          const config: Record<string, unknown> = {
             'resourceLimits.websocket.maxRoomsPerUser': 10,
           };
           return config[key] !== undefined ? config[key] : defaultValue;
@@ -363,7 +363,7 @@ describe('WsRoomLimitGuard', () => {
 
     it('should use default value when config returns undefined', () => {
       const emptyConfig = {
-        get: jest.fn((key: string, defaultValue: any) => defaultValue),
+        get: jest.fn((key: string, defaultValue: unknown) => defaultValue),
       } as any;
 
       const customGuard = new WsRoomLimitGuard(emptyConfig);

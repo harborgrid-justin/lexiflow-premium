@@ -148,7 +148,7 @@ function extractCaseInfo(text: string): { caseInfo: Partial<Case>; confidence: n
     info.title = 'Imported Case (No Number Found)';
   }
   
-  info.status = 'Discovery' as any;
+  info.status = 'Discovery' as Record<string, unknown>;
   info.matterType = MatterType.LITIGATION;
   info.jurisdiction = info.court?.toLowerCase().includes('federal') ? 'Federal' : 'State';
   info.filingDate = new Date().toISOString().split('T')[0];

@@ -117,7 +117,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
           trackingUuid: (generatedData.uuid || crypto.randomUUID()) as UUID,
           caseId: 'Pending Assignment' as CaseId,
           title: title,
-          type: type as any,
+          type: type as Record<string, unknown>,
           description: description,
           collectionDate: new Date().toISOString().split('T')[0],
           collectedBy: 'Current User',
@@ -133,7 +133,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
               actor: 'Current User',
               notes: 'Intake via Digital Wizard'
           }]
-      } as any; // Cast needed for BaseEntity fields
+      } as Record<string, unknown>; // Cast needed for BaseEntity fields
       
       // Validate before submission
       const validation = validateEvidenceItemSafe(newItem);

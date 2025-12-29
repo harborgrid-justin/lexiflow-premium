@@ -217,7 +217,7 @@ export class QuerySanitizationService {
     return this.sanitizeIdentifier(columnName);
   }
 
-  validateWhereClause(whereClause: Record<string, any>): void {
+  validateWhereClause(whereClause: Record<string, unknown>): void {
     const conditionCount = Object.keys(whereClause).length;
 
     if (conditionCount > this.complexityLimits.maxWhereConditions) {
@@ -251,7 +251,7 @@ export class QuerySanitizationService {
     }
   }
 
-  logSuspiciousQuery(query: string, parameters?: any[], metadata?: Record<string, any>): void {
+  logSuspiciousQuery(query: string, parameters?: any[], metadata?: Record<string, unknown>): void {
     this.logger.warn('Suspicious query detected', {
       query: query.substring(0, 500),
       parameterCount: parameters?.length || 0,

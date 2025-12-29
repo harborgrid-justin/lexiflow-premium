@@ -42,12 +42,12 @@ export class BillingService {
     return invoice;
   }
 
-  async createInvoice(data: any): Promise<Invoice> {
-    const invoice = this.invoiceRepository.create(data) as unknown as Invoice;
+  async createInvoice(data: unknown): Promise<Invoice> {
+    const invoice = this.invoiceRepository.create(data as any) as unknown as Invoice;
     return this.invoiceRepository.save(invoice);
   }
 
-  async updateInvoice(id: string, data: any): Promise<Invoice> {
+  async updateInvoice(id: string, data: unknown): Promise<Invoice> {
     const invoice = await this.findInvoiceById(id);
     Object.assign(invoice, data);
     return this.invoiceRepository.save(invoice);
@@ -78,15 +78,16 @@ export class BillingService {
     return this.timeEntryRepository.find({ where: { caseId } });
   }
 
-  async createTimeEntry(data: any): Promise<TimeEntry> {
-    const timeEntry = this.timeEntryRepository.create(data) as unknown as TimeEntry;
-    if (data.duration && data.rate) {
-      timeEntry.total = data.duration * data.rate;
+  async createTimeEntry(data: unknown): Promise<TimeEntry> {
+    const timeEntry = this.timeEntryRepository.create(data as any) as unknown as TimeEntry;
+    const timeData = data as { duration?: number; rate?: number };
+    if (timeData.duration && timeData.rate) {
+      timeEntry.total = timeData.duration * timeData.rate;
     }
     return this.timeEntryRepository.save(timeEntry);
   }
 
-  async updateTimeEntry(id: string, data: any): Promise<TimeEntry> {
+  async updateTimeEntry(id: string, data: unknown): Promise<TimeEntry> {
     const timeEntry = await this.timeEntryRepository.findOne({ where: { id } });
     if (!timeEntry) {
       throw new NotFoundException(`Time entry with ID ${id} not found`);
@@ -116,8 +117,8 @@ export class BillingService {
     return this.expenseRepository.find();
   }
 
-  async createExpense(data: any): Promise<Expense> {
-    const expense = this.expenseRepository.create(data) as unknown as Expense;
+  async createExpense(data: unknown): Promise<Expense> {
+    const expense = this.expenseRepository.create(data as any) as unknown as Expense;
     return this.expenseRepository.save(expense);
   }
 
@@ -145,7 +146,7 @@ export class BillingService {
     return this.invoiceRepository.save(invoice);
   }
 
-  async getBillingSummary(caseId: string): Promise<any> {
+  async getBillingSummary(caseId: string): Promise<unknown> {
     const timeEntries = await this.findTimeEntriesByCaseId(caseId);
     const expenses = await this.expenseRepository.find({ where: { caseId } });
 
@@ -204,7 +205,7 @@ export class BillingService {
     }));
   }
 
-  async getRealizationStats(): Promise<any> {
+  async getRealizationStats(): Promise<unknown> {
     const allTimeEntries = await this.timeEntryRepository.find();
     
     const billed = allTimeEntries

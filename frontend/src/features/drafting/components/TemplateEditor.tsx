@@ -29,7 +29,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
   const [practiceArea, setPracticeArea] = useState(template?.practiceArea || '');
   const [tags, setTags] = useState<string[]>(template?.tags || []);
   const [showPreview, setShowPreview] = useState(false);
-  const [availableClauses, setAvailableClauses] = useState<any[]>([]);
+  const [availableClauses, setAvailableClauses] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -128,7 +128,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
         jurisdiction,
         practiceArea,
         tags,
-        status: 'active' as any,
+        status: 'active' as Record<string, unknown>,
       };
 
       const saved = template
@@ -360,7 +360,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
                     <div className="flex items-center space-x-2">
                       <select
                         value={variable.type}
-                        onChange={(e) => handleUpdateVariable(index, { type: e.target.value as any })}
+                        onChange={(e) => handleUpdateVariable(index, { type: e.target.value as Record<string, unknown> })}
                         className="flex-1 text-xs px-2 py-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
                       >
                         <option value="text">Text</option>

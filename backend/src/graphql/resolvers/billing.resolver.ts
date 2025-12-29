@@ -152,7 +152,7 @@ export class BillingResolver {
     const agreements = await this.feeAgreementsService.findAll();
     // Filter by caseId if provided
     if (caseId) {
-      return agreements.filter((a: any) => a.caseId === caseId) as any;
+      return agreements.filter((a: unknown) => (a as any).caseId === caseId) as any;
     }
     return agreements as any;
   }

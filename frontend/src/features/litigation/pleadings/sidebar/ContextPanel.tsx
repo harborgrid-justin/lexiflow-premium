@@ -38,7 +38,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
   );
 
   // Fetch evidence for the case
-  const { data: evidence = [], isLoading: evidenceLoading } = useQuery<any[]>(
+  const { data: evidence = [], isLoading: evidenceLoading } = useQuery<unknown[]>(
     ['evidence', caseId],
     () => DataService.evidence.getByCaseId(caseId)
   );
@@ -50,7 +50,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
   );
 
   // Fetch documents
-  const { data: documents = [], isLoading: documentsLoading } = useQuery<any[]>(
+  const { data: documents = [], isLoading: documentsLoading } = useQuery<unknown[]>(
     ['documents', caseId],
     () => DataService.documents?.getByCaseId?.(caseId) || Promise.resolve([])
   );
@@ -60,7 +60,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
     const allFacts: CaseFact[] = [];
 
     // Add docket entries as facts
-    docketEntries.forEach((entry: any) => {
+    docketEntries.forEach((entry: unknown) => {
       allFacts.push({
         id: entry.id,
         content: `${entry.title || entry.description || 'Docket Entry'} - Filed on ${entry.filedDate ? new Date(entry.filedDate).toLocaleDateString() : 'N/A'}`,
@@ -70,7 +70,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
     });
 
     // Add evidence
-    evidence.forEach((item: any) => {
+    evidence.forEach((item: unknown) => {
       allFacts.push({
         id: item.id,
         content: item.description || item.title || 'Evidence item',
@@ -81,7 +81,7 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
 
     // Add case parties as witnesses
     if (caseData && typeof caseData === 'object' && 'parties' in caseData && Array.isArray(caseData.parties)) {
-      caseData.parties.forEach((party: any) => {
+      caseData.parties.forEach((party: unknown) => {
         allFacts.push({
           id: `party-${party.id || party.name}`,
           content: `${party.name} - ${party.role}`,

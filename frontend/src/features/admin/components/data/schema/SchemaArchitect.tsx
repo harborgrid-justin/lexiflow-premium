@@ -50,11 +50,11 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
   useEffect(() => {
       if (fetchedTables.length > 0) {
           // Map SchemaTable to TableData format
-          const mappedTables: TableData[] = fetchedTables.map((table: any) => ({
+          const mappedTables: TableData[] = fetchedTables.map((table: unknown) => ({
               name: table.name,
               x: table.x || 0,
               y: table.y || 0,
-              columns: table.columns.map((col: any) => ({
+              columns: table.columns.map((col: unknown) => ({
                   name: col.name,
                   type: col.type,
                   pk: col.pk,
@@ -86,7 +86,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
           if (c.fk) colDef += ` REFERENCES ${c.fk.split('.')[0]}(${c.fk.split('.')[1]})`;
           return colDef;
       }).join(',\n');
-      const indexes = t.columns.filter(c => (c as any).index && !c.pk).map(c => `CREATE INDEX idx_${t.name}_${c.name} ON ${t.name}(${c.name});`).join('\n');
+      const indexes = t.columns.filter(c => (c as Record<string, unknown>).index && !c.pk).map(c => `CREATE INDEX idx_${t.name}_${c.name} ON ${t.name}(${c.name});`).join('\n');
       return `CREATE TABLE ${t.name} (\n${cols}\n);\n${indexes ? indexes + '\n' : ''}`;
   }).join('\n'), [tables]);
   

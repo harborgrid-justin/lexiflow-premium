@@ -33,6 +33,8 @@ import { DataGridFilters, FilterValue, FilterConfig } from './DataGridFilters';
 import { DataGridPagination, PaginationState } from './DataGridPagination';
 import { DataGridToolbar } from './DataGridToolbar';
 import { InlineEditor, CellEditorProps } from './InlineEditor';
+import { ColumnResizer } from './DataGridColumnResizer';
+import { exportToCSV, exportToExcel, exportToPDF } from './DataGridExport';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -55,7 +57,7 @@ export interface EditingCell {
   columnId: string;
 }
 
-export interface DataGridProps<T extends Record<string, any>> {
+export interface DataGridProps<T extends Record<string, unknown>> {
   // Data
   data: T[];
   columns: ColumnDefinition<T>[];
@@ -92,10 +94,11 @@ export interface DataGridProps<T extends Record<string, any>> {
   onPageChange?: (page: number) => void;
 
   // Editing
-  onCellEdit?: (rowId: string | number, columnId: string, value: any) => void;
+  onCellEdit?: (rowId: string | number, columnId: string, value: unknown) => void;
 
   // Export
-  onExport?: (format: 'csv' | 'excel') => void;
+  onExport?: (format: 'csv' | 'excel' | 'pdf') => void;
+  enableExport?: boolean;
 
   // Styling
   className?: string;
@@ -113,11 +116,16 @@ export interface DataGridProps<T extends Record<string, any>> {
 // HELPER FUNCTIONS
 // ============================================================================
 
-function getNestedValue<T>(obj: T, path: string): any {
-  return path.split('.').reduce((acc: any, part) => acc?.[part], obj);
+function getNestedValue<T>(obj: T, path: string): unknown {
+  return path.split('.').reduce((acc: unknown, part) => {
+    if (acc && typeof acc === 'object' && part in acc) {
+      return (acc as Record<string, unknown>)[part];
+    }
+    return undefined;
+  }, obj as unknown);
 }
 
-function compareValues(a: any, b: any, direction: SortDirection): number {
+function compareValues(a: unknown, b: unknown, direction: SortDirection): number {
   if (direction === null) return 0;
 
   // Handle null/undefined
@@ -155,7 +163,7 @@ function compareValues(a: any, b: any, direction: SortDirection): number {
 // COMPONENT
 // ============================================================================
 
-export function DataGrid<T extends Record<string, any>>({
+export function DataGrid<T extends Record<string, unknown>>({
   data,
   columns: initialColumns,
   rowIdKey = 'id' as keyof T,
@@ -167,6 +175,7 @@ export function DataGrid<T extends Record<string, any>>({
   enablePagination = true,
   enableColumnResizing = true,
   enableColumnReordering = false,
+  enableExport = true,
   selectionMode = 'multiple',
   selectedRows: controlledSelectedRows,
   onSelectionChange,
@@ -379,7 +388,7 @@ export function DataGrid<T extends Record<string, any>>({
     setEditingCell({ rowId, columnId });
   }, [enableInlineEditing]);
 
-  const handleCellSave = useCallback((value: any) => {
+  const handleCellSave = useCallback((value: unknown) => {
     if (!editingCell) return;
 
     onCellEdit?.(editingCell.rowId, editingCell.columnId, value);
@@ -439,7 +448,7 @@ export function DataGrid<T extends Record<string, any>>({
           <div
             key={column.id}
             className={cn(
-              "px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider border-r select-none",
+              "px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider border-r select-none relative",
               theme.text.secondary,
               theme.border.default,
               enableSorting && column.sortable !== false && "cursor-pointer hover:bg-opacity-80"
@@ -458,6 +467,17 @@ export function DataGrid<T extends Record<string, any>>({
               <span className="ml-2 flex-shrink-0">
                 {sortInfo.direction === 'asc' ? '↑' : '↓'}
               </span>
+            )}
+
+            {/* Column Resizer */}
+            {enableColumnResizing && (
+              <ColumnResizer
+                columnId={column.id}
+                currentWidth={width}
+                minWidth={column.minWidth || 50}
+                maxWidth={column.maxWidth || 1000}
+                onResize={handleColumnResize}
+              />
             )}
           </div>
         );
@@ -538,9 +558,45 @@ export function DataGrid<T extends Record<string, any>>({
   };
 
   // Handle export
-  const handleExport = useCallback((format: 'csv' | 'excel') => {
-    onExport?.(format);
-  }, [onExport]);
+  const handleExport = useCallback((format: 'csv' | 'excel' | 'pdf') => {
+    if (onExport) {
+      onExport(format);
+      return;
+    }
+
+    // Default export implementation
+    const dataToExport = selectedRows.size > 0
+      ? displayData.filter(row => selectedRows.has(row[rowIdKey]))
+      : displayData;
+
+    const timestamp = new Date().toISOString().split('T')[0];
+    const baseFilename = `export_${timestamp}`;
+
+    switch (format) {
+      case 'csv':
+        exportToCSV(dataToExport, columns, `${baseFilename}.csv`);
+        break;
+      case 'excel':
+        exportToExcel(dataToExport, columns, `${baseFilename}.xlsx`, {
+          title: 'Data Export',
+        });
+        break;
+      case 'pdf':
+        exportToPDF(dataToExport, columns, `${baseFilename}.pdf`, {
+          title: 'Data Export',
+          orientation: 'landscape',
+        });
+        break;
+    }
+  }, [onExport, displayData, columns, selectedRows, rowIdKey]);
+
+  // Handle column resize
+  const handleColumnResize = useCallback((columnId: string, newWidth: number) => {
+    setColumnWidths(prev => ({
+      ...prev,
+      [columnId]: newWidth,
+    }));
+  }, []);
 
   if (loading) {
     return (
@@ -556,10 +612,10 @@ export function DataGrid<T extends Record<string, any>>({
   return (
     <div className={cn("flex flex-col", theme.surface.default, className)} ref={containerRef}>
       {/* Toolbar */}
-      {(enableFiltering || onExport) && (
+      {(enableFiltering || enableExport) && (
         <DataGridToolbar
           enableFiltering={enableFiltering}
-          onExport={onExport ? handleExport : undefined}
+          onExport={enableExport ? handleExport : undefined}
         />
       )}
 

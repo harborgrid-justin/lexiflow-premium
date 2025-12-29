@@ -60,7 +60,7 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
 
     try {
       await onRefresh();
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message || 'Failed to refresh sessions');
     } finally {
       setIsLoading(false);
@@ -80,7 +80,7 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
     try {
       await onRevokeSession(sessionId);
       setSessions((prev) => prev.filter((s) => s.id !== sessionId));
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message || 'Failed to revoke session');
     } finally {
       setRevokingSessionId(null);
@@ -100,7 +100,7 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
     try {
       await onRevokeAllOtherSessions();
       setSessions((prev) => prev.filter((s) => s.current));
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message || 'Failed to revoke sessions');
     } finally {
       setIsLoading(false);

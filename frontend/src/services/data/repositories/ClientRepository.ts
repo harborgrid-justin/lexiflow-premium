@@ -114,7 +114,7 @@ export class ClientRepository extends Repository<Client> {
     override async getAll(): Promise<Client[]> {
         if (this.useBackend) {
             try {
-                return await this.clientsApi.getAll() as any;
+                return await this.clientsApi.getAll() as Record<string, unknown>;
             } catch (error) {
                 console.warn('[ClientRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -140,7 +140,7 @@ export class ClientRepository extends Repository<Client> {
 
         if (this.useBackend) {
             try {
-                return await this.clientsApi.getById(id) as any;
+                return await this.clientsApi.getById(id) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[ClientRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -177,7 +177,7 @@ export class ClientRepository extends Repository<Client> {
 
         if (this.useBackend) {
             try {
-                return await this.clientsApi.create(item as any) as any;
+                return await this.clientsApi.create(item as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[ClientRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -218,7 +218,7 @@ export class ClientRepository extends Repository<Client> {
 
         if (this.useBackend) {
             try {
-                return await this.clientsApi.update(id, updates as any) as any;
+                return await this.clientsApi.update(id, updates as Record<string, unknown>) as Record<string, unknown>;
             } catch (error) {
                 console.warn('[ClientRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -408,7 +408,7 @@ export class ClientRepository extends Repository<Client> {
         try {
             const clients = await this.getAll();
             return clients.filter(client =>
-                (client as any).type === type ||
+                (client as Record<string, unknown>).type === type ||
                 client.clientType === type
             );
         } catch (error) {
@@ -437,10 +437,10 @@ export class ClientRepository extends Repository<Client> {
             return clients.filter(client =>
                 client.name?.toLowerCase().includes(lowerQuery) ||
                 client.email?.toLowerCase().includes(lowerQuery) ||
-                (client as any).company?.toLowerCase().includes(lowerQuery) ||
+                (client as Record<string, unknown>).company?.toLowerCase().includes(lowerQuery) ||
                 client.notes?.toLowerCase().includes(lowerQuery) ||
-                (client as any).firstName?.toLowerCase().includes(lowerQuery) ||
-                (client as any).lastName?.toLowerCase().includes(lowerQuery) ||
+                (client as Record<string, unknown>).firstName?.toLowerCase().includes(lowerQuery) ||
+                (client as Record<string, unknown>).lastName?.toLowerCase().includes(lowerQuery) ||
                 client.phone?.includes(query)
             );
         } catch (error) {
@@ -507,7 +507,7 @@ export class ClientRepository extends Repository<Client> {
                 }
 
                 // Count by type
-                const type = (client as any).type || client.clientType || 'Unknown';
+                const type = (client as Record<string, unknown>).type || client.clientType || 'Unknown';
                 byType[type] = (byType[type] || 0) + 1;
 
                 // Count recently added

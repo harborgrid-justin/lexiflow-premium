@@ -12,7 +12,7 @@ export const JurisdictionInternational: React.FC = () => {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery
-  const { data: rawTreaties = [], isLoading } = useQuery<any[]>(
+  const { data: rawTreaties = [], isLoading } = useQuery<unknown[]>(
       ['jurisdiction', 'treaties'],
       DataService.jurisdiction.getTreaties
   );

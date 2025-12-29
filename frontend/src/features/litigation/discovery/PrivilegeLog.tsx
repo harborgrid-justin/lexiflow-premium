@@ -81,7 +81,7 @@ export const PrivilegeLog: React.FC = () => {
             <TableHead>Description (Rule 26)</TableHead>
           </TableHeader>
           <TableBody>
-            {logItems.map((item: any) => (
+            {logItems.map((item: unknown) => (
               <TableRow key={item.id}>
                 <TableCell className={cn("font-mono text-xs", theme.text.secondary)}>{item.id}</TableCell>
                 <TableCell>{item.date}</TableCell>

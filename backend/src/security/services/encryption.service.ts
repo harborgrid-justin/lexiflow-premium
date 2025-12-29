@@ -287,7 +287,7 @@ export class EncryptionService {
     entity: T,
     sensitiveFields: string[]
   ): T {
-    const encrypted = { ...entity } as Record<string, any>;
+    const encrypted = { ...entity } as Record<string, unknown>;
 
     for (const field of sensitiveFields) {
       if (encrypted[field] !== null && encrypted[field] !== undefined) {
@@ -310,7 +310,7 @@ export class EncryptionService {
     entity: T,
     sensitiveFields: string[]
   ): T {
-    const decrypted = { ...entity } as Record<string, any>;
+    const decrypted = { ...entity } as Record<string, unknown>;
 
     for (const field of sensitiveFields) {
       if (decrypted[field] !== null && decrypted[field] !== undefined) {

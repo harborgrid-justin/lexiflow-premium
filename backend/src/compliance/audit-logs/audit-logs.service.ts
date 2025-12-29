@@ -102,7 +102,7 @@ export class AuditLogsService {
       .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
   }
 
-  async export(exportDto: ExportAuditLogsDto): Promise<any> {
+  async export(exportDto: ExportAuditLogsDto): Promise<unknown> {
     const query: QueryAuditLogsDto = {
       startDate: exportDto.startDate,
       endDate: exportDto.endDate,

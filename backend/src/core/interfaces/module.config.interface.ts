@@ -131,7 +131,7 @@ export interface ModuleConfig {
   /**
    * Module-specific configuration
    */
-  config?: Record<string, any>;
+  config?: Record<string, unknown>;
 }
 
 /**
@@ -161,7 +161,7 @@ export interface ModuleStartupResult {
   /**
    * Additional metadata
    */
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**

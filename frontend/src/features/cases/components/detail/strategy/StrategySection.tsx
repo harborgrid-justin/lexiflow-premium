@@ -83,7 +83,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
          </div>
       ) : (
         <>
-          {items.map((item: any) => {
+          {items.map((item: unknown) => {
             const typedItem = item as LegalArgument | Defense;
             return (
             <Card key={typedItem.id} noPadding className={`border-l-4 hover:shadow-md transition-shadow cursor-pointer ${type === 'Argument' ? 'border-l-blue-500' : 'border-l-amber-500'}`}>

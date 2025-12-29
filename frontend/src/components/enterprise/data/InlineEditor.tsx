@@ -39,10 +39,10 @@ import { EditorOption, EditorType } from './DataGridColumn';
 // ============================================================================
 
 export interface CellEditorProps {
-  value: any;
+  value: unknown;
   type: EditorType;
   options?: EditorOption[];
-  onSave: (value: any) => void;
+  onSave: (value: unknown) => void;
   onCancel: () => void;
 }
 
@@ -289,7 +289,7 @@ InlineEditor.displayName = 'InlineEditor';
 /**
  * Formats a date value for HTML date input
  */
-function formatDateForInput(value: any): string {
+function formatDateForInput(value: unknown): string {
   if (!value) return '';
 
   const date = value instanceof Date ? value : new Date(value);

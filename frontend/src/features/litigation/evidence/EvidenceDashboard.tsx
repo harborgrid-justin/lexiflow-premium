@@ -44,12 +44,12 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
     if (!data) return [];
     if (Array.isArray(data)) return data as EvidenceItem[];
     // Handle paginated response with data property (backend pagination)
-    if (typeof data === 'object' && 'data' in data && Array.isArray((data as any).data)) {
-      return (data as any).data as EvidenceItem[];
+    if (typeof data === 'object' && 'data' in data && Array.isArray((data as Record<string, unknown>).data)) {
+      return (data as Record<string, unknown>).data as EvidenceItem[];
     }
     // Handle object with items property
-    if (typeof data === 'object' && 'items' in data && Array.isArray((data as any).items)) {
-      return (data as any).items as EvidenceItem[];
+    if (typeof data === 'object' && 'items' in data && Array.isArray((data as Record<string, unknown>).items)) {
+      return (data as Record<string, unknown>).items as EvidenceItem[];
     }
     console.warn('[EvidenceDashboard] Data is not an array:', data);
     return [];
@@ -66,8 +66,8 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
   // Calculate recent events from live data
   const recentEvents = React.useMemo(() => {
     return evidence.flatMap((e) =>
-      e.chainOfCustody.map((c: any) => ({ ...c, itemTitle: e.title, itemId: e.id }))
-    ).sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
+      e.chainOfCustody.map((c: unknown) => ({ ...c, itemTitle: e.title, itemId: e.id }))
+    ).sort((a: unknown, b: unknown) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
   }, [evidence]);
 
   const chartData = [
@@ -133,7 +133,7 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
         {/* Recent Activity */}
         <Card title="Recent Custody Transfers">
           <div className="space-y-4">
-            {recentEvents.map((evt: any, idx: number) => (
+            {recentEvents.map((evt: unknown, idx: number) => (
               <div key={idx} className={cn("flex items-start pb-3 border-b last:border-0 last:pb-0", theme.border.default)}>
                 <div className={cn("p-2 rounded-full mr-3 shrink-0", theme.primary.light)}>
                   <Activity className={cn("h-4 w-4", theme.primary.text)} />

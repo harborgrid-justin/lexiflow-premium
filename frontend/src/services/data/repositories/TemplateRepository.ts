@@ -52,8 +52,8 @@ export class TemplateRepository extends Repository<WorkflowTemplateData> {
         const templates = await this.getAll();
         const lowerQuery = query.toLowerCase();
         return templates.filter(t =>
-            (t as any).name?.toLowerCase().includes(lowerQuery) ||
-            (t as any).description?.toLowerCase().includes(lowerQuery) ||
+            (t as Record<string, unknown>).name?.toLowerCase().includes(lowerQuery) ||
+            (t as Record<string, unknown>).description?.toLowerCase().includes(lowerQuery) ||
             t.id?.toLowerCase().includes(lowerQuery)
         );
     }

@@ -37,8 +37,8 @@ export class FileStorageService implements OnModuleDestroy {
   private readonly STREAMING_THRESHOLD = 5 * 1024 * 1024; // 5MB
   
   // Caches
-  private metadataCache: Map<string, { data: any; timestamp: number }> = new Map();
-  private versionCache: Map<string, { data: any; timestamp: number }> = new Map();
+  private metadataCache: Map<string, { data: unknown; timestamp: number }> = new Map();
+  private versionCache: Map<string, { data: unknown; timestamp: number }> = new Map();
   private checksumCache: Map<string, { data: string; timestamp: number }> = new Map();
   
   // Buffer pool for reuse
@@ -135,7 +135,7 @@ export class FileStorageService implements OnModuleDestroy {
   /**
    * Get file metadata with caching
    */
-  async getFileMetadata(fileId: string): Promise<any> {
+  async getFileMetadata(fileId: string): Promise<unknown> {
     const cached = this.metadataCache.get(fileId);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
       return cached.data;
@@ -256,31 +256,31 @@ export class FileStorageService implements OnModuleDestroy {
     this.activeDownloads.add(downloadId);
     
     try {
-      const metadata = await this.getFileMetadata(fileId);
+      const metadata = await this.getFileMetadata(fileId) as any;
       const shouldStream = metadata.size > this.STREAMING_THRESHOLD;
-      
+
       if (shouldStream) {
         // Stream large files in chunks
         const chunkCount = Math.ceil(metadata.size / this.MAX_CHUNK_SIZE);
-        
+
         for (let i = 0; i < chunkCount; i++) {
           const chunkSize = Math.min(
             this.MAX_CHUNK_SIZE,
             metadata.size - i * this.MAX_CHUNK_SIZE
           );
-          
+
           // Get buffer from pool or allocate new
           const buffer = this.bufferPool.pop() || Buffer.allocUnsafe(this.MAX_CHUNK_SIZE);
-          
+
           // Mock data chunk (would normally read from storage)
           const chunk = buffer.slice(0, chunkSize);
           yield chunk;
-          
+
           // Return buffer to pool
           if (this.bufferPool.length < this.MAX_BUFFER_POOL_SIZE) {
             this.bufferPool.push(buffer);
           }
-          
+
           // Periodic GC
           if (global.gc && i % 50 === 0) {
             global.gc();
@@ -305,7 +305,7 @@ export class FileStorageService implements OnModuleDestroy {
   async getFileVersions(fileId: string): Promise<any[]> {
     const cached = this.versionCache.get(fileId);
     if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
-      return cached.data;
+      return cached.data as any;
     }
     
     // Mock versions

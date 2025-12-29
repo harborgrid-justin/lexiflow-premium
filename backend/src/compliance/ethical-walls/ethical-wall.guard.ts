@@ -13,8 +13,8 @@ export class EthicalWallGuard implements CanActivate {
     return this.validateRequest(request);
   }
 
-  private async validateRequest(request: any): Promise<boolean> {
-    const user = request.user;
+  private async validateRequest(request: unknown): Promise<boolean> {
+    const user = (request as any).user;
     if (!user) {
       // No user context, allow (auth should be handled by another guard)
       return true;
@@ -43,12 +43,12 @@ export class EthicalWallGuard implements CanActivate {
     return true;
   }
 
-  private extractEntityInfo(request: any): {
+  private extractEntityInfo(request: unknown): {
     entityType: string;
     entityId: string;
   } | null {
     // Extract from URL params
-    const url = request.url;
+    const url = (request as any).url;
 
     // Pattern matching for common entity routes
     const patterns = [
@@ -69,15 +69,15 @@ export class EthicalWallGuard implements CanActivate {
     }
 
     // Check body for entity information
-    if (request.body) {
-      if (request.body.caseId) {
-        return { entityType: 'Case', entityId: request.body.caseId };
+    if ((request as any).body) {
+      if ((request as any).body.caseId) {
+        return { entityType: 'Case', entityId: (request as any).body.caseId };
       }
-      if (request.body.clientId) {
-        return { entityType: 'Client', entityId: request.body.clientId };
+      if ((request as any).body.clientId) {
+        return { entityType: 'Client', entityId: (request as any).body.clientId };
       }
-      if (request.body.documentId) {
-        return { entityType: 'Document', entityId: request.body.documentId };
+      if ((request as any).body.documentId) {
+        return { entityType: 'Document', entityId: (request as any).body.documentId };
       }
     }
 

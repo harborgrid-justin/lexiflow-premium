@@ -36,10 +36,10 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
   const [step, setStep] = useState<'template' | 'variables' | 'clauses' | 'preview' | 'save'>('template');
   const [templates, setTemplates] = useState<DraftingTemplate[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<DraftingTemplate | null>(null);
-  const [variableValues, setVariableValues] = useState<Record<string, any>>({});
+  const [variableValues, setVariableValues] = useState<Record<string, unknown>>({});
   const [selectedClauses, setSelectedClauses] = useState<string[]>([]);
-  const [availableClauses, setAvailableClauses] = useState<any[]>([]);
-  const [cases, setCases] = useState<any[]>([]);
+  const [availableClauses, setAvailableClauses] = useState<unknown[]>([]);
+  const [cases, setCases] = useState<unknown[]>([]);
   const [selectedCaseId, setSelectedCaseId] = useState<string | undefined>(caseId);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -62,8 +62,8 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
     try {
       const [templatesData, casesData, clausesData] = await Promise.all([
         draftingApi.getAllTemplates(),
-        apiClient.get<any[]>('/cases'),
-        apiClient.get<any[]>('/clauses'),
+        apiClient.get<unknown[]>('/cases'),
+        apiClient.get<unknown[]>('/clauses'),
       ]);
       setTemplates(Array.isArray(templatesData) ? templatesData : []);
       setCases(Array.isArray(casesData) ? casesData : []);
@@ -81,7 +81,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
       setTitle(`${template.name} - ${new Date().toLocaleDateString()}`);
       
       // Initialize variable values with defaults
-      const initialValues: Record<string, any> = {};
+      const initialValues: Record<string, unknown> = {};
       template.variables.forEach((v) => {
         initialValues[v.name] = v.defaultValue || '';
       });
@@ -286,7 +286,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
       
       addToast('Document generated successfully!', 'success');
       onComplete(document);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Failed to generate document:', error);
       addToast(error.message || 'Failed to generate document', 'error');
     } finally {

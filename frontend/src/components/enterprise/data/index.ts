@@ -131,3 +131,71 @@ export { InlineEditor } from './InlineEditor';
 export type {
   CellEditorProps,
 } from './InlineEditor';
+
+// ============================================================================
+// EXPORT UTILITIES
+// ============================================================================
+
+export {
+  exportToCSV,
+  exportToExcel,
+  exportToPDF,
+  exportToMultipleFormats,
+  exportSelectedRows,
+} from './DataGridExport';
+export type {
+  ExportOptions,
+  CSVExportOptions,
+  ExcelExportOptions,
+  PDFExportOptions,
+} from './DataGridExport';
+
+// ============================================================================
+// FUZZY SEARCH
+// ============================================================================
+
+export {
+  fuzzySearch,
+  createSearchIndex,
+  searchIndex,
+  levenshteinDistance,
+  levenshteinSimilarity,
+  damerauLevenshteinDistance,
+  damerauLevenshteinSimilarity,
+  trigramSimilarity,
+  soundex,
+  highlightMatches,
+} from './FuzzySearch';
+export type {
+  FuzzySearchOptions,
+  SearchResult,
+  MatchInfo,
+  SearchIndex,
+} from './FuzzySearch';
+
+// ============================================================================
+// SEARCH COMPONENT
+// ============================================================================
+
+export { DataGridSearch } from './DataGridSearch';
+export type {
+  DataGridSearchProps,
+} from './DataGridSearch';
+
+// ============================================================================
+// COLUMN RESIZER
+// ============================================================================
+
+export {
+  ColumnResizer,
+  useColumnResizer,
+  calculateAutoFitWidth,
+  distributeColumnWidths,
+  saveColumnWidths,
+  loadColumnWidths,
+  resetColumnWidths,
+} from './DataGridColumnResizer';
+export type {
+  ColumnResizerProps,
+  UseColumnResizerOptions,
+} from './DataGridColumnResizer';

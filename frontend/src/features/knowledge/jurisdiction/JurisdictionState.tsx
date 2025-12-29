@@ -40,7 +40,7 @@ export const JurisdictionState: React.FC = () => {
   const [filter, setFilter] = useState('');
 
   // Performance Engine: useQuery
-  const { data: rawStates = [], isLoading } = useQuery<any[]>(
+  const { data: rawStates = [], isLoading } = useQuery<unknown[]>(
       ['jurisdictions', 'state'],
       DataService.jurisdiction.getState
   );

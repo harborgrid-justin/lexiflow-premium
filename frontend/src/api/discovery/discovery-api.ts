@@ -47,7 +47,7 @@ export interface DiscoveryProcess {
     privilegedDocuments: number;
     responsiveDocuments: number;
   };
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdAt?: string;
   updatedAt?: string;
 }

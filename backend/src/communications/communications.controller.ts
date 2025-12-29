@@ -58,7 +58,7 @@ export class CommunicationsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 409, description: 'Resource already exists' })
-  renderTemplate(@Param('templateId') templateId: string, @Body() variables: any) {
+  renderTemplate(@Param('templateId') templateId: string, @Body() variables: unknown) {
     return this.communicationsService.renderTemplate(templateId, variables);
   }
 

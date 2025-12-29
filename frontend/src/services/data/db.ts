@@ -282,7 +282,7 @@ export class DatabaseManager {
   async count(storeName: string): Promise<number> {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
-          const items = StorageUtils.get<any[]>(storeName, []);
+          const items = StorageUtils.get<unknown[]>(storeName, []);
           return items.length;
       }
       return new Promise((resolve, reject) => {
@@ -356,7 +356,7 @@ export class DatabaseManager {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
           const items = StorageUtils.get<T[]>(storeName, []);
-          const idx = items.findIndex((i: any) => i.id === (item as any).id);
+          const idx = items.findIndex((i: unknown) => i.id === (item as Record<string, unknown>).id);
           if (idx >= 0) items[idx] = item;
           else items.push(item);
           StorageUtils.set(storeName, items);
@@ -391,7 +391,7 @@ export class DatabaseManager {
           const currentItems = StorageUtils.get<T[]>(storeName, []);
           const newItems = [...currentItems];
           items.forEach(item => {
-             const idx = newItems.findIndex((i: any) => i.id === (item as any).id);
+             const idx = newItems.findIndex((i: unknown) => i.id === (item as Record<string, unknown>).id);
              if (idx >= 0) newItems[idx] = item;
              else newItems.push(item);
           });
@@ -415,7 +415,7 @@ export class DatabaseManager {
   async delete(storeName: string, id: string): Promise<void> {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
-          const items = StorageUtils.get<any[]>(storeName, []);
+          const items = StorageUtils.get<unknown[]>(storeName, []);
           StorageUtils.set(storeName, items.filter(i => i.id !== id));
           return Promise.resolve();
       }
@@ -442,7 +442,7 @@ export class DatabaseManager {
       });
   }
 
-  async getByIndex<T>(storeName: string, indexName: string, value: string | any[]): Promise<T[]> {
+  async getByIndex<T>(storeName: string, indexName: string, value: string | unknown[]): Promise<T[]> {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
           const items = StorageUtils.get<T[]>(storeName, []);

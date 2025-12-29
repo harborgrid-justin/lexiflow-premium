@@ -73,7 +73,7 @@ export interface UseAppControllerReturn {
   /** Select case */
   selectCase: (caseId: string | null, tab?: string) => void;
   /** Current user */
-  currentUser: any;
+  currentUser: unknown;
   /** Switch user */
   switchUser: (index: number) => void;
   /** Sidebar open state */

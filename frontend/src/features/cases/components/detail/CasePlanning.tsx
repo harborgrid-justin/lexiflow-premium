@@ -154,7 +154,7 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
           />
           <GanttTimeline 
               phases={phases} 
-              tasks={tasks.map(t => ({ ...t, isCritical: criticalPathIds.has(t.id) } as any))} 
+              tasks={tasks.map(t => ({ ...t, isCritical: criticalPathIds.has(t.id) } as Record<string, unknown>))} 
               collapsedPhases={collapsedPhases} 
               zoom={zoom} 
               viewStartDate={viewStartDate} 

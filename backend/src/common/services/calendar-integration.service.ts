@@ -274,7 +274,7 @@ export class CalendarIntegrationService {
 
       const response = await client.api(query).get();
 
-      return (response.value || []).map((event: any) => this.mapOutlookEvent(event));
+      return (response.value || []).map((event: unknown) => this.mapOutlookEvent(event));
     } catch (error) {
       this.logger.error('Failed to list Outlook events', error);
       throw new Error('Failed to fetch Outlook events');
@@ -387,16 +387,17 @@ export class CalendarIntegrationService {
     });
   }
 
-  private mapOutlookEvent(event: any): CalendarEvent {
+  private mapOutlookEvent(event: unknown): CalendarEvent {
+    const e = event as any;
     return {
-      id: event.id,
-      summary: event.subject || '',
-      description: event.body?.content,
-      start: new Date(event.start.dateTime),
-      end: new Date(event.end.dateTime),
-      location: event.location?.displayName,
-      attendees: event.attendees?.map((a: any) => a.emailAddress.address).filter(Boolean),
-      reminders: event.reminderMinutesBeforeStart ? [event.reminderMinutesBeforeStart] : undefined,
+      id: e.id,
+      summary: e.subject || '',
+      description: e.body?.content,
+      start: new Date(e.start.dateTime),
+      end: new Date(e.end.dateTime),
+      location: e.location?.displayName,
+      attendees: e.attendees?.map((a: unknown) => (a as any).emailAddress.address).filter(Boolean),
+      reminders: e.reminderMinutesBeforeStart ? [e.reminderMinutesBeforeStart] : undefined,
       provider: 'outlook',
     };
   }

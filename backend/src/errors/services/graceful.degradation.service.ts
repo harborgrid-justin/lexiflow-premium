@@ -54,7 +54,7 @@ export interface DegradationConfig {
   enableCircuitBreaker: boolean;
   enableFallback: boolean;
   fallbackStrategy: FallbackStrategy;
-  fallbackData?: any;
+  fallbackData?: unknown;
   cacheKey?: string;
   healthCheckInterval?: number;
 }
@@ -68,7 +68,7 @@ export interface DegradationConfig {
 export class GracefulDegradationService {
   private readonly logger = new Logger(GracefulDegradationService.name);
   private serviceHealth: Map<string, ServiceHealthMetrics> = new Map();
-  private responseCache: Map<string, { data: any; timestamp: number }> = new Map();
+  private responseCache: Map<string, { data: unknown; timestamp: number }> = new Map();
   private readonly cacheTTL = 300000; // 5 minutes
 
   constructor(private readonly circuitBreaker: CircuitBreakerService) {
@@ -316,7 +316,7 @@ export class GracefulDegradationService {
     throw error;
   }
 
-  private getPartialResponse<T>(fallbackData: any): T {
+  private getPartialResponse<T>(fallbackData: unknown): T {
     // Return partial data structure
     return {
       ...(fallbackData || {}),
@@ -329,7 +329,7 @@ export class GracefulDegradationService {
     return (Array.isArray({}) ? [] : {}) as T;
   }
 
-  private cacheResponse(cacheKey: string, data: any): void {
+  private cacheResponse(cacheKey: string, data: unknown): void {
     this.responseCache.set(cacheKey, {
       data,
       timestamp: Date.now(),

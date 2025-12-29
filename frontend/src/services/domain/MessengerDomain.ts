@@ -30,11 +30,11 @@ export const MessengerService = {
   },
 
   // Messenger-specific methods
-  getConversations: async (filters?: Record<string, any>) => {
+  getConversations: async (filters?: Record<string, unknown>) => {
     return api.messaging.getConversations(filters);
   },
 
-  getContacts: async (filters?: Record<string, any>) => {
+  getContacts: async (filters?: Record<string, unknown>) => {
     return api.messaging.getContacts(filters);
   },
 

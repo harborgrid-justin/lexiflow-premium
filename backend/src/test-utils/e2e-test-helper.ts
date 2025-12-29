@@ -34,7 +34,7 @@ export class E2ETestHelper {
     app: INestApplication,
     path: string,
     token: string,
-  ): Promise<any> {
+  ): Promise<unknown> {
     const server = app.getHttpServer();
     return request(server)
       .get(path)
@@ -49,7 +49,7 @@ export class E2ETestHelper {
     path: string,
     token: string,
     body: unknown,
-  ): Promise<any> {
+  ): Promise<unknown> {
     const server = app.getHttpServer();
     return request(server)
       .post(path)
@@ -65,7 +65,7 @@ export class E2ETestHelper {
     path: string,
     token: string,
     body: unknown,
-  ): Promise<any> {
+  ): Promise<unknown> {
     const server = app.getHttpServer();
     return request(server)
       .put(path)
@@ -80,7 +80,7 @@ export class E2ETestHelper {
     app: INestApplication,
     path: string,
     token: string,
-  ): Promise<any> {
+  ): Promise<unknown> {
     const server = app.getHttpServer();
     return request(server)
       .delete(path)
@@ -90,17 +90,17 @@ export class E2ETestHelper {
   /**
    * Assert standard response format
    */
-  static assertStandardResponse(response: any, expectedSuccess: boolean = true): void {
-    expect(response.body).toHaveProperty('success', expectedSuccess);
-    expect(response.body).toHaveProperty('message');
-    expect(response.body).toHaveProperty('timestamp');
+  static assertStandardResponse(response: unknown, expectedSuccess: boolean = true): void {
+    expect((response as any).body).toHaveProperty('success', expectedSuccess);
+    expect((response as any).body).toHaveProperty('message');
+    expect((response as any).body).toHaveProperty('timestamp');
   }
 
   /**
    * Assert paginated response format
    */
-  static assertPaginatedResponse(response: any): void {
-    const responseBody = response.body as unknown as {
+  static assertPaginatedResponse(response: unknown): void {
+    const responseBody = (response as any).body as unknown as {
       data: {
         data: unknown[];
         total: number;
@@ -120,14 +120,14 @@ export class E2ETestHelper {
   /**
    * Assert validation error response
    */
-  static assertValidationError(response: any, expectedErrors: number): void {
-    const responseBody = response.body as unknown as {
+  static assertValidationError(response: unknown, expectedErrors: number): void {
+    const responseBody = (response as any).body as unknown as {
       success: boolean;
       error: {
         errors: unknown[];
       };
     };
-    expect(response.status).toBe(400);
+    expect((response as any).status).toBe(400);
     expect(responseBody).toHaveProperty('success', false);
     expect(responseBody.error).toHaveProperty('errors');
     expect(responseBody.error.errors.length).toBeGreaterThanOrEqual(

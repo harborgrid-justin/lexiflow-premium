@@ -58,7 +58,7 @@ export const DocketCalendar: React.FC = () => {
 
   // Memoize deadline lookup function
   const getDeadlines = useMemo(() => {
-    const cache = new Map<string, any[]>();
+    const cache = new Map<string, unknown[]>();
     return (day: number) => {
       const key = `${currentDate.getFullYear()}-${currentDate.getMonth()}-${day}`;
       if (!cache.has(key)) {

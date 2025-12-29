@@ -10,13 +10,13 @@ export class CitationsService {
     private readonly citationRepository: Repository<Citation>,
   ) {}
 
-  async create(createDto: any) {
-    const citation = this.citationRepository.create(createDto);
+  async create(createDto: unknown) {
+    const citation = this.citationRepository.create(createDto as any);
     return await this.citationRepository.save(citation);
   }
 
-  async findAll(filters: any) {
-    const { page = 1, limit = 50 } = filters;
+  async findAll(filters: unknown) {
+    const { page = 1, limit = 50 } = filters as { page?: number; limit?: number };
     const [data, total] = await this.citationRepository.findAndCount({
       order: { createdAt: 'DESC' },
       skip: (page - 1) * limit,
@@ -31,7 +31,7 @@ export class CitationsService {
     return citation;
   }
 
-  async update(id: string, updateDto: any) {
+  async update(id: string, updateDto: unknown) {
     const citation = await this.findOne(id);
     Object.assign(citation, updateDto);
     return await this.citationRepository.save(citation);

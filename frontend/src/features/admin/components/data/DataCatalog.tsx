@@ -75,7 +75,7 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
             <Tabs 
                 tabs={['browse', 'dictionary', 'requests']}
                 activeTab={activeTab}
-                onChange={(t) => setActiveTab(t as any)}
+                onChange={(t) => setActiveTab(t as Record<string, unknown>)}
             />
         </div>
 

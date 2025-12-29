@@ -10,6 +10,13 @@
  * @author LexiFlow Engineering Team
  * @since 2025-12-18 (Enterprise Sync Implementation)
  * @status PRODUCTION READY
+ */
+
+import { defaultWindowAdapter } from '../infrastructure/adapters/WindowAdapter';
+import { isBackendApiEnabled } from '../api';
+
+/**
+ * (Documentation continued below imports)
  * 
  * ═══════════════════════════════════════════════════════════════════════════
  *                            ARCHITECTURAL OVERVIEW

@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 import { CheckCircle, ChevronUp, ChevronDown, Clock, User, ArrowRight } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { UserAvatar } from '@/components/atoms/UserAvatar';
+import { UserAvatar } from '@/components/atoms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

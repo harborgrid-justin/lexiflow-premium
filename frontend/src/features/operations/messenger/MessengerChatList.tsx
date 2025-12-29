@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { Conversation } from '@/hooks/useSecureMessenger';
-import { Button } from '@/components/atoms/Button';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { Button } from '@/components/atoms';
+import { SearchToolbar } from '@/components/organisms';
 import { MoreVertical } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { VirtualList } from '@/components/organisms/VirtualList';
+import { VirtualList } from '@/components/organisms';
 import { useWindow } from '@/providers/WindowContext';
 import { MessengerChatWindow } from '@features/operations';
 import { ConversationRow } from './ConversationRow';

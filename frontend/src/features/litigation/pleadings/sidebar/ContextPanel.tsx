@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { FileText, Plus, Search, BookOpen, Users, Scale, ChevronRight, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DataService } from '@/services';

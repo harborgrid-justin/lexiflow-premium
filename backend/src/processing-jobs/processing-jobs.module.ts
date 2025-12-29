@@ -11,25 +11,39 @@ import { DocumentsModule } from '@documents/documents.module';
 /**
  * Processing Jobs Module
  * Handles background document processing with Bull queues
- * 
+ *
  * Circular Dependency Note:
  * This module has a circular dependency with DocumentsModule.
  * ProcessingJobs need Documents to read/update document metadata.
  * Documents need ProcessingJobs to create processing tasks.
  * Using forwardRef() to resolve this at runtime.
  * @see https://docs.nestjs.com/fundamentals/circular-dependency
+ *
+ * NOTE: Bull queue is conditionally registered based on REDIS_ENABLED.
  */
+
+// Check if Redis is enabled
+const redisEnabled = process.env.REDIS_ENABLED !== 'false' && process.env.DEMO_MODE !== 'true';
+
+// Conditionally include Bull queue
+const bullImports = redisEnabled ? [
+  BullModule.registerQueue({
+    name: 'document-processing',
+  }),
+] : [];
+
+// Conditionally include processor
+const processorProviders = redisEnabled ? [DocumentProcessor] : [];
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([ProcessingJob]),
-    BullModule.registerQueue({
-      name: 'document-processing',
-    }),
+    ...bullImports,
     OcrModule,
     forwardRef(() => DocumentsModule),
   ],
   controllers: [ProcessingJobsController],
-  providers: [ProcessingJobsService, DocumentProcessor],
+  providers: [ProcessingJobsService, ...processorProviders],
   exports: [ProcessingJobsService],
 })
 export class ProcessingJobsModule {}

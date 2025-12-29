@@ -17,9 +17,9 @@ import { Download } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/atoms/Button/Button';
-import { LazyLoader } from '@/components/molecules/LazyLoader/LazyLoader';
-import { TabbedPageLayout } from '@/components/layouts/TabbedPageLayout/TabbedPageLayout';
+import { Button } from '@/components/atoms';
+import { LazyLoader } from '@/components/molecules';
+import { TabbedPageLayout } from '@/components/layouts';
 import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 
 // Hooks & Context

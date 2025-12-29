@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { FileText, Wand2, ArrowRight, Loader2 } from 'lucide-react';
-import { Button } from '@/components/atoms/Button';
-import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { Button } from '@/components/atoms';
+import { AdaptiveLoader } from '@/components/molecules';
 import { DataService } from '@/services';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

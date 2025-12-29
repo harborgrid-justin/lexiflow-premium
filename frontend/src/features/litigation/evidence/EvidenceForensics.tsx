@@ -10,8 +10,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ShieldCheck, Link, RefreshCw, CheckCircle, AlertOctagon } from 'lucide-react';
 
 // Common Components
-import { Card } from '@/components/molecules/Card';
-import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules';
+import { Button } from '@/components/atoms';
 
 // Context & Utils
 import { useTheme } from '@/providers/ThemeContext';

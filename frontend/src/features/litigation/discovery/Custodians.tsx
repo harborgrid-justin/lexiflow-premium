@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { Button } from '@/components/atoms/Button';
-import { Badge } from '@/components/atoms/Badge';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Button } from '@/components/atoms';
+import { Badge } from '@/components/atoms';
 import { Users, Plus, Mail, Building2, Trash2, Edit } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Modal } from '@/components/molecules/Modal';
+import { Modal } from '@/components/molecules';
 import { Input, TextArea } from '@/components/atoms';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks';

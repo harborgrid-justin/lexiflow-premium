@@ -11,9 +11,9 @@ import { ShieldCheck, AlertTriangle, HardDrive, Box, Activity } from 'lucide-rea
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 // Common Components
-import { Card } from '@/components/molecules/Card';
-import { Button } from '@/components/atoms/Button';
-import { MetricCard } from '@/components/molecules/MetricCard';
+import { Card } from '@/components/molecules';
+import { Button } from '@/components/atoms';
+import { MetricCard } from '@/components/molecules';
 
 // Context & Utils
 import { useTheme } from '@/providers/ThemeContext';

@@ -13,7 +13,7 @@
 
 import React, { useMemo, useCallback, ReactNode } from 'react';
 import { LucideIcon } from 'lucide-react';
-import { PageHeader } from '@/components/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 

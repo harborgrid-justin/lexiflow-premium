@@ -8,7 +8,7 @@ import { AuditLogEntry } from '@/types';
 import { useQuery, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
-import { VirtualList } from '@/components/organisms/VirtualList';
+import { VirtualList } from '@/components/organisms';
 import { AuditEvent } from './types';
 
 export const AuditTrailViewer = () => {

@@ -13,8 +13,8 @@ import React from 'react';
 import { Scale, Fingerprint, ChevronRight, BookOpen } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { RiskMeter } from '@/components/organisms/RiskMeter';
-import { Badge } from '@/components/atoms/Badge';
+import { RiskMeter } from '@/components/organisms';
+import { Badge } from '@/components/atoms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

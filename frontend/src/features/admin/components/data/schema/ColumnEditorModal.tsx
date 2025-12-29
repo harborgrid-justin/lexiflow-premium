@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { Modal } from '@/components/molecules/Modal';
+import { Modal } from '@/components/molecules';
 import { Input } from '@/components/atoms';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 

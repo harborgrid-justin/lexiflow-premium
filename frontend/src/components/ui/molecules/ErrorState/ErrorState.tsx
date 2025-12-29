@@ -8,7 +8,7 @@
 import React from 'react';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms/Button/Button';
+import { Button } from '@/components/atoms';
 
 // ============================================================================
 // TYPES

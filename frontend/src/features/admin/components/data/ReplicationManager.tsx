@@ -7,9 +7,9 @@ import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms/Button';
-import { Card } from '@/components/molecules/Card';
-import { Modal } from '@/components/molecules/Modal';
+import { Button } from '@/components/atoms';
+import { Card } from '@/components/molecules';
+import { Modal } from '@/components/molecules';
 
 import { RegionMap } from './replication/RegionMap';
 

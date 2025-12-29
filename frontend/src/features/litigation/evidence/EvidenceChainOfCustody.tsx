@@ -14,10 +14,10 @@ import React, { useState } from 'react';
 import { User, Layers, Plus, ShieldCheck, AlertOctagon, Link } from 'lucide-react';
 
 // Common Components
-import { Button } from '@/components/atoms/Button';
-import { Modal } from '@/components/molecules/Modal';
+import { Button } from '@/components/atoms';
+import { Modal } from '@/components/molecules';
 import { Input, TextArea } from '@/components/atoms';
-import { SignaturePad } from '@/components/organisms/SignaturePad';
+import { SignaturePad } from '@/components/organisms';
 
 // Context & Utils
 import { useTheme } from '@/providers/ThemeContext';

@@ -22,8 +22,8 @@ import { Lock, Shield, Smartphone, Globe, Eye, FileText, Clock, AlertTriangle, C
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { Card } from '@/components/molecules/Card/Card';
-import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules';
+import { Button } from '@/components/atoms';
 
 // Services & Data
 import { DataService } from '@/services';

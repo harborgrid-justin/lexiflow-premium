@@ -18,8 +18,8 @@ import { Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '@/components/atoms/Badge';
-import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms';
+import { Button } from '@/components/atoms';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

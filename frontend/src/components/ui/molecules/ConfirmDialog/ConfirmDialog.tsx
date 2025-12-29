@@ -20,8 +20,8 @@ import { AlertTriangle, Info } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Modal } from '@/components/molecules/Modal/Modal';
-import { Button } from '@/components/atoms/Button/Button';
+import { Modal } from '@/components/molecules';
+import { Button } from '@/components/atoms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

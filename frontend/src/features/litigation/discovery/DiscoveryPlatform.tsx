@@ -20,9 +20,9 @@ import {
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '@/components/organisms/PageHeader';
-import { Button } from '@/components/atoms/Button';
-import { LazyLoader } from '@/components/molecules/LazyLoader';
+import { PageHeader } from '@/components/organisms';
+import { Button } from '@/components/atoms';
+import { LazyLoader } from '@/components/molecules';
 import { DiscoveryNavigation, getParentTabForView, getFirstTabOfParent } from './layout/DiscoveryNavigation';
 
 // Hooks & Context

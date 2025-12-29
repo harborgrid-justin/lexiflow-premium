@@ -96,7 +96,8 @@ export class ConfigurationValidatorService implements OnModuleInit {
    * Validate environment configuration
    */
   private validateEnvironment(): void {
-    const nodeEnv = this.configService.get<string>('nodeEnv');
+    // Use process.env directly as config is namespaced under 'app.app.nodeEnv'
+    const nodeEnv = process.env.NODE_ENV || this.configService.get<string>('app.app.nodeEnv');
 
     if (!nodeEnv) {
       this.addIssue(
@@ -130,7 +131,7 @@ export class ConfigurationValidatorService implements OnModuleInit {
       }
     }
 
-    const port = this.configService.get<number>('port');
+    const port = parseInt(process.env.PORT || '3001', 10);
     if (!port || port < 1 || port > 65535) {
       this.addIssue(
         ConfigIssueSeverity.ERROR,
@@ -146,8 +147,8 @@ export class ConfigurationValidatorService implements OnModuleInit {
    * Validate JWT secrets and strength
    */
   private validateSecrets(): void {
-    const jwtSecret = this.configService.get<string>('JWT_SECRET');
-    const jwtRefreshSecret = this.configService.get<string>('JWT_REFRESH_SECRET');
+    const jwtSecret = process.env.JWT_SECRET;
+    const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET;
 
     // JWT Secret validation
     if (!jwtSecret) {
@@ -224,9 +225,9 @@ export class ConfigurationValidatorService implements OnModuleInit {
    * Validate database configuration
    */
   private validateDatabase(): void {
-    const databaseUrl = this.configService.get<string>('DATABASE_URL');
-    const databaseHost = this.configService.get<string>('database.host');
-    const databaseName = this.configService.get<string>('database.name');
+    const databaseUrl = process.env.DATABASE_URL;
+    const databaseHost = process.env.DATABASE_HOST;
+    const databaseName = process.env.DATABASE_NAME;
 
     if (!databaseUrl && !databaseHost) {
       this.addIssue(
@@ -238,7 +239,8 @@ export class ConfigurationValidatorService implements OnModuleInit {
       );
     }
 
-    if (!databaseName) {
+    // DATABASE_NAME is not required when using DATABASE_URL
+    if (!databaseName && !databaseUrl) {
       this.addIssue(
         ConfigIssueSeverity.WARNING,
         'database',
@@ -249,8 +251,8 @@ export class ConfigurationValidatorService implements OnModuleInit {
     }
 
     // Check SSL configuration in production
-    const nodeEnv = this.configService.get<string>('nodeEnv');
-    const dbSsl = this.configService.get<boolean>('DB_SSL');
+    const nodeEnv = process.env.NODE_ENV;
+    const dbSsl = process.env.DB_SSL === 'true';
 
     if (nodeEnv === 'production' && !dbSsl) {
       this.addIssue(
@@ -300,7 +302,7 @@ export class ConfigurationValidatorService implements OnModuleInit {
    * Validate Redis configuration
    */
   private validateRedis(): void {
-    const redisEnabled = this.configService.get<boolean>('REDIS_ENABLED', true);
+    const redisEnabled = process.env.REDIS_ENABLED !== 'false';
 
     if (!redisEnabled) {
       this.addIssue(
@@ -313,8 +315,8 @@ export class ConfigurationValidatorService implements OnModuleInit {
       return;
     }
 
-    const redisUrl = this.configService.get<string>('redis.url');
-    const redisHost = this.configService.get<string>('redis.host');
+    const redisUrl = process.env.REDIS_URL;
+    const redisHost = process.env.REDIS_HOST;
 
     if (!redisUrl && !redisHost) {
       this.addIssue(
@@ -331,7 +333,7 @@ export class ConfigurationValidatorService implements OnModuleInit {
    * Validate Redis connection
    */
   private async validateRedisConnection(): Promise<void> {
-    const redisEnabled = this.configService.get<boolean>('REDIS_ENABLED', true);
+    const redisEnabled = process.env.REDIS_ENABLED !== 'false';
 
     if (!redisEnabled) {
       return;
@@ -340,10 +342,10 @@ export class ConfigurationValidatorService implements OnModuleInit {
     let redisClient: Redis | null = null;
 
     try {
-      const redisUrl = this.configService.get<string>('redis.url');
-      const redisHost = this.configService.get<string>('redis.host', 'localhost');
-      const redisPort = this.configService.get<number>('redis.port', 6379);
-      const redisPassword = this.configService.get<string>('redis.password');
+      const redisUrl = process.env.REDIS_URL;
+      const redisHost = process.env.REDIS_HOST || 'localhost';
+      const redisPort = parseInt(process.env.REDIS_PORT || '6379', 10);
+      const redisPassword = process.env.REDIS_PASSWORD;
 
       if (redisUrl) {
         redisClient = new Redis(redisUrl);

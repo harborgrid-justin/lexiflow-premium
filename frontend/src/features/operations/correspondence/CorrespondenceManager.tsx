@@ -29,8 +29,8 @@ import { useModalState } from '@/hooks/useModalState';
 import { useSelection } from '@/hooks/useSelectionState';
 
 // Components
-import { PageHeader } from '@/components/organisms/PageHeader';
-import { Button } from '@/components/atoms/Button';
+import { PageHeader } from '@/components/organisms';
+import { Button } from '@/components/atoms';
 import { CommunicationLog } from './CommunicationLog';
 import { ServiceTracker } from './ServiceTracker';
 import { CorrespondenceDetail } from '@features/operations';

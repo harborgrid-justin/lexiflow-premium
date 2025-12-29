@@ -18,7 +18,7 @@
 
 import React, { useState, useCallback, useMemo } from 'react';
 import { AlertCircle, CheckCircle, Landmark, Building, Shield, Users, ArrowRight, ArrowLeft } from 'lucide-react';
-import { Card } from '@/components/molecules/Card';
+import { Card } from '@/components/molecules';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useCreateTrustAccount, useTrustAccountValidation } from '@/hooks/useTrustAccounts';

@@ -6,14 +6,14 @@ import {
   ApiBearerAuth,
   ApiParam,
  }from '@nestjs/swagger';
-import { CaseAnalyticsService } from '@core/analytics';
+import { CaseAnalyticsService } from './case-analytics.service';
 import {
   CaseMetricsQueryDto,
   AnalyticsCaseMetricsDto,
   CaseTrendDataPoint,
   CaseSpecificMetricsDto,
   PracticeAreaBreakdownDto,
-} from '@core/analytics';
+} from './dto/case-analytics.dto';
 
 @ApiTags('Analytics - Cases')
 

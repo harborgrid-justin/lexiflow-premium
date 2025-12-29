@@ -3,7 +3,7 @@ import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnom
  * ? Migrated to backend API (2025-12-21)
  */
 import { adminApi } from "@/api/domains/admin.api";
-import { MOCK_API_SPEC } from '@/api/data/mockApiSpec';
+import { MOCK_API_SPEC } from '@/api/types/mockApiSpec';
 import { API_PREFIX } from '@/config/network/api.config';
 import { delay } from '@/utils/async';
 import { defaultStorage } from '@/services';

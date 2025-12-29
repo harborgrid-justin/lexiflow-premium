@@ -24,8 +24,8 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '@/components/molecules/Card';
-import { Badge } from '@/components/atoms/Badge';
+import { Card } from '@/components/molecules';
+import { Badge } from '@/components/atoms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

@@ -33,10 +33,10 @@ import { Plus, FileText, CheckCircle, XCircle, FileQuestion, AlertCircle, Loader
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { Button } from '@/components/atoms/Button';
-import { Badge } from '@/components/atoms/Badge';
-import { Modal } from '@/components/molecules/Modal';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Button } from '@/components/atoms';
+import { Badge } from '@/components/atoms';
+import { Modal } from '@/components/molecules';
 import { Input, TextArea } from '@/components/atoms';
 
 // Hooks & Context

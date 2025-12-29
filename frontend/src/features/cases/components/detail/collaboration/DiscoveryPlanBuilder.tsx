@@ -13,9 +13,9 @@ import React, { useState } from 'react';
 import { FileText, CheckCircle, AlertCircle, Edit2, Save, Download, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Card } from '@/components/molecules/Card';
-import { Button } from '@/components/atoms/Button';
-import { Badge } from '@/components/atoms/Badge';
+import { Card } from '@/components/molecules';
+import { Button } from '@/components/atoms';
+import { Badge } from '@/components/atoms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

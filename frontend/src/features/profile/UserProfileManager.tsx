@@ -21,12 +21,12 @@ import { UserCircle, Shield, Settings, Sliders, Activity } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { TabbedPageLayout } from '@/components/layouts/TabbedPageLayout';
+import { TabbedPageLayout } from '@/components/layouts';
 import { ProfileOverview } from './ProfileOverview';
 import { AccessMatrixEditor } from './AccessMatrixEditor';
 import { SecurityPane } from './SecurityPane';
 import { PreferencePane } from './PreferencePane';
-import { LazyLoader } from '@/components/molecules/LazyLoader';
+import { LazyLoader } from '@/components/molecules';
 
 // Services & Data
 import { DataService } from '@/services';

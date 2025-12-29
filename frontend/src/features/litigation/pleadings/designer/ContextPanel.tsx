@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Search, Fingerprint, Scale, FileText, ArrowRight, Link, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Tabs } from '@/components/molecules/Tabs';
+import { Tabs } from '@/components/molecules';
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';

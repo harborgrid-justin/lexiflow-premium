@@ -21,7 +21,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Components
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

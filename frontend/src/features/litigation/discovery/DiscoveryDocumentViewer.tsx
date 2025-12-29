@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Printer, Download, FileText, ZoomIn, ZoomOut, Tag } from 'lucide-react';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { DataService } from '@/services';
 import { CodingPanel } from './viewer/CodingPanel';
 import { useTheme } from '@/providers/ThemeContext';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { Button } from '@/components/atoms/Button';
-import { Badge } from '@/components/atoms/Badge';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Button } from '@/components/atoms';
+import { Badge } from '@/components/atoms';
 import { Stethoscope, Plus, Calendar, User } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -10,7 +10,7 @@ import { Examination } from '@/types';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
-import { Modal } from '@/components/molecules/Modal';
+import { Modal } from '@/components/molecules';
 import { Input, TextArea } from '@/components/atoms';
 import { useModalState } from '@/hooks';
 import { getTodayString } from '@/utils/dateUtils';

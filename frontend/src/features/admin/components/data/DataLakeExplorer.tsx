@@ -8,9 +8,9 @@ import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataLakeItem } from '@/types';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms/Button/Button';
-import { Card } from '@/components/molecules/Card/Card';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { Button } from '@/components/atoms';
+import { Card } from '@/components/molecules';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { DocumentPreviewPanel } from '@/features/operations/documents/viewer/DocumentPreviewPanel';
 
 export function DataLakeExplorer(): React.ReactElement {

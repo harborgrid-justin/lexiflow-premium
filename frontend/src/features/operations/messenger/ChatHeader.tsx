@@ -21,8 +21,8 @@ import { useTheme } from '@/providers/ThemeContext';
 import { Conversation } from '@/hooks/useSecureMessenger';
 
 // Components
-import { UserAvatar } from '@/components/atoms/UserAvatar';
-import { Button } from '@/components/atoms/Button';
+import { UserAvatar } from '@/components/atoms';
+import { Button } from '@/components/atoms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

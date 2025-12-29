@@ -29,8 +29,8 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '@/components/molecules/Card';
-import { MetricCard } from '@/components/molecules/MetricCard';
+import { Card } from '@/components/molecules';
+import { MetricCard } from '@/components/molecules';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

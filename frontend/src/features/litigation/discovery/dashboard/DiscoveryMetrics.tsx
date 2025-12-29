@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MetricCard } from '@/components/molecules/MetricCard';
+import { MetricCard } from '@/components/molecules';
 import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
 
 interface DiscoveryMetricsProps {

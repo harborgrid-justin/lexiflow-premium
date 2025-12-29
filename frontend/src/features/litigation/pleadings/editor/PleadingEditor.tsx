@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, Save, LayoutTemplate, Link, BookOpen, MessageSquare, UploadCloud, Download, FileText } from 'lucide-react';
 import jsPDF from 'jspdf';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { PleadingDocument, PleadingSection, PleadingComment, PleadingVariable } from '@/types/pleading-types';

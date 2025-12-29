@@ -12,7 +12,7 @@ import React from 'react';
 import { CheckCircle } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Card } from '@/components/molecules/Card';
+import { Card } from '@/components/molecules';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

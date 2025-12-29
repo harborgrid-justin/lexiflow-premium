@@ -24,8 +24,8 @@ import { CheckCircle, XCircle, FileText, PieChart as PieIcon } from 'lucide-reac
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { MetricCard } from '@/components/molecules/MetricCard';
-import { Card } from '@/components/molecules/Card';
+import { MetricCard } from '@/components/molecules';
+import { Card } from '@/components/molecules';
 
 // Types
 import { TrialExhibit } from '@/types';

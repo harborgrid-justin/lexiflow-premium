@@ -13,8 +13,8 @@ import React, { useState, useMemo } from 'react';
 import { Layers, Plus, TrendingUp } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/atoms/Button';
-import { TaskCreationModal } from '@/components/organisms/TaskCreationModal';
+import { Button } from '@/components/atoms';
+import { TaskCreationModal } from '@/components/organisms';
 import { PlanningSidebar } from './planning/PlanningSidebar';
 import { GanttTimeline } from './planning/GanttTimeline';
 

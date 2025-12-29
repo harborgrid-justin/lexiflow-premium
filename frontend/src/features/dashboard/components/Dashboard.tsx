@@ -21,9 +21,9 @@ import { Download, ShieldCheck } from 'lucide-react';
 import { useSessionStorage } from '@/hooks';
 
 // Components
-import { Button } from '@/components/atoms/Button';
-import { LazyLoader } from '@/components/molecules/LazyLoader';
-import { TabbedPageLayout } from '@/components/layouts/TabbedPageLayout'; // Assuming I move it there
+import { Button } from '@/components/atoms';
+import { LazyLoader } from '@/components/molecules';
+import { TabbedPageLayout } from '@/components/layouts'; // Assuming I move it there
 import { DashboardContent } from './DashboardContent';
 
 // Utils & Config

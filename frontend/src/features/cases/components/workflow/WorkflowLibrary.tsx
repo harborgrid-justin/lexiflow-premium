@@ -27,11 +27,11 @@ import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
 import { TemplatePreview } from '@features/cases';
-import { EmptyState } from '@/components/molecules/EmptyState';
-import { Button } from '@/components/atoms/Button';
-import { LoadingState } from '@/components/molecules/LoadingState';
-import { ErrorState } from '@/components/molecules/ErrorState';
-import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { EmptyState } from '@/components/molecules';
+import { Button } from '@/components/atoms';
+import { LoadingState } from '@/components/molecules';
+import { ErrorState } from '@/components/molecules';
+import { AdaptiveLoader } from '@/components/molecules';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

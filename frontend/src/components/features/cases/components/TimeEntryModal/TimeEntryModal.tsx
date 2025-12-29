@@ -23,10 +23,10 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Modal } from '@/components/molecules/Modal';
-import { Button } from '@/components/atoms/Button';
-import { Input } from '@/components/atoms/Input';
-import { TextArea } from '@/components/atoms/TextArea';
+import { Modal } from '@/components/molecules';
+import { Button } from '@/components/atoms';
+import { Input } from '@/components/atoms';
+import { TextArea } from '@/components/atoms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

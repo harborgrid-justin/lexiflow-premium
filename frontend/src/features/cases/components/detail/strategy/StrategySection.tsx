@@ -13,10 +13,10 @@ import React from 'react';
 import { ExternalLink, BookOpen, CheckCircle, Box, AlertTriangle, X } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Card } from '@/components/molecules/Card';
-import { Badge } from '@/components/atoms/Badge';
-import { RiskMeter } from '@/components/organisms/RiskMeter';
-import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules';
+import { Badge } from '@/components/atoms';
+import { RiskMeter } from '@/components/organisms';
+import { Button } from '@/components/atoms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

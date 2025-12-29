@@ -3,7 +3,7 @@ import React from 'react';
 import { Table, Code, GitBranch, History, BrainCircuit as Brain, RefreshCw, Save } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 
 interface SchemaToolbarProps {
   activeTab: string;

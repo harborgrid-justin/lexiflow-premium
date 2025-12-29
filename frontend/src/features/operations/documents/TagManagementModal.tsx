@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { Modal } from '@/components/molecules/Modal';
-import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules';
+import { Button } from '@/components/atoms';
 import { Plus, X } from 'lucide-react';
 import { LegalDocument } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';

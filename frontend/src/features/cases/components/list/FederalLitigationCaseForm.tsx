@@ -18,7 +18,7 @@
 
 import React, { useState, useReducer, useCallback, useEffect } from 'react';
 import { Scale, Users, Building, FileText, Calendar, AlertCircle } from 'lucide-react';
-import { AutocompleteSelect } from '@/components/molecules/AutocompleteSelect';
+import { AutocompleteSelect } from '@/components/molecules';
 import { Case, CaseStatus } from '@/types';
 import { api } from '@/api';
 import { useAutoSave } from '@/hooks/useAutoSave';

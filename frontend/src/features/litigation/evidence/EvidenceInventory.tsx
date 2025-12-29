@@ -17,13 +17,13 @@ import { Plus, Filter, CheckSquare, Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/atoms/Button';
-import { Badge } from '@/components/atoms/Badge';
-import { TaskCreationModal } from '@/components/organisms/TaskCreationModal';
-import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
-import { EvidenceTypeIcon } from '@/components/atoms/EvidenceTypeIcon';
+import { Button } from '@/components/atoms';
+import { Badge } from '@/components/atoms';
+import { TaskCreationModal } from '@/components/organisms';
+import { AdaptiveLoader } from '@/components/molecules';
+import { EvidenceTypeIcon } from '@/components/atoms';
 import { FilterPanel } from '@/components/organisms/FilterPanel';
-import { VirtualList } from '@/components/organisms/VirtualList';
+import { VirtualList } from '@/components/organisms';
 
 // Context & Utils
 import { useTheme } from '@/providers/ThemeContext';

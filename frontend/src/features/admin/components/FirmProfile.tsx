@@ -16,8 +16,8 @@ import {
 } from 'lucide-react';
 import { useTheme } from '@/providers';
 import { cn } from '@/utils';
-import { Card } from '@/components/molecules/Card';
-import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules';
+import { Button } from '@/components/atoms';
 import { Input } from '@/components/atoms';
 import { useNotify } from '@/hooks';
 

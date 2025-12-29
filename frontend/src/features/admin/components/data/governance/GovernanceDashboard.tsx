@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { ShieldCheck, AlertTriangle, FileSearch, Scale, Edit2 } from 'lucide-react';
-import { Card } from '@/components/molecules/Card/Card';
-import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules';
+import { Button } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 

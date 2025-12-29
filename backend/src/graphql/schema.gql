@@ -569,6 +569,8 @@ type PrivilegeLogEntryType {
 
 type Query {
   case(id: ID!): CaseType
+
+  """Get aggregated case metrics using efficient database queries"""
   caseMetrics: CaseMetrics!
   cases(filter: CaseFilterInput, pagination: PaginationInput): CaseConnection!
   deposition(id: ID!): DepositionType
@@ -610,7 +612,7 @@ input RegisterInput {
 }
 
 type Subscription {
-  caseUpdated(_id: ID!): CaseType!
+  caseUpdated(id: ID!): CaseType!
 }
 
 input TimeEntryFilterInput {

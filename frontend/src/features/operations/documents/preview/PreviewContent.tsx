@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
 import { FileIcon } from '@/components/atoms';
-import { PDFViewer } from '@/components/organisms/PDFViewer';
+import { PDFViewer } from '@/components/organisms';
 import { AcrobatToolbar, PDFTool } from './AcrobatToolbar';
 import { InteractiveOverlay, Field } from './InteractiveOverlay';
-import { Modal } from '@/components/molecules/Modal';
-import { SignaturePad } from '@/components/organisms/SignaturePad';
-import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules';
+import { SignaturePad } from '@/components/organisms';
+import { Button } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { LegalDocument } from '@/types';

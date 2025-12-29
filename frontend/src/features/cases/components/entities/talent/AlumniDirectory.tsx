@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { Card } from '@/components/molecules/Card';
-import { UserAvatar } from '@/components/atoms/UserAvatar';
-import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules';
+import { UserAvatar } from '@/components/atoms';
+import { Button } from '@/components/atoms';
 import { SearchInputBar, MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
 import { Briefcase, Building, Mail, Linkedin, GraduationCap, Network } from 'lucide-react';
 import { LegalEntity } from '@/types';

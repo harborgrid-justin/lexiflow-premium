@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { CustodianInterview, CaseId } from '@/types';
 import { DataService } from '@/services';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { MessageSquare, Plus } from 'lucide-react';
 import { InterviewList } from './interviews/InterviewList';
 import { InterviewModal } from './interviews/InterviewModal';

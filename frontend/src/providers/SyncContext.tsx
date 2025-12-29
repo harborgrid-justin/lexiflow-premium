@@ -33,6 +33,12 @@ interface ExtendedSyncProviderProps extends SyncProviderProps {
 const SyncStateContext = createContext<SyncStateValue | undefined>(undefined);
 const SyncActionsContext = createContext<SyncActionsValue | undefined>(undefined);
 
+// Legacy unified context type for backward compatibility
+export type SyncContextType = SyncStateValue & SyncActionsValue;
+
+// Legacy unified context export (for backward compatibility with useSync hook)
+export const SyncContext = createContext<SyncContextType | undefined>(undefined);
+
 // BP4: Export only custom hooks, not raw contexts
 export function useSyncState(): SyncStateValue {
   const context = useContext(SyncStateContext);

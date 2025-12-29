@@ -10,7 +10,8 @@
 export { AppProviders } from './AppProviders';
 
 // SyncContext exports
-export { SyncProvider, useSyncState, useSyncActions, useSync } from './SyncContext';
+export { SyncProvider, useSyncState, useSyncActions, useSync, SyncContext } from './SyncContext';
+export type { SyncContextType } from './SyncContext';
 export type { SyncStatus } from './SyncContext.types';
 
 // ThemeContext exports

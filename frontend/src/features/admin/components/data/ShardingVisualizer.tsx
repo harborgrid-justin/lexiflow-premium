@@ -4,7 +4,7 @@ import { Server, Database, Plus, Trash2, ArrowRight } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { ConsistentHashRing } from '@/utils/datastructures/consistentHashRing';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 
 /**
  * ShardingVisualizer - React 18 optimized with React.memo

@@ -2,7 +2,7 @@
 import React from 'react';
 import { LegalDocument } from '@/types';
 import { FileIcon } from '@/components/atoms';
-import { Badge } from '@/components/atoms/Badge';
+import { Badge } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 

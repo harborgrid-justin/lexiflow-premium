@@ -21,8 +21,8 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { UserAvatar } from '@/components/atoms/UserAvatar';
-import { BackendStatusIndicator } from '@/components/organisms/BackendStatusIndicator/BackendStatusIndicator';
+import { UserAvatar } from '@/components/atoms';
+import { BackendStatusIndicator } from '@/components/organisms';
 
 // Utils & Constants
 import { PATHS } from '@/config/paths.config';

@@ -3,7 +3,7 @@ import React from 'react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { encodeHtmlEntities } from '@/utils/sanitize';
-import { CopyButton } from '@/components/atoms/CopyButton';
+import { CopyButton } from '@/components/atoms';
 
 interface SchemaCodeEditorProps {
     ddl: string;

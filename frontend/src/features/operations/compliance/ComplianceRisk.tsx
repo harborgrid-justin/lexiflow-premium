@@ -20,7 +20,7 @@ import { AlertTriangle, FileText, ShieldAlert } from 'lucide-react';
 import { DataService } from '@/services';
 
 // Components
-import { MetricCard } from '@/components/molecules/MetricCard';
+import { MetricCard } from '@/components/molecules';
 
 // ============================================================================
 // COMPONENT

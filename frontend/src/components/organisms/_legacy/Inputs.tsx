@@ -1,4 +1,4 @@
-export { Input, type InputProps } from '@/components/atoms/Input';
-export { TextArea } from '@/components/atoms/TextArea';
+export { Input, type InputProps } from '@/components/atoms';
+export { TextArea } from '@/components/atoms';
 // SearchInput component not found - commented out
-// export { SearchInput } from '@/components/molecules/SearchInput';
+// export { SearchInput } from '@/components/molecules';

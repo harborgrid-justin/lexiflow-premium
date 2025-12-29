@@ -14,9 +14,9 @@ import { FileText, Save, CheckSquare } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { Input, TextArea } from '@/components/atoms';
-import { Button } from '@/components/atoms/Button';
-import { RuleSelector } from '@/components/molecules/RuleSelector';
-import { UserSelect } from '@/components/molecules/UserSelect';
+import { Button } from '@/components/atoms';
+import { RuleSelector } from '@/components/molecules';
+import { UserSelect } from '@/components/molecules';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

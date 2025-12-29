@@ -24,7 +24,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

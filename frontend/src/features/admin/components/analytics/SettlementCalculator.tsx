@@ -20,13 +20,13 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Card } from '@/components/molecules/Card/Card';
-import { Input } from '@/components/atoms/Input/Input';
-import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules';
+import { Input } from '@/components/atoms';
+import { Button } from '@/components/atoms';
 
 // Hooks & Context
 import { useTheme, ThemeContextType } from '@/providers/ThemeContext';
-import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
+import { useChartTheme } from '@/components/organisms';
 import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
 
 // Utils & Services

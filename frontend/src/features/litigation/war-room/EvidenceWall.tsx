@@ -24,7 +24,7 @@ import { useWindow } from '@/providers/WindowContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { SearchToolbar } from '@/components/organisms';
 import { DocumentPreviewPanel } from '@features/operations';
 import { WallItemCard } from './cards/WallItemCard';
 

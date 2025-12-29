@@ -1,6 +1,6 @@
 import React from 'react';
 import { TrendingUp, Activity } from 'lucide-react';
-import { Card } from '@/components/molecules/Card';
+import { Card } from '@/components/molecules';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { SecurityMetric } from './types';

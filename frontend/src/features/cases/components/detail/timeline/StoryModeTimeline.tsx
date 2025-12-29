@@ -13,7 +13,7 @@ import React from 'react';
 import { Calendar, Flag, Gavel, FileText, ArrowRight } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Card } from '@/components/molecules/Card';
+import { Card } from '@/components/molecules';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

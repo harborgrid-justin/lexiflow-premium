@@ -215,6 +215,12 @@ export class UnauthorizedError extends DomainError {
   }
 }
 
+export class AuthenticationError extends DomainError {
+  constructor(message: string = 'Authentication failed') {
+    super(message, 'AUTHENTICATION_ERROR', 401);
+  }
+}
+
 export class ForbiddenError extends DomainError {
   constructor(message: string = 'Access denied') {
     super(message, 'FORBIDDEN', 403);

@@ -8,9 +8,9 @@ import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataAnomaly, QualityMetricHistory } from '@/types';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms/Button/Button';
-import { Modal } from '@/components/molecules/Modal/Modal';
-import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { Button } from '@/components/atoms';
+import { Modal } from '@/components/molecules';
+import { Tabs } from '@/components/molecules';
 
 import { DataProfiler } from './quality/DataProfiler';
 import { DeduplicationManager } from './quality/DeduplicationManager';

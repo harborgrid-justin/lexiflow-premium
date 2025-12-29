@@ -14,7 +14,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { BuilderToolbar, BuilderCanvas } from '@features/cases';
 import { LitigationPalette } from './LitigationPalette';
 import { LitigationProperties } from '@features/litigation';
-import { ContextMenu, ContextMenuItem } from '@/components/molecules/ContextMenu';
+import { ContextMenu, ContextMenuItem } from '@/components/molecules';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

@@ -16,7 +16,7 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '@/components/atoms/Badge';
+import { Badge } from '@/components/atoms';
 
 // Utils & Constants
 import { StatusRegistry } from '@/utils/statusRegistry';

@@ -13,7 +13,7 @@
  * 
  * USAGE:
  * ```tsx
- * import { AppContentRenderer } from '@/components/layouts/AppContentRenderer';
+ * import { AppContentRenderer } from '@/components/layouts';
  * 
  * <AppContentRenderer
  *   activeView={activeView}

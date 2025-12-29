@@ -1,7 +1,7 @@
 
 import { MarketingMetric, MarketingCampaign } from '@/types';
 import { delay } from '@/utils/async';
-import { MOCK_METRICS } from "@/api/data/marketingMetric";
+import { MOCK_METRICS } from "@/api/types/marketingMetric";
 export const MarketingService = {
     getMetrics: async (): Promise<MarketingMetric[]> => {
         await delay(200);

@@ -12,7 +12,7 @@ import React from 'react';
 import { Settings, X, BookOpen } from 'lucide-react';
 
 // Internal Components
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { Input, TextArea } from '@/components/atoms';
 
 // Hooks & Context

@@ -25,7 +25,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { AdaptiveLoader } from '@/components/molecules';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

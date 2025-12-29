@@ -21,9 +21,9 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 
 // Components
-import { Badge } from '@/components/atoms/Badge';
+import { Badge } from '@/components/atoms';
 import { SearchInputBar } from '@/components/organisms/_legacy/RefactoredCommon';
-import { VirtualList } from '@/components/organisms/VirtualList';
+import { VirtualList } from '@/components/organisms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

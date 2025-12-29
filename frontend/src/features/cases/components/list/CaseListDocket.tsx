@@ -18,11 +18,11 @@ import { RefreshCcw, Plus, Calendar, AlertTriangle, Link, ArrowRight } from 'luc
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/atoms/Button';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { Badge } from '@/components/atoms/Badge';
-import { VirtualList } from '@/components/organisms/VirtualList';
-import { LazyLoader } from '@/components/molecules/LazyLoader';
+import { Button } from '@/components/atoms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Badge } from '@/components/atoms';
+import { VirtualList } from '@/components/organisms';
+import { LazyLoader } from '@/components/molecules';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

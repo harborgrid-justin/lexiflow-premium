@@ -17,10 +17,10 @@ import { Database, HardDrive, Mail, Server, Shield, Play, CheckCircle, Plus, Loa
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Card } from '@/components/molecules/Card';
-import { Button } from '@/components/atoms/Button';
-import { Badge } from '@/components/atoms/Badge';
-import { ProgressBar } from '@/components/atoms/ProgressBar';
+import { Card } from '@/components/molecules';
+import { Button } from '@/components/atoms';
+import { Badge } from '@/components/atoms';
+import { ProgressBar } from '@/components/atoms';
 import { EvidenceCustodyLog } from '@features/litigation/evidence';
 
 // Hooks & Context

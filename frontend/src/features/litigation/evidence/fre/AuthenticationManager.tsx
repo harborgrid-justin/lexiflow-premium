@@ -9,10 +9,10 @@ import React from 'react';
 import { Fingerprint, CheckCircle, MessageSquare, AlertTriangle, Send } from 'lucide-react';
 
 // Common Components
-import { MetricCard } from '@/components/molecules/MetricCard';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { Badge } from '@/components/atoms/Badge';
-import { Button } from '@/components/atoms/Button';
+import { MetricCard } from '@/components/molecules';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Badge } from '@/components/atoms';
+import { Button } from '@/components/atoms';
 
 // Context & Utils
 import { useTheme } from '@/providers/ThemeContext';

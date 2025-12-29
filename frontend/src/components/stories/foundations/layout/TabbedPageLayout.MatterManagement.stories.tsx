@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TabbedPageLayout, TabConfigItem } from '@/components/layouts/TabbedPageLayout';
-import { Button } from '@/components/atoms/Button';
+import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
+import { Button } from '@/components/atoms';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 import React, { useState, Suspense } from 'react';

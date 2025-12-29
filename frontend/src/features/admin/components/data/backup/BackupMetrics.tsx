@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Clock, HardDrive, Database } from 'lucide-react';
-import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { MetricCard } from '@/components/molecules';
 
 interface BackupMetricsProps {
     latestCreated?: string;

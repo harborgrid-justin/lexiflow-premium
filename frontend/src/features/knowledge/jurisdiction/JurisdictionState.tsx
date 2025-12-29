@@ -26,10 +26,10 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { Badge } from '@/components/atoms/Badge';
-import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Badge } from '@/components/atoms';
+import { AdaptiveLoader } from '@/components/molecules';
+import { SearchToolbar } from '@/components/organisms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

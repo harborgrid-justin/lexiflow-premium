@@ -17,15 +17,15 @@ import { Loader2, Radio } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Modal } from '@/components/molecules/Modal';
-import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { Modal } from '@/components/molecules';
+import { ConfirmDialog } from '@/components/molecules';
 import { DocketStats } from './DocketStats';
 import { DocketFilterPanel } from './DocketFilterPanel';
 import { DocketEntryModal } from './DocketEntryModal';
 import { DocketEntryBuilder } from './DocketEntryBuilder';
 import { DocketTable } from './DocketTable';
 import { DocketToolbar } from './DocketToolbar';
-import { DocketTableSkeleton } from '@/components/organisms/DocketSkeleton';
+import { DocketTableSkeleton } from '@/components/features/cases/components/DocketSkeleton/DocketSkeleton';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

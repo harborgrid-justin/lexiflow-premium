@@ -18,7 +18,7 @@ import { Users, TrendingUp, Scale, AlertTriangle } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Card } from '@/components/molecules/Card/Card';
+import { Card } from '@/components/molecules';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

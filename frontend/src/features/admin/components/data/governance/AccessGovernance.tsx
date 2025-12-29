@@ -1,6 +1,6 @@
 import React from 'react';
-import { Badge } from '@/components/atoms/Badge/Badge';
-import { Button } from '@/components/atoms/Button/Button';
+import { Badge } from '@/components/atoms';
+import { Button } from '@/components/atoms';
 import { Shield, CheckCircle, XCircle, Lock, Info } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

@@ -22,10 +22,10 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { FileIcon } from '@/components/atoms';
-import { Button } from '@/components/atoms/Button';
-import { VirtualList } from '@/components/organisms/VirtualList';
+import { Button } from '@/components/atoms';
+import { VirtualList } from '@/components/organisms';
 import { DocumentPreviewPanel } from '@features/operations';
 import { StatusBadge, EmptyListState } from '@/components/organisms/_legacy/RefactoredCommon';
 

@@ -25,7 +25,7 @@ import { MessengerInbox } from './MessengerInbox';
 import { MessengerContacts } from './MessengerContacts';
 import { MessengerFiles } from './MessengerFiles';
 import { MessengerArchived } from './MessengerArchived';
-import { PageHeader } from '@/components/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

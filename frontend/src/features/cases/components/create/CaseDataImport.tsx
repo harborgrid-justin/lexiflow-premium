@@ -7,8 +7,8 @@
 import React, { useState } from 'react';
 import { FileText, FileCode, Sparkles, ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
-import { Card } from '@/components/molecules/Card';
-import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules';
+import { Button } from '@/components/atoms';
 import { cn } from '@/utils/cn';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Wand2, Sparkles, AlertCircle, RefreshCw } from 'lucide-react';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { TextArea } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

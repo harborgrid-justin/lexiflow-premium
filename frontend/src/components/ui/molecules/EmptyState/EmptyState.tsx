@@ -23,8 +23,8 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Primitives
-import { Box } from '@/components/atoms/Box/Box';
-import { Text } from '@/components/atoms/Text/Text';
+import { Box } from '@/components/atoms';
+import { Text } from '@/components/atoms';
 
 // ============================================================================
 // TYPES & INTERFACES

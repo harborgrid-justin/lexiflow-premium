@@ -18,11 +18,11 @@ import { Loader2 } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { Badge } from '@/components/atoms/Badge';
-import { Button } from '@/components/atoms/Button';
-import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
-import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Badge } from '@/components/atoms';
+import { Button } from '@/components/atoms';
+import { ConfirmDialog } from '@/components/molecules';
+import { AdaptiveLoader } from '@/components/molecules';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

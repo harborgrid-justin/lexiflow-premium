@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import { CommunicationItem, ServiceJob, LegalDocument, DocketEntry, EvidenceItem, WorkflowTask, DocumentId, CaseId, DocketId, EvidenceId, UUID } from '@/types';
 import { X, Mail, MapPin, User, Calendar, FileText, Download, Navigation, CheckSquare, Archive, Briefcase, BookOpen, Truck, Package, PenTool, UploadCloud } from 'lucide-react';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { TaskCreationModal } from '@/components/organisms/TaskCreationModal';
+import { TaskCreationModal } from '@/components/organisms';
 import { DataService } from '@/services';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';

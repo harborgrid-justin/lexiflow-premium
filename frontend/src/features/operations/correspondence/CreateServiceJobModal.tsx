@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { Modal } from '@/components/molecules/Modal';
-import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules';
+import { Button } from '@/components/atoms';
 import { Input, TextArea } from '@/components/atoms';
 import { ServiceJob, UserId } from '@/types';
 import { DataService } from '@/services';

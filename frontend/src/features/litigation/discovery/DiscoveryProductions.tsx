@@ -28,9 +28,9 @@ import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { Badge } from '@/components/atoms/Badge';
-import { Button } from '@/components/atoms/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Badge } from '@/components/atoms';
+import { Button } from '@/components/atoms';
 import { DiscoveryProduction } from './DiscoveryProduction';
 
 // Utils & Constants

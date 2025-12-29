@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Modal } from '@/components/molecules/Modal';
+import { Modal } from '@/components/molecules';
 import { Input, TextArea } from '@/components/atoms';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { CustodianInterview } from '@/types';
 
 interface InterviewModalProps {

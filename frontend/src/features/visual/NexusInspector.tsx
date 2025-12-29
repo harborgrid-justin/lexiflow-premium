@@ -20,7 +20,7 @@ import { X, User, Building, Fingerprint, ExternalLink } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

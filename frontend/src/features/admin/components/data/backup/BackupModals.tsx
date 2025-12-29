@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Modal } from '@/components/molecules/Modal/Modal';
-import { Button } from '@/components/atoms/Button/Button';
+import { Modal } from '@/components/molecules';
+import { Button } from '@/components/atoms';
 import { Clock, Database, AlertCircle } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

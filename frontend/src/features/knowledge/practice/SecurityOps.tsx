@@ -27,8 +27,8 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 
 // Components
-import { Card } from '@/components/molecules/Card';
-import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules';
+import { Button } from '@/components/atoms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

@@ -12,8 +12,8 @@ import React from 'react';
 import { Gavel, FileText, Clock, Bell, Lock, Eye, Hash, ExternalLink } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Badge } from '@/components/atoms/Badge';
-import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms';
+import { Button } from '@/components/atoms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

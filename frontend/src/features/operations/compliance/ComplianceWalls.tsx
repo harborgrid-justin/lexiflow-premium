@@ -2,8 +2,8 @@
 import React from 'react';
 import { Lock, CheckCircle, Plus, Users, Briefcase } from 'lucide-react';
 import { EthicalWall } from '@/types';
-import { Card } from '@/components/molecules/Card';
-import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules';
+import { Button } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 

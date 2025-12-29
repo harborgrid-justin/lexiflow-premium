@@ -4,7 +4,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { db } from '@/services/data/db';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { ConfirmDialog } from '@/components/molecules/ConfirmDialog/ConfirmDialog';
+import { ConfirmDialog } from '@/components/molecules';
 import { useModalState } from '@/hooks/useModalState';
 
 export const DatabaseManagement: React.FC = () => {

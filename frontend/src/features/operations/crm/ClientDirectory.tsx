@@ -1,10 +1,10 @@
 
 import React, { useState, useMemo } from 'react';
 import { Client, ClientStatus } from '@/types';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { Badge } from '@/components/atoms/Badge';
-import { Button } from '@/components/atoms/Button';
+import { SearchToolbar } from '@/components/organisms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Badge } from '@/components/atoms';
+import { Button } from '@/components/atoms';
 import { Currency } from '@/components/atoms';
 import { Lock, MoreVertical } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';

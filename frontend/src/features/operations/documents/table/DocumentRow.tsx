@@ -2,10 +2,10 @@
 import React from 'react';
 import { Download, Eye, MoreVertical, Clock, CheckSquare, Book, Tag } from 'lucide-react';
 import { LegalDocument } from '@/types';
-import { Badge } from '@/components/atoms/Badge';
+import { Badge } from '@/components/atoms';
 import { FileIcon } from '@/components/atoms';
-import { TagList } from '@/components/molecules/TagList';
-import { TableRow, TableCell } from '@/components/organisms/Table';
+import { TagList } from '@/components/molecules';
+import { TableRow, TableCell } from '@/components/organisms';
 import { cn } from '@/utils/cn';
 import { tokens } from '@/components/theme/tokens';
 

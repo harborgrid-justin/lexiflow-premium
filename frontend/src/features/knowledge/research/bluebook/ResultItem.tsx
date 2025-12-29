@@ -1,6 +1,6 @@
 import React from 'react';
 import { Copy, Eye, EyeOff, Trash2, CheckCircle2, AlertTriangle } from 'lucide-react';
-import { Badge } from '@/components/atoms/Badge';
+import { Badge } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { ValidationSeverity } from '@/types/bluebook';

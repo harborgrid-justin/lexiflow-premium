@@ -19,11 +19,11 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Card } from '@/components/molecules/Card/Card';
+import { Card } from '@/components/molecules';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
-import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
+import { useChartTheme } from '@/components/organisms';
 
 // Utils
 import { cn } from '@/utils/cn';

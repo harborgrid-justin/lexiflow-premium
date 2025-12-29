@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {AuditLogEntry} from '@/types';
 import {AlertOctagon, Link, Loader2, User} from 'lucide-react';
-import {Button} from '@/components/atoms/Button/Button';
-import {Badge} from '@/components/atoms/Badge/Badge';
+import {Button} from '@/components/atoms';
+import {Badge} from '@/components/atoms';
 import {ChainedLogEntry, ChainService, IntegrityReport} from '@/services/infrastructure/chainService';
 import {LedgerVisualizer} from './ledger/LedgerVisualizer';
 import {cn} from '@/utils/cn';
 import {useTheme} from '@/providers/ThemeContext';
 import {useToast} from '@/providers/ToastContext';
-import {VirtualList} from '@/components/organisms/VirtualList/VirtualList';
+import {VirtualList} from '@/components/organisms';
 import {useWindow} from '@/providers/WindowContext';
 import {useQuery} from '@/hooks/useQueryHooks';
 import {DataService} from '@/services';

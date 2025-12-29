@@ -26,3 +26,7 @@ export * from './practice';
 // Jurisdiction Module
 export * from './jurisdiction';
 
+// Stub components (temporary)
+import React from 'react';
+export const OperatingLedger: React.FC<{ className?: string }> = ({ className }) => <div className={className}>Operating Ledger (stub)</div>;
+export const TrustLedger: React.FC<{ className?: string }> = ({ className }) => <div className={className}>Trust Ledger (stub)</div>;

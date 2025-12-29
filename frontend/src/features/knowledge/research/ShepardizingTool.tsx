@@ -2,9 +2,9 @@
 // components/research/ShepardizingTool.tsx
 import React, { useState } from 'react';
 import { Scale, Loader2, CheckCircle, AlertTriangle, XCircle, HelpCircle } from 'lucide-react';
-import { Button } from '@/components/atoms/Button';
-import { Card } from '@/components/molecules/Card';
-import { Badge } from '@/components/atoms/Badge';
+import { Button } from '@/components/atoms';
+import { Card } from '@/components/molecules';
+import { Badge } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { GeminiService, ShepardizeResult, TreatmentType } from '@/services/features/research/geminiService';

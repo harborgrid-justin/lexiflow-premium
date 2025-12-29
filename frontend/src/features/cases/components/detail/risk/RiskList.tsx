@@ -13,7 +13,7 @@ import React from 'react';
 import { Shield, DollarSign, Zap, Eye } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Badge } from '@/components/atoms/Badge';
+import { Badge } from '@/components/atoms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

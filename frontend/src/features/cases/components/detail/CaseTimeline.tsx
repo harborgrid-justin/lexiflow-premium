@@ -13,9 +13,9 @@ import React, { useState, useMemo } from 'react';
 import { FileText, CheckCircle, DollarSign, Flag, Briefcase, Gavel, Calendar, BookOpen, List, Filter } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TimelineItem } from '@/components/molecules/TimelineItem';
+import { TimelineItem } from '@/components/molecules';
 import { StoryModeTimeline } from './timeline/StoryModeTimeline';
-import { VirtualList } from '@/components/organisms/VirtualList';
+import { VirtualList } from '@/components/organisms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Modal } from '@/components/molecules/Modal';
-import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules';
+import { Button } from '@/components/atoms';
 import { Input, TextArea } from '@/components/atoms';
-import { UserSelect } from '@/components/molecules/UserSelect';
+import { UserSelect } from '@/components/molecules';
 import { Send, Paperclip, Wand2, X } from 'lucide-react';
 import { CommunicationItem, CommunicationType, UserId, User } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';

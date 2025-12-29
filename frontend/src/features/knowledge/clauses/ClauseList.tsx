@@ -2,16 +2,16 @@
 import React, { useState, useMemo } from 'react';
 import { Clause } from '@/types';
 import { DataService } from '@/services';
-import { Button } from '@/components/atoms/Button';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { Button } from '@/components/atoms';
+import { SearchToolbar } from '@/components/organisms';
 import { Book, Copy, History, Loader2, BookOpen, Check } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { filterClauses } from './clauseList.utils';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { VirtualList } from '@/components/organisms/VirtualList';
-import { EmptyState } from '@/components/molecules/EmptyState';
+import { VirtualList } from '@/components/organisms';
+import { EmptyState } from '@/components/molecules';
 import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/master.config';
 
 interface ClauseListProps {

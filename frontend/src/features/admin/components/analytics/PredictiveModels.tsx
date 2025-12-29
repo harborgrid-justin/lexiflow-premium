@@ -21,7 +21,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { EmptyState } from '@/components/molecules';
 import type { OutcomePrediction } from '@/api/analytics';
 
 // ============================================================================

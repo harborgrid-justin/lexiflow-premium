@@ -24,7 +24,7 @@ export enum GeneratedDocumentStatus {
 @Index(['templateId'])
 @Index(['caseId'])
 @Index(['status'])
-@Index(['createdBy'])
+// createdBy index is inherited from BaseEntity
 export class GeneratedDocument extends BaseEntity {
   @Column()
   title!: string;

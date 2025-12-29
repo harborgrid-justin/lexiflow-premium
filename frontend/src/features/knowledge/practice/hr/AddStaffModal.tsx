@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { Modal } from '@/components/molecules/Modal';
-import { Button } from '@/components/atoms/Button';
+import { Modal } from '@/components/molecules';
+import { Button } from '@/components/atoms';
 import { Input } from '@/components/atoms';
 import { StaffMember } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';

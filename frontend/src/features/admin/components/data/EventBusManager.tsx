@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { GitCommit, Zap, Play, Pause, AlertCircle, Plus } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Card } from '@/components/molecules/Card/Card';
-import { Badge } from '@/components/atoms/Badge/Badge';
-import { Button } from '@/components/atoms/Button/Button';
+import { Card } from '@/components/molecules';
+import { Badge } from '@/components/atoms';
+import { Button } from '@/components/atoms';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 interface EventBusEvent {

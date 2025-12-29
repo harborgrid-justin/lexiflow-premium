@@ -20,9 +20,9 @@ import { Plus, Filter } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { PageHeader } from '@/components/organisms/PageHeader';
-import { Button } from '@/components/atoms/Button';
-import { LazyLoader } from '@/components/molecules/LazyLoader';
+import { PageHeader } from '@/components/organisms';
+import { Button } from '@/components/atoms';
+import { LazyLoader } from '@/components/molecules';
 import { RulesPlatformContent } from './RulesPlatformContent';
 
 // Utils & Config

@@ -22,10 +22,10 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useToast } from '@/providers/ToastContext';
 
 // Components
-import { Button } from '@/components/atoms/Button';
-import { Badge } from '@/components/atoms/Badge';
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
-import { Modal } from '@/components/molecules/Modal';
+import { Button } from '@/components/atoms';
+import { Badge } from '@/components/atoms';
+import { PageHeader } from '@/components/organisms';
+import { Modal } from '@/components/molecules';
 
 // Utils
 import { cn } from '@/utils/cn';

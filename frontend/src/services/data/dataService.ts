@@ -193,7 +193,7 @@ import type {
   TimeEntry
 } from '@/types';
 
-import { MOCK_JUDGES } from '@/api/data/judgeProfile';
+import { MOCK_JUDGES } from '@/api/types/judgeProfile';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                      INTEGRATED REPOSITORIES

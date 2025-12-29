@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { TabbedPageLayout, TabConfigItem } from '@/components/layouts/TabbedPageLayout';
+import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import React, { useState } from 'react';
 import { 
@@ -16,7 +16,7 @@ import {
   Users,
   Calendar
 } from 'lucide-react';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { cn } from '@/utils/cn';
 
 /**

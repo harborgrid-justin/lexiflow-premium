@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { FileText, ArrowRight, ArrowLeft, Save, Eye, X, CheckCircle, List, Edit, Layers, FileSearch, FolderCheck } from 'lucide-react';
 import { useTheme } from '@providers/ThemeContext';
 import { useToast } from '@providers/ToastContext';
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
-import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
+import { PageHeader } from '@/components/organisms';
+import { TabNavigation } from '@/components/organisms';
 import { cn } from '@/utils/cn';
 import { 
   draftingApi, 

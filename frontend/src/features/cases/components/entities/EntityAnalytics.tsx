@@ -22,8 +22,8 @@ import { useTheme } from '@/providers/ThemeContext';
 import { ChartColorService } from '@/services/theme/chartColorService';
 
 // Components
-import { MetricCard } from '@/components/molecules/MetricCard';
-import { Card } from '@/components/molecules/Card';
+import { MetricCard } from '@/components/molecules';
+import { Card } from '@/components/molecules';
 
 // Types
 import { LegalEntity } from '@/types';

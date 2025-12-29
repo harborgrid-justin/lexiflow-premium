@@ -25,7 +25,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '@/components/molecules/Card';
+import { Card } from '@/components/molecules';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

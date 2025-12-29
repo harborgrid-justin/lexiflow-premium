@@ -33,10 +33,10 @@ import { Briefcase, Phone, Mail, Star, Plus } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { Button } from '@/components/atoms/Button';
-import { Badge } from '@/components/atoms/Badge';
-import { Modal } from '@/components/molecules/Modal';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Button } from '@/components/atoms';
+import { Badge } from '@/components/atoms';
+import { Modal } from '@/components/molecules';
 import { Input } from '@/components/atoms';
 
 // Hooks & Context

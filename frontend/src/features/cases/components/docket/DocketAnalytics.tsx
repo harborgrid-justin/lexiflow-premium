@@ -24,7 +24,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { ChartColorService } from '@/services/theme/chartColorService';
 
 // Components
-import { Card } from '@/components/molecules/Card';
+import { Card } from '@/components/molecules';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';

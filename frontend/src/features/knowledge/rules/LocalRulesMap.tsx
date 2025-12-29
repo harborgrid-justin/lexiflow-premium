@@ -1,7 +1,7 @@
 
 import React, { useMemo } from 'react';
 import { JurisdictionGeoMap } from '@features/knowledge/jurisdiction';
-import { Card } from '@/components/molecules/Card';
+import { Card } from '@/components/molecules';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { MapPin, Book, Loader2 } from 'lucide-react';

@@ -9,10 +9,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, UploadCloud, CheckCircle, Loader2, Link, ShieldCheck, Save } from 'lucide-react';
 
 // Common Components
-import { Card } from '@/components/molecules/Card';
-import { Button } from '@/components/atoms/Button';
-import { Stepper } from '@/components/molecules/Stepper';
-import { TagInput } from '@/components/molecules/TagInput';
+import { Card } from '@/components/molecules';
+import { Button } from '@/components/atoms';
+import { Stepper } from '@/components/molecules';
+import { TagInput } from '@/components/molecules';
 
 // Context & Utils
 import { useTheme } from '@/providers/ThemeContext';

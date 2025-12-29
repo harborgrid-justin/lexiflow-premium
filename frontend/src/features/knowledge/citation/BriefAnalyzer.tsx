@@ -21,10 +21,10 @@ import {
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/atoms/Button';
-import { Card } from '@/components/molecules/Card';
-import { Tabs } from '@/components/molecules/Tabs';
-import { RiskMeter } from '@/components/organisms/RiskMeter';
+import { Button } from '@/components/atoms';
+import { Card } from '@/components/molecules';
+import { Tabs } from '@/components/molecules';
+import { RiskMeter } from '@/components/organisms';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

@@ -13,7 +13,7 @@ import React from 'react';
 import { Globe, Gavel, Scale, Briefcase, BookOpen, AlertCircle, Calendar, DollarSign } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Card } from '@/components/molecules/Card';
+import { Card } from '@/components/molecules';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

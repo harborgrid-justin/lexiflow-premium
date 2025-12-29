@@ -12,7 +12,7 @@
 
 import React from 'react';
 import { useTheme } from '@/providers/ThemeContext';
-import { PageHeader } from '@/components/organisms/PageHeader';
+import { PageHeader } from '@/components/organisms';
 import { cn } from '@/utils/cn';
 
 interface ManagerLayoutProps {

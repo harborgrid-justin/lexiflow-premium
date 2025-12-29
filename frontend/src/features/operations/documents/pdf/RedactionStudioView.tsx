@@ -6,13 +6,13 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DocumentService } from '@/services/features/documents/documentService';
 import { BlobManager } from '@/services/infrastructure/blobManager';
-import { PDFViewer } from '@/components/organisms/PDFViewer';
+import { PDFViewer } from '@/components/organisms';
 import { PIIPanel } from '../preview/PIIPanel';
 import { Loader2, Eraser } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
-import { ErrorState } from '@/components/molecules/ErrorState';
+import { ErrorState } from '@/components/molecules';
 
 export function RedactionStudioView() {
     const { theme } = useTheme();

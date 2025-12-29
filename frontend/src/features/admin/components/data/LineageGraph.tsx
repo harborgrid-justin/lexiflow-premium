@@ -8,7 +8,7 @@ import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { LineageNode, LineageLink } from '@/types';
 import { cn } from '@/utils/cn';
-import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { Tabs } from '@/components/molecules';
 
 import { ImpactAnalysis } from './lineage/ImpactAnalysis';
 import { LineageCanvas } from './lineage/LineageCanvas';

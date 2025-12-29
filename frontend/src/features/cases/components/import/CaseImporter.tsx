@@ -16,7 +16,7 @@ import React, { useState } from 'react';
 import { Upload, FileText, CheckCircle, AlertCircle, Loader, Plus, X, Edit2, Sparkles, Settings } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { api } from '@/api';
 import { queryClient } from '@/hooks/useQueryHooks';
 import { getAIProvider, setAIProvider, type AIProvider } from '@/services/features/research/aiProviderSelector';

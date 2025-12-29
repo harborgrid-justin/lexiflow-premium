@@ -6,8 +6,8 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { Connector } from '@/types';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms/Button/Button';
-import { Tabs } from '@/components/molecules/Tabs/Tabs';
+import { Button } from '@/components/atoms';
+import { Tabs } from '@/components/molecules';
 import { dataPlatformApi, Pipeline } from '@/api/data-platform';
 
 import { PipelineDAG } from './pipeline/PipelineDAG';

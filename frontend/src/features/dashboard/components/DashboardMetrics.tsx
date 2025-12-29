@@ -22,7 +22,7 @@ import { Briefcase, Clock, FileText, AlertTriangle } from 'lucide-react';
 import { useInterval } from '@/hooks/useInterval';
 
 // Components
-import { MetricCard } from '@/components/molecules/MetricCard';
+import { MetricCard } from '@/components/molecules';
 
 // ============================================================================
 // TYPES & INTERFACES

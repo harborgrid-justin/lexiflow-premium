@@ -1,9 +1,9 @@
 
 import React from 'react';
 import { CheckCircle } from 'lucide-react';
-import { Card } from '@/components/molecules/Card';
-import { Button } from '@/components/atoms/Button';
-import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { Card } from '@/components/molecules';
+import { Button } from '@/components/atoms';
+import { AdaptiveLoader } from '@/components/molecules';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services';

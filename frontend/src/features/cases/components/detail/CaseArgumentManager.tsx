@@ -13,10 +13,10 @@ import React, { useState } from 'react';
 import { Target, Plus, Filter } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { ArgumentList } from './arguments/ArgumentList';
 import { ArgumentDetail } from './arguments/ArgumentDetail';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { SearchToolbar } from '@/components/organisms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

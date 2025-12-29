@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { Sidebar } from '@/components/organisms/Sidebar/Sidebar';
+import { Sidebar } from '@/components/organisms';
 import { AppShell } from '@/components/ui/layouts/AppShell/AppShell';
-import { AppHeader } from '@/components/organisms/AppHeader/AppHeader';
+import { AppHeader } from '@/components/organisms';
 import { 
   ThemeProvider, 
   ToastProvider, 
@@ -10,12 +10,12 @@ import {
   DataSourceProvider 
 } from '@/providers';
 import type { Case } from '@/types';
-import { HolographicDock } from '@/components/organisms/HolographicDock/HolographicDock';
-import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
+import { HolographicDock } from '@/components/organisms';
+import { ErrorBoundary } from '@/components/organisms';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { initializeModules } from '@/config';
 import { AppContentRenderer } from '@/components/ui/layouts/AppContentRenderer/AppContentRenderer';
-import { GlobalHotkeys } from '@/components/organisms/GlobalHotkeys/GlobalHotkeys';
+import { GlobalHotkeys } from '@/components/organisms';
 import { useAppController } from '@/hooks';
 import { useDataServiceCleanup } from './hooks/useDataServiceCleanup';
 import { backendDiscovery } from '@/services';

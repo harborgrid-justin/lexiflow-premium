@@ -3,7 +3,7 @@ import React from 'react';
 import { Server, HardDrive, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
+import { VirtualList } from '@/components/organisms';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services';
 

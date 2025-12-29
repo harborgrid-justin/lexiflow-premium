@@ -24,19 +24,22 @@ export * from './BackendStatusIndicator';
 export * from './ConnectionStatus';
 export * from './ConnectivityHUD';
 export * from './ServiceCoverageIndicator';
+export * from './PageHeader';
 
 // ============================================================================
 // NAVIGATION & INTERACTION
 // ============================================================================
 export * from './Sidebar';
-// export * from './NeuralCommandBar'; // In features/navigation
-// export * from './FilterPanel'; // In features/search
+export * from './NeuralCommandBar';
+export * from './FilterPanel';
 export * from './discovery';
-// export * from './GlobalHotkeys'; // In features/navigation
-// export * from './HolographicDock';
-// export * from './TabNavigation'; // In features/navigation
+export * from './GlobalHotkeys';
+export * from './HolographicDock';
+export * from './TabNavigation';
 // export * from './MobileBottomNav'; // In features/navigation
-// export * from './AppHeader'; // Export directly, not as module
+export * from './AppHeader';
+export * from './ChartHelpers';
+export * from './SearchToolbar';
 
 // ============================================================================
 // LAYOUT & VIEWS
@@ -52,4 +55,4 @@ export * from './InfiniteScrollTrigger';
 // DOMAIN COMPONENTS
 // ============================================================================
 export * from './cases';
-export * from './discovery';
+// Note: discovery is already exported above

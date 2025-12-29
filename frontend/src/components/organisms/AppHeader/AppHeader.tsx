@@ -22,14 +22,14 @@ import { Menu, Bell, PlusCircle, UserPlus, Clock, FileText } from 'lucide-react'
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { ConnectivityHUD } from '@/components/organisms/ConnectivityHUD/ConnectivityHUD';
-import { NeuralCommandBar } from '@/components/organisms/NeuralCommandBar/NeuralCommandBar';
+import { ConnectivityHUD } from '../ConnectivityHUD';
+import { NeuralCommandBar } from '../NeuralCommandBar';
 const UserAvatar = ({ user, className }: { user?: { name?: string; [key: string]: any }; className?: string }) => (
   <div className={cn("rounded-full bg-blue-500 text-white flex items-center justify-center", className)}>
     {user?.name?.[0] || 'U'}
   </div>
 );
-import { ConnectionStatus } from '@/components/organisms/ConnectionStatus/ConnectionStatus';
+import { ConnectionStatus } from '../ConnectionStatus';
 
 // Services & Data
 import { GlobalSearchResult } from '@/services/search/searchService';

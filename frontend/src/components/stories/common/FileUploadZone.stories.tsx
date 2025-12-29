@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FileUploadZone } from '@/components/molecules/FileUploadZone';
+import { FileUploadZone } from '@/components/molecules';
 import { ThemeProvider } from '@/providers/ThemeContext';
 
 /**

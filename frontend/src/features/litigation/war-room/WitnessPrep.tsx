@@ -23,9 +23,9 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useModalState } from '@/hooks';
 
 // Components
-import { Card } from '@/components/molecules/Card';
-import { UserAvatar } from '@/components/atoms/UserAvatar';
-import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules';
+import { UserAvatar } from '@/components/atoms';
+import { Button } from '@/components/atoms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

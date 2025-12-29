@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { CheckCircle, XCircle, Clock, User, Shield } from 'lucide-react';
-import { Button } from '@/components/atoms/Button';
-import { Card } from '@/components/molecules/Card';
+import { Button } from '@/components/atoms';
+import { Card } from '@/components/molecules';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services';

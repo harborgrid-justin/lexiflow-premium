@@ -8,8 +8,7 @@ import {
   RecoverEvent,
   DataSource,
 } from 'typeorm';
-import { Injectable, Logger, Scope } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
+import { Logger } from '@nestjs/common';
 
 export interface AuditLogEntry {
   entityName: string;
@@ -26,7 +25,6 @@ export interface AuditLogEntry {
   metadata?: Record<string, any>;
 }
 
-@Injectable({ scope: Scope.DEFAULT })
 @EventSubscriber()
 export class AuditSubscriber implements EntitySubscriberInterface {
   private readonly logger = new Logger(AuditSubscriber.name);
@@ -34,6 +32,7 @@ export class AuditSubscriber implements EntitySubscriberInterface {
   private static maxBufferSize = 1000;
   private static flushInterval = 60000;
   private flushTimer?: NodeJS.Timeout;
+  private dataSource?: DataSource;
 
   private readonly excludedEntities = ['AuditLog', 'Session', 'LoginAttempt', 'RefreshToken'];
 
@@ -50,8 +49,7 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     'encryptedData',
   ];
 
-  constructor(@InjectDataSource() private readonly dataSource: DataSource) {
-    this.dataSource.subscribers.push(this);
+  constructor() {
     this.startFlushTimer();
     this.logger.log('Audit subscriber initialized');
   }
@@ -92,13 +90,20 @@ export class AuditSubscriber implements EntitySubscriberInterface {
     return masked;
   }
 
-  private extractEntityId(entity: any): string {
+  private extractEntityId(entity: any, dataSource?: DataSource): string {
     if (entity.id) return entity.id;
     if (entity.uuid) return entity.uuid;
 
-    const metadata = this.dataSource.getMetadata(entity.constructor);
-    const primaryColumn = metadata.primaryColumns[0];
-    return primaryColumn?.propertyName ? entity[primaryColumn.propertyName] : 'unknown';
+    if (dataSource) {
+      try {
+        const metadata = dataSource.getMetadata(entity.constructor);
+        const primaryColumn = metadata.primaryColumns[0];
+        return primaryColumn?.propertyName ? entity[primaryColumn.propertyName] : 'unknown';
+      } catch {
+        return 'unknown';
+      }
+    }
+    return 'unknown';
   }
 
   private calculateChanges(before: Record<string, any>, after: Record<string, any>): Record<string, { old: any; new: any }> {
@@ -180,7 +185,12 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         return;
       }
 
-      const entityId = this.extractEntityId(event.entity);
+      // Store dataSource reference for later use
+      if (!this.dataSource && event.connection) {
+        this.dataSource = event.connection;
+      }
+
+      const entityId = this.extractEntityId(event.entity, event.connection);
       const afterValues = { ...event.entity };
 
       this.createAuditLog(entityName, entityId, 'INSERT', undefined, afterValues);
@@ -199,7 +209,11 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         return;
       }
 
-      const entityId = this.extractEntityId(event.entity);
+      if (!this.dataSource && event.connection) {
+        this.dataSource = event.connection;
+      }
+
+      const entityId = this.extractEntityId(event.entity, event.connection);
 
       const beforeValues = event.databaseEntity || {};
       const afterValues = { ...event.entity };
@@ -223,7 +237,11 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         return;
       }
 
-      const entityId = this.extractEntityId(event.entity || event.databaseEntity);
+      if (!this.dataSource && event.connection) {
+        this.dataSource = event.connection;
+      }
+
+      const entityId = this.extractEntityId(event.entity || event.databaseEntity, event.connection);
       const beforeValues = event.databaseEntity || event.entity || {};
 
       this.createAuditLog(entityName, entityId, 'DELETE', beforeValues, undefined);
@@ -242,7 +260,11 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         return;
       }
 
-      const entityId = this.extractEntityId(event.entity);
+      if (!this.dataSource && event.connection) {
+        this.dataSource = event.connection;
+      }
+
+      const entityId = this.extractEntityId(event.entity, event.connection);
       const beforeValues = event.databaseEntity || {};
       const afterValues = { ...event.entity };
 
@@ -262,7 +284,11 @@ export class AuditSubscriber implements EntitySubscriberInterface {
         return;
       }
 
-      const entityId = this.extractEntityId(event.entity);
+      if (!this.dataSource && event.connection) {
+        this.dataSource = event.connection;
+      }
+
+      const entityId = this.extractEntityId(event.entity, event.connection);
       const beforeValues = event.databaseEntity || {};
       const afterValues = { ...event.entity };
 
@@ -298,6 +324,11 @@ export class AuditSubscriber implements EntitySubscriberInterface {
 
   private async persistAuditLog(log: AuditLogEntry): Promise<void> {
     try {
+      if (!this.dataSource) {
+        this.logger.debug('Audit log entry (dataSource not available)', log);
+        return;
+      }
+
       const auditLogRepository = this.dataSource.getRepository('AuditLog');
 
       if (auditLogRepository) {

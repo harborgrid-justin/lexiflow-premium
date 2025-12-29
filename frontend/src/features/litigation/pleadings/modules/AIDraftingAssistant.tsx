@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Wand2, Sparkles, AlertCircle, Play, RefreshCw, FileText, WifiOff } from 'lucide-react';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { TextArea } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

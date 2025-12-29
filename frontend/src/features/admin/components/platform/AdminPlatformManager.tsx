@@ -1,16 +1,16 @@
 
 import React, { useState } from 'react';
 import { Plus, Search } from 'lucide-react';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { RecordModal } from './RecordModal';
 import { EntitySidebar, Category } from './EntitySidebar';
 import { EntityList } from './EntityList';
-import { TableContainer } from '@/components/organisms/Table';
+import { TableContainer } from '@/components/organisms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useAdminData } from './useAdminData';
 import { EMPTY_TEMPLATES } from './AdminConfig';
-import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { ConfirmDialog } from '@/components/molecules';
 import { useModalState } from '@/hooks/useModalState';
 
 export const AdminPlatformManager: React.FC = () => {

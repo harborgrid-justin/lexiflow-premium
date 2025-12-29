@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Badge } from '@/components/atoms/Badge';
+import { Badge } from '@/components/atoms';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import React from "react";
 

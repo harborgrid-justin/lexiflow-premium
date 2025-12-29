@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
-import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
-import { Card } from '@/components/molecules/Card/Card';
+import { MetricCard } from '@/components/molecules';
+import { Card } from '@/components/molecules';
 import { Database, Activity, HardDrive, Server } from 'lucide-react';
 import { AreaChart, Area, ResponsiveContainer, Tooltip } from 'recharts';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
+import { useChartTheme } from '@/components/organisms';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services';
 import { TenantConfig } from '@/types';

@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { Client, ClientStatus } from '@/types';
-import { Badge } from '@/components/atoms/Badge';
-import { Button } from '@/components/atoms/Button';
+import { Badge } from '@/components/atoms';
+import { Button } from '@/components/atoms';
 import { Currency } from '@/components/atoms';
 import { Lock, PieChart, Building } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';

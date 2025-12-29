@@ -9,9 +9,9 @@ import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { CostMetric, CostForecast } from '@/types';
 import { cn } from '@/utils/cn';
-import { Card } from '@/components/molecules/Card/Card';
-import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
-import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
+import { Card } from '@/components/molecules';
+import { useChartTheme } from '@/components/organisms';
+import { MetricCard } from '@/components/molecules';
 
 export function CostFinOps() {
   const { theme } = useTheme();

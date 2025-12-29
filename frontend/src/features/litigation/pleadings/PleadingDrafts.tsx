@@ -20,7 +20,7 @@ import { FileText, Clock, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { VirtualGrid } from '@/components/organisms/VirtualGrid';
+import { VirtualGrid } from '@/components/organisms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

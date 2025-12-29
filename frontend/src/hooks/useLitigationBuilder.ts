@@ -45,7 +45,7 @@ import { useAutoSave } from './useAutoSave';
 // Utils & Constants
 import { WorkflowNode, WorkflowConnection, NodeType, LITIGATION_PORTS, TypedWorkflowNode } from '@/types/workflow-types';
 import { CANVAS_CONSTANTS, VALIDATION_MESSAGES } from '@/types/canvas-constants';
-import { Playbook } from '@/api/data/mockLitigationPlaybooks';
+import { Playbook } from '@/api/types/mockLitigationPlaybooks';
 
 // Types
 import { Case, CasePhase, WorkflowTask, CaseId, TaskId, TaskStatusBackend, TaskPriorityBackend } from '@/types';

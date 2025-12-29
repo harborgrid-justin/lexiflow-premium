@@ -21,8 +21,8 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { MetricCard } from '@/components/molecules/MetricCard/MetricCard';
-import { EmptyState } from '@/components/molecules/EmptyState/EmptyState';
+import { MetricCard } from '@/components/molecules';
+import { EmptyState } from '@/components/molecules';
 
 // ============================================================================
 // TYPES & INTERFACES

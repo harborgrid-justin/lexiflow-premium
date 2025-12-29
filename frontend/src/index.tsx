@@ -2,7 +2,7 @@ import './index.css';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
+import { ErrorBoundary } from '@/components/organisms';
 
 /**
  * Enterprise Entry Point (Vite 7 + React 18)

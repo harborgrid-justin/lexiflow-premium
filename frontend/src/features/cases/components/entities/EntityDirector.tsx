@@ -27,9 +27,9 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { PageHeader } from '@/components/organisms/PageHeader';
-import { Button } from '@/components/atoms/Button';
-import { LazyLoader } from '@/components/molecules/LazyLoader';
+import { PageHeader } from '@/components/organisms';
+import { Button } from '@/components/atoms';
+import { LazyLoader } from '@/components/molecules';
 import { EntityNavigation, DirectorView, getEntityParentTab, getEntityFirstTab } from './layout/EntityNavigation';
 
 // Utils & Constants

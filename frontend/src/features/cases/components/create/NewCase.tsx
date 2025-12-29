@@ -44,9 +44,9 @@ import {
   PracticeArea 
 } from '@/types';
 import { PATHS } from '@/config/paths.config';
-import { Button } from '@/components/atoms/Button';
-import { PageHeader } from '@/components/organisms/PageHeader';
-import { Breadcrumbs } from '@/components/molecules/Breadcrumbs';
+import { Button } from '@/components/atoms';
+import { PageHeader } from '@/components/organisms';
+import { Breadcrumbs } from '@/components/molecules';
 import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/utils/cn';

@@ -18,7 +18,7 @@ import { User, Eye } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { StatusBadge } from '@/components/atoms/StatusBadge';
+import { StatusBadge } from '@/components/atoms';
 import { Currency } from '@/components/atoms';
 
 // Hooks & Context

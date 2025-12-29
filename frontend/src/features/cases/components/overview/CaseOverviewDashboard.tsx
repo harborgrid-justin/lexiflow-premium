@@ -30,11 +30,11 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms/Button';
-import { Card } from '@/components/molecules/Card';
-import { Badge } from '@/components/atoms/Badge';
-import { ErrorState } from '@/components/molecules/ErrorState';
-import { EmptyState } from '@/components/molecules/EmptyState';
+import { Button } from '@/components/atoms';
+import { Card } from '@/components/molecules';
+import { Badge } from '@/components/atoms';
+import { ErrorState } from '@/components/molecules';
+import { EmptyState } from '@/components/molecules';
 import type { Matter } from '@/types';
 import { MatterStatus } from '@/types';
 

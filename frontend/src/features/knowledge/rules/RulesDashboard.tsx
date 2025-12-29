@@ -1,11 +1,11 @@
 import React from 'react';
-import { MetricCard } from '@/components/molecules/MetricCard';
-import { Card } from '@/components/molecules/Card';
-import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { MetricCard } from '@/components/molecules';
+import { Card } from '@/components/molecules';
+import { AdaptiveLoader } from '@/components/molecules';
 import { BookOpen, Gavel, AlertTriangle, Clock, ArrowRight, Scale, MapPin, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services';
 import type { JudgeProfile } from '@/types';

@@ -25,8 +25,8 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '@/components/molecules/Card';
-import { LoadingState } from '@/components/molecules/LoadingState';
+import { Card } from '@/components/molecules';
+import { LoadingState } from '@/components/molecules';
 
 // Utils & Constants
 import { 

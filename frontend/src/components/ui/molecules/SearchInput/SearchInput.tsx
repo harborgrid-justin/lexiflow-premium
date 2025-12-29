@@ -17,7 +17,7 @@ import { Search } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Input, InputProps } from '@/components/atoms/Input';
+import { Input, InputProps } from '@/components/atoms';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

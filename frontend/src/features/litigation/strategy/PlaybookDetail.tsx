@@ -14,8 +14,8 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 import { cn } from '@/utils/cn';
 
-import { Button } from '@/components/atoms/Button';
-import { Tabs } from '@/components/molecules/Tabs';
+import { Button } from '@/components/atoms';
+import { Tabs } from '@/components/molecules';
 import { ResearchTool } from '@features/knowledge';
 import { WarRoom } from '../war-room/WarRoom';
 import { PlaybookDetailProps } from './types';

@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import { Modal } from '@/components/molecules/Modal';
-import { Button } from '@/components/atoms/Button';
-import { Badge } from '@/components/atoms/Badge';
+import { Modal } from '@/components/molecules';
+import { Button } from '@/components/atoms';
+import { Badge } from '@/components/atoms';
 import { Wand2 } from 'lucide-react';
 import { DiscoveryRequest } from '@/types';
 import { GeminiService } from '@/services/features/research/geminiService';

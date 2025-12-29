@@ -26,7 +26,7 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { OperatingLedger } from './finance/OperatingLedger';
 import { TrustLedger } from './finance/TrustLedger';
 

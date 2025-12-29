@@ -22,10 +22,10 @@ import { useNotify } from '@/hooks/useNotify';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 
 // Components
-import { Button } from '@/components/atoms/Button';
-import { Card } from '@/components/molecules/Card';
-import { Tabs } from '@/components/molecules/Tabs';
-import { MetricCard } from '@/components/molecules/MetricCard';
+import { Button } from '@/components/atoms';
+import { Card } from '@/components/molecules';
+import { Tabs } from '@/components/molecules';
+import { MetricCard } from '@/components/molecules';
 
 // Services & Utils
 import { DataService } from '@/services';

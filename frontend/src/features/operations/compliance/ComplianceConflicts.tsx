@@ -20,10 +20,10 @@ import { Plus, User, Filter, Download } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { Button } from '@/components/atoms/Button';
-import { Badge } from '@/components/atoms/Badge';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Button } from '@/components/atoms';
+import { Badge } from '@/components/atoms';
+import { SearchToolbar } from '@/components/organisms';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

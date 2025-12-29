@@ -13,10 +13,10 @@ import React, { useState } from 'react';
 import { X, Save, Trash2, Wand2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { Input, TextArea } from '@/components/atoms';
 import { RiskMatrix } from './RiskMatrix';
-import { Modal } from '@/components/molecules/Modal';
+import { Modal } from '@/components/molecules';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

@@ -17,9 +17,9 @@ import { Plus, BookOpen, FileText } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TabbedPageLayout, TabConfigItem } from '@/components/layouts/TabbedPageLayout';
-import { Button } from '@/components/atoms/Button';
-import { LazyLoader } from '@/components/molecules/LazyLoader';
+import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
+import { Button } from '@/components/atoms';
+import { LazyLoader } from '@/components/molecules';
 
 // Hooks
 import { useSessionStorage } from '@/hooks/useSessionStorage';

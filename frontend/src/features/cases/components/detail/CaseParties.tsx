@@ -13,12 +13,12 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, User, Building, Gavel, Link, Layers, MapPin, Phone, Mail, Briefcase } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { Button } from '@/components/atoms/Button';
-import { Modal } from '@/components/molecules/Modal';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Button } from '@/components/atoms';
+import { Modal } from '@/components/molecules';
 import { Input } from '@/components/atoms';
-import { Badge } from '@/components/atoms/Badge';
-import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { Badge } from '@/components/atoms';
+import { ConfirmDialog } from '@/components/molecules';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

@@ -26,12 +26,12 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { VirtualGrid } from '@/components/organisms/VirtualGrid';
+import { VirtualGrid } from '@/components/organisms';
 import { PlaybookDetail } from './PlaybookDetail';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
-import { Playbook } from '@/api/data/mockLitigationPlaybooks';
+import { Playbook } from '@/api/types/mockLitigationPlaybooks';
 import { filterPlaybooks, extractCategories, getDifficultyColor, getDifficultyBorderColor } from './utils';
 
 // Types

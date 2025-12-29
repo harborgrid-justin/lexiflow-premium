@@ -14,7 +14,7 @@ import { Wand2 } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { TextArea } from '@/components/atoms';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

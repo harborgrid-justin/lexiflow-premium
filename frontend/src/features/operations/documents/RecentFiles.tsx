@@ -1,10 +1,10 @@
 
 import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { FileIcon } from '@/components/atoms';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { Clock, Eye, Loader2, FolderOpen } from 'lucide-react';
-import { EmptyState } from '@/components/molecules/EmptyState';
+import { EmptyState } from '@/components/molecules';
 import { DataService } from '@/services';
 import { LegalDocument } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';

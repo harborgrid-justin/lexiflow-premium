@@ -13,9 +13,9 @@ import React, { useState, useRef, lazy, Suspense } from 'react';
 import { FileText, Plus, Wand2, Cpu, Loader2, ShieldCheck, Eye } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TaskCreationModal } from '@/components/organisms/TaskCreationModal';
+import { TaskCreationModal } from '@/components/organisms';
 import { CaseDocumentItem } from './documents/CaseDocumentItem';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

@@ -11,10 +11,10 @@ import React, { useState, Suspense, lazy } from 'react';
 import { Save, Rocket, Loader2 } from 'lucide-react';
 
 // Internal Components
-import { LazyLoader } from '@/components/molecules/LazyLoader';
-import { TabbedPageLayout } from '@/components/layouts/TabbedPageLayout';
-import { Button } from '@/components/atoms/Button';
-import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
+import { LazyLoader } from '@/components/molecules';
+import { TabbedPageLayout } from '@/components/layouts';
+import { Button } from '@/components/atoms';
+import { ErrorBoundary } from '@/components/organisms';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

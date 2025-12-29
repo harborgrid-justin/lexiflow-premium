@@ -13,7 +13,7 @@ import { Plus, TrendingUp } from 'lucide-react';
 
 // Internal Components
 import { PlanningSidebar, GanttTimeline } from '@features/cases';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

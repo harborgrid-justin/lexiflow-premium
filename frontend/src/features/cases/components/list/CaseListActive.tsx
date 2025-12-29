@@ -18,16 +18,16 @@ import { Filter } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { VirtualList } from '@/components/organisms/VirtualList';
+import { VirtualList } from '@/components/organisms';
 import { SwipeableItem } from '@/components/organisms/SwipeableItem';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import { FilterPanel } from '@/components/organisms/FilterPanel';
-import { SearchInput } from '@/components/molecules/SearchInput';
-import { Input } from '@/components/atoms/Input';
-import { Badge } from '@/components/atoms/Badge';
-import { Currency } from '@/components/atoms/Currency';
+import { SearchInput } from '@/components/molecules';
+import { Input } from '@/components/atoms';
+import { Badge } from '@/components/atoms';
+import { Currency } from '@/components/atoms';
 import { ActiveCaseTable } from './ActiveCaseTable';
-import { ConfirmDialog } from '@/components/molecules/ConfirmDialog';
+import { ConfirmDialog } from '@/components/molecules';
 
 // Hooks & Context
 import { useSort } from '@/hooks/useSort';

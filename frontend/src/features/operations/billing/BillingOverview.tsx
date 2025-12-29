@@ -23,12 +23,12 @@ import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
-import { useChartTheme } from '@/components/organisms/ChartHelpers';
+import { useChartTheme } from '@/components/organisms';
 
 // Components
-import { Card } from '@/components/molecules/Card';
+import { Card } from '@/components/molecules';
 import { Currency } from '@/components/atoms';
-import { MetricCard } from '@/components/molecules/MetricCard';
+import { MetricCard } from '@/components/molecules';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

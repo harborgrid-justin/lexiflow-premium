@@ -1,2 +1,2 @@
-export { Badge } from '@/components/atoms/Badge';
-export type { BadgeProps } from '@/components/atoms/Badge';
+export { Badge } from '@/components/atoms';
+export type { BadgeProps } from '@/components/atoms';

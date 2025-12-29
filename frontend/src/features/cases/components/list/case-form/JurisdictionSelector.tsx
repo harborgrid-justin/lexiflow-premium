@@ -23,7 +23,7 @@ import { useTheme } from '@/providers/ThemeContext';
 
 // Utils & Data
 import { cn } from '@/utils/cn';
-import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS, StateJurisdiction } from '@/api/data/federalHierarchy';
+import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS, StateJurisdiction } from '@/api/types/federalHierarchy';
 
 // ============================================================================
 // TYPES & INTERFACES

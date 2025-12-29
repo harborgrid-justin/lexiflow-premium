@@ -43,3 +43,22 @@ export * from './ui';
 // DESIGN SYSTEM
 // ============================================================================
 export * from './theme';
+
+// ============================================================================
+// STUB COMPONENTS (temporary - to be implemented)
+// ============================================================================
+import React from 'react';
+
+export const NotificationCenter: React.FC<{ className?: string }> = ({ className }) => {
+    return <div className={className}>Notification Center (stub)</div>;
+};
+
+export const TaskCreationModal: React.FC<{ isOpen?: boolean; onClose?: () => void; className?: string }> = ({ isOpen, onClose, className }) => {
+    if (!isOpen) return null;
+    return (
+        <div className={className}>
+            <div>Task Creation Modal (stub)</div>
+            <button onClick={onClose}>Close</button>
+        </div>
+    );
+};

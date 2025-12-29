@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { TableContainer, TableHeader, TableHead, TableBody, TableRow, TableCell } from '@/components/organisms/Table/Table';
-import { Button } from '@/components/atoms/Button/Button';
-import { StatusBadge } from '@/components/atoms/StatusBadge/StatusBadge';
+import { TableContainer, TableHeader, TableHead, TableBody, TableRow, TableCell } from '@/components/organisms';
+import { Button } from '@/components/atoms';
+import { StatusBadge } from '@/components/atoms';
 import { Database, Clock, Download, Archive } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

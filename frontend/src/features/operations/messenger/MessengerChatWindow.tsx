@@ -30,7 +30,7 @@ import { Conversation, Attachment } from '@/hooks/useSecureMessenger';
 import { ChatHeader } from './ChatHeader';
 import { ChatInput } from './ChatInput';
 import { MessageList } from './MessageList';
-import { FileAttachment } from '@/components/molecules/FileAttachment';
+import { FileAttachment } from '@/components/molecules';
 import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
 
 // Utils & Constants

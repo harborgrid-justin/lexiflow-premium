@@ -1,9 +1,9 @@
 
 import React from 'react';
-import { Card } from '@/components/molecules/Card';
+import { Card } from '@/components/molecules';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { useTheme } from '@/providers/ThemeContext';
-import { useChartTheme } from '@/components/organisms/ChartHelpers';
+import { useChartTheme } from '@/components/organisms';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services';
 import { ChartColorService } from '@/services/theme/chartColorService';

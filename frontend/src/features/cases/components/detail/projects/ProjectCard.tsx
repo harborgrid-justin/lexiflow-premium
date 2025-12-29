@@ -12,7 +12,7 @@ import React from 'react';
 import { Calendar, CheckCircle, ChevronDown, ChevronUp, Plus } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Badge } from '@/components/atoms/Badge';
+import { Badge } from '@/components/atoms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

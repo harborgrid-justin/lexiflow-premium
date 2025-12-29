@@ -13,8 +13,8 @@ import React, { useState } from 'react';
 import { Target, Shield, Plus, Scale } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/atoms/Button';
-import { Modal } from '@/components/molecules/Modal';
+import { Button } from '@/components/atoms';
+import { Modal } from '@/components/molecules';
 import { Input, TextArea } from '@/components/atoms';
 import { StrategySection } from './strategy/StrategySection';
 

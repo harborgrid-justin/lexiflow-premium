@@ -1,8 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
-import { Card } from '@/components/molecules/Card';
-import { MetricCard } from '@/components/molecules/MetricCard';
+import { Card } from '@/components/molecules';
+import { MetricCard } from '@/components/molecules';
 import { ShieldAlert, FileText, CheckCircle, TrendingUp } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

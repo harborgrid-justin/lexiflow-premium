@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { PageHeader } from '@/components/organisms/PageHeader';
-import { Button } from '@/components/atoms/Button';
+import { PageHeader } from '@/components/organisms';
+import { Button } from '@/components/atoms';
 import { Plus, FileText, LayoutTemplate, Clock } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -10,8 +10,8 @@ import { PleadingDocument, PleadingTemplate, PleadingSection } from '@/types/ple
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
-import { VirtualGrid } from '@/components/organisms/VirtualGrid';
-import { Modal } from '@/components/molecules/Modal';
+import { VirtualGrid } from '@/components/organisms';
+import { Modal } from '@/components/molecules';
 import { Input } from '@/components/atoms';
 import { Case, CaseId, DocumentId, UserId } from '@/types';
 

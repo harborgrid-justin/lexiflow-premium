@@ -13,10 +13,10 @@ import React from 'react';
 import { Lock, Printer, Download, ExternalLink, Scale, Calendar, Database, Tag, Copy } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Modal } from '@/components/molecules/Modal';
-import { Button } from '@/components/atoms/Button';
-import { Badge } from '@/components/atoms/Badge';
-import { CopyButton } from '@/components/atoms/CopyButton';
+import { Modal } from '@/components/molecules';
+import { Button } from '@/components/atoms';
+import { Badge } from '@/components/atoms';
+import { CopyButton } from '@/components/atoms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

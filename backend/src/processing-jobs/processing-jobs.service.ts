@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, Optional } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThan } from 'typeorm';
 import { InjectQueue } from '@nestjs/bull';
@@ -19,9 +19,14 @@ export class ProcessingJobsService {
   constructor(
     @InjectRepository(ProcessingJob)
     private jobRepository: Repository<ProcessingJob>,
+    @Optional()
     @InjectQueue('document-processing')
-    private documentQueue: Queue,
-  ) {}
+    private documentQueue?: Queue,
+  ) {
+    if (!this.documentQueue) {
+      this.logger.warn('Document processing queue not available - Redis is disabled');
+    }
+  }
 
   /**
    * Create a new processing job
@@ -44,13 +49,17 @@ export class ProcessingJobsService {
 
       const savedJob = await this.jobRepository.save(job);
 
-      // Add to queue
-      const queueData: JobQueueData = {
-        jobId: savedJob.id,
-        documentId,
-        parameters,
-      };
-      await this.documentQueue.add(type, queueData);
+      // Add to queue if available
+      if (this.documentQueue) {
+        const queueData: JobQueueData = {
+          jobId: savedJob.id,
+          documentId,
+          parameters,
+        };
+        await this.documentQueue.add(type, queueData);
+      } else {
+        this.logger.warn(`Queue unavailable - job ${savedJob.id} created but not queued`);
+      }
 
       this.logger.log(`Job created: ${savedJob.id} (${type})`);
 

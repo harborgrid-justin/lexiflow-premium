@@ -18,10 +18,10 @@ import { Wand2, Plus, Shield, Mail } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/atoms/Button';
-import { Badge } from '@/components/atoms/Badge';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { AdaptiveLoader } from '@/components/molecules/AdaptiveLoader';
+import { Button } from '@/components/atoms';
+import { Badge } from '@/components/atoms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { AdaptiveLoader } from '@/components/molecules';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

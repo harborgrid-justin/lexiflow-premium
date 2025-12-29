@@ -10,8 +10,8 @@ import React, { useState, useMemo } from 'react';
 import { Search, Filter, Download } from 'lucide-react';
 
 // Common Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
-import { Button } from '@/components/atoms/Button';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Button } from '@/components/atoms';
 
 // Context & Utils
 import { useTheme } from '@/providers/ThemeContext';

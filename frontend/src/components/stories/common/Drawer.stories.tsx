@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Drawer } from '@/components/molecules/Drawer';
+import { Drawer } from '@/components/molecules';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import { Button } from '@/components/atoms/Button';
+import { Button } from '@/components/atoms';
 import React, { useState } from 'react';
 
 /**

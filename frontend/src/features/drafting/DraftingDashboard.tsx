@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Plus, FileText, FolderOpen, Settings as SettingsIcon, Layout, BarChart3, Clock } from 'lucide-react';
 import { useTheme } from '@providers/ThemeContext';
-import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
-import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { TabNavigation } from '@/components/organisms';
+import { PageHeader } from '@/components/organisms';
 import { cn } from '@/utils/cn';
 import { RecentDrafts } from './components/RecentDrafts';
 import { TemplateGallery } from './components/TemplateGallery';

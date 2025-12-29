@@ -451,6 +451,60 @@ export const HTTP_REQUEST_TIMEOUT_MS = 30000; // 30 seconds
 export const GRAPHQL_QUERY_TIMEOUT_MS = 60000; // 60 seconds
 
 // =============================================================================
+// DEFAULT GLOBAL ADMIN PROFILE CONFIGURATION
+// =============================================================================
+// Controls the automatic creation of a default global admin user on startup
+// All settings can be overridden via environment variables
+
+export const DEFAULT_ADMIN_ENABLED = process.env.DEFAULT_ADMIN_ENABLED !== 'false';
+export const DEFAULT_ADMIN_EMAIL = process.env.DEFAULT_ADMIN_EMAIL || 'admin@lexiflow.com';
+export const DEFAULT_ADMIN_PASSWORD = process.env.DEFAULT_ADMIN_PASSWORD || 'Admin123!';
+export const DEFAULT_ADMIN_FIRST_NAME = process.env.DEFAULT_ADMIN_FIRST_NAME || 'Super';
+export const DEFAULT_ADMIN_LAST_NAME = process.env.DEFAULT_ADMIN_LAST_NAME || 'Admin';
+export const DEFAULT_ADMIN_TITLE = process.env.DEFAULT_ADMIN_TITLE || 'System Administrator';
+export const DEFAULT_ADMIN_DEPARTMENT = process.env.DEFAULT_ADMIN_DEPARTMENT || 'Administration';
+
+// Default Admin Profile Settings (for linked UserProfile)
+export const DEFAULT_ADMIN_PROFILE_ENABLED = process.env.DEFAULT_ADMIN_PROFILE_ENABLED !== 'false';
+export const DEFAULT_ADMIN_BAR_NUMBER = process.env.DEFAULT_ADMIN_BAR_NUMBER || null;
+export const DEFAULT_ADMIN_JURISDICTIONS = process.env.DEFAULT_ADMIN_JURISDICTIONS
+  ? JSON.parse(process.env.DEFAULT_ADMIN_JURISDICTIONS)
+  : ['Global'];
+export const DEFAULT_ADMIN_PRACTICE_AREAS = process.env.DEFAULT_ADMIN_PRACTICE_AREAS
+  ? JSON.parse(process.env.DEFAULT_ADMIN_PRACTICE_AREAS)
+  : ['System Administration', 'Platform Management'];
+export const DEFAULT_ADMIN_BIO = process.env.DEFAULT_ADMIN_BIO ||
+  'Global system administrator with full platform access and management capabilities.';
+export const DEFAULT_ADMIN_YEARS_OF_EXPERIENCE = parseInt(
+  process.env.DEFAULT_ADMIN_YEARS_OF_EXPERIENCE || '0', 10
+);
+export const DEFAULT_ADMIN_DEFAULT_HOURLY_RATE = parseFloat(
+  process.env.DEFAULT_ADMIN_DEFAULT_HOURLY_RATE || '0'
+);
+
+// Consolidated Default Admin Configuration Object
+export const DEFAULT_ADMIN_CONFIG = {
+  enabled: DEFAULT_ADMIN_ENABLED,
+  user: {
+    email: DEFAULT_ADMIN_EMAIL,
+    password: DEFAULT_ADMIN_PASSWORD,
+    firstName: DEFAULT_ADMIN_FIRST_NAME,
+    lastName: DEFAULT_ADMIN_LAST_NAME,
+    title: DEFAULT_ADMIN_TITLE,
+    department: DEFAULT_ADMIN_DEPARTMENT,
+  },
+  profile: {
+    enabled: DEFAULT_ADMIN_PROFILE_ENABLED,
+    barNumber: DEFAULT_ADMIN_BAR_NUMBER,
+    jurisdictions: DEFAULT_ADMIN_JURISDICTIONS,
+    practiceAreas: DEFAULT_ADMIN_PRACTICE_AREAS,
+    bio: DEFAULT_ADMIN_BIO,
+    yearsOfExperience: DEFAULT_ADMIN_YEARS_OF_EXPERIENCE,
+    defaultHourlyRate: DEFAULT_ADMIN_DEFAULT_HOURLY_RATE,
+  },
+} as const;
+
+// =============================================================================
 // FEATURE FLAGS
 // =============================================================================
 export const FEATURE_GRAPHQL_ENABLED = true;

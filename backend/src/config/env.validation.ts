@@ -73,6 +73,24 @@ export const validationSchema = Joi.object({
   LOG_LEVEL: Joi.string()
     .valid('error', 'warn', 'info', 'debug', 'verbose')
     .default('info'),
+
+  // Default Global Admin Configuration
+  DEFAULT_ADMIN_ENABLED: Joi.boolean().default(true),
+  DEFAULT_ADMIN_EMAIL: Joi.string().email().default('admin@lexiflow.com'),
+  DEFAULT_ADMIN_PASSWORD: Joi.string().min(8).default('Admin123!'),
+  DEFAULT_ADMIN_FIRST_NAME: Joi.string().default('Super'),
+  DEFAULT_ADMIN_LAST_NAME: Joi.string().default('Admin'),
+  DEFAULT_ADMIN_TITLE: Joi.string().default('System Administrator'),
+  DEFAULT_ADMIN_DEPARTMENT: Joi.string().default('Administration'),
+
+  // Default Admin Profile Configuration
+  DEFAULT_ADMIN_PROFILE_ENABLED: Joi.boolean().default(true),
+  DEFAULT_ADMIN_BAR_NUMBER: Joi.string().allow('', null).optional(),
+  DEFAULT_ADMIN_JURISDICTIONS: Joi.string().optional(), // JSON array string
+  DEFAULT_ADMIN_PRACTICE_AREAS: Joi.string().optional(), // JSON array string
+  DEFAULT_ADMIN_BIO: Joi.string().optional(),
+  DEFAULT_ADMIN_YEARS_OF_EXPERIENCE: Joi.number().min(0).default(0),
+  DEFAULT_ADMIN_DEFAULT_HOURLY_RATE: Joi.number().min(0).default(0),
 });
 
 /**

@@ -61,6 +61,40 @@ export interface AppConfig {
 }
 
 /**
+ * Default Admin User Configuration
+ */
+export interface DefaultAdminUserConfig {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  title: string;
+  department: string;
+}
+
+/**
+ * Default Admin Profile Configuration
+ */
+export interface DefaultAdminProfileConfig {
+  enabled: boolean;
+  barNumber: string | null;
+  jurisdictions: string[];
+  practiceAreas: string[];
+  bio: string;
+  yearsOfExperience: number;
+  defaultHourlyRate: number;
+}
+
+/**
+ * Complete Default Admin Configuration
+ */
+export interface DefaultAdminConfig {
+  enabled: boolean;
+  user: DefaultAdminUserConfig;
+  profile: DefaultAdminProfileConfig;
+}
+
+/**
  * Complete application configuration interface
  */
 export interface Configuration {
@@ -71,4 +105,5 @@ export interface Configuration {
   redis: RedisConfig;
   rateLimit: RateLimitConfig;
   fileStorage: FileStorageConfig;
+  defaultAdmin: DefaultAdminConfig;
 }

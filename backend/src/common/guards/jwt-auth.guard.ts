@@ -71,7 +71,7 @@ export class JwtAuthGuard implements CanActivate {
 
     try {
       // Use ConfigService for secure JWT secret access
-      const jwtSecret = this.configService.get<string>('jwt.secret');
+      const jwtSecret = this.configService.get<string>('app.jwt.secret');
       if (!jwtSecret) {
         this.logger.error('JWT secret not configured - check environment variables');
         throw new UnauthorizedException('Server configuration error');

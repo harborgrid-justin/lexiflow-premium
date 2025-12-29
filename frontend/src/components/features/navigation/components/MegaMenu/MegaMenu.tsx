@@ -28,6 +28,7 @@ import { useClickOutside } from '@/hooks/useClickOutside';
 // Utils & Constants
 import { cn } from '@/utils/cn';
 import * as styles from './MegaMenu.styles';
+import type { MegaMenuLayout } from './MegaMenu.styles';
 
 // Types
 import type { UserRole } from '@/types';
@@ -80,10 +81,7 @@ export interface MegaMenuSection {
   allowedRoles?: UserRole[];
 }
 
-/**
- * Layout configuration for the mega menu
- */
-export type MegaMenuLayout = 'single' | 'double' | 'triple' | 'quad';
+// MegaMenuLayout type is now imported from ./MegaMenu.styles
 
 export interface MegaMenuProps {
   /** Trigger button label */

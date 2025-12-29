@@ -47,8 +47,9 @@ import { WorkflowNode, WorkflowConnection, NodeType, LITIGATION_PORTS, TypedWork
 import { CANVAS_CONSTANTS, VALIDATION_MESSAGES } from '@/types/canvas-constants';
 import { Playbook } from '@/api/types/mockLitigationPlaybooks';
 
-// Types
-import { Case, CasePhase, WorkflowTask, CaseId, TaskId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
+// Types - Direct imports to avoid barrel export overhead
+import type { Case, CasePhase, WorkflowTask, CaseId, TaskId } from '@/types/models';
+import type { TaskStatusBackend, TaskPriorityBackend } from '@/types/enums';
 
 // ============================================================================
 // TYPES & INTERFACES

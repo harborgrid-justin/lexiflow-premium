@@ -6,6 +6,7 @@ import {
   EntityId, PartyId,
   CaseId, MatterId, Money, JurisdictionObject, MetadataRecord, JsonValue
 } from './primitives';
+import { CaseTeamMember } from './case-team';
 import {
   CaseStatus, MatterType, BillingModel,
   

@@ -118,6 +118,13 @@ export const getLexisUrl = () => import.meta.env.VITE_LEXIS_URL || '';
 export const getGoogleClientId = () => import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 export const getOutlookClientId = () => import.meta.env.VITE_OUTLOOK_CLIENT_ID || '';
 
+// Export constants for backward compatibility (using getters)
+export const INTEGRATION_PACER_URL = getPacerUrl();
+export const INTEGRATION_WESTLAW_URL = getWestlawUrl();
+export const INTEGRATION_LEXIS_URL = getLexisUrl();
+export const INTEGRATION_GOOGLE_CALENDAR_CLIENT_ID = getGoogleClientId();
+export const INTEGRATION_OUTLOOK_CLIENT_ID = getOutlookClientId();
+
 // Backup & Recovery
 export const BACKUP_AUTO_ENABLED = true;
 export const BACKUP_INTERVAL_MS = 3600000; // 1 hour

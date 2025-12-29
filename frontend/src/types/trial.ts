@@ -4,6 +4,7 @@
 import {
   BaseEntity, CaseId, EvidenceId, MetadataRecord
 } from './primitives';
+import { JurorStatus, WitnessType, WitnessStatus } from './enums';
 
 // --- CLUSTER 5: TRIAL & STRATEGY ---
 

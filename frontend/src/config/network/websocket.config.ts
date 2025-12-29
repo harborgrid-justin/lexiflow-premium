@@ -8,6 +8,9 @@ export const getWsUrl = () => {
   if (typeof window === 'undefined') return '';
   return import.meta.env.VITE_WS_URL || (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws';
 };
+// Export WS_URL for backward compatibility - use getWsUrl() instead for dynamic resolution
+export const WS_URL = typeof window !== 'undefined' ? getWsUrl() : '';
+
 // Note: Don't call getWsUrl() at module load - will be called lazily when needed
 export const WS_RECONNECT_ATTEMPTS = 5;
 export const WS_RECONNECT_DELAY_MS = 1000;

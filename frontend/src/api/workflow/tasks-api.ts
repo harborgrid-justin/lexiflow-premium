@@ -174,8 +174,8 @@ export class TasksApiService {
       if (filters?.priority) params.append('priority', filters.priority);
       if (filters?.assignedTo) params.append('assignedTo', filters.assignedTo);
       const queryString = params.toString();
-      const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
-      return await apiClient.get<WorkflowTask[]>(url);
+      const endpoint = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
+      return await apiClient.get<WorkflowTask[]>(endpoint);
     } catch (error) {
       console.error('[TasksApiService.getAll] Error:', error);
       throw new Error('Failed to fetch tasks');

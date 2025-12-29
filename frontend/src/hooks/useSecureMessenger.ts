@@ -35,7 +35,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { DataService } from '@/services';
 
 // Utils & Constants
-import { Scheduler } from '@/utils';
+import { Scheduler } from '@/utils/scheduler';
 
 // Types
 import { Conversation, Message, Attachment } from '@/types';

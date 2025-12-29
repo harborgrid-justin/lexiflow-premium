@@ -9,7 +9,7 @@ import { Briefcase, Activity, Plus, Settings, Clock, DollarSign, BarChart3, Tren
 // Import actual Case Management components
 import { CaseOverviewDashboard } from '@features/cases';
 import { CaseOperationsCenter } from '@features/cases';
-import { CaseCalendar } from '@features/cases/components/calendar/CaseCalendar.tsx';
+import { CaseCalendar } from '@features/cases/components/calendar/CaseCalendar';
 import { CaseFinancialsCenter } from '@features/cases';
 import { CaseAnalyticsDashboard } from '@features/cases';
 import { CaseInsightsDashboard } from '@features/cases';

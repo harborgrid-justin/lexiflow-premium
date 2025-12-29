@@ -75,9 +75,9 @@ async function bootstrap(): Promise<INestApplication> {
   app.setGlobalPrefix('api');
 
   app.enableVersioning({
-    type: VersioningType.URI,
-    defaultVersion: '1',
-    prefix: 'api/v',
+    type: VersioningType.HEADER,
+    // defaultVersion: '1',
+    header: 'X-API-Version',
   });
 
   app.useGlobalFilters(new EnterpriseExceptionFilter());

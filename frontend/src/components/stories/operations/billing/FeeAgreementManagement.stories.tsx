@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FeeAgreementManagement } from '@features/operations/billing/fee-agreements/FeeAgreementManagement.tsx';
+import { FeeAgreementManagement } from '@features/operations/billing/fee-agreements/FeeAgreementManagement';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 

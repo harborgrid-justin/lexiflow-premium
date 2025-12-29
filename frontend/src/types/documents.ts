@@ -4,7 +4,7 @@
 import {
   BaseEntity, UserId, GroupId, DocumentId, CaseId, MetadataRecord, JsonValue
 } from './primitives';
-import { OcrStatus } from './enums';
+import { OcrStatus, PermissionLevel } from './enums';
 import { Case } from './case';
 import { User } from './system';
 

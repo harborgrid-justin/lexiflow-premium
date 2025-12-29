@@ -28,9 +28,27 @@ import { cn } from '@/utils/cn';
 // COMPONENT
 // ============================================================================
 export const ConnectivityHUD: React.FC = () => {
-  const { isOnline, pendingCount, failedCount, syncStatus, retryFailed } = useSync();
   const { theme } = useTheme();
   const [latency, setLatency] = useState(24);
+  
+  // Safely access sync context - might not be available during initial render
+  let isOnline = true;
+  let pendingCount = 0;
+  let failedCount = 0;
+  let syncStatus = 'synced';
+  let retryFailed = () => {};
+  
+  try {
+    const syncContext = useSync();
+    isOnline = syncContext.isOnline;
+    pendingCount = syncContext.pendingCount;
+    failedCount = syncContext.failedCount;
+    syncStatus = syncContext.syncStatus;
+    retryFailed = syncContext.retryFailed;
+  } catch (error) {
+    // SyncProvider not yet available - use defaults
+    console.debug('[ConnectivityHUD] SyncProvider not available yet');
+  }
 
   // Simulate network latency fluctuation
   useInterval(() => {

@@ -6,7 +6,6 @@ import { BaseEntity } from '@common/base/base.entity';
 @Index(['notificationType'])
 @Index(['isRead'])
 @Index(['priority'])
-@Index(['createdAt'])
 export class Notification extends BaseEntity {
   @Column({ name: 'user_id', type: 'uuid' })
   userId!: string;

@@ -1,4 +1,18 @@
 // services/index.ts - Main barrel export (simplified and organized)
+// 
+// ⚠️ PERFORMANCE WARNING: This barrel exports ALL services, which can slow down
+// module resolution and increase bundle size, especially for heavy services.
+// 
+// 📦 RECOMMENDED: Import from focused sub-barrels instead:
+// 
+//   import { DataService } from '@/services/core-services';         // Core data layer
+//   import { api, isBackendApiEnabled } from '@/services/backend-services';  // Backend integration  
+//   import { UserRepository } from '@/services/repositories';       // Specific repositories
+//   import { cryptoService } from '@/services/utils-services';      // Utility services
+//   import { GeminiService } from '@/services/features-services';   // Feature services (heavy!)
+// 
+// This file remains for backward compatibility. New code should use focused imports.
+// ============================================================================
 
 // ==================== CORE INFRASTRUCTURE ====================
 export * from './core/Repository';
@@ -125,9 +139,11 @@ export * from './features/documents/xmlDocketParser';
 
 // Legal
 export * from './features/legal/ruleService';
-export * from './features/legal/deadlineEngine';
+// Heavy service - import directly when needed: import { DeadlineEngine } from '@/services/features-services';
+// export * from './features/legal/deadlineEngine';
 
 // Research
+// Heavy service with Gemini SDK - import directly when needed: import { GeminiService } from '@/services/features-services';
 export * from './features/research/geminiService';
 
 // Bluebook (keep organized exports)

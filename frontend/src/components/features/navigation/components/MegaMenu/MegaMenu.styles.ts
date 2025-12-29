@@ -6,7 +6,9 @@
 
 import { cn } from '@/utils/cn';
 import type { tokens } from '@/components/theme/tokens';
-import type { MegaMenuLayout } from './MegaMenu';
+
+// Define type locally to avoid circular dependency
+export type MegaMenuLayout = 'single' | 'double' | 'triple' | 'quad';
 
 type Theme = typeof tokens.colors.light;
 

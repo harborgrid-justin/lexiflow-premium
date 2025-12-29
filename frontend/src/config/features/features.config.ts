@@ -28,13 +28,14 @@ export const FEATURE_BACKUP_RESTORE = true;
 import { getAppEnv } from '../app.config';
 
 export const getDebugEnabled = () => getAppEnv() === 'development';
+export const DEBUG_ENABLED = getAppEnv() === 'development';
 export const DEBUG_SHOW_QUERY_CACHE = false;
 export const DEBUG_API_SIMULATION_DELAY_MS = 1000; // Simulated API delay for demos
 export const DEBUG_SHOW_RENDER_COUNT = false;
 export const DEBUG_SHOW_PERFORMANCE = false;
 export const DEBUG_LOG_API_CALLS = false;
 export const DEBUG_LOG_STATE_CHANGES = false;
-export const ENABLE_REACT_DEVTOOLS = APP_ENV === 'development';
+export const ENABLE_REACT_DEVTOOLS = getAppEnv() === 'development';
 
 // Export as object
 export const FEATURES_CONFIG = {

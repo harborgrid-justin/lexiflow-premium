@@ -31,7 +31,7 @@ export const AUDIT_BATCH_SIZE = 50;
 export const AUDIT_FLUSH_INTERVAL_MS = 10000; // 10 seconds
 
 // Error Handling
-export const ERROR_SHOW_STACK_TRACE = APP_ENV === 'development';
+export const ERROR_SHOW_STACK_TRACE = getAppEnv() === 'development';
 export const ERROR_ENABLE_REPORTING = false; // Set to true with error service
 export const ERROR_MAX_REPORT_SIZE = 10000; // Characters
 export const ERROR_REPORT_SAMPLING_RATE = 1.0; // 100% in dev, lower in prod

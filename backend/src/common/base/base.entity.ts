@@ -38,6 +38,7 @@ import { Transform } from 'class-transformer';
  *
  * All entities extending BaseEntity will benefit from these optimizations
  */
+// @Index('IDX_active_records', ['deletedAt', 'createdAt'])
 export abstract class BaseEntity {
   @ApiProperty({
     example: '123e4567-e89b-12d3-a456-426614174000',
@@ -55,7 +56,7 @@ export abstract class BaseEntity {
     type: 'timestamp with time zone',
     nullable: false,
   })
-  @Index('IDX_created_at') // Optimized for sorting by creation date (most recent first)
+  @Index() // Optimized for sorting by creation date (most recent first)
   @Transform(({ value }: { value: Date }) => value?.toISOString(), { toPlainOnly: true })
   createdAt!: Date;
 
@@ -81,7 +82,7 @@ export abstract class BaseEntity {
     type: 'timestamp with time zone',
     nullable: true,
   })
-  @Index('IDX_deleted_at') // CRITICAL: Index for soft delete performance on all tables
+  @Index() // CRITICAL: Index for soft delete performance on all tables
   @Transform(({ value }: { value?: Date }) => value?.toISOString(), { toPlainOnly: true })
   deletedAt?: Date;
 
@@ -95,7 +96,7 @@ export abstract class BaseEntity {
     type: 'uuid',
     nullable: true,
   })
-  @Index('IDX_created_by') // Index for audit queries by user
+  @Index() // Index for audit queries by user
   createdBy?: string;
 
   @ApiProperty({
@@ -108,7 +109,7 @@ export abstract class BaseEntity {
     type: 'uuid',
     nullable: true,
   })
-  @Index('IDX_updated_by') // Index for audit queries by user
+  @Index() // Index for audit queries by user
   updatedBy?: string;
 
   @ApiProperty({
@@ -121,14 +122,6 @@ export abstract class BaseEntity {
     default: 1,
   })
   version!: number;
-
-  /**
-   * Composite index for common query pattern: active records ordered by creation date
-   * This dramatically improves performance for queries like:
-   * SELECT * FROM table WHERE deleted_at IS NULL ORDER BY created_at DESC
-   */
-  @Index('IDX_active_records', ['deletedAt', 'createdAt'])
-  protected activeRecordsIndex?: void;
 
   /**
    * Lifecycle hook: Before insert validation

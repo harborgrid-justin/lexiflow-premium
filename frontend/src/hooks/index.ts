@@ -1,6 +1,20 @@
 // hooks/index.ts
 // ============================================================================
-// Hooks Barrel Export with Deprecation Management
+// Hooks Barrel Export - COMPLETE (For Backward Compatibility)
+// ============================================================================
+// 
+// ⚠️ PERFORMANCE WARNING: This barrel exports ALL hooks, which can slow down
+// module resolution and increase bundle size.
+// 
+// 📦 RECOMMENDED: Import from focused sub-barrels instead:
+// 
+//   import { useToggle, useDebounce } from '@/hooks/core';           // State & utilities
+//   import { useListNavigation } from '@/hooks/ui';                  // UI interactions
+//   import { useOptimizedFilter } from '@/hooks/performance';        // React 18 optimizations
+//   import { useCaseList } from '@/hooks/domain';                    // Domain logic (heavy)
+//   import { useBackendHealth } from '@/hooks/backend';              // Backend integration
+// 
+// This file remains for backward compatibility. New code should use focused imports.
 // ============================================================================
 
 // ============================================================================

@@ -129,6 +129,13 @@ export enum JurorStatus {
   DISMISSED = 'Dismissed'
 }
 
+export enum PermissionLevel {
+  NONE = 'None',
+  READ = 'Read',
+  WRITE = 'Write',
+  ADMIN = 'Admin'
+}
+
 export enum WitnessType {
   FACT_WITNESS = 'fact_witness',
   EXPERT_WITNESS = 'expert_witness',

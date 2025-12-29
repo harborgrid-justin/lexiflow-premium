@@ -79,7 +79,7 @@ export const Card = React.memo<CardProps>(({
         </div>
       )}
       
-      <div className={cn("flex-1", noPadding ? 'p-0' : 'p-5')}>
+      <div className={cn("flex-1 min-h-0", noPadding ? 'p-0' : 'p-5')}>
         {children}
       </div>
       

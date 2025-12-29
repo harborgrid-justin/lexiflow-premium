@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TrustAccountDashboard } from '@features/operations/billing/trust/TrustAccountDashboard.tsx';
+import { TrustAccountDashboard } from '@features/operations/billing/trust/TrustAccountDashboard';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 

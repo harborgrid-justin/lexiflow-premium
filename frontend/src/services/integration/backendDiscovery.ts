@@ -27,7 +27,7 @@ class BackendDiscoveryService {
   private checkInterval: NodeJS.Timeout | null = null;
   private listeners: Set<BackendStatusCallback> = new Set();
   private readonly CHECK_INTERVAL_MS = 60000; // Check every 60 seconds (optimized for performance)
-  private readonly getHealthEndpoint = () => `${getApiBaseUrl()}/api/v1/health`; // Backend runs on port 5000
+  private readonly getHealthEndpoint = () => `${getApiBaseUrl()}/api/health`; // Backend health endpoint (no version prefix)
   private readonly TIMEOUT_MS = 3000; // 3 second timeout (faster failure detection)
   private notifyTimeout: NodeJS.Timeout | null = null; // Debounce notifications
 

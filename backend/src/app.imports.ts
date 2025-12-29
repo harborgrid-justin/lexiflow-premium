@@ -1,5 +1,9 @@
 // src/app.imports.ts
 
+// Authentication & Users
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+
 // Case Management
 import { CasesModule } from './cases/cases.module';
 import { PartiesModule } from './parties/parties.module';
@@ -79,6 +83,10 @@ import { EnterpriseAgentsModule } from './enterprise-agents/enterprise-agents.mo
 /* ------------------------------------------------------------------ */
 
 export const APP_IMPORTS = [
+  // Authentication & Users
+  AuthModule,
+  UsersModule,
+
   // Case Management
   CasesModule,
   PartiesModule,

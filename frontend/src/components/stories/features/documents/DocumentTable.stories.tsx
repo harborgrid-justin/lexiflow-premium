@@ -6,7 +6,7 @@
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { DocumentTable } from '@features/operations/documents/table/DocumentTable.tsx';
+import { DocumentTable } from '@features/operations/documents/table/DocumentTable';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { LegalDocument, DocumentId, UserId, CaseId } from '@/types';
 

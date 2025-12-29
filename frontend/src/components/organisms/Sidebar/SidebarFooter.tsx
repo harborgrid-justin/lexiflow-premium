@@ -19,6 +19,7 @@ import { ChevronDown, LogOut, Settings } from 'lucide-react';
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
+import { cn } from '@/utils/cn';
 
 // Components
 // UserAvatar component not found - create a simple fallback

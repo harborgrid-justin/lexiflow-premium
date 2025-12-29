@@ -6,7 +6,7 @@ import {
   EntityId,
   CaseId, Money, MetadataRecord} from './primitives';
 import {
-  BillingModel,  LedesActivityCode} from './enums';
+  BillingModel,  LedesActivityCode, TimeEntryStatus, InvoiceStatus} from './enums';
 import { TrustSubLedger } from './trust-accounts';
 
 // --- CLUSTER 3: FINANCIAL & BILLING ---

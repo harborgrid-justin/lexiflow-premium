@@ -37,7 +37,7 @@
  * - Minimal memory footprint with streaming uploads
  */
 
-import { ValidationError, AuthenticationError, OperationError } from '@/services/core/errors';
+import { ValidationError, AuthenticationError, OperationError, ExternalServiceError } from '@/services/core/errors';
 import { getApiBaseUrl, getApiPrefix } from '@/config/network/api.config';
 import { keysToCamel } from '@/utils/caseConverter';
 import { defaultStorage } from './adapters/StorageAdapter';
@@ -347,7 +347,9 @@ class ApiClient {
    */
   private async refreshAccessToken(refreshToken: string): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseURL}/auth/refresh`, {
+      const fullUrl = this.baseURL ? `${this.baseURL}/auth/refresh` : '/auth/refresh';
+      const url = new URL(fullUrl, window.location.origin);
+      const response = await fetch(url.toString(), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refreshToken }),
@@ -382,7 +384,9 @@ class ApiClient {
   async get<T>(endpoint: string, params?: Record<string, unknown>): Promise<T> {
     this.validateEndpoint(endpoint, 'get');
     try {
-      const url = new URL(`${this.baseURL}${endpoint}`);
+      // Handle empty baseURL (for Vite proxy mode)
+      const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
+      const url = new URL(fullUrl, window.location.origin);
       if (params) {
         Object.keys(params).forEach(key => {
           if (params[key] !== undefined && params[key] !== null) {
@@ -417,7 +421,9 @@ class ApiClient {
     this.validateEndpoint(endpoint, 'post');
     this.validateData(data, 'post');
     try {
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
+      const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
+      const url = new URL(fullUrl, window.location.origin);
+      const response = await fetch(url.toString(), {
         method: 'POST',
         headers: this.getHeaders(options?.headers),
         body: data ? JSON.stringify(data) : undefined,
@@ -444,7 +450,9 @@ class ApiClient {
     this.validateEndpoint(endpoint, 'put');
     this.validateData(data, 'put');
     try {
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
+      const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
+      const url = new URL(fullUrl, window.location.origin);
+      const response = await fetch(url.toString(), {
         method: 'PUT',
         headers: this.getHeaders(),
         body: data ? JSON.stringify(data) : undefined,
@@ -470,7 +478,9 @@ class ApiClient {
     this.validateEndpoint(endpoint, 'patch');
     this.validateData(data, 'patch');
     try {
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
+      const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
+      const url = new URL(fullUrl, window.location.origin);
+      const response = await fetch(url.toString(), {
         method: 'PATCH',
         headers: this.getHeaders(),
         body: data ? JSON.stringify(data) : undefined,
@@ -494,7 +504,9 @@ class ApiClient {
   async delete<T>(endpoint: string): Promise<T> {
     this.validateEndpoint(endpoint, 'delete');
     try {
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
+      const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
+      const url = new URL(fullUrl, window.location.origin);
+      const response = await fetch(url.toString(), {
         method: 'DELETE',
         headers: this.getHeaders(),
         signal: AbortSignal.timeout(this.DEFAULT_TIMEOUT),
@@ -544,7 +556,9 @@ class ApiClient {
       }
       // Do NOT set Content-Type for multipart/form-data (browser sets it with boundary)
 
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
+      const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
+      const url = new URL(fullUrl, window.location.origin);
+      const response = await fetch(url.toString(), {
         method: 'POST',
         headers,
         body: formData,
@@ -596,7 +610,9 @@ class ApiClient {
     const lastChecked = new Date().toISOString();
 
     try {
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
+      const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
+      const url = new URL(fullUrl, window.location.origin);
+      const response = await fetch(url.toString(), {
         method: 'HEAD',
         headers: this.getHeaders(),
         signal: AbortSignal.timeout(this.HEALTH_CHECK_TIMEOUT),

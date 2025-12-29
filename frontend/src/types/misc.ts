@@ -7,7 +7,8 @@ import {
 import {
   ServiceMethod, EntityType, EntityRole, ServiceStatus, NavCategory
 } from './enums';
-import React, { LazyExoticComponent } from 'react';
+import type React from 'react';
+import type { LazyExoticComponent } from 'react';
 import type { Case, Party } from './case';
 import type { Motion, DocketEntry } from './motion-docket';
 import type { EvidenceItem } from './evidence';

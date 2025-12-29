@@ -5,7 +5,10 @@
 
 // Lazy getters to avoid accessing import.meta.env before Vite initialization
 export const getApiBaseUrl = () => import.meta.env.VITE_API_URL || '';
-export const getApiPrefix = () => import.meta.env.VITE_API_PREFIX || '/api/v1';
+export const getApiPrefix = () => import.meta.env.VITE_API_PREFIX || '/api';
+
+// Export constants for backward compatibility
+export const API_PREFIX = import.meta.env.VITE_API_PREFIX || '/api';
 
 // Note: Don't access import.meta.env at module load
 export const API_TIMEOUT_MS = 30000; // 30 seconds

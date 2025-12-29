@@ -21,7 +21,7 @@
 
 import { useState, useMemo } from 'react';
 import { Case, LegalDocument, WorkflowStage, TimeEntry, TimelineEvent, Party, Project, WorkflowTask, Motion } from '@/types';
-import { GeminiService } from '@/services';
+import { GeminiService } from '@/services/features/research/geminiService';
 import { DataService } from '@/services';
 import { useQuery, useMutation, queryClient } from './useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';

@@ -14,31 +14,55 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
   const [backendStatus, setBackendStatus] = useState<'connected' | 'disconnected' | 'checking'>('checking');
   const [showHealthMonitor, setShowHealthMonitor] = useState(false);
   const [showCoverage, setShowCoverage] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
   const { currentSource, isBackendApiEnabled: useBackendApi } = useDataSource();
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    let isActive = true;
+
+    // Exponential backoff: 5s, 10s, 20s, 40s, then 60s max
+    const getBackoffDelay = (count: number) => {
+      const baseDelay = 5000;
+      const maxDelay = 60000;
+      return Math.min(baseDelay * Math.pow(2, count), maxDelay);
+    };
+
     // Check backend connection if API mode is enabled
     const checkBackend = async () => {
-      if (!useBackendApi) {
+      if (!isActive || !useBackendApi) {
         setBackendStatus('disconnected');
         return;
       }
 
       try {
         await apiClient.healthCheck();
-        setBackendStatus('connected');
+        if (isActive) {
+          setBackendStatus('connected');
+          setRetryCount(0); // Reset on success
+          // Check again in 30 seconds when connected
+          timeoutId = setTimeout(checkBackend, 30000);
+        }
       } catch (error) {
-        setBackendStatus('disconnected');
+        if (isActive) {
+          setBackendStatus('disconnected');
+          const newRetryCount = retryCount + 1;
+          setRetryCount(newRetryCount);
+          // Use exponential backoff when disconnected
+          const delay = getBackoffDelay(newRetryCount);
+          console.debug(`[ConnectionStatus] Backend offline, retrying in ${delay / 1000}s...`);
+          timeoutId = setTimeout(checkBackend, delay);
+        }
       }
     };
 
     checkBackend();
     
-    // Check periodically
-    const interval = setInterval(checkBackend, 30000); // Every 30 seconds
-    
-    return () => clearInterval(interval);
-  }, [useBackendApi]);
+    return () => {
+      isActive = false;
+      clearTimeout(timeoutId);
+    };
+  }, [useBackendApi, retryCount]);
 
   useEffect(() => {
     // Listen to network status

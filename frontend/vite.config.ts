@@ -30,10 +30,20 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       },
       proxy: {
         '/api': {
-          target: env.VITE_API_BASE_URL || 'http://localhost:5000',
+          target: env.VITE_API_BASE_URL || 'http://localhost:3000',
           changeOrigin: true,
           secure: false,
-          rewrite: (path) => path.replace(/^\/api/, ''),
+          rewrite: (path) => path,
+          // Suppress proxy errors when backend is offline
+          configure: (proxy, options) => {
+            proxy.on('error', (err, req, res) => {
+              // Silently handle connection refused errors (backend offline)
+              if (err.code === 'ECONNREFUSED') {
+                return;
+              }
+              console.error('[vite] http proxy error:', err);
+            });
+          },
         },
       },
     },

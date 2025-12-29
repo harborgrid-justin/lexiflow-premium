@@ -1,108 +1,141 @@
 import { Controller, Get } from '@nestjs/common';
-import { Public } from '@common/decorators/public.decorator';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Public } from '@common/decorators/public.decorator';
+
 import {
   HealthCheckService,
   HealthCheck,
   TypeOrmHealthIndicator,
   MemoryHealthIndicator as TerminusMemoryHealthIndicator,
 } from '@nestjs/terminus';
-import { RedisHealthIndicator as ImprovedRedisHealthIndicator } from './indicators/redis.health';
+
+import { RedisHealthIndicator } from './indicators/redis.health';
 import { DiskHealthIndicator } from './indicators/disk.health';
 import { MemoryHealthIndicator } from './indicators/memory.health';
+import { TelemetryHealthIndicator } from './indicators/telemetry.health';
+
 import * as MasterConfig from '@config/master.config';
 
-/**
- * Health Check Controller
- * Provides comprehensive health checks for monitoring and orchestration
- * Compatible with Kubernetes liveness/readiness probes
- * @see https://docs.nestjs.com/recipes/terminus
+/* ------------------------------------------------------------------ */
+/* Health Controller                                                   */
+/* ------------------------------------------------------------------ */
+/*
+ * Exposes liveness and readiness probes suitable for:
+ * - Kubernetes
+ * - systemd
+ * - load balancers
+ * - monitoring systems
+ *
+ * Health semantics:
+ * - /health/live   -> process is alive (no dependencies)
+ * - /health/ready  -> critical dependencies are ready
+ * - /health        -> full diagnostic surface (operators only)
  */
-@ApiTags('Health')
+
+@ApiTags('system')
 @Controller('health')
 export class HealthController {
   constructor(
-    private health: HealthCheckService,
-    private db: TypeOrmHealthIndicator,
-    private terminusMemory: TerminusMemoryHealthIndicator,
-    private redis: ImprovedRedisHealthIndicator,
-    private disk: DiskHealthIndicator,
-    private memory: MemoryHealthIndicator,
+    private readonly health: HealthCheckService,
+    private readonly database: TypeOrmHealthIndicator,
+    private readonly terminusMemory: TerminusMemoryHealthIndicator,
+    private readonly redis: RedisHealthIndicator,
+    private readonly disk: DiskHealthIndicator,
+    private readonly memory: MemoryHealthIndicator,
+    private readonly telemetry: TelemetryHealthIndicator,
   ) {}
 
-  /**
-   * Comprehensive health check endpoint
-   * Returns detailed status of all system components
-   */
+  /* ------------------------------------------------------------------ */
+  /* Comprehensive Health                                               */
+  /* ------------------------------------------------------------------ */
+
   @Public()
   @Get()
   @HealthCheck()
-  @ApiOperation({ summary: 'Comprehensive health check' })
-  @ApiResponse({ status: 200, description: 'Service is healthy' })
-  @ApiResponse({ status: 503, description: 'Service is unhealthy' })
+  @ApiOperation({
+    summary: 'Comprehensive health check',
+    description: 'Returns full system and dependency health diagnostics',
+  })
+  @ApiResponse({ status: 200, description: 'System is healthy' })
+  @ApiResponse({ status: 503, description: 'System is unhealthy' })
   check() {
     return this.health.check([
-      // Database health
+      /* Database */
       () =>
-        this.db.pingCheck('database', {
+        this.database.pingCheck('database', {
           timeout: MasterConfig.HEALTH_CHECK_TIMEOUT_MS,
         }),
 
-      // Redis health (if enabled)
+      /* Redis / Queue */
       () => this.redis.isHealthy('redis'),
 
-      // Memory health (comprehensive)
+      /* Memory (custom, detailed) */
       () => this.memory.isHealthy('memory'),
 
-      // Disk space health
+      /* Disk */
       () => this.disk.isHealthy('disk'),
 
-      // Terminus memory check (heap size limit: 800MB)
-      () =>
-        this.terminusMemory.checkHeap('memoryHeap', 800 * 1024 * 1024),
+      /* Telemetry */
+      () => this.telemetry.isHealthy('telemetry'),
 
-      // RSS memory check (1.5GB limit)
+      /* Terminus memory guards (cheap safety rails) */
       () =>
-        this.terminusMemory.checkRSS('memoryRSS', 1.5 * 1024 * 1024 * 1024),
+        this.terminusMemory.checkHeap(
+          'heap',
+          1024 * 1024 * 1024, // 1 GB
+        ),
+
+      () =>
+        this.terminusMemory.checkRSS(
+          'rss',
+          1536 * 1024 * 1024, // 1.5 GB
+        ),
     ]);
   }
 
-  /**
-   * Liveness probe for Kubernetes
-   * Returns 200 if the application is running
-   */
+  /* ------------------------------------------------------------------ */
+  /* Liveness                                                          */
+  /* ------------------------------------------------------------------ */
+
   @Public()
   @Get('live')
   @HealthCheck()
-  @ApiOperation({ summary: 'Kubernetes liveness probe' })
-  @ApiResponse({ status: 200, description: 'Application is alive' })
+  @ApiOperation({
+    summary: 'Liveness probe',
+    description: 'Indicates whether the process is alive',
+  })
+  @ApiResponse({ status: 200, description: 'Process is alive' })
   live() {
     return this.health.check([
-      // Minimal checks - just verify the app is responsive
       () =>
-        this.terminusMemory.checkHeap('heap', 1024 * 1024 * 1024), // 1GB
+        this.terminusMemory.checkHeap(
+          'heap',
+          2048 * 1024 * 1024, // 2 GB (very tolerant)
+        ),
     ]);
   }
 
-  /**
-   * Readiness probe for Kubernetes
-   * Returns 200 when the application is ready to receive traffic
-   */
+  /* ------------------------------------------------------------------ */
+  /* Readiness                                                          */
+  /* ------------------------------------------------------------------ */
+
   @Public()
   @Get('ready')
   @HealthCheck()
-  @ApiOperation({ summary: 'Kubernetes readiness probe' })
+  @ApiOperation({
+    summary: 'Readiness probe',
+    description: 'Indicates whether the application is ready to receive traffic',
+  })
   @ApiResponse({ status: 200, description: 'Application is ready' })
   @ApiResponse({ status: 503, description: 'Application is not ready' })
   ready() {
     return this.health.check([
-      // Check critical dependencies
       () =>
-        this.db.pingCheck('database', {
+        this.database.pingCheck('database', {
           timeout: MasterConfig.HEALTH_CHECK_TIMEOUT_MS,
         }),
+
       () => this.redis.isHealthy('redis'),
     ]);
   }
 }
-

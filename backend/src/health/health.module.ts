@@ -1,33 +1,52 @@
 import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
-// // HttpModule import removed - not available in current @nestjs version // Module not installed
 import { ConfigModule } from '@nestjs/config';
+
 import { HealthController } from './health.controller';
-import { RedisHealthIndicator } from './redis-health.indicator';
-import { TelemetryHealthIndicator } from '@telemetry/telemetry-health.indicator';
-import { RedisHealthIndicator as ImprovedRedisHealthIndicator } from './indicators/redis.health';
+
+import { RedisHealthIndicator } from './indicators/redis.health';
 import { DiskHealthIndicator } from './indicators/disk.health';
 import { MemoryHealthIndicator } from './indicators/memory.health';
+import { TelemetryHealthIndicator } from './indicators/telemetry.health';
 
-/**
- * Health Module
- * Provides comprehensive health checks for the application
- * Includes database, Redis, memory, disk, and HTTP endpoints monitoring
+/* ------------------------------------------------------------------ */
+/* Health Module                                                       */
+/* ------------------------------------------------------------------ */
+/*
+ * Provides comprehensive system health reporting.
+ *
+ * This module is responsible ONLY for:
+ * - Liveness checks
+ * - Readiness checks
+ * - Dependency health indicators
+ *
+ * It must NOT:
+ * - Contain business logic
+ * - Perform startup reporting
+ * - Duplicate AppService health endpoints
+ *
  * @see https://docs.nestjs.com/recipes/terminus
  */
+
 @Module({
   imports: [
     TerminusModule,
-    // HttpModule, // For HTTP health checks - not available in current version
     ConfigModule,
   ],
-  controllers: [HealthController],
+  controllers: [
+    HealthController,
+  ],
   providers: [
-    RedisHealthIndicator, // Legacy
-    ImprovedRedisHealthIndicator, // New improved version
-    TelemetryHealthIndicator,
+    RedisHealthIndicator,
     DiskHealthIndicator,
     MemoryHealthIndicator,
+    TelemetryHealthIndicator,
+  ],
+  exports: [
+    RedisHealthIndicator,
+    DiskHealthIndicator,
+    MemoryHealthIndicator,
+    TelemetryHealthIndicator,
   ],
 })
 export class HealthModule {}

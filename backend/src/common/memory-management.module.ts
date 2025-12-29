@@ -8,19 +8,19 @@
 import { Module, Global } from '@nestjs/common';
 import { MemoryMonitoringService } from './services/memory-monitoring.service';
 import { MemoryLeakDetectorService } from './services/memory-leak-detector.service';
-import { EnhancedMemoryHealthIndicator } from '@health/indicators/enhanced-memory.health';
+import { MemoryHealthIndicator } from '@health/indicators/memory.health';
 
 @Global()
 @Module({
   providers: [
     MemoryMonitoringService,
     MemoryLeakDetectorService,
-    EnhancedMemoryHealthIndicator,
+    MemoryHealthIndicator,
   ],
   exports: [
     MemoryMonitoringService,
     MemoryLeakDetectorService,
-    EnhancedMemoryHealthIndicator,
+    MemoryHealthIndicator,
   ],
 })
 export class MemoryManagementModule {}

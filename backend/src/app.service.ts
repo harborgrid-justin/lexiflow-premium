@@ -2,17 +2,27 @@ import { Injectable } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
+/* ------------------------------------------------------------------ */
+/* Application Service                                                 */
+/* ------------------------------------------------------------------ */
+
 @Injectable()
 export class AppService {
   constructor(
-    @InjectDataSource() private dataSource: DataSource,
+    @InjectDataSource()
+    private readonly dataSource: DataSource,
   ) {}
+
+  /* ------------------------------------------------------------------ */
+  /* Root Endpoint                                                      */
+  /* ------------------------------------------------------------------ */
 
   getRoot() {
     return {
-      name: 'LexiFlow Enterprise API',
-      version: '1.0.0',
-      description: 'Document Management System for Legal Professionals',
+      service: 'LexiFlow Enterprise API',
+      description: 'Enterprise Document and Case Management Platform',
+      version: this.getServiceVersion(),
+      environment: this.getEnvironment(),
       documentation: '/api/docs',
       endpoints: {
         health: '/health',
@@ -22,25 +32,52 @@ export class AppService {
     };
   }
 
+  /* ------------------------------------------------------------------ */
+  /* Health Check                                                       */
+  /* ------------------------------------------------------------------ */
+
   async getHealth() {
-    const databaseStatus = await this.checkDatabaseConnection();
-    
+    const database = await this.checkDatabase();
+
     return {
-      status: databaseStatus.connected ? 'ok' : 'degraded',
+      status: database.connected ? 'ok' : 'degraded',
       timestamp: new Date().toISOString(),
-      uptime: process.uptime(),
-      environment: process.env.NODE_ENV || 'development',
+      uptimeSeconds: Math.floor(process.uptime()),
+      environment: this.getEnvironment(),
       service: 'LexiFlow Enterprise API',
-      version: '1.0.0',
-      database: {
-        status: databaseStatus.connected ? 'Connected' : 'Disconnected',
-        type: 'PostgreSQL',
-        isInitialized: this.dataSource.isInitialized,
+      version: this.getServiceVersion(),
+      components: {
+        database: {
+          type: 'PostgreSQL',
+          connected: database.connected,
+          initialized: this.dataSource.isInitialized,
+        },
       },
     };
   }
 
-  private async checkDatabaseConnection(): Promise<{ connected: boolean }> {
+  /* ------------------------------------------------------------------ */
+  /* Version Information                                                */
+  /* ------------------------------------------------------------------ */
+
+  getVersion() {
+    return {
+      service: 'LexiFlow Enterprise API',
+      version: this.getServiceVersion(),
+      apiVersion: 'v1',
+      buildTimestamp: this.getBuildTimestamp(),
+      runtime: {
+        node: process.version,
+        environment: this.getEnvironment(),
+      },
+    };
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Internal Helpers                                                   */
+  /* ------------------------------------------------------------------ */
+
+  private async checkDatabase(): Promise<{ connected: boolean }> {
     try {
       await this.dataSource.query('SELECT 1');
       return { connected: true };
@@ -49,13 +86,15 @@ export class AppService {
     }
   }
 
-  getVersion() {
-    return {
-      version: '1.0.0',
-      apiVersion: 'v1',
-      buildDate: new Date().toISOString(),
-      nodeVersion: process.version,
-      environment: process.env.NODE_ENV || 'development',
-    };
+  private getEnvironment(): string {
+    return process.env.NODE_ENV ?? 'development';
+  }
+
+  private getServiceVersion(): string {
+    return process.env.APP_VERSION ?? '1.0.0';
+  }
+
+  private getBuildTimestamp(): string {
+    return process.env.BUILD_TIMESTAMP ?? new Date().toISOString();
   }
 }

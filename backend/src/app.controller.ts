@@ -1,41 +1,66 @@
 import { Controller, Get, VERSION_NEUTRAL } from '@nestjs/common';
-import { ApiTags, ApiOperation , ApiResponse }from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+
 import { AppService } from './app.service';
 
-@ApiTags('health')
+/* ------------------------------------------------------------------ */
+/* Root / Health / Version Controller                                  */
+/* ------------------------------------------------------------------ */
+
+@ApiTags('system')
 @Controller({ version: VERSION_NEUTRAL })
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+  ) {}
 
-  
+  /* ------------------------------------------------------------------ */
+  /* Root                                                               */
+  /* ------------------------------------------------------------------ */
+
   @Get()
-  @ApiOperation({ summary: 'API root endpoint' })
+  @ApiOperation({
+    summary: 'Root endpoint',
+    description: 'Provides basic service metadata and entrypoint links',
+  })
   @ApiResponse({
     status: 200,
-    description: 'Welcome message and API information',
+    description: 'Service metadata returned successfully',
   })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
   getRoot() {
     return this.appService.getRoot();
   }
 
-  
+  /* ------------------------------------------------------------------ */
+  /* Health                                                             */
+  /* ------------------------------------------------------------------ */
+
   @Get('health')
-  @ApiOperation({ summary: 'Health check endpoint' })
-  @ApiResponse({ status: 200, description: 'Service is healthy' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiOperation({
+    summary: 'Health check',
+    description: 'Returns liveness and dependency health information',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Service is healthy or degraded',
+  })
   getHealth() {
     return this.appService.getHealth();
   }
 
-  
+  /* ------------------------------------------------------------------ */
+  /* Version                                                            */
+  /* ------------------------------------------------------------------ */
+
   @Get('version')
-  @ApiOperation({ summary: 'Get API version' })
-  @ApiResponse({ status: 200, description: 'API version information' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiOperation({
+    summary: 'Version information',
+    description: 'Returns build, runtime, and API version details',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Version information returned successfully',
+  })
   getVersion() {
     return this.appService.getVersion();
   }

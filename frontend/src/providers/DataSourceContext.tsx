@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { isBackendApiEnabled as checkBackendEnabled } from '../services/integration/apiConfig';
+import { DataService } from '../services/data/dataService';
 import type {
   DataSourceType,
   DataSourceStateValue,
@@ -62,9 +63,6 @@ export * from './repository/errors';
  * Pattern 3: Hides transport details (HTTP/IndexedDB)
  */
 function createRepositories(config: DataSourceConfig): RepositoryRegistry {
-  // Lazy import to avoid circular dependencies
-  const { DataService } = require('../services/data/dataService');
-  
   // Pattern 11: Observability - log repository creation
   config.observability.logger?.info('Creating repository instances', {
     environment: config.environment.environment,

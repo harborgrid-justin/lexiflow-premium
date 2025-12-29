@@ -30,7 +30,6 @@ export class DashboardSnapshot extends BaseEntity {
   data!: Record<string, unknown>;
 
   @Column({ name: 'snapshot_date', type: 'date' })
-  @Index()
   snapshotDate!: string;
 
   @Column({

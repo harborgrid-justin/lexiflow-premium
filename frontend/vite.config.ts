@@ -19,7 +19,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     
     // 1. Server & Preview: Consolidation
     server: {
-      port: 3000,
+      port: 3400,
       host: true,
       strictPort: true,
       hmr: process.env.CODESPACES ? {

@@ -40,6 +40,7 @@
 import { ValidationError, AuthenticationError, OperationError } from '@/services/core/errors';
 import { API_BASE_URL, API_PREFIX } from '@/config/master.config';
 import { keysToCamel } from '@/utils/caseConverter';
+import { defaultStorage } from './adapters/StorageAdapter';
 
 const BASE_URL = `${API_BASE_URL}${API_PREFIX}`;
 

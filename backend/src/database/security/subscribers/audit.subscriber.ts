@@ -332,10 +332,19 @@ export class AuditSubscriber implements EntitySubscriberInterface {
       const auditLogRepository = this.dataSource.getRepository('AuditLog');
 
       if (auditLogRepository) {
+        // Map action to lowercase to match database enum values
+        const actionMap: Record<string, string> = {
+          'INSERT': 'create',
+          'UPDATE': 'update',
+          'DELETE': 'delete',
+          'SOFT_DELETE': 'archive',
+          'RECOVER': 'restore',
+        };
+        
         await auditLogRepository.save({
           entityType: log.entityName,
           entityId: log.entityId,
-          action: log.action.toLowerCase(),
+          action: actionMap[log.action] || log.action.toLowerCase(),
           userId: log.userId,
           userName: log.userName,
           timestamp: log.timestamp,

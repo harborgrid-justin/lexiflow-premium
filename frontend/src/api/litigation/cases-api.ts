@@ -418,7 +418,7 @@ export class CasesApiService {
             try {
                 const response = await apiClient.get<PaginatedResponse<unknown>>('/cases/archived', filters);
                 return response.data.map(c => this.transformCase(c) as unknown as ArchivedCase);
-            } catch {
+            } catch (error) {
                 console.warn('[CasesApiService] Archived endpoint unavailable, falling back to status filter');
                 // Fallback: filter locally by status
                 const allCases = await this.getAll({ status: 'Closed' });

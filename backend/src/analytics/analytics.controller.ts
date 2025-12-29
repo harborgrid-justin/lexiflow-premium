@@ -1,6 +1,9 @@
-import { Controller, Get, Post, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth , ApiResponse} from '@nestjs/swagger';
+import { Controller, Get, Post, Delete, Body, Param, Query, Head, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+import { RolesGuard } from '@common/guards/roles.guard';
+import { Roles } from '@common/decorators/roles.decorator';
+import { UserRole } from '@users/entities/user.entity';
 import { AnalyticsService } from './analytics.service';
 import { AnalyticsEvent } from './entities/analytics-event.entity';
 import { Dashboard } from './entities/dashboard.entity';
@@ -14,6 +17,21 @@ import {
   AnalyticsBillingMetricsDto,
   TimeSeriesDataPointDto,
 } from './dto/metrics-response.dto';
+import {
+  BulkImportEventsDto,
+  BulkImportResponseDto,
+  BulkRecalculateMetricsDto,
+  BulkRecalculateResponseDto,
+  BulkArchiveAnalyticsEventsDto,
+  BulkArchiveResponseDto,
+  BulkDeleteAnalyticsEventsDto,
+  BulkDeleteAnalyticsResponseDto,
+} from './dto/bulk-analytics.dto';
+import {
+  ExportAnalyticsDataDto,
+  ExportAnalyticsResponseDto,
+  ListExportJobsResponseDto,
+} from './dto/export-analytics.dto';
 
 @ApiTags('analytics')
 @ApiBearerAuth()
@@ -179,5 +197,114 @@ export class AnalyticsController {
   @ApiResponse({ status: 409, description: 'Resource already exists' })
   async generateReport(@Body() params: AnalyticsGenerateReportDto): Promise<GenerateReportResponseDto> {
     return this.analyticsService.generateReport(params);
+  }
+
+  // ============================================
+  // BULK OPERATIONS ENDPOINTS
+  // ============================================
+
+  @Post('bulk/import-events')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiOperation({ summary: 'Bulk import analytics events' })
+  @ApiResponse({ status: 202, description: 'Import job initiated successfully', type: BulkImportResponseDto })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async bulkImportEvents(@Body() importDto: BulkImportEventsDto): Promise<BulkImportResponseDto> {
+    return this.analyticsService.bulkImportEvents(importDto);
+  }
+
+  @Post('bulk/recalculate-metrics')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiOperation({ summary: 'Bulk recalculate analytics metrics' })
+  @ApiResponse({ status: 202, description: 'Recalculation job initiated successfully', type: BulkRecalculateResponseDto })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async bulkRecalculateMetrics(@Body() recalculateDto: BulkRecalculateMetricsDto): Promise<BulkRecalculateResponseDto> {
+    return this.analyticsService.bulkRecalculateMetrics(recalculateDto);
+  }
+
+  @Post('bulk/archive-events')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: 'Bulk archive analytics events' })
+  @ApiResponse({ status: 200, description: 'Events archived successfully', type: BulkArchiveResponseDto })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async bulkArchiveEvents(@Body() archiveDto: BulkArchiveAnalyticsEventsDto): Promise<BulkArchiveResponseDto> {
+    return this.analyticsService.bulkArchiveEvents(archiveDto);
+  }
+
+  @Delete('bulk/delete-events')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: 'Bulk delete analytics events' })
+  @ApiResponse({ status: 200, description: 'Events deleted successfully', type: BulkDeleteAnalyticsResponseDto })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async bulkDeleteEvents(@Body() deleteDto: BulkDeleteAnalyticsEventsDto): Promise<BulkDeleteAnalyticsResponseDto> {
+    return this.analyticsService.bulkDeleteEvents(deleteDto);
+  }
+
+  // ============================================
+  // EXPORT ENDPOINTS
+  // ============================================
+
+  @Post('export')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @HttpCode(HttpStatus.ACCEPTED)
+  @ApiOperation({ summary: 'Export analytics data in various formats' })
+  @ApiResponse({ status: 202, description: 'Export job initiated successfully', type: ExportAnalyticsResponseDto })
+  @ApiResponse({ status: 400, description: 'Invalid request data' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async exportAnalyticsData(@Body() exportDto: ExportAnalyticsDataDto): Promise<ExportAnalyticsResponseDto> {
+    return this.analyticsService.exportAnalyticsData(exportDto);
+  }
+
+  @Get('export/jobs')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @ApiOperation({ summary: 'List all export jobs' })
+  @ApiResponse({ status: 200, description: 'Export jobs retrieved successfully', type: ListExportJobsResponseDto })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async listExportJobs(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number
+  ): Promise<ListExportJobsResponseDto> {
+    return this.analyticsService.listExportJobs(page, limit);
+  }
+
+  @Get('export/:jobId')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @ApiOperation({ summary: 'Get export job status' })
+  @ApiResponse({ status: 200, description: 'Export job status retrieved successfully', type: ExportAnalyticsResponseDto })
+  @ApiResponse({ status: 404, description: 'Export job not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async getExportJobStatus(@Param('jobId') jobId: string): Promise<ExportAnalyticsResponseDto> {
+    return this.analyticsService.getExportJobStatus(jobId);
+  }
+
+  @Delete('export/:jobId')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: 'Cancel or delete export job' })
+  @ApiResponse({ status: 200, description: 'Export job cancelled successfully' })
+  @ApiResponse({ status: 404, description: 'Export job not found' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
+  async cancelExportJob(@Param('jobId') jobId: string): Promise<{ success: boolean; message: string }> {
+    return this.analyticsService.cancelExportJob(jobId);
   }
 }

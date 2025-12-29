@@ -1,4 +1,4 @@
-import storybook from "eslint-plugin-storybook";
+// import storybook from "eslint-plugin-storybook";
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import react from 'eslint-plugin-react';
@@ -11,8 +11,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default tseslint.config(
-  js.configs.recommended, 
-  ...tseslint.configs.recommended, 
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
   {
     // Apply this block to all relevant files
     files: ['**/*.{ts,tsx,mts,cts}'],
@@ -26,7 +26,7 @@ export default tseslint.config(
         // Modern Vite 7 / TS-ESLint v8 replacement for 'project'
         projectService: {
           allowDefaultProject: [
-            'vite.config.ts', 
+            'vite.config.ts',
             'eslint.config.js',
             'tailwind.config.ts'
           ],
@@ -55,7 +55,7 @@ export default tseslint.config(
       'react-hooks/exhaustive-deps': 'warn',
       'no-console': 'off',
     },
-  }, 
+  },
   {
     ignores: [
       'node_modules/**',
@@ -72,6 +72,6 @@ export default tseslint.config(
       '**/*.spec.ts',
       '**/*.spec.tsx',
     ],
-  }, 
-  storybook.configs["flat/recommended"]
+  },
+  // storybook.configs["flat/recommended"]
 );

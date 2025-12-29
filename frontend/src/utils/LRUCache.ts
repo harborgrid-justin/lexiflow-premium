@@ -120,7 +120,7 @@ export class LRUCache<T> {
       } else if (typeof value === 'object' && value !== null) {
         try {
           totalSize += JSON.stringify(value).length * 2;
-        } catch {
+        } catch (error) {
           totalSize += 1000; // Fallback estimate for non-serializable objects
         }
       } else {

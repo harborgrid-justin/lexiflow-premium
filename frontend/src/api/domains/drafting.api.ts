@@ -419,7 +419,7 @@ export class DraftingValidationService {
           if (v.validation.pattern) {
             try {
               new RegExp(v.validation.pattern);
-            } catch {
+            } catch (error) {
               errors.push({
                 field: `variables[${index}].validation.pattern`,
                 message: 'Invalid regex pattern',

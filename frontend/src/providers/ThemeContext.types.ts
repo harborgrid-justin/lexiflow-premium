@@ -5,10 +5,15 @@
 import { ThemeMode } from '@theme/tokens';
 import { tokens } from '@theme/tokens';
 
+// Theme type with colors compatibility layer
+type ThemeWithColors = typeof tokens.colors.light & {
+  colors: typeof tokens.colors.light;
+};
+
 // BP2: Narrow interface - read-only state
 export interface ThemeStateValue {
   mode: ThemeMode;
-  theme: typeof tokens.colors.light;
+  theme: ThemeWithColors;
   isDark: boolean;
 }
 

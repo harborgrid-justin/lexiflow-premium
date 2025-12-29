@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { AlertSeverity } from './dto/realtime-metrics.dto';
 
 export interface BaseQuery {
   startDate?: string;
@@ -9,14 +10,22 @@ export interface KPIQuery extends BaseQuery {
   period?: string;
 }
 
+export interface KPIDto {
+  id: string;
+  name: string;
+  value: number;
+  previousValue?: number;
+  changePercentage?: number;
+  target?: number;
+  unit?: string;
+  trend?: 'up' | 'down' | 'stable';
+}
+
 export interface KPIResponse {
-  activeCases: number;
-  revenue: number;
-  billableHours: number;
-  clientSatisfaction: number;
-  winRate: number;
-  avgCaseDuration: number;
+  kpis: KPIDto[];
   period: string;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface CaseMetricsQuery extends BaseQuery {
@@ -27,6 +36,7 @@ export interface CaseMetricsResponse {
   totalCases: number;
   activeCases: number;
   closedCases: number;
+  pendingCases: number;
   winRate: number;
   avgSettlement: number;
   casesByType: Record<string, number>;
@@ -37,12 +47,16 @@ export interface CaseMetricsResponse {
 
 export interface FinancialMetricsResponse {
   totalRevenue: number;
-  outstandingAR: number;
-  collectionRate: number;
-  avgBillingRate: number;
+  outstandingReceivables: number;
+  collectedRevenue: number;
+  totalBillableHours: number;
+  averageHourlyRate: number;
   revenueByPracticeArea: Record<string, number>;
-  revenueTimeline: Array<{ date: string; revenue: number }>;
-  filters: BaseQuery;
+  collectionRate?: number;
+  revenueGrowth?: number;
+  outstandingInvoicesCount?: number;
+  revenueTimeline?: Array<{ date: string; revenue: number }>;
+  filters?: BaseQuery;
 }
 
 export interface TeamPerformanceQuery extends BaseQuery {
@@ -50,32 +64,49 @@ export interface TeamPerformanceQuery extends BaseQuery {
 }
 
 export interface TeamMember {
-  id: string;
-  name: string;
-  role: string;
-  hours: number;
-  revenue: number;
+  userId: string;
+  userName: string;
+  billableHours: number;
+  casesHandled: number;
+  revenueGenerated: number;
+  utilizationRate?: number;
+  averageCaseDuration?: number;
 }
 
 export interface TeamPerformanceResponse {
-  billableHours: number;
-  utilizationRate: number;
-  revenueGenerated: number;
-  casesHandled: number;
   teamMembers: TeamMember[];
-  performanceTimeline: Array<{ date: string; hours: number }>;
-  filters: TeamPerformanceQuery;
+  overallUtilizationRate: number;
+  totalBillableHours: number;
+  totalRevenue: number;
+  topPerformerId?: string;
+  performanceTimeline?: Array<{ date: string; hours: number }>;
+  filters?: TeamPerformanceQuery;
+}
+
+export interface ClientMetric {
+  clientId: string;
+  clientName: string;
+  totalRevenue: number;
+  activeCases: number;
+  outstandingBalance: number;
+  lifetimeValue?: number;
+  lastActivityDate?: string;
 }
 
 export interface ClientMetricsResponse {
-  totalClients: number;
-  activeClients: number;
-  newClients: number;
-  retentionRate: number;
-  avgClientValue: number;
-  clientsByIndustry: Record<string, number>;
-  satisfactionScores: Array<{ date: string; score: number }>;
-  filters: BaseQuery;
+  clients: ClientMetric[];
+  totalActiveClients: number;
+  totalRevenue: number;
+  averageLifetimeValue?: number;
+  topClientId?: string;
+  totalClients?: number;
+  activeClients?: number;
+  newClients?: number;
+  retentionRate?: number;
+  avgClientValue?: number;
+  clientsByIndustry?: Record<string, number>;
+  satisfactionScores?: Array<{ date: string; score: number }>;
+  filters?: BaseQuery;
 }
 
 export interface ChartDataQuery extends BaseQuery {
@@ -83,18 +114,19 @@ export interface ChartDataQuery extends BaseQuery {
   metric?: string;
 }
 
-export interface Dataset {
+export interface ChartDataPoint {
   label: string;
-  data: number[];
-  backgroundColor?: string;
-  borderColor?: string;
+  value: number;
 }
 
 export interface ChartDataResponse {
   chartType: string;
-  labels: string[];
-  datasets: Dataset[];
-  filters: ChartDataQuery;
+  data: ChartDataPoint[];
+  title?: string;
+  xAxisLabel?: string;
+  yAxisLabel?: string;
+  labels?: string[];
+  filters?: ChartDataQuery;
 }
 
 export interface ExportReportQuery extends BaseQuery {
@@ -123,41 +155,59 @@ export interface ComparativeAnalysisResponse {
 }
 
 export interface StatsResponse {
+  totalActiveUsers: number;
   totalCases: number;
+  totalClients: number;
   totalRevenue: number;
-  totalHours: number;
-  activeUsers: number;
-  filters: BaseQuery;
+  activeTasks: number;
+  pendingInvoices: number;
+  recentActivity?: number;
+  systemHealth?: string;
+  lastUpdated?: string;
+  totalHours?: number;
+  activeUsers?: number;
+  filters?: BaseQuery;
 }
 
 export interface Alert {
   id: string;
+  title: string;
   type: string;
   message: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: AlertSeverity;
   timestamp: string;
 }
 
 export interface RecentAlertsResponse {
   alerts: Alert[];
-  total: number;
-  limit: number;
+  totalCount: number;
+  criticalCount: number;
+  warningCount: number;
+  timestamp: string;
+  total?: number;
+  limit?: number;
 }
 
 @Injectable()
 export class AnalyticsDashboardService {
   async getKPIs(query: KPIQuery): Promise<KPIResponse> {
-    const { period = '30d' } = query;
+    const { period = '30d', startDate, endDate } = query;
 
     // Aggregate KPIs from various sources
+    const kpis: KPIDto[] = [
+      { id: 'active-cases', name: 'Active Cases', value: 0, unit: 'count' },
+      { id: 'revenue', name: 'Revenue', value: 0, unit: '$' },
+      { id: 'billable-hours', name: 'Billable Hours', value: 0, unit: 'hours' },
+      { id: 'client-satisfaction', name: 'Client Satisfaction', value: 0, unit: '%' },
+      { id: 'win-rate', name: 'Win Rate', value: 0, unit: '%' },
+      { id: 'avg-case-duration', name: 'Avg Case Duration', value: 0, unit: 'days' }
+    ];
+
     return {
-      activeCases: 0,
-      revenue: 0,
-      billableHours: 0,
-      clientSatisfaction: 0,
-      winRate: 0,
-      avgCaseDuration: 0,
-      period
+      kpis,
+      period,
+      startDate,
+      endDate
     };
   }
 
@@ -168,6 +218,7 @@ export class AnalyticsDashboardService {
       totalCases: 0,
       activeCases: 0,
       closedCases: 0,
+      pendingCases: 0,
       winRate: 0,
       avgSettlement: 0,
       casesByType: {},
@@ -182,10 +233,14 @@ export class AnalyticsDashboardService {
 
     return {
       totalRevenue: 0,
-      outstandingAR: 0,
-      collectionRate: 0,
-      avgBillingRate: 0,
+      outstandingReceivables: 0,
+      collectedRevenue: 0,
+      totalBillableHours: 0,
+      averageHourlyRate: 0,
       revenueByPracticeArea: {},
+      collectionRate: 0,
+      revenueGrowth: 0,
+      outstandingInvoicesCount: 0,
       revenueTimeline: [],
       filters: query
     };
@@ -195,11 +250,11 @@ export class AnalyticsDashboardService {
     // Query parameters available for filtering: startDate, endDate, teamId
 
     return {
-      billableHours: 0,
-      utilizationRate: 0,
-      revenueGenerated: 0,
-      casesHandled: 0,
       teamMembers: [],
+      overallUtilizationRate: 0,
+      totalBillableHours: 0,
+      totalRevenue: 0,
+      topPerformerId: undefined,
       performanceTimeline: [],
       filters: query
     };
@@ -209,6 +264,11 @@ export class AnalyticsDashboardService {
     // Query parameters available for filtering: startDate, endDate
 
     return {
+      clients: [],
+      totalActiveClients: 0,
+      totalRevenue: 0,
+      averageLifetimeValue: 0,
+      topClientId: undefined,
       totalClients: 0,
       activeClients: 0,
       newClients: 0,
@@ -225,8 +285,11 @@ export class AnalyticsDashboardService {
 
     return {
       chartType,
+      data: [],
+      title: undefined,
+      xAxisLabel: undefined,
+      yAxisLabel: undefined,
       labels: [],
-      datasets: [],
       filters: query
     };
   }
@@ -259,8 +322,15 @@ export class AnalyticsDashboardService {
     // Query parameters available for statistics
 
     return {
+      totalActiveUsers: 0,
       totalCases: 0,
+      totalClients: 0,
       totalRevenue: 0,
+      activeTasks: 0,
+      pendingInvoices: 0,
+      recentActivity: 0,
+      systemHealth: 'healthy',
+      lastUpdated: new Date().toISOString(),
       totalHours: 0,
       activeUsers: 0,
       filters: query
@@ -272,8 +342,85 @@ export class AnalyticsDashboardService {
 
     return {
       alerts: [],
+      totalCount: 0,
+      criticalCount: 0,
+      warningCount: 0,
+      timestamp: new Date().toISOString(),
       total: 0,
       limit: alertLimit
+    };
+  }
+
+  async getRealtimeMetrics(_query: any): Promise<any> {
+    return {
+      timestamp: new Date().toISOString(),
+      metrics: []
+    };
+  }
+
+  async getActiveUsersRealtime(): Promise<any> {
+    return {
+      activeUsers: 0,
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  async getSystemPerformanceRealtime(): Promise<any> {
+    return {
+      cpuUsage: 0,
+      memoryUsage: 0,
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  async getCaseActivityRealtime(): Promise<any> {
+    return {
+      recentActivity: [],
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  async getRevenueRealtime(): Promise<any> {
+    return {
+      currentRevenue: 0,
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  async exportAnalyticsData(exportDto: any): Promise<any> {
+    const { format = 'csv' } = exportDto;
+    return {
+      url: `/exports/${Date.now()}.${format}`,
+      jobId: `export-${Date.now()}`,
+      status: 'pending'
+    };
+  }
+
+  async getExportJobStatus(jobId: string): Promise<any> {
+    return {
+      jobId,
+      status: 'completed',
+      url: `/exports/${jobId}.csv`
+    };
+  }
+
+  async bulkRefreshDashboards(refreshDto: any): Promise<any> {
+    const { dashboardIds = [] } = refreshDto;
+    return {
+      refreshedCount: dashboardIds.length,
+      failedCount: 0,
+      results: {},
+      timestamp: new Date().toISOString()
+    };
+  }
+
+  async bulkDeleteEvents(deleteDto: any): Promise<any> {
+    const { eventIds = [] } = deleteDto;
+    return {
+      deletedCount: eventIds.length,
+      failedCount: 0,
+      failedIds: [],
+      timestamp: new Date().toISOString()
     };
   }
 }

@@ -1,18 +1,18 @@
 /**
  * @module hooks/useCalendarView
  * @category Hooks - Calendar
- * 
+ *
  * Manages calendar view state with month navigation and event loading.
  * Provides day-based event filtering for grid rendering.
- * 
+ *
  * @example
  * ```typescript
  * const calendar = useCalendarView();
- * 
+ *
  * <button onClick={() => calendar.changeMonth(-1)}>Previous</button>
  * <button onClick={() => calendar.changeMonth(1)}>Next</button>
  * <button onClick={calendar.goToToday}>Today</button>
- * 
+ *
  * {Array.from({ length: calendar.daysInMonth }).map((_, day) => (
  *   <Day events={calendar.getEventsForDay(day + 1)} />
  * ))}
@@ -28,7 +28,7 @@ import { useState, useEffect, useCallback } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 
 // Types
 import { CalendarEventItem } from '@/types';
@@ -67,7 +67,7 @@ export interface UseCalendarViewReturn {
 
 /**
  * Manages calendar view state and navigation.
- * 
+ *
  * @returns Object with calendar state and controls
  */
 export function useCalendarView(): UseCalendarViewReturn {

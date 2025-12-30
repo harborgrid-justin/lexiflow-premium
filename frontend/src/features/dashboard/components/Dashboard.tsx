@@ -11,24 +11,24 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, useTransition } from 'react';
 import { Download, ShieldCheck } from 'lucide-react';
+import React, { Suspense, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useSessionStorage } from '@/hooks';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
 import { Button } from '@/components/atoms';
 import { LazyLoader } from '@/components/molecules';
-import { TabbedPageLayout } from '@/components/layouts'; // Assuming I move it there
+import { TabbedPageLayout } from '@/components/ui/layouts/TabbedPageLayout/TabbedPageLayout';
 import { DashboardContent } from './DashboardContent';
 
 // Utils & Config
-import { cn } from '@/utils';
 import { DASHBOARD_TAB_CONFIG } from '@/config/tabs.config';
+import { cn } from '@/utils';
 
 // Types
 import type { User } from '@/types';
@@ -55,7 +55,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab, 
 
   const setActiveTab = (tab: string) => {
     startTransition(() => {
-        setActiveTab(tab);
+      setActiveTab(tab);
     });
   };
 
@@ -70,21 +70,21 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectCase, initialTab, 
       pageSubtitle="Real-time firm intelligence and personal productivity center."
       pageActions={
         <div className="flex items-center gap-2">
-            <span className="flex items-center text-[10px] font-bold px-2 py-1 rounded bg-green-100 text-green-700 border border-green-200">
-                <ShieldCheck className="h-3 w-3 mr-1"/> SYSTEM OPERATIONAL
-            </span>
-            <Button variant="outline" size="sm" icon={Download}>Export Report</Button>
+          <span className="flex items-center text-[10px] font-bold px-2 py-1 rounded bg-green-100 text-green-700 border border-green-200">
+            <ShieldCheck className="h-3 w-3 mr-1" /> SYSTEM OPERATIONAL
+          </span>
+          <Button variant="outline" size="sm" icon={Download}>Export Report</Button>
         </div>
       }
       tabConfig={DASHBOARD_TAB_CONFIG}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >
-        <Suspense fallback={<LazyLoader message="Loading Dashboard Module..." />}>
-          <div className={cn(isPending && 'opacity-60 transition-opacity')}>
-            {renderContent()}
-          </div>
-        </Suspense>
+      <Suspense fallback={<LazyLoader message="Loading Dashboard Module..." />}>
+        <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+          {renderContent()}
+        </div>
+      </Suspense>
     </TabbedPageLayout>
   );
 };

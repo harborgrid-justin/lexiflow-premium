@@ -25,7 +25,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
-import { TemplatePreview } from '@features/cases';
+import { TemplatePreview } from './TemplatePreview';
 import { ErrorState } from '@/components/molecules';
 import { AdaptiveLoader } from '@/components/molecules';
 
@@ -49,15 +49,15 @@ interface WorkflowLibraryProps {
 
 export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) => {
   const { theme } = useTheme();
-  
+
   const { data: templatesData = [], isLoading, isError, refetch } = useQuery<WorkflowTemplateData[]>(
     queryKeys.workflows.templates(),
     () => DataService.workflow.getTemplates()
   );
-  
+
   // Ensure templates is always an array (defensive check)
   const templates = Array.isArray(templatesData) ? templatesData : [];
-  
+
   // Use useFilterAndSearch hook for unified filtering
   const { filteredItems: filteredTemplates, searchQuery, setSearchQuery, category, setCategory, categories } = useFilterAndSearch({
     items: templates as unknown as Record<string, unknown>[],
@@ -95,7 +95,7 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
               onClick={() => setCategory(cat)}
               className={cn(
                 "px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors",
-                category === cat 
+                category === cat
                   ? cn(theme.primary.DEFAULT, theme.text.inverse)
                   : cn(theme.surface.highlight, theme.text.secondary, `hover:${theme.border.default}`)
               )}
@@ -106,7 +106,7 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
         </div>
         <div className="relative w-full md:w-64">
           <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)}/>
-          <input 
+          <input
             className={cn(
               "w-full pl-9 pr-4 py-2 border rounded-lg text-sm outline-none transition-all",
               theme.surface.highlight,
@@ -125,8 +125,8 @@ export const WorkflowLibrary: React.FC<WorkflowLibraryProps> = ({ onCreate }) =>
         {(filteredTemplates as unknown as WorkflowTemplateData[]).map((tpl) => (
           <TemplatePreview key={tpl.id} data={tpl} onClick={() => onCreate(tpl)} />
         ))}
-        
-        <button 
+
+        <button
           onClick={() => onCreate()}
           className={cn(
             "border-2 border-dashed rounded-xl flex flex-col items-center justify-center p-8 transition-all h-full min-h-[280px]",

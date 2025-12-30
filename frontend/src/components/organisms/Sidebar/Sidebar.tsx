@@ -1,11 +1,11 @@
 // components/layout/Sidebar.tsx
-import React from 'react';
-import { User, AppView } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';
+import { AppView, User } from '@/types';
 import { cn } from '@/utils/cn';
-import { SidebarHeader } from '@/components';
+import React from 'react';
+import { SidebarFooter } from './SidebarFooter';
+import { SidebarHeader } from './SidebarHeader';
 import { SidebarNav } from './SidebarNav';
-import { SidebarFooter } from '@/components';
 
 interface SidebarProps {
   activeView: AppView;
@@ -26,7 +26,7 @@ export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, is
     <>
       {/* Mobile Backdrop Overlay */}
       {isOpen && (
-        <div 
+        <div
           className={cn("fixed inset-0 backdrop-blur-sm z-40 md:hidden transition-opacity", theme.backdrop)}
           onClick={onClose}
         />
@@ -39,10 +39,10 @@ export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, is
         theme.border.default,
         isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0 md:static md:inset-auto'
       )}>
-        
+
         <SidebarHeader onClose={onClose} />
 
-        <SidebarNav 
+        <SidebarNav
           activeView={activeView}
           setActiveView={(view: AppView) => {
             setActiveView(view);
@@ -52,7 +52,7 @@ export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, is
         />
 
         {currentUser && (
-          <SidebarFooter 
+          <SidebarFooter
             currentUser={currentUser}
             onSwitchUser={onSwitchUser}
             onNavigate={setActiveView}

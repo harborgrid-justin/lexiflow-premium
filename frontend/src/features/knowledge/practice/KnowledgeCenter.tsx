@@ -10,27 +10,27 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { BarChart3, BookOpen, FileText, GraduationCap, Users } from 'lucide-react';
 import React, { useState } from 'react';
-import { BookOpen, FileText, GraduationCap, Users, BarChart3 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Tabs } from '@/components/molecules';
-import { WikiView } from '../base/WikiView';
-import { PrecedentsView } from '@features/knowledge';
-import { QAView } from '../base/QAView';
-import { KnowledgeAnalytics } from '@features/knowledge';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { Badge } from '@/components/atoms';
+import { Tabs } from '@/components/molecules';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms';
+import { KnowledgeAnalytics } from '../base/KnowledgeAnalytics';
+import { PrecedentsView } from '../base/PrecedentsView';
+import { QAView } from '../base/QAView';
+import { WikiView } from '../base/WikiView';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -60,7 +60,7 @@ export const KnowledgeCenter: React.FC = () => {
     return (
         <div className="flex flex-col h-full space-y-4">
             <div className={cn("p-4 border-b shrink-0", theme.border.default)}>
-                <Tabs 
+                <Tabs
                     tabs={[
                         { id: 'wiki', label: 'Firm Wiki & SOPs', icon: BookOpen },
                         { id: 'precedents', label: 'Precedents', icon: FileText },
@@ -75,11 +75,11 @@ export const KnowledgeCenter: React.FC = () => {
 
             <div className="flex-1 overflow-hidden">
                 {activeTab === 'wiki' && <div className="h-full overflow-hidden"><WikiView /></div>}
-                
+
                 {activeTab === 'precedents' && <div className="h-full overflow-y-auto p-6"><PrecedentsView /></div>}
-                
+
                 {activeTab === 'qa' && <div className="h-full overflow-y-auto p-6"><QAView /></div>}
-                
+
                 {activeTab === 'analytics' && <div className="h-full overflow-y-auto p-6"><KnowledgeAnalytics /></div>}
 
                 {activeTab === 'cle' && (
@@ -104,7 +104,7 @@ export const KnowledgeCenter: React.FC = () => {
                                         <TableCell>
                                             <div className="flex items-center gap-2">
                                                 <div className="w-24 h-2 rounded-full bg-slate-200 overflow-hidden">
-                                                    <div className={cn("h-full", row.status === 'At Risk' ? 'bg-red-500' : 'bg-green-500')} style={{width: `${(row.completed/row.req)*100}%`}}></div>
+                                                    <div className={cn("h-full", row.status === 'At Risk' ? 'bg-red-500' : 'bg-green-500')} style={{ width: `${(row.completed / row.req) * 100}%` }}></div>
                                                 </div>
                                                 {row.completed}
                                             </div>
@@ -123,5 +123,3 @@ export const KnowledgeCenter: React.FC = () => {
         </div>
     );
 };
-
-

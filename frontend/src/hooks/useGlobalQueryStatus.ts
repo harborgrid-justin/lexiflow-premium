@@ -1,14 +1,14 @@
 /**
  * @module hooks/useGlobalQueryStatus
  * @category Hooks - Data Management
- * 
+ *
  * Tracks global query fetching status for loading indicators.
  * Subscribes to QueryClient updates.
- * 
+ *
  * @example
  * ```typescript
  * const { isFetching } = useGlobalQueryStatus();
- * 
+ *
  * {isFetching && <GlobalLoadingSpinner />}
  * ```
  */
@@ -16,13 +16,13 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
 
 // ========================================
 // INTERNAL DEPENDENCIES
 // ========================================
-// Services & Data
-import { queryClient } from '@/services';
+// Services & Data - Direct import to avoid circular dependency
+import { queryClient } from "@/services/infrastructure/queryClient";
 
 // ========================================
 // TYPES
@@ -42,20 +42,19 @@ export interface UseGlobalQueryStatusReturn {
 
 /**
  * Tracks global query fetching status.
- * 
+ *
  * @returns Object with isFetching flag
  */
 export function useGlobalQueryStatus(): UseGlobalQueryStatusReturn {
-    const [isFetching, setIsFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
-    useEffect(() => {
-        const unsubscribe = queryClient.subscribeToGlobalUpdates((status) => {
-            setIsFetching(status.isFetching > 0);
-        });
+  useEffect(() => {
+    const unsubscribe = queryClient.subscribeToGlobalUpdates((status) => {
+      setIsFetching(status.isFetching > 0);
+    });
 
-        return () => unsubscribe();
-    }, []);
+    return () => unsubscribe();
+  }, []);
 
-    return { isFetching };
+  return { isFetching };
 }
-

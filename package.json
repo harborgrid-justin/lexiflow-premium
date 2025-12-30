@@ -26,5 +26,11 @@
   "devDependencies": {
     "concurrently": "^8.2.2",
     "xmldom": "^0.6.0"
+  },
+  "overrides": {
+    "sinon-chai": {
+      "chai": "^5.3.3"
+    },
+    "debug": "^4.4.3"
   }
 }

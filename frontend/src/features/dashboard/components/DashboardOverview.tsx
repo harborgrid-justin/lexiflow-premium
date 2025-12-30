@@ -10,29 +10,29 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Components
-import { DashboardMetrics } from './DashboardMetrics';
-import { DashboardAnalytics } from '@features/dashboard';
-import { DashboardSidebar } from './DashboardSidebar';
 import { LazyLoader } from '@/components/molecules';
+import { DashboardAnalytics } from './DashboardAnalytics';
+import { DashboardMetrics } from './DashboardMetrics';
+import { DashboardSidebar } from './DashboardSidebar';
 
 // Utils & Constants
 import { Scheduler } from '@/utils/scheduler';
 
 // Types
-import type { WorkflowTask, TaskId, CaseId } from '@/types';
-import type { ChartDataPoint as DashboardChartData } from '@/types/dashboard';
+import type { CaseId, TaskId, WorkflowTask } from '@/types';
 import { TaskStatusBackend } from '@/types';
+import type { ChartDataPoint as DashboardChartData } from '@/types/dashboard';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -85,7 +85,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
       return { id: index, message: '', detail: '', time: '', caseId: '' };
     }
     const alertId = 'id' in alert && typeof alert.id === 'number' ? alert.id :
-                    'id' in alert ? (parseInt(String(alert.id), 10) || index) : index;
+      'id' in alert ? (parseInt(String(alert.id), 10) || index) : index;
     const alertMessage = 'message' in alert ? String(alert.message) : '';
     const alertDetail = 'detail' in alert ? String(alert.detail) : '';
     const alertTime = 'time' in alert ? String(alert.time) : '';
@@ -104,23 +104,23 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
   const [activeProjects, setActiveProjects] = useState<ActiveProject[]>([]);
 
   useEffect(() => {
-      if (tasks.length > 0) {
-          // Process heavy filtering/mapping in idle time to unblock initial paint
-          Scheduler.defer(() => {
-              const processed = tasks
-                  .filter((t: WorkflowTask) => t.priority === 'High' && t.status !== TaskStatusBackend.COMPLETED)
-                  .slice(0, 5)
-                  .map((t: WorkflowTask) => ({
-                      id: t.id,
-                      title: t.title,
-                      case: t.caseId || 'General',
-                      progress: t.status === 'In Progress' ? 50 : 10,
-                      status: t.status,
-                      due: t.dueDate || 'No due date'
-                  }));
-              setActiveProjects(processed);
-          });
-      }
+    if (tasks.length > 0) {
+      // Process heavy filtering/mapping in idle time to unblock initial paint
+      Scheduler.defer(() => {
+        const processed = tasks
+          .filter((t: WorkflowTask) => t.priority === 'High' && t.status !== TaskStatusBackend.COMPLETED)
+          .slice(0, 5)
+          .map((t: WorkflowTask) => ({
+            id: t.id,
+            title: t.title,
+            case: t.caseId || 'General',
+            progress: t.status === 'In Progress' ? 50 : 10,
+            status: t.status,
+            due: t.dueDate || 'No due date'
+          }));
+        setActiveProjects(processed);
+      });
+    }
   }, [tasks]);
 
   if (statsLoading) return <LazyLoader message="Aggregating Firm Intelligence..." />;
@@ -135,5 +135,3 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
     </div>
   );
 };
-
-

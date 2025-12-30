@@ -16,11 +16,11 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '@/components/atoms';
+import { Badge } from '../Badge';
 
 // Utils & Constants
-import { StatusRegistry } from '@/utils/statusRegistry';
 import { cn } from '@/utils/cn';
+import { StatusRegistry } from '@/utils/statusRegistry';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -40,7 +40,7 @@ interface StatusBadgeProps {
  */
 export const StatusBadge = React.memo<StatusBadgeProps>(({ status, className, variantOverride }) => {
   const variant = variantOverride || StatusRegistry.getVariant(status);
-  
+
   return (
     <Badge variant={variant} className={cn("whitespace-nowrap", className)}>
       {status}

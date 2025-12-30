@@ -1,7 +1,7 @@
 /**
  * Backend Health Hook
  * Enterprise-grade React hook for backend service health monitoring with real-time updates
- * 
+ *
  * @module hooks/useBackendHealth
  * @category Hooks - Infrastructure & Monitoring
  * @description Provides reactive access to backend service health and availability status including:
@@ -13,13 +13,13 @@
  * - Automatic health check scheduling
  * - Subscription-based updates
  * - Manual refresh capability
- * 
+ *
  * @security
  * - No sensitive data exposure in health status
  * - Safe error message handling
  * - Validated status object structure
  * - Secure subscription pattern
- * 
+ *
  * @architecture
  * - Subscription-based reactive updates
  * - Singleton backendDiscovery service
@@ -27,37 +27,37 @@
  * - Type-safe operations throughout
  * - Automatic cleanup on unmount
  * - Minimal re-render optimization
- * 
+ *
  * @performance
  * - Efficient subscription mechanism
  * - Lazy initialization of service
  * - Memoized status object
  * - Automatic cleanup to prevent memory leaks
  * - Minimal API calls via shared service
- * 
+ *
  * @renamed
  * Previously known as useBackendDiscovery
  * Renamed to useBackendHealth to avoid confusion with legal discovery domain
- * 
+ *
  * @example
  * ```typescript
  * // Basic usage
  * const { isAvailable, isHealthy, latency } = useBackendHealth();
- * 
+ *
  * // Check availability for conditional rendering
  * if (!isAvailable) {
  *   return <OfflineMode />;
  * }
- * 
+ *
  * // Display latency information
  * if (isHealthy && latency) {
  *   console.log(`Backend latency: ${latency}ms`);
  * }
- * 
+ *
  * // Manual refresh of health status
  * const { refresh } = useBackendHealth();
  * await refresh();
- * 
+ *
  * // Access full status object
  * const { status } = useBackendHealth();
  * console.log('Backend version:', status.version);
@@ -68,16 +68,16 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services
-import { 
-  backendDiscovery, 
-  type BackendStatus 
-} from '@/services';
+import {
+    backendDiscovery,
+    type BackendStatus
+} from '@/services/integration/backendDiscovery';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -114,10 +114,10 @@ export interface UseBackendHealthReturn {
 /**
  * Backend health monitoring hook.
  * Provides reactive access to backend service health and availability.
- * 
+ *
  * @returns Backend health monitoring interface
  * @throws Never throws - all errors are handled internally with fallbacks
- * 
+ *
  * @example
  * ```typescript
  * const {
@@ -129,14 +129,14 @@ export interface UseBackendHealthReturn {
  *   error,
  *   refresh
  * } = useBackendHealth();
- * 
+ *
  * // Check if backend is available
  * if (isAvailable) {
  *   // Proceed with backend operations
  * } else {
  *   // Fallback to offline mode
  * }
- * 
+ *
  * // Manual health check
  * await refresh();
  * ```
@@ -145,7 +145,7 @@ export function useBackendHealth(): UseBackendHealthReturn {
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================
-  
+
   /**
    * Backend status state
    * Initialized with current status from singleton service
@@ -241,14 +241,14 @@ export function useBackendHealth(): UseBackendHealthReturn {
   /**
    * Manually refresh backend health status
    * Triggers immediate health check
-   * 
+   *
    * @returns Promise<BackendStatus> Updated status after refresh
    * @throws Logs errors but doesn't throw to prevent UI disruption
-   * 
+   *
    * @example
    * ```typescript
    * const { refresh } = useBackendHealth();
-   * 
+   *
    * // Manual refresh
    * try {
    *   const updatedStatus = await refresh();
@@ -262,10 +262,10 @@ export function useBackendHealth(): UseBackendHealthReturn {
     try {
       console.log('[useBackendHealth] Manual refresh triggered');
       setIsLoading(true);
-      
+
       // Trigger health check via service
       const updatedStatus = await backendDiscovery.refresh();
-      
+
       // Validate response
       if (!updatedStatus || typeof updatedStatus !== 'object') {
         throw new Error('Invalid status response from refresh');
@@ -280,7 +280,7 @@ export function useBackendHealth(): UseBackendHealthReturn {
       return updatedStatus;
     } catch (error) {
       console.error('[useBackendHealth.refresh] Error:', error);
-      
+
       // Return current status on error
       return status;
     } finally {
@@ -311,7 +311,7 @@ export function useBackendHealth(): UseBackendHealthReturn {
       }
 
       // lastChecked can be Date object or ISO string
-      if (!status.lastChecked || 
+      if (!status.lastChecked ||
           (!(status.lastChecked instanceof Date) && typeof status.lastChecked !== 'string')) {
         console.error('[useBackendHealth] Invalid lastChecked field:', status.lastChecked);
         return false;
@@ -355,7 +355,7 @@ export function useBackendHealth(): UseBackendHealthReturn {
   /**
    * Return comprehensive backend health monitoring interface
    * All handlers are memoized for optimal performance
-   * 
+   *
    * @returns {Object} Backend health monitoring interface
    * @property {BackendStatus} status - Complete backend status object
    * @property {boolean} isAvailable - Backend availability flag

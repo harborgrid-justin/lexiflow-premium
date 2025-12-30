@@ -2,7 +2,6 @@
 
 export { default as BillingDashboard } from './BillingDashboard';
 export { BillingDashboardContent } from './BillingDashboardContent';
-export { BillingInvoices } from './BillingInvoices';
+// BillingInvoices and BillingWIP are dynamically imported - don't export statically
 export { BillingLedger } from './BillingLedger';
 export { BillingOverview } from './BillingOverview';
-export { BillingWIP } from './BillingWIP';

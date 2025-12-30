@@ -10,10 +10,10 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { Suspense, useTransition } from 'react';
 import {
   Clock, LayoutTemplate
 } from 'lucide-react';
+import { Suspense, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -25,11 +25,11 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { Button } from '@/components/atoms';
 import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules';
-import { DocumentManagerContent } from '@features/operations';
+import { DocumentManagerContent } from './DocumentManagerContent';
 
 // Utils & Config
-import { cn } from '@/utils/cn';
 import { DOCUMENT_MANAGER_TAB_CONFIG, DocView } from '@/config/tabs.config';
+import { cn } from '@/utils/cn';
 
 // Types
 import { UserRole } from '@/types';
@@ -54,13 +54,13 @@ export function DocumentManager({ currentUserRole = 'Associate', initialTab }: D
 
   const setActiveTab = (tab: string) => {
     startTransition(() => {
-        _setActiveTab(tab);
+      _setActiveTab(tab);
     });
   };
 
   const renderContent = () => {
-      // Delegation to DocumentManagerContent
-      return <DocumentManagerContent activeTab={activeTab as DocView} currentUserRole={currentUserRole} />;
+    // Delegation to DocumentManagerContent
+    return <DocumentManagerContent activeTab={activeTab as DocView} currentUserRole={currentUserRole} />;
   };
 
   return (
@@ -69,8 +69,8 @@ export function DocumentManager({ currentUserRole = 'Associate', initialTab }: D
       pageSubtitle="Centralized DMS, Version Control, and Automated Drafting."
       pageActions={
         <div className="flex gap-2">
-            <Button variant="secondary" icon={Clock} onClick={() => setActiveTab('recent')}>History</Button>
-            <Button variant="outline" icon={LayoutTemplate} onClick={() => setActiveTab('templates')}>New Draft</Button>
+          <Button variant="secondary" icon={Clock} onClick={() => setActiveTab('recent')}>History</Button>
+          <Button variant="outline" icon={LayoutTemplate} onClick={() => setActiveTab('templates')}>New Draft</Button>
         </div>
       }
       tabConfig={DOCUMENT_MANAGER_TAB_CONFIG}
@@ -79,7 +79,7 @@ export function DocumentManager({ currentUserRole = 'Associate', initialTab }: D
     >
       <Suspense fallback={<LazyLoader message="Loading Document Module..." />}>
         <div className={cn(isPending && 'opacity-60 transition-opacity')}>
-            {renderContent()}
+          {renderContent()}
         </div>
       </Suspense>
     </TabbedPageLayout>

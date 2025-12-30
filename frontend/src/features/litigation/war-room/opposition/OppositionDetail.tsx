@@ -11,28 +11,28 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { Activity, FileText, Gavel, Loader2, Scale, X } from 'lucide-react';
 import React from 'react';
-import {X, FileText, Gavel, Scale, Activity, Loader2} from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import {DataService} from '@/services';
-import {useQuery} from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services';
 
 // Hooks & Context
-import {useTheme} from '@/providers';
+import { useTheme } from '@/providers';
 
 // Components
-import {Button} from '@/components';
-import {EmptyState} from '@/components';
+import { Button } from '@/components/atoms/Button';
+import { EmptyState } from '@/components/molecules/EmptyState';
 
 // Utils & Constants
-import {cn} from '@/utils';
+import { cn } from '@/utils';
 
 // Types
-import type {OppositionEntity} from './OppositionList';
+import type { OppositionEntity } from './OppositionList';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -56,8 +56,8 @@ interface CaseHistoryItem {
 // ============================================================================
 // HELPER COMPONENTS
 // ============================================================================
-const SectionHeader: React.FC<{ title: string; className?: string }> = ({title, className}) => {
-    const {theme} = useTheme();
+const SectionHeader: React.FC<{ title: string; className?: string }> = ({ title, className }) => {
+    const { theme } = useTheme();
     return (
         <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.default, className)}>
             {title}
@@ -65,8 +65,8 @@ const SectionHeader: React.FC<{ title: string; className?: string }> = ({title, 
     );
 };
 
-const CaseHistoryCard: React.FC<{ caseItem: CaseHistoryItem }> = ({caseItem}) => {
-    const {theme} = useTheme();
+const CaseHistoryCard: React.FC<{ caseItem: CaseHistoryItem }> = ({ caseItem }) => {
+    const { theme } = useTheme();
     return (
         <div
             className={cn("p-3 rounded border transition-colors hover:border-blue-300 cursor-pointer group", theme.surface.default, theme.border.default)}>
@@ -84,10 +84,10 @@ const CaseHistoryCard: React.FC<{ caseItem: CaseHistoryItem }> = ({caseItem}) =>
 // CONSTANTS
 // ============================================================================
 const INTEL_BUTTONS = [
-    {icon: FileText, label: "Publications"},
-    {icon: Gavel, label: "Rulings"},
-    {icon: Scale, label: "Ethics"},
-    {icon: Activity, label: "Social"}
+    { icon: FileText, label: "Publications" },
+    { icon: Gavel, label: "Rulings" },
+    { icon: Scale, label: "Ethics" },
+    { icon: Activity, label: "Social" }
 ] as const;
 
 // ============================================================================
@@ -115,11 +115,11 @@ const calculateSettlementProbability = (entity: OppositionEntity): number => {
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const OppositionDetail: React.FC<OppositionDetailProps> = ({entity, onClose}) => {
-    const {theme} = useTheme();
+export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onClose }) => {
+    const { theme } = useTheme();
 
     // Fetch case history for this entity from the backend
-    const {data: caseHistory = [], isLoading: historyLoading} = useQuery<CaseHistoryItem[]>(
+    const { data: caseHistory = [], isLoading: historyLoading } = useQuery<CaseHistoryItem[]>(
         ['opposition', 'caseHistory', entity.id],
         async () => {
             // Try to get case history from the backend
@@ -171,7 +171,7 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({entity, onClo
                     className={cn("p-1 rounded hover:bg-slate-200 transition-colors", theme.text.tertiary)}
                     aria-label="Close dossier"
                 >
-                    <X className="h-4 w-4"/>
+                    <X className="h-4 w-4" />
                 </button>
             </div>
 
@@ -190,39 +190,39 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({entity, onClo
                         {entity.role} at {entity.firm}
                     </p>
                     <div className="flex justify-center gap-2 mt-3">
-            <span className={cn(
-                "text-xs px-2 py-1 rounded font-medium border",
-                theme.surface.highlight,
-                theme.text.secondary,
-                theme.border.default
-            )}>
-              {entity.status}
-            </span>
+                        <span className={cn(
+                            "text-xs px-2 py-1 rounded font-medium border",
+                            theme.surface.highlight,
+                            theme.text.secondary,
+                            theme.border.default
+                        )}>
+                            {entity.status}
+                        </span>
                     </div>
                 </div>
 
                 {/* Strategic Analysis */}
                 <section className="space-y-4">
-                    <SectionHeader title="Strategic Analysis"/>
+                    <SectionHeader title="Strategic Analysis" />
                     <div
                         className={cn("p-4 rounded-lg border space-y-3", theme.surface.highlight, theme.border.default)}>
                         <div className="flex justify-between items-center">
-              <span className={cn("text-xs font-medium", theme.text.secondary)}>
-                Aggression Index
-              </span>
+                            <span className={cn("text-xs font-medium", theme.text.secondary)}>
+                                Aggression Index
+                            </span>
                             {renderAggressionIndex()}
                         </div>
                         <div className="flex justify-between items-center">
-              <span className={cn("text-xs font-medium", theme.text.secondary)}>
-                Settlement Probability
-              </span>
+                            <span className={cn("text-xs font-medium", theme.text.secondary)}>
+                                Settlement Probability
+                            </span>
                             <span
                                 className={cn("text-sm font-bold", theme.text.primary)}>{settlementProbability}%</span>
                         </div>
                         <div className="flex justify-between items-center">
-              <span className={cn("text-xs font-medium", theme.text.secondary)}>
-                Win Rate vs Firm
-              </span>
+                            <span className={cn("text-xs font-medium", theme.text.secondary)}>
+                                Win Rate vs Firm
+                            </span>
                             <span className={cn("text-sm font-bold", theme.text.primary)}>{entity.winRate}%</span>
                         </div>
                     </div>
@@ -235,10 +235,10 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({entity, onClo
 
                 {/* Case History */}
                 <section className="space-y-4">
-                    <SectionHeader title="Case History"/>
+                    <SectionHeader title="Case History" />
                     {historyLoading ? (
                         <div className="flex justify-center items-center py-8">
-                            <Loader2 className="h-6 w-6 animate-spin text-blue-600"/>
+                            <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
                         </div>
                     ) : caseHistory.length === 0 ? (
                         <EmptyState
@@ -250,7 +250,7 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({entity, onClo
                     ) : (
                         <div className="space-y-3">
                             {caseHistory.map((caseItem) => (
-                                <CaseHistoryCard key={caseItem.id} caseItem={caseItem}/>
+                                <CaseHistoryCard key={caseItem.id} caseItem={caseItem} />
                             ))}
                         </div>
                     )}
@@ -258,16 +258,16 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({entity, onClo
 
                 {/* Intel Actions */}
                 <section className="space-y-4">
-                    <SectionHeader title="Intel"/>
+                    <SectionHeader title="Intel" />
                     <div className="grid grid-cols-2 gap-3">
-                        {INTEL_BUTTONS.map(({icon: Icon, label}) => (
+                        {INTEL_BUTTONS.map(({ icon: Icon, label }) => (
                             <Button
                                 key={label}
                                 variant="outline"
                                 size="sm"
                                 className="text-xs"
                             >
-                                <Icon className="h-3 w-3 mr-1"/>
+                                <Icon className="h-3 w-3 mr-1" />
                                 {label}
                             </Button>
                         ))}

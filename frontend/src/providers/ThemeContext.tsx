@@ -1,16 +1,16 @@
 
-import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
-import { tokens, ThemeMode } from '@theme/tokens';
-import { DEFAULT_THEME, THEME_STORAGE_KEY } from '@/config';
+import { DEFAULT_THEME, THEME_STORAGE_KEY } from '@/config/app.config';
+import { ThemeMode, tokens } from '@theme/tokens';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type {
-  ThemeStateValue,
   ThemeActionsValue,
   ThemeProviderProps,
+  ThemeStateValue,
 } from './ThemeContext.types';
 
 /**
  * ThemeContext - Application-level theming boundary
- * 
+ *
  * Best Practices Applied:
  * - BP1: Cross-cutting concern (theming) justifies context usage
  * - BP2: Narrow interface with minimal surface area
@@ -98,15 +98,15 @@ export const ThemeProvider = ({ children, initialMode }: ThemeProviderProps) => 
     // BP13: Document lifecycle - DOM manipulation for theme application
     // Only apply class changes if mounted to avoid side-effects during render phase (though useEffect is post-render)
     if (!mounted) return;
-    
+
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
     root.classList.add(mode);
-    
+
     // Apply meta theme color for mobile browsers
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');
     if (metaThemeColor) {
-        metaThemeColor.setAttribute('content', mode === 'dark' ? '#0f172a' : '#f8fafc');
+      metaThemeColor.setAttribute('content', mode === 'dark' ? '#0f172a' : '#f8fafc');
     }
   }, [mode, mounted]);
 

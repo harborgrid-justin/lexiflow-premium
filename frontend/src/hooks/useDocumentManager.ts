@@ -1,7 +1,7 @@
 /**
  * Document Manager Hook
  * Enterprise-grade React hook for document management with backend API integration
- * 
+ *
  * @module hooks/useDocumentManager
  * @category Hooks - Document Management
  * @description Manages comprehensive document management operations including:
@@ -14,14 +14,14 @@
  * - Multi-selection with preview pane
  * - Statistics and analytics
  * - Optimistic UI updates
- * 
+ *
  * @security
  * - Input validation on all parameters
  * - XSS prevention through type enforcement
  * - File upload validation and sanitization
  * - Proper error handling and logging
  * - Tag injection prevention
- * 
+ *
  * @architecture
  * - Backend API primary (PostgreSQL via DataService)
  * - React Query integration for cache management
@@ -29,31 +29,31 @@
  * - Optimistic UI updates for responsiveness
  * - Type-safe operations throughout
  * - Event-driven integration
- * 
+ *
  * @performance
  * - Web Worker search for large document sets
  * - Memoized filtering and statistics
  * - Efficient re-render control
  * - LRU cache for document content
  * - Query cache invalidation strategy
- * 
+ *
  * @example
  * ```typescript
  * // Basic usage
  * const docManager = useDocumentManager();
- * 
+ *
  * // With drag-drop enabled
  * const docManager = useDocumentManager({ enableDragDrop: true });
- * 
+ *
  * // Search documents
  * docManager.setSearchTerm('contract');
- * 
+ *
  * // Filter by module
  * docManager.setActiveModuleFilter('Evidence');
- * 
+ *
  * // Select document for preview
  * docManager.toggleSelection('doc-123');
- * 
+ *
  * // Add tag
  * docManager.addTag('doc-123', 'priority');
  * ```
@@ -62,23 +62,29 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services';
-import { DocumentService } from '@/services';
-import { useQuery, useMutation, queryClient } from './useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
+import { DataService } from "@/services/data/dataService";
+import { DocumentService } from "@/services/features/documents/documentService";
+import { queryKeys } from "@/utils/queryKeys";
+import { queryClient, useMutation, useQuery } from "./useQueryHooks";
 
 // Hooks & Context
-import { useWorkerSearch } from './useWorkerSearch';
-import { useNotify } from './useNotify';
+import { useNotify } from "./useNotify";
+import { useWorkerSearch } from "./useWorkerSearch";
 
 // Types
-import { LegalDocument, DocumentVersion, CaseId } from '@/types';
+import { CaseId, DocumentVersion, LegalDocument } from "@/types";
 
 // ============================================================================
 // QUERY KEYS FOR REACT QUERY INTEGRATION
@@ -86,16 +92,18 @@ import { LegalDocument, DocumentVersion, CaseId } from '@/types';
 /**
  * Query keys for document manager operations
  * Use these constants for cache invalidation and refetching
- * 
+ *
  * @example
  * queryClient.invalidateQueries({ queryKey: DOCUMENT_MANAGER_QUERY_KEYS.all() });
  * queryClient.invalidateQueries({ queryKey: DOCUMENT_MANAGER_QUERY_KEYS.byFolder(folderId) });
  */
 export const DOCUMENT_MANAGER_QUERY_KEYS = {
-    all: () => ['documents', 'manager'] as const,
-    byFolder: (folderId: string) => ['documents', 'manager', 'folder', folderId] as const,
-    byModule: (module: string) => ['documents', 'manager', 'module', module] as const,
-    search: (query: string) => ['documents', 'manager', 'search', query] as const,
+  all: () => ["documents", "manager"] as const,
+  byFolder: (folderId: string) =>
+    ["documents", "manager", "folder", folderId] as const,
+  byModule: (module: string) =>
+    ["documents", "manager", "module", module] as const,
+  search: (query: string) => ["documents", "manager", "search", query] as const,
 } as const;
 
 // ============================================================================
@@ -104,7 +112,7 @@ export const DOCUMENT_MANAGER_QUERY_KEYS = {
 
 /**
  * Configuration options for useDocumentManager hook
- * 
+ *
  * @property {boolean} enableDragDrop - Enable drag-and-drop file upload functionality
  */
 export interface UseDocumentManagerOptions {
@@ -182,7 +190,9 @@ export interface UseDocumentManagerReturn {
   /** All documents (raw) */
   documents: LegalDocument[];
   /** Set documents (legacy compatibility) */
-  setDocuments: (docs: LegalDocument[] | ((prev: LegalDocument[]) => LegalDocument[])) => void;
+  setDocuments: (
+    docs: LegalDocument[] | ((prev: LegalDocument[]) => LegalDocument[])
+  ) => void;
   /** Loading state */
   isLoading: boolean;
   /** Restore document version handler */
@@ -216,51 +226,56 @@ export interface UseDocumentManagerReturn {
 
 /**
  * Document manager hook.
- * 
+ *
  * @param options - Configuration options
  * @returns Document manager interface
  */
-export function useDocumentManager(options: UseDocumentManagerOptions = {}): UseDocumentManagerReturn {
+export function useDocumentManager(
+  options: UseDocumentManagerOptions = {}
+): UseDocumentManagerReturn {
   const { enableDragDrop = false } = options;
 
   // ============================================================================
   // DEPENDENCIES
   // ============================================================================
-  
+
   const notify = useNotify();
 
   // Log initialization
   useEffect(() => {
-    console.log(`[useDocumentManager] Initialized with ${
-      enableDragDrop ? 'drag-drop enabled' : 'drag-drop disabled'
-    }`);
+    console.log(
+      `[useDocumentManager] Initialized with ${
+        enableDragDrop ? "drag-drop enabled" : "drag-drop disabled"
+      }`
+    );
   }, [enableDragDrop]);
 
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================
-  
+
   /** Search term (raw input) */
-  const [searchTerm, setSearchTerm] = useState('');
-  
+  const [searchTerm, setSearchTerm] = useState("");
+
   /** Active module filter */
-  const [activeModuleFilter, setActiveModuleFilter] = useState<string>('All');
-  
+  const [activeModuleFilter, setActiveModuleFilter] = useState<string>("All");
+
   /** Selected document IDs for bulk operations */
   const [selectedDocs, setSelectedDocs] = useState<string[]>([]);
-  
+
   /** Selected document for version history view */
-  const [selectedDocForHistory, setSelectedDocForHistory] = useState<LegalDocument | null>(null);
-  
+  const [selectedDocForHistory, setSelectedDocForHistory] =
+    useState<LegalDocument | null>(null);
+
   /** AI processing state */
   const [isProcessingAI, setIsProcessingAI] = useState(false);
-  
+
   /** Current folder context */
-  const [currentFolder, setCurrentFolder] = useState('root');
-  
+  const [currentFolder, setCurrentFolder] = useState("root");
+
   /** Details panel visibility */
   const [isDetailsOpen, setIsDetailsOpen] = useState(true);
-  
+
   /** Document preview state */
   const [previewDoc, setPreviewDoc] = useState<LegalDocument | null>(null);
 
@@ -277,44 +292,56 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
    * Validate document ID parameter
    * @private
    */
-  const validateDocId = useCallback((docId: string, methodName: string): boolean => {
-    if (!docId || false || docId.trim() === '') {
-      console.error(`[useDocumentManager.${methodName}] Invalid docId parameter:`, docId);
-      return false;
-    }
-    return true;
-  }, []);
+  const validateDocId = useCallback(
+    (docId: string, methodName: string): boolean => {
+      if (!docId || false || docId.trim() === "") {
+        console.error(
+          `[useDocumentManager.${methodName}] Invalid docId parameter:`,
+          docId
+        );
+        return false;
+      }
+      return true;
+    },
+    []
+  );
 
   /**
    * Validate and sanitize tag
    * @private
    */
   const validateTag = useCallback((tag: string): string => {
-    if (!tag || false) return '';
+    if (!tag || false) return "";
     // Remove HTML tags, trim whitespace, limit length
-    return tag.replace(/<[^>]*>/g, '').trim().slice(0, 50);
+    return tag
+      .replace(/<[^>]*>/g, "")
+      .trim()
+      .slice(0, 50);
   }, []);
 
   /**
    * Validate file for upload
    * @private
    */
-  const validateFile = useCallback((file: File): boolean => {
-    // Basic file validation
-    if (!file || !file.name) {
-      console.error('[useDocumentManager] Invalid file:', file);
-      return false;
-    }
+  const validateFile = useCallback(
+    (file: File): boolean => {
+      // Basic file validation
+      if (!file || !file.name) {
+        console.error("[useDocumentManager] Invalid file:", file);
+        return false;
+      }
 
-    // Size limit: 50MB
-    const maxSize = 50 * 1024 * 1024;
-    if (file.size > maxSize) {
-      notify.error(`File ${file.name} exceeds 50MB limit`);
-      return false;
-    }
+      // Size limit: 50MB
+      const maxSize = 50 * 1024 * 1024;
+      if (file.size > maxSize) {
+        notify.error(`File ${file.name} exceeds 50MB limit`);
+        return false;
+      }
 
-    return true;
-  }, [notify]);
+      return true;
+    },
+    [notify]
+  );
 
   // ============================================================================
   // DATA FETCHING
@@ -330,7 +357,7 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
       try {
         return await DataService.documents.getAll();
       } catch (error) {
-        console.error('[useDocumentManager] Error fetching documents:', error);
+        console.error("[useDocumentManager] Error fetching documents:", error);
         throw error;
       }
     }
@@ -352,18 +379,20 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
    */
   const contextFilteredDocs = useMemo(() => {
     try {
-      return documentsArray.filter(d => {
+      return documentsArray.filter((d) => {
         // Folder filter: Root shows all, otherwise match folderId
-        const inFolder = currentFolder === 'root' ? true : d.folderId === currentFolder;
-        
+        const inFolder =
+          currentFolder === "root" ? true : d.folderId === currentFolder;
+
         // Module filter: 'All' shows all, otherwise match sourceModule
-        const matchesModule = activeModuleFilter === 'All' || d.sourceModule === activeModuleFilter;
-        
+        const matchesModule =
+          activeModuleFilter === "All" || d.sourceModule === activeModuleFilter;
+
         // If searching, ignore folder constraint (search globally)
         return matchesModule && (searchTerm ? true : inFolder);
       });
     } catch (error) {
-      console.error('[useDocumentManager] Context filtering error:', error);
+      console.error("[useDocumentManager] Context filtering error:", error);
       return documentsArray;
     }
   }, [documentsArray, currentFolder, activeModuleFilter, searchTerm]);
@@ -380,7 +409,7 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
   const { filteredItems: filtered, isSearching } = useWorkerSearch({
     items: contextFilteredDocs,
     query: searchTerm,
-    fields: ['title', 'content', 'tags', 'type']
+    fields: ["title", "content", "tags", "type"],
   });
 
   // ============================================================================
@@ -392,11 +421,11 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
    * Handles partial updates with cache invalidation
    */
   const { mutate: performUpdate } = useMutation(
-    async (payload: { id: string, updates: Partial<LegalDocument> }) => {
+    async (payload: { id: string; updates: Partial<LegalDocument> }) => {
       try {
         return await DataService.documents.update(payload.id, payload.updates);
       } catch (error) {
-        console.error('[useDocumentManager] Update mutation error:', error);
+        console.error("[useDocumentManager] Update mutation error:", error);
         throw error;
       }
     },
@@ -407,54 +436,68 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
 
   /**
    * Update a document with validation and optimistic UI
-   * 
+   *
    * @param id - Document ID
    * @param updates - Partial document updates
    * @throws Logs errors but doesn't throw to prevent UI disruption
-   * 
+   *
    * @example
    * updateDocument('doc-123', { title: 'New Title', tags: ['important'] });
    */
-  const updateDocument = useCallback((id: string, updates: Partial<LegalDocument>) => {
-    if (!validateDocId(id, 'updateDocument')) return;
+  const updateDocument = useCallback(
+    (id: string, updates: Partial<LegalDocument>) => {
+      if (!validateDocId(id, "updateDocument")) return;
 
-    if (!updates || typeof updates !== 'object') {
-      console.error('[useDocumentManager.updateDocument] Invalid updates:', updates);
-      return;
-    }
-
-    try {
-      // Optimistic UI update for preview doc
-      if (previewDoc && previewDoc.id === id) {
-        setPreviewDoc(prev => prev ? { ...prev, ...updates } : null);
+      if (!updates || typeof updates !== "object") {
+        console.error(
+          "[useDocumentManager.updateDocument] Invalid updates:",
+          updates
+        );
+        return;
       }
 
-      // Persist via mutation
-      performUpdate({ id, updates });
-      
-      console.log(`[useDocumentManager] Document updated: ${id}`);
-    } catch (error) {
-      console.error('[useDocumentManager.updateDocument] Error:', error);
-      notify.error('Failed to update document');
-    }
-  }, [previewDoc, performUpdate, validateDocId, notify]);
+      try {
+        // Optimistic UI update for preview doc
+        if (previewDoc && previewDoc.id === id) {
+          setPreviewDoc((prev) => (prev ? { ...prev, ...updates } : null));
+        }
+
+        // Persist via mutation
+        performUpdate({ id, updates });
+
+        console.log(`[useDocumentManager] Document updated: ${id}`);
+      } catch (error) {
+        console.error("[useDocumentManager.updateDocument] Error:", error);
+        notify.error("Failed to update document");
+      }
+    },
+    [previewDoc, performUpdate, validateDocId, notify]
+  );
 
   /**
    * Compatibility layer for legacy components
    * Allows direct cache manipulation
    */
-  const setDocuments = useCallback((newDocs: LegalDocument[] | ((prev: LegalDocument[]) => LegalDocument[])) => {
-    try {
-      queryClient.setQueryData(queryKeys.documents.all(), (old: LegalDocument[] | undefined) => {
-        if (typeof newDocs === 'function') {
-          return newDocs(old || []);
-        }
-        return newDocs;
-      });
-    } catch (error) {
-      console.error('[useDocumentManager.setDocuments] Error:', error);
-    }
-  }, []);
+  const setDocuments = useCallback(
+    (
+      newDocs: LegalDocument[] | ((prev: LegalDocument[]) => LegalDocument[])
+    ) => {
+      try {
+        queryClient.setQueryData(
+          queryKeys.documents.all(),
+          (old: LegalDocument[] | undefined) => {
+            if (typeof newDocs === "function") {
+              return newDocs(old || []);
+            }
+            return newDocs;
+          }
+        );
+      } catch (error) {
+        console.error("[useDocumentManager.setDocuments] Error:", error);
+      }
+    },
+    []
+  );
 
   // ============================================================================
   // VERSION HISTORY HANDLERS
@@ -462,11 +505,11 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
 
   /**
    * Restore document from version history
-   * 
+   *
    * @param version - Document version to restore
    * @throws Logs errors but doesn't throw to prevent UI disruption
    * @security Validates version data before restoration
-   * 
+   *
    * @example
    * handleRestore({
    *   id: 'v-123',
@@ -474,35 +517,45 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
    *   contentSnapshot: 'Original content...'
    * });
    */
-  const handleRestore = useCallback(async (version: DocumentVersion) => {
-    if (!selectedDocForHistory) {
-      console.error('[useDocumentManager.handleRestore] No document selected for history');
-      return;
-    }
+  const handleRestore = useCallback(
+    async (version: DocumentVersion) => {
+      if (!selectedDocForHistory) {
+        console.error(
+          "[useDocumentManager.handleRestore] No document selected for history"
+        );
+        return;
+      }
 
-    // Validation
-    if (!version || !version.contentSnapshot) {
-      console.error('[useDocumentManager.handleRestore] Invalid version:', version);
-      notify.error('Invalid version data');
-      return;
-    }
+      // Validation
+      if (!version || !version.contentSnapshot) {
+        console.error(
+          "[useDocumentManager.handleRestore] Invalid version:",
+          version
+        );
+        notify.error("Invalid version data");
+        return;
+      }
 
-    try {
-      const updates: Partial<LegalDocument> = { 
-        content: version.contentSnapshot, 
-        lastModified: new Date().toISOString().split('T')[0] 
-      };
-      
-      updateDocument(selectedDocForHistory.id, updates);
-      setSelectedDocForHistory(null);
-      
-      notify.success('Document restored successfully');
-      console.log(`[useDocumentManager] Version restored for: ${selectedDocForHistory.id}`);
-    } catch (error) {
-      console.error('[useDocumentManager.handleRestore] Error:', error);
-      notify.error('Failed to restore version');
-    }
-  }, [selectedDocForHistory, updateDocument, notify]);
+      try {
+        const updates: Partial<LegalDocument> = {
+          content: version.contentSnapshot,
+          lastModified: new Date().toISOString().split("T")[0],
+        };
+
+        updateDocument(selectedDocForHistory.id, updates);
+        setSelectedDocForHistory(null);
+
+        notify.success("Document restored successfully");
+        console.log(
+          `[useDocumentManager] Version restored for: ${selectedDocForHistory.id}`
+        );
+      } catch (error) {
+        console.error("[useDocumentManager.handleRestore] Error:", error);
+        notify.error("Failed to restore version");
+      }
+    },
+    [selectedDocForHistory, updateDocument, notify]
+  );
 
   // ============================================================================
   // BULK OPERATIONS
@@ -511,40 +564,44 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
   /**
    * Execute bulk AI summarization
    * Processes all selected documents
-   * 
+   *
    * @throws Logs errors but doesn't throw to prevent UI disruption
    * @integration Publishes DOCUMENTS_SUMMARIZED event
-   * 
+   *
    * @example
    * // Select documents first
    * toggleSelection('doc-1');
    * toggleSelection('doc-2');
-   * 
+   *
    * // Then summarize
    * await handleBulkSummarize();
    */
   const handleBulkSummarize = useCallback(async () => {
     if (selectedDocs.length === 0) {
-      notify.info('No documents selected for summarization');
+      notify.info("No documents selected for summarization");
       return;
     }
 
     try {
       setIsProcessingAI(true);
-      console.log(`[useDocumentManager] Starting bulk summarization for ${selectedDocs.length} documents`);
-      
+      console.log(
+        `[useDocumentManager] Starting bulk summarization for ${selectedDocs.length} documents`
+      );
+
       // Simulate AI processing (replace with actual API call)
-      await new Promise(r => setTimeout(r, 1500));
-      
-      notify.success(`AI Summary generated for ${selectedDocs.length} documents. Report saved to case file.`);
-      
+      await new Promise((r) => setTimeout(r, 1500));
+
+      notify.success(
+        `AI Summary generated for ${selectedDocs.length} documents. Report saved to case file.`
+      );
+
       // Clear selection after successful operation
       setSelectedDocs([]);
-      
-      console.log('[useDocumentManager] Bulk summarization completed');
+
+      console.log("[useDocumentManager] Bulk summarization completed");
     } catch (error) {
-      console.error('[useDocumentManager.handleBulkSummarize] Error:', error);
-      notify.error('Failed to generate summaries');
+      console.error("[useDocumentManager.handleBulkSummarize] Error:", error);
+      notify.error("Failed to generate summaries");
     } finally {
       setIsProcessingAI(false);
     }
@@ -557,43 +614,46 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
   /**
    * Toggle document selection for bulk operations
    * Updates preview doc when selecting
-   * 
+   *
    * @param id - Document ID to toggle
    * @security Validates document ID before processing
-   * 
+   *
    * @example
    * toggleSelection('doc-123'); // Select
    * toggleSelection('doc-123'); // Deselect
    */
-  const toggleSelection = useCallback((id: string) => {
-    if (!validateDocId(id, 'toggleSelection')) return;
+  const toggleSelection = useCallback(
+    (id: string) => {
+      if (!validateDocId(id, "toggleSelection")) return;
 
-    try {
-      if (selectedDocs.includes(id)) {
-        // Deselect
-        setSelectedDocs(selectedDocs.filter(d => d !== id));
-        
-        // Clear preview if deselecting the previewed doc
-        if (previewDoc?.id === id) {
-          setPreviewDoc(null);
+      try {
+        if (selectedDocs.includes(id)) {
+          // Deselect
+          setSelectedDocs(selectedDocs.filter((d) => d !== id));
+
+          // Clear preview if deselecting the previewed doc
+          if (previewDoc?.id === id) {
+            setPreviewDoc(null);
+          }
+
+          console.log(`[useDocumentManager] Document deselected: ${id}`);
+        } else {
+          // Select
+          setSelectedDocs([...selectedDocs, id]);
+
+          // Set as preview doc
+          const doc = documentsArray.find((d) => d.id === id);
+          if (doc) {
+            setPreviewDoc(doc);
+            console.log(`[useDocumentManager] Document selected: ${id}`);
+          }
         }
-        
-        console.log(`[useDocumentManager] Document deselected: ${id}`);
-      } else {
-        // Select
-        setSelectedDocs([...selectedDocs, id]);
-        
-        // Set as preview doc
-        const doc = documentsArray.find(d => d.id === id);
-        if (doc) {
-          setPreviewDoc(doc);
-          console.log(`[useDocumentManager] Document selected: ${id}`);
-        }
+      } catch (error) {
+        console.error("[useDocumentManager.toggleSelection] Error:", error);
       }
-    } catch (error) {
-      console.error('[useDocumentManager.toggleSelection] Error:', error);
-    }
-  }, [selectedDocs, previewDoc, documentsArray, validateDocId]);
+    },
+    [selectedDocs, previewDoc, documentsArray, validateDocId]
+  );
 
   // ============================================================================
   // TAG MANAGEMENT
@@ -602,74 +662,91 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
   /**
    * Add tag to document with validation
    * Prevents duplicate tags and validates input
-   * 
+   *
    * @param docId - Document ID
    * @param tag - Tag to add
    * @security Sanitizes tag input to prevent XSS
-   * 
+   *
    * @example
    * addTag('doc-123', 'priority');
    */
-  const addTag = useCallback(async (docId: string, tag: string) => {
-    if (!validateDocId(docId, 'addTag')) return;
+  const addTag = useCallback(
+    async (docId: string, tag: string) => {
+      if (!validateDocId(docId, "addTag")) return;
 
-    const sanitizedTag = validateTag(tag);
-    if (!sanitizedTag) {
-      console.error('[useDocumentManager.addTag] Invalid tag after sanitization:', tag);
-      return;
-    }
-
-    try {
-      const doc = documentsArray.find(d => d.id === docId);
-      if (!doc) {
-        console.error('[useDocumentManager.addTag] Document not found:', docId);
+      const sanitizedTag = validateTag(tag);
+      if (!sanitizedTag) {
+        console.error(
+          "[useDocumentManager.addTag] Invalid tag after sanitization:",
+          tag
+        );
         return;
       }
 
-      // Prevent duplicate tags
-      if (doc.tags.includes(sanitizedTag)) {
-        notify.info(`Tag "${sanitizedTag}" already exists`);
-        return;
-      }
+      try {
+        const doc = documentsArray.find((d) => d.id === docId);
+        if (!doc) {
+          console.error(
+            "[useDocumentManager.addTag] Document not found:",
+            docId
+          );
+          return;
+        }
 
-      const newTags = [...doc.tags, sanitizedTag];
-      updateDocument(docId, { tags: newTags });
-      
-      console.log(`[useDocumentManager] Tag added to ${docId}: ${sanitizedTag}`);
-    } catch (error) {
-      console.error('[useDocumentManager.addTag] Error:', error);
-      notify.error('Failed to add tag');
-    }
-  }, [documentsArray, validateDocId, validateTag, updateDocument, notify]);
+        // Prevent duplicate tags
+        if (doc.tags.includes(sanitizedTag)) {
+          notify.info(`Tag "${sanitizedTag}" already exists`);
+          return;
+        }
+
+        const newTags = [...doc.tags, sanitizedTag];
+        updateDocument(docId, { tags: newTags });
+
+        console.log(
+          `[useDocumentManager] Tag added to ${docId}: ${sanitizedTag}`
+        );
+      } catch (error) {
+        console.error("[useDocumentManager.addTag] Error:", error);
+        notify.error("Failed to add tag");
+      }
+    },
+    [documentsArray, validateDocId, validateTag, updateDocument, notify]
+  );
 
   /**
    * Remove tag from document
-   * 
+   *
    * @param docId - Document ID
    * @param tag - Tag to remove
-   * 
+   *
    * @example
    * removeTag('doc-123', 'priority');
    */
-  const removeTag = useCallback(async (docId: string, tag: string) => {
-    if (!validateDocId(docId, 'removeTag')) return;
+  const removeTag = useCallback(
+    async (docId: string, tag: string) => {
+      if (!validateDocId(docId, "removeTag")) return;
 
-    try {
-      const doc = documentsArray.find(d => d.id === docId);
-      if (!doc) {
-        console.error('[useDocumentManager.removeTag] Document not found:', docId);
-        return;
+      try {
+        const doc = documentsArray.find((d) => d.id === docId);
+        if (!doc) {
+          console.error(
+            "[useDocumentManager.removeTag] Document not found:",
+            docId
+          );
+          return;
+        }
+
+        const newTags = doc.tags.filter((t: string) => t !== tag);
+        updateDocument(docId, { tags: newTags });
+
+        console.log(`[useDocumentManager] Tag removed from ${docId}: ${tag}`);
+      } catch (error) {
+        console.error("[useDocumentManager.removeTag] Error:", error);
+        notify.error("Failed to remove tag");
       }
-
-      const newTags = doc.tags.filter((t: string) => t !== tag);
-      updateDocument(docId, { tags: newTags });
-      
-      console.log(`[useDocumentManager] Tag removed from ${docId}: ${tag}`);
-    } catch (error) {
-      console.error('[useDocumentManager.removeTag] Error:', error);
-      notify.error('Failed to remove tag');
-    }
-  }, [documentsArray, validateDocId, updateDocument, notify]);
+    },
+    [documentsArray, validateDocId, updateDocument, notify]
+  );
 
   /**
    * Get all unique tags across all documents
@@ -677,9 +754,9 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
    */
   const allTags = useMemo(() => {
     try {
-      return Array.from(new Set(documentsArray.flatMap(d => d.tags || [])));
+      return Array.from(new Set(documentsArray.flatMap((d) => d.tags || [])));
     } catch (error) {
-      console.error('[useDocumentManager] Error computing allTags:', error);
+      console.error("[useDocumentManager] Error computing allTags:", error);
       return [];
     }
   }, [documentsArray]);
@@ -696,12 +773,14 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
     try {
       return {
         total: documentsArray.length,
-        evidence: documentsArray.filter(d => d.sourceModule === 'Evidence').length,
-        discovery: documentsArray.filter(d => d.sourceModule === 'Discovery').length,
-        signed: documentsArray.filter(d => d.status === 'Signed').length
+        evidence: documentsArray.filter((d) => d.sourceModule === "Evidence")
+          .length,
+        discovery: documentsArray.filter((d) => d.sourceModule === "Discovery")
+          .length,
+        signed: documentsArray.filter((d) => d.status === "Signed").length,
       };
     } catch (error) {
-      console.error('[useDocumentManager] Error computing stats:', error);
+      console.error("[useDocumentManager] Error computing stats:", error);
       return { total: 0, evidence: 0, discovery: 0, signed: 0 };
     }
   }, [documentsArray]);
@@ -710,92 +789,119 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
   // DRAG & DROP FUNCTIONALITY (Optional)
   // ============================================================================
 
-  const handleDragEnter = useCallback((e: React.DragEvent) => {
-    if (!enableDragDrop) return;
-    
-    e.preventDefault();
-    e.stopPropagation();
-    dragCounter.current++;
-    
-    if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
-      setIsDragging(true);
-    }
-  }, [enableDragDrop]);
+  const handleDragEnter = useCallback(
+    (e: React.DragEvent) => {
+      if (!enableDragDrop) return;
 
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    if (!enableDragDrop) return;
-    
-    e.preventDefault();
-    e.stopPropagation();
-    dragCounter.current--;
-    
-    if (dragCounter.current === 0) {
+      e.preventDefault();
+      e.stopPropagation();
+      dragCounter.current++;
+
+      if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+        setIsDragging(true);
+      }
+    },
+    [enableDragDrop]
+  );
+
+  const handleDragLeave = useCallback(
+    (e: React.DragEvent) => {
+      if (!enableDragDrop) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+      dragCounter.current--;
+
+      if (dragCounter.current === 0) {
+        setIsDragging(false);
+      }
+    },
+    [enableDragDrop]
+  );
+
+  const handleDragOver = useCallback(
+    (e: React.DragEvent) => {
+      if (!enableDragDrop) return;
+      e.preventDefault();
+      e.stopPropagation();
+    },
+    [enableDragDrop]
+  );
+
+  const handleDrop = useCallback(
+    async (e: React.DragEvent) => {
+      if (!enableDragDrop) return;
+
+      e.preventDefault();
+      e.stopPropagation();
       setIsDragging(false);
-    }
-  }, [enableDragDrop]);
+      dragCounter.current = 0;
 
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    if (!enableDragDrop) return;
-    e.preventDefault();
-    e.stopPropagation();
-  }, [enableDragDrop]);
+      if (!e.dataTransfer.files || e.dataTransfer.files.length === 0) return;
 
-  const handleDrop = useCallback(async (e: React.DragEvent) => {
-    if (!enableDragDrop) return;
-    
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-    dragCounter.current = 0;
+      setIsUploading(true);
+      const files = Array.from(e.dataTransfer.files);
+      let successCount = 0;
+      let failCount = 0;
 
-    if (!e.dataTransfer.files || e.dataTransfer.files.length === 0) return;
+      try {
+        console.log(
+          `[useDocumentManager] Processing ${files.length} dropped files`
+        );
 
-    setIsUploading(true);
-    const files = Array.from(e.dataTransfer.files);
-    let successCount = 0;
-    let failCount = 0;
+        for (const file of files) {
+          // Validate file
+          if (!validateFile(file)) {
+            failCount++;
+            continue;
+          }
 
-    try {
-      console.log(`[useDocumentManager] Processing ${files.length} dropped files`);
-
-      for (const file of files) {
-        // Validate file
-        if (!validateFile(file)) {
-          failCount++;
-          continue;
+          try {
+            await DocumentService.uploadDocument(file, {
+              sourceModule:
+                currentFolder === "root" ? "General" : currentFolder,
+              caseId: "General" as CaseId,
+            });
+            successCount++;
+          } catch (error) {
+            console.error(
+              `[useDocumentManager] Failed to upload ${file.name}:`,
+              error
+            );
+            failCount++;
+          }
         }
 
-        try {
-          await DocumentService.uploadDocument(file, {
-            sourceModule: currentFolder === 'root' ? 'General' : currentFolder,
-            caseId: 'General' as CaseId
-          });
-          successCount++;
-        } catch (error) {
-          console.error(`[useDocumentManager] Failed to upload ${file.name}:`, error);
-          failCount++;
+        // Invalidate cache to refresh document list
+        queryClient.invalidate(queryKeys.documents.all());
+
+        // Notify user of results
+        if (successCount > 0) {
+          notify.success(
+            `Uploaded ${successCount} document${successCount > 1 ? "s" : ""}`
+          );
         }
-      }
+        if (failCount > 0) {
+          notify.error(
+            `Failed to upload ${failCount} document${failCount > 1 ? "s" : ""}`
+          );
+        }
 
-      // Invalidate cache to refresh document list
-      queryClient.invalidate(queryKeys.documents.all());
-
-      // Notify user of results
-      if (successCount > 0) {
-        notify.success(`Uploaded ${successCount} document${successCount > 1 ? 's' : ''}`);
+        console.log(
+          `[useDocumentManager] Upload completed: ${successCount} success, ${failCount} failed`
+        );
+      } catch (error) {
+        console.error(
+          "[useDocumentManager.handleDrop] Unexpected error:",
+          error
+        );
+        notify.error("Failed to process dropped files");
+      } finally {
+        setIsUploading(false);
       }
-      if (failCount > 0) {
-        notify.error(`Failed to upload ${failCount} document${failCount > 1 ? 's' : ''}`);
-      }
-
-      console.log(`[useDocumentManager] Upload completed: ${successCount} success, ${failCount} failed`);
-    } catch (error) {
-      console.error('[useDocumentManager.handleDrop] Unexpected error:', error);
-      notify.error('Failed to process dropped files');
-    } finally {
-      setIsUploading(false);
-    }
-  }, [enableDragDrop, currentFolder, validateFile, notify]);
+    },
+    [enableDragDrop, currentFolder, validateFile, notify]
+  );
 
   // ============================================================================
   // RETURN INTERFACE
@@ -804,7 +910,7 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
   /**
    * Return comprehensive document manager interface
    * All handlers are memoized for optimal performance
-   * 
+   *
    * @returns {Object} Document manager interface
    * @property {string} searchTerm - Current search term
    * @property {Function} setSearchTerm - Search term setter
@@ -851,23 +957,32 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
     clearSelection: useCallback(() => setSelectedDocs([]), []),
     selectedDocForHistory,
     setSelectedDocForHistory,
-    showVersionHistory: useCallback((doc: LegalDocument) => setSelectedDocForHistory(doc), []),
+    showVersionHistory: useCallback(
+      (doc: LegalDocument) => setSelectedDocForHistory(doc),
+      []
+    ),
     closeVersionHistory: useCallback(() => setSelectedDocForHistory(null), []),
     isProcessingAI,
     bulkSummarize: handleBulkSummarize,
     currentFolder,
-    navigateToFolder: useCallback((folder: string) => setCurrentFolder(folder), []),
+    navigateToFolder: useCallback(
+      (folder: string) => setCurrentFolder(folder),
+      []
+    ),
     isDetailsOpen,
-    toggleDetails: useCallback(() => setIsDetailsOpen(prev => !prev), []),
+    toggleDetails: useCallback(() => setIsDetailsOpen((prev) => !prev), []),
     stats,
     addTag,
     removeTag,
     isSearching,
-    restoreVersion: useCallback(async (docId: string, versionId: string) => {
-      const doc = documentsArray.find(d => d.id === docId);
-      const version = doc?.versions?.find(v => v.id === versionId);
-      if (version) await handleRestore(version);
-    }, [documentsArray, handleRestore]),
+    restoreVersion: useCallback(
+      async (docId: string, versionId: string) => {
+        const doc = documentsArray.find((d) => d.id === docId);
+        const version = doc?.versions?.find((v) => v.id === versionId);
+        if (version) await handleRestore(version);
+      },
+      [documentsArray, handleRestore]
+    ),
     documents: documentsArray,
     setDocuments,
     isLoading: isLoading || isSearching,
@@ -891,9 +1006,9 @@ export function useDocumentManager(options: UseDocumentManagerOptions = {}): Use
       handleDragEnter,
       handleDragLeave,
       handleDragOver,
-      handleDrop
+      handleDrop,
     };
   }
 
   return baseReturn;
-};
+}

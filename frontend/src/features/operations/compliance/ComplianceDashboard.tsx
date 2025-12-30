@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, useTransition } from 'react';
 import { Download } from 'lucide-react';
+import React, { Suspense, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -23,11 +23,11 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { Button } from '@/components/atoms';
 import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules';
-import { ComplianceDashboardContent } from '@features/operations';
+import { ComplianceDashboardContent } from './ComplianceDashboardContent';
 
 // Utils & Config
-import { cn } from '@/utils/cn';
 import { COMPLIANCE_TAB_CONFIG } from '@/config/tabs.config';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -35,8 +35,8 @@ import { COMPLIANCE_TAB_CONFIG } from '@/config/tabs.config';
 type ComplianceView = 'overview' | 'conflicts' | 'walls' | 'policies';
 
 interface ComplianceDashboardProps {
-    /** Optional initial tab to display. */
-    initialTab?: ComplianceView;
+  /** Optional initial tab to display. */
+  initialTab?: ComplianceView;
 }
 
 // ============================================================================
@@ -49,7 +49,7 @@ export const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ initia
 
   const setActiveTab = (tab: string) => {
     startTransition(() => {
-        _setActiveTab(tab);
+      _setActiveTab(tab);
     });
   };
 
@@ -64,7 +64,7 @@ export const ComplianceDashboard: React.FC<ComplianceDashboardProps> = ({ initia
     >
       <Suspense fallback={<LazyLoader message="Loading Compliance Module..." />}>
         <div className={cn(isPending && 'opacity-60 transition-opacity')}>
-            <ComplianceDashboardContent activeTab={activeTab as ComplianceView} />
+          <ComplianceDashboardContent activeTab={activeTab as ComplianceView} />
         </div>
       </Suspense>
     </TabbedPageLayout>

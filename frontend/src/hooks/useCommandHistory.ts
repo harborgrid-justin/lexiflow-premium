@@ -1,41 +1,44 @@
 /**
  * useCommandHistory.ts
- * 
+ *
  * React hook for imperative command pattern with undo/redo operations.
- * 
+ *
  * **WHEN TO USE THIS HOOK:**
  * - You need undo/redo for imperative operations with side effects
  * - Your commands manipulate external state (canvas nodes, DOM, services)
  * - You're working with workflow/strategy canvas components
  * - You need command descriptions and operation counts
  * - Example: Canvas operations, graph manipulation, visual editor actions
- * 
+ *
  * **WHEN NOT TO USE (use useHistory instead):**
  * - You need undo/redo for pure React state transformations
  * - Your operations are functional and side-effect-free
  * - You want the hook to manage state for you
- * 
+ *
  * **PATTERN:**
  * Commands are imperative with side effects: `execute(): void, undo(): void`
  * The hook tracks command history but doesn't manage application state
  * Commands directly mutate external state when executed/undone
- * 
+ *
  * @example
  * ```typescript
  * const { execute, undo, redo, canUndo, canRedo } = useCommandHistory();
- * 
+ *
  * // Execute an imperative command
  * const command = new AddNodeCommand(nodeId, nodeData, canvas);
  * execute(command); // Directly adds node to canvas
- * 
+ *
  * undo(); // Command.undo() removes node from canvas
  * ```
- * 
+ *
  * @module hooks/useCommandHistory
  */
 
-import { useState, useCallback, useRef } from 'react';
-import { CommandHistory, Command } from '@/services';
+import {
+  Command,
+  CommandHistory,
+} from "@/services/infrastructure/commandHistory";
+import { useCallback, useRef, useState } from "react";
 
 export interface UseCommandHistoryReturn {
   execute: (command: Command) => void;
@@ -58,13 +61,16 @@ export function useCommandHistory(maxSize?: number): UseCommandHistoryReturn {
 
   // Force re-render helper
   const forceUpdate = useCallback(() => {
-    setUpdateTrigger(prev => prev + 1);
+    setUpdateTrigger((prev) => prev + 1);
   }, []);
 
-  const execute = useCallback((command: Command) => {
-    historyRef.current.execute(command);
-    forceUpdate();
-  }, [forceUpdate]);
+  const execute = useCallback(
+    (command: Command) => {
+      historyRef.current.execute(command);
+      forceUpdate();
+    },
+    [forceUpdate]
+  );
 
   const undo = useCallback(() => {
     if (historyRef.current.undo()) {
@@ -95,4 +101,3 @@ export function useCommandHistory(maxSize?: number): UseCommandHistoryReturn {
     lastCommand: historyRef.current.getLastCommandDescription(),
   };
 }
-

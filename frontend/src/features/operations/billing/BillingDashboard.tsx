@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, useState, useTransition } from 'react';
 import { RefreshCw } from 'lucide-react';
+import React, { Suspense, useState, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -21,22 +21,21 @@ import { useMutation } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services';
 
 // Hooks
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Components
 import { Button } from '@/components/atoms';
-import { PeriodSelector } from '@/components/molecules';
 import { ExportMenu } from '@/components/features/discovery/components/ExportMenu/ExportMenu';
 import { TabbedPageLayout } from '@/components/layouts';
-import { LazyLoader } from '@/components/molecules';
-import { BillingDashboardContent } from '@features/operations';
+import { LazyLoader, PeriodSelector } from '@/components/molecules';
+import { BillingDashboardContent } from './BillingDashboardContent';
 import { BillingErrorBoundary } from './BillingErrorBoundary';
 
 // Utils & Config
-import { cn } from '@/utils/cn';
 import { BILLING_TAB_CONFIG, BillingView } from '@/config/tabs.config';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -59,45 +58,45 @@ const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo,
 
   const setActiveTab = (tab: string) => {
     startTransition(() => {
-        _setActiveTab(tab);
+      _setActiveTab(tab);
     });
   };
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
-      'mod+w': () => setActiveTab('wip'),
-      'mod+i': () => setActiveTab('invoices'),
-      'mod+e': () => setActiveTab('expenses'),
-      'mod+l': () => setActiveTab('ledger'),
-      'mod+t': () => setActiveTab('trust')
+    'mod+w': () => setActiveTab('wip'),
+    'mod+i': () => setActiveTab('invoices'),
+    'mod+e': () => setActiveTab('expenses'),
+    'mod+l': () => setActiveTab('ledger'),
+    'mod+t': () => setActiveTab('trust')
   });
 
   const { mutate: syncFinancials, isLoading: isSyncing } = useMutation(
-      async () => {
-        // Retry logic: 3 attempts with exponential backoff
-        let lastError;
-        for (let attempt = 1; attempt <= 3; attempt++) {
-          try {
-            return await DataService.billing.sync();
-          } catch (error) {
-            lastError = error;
-            if (attempt < 3) {
-              const delay = Math.min(1000 * Math.pow(2, attempt - 1), 30000); // 1s, 2s, 4s (max 30s)
-              await new Promise(resolve => setTimeout(resolve, delay));
-            }
+    async () => {
+      // Retry logic: 3 attempts with exponential backoff
+      let lastError;
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          return await DataService.billing.sync();
+        } catch (error) {
+          lastError = error;
+          if (attempt < 3) {
+            const delay = Math.min(1000 * Math.pow(2, attempt - 1), 30000); // 1s, 2s, 4s (max 30s)
+            await new Promise(resolve => setTimeout(resolve, delay));
           }
         }
-        throw lastError;
-      },
-      { 
-        onSuccess: () => notify.success("Financial data synced."),
-        onError: () => notify.error("Sync failed after 3 attempts. Please try again later.")
       }
+      throw lastError;
+    },
+    {
+      onSuccess: () => notify.success("Financial data synced."),
+      onError: () => notify.error("Sync failed after 3 attempts. Please try again later.")
+    }
   );
 
   const { mutate: exportReport } = useMutation(
-      (format: string) => DataService.billing.export(format),
-      { onSuccess: (_, format) => notify.success(`Report exported (${format.toUpperCase()}).`) }
+    (format: string) => DataService.billing.export(format),
+    { onSuccess: (_, format) => notify.success(`Report exported (${format.toUpperCase()}).`) }
   );
 
   const renderContent = () => {
@@ -111,9 +110,9 @@ const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo,
       pageSubtitle="Revenue cycle management, invoicing, and firm accounting."
       pageActions={
         <div className="flex gap-3 items-center">
-            <PeriodSelector selected={period} onChange={setPeriod} />
-            <ExportMenu onExport={exportReport as any} />
-            <Button variant="outline" size="sm" icon={RefreshCw} onClick={() => syncFinancials(undefined)} isLoading={isSyncing}>Sync</Button>
+          <PeriodSelector selected={period} onChange={setPeriod} />
+          <ExportMenu onExport={exportReport as any} />
+          <Button variant="outline" size="sm" icon={RefreshCw} onClick={() => syncFinancials(undefined)} isLoading={isSyncing}>Sync</Button>
         </div>
       }
       tabConfig={BILLING_TAB_CONFIG}
@@ -122,7 +121,7 @@ const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo,
     >
       <Suspense fallback={<LazyLoader message="Loading Billing Module..." />}>
         <div className={cn(isPending && 'opacity-60 transition-opacity')}>
-            {renderContent()}
+          {renderContent()}
         </div>
       </Suspense>
     </TabbedPageLayout>
@@ -136,4 +135,3 @@ const BillingDashboard: React.FC<BillingDashboardProps> = (props) => (
 );
 
 export default BillingDashboard;
-

@@ -26,7 +26,7 @@ import { Input, TextArea } from '@/components';
 // Hooks & Context
 import { useTheme } from '@/providers';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
-import { useWindow } from '@/providers';
+import { useWindow } from '@/providers/WindowContext';
 
 // Services & Utils
 import { DataService } from '@/services';
@@ -160,8 +160,8 @@ export const DiscoveryDepositions: React.FC = () => {
                         </TableCell>
                         <TableCell>
                             <div className={cn("flex items-center text-sm", theme.text.primary)}>
-                                {depo.location.toLowerCase().includes('zoom') || depo.location.toLowerCase().includes('remote') 
-                                    ? <Video className="h-4 w-4 mr-2 text-blue-500"/> 
+                                {depo.location.toLowerCase().includes('zoom') || depo.location.toLowerCase().includes('remote')
+                                    ? <Video className="h-4 w-4 mr-2 text-blue-500"/>
                                     : <MapPin className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/>
                                 }
                                 {depo.location}

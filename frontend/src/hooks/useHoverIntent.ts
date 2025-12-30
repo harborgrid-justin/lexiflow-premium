@@ -1,17 +1,17 @@
 /**
  * @module hooks/useHoverIntent
  * @category Hooks - UI Utilities
- * 
+ *
  * Provides hover intent detection with configurable delay.
  * Prevents accidental hovers by requiring sustained mouse presence.
- * 
+ *
  * @example
  * ```typescript
  * const { onMouseEnter, onMouseLeave } = useHoverIntent({
  *   onHover: (item) => setTooltipData(item),
  *   timeout: 500
  * });
- * 
+ *
  * <div
  *   onMouseEnter={() => onMouseEnter(item)}
  *   onMouseLeave={onMouseLeave}
@@ -25,7 +25,7 @@
 // EXTERNAL DEPENDENCIES
 // ========================================
 import { useRef, useCallback, useEffect } from 'react';
-import { TOOLTIP_DELAY_MS } from '@/config';
+import { TOOLTIP_DELAY_MS } from '@/config/features/ui.config';
 
 // ========================================
 // TYPES & INTERFACES
@@ -57,7 +57,7 @@ export interface UseHoverIntentReturn<T> {
 
 /**
  * Manages hover intent with configurable delay.
- * 
+ *
  * @param options - Configuration options
  * @returns Object with onMouseEnter and onMouseLeave handlers
  */
@@ -66,7 +66,7 @@ export function useHoverIntent<T>(
 ): UseHoverIntentReturn<T> {
   const timer = useRef<number | null>(null);
   const onHoverRef = useRef(onHover);
-  
+
   // Keep ref fresh without re-binding handlers
   useEffect(() => {
     onHoverRef.current = onHover;

@@ -1,15 +1,13 @@
-
-import React from 'react';
-import { Conversation } from '@/hooks/useSecureMessenger';
 import { Button } from '@/components/atoms';
-import { SearchToolbar } from '@/components/organisms';
-import { MoreVertical } from 'lucide-react';
+import { SearchToolbar, VirtualList } from '@/components/organisms';
+import { Conversation } from '@/hooks/useSecureMessenger';
 import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { VirtualList } from '@/components/organisms';
 import { useWindow } from '@/providers/WindowContext';
-import { MessengerChatWindow } from '@features/operations';
+import { cn } from '@/utils/cn';
+import { MoreVertical } from 'lucide-react';
+import React from 'react';
 import { ConversationRow } from './ConversationRow';
+import { MessengerChatWindow } from './MessengerChatWindow';
 
 interface MessengerChatListProps {
   conversations: Conversation[];
@@ -27,37 +25,37 @@ export function MessengerChatList({
   const { openWindow } = useWindow();
 
   const handlePopOut = (conv: Conversation, e: React.MouseEvent) => {
-      e.stopPropagation();
-      const winId = `chat-${conv.id}`;
-      openWindow(
-          winId,
-          `Chat: ${conv.name}`,
-          <MessengerChatWindow 
-            activeConversation={conv}
-            activeConvId={conv.id}
-            setActiveConvId={() => {}} // No-op for detached window
-            inputText=""
-            setInputText={() => {}}
-            pendingAttachments={[]}
-            setPendingAttachments={() => {}}
-            isPrivilegedMode={false}
-            setIsPrivilegedMode={() => {}}
-            handleSendMessage={() => {}} // Mock
-            handleFileSelect={() => {}} // Mock
-            formatTime={formatTime}
-          />
-      );
+    e.stopPropagation();
+    const winId = `chat-${conv.id}`;
+    openWindow(
+      winId,
+      `Chat: ${conv.name}`,
+      <MessengerChatWindow
+        activeConversation={conv}
+        activeConvId={conv.id}
+        setActiveConvId={() => { }} // No-op for detached window
+        inputText=""
+        setInputText={() => { }}
+        pendingAttachments={[]}
+        setPendingAttachments={() => { }}
+        isPrivilegedMode={false}
+        setIsPrivilegedMode={() => { }}
+        handleSendMessage={() => { }} // Mock
+        handleFileSelect={() => { }} // Mock
+        formatTime={formatTime}
+      />
+    );
   };
 
   const renderRow = (conv: Conversation) => (
-      <ConversationRow 
-          key={conv.id}
-          conv={conv}
-          isActive={activeConvId === conv.id}
-          onSelect={() => handleSelectConversation(conv.id)}
-          onPopOut={(e) => handlePopOut(conv, e)}
-          formatTime={formatTime}
-      />
+    <ConversationRow
+      key={conv.id}
+      conv={conv}
+      isActive={activeConvId === conv.id}
+      onSelect={() => handleSelectConversation(conv.id)}
+      onPopOut={(e) => handlePopOut(conv, e)}
+      formatTime={formatTime}
+    />
   );
 
   return (
@@ -66,25 +64,25 @@ export function MessengerChatList({
         <div className="flex justify-between items-center mb-4">
           <h2 className={cn("text-lg font-bold", theme.text.primary)}>Inbox</h2>
           <div className="flex gap-2">
-            <Button variant="ghost" size="xs" icon={MoreVertical} className="p-2"/>
+            <Button variant="ghost" size="xs" icon={MoreVertical} className="p-2" />
             <Button variant="primary" size="xs" className="rounded-full w-7 h-7 p-0 flex items-center justify-center">+</Button>
           </div>
         </div>
-        <SearchToolbar 
-            value={searchTerm} 
-            onChange={setSearchTerm} 
-            placeholder="Search messages..." 
-            className="p-0 border-none shadow-none bg-transparent"
+        <SearchToolbar
+          value={searchTerm}
+          onChange={setSearchTerm}
+          placeholder="Search messages..."
+          className="p-0 border-none shadow-none bg-transparent"
         />
       </div>
 
       <div className="flex-1 min-h-0 relative">
-        <VirtualList 
-            items={conversations}
-            height="100%"
-            itemHeight={88}
-            renderItem={renderRow}
-            emptyMessage="No conversations found."
+        <VirtualList
+          items={conversations}
+          height="100%"
+          itemHeight={88}
+          renderItem={renderRow}
+          emptyMessage="No conversations found."
         />
       </div>
     </div>

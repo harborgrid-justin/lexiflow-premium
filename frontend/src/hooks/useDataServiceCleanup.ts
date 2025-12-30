@@ -1,17 +1,20 @@
 /**
  * useDataServiceCleanup Hook
- * 
+ *
  * Ensures proper cleanup of DataService repositories and listeners
  * to prevent memory leaks. Use this at the root App component level.
- * 
+ *
  * Features:
  * - Clears all repository listeners on unmount
  * - Clears singleton cache
  * - Optional periodic memory stats logging
  */
 
-import { useEffect } from 'react';
-import { cleanupDataService, logDataServiceMemory } from '@/services';
+import {
+  cleanupDataService,
+  logDataServiceMemory,
+} from "@/services/data/dataService";
+import { useEffect } from "react";
 
 interface UseDataServiceCleanupOptions {
   /**
@@ -19,7 +22,7 @@ interface UseDataServiceCleanupOptions {
    * Useful for development/debugging
    */
   enableLogging?: boolean;
-  
+
   /**
    * Logging interval in milliseconds (default: 120000 = 2 minutes)
    */
@@ -28,7 +31,7 @@ interface UseDataServiceCleanupOptions {
 
 /**
  * Hook to manage DataService lifecycle and memory cleanup.
- * 
+ *
  * @example
  * ```tsx
  * function App() {
@@ -37,17 +40,19 @@ interface UseDataServiceCleanupOptions {
  * }
  * ```
  */
-export function useDataServiceCleanup(options: UseDataServiceCleanupOptions = {}) {
+export function useDataServiceCleanup(
+  options: UseDataServiceCleanupOptions = {}
+) {
   const { enableLogging = false, loggingInterval = 120000 } = options;
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | null = null;
 
     // Optional periodic logging for debugging
-    if (enableLogging && process.env.NODE_ENV === 'development') {
-      console.log('[useDataServiceCleanup] Periodic memory logging enabled');
+    if (enableLogging && process.env.NODE_ENV === "development") {
+      console.log("[useDataServiceCleanup] Periodic memory logging enabled");
       logDataServiceMemory(); // Log immediately
-      
+
       intervalId = setInterval(() => {
         logDataServiceMemory();
       }, loggingInterval);
@@ -58,8 +63,8 @@ export function useDataServiceCleanup(options: UseDataServiceCleanupOptions = {}
       if (intervalId) {
         clearInterval(intervalId);
       }
-      
-      console.log('[useDataServiceCleanup] Cleaning up DataService...');
+
+      console.log("[useDataServiceCleanup] Cleaning up DataService...");
       cleanupDataService();
     };
   }, [enableLogging, loggingInterval]);
@@ -68,7 +73,7 @@ export function useDataServiceCleanup(options: UseDataServiceCleanupOptions = {}
 /**
  * Hook for components that need to track repository memory usage.
  * Returns current memory stats.
- * 
+ *
  * @example
  * ```tsx
  * function DebugPanel() {
@@ -93,33 +98,35 @@ export function useDataServiceMemoryStats(refreshInterval: number = 5000) {
     let intervalId: NodeJS.Timeout | undefined;
 
     // Dynamically import to avoid circular dependency
-    import('../services/data/dataService').then(({ getDataServiceMemoryStats }) => {
-      const updateStats = () => {
-        const memStats = getDataServiceMemoryStats() as {
-          repositoryCount?: number;
-          totalListeners: number;
-          refactoredSingletons: number;
-          legacyRepositories: number;
-          totalRepositories: number;
-          estimatedMemoryKB?: number;
-          repositories?: Array<{ name: string; listeners: number }>;
-          refactoredKeys: string[];
+    import("../services/data/dataService").then(
+      ({ getDataServiceMemoryStats }) => {
+        const updateStats = () => {
+          const memStats = getDataServiceMemoryStats() as {
+            repositoryCount?: number;
+            totalListeners: number;
+            refactoredSingletons: number;
+            legacyRepositories: number;
+            totalRepositories: number;
+            estimatedMemoryKB?: number;
+            repositories?: Array<{ name: string; listeners: number }>;
+            refactoredKeys: string[];
+          };
+          setStats({
+            repositoryCount: memStats.repositoryCount || 0,
+            totalListeners: memStats.totalListeners || 0,
+            refactoredSingletons: memStats.refactoredSingletons || 0,
+            legacyRepositories: memStats.legacyRepositories || 0,
+            totalRepositories: memStats.totalRepositories || 0,
+            estimatedMemoryKB: memStats.estimatedMemoryKB || 0,
+            repositories: memStats.repositories || [],
+            refactoredKeys: memStats.refactoredKeys || [],
+          });
         };
-        setStats({
-          repositoryCount: memStats.repositoryCount || 0,
-          totalListeners: memStats.totalListeners || 0,
-          refactoredSingletons: memStats.refactoredSingletons || 0,
-          legacyRepositories: memStats.legacyRepositories || 0,
-          totalRepositories: memStats.totalRepositories || 0,
-          estimatedMemoryKB: memStats.estimatedMemoryKB || 0,
-          repositories: memStats.repositories || [],
-          refactoredKeys: memStats.refactoredKeys || [],
-        });
-      };
-      updateStats(); // Initial load
+        updateStats(); // Initial load
 
-      intervalId = setInterval(updateStats, refreshInterval);
-    });
+        intervalId = setInterval(updateStats, refreshInterval);
+      }
+    );
 
     return () => {
       if (intervalId) {
@@ -132,5 +139,4 @@ export function useDataServiceMemoryStats(refreshInterval: number = 5000) {
 }
 
 // Need React import for useDataServiceMemoryStats
-import * as React from 'react';
-
+import * as React from "react";

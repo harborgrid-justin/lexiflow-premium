@@ -10,30 +10,29 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { ArrowRight, CheckSquare, Loader2 } from 'lucide-react';
 import React from 'react';
-import {CheckSquare, ArrowRight, Loader2} from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import {useQuery} from '@/hooks/useQueryHooks';
-import {DataService} from '@/services';
-import {STORES} from '@/services';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService, STORES } from '@/services';
 
 // Hooks & Context
-import {useTheme} from '@/providers';
+import { useTheme } from '@/providers';
 
 // Components
-import {Card} from '@/components';
-import {Button} from '@/components';
-import {NotificationCenter} from '@/components';
+import { Button } from '@/components/atoms/Button';
+import { Card } from '@/components/molecules/Card';
+import { NotificationCenter } from '@/components/organisms/NotificationCenter';
 
 // Utils & Constants
-import {cn} from '@/utils';
+import { cn } from '@/utils';
 
 // Types
-import type {User, WorkflowTask, CalendarEventItem} from '@/types';
+import type { CalendarEventItem, User, WorkflowTask } from '@/types';
 import { TaskStatusBackend } from '@/types';
 
 // ============================================================================
@@ -50,15 +49,15 @@ interface PersonalWorkspaceProps {
 // COMPONENT
 // ============================================================================
 
-export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({activeTab, currentUser}) => {
-    const {theme} = useTheme();
+export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab, currentUser }) => {
+    const { theme } = useTheme();
 
-    const {data: allTasks = [], isLoading: tasksLoading, error: tasksError} = useQuery<WorkflowTask[]>(
+    const { data: allTasks = [], isLoading: tasksLoading, error: tasksError } = useQuery<WorkflowTask[]>(
         [STORES.TASKS, 'all'],
         DataService.tasks.getAll
     );
 
-    const {data: allEvents = [], isLoading: eventsLoading, error: eventsError} = useQuery<CalendarEventItem[]>(
+    const { data: allEvents = [], isLoading: eventsLoading, error: eventsError } = useQuery<CalendarEventItem[]>(
         ['calendar', 'all'],
         DataService.calendar.getEvents
     );
@@ -77,7 +76,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({activeTab, 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in">
             {isLoading ? (
                 <div className="lg:col-span-2 flex justify-center items-center p-12">
-                    <Loader2 className="animate-spin h-8 w-8 text-blue-600"/>
+                    <Loader2 className="animate-spin h-8 w-8 text-blue-600" />
                 </div>
             ) : hasError ? (
                 <div className="lg:col-span-2">
@@ -103,11 +102,11 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({activeTab, 
                                             to you.</p>}
                                     {myTasks.map((task, i) => (
                                         <div key={i}
-                                             className={cn("p-4 border rounded-lg flex items-center justify-between transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
+                                            className={cn("p-4 border rounded-lg flex items-center justify-between transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
                                             <div className="flex items-start gap-4">
                                                 <div
                                                     className={cn("p-2 rounded-full", task.priority === 'High' ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600")}>
-                                                    <CheckSquare className="h-5 w-5"/>
+                                                    <CheckSquare className="h-5 w-5" />
                                                 </div>
                                                 <div>
                                                     <h4 className={cn("font-bold text-sm", theme.text.primary)}>{task.title}</h4>
@@ -125,10 +124,10 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({activeTab, 
                                 <div className="space-y-3">
                                     {myMeetings.slice(0, 2).map((event, i) => (
                                         <div key={i}
-                                             className={cn("flex items-center gap-3 p-3 rounded border-l-4 bg-slate-50", theme.border.default, event.priority === 'High' ? "border-l-red-500" : "border-l-blue-500")}>
+                                            className={cn("flex items-center gap-3 p-3 rounded border-l-4 bg-slate-50", theme.border.default, event.priority === 'High' ? "border-l-red-500" : "border-l-blue-500")}>
                                             <div className="text-center w-12">
                                                 <span
-                                                    className="block text-xs font-bold text-slate-500">{new Date(event.date).toLocaleString('default', {month: 'short'}).toUpperCase()}</span>
+                                                    className="block text-xs font-bold text-slate-500">{new Date(event.date).toLocaleString('default', { month: 'short' }).toUpperCase()}</span>
                                                 <span
                                                     className="block text-lg font-bold text-slate-900">{new Date(event.date).getDate()}</span>
                                             </div>
@@ -148,7 +147,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({activeTab, 
 
                     {activeTab === 'notifications' && (
                         <div className="lg:col-span-2">
-                            <NotificationCenter/>
+                            <NotificationCenter />
                         </div>
                     )}
                 </>
@@ -156,4 +155,3 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({activeTab, 
         </div>
     );
 };
-

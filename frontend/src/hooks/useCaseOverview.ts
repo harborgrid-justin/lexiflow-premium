@@ -1,21 +1,21 @@
 /**
  * @module hooks/useCaseOverview
  * @category Hooks - Case Management
- * 
+ *
  * Manages case overview operations including time tracking, case linking, and appeal transfers.
  * Provides modal states and handlers for case overview workflows.
- * 
+ *
  * @example
  * ```typescript
  * const overview = useCaseOverview(caseData, handleTimeAdded, handleNavigate);
- * 
+ *
  * // Open modals
  * <button onClick={() => overview.openTimeModal()}>Log Time</button>
  * <button onClick={() => overview.openLinkModal()}>Link Cases</button>
  * <button onClick={() => overview.openTransferModal()}>Transfer to Appeal</button>
- * 
+ *
  * // Handle operations
- * <TimeModal 
+ * <TimeModal
  *   isOpen={overview.showTimeModal}
  *   onClose={overview.closeTimeModal}
  *   onSave={overview.handleSaveTime}
@@ -26,19 +26,28 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services';
+import { DataService } from "@/services/data/dataService";
 
 // Hooks & Context
-import { useSync } from './useSync';
+import { useSync } from "./useSync";
 
 // Types
-import { Case, TimeEntry, TimeEntryPayload, UserId, UUID, CaseId, CaseStatus, MatterType } from '@/types';
+import {
+  Case,
+  CaseId,
+  CaseStatus,
+  MatterType,
+  TimeEntry,
+  TimeEntryPayload,
+  UserId,
+  UUID,
+} from "@/types";
 
 // ============================================================================
 // TYPES
@@ -90,98 +99,109 @@ export interface UseCaseOverviewReturn {
 
 /**
  * Manages case overview operations and modal states.
- * 
+ *
  * @param caseData - Case data object
  * @param onTimeEntryAdded - Callback when time entry is added
  * @param onNavigateToCase - Optional callback for case navigation
  * @returns Object with overview state and handlers
  */
 export function useCaseOverview(
-  caseData: Case, 
-  onTimeEntryAdded: (entry: TimeEntry) => void, 
+  caseData: Case,
+  onTimeEntryAdded: (entry: TimeEntry) => void,
   onNavigateToCase?: (c: Case) => void
 ): UseCaseOverviewReturn {
-    const { performMutation } = useSync();
-    const [showTimeModal, setShowTimeModal] = useState(false);
-    const [showLinkModal, setShowLinkModal] = useState(false);
-    const [showTransferModal, setShowTransferModal] = useState(false);
-    
-    const [linkedCases, setLinkedCases] = useState<Case[]>([]);
-    const [availableCases, setAvailableCases] = useState<Case[]>([]);
+  const { performMutation } = useSync();
+  const [showTimeModal, setShowTimeModal] = useState(false);
+  const [showLinkModal, setShowLinkModal] = useState(false);
+  const [showTransferModal, setShowTransferModal] = useState(false);
 
-    useEffect(() => {
-        const loadRelated = async () => {
-            const allCases = await DataService.cases.getAll();
-            const linked = allCases.filter((c: Case) => caseData.linkedCaseIds?.includes(c.id));
-            setLinkedCases(linked);
-            const available = allCases.filter((c: Case) => c.id !== caseData.id && !caseData.linkedCaseIds?.includes(c.id));
-            setAvailableCases(available);
-        };
-        loadRelated();
-    }, [caseData]);
+  const [linkedCases, setLinkedCases] = useState<Case[]>([]);
+  const [availableCases, setAvailableCases] = useState<Case[]>([]);
 
-    const handleSaveTime = (rawEntry: TimeEntryPayload) => {
-        const newEntry: TimeEntry = { 
-            ...rawEntry,
-            id: `t-${Date.now()}` as UUID, 
-            userId: 'current-user' as UserId,
-            billable: true,
-            caseId: caseData.id,
-        };
-        
-        performMutation('BILLING_LOG', newEntry, () => DataService.billing.addTimeEntry(newEntry));
-        
-        onTimeEntryAdded(newEntry);
+  useEffect(() => {
+    const loadRelated = async () => {
+      const allCases = await DataService.cases.getAll();
+      const linked = allCases.filter((c: Case) =>
+        caseData.linkedCaseIds?.includes(c.id)
+      );
+      setLinkedCases(linked);
+      const available = allCases.filter(
+        (c: Case) =>
+          c.id !== caseData.id && !caseData.linkedCaseIds?.includes(c.id)
+      );
+      setAvailableCases(available);
+    };
+    loadRelated();
+  }, [caseData]);
+
+  const handleSaveTime = (rawEntry: TimeEntryPayload) => {
+    const newEntry: TimeEntry = {
+      ...rawEntry,
+      id: `t-${Date.now()}` as UUID,
+      userId: "current-user" as UserId,
+      billable: true,
+      caseId: caseData.id,
     };
 
-    const handleLinkCase = (c: Case) => {
-        if (linkedCases.find(lc => lc.id === c.id)) return;
-        setLinkedCases([...linkedCases, c]);
-        // Here you would also call a mutation to update the caseData in the DB
+    performMutation("BILLING_LOG", newEntry, () =>
+      DataService.billing.addTimeEntry(newEntry)
+    );
+
+    onTimeEntryAdded(newEntry);
+  };
+
+  const handleLinkCase = (c: Case) => {
+    if (linkedCases.find((lc) => lc.id === c.id)) return;
+    setLinkedCases([...linkedCases, c]);
+    // Here you would also call a mutation to update the caseData in the DB
+  };
+
+  const handleTransferToAppeal = async () => {
+    const appealCase: Case = {
+      ...caseData,
+      id: `APP-${Date.now()}` as CaseId,
+      title: `Appeal: ${caseData.title}`,
+      matterType: MatterType.LITIGATION,
+      status: CaseStatus.Appeal,
+      jurisdiction: "Appellate Court",
+      court: "Circuit Court of Appeals",
+      filingDate: new Date().toISOString().split("T")[0],
+      linkedCaseIds: [caseData.id, ...(caseData.linkedCaseIds || [])],
     };
 
-    const handleTransferToAppeal = async () => {
-        const appealCase: Case = {
-            ...caseData,
-            id: `APP-${Date.now()}` as CaseId,
-            title: `Appeal: ${caseData.title}`,
-            matterType: MatterType.LITIGATION,
-            status: CaseStatus.Appeal,
-            jurisdiction: 'Appellate Court',
-            court: 'Circuit Court of Appeals',
-            filingDate: new Date().toISOString().split('T')[0],
-            linkedCaseIds: [caseData.id, ...(caseData.linkedCaseIds || [])]
-        };
-        
-        try {
-            await DataService.cases.add(appealCase);
-            setLinkedCases([...linkedCases, appealCase]);
-            setShowTransferModal(false);
-            if (confirm(`Appeal case created: ${appealCase.title}. Switch to new matter?`)) {
-                if (onNavigateToCase) onNavigateToCase(appealCase);
-            }
-        } catch (e) {
-            alert("Failed to create appeal case.");
-        }
-    };
+    try {
+      await DataService.cases.add(appealCase);
+      setLinkedCases([...linkedCases, appealCase]);
+      setShowTransferModal(false);
+      if (
+        confirm(
+          `Appeal case created: ${appealCase.title}. Switch to new matter?`
+        )
+      ) {
+        if (onNavigateToCase) onNavigateToCase(appealCase);
+      }
+    } catch (e) {
+      alert("Failed to create appeal case.");
+    }
+  };
 
-    return {
-        showTimeModal,
-        setShowTimeModal,
-        openTimeModal: () => setShowTimeModal(true),
-        closeTimeModal: () => setShowTimeModal(false),
-        showLinkModal,
-        setShowLinkModal,
-        openLinkModal: () => setShowLinkModal(true),
-        closeLinkModal: () => setShowLinkModal(false),
-        showTransferModal,
-        setShowTransferModal,
-        openTransferModal: () => setShowTransferModal(true),
-        closeTransferModal: () => setShowTransferModal(false),
-        linkedCases,
-        availableCases,
-        handleSaveTime,
-        handleLinkCase,
-        handleTransferToAppeal
-    };
-};
+  return {
+    showTimeModal,
+    setShowTimeModal,
+    openTimeModal: () => setShowTimeModal(true),
+    closeTimeModal: () => setShowTimeModal(false),
+    showLinkModal,
+    setShowLinkModal,
+    openLinkModal: () => setShowLinkModal(true),
+    closeLinkModal: () => setShowLinkModal(false),
+    showTransferModal,
+    setShowTransferModal,
+    openTransferModal: () => setShowTransferModal(true),
+    closeTransferModal: () => setShowTransferModal(false),
+    linkedCases,
+    availableCases,
+    handleSaveTime,
+    handleLinkCase,
+    handleTransferToAppeal,
+  };
+}

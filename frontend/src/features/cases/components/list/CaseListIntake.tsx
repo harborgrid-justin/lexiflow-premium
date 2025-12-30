@@ -1,9 +1,9 @@
 /**
  * CaseListIntake.tsx
- * 
+ *
  * Kanban board for lead intake and case conversion pipeline.
  * Drag-and-drop workflow from initial contact through case creation.
- * 
+ *
  * @module components/case-list/CaseListIntake
  * @category Case Management - Intake Pipeline
  */
@@ -28,7 +28,7 @@ import { AdaptiveLoader } from '@/components/molecules';
 import { useTheme } from '@/providers/ThemeContext';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/useModalState';
 
 // Services & Utils
 import { DataService } from '@/services';
@@ -53,7 +53,7 @@ export const CaseListIntake: React.FC = () => {
       async ({ id, stage }: { id: string, stage: string }) => {
           // Update via DataService
           await DataService.crm.updateLead(id, { stage, updatedAt: new Date().toISOString() });
-          
+
           // Return updated cache state
           const current = queryClient.getQueryState<unknown[]>(['crm', 'leads'])?.data || [];
           const updated = current.map((l: unknown) => (l as {id: string}).id === id ? { ...(l as object), stage, updatedAt: new Date().toISOString() } : l);
@@ -137,7 +137,7 @@ export const CaseListIntake: React.FC = () => {
       <div className="flex justify-between items-center mb-4 px-2">
         <h3 className={cn("font-bold", theme.text.primary)}>Pipeline Board</h3>
       </div>
-      
+
       <KanbanBoard>
         {stages.map((stage, idx) => {
           const stageLeads = (Array.isArray(leads) ? leads : []).filter((l: unknown) => {

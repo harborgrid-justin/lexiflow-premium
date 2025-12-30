@@ -1,23 +1,23 @@
 /**
  * @module hooks/useAppController
  * @category Hooks - Application
- * 
+ *
  * Main application controller managing navigation, user context, and global state.
  * Handles app initialization, authentication, and routing.
- * 
+ *
  * @example
  * ```typescript
  * const app = useAppController();
- * 
+ *
  * // Navigation
  * app.navigateToView(PATHS.CASES);
- * 
+ *
  * // User switching
  * app.switchUser(1);
- * 
+ *
  * // Global search
  * app.updateSearch('contract');
- * 
+ *
  * // Case selection
  * app.selectCase(caseId, 'Documents');
  * ```
@@ -26,26 +26,26 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useState, useCallback, useEffect, useTransition, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services';
-import { apiClient } from '@/services';
 import { isBackendApiEnabled } from '@/api';
+import { DataService } from '@/services/data/dataService';
+import { apiClient } from '@/services/infrastructure/apiClient';
 
 // Hooks & Context
-import { useSessionStorage } from './useSessionStorage';
 import { useToast } from '@providers/ToastContext';
 import { useUsers } from './useDomainData';
+import { useSessionStorage } from './useSessionStorage';
 
 // Utils & Constants
-import { PATHS } from '@/config';
+import { PATHS } from '@/config/paths.config';
 
 // Types
-import { Case, AppView, User } from '@/types';
+import { AppView, Case, User } from '@/types';
 
 // ============================================================================
 // TYPES
@@ -93,7 +93,7 @@ export interface UseAppControllerReturn {
 
 /**
  * Main application controller.
- * 
+ *
  * @returns Object with app state and navigation methods
  */
 export function useAppController(): UseAppControllerReturn {
@@ -101,14 +101,14 @@ export function useAppController(): UseAppControllerReturn {
   const [selectedCaseId, setSelectedCaseId] = useSessionStorage<string | null>(`lexiflow_selected_case_id`, null);
   const [selectedCase, setSelectedCase] = useState<Case | null>(null);
   const { addToast } = useToast();
-  
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [globalSearch] = useState('');
   const [, startTransition] = useTransition();
 
   const [initialTab, setInitialTab] = useState<string | undefined>(undefined);
-  
+
   // App Initialization State
   const [isAppLoading, setIsAppLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -119,7 +119,7 @@ export function useAppController(): UseAppControllerReturn {
 
   // Domain Data
   const { data: users = [] } = useUsers();
-  
+
   const currentUser = users[currentUserIndex] || {
     id: 'temp-user',
     email: 'loading@lexiflow.com',
@@ -142,10 +142,10 @@ export function useAppController(): UseAppControllerReturn {
         try {
             console.log('[useAppController] Starting initialization...');
             const backendApiEnabled = isBackendApiEnabled();
-            
+
             if (backendApiEnabled) {
                 setAppStatusMessage('Connecting to backend API...');
-                
+
                 // 1. Check Health First
                 try {
                     await apiClient.healthCheck();
@@ -167,11 +167,11 @@ export function useAppController(): UseAppControllerReturn {
                             email: 'admin@lexiflow.com',
                             password: 'Password123!'
                         });
-                        
+
                         // Handle wrapped response format (common in NestJS with interceptors)
                         const accessToken = loginResponse?.accessToken || loginResponse?.data?.accessToken;
                         const refreshToken = loginResponse?.refreshToken || loginResponse?.data?.refreshToken;
-                        
+
                         // Validate response before setting tokens
                         if (accessToken) {
                             apiClient.setAuthTokens(accessToken, refreshToken);
@@ -196,7 +196,7 @@ export function useAppController(): UseAppControllerReturn {
                 console.warn('IndexedDB mode is deprecated. Please use backend API.');
                 // IndexedDB fallback for offline support
                 setIsAppLoading(false);
-                
+
                 // Check if data exists via backend API
                 try {
                     const casesCount = await DataService.cases.getAll().then((cases: Case[]) => cases.length);
@@ -211,7 +211,7 @@ export function useAppController(): UseAppControllerReturn {
         } catch (e) {
             console.error("Initialization failed:", e);
             setAppStatusMessage('Error initializing application.');
-            setIsAppLoading(false); 
+            setIsAppLoading(false);
         }
     };
 
@@ -242,20 +242,20 @@ export function useAppController(): UseAppControllerReturn {
   // ==========================================================================
   // CALLBACK HANDLERS
   // ==========================================================================
-  
+
   const handleSelectCaseById = useCallback((caseId: string) => {
     startTransition(async () => {
         const found = await DataService.cases.getById(caseId);
         if (found) {
             setSelectedCase(found);
             setSelectedCaseId(caseId);
-            setInitialTab(undefined); 
+            setInitialTab(undefined);
             setActiveView(PATHS.CASES);
             addToast(`Context switched to ${found.title}`, 'info');
         }
     });
   }, [setSelectedCaseId, addToast, setActiveView]);
-  
+
   // Removed unused handleSelectCase - can be re-added if needed
 
   const handleNavigation = useCallback((view: AppView) => {

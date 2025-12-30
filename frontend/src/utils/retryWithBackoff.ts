@@ -3,7 +3,11 @@
  * @description Exponential backoff retry logic for network requests
  */
 
-import { API_RETRY_ATTEMPTS, API_RETRY_DELAY_MS, SYNC_MAX_RETRY_DELAY_MS } from '@/config';
+import {
+  API_RETRY_ATTEMPTS,
+  API_RETRY_DELAY_MS,
+  SYNC_MAX_RETRY_DELAY_MS,
+} from "@/config/network/api.config";
 
 export interface RetryOptions {
   maxRetries?: number;
@@ -20,7 +24,7 @@ export class RetryError extends Error {
     public readonly lastError: Error
   ) {
     super(message);
-    this.name = 'RetryError';
+    this.name = "RetryError";
   }
 }
 
@@ -36,7 +40,7 @@ export async function retryWithBackoff<T>(
     initialDelay = API_RETRY_DELAY_MS,
     maxDelay = SYNC_MAX_RETRY_DELAY_MS,
     backoffFactor = 2,
-    onRetry
+    onRetry,
   } = options;
 
   let lastError: Error;
@@ -56,7 +60,7 @@ export async function retryWithBackoff<T>(
       onRetry?.(attempt + 1, lastError);
 
       // Wait before retrying
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
 
       // Exponential backoff with max delay cap
       delay = Math.min(delay * backoffFactor, maxDelay);
@@ -75,15 +79,15 @@ export async function retryWithBackoff<T>(
  */
 export function isRetryableError(error: unknown): boolean {
   // Network errors
-  if (error && typeof error === 'object' && 'name' in error) {
+  if (error && typeof error === "object" && "name" in error) {
     const errorName = (error as { name: string }).name;
-    if (errorName === 'NetworkError' || errorName === 'TypeError') {
+    if (errorName === "NetworkError" || errorName === "TypeError") {
       return true;
     }
   }
 
   // HTTP status codes that should be retried
-  if (error && typeof error === 'object' && 'status' in error) {
+  if (error && typeof error === "object" && "status" in error) {
     const errorStatus = (error as { status: number }).status;
     const retryableStatuses = [408, 429, 500, 502, 503, 504];
     return retryableStatuses.includes(errorStatus);

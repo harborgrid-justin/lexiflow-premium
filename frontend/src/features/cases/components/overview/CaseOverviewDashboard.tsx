@@ -1,9 +1,9 @@
 /**
  * Matter Overview Dashboard - Enterprise Matter Management Command Center
- * 
+ *
  * @module MatterOverviewDashboard
  * @description Centralized oversight of all matter management operations
- * 
+ *
  * Features:
  * - Real-time KPI metrics (active matters, intake pipeline, deadlines)
  * - Matter status distribution with drill-down capability
@@ -12,7 +12,7 @@
  * - Recent activity feed with smart prioritization
  * - Quick action menu for common operations
  * - Advanced search and filtering
- * 
+ *
  * @architecture
  * - React Query for data fetching and caching
  * - Real-time updates via WebSocket (future enhancement)
@@ -20,20 +20,31 @@
  * - Optimistic UI updates for instant feedback
  */
 
-import React, { useState, useMemo } from 'react';
-import {
-  Briefcase, TrendingUp, Clock, AlertTriangle, Search, Plus, Activity,
-  CheckCircle, Circle, AlertCircle, XCircle, ChevronRight, Loader2
-} from 'lucide-react';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
-import { Card } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
-import { ErrorState } from '@/components/molecules';
 import { CaseStatus } from '@/types';
+import { cn } from '@/utils/cn';
+import {
+  Activity,
+  AlertCircle,
+  AlertTriangle,
+  Briefcase,
+  CheckCircle,
+  ChevronRight,
+  Circle,
+  Clock,
+  Loader2,
+  Plus,
+  Search,
+  TrendingUp,
+  XCircle
+} from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
 interface IntakePipelineStage {
   stage: string;
@@ -92,11 +103,11 @@ export const CaseOverviewDashboard: React.FC = () => {
         const value = stageMatters.reduce((sum, m) => sum + (m.value || 0), 0);
         const avgDays = stageMatters.length > 0
           ? Math.round(stageMatters.reduce((sum, m) => {
-              if (!m.createdAt) return sum;
-              const created = new Date(m.createdAt);
-              const now = new Date();
-              return sum + (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
-            }, 0) / stageMatters.length)
+            if (!m.createdAt) return sum;
+            const created = new Date(m.createdAt);
+            const now = new Date();
+            return sum + (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
+          }, 0) / stageMatters.length)
           : 0;
 
         return {
@@ -198,7 +209,7 @@ export const CaseOverviewDashboard: React.FC = () => {
         }
       });
 
-      return activities.sort((a, b) => 
+      return activities.sort((a, b) =>
         new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
       ).slice(0, 10);
     },
@@ -445,8 +456,8 @@ export const CaseOverviewDashboard: React.FC = () => {
                           <div className={cn(
                             'text-sm font-semibold',
                             resource.utilizationRate > 90 ? 'text-red-500' :
-                            resource.utilizationRate > 80 ? 'text-amber-500' :
-                            'text-emerald-500'
+                              resource.utilizationRate > 80 ? 'text-amber-500' :
+                                'text-emerald-500'
                           )}>
                             {resource.utilizationRate}%
                           </div>
@@ -455,8 +466,8 @@ export const CaseOverviewDashboard: React.FC = () => {
                           <div
                             className={cn('h-full rounded-full',
                               resource.utilizationRate > 90 ? 'bg-red-500' :
-                              resource.utilizationRate > 80 ? 'bg-amber-500' :
-                              'bg-emerald-500'
+                                resource.utilizationRate > 80 ? 'bg-amber-500' :
+                                  'bg-emerald-500'
                             )}
                             style={{ width: `${Math.min(resource.utilizationRate, 100)}%` }}
                           />
@@ -529,8 +540,8 @@ const KPICard: React.FC<KPICardProps> = ({ icon: Icon, title, value, change, tre
         {change && (
           <div className={cn('text-sm mt-2',
             trend === 'up' ? 'text-emerald-500' :
-            trend === 'down' ? 'text-red-500' :
-            isDark ? 'text-slate-400' : 'text-slate-600'
+              trend === 'down' ? 'text-red-500' :
+                isDark ? 'text-slate-400' : 'text-slate-600'
           )}>
             {change}
           </div>
@@ -575,8 +586,8 @@ const StatusIcon: React.FC<{ status: string }> = ({ status }) => {
 const ActivityIcon: React.FC<{ type: string; priority: string }> = ({ type, priority }) => {
   const iconClass = cn('w-5 h-5',
     priority === 'high' ? 'text-red-500' :
-    priority === 'medium' ? 'text-amber-500' :
-    'text-slate-400'
+      priority === 'medium' ? 'text-amber-500' :
+        'text-slate-400'
   );
 
   switch (type) {
@@ -598,7 +609,7 @@ const formatTimestamp = (timestamp: string): string => {
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffMins = Math.floor(diffMs / 60000);
-  
+
   if (diffMins < 60) return `${diffMins}m ago`;
   if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`;
   return `${Math.floor(diffMins / 1440)}d ago`;

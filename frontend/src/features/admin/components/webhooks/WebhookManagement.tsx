@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { Webhook, Plus, Edit, Trash2, Play, AlertCircle, CheckCircle } from 'lucide-react';
+import { WebhooksApiService, type SystemWebhookConfig } from '@/api/integrations';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
+import { useModalState } from '@/hooks';
+import { useNotify } from '@/hooks/useNotify';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useSelection } from '@/hooks/useSelectionState';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { Modal } from '@/components/molecules';
-import { Input } from '@/components/atoms';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { useNotify } from '@/hooks/useNotify';
-import { useModalState } from '@/hooks';
-import { useSelection } from '@/hooks/useSelectionState';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { WebhooksApiService, type SystemWebhookConfig } from '@/api/integrations';
+import { AlertCircle, CheckCircle, Edit, Play, Plus, Trash2, Webhook } from 'lucide-react';
+import React, { useState } from 'react';
 
 const webhooksApi = new WebhooksApiService();
 
@@ -26,7 +26,7 @@ const availableEvents = [
 export const WebhookManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  
+
   // Fetch real webhooks from backend
   const { data: webhooks = [], isLoading, refetch } = useQuery(['webhooks'], async () => {
     const response = await webhooksApi.getAll();
@@ -133,7 +133,7 @@ export const WebhookManagement: React.FC = () => {
       <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
-            <Webhook className="h-5 w-5 mr-2 text-purple-500"/> Webhook Management
+            <Webhook className="h-5 w-5 mr-2 text-purple-500" /> Webhook Management
           </h3>
           <p className={cn("text-sm", theme.text.secondary)}>Configure outgoing webhooks for system events.</p>
         </div>
@@ -207,8 +207,8 @@ export const WebhookManagement: React.FC = () => {
         title={createModal.isOpen ? 'Create Webhook' : 'Edit Webhook'}
       >
         <div className="p-6 space-y-4">
-          <Input label="Endpoint URL" value={formData.url || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, url: e.target.value})} placeholder="https://api.example.com/webhook" />
-          <Input label="Secret (optional)" value={formData.secret || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, secret: e.target.value})} placeholder="Shared secret for signature verification" />
+          <Input label="Endpoint URL" value={formData.url || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, url: e.target.value })} placeholder="https://api.example.com/webhook" />
+          <Input label="Secret (optional)" value={formData.secret || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, secret: e.target.value })} placeholder="Shared secret for signature verification" />
 
           <div>
             <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Events to Subscribe</label>

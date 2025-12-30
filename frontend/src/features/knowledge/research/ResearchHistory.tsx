@@ -1,31 +1,31 @@
 
-import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { AdaptiveLoader } from '@/components/molecules';
-import { ExternalLink, Clock } from 'lucide-react';
-import { SearchToolbar } from '@/components/organisms';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { SearchToolbar } from '@/components/ui/organisms/SearchToolbar/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { ResearchSession } from '@/types';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
+import { Clock, ExternalLink } from 'lucide-react';
+import React from 'react';
 
 export const ResearchHistory: React.FC = () => {
   const { theme } = useTheme();
 
   // Enterprise Data Access
   const { data: history = [], isLoading } = useQuery<ResearchSession[]>(
-      queryKeys.research.history(),
-      () => DataService.research.getHistory()
+    queryKeys.research.history(),
+    () => DataService.research.getHistory()
   );
 
   return (
     <div className="space-y-6 animate-fade-in">
       <SearchToolbar
         value=""
-        onChange={() => {}}
+        onChange={() => { }}
         placeholder="Search past queries..."
       />
 
@@ -38,13 +38,13 @@ export const ResearchHistory: React.FC = () => {
         </TableHeader>
         <TableBody>
           {isLoading ? (
-              <TableRow><TableCell colSpan={4} className="p-0"><AdaptiveLoader contentType="table" shimmer itemCount={5} /></TableCell></TableRow>
+            <TableRow><TableCell colSpan={4} className="p-0"><AdaptiveLoader contentType="table" shimmer itemCount={5} /></TableCell></TableRow>
           ) : history.map(item => (
             <TableRow key={item.id}>
               <TableCell className={cn("font-medium", theme.text.primary)}>{item.query}</TableCell>
               <TableCell>
                 <div className={cn("flex items-center text-xs", theme.text.secondary)}>
-                  <Clock className="h-3 w-3 mr-1"/> {item.timestamp}
+                  <Clock className="h-3 w-3 mr-1" /> {item.timestamp}
                 </div>
               </TableCell>
               <TableCell>{item.sources.length}</TableCell>
@@ -54,11 +54,10 @@ export const ResearchHistory: React.FC = () => {
             </TableRow>
           ))}
           {!isLoading && history.length === 0 && (
-              <TableRow><TableCell colSpan={4} className="text-center py-8 text-slate-400">No research history found.</TableCell></TableRow>
+            <TableRow><TableCell colSpan={4} className="text-center py-8 text-slate-400">No research history found.</TableCell></TableRow>
           )}
         </TableBody>
       </TableContainer>
     </div>
   );
 };
-

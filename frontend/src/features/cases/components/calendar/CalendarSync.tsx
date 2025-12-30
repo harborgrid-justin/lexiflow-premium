@@ -10,21 +10,21 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { CheckCircle, Loader2, RefreshCw, XCircle } from 'lucide-react';
 import React from 'react';
-import { RefreshCw, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services/Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -47,8 +47,8 @@ export const CalendarSync: React.FC = () => {
 
   // Enterprise Data Access
   const { data: integrations = [], isLoading } = useQuery<Integration[]>(
-      ['admin', 'integrations'],
-      DataService.admin.getIntegrations
+    ['admin', 'integrations'],
+    DataService.admin.getIntegrations
   );
 
   const calendarIntegrations = integrations.filter((i: unknown) => {
@@ -58,7 +58,7 @@ export const CalendarSync: React.FC = () => {
     return false;
   });
 
-  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <div className="flex justify-center p-12"><Loader2 className="animate-spin text-blue-600" /></div>;
 
   return (
     <div className={cn("rounded-lg border overflow-hidden shadow-sm animate-fade-in", theme.surface.default, theme.border.default)}>
@@ -68,7 +68,7 @@ export const CalendarSync: React.FC = () => {
           <p className={cn("text-sm", theme.text.secondary)}>Manage 2-way sync with external providers.</p>
         </div>
         <Button variant="outline" size="sm" icon={RefreshCw} className="hidden md:flex">Force Sync All</Button>
-        <Button variant="outline" size="sm" className="md:hidden"><RefreshCw className="h-4 w-4"/></Button>
+        <Button variant="outline" size="sm" className="md:hidden"><RefreshCw className="h-4 w-4" /></Button>
       </div>
       <div className={cn("divide-y", theme.border.default)}>
         {calendarIntegrations.map((acc, i) => (
@@ -84,7 +84,7 @@ export const CalendarSync: React.FC = () => {
             </div>
             <div className="flex justify-between md:block md:text-right items-center">
               <div className={`flex items-center md:justify-end text-sm font-medium ${acc.status === 'Connected' ? 'text-green-600' : 'text-red-600'}`}>
-                {acc.status === 'Connected' ? <CheckCircle className="h-4 w-4 mr-1"/> : <XCircle className="h-4 w-4 mr-1"/>}
+                {acc.status === 'Connected' ? <CheckCircle className="h-4 w-4 mr-1" /> : <XCircle className="h-4 w-4 mr-1" />}
                 {acc.status}
               </div>
               <p className={cn("text-xs mt-1", theme.text.tertiary)}>Last Sync: 2 mins ago</p>
@@ -92,7 +92,7 @@ export const CalendarSync: React.FC = () => {
           </div>
         ))}
         {calendarIntegrations.length === 0 && (
-             <div className="p-8 text-center text-slate-400">No calendar integrations configured.</div>
+          <div className="p-8 text-center text-slate-400">No calendar integrations configured.</div>
         )}
       </div>
       <div className={cn("p-6 border-t", theme.surface.highlight, theme.border.default)}>
@@ -101,4 +101,3 @@ export const CalendarSync: React.FC = () => {
     </div>
   );
 };
-

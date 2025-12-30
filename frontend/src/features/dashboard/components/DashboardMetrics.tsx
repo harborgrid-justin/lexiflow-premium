@@ -12,8 +12,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { AlertTriangle, Briefcase, Clock, FileText } from 'lucide-react';
 import { useState } from 'react';
-import { Briefcase, Clock, FileText, AlertTriangle } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -22,19 +22,19 @@ import { Briefcase, Clock, FileText, AlertTriangle } from 'lucide-react';
 import { useInterval } from '@/hooks/useInterval';
 
 // Components
-import { MetricCard } from '@/components/molecules';
+import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
 interface DashboardMetricsProps {
-    /** Statistics object with key firm metrics. */
-    stats: {
-        activeCases: number;
-        pendingMotions: number;
-        billableHours: number;
-        highRisks: number;
-    } | null;
+  /** Statistics object with key firm metrics. */
+  stats: {
+    activeCases: number;
+    pendingMotions: number;
+    billableHours: number;
+    highRisks: number;
+  } | null;
 }
 
 // ============================================================================
@@ -47,16 +47,16 @@ export function DashboardMetrics({ stats }: DashboardMetricsProps) {
 
   // Simulate real-time updates for demo purposes (DOM Hydration effect)
   useInterval(() => {
-      // 30% chance to update every 3 seconds
-      if (Math.random() > 0.7) {
-          setLiveStats(prev => ({
-              ...prev,
-              billableHours: prev.billableHours + (Math.random() > 0.5 ? 0.5 : 0),
-              pendingMotions: prev.pendingMotions + (Math.random() > 0.8 ? 1 : 0),
-              // Rarely change active cases
-              activeCases: prev.activeCases + (Math.random() > 0.95 ? 1 : 0)
-          }));
-      }
+    // 30% chance to update every 3 seconds
+    if (Math.random() > 0.7) {
+      setLiveStats(prev => ({
+        ...prev,
+        billableHours: prev.billableHours + (Math.random() > 0.5 ? 0.5 : 0),
+        pendingMotions: prev.pendingMotions + (Math.random() > 0.8 ? 1 : 0),
+        // Rarely change active cases
+        activeCases: prev.activeCases + (Math.random() > 0.95 ? 1 : 0)
+      }));
+    }
   }, 3000);
 
   const metrics = [
@@ -69,11 +69,11 @@ export function DashboardMetrics({ stats }: DashboardMetricsProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {metrics.map((stat, idx) => (
-        <MetricCard 
-          key={idx} 
-          label={stat.label} 
+        <MetricCard
+          key={idx}
+          label={stat.label}
           value={stat.value} // Passed as number for animation
-          icon={stat.icon} 
+          icon={stat.icon}
           trend={stat.trend}
           trendUp={true}
           className={`border-l-4 ${stat.color}`}

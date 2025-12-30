@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import { Button } from '@/components/atoms';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 
 /**

@@ -1,9 +1,9 @@
 /**
  * AnalyticsDashboardContent.tsx
- * 
+ *
  * Content router for analytics dashboard tabs - loads data and renders
  * appropriate analytics view based on active tab selection.
- * 
+ *
  * @module components/analytics/AnalyticsDashboardContent
  * @category Analytics - Content Router
  */
@@ -17,7 +17,7 @@ import React, { Suspense, lazy } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { LazyLoader } from '@/components/molecules';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 
 // ============================================================================
 // LAZY-LOADED COMPONENTS
@@ -50,8 +50,8 @@ export const AnalyticsDashboardContent: React.FC<AnalyticsDashboardContentProps>
     <Suspense fallback={<LazyLoader message="Loading analytics data..." />}>
       {/* Business Intelligence: Firm, Practice, Attorney, Financial */}
       {mainTab === 'intel' && (
-        <BusinessIntelligence 
-          subTab={(subTab || 'firm') as 'firm' | 'practice' | 'attorney' | 'financial'} 
+        <BusinessIntelligence
+          subTab={(subTab || 'firm') as 'firm' | 'practice' | 'attorney' | 'financial'}
         />
       )}
 
@@ -62,4 +62,3 @@ export const AnalyticsDashboardContent: React.FC<AnalyticsDashboardContentProps>
     </Suspense>
   );
 };
-

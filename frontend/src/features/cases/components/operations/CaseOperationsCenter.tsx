@@ -1,9 +1,9 @@
 /**
  * Matter Operations Center - Centralized Operations Hub
- * 
+ *
  * @module MatterOperationsCenter
  * @description Task management, collaboration, and workflow coordination
- * 
+ *
  * Features:
  * - Task management and assignment
  * - Team collaboration tools
@@ -15,19 +15,24 @@
  * - Workflow automation
  */
 
-import React, { useState, useMemo } from 'react';
-import {
-  Calendar, Search, Plus, List, Kanban, Loader2
-} from 'lucide-react';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
-import { Card } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
 import type { WorkflowInstance } from '@/api/workflow/workflow-api';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
 import type { User } from '@/types';
+import { cn } from '@/utils/cn';
+import {
+  Calendar,
+  Kanban,
+  List,
+  Loader2,
+  Plus,
+  Search
+} from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
 type ViewMode = 'list' | 'kanban' | 'calendar';
 

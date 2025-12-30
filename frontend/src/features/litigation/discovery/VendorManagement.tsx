@@ -26,26 +26,26 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { Briefcase, Plus, Star } from 'lucide-react';
 import React, { useState } from 'react';
-import { Briefcase, Star, Plus } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { Modal } from '@/components/molecules';
-import { Input } from '@/components/atoms';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
 import { useModalState } from '@/hooks';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Services & Utils
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
-import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
@@ -91,19 +91,19 @@ export function VendorManagement() {
   // HOOKS - Data Fetching
   // ==========================================================================
   const { data: vendors = [] } = useQuery<Vendor[]>(
-      ['vendors', 'all'],
-      () => DataService.discovery.getVendors()
+    ['vendors', 'all'],
+    () => DataService.discovery.getVendors()
   );
 
   const { mutate: addVendor } = useMutation(
-      DataService.discovery.addVendor,
-      {
-          invalidateKeys: [['vendors', 'all']],
-          onSuccess: () => {
-              vendorModal.close();
-              setNewVendor({});
-          }
+    DataService.discovery.addVendor,
+    {
+      invalidateKeys: [['vendors', 'all']],
+      onSuccess: () => {
+        vendorModal.close();
+        setNewVendor({});
       }
+    }
   );
 
   // ==========================================================================
@@ -111,17 +111,17 @@ export function VendorManagement() {
   // ==========================================================================
 
   const handleSave = () => {
-      if (!newVendor.name) return;
-      addVendor({
-          id: `vnd-${Date.now()}`,
-          name: newVendor.name,
-          serviceType: newVendor.serviceType as unknown as Record<string, unknown> || 'Court Reporting',
-          contactName: newVendor.contactName || '',
-          phone: newVendor.phone || '',
-          email: newVendor.email || '',
-          status: 'Active',
-          rating: 5
-      } as unknown as Vendor);
+    if (!newVendor.name) return;
+    addVendor({
+      id: `vnd-${Date.now()}`,
+      name: newVendor.name,
+      serviceType: newVendor.serviceType as unknown as Record<string, unknown> || 'Court Reporting',
+      contactName: newVendor.contactName || '',
+      phone: newVendor.phone || '',
+      email: newVendor.email || '',
+      status: 'Active',
+      rating: 5
+    } as unknown as Vendor);
   };
 
   // ==========================================================================
@@ -294,4 +294,3 @@ export function VendorManagement() {
 // ============================================================================
 
 export default VendorManagement;
-

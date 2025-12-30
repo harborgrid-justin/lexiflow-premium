@@ -1,9 +1,9 @@
-import React from 'react';
-import { Wand2, Upload, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { Card } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import { Plus, Trash2, Upload, Wand2 } from 'lucide-react';
+import React from 'react';
 import { FormatOptionsCard } from './FormatOptionsCard';
 import type { FormatOptions } from './types';
 

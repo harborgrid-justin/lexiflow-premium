@@ -26,35 +26,36 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { AlertCircle, CheckCircle, FileQuestion, FileText, Loader2, Plus, XCircle } from 'lucide-react';
 import React from 'react';
-import { Plus, FileText, CheckCircle, XCircle, FileQuestion, AlertCircle, Loader2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { Modal } from '@/components/molecules';
-import { Input, TextArea } from '@/components/atoms';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
-import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks';
+import { useNotify } from '@/hooks/useNotify';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Services & Utils
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { IdGenerator } from '@/utils/idGenerator';
-import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { StipulationRequest, CaseId } from '@/types';
+import { CaseId, StipulationRequest } from '@/types';
 
 interface DiscoveryStipulationsProps {
   /** Optional case ID to filter stipulations */
@@ -103,16 +104,16 @@ export const DiscoveryStipulations: React.FC<DiscoveryStipulationsProps> = ({ ca
   // ==========================================================================
   // HOOKS - Data Fetching
   // ==========================================================================
-  const stipulationsQueryKey = caseId 
+  const stipulationsQueryKey = caseId
     ? ['stipulations', 'case', caseId]
     : ['stipulations', 'all'];
 
-  const { 
-    data: stipulations = [], 
-    isLoading, 
-    status, 
+  const {
+    data: stipulations = [],
+    isLoading,
+    status,
     error,
-    refetch 
+    refetch
   } = useQuery<StipulationRequest[]>(
     stipulationsQueryKey,
     () => DataService.discovery.getStipulations(caseId)
@@ -121,36 +122,36 @@ export const DiscoveryStipulations: React.FC<DiscoveryStipulationsProps> = ({ ca
   const isError = status === 'error';
 
   const { mutate: addStip, isLoading: isAdding } = useMutation(
-      DataService.discovery.addStipulation,
-      {
-          invalidateKeys: [stipulationsQueryKey],
-          onSuccess: () => {
-              closeModal();
-              resetForm();
-              notify.success('Stipulation requested successfully.');
-          },
-          onError: (err: Error) => {
-              notify.error(`Failed to create stipulation: ${err.message}`);
-          }
+    DataService.discovery.addStipulation,
+    {
+      invalidateKeys: [stipulationsQueryKey],
+      onSuccess: () => {
+        closeModal();
+        resetForm();
+        notify.success('Stipulation requested successfully.');
+      },
+      onError: (err: Error) => {
+        notify.error(`Failed to create stipulation: ${err.message}`);
       }
+    }
   );
 
   const { mutate: updateStipStatus, isLoading: isUpdating } = useMutation(
-      async ({ id, status }: { id: string; status: string }) => {
-          const existing = stipulations.find(s => s.id === id);
-          if (!existing) throw new Error('Stipulation not found');
-          return DataService.discovery.addStipulation({ ...existing, status });
+    async ({ id, status }: { id: string; status: string }) => {
+      const existing = stipulations.find(s => s.id === id);
+      if (!existing) throw new Error('Stipulation not found');
+      return DataService.discovery.addStipulation({ ...existing, status });
+    },
+    {
+      invalidateKeys: [stipulationsQueryKey],
+      onSuccess: (_, variables) => {
+        const statusLabel = variables.status.toLowerCase();
+        notify.success(`Stipulation ${statusLabel} successfully.`);
       },
-      {
-          invalidateKeys: [stipulationsQueryKey],
-          onSuccess: (_, variables) => {
-              const statusLabel = variables.status.toLowerCase();
-              notify.success(`Stipulation ${statusLabel} successfully.`);
-          },
-          onError: (err: Error) => {
-              notify.error(`Failed to update stipulation: ${err.message}`);
-          }
+      onError: (err: Error) => {
+        notify.error(`Failed to update stipulation: ${err.message}`);
       }
+    }
   );
 
   // ==========================================================================
@@ -172,28 +173,28 @@ export const DiscoveryStipulations: React.FC<DiscoveryStipulationsProps> = ({ ca
   };
 
   const handleSave = () => {
-      if (!newStip.title?.trim() || !newStip.requestingParty?.trim()) {
-          notify.warning('Please fill in all required fields.');
-          return;
-      }
+    if (!newStip.title?.trim() || !newStip.requestingParty?.trim()) {
+      notify.warning('Please fill in all required fields.');
+      return;
+    }
 
-      const stipulationData: StipulationRequest = {
-          id: IdGenerator.stipulation(),
-          title: newStip.title.trim(),
-          requestingParty: newStip.requestingParty.trim(),
-          proposedDate: newStip.proposedDate || new Date().toISOString().split('T')[0],
-          status: 'Pending',
-          reason: newStip.reason?.trim() || '',
-          caseId: caseId,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-      };
+    const stipulationData: StipulationRequest = {
+      id: IdGenerator.stipulation(),
+      title: newStip.title.trim(),
+      requestingParty: newStip.requestingParty.trim(),
+      proposedDate: newStip.proposedDate || new Date().toISOString().split('T')[0],
+      status: 'Pending',
+      reason: newStip.reason?.trim() || '',
+      caseId: caseId,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
 
-      addStip(stipulationData);
+    addStip(stipulationData);
   };
 
   const handleStatusChange = (id: string, newStatus: string) => {
-      updateStipStatus({ id, status: newStatus });
+    updateStipStatus({ id, status: newStatus });
   };
 
   const handleInputChange = (field: keyof StipulationRequest) => (
@@ -258,7 +259,7 @@ export const DiscoveryStipulations: React.FC<DiscoveryStipulationsProps> = ({ ca
         No Stipulations Found
       </h3>
       <p className={cn('text-sm mb-4 text-center max-w-md', theme.text.secondary)}>
-        Discovery stipulations help manage joint agreements between parties. 
+        Discovery stipulations help manage joint agreements between parties.
         Create your first stipulation to get started.
       </p>
       <Button variant="primary" icon={Plus} onClick={handleOpenModal}>
@@ -321,8 +322,8 @@ export const DiscoveryStipulations: React.FC<DiscoveryStipulationsProps> = ({ ca
                   {stip.requestingParty}
                 </TableCell>
                 <TableCell className={theme.text.secondary}>
-                  {stip.proposedDate 
-                    ? new Date(stip.proposedDate).toLocaleDateString() 
+                  {stip.proposedDate
+                    ? new Date(stip.proposedDate).toLocaleDateString()
                     : 'Not set'}
                 </TableCell>
                 <TableCell>
@@ -449,5 +450,3 @@ export const DiscoveryStipulations: React.FC<DiscoveryStipulationsProps> = ({ ca
 // ============================================================================
 // EXPORTS
 export default DiscoveryStipulations;
-
-

@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { IconButton } from '@/components/atoms';
+import { IconButton } from '@/components/ui/atoms/IconButton/IconButton';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import { Plus, Edit, Trash2, Download, Share2 } from 'lucide-react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Download, Edit, Plus, Share2, Trash2 } from 'lucide-react';
 import React from "react";
 
 /**

@@ -3,9 +3,9 @@
  * @description Error boundary for Evidence Vault to catch and display errors gracefully
  */
 
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { AlertOctagon, Home, RefreshCw } from 'lucide-react';
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertOctagon, RefreshCw, Home } from 'lucide-react';
-import { Button } from '@/components/atoms';
 
 interface Props {
   children: ReactNode;

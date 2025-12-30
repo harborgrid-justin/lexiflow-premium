@@ -4,16 +4,16 @@
  * @description AI-powered case data import with intelligent field mapping for XML, docket sheets, and structured data
  */
 
-import React, { useState } from 'react';
-import { FileText, FileCode, Sparkles, ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { cn } from '@/utils/cn';
-import { GeminiService } from '@/services/features/research/geminiService';
-import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useNotify } from '@/hooks/useNotify';
-import type { Case, Party, DocketEntry } from '@/types';
+import { useTheme } from '@/providers/ThemeContext';
+import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';
+import { GeminiService } from '@/services/features/research/geminiService';
+import type { Case, DocketEntry, Party } from '@/types';
+import { cn } from '@/utils/cn';
+import { ArrowRight, CheckCircle, FileCode, FileText, Loader2, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface ParsedCaseData {
   caseInfo?: Partial<Case>;
@@ -180,7 +180,7 @@ export const CaseDataImport: React.FC<{
                   <h3 className={cn("font-bold", theme.text.primary)}>
                     {mode === 'xml' ? 'Paste XML Data' : mode === 'ai' ? 'Paste Any Format' : 'Paste Docket Text'}
                   </h3>
-                  
+
                   <textarea
                     className={cn(
                       "w-full h-96 p-4 border rounded-lg font-mono text-xs resize-none",
@@ -273,7 +273,7 @@ export const CaseDataImport: React.FC<{
                 Fill out case details using a traditional form
               </p>
             </div>
-            
+
             <div className="space-y-4 text-left">
               <div>
                 <label className={cn("block text-xs font-medium mb-1", theme.text.secondary)}>

@@ -1,23 +1,19 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
-import React, { useState, Suspense } from 'react';
-import { Briefcase, Activity, Plus, Settings, Clock, DollarSign, BarChart3, TrendingUp, Eye, Lightbulb } from 'lucide-react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Activity, BarChart3, Briefcase, Clock, DollarSign, Eye, Lightbulb, Plus, Settings, TrendingUp } from 'lucide-react';
+import React, { Suspense, useState } from 'react';
 
 // Import actual Case Management components
-import { CaseOverviewDashboard } from '@features/cases';
-import { CaseOperationsCenter } from '@features/cases';
-import { CaseCalendar } from '@features/cases/components/calendar/CaseCalendar';
-import { CaseFinancialsCenter } from '@features/cases';
-import { CaseAnalyticsDashboard } from '@features/cases';
-import { CaseInsightsDashboard } from '@features/cases';
 import { NewCaseIntakeForm } from '@/features/cases/components/intake/NewCaseIntakeForm';
+import { CaseAnalyticsDashboard, CaseFinancialsCenter, CaseInsightsDashboard, CaseOperationsCenter, CaseOverviewDashboard } from '@features/cases';
+import { CaseCalendar } from '@features/cases/components/calendar/CaseCalendar';
 
 /**
  * TabbedPageLayout with Actions - Matter Management pattern
- * 
+ *
  * Demonstrates hybrid navigation: standard two-level tabs PLUS
  * quick-access action buttons for frequent operations.
  */

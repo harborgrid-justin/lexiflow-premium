@@ -10,29 +10,29 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
-import { Plus, Users, Clock } from 'lucide-react';
+import { Clock, Plus, Users } from 'lucide-react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { PageHeader } from '@/components/organisms';
-import { Button } from '@/components/atoms';
-import { LazyLoader } from '@/components/molecules';
-import { DiscoveryNavigation, getParentTabForView, getFirstTabOfParent } from './layout/DiscoveryNavigation';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { DiscoveryNavigation, getFirstTabOfParent, getParentTabForView } from './layout/DiscoveryNavigation';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { useNotify } from '@/hooks/useNotify';
-import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
+import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
 import { STORES } from '@/services/data/db';
+import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
 
 // ============================================================================
@@ -55,16 +55,16 @@ const DiscoveryInterviews = lazy(() => import('./DiscoveryInterviews'));
 const Examinations = lazy(() => import('./Examinations'));
 const Custodians = lazy(() => import('./Custodians'));
 
-import { DiscoveryView, DiscoveryPlatformProps } from './types';
 import { DiscoveryErrorBoundary } from './DiscoveryErrorBoundary';
-import { DiscoveryRequestsSkeleton, PrivilegeLogSkeleton, LegalHoldsSkeleton, ESIDashboardSkeleton } from './DiscoverySkeleton';
+import { DiscoveryRequestsSkeleton, ESIDashboardSkeleton, LegalHoldsSkeleton, PrivilegeLogSkeleton } from './DiscoverySkeleton';
+import { DiscoveryPlatformProps, DiscoveryView } from './types';
 
 const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProps) => {
   const { theme } = useTheme();
   const notify = useNotify();
   const [activeTab, setActiveTab] = useSessionStorage<DiscoveryView>(
-      caseId ? `discovery_active_tab_${caseId}` : 'discovery_active_tab', 
-      initialTab || 'dashboard'
+    caseId ? `discovery_active_tab_${caseId}` : 'discovery_active_tab',
+    initialTab || 'dashboard'
   );
   const [contextId, setContextId] = useState<string | null>(null);
 
@@ -80,48 +80,48 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
   // Enterprise Query: Requests are central to many sub-views
   // We pass caseId to the service layer to scope the data fetch
   const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
-      [STORES.REQUESTS, caseId || 'all'],
-      async () => {
-        const discovery = DataService.discovery as any;
-        return discovery.getRequests(caseId);
-      }
+    [STORES.REQUESTS, caseId || 'all'],
+    async () => {
+      const discovery = DataService.discovery as any;
+      return discovery.getRequests(caseId);
+    }
   );
 
   const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
-      async () => {
-        const discovery = DataService.discovery as any;
-        return discovery.syncDeadlines();
+    async () => {
+      const discovery = DataService.discovery as any;
+      return discovery.syncDeadlines();
+    },
+    {
+      onSuccess: () => {
+        notify.success("Synced discovery deadlines with court calendar.");
+        queryClient.invalidate(queryKeys.discovery.all());
+        queryClient.invalidate(queryKeys.calendar.events());
       },
-      {
-          onSuccess: () => {
-              notify.success("Synced discovery deadlines with court calendar.");
-              queryClient.invalidate(queryKeys.discovery.all());
-              queryClient.invalidate(queryKeys.calendar.events());
-          },
-          onError: (error: unknown) => {
-              notify.error('Failed to sync deadlines. Please try again later.');
-              console.error('Sync error:', error);
-          }
+      onError: (error: unknown) => {
+        notify.error('Failed to sync deadlines. Please try again later.');
+        console.error('Sync error:', error);
       }
+    }
   );
 
   useEffect(() => {
-      if (initialTab) setActiveTab(initialTab);
+    if (initialTab) setActiveTab(initialTab);
   }, [initialTab, setActiveTab]);
 
-  const activeParentTab = useMemo(() => 
+  const activeParentTab = useMemo(() =>
     getParentTabForView(activeTab),
-  [activeTab]);
+    [activeTab]);
 
   const handleParentTabChange = useCallback((parentId: string) => {
     setActiveTab(getFirstTabOfParent(parentId));
   }, [setActiveTab]);
-  
+
   const handleNavigate = (targetView: DiscoveryView, id?: string) => {
     if (id) setContextId(id);
     setActiveTab(targetView);
   };
-  
+
   const handleBackToDashboard = () => {
     setActiveTab('dashboard');
     setContextId(null);
@@ -129,24 +129,24 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
-      'mod+d': () => setActiveTab('dashboard'),
-      'mod+r': () => setActiveTab('requests'),
-      'mod+p': () => setActiveTab('privilege'),
-      'mod+h': () => setActiveTab('holds'),
-      'mod+e': () => setActiveTab('esi'),
-      'escape': () => {
-          if (isWizardView) {
-              handleBackToDashboard();
-          }
+    'mod+d': () => setActiveTab('dashboard'),
+    'mod+r': () => setActiveTab('requests'),
+    'mod+p': () => setActiveTab('privilege'),
+    'mod+h': () => setActiveTab('holds'),
+    'mod+e': () => setActiveTab('esi'),
+    'escape': () => {
+      if (isWizardView) {
+        handleBackToDashboard();
       }
+    }
   });
 
   const handleSaveResponse = async (reqId: string) => {
-      const discovery = DataService.discovery as any;
-      await discovery.updateRequestStatus(reqId, 'Responded');
-      queryClient.invalidate(caseId ? queryKeys.discovery.byCaseId(caseId) : queryKeys.discovery.all());
-      alert(`Response saved for ${reqId}. Status updated to Responded.`);
-      setActiveTab('requests');
+    const discovery = DataService.discovery as any;
+    await discovery.updateRequestStatus(reqId, 'Responded');
+    queryClient.invalidate(caseId ? queryKeys.discovery.byCaseId(caseId) : queryKeys.discovery.all());
+    alert(`Response saved for ${reqId}. Status updated to Responded.`);
+    setActiveTab('requests');
   };
 
   const isWizardView = ['doc_viewer', 'response', 'production_wizard'].includes(activeTab);
@@ -163,36 +163,36 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
     'privilege': <PrivilegeLog />,
     'holds': <LegalHolds />,
     'plan': (
-        <div className={cn("p-12 flex flex-col items-center justify-center h-full text-center rounded-lg border-2 border-dashed", theme.border.default)}>
-            <Users className={cn("h-16 w-16 mb-4 opacity-20", theme.text.primary)}/>
-            <p className={cn("font-medium text-lg", theme.text.primary)}>Rule 26(f) Discovery Plan Builder</p>
-            <p className={cn("text-sm mb-6", theme.text.secondary)}>Collaborative editor for joint discovery plans.</p>
-            <Button variant="outline" onClick={handleBackToDashboard}>Return to Dashboard</Button>
-        </div>
+      <div className={cn("p-12 flex flex-col items-center justify-center h-full text-center rounded-lg border-2 border-dashed", theme.border.default)}>
+        <Users className={cn("h-16 w-16 mb-4 opacity-20", theme.text.primary)} />
+        <p className={cn("font-medium text-lg", theme.text.primary)}>Rule 26(f) Discovery Plan Builder</p>
+        <p className={cn("text-sm mb-6", theme.text.secondary)}>Collaborative editor for joint discovery plans.</p>
+        <Button variant="outline" onClick={handleBackToDashboard}>Return to Dashboard</Button>
+      </div>
     ),
   }), [requests, theme, handleNavigate, handleBackToDashboard]);
 
   if (isWizardView) {
-      return (
-          <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
-            <Suspense fallback={<LazyLoader message="Loading Discovery Wizard..." />}>
-              {activeTab === 'doc_viewer' && (
-                  <DiscoveryDocumentViewer docId={contextId || ''} onBack={handleBackToDashboard} />
-              )}
-              {activeTab === 'response' && (
-                  <div className="p-6 h-full"><DiscoveryResponse request={requests.find(r => r.id === contextId) || null} onBack={() => setActiveTab('requests')} onSave={handleSaveResponse} /></div>
-              )}
-              {activeTab === 'production_wizard' && (
-                  <div className="p-6 h-full"><DiscoveryProduction request={requests.find(r => r.id === contextId) || null} onBack={() => setActiveTab('productions')} /></div>
-              )}
-            </Suspense>
-          </div>
-      );
+    return (
+      <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
+        <Suspense fallback={<LazyLoader message="Loading Discovery Wizard..." />}>
+          {activeTab === 'doc_viewer' && (
+            <DiscoveryDocumentViewer docId={contextId || ''} onBack={handleBackToDashboard} />
+          )}
+          {activeTab === 'response' && (
+            <div className="p-6 h-full"><DiscoveryResponse request={requests.find(r => r.id === contextId) || null} onBack={() => setActiveTab('requests')} onSave={handleSaveResponse} /></div>
+          )}
+          {activeTab === 'production_wizard' && (
+            <div className="p-6 h-full"><DiscoveryProduction request={requests.find(r => r.id === contextId) || null} onBack={() => setActiveTab('productions')} /></div>
+          )}
+        </Suspense>
+      </div>
+    );
   }
 
   // Show skeletons while loading
   const renderSkeleton = () => {
-    switch(activeTab) {
+    switch (activeTab) {
       case 'requests': return <DiscoveryRequestsSkeleton />;
       case 'privilege': return <PrivilegeLogSkeleton />;
       case 'holds': return <LegalHoldsSkeleton />;
@@ -205,31 +205,31 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
       <div className={cn("px-6 pt-6 shrink-0", caseId ? "pt-2" : "")}>
         {!caseId && (
-            <PageHeader 
-                title="Discovery Center" 
-                subtitle="Manage Requests, Legal Holds, and FRCP Compliance."
-                actions={
-                <div className="flex gap-2">
-                    <Button variant="secondary" icon={Clock} onClick={() => syncDeadlines(undefined)} isLoading={isSyncing}>Sync Deadlines</Button>
-                    <Button variant="primary" icon={Plus} onClick={() => alert("New Request Wizard")}>Create Request</Button>
-                </div>
-                }
-            />
+          <PageHeader
+            title="Discovery Center"
+            subtitle="Manage Requests, Legal Holds, and FRCP Compliance."
+            actions={
+              <div className="flex gap-2">
+                <Button variant="secondary" icon={Clock} onClick={() => syncDeadlines(undefined)} isLoading={isSyncing}>Sync Deadlines</Button>
+                <Button variant="primary" icon={Plus} onClick={() => alert("New Request Wizard")}>Create Request</Button>
+              </div>
+            }
+          />
         )}
-        
-        <DiscoveryNavigation 
-            activeTab={activeTab} 
-            setActiveTab={setActiveTab} 
-            activeParentTabId={activeParentTab.id}
-            onParentTabChange={handleParentTabChange}
+
+        <DiscoveryNavigation
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          activeParentTabId={activeParentTab.id}
+          onParentTabChange={handleParentTabChange}
         />
       </div>
 
       <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0">
         <div className="h-full overflow-y-auto custom-scrollbar">
-            <Suspense fallback={renderSkeleton()}>
-                {tabContentMap[activeTab as keyof typeof tabContentMap]}
-            </Suspense>
+          <Suspense fallback={renderSkeleton()}>
+            {tabContentMap[activeTab as keyof typeof tabContentMap]}
+          </Suspense>
         </div>
       </div>
     </div>
@@ -244,4 +244,3 @@ export const DiscoveryPlatform = (props: DiscoveryPlatformProps) => (
 );
 
 export default DiscoveryPlatform;
-

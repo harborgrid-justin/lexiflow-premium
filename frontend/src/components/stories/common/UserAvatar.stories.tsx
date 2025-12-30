@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { UserAvatar } from '@/components/atoms';
+import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
 import { ThemeProvider } from '@/providers/ThemeContext';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";
 
 /**

@@ -1,8 +1,8 @@
 
-import React, { useState, useEffect } from 'react';
-import { Modal } from '@/components/molecules';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { Save } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface RecordModalProps {
   isOpen: boolean;
@@ -24,7 +24,7 @@ export const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, title
     return Object.keys(formData).map(key => {
       // Filter out internal or complex array/object fields for this simple editor
       if (key === 'id' || key === 'parties' || key === 'versions' || key === 'matters' || typeof formData[key] === 'object') return null;
-      
+
       return (
         <div key={key} className="mb-4">
           <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">{key}</label>

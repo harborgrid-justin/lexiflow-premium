@@ -10,24 +10,24 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { ExternalLink, Landmark } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { AdaptiveLoader } from '@/components/molecules';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -37,8 +37,8 @@ export const JurisdictionFederal: React.FC = () => {
 
   // Performance Engine: useQuery
   const { data: rawCourts = [], isLoading } = useQuery<unknown[]>(
-      ['jurisdictions', 'federal'],
-      DataService.jurisdiction.getFederal
+    ['jurisdictions', 'federal'],
+    DataService.jurisdiction.getFederal
   );
 
   // Defensive array validation
@@ -54,7 +54,7 @@ export const JurisdictionFederal: React.FC = () => {
           <p className="opacity-80 text-sm mt-1">Access Pacer records, standing orders, and circuit rules.</p>
         </div>
         <div className="p-3 bg-white/10 rounded-full">
-          <Landmark className="h-8 w-8"/>
+          <Landmark className="h-8 w-8" />
         </div>
       </div>
 
@@ -68,12 +68,12 @@ export const JurisdictionFederal: React.FC = () => {
         <TableBody>
           {courts.map((court: unknown, i: number) => (
             <TableRow key={i}>
-              <TableCell className={cn("font-bold", theme.text.primary)}>{(court as {name: string}).name}</TableCell>
-              <TableCell>{(court as {region: string}).region}</TableCell>
-              <TableCell><Badge variant="neutral">{(court as {type: string}).type}</Badge></TableCell>
+              <TableCell className={cn("font-bold", theme.text.primary)}>{(court as { name: string }).name}</TableCell>
+              <TableCell>{(court as { region: string }).region}</TableCell>
+              <TableCell><Badge variant="neutral">{(court as { type: string }).type}</Badge></TableCell>
               <TableCell className="text-right">
                 <button className={cn("hover:underline text-xs flex items-center justify-end", theme.primary.text)}>
-                  View Rules <ExternalLink className="h-3 w-3 ml-1"/>
+                  View Rules <ExternalLink className="h-3 w-3 ml-1" />
                 </button>
               </TableCell>
             </TableRow>
@@ -83,5 +83,3 @@ export const JurisdictionFederal: React.FC = () => {
     </div>
   );
 };
-
-

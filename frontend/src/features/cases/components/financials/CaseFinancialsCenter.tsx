@@ -1,9 +1,9 @@
 /**
  * Matter Financials Center - Comprehensive Financial Management
- * 
+ *
  * @module MatterFinancialsCenter
  * @description Complete financial oversight and billing management
- * 
+ *
  * Features:
  * - Billing overview and analytics
  * - Budget tracking and forecasting
@@ -17,18 +17,22 @@
  * - Trust accounting
  */
 
-import React, { useState, useMemo } from 'react';
-import {
-  DollarSign, TrendingUp, Clock, BarChart3,
-  Download, Wallet
-} from 'lucide-react';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
-import { Card } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
+import {
+  BarChart3,
+  Clock,
+  DollarSign,
+  Download,
+  TrendingUp,
+  Wallet
+} from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
 export const CaseFinancialsCenter: React.FC = () => {
   const { isDark } = useTheme();
@@ -116,70 +120,70 @@ export const CaseFinancialsCenter: React.FC = () => {
     <div className={cn('h-full flex flex-col', isDark ? 'bg-slate-900' : 'bg-slate-50')}>
       <div className={cn('border-b px-6 py-4', isDark ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
         <div className="flex items-center justify-between">
-            <select
-              value={dateRange}
-              onChange={(e) => setDateRange(e.target.value as typeof dateRange)}
-              className={cn(
-                'px-4 py-2 rounded-lg border text-sm',
-                isDark
-                  ? 'bg-slate-700 border-slate-600 text-slate-100'
-                  : 'bg-white border-slate-300 text-slate-900'
-              )}
-            >
-              <option value="30d">Last 30 Days</option>
-              <option value="90d">Last 90 Days</option>
-              <option value="ytd">Year to Date</option>
-              <option value="all">All Time</option>
-            </select>
-            <Button variant="outline" size="sm">
-              <Download className="w-4 h-4 mr-2" />
-              Export
-            </Button>
-          </div>
+          <select
+            value={dateRange}
+            onChange={(e) => setDateRange(e.target.value as typeof dateRange)}
+            className={cn(
+              'px-4 py-2 rounded-lg border text-sm',
+              isDark
+                ? 'bg-slate-700 border-slate-600 text-slate-100'
+                : 'bg-white border-slate-300 text-slate-900'
+            )}
+          >
+            <option value="30d">Last 30 Days</option>
+            <option value="90d">Last 90 Days</option>
+            <option value="ytd">Year to Date</option>
+            <option value="all">All Time</option>
+          </select>
+          <Button variant="outline" size="sm">
+            <Download className="w-4 h-4 mr-2" />
+            Export
+          </Button>
         </div>
+      </div>
 
-        <div className={cn('flex items-center gap-2 p-1 rounded-lg', isDark ? 'bg-slate-700' : 'bg-slate-100')}>
-          <button
-            onClick={() => setViewMode('overview')}
-            className={cn('px-4 py-2 rounded text-sm font-medium transition-colors',
-              viewMode === 'overview'
-                ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
-                : isDark ? 'text-slate-400' : 'text-slate-600'
-            )}
-          >
-            Overview
-          </button>
-          <button
-            onClick={() => setViewMode('billing')}
-            className={cn('px-4 py-2 rounded text-sm font-medium transition-colors',
-              viewMode === 'billing'
-                ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
-                : isDark ? 'text-slate-400' : 'text-slate-600'
-            )}
-          >
-            Billing
-          </button>
-          <button
-            onClick={() => setViewMode('expenses')}
-            className={cn('px-4 py-2 rounded text-sm font-medium transition-colors',
-              viewMode === 'expenses'
-                ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
-                : isDark ? 'text-slate-400' : 'text-slate-600'
-            )}
-          >
-            Expenses
-          </button>
-          <button
-            onClick={() => setViewMode('budget')}
-            className={cn('px-4 py-2 rounded text-sm font-medium transition-colors',
-              viewMode === 'budget'
-                ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
-                : isDark ? 'text-slate-400' : 'text-slate-600'
-            )}
-          >
-            Budget
-          </button>
-        </div>
+      <div className={cn('flex items-center gap-2 p-1 rounded-lg', isDark ? 'bg-slate-700' : 'bg-slate-100')}>
+        <button
+          onClick={() => setViewMode('overview')}
+          className={cn('px-4 py-2 rounded text-sm font-medium transition-colors',
+            viewMode === 'overview'
+              ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
+              : isDark ? 'text-slate-400' : 'text-slate-600'
+          )}
+        >
+          Overview
+        </button>
+        <button
+          onClick={() => setViewMode('billing')}
+          className={cn('px-4 py-2 rounded text-sm font-medium transition-colors',
+            viewMode === 'billing'
+              ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
+              : isDark ? 'text-slate-400' : 'text-slate-600'
+          )}
+        >
+          Billing
+        </button>
+        <button
+          onClick={() => setViewMode('expenses')}
+          className={cn('px-4 py-2 rounded text-sm font-medium transition-colors',
+            viewMode === 'expenses'
+              ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
+              : isDark ? 'text-slate-400' : 'text-slate-600'
+          )}
+        >
+          Expenses
+        </button>
+        <button
+          onClick={() => setViewMode('budget')}
+          className={cn('px-4 py-2 rounded text-sm font-medium transition-colors',
+            viewMode === 'budget'
+              ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
+              : isDark ? 'text-slate-400' : 'text-slate-600'
+          )}
+        >
+          Budget
+        </button>
+      </div>
 
       <div className="flex-1 overflow-auto p-6">
         {/* Financial KPIs */}

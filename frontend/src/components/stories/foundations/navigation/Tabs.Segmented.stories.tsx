@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Tabs } from '@/components/molecules';
+import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { ThemeProvider } from '@/providers/ThemeContext';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
 
 /**
  * Tabs - Segmented variant
- * 
+ *
  * The default segmented style with pill-like buttons. Best for
  * compact toolbars and view switchers.
  */

@@ -1,10 +1,10 @@
 /**
  * SettlementCalculator.tsx
- * 
+ *
  * Monte Carlo simulation engine for settlement value forecasting.
  * Runs probabilistic simulations to determine expected value ranges
  * and optimal settlement targets based on case parameters.
- * 
+ *
  * @module components/analytics/SettlementCalculator
  * @category Analytics - Settlement Modeling
  */
@@ -12,23 +12,23 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Calculator, RefreshCw, TrendingUp } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import React from 'react';
+import { Area, AreaChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Card } from '@/components/molecules';
-import { Input } from '@/components/atoms';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Hooks & Context
+import { useChartTheme } from '@/components/features/core/components/ChartHelpers/ChartHelpers';
+import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
 import { useTheme } from '@/providers/ThemeContext';
 import type { ThemeStateValue } from '@/providers/ThemeContext.types';
-import { useChartTheme } from '@/components/organisms';
-import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
 
 // Utils & Services
 import { cn } from '@/utils/cn';
@@ -97,40 +97,40 @@ const SimulationParametersPanel: React.FC<SimulationParametersPanelProps> = ({
 }) => (
   <Card className="flex flex-col h-full">
     <div className={cn("flex items-center gap-2 mb-4", theme.text.link)}>
-      <Calculator className="h-5 w-5"/>
+      <Calculator className="h-5 w-5" />
       <h3 className="font-bold">Simulation Parameters</h3>
     </div>
     <div className="space-y-4 flex-1">
-      <Input 
-        label="Low Estimate ($)" 
-        type="number" 
-        value={low} 
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onLowChange(Number(e.target.value))} 
+      <Input
+        label="Low Estimate ($)"
+        type="number"
+        value={low}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onLowChange(Number(e.target.value))}
       />
-      <Input 
-        label="High Estimate ($)" 
-        type="number" 
-        value={high} 
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onHighChange(Number(e.target.value))} 
+      <Input
+        label="High Estimate ($)"
+        type="number"
+        value={high}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onHighChange(Number(e.target.value))}
       />
       <div>
         <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>
           Liability Probability ({liabilityProb}%)
         </label>
-        <input 
-          type="range" 
-          min="0" 
-          max="100" 
-          value={liabilityProb} 
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value={liabilityProb}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onLiabilityProbChange(Number(e.target.value))}
           className="w-full"
         />
       </div>
       <div className="pt-4">
-        <Button 
-          variant="primary" 
-          className="w-full" 
-          icon={isCalculating ? RefreshCw : Calculator} 
+        <Button
+          variant="primary"
+          className="w-full"
+          icon={isCalculating ? RefreshCw : Calculator}
           onClick={onRunSimulation}
           isLoading={isCalculating}
         >
@@ -146,7 +146,7 @@ const SimulationParametersPanel: React.FC<SimulationParametersPanelProps> = ({
  */
 const SimulationMetricsDisplay: React.FC<SimulationMetricsDisplayProps> = ({ metrics, theme }) => {
   const recommendedSettlement = ((metrics.ev + metrics.p75) / 2).toLocaleString(undefined, { maximumFractionDigits: 0 });
-  
+
   return (
     <div className={cn("grid grid-cols-3 gap-4 mt-6 pt-4 border-t", theme.border.default)}>
       <div className="text-center">
@@ -163,7 +163,7 @@ const SimulationMetricsDisplay: React.FC<SimulationMetricsDisplayProps> = ({ met
       </div>
       <div className="text-center flex flex-col items-center justify-center">
         <div className="flex items-center text-green-600 text-xs font-bold">
-          <TrendingUp className="h-3 w-3 mr-1"/> Recommendation
+          <TrendingUp className="h-3 w-3 mr-1" /> Recommendation
         </div>
         <p className={cn("font-bold text-sm", theme.text.primary)}>
           Settle ${recommendedSettlement}
@@ -204,23 +204,23 @@ const SimulationResultsChart: React.FC<SimulationResultsChartProps> = ({
         <AreaChart data={results} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor={chartTheme.colors.success} stopOpacity={0.8}/>
-              <stop offset="95%" stopColor={chartTheme.colors.success} stopOpacity={0}/>
+              <stop offset="5%" stopColor={chartTheme.colors.success} stopOpacity={0.8} />
+              <stop offset="95%" stopColor={chartTheme.colors.success} stopOpacity={0} />
             </linearGradient>
           </defs>
           <XAxis dataKey="range" fontSize={10} tickLine={false} axisLine={false} stroke={chartTheme.text} />
           <YAxis hide />
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
-          <Tooltip 
-            cursor={{stroke: chartTheme.colors.success, strokeWidth: 1}}
+          <Tooltip
+            cursor={{ stroke: chartTheme.colors.success, strokeWidth: 1 }}
             contentStyle={chartTheme.tooltipStyle}
           />
           <Area type="monotone" dataKey="count" stroke={chartTheme.colors.success} fillOpacity={1} fill="url(#colorCount)" />
-          <ReferenceLine 
-            x={results.find(r => r.value >= metrics.ev)?.range} 
-            stroke={chartTheme.colors.danger} 
-            strokeDasharray="3 3" 
-            label="EV" 
+          <ReferenceLine
+            x={results.find(r => r.value >= metrics.ev)?.range}
+            stroke={chartTheme.colors.danger}
+            strokeDasharray="3 3"
+            label="EV"
           />
         </AreaChart>
       </ResponsiveContainer>
@@ -236,10 +236,10 @@ const SimulationResultsChart: React.FC<SimulationResultsChartProps> = ({
 
 /**
  * SettlementCalculator - Container component for Monte Carlo settlement simulation
- * 
+ *
  * Uses useSettlementSimulation hook for business logic
  * Composed of presentation components for clean separation
- * 
+ *
  * Features:
  * - Configurable damage range and liability probability
  * - 1,000+ iteration Monte Carlo simulation

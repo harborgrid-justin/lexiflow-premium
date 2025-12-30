@@ -1,9 +1,9 @@
 /**
  * Matter Analytics Dashboard - Comprehensive Analytics & Business Intelligence
- * 
+ *
  * @module MatterAnalyticsDashboard
  * @description Enterprise-grade analytics for matter performance and insights
- * 
+ *
  * Features:
  * - Matter performance metrics
  * - Financial performance tracking
@@ -17,18 +17,25 @@
  * - Custom report generation
  */
 
-import React, { useState, useMemo } from 'react';
-import {
-  DollarSign, Clock, Users, Briefcase,
-  PieChart, LineChart, Download, ArrowUp, ArrowDown
-} from 'lucide-react';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
-import { Card } from '@/components/molecules';
 import { CaseStatus } from '@/types';
+import { cn } from '@/utils/cn';
+import {
+  ArrowDown,
+  ArrowUp,
+  Briefcase,
+  Clock,
+  DollarSign,
+  Download,
+  LineChart,
+  PieChart,
+  Users
+} from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
 export const CaseAnalyticsDashboard: React.FC = () => {
   const { isDark } = useTheme();
@@ -56,14 +63,14 @@ export const CaseAnalyticsDashboard: React.FC = () => {
   // Calculate analytics metrics
   const metrics = useMemo(() => {
     if (!matters) return { totalMatters: 0, revenue: 0, avgResolution: 0, utilization: 0 };
-    
+
     const now = new Date();
     const cutoffDate = new Date();
     if (dateRange === '7d') cutoffDate.setDate(now.getDate() - 7);
     else if (dateRange === '30d') cutoffDate.setDate(now.getDate() - 30);
     else if (dateRange === '90d') cutoffDate.setDate(now.getDate() - 90);
     else if (dateRange === 'ytd') cutoffDate.setMonth(0, 1);
-    
+
     const filteredMatters = matters.filter(m =>
       m.createdAt && new Date(m.createdAt) >= cutoffDate &&
       (practiceAreaFilter === 'all' || m.practiceArea === practiceAreaFilter)
@@ -76,17 +83,17 @@ export const CaseAnalyticsDashboard: React.FC = () => {
     const closedMatters = filteredMatters.filter(m => m.status === CaseStatus.Closed);
     const avgResolution = closedMatters.length > 0
       ? Math.round(closedMatters.reduce((sum, m) => {
-          if (!m.createdAt || !m.updatedAt) return sum;
-          const created = new Date(m.createdAt);
-          const closed = new Date(m.updatedAt);
-          return sum + (closed.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
-        }, 0) / closedMatters.length)
+        if (!m.createdAt || !m.updatedAt) return sum;
+        const created = new Date(m.createdAt);
+        const closed = new Date(m.updatedAt);
+        return sum + (closed.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
+      }, 0) / closedMatters.length)
       : 0;
-    
+
     const totalHours = timeEntries?.reduce((sum, t) => sum + (t.duration || 0), 0) || 0;
     const capacity = 180 * (timeEntries?.length || 1); // Assuming 180h/month per person
     const utilization = capacity > 0 ? (totalHours / capacity) * 100 : 0;
-    
+
     return {
       totalMatters: filteredMatters.length,
       revenue: totalRevenue,

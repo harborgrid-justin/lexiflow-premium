@@ -1,10 +1,10 @@
 
-import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Badge } from '@/components/atoms';
-import { User, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import { CheckCircle, Clock, User, XCircle } from 'lucide-react';
+import React from 'react';
 
 export const AccessRequestManager: React.FC = () => {
     const { theme } = useTheme();
@@ -36,7 +36,7 @@ export const AccessRequestManager: React.FC = () => {
                         <TableRow key={req.id}>
                             <TableCell>
                                 <div className="flex items-center gap-2">
-                                    <User className={cn("h-4 w-4", theme.text.tertiary)}/>
+                                    <User className={cn("h-4 w-4", theme.text.tertiary)} />
                                     <span className={cn("font-medium", theme.text.primary)}>{req.user}</span>
                                 </div>
                             </TableCell>
@@ -44,7 +44,7 @@ export const AccessRequestManager: React.FC = () => {
                             <TableCell className={cn("text-xs italic", theme.text.secondary)}>{req.purpose}</TableCell>
                             <TableCell>
                                 <span className={cn("flex items-center text-xs", theme.text.tertiary)}>
-                                    <Clock className="h-3 w-3 mr-1"/> {req.date}
+                                    <Clock className="h-3 w-3 mr-1" /> {req.date}
                                 </span>
                             </TableCell>
                             <TableCell>
@@ -55,8 +55,8 @@ export const AccessRequestManager: React.FC = () => {
                             <TableCell className="text-right">
                                 {req.status === 'Pending' && (
                                     <div className="flex justify-end gap-1">
-                                        <button className="p-1.5 text-green-600 hover:bg-green-50 rounded" title="Approve"><CheckCircle className="h-4 w-4"/></button>
-                                        <button className="p-1.5 text-red-600 hover:bg-red-50 rounded" title="Reject"><XCircle className="h-4 w-4"/></button>
+                                        <button className="p-1.5 text-green-600 hover:bg-green-50 rounded" title="Approve"><CheckCircle className="h-4 w-4" /></button>
+                                        <button className="p-1.5 text-red-600 hover:bg-red-50 rounded" title="Reject"><XCircle className="h-4 w-4" /></button>
                                     </div>
                                 )}
                             </TableCell>

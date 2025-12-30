@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Settings, Code, FileSearch, Save, Download, Upload, CheckCircle } from 'lucide-react';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { Input } from '@/components/atoms';
-import { Tabs } from '@/components/molecules';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { CheckCircle, Code, Download, FileSearch, Save, Settings, Upload } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface ConfigurationProps {
   initialTab?: string;
@@ -16,7 +16,7 @@ export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'gene
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState(initialTab);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  
+
   // Fetch real configuration from backend
   const { data: backendConfig, isLoading } = useQuery(['system', 'config'], async () => {
     // Fetch from backend configuration API
@@ -65,7 +65,7 @@ export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'gene
     const dataStr = JSON.stringify(config, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
     const exportFileDefaultName = `lexiflow-config-${new Date().toISOString().split('T')[0]}.json`;
-    
+
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
@@ -85,7 +85,7 @@ export const Configuration: React.FC<ConfigurationProps> = ({ initialTab = 'gene
           const importedConfig = JSON.parse(event.target?.result as string);
           setConfig({ ...config, ...importedConfig });
         } catch (error) {
-          console.error('Invalid configuration file');
+          console.error('Invalid configuration file', error);
         }
       };
       reader.readAsText(file);

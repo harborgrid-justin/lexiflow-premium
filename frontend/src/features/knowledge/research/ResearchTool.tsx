@@ -10,32 +10,32 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
+import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from '@/providers/ThemeContext';
-import { useSingleSelection } from '@/hooks/useMultiSelection';
 
 // Components
-import { LazyLoader } from '@/components/molecules';
 import { TabbedPageLayout } from '@/components/layouts';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { ResearchToolContent } from './ResearchToolContent';
 
 // Utils & Config
-import { cn } from '@/utils/cn';
 import { RESEARCH_TAB_CONFIG } from '@/config/tabs.config';
+import { cn } from '@/utils/cn';
 
 // Types
-import { JudgeProfile, Clause } from '@/types';
+import { Clause, JudgeProfile } from '@/types';
 
 const ClauseHistoryModal = lazy(async () => {
   const module = await import('../clauses/ClauseHistoryModal');
@@ -79,50 +79,50 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
 
   // If embedded in a case, we might want to hide the header or simplify it
   if (caseId) {
-      return (
-          <>
-            {clauseSelection.selected && (
-                <Suspense fallback={null}>
-                    <ClauseHistoryModal clause={clauseSelection.selected} onClose={clauseSelection.deselect} />
-                </Suspense>
-            )}
-            <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
-                {/* Embedded Navigation (Simplified) */}
-                <div className={cn("px-6 pt-2 shrink-0 border-b", theme.border.default)}>
-                     <div className="flex space-x-4 overflow-x-auto no-scrollbar pb-3">
-                         {RESEARCH_TAB_CONFIG.flatMap(g => g.subTabs).map(tab => (
-                             <button
-                                key={tab.id}
-                                onClick={() => setActiveView(tab.id)}
-                                className={cn(
-                                    "flex items-center text-xs font-medium px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap",
-                                    activeView === tab.id
-                                        ? cn(theme.primary.light, theme.primary.text, theme.primary.border)
-                                        : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`)
-                                )}
-                             >
-                                 <tab.icon className="h-3 w-3 mr-1.5"/>
-                                 {tab.label}
-                             </button>
-                         ))}
-                     </div>
-                </div>
-                <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0 pt-4">
-                    <Suspense fallback={<LazyLoader message="Loading Research Tools..." />}>
-                        {renderContent()}
-                    </Suspense>
-                </div>
+    return (
+      <>
+        {clauseSelection.selected && (
+          <Suspense fallback={null}>
+            <ClauseHistoryModal clause={clauseSelection.selected} onClose={clauseSelection.deselect} />
+          </Suspense>
+        )}
+        <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
+          {/* Embedded Navigation (Simplified) */}
+          <div className={cn("px-6 pt-2 shrink-0 border-b", theme.border.default)}>
+            <div className="flex space-x-4 overflow-x-auto no-scrollbar pb-3">
+              {RESEARCH_TAB_CONFIG.flatMap(g => g.subTabs).map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveView(tab.id)}
+                  className={cn(
+                    "flex items-center text-xs font-medium px-3 py-1.5 rounded-full border transition-colors whitespace-nowrap",
+                    activeView === tab.id
+                      ? cn(theme.primary.light, theme.primary.text, theme.primary.border)
+                      : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`)
+                  )}
+                >
+                  <tab.icon className="h-3 w-3 mr-1.5" />
+                  {tab.label}
+                </button>
+              ))}
             </div>
-          </>
-      );
+          </div>
+          <div className="flex-1 overflow-hidden px-6 pb-6 min-h-0 pt-4">
+            <Suspense fallback={<LazyLoader message="Loading Research Tools..." />}>
+              {renderContent()}
+            </Suspense>
+          </div>
+        </div>
+      </>
+    );
   }
 
   return (
     <>
       {clauseSelection.selected && (
-          <Suspense fallback={null}>
-              <ClauseHistoryModal clause={clauseSelection.selected} onClose={clauseSelection.deselect} />
-          </Suspense>
+        <Suspense fallback={null}>
+          <ClauseHistoryModal clause={clauseSelection.selected} onClose={clauseSelection.deselect} />
+        </Suspense>
       )}
       <TabbedPageLayout
         pageTitle="Research & Knowledge Center"
@@ -131,13 +131,12 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
         activeTabId={activeView}
         onTabChange={setActiveView}
       >
-          <Suspense fallback={<LazyLoader message="Loading Module..." />}>
-              {renderContent()}
-          </Suspense>
+        <Suspense fallback={<LazyLoader message="Loading Module..." />}>
+          {renderContent()}
+        </Suspense>
       </TabbedPageLayout>
     </>
   );
 };
 
 export default ResearchTool;
-

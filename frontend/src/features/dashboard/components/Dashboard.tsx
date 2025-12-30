@@ -21,9 +21,9 @@ import React, { Suspense, useTransition } from 'react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { Button } from '@/components/atoms';
-import { LazyLoader } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { TabbedPageLayout } from '@/components/ui/layouts/TabbedPageLayout/TabbedPageLayout';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { DashboardContent } from './DashboardContent';
 
 // Utils & Config

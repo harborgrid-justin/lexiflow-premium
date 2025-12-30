@@ -10,24 +10,24 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { CheckCircle, FileWarning, Loader2, UploadCloud } from 'lucide-react';
 import React, { useState } from 'react';
-import { UploadCloud, Loader2, FileWarning, CheckCircle } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -51,7 +51,7 @@ export const SecurityOps: React.FC = () => {
 
     const handleFileScan = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files || e.target.files.length === 0) return;
-        
+
         const file = e.target.files[0];
         setFileName(file.name);
         setIsScanning(true);
@@ -88,33 +88,33 @@ export const SecurityOps: React.FC = () => {
                     <Button variant="danger">View Intel Brief</Button>
                 </div>
             </Card>
-            
+
             <Card title="Malware Signature Scanner (Suffix Tree)">
-                 <div className={cn("p-8 border-2 border-dashed rounded-lg text-center cursor-pointer relative", theme.border.default, `hover:${theme.primary.border}`)}>
+                <div className={cn("p-8 border-2 border-dashed rounded-lg text-center cursor-pointer relative", theme.border.default, `hover:${theme.primary.border}`)}>
                     <input type="file" title="Select file to scan" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleFileScan} />
                     {isScanning ? (
                         <>
-                            <Loader2 className={cn("h-12 w-12 mx-auto mb-4 animate-spin", theme.primary.text)}/>
+                            <Loader2 className={cn("h-12 w-12 mx-auto mb-4 animate-spin", theme.primary.text)} />
                             <h3 className={cn("font-bold text-lg", theme.text.primary)}>Scanning: {fileName}</h3>
                             <p className={cn("text-sm", theme.text.secondary)}>Using Suffix Tree for O(L) substring search...</p>
                         </>
                     ) : scanResult ? (
                         scanResult === 'clean' ? (
                             <>
-                                <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500"/>
+                                <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
                                 <h3 className="font-bold text-lg text-green-700">File is Clean</h3>
                                 <p className={cn("text-sm", theme.text.secondary)}>No known malware signatures found in {fileName}.</p>
                             </>
                         ) : (
                             <>
-                                <FileWarning className="h-12 w-12 mx-auto mb-4 text-red-500"/>
+                                <FileWarning className="h-12 w-12 mx-auto mb-4 text-red-500" />
                                 <h3 className="font-bold text-lg text-red-700">Threat Detected!</h3>
                                 <p className={cn("text-sm", theme.text.secondary)}>Malicious signature found in {fileName}. File has been quarantined.</p>
                             </>
                         )
                     ) : (
                         <>
-                            <UploadCloud className={cn("h-12 w-12 mx-auto mb-4", theme.text.tertiary)}/>
+                            <UploadCloud className={cn("h-12 w-12 mx-auto mb-4", theme.text.tertiary)} />
                             <h3 className={cn("font-bold text-lg", theme.text.primary)}>Scan Document for Threats</h3>
                             <p className={cn("text-sm", theme.text.secondary)}>Click or drop file to analyze against signature database.</p>
                         </>
@@ -124,5 +124,3 @@ export const SecurityOps: React.FC = () => {
         </div>
     );
 };
-
-

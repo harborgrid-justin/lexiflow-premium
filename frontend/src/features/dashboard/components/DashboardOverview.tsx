@@ -21,7 +21,7 @@ import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Components
-import { LazyLoader } from '@/components/molecules';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { DashboardAnalytics } from './DashboardAnalytics';
 import { DashboardMetrics } from './DashboardMetrics';
 import { DashboardSidebar } from './DashboardSidebar';

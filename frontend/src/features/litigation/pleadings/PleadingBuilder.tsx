@@ -10,34 +10,34 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, Suspense, lazy } from 'react';
 import { Plus } from 'lucide-react';
+import React, { Suspense, lazy, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API with queryKeys (2025-12-21)
 
 // Hooks & Context
+import { useModalState } from '@/hooks';
+import { useNotify } from '@/hooks/useNotify';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from '@/providers/ThemeContext';
-import { useNotify } from '@/hooks/useNotify';
-import { useModalState } from '@/hooks';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { Button } from '@/components/atoms';
-import { Modal } from '@/components/molecules';
-import { Input } from '@/components/atoms';
-import { LazyLoader } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
 
 // Utils & Config
-import { cn } from '@/utils/cn';
 import { PLEADING_BUILDER_TAB_CONFIG } from '@/config/tabs.config';
+import { cn } from '@/utils/cn';
 import { validateTemplate } from '@/utils/validation';
 
 // Types
@@ -111,22 +111,22 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ caseId }) => {
         setNewDocData({ title: template ? template.name : '', caseId: caseId || '', templateId: template?.id || '' });
         createModal.open();
     };
-    
+
     const handleCreateSubmit = () => {
         // Clear previous errors
         setValidationErrors([]);
 
         // Validate required fields
         const errors: string[] = [];
-        
+
         if (!newDocData.title?.trim()) {
             errors.push('Document title is required');
         }
-        
+
         if (!newDocData.caseId) {
             errors.push('Case must be selected');
         }
-        
+
         if (!newDocData.templateId) {
             errors.push('Template must be selected');
         }
@@ -166,7 +166,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ caseId }) => {
                 return <PleadingTemplates templates={templates} onCreateFromTemplate={handleCreateNew} isLoading={templatesLoading} />;
             case 'clauses':
                 return <ClauseLibrary onSelectClause={(clause: unknown) => {
-                    notifySuccess(`Clause "${(clause as {name: string}).name}" added to editor`);
+                    notifySuccess(`Clause "${(clause as { name: string }).name}" added to editor`);
                     // If there's an active pleading, we would append the clause
                     // For now, log to console for integration
                     console.log('Clause selected for insertion:', clause);
@@ -191,77 +191,75 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ caseId }) => {
 
     return (
         <>
-        <TabbedPageLayout
-            pageTitle="Pleading Builder"
-            pageSubtitle="Draft, format, and file legal documents with AI assistance."
-            pageActions={<Button variant="primary" icon={Plus} onClick={() => handleCreateNew()}>New Pleading</Button>}
-            tabConfig={PLEADING_BUILDER_TAB_CONFIG}
-            activeTabId={activeTab}
-            onTabChange={setActiveTab}
-        >
-            <Suspense fallback={<LazyLoader message={`Loading ${activeTab}...`} />}>
-                <div className="h-full">
-                  {renderContent()}
-                </div>
-            </Suspense>
-        </TabbedPageLayout>
-
-        <Modal isOpen={createModal.isOpen} onClose={() => { createModal.close(); setValidationErrors([]); }} title="Create New Pleading">
-            <div className="p-6 space-y-4">
-                {validationErrors.length > 0 && (
-                    <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 dark:bg-rose-900/20 dark:border-rose-800">
-                        <div className="text-sm font-semibold text-rose-800 dark:text-rose-300 mb-1">Validation Errors:</div>
-                        <ul className="text-xs text-rose-700 dark:text-rose-400 list-disc list-inside space-y-0.5">
-                            {validationErrors.map((error, idx) => (
-                                <li key={idx}>{error}</li>
-                            ))}
-                        </ul>
+            <TabbedPageLayout
+                pageTitle="Pleading Builder"
+                pageSubtitle="Draft, format, and file legal documents with AI assistance."
+                pageActions={<Button variant="primary" icon={Plus} onClick={() => handleCreateNew()}>New Pleading</Button>}
+                tabConfig={PLEADING_BUILDER_TAB_CONFIG}
+                activeTabId={activeTab}
+                onTabChange={setActiveTab}
+            >
+                <Suspense fallback={<LazyLoader message={`Loading ${activeTab}...`} />}>
+                    <div className="h-full">
+                        {renderContent()}
                     </div>
-                )}
-                <Input label="Document Title" value={newDocData.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDocData({...newDocData, title: e.target.value})} placeholder="e.g. Plaintiff's Motion to Compel" required />
-                {!caseId && (
-                <div>
-                    <label htmlFor="case-select" className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Related Matter</label>
-                    <select 
-                        id="case-select"
-                        className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
-                        value={newDocData.caseId}
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewDocData({...newDocData, caseId: e.target.value})}
-                    >
-                        <option value="">Select Case...</option>
-                        {Array.isArray(cases) && cases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
-                    </select>
-                </div>
-                )}
-                <div>
-                    <label htmlFor="template-select" className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Template</label>
-                    <select 
-                        id="template-select"
-                        className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
-                        value={newDocData.templateId}
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewDocData({...newDocData, templateId: e.target.value})}
-                    >
-                        <option value="">Select Template...</option>
-                        {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
-                    </select>
-                </div>
+                </Suspense>
+            </TabbedPageLayout>
 
-                <div className="flex justify-end pt-4 gap-2">
-                    <Button variant="secondary" onClick={() => { createModal.close(); setValidationErrors([]); }} disabled={isCreating}>Cancel</Button>
-                    <Button 
-                        variant="primary" 
-                        onClick={handleCreateSubmit} 
-                        disabled={!newDocData.title?.trim() || !newDocData.caseId || !newDocData.templateId || isCreating}
-                        isLoading={isCreating}
-                    >
-                        {isCreating ? 'Creating...' : 'Create & Open'}
-                    </Button>
+            <Modal isOpen={createModal.isOpen} onClose={() => { createModal.close(); setValidationErrors([]); }} title="Create New Pleading">
+                <div className="p-6 space-y-4">
+                    {validationErrors.length > 0 && (
+                        <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 dark:bg-rose-900/20 dark:border-rose-800">
+                            <div className="text-sm font-semibold text-rose-800 dark:text-rose-300 mb-1">Validation Errors:</div>
+                            <ul className="text-xs text-rose-700 dark:text-rose-400 list-disc list-inside space-y-0.5">
+                                {validationErrors.map((error, idx) => (
+                                    <li key={idx}>{error}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                    <Input label="Document Title" value={newDocData.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDocData({ ...newDocData, title: e.target.value })} placeholder="e.g. Plaintiff's Motion to Compel" required />
+                    {!caseId && (
+                        <div>
+                            <label htmlFor="case-select" className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Related Matter</label>
+                            <select
+                                id="case-select"
+                                className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
+                                value={newDocData.caseId}
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewDocData({ ...newDocData, caseId: e.target.value })}
+                            >
+                                <option value="">Select Case...</option>
+                                {Array.isArray(cases) && cases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
+                            </select>
+                        </div>
+                    )}
+                    <div>
+                        <label htmlFor="template-select" className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Template</label>
+                        <select
+                            id="template-select"
+                            className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
+                            value={newDocData.templateId}
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewDocData({ ...newDocData, templateId: e.target.value })}
+                        >
+                            <option value="">Select Template...</option>
+                            {templates.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                        </select>
+                    </div>
+
+                    <div className="flex justify-end pt-4 gap-2">
+                        <Button variant="secondary" onClick={() => { createModal.close(); setValidationErrors([]); }} disabled={isCreating}>Cancel</Button>
+                        <Button
+                            variant="primary"
+                            onClick={handleCreateSubmit}
+                            disabled={!newDocData.title?.trim() || !newDocData.caseId || !newDocData.templateId || isCreating}
+                            isLoading={isCreating}
+                        >
+                            {isCreating ? 'Creating...' : 'Create & Open'}
+                        </Button>
+                    </div>
                 </div>
-            </div>
-        </Modal>
+            </Modal>
         </>
     );
 };
 export default PleadingBuilder;
-
-

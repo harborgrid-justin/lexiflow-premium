@@ -10,16 +10,16 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, useTransition, useState } from 'react';
 import { Download } from 'lucide-react';
+import React, { Suspense, useState, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/atoms';
-import { LazyLoader } from '@/components/molecules';
 import { TabbedPageLayout } from '@/components/layouts';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 
 // Hooks & Context
@@ -29,8 +29,8 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { api } from '@/api';
 
 // Utils & Config
-import { cn } from '@/utils/cn';
 import { ANALYTICS_TAB_CONFIG } from '@/config/tabs.config';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // MAIN COMPONENT
@@ -38,7 +38,7 @@ import { ANALYTICS_TAB_CONFIG } from '@/config/tabs.config';
 
 /**
  * AnalyticsDashboard - Business intelligence and predictive analytics
- * 
+ *
  * Features:
  * - Business Intelligence (Firm Metrics, Practice Groups, Attorney Performance, Financial KPIs)
  * - Predictive Models (Case Outcome Predictions)
@@ -55,13 +55,13 @@ export const AnalyticsDashboard: React.FC = () => {
   // ==========================================================================
   // CALLBACKS - Event Handlers
   // ==========================================================================
-  
+
   /**
    * Handles tab changes with React transition for smoother UX
    */
   const setActiveTab = (tab: string) => {
     startTransition(() => {
-        _setActiveTab(tab);
+      _setActiveTab(tab);
     });
   };
 
@@ -76,7 +76,7 @@ export const AnalyticsDashboard: React.FC = () => {
         startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
         endDate: new Date().toISOString(),
       });
-      
+
       // In a real implementation, this would trigger a download
       console.log('Report generated:', response);
       alert('Report export functionality will be available soon.');
@@ -91,15 +91,15 @@ export const AnalyticsDashboard: React.FC = () => {
   // ==========================================================================
   // MAIN RENDER
   // ==========================================================================
-  
+
   return (
     <TabbedPageLayout
       pageTitle="Analytics & Prediction"
       pageSubtitle="Data-driven insights for litigation strategy and outcome modeling."
       pageActions={
-        <Button 
-          variant="outline" 
-          size="sm" 
+        <Button
+          variant="outline"
+          size="sm"
           icon={Download}
           onClick={handleExportReport}
           disabled={isExporting}
@@ -107,14 +107,14 @@ export const AnalyticsDashboard: React.FC = () => {
           {isExporting ? 'Exporting...' : 'Export Report'}
         </Button>
       }
-      tabConfig={ANALYTICS_TAB_CONFIG}
+      tabConfig={ANALYTICS_TAB_CONFIG as any}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >
       <Suspense fallback={<LazyLoader message="Loading Analytics Module..." />}>
-          <div className={cn(isPending && 'opacity-60 transition-opacity')}>
-            <AnalyticsDashboardContent activeTab={activeTab} />
-          </div>
+        <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+          <AnalyticsDashboardContent activeTab={activeTab} />
+        </div>
       </Suspense>
     </TabbedPageLayout>
   );

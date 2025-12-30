@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { History, GitBranch, Tag, Clock, User, Plus } from 'lucide-react';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Card } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
-import { Tabs } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { Clock, GitBranch, History, Plus, Tag, User } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface HistoryEntry {
   id: string;
@@ -185,7 +185,7 @@ export const VersionControl = React.memo<VersionControlProps>(function VersionCo
                             <Badge
                               variant={
                                 branch.status === 'active' ? 'success' :
-                                branch.status === 'merged' ? 'info' : 'neutral'
+                                  branch.status === 'merged' ? 'info' : 'neutral'
                               }
                             >
                               {branch.status}

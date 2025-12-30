@@ -1,16 +1,16 @@
 
-import React, { useState } from 'react';
-import { Plus, Search } from 'lucide-react';
-import { Button } from '@/components/atoms';
-import { RecordModal } from './RecordModal';
-import { EntitySidebar, Category } from './EntitySidebar';
-import { EntityList } from './EntityList';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
+import { useModalState } from '@/hooks/useModalState';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { useAdminData } from './useAdminData';
+import { Plus, Search } from 'lucide-react';
+import React, { useState } from 'react';
 import { EMPTY_TEMPLATES } from './AdminConfig';
-import { ConfirmDialog } from '@/components/molecules';
-import { useModalState } from '@/hooks/useModalState';
+import { EntityList } from './EntityList';
+import { Category, EntitySidebar } from './EntitySidebar';
+import { RecordModal } from './RecordModal';
+import { useAdminData } from './useAdminData';
 
 export const AdminPlatformManager: React.FC = () => {
   const { theme } = useTheme();
@@ -37,7 +37,7 @@ export const AdminPlatformManager: React.FC = () => {
   };
 
   const handleCreate = () => {
-    setEditingItem({ ...EMPTY_TEMPLATES[activeCategory], id: `${activeCategory.substring(0,3)}-${Date.now()}` });
+    setEditingItem({ ...EMPTY_TEMPLATES[activeCategory], id: `${activeCategory.substring(0, 3)}-${Date.now()}` });
     setIsNewItem(true);
     setIsModalOpen(true);
   };
@@ -49,8 +49,8 @@ export const AdminPlatformManager: React.FC = () => {
 
   const confirmDelete = () => {
     if (deleteItemId) {
-        deleteItem({ category: activeCategory, id: deleteItemId });
-        setDeleteItemId(null);
+      deleteItem({ category: activeCategory, id: deleteItemId });
+      setDeleteItemId(null);
     }
   };
 
@@ -70,8 +70,8 @@ export const AdminPlatformManager: React.FC = () => {
       />
 
       <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
-        <EntitySidebar 
-          activeCategory={activeCategory} 
+        <EntitySidebar
+          activeCategory={activeCategory}
           setActiveCategory={setActiveCategory}
           counts={counts}
         />
@@ -81,7 +81,7 @@ export const AdminPlatformManager: React.FC = () => {
           <div className={cn("p-4 border-b flex justify-between items-center", theme.border.default, theme.surface.highlight)}>
             <div className="relative flex-1 md:max-w-xs mr-2">
               <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)} />
-              <input 
+              <input
                 className={cn("w-full pl-10 pr-4 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                 placeholder={`Search ${activeCategory}...`}
                 value={searchTerm}
@@ -92,12 +92,12 @@ export const AdminPlatformManager: React.FC = () => {
           </div>
 
           <div className="flex-1 overflow-auto p-0 md:p-4">
-             <EntityList
-                activeCategory={activeCategory}
-                items={filteredItems as Array<{ id: string; [key: string]: unknown }>}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-             />
+            <EntityList
+              activeCategory={activeCategory}
+              items={filteredItems as Array<{ id: string;[key: string]: unknown }>}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           </div>
         </div>
       </div>

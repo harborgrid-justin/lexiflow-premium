@@ -10,20 +10,20 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { CheckCircle, Clock, FileText, TrendingUp } from 'lucide-react';
 import React, { useMemo } from 'react';
-import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { TrendingUp, Clock, FileText, CheckCircle } from 'lucide-react';
+import { Bar, BarChart, CartesianGrid, Cell, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '@/components/molecules';
-import { MetricCard } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -188,4 +188,3 @@ export const PleadingAnalytics: React.FC = () => {
         </div>
     );
 };
-

@@ -1,8 +1,8 @@
-import React from 'react';
-import { FileText, Book, Scale, Flag, FileCode } from 'lucide-react';
-import { Card } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import { Book, FileCode, FileText, Flag, Scale } from 'lucide-react';
+import React from 'react';
 
 export const HelpSection: React.FC = () => {
   const { theme } = useTheme();

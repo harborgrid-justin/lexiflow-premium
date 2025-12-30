@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { ArrowRight, LayoutTemplate, Loader2 } from 'lucide-react';
 import React from 'react';
-import { LayoutTemplate, ArrowRight, Loader2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -20,7 +20,7 @@ import { LayoutTemplate, ArrowRight, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { VirtualGrid } from '@/components/organisms';
+import { VirtualGrid } from '@/components/organisms/VirtualGrid/VirtualGrid';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -63,19 +63,19 @@ export const PleadingTemplates: React.FC<PleadingTemplatesProps> = ({ templates,
                 className={cn("p-4 border rounded-lg h-full flex flex-col cursor-pointer transition-all hover:shadow-lg group", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}
             >
                 <div className="flex items-start justify-between mb-2">
-                    <div className={cn("p-2 rounded bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400")}><LayoutTemplate className="h-6 w-6"/></div>
+                    <div className={cn("p-2 rounded bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400")}><LayoutTemplate className="h-6 w-6" /></div>
                 </div>
                 <h4 className={cn("font-bold text-sm mb-1 flex-1", theme.text.primary)}>{template.name}</h4>
                 <p className={cn("text-xs mb-3 opacity-70", theme.text.secondary)}>{template.category}</p>
                 <div className={cn("mt-auto text-xs flex items-center justify-end pt-2 border-t font-bold", theme.border.default, theme.primary.text)}>
-                    Use Template <ArrowRight className="h-3 w-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity"/>
+                    Use Template <ArrowRight className="h-3 w-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
             </div>
         </div>
     );
 
     return (
-         <VirtualGrid
+        <VirtualGrid
             items={templates}
             height="100%"
             itemHeight={180}

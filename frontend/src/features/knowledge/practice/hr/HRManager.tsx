@@ -1,22 +1,22 @@
-import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { UserAvatar } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
-import { ConfirmDialog } from '@/components/molecules';
-import { MetricCard } from '@/components/molecules';
-import { Plus, User, Award, TrendingUp, MoreHorizontal, Trash2, Loader2, AlertCircle, Users } from 'lucide-react';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
+import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
+import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
+import { useMutation } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
+import { DataService } from '@/services/data/dataService';
 import { StaffMember, UserId } from '@/types';
+import { cn } from '@/utils/cn';
+import { AlertCircle, Award, Loader2, MoreHorizontal, Plus, Trash2, TrendingUp, User, Users } from 'lucide-react';
+import React from 'react';
+import { AddStaffModal } from './AddStaffModal';
 
 type StaffRole = 'Associate' | 'Paralegal' | 'Senior Partner' | 'Administrator';
-import { DataService } from '@/services/data/dataService';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { AddStaffModal } from './AddStaffModal';
-import { useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { useStaff } from '@/hooks/useDomainData';
 import { useModalState } from '@/hooks';
+import { useStaff } from '@/hooks/useDomainData';
 import { useNotify } from '@/hooks/useNotify';
 import { getTodayString } from '@/utils/dateUtils';
 import { IdGenerator } from '@/utils/idGenerator';
@@ -84,74 +84,74 @@ export const HRManager: React.FC = () => {
   };
 
   const { mutate: addStaff } = useMutation(
-      hrService.addStaff,
-      {
-          invalidateKeys: [['staff', 'all'], ['users', 'all']],
-          onSuccess: () => {
-              addStaffModal.close();
-              notify.success('Staff member added successfully.');
-          },
-          onError: (err: Error) => {
-              notify.error(`Failed to add staff member: ${err.message}`);
-          }
+    hrService.addStaff,
+    {
+      invalidateKeys: [['staff', 'all'], ['users', 'all']],
+      onSuccess: () => {
+        addStaffModal.close();
+        notify.success('Staff member added successfully.');
+      },
+      onError: (err: Error) => {
+        notify.error(`Failed to add staff member: ${err.message}`);
       }
+    }
   );
 
   const { mutate: deleteStaff, isLoading: isDeleting } = useMutation(
-      hrService.deleteStaff,
-      {
-          invalidateKeys: [['staff', 'all']],
-          onSuccess: () => {
-              deleteModal.close();
-              setStaffToDelete(null);
-              notify.success('Staff member removed successfully.');
-          },
-          onError: (err: Error) => {
-              notify.error(`Failed to remove staff member: ${err.message}`);
-          }
+    hrService.deleteStaff,
+    {
+      invalidateKeys: [['staff', 'all']],
+      onSuccess: () => {
+        deleteModal.close();
+        setStaffToDelete(null);
+        notify.success('Staff member removed successfully.');
+      },
+      onError: (err: Error) => {
+        notify.error(`Failed to remove staff member: ${err.message}`);
       }
+    }
   );
 
   // ==========================================================================
   // CALLBACKS - Event Handlers
   // ==========================================================================
   const handleAddStaff = (newStaff: Partial<StaffMember>) => {
-      if (!newStaff.name?.trim() || !newStaff.email?.trim()) {
-          notify.warning('Please fill in all required fields.');
-          return;
-      }
+    if (!newStaff.name?.trim() || !newStaff.email?.trim()) {
+      notify.warning('Please fill in all required fields.');
+      return;
+    }
 
-      const staff: StaffMember = {
-          id: IdGenerator.staff(),
-          userId: IdGenerator.user() as UserId,
-          name: newStaff.name.trim(),
-          email: newStaff.email.trim().toLowerCase(),
-          role: (newStaff.role as StaffRole) || 'Associate',
-          phone: newStaff.phone?.trim() || '',
-          billableTarget: Number(newStaff.billableTarget) || DEFAULT_BILLABLE_TARGET,
-          currentBillable: 0,
-          utilizationRate: 0,
-          salary: Number(newStaff.salary) || DEFAULT_SALARY,
-          status: 'Active',
-          startDate: getTodayString(),
-      };
-      addStaff(staff);
+    const staff: StaffMember = {
+      id: IdGenerator.staff(),
+      userId: IdGenerator.user() as UserId,
+      name: newStaff.name.trim(),
+      email: newStaff.email.trim().toLowerCase(),
+      role: (newStaff.role as StaffRole) || 'Associate',
+      phone: newStaff.phone?.trim() || '',
+      billableTarget: Number(newStaff.billableTarget) || DEFAULT_BILLABLE_TARGET,
+      currentBillable: 0,
+      utilizationRate: 0,
+      salary: Number(newStaff.salary) || DEFAULT_SALARY,
+      status: 'Active',
+      startDate: getTodayString(),
+    };
+    addStaff(staff);
   };
 
   const handleDeleteClick = (id: string) => {
-      setStaffToDelete(id);
-      deleteModal.open();
+    setStaffToDelete(id);
+    deleteModal.open();
   };
-  
+
   const handleConfirmDelete = () => {
-      if (staffToDelete) {
-          deleteStaff(staffToDelete);
-      }
+    if (staffToDelete) {
+      deleteStaff(staffToDelete);
+    }
   };
 
   const handleCancelDelete = () => {
-      deleteModal.close();
-      setStaffToDelete(null);
+    deleteModal.close();
+    setStaffToDelete(null);
   };
 
   // ==========================================================================
@@ -214,7 +214,7 @@ export const HRManager: React.FC = () => {
         No Staff Members Found
       </h3>
       <p className={cn('text-sm mb-4 text-center max-w-md', theme.text.secondary)}>
-        Your staff directory is empty. Add your first staff member to start tracking 
+        Your staff directory is empty. Add your first staff member to start tracking
         attorney profiles, utilization targets, and performance metrics.
       </p>
       <Button variant="primary" icon={Plus} onClick={addStaffModal.open}>
@@ -247,10 +247,10 @@ export const HRManager: React.FC = () => {
           trendUp={staffList.length > 0}
           className="border-l-4 border-l-blue-600"
         />
-        <MetricCard 
-          label="Avg Utilization" 
+        <MetricCard
+          label="Avg Utilization"
           value={`${averageUtilization}%`}
-          icon={Award} 
+          icon={Award}
           trend={`Target: ${UTILIZATION_TARGET}%`}
           trendUp={isOnTrackUtilization}
           className="border-l-4 border-l-purple-600"
@@ -292,7 +292,7 @@ export const HRManager: React.FC = () => {
                 <TableRow key={staff.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <UserAvatar name={staff.name} size="sm"/>
+                      <UserAvatar name={staff.name} size="sm" />
                       <div>
                         <p className={cn("font-bold text-sm", theme.text.primary)}>{staff.name}</p>
                         <p className={cn("text-xs", theme.text.secondary)}>{staff.email}</p>
@@ -332,7 +332,7 @@ export const HRManager: React.FC = () => {
                         )}
                         aria-label={`More options for ${staff.name}`}
                       >
-                        <MoreHorizontal className="h-4 w-4"/>
+                        <MoreHorizontal className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => handleDeleteClick(staff.id)}
@@ -343,7 +343,7 @@ export const HRManager: React.FC = () => {
                         aria-label={`Remove ${staff.name}`}
                         disabled={isDeleting}
                       >
-                        <Trash2 className="h-4 w-4"/>
+                        <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
                   </TableCell>
@@ -366,10 +366,10 @@ export const HRManager: React.FC = () => {
       />
 
       {/* Add Staff Modal */}
-      <AddStaffModal 
-        isOpen={addStaffModal.isOpen} 
-        onClose={addStaffModal.close} 
-        onAdd={handleAddStaff} 
+      <AddStaffModal
+        isOpen={addStaffModal.isOpen}
+        onClose={addStaffModal.close}
+        onAdd={handleAddStaff}
       />
     </div>
   );

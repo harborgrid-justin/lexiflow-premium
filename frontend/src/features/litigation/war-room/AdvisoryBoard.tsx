@@ -31,10 +31,10 @@ import { useToggle } from '@/hooks/useToggle';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { SearchToolbar } from '@/components/ui/organisms/SearchToolbar/SearchToolbar';
 import { AdvisorDetail } from './advisory/AdvisorDetail';
 import { Advisor, AdvisorList } from './advisory/AdvisorList';
 import { AdvisorySidebar } from './advisory/AdvisorySidebar';

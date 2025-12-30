@@ -1,17 +1,17 @@
 
-import React, { useState, useMemo } from 'react';
-import { DataDictionaryItem } from '@/types';
-import { DataService } from '@/services/data/dataService';
+import { Button } from '@/components/atoms';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
+import { SearchToolbar } from '@/components/ui/organisms/SearchToolbar/SearchToolbar';
+import { VirtualList } from '@/components/ui/organisms/VirtualList/VirtualList';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelectionState';
-import { ErrorState } from '@/components/molecules';
-import { VirtualList } from '@/components/organisms';
-import { SearchToolbar } from '@/components/organisms';
-import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
+import { DataService } from '@/services/data/dataService';
+import { DataDictionaryItem } from '@/types';
 import { cn } from '@/utils/cn';
-import { Eye, Loader2, Filter } from 'lucide-react';
+import { Eye, Filter, Loader2 } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 import { DictionaryItemDetail } from './DictionaryItemDetail';
 
 export const DataDictionary: React.FC = () => {
@@ -28,16 +28,16 @@ export const DataDictionary: React.FC = () => {
 
     const filteredItems = useMemo(() => {
         return items.filter(item => {
-            const matchesSearch = item.column.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                                  item.table.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                  item.description.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesSearch = item.column.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.table.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.description.toLowerCase().includes(searchTerm.toLowerCase());
             const matchesDomain = activeDomain === 'All' || item.domain === activeDomain;
             return matchesSearch && matchesDomain;
         });
     }, [items, searchTerm, activeDomain]);
 
     const getClassificationColor = (classification: string) => {
-        switch(classification) {
+        switch (classification) {
             case 'Restricted': return 'error';
             case 'Confidential': return 'warning';
             case 'Internal': return 'info';
@@ -55,8 +55,8 @@ export const DataDictionary: React.FC = () => {
     };
 
     const renderRow = (item: DataDictionaryItem) => (
-        <div 
-            key={item.id} 
+        <div
+            key={item.id}
             onClick={() => handleSelect(item)}
             className={cn("flex items-center border-b h-16 px-6 cursor-pointer transition-colors group", theme.border.default, `hover:${theme.surface.highlight}`)}
         >
@@ -81,11 +81,11 @@ export const DataDictionary: React.FC = () => {
     return (
         <div className="flex flex-col h-full space-y-4">
             <div className="flex justify-between items-center px-1">
-                 <div className="flex-1 max-w-xl">
-                    <SearchToolbar 
-                        value={searchTerm} 
-                        onChange={setSearchTerm} 
-                        placeholder="Search definitions, columns, or tables..." 
+                <div className="flex-1 max-w-xl">
+                    <SearchToolbar
+                        value={searchTerm}
+                        onChange={setSearchTerm}
+                        placeholder="Search definitions, columns, or tables..."
                         className="border-none shadow-none p-0 bg-transparent"
                         actions={
                             <Button variant="secondary" icon={Filter} onClick={() => setShowFilters(!showFilters)}>
@@ -93,27 +93,27 @@ export const DataDictionary: React.FC = () => {
                             </Button>
                         }
                     />
-                 </div>
-                 <div className="flex gap-2">
-                     {['All', 'Legal', 'Finance', 'HR', 'IT'].map(dom => (
-                         <button
+                </div>
+                <div className="flex gap-2">
+                    {['All', 'Legal', 'Finance', 'HR', 'IT'].map(dom => (
+                        <button
                             key={dom}
                             onClick={() => setActiveDomain(dom)}
                             className={cn(
                                 "px-3 py-1.5 text-xs font-medium rounded-full transition-colors border",
-                                activeDomain === dom 
-                                    ? cn(theme.primary.light, theme.primary.text, theme.primary.border) 
+                                activeDomain === dom
+                                    ? cn(theme.primary.light, theme.primary.text, theme.primary.border)
                                     : cn(theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`)
                             )}
-                         >
-                             {dom}
-                         </button>
-                     ))}
-                 </div>
+                        >
+                            {dom}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             <div className={cn("flex-1 border rounded-lg overflow-hidden flex flex-col", theme.surface.default, theme.border.default)}>
-                 <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.border.default, theme.surface.highlight, theme.text.secondary)}>
+                <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.border.default, theme.surface.highlight, theme.text.secondary)}>
                     <div className="w-[25%]">Table Name</div>
                     <div className="w-[20%]">Column / Field</div>
                     <div className="w-[15%]">Data Type</div>
@@ -121,12 +121,12 @@ export const DataDictionary: React.FC = () => {
                     <div className="w-[15%]">Class</div>
                     <div className="w-10"></div>
                 </div>
-                
+
                 <div className="flex-1 relative">
                     {isLoading ? (
-                        <div className="flex items-center justify-center h-full"><Loader2 className="animate-spin text-blue-600"/></div>
+                        <div className="flex items-center justify-center h-full"><Loader2 className="animate-spin text-blue-600" /></div>
                     ) : filteredItems.length > 0 ? (
-                        <VirtualList 
+                        <VirtualList
                             items={filteredItems}
                             height="100%"
                             itemHeight={64}

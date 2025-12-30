@@ -10,19 +10,26 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { CheckCircle, FileText, PieChart as PieIcon, XCircle } from 'lucide-react';
 import React from 'react';
-import { 
-  PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend, 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid 
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer, Tooltip,
+  XAxis, YAxis
 } from 'recharts';
-import { CheckCircle, XCircle, FileText, PieChart as PieIcon } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { MetricCard } from '@/components/molecules';
-import { Card } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 
 // Types
 import { TrialExhibit } from '@/types';
@@ -54,46 +61,46 @@ export const ExhibitStats: React.FC<ExhibitStatsProps> = ({ exhibits }) => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <MetricCard label="Total Marked" value={exhibits.length} icon={FileText} className="border-l-4 border-l-blue-500"/>
-            <MetricCard label="Admitted" value={statusData[0].value} icon={CheckCircle} className="border-l-4 border-l-green-500"/>
-            <MetricCard label="Excluded" value={statusData[2].value} icon={XCircle} className="border-l-4 border-l-red-500"/>
-            <MetricCard label="Admission Rate" value={`${Math.round((statusData[0].value / exhibits.length) * 100)}%`} icon={PieIcon} className="border-l-4 border-l-purple-500"/>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <MetricCard label="Total Marked" value={exhibits.length} icon={FileText} className="border-l-4 border-l-blue-500" />
+        <MetricCard label="Admitted" value={statusData[0].value} icon={CheckCircle} className="border-l-4 border-l-green-500" />
+        <MetricCard label="Excluded" value={statusData[2].value} icon={XCircle} className="border-l-4 border-l-red-500" />
+        <MetricCard label="Admission Rate" value={`${Math.round((statusData[0].value / exhibits.length) * 100)}%`} icon={PieIcon} className="border-l-4 border-l-purple-500" />
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card title="Admissibility Status">
-                <ResponsiveContainer width="100%" height={256}>
-                    <PieChart>
-                        <Pie 
-                            data={statusData} 
-                            innerRadius={60} 
-                            outerRadius={80} 
-                            paddingAngle={5} 
-                            dataKey="value"
-                        >
-                            {statusData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.color} />
-                            ))}
-                        </Pie>
-                        <Tooltip />
-                        <Legend verticalAlign="bottom" height={36}/>
-                    </PieChart>
-                </ResponsiveContainer>
-            </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card title="Admissibility Status">
+          <ResponsiveContainer width="100%" height={256}>
+            <PieChart>
+              <Pie
+                data={statusData}
+                innerRadius={60}
+                outerRadius={80}
+                paddingAngle={5}
+                dataKey="value"
+              >
+                {statusData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend verticalAlign="bottom" height={36} />
+            </PieChart>
+          </ResponsiveContainer>
+        </Card>
 
-            <Card title="Exhibits by Party">
-                <ResponsiveContainer width="100%" height={256}>
-                    <BarChart data={partyData} layout="vertical" margin={{ left: 20 }}>
-                        <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-                        <XAxis type="number" hide />
-                        <YAxis dataKey="name" type="category" width={80} tick={{fontSize: 12}} />
-                        <Tooltip cursor={{fill: 'transparent'}} />
-                        <Bar dataKey="count" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={30} />
-                    </BarChart>
-                </ResponsiveContainer>
-            </Card>
-        </div>
+        <Card title="Exhibits by Party">
+          <ResponsiveContainer width="100%" height={256}>
+            <BarChart data={partyData} layout="vertical" margin={{ left: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+              <XAxis type="number" hide />
+              <YAxis dataKey="name" type="category" width={80} tick={{ fontSize: 12 }} />
+              <Tooltip cursor={{ fill: 'transparent' }} />
+              <Bar dataKey="count" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={30} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Card>
+      </div>
     </div>
   );
 };

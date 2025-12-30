@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { ThemeProvider } from '@/providers/ThemeContext';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Plus, Save, Trash2 } from 'lucide-react';
 import React from "react";
 

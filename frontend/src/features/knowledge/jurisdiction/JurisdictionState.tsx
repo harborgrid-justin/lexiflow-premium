@@ -16,17 +16,17 @@ import React, { useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { AdaptiveLoader } from '@/components/molecules';
-import { SearchToolbar } from '@/components/organisms';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -38,8 +38,8 @@ export const JurisdictionState: React.FC = () => {
 
   // Performance Engine: useQuery
   const { data: rawStates = [], isLoading } = useQuery<unknown[]>(
-      ['jurisdictions', 'state'],
-      DataService.jurisdiction.getState
+    ['jurisdictions', 'state'],
+    DataService.jurisdiction.getState
   );
 
   // Defensive array validation
@@ -50,10 +50,10 @@ export const JurisdictionState: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <SearchToolbar 
-        value={filter} 
-        onChange={setFilter} 
-        placeholder="Search state courts..." 
+      <SearchToolbar
+        value={filter}
+        onChange={setFilter}
+        placeholder="Search state courts..."
         actions={
           <div className={cn("text-xs font-medium px-3 py-1.5 rounded-full border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
             Showing {filteredStates.length} jurisdictions
@@ -80,5 +80,3 @@ export const JurisdictionState: React.FC = () => {
     </div>
   );
 };
-
-

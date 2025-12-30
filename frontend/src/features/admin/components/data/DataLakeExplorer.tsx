@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 
-import { Folder, File, HardDrive, Download, MoreHorizontal, FileText, UploadCloud, ChevronRight, Home, Loader2 } from 'lucide-react';
+import { ChevronRight, Download, File, FileText, Folder, HardDrive, Home, Loader2, MoreHorizontal, UploadCloud } from 'lucide-react';
 
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
+import { DocumentPreviewPanel } from '@/features/operations/documents/viewer/DocumentPreviewPanel';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 import { DataService } from '@/services/data/dataService';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { DataLakeItem } from '@/types';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
-import { Card } from '@/components/molecules';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { DocumentPreviewPanel } from '@/features/operations/documents/viewer/DocumentPreviewPanel';
 
 export function DataLakeExplorer(): React.ReactElement {
     const { theme } = useTheme();
     const { openWindow } = useWindow();
     const [currentPath, setCurrentPath] = useState<string[]>(['root']);
     const [selection, setSelection] = useState<string[]>([]);
-    
+
     const currentFolderId = currentPath[currentPath.length - 1];
 
     const { data: items = [], isLoading } = useQuery<DataLakeItem[]>(
@@ -40,9 +40,9 @@ export function DataLakeExplorer(): React.ReactElement {
     };
 
     const getFileIcon = (format?: string, type?: string): React.ReactElement => {
-        if (type === 'folder') {return <Folder className="h-5 w-5 text-blue-500 fill-blue-100" />;}
-        if (format === 'JSON' || format === 'CSV') {return <FileText className="h-5 w-5 text-green-600" />;}
-        if (format === 'Parquet') {return <DatabaseIcon className="h-5 w-5 text-purple-600" />;}
+        if (type === 'folder') { return <Folder className="h-5 w-5 text-blue-500 fill-blue-100" />; }
+        if (format === 'JSON' || format === 'CSV') { return <FileText className="h-5 w-5 text-green-600" />; }
+        if (format === 'Parquet') { return <DatabaseIcon className="h-5 w-5 text-purple-600" />; }
         return <File className="h-5 w-5 text-slate-500" />;
     };
 
@@ -51,7 +51,7 @@ export function DataLakeExplorer(): React.ReactElement {
             handleNavigate(file.name);
         } else {
             // Preview logic
-             openWindow(
+            openWindow(
                 `preview-${file.id}`,
                 `Preview: ${file.name}`,
                 <div className={cn("h-full", theme.surface.default)}>
@@ -67,7 +67,7 @@ export function DataLakeExplorer(): React.ReactElement {
                             versions: [],
                             caseId: 'system-data-lake' as import('@/types').CaseId
                         }}
-                        onViewHistory={() => {}}
+                        onViewHistory={() => { }}
                         isOrbital
                     />
                 </div>
@@ -75,14 +75,14 @@ export function DataLakeExplorer(): React.ReactElement {
         }
     };
 
-    if (isLoading) {return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)}/></div>;}
+    if (isLoading) { return <div className="flex h-full items-center justify-center"><Loader2 className={cn("animate-spin", theme.primary.text)} /></div>; }
 
     return (
         <div className="flex flex-col h-full animate-fade-in">
             <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.default, theme.border.default)}>
                 <div>
                     <h3 className={cn("text-lg font-bold flex items-center gap-2", theme.text.primary)}>
-                        <HardDrive className="h-5 w-5 text-indigo-600"/> Data Lake Storage
+                        <HardDrive className="h-5 w-5 text-indigo-600" /> Data Lake Storage
                     </h3>
                     <p className={cn("text-xs", theme.text.secondary)}>S3 Compatible Object Store • us-east-1</p>
                 </div>
@@ -93,11 +93,11 @@ export function DataLakeExplorer(): React.ReactElement {
             </div>
 
             <div className={cn("p-2 border-b flex items-center gap-2 text-sm", theme.surface.highlight, theme.border.default)}>
-                <button onClick={() => handleBreadcrumb(0)} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surface.default}`)}><Home className="h-4 w-4"/></button>
+                <button onClick={() => handleBreadcrumb(0)} className={cn("p-1 rounded", theme.text.secondary, `hover:${theme.surface.default}`)}><Home className="h-4 w-4" /></button>
                 {currentPath.slice(1).map((folder, i) => (
                     <React.Fragment key={folder}>
-                        <ChevronRight className="h-4 w-4 text-slate-400"/>
-                        <button 
+                        <ChevronRight className="h-4 w-4 text-slate-400" />
+                        <button
                             onClick={() => handleBreadcrumb(i + 1)}
                             className={cn("px-2 py-0.5 rounded font-medium", i === currentPath.length - 2 ? theme.text.primary : theme.text.secondary, `hover:${theme.surface.default}`)}
                         >
@@ -111,7 +111,7 @@ export function DataLakeExplorer(): React.ReactElement {
                 <Card noPadding className="h-full flex flex-col">
                     <TableContainer className="border-0 shadow-none rounded-none flex-1">
                         <TableHeader>
-                            <TableHead className="w-10"><input type="checkbox"/></TableHead>
+                            <TableHead className="w-10"><input type="checkbox" /></TableHead>
                             <TableHead>Name</TableHead>
                             <TableHead>Size</TableHead>
                             <TableHead>Type</TableHead>
@@ -126,12 +126,12 @@ export function DataLakeExplorer(): React.ReactElement {
                             {items.map(item => (
                                 <TableRow key={item.id} className={cn("cursor-pointer", `hover:${theme.surface.highlight}`)} onClick={() => handleFileClick(item)}>
                                     <TableCell onClick={e => e.stopPropagation()}>
-                                        <input 
-                                            type="checkbox" 
+                                        <input
+                                            type="checkbox"
                                             checked={selection.includes(item.id)}
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                if(e.target.checked) {setSelection([...selection, item.id]);}
-                                                else {setSelection(selection.filter(id => id !== item.id));}
+                                                if (e.target.checked) { setSelection([...selection, item.id]); }
+                                                else { setSelection(selection.filter(id => id !== item.id)); }
                                             }}
                                         />
                                     </TableCell>
@@ -149,7 +149,7 @@ export function DataLakeExplorer(): React.ReactElement {
                                     <TableCell className={cn("text-xs", theme.text.secondary)}>{item.modified}</TableCell>
                                     <TableCell className="text-right">
                                         <button className={cn("p-1 rounded", theme.text.tertiary, `hover:${theme.surface.highlight}`)} onClick={e => e.stopPropagation()}>
-                                            <MoreHorizontal className="h-4 w-4"/>
+                                            <MoreHorizontal className="h-4 w-4" />
                                         </button>
                                     </TableCell>
                                 </TableRow>
@@ -175,7 +175,7 @@ function getTierClasses(tier: string, theme: ReturnType<typeof useTheme>['theme'
 export default DataLakeExplorer;
 
 function DatabaseIcon({ className }: { className?: string }): React.ReactElement {
-  return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
         <ellipse cx="12" cy="5" rx="9" ry="3" />
         <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
         <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />

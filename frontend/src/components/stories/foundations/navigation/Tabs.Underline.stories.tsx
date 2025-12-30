@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Tabs } from '@/components/molecules';
+import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { ThemeProvider } from '@/providers/ThemeContext';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { FileText, Settings, Users } from 'lucide-react';
 import React, { useState } from 'react';
-import { FileText, Users, Settings } from 'lucide-react';
 
 /**
  * Tabs - Underline variant
- * 
+ *
  * Border-bottom indicator style. Best for full-width page sections
  * and content areas that need clear separation.
  */

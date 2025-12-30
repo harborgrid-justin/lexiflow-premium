@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ProgressBar } from '@/components/atoms';
+import { ProgressBar } from '@/components/ui/atoms/ProgressBar/ProgressBar';
 import { ThemeProvider } from '@/providers/ThemeContext';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";
 
 /**

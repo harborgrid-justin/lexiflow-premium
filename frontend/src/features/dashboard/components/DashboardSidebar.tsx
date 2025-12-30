@@ -26,9 +26,10 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers';
 
 // Components
-import { Button, DateText } from '@/components/atoms';
-import { EmptyState } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { DateText } from '@/components/ui/atoms/DateText/DateText';
 import { Card } from '@/components/ui/molecules/Card/Card';
+import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

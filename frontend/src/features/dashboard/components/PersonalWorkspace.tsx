@@ -25,8 +25,8 @@ import { STORES } from '@/services/data/db';
 import { useTheme } from '@/providers';
 
 // Components
-import { Button } from '@/components/atoms';
 import { NotificationCenter } from '@/components/organisms/notifications/NotificationCenter';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Utils & Constants

@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { ThemeProvider } from '@/providers/ThemeContext';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FileText, Inbox, Search } from 'lucide-react';
-import { Button } from '@/components/atoms';
 import React from "react";
 
 /**

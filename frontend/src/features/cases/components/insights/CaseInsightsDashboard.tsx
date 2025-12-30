@@ -1,9 +1,9 @@
 /**
  * Matter Insights Dashboard - Strategic Intelligence & Predictions
- * 
+ *
  * @module MatterInsightsDashboard
  * @description AI-powered insights, risk assessment, and predictive analytics
- * 
+ *
  * Features:
  * - Risk assessment and scoring
  * - Outcome predictions
@@ -15,18 +15,20 @@
  * - Resource optimization recommendations
  */
 
-import React, { useState, useMemo } from 'react';
-import {
-  AlertTriangle, Target, Brain, Download
-} from 'lucide-react';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
-import { Card } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
 import { CaseStatus } from '@/types';
+import { cn } from '@/utils/cn';
+import {
+  AlertTriangle,
+  Brain, Download,
+  Target
+} from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
 export const CaseInsightsDashboard: React.FC = () => {
   const { isDark } = useTheme();
@@ -247,12 +249,12 @@ export const CaseInsightsDashboard: React.FC = () => {
                 const actual = matterTime.reduce((sum, t) => sum + ((t.duration || 0) * (t.rate || 150)), 0);
                 return actual > (m.value || 0) * 1.1;
               }) && (
-                <RecommendationItem
-                  title="Budget Adjustments Needed"
-                  description="Some matters are exceeding budget thresholds"
-                  isDark={isDark}
-                />
-              )}
+                  <RecommendationItem
+                    title="Budget Adjustments Needed"
+                    description="Some matters are exceeding budget thresholds"
+                    isDark={isDark}
+                  />
+                )}
               {matters?.some(m => m.trialDate && new Date(m.trialDate) < new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)) && (
                 <RecommendationItem
                   title="Urgent Trial Dates"

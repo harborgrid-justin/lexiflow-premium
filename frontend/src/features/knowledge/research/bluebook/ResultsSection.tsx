@@ -1,12 +1,12 @@
-import React from 'react';
-import { Filter, Copy, Table, FileDown, Info } from 'lucide-react';
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { Card } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
 import { BluebookCitationType, ExportFormat } from '@/types/bluebook';
+import { cn } from '@/utils/cn';
+import { Copy, FileDown, Filter, Info, Table } from 'lucide-react';
+import React from 'react';
 import { ResultItem } from './ResultItem';
-import type { FormattingResult, FilterOptions } from './types';
+import type { FilterOptions, FormattingResult } from './types';
 
 interface ResultsSectionProps {
   results: FormattingResult[];

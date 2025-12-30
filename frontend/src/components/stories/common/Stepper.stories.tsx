@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { Stepper } from '@/components/ui/molecules/Stepper/Stepper';
 import { ThemeProvider } from '@/providers/ThemeContext';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import React, { useState } from 'react';
-import { Button } from '@/components/atoms';
 
 /**
  * Stepper component for multi-step processes.

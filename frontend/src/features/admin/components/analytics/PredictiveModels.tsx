@@ -1,9 +1,9 @@
 /**
  * PredictiveModels.tsx
- * 
+ *
  * Predictive analytics and machine learning models for case outcomes,
  * settlement predictions, and litigation strategy recommendations.
- * 
+ *
  * @module components/analytics/PredictiveModels
  * @category Analytics - Predictive Models
  */
@@ -11,18 +11,18 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { AlertCircle, BrainCircuit, Target, TrendingUp } from 'lucide-react';
 import React from 'react';
-import { BrainCircuit, TrendingUp, Target, AlertCircle } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
+import type { OutcomePrediction } from '@/api/analytics';
+import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { EmptyState } from '@/components/molecules';
-import type { OutcomePrediction } from '@/api/analytics';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -36,7 +36,7 @@ interface PredictiveModelsProps {
 // ============================================================================
 const PredictiveModelsSkeleton: React.FC = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className="space-y-6 p-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -151,7 +151,7 @@ export const PredictiveModels: React.FC<PredictiveModelsProps> = ({ subTab }) =>
                   Machine Learning Models
                 </p>
                 <p className={cn("text-xs", theme.text.secondary)}>
-                  Predictions are generated using historical case data and continuously improve with more data points. 
+                  Predictions are generated using historical case data and continuously improve with more data points.
                   Always use professional judgment in conjunction with these predictions.
                 </p>
               </div>

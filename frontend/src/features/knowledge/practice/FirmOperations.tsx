@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, lazy } from 'react';
-import { Users, TrendingUp, Building2, Laptop, Wallet, BookOpen, ShieldAlert, MapPin, Target, ShoppingCart } from 'lucide-react';
+import { BookOpen, Building2, Laptop, MapPin, ShieldAlert, ShoppingCart, Target, TrendingUp, Users, Wallet } from 'lucide-react';
+import React, { lazy, Suspense } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -20,9 +20,9 @@ import { Users, TrendingUp, Building2, Laptop, Wallet, BookOpen, ShieldAlert, Ma
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { Button } from '@/components/atoms';
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { LazyLoader } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 
 // Sub-components
 const HRManager = lazy(() => import('./hr/HRManager').then(m => ({ default: m.HRManager })));
@@ -40,7 +40,7 @@ const StrategyBoard = lazy(() => import('./StrategyBoard').then(m => ({ default:
 type OperationView = 'hr' | 'assets' | 'finance' | 'marketing' | 'knowledge' | 'procurement' | 'facilities' | 'security' | 'strategy';
 
 interface FirmOperationsProps {
-    initialTab?: OperationView;
+  initialTab?: OperationView;
 }
 
 const TAB_CONFIG: TabConfigItem[] = [
@@ -102,9 +102,9 @@ export const FirmOperations: React.FC<FirmOperationsProps> = ({ initialTab }) =>
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >
-        <Suspense fallback={<LazyLoader message="Loading Operations Module..." />}>
-          {renderContent()}
-        </Suspense>
+      <Suspense fallback={<LazyLoader message="Loading Operations Module..." />}>
+        {renderContent()}
+      </Suspense>
     </TabbedPageLayout>
   );
 };

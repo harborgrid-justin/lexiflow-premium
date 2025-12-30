@@ -6,20 +6,20 @@
  * Allows linking Federal Rules of Evidence (FRE) and tracking challenges.
  */
 
+import { CheckCircle, Plus, Scale, ShieldAlert } from 'lucide-react';
 import React, { useState } from 'react';
-import { ShieldAlert, CheckCircle, Scale, Plus } from 'lucide-react';
 
 // Common Components
-import { Card } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
-import { RuleSelector } from '@/components/molecules';
-import { Modal } from '@/components/molecules';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { RuleSelector } from '@/components/ui/molecules/RuleSelector/RuleSelector';
 
 // Context & Utils
+import { useModalState } from '@/hooks';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { useModalState } from '@/hooks';
 
 // Types
 import { EvidenceItem } from '@/types';
@@ -47,41 +47,41 @@ export const EvidenceAdmissibility: React.FC<EvidenceAdmissibilityProps> = ({ se
 
       <Card title="Admissibility Assessment">
         <div className={cn("border rounded-lg p-4 mb-6 flex items-start", theme.status.warning.bg, theme.status.warning.border)}>
-          <ShieldAlert className={cn("h-5 w-5 mr-3 mt-0.5 shrink-0", theme.status.warning.text)}/>
+          <ShieldAlert className={cn("h-5 w-5 mr-3 mt-0.5 shrink-0", theme.status.warning.text)} />
           <div>
             <h5 className={cn("text-sm font-bold", theme.status.warning.text)}>Current Status: {selectedItem.admissibility}</h5>
             <p className={cn("text-xs mt-1", theme.status.warning.text)}>
-              {selectedItem.admissibility === 'Challenged' 
-                ? 'Opposing counsel has filed a Motion in Limine based on FRE 901 (Authentication).' 
+              {selectedItem.admissibility === 'Challenged'
+                ? 'Opposing counsel has filed a Motion in Limine based on FRE 901 (Authentication).'
                 : 'Standard foundation required. No current challenges.'}
             </p>
           </div>
         </div>
-        
+
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <h4 className={cn("font-bold text-sm", theme.text.primary)}>Rules of Evidence Checklist</h4>
             <button
-                onClick={ruleModal.open}
-                className={cn("text-xs hover:underline flex items-center", theme.primary.text)}
+              onClick={ruleModal.open}
+              className={cn("text-xs hover:underline flex items-center", theme.primary.text)}
             >
-                <Plus className="h-3 w-3 mr-1"/> Add Rule
+              <Plus className="h-3 w-3 mr-1" /> Add Rule
             </button>
           </div>
-          
+
           <div className="space-y-2">
             {rules.map(rule => (
-                <div key={rule} className={cn("flex items-center justify-between p-3 border rounded", theme.surface.highlight, theme.border.default)}>
-                    <div className="flex items-center">
-                        <div className={cn("w-5 h-5 rounded-full border-2 flex items-center justify-center mr-3", theme.status.success.border)}>
-                            <CheckCircle className={cn("h-3 w-3", theme.status.success.text)}/>
-                        </div>
-                        <span className={cn("text-sm font-medium", theme.text.primary)}>{rule}</span>
-                    </div>
-                    <Badge variant={rule.includes('901') ? 'warning' : 'success'}>
-                        {rule.includes('901') ? 'Pending' : 'Pass'}
-                    </Badge>
+              <div key={rule} className={cn("flex items-center justify-between p-3 border rounded", theme.surface.highlight, theme.border.default)}>
+                <div className="flex items-center">
+                  <div className={cn("w-5 h-5 rounded-full border-2 flex items-center justify-center mr-3", theme.status.success.border)}>
+                    <CheckCircle className={cn("h-3 w-3", theme.status.success.text)} />
+                  </div>
+                  <span className={cn("text-sm font-medium", theme.text.primary)}>{rule}</span>
                 </div>
+                <Badge variant={rule.includes('901') ? 'warning' : 'success'}>
+                  {rule.includes('901') ? 'Pending' : 'Pass'}
+                </Badge>
+              </div>
             ))}
             {rules.length === 0 && <p className={cn("text-xs italic", theme.text.tertiary)}>No rules linked.</p>}
           </div>
@@ -90,7 +90,7 @@ export const EvidenceAdmissibility: React.FC<EvidenceAdmissibilityProps> = ({ se
 
       <Card title="Motions & Challenges">
         <div className={cn("text-center py-8", theme.text.tertiary)}>
-          <Scale className="h-12 w-12 mx-auto mb-3 opacity-20"/>
+          <Scale className="h-12 w-12 mx-auto mb-3 opacity-20" />
           <p>No active motions filed against this evidence ID.</p>
           <Button variant="outline" size="sm" className="mt-4">Log Anticipated Challenge</Button>
         </div>

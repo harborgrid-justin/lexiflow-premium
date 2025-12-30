@@ -1,7 +1,7 @@
-import React from 'react';
-import { Card } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import React from 'react';
 import type { FormatStats } from './types';
 
 interface StatsBarProps {

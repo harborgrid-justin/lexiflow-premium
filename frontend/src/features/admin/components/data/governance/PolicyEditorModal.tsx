@@ -128,7 +128,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
             </div>
 
             <div>
-                <label className={cn("block text-xs font-semibold uppercase mb-2 flex items-center gap-2", theme.text.secondary)}>
+                <label className={cn("flex text-xs font-semibold uppercase mb-2 items-center gap-2", theme.text.secondary)}>
                     <Code className="h-3 w-3"/> SQL Expression (USING)
                 </label>
                 <div className="relative">
@@ -144,7 +144,7 @@ export const PolicyEditorModal: React.FC<PolicyEditorModalProps> = ({ isOpen, on
 
             {['INSERT', 'UPDATE', 'ALL'].includes(formData.cmd || '') && (
                 <div>
-                    <label className={cn("block text-xs font-semibold uppercase mb-2 flex items-center gap-2", theme.text.secondary)}>
+                    <label className={cn("flex text-xs font-semibold uppercase mb-2 items-center gap-2", theme.text.secondary)}>
                         <Shield className="h-3 w-3"/> Check Expression (WITH CHECK)
                     </label>
                     <div className="relative">

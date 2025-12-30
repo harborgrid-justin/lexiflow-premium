@@ -10,25 +10,25 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { FileText, Plus, Search, Tag } from 'lucide-react';
 import React, { useState } from 'react';
-import { Search, FileText, Plus, Tag } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Types
-import { Clause } from '@/types';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Card } from '@/components/molecules';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
-import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { AdaptiveLoader } from '@/components/molecules';
-import { ErrorState } from '@/components/molecules';
-import { EmptyState } from '@/components/molecules';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
+import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';
+import { Clause } from '@/types';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

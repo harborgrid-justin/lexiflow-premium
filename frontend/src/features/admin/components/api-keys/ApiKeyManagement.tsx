@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { Key, Plus, Copy, Trash2, Eye, EyeOff, RefreshCw } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { Modal } from '@/components/molecules';
-import { Input } from '@/components/atoms';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { useNotify } from '@/hooks/useNotify';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
 import { useModalState } from '@/hooks/useModalState';
-import { useQuery} from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/useNotify';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
+import { Copy, Eye, EyeOff, Key, Plus, RefreshCw, Trash2 } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface ApiKey {
   id: string;
@@ -39,13 +39,13 @@ const availableScopes = [
 export const ApiKeyManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  
+
   // Fetch API keys from backend
   const { data: apiKeys = [], refetch } = useQuery<ApiKey[]>(
     ['admin', 'apiKeys'],
     () => DataService.admin.getApiKeys?.() || Promise.resolve([])
   );
-  
+
   const createModal = useModalState();
   const deleteModal = useModalState();
   const [selectedKey, setSelectedKey] = useState<ApiKey | null>(null);
@@ -75,7 +75,7 @@ export const ApiKeyManagement: React.FC = () => {
       setFormData({ name: '', scopes: [] });
       notify.success('API key created successfully');
       await refetch();
-    } catch (error) {
+    } catch {
       notify.error('Failed to create API key');
     }
   };
@@ -89,7 +89,7 @@ export const ApiKeyManagement: React.FC = () => {
       setSelectedKey(null);
       notify.success('API key revoked successfully');
       await refetch();
-    } catch (error) {
+    } catch {
       notify.error('Failed to revoke API key');
     }
   };
@@ -103,7 +103,7 @@ export const ApiKeyManagement: React.FC = () => {
       setSelectedKey(null);
       notify.success('API key deleted successfully');
       await refetch();
-    } catch (error) {
+    } catch {
       notify.error('Failed to delete API key');
     }
   };
@@ -130,7 +130,7 @@ export const ApiKeyManagement: React.FC = () => {
       <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
-            <Key className="h-5 w-5 mr-2 text-amber-500"/> API Key Management
+            <Key className="h-5 w-5 mr-2 text-amber-500" /> API Key Management
           </h3>
           <p className={cn("text-sm", theme.text.secondary)}>Manage API keys for external integrations.</p>
         </div>
@@ -217,8 +217,8 @@ export const ApiKeyManagement: React.FC = () => {
             </div>
           ) : (
             <>
-              <Input label="Key Name" value={formData.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})} placeholder="e.g., Production API Key" />
-              <Input label="Expiration Date (optional)" type="date" value={formData.expiresAt || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, expiresAt: e.target.value})} />
+              <Input label="Key Name" value={formData.name} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })} placeholder="e.g., Production API Key" />
+              <Input label="Expiration Date (optional)" type="date" value={formData.expiresAt || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, expiresAt: e.target.value })} />
 
               <div>
                 <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Scopes (Permissions)</label>

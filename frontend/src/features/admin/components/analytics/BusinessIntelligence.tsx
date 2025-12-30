@@ -1,9 +1,9 @@
 /**
  * BusinessIntelligence.tsx
- * 
+ *
  * Main container for Business Intelligence analytics with firm metrics,
  * practice group analytics, attorney performance, and financial KPIs.
- * 
+ *
  * @module components/analytics/BusinessIntelligence
  * @category Analytics - Business Intelligence
  */
@@ -11,18 +11,18 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { BarChart3, Building2, TrendingUp, Users } from 'lucide-react';
 import React from 'react';
-import { BarChart3, TrendingUp, Users, Building2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
+import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
+import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { MetricCard } from '@/components/molecules';
-import { EmptyState } from '@/components/molecules';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -54,7 +54,7 @@ interface FinancialMetricsData {
 // ============================================================================
 const BusinessIntelligenceSkeleton: React.FC = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className="space-y-6 p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -4,7 +4,7 @@
  * Provides graceful error handling and prevents financial data corruption
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, DollarSign } from 'lucide-react';
 import { Button } from '@/components/atoms';
 
@@ -68,7 +68,7 @@ export class BillingErrorBoundary extends Component<Props, State> {
     window.location.href = '/';
   };
 
-  render() {
+  override render() {
     if (this.state.hasError) {
       return (
         <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900 p-4">

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import type { UserId } from '@/types';
 import { Sidebar } from './Sidebar';
 
 const meta: Meta<typeof Sidebar> = {
@@ -15,11 +16,16 @@ type Story = StoryObj<typeof Sidebar>;
 
 export const Default: Story = {
   args: {
-  "activeView": {},
-  "setActiveView": {},
+  "activeView": "dashboard",
+  "setActiveView": () => {},
   "isOpen": true,
-  "onClose": {},
-  "currentUser": {},
-  "onSwitchUser": {}
+  onClose: () => {},
+  "currentUser": {
+    id: '1' as UserId,
+    email: 'user@example.com',
+    name: 'John Doe',
+    role: 'Associate',
+  },
+  onSwitchUser: () => {}
 },
 };

@@ -36,7 +36,7 @@ export class ProcessingJobsApiService {
    * GET ${API_PREFIX}/processing-jobs
    */
   async getAll(filters?: JobFilters): Promise<ProcessingJob[]> {
-    const response = await apiClient.get<PaginatedResponse<ProcessingJob>>('/processing-jobs', filters);
+    const response = await apiClient.get<PaginatedResponse<ProcessingJob>>('/processing-jobs', filters as Record<string, unknown>);
     return response.data;
   }
 

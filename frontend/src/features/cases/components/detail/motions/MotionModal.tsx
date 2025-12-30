@@ -25,7 +25,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Motion, MotionType, LegalDocument, MotionId, CaseId, DocumentId } from '@/types';
+import { Motion, MotionType, LegalDocument, DocumentId } from '@/types';
 
 interface MotionModalProps {
   isOpen: boolean;

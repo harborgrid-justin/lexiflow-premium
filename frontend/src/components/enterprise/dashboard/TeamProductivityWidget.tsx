@@ -72,18 +72,32 @@ export const TeamProductivityWidget: React.FC<TeamProductivityWidgetProps> = ({
     .sort((a, b) => b.efficiency - a.efficiency)
     .slice(0, 3);
 
-  const CustomTooltip = ({ active, payload }: unknown) => {
+  interface TooltipPayload {
+    payload: TeamMember | TeamProductivityData;
+    name: string;
+    value: number;
+  }
+
+  interface CustomTooltipProps {
+    active?: boolean;
+    payload?: TooltipPayload[];
+  }
+
+  const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      const displayName = 'name' in data ? data.name : 'metric' in data ? data.metric : '';
+
       return (
         <div
           className={cn(
             'p-3 rounded-lg shadow-lg border',
-            theme.surface.elevated,
+            theme.surface.raised,
             theme.border.default
           )}
         >
           <p className={cn('text-sm font-medium', theme.text.primary)}>
-            {payload[0].payload.name || payload[0].payload.metric}
+            {displayName}
           </p>
           <p className={cn('text-xs', theme.text.secondary)}>
             {payload[0].name}: {payload[0].value}
@@ -187,7 +201,7 @@ export const TeamProductivityWidget: React.FC<TeamProductivityWidgetProps> = ({
 
         {/* Summary Stats */}
         <div className="grid grid-cols-3 gap-3">
-          <div className={cn('p-3 rounded-lg', theme.surface.elevated)}>
+          <div className={cn('p-3 rounded-lg', theme.surface.raised)}>
             <div className="flex items-center gap-2 mb-1">
               <Target className={cn('h-3 w-3', theme.text.tertiary)} />
               <p className={cn('text-xs font-medium', theme.text.tertiary)}>Tasks</p>
@@ -196,7 +210,7 @@ export const TeamProductivityWidget: React.FC<TeamProductivityWidgetProps> = ({
               {totalTasksCompleted}
             </p>
           </div>
-          <div className={cn('p-3 rounded-lg', theme.surface.elevated)}>
+          <div className={cn('p-3 rounded-lg', theme.surface.raised)}>
             <div className="flex items-center gap-2 mb-1">
               <Clock className={cn('h-3 w-3', theme.text.tertiary)} />
               <p className={cn('text-xs font-medium', theme.text.tertiary)}>Hours</p>
@@ -205,7 +219,7 @@ export const TeamProductivityWidget: React.FC<TeamProductivityWidgetProps> = ({
               {totalHoursLogged.toFixed(1)}
             </p>
           </div>
-          <div className={cn('p-3 rounded-lg', theme.surface.elevated)}>
+          <div className={cn('p-3 rounded-lg', theme.surface.raised)}>
             <div className="flex items-center gap-2 mb-1">
               <TrendingUp className={cn('h-3 w-3', theme.text.tertiary)} />
               <p className={cn('text-xs font-medium', theme.text.tertiary)}>
@@ -239,7 +253,7 @@ export const TeamProductivityWidget: React.FC<TeamProductivityWidgetProps> = ({
                   transition={{ delay: index * 0.05 }}
                   className={cn(
                     'p-4 rounded-lg border hover:border-purple-300 dark:hover:border-purple-700 transition-all',
-                    theme.surface.elevated,
+                    theme.surface.raised,
                     theme.border.default
                   )}
                 >
@@ -302,12 +316,13 @@ export const TeamProductivityWidget: React.FC<TeamProductivityWidgetProps> = ({
                       initial={{ width: 0 }}
                       animate={{ width: `${member.efficiency}%` }}
                       transition={{ duration: 0.8, delay: index * 0.1 }}
-                      className={cn('h-full rounded-full', {
-                        'bg-emerald-500': member.efficiency >= 90,
-                        'bg-blue-500': member.efficiency >= 75 && member.efficiency < 90,
-                        'bg-amber-500': member.efficiency >= 60 && member.efficiency < 75,
-                        'bg-rose-500': member.efficiency < 60,
-                      })}
+                      className={cn(
+                        'h-full rounded-full',
+                        member.efficiency >= 90 && 'bg-emerald-500',
+                        member.efficiency >= 75 && member.efficiency < 90 && 'bg-blue-500',
+                        member.efficiency >= 60 && member.efficiency < 75 && 'bg-amber-500',
+                        member.efficiency < 60 && 'bg-rose-500'
+                      )}
                     />
                   </div>
                 </motion.div>
@@ -406,7 +421,7 @@ export const TeamProductivityWidget: React.FC<TeamProductivityWidgetProps> = ({
                     'p-3 rounded-lg text-center',
                     index === 0
                       ? 'bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 border border-amber-200 dark:border-amber-800'
-                      : theme.surface.elevated
+                      : theme.surface.raised
                   )}
                 >
                   <div className="text-2xl mb-1">

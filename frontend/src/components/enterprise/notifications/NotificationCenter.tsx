@@ -26,9 +26,9 @@ import {
   CreditCard,
   X,
 } from 'lucide-react';
-import { formatDistanceToNow, format } from 'date-fns';
+import { formatDistanceToNow} from 'date-fns';
 import { cn } from '@/utils/cn';
-import type { UINotification, NotificationFilters } from '@/types/notifications';
+import type { UINotification } from '@/types/notifications';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -71,7 +71,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
   onMarkAllAsRead,
   onDelete,
   onDeleteBulk,
-  onClearAll,
   onArchive,
   onOpenPreferences,
   isLoading = false,
@@ -169,17 +168,9 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     });
   };
 
-  const selectAll = () => {
-    setSelectedIds(new Set(filteredAndSortedNotifications.map((n) => n.id)));
-  };
-
   const clearSelection = () => {
     setSelectedIds(new Set());
   };
-
-  const isAllSelected =
-    selectedIds.size > 0 &&
-    selectedIds.size === filteredAndSortedNotifications.length;
 
   // Bulk actions
   const handleBulkMarkAsRead = () => {

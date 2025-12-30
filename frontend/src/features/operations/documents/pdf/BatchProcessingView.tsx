@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Cpu } from 'lucide-react';
 import { EmptyState } from '@/components/molecules';
 import { Button } from '@/components/atoms';

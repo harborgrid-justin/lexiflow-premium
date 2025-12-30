@@ -15,8 +15,8 @@ type Story = StoryObj<typeof PageContainerLayout>;
 
 export const Default: Story = {
   args: {
-  "children": "<div>Sample Content</div>",
+  children: undefined,
   "className": "Sample Text",
-  "maxWidth": {}
+  maxWidth: undefined
 },
 };

@@ -91,7 +91,6 @@ export const getActionButton = (theme: Theme, disabled: boolean) => cn(
 );
 
 export const getActionIconContainer = (
-  theme: Theme,
   variant: 'primary' | 'success' | 'warning' | 'danger' | 'info'
 ) => {
   const variantClasses = {
@@ -133,7 +132,7 @@ export const getShortcutKey = (theme: Theme) => cn(
   theme.text.tertiary
 );
 
-export const getBadge = (theme: Theme) => cn(
+export const getBadge = () => cn(
   "px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider",
   "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
 );

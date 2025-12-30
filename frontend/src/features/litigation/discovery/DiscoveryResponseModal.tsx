@@ -122,7 +122,7 @@ export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ 
            <Button variant="secondary" onClick={onClose}>Discard</Button>
            <Button
              variant="primary"
-             onClick={() => saveDraftMutation.mutate(undefined as Record<string, unknown>)}
+             onClick={() => saveDraftMutation.mutate(undefined as unknown as Record<string, unknown>)}
              disabled={saveDraftMutation.isLoading || !draftResponse}
            >
              {saveDraftMutation.isLoading ? 'Saving...' : 'Save to Matter File'}

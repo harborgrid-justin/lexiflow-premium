@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { UserCheck, FileText, Gavel, ShieldAlert } from 'lucide-react';
+import { UserCheck, FileText, Gavel } from 'lucide-react';
 
 // Common Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
@@ -20,12 +20,10 @@ import { cn } from '@/utils/cn';
 // Services & Types
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services';
-// ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 
 export const ExpertEvidenceManager: React.FC = () => {
     const { theme } = useTheme();
-    const { data: experts = [] } = useQuery<unknown[]>(
+    const { data: experts = [] } = useQuery<Array<{ id: string; name: string; specialty: string; reports: number }>>(
         ['advisors', 'experts'],
         DataService.warRoom.getExperts
     );
@@ -49,7 +47,7 @@ export const ExpertEvidenceManager: React.FC = () => {
                     <TableHead className="text-right">Actions</TableHead>
                 </TableHeader>
                 <TableBody>
-                    {experts.map(expert => (
+                    {experts.map((expert: { id: string; name: string; specialty: string; reports: number }) => (
                          <TableRow key={expert.id}>
                             <TableCell className={cn("font-medium", theme.text.primary)}>{expert.name}</TableCell>
                             <TableCell>{expert.specialty}</TableCell>

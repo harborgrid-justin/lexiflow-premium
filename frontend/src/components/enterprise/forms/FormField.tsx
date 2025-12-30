@@ -16,6 +16,7 @@
 import React, { useId } from 'react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type {
   FieldSchema,
   TextFieldSchema,
@@ -71,7 +72,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   disabled = false,
   readOnly = false,
 }) => {
-  const { theme, mode } = useTheme();
+  const { theme } = useTheme();
   const inputId = useId();
   const errorId = useId();
   const helpId = useId();
@@ -528,7 +529,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   const showSeparateLabel = !['checkbox', 'toggle', 'radio'].includes(type);
 
   return (
-    <div className={cn('form-field', field.order && `order-${field.order}`)}>
+    <div className={cn('form-field', field.order ? `order-${field.order}` : undefined)}>
       {/* Label */}
       {showSeparateLabel && label && (
         <label

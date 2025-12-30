@@ -41,12 +41,6 @@ export function PipelineMonitor({ initialTab = 'monitor' }: PipelineMonitorProps
 
   const pipelines = Array.isArray(pipelinesResponse) ? pipelinesResponse : (pipelinesResponse?.data || []);
 
-  // Fetch pipeline stats
-  const { data: stats } = useQuery(
-      ['pipelines', 'stats'],
-      () => dataPlatformApi.pipelines.getStats(),
-  );
-
   // Mock connectors for now - can be implemented later
   const connectors: Connector[] = [];
   const isLoadingConnectors = false;

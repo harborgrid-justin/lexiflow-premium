@@ -17,8 +17,8 @@ export const WarRoomService = {
   },
 
   add: async (item: unknown) => item,
-  update: async (id: string, updates: unknown) => updates,
-  delete: async (id: string) => true,
+  update: async (updates: unknown) => updates,
+  delete: async () => true,
 
   // War room specific methods
   getData: async (caseId: string) => {
@@ -40,9 +40,9 @@ export const WarRoomService = {
 
   getSessions: async () => [],
   createSession: async (session: unknown) => session,
-  joinSession: async (sessionId: string) => true,
-  leaveSession: async (sessionId: string) => true,
-  getParticipants: async (sessionId: string) => [],
+  joinSession: async () => true,
+  leaveSession: async () => true,
+  getParticipants: async () => [],
 
   // Advisors
   getAdvisors: async (query?: Record<string, string>) => {

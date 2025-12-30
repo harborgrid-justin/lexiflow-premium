@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { Badge } from '@/components/atoms';
 import { Button } from '@/components/atoms';
-import { SearchInputBar, ActionRow, MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
+import { ActionRow, MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
 import { Building, User, AlertTriangle, ShieldCheck, Network, Download, Plus } from 'lucide-react';
 import { LegalEntity } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';
@@ -41,8 +41,9 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
   const metrics = useMemo(() => ({
     entitiesTracked: stats?.corporations || corporations.length,
     ubosIdentified: corporations.reduce((sum, corp) => {
-      const apiCorp = corp as Record<string, unknown>;
-      return sum + (apiCorp.relationships?.length || 0);
+      const apiCorp = corp as unknown as Record<string, unknown>;
+      const relationships = apiCorp.relationships as Array<unknown> | undefined;
+      return sum + (relationships?.length || 0);
     }, 0),
     verificationPending: corporations.filter(corp => corp.status !== 'active').length,
   }), [corporations, stats]);
@@ -85,7 +86,7 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
           />
       </div>
 
-      <ActionRow title="Beneficial Ownership Register" subtitle="Track equity holders >25% and controlling persons per CTA requirements.">
+      <ActionRow>
          <Button variant="outline" icon={Download} onClick={handleExportFinCEN}>Export FinCEN Report</Button>
          <Button variant="primary" icon={Plus} onClick={handleAddUBO}>Add UBO Entry</Button>
       </ActionRow>
@@ -101,24 +102,26 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
           </TableHeader>
           <TableBody>
               {corporations.map(corp => {
-                const apiCorp = corp as Record<string, unknown>;
-                const firstRelationship = apiCorp.relationships?.[0];
-                const ownershipPct = firstRelationship?.metadata?.ownershipPercentage as number || 0;
-                const controlType = firstRelationship?.relationshipType || 'Senior Officer';
+                const apiCorp = corp as unknown as Record<string, unknown>;
+                const relationships = apiCorp.relationships as Array<Record<string, unknown>> | undefined;
+                const firstRelationship = relationships?.[0];
+                const metadata = firstRelationship?.metadata as Record<string, unknown> | undefined;
+                const ownershipPct = (metadata?.ownershipPercentage as number) || 0;
+                const controlType = (firstRelationship?.relationshipType as string) || 'Senior Officer';
                 const isVerified = corp.status === 'active';
 
                 return (
-                  <TableRow key={corp.id} onClick={() => onSelect(corp as Record<string, unknown>)} className="cursor-pointer">
+                  <TableRow key={corp.id} onClick={() => onSelect(corp as LegalEntity)} className="cursor-pointer">
                       <TableCell className={cn("font-bold", theme.text.primary)}>
                           <div className="flex items-center gap-2">
                               <Building className="h-4 w-4 text-blue-500"/>
-                              {apiCorp.fullLegalName || corp.name}
+                              {(apiCorp.fullLegalName as string) || corp.name}
                           </div>
                       </TableCell>
                       <TableCell>
                            <div className="flex items-center gap-2">
-                               <User className={cn("h-4 w-4", theme.text.tertiary)}/> 
-                               {firstRelationship?.relatedEntityName || 'Not Assigned'}
+                               <User className={cn("h-4 w-4", theme.text.tertiary)}/>
+                               {(firstRelationship?.relatedEntityName as string) || 'Not Assigned'}
                            </div>
                       </TableCell>
                       <TableCell>

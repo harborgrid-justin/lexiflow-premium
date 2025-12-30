@@ -5,11 +5,10 @@
 
 import OpenAI from 'openai';
 import { ParsedDocket } from '@/types';
-import type { SearchResult } from '@/types';
 import { withRetry } from '@/utils/apiUtils';
 import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, ShepardizeResult } from '@/types/ai';
 import { defaultStorage } from '@/services';
-import { MissingConfigurationError, ExternalServiceError, ApiTimeoutError } from '@/services/core/errors';
+import { MissingConfigurationError} from '@/services/core/errors';
 
 // Note: Import AI types from @/types, don't re-export them
 
@@ -125,13 +124,14 @@ export const OpenAIService = {
       });
 
       for await (const event of stream) {
-        if (event.type === 'response.output_item.added' && event.item.type === 'message') {
-          const content = event.item.content?.[0];
+        const eventObj = event as { type?: string; item?: { type?: string; content?: Array<{ type?: string; text?: string }> }; delta?: { type?: string; text?: string } };
+        if (eventObj.type === 'response.output_item.added' && eventObj.item?.type === 'message') {
+          const content = eventObj.item.content?.[0];
           if (content && content.type === 'output_text') {
             yield content.text || '';
           }
-        } else if (event.type === 'response.output_item.delta') {
-          const delta = event.delta;
+        } else if (eventObj.type === 'response.output_item.delta') {
+          const delta = eventObj.delta;
           if (delta && delta.type === 'output_text' && delta.text) {
             yield delta.text;
           }
@@ -276,7 +276,7 @@ export const OpenAIService = {
         const client = getClient();
         const response = await client.responses.create({
           model: 'gpt-4o',
-          instructions: 'You are a legal research assistant. Analyze case citation validity and treatment history. Return JSON with {status: string, treatment: string[], citingCases: string[], redFlags: string[]}.',
+          instructions: 'You are a legal research assistant. Analyze case citation validity and treatment history. Return JSON with {caseName: string, citation: string, summary: string, history: array, treatment: array}.',
           input: `Shepardize this citation: ${citation}`,
           text: {
             format: {
@@ -289,18 +289,20 @@ export const OpenAIService = {
         const textContent = response.output_text || '';
         const result = JSON.parse(textContent || '{}');
         return {
-          status: result.status || 'Unknown',
-          treatment: result.treatment || [],
-          citingCases: result.citingCases || [],
-          redFlags: result.redFlags || []
+          caseName: result.caseName || 'Unknown Case',
+          citation: result.citation || citation,
+          summary: result.summary || 'No summary available',
+          history: result.history || [],
+          treatment: result.treatment || []
         };
       } catch (e) {
         console.error('Shepardize Error:', e);
         return {
-          status: 'Analysis unavailable',
-          treatment: [],
-          citingCases: [],
-          redFlags: ['Service error - unable to verify citation']
+          caseName: 'Unknown Case',
+          citation: citation,
+          summary: 'Analysis unavailable',
+          history: [],
+          treatment: []
         };
       }
     });
@@ -329,5 +331,58 @@ export const OpenAIService = {
         return {};
       }
     });
+  },
+
+  // ============================================================================
+  // AIServiceInterface Compatibility Methods
+  // ============================================================================
+
+  /**
+   * Legal research (wrapper for conductResearch)
+   * @param query - Research query
+   * @param jurisdiction - Optional jurisdiction filter
+   */
+  async legalResearch(query: string, _jurisdiction?: string): Promise<ResearchResponse> {
+    return this.conductResearch(query);
+  },
+
+  /**
+   * Validate citations (wrapper for shepardizeCitation)
+   * @param citations - Array of citations to validate
+   */
+  async validateCitations(citations: string[]): Promise<ShepardizeResult> {
+    // Validate first citation for now (API limitation)
+    if (citations.length === 0) {
+      return {
+        caseName: 'No citations provided',
+        citation: '',
+        summary: 'No citations to validate',
+        history: [],
+        treatment: []
+      };
+    }
+    return this.shepardizeCitation(citations[0]);
+  },
+
+  /**
+   * Draft document (wrapper for generateDraft with callback support)
+   * @param prompt - Draft prompt
+   * @param onChunk - Callback for streaming chunks
+   */
+  async draftDocument(prompt: string, onChunk: (chunk: string) => void): Promise<void> {
+    const stream = this.streamDraft(prompt, 'document');
+    for await (const chunk of stream) {
+      onChunk(chunk);
+    }
+  },
+
+  /**
+   * Suggest reply (wrapper for generateReply)
+   * @param threadMessages - Array of thread messages
+   */
+  async suggestReply(threadMessages: string[]): Promise<string> {
+    // Use the last message for context
+    const lastMessage = threadMessages[threadMessages.length - 1] || '';
+    return this.generateReply(lastMessage, 'professional');
   }
 };

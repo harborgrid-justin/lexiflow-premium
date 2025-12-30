@@ -60,16 +60,6 @@ export const SystemHealthIndicator: React.FC<SystemHealthIndicatorProps> = ({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
-  useEffect(() => {
-    if (autoRefresh && onRefresh) {
-      const interval = setInterval(() => {
-        handleRefresh();
-      }, refreshInterval);
-
-      return () => clearInterval(interval);
-    }
-  }, [autoRefresh, onRefresh, refreshInterval]);
-
   const handleRefresh = async () => {
     if (onRefresh && !isRefreshing) {
       setIsRefreshing(true);
@@ -81,6 +71,17 @@ export const SystemHealthIndicator: React.FC<SystemHealthIndicatorProps> = ({
       }
     }
   };
+
+  useEffect(() => {
+    if (autoRefresh && onRefresh) {
+      const interval = setInterval(() => {
+        handleRefresh();
+      }, refreshInterval);
+
+      return () => clearInterval(interval);
+    }
+    return undefined;
+  }, [autoRefresh, onRefresh, refreshInterval, isRefreshing]);
 
   const getStatusIcon = (status: HealthStatus) => {
     switch (status) {
@@ -241,7 +242,7 @@ export const SystemHealthIndicator: React.FC<SystemHealthIndicatorProps> = ({
                 transition={{ delay: index * 0.05 }}
                 className={cn(
                   'p-4 rounded-lg border',
-                  theme.surface.elevated,
+                  theme.surface.raised,
                   theme.border.default,
                   'hover:border-blue-300 dark:hover:border-blue-700 transition-colors'
                 )}
@@ -334,7 +335,7 @@ export const SystemHealthIndicator: React.FC<SystemHealthIndicatorProps> = ({
                 count: services.filter((s) => s.status === 'offline').length,
                 color: 'text-gray-600 dark:text-gray-400',
               },
-            ].map((stat, index) => (
+            ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <p className={cn('text-2xl font-bold', stat.color)}>{stat.count}</p>
                 <p className={cn('text-xs', theme.text.tertiary)}>{stat.label}</p>

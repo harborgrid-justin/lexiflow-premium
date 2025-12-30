@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle, AlertCircle, XCircle, Clock, User } from 'lucide-react';
+import { CheckCircle, AlertCircle} from 'lucide-react';
 import { useTheme } from '@providers/ThemeContext';
 import * as styles from '../DraftingDashboard.styles';
 import { GeneratedDocument } from '@api/domains/drafting.api';
@@ -40,7 +40,7 @@ export const ApprovalQueue: React.FC<ApprovalQueueProps> = ({ approvals, onRevie
             <div className="flex-1 min-w-0">
               <h4 className={styles.getItemTitle(theme)}>{doc.title}</h4>
               <p className={styles.getItemSubtitle(theme)}>
-                Submitted by {doc.creator?.firstName || 'Unknown'} {doc.creator?.lastName || ''} • {formatDistanceToNow(new Date(doc.updatedAt || new Date()), { addSuffix: true })}
+                Submitted by {(doc.creator as { firstName?: string; lastName?: string })?.firstName || 'Unknown'} {(doc.creator as { firstName?: string; lastName?: string })?.lastName || ''} • {formatDistanceToNow(new Date(doc.updatedAt || new Date()), { addSuffix: true })}
               </p>
             </div>
           </div>

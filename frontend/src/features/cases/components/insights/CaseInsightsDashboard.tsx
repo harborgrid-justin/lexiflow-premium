@@ -17,8 +17,7 @@
 
 import React, { useState, useMemo } from 'react';
 import {
-  TrendingUp, AlertTriangle, Target, Award, ThumbsUp, DollarSign,
-  Brain, BarChart3, PieChart, Download, Filter
+  AlertTriangle, Target, Brain, Download
 } from 'lucide-react';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
@@ -27,9 +26,10 @@ import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms';
 import { Card } from '@/components/molecules';
 import { Badge } from '@/components/atoms';
+import { CaseStatus } from '@/types';
 
 export const CaseInsightsDashboard: React.FC = () => {
-  const { mode, isDark } = useTheme();
+  const { isDark } = useTheme();
   const [dateRange, setDateRange] = useState<'30d' | '90d' | 'ytd' | 'all'>('30d');
 
   // Fetch matters for analysis
@@ -50,15 +50,15 @@ export const CaseInsightsDashboard: React.FC = () => {
   // Calculate success probability from historical data
   const successMetrics = useMemo(() => {
     if (!matters) return { probability: 0, riskScore: 0, budgetAccuracy: 0 };
-    
-    const activeMatters = matters.filter(m => m.status === 'ACTIVE');
-    const completedMatters = matters.filter(m => m.status === 'CLOSED');
-    
+
+    const activeMatters = matters.filter(m => m.status === CaseStatus.Active || m.status === CaseStatus.Open);
+    const completedMatters = matters.filter(m => m.status === CaseStatus.Closed || m.status === CaseStatus.Settled);
+
     return {
-      probability: completedMatters.length > 0 
+      probability: completedMatters.length > 0
         ? Math.round((activeMatters.length / (activeMatters.length + completedMatters.length)) * 100 * 10) / 10
         : 0,
-      riskScore: activeMatters.filter(m => m.priority === 'HIGH').length,
+      riskScore: activeMatters.length,
       budgetAccuracy: analyticsData?.budgetAccuracy || 0,
     };
   }, [matters, analyticsData]);
@@ -125,16 +125,16 @@ export const CaseInsightsDashboard: React.FC = () => {
               Risk Assessment
             </h3>
             <div className="space-y-3">
-              {matters?.filter(m => m.status === 'ACTIVE').slice(0, 5).map((matter) => {
-                const riskLevel = matter.priority === 'HIGH' ? 'high' : matter.priority === 'MEDIUM' ? 'medium' : 'low';
-                const riskScore = matter.priority === 'HIGH' ? 7.5 : matter.priority === 'MEDIUM' ? 5.0 : 2.5;
+              {matters?.filter(m => m.status === CaseStatus.Active || m.status === CaseStatus.Open).slice(0, 5).map((matter) => {
+                const hasHighValue = matter.value && matter.value > 100000;
+                const hasUpcomingTrial = matter.trialDate && new Date(matter.trialDate) < new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+                const riskLevel = hasHighValue || hasUpcomingTrial ? 'high' : 'medium';
+                const riskScore = hasHighValue && hasUpcomingTrial ? 7.5 : hasHighValue || hasUpcomingTrial ? 5.0 : 2.5;
                 const reasons = [];
 
-                if (matter.estimatedValue && matter.estimatedValue > 100000) reasons.push('High value');
-                if (matter.targetCloseDate && new Date(matter.targetCloseDate) < new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)) {
-                  reasons.push('Deadline approaching');
-                }
-                if (matter.priority === 'HIGH') reasons.push('High priority');
+                if (hasHighValue) reasons.push('High value case');
+                if (hasUpcomingTrial) reasons.push('Trial approaching');
+                if (matter.closeDate) reasons.push('Close date set');
                 if (reasons.length === 0) reasons.push('On track');
 
                 return (
@@ -156,8 +156,8 @@ export const CaseInsightsDashboard: React.FC = () => {
               Budget Variance Analysis
             </h3>
             <div className="space-y-4">
-              {matters?.filter(m => m.estimatedValue && m.estimatedValue > 0).slice(0, 5).map((matter) => {
-                const budget = matter.estimatedValue || 0;
+              {matters?.filter(m => m.value && m.value > 0).slice(0, 5).map((matter) => {
+                const budget = matter.value || 0;
                 const matterTimeEntries = timeEntries?.filter(t => String(t.caseId) === String(matter.id)) || [];
                 const actual = matterTimeEntries.reduce((sum, t) => sum + ((t.duration || 0) * (t.rate || 150)), 0);
                 const variance = budget > 0 ? ((actual - budget) / budget) * 100 : 0;
@@ -184,21 +184,27 @@ export const CaseInsightsDashboard: React.FC = () => {
             </h3>
             <div className="space-y-3">
               {matters && (() => {
-                const attorneyStats = new Map();
+                const attorneyStats = new Map<string, {
+                  id: string;
+                  name: string;
+                  activeMatters: number;
+                  completedMatters: number;
+                  totalDays: number;
+                }>();
                 matters.forEach(matter => {
-                  const attorneyId = matter.leadAttorneyId;
+                  const attorneyId = matter.leadAttorneyId || matter.ownerId;
                   if (!attorneyId) return;
 
                   const existing = attorneyStats.get(attorneyId) || {
                     id: attorneyId,
-                    name: matter.leadAttorneyName || 'Unknown',
+                    name: `Attorney ${attorneyId.substring(0, 8)}`,
                     activeMatters: 0,
                     completedMatters: 0,
                     totalDays: 0,
                   };
 
-                  if (matter.status === 'ACTIVE') existing.activeMatters++;
-                  if (matter.status === 'CLOSED') {
+                  if (matter.status === CaseStatus.Active || matter.status === CaseStatus.Open) existing.activeMatters++;
+                  if (matter.status === CaseStatus.Closed || matter.status === CaseStatus.Settled) {
                     existing.completedMatters++;
                     if (matter.createdAt) {
                       const days = (new Date().getTime() - new Date(matter.createdAt).getTime()) / (1000 * 60 * 60 * 24);
@@ -231,7 +237,6 @@ export const CaseInsightsDashboard: React.FC = () => {
             <div className="space-y-4">
               {successMetrics.riskScore > 3 && (
                 <RecommendationItem
-                  type="resource"
                   title="Review High-Risk Matters"
                   description={`${successMetrics.riskScore} matters require immediate attention`}
                   isDark={isDark}
@@ -240,20 +245,18 @@ export const CaseInsightsDashboard: React.FC = () => {
               {matters?.some(m => {
                 const matterTime = timeEntries?.filter(t => String(t.caseId) === String(m.id)) || [];
                 const actual = matterTime.reduce((sum, t) => sum + ((t.duration || 0) * (t.rate || 150)), 0);
-                return actual > (m.estimatedValue || 0) * 1.1;
+                return actual > (m.value || 0) * 1.1;
               }) && (
                 <RecommendationItem
-                  type="budget"
                   title="Budget Adjustments Needed"
                   description="Some matters are exceeding budget thresholds"
                   isDark={isDark}
                 />
               )}
-              {matters?.some(m => m.targetCloseDate && new Date(m.targetCloseDate) < new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)) && (
+              {matters?.some(m => m.trialDate && new Date(m.trialDate) < new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)) && (
                 <RecommendationItem
-                  type="deadline"
-                  title="Urgent Deadlines"
-                  description="Multiple deadlines approaching within 3 days"
+                  title="Urgent Trial Dates"
+                  description="Multiple trials approaching within 7 days"
                   isDark={isDark}
                 />
               )}
@@ -385,11 +388,10 @@ const TeamPerformanceItem: React.FC<{
 );
 
 const RecommendationItem: React.FC<{
-  type: string;
   title: string;
   description: string;
   isDark: boolean;
-}> = ({ type, title, description, isDark }) => (
+}> = ({ title, description, isDark }) => (
   <div className={cn('p-4 rounded-lg border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-slate-50')}>
     <div className={cn('font-medium mb-1', isDark ? 'text-slate-100' : 'text-slate-900')}>
       {title}

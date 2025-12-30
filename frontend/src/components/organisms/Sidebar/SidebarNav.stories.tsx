@@ -16,7 +16,7 @@ type Story = StoryObj<typeof SidebarNav>;
 export const Default: Story = {
   args: {
   "activeView": "Sample Text",
-  "setActiveView": "Sample Text",
+  "setActiveView": () => {},
   "currentUserRole": "Sample Text"
 },
 };

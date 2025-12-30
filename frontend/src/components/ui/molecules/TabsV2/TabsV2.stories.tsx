@@ -17,9 +17,9 @@ export const Default: Story = {
   args: {
   "tabs": [],
   "activeTabId": "Sample Text",
-  "onChange": "Sample Text",
+  "onChange": () => {},
   "className": "Sample Text",
-  "size": {},
+  size: undefined,
   "compactSubTabs": true
 },
 };

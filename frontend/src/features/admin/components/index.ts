@@ -5,7 +5,7 @@ export { AdminAuditLog } from './AdminAuditLog';
 export { AdminSecurity } from './AdminSecurity';
 export { FirmProfile } from './FirmProfile';
 export { SecurityCompliance } from './security/SecurityCompliance';
-export { default as SystemSettings } from './SystemSettings';
+export { SystemSettings } from './SystemSettings';
 
 // Re-export sub-modules
 export * from './analytics';

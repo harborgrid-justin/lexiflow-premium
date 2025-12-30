@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TabsV2, ParentTabItem } from '@/components/molecules/TabsV2';
+import type { Meta } from '@storybook/react-vite';
+import { TabsV2, ParentTabItem } from '@/components/ui/molecules/TabsV2/TabsV2';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import React, { useState } from 'react';
 import {
@@ -61,7 +61,6 @@ const meta = {
 } satisfies Meta<typeof TabsV2>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
 
 // Mock tab configuration for Matter Management
 const matterManagementTabs: ParentTabItem[] = [

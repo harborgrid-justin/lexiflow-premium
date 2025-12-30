@@ -11,7 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { memo, useState, useEffect } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Briefcase, ChevronRight, ArrowRight } from 'lucide-react';
 
@@ -96,7 +96,7 @@ export const DashboardAnalytics = memo<DashboardAnalyticsProps>(({ activeProject
                       contentStyle={chartTheme.tooltipStyle}
                     />
                     <Bar dataKey="count" radius={[4, 4, 0, 0]} barSize={40}>
-                    {safeChartData.map((entry, index) => (
+                    {safeChartData.map((_, index) => (
                         <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
                     ))}
                     </Bar>

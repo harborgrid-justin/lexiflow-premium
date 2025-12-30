@@ -1,9 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ChartHelpers } from './ChartHelpers';
+import { useChartTheme } from './ChartHelpers';
 
-const meta: Meta<typeof ChartHelpers> = {
+// This module exports hooks, not components. Story disabled.
+const DemoComponent = () => {
+  const chartTheme = useChartTheme();
+  return <div>Chart theme loaded: {JSON.stringify(chartTheme, null, 2)}</div>;
+};
+
+const meta: Meta<typeof DemoComponent> = {
   title: 'Components/Organisms/ChartHelpers/ChartHelpers',
-  component: ChartHelpers,
+  component: DemoComponent,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -11,7 +17,7 @@ const meta: Meta<typeof ChartHelpers> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ChartHelpers>;
+type Story = StoryObj<typeof DemoComponent>;
 
 export const Default: Story = {
   args: {},

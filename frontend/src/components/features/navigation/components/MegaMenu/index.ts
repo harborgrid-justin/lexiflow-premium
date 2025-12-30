@@ -8,6 +8,6 @@ export { MegaMenu } from './MegaMenu';
 export type {
   MegaMenuProps,
   MegaMenuItem,
-  MegaMenuSection,
-  MegaMenuLayout
+  MegaMenuSection
 } from './MegaMenu';
+export type { MegaMenuLayout } from './MegaMenu.styles';

@@ -15,6 +15,6 @@ type Story = StoryObj<typeof DiscoveryPage>;
 
 export const Default: Story = {
   args: {
-  "onNavigate": "Sample Text"
+  "onNavigate": () => {}
 },
 };

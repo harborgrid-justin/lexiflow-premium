@@ -18,7 +18,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { Project, Case } from '@/types';
+import { Project } from '@/types';
 
 interface ActiveWorkstreamsProps {
   activeProjects: Project[];

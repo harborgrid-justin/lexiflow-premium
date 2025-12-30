@@ -34,15 +34,15 @@ import { useWindow } from '@/providers/WindowContext';
 
 // Services & Utils
 import { DataService } from '@/services';
-import { GeminiService, BriefCritique } from '@/services/features/research/geminiService';
+import { GeminiService } from '@/services/features/research/geminiService';
 import { AnalysisEngine, ConflictResult } from '@/services/features/analysis/analysisEngine';
 import { cn } from '@/utils/cn';
-// ✅ Migrated to backend API (2025-12-21)
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
 import { Citation, Case } from '@/types';
+import { BriefCritique } from '@/types/ai';
 import { sanitizeHtml } from './utils';
 
 export const BriefAnalyzer: React.FC = () => {
@@ -52,19 +52,32 @@ export const BriefAnalyzer: React.FC = () => {
   const [text, setText] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [activeTab, setActiveTab] = useState<'authority' | 'strategy' | 'nexus'>('authority');
-  
+
   // Results State
   const [extractedCitations, setExtractedCitations] = useState<string[]>([]);
   const [critique, setCritique] = useState<BriefCritique | null>(null);
   const [conflicts, setConflicts] = useState<ConflictResult[]>([]);
 
+  const citationsService = DataService.citations as {
+    getAll: () => Promise<Citation[]>;
+    quickAdd: (citation: Partial<Citation>) => Promise<Citation>;
+  };
+
+  const casesService = DataService.cases as {
+    getAll: () => Promise<Case[]>;
+  };
+
+  const analysisService = DataService.analysis as {
+    add: (analysis: unknown) => Promise<unknown>;
+  };
+
   // Load Data Dependencies
-  const { data: authorityDb = [] } = useQuery<Citation[]>(['citations', 'all'], () => DataService.citations.getAll());
-  const { data: allCases = [] } = useQuery<Case[]>(['cases', 'all'], () => DataService.cases.getAll());
+  const { data: authorityDb = [] } = useQuery<Citation[]>(['citations', 'all'], citationsService.getAll);
+  const { data: allCases = [] } = useQuery<Case[]>(['cases', 'all'], casesService.getAll);
 
   // Mutations
   const { mutate: _addToLibrary } = useMutation(
-      DataService.citations.quickAdd,
+      citationsService.quickAdd,
       {
           onSuccess: (citation) => {
               const cite = citation as Citation;
@@ -74,7 +87,7 @@ export const BriefAnalyzer: React.FC = () => {
   );
 
   const { mutate: saveSession, isLoading: isSaving } = useMutation(
-      DataService.analysis.add,
+      analysisService.add,
       {
           onSuccess: () => notify.success("Analysis session saved to case file.")
       }
@@ -134,13 +147,13 @@ export const BriefAnalyzer: React.FC = () => {
                   </Card>
                   <Card title="Key Weaknesses">
                       <ul className="list-disc pl-5 space-y-1 text-sm">
-                          {critique.weaknesses.map((w, i) => <li key={i} className="text-red-700">{w}</li>)}
+                          {critique.weaknesses.map((w: string, i: number) => <li key={i} className="text-red-700">{w}</li>)}
                       </ul>
                   </Card>
               </div>
               <Card title="Recommendations">
                    <ul className="list-disc pl-5 space-y-1 text-sm">
-                       {critique.suggestions.map((s, i) => <li key={i}>{s}</li>)}
+                       {critique.suggestions.map((s: string, i: number) => <li key={i}>{s}</li>)}
                    </ul>
               </Card>
           </div>
@@ -289,17 +302,17 @@ export const BriefAnalyzer: React.FC = () => {
                          </Card>
                          <Card title="Strengths">
                              <ul className={cn("list-disc pl-5 space-y-1 text-sm", theme.status.success.text)}>
-                                 {critique.strengths.map((s, i) => <li key={i}>{s}</li>)}
+                                 {critique.strengths.map((s: string, i: number) => <li key={i}>{s}</li>)}
                              </ul>
                          </Card>
                          <Card title="Weaknesses">
                              <ul className={cn("list-disc pl-5 space-y-1 text-sm", theme.status.error.text)}>
-                                 {critique.weaknesses.map((w, i) => <li key={i}>{w}</li>)}
+                                 {critique.weaknesses.map((w: string, i: number) => <li key={i}>{w}</li>)}
                              </ul>
                          </Card>
                          <Card title="Recommendations">
                              <ul className={cn("list-disc pl-5 space-y-1 text-sm", theme.text.secondary)}>
-                                 {critique.suggestions.map((s, i) => <li key={i}>{s}</li>)}
+                                 {critique.suggestions.map((s: string, i: number) => <li key={i}>{s}</li>)}
                              </ul>
                          </Card>
                      </div>

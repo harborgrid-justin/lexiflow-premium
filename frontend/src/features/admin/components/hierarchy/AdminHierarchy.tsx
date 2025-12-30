@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { Shield, Plus, Loader2, Users, CheckCircle } from 'lucide-react';
-import { Organization, Group, User as UserType, Case, GroupId } from '@/types';
+import { Organization, Group, User as UserType, GroupId} from '@/types';
 import { Button } from '@/components/atoms';
 import { HierarchyColumn } from './HierarchyColumn';
 import { OrgListItem, GroupListItem, UserListItem } from './HierarchyRows';

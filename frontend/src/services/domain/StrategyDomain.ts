@@ -8,14 +8,14 @@
  * @module services/domain/StrategyDomain
  * @architecture Backend-First Strategy Management
  * @author LexiFlow Engineering Team
-import { OperationError } from '@/services/core/errors'; * @since 2025-12-22
+ * @since 2025-12-22
  * @status PRODUCTION READY
  * 
  * Provides litigation strategy creation, risk assessment, and tactical recommendations
  * with backend API integration for persistent storage and analytics.
  */
 
-import { litigationApi } from '@/api/domains/litigation.api';
+import { OperationError } from '@/services/core/errors';
 import { delay } from '@/utils/async';
 import { isBackendApiEnabled } from '@/api';
 import { apiClient } from '@/services/infrastructure/apiClient';
@@ -63,10 +63,10 @@ export const StrategyService = {
   getById: async (id: string) => {
     if (isBackendApiEnabled()) {
       // TODO: Strategy API service is not yet implemented in litigationApi
-      console.warn('[StrategyService] Strategy API service not available');
+      console.warn('[StrategyService] Strategy API service not available', id);
       return null;
     }
-    console.warn('[StrategyService] Backend API disabled');
+    console.warn('[StrategyService] Backend API disabled', id);
     return null;
   },
   
@@ -77,7 +77,7 @@ export const StrategyService = {
         createdAt: new Date().toISOString()
       });
     }
-    throw new OperationError('[StrategyService] Backend API required for add operation');
+    throw new OperationError('StrategyService.add', 'Backend API required for add operation');
   },
 
   update: async (id: string, updates: unknown) => {
@@ -87,7 +87,7 @@ export const StrategyService = {
         updatedAt: new Date().toISOString()
       });
     }
-    throw new OperationError('[StrategyService] Backend API required for update operation');
+    throw new OperationError('StrategyService.update', 'Backend API required for update operation');
   },
   
   delete: async (id: string) => {
@@ -95,7 +95,7 @@ export const StrategyService = {
       await apiClient.delete(`/strategies/${id}`);
       return;
     }
-    throw new OperationError('[StrategyService] Backend API required for delete operation');
+    throw new OperationError('StrategyService.delete', 'Backend API required for delete operation');
   },
   
   // Strategy specific methods
@@ -119,7 +119,7 @@ export const StrategyService = {
       };
       return apiClient.post<Strategy>('/strategies', payload);
     }
-    throw new OperationError('[StrategyService] Backend API required for createStrategy');
+    throw new OperationError('StrategyService.createStrategy', 'Backend API required for createStrategy');
   },
   
   analyzeRisks: async (strategyId: string): Promise<Risk[]> => {
@@ -136,7 +136,7 @@ export const StrategyService = {
     const strategy = await StrategyService.getById(strategyId);
 
     // Return existing risks plus generate some AI-suggested risks
-    const existingRisks: Risk[] = (strategy && Array.isArray((strategy as Record<string, unknown>).risks)) ? (strategy as Record<string, unknown>).risks : [];
+    const existingRisks: Risk[] = (strategy && Array.isArray((strategy as Record<string, unknown>).risks)) ? ((strategy as Record<string, unknown>).risks as Risk[]) : [];
     const suggestedRisks: Risk[] = [
       {
         id: `risk-${Date.now()}-1`,

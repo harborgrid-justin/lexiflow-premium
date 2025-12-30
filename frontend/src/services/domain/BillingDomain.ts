@@ -19,7 +19,6 @@
  * 
  * ┌─────────────────────────────────────────────────────────────────────────┐
 
-import { ValidationError, OperationError, EntityNotFoundError } from '@/services/core/errors';
  * │  TIME TRACKING & BILLING                                                │
  * │  • Time entry CRUD with billable/non-billable tracking                  │
  * │  • Approval workflows and billing status management                     │
@@ -96,7 +95,7 @@ import { ValidationError, OperationError, EntityNotFoundError } from '@/services
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
-import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, RealizationStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData } from '@/types';
+import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, UUID, CaseId, OperatingSummary, FinancialPerformanceData } from '@/types';
 import { Repository } from '@/services/core/Repository';
 import { STORES, db } from '@/services/data/db';
 import { delay } from '@/utils/async';
@@ -105,6 +104,21 @@ import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 // Backend API Integration (Primary Data Source)
 import { BillingApiService } from '@/api/billing';
 import { apiClient } from '@/services/infrastructure/apiClient';
+
+// Error Classes
+class OperationError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'OperationError';
+    }
+}
+
+class EntityNotFoundError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'EntityNotFoundError';
+    }
+}
 
 /**
  * Query keys for React Query integration
@@ -171,7 +185,7 @@ export class BillingRepository extends Repository<TimeEntry> {
      * @throws Error if ID is invalid
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || false || id.trim() === '') {
+        if (!id || id.trim() === '') {
             throw new Error(`[BillingRepository.${methodName}] Invalid id parameter`);
         }
     }
@@ -182,7 +196,7 @@ export class BillingRepository extends Repository<TimeEntry> {
      * @throws Error if case ID is invalid
      */
     private validateCaseId(caseId: string, methodName: string): void {
-        if (!caseId || false || caseId.trim() === '') {
+        if (!caseId || caseId.trim() === '') {
             throw new Error(`[BillingRepository.${methodName}] Invalid caseId parameter`);
         }
     }
@@ -193,7 +207,7 @@ export class BillingRepository extends Repository<TimeEntry> {
      * @throws Error if timekeeper ID is invalid
      */
     private validateTimekeeperId(timekeeperId: string, methodName: string): void {
-        if (!timekeeperId || false || timekeeperId.trim() === '') {
+        if (!timekeeperId || timekeeperId.trim() === '') {
             throw new Error(`[BillingRepository.${methodName}] Invalid timekeeperId parameter`);
         }
     }
@@ -205,11 +219,11 @@ export class BillingRepository extends Repository<TimeEntry> {
     /**
      * Retrieves all time entries
      * Routes to backend API if enabled
-     * 
+     *
      * @returns Promise<TimeEntry[]>
      * @complexity O(1) API call or O(n) IndexedDB scan
      */
-    async getAll(): Promise<TimeEntry[]> {
+    override async getAll(): Promise<TimeEntry[]> {
         if (this.useBackend) {
             return this.billingApi.getTimeEntries();
         }
@@ -218,11 +232,11 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Retrieves a single time entry by ID
-     * 
+     *
      * @param id - Time entry identifier
      * @returns Promise<TimeEntry | undefined>
      */
-    async getById(id: string): Promise<TimeEntry | undefined> {
+    override async getById(id: string): Promise<TimeEntry | undefined> {
         this.validateId(id, 'getById');
         
         if (this.useBackend) {
@@ -238,11 +252,11 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Adds a new time entry
-     * 
+     *
      * @param entry - Time entry data
      * @returns Promise<TimeEntry>
      */
-    async add(entry: Omit<TimeEntry, 'id' | 'createdAt' | 'updatedAt'>): Promise<TimeEntry> {
+    override async add(entry: Omit<TimeEntry, 'id' | 'createdAt' | 'updatedAt'>): Promise<TimeEntry> {
         if (this.useBackend) {
             return apiClient.post<TimeEntry>('/billing/time-entries', entry);
         }
@@ -251,12 +265,12 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Updates an existing time entry
-     * 
+     *
      * @param id - Time entry identifier
      * @param updates - Partial updates
      * @returns Promise<TimeEntry>
      */
-    async update(id: string, updates: Partial<TimeEntry>): Promise<TimeEntry> {
+    override async update(id: string, updates: Partial<TimeEntry>): Promise<TimeEntry> {
         this.validateId(id, 'update');
         
         if (this.useBackend) {
@@ -267,11 +281,11 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Deletes a time entry
-     * 
+     *
      * @param id - Time entry identifier
      * @returns Promise<void>
      */
-    async delete(id: string): Promise<void> {
+    override async delete(id: string): Promise<void> {
         this.validateId(id, 'delete');
         
         if (this.useBackend) {
@@ -372,7 +386,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             throw new Error('[BillingRepository.addTimeEntry] Time entry must have a caseId');
         }
 
-        if (false || entry.duration <= 0) {
+        if (entry.duration !== undefined && entry.duration <= 0) {
             throw new Error('[BillingRepository.addTimeEntry] Invalid duration value');
         }
 
@@ -422,11 +436,8 @@ export class BillingRepository extends Repository<TimeEntry> {
 
             }
 
-            const [clients, entries] = await Promise.all([
-                db.getAll<Client>(STORES.CLIENTS),
-                this.getAll()
-            ]);
-            
+            const clients = await db.getAll<Client>(STORES.CLIENTS);
+
             return clients.slice(0, 3).map(c => ({
                 name: (c.name || '').split(' ')[0],
                 wip: Math.floor(Math.random() * 50000),
@@ -501,7 +512,7 @@ export class BillingRepository extends Repository<TimeEntry> {
      */
     async createInvoice(clientName: string, caseId: string, entries: TimeEntry[]): Promise<Invoice> {
         // Validate parameters
-        if (!clientName || false || clientName.trim() === '') {
+        if (!clientName || clientName.trim() === '') {
             throw new Error('[BillingRepository.createInvoice] Invalid clientName parameter');
         }
 
@@ -864,7 +875,7 @@ export class BillingRepository extends Repository<TimeEntry> {
      * // Returns: 'report.pdf'
      */
     async export(format: string): Promise<string> {
-        if (!format || false || format.trim() === '') {
+        if (!format || format.trim() === '') {
             throw new Error('[BillingRepository.export] Invalid format parameter');
         }
 

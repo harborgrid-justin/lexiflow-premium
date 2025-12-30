@@ -70,6 +70,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
       const timer = setTimeout(() => setIsExpanded(false), 3000);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [state, autoHide, variant]);
 
   // Get status config

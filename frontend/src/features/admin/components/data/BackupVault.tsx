@@ -26,7 +26,7 @@ export const BackupVault: React.FC = () => {
 
   const snapshots = snapshotsResponse?.data || [];
 
-  const { data: stats, isLoading: isLoadingStats } = useQuery(
+  const { data: stats } = useQuery(
       ['backups', 'stats'],
       () => dataPlatformApi.backups.getStats(),
   );
@@ -99,8 +99,8 @@ export const BackupVault: React.FC = () => {
                          <div className="flex items-center gap-3">
                              <Server className={cn("h-8 w-8 text-blue-500")}/>
                              <div>
-                                 <p className={cn("font-bold", theme.text.primary)}>{(stats as Record<string, unknown>)?.glacierTier || 'Standard'}</p>
-                                 <p className={cn("text-xs", theme.text.secondary)}>Retention: {(stats as Record<string, unknown>)?.retentionPolicy || '30 days'}</p>
+                                 <p className={cn("font-bold", theme.text.primary)}>{String((stats as Record<string, unknown>)?.glacierTier || 'Standard')}</p>
+                                 <p className={cn("text-xs", theme.text.secondary)}>Retention: {String((stats as Record<string, unknown>)?.retentionPolicy || '30 days')}</p>
                              </div>
                          </div>
                          <div className={cn("h-2 w-full rounded-full overflow-hidden", theme.border.default)}>

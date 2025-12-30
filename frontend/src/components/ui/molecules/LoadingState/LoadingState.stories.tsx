@@ -16,7 +16,7 @@ type Story = StoryObj<typeof LoadingState>;
 export const Default: Story = {
   args: {
   "message": "Sample Text",
-  "size": {},
+  size: undefined,
   "centered": true,
   "className": "Sample Text"
 },

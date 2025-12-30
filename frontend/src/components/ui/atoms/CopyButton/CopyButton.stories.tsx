@@ -17,7 +17,7 @@ export const Default: Story = {
   args: {
   "text": "Sample Text",
   "label": "Sample Text",
-  "variant": {},
-  "size": {}
+  variant: undefined,
+  size: undefined
 },
 };

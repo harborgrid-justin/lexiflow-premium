@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DollarSign, Plus, Edit, Trash2, Users, Clock } from 'lucide-react';
+import { DollarSign, Plus, Edit, Trash2, Users } from 'lucide-react';
 import { useTheme } from '@providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms';
@@ -10,8 +10,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/useModalState';
 import { useSelection } from '@/hooks/useSelectionState';
-import { getTodayString } from '@/utils/dateUtils';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DataService } from '@/services';
 
@@ -28,17 +27,12 @@ interface RateTable {
   createdAt: string;
 }
 
-/**
- * @deprecated Mock data - use backend API via DataService.rateTables
- */
-const mockRateTables: RateTable[] = [];
-
 export const RateTableManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  
+
   // Fetch rate tables from backend API
-  const { data: rateTables = [], isLoading, refetch } = useQuery<RateTable[]>(
+  const { data: rateTables = [], refetch } = useQuery<RateTable[]>(
     queryKeys.billing.rateTables?.() || ['billing', 'rateTables'],
     () => DataService.rateTables.getAll()
   );

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { FormattingRule, PleadingSection } from '@/types';
-import { CheckCircle, AlertOctagon, Info, Zap, Settings, BookOpen, AlertTriangle } from 'lucide-react';
+import { AlertOctagon, Info, Zap, AlertTriangle } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
@@ -10,7 +10,7 @@ interface ComplianceHUDProps {
     score: number;
 }
 
-const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, score: propScore }) => {
+const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ sections, score: propScore }) => {
     const { theme } = useTheme();
 
     const issues = useMemo(() => [
@@ -22,8 +22,8 @@ const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, score: p
         if (issues.length === 0) return 100;
         const errorWeight = 10;
         const warningWeight = 5;
-        const penalty = issues.reduce((acc: unknown, issue) => acc + (issue.type === 'error' ? errorWeight : issue.type === 'warning' ? warningWeight : 0), 0);
-        return Math.max(0, 100 - penalty);
+        const penalty = issues.reduce((acc: unknown, issue: unknown) => (acc as number) + ((issue as {type: string}).type === 'error' ? errorWeight : (issue as {type: string}).type === 'warning' ? warningWeight : 0), 0);
+        return Math.max(0, 100 - (penalty as number));
     }, [issues]);
 
     const displayScore = propScore !== 100 ? propScore : dynamicScore;

@@ -345,7 +345,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
         <input
           type={type}
           value={(formData[field] as string) || ''}
-          onChange={(e) => updateField(field, e.target.value as Record<string, unknown>)}
+          onChange={(e) => updateField(field, e.target.value)}
           onBlur={() => handleFieldBlur(field)}
           placeholder={placeholder}
           className={cn(

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { FileText, Download, Eye } from 'lucide-react';
+import { FileText } from 'lucide-react';
 
 export const ClientPortalDocuments: React.FC = () => {
     const { theme } = useTheme();

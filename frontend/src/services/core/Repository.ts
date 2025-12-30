@@ -107,7 +107,13 @@ export abstract class Repository<T extends BaseEntity> {
         });
     }
 
-    protected logAction = async (action: string, resourceId: string, details: string, previousValue?: unknown, newValue?: unknown) => {
+    protected logAction = async (
+        _action: string,
+        _id: string,
+        _description: string,
+        _before: unknown,
+        _after: unknown
+    ) => {
         // Log action logic here if needed
     }
 

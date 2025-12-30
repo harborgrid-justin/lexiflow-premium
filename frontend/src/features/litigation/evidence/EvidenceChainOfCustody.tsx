@@ -11,7 +11,7 @@
  */
 
 import React, { useState } from 'react';
-import { User, Layers, Plus, ShieldCheck, AlertOctagon, Link } from 'lucide-react';
+import { Layers, Plus, AlertOctagon, Link } from 'lucide-react';
 
 // Common Components
 import { Button } from '@/components/atoms';
@@ -49,7 +49,6 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
     action: CustodyActionType.TRANSFER_TO_STORAGE,
     actor: 'Current User'
   });
-  const [isSigning, setIsSigning] = useState(false);
   const [isSigned, setIsSigned] = useState(false);
 
   // Mutation with optimistic updates and exponential backoff retry
@@ -64,10 +63,10 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
           await DataService.evidence.update(payload.item.id, updatedItem);
           
           // Log to internal immutable ledger
-          const prevHash = selectedItem.chainOfCustody.length > 0 
-                           ? (selectedItem.chainOfCustody[0] as Record<string, unknown>).curr_hash || '0' 
+          const prevHash = selectedItem.chainOfCustody.length > 0
+                           ? ((selectedItem.chainOfCustody[0] as unknown as Record<string, unknown>).curr_hash as string) || '0'
                            : '0000000000000000000000000000000000000000000000000000000000000000'; // Genesis hash
-          
+
           const chainedLog = await ChainService.createEntry({
               timestamp: payload.event.date,
               userId: 'current-user' as UserId,
@@ -75,7 +74,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
               action: `CUSTODY_UPDATE_${payload.event.action.toUpperCase().replace(/\s/g, '_')}`,
               resource: `Evidence/${selectedItem.id}`,
               ip: '127.0.0.1',
-              previousValue: selectedItem.chainOfCustody[0]?.id,
+              previousValue: selectedItem.chainOfCustody[0]?.id || '',
               newValue: payload.event.id
           }, prevHash);
           
@@ -114,7 +113,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
               setNewEvent({ date: new Date().toISOString().split('T')[0], action: CustodyActionType.TRANSFER_TO_STORAGE, actor: 'Current User' });
               setIsSigned(false);
           },
-          onError: (error, variables, context: { previousEvidence?: EvidenceItem[] }) => {
+          onError: (_error, _variables, context: { previousEvidence?: EvidenceItem[] }) => {
               // Rollback optimistic update on error
               if (context?.previousEvidence) {
                   queryClient.setQueryData(
@@ -186,12 +185,12 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
                   <span className="font-medium">{event.actor}</span> on {event.date}
                 </p>
                 {event.notes && <p className={cn("text-xs italic mt-2", theme.text.secondary)}>{event.notes}</p>}
-                {(event as Record<string, unknown>).hash && (
+                {(event as unknown as Record<string, unknown>).hash ? (
                   <div className={cn("mt-2 p-2 rounded text-[10px] font-mono border break-all", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                      <Link className={cn("h-3 w-3 inline mr-1", theme.text.tertiary)}/>
-                     Hash: {(event as Record<string, unknown>).hash.substring(0, 12)}...
+                     Hash: {String((event as unknown as Record<string, unknown>).hash).substring(0, 12)}...
                   </div>
-                )}
+                ) : null}
               </div>
             </div>
           ))}

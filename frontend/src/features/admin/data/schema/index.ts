@@ -4,6 +4,6 @@
  */
 
 export { SchemaArchitect } from './SchemaArchitect';
-export { schemaTypes } from './schemaTypes';
-export { SchemaVisualizer } from './SchemaVisualizer';
+// schemaTypes is obsolete - content moved to components/admin/data/schema/schemaTypes.ts
+// SchemaVisualizer is obsolete - content moved to components/admin/data/schema/SchemaVisualizer.tsx
 

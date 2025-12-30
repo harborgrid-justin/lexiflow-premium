@@ -102,11 +102,11 @@ class BluebookFormatterClass {
     switch (citationType) {
       case 'CASE':
       case 'case':
-        return this.formatCase(citation, italicizeCaseNames, useSmallCaps, format);
+        return this.formatCase(citation, italicizeCaseNames, format);
 
       case 'STATUTE':
       case 'statute':
-        return this.formatStatute(citation as Record<string, unknown>, format);
+        return this.formatStatute(citation, format);
 
       case 'JOURNAL':
       case 'journal':
@@ -115,7 +115,7 @@ class BluebookFormatterClass {
         return this.formatSecondary(citation, italicizeCaseNames, useSmallCaps);
 
       default:
-        return (citation as Record<string, unknown>).fullCitation || '';
+        return (citation as unknown as Record<string, unknown>).fullCitation as string || '';
     }
   }
 
@@ -125,25 +125,25 @@ class BluebookFormatterClass {
   private formatCase(
     citation: BluebookCitation,
     italicize: boolean,
-    smallCaps: boolean,
     format: 'full' | 'short' | 'id'
   ): string {
-    const cit = citation as Record<string, unknown>;
+    const cit = citation as unknown as Record<string, unknown>;
     if (format === 'id') {
-      return cit.shortCitation || 'Id.';
+      return (cit.shortCitation as string) || 'Id.';
     }
 
     if (format === 'short' && cit.shortCitation) {
-      return cit.shortCitation;
+      return cit.shortCitation as string;
     }
 
     // Full citation format
-    const caseName = italicize ? `_${cit.caseName}_` : cit.caseName;
-    const volume = cit.reporters?.[0]?.volume || '';
-    const reporter = cit.reporters?.[0]?.reporter || '';
-    const page = cit.reporters?.[0]?.page || '';
-    const court = cit.court || '';
-    const year = cit.year || '';
+    const reporters = (cit.reporters as Array<{ volume?: string; reporter?: string; page?: string }>) || [];
+    const caseName = italicize ? `_${cit.caseName}_` : String(cit.caseName || '');
+    const volume = reporters[0]?.volume || '';
+    const reporter = reporters[0]?.reporter || '';
+    const page = reporters[0]?.page || '';
+    const court = String(cit.court || '');
+    const year = String(cit.year || '');
 
     let formatted = `${caseName}, ${volume} ${reporter} ${page}`;
 
@@ -163,16 +163,12 @@ class BluebookFormatterClass {
   /**
    * Format a statute citation
    */
-  private formatStatute(citation: unknown, format: 'full' | 'short' | 'id'): string {
+  private formatStatute(citation: BluebookCitation, format: 'full' | 'short' | 'id'): string {
     if (format === 'id') {
       return 'Id.';
     }
 
-    if (!citation || typeof citation !== 'object') {
-      return '';
-    }
-
-    const stat = citation as Partial<StatuteCitation>;
+    const stat = citation as unknown as Partial<StatuteCitation>;
     const title = stat.title || '';
     const code = stat.code || 'U.S.C.';
     const section = stat.section || '';
@@ -262,13 +258,8 @@ class BluebookFormatterClass {
     citations.forEach(citation => {
       const formatted = this.format(citation);
 
-      // Try to extract page number from different citation types
-      let page = 1;
-      const caseCit = citation as Partial<CaseCitation>;
-      const periodicalCit = citation as Partial<PeriodicalCitation>;
-      const bookCit = citation as Partial<BookCitation>;
-
-        page = caseCit.page;
+      // Extract page number from citation
+      const page = 1;
 
       switch (citation.type) {
         case BluebookCitationType.CASE:

@@ -17,11 +17,11 @@ export const Default: Story = {
   args: {
   "title": "Sample Text",
   "subtitle": "Sample Text",
-  "actions": "<div>Sample Content</div>",
-  "filterPanel": "<div>Sample Content</div>",
-  "children": "<div>Sample Content</div>",
-  "sidebar": "<div>Sample Content</div>",
+  actions: undefined,
+  filterPanel: undefined,
+  children: undefined,
+  sidebar: undefined,
   "className": "Sample Text",
-  "sidebarWidth": {}
+  sidebarWidth: undefined
 },
 };

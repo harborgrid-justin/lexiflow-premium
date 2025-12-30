@@ -10,7 +10,6 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Box, Activity, FileText, Fingerprint } from 'lucide-react';
 import { getIconClass } from './EvidenceTypeIcon.styles';
 

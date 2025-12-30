@@ -6,6 +6,7 @@
 import { BriefAnalysisSession, JudgeProfile } from '@/types';
 import { delay } from '@/utils/async';
 import { Repository } from '@/services/core/Repository';
+import { ValidationError } from '@/services/core/errors';
 import { STORES, db } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
@@ -97,8 +98,8 @@ export class AnalysisRepository extends Repository<BriefAnalysisSession> {
         const lowerQuery = query.toLowerCase();
         return sessions.filter(s =>
             s.id?.toLowerCase().includes(lowerQuery) ||
-            (s as Record<string, unknown>).title?.toLowerCase().includes(lowerQuery) ||
-            (s as Record<string, unknown>).caseId?.toLowerCase().includes(lowerQuery)
+            ((s as unknown as Record<string, unknown>).title as string | undefined)?.toLowerCase().includes(lowerQuery) ||
+            ((s as unknown as Record<string, unknown>).caseId as string | undefined)?.toLowerCase().includes(lowerQuery)
         );
     }
 }

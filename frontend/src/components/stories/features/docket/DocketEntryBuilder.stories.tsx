@@ -97,7 +97,7 @@ const mockParties = [
 ];
 
 const mockExistingEntry: Partial<DocketEntry> = {
-  id: 'docket-1' as Record<string, unknown>,
+  id: 'docket-1' as any,
   sequenceNumber: 42,
   dateFiled: '2024-12-15',
   description: 'MOTION to Dismiss for Failure to State a Claim',

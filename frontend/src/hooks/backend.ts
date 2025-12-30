@@ -10,7 +10,7 @@ export { useBackendHealth } from './useBackendHealth';
 export { useBackendDiscovery } from './useBackendDiscovery';
 
 // Query Hooks (React Query wrappers)
-export { useQuery, useMutation, useQueryClient } from './useQueryHooks';
+export { useQuery, useMutation, queryClient } from './useQueryHooks';
 
 // Data Service Cleanup
 export { useDataServiceCleanup } from './useDataServiceCleanup';

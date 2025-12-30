@@ -81,8 +81,17 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
   const handleExport = async () => {
     try {
       setIsExporting(true);
-      const cases = queryClient.getQueryState(['cases'])?.data as unknown[] || [];
-      
+      interface CaseData {
+        caseNumber?: string;
+        title?: string;
+        status?: string;
+        type?: string;
+        clientName?: string;
+        createdAt?: string;
+      }
+
+      const cases = (queryClient.getQueryState(['cases'])?.data as CaseData[]) || [];
+
       // Filter cases based on current filters
       const filteredCases = cases.filter(c => {
         const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
@@ -131,8 +140,20 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
     try {
       setIsExporting(true);
       setShowExportMenu(false);
-      const cases = queryClient.getQueryState(['cases'])?.data as unknown[] || [];
-      
+      interface CaseData {
+        caseNumber?: string;
+        title?: string;
+        status?: string;
+        type?: string;
+        clientName?: string;
+        createdAt?: string;
+        leadAttorney?: string;
+        court?: string;
+        judge?: string;
+      }
+
+      const cases = (queryClient.getQueryState(['cases'])?.data as CaseData[]) || [];
+
       // Filter cases based on current filters
       const filteredCases = cases.filter(c => {
         const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
@@ -142,21 +163,21 @@ export const CaseListToolbar: React.FC<CaseListToolbarProps> = ({
 
       // Create Excel-compatible XML structure (SpreadsheetML)
       const headers = ['Case Number', 'Title', 'Status', 'Type', 'Client', 'Created Date', 'Lead Attorney', 'Court', 'Judge'];
-      
+
       let xmlContent = `<?xml version="1.0"?>\n`;
       xmlContent += `<?mso-application progid="Excel.Sheet"?>\n`;
       xmlContent += `<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"\n`;
       xmlContent += `  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">\n`;
       xmlContent += `  <Worksheet ss:Name="Cases">\n`;
       xmlContent += `    <Table>\n`;
-      
+
       // Header row
       xmlContent += `      <Row>\n`;
       headers.forEach(header => {
         xmlContent += `        <Cell><Data ss:Type="String">${header}</Data></Cell>\n`;
       });
       xmlContent += `      </Row>\n`;
-      
+
       // Data rows
       filteredCases.forEach(c => {
         xmlContent += `      <Row>\n`;

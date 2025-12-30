@@ -12,7 +12,7 @@
  * - Keyboard shortcuts
  */
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useEnhancedWizard } from '@/hooks/useEnhancedWizard';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

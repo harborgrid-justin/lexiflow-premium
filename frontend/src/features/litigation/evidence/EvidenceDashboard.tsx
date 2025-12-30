@@ -6,7 +6,7 @@
  * Displays high-level metrics, charts, and recent activity for evidence items.
  */
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ShieldCheck, AlertTriangle, HardDrive, Box, Activity } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
@@ -34,7 +34,7 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
   const { theme, mode } = useTheme();
   
   // Load evidence from IndexedDB via useQuery for accurate, cached data
-  const { data, isLoading } = useQuery(
+  const { data } = useQuery(
     queryKeys.evidence.all(),
     () => DataService.evidence.getAll()
   );
@@ -66,8 +66,8 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
   // Calculate recent events from live data
   const recentEvents = React.useMemo(() => {
     return evidence.flatMap((e) =>
-      e.chainOfCustody.map((c: unknown) => ({ ...c, itemTitle: e.title, itemId: e.id }))
-    ).sort((a: unknown, b: unknown) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
+      e.chainOfCustody.map((c) => ({ ...c, itemTitle: e.title, itemId: e.id }))
+    ).sort((a: { date: string }, b: { date: string }) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
   }, [evidence]);
 
   const chartData = [
@@ -133,7 +133,7 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
         {/* Recent Activity */}
         <Card title="Recent Custody Transfers">
           <div className="space-y-4">
-            {recentEvents.map((evt: unknown, idx: number) => (
+            {recentEvents.map((evt: { id?: string; action: string; itemTitle: string; actor: string; date: string }, idx: number) => (
               <div key={idx} className={cn("flex items-start pb-3 border-b last:border-0 last:pb-0", theme.border.default)}>
                 <div className={cn("p-2 rounded-full mr-3 shrink-0", theme.primary.light)}>
                   <Activity className={cn("h-4 w-4", theme.primary.text)} />

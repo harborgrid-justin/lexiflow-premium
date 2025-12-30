@@ -126,10 +126,10 @@ export const FormsSigningView = () => {
 
     const handleSend = async () => {
         if (selectedDocument) {
-            const updatedDoc = { ...selectedDocument, status: 'Sent' as Record<string, unknown> };
+            const updatedDoc = { ...selectedDocument, status: 'Sent' as any };
             await DataService.documents.update(selectedDocument.id, updatedDoc);
             queryClient.invalidate(queryKeys.documents.all());
-            setSelectedDocument(updatedDoc);
+            setSelectedDocument(updatedDoc as any);
             sendModal.close();
             notify.success(`'${selectedDocument.title}' sent for signature.`);
         }

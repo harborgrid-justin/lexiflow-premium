@@ -2,9 +2,9 @@ import { DataDictionaryItem, SchemaTable, DataLakeItem, LineageNode, LineageLink
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { dataPlatformApi } from "@/api/domains/data-platform.api";
 import { MOCK_DATA_DICTIONARY } from '@/api/types/dataDictionary';
 import { delay } from '@/utils/async';
+import { STORES, db } from '@/services/data/db';
 
 export const DataCatalogService = {
     getDictionary: async (): Promise<DataDictionaryItem[]> => { 
@@ -49,8 +49,7 @@ export const DataCatalogService = {
         const info: unknown[] = [];
         for (const store of stores) {
             try {
-                const dbInstance = db as Record<string, unknown>;
-                const count = await dbInstance.count(store);
+                const count = await db.count(store) as number;
                 info.push({
                     name: store,
                     type: 'System Table',
@@ -91,17 +90,25 @@ export const DataCatalogService = {
         const entities: unknown[] = [];
         const relationships: unknown[] = [];
 
-        const nodes: LineageNode[] = entities.map((e: unknown) => ({
-            id: e.id,
-            label: e.name,
-            type: e.type === 'Corporation' ? 'org' : 'party'
-        }));
+        interface EntityLike { id: string; name: string; type: string }
+        const nodes: LineageNode[] = entities.map((e: unknown) => {
+            const entity = e as EntityLike;
+            return {
+                id: entity.id,
+                label: entity.name,
+                type: entity.type === 'Corporation' ? 'org' : 'party'
+            };
+        });
 
-        const links: LineageLink[] = relationships.map((r: unknown) => ({
-            source: r.sourceId,
-            target: r.targetId,
-            strength: r.weight || 0.5
-        }));
+        interface RelationshipLike { sourceId: string; targetId: string; weight?: number }
+        const links: LineageLink[] = relationships.map((r: unknown) => {
+            const rel = r as RelationshipLike;
+            return {
+                source: rel.sourceId,
+                target: rel.targetId,
+                strength: rel.weight || 0.5
+            };
+        });
 
         // Add System Nodes if empty to show structure
         if (nodes.length === 0) {

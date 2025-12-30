@@ -15,10 +15,10 @@ type Story = StoryObj<typeof EmptyState>;
 
 export const Default: Story = {
   args: {
-  "icon": {},
+  icon: undefined,
   "title": "Sample Text",
   "description": "Sample Text",
-  "action": "<div>Sample Content</div>",
+  action: undefined,
   "className": "Sample Text"
 },
 };

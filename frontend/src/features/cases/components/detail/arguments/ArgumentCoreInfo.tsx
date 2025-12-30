@@ -23,7 +23,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { LegalArgument, RiskStatus } from '@/types';
+import { LegalArgument } from '@/types';
 
 interface ArgumentCoreInfoProps {
   argument: LegalArgument;
@@ -66,9 +66,9 @@ export const ArgumentCoreInfo: React.FC<ArgumentCoreInfoProps> = ({ argument, on
                     <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Status</label>
                     <div className="flex gap-2">
                     {['Draft', 'Active', 'Dismissed'].map(s => (
-                        <button 
+                        <button
                             key={s}
-                            onClick={() => onUpdate({ ...argument, status: s as Record<string, unknown> })}
+                            onClick={() => onUpdate({ ...argument, status: s as any })}
                             className={cn(
                                 "px-3 py-1.5 text-xs rounded border transition-all",
                                 argument.status === s 

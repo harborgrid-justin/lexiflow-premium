@@ -8,14 +8,15 @@
 import React from 'react';
 import { Plus, X, RefreshCw, Database } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme, ThemeContextType } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
+import type { ThemeContextValue } from '@/providers/ThemeContext.types';
 import { cn } from '@/utils/cn';
 import { ConnectionCard } from './ConnectionCard';
 import { ServiceCoverageIndicator } from './ServiceCoverageIndicator';
 import { DATA_PROVIDERS } from './constants';
 import { useDataSourceConnections, useConnectionForm } from './hooks';
 import { DataSourceSelector } from './DataSourceSelector';
-import type { DataProvider } from './types';
+import type { DataProvider, ConnectionFormData } from './types';
 
 /**
  * Main view for managing cloud database connections - React 18 optimized with React.memo
@@ -46,15 +47,15 @@ export const CloudDatabaseView = React.memo(() => {
 CloudDatabaseView.displayName = 'CloudDatabaseView';
 
 interface CloudDatabaseContentProps {
-  theme: ThemeContextType['theme'];
+  theme: ThemeContextValue['theme'];
   isAdding: boolean;
   setIsAdding: (value: boolean) => void;
   selectedProvider: string | null;
   setSelectedProvider: (value: string | null) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  formData: unknown;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setFormData: (value: unknown) => void;
+
+  formData: ConnectionFormData;
+
+  setFormData: React.Dispatch<React.SetStateAction<ConnectionFormData>>;
   resetForm: () => void;
 }
 
@@ -205,7 +206,7 @@ const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
 interface ProviderSelectionProps {
   providers: readonly DataProvider[];
   onSelect: (id: string) => void;
-  theme: ThemeContextType['theme'];
+  theme: ThemeContextValue['theme'];
 }
 
 const ProviderSelection: React.FC<ProviderSelectionProps> = ({ providers, onSelect, theme }) => (
@@ -231,14 +232,14 @@ const ProviderSelection: React.FC<ProviderSelectionProps> = ({ providers, onSele
 interface ConnectionFormProps {
   selectedProvider: string;
   providers: readonly DataProvider[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  formData: unknown;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setFormData: (value: unknown) => void;
+
+  formData: ConnectionFormData;
+
+  setFormData: React.Dispatch<React.SetStateAction<ConnectionFormData>>;
   onCancel: () => void;
   onSubmit: (e: React.FormEvent) => void;
   isSubmitting: boolean;
-  theme: ThemeContextType['theme'];
+  theme: ThemeContextValue['theme'];
 }
 
 const ConnectionForm: React.FC<ConnectionFormProps> = ({

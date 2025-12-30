@@ -49,7 +49,7 @@ export function createRepository<T extends BaseEntity>(
  * Ensures the same repository instance is used across the application.
  */
 class RepositoryRegistry {
-  private instances: Map<string, Repository<unknown>> = new Map();
+  private instances: Map<string, Repository<BaseEntity>> = new Map();
 
   /**
    * Get or create a repository instance for a given store.
@@ -59,9 +59,9 @@ class RepositoryRegistry {
    */
   getOrCreate<T extends BaseEntity>(storeName: string): Repository<T> {
     if (!this.instances.has(storeName)) {
-      this.instances.set(storeName, createRepository<T>(storeName));
+      this.instances.set(storeName, createRepository<BaseEntity>(storeName));
     }
-    return this.instances.get(storeName) as Repository<T>;
+    return this.instances.get(storeName) as unknown as Repository<T>;
   }
 
   /**
@@ -74,7 +74,7 @@ class RepositoryRegistry {
     storeName: string,
     repository: Repository<T>
   ): void {
-    this.instances.set(storeName, repository);
+    this.instances.set(storeName, repository as unknown as Repository<BaseEntity>);
   }
 
   /**

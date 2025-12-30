@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { CheckSquare, Lock, Loader2 } from 'lucide-react';
+import { CheckSquare, Lock} from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';

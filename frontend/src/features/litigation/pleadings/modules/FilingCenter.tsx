@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { UploadCloud, FileCheck, Stamp, Printer, AlertOctagon } from 'lucide-react';
+import { UploadCloud, FileCheck, Stamp, Printer } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms';

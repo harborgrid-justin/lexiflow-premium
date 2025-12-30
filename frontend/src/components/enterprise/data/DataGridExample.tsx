@@ -17,7 +17,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -39,7 +39,7 @@ import {
 // TYPES
 // ============================================================================
 
-interface User {
+interface User extends Record<string, unknown> {
   id: number;
   name: string;
   email: string;
@@ -181,7 +181,6 @@ export function DataGridExample() {
         data={filteredUsers}
         columns={columns}
         rowIdKey="id"
-        enableVirtualization
         enableSorting
         enableFiltering
         enableSelection

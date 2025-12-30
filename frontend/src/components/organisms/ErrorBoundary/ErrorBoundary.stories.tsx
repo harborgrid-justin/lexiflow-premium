@@ -15,9 +15,9 @@ type Story = StoryObj<typeof ErrorBoundary>;
 
 export const Default: Story = {
   args: {
-  "children": "<div>Sample Content</div>",
-  "fallback": "<div>Sample Content</div>",
-  "onReset": {},
+  children: undefined,
+  fallback: undefined,
+  onReset: () => {},
   "scope": "Sample Text"
 },
 };

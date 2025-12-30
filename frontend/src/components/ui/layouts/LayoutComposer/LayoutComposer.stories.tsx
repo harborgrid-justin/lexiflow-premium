@@ -16,8 +16,8 @@ type Story = StoryObj<typeof LayoutComposer>;
 export const Default: Story = {
   args: {
   "sections": [],
-  "direction": {},
-  "gap": {},
+  direction: undefined,
+  gap: undefined,
   "enableSkipLinks": true,
   "className": "Sample Text"
 },

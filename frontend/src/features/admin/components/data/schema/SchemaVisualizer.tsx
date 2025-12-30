@@ -66,7 +66,6 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
       tables.forEach(t => tableMap.set(t.name, t));
       
       const TABLE_WIDTH = 256;
-      const ROW_HEIGHT = 37; // Approx height of header/row
       
       tables.forEach(t => {
           t.columns.forEach((col, idx) => {

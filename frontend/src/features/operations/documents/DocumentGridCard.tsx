@@ -33,7 +33,7 @@ export function DocumentGridCard({ doc, isSelected, onToggleSelection, onPreview
                 <input 
                     type="checkbox" 
                     checked={isSelected} 
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onToggleSelection(doc.id, e as Record<string, unknown>)} 
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onToggleSelection(doc.id, e as any)} 
                     className="rounded text-blue-600 cursor-pointer w-4 h-4"
                 />
             </div>

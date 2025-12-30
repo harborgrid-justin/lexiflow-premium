@@ -15,10 +15,10 @@ type Story = StoryObj<typeof TagInput>;
 
 export const Default: Story = {
   args: {
-  "tags": "Sample Text",
-  "onAdd": "Sample Text",
-  "onRemove": "Sample Text",
-  "suggestions": "Sample Text",
+  "tags": [],
+  "onAdd": () => {},
+  "onRemove": () => {},
+  "suggestions": [],
   "placeholder": "Sample Text"
 },
 };

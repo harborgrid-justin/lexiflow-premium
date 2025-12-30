@@ -9,8 +9,8 @@
  */
 
 // External Dependencies
-import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
-import { Cpu, Book, AlertTriangle, Check, Wand2, Search, History, Loader2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Cpu, AlertTriangle, Wand2 } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { AdvancedEditor } from '@features/operations';
@@ -18,18 +18,14 @@ import { ClauseList as ClausePanel } from '@features/knowledge';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
-import { useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { GeminiService } from '@/services/features/research/geminiService';
-import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
 import { Clause } from '@/types';
-
-const ClauseHistoryModal = lazy(() => import('@/features/knowledge/clauses/ClauseHistoryModal').then(m => ({ default: m.ClauseHistoryModal })));
 
 interface CaseDraftingProps {
   caseTitle: string;

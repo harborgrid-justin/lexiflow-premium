@@ -37,7 +37,6 @@ import {
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/providers/ThemeContext';
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 
 // ============================================================================
@@ -156,7 +155,6 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
   syncId
 }) => {
   const chartTheme = useChartTheme();
-  const { theme } = useTheme();
 
   // Check if we need right Y-axis
   const hasRightAxis = useMemo(() =>
@@ -165,15 +163,16 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
   );
 
   // Custom tooltip
-  const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload, label }) => {
+  const CustomTooltip = (props: TooltipProps<number, string>) => {
+    const { active, payload, label } = props as { active?: boolean; payload?: Array<{ name?: string; value?: number; color?: string; dataKey?: string }>; label?: string };
     if (!active || !payload || payload.length === 0) return null;
 
     return (
       <div style={chartTheme.tooltipStyle}>
         <p style={{ fontWeight: 600, marginBottom: '8px', fontSize: '14px' }}>
-          {formatDate(label)}
+          {formatDate(label || '')}
         </p>
-        {payload.map((entry, index) => {
+        {payload.map((entry: { name?: string; value?: number; color?: string; dataKey?: string }, index: number) => {
           const seriesConfig = series.find(s => s.dataKey === entry.dataKey);
           const formatter = seriesConfig?.yAxisId === 'right' ? formatValueRight : formatValueLeft;
 
@@ -188,7 +187,7 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
                 }}
               />
               <span style={{ fontSize: '13px' }}>
-                {entry.name}: <strong>{formatter(entry.value as number)}</strong>
+                {entry.name}: <strong>{formatter(entry.value || 0)}</strong>
               </span>
             </div>
           );

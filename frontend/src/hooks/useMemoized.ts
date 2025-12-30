@@ -203,7 +203,7 @@ export function useDeepMemo<T>(
   deps: DependencyList,
 ): T {
   const depsRef = useRef<DependencyList>(deps);
-  const valueRef = useRef<T>();
+  const valueRef = useRef<T | undefined>(undefined);
 
   // Deep equality check
   const depsChanged = !deepEqual(depsRef.current, deps);
@@ -258,7 +258,7 @@ export function useDeepCallback<T extends (...args: unknown[]) => unknown>(
  * ```
  */
 export function useConstant<T>(factory: () => T): T {
-  const ref = useRef<T>();
+  const ref = useRef<T | undefined>(undefined);
 
   if (ref.current === undefined) {
     ref.current = factory();
@@ -316,7 +316,9 @@ export function useMemoCache<TInput, TOutput>(
     // Evict oldest if over size
     if (cache.size > maxSize) {
       const firstKey = cache.keys().next().value;
-      cache.delete(firstKey);
+      if (firstKey !== undefined) {
+        cache.delete(firstKey);
+      }
     }
 
     return value;
@@ -341,13 +343,11 @@ export interface MemoStats {
  *
  * @param factory - Factory function
  * @param deps - Dependencies
- * @param config - Configuration
  * @returns Tuple of [value, stats]
  */
 export function useMemoWithStats<T>(
   factory: () => T,
   deps: DependencyList,
-  config: MemoizationConfig = {},
 ): [T, MemoStats] {
   const statsRef = useRef<{
     computations: number;
@@ -362,7 +362,7 @@ export function useMemoWithStats<T>(
   });
 
   const prevDepsRef = useRef<DependencyList>(deps);
-  const valueRef = useRef<T>();
+  const valueRef = useRef<T | undefined>(undefined);
 
   const depsChanged = !shallowEqual(prevDepsRef.current, deps);
 
@@ -410,12 +410,14 @@ function deepEqual(a: unknown, b: unknown): boolean {
   }
 
   if (typeof a === 'object' && typeof b === 'object') {
-    const keysA = Object.keys(a);
-    const keysB = Object.keys(b);
+    const objA = a as Record<string, unknown>;
+    const objB = b as Record<string, unknown>;
+    const keysA = Object.keys(objA);
+    const keysB = Object.keys(objB);
 
     if (keysA.length !== keysB.length) return false;
 
-    return keysA.every(key => deepEqual(a[key], b[key]));
+    return keysA.every(key => deepEqual(objA[key], objB[key]));
   }
 
   return false;

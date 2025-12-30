@@ -16,7 +16,7 @@ type Story = StoryObj<typeof EditorToolbar>;
 export const Default: Story = {
   args: {
   "wordCount": 42,
-  "onCmd": "Sample Text",
-  "onSave": {}
+  "onCmd": () => {},
+  onSave: () => {}
 },
 };

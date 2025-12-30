@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { Sidebar } from '@/components/organisms';
 import { AppShell } from '@/components/ui/layouts/AppShell/AppShell';
 import { AppHeader } from '@/components/organisms';
-import { 
-  ThemeProvider, 
-  ToastProvider, 
-  WindowProvider, 
-  SyncProvider, 
-  DataSourceProvider 
+import {
+  ThemeProvider,
+  ToastProvider,
+  WindowProvider,
+  SyncProvider,
+  DataSourceProvider
 } from '@/providers';
 import type { Case } from '@/types';
 import { HolographicDock } from '@/components/organisms';
@@ -20,6 +20,8 @@ import { useAppController } from '@/hooks';
 import { useDataServiceCleanup } from './hooks/useDataServiceCleanup';
 import { backendDiscovery } from '@/services';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import type { IntentResult } from '@/types/ai';
+import type { GlobalSearchResult } from '@/services/search/searchService';
 
 // Initialize Module Registry
 initializeModules();
@@ -83,8 +85,8 @@ const InnerApp: React.FC = () => {
             onGlobalSearch={() => {}}
             currentUser={currentUser}
             onSwitchUser={handleSwitchUser}
-            onSearchResultClick={(result: unknown) => selectCase(result.id)}
-            onNeuralCommand={(cmd: unknown) => console.log('Neural command:', cmd)}
+            onSearchResultClick={(result: GlobalSearchResult) => selectCase(result.id)}
+            onNeuralCommand={(intent: IntentResult) => console.log('Neural command:', intent)}
           />
         </ErrorBoundary>
       }

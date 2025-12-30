@@ -15,7 +15,7 @@ type Story = StoryObj<typeof PageContainer>;
 
 export const Default: Story = {
   args: {
-  "children": "<div>Sample Content</div>",
+  children: undefined,
   "className": "Sample Text"
 },
 };

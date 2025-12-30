@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { Split, Link, FileText, ArrowDown } from 'lucide-react';
+import { Split, Link, FileText } from 'lucide-react';
 
 // Common Components
 import { Card } from '@/components/molecules';

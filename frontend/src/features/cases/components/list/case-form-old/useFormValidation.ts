@@ -13,8 +13,8 @@ export const useFormValidation = () => {
     if (!formData.clientName?.trim()) {
       newErrors.clientName = 'Client name is required';
     }
-    const attorneyName = formData.leadAttorneyName || (formData as Record<string, unknown>).responsibleAttorneyName;
-    if (!attorneyName?.trim()) {
+    const attorneyName = formData.leadAttorneyName || (formData as unknown as Record<string, unknown>).responsibleAttorneyName;
+    if (!(attorneyName as string)?.trim()) {
       newErrors.leadAttorneyName = 'Lead attorney is required';
     }
     if (!formData.practiceArea) {

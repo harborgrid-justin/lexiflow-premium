@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState } from 'react';
-import { Palette, Type, Layout, Save, RefreshCw, ExternalLink } from 'lucide-react';
+import { Save, RefreshCw, ExternalLink } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

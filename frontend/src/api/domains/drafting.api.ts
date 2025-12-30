@@ -653,11 +653,21 @@ export class DraftingValidationService {
   static validateClauses(clauses: unknown[]): ClauseValidationResult {
     const conflicts: ClauseConflict[] = [];
 
+    interface ClauseWithMetadata {
+      id: string;
+      title: string;
+      category: string;
+      tags?: string[];
+      metadata?: {
+        conflictsWith?: string[];
+      };
+    }
+
     // Check for mutual exclusivity
     for (let i = 0; i < clauses.length; i++) {
       for (let j = i + 1; j < clauses.length; j++) {
-        const clause1 = clauses[i];
-        const clause2 = clauses[j];
+        const clause1 = clauses[i] as ClauseWithMetadata;
+        const clause2 = clauses[j] as ClauseWithMetadata;
 
         // Check if clauses have incompatible categories
         if (clause1.category === clause2.category && clause1.category !== 'general' && clause1.category !== 'boilerplate') {
@@ -692,7 +702,7 @@ export class DraftingValidationService {
         if (clause1.tags && clause2.tags) {
           const clause1Tags = Array.isArray(clause1.tags) ? clause1.tags : [];
           const clause2Tags = Array.isArray(clause2.tags) ? clause2.tags : [];
-          
+
           // Check mutual exclusivity
           const isMutuallyExclusive = clause1Tags.some((tag: string) => tag.startsWith('exclude:')) &&
                                      clause2Tags.some((tag: string) => {

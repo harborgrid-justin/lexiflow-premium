@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { 
   Folder, FolderOpen, Clock, Star, Cloud, 
   FileText, Image as ImageIcon, Video, AlertOctagon, CheckCircle2, File, Loader2 
@@ -71,22 +70,22 @@ export function DocumentFilters({ currentFolder, setCurrentFolder }: DocumentFil
             <div className="space-y-0.5 mb-6">
                 {isLoading ? (
                      <div className="p-4 flex justify-center"><Loader2 className="animate-spin h-4 w-4 text-slate-400"/></div>
-                ) : (Array.isArray(folders) ? folders : []).map(folder => {
-                    const isActive = currentFolder === folder.id;
+                ) : (Array.isArray(folders) ? folders : []).map((folder: unknown) => {
+                    const isActive = currentFolder === (folder as {id: string}).id;
                     const Icon = isActive ? FolderOpen : Folder;
                     return (
-                        <button 
-                            key={folder.id}
-                            onClick={() => setCurrentFolder(folder.id)}
+                        <button
+                            key={(folder as {id: string}).id}
+                            onClick={() => setCurrentFolder((folder as {id: string}).id)}
                             className={cn(
                                 "w-full flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
-                                isActive 
-                                    ? cn(theme.primary.light, theme.primary.text, "font-semibold") 
+                                isActive
+                                    ? cn(theme.primary.light, theme.primary.text, "font-semibold")
                                     : cn(theme.text.secondary, `hover:${theme.surface.default}`, `hover:${theme.primary.text}`)
                             )}
                         >
                             <Icon className={cn("h-4 w-4 mr-3", isActive ? "fill-current opacity-20" : "opacity-50")}/>
-                            {folder.label}
+                            {(folder as {label: string}).label}
                         </button>
                     );
                 })}

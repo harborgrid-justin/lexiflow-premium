@@ -14,8 +14,7 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React from 'react';
-import { Smartphone, Monitor, Globe, LogOut, Key, ShieldCheck, Clock } from 'lucide-react';
+import { Smartphone, Monitor, Globe, LogOut, Key, Clock } from 'lucide-react';
 
 // ========================================
 // INTERNAL DEPENDENCIES
@@ -23,12 +22,6 @@ import { Smartphone, Monitor, Globe, LogOut, Key, ShieldCheck, Clock } from 'luc
 // Components
 import { Card } from '@/components/molecules';
 import { Button } from '@/components/atoms';
-
-// Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
-
-// Utils & Constants
-import { cn } from '@/utils/cn';
 
 // Types
 import { ExtendedUserProfile } from '@/types';
@@ -44,8 +37,6 @@ interface SecurityPaneProps {
 // COMPONENT
 // ========================================
 export const SecurityPane = ({ profile }: SecurityPaneProps) => {
-  const { theme } = useTheme();
-
   return (
     <div className="p-6 space-y-6 overflow-y-auto h-full animate-fade-in">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

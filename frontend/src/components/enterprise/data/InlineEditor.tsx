@@ -92,13 +92,13 @@ export function InlineEditor({
 
     switch (type) {
       case 'number':
-        finalValue = value ? parseFloat(value) : null;
+        finalValue = value ? parseFloat(String(value)) : null;
         break;
       case 'checkbox':
         finalValue = Boolean(value);
         break;
       case 'date':
-        finalValue = value ? new Date(value) : null;
+        finalValue = value ? new Date(String(value)) : null;
         break;
     }
 
@@ -126,7 +126,7 @@ export function InlineEditor({
           <input
             ref={inputRef as React.RefObject<HTMLInputElement>}
             type="text"
-            value={value ?? ''}
+            value={String(value ?? '')}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
             className={cn(
@@ -144,7 +144,7 @@ export function InlineEditor({
           <input
             ref={inputRef as React.RefObject<HTMLInputElement>}
             type="number"
-            value={value ?? ''}
+            value={value !== null && value !== undefined ? String(value) : ''}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
             className={cn(
@@ -179,7 +179,7 @@ export function InlineEditor({
         return (
           <select
             ref={inputRef as React.RefObject<HTMLSelectElement>}
-            value={value ?? ''}
+            value={value !== null && value !== undefined ? String(value) : ''}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
             className={cn(
@@ -217,7 +217,7 @@ export function InlineEditor({
         return (
           <textarea
             ref={inputRef as React.RefObject<HTMLTextAreaElement>}
-            value={value ?? ''}
+            value={String(value ?? '')}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
             rows={3}
@@ -236,7 +236,7 @@ export function InlineEditor({
           <input
             ref={inputRef as React.RefObject<HTMLInputElement>}
             type="text"
-            value={value ?? ''}
+            value={String(value ?? '')}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
             className={cn(
@@ -292,7 +292,7 @@ InlineEditor.displayName = 'InlineEditor';
 function formatDateForInput(value: unknown): string {
   if (!value) return '';
 
-  const date = value instanceof Date ? value : new Date(value);
+  const date = value instanceof Date ? value : new Date(String(value));
 
   if (isNaN(date.getTime())) return '';
 

@@ -16,6 +16,6 @@ type Story = StoryObj<typeof BackendHealthMonitor>;
 export const Default: Story = {
   args: {
   "isOpen": true,
-  "onClose": {}
+  onClose: () => {}
 },
 };

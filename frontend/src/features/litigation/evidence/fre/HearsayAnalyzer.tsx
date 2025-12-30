@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { FileWarning, FileText, CheckCircle, AlertTriangle, Wand2 } from 'lucide-react';
+import { FileText, CheckCircle, AlertTriangle, Wand2 } from 'lucide-react';
 
 // Common Components
 import { Card } from '@/components/molecules';
@@ -20,7 +20,6 @@ import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 import { EvidenceItem } from '@/types';
 
 export const HearsayAnalyzer: React.FC = () => {

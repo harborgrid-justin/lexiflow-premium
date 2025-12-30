@@ -9,7 +9,7 @@
  */
 
 // External Dependencies
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Phone, Mail, Users, Video, Plus, CheckCircle, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
@@ -21,8 +21,7 @@ import { Modal } from '@/components/molecules';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 import { useToast } from '@/providers/ToastContext';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { useModalState } from '@/hooks';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { getTodayString } from '@/utils/dateUtils';
 
 // Internal Dependencies - Services & Utils
@@ -31,7 +30,7 @@ import { DataService } from '@/services';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { ConferralSession, ConferralResult, ConferralMethod, UUID, CaseId, UserId } from '@/types';
+import { ConferralSession, ConferralResult, ConferralMethod, UUID, CaseId } from '@/types';
 
 interface ConferralLogProps {
   caseId: string;

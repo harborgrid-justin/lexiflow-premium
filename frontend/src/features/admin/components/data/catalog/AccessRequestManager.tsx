@@ -2,7 +2,6 @@
 import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
 import { User, Clock, CheckCircle, XCircle } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

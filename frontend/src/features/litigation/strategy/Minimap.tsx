@@ -11,15 +11,12 @@ import React, { useRef, useMemo, useCallback } from 'react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { MinimapProps } from './types';
-import { 
+import {
   calculateMinimapBoundsAndScale,
   minimapToCanvasCoordinates,
   calculateCenterPan,
   nodeToMinimapPosition,
-  viewportToMinimapPosition,
-  MINIMAP_WIDTH,
-  MINIMAP_HEIGHT,
-  MINIMAP_PADDING as PADDING
+  viewportToMinimapPosition
 } from './utils';
 
 export const Minimap: React.FC<MinimapProps> = ({ nodes, viewport, onPan }) => {

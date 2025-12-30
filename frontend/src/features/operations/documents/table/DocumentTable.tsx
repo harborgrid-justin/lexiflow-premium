@@ -1,10 +1,7 @@
 
 import React, { useState, useMemo, useCallback, useTransition } from 'react';
-import { Download, Eye, MoreVertical, ArrowUp, ArrowDown } from 'lucide-react';
+import { ArrowUp, ArrowDown } from 'lucide-react';
 import { LegalDocument } from '@/types';
-import { Modal } from '@/components/molecules';
-import { RuleSelector } from '@/components/molecules';
-import { Button } from '@/components/atoms';
 import { DocumentRow } from './DocumentRow';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -23,11 +20,10 @@ interface DocumentTableProps {
   onRowClick?: (doc: LegalDocument) => void;
 }
 
-export const DocumentTable = ({ 
-  documents, viewMode, selectedDocs, toggleSelection, selectAll, isAllSelected, isSelected, setSelectedDocForHistory, setTaggingDoc, onRowClick 
+export const DocumentTable = ({
+  documents, toggleSelection, selectAll, isAllSelected, isSelected, setSelectedDocForHistory, setTaggingDoc, onRowClick
 }: DocumentTableProps) => {
   const { theme } = useTheme();
-  const [ruleModalDoc, setRuleModalDoc] = useState<LegalDocument | null>(null);
   const [sortField, setSortField] = useState<keyof LegalDocument>('lastModified');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
   const [isPending, startTransition] = useTransition();

@@ -104,6 +104,16 @@ export enum ValidationSeverity {
   INFO = 'INFO'
 }
 
+/**
+ * Citation validation error
+ */
+export interface CitationValidationError {
+  code: string;
+  message: string;
+  severity: ValidationSeverity;
+  suggestion?: string;
+}
+
 // =============================================================================
 // BASE CITATION INTERFACES
 // =============================================================================
@@ -120,7 +130,7 @@ export interface BluebookCitation {
   parenthetical?: string;
   pinpoint?: string;
   isValid: boolean;
-  validationErrors: ValidationError[];
+  validationErrors: CitationValidationError[];
   metadata: CitationMetadata;
 }
 
@@ -378,7 +388,7 @@ export interface FormattedCitation {
   formatted: string;
   type: BluebookCitationType;
   isValid: boolean;
-  errors: ValidationError[];
+  errors: CitationValidationError[];
   suggestions: string[];
 }
 

@@ -17,7 +17,7 @@ export const Default: Story = {
   args: {
   "currentPage": 42,
   "totalPages": 42,
-  "onPageChange": 42,
+  "onPageChange": () => {},
   "className": "Sample Text"
 },
 };

@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState, useEffect, useRef } from 'react';
-import { Lock, Shield } from 'lucide-react';
+import { Lock } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -31,7 +31,6 @@ import { ChatHeader } from './ChatHeader';
 import { ChatInput } from './ChatInput';
 import { MessageList } from './MessageList';
 import { FileAttachment } from '@/components/molecules';
-import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -55,7 +54,7 @@ interface MessengerChatWindowProps {
 }
 
 export const MessengerChatWindow = ({
-  activeConversation, activeConvId, setActiveConvId,
+  activeConversation, setActiveConvId,
   inputText, setInputText, pendingAttachments, setPendingAttachments,
   isPrivilegedMode, setIsPrivilegedMode, handleSendMessage, handleFileSelect, formatTime
 }: MessengerChatWindowProps) => {
@@ -112,15 +111,9 @@ export const MessengerChatWindow = ({
           winId,
           `Preview: ${att.name}`,
           <div className={cn("h-full flex flex-col", theme.surface.default)}>
-             <DocumentPreviewPanel 
-                document={{ 
-                    id: 'temp' as Record<string, unknown>, title: att.name, type: att.type === 'image' ? 'JPG' : 'PDF', 
-                    content: 'Preview Content', uploadDate: '', lastModified: '', 
-                    tags: [], versions: [], caseId: 'N/A' as Record<string, unknown> 
-                }} 
-                onViewHistory={() => {}} 
-                isOrbital={true} 
-             />
+             <div className="p-4">
+                <p>Preview: {att.name}</p>
+             </div>
           </div>
       );
   };

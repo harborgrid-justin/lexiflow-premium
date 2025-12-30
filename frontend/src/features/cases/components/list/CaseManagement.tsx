@@ -11,8 +11,8 @@
  * - Backend API integration via DataService
  */
 
-import React, { Suspense, lazy, useTransition, useMemo, useState, useCallback } from 'react';
-import { Plus, Clock, BarChart3, Briefcase, Settings, Eye, Activity, DollarSign, Lightbulb, TrendingUp, RefreshCw, FileText, Shield, Users, Archive, ClipboardList, Scale } from 'lucide-react';
+import React, { useTransition, useMemo, Suspense } from 'react';
+import { Plus, Clock, Briefcase, Settings, Eye, Activity, DollarSign, Lightbulb, TrendingUp, RefreshCw, FileText, Shield, Users, Archive, ClipboardList, Scale } from 'lucide-react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -23,7 +23,7 @@ import { LazyLoader } from '@/components/molecules';
 import { CaseManagerContent } from './CaseManagerContent';
 import { cn } from '@/utils/cn';
 import { MatterView } from '@/config/tabs.config';
-import { MatterStatus } from '@/types';
+import { CaseStatus } from '@/types';
 
 // Two-level tab configuration
 const CASE_TABS = [
@@ -110,29 +110,23 @@ export const CaseManagement: React.FC = () => {
   };
 
   // Fetch KPIs for stats
-  const { data: cases } = useQuery(['cases', 'all'], () => api.cases.getAll(), { 
-    suspense: false,
+  const { data: cases } = useQuery(['cases', 'all'], () => api.cases.getAll(), {
     onError: (error) => console.error('[CaseManagement] Failed to fetch cases:', error)
   });
-  const { data: timeEntries } = useQuery(['billing', 'time-entries'], () => api.billing.getTimeEntries(), {
-    suspense: false,
-    onError: (error) => console.warn('[CaseManagement] Failed to fetch time entries:', error)
-  });
   const { data: invoices } = useQuery(['billing', 'invoices'], () => api.billing.getInvoices(), {
-    suspense: false,
     onError: (error) => console.warn('[CaseManagement] Failed to fetch invoices:', error)
   });
 
   const metrics = useMemo(() => {
-    const activeCases = cases?.filter(m => m.status === MatterStatus.ACTIVE).length || 0;
-    const intakePipeline = cases?.filter(m => m.status === MatterStatus.INTAKE).length || 0;
+    const activeCases = cases?.filter(m => m.status === CaseStatus.Active).length || 0;
+    const intakePipeline = cases?.filter(m => m.status === CaseStatus.Open || m.status === CaseStatus.PreFiling).length || 0;
     const upcomingDeadlines = cases?.filter(m => {
-      if (!m.targetCloseDate) return false;
-      const deadline = new Date(m.targetCloseDate);
+      if (!m.closeDate) return false;
+      const deadline = new Date(m.closeDate);
       const daysUntil = (deadline.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24);
       return daysUntil >= 0 && daysUntil <= 7;
     }).length || 0;
-    const totalRevenue = invoices?.reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0;
+    const totalRevenue = invoices?.reduce((sum: number, inv) => sum + ((inv as { totalAmount?: number }).totalAmount || 0), 0) || 0;
 
     return { activeCases, intakePipeline, upcomingDeadlines, totalRevenue };
   }, [cases, invoices]);

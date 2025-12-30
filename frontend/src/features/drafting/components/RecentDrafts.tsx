@@ -37,10 +37,10 @@ export const RecentDrafts: React.FC<RecentDraftsProps> = ({ drafts, onSelect }) 
               <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className={styles.getItemTitle(theme)}>{draft.title}</h4>
+              <h4 className={styles.getItemTitle(theme)}>{(draft as { title?: string }).title}</h4>
               <div className="flex items-center space-x-2 mt-1">
                 <p className={styles.getItemSubtitle(theme)}>
-                  {draft.case?.title || 'No Case Assigned'}
+                  {(draft.case as { title?: string })?.title || 'No Case Assigned'}
                 </p>
                 <span className="text-slate-400 dark:text-slate-600">•</span>
                 <div className="flex items-center space-x-1 text-xs text-slate-500 dark:text-slate-400">

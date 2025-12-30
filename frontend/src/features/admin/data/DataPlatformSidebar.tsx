@@ -16,7 +16,7 @@
 // EXTERNAL DEPENDENCIES
 // ========================================
 import React, { useState, useEffect, useMemo } from 'react';
-import { Server, ChevronDown, ChevronRight, Layers } from 'lucide-react';
+import { Server, ChevronDown, ChevronRight } from 'lucide-react';
 
 // ========================================
 // INTERNAL DEPENDENCIES
@@ -26,10 +26,10 @@ import { useTheme } from '@providers/ThemeContext';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
-import { DATA_PLATFORM_MENU } from '@config/tabs.config';
+import { DATA_PLATFORM_MENU, type MenuItem } from '@config/tabs.config';
 
 // Types
-import { PlatformView } from '@/features/admin/components/data/AdminDatabaseControl';
+import type { PlatformView } from '@/features/admin/components/data/types';
 
 // ========================================
 // TYPES & INTERFACES
@@ -54,7 +54,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
     'catalog': true
   });
 
-  const menu = useMemo(() => DATA_PLATFORM_MENU, []);
+  const menu: MenuItem[] = useMemo(() => DATA_PLATFORM_MENU, []);
 
   // Auto-expand parent if child is active
   useEffect(() => {
@@ -62,7 +62,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
     if (parent && !expanded[parent.id]) {
       setExpanded(prev => ({ ...prev, [parent.id]: true }));
     }
-  }, [activeView, menu]);
+  }, [activeView, menu, expanded]);
 
   const toggleExpand = (id: string) => {
     setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
@@ -77,7 +77,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
         </p>
       </div>
       <nav className="flex-1 overflow-y-auto p-2 space-y-1 custom-scrollbar min-h-0">
-        {menu.map((item: { children?: unknown[]; id: string; icon: React.ComponentType<{ className?: string }>; label: string }) => {
+        {menu.map((item: MenuItem) => {
           const hasChildren = item.children && item.children.length > 0;
           const itemId = item.id as string;
           const isExpanded = expanded[itemId];
@@ -92,8 +92,8 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
                 }}
                 className={cn(
                   "w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 group",
-                  isActive 
-                    ? cn(theme.primary.light, theme.primary.text) 
+                  isActive
+                    ? cn(theme.primary.light, theme.primary.text)
                     : cn(theme.text.secondary, `hover:${theme.surface.highlight}`)
                 )}
               >
@@ -107,13 +107,13 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
                   </div>
                 )}
               </button>
-              
-              {hasChildren && isExpanded && (
+
+              {hasChildren && isExpanded && item.children && (
                 <div className={cn("ml-4 pl-3 border-l space-y-1 mt-1 mb-1", theme.border.default)}>
-                  {(item.children as Record<string, unknown>)?.map((sub: unknown) => (
+                  {item.children.map((sub: MenuItem) => (
                     <button
                       key={sub.id}
-                      onClick={() => onChange(sub.id)} 
+                      onClick={() => onChange(sub.id as PlatformView)}
                       className={cn(
                         "w-full flex items-center px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
                         activeView === sub.id

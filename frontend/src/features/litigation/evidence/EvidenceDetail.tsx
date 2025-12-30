@@ -30,7 +30,7 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Services & Types
 import { DataService } from '@/services';
-import { useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { EvidenceItem, ChainOfCustodyEvent, TrialExhibit } from '@/types';
 
@@ -80,7 +80,7 @@ export const EvidenceDetail: React.FC<EvidenceDetailProps> = ({
       async () => {
           // 1. Create Exhibit
           const exhibit: TrialExhibit = {
-              id: `ex-${Date.now()}` as Record<string, unknown>,
+              id: `ex-${Date.now()}` as any,
               caseId: selectedItem.caseId,
               exhibitNumber: `PX-${Date.now().toString().slice(-3)}`, // Auto-gen number
               title: selectedItem.title,

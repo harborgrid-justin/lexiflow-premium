@@ -45,7 +45,7 @@ export class SearchApiService {
    * GET ${API_PREFIX}/search
    */
   async search(query: SearchQuery): Promise<SearchResult[]> {
-    const response = await apiClient.get<PaginatedResponse<SearchResult>>('/search', query);
+    const response = await apiClient.get<PaginatedResponse<SearchResult>>('/search', query as unknown as Record<string, unknown>);
     return response.data;
   }
 

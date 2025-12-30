@@ -52,9 +52,11 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
     if (animated && unreadCount > prevCount && unreadCount > 0) {
       setShouldShake(true);
       const timer = setTimeout(() => setShouldShake(false), 500);
+      setPrevCount(unreadCount);
       return () => clearTimeout(timer);
     }
     setPrevCount(unreadCount);
+    return undefined;
   }, [unreadCount, prevCount, animated]);
 
   // Size mappings

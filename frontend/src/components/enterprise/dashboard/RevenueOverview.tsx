@@ -77,18 +77,30 @@ export const RevenueOverview: React.FC<RevenueOverviewProps> = ({
     return `$${value}`;
   };
 
-  const CustomTooltip = ({ active, payload, label }: unknown) => {
+  interface TooltipPayload {
+    name: string;
+    value: number;
+    color: string;
+  }
+
+  interface CustomTooltipProps {
+    active?: boolean;
+    payload?: TooltipPayload[];
+    label?: string;
+  }
+
+  const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       return (
         <div
           className={cn(
             'p-3 rounded-lg shadow-lg border',
-            theme.surface.elevated,
+            theme.surface.raised,
             theme.border.default
           )}
         >
           <p className={cn('text-sm font-medium mb-2', theme.text.primary)}>{label}</p>
-          {payload.map((entry: unknown, index: number) => (
+          {payload.map((entry, index: number) => (
             <p key={index} className="text-xs" style={{ color: entry.color }}>
               {entry.name}: {formatCurrency(entry.value)}
             </p>

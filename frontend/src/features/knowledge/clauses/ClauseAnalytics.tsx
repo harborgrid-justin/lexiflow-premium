@@ -1,11 +1,10 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 import { Card } from '@/components/molecules';
 import { MetricCard } from '@/components/molecules';
 import { ShieldAlert, FileText, CheckCircle, TrendingUp } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
 import { getRiskData, getUsageData } from './clauseAnalytics.utils';
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -13,10 +12,10 @@ import { queryKeys } from '@/utils/queryKeys';
 import { Clause } from '@/types';
 
 export const ClauseAnalytics: React.FC = () => {
-  const { theme, mode } = useTheme();
-  
+  const { mode } = useTheme();
+
   // Load clauses from IndexedDB via useQuery for accurate, cached data
-  const { data: clausesData = [], isLoading } = useQuery<Clause[]>(
+  const { data: clausesData = [] } = useQuery<Clause[]>(
     queryKeys.clauses.all(),
     () => DataService.clauses.getAll()
   );

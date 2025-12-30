@@ -3,11 +3,11 @@
  * Enterprise-grade repository for trial management with backend API integration
  */
 
-import { Juror, Witness, TrialExhibit, Fact, Case } from '@/types';
+import { Juror, Witness, TrialExhibit, Fact} from '@/types';
 import { Repository } from '@/services/core/Repository';
+import { ValidationError, OperationError } from '@/services/core/errors';
 import { STORES, db } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { TrialApiService } from '@/api/trial';
 
 export const TRIAL_QUERY_KEYS = {
     exhibits: {
@@ -30,12 +30,10 @@ export const TRIAL_QUERY_KEYS = {
 
 export class TrialRepository extends Repository<TrialExhibit> {
     private readonly useBackend: boolean;
-    private trialApi: TrialApiService;
 
     constructor() {
         super(STORES.EXHIBITS);
         this.useBackend = isBackendApiEnabled();
-        this.trialApi = new TrialApiService();
         console.log(`[TrialRepository] Initialized with ${this.useBackend ? 'Backend API' : 'IndexedDB'}`);
     }
 
@@ -74,7 +72,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
             await db.put(STORES.JURORS, juror);
         } catch (error) {
             console.error('[TrialRepository.addJuror] Error:', error);
-            throw new OperationError('Failed to add juror');
+            throw new OperationError('addJuror', 'Failed to add juror to database');
         }
     }
 
@@ -96,7 +94,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
             }
         } catch (error) {
             console.error('[TrialRepository.strikeJuror] Error:', error);
-            throw new OperationError('Failed to strike juror');
+            throw new OperationError('strikeJuror', 'Failed to strike juror in database');
         }
     }
 
@@ -144,7 +142,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
             }
         } catch (error) {
             console.error('[TrialRepository.rateWitness] Error:', error);
-            throw new OperationError('Failed to rate witness');
+            throw new OperationError('rateWitness', 'Failed to rate witness in database');
         }
     }
 
@@ -172,7 +170,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
         }
     }
 
-    getAll = async (): Promise<TrialExhibit[]> => {
+    override getAll = async (): Promise<TrialExhibit[]> => {
         try {
             return await db.getAll<TrialExhibit>(STORES.EXHIBITS);
         } catch (error) {
@@ -191,7 +189,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
         }
     }
 
-    async getByCaseId(caseId: string): Promise<TrialExhibit[]> {
+    override async getByCaseId(caseId: string): Promise<TrialExhibit[]> {
         this.validateCaseId(caseId, 'getByCaseId');
         try {
             return await this.getByIndex('caseId', caseId);
@@ -207,7 +205,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
             return await super.update(id, updates);
         } catch (error) {
             console.error('[TrialRepository.update] Error:', error);
-            throw new OperationError('Failed to update exhibit');
+            throw new OperationError('updateExhibit', 'Failed to update exhibit in database');
         }
     }
 
@@ -217,7 +215,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
             await super.delete(id);
         } catch (error) {
             console.error('[TrialRepository.delete] Error:', error);
-            throw new OperationError('Failed to delete exhibit');
+            throw new OperationError('deleteExhibit', 'Failed to delete exhibit from database');
         }
     }
 

@@ -13,8 +13,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
-import { CheckSquare, FileText, Activity, AlertCircle, Users, ArrowRight, AlertTriangle } from 'lucide-react';
+import { CheckSquare, FileText, Activity, AlertCircle, Users, AlertTriangle } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -22,8 +21,6 @@ import { CheckSquare, FileText, Activity, AlertCircle, Users, ArrowRight, AlertT
 // Services & Data
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
-// ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -53,7 +50,7 @@ interface CommandCenterProps {
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export function CommandCenter({ caseId, warRoomData, onNavigate }: CommandCenterProps) {
+export function CommandCenter({ warRoomData }: CommandCenterProps) {
   // ============================================================================
   // HOOKS & CONTEXT
   // ============================================================================
@@ -71,9 +68,9 @@ export function CommandCenter({ caseId, warRoomData, onNavigate }: CommandCenter
   // DERIVED STATE & MEMOIZED VALUES
   // ============================================================================
   const exhibitsTotal = warRoomData.evidence?.length || 0;
-  const exhibitsAdmitted = warRoomData.evidence?.filter((e: unknown) => e.status === 'Admitted').length || 0;
+  const exhibitsAdmitted = warRoomData.evidence?.filter((e: unknown) => (e as { status: string }).status === 'Admitted').length || 0;
   const witnessCount = warRoomData.witnesses?.length || 0;
-  const tasksDue = warRoomData.tasks?.filter((t: unknown) => t.priority === 'High' && t.status !== 'Done').length || 0;
+  const tasksDue = warRoomData.tasks?.filter((t: unknown) => (t as { priority: string; status: string }).priority === 'High' && (t as { priority: string; status: string }).status !== 'Done').length || 0;
   const recentDocket = warRoomData.docket?.slice().reverse().slice(0, 5) || [];
   const sanctionsCount = sanctions.length;
 

@@ -16,12 +16,12 @@ type Story = StoryObj<typeof ConfirmDialog>;
 export const Default: Story = {
   args: {
   "isOpen": true,
-  "onClose": {},
-  "onConfirm": {},
+  onClose: () => {},
+  onConfirm: () => {},
   "title": "Sample Text",
   "message": "Sample Text",
   "confirmText": "Sample Text",
   "cancelText": "Sample Text",
-  "variant": {}
+  variant: undefined
 },
 };

@@ -36,14 +36,14 @@ export const EvidenceCustodyLog: React.FC = () => {
   // Ensure evidence is always an array
   const evidence = useMemo(() => {
     if (!data) return [];
-    if (Array.isArray(data)) return data;
+    if (Array.isArray(data)) return data as EvidenceItem[];
     // Handle paginated response with data property (backend pagination)
     if (typeof data === 'object' && 'data' in data && Array.isArray((data as Record<string, unknown>).data)) {
-      return (data as Record<string, unknown>).data;
+      return (data as Record<string, unknown>).data as EvidenceItem[];
     }
     // Handle object with items property
     if (typeof data === 'object' && 'items' in data && Array.isArray((data as Record<string, unknown>).items)) {
-      return (data as Record<string, unknown>).items;
+      return (data as Record<string, unknown>).items as EvidenceItem[];
     }
     console.warn('[EvidenceCustodyLog] Data is not an array:', data);
     return [];
@@ -51,19 +51,19 @@ export const EvidenceCustodyLog: React.FC = () => {
 
   // Flatten custody events from all evidence items
   const events = useMemo(() => {
-      return evidence.flatMap(item => 
-        (item.chainOfCustody || []).map(event => ({
+      return evidence.flatMap((item: EvidenceItem) =>
+        (item.chainOfCustody || []).map((event) => ({
           ...event,
           itemId: item.id,
           itemTitle: item.title,
           caseId: item.caseId
         }))
-      ).sort((a: unknown, b: unknown) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      ).sort((a: { date: string }, b: { date: string }) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }, [evidence]);
 
   const filteredEvents = useMemo(() => {
-    return events.filter(e => 
-        e.itemTitle.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    return events.filter((e: { itemTitle: string; actor: string; action: string }) =>
+        e.itemTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
         e.actor.toLowerCase().includes(searchTerm.toLowerCase()) ||
         e.action.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -101,7 +101,7 @@ export const EvidenceCustodyLog: React.FC = () => {
             <TableHead>Notes</TableHead>
         </TableHeader>
         <TableBody>
-            {filteredEvents.map((evt, idx) => (
+            {filteredEvents.map((evt: { id?: string; date: string; itemTitle: string; action: string; actor: string; caseId: string; notes?: string }, idx: number) => (
                 <TableRow key={`${evt.id}-${idx}`}>
                     <TableCell className={cn("font-mono text-xs", theme.text.secondary)}>{evt.date}</TableCell>
                     <TableCell className={cn("font-medium", theme.text.primary)}>{evt.itemTitle}</TableCell>

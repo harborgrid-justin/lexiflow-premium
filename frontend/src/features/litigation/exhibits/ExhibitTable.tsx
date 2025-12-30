@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React from 'react';
-import { Eye, Layers } from 'lucide-react';
+import { Eye } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -22,7 +22,6 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { FileIcon } from '@/components/atoms';
 import { Button } from '@/components/atoms';
 import { VirtualList } from '@/components/organisms';
@@ -33,7 +32,7 @@ import { StatusBadge, EmptyListState } from '@/components/organisms/_legacy/Refa
 import { cn } from '@/utils/cn';
 
 // Types
-import { TrialExhibit, DocumentId } from '@/types';
+import { TrialExhibit } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -64,27 +63,14 @@ export function ExhibitTable({ exhibits, viewMode }: ExhibitTableProps) {
           `Exhibit ${ex.exhibitNumber}`,
           <div className={cn("h-full", theme.surface.default)}>
              <DocumentPreviewPanel
-                document={{
-                    id: ex.id as DocumentId,
-                    title: ex.title || 'Untitled',
-                    type: ex.fileType || '',
-                    content: ex.description || '',
-                    uploadDate: ex.dateMarked || '',
-                    lastModified: ex.dateMarked || '',
-                    tags: ex.tags || [],
-                    versions: [],
-                    caseId: ex.caseId,
-                    status: ex.status
-                }}
-                onViewHistory={() => {}}
-                isOrbital={true}
+                documentId={ex.id as string}
              />
           </div>
       );
   };
 
   if (viewMode === 'grid') {
-      if (exhibits.length === 0) return <EmptyListState label="No exhibits found" icon={Layers} />;
+      if (exhibits.length === 0) return <EmptyListState title="No exhibits found" />;
 
       return (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -150,7 +136,7 @@ export function ExhibitTable({ exhibits, viewMode }: ExhibitTableProps) {
         </div>
         <div className="flex-1 relative">
              {exhibits.length === 0 ? (
-                 <EmptyListState label="No exhibits found" icon={Layers} />
+                 <EmptyListState title="No exhibits found" />
              ) : (
                 <VirtualList 
                     items={exhibits}

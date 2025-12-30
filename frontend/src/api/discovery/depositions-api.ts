@@ -54,17 +54,17 @@ export class DepositionsApiService {
     const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
     
     const response = await apiClient.get<Deposition[] | PaginatedResponse<Deposition>>(url);
-    
+
     // Handle paginated response
     if (response && typeof response === 'object' && 'items' in response && Array.isArray((response as Record<string, unknown>).items)) {
-        return (response as Record<string, unknown>).items;
+        return (response as Record<string, unknown>).items as Deposition[];
     }
-    
+
     // Handle direct array response
     if (Array.isArray(response)) {
         return response;
     }
-    
+
     // Fallback
     return [];
   }

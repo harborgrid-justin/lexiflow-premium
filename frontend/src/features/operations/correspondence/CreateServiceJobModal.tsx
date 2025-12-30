@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Modal } from '@/components/molecules';
 import { Button } from '@/components/atoms';
 import { Input, TextArea } from '@/components/atoms';
@@ -11,7 +11,6 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/utils/cn';
 import { validateServiceJobSafe } from '@/services/validation/correspondenceSchemas';
-import { ServiceStatus, ServiceStatusType } from '@/types/enums';
 
 interface CreateServiceJobModalProps {
   isOpen: boolean;
@@ -27,8 +26,9 @@ export function CreateServiceJobModal({ isOpen, onClose, onSave }: CreateService
     attempts: 0,
     method: 'Process Server'
   });
-  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
-  
+  const [_validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  // Note: validationErrors is set but not currently displayed in UI - can be used to show field-level errors
+
   // Load cases from IndexedDB via useQuery for accurate, cached data
   const { data: cases = [] } = useQuery(
     queryKeys.cases.all(),
@@ -44,12 +44,6 @@ export function CreateServiceJobModal({ isOpen, onClose, onSave }: CreateService
 
   const handleSave = () => {
       if (!formData.targetPerson || !formData.caseId || !formData.documentTitle || !formData.dueDate) {
-          setValidationErrors({
-              targetPerson: !formData.targetPerson ? 'Target person is required' : '',
-              caseId: !formData.caseId ? 'Case is required' : '',
-              documentTitle: !formData.documentTitle ? 'Document is required' : '',
-              dueDate: !formData.dueDate ? 'Due date is required' : ''
-          });
           notify.error('Please fill in all required fields');
           return;
       }

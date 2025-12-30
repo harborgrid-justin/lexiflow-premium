@@ -8,7 +8,7 @@ import { Card } from '@/components/molecules';
 import { Input } from '@/components/atoms';
 import { TextArea } from '@/components/atoms';
 import { Badge } from '@/components/atoms';
-import { ArrowLeft, Save, Shield, Tag, Database, User, Clock, Wand2, Activity } from 'lucide-react';
+import { ArrowLeft, Save, Shield, Wand2, Activity } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useNotify } from '@/hooks/useNotify';

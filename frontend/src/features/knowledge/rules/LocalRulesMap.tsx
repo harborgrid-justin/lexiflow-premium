@@ -20,7 +20,7 @@ export const LocalRulesMap: React.FC = () => {
   );
 
   // Transform flat list into grouped state structure dynamically
-  const stateGroups = useMemo(() => groupJurisdictionsByState(jurisdictions), [jurisdictions]);
+  const stateGroups = useMemo(() => groupJurisdictionsByState(jurisdictions as any[]), [jurisdictions]);
 
   return (
     <div className="h-full flex flex-col space-y-6 animate-fade-in">

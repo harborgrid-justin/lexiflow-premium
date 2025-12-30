@@ -70,6 +70,7 @@ import type { SystemEventPayloads, IntegrationResult } from '@/types/integration
 import { EventHandlerRegistry } from './handlers';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
+import { ValidationError } from '@/services/core/errors';
 
 // =============================================================================
 // VALIDATION (Private)
@@ -114,8 +115,8 @@ export class IntegrationOrchestrator {
 
     // Subscribe to all known event types and track cleanup functions
     Object.values(SystemEventType).forEach(type => {
-      const unsubscribe = IntegrationEventPublisher.subscribe(type, (payload) => this.publish(type as SystemEventType, payload));
-      this.subscriptionCleanups.push(unsubscribe);
+      const unsubscribe = IntegrationEventPublisher.subscribe(type, ((payload: any) => this.publish(type as SystemEventType, payload)) as any);
+      this.subscriptionCleanups.push(unsubscribe as any);
     });
 
     this.initialized = true;

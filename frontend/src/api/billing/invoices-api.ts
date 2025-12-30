@@ -55,7 +55,7 @@ export class InvoicesApiService {
    * GET ${API_PREFIX}/billing/invoices
    */
   async getAll(filters?: InvoiceFilters): Promise<Invoice[]> {
-    const response = await apiClient.get<PaginatedResponse<Invoice>>('/billing/invoices', filters);
+    const response = await apiClient.get<PaginatedResponse<Invoice>>('/billing/invoices', filters as Record<string, unknown>);
     return response.data;
   }
 

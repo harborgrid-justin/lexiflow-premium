@@ -14,7 +14,7 @@ import {
   PeriodicalCitation,
   RegulationCitation,
   WebCitation,
-  ValidationError,
+  CitationValidationError,
   ValidationSeverity,
   CourtLevel,
   CitationSignal,
@@ -422,8 +422,8 @@ export class BluebookParser {
   /**
    * Validate citation against Bluebook rules
    */
-  static validate(citation: BluebookCitation): ValidationError[] {
-    const errors: ValidationError[] = [];
+  static validate(citation: BluebookCitation): CitationValidationError[] {
+    const errors: CitationValidationError[] = [];
 
     // Type-specific validation
     switch (citation.type) {
@@ -442,8 +442,8 @@ export class BluebookParser {
   /**
    * Validate case citation
    */
-  private static validateCaseCitation(citation: CaseCitation): ValidationError[] {
-    const errors: ValidationError[] = [];
+  private static validateCaseCitation(citation: CaseCitation): CitationValidationError[] {
+    const errors: CitationValidationError[] = [];
 
     if (!citation.caseName || citation.caseName.length < 3) {
       errors.push({
@@ -475,8 +475,8 @@ export class BluebookParser {
   /**
    * Validate statute citation
    */
-  private static validateStatuteCitation(citation: StatuteCitation): ValidationError[] {
-    const errors: ValidationError[] = [];
+  private static validateStatuteCitation(citation: StatuteCitation): CitationValidationError[] {
+    const errors: CitationValidationError[] = [];
 
     if (!citation.section) {
       errors.push({

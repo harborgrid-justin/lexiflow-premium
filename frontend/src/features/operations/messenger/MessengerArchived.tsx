@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Archive } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

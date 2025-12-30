@@ -49,14 +49,12 @@ import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { SystemEventType } from "@/types/integration-types";
-import { IdGenerator } from '@/utils/idGenerator';
-import { retryWithBackoff, RetryError } from '@/utils/retryWithBackoff';
+import { retryWithBackoff} from '@/utils/retryWithBackoff';
 import { delay } from '@/utils/async';
 
 // Backend API Integration (Primary Data Source)
 import { isBackendApiEnabled } from '@/api';
 import { DocketApiService } from '@/api/litigation';
-import { apiClient } from '@/services/infrastructure/apiClient';
 
 // ============================================================================
 // ERROR CLASSES
@@ -110,11 +108,11 @@ export class DocketRepository extends Repository<DocketEntry> {
     /**
      * Retrieves all docket entries with optional case filtering
      * Routes to backend API if enabled, otherwise uses IndexedDB
-     * 
+     *
      * @returns Promise<DocketEntry[]>
      * @complexity O(1) API call or O(n) IndexedDB scan
      */
-    async getAll(): Promise<DocketEntry[]> {
+    override async getAll(): Promise<DocketEntry[]> {
         if (isBackendApiEnabled()) {
             return this.docketApi.getAll();
         }
@@ -123,11 +121,11 @@ export class DocketRepository extends Repository<DocketEntry> {
 
     /**
      * Retrieves a single docket entry by ID
-     * 
+     *
      * @param id - Docket entry identifier
      * @returns Promise<DocketEntry | undefined>
      */
-    async getById(id: string): Promise<DocketEntry | undefined> {
+    override async getById(id: string): Promise<DocketEntry | undefined> {
         if (isBackendApiEnabled()) {
             try {
                 return await this.docketApi.getById(id);
@@ -141,11 +139,11 @@ export class DocketRepository extends Repository<DocketEntry> {
 
     /**
      * Adds a new docket entry
-     * 
+     *
      * @param entry - Docket entry data
      * @returns Promise<DocketEntry>
      */
-    async add(entry: Omit<DocketEntry, 'id' | 'createdAt' | 'updatedAt'>): Promise<DocketEntry> {
+    override async add(entry: Omit<DocketEntry, 'id' | 'createdAt' | 'updatedAt'>): Promise<DocketEntry> {
         if (isBackendApiEnabled()) {
             const created = await this.docketApi.add(entry);
             // Publish integration event
@@ -165,12 +163,12 @@ export class DocketRepository extends Repository<DocketEntry> {
 
     /**
      * Updates an existing docket entry
-     * 
+     *
      * @param id - Docket entry identifier
      * @param updates - Partial updates
      * @returns Promise<DocketEntry>
      */
-    async update(id: string, updates: Partial<DocketEntry>): Promise<DocketEntry> {
+    override async update(id: string, updates: Partial<DocketEntry>): Promise<DocketEntry> {
         if (isBackendApiEnabled()) {
             return this.docketApi.update(id, updates);
         }
@@ -179,11 +177,11 @@ export class DocketRepository extends Repository<DocketEntry> {
 
     /**
      * Deletes a docket entry
-     * 
+     *
      * @param id - Docket entry identifier
      * @returns Promise<void>
      */
-    async delete(id: string): Promise<void> {
+    override async delete(id: string): Promise<void> {
         if (isBackendApiEnabled()) {
             await this.docketApi.delete(id);
             return;
@@ -193,12 +191,12 @@ export class DocketRepository extends Repository<DocketEntry> {
     
     /**
      * Retrieves all docket entries for a specific case
-     * 
+     *
      * @param caseId - Case identifier
      * @returns Promise<DocketEntry[]>
      * @complexity O(1) API call or O(log n) IndexedDB index lookup
      */
-    async getByCaseId(caseId: string): Promise<DocketEntry[]> { 
+    override async getByCaseId(caseId: string): Promise<DocketEntry[]> { 
         if (isBackendApiEnabled()) {
             return this.docketApi.getAll(caseId);
         }

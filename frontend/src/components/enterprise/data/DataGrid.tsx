@@ -21,18 +21,17 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
-import { FixedSizeList as List } from 'react-window';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataGridColumn, ColumnDefinition } from './DataGridColumn';
+import { ColumnDefinition } from './DataGridColumn';
 import { DataGridFilters, FilterValue, FilterConfig } from './DataGridFilters';
-import { DataGridPagination, PaginationState } from './DataGridPagination';
+import { DataGridPagination } from './DataGridPagination';
 import { DataGridToolbar } from './DataGridToolbar';
-import { InlineEditor, CellEditorProps } from './InlineEditor';
+import { InlineEditor } from './InlineEditor';
 import { ColumnResizer } from './DataGridColumnResizer';
 import { exportToCSV, exportToExcel, exportToPDF } from './DataGridExport';
 
@@ -66,7 +65,6 @@ export interface DataGridProps<T extends Record<string, unknown>> {
   rowIdKey?: keyof T;
 
   // Features
-  enableVirtualization?: boolean;
   enableSorting?: boolean;
   enableFiltering?: boolean;
   enableSelection?: boolean;
@@ -167,14 +165,12 @@ export function DataGrid<T extends Record<string, unknown>>({
   data,
   columns: initialColumns,
   rowIdKey = 'id' as keyof T,
-  enableVirtualization = true,
   enableSorting = true,
   enableFiltering = true,
   enableSelection = false,
   enableInlineEditing = false,
   enablePagination = true,
   enableColumnResizing = true,
-  enableColumnReordering = false,
   enableExport = true,
   selectionMode = 'multiple',
   selectedRows: controlledSelectedRows,
@@ -204,7 +200,7 @@ export function DataGrid<T extends Record<string, unknown>>({
   const [internalFilters, setInternalFilters] = useState<Record<string, FilterValue>>({});
   const [internalCurrentPage, setInternalCurrentPage] = useState(0);
   const [editingCell, setEditingCell] = useState<EditingCell | null>(null);
-  const [columns, setColumns] = useState(initialColumns);
+  const columns = initialColumns;
   const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
 
   // Use controlled or internal state
@@ -259,12 +255,14 @@ export function DataGrid<T extends Record<string, unknown>>({
 
             case 'number':
               const numValue = Number(cellValue);
-              if (filter.min !== undefined && numValue < filter.min) return false;
-              if (filter.max !== undefined && numValue > filter.max) return false;
+              const minNum = typeof filter.min === 'number' ? filter.min : Number(filter.min);
+              const maxNum = typeof filter.max === 'number' ? filter.max : Number(filter.max);
+              if (!isNaN(minNum) && numValue < minNum) return false;
+              if (!isNaN(maxNum) && numValue > maxNum) return false;
               return true;
 
             case 'date':
-              const dateValue = new Date(cellValue);
+              const dateValue = new Date(cellValue as string);
               if (filter.min && dateValue < new Date(filter.min)) return false;
               if (filter.max && dateValue > new Date(filter.max)) return false;
               return true;
@@ -325,31 +323,26 @@ export function DataGrid<T extends Record<string, unknown>>({
   const handleSort = useCallback((columnId: keyof T | string) => {
     if (!enableSorting) return;
 
-    setSortState((prev) => {
-      const existingIndex = prev.findIndex(s => s.columnId === columnId);
+    const existingIndex = sortState.findIndex((s: SortState<T>) => s.columnId === columnId);
 
-      if (existingIndex === -1) {
-        // Add new sort
-        return [...prev, { columnId, direction: 'asc' as SortDirection }];
-      }
-
-      const existing = prev[existingIndex];
+    if (existingIndex === -1) {
+      setSortState([...sortState, { columnId, direction: 'asc' as SortDirection }]);
+    } else {
+      const existing = sortState[existingIndex];
       const newDirection: SortDirection =
         existing.direction === 'asc' ? 'desc' :
         existing.direction === 'desc' ? null :
         'asc';
 
       if (newDirection === null) {
-        // Remove sort
-        return prev.filter((_, i) => i !== existingIndex);
+        setSortState(sortState.filter((_: SortState<T>, i: number) => i !== existingIndex));
+      } else {
+        const newSort = [...sortState];
+        newSort[existingIndex] = { columnId, direction: newDirection };
+        setSortState(newSort);
       }
-
-      // Update sort direction
-      const newSort = [...prev];
-      newSort[existingIndex] = { columnId, direction: newDirection };
-      return newSort;
-    });
-  }, [enableSorting, setSortState]);
+    }
+  }, [enableSorting, sortState, setSortState]);
 
   // Handle selection
   const handleSelectAll = useCallback(() => {
@@ -358,7 +351,7 @@ export function DataGrid<T extends Record<string, unknown>>({
     if (selectedRows.size === displayData.length) {
       setSelectedRows(new Set());
     } else {
-      const allIds = new Set(displayData.map(row => row[rowIdKey]));
+      const allIds = new Set(displayData.map(row => row[rowIdKey] as string | number));
       setSelectedRows(allIds);
     }
   }, [enableSelection, selectedRows.size, displayData, rowIdKey, setSelectedRows]);
@@ -401,11 +394,6 @@ export function DataGrid<T extends Record<string, unknown>>({
 
   // Calculate column widths
   const calculatedColumnWidths = useMemo(() => {
-    const totalWidth = containerWidth - (enableSelection ? 48 : 0); // Reserve space for checkbox
-    const definedWidths = columns.reduce((sum, col) => {
-      return sum + (columnWidths[col.id] || col.width || 150);
-    }, 0);
-
     const widths: Record<string, number> = {};
     columns.forEach(col => {
       widths[col.id] = columnWidths[col.id] || col.width || 150;
@@ -488,7 +476,7 @@ export function DataGrid<T extends Record<string, unknown>>({
   // Render row
   const renderRow = ({ index, style }: { index: number; style: React.CSSProperties }) => {
     const row = displayData[index];
-    const rowId = row[rowIdKey];
+    const rowId = row[rowIdKey] as string | number;
     const isSelected = selectedRows.has(rowId);
 
     return (
@@ -566,7 +554,7 @@ export function DataGrid<T extends Record<string, unknown>>({
 
     // Default export implementation
     const dataToExport = selectedRows.size > 0
-      ? displayData.filter(row => selectedRows.has(row[rowIdKey]))
+      ? displayData.filter(row => selectedRows.has(row[rowIdKey] as string | number))
       : displayData;
 
     const timestamp = new Date().toISOString().split('T')[0];
@@ -643,24 +631,12 @@ export function DataGrid<T extends Record<string, unknown>>({
           <div className="flex flex-col h-full overflow-hidden">
             {renderHeader()}
 
-            {enableVirtualization ? (
-              <List
-                height={height - rowHeight - (enablePagination ? 60 : 0)}
-                itemCount={displayData.length}
-                itemSize={rowHeight}
-                width="100%"
-                overscanCount={5}
-              >
-                {renderRow}
-              </List>
-            ) : (
-              <div className="overflow-auto flex-1">
-                {displayData.map((_, index) => renderRow({
-                  index,
-                  style: { height: rowHeight }
-                }))}
-              </div>
-            )}
+            <div className="overflow-auto flex-1">
+              {displayData.map((_, index) => renderRow({
+                index,
+                style: { height: rowHeight }
+              }))}
+            </div>
           </div>
         )}
       </div>

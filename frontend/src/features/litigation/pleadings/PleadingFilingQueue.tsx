@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import React from 'react';
 import { Send, Clock, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 
 // ============================================================================
@@ -19,7 +19,7 @@ import { Send, Clock, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 
 // Components
 import { Button } from '@/components/atoms';
@@ -148,17 +148,17 @@ export const PleadingFilingQueue: React.FC = () => {
                         {pleadings.map((item: unknown) => {
                             const status = getFilingStatus(item as FilingQueueItem);
                             return (
-                                <TableRow key={item.id}>
+                                <TableRow key={(item as {id: string}).id}>
                                     <TableCell>
                                         <div className="flex items-center gap-2">
                                             <Send className={cn("h-4 w-4", theme.text.secondary)} />
                                             <span className={cn("font-medium", theme.text.primary)}>
-                                                {item.title}
+                                                {(item as {title: string}).title}
                                             </span>
                                         </div>
                                     </TableCell>
                                     <TableCell className={theme.text.secondary}>
-                                        {item.caseId || 'N/A'}
+                                        {(item as {caseId?: string}).caseId || 'N/A'}
                                     </TableCell>
                                     <TableCell className={theme.text.secondary}>
                                         {(item as FilingQueueItem).court || 'Not specified'}
@@ -173,7 +173,7 @@ export const PleadingFilingQueue: React.FC = () => {
                                                     size="sm"
                                                     variant="primary"
                                                     icon={Send}
-                                                    onClick={() => submitFiling(item.id)}
+                                                    onClick={() => submitFiling((item as {id: string}).id)}
                                                 >
                                                     File Now
                                                 </Button>
@@ -192,7 +192,7 @@ export const PleadingFilingQueue: React.FC = () => {
                                                     size="sm"
                                                     variant="danger"
                                                     icon={AlertTriangle}
-                                                    onClick={() => submitFiling(item.id)}
+                                                    onClick={() => submitFiling((item as {id: string}).id)}
                                                 >
                                                     Retry
                                                 </Button>

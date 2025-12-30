@@ -15,6 +15,6 @@ type Story = StoryObj<typeof ModalFooter>;
 
 export const Default: Story = {
   args: {
-  "children": "<div>Sample Content</div>"
+  children: undefined
 },
 };

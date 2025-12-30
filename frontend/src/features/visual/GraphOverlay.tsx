@@ -78,8 +78,8 @@ export const GraphOverlay = ({ scale: _scale, setScale, onReheat, isStable, node
         {/* Legend */}
         <div className={cn("absolute bottom-4 left-4 z-10 p-3 rounded-lg border shadow-md text-xs space-y-2 pointer-events-none select-none backdrop-blur-md bg-opacity-90", theme.surface.default, theme.border.default)}>
             <div className={cn("font-bold uppercase mb-1 tracking-wider text-[10px]", theme.text.tertiary)}>Entity Types</div>
-            <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className={cn("w-3 h-3 rounded-full border", theme.surface.emphasis, theme.border.default)}></div> Case / Root</div>
-            <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className={cn("w-3 h-3 rounded-full", theme.accent.primary)}></div> Individual</div>
+            <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className={cn("w-3 h-3 rounded-full border", theme.surface.active, theme.border.default)}></div> Case / Root</div>
+            <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className={cn("w-3 h-3 rounded-full", theme.primary.text)}></div> Individual</div>
             <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className="w-3 h-3 rounded-full bg-purple-500"></div> Organization</div>
             <div className={cn("flex items-center gap-2", theme.text.secondary)}><div className={cn("w-3 h-3 rounded-full", theme.status.warning.bg)}></div> Evidence</div>
         </div>

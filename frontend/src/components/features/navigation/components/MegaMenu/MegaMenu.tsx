@@ -342,7 +342,7 @@ export const MegaMenu = React.memo<MegaMenuProps>(({
                             {item.label}
                           </span>
                           {item.badge && (
-                            <span className={styles.getBadge(theme, item.badgeVariant || 'primary')}>
+                            <span className={styles.getBadge(item.badgeVariant || 'primary')}>
                               {item.badge}
                             </span>
                           )}
@@ -406,7 +406,7 @@ export const MegaMenu = React.memo<MegaMenuProps>(({
                                     <ExternalLink className="h-3 w-3 opacity-40" />
                                   )}
                                   {item.badge && (
-                                    <span className={styles.getBadge(theme, item.badgeVariant || 'primary')}>
+                                    <span className={styles.getBadge(item.badgeVariant || 'primary')}>
                                       {item.badge}
                                     </span>
                                   )}

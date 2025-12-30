@@ -10,7 +10,7 @@
 
 // External Dependencies
 import React from 'react';
-import { Lock, Printer, Download, ExternalLink, Scale, Calendar, Database, Tag, Copy } from 'lucide-react';
+import { Lock, Printer, Download, ExternalLink, Scale, Calendar, Database, Tag } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { Modal } from '@/components/molecules';

@@ -193,7 +193,7 @@ class CryptoServiceClass {
     } catch (error) {
       const message = `Failed to hash file ${file.name}: ${error instanceof Error ? error.message : 'Unknown error'}`;
       console.error(`[CryptoService.hashFile] ${message}`);
-      throw new OperationError(message);
+      throw new OperationError('CryptoService.hashFile', message);
     }
   }
 
@@ -266,7 +266,7 @@ class CryptoServiceClass {
       return bufferToHex(hashBuffer);
     } catch (error) {
       console.error('[CryptoService.hashString] Error:', error);
-      throw new OperationError(`Failed to hash string: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new OperationError('CryptoService.hashString', `Failed to hash string: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -287,7 +287,7 @@ class CryptoServiceClass {
       return bufferToHex(hashBuffer);
     } catch (error) {
       console.error('[CryptoService.hashBuffer] Error:', error);
-      throw new OperationError(`Failed to hash buffer: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new OperationError('CryptoService.hashBuffer', `Failed to hash buffer: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 
@@ -317,7 +317,7 @@ class CryptoServiceClass {
         .join('');
     } catch (error) {
       console.error('[CryptoService.generateRandomHex] Error:', error);
-      throw new OperationError(`Failed to generate random hex: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new OperationError('CryptoService.generateRandomHex', `Failed to generate random hex: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 

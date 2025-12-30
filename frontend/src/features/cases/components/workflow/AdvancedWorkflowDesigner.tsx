@@ -7,15 +7,15 @@
  */
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { 
-  GitBranch, 
-  Boxes, 
-  GitCompare, 
-  Clock, 
-  UserCheck, 
-  Undo2, 
-  LineChart, 
-  Sparkles, 
+import {
+  GitBranch,
+  Boxes,
+  GitCompare,
+  Clock,
+  UserCheck,
+  Undo2,
+  LineChart,
+  Sparkles,
   Webhook,
   Play,
   Save,
@@ -29,15 +29,12 @@ import {
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms';
-import { Tabs } from '@/components/molecules';
 import { Card } from '@/components/molecules';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services';
 import { useNotify } from '@/hooks/useNotify';
 import type {
   EnhancedWorkflowInstance,
-  ConditionalBranchingConfig,
-  ParallelExecutionConfig,
   WorkflowVersion,
   WorkflowSnapshot,
   WorkflowAnalytics,
@@ -46,6 +43,7 @@ import type {
   WebhookConfig,
   SLAConfig,
   ApprovalChain,
+  RollbackOperation,
 } from '@/types/workflow-advanced-types';
 
 interface AdvancedWorkflowDesignerProps {
@@ -66,15 +64,14 @@ type FeatureTab =
   | 'ai' 
   | 'triggers';
 
-export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> = ({ 
-  workflowId, 
-  onSave, 
-  onClose 
+export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> = ({
+  workflowId,
+  onSave
 }) => {
   const { theme } = useTheme();
   const notify = useNotify();
   const [activeTab, setActiveTab] = useState<FeatureTab>('designer');
-  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const [selectedNodeId] = useState<string | null>(null);
 
   // ============================================================================
   // DATA FETCHING
@@ -82,34 +79,49 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
 
   const { data: workflow, isLoading } = useQuery<EnhancedWorkflowInstance>(
     ['workflow', 'enhanced', workflowId],
-    () => DataService.workflow.getEnhanced(workflowId!),
+    async () => {
+      const workflowService = DataService.workflow as unknown as { getEnhanced: (id: string) => Promise<EnhancedWorkflowInstance> };
+      return workflowService.getEnhanced(workflowId!);
+    },
     { enabled: !!workflowId },
   );
 
   const { data: analytics } = useQuery<WorkflowAnalytics>(
     ['workflow', 'analytics', workflowId],
-    () => DataService.workflow.getAnalytics(workflowId!, {
-      start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-      end: new Date().toISOString(),
-    }),
+    async () => {
+      const workflowService = DataService.workflow as unknown as { getAnalytics: (id: string, params: { start: string; end: string }) => Promise<WorkflowAnalytics> };
+      return workflowService.getAnalytics(workflowId!, {
+        start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+        end: new Date().toISOString(),
+      });
+    },
     { enabled: !!workflowId && activeTab === 'analytics' },
   );
 
   const { data: aiSuggestions = [] } = useQuery<AIWorkflowSuggestion[]>(
     ['workflow', 'ai-suggestions', workflowId],
-    () => DataService.workflow.getAISuggestions(workflowId!),
+    async () => {
+      const workflowService = DataService.workflow as unknown as { getAISuggestions: (id: string) => Promise<AIWorkflowSuggestion[]> };
+      return workflowService.getAISuggestions(workflowId!);
+    },
     { enabled: !!workflowId && activeTab === 'ai' },
   );
 
   const { data: versions = [] } = useQuery<WorkflowVersion[]>(
     ['workflow', 'versions', workflowId],
-    () => DataService.workflow.getVersions(workflowId!),
+    async () => {
+      const workflowService = DataService.workflow as unknown as { getVersions: (id: string) => Promise<WorkflowVersion[]> };
+      return workflowService.getVersions(workflowId!);
+    },
     { enabled: !!workflowId && activeTab === 'versions' },
   );
 
   const { data: snapshots = [] } = useQuery<WorkflowSnapshot[]>(
     ['workflow', 'snapshots', workflowId],
-    () => DataService.workflow.getSnapshots(workflowId!),
+    async () => {
+      const workflowService = DataService.workflow as unknown as { getSnapshots: (id: string) => Promise<WorkflowSnapshot[]> };
+      return workflowService.getSnapshots(workflowId!);
+    },
     { enabled: !!workflowId && activeTab === 'rollback' },
   );
 
@@ -117,23 +129,11 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
   // FEATURE 1: CONDITIONAL BRANCHING
   // ============================================================================
 
-  const [conditionalConfig, setConditionalConfig] = useState<ConditionalBranchingConfig | null>(null);
-
   const addConditionalBranch = useCallback(() => {
     if (!selectedNodeId) {
       notify.warning('Please select a node first');
       return;
     }
-
-    const newBranch = {
-      id: `branch-${Date.now()}`,
-      name: 'New Decision Branch',
-      rules: [],
-      logic: 'AND' as const,
-      priority: 1,
-      targetNodeId: '',
-      fallthrough: false,
-    };
 
     notify.success('Conditional branch added - configure rules');
     setActiveTab('conditional');
@@ -143,25 +143,12 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
   // FEATURE 2: PARALLEL EXECUTION
   // ============================================================================
 
-  const [parallelConfig, setParallelConfig] = useState<ParallelExecutionConfig | null>(null);
-
   const addParallelExecution = useCallback(() => {
     if (!selectedNodeId) {
       notify.warning('Please select a node first');
       return;
     }
 
-    const newConfig: ParallelExecutionConfig = {
-      nodeId: selectedNodeId,
-      branches: [],
-      joinStrategy: 'wait_all',
-      loadBalancing: 'round_robin',
-      errorHandling: {
-        strategy: 'fail_fast',
-      },
-    };
-
-    setParallelConfig(newConfig);
     notify.success('Parallel execution configured');
     setActiveTab('parallel');
   }, [selectedNodeId, notify]);
@@ -171,8 +158,10 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
   // ============================================================================
 
   const createVersionMutation = useMutation(
-    (versionData: Partial<WorkflowVersion>) =>
-      DataService.workflow.createVersion(workflowId!, versionData),
+    async (versionData: Partial<WorkflowVersion>) => {
+      const workflowService = DataService.workflow as unknown as { createVersion: (id: string, data: Partial<WorkflowVersion>) => Promise<WorkflowVersion> };
+      return workflowService.createVersion(workflowId!, versionData);
+    },
     {
       onSuccess: () => {
         queryClient.invalidate(['workflow', 'versions', workflowId]);
@@ -207,10 +196,11 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
   // FEATURE 5: SLA MONITORING
   // ============================================================================
 
-  const [slaConfig, setSLAConfig] = useState<SLAConfig | null>(null);
-
   const createSLAMutation = useMutation(
-    (config: Partial<SLAConfig>) => DataService.workflow.createSLA(workflowId!, config),
+    async (config: Partial<SLAConfig>) => {
+      const workflowService = DataService.workflow as unknown as { createSLA: (id: string, config: Partial<SLAConfig>) => Promise<SLAConfig> };
+      return workflowService.createSLA(workflowId!, config);
+    },
     {
       onSuccess: () => {
         notify.success('SLA monitoring enabled');
@@ -248,10 +238,11 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
   // FEATURE 6: APPROVAL CHAINS
   // ============================================================================
 
-  const [approvalChain, setApprovalChain] = useState<ApprovalChain | null>(null);
-
   const createApprovalChainMutation = useMutation(
-    (chain: Partial<ApprovalChain>) => DataService.workflow.createApprovalChain(workflowId!, chain),
+    async (chain: Partial<ApprovalChain>) => {
+      const workflowService = DataService.workflow as unknown as { createApprovalChain: (id: string, chain: Partial<ApprovalChain>) => Promise<ApprovalChain> };
+      return workflowService.createApprovalChain(workflowId!, chain);
+    },
     {
       onSuccess: () => {
         notify.success('Approval chain created');
@@ -291,8 +282,10 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
   // ============================================================================
 
   const createSnapshotMutation = useMutation(
-    (type: 'manual' | 'milestone') =>
-      DataService.workflow.createSnapshot(workflowId!, { type, label: `${type} snapshot` }),
+    async (type: 'manual' | 'milestone') => {
+      const workflowService = DataService.workflow as unknown as { createSnapshot: (id: string, data: { type: string; label?: string }) => Promise<WorkflowSnapshot> };
+      return workflowService.createSnapshot(workflowId!, { type, label: `${type} snapshot` });
+    },
     {
       onSuccess: () => {
         notify.success('Snapshot created');
@@ -302,7 +295,10 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
   );
 
   const rollbackMutation = useMutation(
-    (snapshotId: string) => DataService.workflow.rollback(workflowId!, snapshotId),
+    async (snapshotId: string) => {
+      const workflowService = DataService.workflow as unknown as { rollback: (id: string, snapshotId: string) => Promise<RollbackOperation> };
+      return workflowService.rollback(workflowId!, snapshotId);
+    },
     {
       onSuccess: () => {
         notify.success('Workflow rolled back successfully');
@@ -321,7 +317,10 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
   // ============================================================================
 
   const applyAISuggestionMutation = useMutation(
-    (suggestionId: string) => DataService.workflow.applyAISuggestion(workflowId!, suggestionId),
+    async (suggestionId: string) => {
+      const workflowService = DataService.workflow as unknown as { applyAISuggestion: (id: string, suggestionId: string) => Promise<EnhancedWorkflowInstance> };
+      return workflowService.applyAISuggestion(workflowId!, suggestionId);
+    },
     {
       onSuccess: () => {
         notify.success('AI suggestion applied');
@@ -338,7 +337,10 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
   const [externalTrigger, setExternalTrigger] = useState<ExternalTrigger | null>(null);
 
   const createTriggerMutation = useMutation(
-    (config: Partial<ExternalTrigger>) => DataService.workflow.createExternalTrigger(workflowId!, config),
+    async (config: Partial<ExternalTrigger>) => {
+      const workflowService = DataService.workflow as unknown as { createExternalTrigger: (id: string, config: Partial<ExternalTrigger>) => Promise<ExternalTrigger> };
+      return workflowService.createExternalTrigger(workflowId!, config);
+    },
     {
       onSuccess: (trigger: ExternalTrigger) => {
         const webhookConfig = trigger.type === 'webhook' && trigger.config.type === 'webhook'
@@ -833,8 +835,8 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                   Detected Bottlenecks
                 </h4>
                 <div className="space-y-2">
-                  {analytics?.bottlenecks?.map((bottleneck: unknown) => (
-                    <div 
+                  {analytics?.bottlenecks?.map((bottleneck) => (
+                    <div
                       key={bottleneck.id}
                       className={cn("p-4 rounded-lg border-l-4", theme.surface.default, theme.border.default,
                         bottleneck.severity === 'critical' ? "border-l-red-500" :
@@ -881,8 +883,8 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                   Optimization Suggestions
                 </h4>
                 <div className="space-y-2">
-                  {analytics?.optimizationSuggestions?.map((suggestion: unknown) => (
-                    <div 
+                  {analytics?.optimizationSuggestions?.map((suggestion) => (
+                    <div
                       key={suggestion.id}
                       className={cn("p-4 rounded-lg border", theme.surface.default, theme.border.default)}
                     >

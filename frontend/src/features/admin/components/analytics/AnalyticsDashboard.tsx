@@ -23,7 +23,6 @@ import { TabbedPageLayout } from '@/components/layouts';
 import { AnalyticsDashboardContent } from './AnalyticsDashboardContent';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Services
@@ -49,7 +48,6 @@ export const AnalyticsDashboard: React.FC = () => {
   // ==========================================================================
   // HOOKS - Context & State
   // ==========================================================================
-  const { theme } = useTheme();
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('analytics_active_tab', 'intel.firm');
   const [isExporting, setIsExporting] = useState(false);

@@ -9,6 +9,7 @@ export interface SearchResult {
   type: string;
   title: string;
   description?: string;
+  snippet?: string;
   highlights?: string[];
   score: number;
   url?: string;

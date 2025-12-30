@@ -39,7 +39,7 @@ const UTILIZATION_TARGET = 85;
  */
 const calculateAverageUtilization = (staffList: StaffMember[]): number => {
   if (staffList.length === 0) return 0;
-  const totalUtilization = staffList.reduce((acc: unknown, s) => acc + (s.utilizationRate || 0), 0);
+  const totalUtilization = staffList.reduce((acc: number, s) => acc + (s.utilizationRate || 0), 0);
   return Math.round(totalUtilization / staffList.length);
 };
 
@@ -70,17 +70,22 @@ export const HRManager: React.FC = () => {
   // HOOKS - Data Fetching
   // ==========================================================================
   const { data: rawStaffList = [], isLoading, status, error, refetch } = useStaff();
-  
-  // Ensure staffList is always an array
-  const staffList = Array.isArray(rawStaffList) ? rawStaffList : [];
+
+  // Ensure staffList is always an array and cast to StaffMember[]
+  const staffList = (Array.isArray(rawStaffList) ? rawStaffList : []) as unknown as StaffMember[];
   const isError = status === 'error';
 
   // ==========================================================================
   // HOOKS - Mutations
   // ==========================================================================
-  const { mutate: addStaff, isLoading: isAdding } = useMutation(
-      DataService.hr.addStaff,
-      { 
+  const hrService = DataService.hr as {
+    addStaff: (staff: StaffMember) => Promise<StaffMember>;
+    deleteStaff: (id: string) => Promise<void>;
+  };
+
+  const { mutate: addStaff } = useMutation(
+      hrService.addStaff,
+      {
           invalidateKeys: [['staff', 'all'], ['users', 'all']],
           onSuccess: () => {
               addStaffModal.close();
@@ -93,8 +98,8 @@ export const HRManager: React.FC = () => {
   );
 
   const { mutate: deleteStaff, isLoading: isDeleting } = useMutation(
-      DataService.hr.deleteStaff,
-      { 
+      hrService.deleteStaff,
+      {
           invalidateKeys: [['staff', 'all']],
           onSuccess: () => {
               deleteModal.close();
@@ -152,10 +157,10 @@ export const HRManager: React.FC = () => {
   // ==========================================================================
   // COMPUTED VALUES
   // ==========================================================================
-  const totalBillable = staffList.reduce((acc: unknown, s) => acc + (s.currentBillable || 0), 0);
+  const totalBillable = staffList.reduce((acc: number, s) => acc + (s.currentBillable || 0), 0);
   const averageUtilization = calculateAverageUtilization(staffList);
   const isOnTrackUtilization = averageUtilization >= UTILIZATION_TARGET;
-  const staffToDeleteName = staffToDelete 
+  const staffToDeleteName = staffToDelete
     ? staffList.find(s => s.id === staffToDelete)?.name || 'this staff member'
     : 'this staff member';
 
@@ -234,10 +239,10 @@ export const HRManager: React.FC = () => {
 
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <MetricCard 
-          label="Total Headcount" 
-          value={staffList.length} 
-          icon={User} 
+        <MetricCard
+          label="Total Headcount"
+          value={staffList.length}
+          icon={User}
           trend={staffList.length > 0 ? `${staffList.filter(s => s.status === 'Active').length} active` : 'No staff yet'}
           trendUp={staffList.length > 0}
           className="border-l-4 border-l-blue-600"
@@ -250,10 +255,10 @@ export const HRManager: React.FC = () => {
           trendUp={isOnTrackUtilization}
           className="border-l-4 border-l-purple-600"
         />
-        <MetricCard 
-          label="Billable Hours YTD" 
-          value={totalBillable.toLocaleString()} 
-          icon={TrendingUp} 
+        <MetricCard
+          label="Billable Hours YTD"
+          value={Math.round(totalBillable).toLocaleString()}
+          icon={TrendingUp}
           trend={totalBillable > 0 ? 'On track' : 'No hours logged'}
           trendUp={totalBillable > 0}
           className="border-l-4 border-l-emerald-600"
@@ -275,11 +280,14 @@ export const HRManager: React.FC = () => {
           </TableHeader>
           <TableBody>
             {staffList.map(staff => {
-              const progress = staff.billableTarget > 0 
-                ? (staff.currentBillable / staff.billableTarget) * 100 
+              const billableTarget = staff.billableTarget || DEFAULT_BILLABLE_TARGET;
+              const currentBillable = staff.currentBillable || 0;
+              const progress = billableTarget > 0
+                ? (currentBillable / billableTarget) * 100
                 : 0;
-              const utilizationColorClass = getUtilizationColorClass(staff.utilizationRate);
-              
+              const utilizationRate = staff.utilizationRate || 0;
+              const utilizationColorClass = getUtilizationColorClass(utilizationRate);
+
               return (
                 <TableRow key={staff.id}>
                   <TableCell>
@@ -297,20 +305,18 @@ export const HRManager: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <span className={cn('font-bold', utilizationColorClass)}>
-                      {staff.utilizationRate}%
+                      {utilizationRate}%
                     </span>
                   </TableCell>
                   <TableCell>
                     <div className="w-full max-w-[140px]">
                       <div className={cn("flex justify-between text-xs mb-1", theme.text.secondary)}>
-                        <span>{staff.currentBillable.toLocaleString()} hrs</span>
-                        <span className={theme.text.tertiary}>/ {staff.billableTarget.toLocaleString()}</span>
+                        <span>{Math.round(currentBillable).toLocaleString()} hrs</span>
+                        <span className={theme.text.tertiary}>/ {billableTarget.toLocaleString()}</span>
                       </div>
                       <div className={cn("w-full rounded-full h-1.5", theme.surface.highlight)}>
-                        {/* Progress bar - inline style required for dynamic width */}
-                        { }
-                        <div 
-                          className="bg-blue-600 h-1.5 rounded-full transition-all duration-300" 
+                        <div
+                          className="bg-blue-600 h-1.5 rounded-full transition-all duration-300"
                           style={{ width: `${Math.min(progress, 100)}%` }}
                         />
                       </div>
@@ -318,7 +324,7 @@ export const HRManager: React.FC = () => {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <button 
+                      <button
                         className={cn(
                           "p-1.5 rounded transition-colors",
                           theme.text.tertiary,
@@ -328,8 +334,8 @@ export const HRManager: React.FC = () => {
                       >
                         <MoreHorizontal className="h-4 w-4"/>
                       </button>
-                      <button 
-                        onClick={() => handleDeleteClick(staff.id)} 
+                      <button
+                        onClick={() => handleDeleteClick(staff.id)}
                         className={cn(
                           "p-1.5 rounded transition-colors",
                           "text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950"

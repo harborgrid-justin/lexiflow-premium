@@ -17,7 +17,7 @@ export const Default: Story = {
   args: {
   "periods": [],
   "selected": "Sample Text",
-  "onChange": "Sample Text",
+  "onChange": () => {},
   "className": "Sample Text"
 },
 };

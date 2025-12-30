@@ -49,7 +49,6 @@ export interface DiscoveryFilters {
 
 // Helper validators
 const isValidDate = (date: string): boolean => /^\d{4}-\d{2}-\d{2}$/.test(date);
-const isValidDateTime = (date: string): boolean => /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d{3})?Z)?$/.test(date);
 const isValidBatesPrefix = (prefix: string): boolean => /^[A-Z0-9_-]{1,10}$/.test(prefix);
 
 const discoveryRequestStatuses = Object.values(DiscoveryRequestStatusEnum);
@@ -85,7 +84,7 @@ const validateDiscoveryRequest = (data: unknown): ValidationResult<Partial<Disco
   }
 
   const dataType = 'type' in data ? data.type : undefined;
-  if (!discoveryTypes.includes(dataType as Record<string, unknown>)) {
+  if (!discoveryTypes.includes(dataType as any)) {
     errors.push({ path: 'type', message: 'Invalid discovery type' });
   }
 
@@ -100,7 +99,7 @@ const validateDiscoveryRequest = (data: unknown): ValidationResult<Partial<Disco
   }
 
   const dataStatus = 'status' in data ? data.status : undefined;
-  if (!discoveryRequestStatuses.includes(dataStatus as Record<string, unknown>)) {
+  if (!discoveryRequestStatuses.includes(dataStatus as any)) {
     errors.push({ path: 'status', message: 'Invalid status' });
   }
 
@@ -147,7 +146,7 @@ const validatePrivilegeLogEntry = (data: unknown): ValidationResult<Partial<Priv
   }
 
   const dataBasis = 'basis' in data ? data.basis : undefined;
-  if (!privilegeBasisTypes.includes(dataBasis as Record<string, unknown>)) {
+  if (!privilegeBasisTypes.includes(dataBasis as any)) {
     errors.push({ path: 'basis', message: 'Invalid privilege basis' });
   }
 
@@ -226,7 +225,7 @@ const validateLegalHold = (data: unknown): ValidationResult<Partial<LegalHold>> 
     errors.push({ path: 'issued', message: 'Invalid issue date format (YYYY-MM-DD)' });
   }
 
-  if (!legalHoldStatuses.includes(record.status as Record<string, unknown>)) {
+  if (!legalHoldStatuses.includes(record.status as any)) {
     errors.push({ path: 'status', message: 'Invalid status' });
   }
 
@@ -297,13 +296,12 @@ const validateProductionConfig = (data: unknown): ValidationResult<ProductionCon
  */
 const validateESISource = (data: unknown): ValidationResult<ESISource> => {
   const errors: Array<{ path: string; message: string }> = [];
-  const source: ESISource = {};
-  
+
   if (!data || typeof data !== 'object') {
     errors.push({ path: 'data', message: 'Invalid ESI source data' });
     return { success: false, error: { errors } };
   }
-  
+
   const input = data as Record<string, unknown>;
 
   const name = input.name && typeof input.name === 'string' ? sanitizeString(input.name) : '';
@@ -314,11 +312,11 @@ const validateESISource = (data: unknown): ValidationResult<ESISource> => {
   }
 
   const validTypes = ['Email', 'Slack', 'Device', 'SharePoint', 'OneDrive', 'Database'];
-  if (!validTypes.includes(input.type as Record<string, unknown>)) {
+  if (!validTypes.includes(input.type as any)) {
     errors.push({ path: 'type', message: 'Invalid source type' });
   }
 
-  if (!esiCollectionStatuses.includes(input.status as Record<string, unknown>)) {
+  if (!esiCollectionStatuses.includes(input.status as any)) {
     errors.push({ path: 'status', message: 'Invalid status' });
   }
 

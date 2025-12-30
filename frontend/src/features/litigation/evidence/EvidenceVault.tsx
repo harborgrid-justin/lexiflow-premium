@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo, useCallback, useState, useEffect, Suspense, lazy } from 'react';
+import React, { useMemo, useCallback, useEffect, Suspense, lazy } from 'react';
 import { Plus, Search } from 'lucide-react';
 
 // ============================================================================
@@ -32,7 +32,6 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Config & Types
 import { EVIDENCE_PARENT_TABS } from '@/config/tabs.config';
-import { EvidenceItem } from '@/types';
 
 const EvidenceDetail = lazy(() => import('./EvidenceDetail').then(m => ({ default: m.EvidenceDetail })));
 
@@ -105,7 +104,7 @@ const EvidenceVaultInternal: React.FC<EvidenceVaultProps> = ({ onNavigateToCase,
               selectedItem={selectedItem}
               handleBack={handleBack}
               activeTab={activeTab}
-              setActiveTab={(tab) => setActiveTab(tab as Record<string, unknown>)}
+              setActiveTab={(tab) => setActiveTab(tab as any)}
               onNavigateToCase={onNavigateToCase}
               onCustodyUpdate={handleCustodyUpdate}
             />

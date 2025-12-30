@@ -26,7 +26,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, Dispatch, SetStateAction } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -59,15 +59,15 @@ export interface UseSecureMessengerReturn {
   /** All conversations */
   conversations: Conversation[];
   /** Contacts list */
-  contactsList: Contact[];
+  contacts: Contact[];
   /** All file attachments */
   allFiles: Attachment[];
   /** Active conversation ID */
   activeConvId: string | null;
-  /** Select conversation */
-  selectConversation: (id: string | null) => void;
+  /** Set active conversation ID */
+  setActiveConvId: (id: string | null) => void;
   /** Active conversation */
-  activeConv: Conversation | undefined;
+  activeConversation: Conversation | undefined;
   /** Search term */
   searchTerm: string;
   /** Set search term */
@@ -78,20 +78,22 @@ export interface UseSecureMessengerReturn {
   setInputText: (text: string) => void;
   /** Pending attachments */
   pendingAttachments: Attachment[];
+  /** Set pending attachments */
+  setPendingAttachments: Dispatch<SetStateAction<Attachment[]>>;
   /** Handle file selection */
-  handleFileSelect: (files: FileList | null) => void;
-  /** Remove attachment */
-  removeAttachment: (id: string) => void;
-  /** Send message */
-  sendMessage: () => void;
+  handleFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
   /** Privileged mode flag */
   isPrivilegedMode: boolean;
   /** Set privileged mode */
-  setPrivilegedMode: (enabled: boolean) => void;
-  /** Sorted conversations */
-  sortedConversations: Conversation[];
+  setIsPrivilegedMode: Dispatch<SetStateAction<boolean>>;
   /** Filtered conversations */
   filteredConversations: Conversation[];
+  /** Select conversation */
+  handleSelectConversation: (id: string) => void;
+  /** Send message */
+  handleSendMessage: () => void;
+  /** Format timestamp */
+  formatTime: (isoString: string) => string;
 }
 
 // ============================================================================

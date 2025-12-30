@@ -19,7 +19,7 @@ const meta: Meta<typeof HelpersDemo> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof helpers>;
+type Story = StoryObj<typeof HelpersDemo>;
 
 export const Default: Story = {
   args: {},

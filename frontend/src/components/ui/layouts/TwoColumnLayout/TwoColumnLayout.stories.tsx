@@ -15,10 +15,10 @@ type Story = StoryObj<typeof TwoColumnLayout>;
 
 export const Default: Story = {
   args: {
-  "leftColumn": "<div>Sample Content</div>",
-  "rightColumn": "<div>Sample Content</div>",
-  "leftWidth": {},
-  "gap": {},
+  leftColumn: undefined,
+  rightColumn: undefined,
+  "leftWidth": undefined,
+  gap: undefined,
   "stackOnMobile": true,
   "className": "Sample Text"
 },

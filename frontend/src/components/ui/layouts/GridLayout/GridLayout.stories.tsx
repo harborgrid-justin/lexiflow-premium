@@ -15,9 +15,9 @@ type Story = StoryObj<typeof GridLayout>;
 
 export const Default: Story = {
   args: {
-  "children": "<div>Sample Content</div>",
-  "columns": {},
-  "gap": {},
+  children: undefined,
+  columns: undefined,
+  gap: undefined,
   "autoFit": true,
   "minItemWidth": "Sample Text",
   "className": "Sample Text"

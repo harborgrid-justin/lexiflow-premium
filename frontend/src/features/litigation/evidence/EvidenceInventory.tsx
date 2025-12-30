@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Plus, Filter, CheckSquare, Loader2 } from 'lucide-react';
 
 // ============================================================================
@@ -20,7 +20,6 @@ import { Plus, Filter, CheckSquare, Loader2 } from 'lucide-react';
 import { Button } from '@/components/atoms';
 import { Badge } from '@/components/atoms';
 import { TaskCreationModal } from '@/components/organisms';
-import { AdaptiveLoader } from '@/components/molecules';
 import { EvidenceTypeIcon } from '@/components/atoms';
 import { FilterPanel } from '@/components/organisms/FilterPanel';
 import { VirtualList } from '@/components/organisms';
@@ -46,8 +45,8 @@ interface EvidenceInventoryProps {
   onIntakeClick: () => void;
 }
 
-const EvidenceInventoryComponent: React.FC<EvidenceInventoryProps> = ({ 
-  items, filteredItems: propFiltered, filters, setFilters, onItemClick, onIntakeClick 
+const EvidenceInventoryComponent: React.FC<EvidenceInventoryProps> = ({
+  items, filters, setFilters, onItemClick, onIntakeClick
 }) => {
   const { theme } = useTheme();
   const filtersToggle = useToggle();

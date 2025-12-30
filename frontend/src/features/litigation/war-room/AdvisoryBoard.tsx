@@ -13,7 +13,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState } from 'react';
-import { UserPlus, Filter, Layout, Loader2 } from 'lucide-react';
+import { UserPlus, Filter, Layout } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -38,7 +38,6 @@ import { AdvisorySidebar } from './advisory/AdvisorySidebar';
 import { AdvisorList, Advisor } from './advisory/AdvisorList';
 import { AdvisorDetail } from './advisory/AdvisorDetail';
 import { Modal } from '@/components/molecules';
-import { ErrorState } from '@/components/molecules';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -74,7 +73,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   // ============================================================================
   // DATA FETCHING
   // ============================================================================
-  const { data: advisors = [], isLoading, error, refetch } = useQuery<Advisor[]>(
+  const { data: advisors = [], isLoading } = useQuery<Advisor[]>(
       queryKeys.warRoom.advisors(caseId || ''),
       () => DataService.warRoom.getAdvisors(caseId || '')
   );

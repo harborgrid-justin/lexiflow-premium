@@ -19,7 +19,6 @@ import {
   Legend,
   ResponsiveContainer,
   ReferenceLine,
-  ReferenceArea,
 } from 'recharts';
 import {
   TrendingUp,
@@ -57,7 +56,6 @@ export const TrendAnalysisWidget: React.FC<TrendAnalysisWidgetProps> = ({
   data,
   predictions = [],
   trendData,
-  metric,
   unit,
   chartType = 'area',
   showPredictions = true,
@@ -177,7 +175,7 @@ export const TrendAnalysisWidget: React.FC<TrendAnalysisWidgetProps> = ({
         <div
           className={cn(
             'p-3 rounded-lg shadow-lg border',
-            theme.surface.elevated,
+            theme.surface.raised,
             theme.border.default
           )}
         >
@@ -296,7 +294,7 @@ export const TrendAnalysisWidget: React.FC<TrendAnalysisWidgetProps> = ({
             </p>
           </div>
 
-          <div className={cn('p-3 rounded-lg', theme.surface.elevated)}>
+          <div className={cn('p-3 rounded-lg', theme.surface.raised)}>
             <div className="flex items-center gap-2 mb-1">
               <Activity className={cn('h-4 w-4', theme.text.tertiary)} />
               <p className={cn('text-xs font-medium', theme.text.tertiary)}>Current</p>
@@ -457,14 +455,15 @@ export const TrendAnalysisWidget: React.FC<TrendAnalysisWidgetProps> = ({
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className={cn('p-3 rounded-lg border text-sm', {
-                  'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200':
-                    insight.type === 'positive',
-                  'bg-rose-50 dark:bg-rose-900/20 border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200':
-                    insight.type === 'negative',
-                  'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200':
-                    insight.type === 'neutral',
-                })}
+                className={cn(
+                  'p-3 rounded-lg border text-sm',
+                  insight.type === 'positive' &&
+                    'bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200',
+                  insight.type === 'negative' &&
+                    'bg-rose-50 dark:bg-rose-900/20 border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200',
+                  insight.type === 'neutral' &&
+                    'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200'
+                )}
               >
                 {insight.message}
               </motion.div>

@@ -71,12 +71,12 @@ export class DataSourceRouter {
 
   /**
    * Creates a property descriptor for lazy routing (used with Object.defineProperty)
-   * 
+   *
    * @param apiPath - Path to backend API service (e.g., 'cases', 'docket')
    * @param fallbackFactory - Factory function for fallback source
    * @returns PropertyDescriptor for use with Object.defineProperty
    */
-  static createPropertyDescriptor<T>(
+  static createPropertyDescriptor(
     apiPath: string | null,
     fallbackFactory: () => any
   ): PropertyDescriptor {

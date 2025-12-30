@@ -15,6 +15,6 @@ type Story = StoryObj<typeof SidebarHeader>;
 
 export const Default: Story = {
   args: {
-  "onClose": {}
+  onClose: () => {}
 },
 };

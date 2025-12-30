@@ -34,6 +34,7 @@ interface SOLEntry {
   cause: string;
   jurisdiction: string;
   daysLeft: number;
+  critical?: boolean;
 }
 
 export const CalendarSOL: React.FC = () => {

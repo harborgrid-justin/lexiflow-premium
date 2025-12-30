@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CaseManagementHub } from '@/features/cases/components/list/CaseManagementHub';
+import CaseManagementHub from '@/features/cases/components/list/CaseManagementHub';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';
 

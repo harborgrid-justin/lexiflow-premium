@@ -16,18 +16,18 @@ type Story = StoryObj<typeof ProgressIndicator>;
 export const Default: Story = {
   args: {
   "progress": 42,
-  "status": {},
+  status: undefined,
   "showPercentage": true,
   "showETA": true,
   "startTime": 42,
   "estimatedDuration": 42,
   "steps": [],
   "canCancel": true,
-  "onCancel": {},
+  onCancel: () => {},
   "error": "Sample Text",
   "successMessage": "Sample Text",
   "label": "Sample Text",
-  "size": {},
-  "variant": {}
+  size: undefined,
+  variant: undefined
 },
 };

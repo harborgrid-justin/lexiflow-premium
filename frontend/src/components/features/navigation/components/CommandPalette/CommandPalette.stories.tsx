@@ -8,10 +8,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { CommandPalette } from './CommandPalette';
 import {
-  Briefcase, FileText, Users, Calendar, Clock,
-  Settings, Search, Home, FolderOpen, MessageSquare
+  Briefcase, Users, Calendar, Clock,
+  Settings, Search, Home, FolderOpen
 } from 'lucide-react';
 import type { CommandItem } from './CommandPalette';
+import type { UserRole } from '@/types';
 
 const meta: Meta<typeof CommandPalette> = {
   title: 'Navigation/CommandPalette',
@@ -136,7 +137,16 @@ const sampleCommands: CommandItem[] = [
 ];
 
 // Interactive wrapper component
-const CommandPaletteWrapper = (args: unknown) => {
+interface WrapperProps {
+  commands: CommandItem[];
+  currentUserRole?: string;
+  placeholder?: string;
+  maxRecentCommands?: number;
+  enableAI?: boolean;
+  className?: string;
+}
+
+const CommandPaletteWrapper = (args: WrapperProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -159,7 +169,12 @@ const CommandPaletteWrapper = (args: unknown) => {
       </div>
 
       <CommandPalette
-        {...args}
+        commands={args.commands}
+        currentUserRole={args.currentUserRole as UserRole}
+        placeholder={args.placeholder}
+        maxRecentCommands={args.maxRecentCommands}
+        enableAI={args.enableAI}
+        className={args.className}
         isOpen={isOpen}
         onOpenChange={setIsOpen}
       />

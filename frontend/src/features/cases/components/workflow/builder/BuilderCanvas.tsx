@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
-import { Badge } from '@/components/atoms';
 import { WorkflowNode, WorkflowConnection, getNodeIcon, getNodeStyles, NodeType } from './types';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -144,11 +143,11 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
       }
     };
 
-    const handleMouseUp = (e: MouseEvent) => {
+    const handleMouseUp = () => {
       if (isPanningRef.current) {
         setIsPanning(false);
       }
-      
+
       // If a connection is being drawn when mouse is released globally, it means
       // it wasn't dropped on a valid port, so we cancel it.
       if (drawingConnectionRef.current) {
@@ -223,7 +222,6 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({
   }
 
   const gridColor = mode === 'dark' ? '#334155' : '#cbd5e1';
-  const bgColor = mode === 'dark' ? '#0f172a' : '#f8fafc';
 
   return (
     <div 

@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect, useRef, useMemo, useId } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles, Command, X, Zap, AlertCircle, CornerDownLeft } from 'lucide-react';
 
 // ============================================================================
@@ -49,8 +49,6 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
   globalSearch, setGlobalSearch, onGlobalSearch, onSearchResultClick, onNeuralCommand
 }) => {
   const { theme } = useTheme();
-  const searchId = useId();
-  const resultsId = useId();
   const [showResults, setShowResults] = useState(false);
   const [isProcessingIntent, setIsProcessingIntent] = useState(false);
   const [results, setResults] = useState<GlobalSearchResult[]>([]);

@@ -61,7 +61,8 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
     try {
       await onRefresh();
     } catch (err: unknown) {
-      setError(err.message || 'Failed to refresh sessions');
+      const message = err instanceof Error ? err.message : 'Failed to refresh sessions';
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -81,7 +82,8 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
       await onRevokeSession(sessionId);
       setSessions((prev) => prev.filter((s) => s.id !== sessionId));
     } catch (err: unknown) {
-      setError(err.message || 'Failed to revoke session');
+      const message = err instanceof Error ? err.message : 'Failed to revoke session';
+      setError(message);
     } finally {
       setRevokingSessionId(null);
     }
@@ -101,7 +103,8 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
       await onRevokeAllOtherSessions();
       setSessions((prev) => prev.filter((s) => s.current));
     } catch (err: unknown) {
-      setError(err.message || 'Failed to revoke sessions');
+      const message = err instanceof Error ? err.message : 'Failed to revoke sessions';
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -123,7 +126,7 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
     return date.toLocaleDateString();
   };
 
-  const getDeviceIcon = (device: string): JSX.Element => {
+  const getDeviceIcon = (device: string): React.JSX.Element => {
     const deviceLower = device.toLowerCase();
 
     if (deviceLower.includes('mobile') || deviceLower.includes('phone')) {

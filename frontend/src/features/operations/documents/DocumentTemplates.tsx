@@ -1,6 +1,5 @@
 
-import React from 'react';
-import { FileText, Wand2, ArrowRight, Loader2 } from 'lucide-react';
+import { FileText, Wand2, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/atoms';
 import { AdaptiveLoader } from '@/components/molecules';
 import { DataService } from '@/services';
@@ -8,7 +7,6 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 
 interface Template {
   id: string;

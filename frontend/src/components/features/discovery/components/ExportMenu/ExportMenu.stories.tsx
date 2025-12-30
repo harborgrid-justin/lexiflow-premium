@@ -15,6 +15,6 @@ type Story = StoryObj<typeof ExportMenu>;
 
 export const Default: Story = {
   args: {
-  "onExport": {}
+  onExport: () => {}
 },
 };

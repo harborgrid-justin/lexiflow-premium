@@ -19,8 +19,8 @@
 
 import React, { useState, useMemo } from 'react';
 import {
-  DollarSign, TrendingUp, Clock, FileText, PieChart, BarChart3,
-  Download, Filter, Calendar, CreditCard, Receipt, Wallet
+  DollarSign, TrendingUp, Clock, BarChart3,
+  Download, Wallet
 } from 'lucide-react';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
@@ -31,7 +31,7 @@ import { Card } from '@/components/molecules';
 import { Badge } from '@/components/atoms';
 
 export const CaseFinancialsCenter: React.FC = () => {
-  const { mode, isDark } = useTheme();
+  const { isDark } = useTheme();
   const [dateRange, setDateRange] = useState<'30d' | '90d' | 'ytd' | 'all'>('30d');
   const [viewMode, setViewMode] = useState<'overview' | 'billing' | 'expenses' | 'budget'>('overview');
 
@@ -61,17 +61,31 @@ export const CaseFinancialsCenter: React.FC = () => {
     else if (dateRange === '90d') cutoffDate.setDate(now.getDate() - 90);
     else if (dateRange === 'ytd') cutoffDate.setMonth(0, 1);
 
-    const recentInvoices = invoices?.filter(inv => 
-      new Date(inv.createdAt) >= cutoffDate
+    interface InvoiceData {
+      createdAt?: string;
+      totalAmount?: number;
+      amount?: number;
+      status?: string;
+    }
+
+    interface TimeEntryData {
+      date?: string;
+      createdAt?: string;
+      duration?: number;
+      rate?: number;
+    }
+
+    const recentInvoices = (invoices as InvoiceData[] | undefined)?.filter(inv =>
+      inv.createdAt && new Date(inv.createdAt) >= cutoffDate
     ) || [];
-    
-    const recentTimeEntries = timeEntries?.filter(t => {
+
+    const recentTimeEntries = (timeEntries as TimeEntryData[] | undefined)?.filter(t => {
       const entryDate = t.date || (t.createdAt ? t.createdAt : new Date().toISOString());
       return new Date(entryDate) >= cutoffDate;
     }) || [];
 
-    const totalRevenue = recentInvoices.reduce((sum, inv) => 
-      sum + (inv.amount || 0), 0
+    const totalRevenue = recentInvoices.reduce((sum, inv) =>
+      sum + (inv.totalAmount || inv.amount || 0), 0
     );
 
     const billableHours = recentTimeEntries.reduce((sum, t) =>
@@ -82,13 +96,13 @@ export const CaseFinancialsCenter: React.FC = () => {
       sum + ((t.duration || 0) * (t.rate || 150)), 0
     );
 
-    const realizationRate = totalBilled > 0 
-      ? (totalRevenue / totalBilled) * 100 
+    const realizationRate = totalBilled > 0
+      ? (totalRevenue / totalBilled) * 100
       : 0;
 
-    const outstandingAR = invoices?.filter(inv => 
+    const outstandingAR = (invoices as InvoiceData[] | undefined)?.filter(inv =>
       inv.status === 'PENDING' || inv.status === 'OVERDUE'
-    ).reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0;
+    ).reduce((sum, inv) => sum + (inv.totalAmount || inv.amount || 0), 0) || 0;
 
     return {
       totalRevenue,
@@ -219,9 +233,20 @@ export const CaseFinancialsCenter: React.FC = () => {
             </h3>
             <div className="space-y-3">
               {matters && (() => {
-                const matterRevenue = matters.map(matter => {
-                  const matterInvoices = invoices?.filter(inv => inv.caseId === matter.id) || [];
-                  const revenue = matterInvoices.reduce((sum, inv) => sum + (inv.amount || inv.totalAmount || 0), 0);
+                interface MatterData {
+                  id: string;
+                  title: string;
+                }
+
+                interface InvoiceData {
+                  caseId?: string;
+                  totalAmount?: number;
+                  amount?: number;
+                }
+
+                const matterRevenue = (matters as MatterData[]).map(matter => {
+                  const matterInvoices = (invoices as InvoiceData[] | undefined)?.filter(inv => inv.caseId === matter.id) || [];
+                  const revenue = matterInvoices.reduce((sum, inv) => sum + (inv.totalAmount || inv.amount || 0), 0);
                   return { matter, revenue };
                 }).sort((a, b) => b.revenue - a.revenue).slice(0, 5);
 

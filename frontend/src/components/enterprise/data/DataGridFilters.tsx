@@ -16,7 +16,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -163,8 +163,6 @@ function FilterInput<T extends Record<string, unknown>>({
   value,
   onChange,
 }: FilterInputProps<T>) {
-  const { theme } = useTheme();
-
   // Determine filter type based on column configuration
   const getFilterType = (): FilterType => {
     if (column.editorType === 'select') return 'select';

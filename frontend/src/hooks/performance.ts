@@ -11,9 +11,11 @@ export { useOptimizedFilter, useMultiFilter, useOptimizedSort } from './useOptim
 export type { OptimizedFilterConfig, OptimizedFilterReturn } from './useOptimizedFilter';
 
 // Code Splitting & Loading
-export { useCodeSplitting } from './useCodeSplitting';
+// useCodeSplitting doesn't exist as a single export - use individual hooks from './useCodeSplitting'
+export * from './useCodeSplitting';
 export { useAdaptiveLoading } from './useAdaptiveLoading';
-export { useImageOptimization } from './useImageOptimization';
+// useImageOptimization doesn't exist as a single export - use individual hooks from './useImageOptimization'
+export * from './useImageOptimization';
 
 // Performance Monitoring
 export { usePerformanceTracking } from './usePerformanceTracking';

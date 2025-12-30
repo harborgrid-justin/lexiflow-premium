@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { MessageSquare } from 'lucide-react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { UserAvatar } from '@/components/atoms';

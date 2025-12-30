@@ -83,7 +83,7 @@ export interface VirtualListState {
   /** Total height of all items */
   totalHeight: number;
   /** Ref for container element */
-  containerRef: React.RefObject<HTMLDivElement>;
+  containerRef: React.RefObject<HTMLDivElement | null>;
   /** Scroll to index */
   scrollToIndex: (index: number, options?: ScrollToOptions) => void;
   /** Scroll to offset */
@@ -162,7 +162,7 @@ export function useVirtualList(config: VirtualListConfig): VirtualListState {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollOffset, setScrollOffset] = useState(0);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout>();
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // Calculate item heights
   const getItemHeight = useCallback(
@@ -394,7 +394,7 @@ export function useVirtualGrid(config: {
   }>;
   totalHeight: number;
   totalWidth: number;
-  containerRef: React.RefObject<HTMLDivElement>;
+  containerRef: React.RefObject<HTMLDivElement | null>;
 } {
   const {
     rowCount,

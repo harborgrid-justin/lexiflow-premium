@@ -1,12 +1,12 @@
 
-import React, { useState, useEffect, Suspense, lazy, useCallback } from 'react';
+import React, { useState, Suspense, lazy, useCallback } from 'react';
 import { PleadingDocument, FormattingRule, Case, PleadingSection } from '@/types';
 import { ArrowLeft, Save, Eye, PenTool, GitMerge, Loader2, Undo2, Redo2 } from 'lucide-react';
 import { Button } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useQuery, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
 import { useNotify } from '@/hooks/useNotify';

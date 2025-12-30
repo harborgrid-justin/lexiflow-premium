@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { Card } from '@/components/molecules';
 import { UserAvatar } from '@/components/atoms';
 import { Button } from '@/components/atoms';
 import { SearchInputBar, MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
@@ -16,7 +15,7 @@ interface AlumniDirectoryProps {
   entities: LegalEntity[];
 }
 
-export const AlumniDirectory: React.FC<AlumniDirectoryProps> = ({ entities }) => {
+export const AlumniDirectory: React.FC<AlumniDirectoryProps> = () => {
   const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -57,11 +56,11 @@ export const AlumniDirectory: React.FC<AlumniDirectoryProps> = ({ entities }) =>
         </div>
 
         <div className="flex justify-between items-center">
-            <SearchInputBar 
-              placeholder="Search alumni by name, firm, or year..." 
+            <SearchInputBar
+              placeholder="Search alumni by name, firm, or year..."
               className="max-w-md"
               value={searchTerm}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+              onChange={(value: string) => setSearchTerm(value)}
             />
             <Button variant="outline">Invite to Network</Button>
         </div>

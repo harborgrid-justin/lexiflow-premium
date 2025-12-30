@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { History, GitBranch, Tag, Clock, User, FileText, Plus } from 'lucide-react';
+import { History, GitBranch, Tag, Clock, User, Plus } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Card } from '@/components/molecules';

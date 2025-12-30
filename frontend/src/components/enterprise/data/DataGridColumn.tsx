@@ -161,7 +161,7 @@ export function currencyColumn<T extends Record<string, unknown>>(
     editorType: 'number',
     cell: ({ value }) => {
       if (value == null) return '';
-      const numValue = typeof value === 'number' ? value : parseFloat(value);
+      const numValue = typeof value === 'number' ? value : parseFloat(String(value));
       return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency,
@@ -188,7 +188,7 @@ export function dateColumn<T extends Record<string, unknown>>(
     editorType: 'date',
     cell: ({ value }) => {
       if (!value) return '';
-      const date = value instanceof Date ? value : new Date(value);
+      const date = value instanceof Date ? value : new Date(String(value));
 
       switch (format) {
         case 'short':

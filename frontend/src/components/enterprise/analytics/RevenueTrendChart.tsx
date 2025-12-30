@@ -33,7 +33,6 @@ import {
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/providers/ThemeContext';
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 
 // ============================================================================
@@ -92,7 +91,6 @@ export const RevenueTrendChart: React.FC<RevenueTrendChartProps> = ({
   loading = false
 }) => {
   const chartTheme = useChartTheme();
-  const { theme } = useTheme();
 
   // Stream configuration
   const streamConfig = useMemo(() => ({
@@ -124,7 +122,8 @@ export const RevenueTrendChart: React.FC<RevenueTrendChartProps> = ({
   }), [chartTheme.colors, colorMap]);
 
   // Custom tooltip
-  const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload, label }) => {
+  const CustomTooltip = (props: TooltipProps<number, string>) => {
+    const { active, payload, label } = props as { active?: boolean; payload?: Array<{ name?: string; value?: number; color?: string; dataKey?: string }>; label?: string };
     if (!active || !payload || payload.length === 0) return null;
 
     return (
@@ -132,7 +131,7 @@ export const RevenueTrendChart: React.FC<RevenueTrendChartProps> = ({
         <p style={{ fontWeight: 600, marginBottom: '8px', fontSize: '14px' }}>
           {label}
         </p>
-        {payload.map((entry, index) => (
+        {payload.map((entry: { name?: string; value?: number; color?: string }, index: number) => (
           <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
             <div
               style={{
@@ -143,7 +142,7 @@ export const RevenueTrendChart: React.FC<RevenueTrendChartProps> = ({
               }}
             />
             <span style={{ fontSize: '13px' }}>
-              {entry.name}: <strong>{formatCurrency(entry.value as number)}</strong>
+              {entry.name}: <strong>{formatCurrency(entry.value || 0)}</strong>
             </span>
           </div>
         ))}

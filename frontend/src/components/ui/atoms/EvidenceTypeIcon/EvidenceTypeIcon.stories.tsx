@@ -15,7 +15,7 @@ type Story = StoryObj<typeof EvidenceTypeIcon>;
 
 export const Default: Story = {
   args: {
-  "type": {},
+  type: undefined,
   "className": "Sample Text"
 },
 };

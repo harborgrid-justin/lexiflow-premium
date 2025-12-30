@@ -51,7 +51,6 @@ export interface DataGridToolbarProps {
 // ============================================================================
 
 export function DataGridToolbar({
-  enableFiltering = false,
   onExport,
   actions = [],
   title,

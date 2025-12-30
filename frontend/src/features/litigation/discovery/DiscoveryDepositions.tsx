@@ -20,8 +20,7 @@ import { Mic2, Calendar, FileText, CheckSquare, Video, MapPin, User, Plus } from
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components';
 import { Button } from '@/components';
 import { Badge } from '@/components';
-import { TaskCreationModal } from '@/components';
-import { Modal } from '@/components/molecules';
+import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
 import { Input, TextArea } from '@/components';
 
 // Hooks & Context
@@ -33,7 +32,6 @@ import { useWindow } from '@/providers';
 import { DataService } from '@/services';
 import { cn } from '@/utils';
 import { STORES } from '@/services';
-import { queryKeys } from '@/utils/queryKeys';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -99,26 +97,29 @@ export const DiscoveryDepositions: React.FC = () => {
       );
   };
 
+  const [taskModalOpen, setTaskModalOpen] = React.useState(false);
+  const [selectedDepo, setSelectedDepo] = React.useState<Deposition | null>(null);
+
   const handleCreatePrepTask = (depo: Deposition) => {
-      const winId = `prep-task-${depo.id}`;
-      openWindow(
-          winId,
-          `Deposition Prep: ${depo.witnessName}`,
-          <div className="p-4">
-              <TaskCreationModal 
-                isOpen={true} 
-                onClose={() => closeWindow(winId)}
-                initialTitle={`Prepare for Depo: ${depo.witnessName}`}
-                relatedModule="Deposition"
-                relatedItemId={depo.id}
-                relatedItemTitle={depo.witnessName}
-            />
-          </div>
-      );
+      setSelectedDepo(depo);
+      setTaskModalOpen(true);
   };
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <>
+      {selectedDepo && (
+        <TaskCreationModal
+          isOpen={taskModalOpen}
+          onClose={() => {
+            setTaskModalOpen(false);
+            setSelectedDepo(null);
+          }}
+          initialTitle={`Prepare for Depo: ${selectedDepo.witnessName}`}
+          relatedModule="Deposition"
+          relatedItemId={selectedDepo.id}
+        />
+      )}
+      <div className="space-y-6 animate-fade-in">
         <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
             <div>
                 <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
@@ -187,7 +188,8 @@ export const DiscoveryDepositions: React.FC = () => {
                 )}
             </TableBody>
         </TableContainer>
-    </div>
+      </div>
+    </>
   );
 };
 

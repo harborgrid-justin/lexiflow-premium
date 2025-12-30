@@ -15,8 +15,8 @@ type Story = StoryObj<typeof Badge>;
 
 export const Default: Story = {
   args: {
-  "variant": {},
-  "children": "<div>Sample Content</div>",
-  "className": "Sample Text"
-},
+    variant: 'info',
+    children: 'Badge Text',
+    className: '',
+  },
 };

@@ -34,6 +34,7 @@ export const ResearchInput: React.FC<ResearchInputProps> = ({ query, setQuery, o
       } else {
           setIntent('general');
       }
+      return undefined;
   }, [query]);
 
   return (

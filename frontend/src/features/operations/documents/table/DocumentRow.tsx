@@ -5,7 +5,6 @@ import { LegalDocument } from '@/types';
 import { Badge } from '@/components/atoms';
 import { FileIcon } from '@/components/atoms';
 import { TagList } from '@/components/molecules';
-import { TableRow, TableCell } from '@/components/organisms';
 import { cn } from '@/utils/cn';
 import { tokens } from '@/components/theme/tokens';
 
@@ -87,7 +86,7 @@ export const DocumentRow = React.memo<DocumentRowProps>(({
         <div className="w-48 flex-shrink-0">
             <div className="flex flex-col gap-1.5">
                 <div className="flex gap-1 items-center">
-                    <TagList tags={doc.tags} limit={2} />
+                    <TagList tags={[...doc.tags]} limit={2} />
                     <button 
                         onClick={handleTagging} 
                         className={cn("opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}

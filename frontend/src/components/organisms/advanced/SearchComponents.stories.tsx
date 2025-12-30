@@ -1,9 +1,33 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { SearchComponents } from './SearchComponents';
+import { CategoryFilter, SuggestionItem } from './SearchComponents';
+import { useTheme } from '@/providers/ThemeContext';
+import type { SearchCategory } from './types';
 
-const meta: Meta<typeof SearchComponents> = {
+const DemoComponent = () => {
+  const { theme } = useTheme();
+  const [activeCategory, setActiveCategory] = React.useState<SearchCategory>('all');
+
+  return (
+    <div className="p-4 space-y-4">
+      <CategoryFilter
+        activeCategory={activeCategory}
+        onCategoryChange={setActiveCategory}
+        theme={theme}
+      />
+      <SuggestionItem
+        suggestion={{ text: 'Example suggestion' }}
+        isSelected={false}
+        onClick={() => {}}
+        theme={theme}
+      />
+    </div>
+  );
+};
+
+const meta: Meta<typeof DemoComponent> = {
   title: 'Components/Organisms/search/SearchComponents',
-  component: SearchComponents,
+  component: DemoComponent,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -11,12 +35,8 @@ const meta: Meta<typeof SearchComponents> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof SearchComponents>;
+type Story = StoryObj<typeof DemoComponent>;
 
 export const Default: Story = {
-  args: {
-  "activeCategory": {},
-  "onCategoryChange": {},
-  "theme": "Sample Text"
-},
+  args: {},
 };

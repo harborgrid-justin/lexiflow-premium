@@ -21,7 +21,6 @@ import type {
   FormSchema,
   ValidationResult,
   ValidationRule,
-  CrossFieldValidationRule,
   FieldCondition,
   FieldState,
   FormState,
@@ -237,7 +236,6 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
   });
 
   // Form-level state
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitCount, setSubmitCount] = useState(0);
 
   // Track which fields have been validated
@@ -251,7 +249,7 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
    */
   const isFieldVisible = useCallback(
     (fieldName: keyof TFormData): boolean => {
-      const fieldSchema = getFieldSchema(schema, fieldName as string);
+      const fieldSchema = getFieldSchema(schema as any, fieldName as string);
       if (!fieldSchema?.showWhen) return true;
 
       return evaluateConditions(fieldSchema.showWhen, formData);
@@ -271,7 +269,7 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
    */
   const validateFieldImmediate = useCallback(
     async <K extends keyof TFormData>(field: K): Promise<boolean> => {
-      const fieldSchema = getFieldSchema(schema, field as string);
+      const fieldSchema = getFieldSchema(schema as any, field as string);
       const fieldValue = formData[field];
 
       // Mark field as validating
@@ -299,7 +297,7 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
       // Run field-level validations
       if (!error && fieldSchema?.validationRules) {
         for (const rule of fieldSchema.validationRules) {
-          const result = await executeValidationRule(rule, fieldValue, formData);
+          const result = await executeValidationRule(rule as any, fieldValue, formData);
 
           if (!result.valid) {
             if (result.severity === 'warning') {
@@ -385,7 +383,7 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
 
       if (shouldValidate) {
         // Use debounced validation for async validators
-        const fieldSchema = getFieldSchema(schema, field as string);
+        const fieldSchema = getFieldSchema(schema as any, field as string);
         const hasAsyncValidation = fieldSchema?.validationRules?.some(
           rule => rule.debounce !== undefined
         );
@@ -557,12 +555,12 @@ export function useEnhancedFormValidation<TFormData extends Record<string, unkno
       data: formData,
       fields: fieldStates,
       isValid,
-      isSubmitting,
+      isSubmitting: false,
       isDirty,
       submitCount,
       errors: errors as Record<string, string>,
     }),
-    [formData, fieldStates, isValid, isSubmitting, isDirty, submitCount, errors]
+    [formData, fieldStates, isValid, isDirty, submitCount, errors]
   );
 
   return {

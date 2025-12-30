@@ -6,14 +6,14 @@
  * For ProcessIcon component, import from './ProcessIcon' instead.
  */
 
-import { WorkflowTask } from '@/types';
+import { WorkflowTask, TaskStatusBackend } from '@/types';
 
 /**
  * @deprecated Use ProcessIcon component instead
  * @see ProcessIcon in './ProcessIcon.tsx'
  */
-export const getProcessIcon = (name: string): unknown => {
-  console.warn('getProcessIcon is deprecated. Use <ProcessIcon processName={name} /> instead.');
+export const getProcessIcon = (): unknown => {
+  console.warn('getProcessIcon is deprecated. Use <ProcessIcon processName={...} /> instead.');
   return null;
 };
 
@@ -45,11 +45,7 @@ export const formatDeadline = (dueTime: number): string => {
 export const getCaseProgress = (caseId: string, tasks: WorkflowTask[]): number => {
   const caseTasks = tasks.filter(t => t.caseId === caseId);
   if (caseTasks.length === 0) return 0;
-  const completed = caseTasks.filter(t =>
-    t.status === 'COMPLETED' as Record<string, unknown> ||
-    t.status === 'Completed' as Record<string, unknown> ||
-    t.status === 'Done' as any
-  ).length;
+  const completed = caseTasks.filter(t => t.status === TaskStatusBackend.COMPLETED).length;
   return Math.round((completed / caseTasks.length) * 100);
 };
 
@@ -62,12 +58,10 @@ export const getCaseProgress = (caseId: string, tasks: WorkflowTask[]): number =
 export const getNextTask = (caseId: string, tasks: WorkflowTask[]): string => {
   const caseTasks = tasks.filter(t =>
     t.caseId === caseId &&
-    t.status !== 'Done' as Record<string, unknown> &&
-    t.status !== 'Completed' as Record<string, unknown> &&
-    t.status !== 'COMPLETED' as any
+    t.status !== TaskStatusBackend.COMPLETED &&
+    t.status !== TaskStatusBackend.CANCELLED
   );
   if (caseTasks.length === 0) return "All tasks completed";
-  // Sort by due date
   caseTasks.sort((a: WorkflowTask, b: WorkflowTask) => {
     const dateA = a.dueDate ? new Date(a.dueDate).getTime() : 0;
     const dateB = b.dueDate ? new Date(b.dueDate).getTime() : 0;

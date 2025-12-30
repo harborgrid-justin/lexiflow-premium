@@ -15,7 +15,7 @@ type Story = StoryObj<typeof TagList>;
 
 export const Default: Story = {
   args: {
-  "tags": "Sample Text",
+  "tags": [],
   "limit": 42
 },
 };

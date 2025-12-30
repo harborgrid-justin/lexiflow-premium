@@ -147,8 +147,8 @@ function extractCaseInfo(text: string): { caseInfo: Partial<Case>; confidence: n
     info.id = `CASE-${Date.now()}` as CaseId;
     info.title = 'Imported Case (No Number Found)';
   }
-  
-  info.status = 'Discovery' as Record<string, unknown>;
+
+  info.status = 'Discovery' as any;
   info.matterType = MatterType.LITIGATION;
   info.jurisdiction = info.court?.toLowerCase().includes('federal') ? 'Federal' : 'State';
   info.filingDate = new Date().toISOString().split('T')[0];
@@ -327,7 +327,7 @@ export const FallbackDocketParser = {
    * Validate parsed result
    */
   validateResult(result: FallbackParseResult): boolean {
-    return (
+    return !!(
         result.caseInfo.id &&
         result.docketEntries.length > 0
     );

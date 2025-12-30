@@ -25,13 +25,14 @@
  * - Event-driven integration
  */
 
-import { WorkflowTask, CaseId, UserId, TaskStatusBackend, TaskPriorityBackend, BaseEntity } from '@/types';
+import { WorkflowTask, CaseId, UserId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { TasksApiService } from '@/api/workflow';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
+import { ValidationError, OperationError } from '@/services/core/errors';
 
 // Type alias to satisfy Repository constraint
 type WorkflowTaskEntity = WorkflowTask & { createdBy?: UserId };
@@ -135,7 +136,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return await super.getAll();
         } catch (error) {
             console.error('[TaskRepository.getAll] Error:', error);
-            throw new OperationError('Failed to fetch tasks');
+            throw new OperationError('getAll', 'Failed to fetch tasks');
         }
     }
 
@@ -161,7 +162,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return await this.getByIndex('caseId', caseId);
         } catch (error) {
             console.error('[TaskRepository.getByCaseId] Error:', error);
-            throw new OperationError('Failed to fetch tasks by case ID');
+            throw new OperationError('getByCaseId', 'Failed to fetch tasks by case ID');
         }
     }
 
@@ -180,7 +181,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return tasks.filter(t => t.status !== TaskStatusBackend.COMPLETED).length;
         } catch (error) {
             console.error('[TaskRepository.countByCaseId] Error:', error);
-            throw new OperationError('Failed to count tasks by case ID');
+            throw new OperationError('countByCaseId', 'Failed to count tasks by case ID');
         }
     }
 
@@ -206,7 +207,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return await super.getById(id);
         } catch (error) {
             console.error('[TaskRepository.getById] Error:', error);
-            throw new OperationError('Failed to fetch task');
+            throw new OperationError('getById', 'Failed to fetch task');
         }
     }
 
@@ -224,7 +225,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
 
         if (this.useBackend) {
             try {
-                return await this.tasksApi.create(item as Record<string, unknown>) as WorkflowTaskEntity;
+                return await this.tasksApi.create(item) as WorkflowTaskEntity;
             } catch (error) {
                 console.warn('[TaskRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -235,7 +236,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return result;
         } catch (error) {
             console.error('[TaskRepository.add] Error:', error);
-            throw new OperationError('Failed to add task');
+            throw new OperationError('add', 'Failed to add task');
         }
     }
 
@@ -305,7 +306,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             await super.delete(id);
         } catch (error) {
             console.error('[TaskRepository.delete] Error:', error);
-            throw new OperationError('Failed to delete task');
+            throw new OperationError('delete', 'Failed to delete task');
         }
     }
 
@@ -339,7 +340,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return completed;
         } catch (error) {
             console.error('[TaskRepository.completeTask] Error:', error);
-            throw new OperationError('Failed to complete task');
+            throw new OperationError('completeTask', 'Failed to complete task');
         }
     }
 
@@ -376,7 +377,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return await this.update(id, updates);
         } catch (error) {
             console.error('[TaskRepository.updateStatus] Error:', error);
-            throw new OperationError('Failed to update task status');
+            throw new OperationError('updateStatus', 'Failed to update task status');
         }
     }
 
@@ -493,7 +494,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return await this.getByIndex('assignedTo', userId);
         } catch (error) {
             console.error('[TaskRepository.getByAssignee] Error:', error);
-            throw new OperationError('Failed to fetch tasks by assignee');
+            throw new OperationError('getByAssignee', 'Failed to fetch tasks by assignee');
         }
     }
 
@@ -518,7 +519,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             });
         } catch (error) {
             console.error('[TaskRepository.getOverdue] Error:', error);
-            throw new OperationError('Failed to fetch overdue tasks');
+            throw new OperationError('getOverdue', 'Failed to fetch overdue tasks');
         }
     }
 
@@ -542,7 +543,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             });
         } catch (error) {
             console.error('[TaskRepository.getUpcoming] Error:', error);
-            throw new OperationError('Failed to fetch upcoming tasks');
+            throw new OperationError('getUpcoming', 'Failed to fetch upcoming tasks');
         }
     }
 
@@ -570,7 +571,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return await this.getByIndex('status', status);
         } catch (error) {
             console.error('[TaskRepository.getByStatus] Error:', error);
-            throw new OperationError('Failed to fetch tasks by status');
+            throw new OperationError('getByStatus', 'Failed to fetch tasks by status');
         }
     }
 
@@ -598,7 +599,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return await this.getByIndex('priority', priority);
         } catch (error) {
             console.error('[TaskRepository.getByPriority] Error:', error);
-            throw new OperationError('Failed to fetch tasks by priority');
+            throw new OperationError('getByPriority', 'Failed to fetch tasks by priority');
         }
     }
 
@@ -646,7 +647,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             return tasks;
         } catch (error) {
             console.error('[TaskRepository.search] Error:', error);
-            throw new OperationError('Failed to search tasks');
+            throw new OperationError('search', 'Failed to search tasks');
         }
     }
 
@@ -706,7 +707,7 @@ export class TaskRepository extends Repository<WorkflowTaskEntity> {
             };
         } catch (error) {
             console.error('[TaskRepository.getStatistics] Error:', error);
-            throw new OperationError('Failed to get task statistics');
+            throw new OperationError('getStatistics', 'Failed to get task statistics');
         }
     }
 }

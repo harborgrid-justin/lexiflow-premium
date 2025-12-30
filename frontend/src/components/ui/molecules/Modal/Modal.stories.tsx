@@ -16,12 +16,12 @@ type Story = StoryObj<typeof Modal>;
 export const Default: Story = {
   args: {
   "isOpen": true,
-  "onClose": {},
-  "title": "<div>Sample Content</div>",
-  "children": "<div>Sample Content</div>",
-  "size": {},
+  onClose: () => {},
+  title: undefined,
+  children: undefined,
+  size: undefined,
   "className": "Sample Text",
-  "footer": "<div>Sample Content</div>",
+  footer: undefined,
   "closeOnBackdrop": true
 },
 };

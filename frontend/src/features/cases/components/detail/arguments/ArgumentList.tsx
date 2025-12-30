@@ -10,7 +10,7 @@
 
 // External Dependencies
 import React from 'react';
-import { Scale, Fingerprint, ChevronRight, BookOpen } from 'lucide-react';
+import { Scale, Fingerprint, ChevronRight } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { RiskMeter } from '@/components/organisms';

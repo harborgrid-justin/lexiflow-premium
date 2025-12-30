@@ -72,9 +72,8 @@ import React, { useState, useCallback } from 'react';
 
 /**
  * Return type for useSelection hook
- * @template T - Type of items being selected
  */
-export interface UseSelectionReturn<T> {
+export interface UseSelectionReturn {
   /** Array of selected item IDs */
   selectedIds: string[];
   /** Manually set selected IDs */
@@ -194,11 +193,11 @@ function validateIdKey<T extends Record<string, unknown>>(items: T[], idKey: key
 export function useSelection<T extends object>(
   items: T[],
   idKey: keyof T = 'id' as keyof T
-): UseSelectionReturn<T> {
+): UseSelectionReturn {
   // Validate inputs in development
   if (process.env.NODE_ENV !== 'production') {
     validateItems(items);
-    validateIdKey(items, idKey);
+    validateIdKey(items as Record<string, unknown>[], idKey as string);
   }
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

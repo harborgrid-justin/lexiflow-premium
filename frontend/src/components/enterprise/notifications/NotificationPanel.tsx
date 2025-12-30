@@ -9,7 +9,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bell,
   X,
-  Check,
   Trash2,
   CheckCheck,
   Clock,

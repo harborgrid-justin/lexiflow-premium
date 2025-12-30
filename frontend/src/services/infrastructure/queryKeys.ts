@@ -6,7 +6,7 @@
 
 // DEPRECATED: Use queryKeys from utils/queryKeys.ts instead
 // This file should be removed and references updated
-import type { CaseId, DocumentId, UserId } from '@/types';
+import type { CaseId, UserId } from '@/types';
 
 /**
  * Correspondence query keys factory

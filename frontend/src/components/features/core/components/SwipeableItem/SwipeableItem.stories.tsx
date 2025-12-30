@@ -15,9 +15,9 @@ type Story = StoryObj<typeof SwipeableItem>;
 
 export const Default: Story = {
   args: {
-  "children": "<div>Sample Content</div>",
-  "onSwipeLeft": {},
-  "onSwipeRight": {},
+  children: undefined,
+  onSwipeLeft: () => {},
+  onSwipeRight: () => {},
   "leftActionLabel": "Sample Text",
   "rightActionLabel": "Sample Text",
   "leftActionColor": "Sample Text",

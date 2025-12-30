@@ -15,8 +15,6 @@
  * and relevance scoring.
  */
 
-import { analyticsApi } from '@/api/domains/analytics.api';
-import { delay } from '@/utils/async';
 import { isBackendApiEnabled } from '@/api';
 import { apiClient } from '@/services/infrastructure/apiClient';
 
@@ -34,10 +32,10 @@ const MAX_RECENT_SEARCHES = 10;
 
 export const SearchService = {
   getAll: async () => [], // Not applicable for search service
-  getById: async (id: string) => null,
+  getById: async () => null,
   add: async (item: unknown) => item,
-  update: async (id: string, updates: unknown) => updates,
-  delete: async (id: string) => true,
+  update: async (updates: unknown) => updates,
+  delete: async () => true,
   
   /**
    * Global search across all entities using backend Elasticsearch
@@ -71,7 +69,7 @@ export const SearchService = {
   
   getRecentSearches: async (): Promise<string[]> => {
     try {
-      const stored = defaultStorage.getItem(RECENT_SEARCHES_KEY);
+      const stored = localStorage.getItem(RECENT_SEARCHES_KEY);
       return stored ? JSON.parse(stored) : [];
     } catch (error) {
       return [];
@@ -82,7 +80,7 @@ export const SearchService = {
     try {
       const recent = await SearchService.getRecentSearches();
       const updated = [query, ...recent.filter(q => q !== query)].slice(0, MAX_RECENT_SEARCHES);
-      defaultStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
+      localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
       return true;
     } catch (error) {
       return false;

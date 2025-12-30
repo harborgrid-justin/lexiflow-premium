@@ -146,7 +146,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
                 <p className={cn("text-xs font-bold leading-tight", theme.text.primary)}>{currentUser?.name || 'Guest'}</p>
                 <p className={cn("text-[10px] uppercase font-medium tracking-wide", theme.text.secondary)}>{currentUser?.role || 'User'}</p>
             </div>
-            <UserAvatar name={currentUser?.name || 'Guest'} size="sm" className="shadow-sm" />
+            <UserAvatar user={currentUser} className="shadow-sm" />
         </button>
       </div>
     </header>

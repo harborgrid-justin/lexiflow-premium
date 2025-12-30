@@ -15,8 +15,7 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React from 'react';
-import { Bell, Moon, Sun, Monitor, Globe, Grid } from 'lucide-react';
+import { Bell, Moon, Sun, Monitor } from 'lucide-react';
 
 // ========================================
 // INTERNAL DEPENDENCIES
@@ -45,7 +44,7 @@ interface PreferencePaneProps {
 // COMPONENT
 // ========================================
 export const PreferencePane = ({ profile }: PreferencePaneProps) => {
-  const { theme, setTheme, mode } = useTheme();
+  const { setTheme, mode } = useTheme();
 
   return (
     <div className="p-6 space-y-6 overflow-y-auto h-full animate-fade-in">

@@ -3,7 +3,6 @@ import { DataAnomaly, DedupeCluster, CleansingRule, QualityMetricHistory, DataPr
 /**
  * ? Migrated to backend API (2025-12-21)
  */
-import { dataPlatformApi } from '@/api/domains/data-platform.api';
 import { yieldToMain } from '@/utils/apiUtils';
 import { delay } from '@/utils/async';
 import { STORES, db } from '@/services/data/db';
@@ -23,10 +22,10 @@ export class DataQualityService {
 
     async getDedupeClusters(): Promise<DedupeCluster[]> { await delay(100); return []; }
     async getHistory(): Promise<QualityMetricHistory[]> { await delay(100); return []; }
-    async runCleansingJob(rules: CleansingRule[]): Promise<{ processed: number, fixed: number }> { await delay(800); return { processed: 1500, fixed: 42 }; }
-    async mergeCluster(clusterId: string, masterId: string): Promise<void> { await delay(100); }
-    async ignoreCluster(clusterId: string): Promise<void> { await delay(100); }
-    async applyFix(anomalyId: number): Promise<void> { await delay(100); }
+    async runCleansingJob(): Promise<{ processed: number, fixed: number }> { await delay(800); return { processed: 1500, fixed: 42 }; }
+    async mergeCluster(): Promise<void> { await delay(100); }
+    async ignoreCluster(): Promise<void> { await delay(100); }
+    async applyFix(): Promise<void> { await delay(100); }
     
     // Optimized Profiler with single-pass aggregation and yielding
     async getProfiles(): Promise<DataProfile[]> {

@@ -1,6 +1,5 @@
 
-import React from 'react';
-import { FileText, Download, Eye, Calendar, Loader2 } from 'lucide-react';
+import { FileText, Download, Eye, Calendar } from 'lucide-react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { AdaptiveLoader } from '@/components/molecules';
 import { Button } from '@/components/atoms';
@@ -10,10 +9,8 @@ import { cn } from '@/utils/cn';
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 import { useWindow } from '@/providers/WindowContext';
 import { DocumentPreviewPanel } from '../documents/viewer/DocumentPreviewPanel';
-import { ActionRow } from '@/components/organisms/_legacy/RefactoredCommon';
 
 interface PolicyItem {
   id: string;
@@ -25,7 +22,7 @@ interface PolicyItem {
 
 export function CompliancePolicies() {
   const { theme } = useTheme();
-  const { openWindow, closeWindow } = useWindow();
+  const { openWindow } = useWindow();
   
   // Performance Engine: Caching
   const { data: policies = [], isLoading } = useQuery<PolicyItem[]>(
@@ -63,12 +60,13 @@ export function CompliancePolicies() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-        <ActionRow 
-            title="Regulatory Policies" 
-            subtitle="Firm-wide compliance documents and SOPs."
-        >
+        <div className={cn("flex justify-between items-start p-4 rounded-lg border", theme.surface.default, theme.border.default)}>
+            <div>
+                <h3 className={cn("font-bold text-lg", theme.text.primary)}>Regulatory Policies</h3>
+                <p className={cn("text-sm", theme.text.secondary)}>Firm-wide compliance documents and SOPs.</p>
+            </div>
             <Button variant="outline">Upload New Version</Button>
-        </ActionRow>
+        </div>
 
         <TableContainer responsive="card">
             <TableHeader>

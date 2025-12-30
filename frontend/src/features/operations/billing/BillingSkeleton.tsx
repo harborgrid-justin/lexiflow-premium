@@ -4,7 +4,6 @@
  * Provides visual feedback during data loading with context-specific variants
  */
 
-import React from 'react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 

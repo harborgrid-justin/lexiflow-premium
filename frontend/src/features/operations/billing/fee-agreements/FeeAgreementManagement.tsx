@@ -9,8 +9,7 @@ import { Input, TextArea } from '@/components/atoms';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks';
-import { getTodayString } from '@/utils/dateUtils';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DataService } from '@/services';
 
@@ -31,17 +30,12 @@ interface FeeAgreement {
   createdAt: string;
 }
 
-/**
- * @deprecated Mock data - use backend API via DataService.feeAgreements
- */
-const mockAgreements: FeeAgreement[] = [];
-
 export const FeeAgreementManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  
+
   // Fetch fee agreements from backend API
-  const { data: agreements = [], isLoading, refetch } = useQuery<FeeAgreement[]>(
+  const { data: agreements = [], refetch } = useQuery<FeeAgreement[]>(
     queryKeys.billing.feeAgreements?.() || ['billing', 'feeAgreements'],
     () => DataService.feeAgreements.getAll()
   );

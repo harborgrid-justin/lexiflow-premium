@@ -1,4 +1,15 @@
-
+// Workaround for broken type definitions in @google/generative-ai
+// The package exports SchemaType at runtime but the .d.ts file has empty export block
+declare module "@google/generative-ai" {
+  export enum SchemaType {
+    STRING = "string",
+    NUMBER = "number",
+    INTEGER = "integer",
+    BOOLEAN = "boolean",
+    ARRAY = "array",
+    OBJECT = "object"
+  }
+}
 import { SchemaType } from "@google/generative-ai";
 
 // Type alias for backward compatibility

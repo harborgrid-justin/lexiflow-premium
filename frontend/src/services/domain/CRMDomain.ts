@@ -84,8 +84,7 @@
  * - Analytics calculated from backend data
  */
 
-import { Client, Case, EntityId, CaseId, UserId, MatterType, CaseStatus } from '@/types';
-import { adminApi } from "@/api/domains/admin.api";
+import { EntityId, UserId, MatterType, CaseStatus, ClientType, ClientStatus, PaymentTerms } from '@/types';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from "@/types/integration-types";
 import { delay } from '@/utils/async';
@@ -102,31 +101,6 @@ interface Lead {
   stage: string;
   value: string;
   source?: string;
-}
-
-// =============================================================================
-// VALIDATION (Private)
-// =============================================================================
-
-/**
- * Validate lead ID parameter
- * @private
- */
-function validateLeadId(id: string, methodName: string): void {
-  if (!id || false) {
-    throw new Error(`[CRMService.${methodName}] Invalid id parameter`);
-  }
-}
-
-/**
- * Validate stage parameter
- * @private
- */
-function validateStage(stage: string, methodName: string): void {
-  const validStages = ['New Lead', 'Qualified', 'Proposal Sent', 'Negotiating', 'Matter Created', 'Lost'];
-  if (!stage || !validStages.includes(stage)) {
-    throw new Error(`[CRMService.${methodName}] Invalid stage parameter (must be one of: ${validStages.join(', ')})`);
-  }
 }
 
 // =============================================================================
@@ -148,9 +122,9 @@ export const CRMService = {
         const leads = await CRMService.getLeads();
 
         // Dynamic Calculation based on DB state
-        const pipelineValue = leads.reduce((acc: number, l: unknown) => acc + (parseFloat(l.value.replace(/[^0-9.]/g, '')) || 0), 0);
         const bySource = leads.reduce((acc: Record<string, number>, l: unknown) => {
-            acc[l.source || 'Referral'] = (acc[l.source || 'Referral'] || 0) + 1;
+            const lead = l as Lead;
+            acc[lead.source || 'Referral'] = (acc[lead.source || 'Referral'] || 0) + 1;
             return acc;
         }, {} as Record<string, number>);
 
@@ -215,8 +189,8 @@ export const CRMService = {
         // 1. Create Client via backend API
         const newClient = await clientsApi.create({
             name: lead.client,
-            clientType: 'corporation',
-            status: 'active',
+            clientType: ClientType.CORPORATION,
+            status: ClientStatus.ACTIVE,
             industry: 'General',
             totalBilled: 0,
             currentBalance: 0,
@@ -226,7 +200,7 @@ export const CRMService = {
             isVip: false,
             requiresConflictCheck: true,
             hasRetainer: false,
-            paymentTerms: 'net_30'
+            paymentTerms: PaymentTerms.NET_30
         });
 
         // 2. Create Case via backend API

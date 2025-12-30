@@ -5,6 +5,7 @@
 
 import { LegalRule } from '@/types';
 import { Repository } from '@/services/core/Repository';
+import { ValidationError } from '@/services/core/errors';
 import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
@@ -74,9 +75,9 @@ export class RuleRepository extends Repository<LegalRule> {
         const rules = await this.getAll();
         const lowerQuery = query.toLowerCase();
         return rules.filter(r =>
-            (r as Record<string, unknown>).title?.toLowerCase().includes(lowerQuery) ||
+            ((r as unknown as Record<string, unknown>).title as string | undefined)?.toLowerCase().includes(lowerQuery) ||
             r.description?.toLowerCase().includes(lowerQuery) ||
-            (r as Record<string, unknown>).ruleNumber?.toLowerCase().includes(lowerQuery) ||
+            ((r as unknown as Record<string, unknown>).ruleNumber as string | undefined)?.toLowerCase().includes(lowerQuery) ||
             r.code?.toLowerCase().includes(lowerQuery) ||
             r.name?.toLowerCase().includes(lowerQuery)
         );

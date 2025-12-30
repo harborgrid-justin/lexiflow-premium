@@ -1,19 +1,15 @@
 
-import React, { useState, Suspense, lazy, useTransition } from 'react';
+import React, { useState, Suspense, useTransition } from 'react';
 import { Client, EntityId, ClientStatus, PaymentTerms } from '@/types';
-import {
-  UserPlus, LayoutDashboard, List, GitPullRequest,
-  BarChart3, Users, TrendingUp
-} from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 import { ClientIntakeModal } from './ClientIntakeModal';
 import { ClientPortalModal } from './ClientPortalModal';
 import { Button } from '@/components/atoms';
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
+import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules';
-// ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/utils/cn';
 import { CRM_TAB_CONFIG, CRMView } from '@/config/tabs.config';
 import { ClientCRMContent } from './ClientCRMContent';

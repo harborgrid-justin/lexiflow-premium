@@ -10,8 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
-import { Briefcase, MapPin, Mail, Phone, Award, ShieldCheck, Clock, Scale } from 'lucide-react';
+import { MapPin, Mail, Phone, ShieldCheck, Scale } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

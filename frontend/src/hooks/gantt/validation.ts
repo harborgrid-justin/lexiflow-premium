@@ -4,7 +4,6 @@ import type { TaskDependency, ValidationResult, GanttTask } from './types';
  * Check for circular dependencies using DFS
  */
 export function hasCircularDependency(
-  fromTaskId: string,
   toTaskId: string,
   dependencies: TaskDependency[]
 ): boolean {
@@ -55,7 +54,7 @@ export function validateDependency(
     errors.push('Task cannot depend on itself');
   }
 
-  if (hasCircularDependency(dependency.fromTaskId, dependency.toTaskId, dependencies)) {
+  if (hasCircularDependency(dependency.toTaskId, dependencies)) {
     errors.push('This dependency would create a circular dependency');
   }
 

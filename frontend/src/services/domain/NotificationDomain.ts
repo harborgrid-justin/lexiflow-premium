@@ -6,7 +6,6 @@
  */
 
 import { communicationsApi } from '@/api/domains/communications.api';
-import { delay } from '@/utils/async';
 import { defaultStorage } from '@/services';
 
 interface Notification {

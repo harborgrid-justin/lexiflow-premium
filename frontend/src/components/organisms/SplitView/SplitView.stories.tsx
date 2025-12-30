@@ -15,8 +15,8 @@ type Story = StoryObj<typeof SplitView>;
 
 export const Default: Story = {
   args: {
-  "sidebar": "<div>Sample Content</div>",
-  "content": "<div>Sample Content</div>",
+  sidebar: undefined,
+  content: undefined,
   "showSidebarOnMobile": true,
   "className": "Sample Text"
 },

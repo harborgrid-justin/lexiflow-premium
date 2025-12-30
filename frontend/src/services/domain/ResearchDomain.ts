@@ -8,14 +8,14 @@
  * @module services/domain/ResearchDomain
  * @architecture Backend-First Legal Research with API Integration
  * @author LexiFlow Engineering Team
-import { OperationError } from '@/services/core/errors'; * @since 2025-12-22
+ * @since 2025-12-22
  * @status PRODUCTION READY
  * 
  * Provides case law search, citation validation, and legal research with
  * backend API integration for legal databases.
  */
 
-import { analyticsApi } from '@/api/domains/analytics.api';
+import { OperationError } from '@/services/core/errors';
 import { delay } from '@/utils/async';
 import { isBackendApiEnabled } from '@/api';
 import { apiClient } from '@/services/infrastructure/apiClient';
@@ -60,7 +60,7 @@ export const ResearchService = {
         createdAt: new Date().toISOString()
       });
     }
-    throw new OperationError('[ResearchService] Backend API required for add operation');
+    throw new OperationError('ResearchService.add', 'Backend API required for add operation');
   },
 
   update: async (id: string, updates: unknown) => {
@@ -70,7 +70,7 @@ export const ResearchService = {
         updatedAt: new Date().toISOString()
       });
     }
-    throw new OperationError('[ResearchService] Backend API required for update operation');
+    throw new OperationError('ResearchService.update', 'Backend API required for update operation');
   },
   
   delete: async (id: string) => {
@@ -78,7 +78,7 @@ export const ResearchService = {
       await apiClient.delete(`/citations/${id}`);
       return;
     }
-    throw new OperationError('[ResearchService] Backend API required for delete operation');
+    throw new OperationError('ResearchService.delete', 'Backend API required for delete operation');
   },
   
   // Research specific methods

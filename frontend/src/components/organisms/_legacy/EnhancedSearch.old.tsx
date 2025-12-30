@@ -229,7 +229,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
         };
       })
       .filter((r): r is NonNullable<typeof r> => r !== null)
-      .sort((a: unknown, b: unknown) => (b?.score || 0) - (a?.score || 0))
+      .sort((a, b) => ((b as { score?: number })?.score || 0) - ((a as { score?: number })?.score || 0))
       .slice(0, maxSuggestions);
     
     return results;
@@ -462,7 +462,7 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
                       "text-xs mt-0.5",
                       selectedIndex === idx ? theme.primary.text : theme.text.tertiary
                     )}>
-                      {item.metadata.description}
+                      {String(item.metadata.description || '')}
                     </p>
                   )}
                 </div>

@@ -75,6 +75,7 @@ import { StorageUtils } from '@/utils/storage';
 
 // Types
 import { Case, Client, WorkflowTask, EvidenceItem, User, LegalDocument, DocketEntry, Motion, Clause, LegalRule } from '@/types';
+import { ValidationError } from '@/services/core/errors';
 
 // ============================================================================
 // TYPES & INTERFACES

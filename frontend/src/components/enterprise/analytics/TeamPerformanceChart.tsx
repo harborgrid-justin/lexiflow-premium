@@ -16,7 +16,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   BarChart,
   Bar,
@@ -26,14 +26,12 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  Cell,
   TooltipProps
 } from 'recharts';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/providers/ThemeContext';
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 
 // ============================================================================
@@ -110,11 +108,9 @@ export const TeamPerformanceChart: React.FC<TeamPerformanceChartProps> = ({
   onBarClick
 }) => {
   const chartTheme = useChartTheme();
-  const { theme } = useTheme();
-  const [activeBar, setActiveBar] = useState<string | null>(null);
 
   // Default metric configuration
-  const metricConfig = useMemo(() => ({
+  const metricConfig: Record<string, { label: string; color: string }> = useMemo(() => ({
     totalCases: {
       label: 'Total Cases',
       color: colorMap?.totalCases || chartTheme.colors.primary
@@ -157,7 +153,8 @@ export const TeamPerformanceChart: React.FC<TeamPerformanceChartProps> = ({
   }, [data, sortBy, sortOrder]);
 
   // Custom tooltip
-  const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload, label }) => {
+  const CustomTooltip = (props: TooltipProps<number, string>) => {
+    const { active, payload, label } = props as { active?: boolean; payload?: Array<{ dataKey?: string; value?: number; color?: string }>; label?: string };
     if (!active || !payload || payload.length === 0) return null;
 
     return (
@@ -165,7 +162,7 @@ export const TeamPerformanceChart: React.FC<TeamPerformanceChartProps> = ({
         <p style={{ fontWeight: 600, marginBottom: '8px', fontSize: '14px' }}>
           {label}
         </p>
-        {payload.map((entry, index) => {
+        {payload.map((entry: { dataKey?: string; value?: number; color?: string }, index: number) => {
           const metricKey = entry.dataKey as string;
           const metricLabel = metricConfig[metricKey]?.label || metricKey;
 
@@ -180,7 +177,7 @@ export const TeamPerformanceChart: React.FC<TeamPerformanceChartProps> = ({
                 }}
               />
               <span style={{ fontSize: '13px' }}>
-                {metricLabel}: <strong>{formatValue(entry.value as number, metricKey)}</strong>
+                {metricLabel}: <strong>{formatValue(entry.value || 0, metricKey)}</strong>
               </span>
             </div>
           );
@@ -192,7 +189,7 @@ export const TeamPerformanceChart: React.FC<TeamPerformanceChartProps> = ({
   // Handle bar click
   const handleBarClick = (data: unknown, metric: string) => {
     if (onBarClick) {
-      onBarClick(data, metric);
+      onBarClick(data as TeamMemberPerformance, metric);
     }
   };
 
@@ -306,8 +303,6 @@ export const TeamPerformanceChart: React.FC<TeamPerformanceChartProps> = ({
               stackId={type === 'stacked' ? 'stack' : undefined}
               radius={type === 'grouped' ? [4, 4, 0, 0] : undefined}
               onClick={(data) => handleBarClick(data, metric)}
-              onMouseEnter={() => setActiveBar(metric)}
-              onMouseLeave={() => setActiveBar(null)}
               style={{ cursor: onBarClick ? 'pointer' : 'default' }}
             />
           );

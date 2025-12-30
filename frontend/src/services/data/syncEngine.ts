@@ -13,7 +13,7 @@
  */
 
 import { defaultWindowAdapter } from '../infrastructure/adapters/WindowAdapter';
-import { isBackendApiEnabled } from '../api';
+import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
 /**
  * (Documentation continued below imports)
@@ -133,7 +133,6 @@ import { StorageUtils } from '@/utils/storage';
 import { LinearHash } from '@/utils/datastructures/linearHash';
 import { SYNC_CACHE_MAX_SIZE } from '@/config/master.config';
 import { apiClient } from '@/services/infrastructure/apiClient';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                            TYPE DEFINITIONS
@@ -193,7 +192,6 @@ const MAX_RETRY_ATTEMPTS = 3;
 const BASE_RETRY_DELAY = 1000;
 
 /** Backend sync endpoint base URL */
-const SYNC_API_BASE = '/api/sync';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                         SINGLETON CACHE INSTANCE

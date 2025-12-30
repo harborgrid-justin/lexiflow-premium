@@ -28,9 +28,7 @@ import { MetricCard } from '@/components/molecules';
 // Services & Utils
 import { DataService } from '@/services';
 import { ChartColorService } from '@/services/theme/chartColorService';
-import { getChartTheme } from '@/utils/chartConfig';
 // ✅ Migrated to backend API (2025-12-21)
-import { cn } from '@/utils/cn';
 
 // Types
 import { PleadingDocument } from '@/types';
@@ -41,7 +39,6 @@ import { PleadingDocument } from '@/types';
 
 export const PleadingAnalytics: React.FC = () => {
     const { theme, mode } = useTheme();
-    const colors = ChartColorService.getCategoryColors(mode);
 
     const { data: pleadings = [] } = useQuery<PleadingDocument[]>(
         ['pleadings', 'all'],
@@ -59,11 +56,11 @@ export const PleadingAnalytics: React.FC = () => {
 
         // Clause usage (mock data) - use theme-aware colors
         const clauseUsage = [
-            { name: 'Jurisdiction', count: 45, color: colors[0] },
-            { name: 'Summary Judgment', count: 32, color: colors[1] },
-            { name: 'Discovery', count: 28, color: colors[2] },
-            { name: 'Damages', count: 25, color: colors[3] },
-            { name: 'Relief Sought', count: 42, color: colors[4] },
+            { name: 'Jurisdiction', count: 45, color: ChartColorService.getColorByIndex(0, mode) },
+            { name: 'Summary Judgment', count: 32, color: ChartColorService.getColorByIndex(1, mode) },
+            { name: 'Discovery', count: 28, color: ChartColorService.getColorByIndex(2, mode) },
+            { name: 'Damages', count: 25, color: ChartColorService.getColorByIndex(3, mode) },
+            { name: 'Relief Sought', count: 42, color: ChartColorService.getColorByIndex(4, mode) },
         ];
 
         // Monthly trend (mock data)
@@ -94,7 +91,7 @@ export const PleadingAnalytics: React.FC = () => {
             monthlyTrend,
             motionTypes,
         };
-    }, [pleadings, mode, colors]);
+    }, [pleadings, mode]);
 
     return (
         <div className="h-full overflow-y-auto p-6 space-y-6">

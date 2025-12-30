@@ -1,4 +1,4 @@
-import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, UUID, PermissionLevel, TenantConfig, Connector, GovernanceRule, GovernancePolicy, ApiServiceSpec } from '@/types';
+import { AuditLogEntry, RLSPolicy, RolePermission, ApiKey, PipelineJob, DataAnomaly, TenantConfig, Connector, GovernanceRule, GovernancePolicy, ApiServiceSpec} from '@/types';
 /**
  * ? Migrated to backend API (2025-12-21)
  */
@@ -105,7 +105,7 @@ export const AdminService = {
         // In production, this would save via data platform API
         return policy;
     },
-    deleteRLSPolicy: async (id: string): Promise<void> => {
+    deleteRLSPolicy: async (): Promise<void> => {
         // In production, this would delete via data platform API
         await delay(100);
     },
@@ -130,17 +130,13 @@ export const AdminService = {
         return [{
             id: 'key_1',
             name: 'Default Key',
-            keyPrefix: 'pk_live_ab12...',
-            keyHash: '',
+            key: 'pk_live_ab12...',
             scopes: [],
-            rateLimit: 1000,
-            requestCount: 0,
-            isActive: true,
-            userId: 'usr-admin-justin',
-            createdAt: '2024-01-01',
-            status: 'Active',
+            status: 'active',
             lastUsedAt: undefined,
-            expiresAt: undefined
+            expiresAt: undefined,
+            createdAt: '2024-01-01',
+            updatedAt: '2024-01-01'
         }];
     },
     

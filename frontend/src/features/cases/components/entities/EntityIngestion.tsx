@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
-import { UploadCloud, FileSpreadsheet, CheckCircle, RefreshCw, Link, AlertTriangle } from 'lucide-react';
+import React from 'react';
+import { UploadCloud, CheckCircle, RefreshCw, Link, AlertTriangle } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -32,8 +32,6 @@ import { cn } from '@/utils/cn';
 
 export const EntityIngestion: React.FC = () => {
   const { theme } = useTheme();
-  const [dragActive, setDragActive] = useState(false);
-  const [uploadStep, setUploadStep] = useState(0);
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 py-8 animate-fade-in">

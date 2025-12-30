@@ -78,12 +78,12 @@ export const PleadingDrafts: React.FC<PleadingDraftsProps> = ({ pleadings, onEdi
     );
 
     return (
-         <VirtualGrid 
+         <VirtualGrid
             items={pleadings}
             height="100%"
             itemHeight={180}
             itemWidth={250}
-            renderItem={renderItem}
+            renderItem={(item: unknown) => renderItem(item as PleadingDocument)}
             gap={16}
             emptyMessage="No pleadings found. Create one to get started."
         />

@@ -1,9 +1,7 @@
 
 import React, { useState, Suspense, lazy } from 'react';
 import { Client } from '@/types';
-import { X, Lock, FileText, MessageSquare, UploadCloud, Bell, Activity, Shield } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
+import { X, Lock, FileText, MessageSquare, UploadCloud, Activity, Shield } from 'lucide-react';
 import { Button } from '@/components/atoms';
 import { Tabs } from '@/components/molecules';
 import { LazyLoader } from '@/components/molecules';
@@ -21,7 +19,6 @@ interface ClientPortalModalProps {
 }
 
 export const ClientPortalModal: React.FC<ClientPortalModalProps> = ({ client, onClose }) => {
-  const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('documents');
 
   const renderContent = () => {

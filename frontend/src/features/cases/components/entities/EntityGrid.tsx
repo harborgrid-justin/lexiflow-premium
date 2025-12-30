@@ -113,10 +113,10 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
     <div className="space-y-4 h-full flex flex-col">
         <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm shrink-0", theme.surface.default, theme.border.default)}>
             <div className="w-full max-w-md relative">
-                <SearchInputBar 
-                    value={searchTerm} 
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)} 
-                    placeholder="Search entities..." 
+                <SearchInputBar
+                    value={searchTerm}
+                    onChange={(value: string) => setSearchTerm(value)}
+                    placeholder="Search entities..."
                 />
                 {isSearching && <div className="absolute right-3 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-blue-500"/></div>}
             </div>

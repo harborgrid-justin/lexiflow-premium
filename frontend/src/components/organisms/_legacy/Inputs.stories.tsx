@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Inputs } from './Inputs';
+import { Input } from './Inputs';
 
-const meta: Meta<typeof Inputs> = {
+const meta: Meta<typeof Input> = {
   title: 'Components/Organisms/_legacy/Inputs',
-  component: Inputs,
+  component: Input,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -11,7 +11,7 @@ const meta: Meta<typeof Inputs> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Inputs>;
+type Story = StoryObj<typeof Input>;
 
 export const Default: Story = {
   args: {},

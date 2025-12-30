@@ -111,12 +111,12 @@ export class TypedEventEmitter<TEvents extends Record<string, unknown>> {
     if (!this.listeners.has(event)) {
       this.listeners.set(event, new Set());
     }
-    this.listeners.get(event)!.add(listener);
+    this.listeners.get(event)!.add(listener as any);
 
     return () => {
       const eventListeners = this.listeners.get(event);
       if (eventListeners) {
-        eventListeners.delete(listener);
+        eventListeners.delete(listener as any);
         if (eventListeners.size === 0) {
           this.listeners.delete(event);
         }

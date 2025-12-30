@@ -18,6 +18,6 @@ export const Default: Story = {
   "x": 42,
   "y": 42,
   "items": [],
-  "onClose": {}
+  onClose: () => {}
 },
 };

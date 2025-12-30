@@ -17,7 +17,7 @@ export const Default: Story = {
   args: {
   "label": "Sample Text",
   "value": "Sample Text",
-  "onChange": "Sample Text",
+  "onChange": () => {},
   "options": [],
   "className": "Sample Text"
 },

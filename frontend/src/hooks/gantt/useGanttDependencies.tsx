@@ -65,8 +65,8 @@ export function useGanttDependencies(
     return validateDependency(dependency, taskMap, dependencies);
   }, [taskMap, dependencies]);
 
-  const hasCircular = useCallback((fromTaskId: string, toTaskId: string) => {
-    return hasCircularDependency(fromTaskId, toTaskId, dependencies);
+  const hasCircular = useCallback((toTaskId: string) => {
+    return hasCircularDependency(toTaskId, dependencies);
   }, [dependencies]);
 
   const calcCriticalPath = useCallback(() => {

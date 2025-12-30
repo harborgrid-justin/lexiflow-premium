@@ -267,8 +267,8 @@ export const AnalyticsFilters: React.FC<AnalyticsFiltersProps> = ({
   const containerStyle: React.CSSProperties = {
     padding: '20px',
     borderRadius: '8px',
-    backgroundColor: theme.colors.background.secondary,
-    border: `1px solid ${theme.colors.border.primary}`,
+    backgroundColor: theme.surface?.raised || '#ffffff',
+    border: `1px solid ${theme.border?.default || '#e2e8f0'}`,
     display: 'flex',
     flexDirection: 'column',
     gap: '20px'
@@ -283,16 +283,16 @@ export const AnalyticsFilters: React.FC<AnalyticsFiltersProps> = ({
   const labelStyle: React.CSSProperties = {
     fontSize: '14px',
     fontWeight: 600,
-    color: theme.colors.text.primary,
+    color: theme.text?.primary || '#1e293b',
     marginBottom: '8px'
   };
 
   const inputStyle: React.CSSProperties = {
     padding: '8px 12px',
     borderRadius: '6px',
-    border: `1px solid ${theme.colors.border.primary}`,
-    backgroundColor: theme.colors.background.primary,
-    color: theme.colors.text.primary,
+    border: `1px solid ${theme.border?.default || '#e2e8f0'}`,
+    backgroundColor: theme.surface?.input || '#ffffff',
+    color: theme.text?.primary || '#1e293b',
     fontSize: '14px',
     outline: 'none'
   };
@@ -310,9 +310,9 @@ export const AnalyticsFilters: React.FC<AnalyticsFiltersProps> = ({
 
   const presetButtonStyle = (active: boolean): React.CSSProperties => ({
     ...buttonStyle,
-    backgroundColor: active ? theme.colors.primary.main : 'transparent',
-    color: active ? '#ffffff' : theme.colors.text.primary,
-    border: `1px solid ${active ? theme.colors.primary.main : theme.colors.border.primary}`
+    backgroundColor: active ? (theme.primary?.main || '#3b82f6') : 'transparent',
+    color: active ? '#ffffff' : (theme.text?.primary || '#1e293b'),
+    border: `1px solid ${active ? (theme.primary?.main || '#3b82f6') : (theme.border?.default || '#e2e8f0')}`
   });
 
   const checkboxStyle: React.CSSProperties = {
@@ -322,7 +322,7 @@ export const AnalyticsFilters: React.FC<AnalyticsFiltersProps> = ({
 
   const optionLabelStyle: React.CSSProperties = {
     fontSize: '14px',
-    color: theme.colors.text.primary,
+    color: theme.text?.primary || '#1e293b',
     cursor: loading ? 'not-allowed' : 'pointer',
     display: 'flex',
     alignItems: 'center'
@@ -413,8 +413,8 @@ export const AnalyticsFilters: React.FC<AnalyticsFiltersProps> = ({
           style={{
             ...buttonStyle,
             backgroundColor: 'transparent',
-            color: theme.colors.primary.main,
-            border: `1px solid ${theme.colors.primary.main}`,
+            color: theme.primary?.main || '#3b82f6',
+            border: `1px solid ${theme.primary?.main || '#3b82f6'}`,
             alignSelf: 'flex-start'
           }}
         >

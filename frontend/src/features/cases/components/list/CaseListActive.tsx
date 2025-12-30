@@ -113,7 +113,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
   const { mutate: archiveCase } = useMutation(
       DataService.cases.archive,
       {
-          onSuccess: (_, id) => {
+          onSuccess: () => {
               notify.success("Case archived successfully");
               queryClient.invalidate(queryKeys.cases.all());
           }
@@ -123,7 +123,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
   const { mutate: flagCase } = useMutation(
       DataService.cases.flag,
       {
-          onSuccess: (_, id) => {
+          onSuccess: () => {
               notify.warning("Case flagged for risk review");
           }
       }
@@ -158,7 +158,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
   };
 
   // Virtualized Row Renderer (Mobile)
-  const renderMobileRow = (c: Case, index: number) => (
+  const renderMobileRow = (c: Case) => (
     <div key={c.id} className="px-1 py-1.5 h-[120px]">
         <SwipeableItem 
             onSwipeLeft={() => handleArchiveCase(c)}

@@ -24,7 +24,6 @@ const FirmProfile = lazy(() => import('./FirmProfile').then(m => ({ default: m.F
 const UserManagement = lazy(() => import('./users/UserManagement').then(m => ({ default: m.UserManagement })));
 const SecurityCompliance = lazy(() => import('./security').then(m => ({ default: m.SecurityCompliance })));
 const AdminSecurity = lazy(() => import('./AdminSecurity').then(m => ({ default: m.AdminSecurity })));
-const AdminDatabaseControl = lazy(() => import('./data/AdminDatabaseControl').then(m => ({ default: m.AdminDatabaseControl })));
 const AdminIntegrations = lazy(() => import('./integrations/AdminIntegrations').then(m => ({ default: m.AdminIntegrations })));
 const AdminAuditLog = lazy(() => import('./AdminAuditLog').then(m => ({ default: m.AdminAuditLog })));
 const AdminPlatformManager = lazy(() => import('./platform/AdminPlatformManager').then(m => ({ default: m.AdminPlatformManager })));

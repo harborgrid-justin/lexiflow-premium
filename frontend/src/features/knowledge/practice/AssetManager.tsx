@@ -28,7 +28,6 @@ import { useModalState } from '@/hooks';
 import { getTodayString } from '@/utils/dateUtils';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { Button } from '@/components/atoms';
 import { Badge } from '@/components/atoms';
 import { ConfirmDialog } from '@/components/molecules';
@@ -87,9 +86,9 @@ export const AssetManager: React.FC = () => {
       const asset: FirmAsset = {
           id: `AST-${Date.now()}`,
           name: newAsset.name,
-          type: (newAsset.type as Record<string, unknown>) || 'Hardware',
+          type: (newAsset.type as any) || 'Hardware',
           assignedTo: newAsset.assignedTo || 'Unassigned',
-          status: (newAsset.status as Record<string, unknown>) || 'Active',
+          status: (newAsset.status as any) || 'Active',
           purchaseDate: newAsset.purchaseDate || getTodayString(),
           value: Number(newAsset.value) || 0,
           serialNumber: newAsset.serialNumber

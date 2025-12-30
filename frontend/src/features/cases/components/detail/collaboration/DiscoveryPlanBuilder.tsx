@@ -19,7 +19,7 @@ import { Badge } from '@/components/atoms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services';

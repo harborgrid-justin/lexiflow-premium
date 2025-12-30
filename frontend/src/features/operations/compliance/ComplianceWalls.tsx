@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Lock, CheckCircle, Plus, Users, Briefcase } from 'lucide-react';
 import { EthicalWall } from '@/types';
 import { Card } from '@/components/molecules';

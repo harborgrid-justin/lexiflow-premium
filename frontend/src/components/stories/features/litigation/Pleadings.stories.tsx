@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { CaseId, DocumentId, Pleading, Clause, PleadingDocument } from '@/types';
+import type { PleadingDocument } from '@/types';
 import { PleadingBuilder } from '../../../../features/litigation/pleadings/PleadingBuilder';
 import { PleadingDashboard } from '@features/litigation/pleadings';
 import PleadingDesigner from '../../../../features/litigation/pleadings/PleadingDesigner';
@@ -103,8 +103,8 @@ export const WithTemplate: Story = {
 export const Designer: StoryObj<Meta<typeof PleadingDesigner>> = {
   render: () => {
     const mockPleading: PleadingDocument = {
-      id: 'pleading-123' as Record<string, unknown>,
-      caseId: 'case-123' as Record<string, unknown>,
+      id: 'pleading-123' as any,
+      caseId: 'case-123' as any,
       title: 'Motion to Dismiss',
       status: 'Draft',
       filingStatus: 'Pre-Filing',

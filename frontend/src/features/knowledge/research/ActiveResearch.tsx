@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { GeminiService } from '@/services/features/research/geminiService';
-import { ResearchSession, UserId } from '@/types';
+import { ResearchSession } from '@/types';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DataService } from '@/services';
@@ -15,7 +14,7 @@ import { queryClient } from '@/services/infrastructure/queryClient';
 
 export const ActiveResearch: React.FC = () => {
   const { theme } = useTheme();
-  const { openWindow, closeWindow } = useWindow();
+  const { openWindow } = useWindow();
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
@@ -30,7 +29,7 @@ export const ActiveResearch: React.FC = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-        const { newSession, updatedHistory } = await performSearch(query, history);
+        const { newSession } = await performSearch(query, history);
         queryClient.invalidate(queryKeys.research.history());
         setActiveSessionId(newSession.id);
         setQuery('');

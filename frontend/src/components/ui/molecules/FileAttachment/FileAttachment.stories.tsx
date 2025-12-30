@@ -19,9 +19,9 @@ export const Default: Story = {
   "size": "Sample Text",
   "type": "Sample Text",
   "date": "Sample Text",
-  "onDownload": {},
-  "onPreview": {},
+  onDownload: () => {},
+  onPreview: () => {},
   "className": "Sample Text",
-  "variant": {}
+  variant: undefined
 },
 };

@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useRef, useId } from 'react';
+import React, { useRef } from 'react';
 import { UploadCloud, CheckCircle, Loader2, Link, ShieldCheck } from 'lucide-react';
 
 // ============================================================================
@@ -48,8 +48,6 @@ export const FileUploadZone: React.FC<FileUploadZoneProps> = ({
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { theme } = useTheme();
-  const inputId = useId();
-  const labelId = useId();
 
   return (
     <div

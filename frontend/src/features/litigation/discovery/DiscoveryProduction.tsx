@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Upload, FileText, Check, Settings, ShieldCheck, Database, Printer, HardDrive } from 'lucide-react';
+import { ArrowLeft, Upload, FileText, Check, ShieldCheck, Database, Printer, HardDrive } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -23,7 +23,7 @@ import { Card } from '@/components/molecules';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
-import { useQuery, queryClient } from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Services & Utils
@@ -40,14 +40,12 @@ const loadDocumentService = async () => {
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { DiscoveryRequest } from '@/types';
 import { DiscoveryProductionProps } from './types';
 
 export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ request, onBack }) => {
   const { theme } = useTheme();
   const [uploading, setUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
-  const [validationErrors, setValidationErrors] = useState<Array<{ path: string; message: string }>>([]);
   
   // Cache production config with 24h TTL
   const { data: cachedConfig } = useQuery(
@@ -113,7 +111,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
       // Validate config before finalizing
       const validation = validateProductionConfigSafe(config);
       if (!validation.success) {
-          setValidationErrors(validation.error.errors);
+          console.error('Validation errors:', validation.error.errors);
           return;
       }
       alert('Production job queued. You will be notified upon completion.');

@@ -33,7 +33,6 @@ export interface KPICardProps {
 export const KPICard: React.FC<KPICardProps> = ({
   title,
   value,
-  previousValue,
   prefix = '',
   suffix = '',
   icon: Icon,

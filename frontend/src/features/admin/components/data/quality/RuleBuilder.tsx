@@ -1,11 +1,10 @@
 
-import React, { useState, useMemo, useEffect } from 'react';
-import { X, Plus, Trash2, Play, Save, Code, CheckCircle, Database } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Plus, Trash2, Play, Save, Code, CheckCircle, Database } from 'lucide-react';
 import { Button } from '@/components/atoms';
 import { Input, TextArea } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Modal } from '@/components/molecules';
 
 export interface RuleCondition {
   id: string;

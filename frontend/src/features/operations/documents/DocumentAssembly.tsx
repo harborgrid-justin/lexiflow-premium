@@ -1,7 +1,7 @@
 
 // components/DocumentAssembly.tsx
-import React, { useState, useEffect } from 'react';
-import { X, Wand2, Activity, Minus } from 'lucide-react';
+import { useState } from 'react';
+import { X, Wand2, Minus } from 'lucide-react';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { LegalDocument, DocumentId, CaseId } from '@/types';
 import { useWindow } from '@/providers/WindowContext';

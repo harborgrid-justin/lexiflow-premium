@@ -58,7 +58,6 @@ export function Modal({
   const { theme } = useTheme();
   // React 18: useId generates stable, unique IDs (SSR-safe)
   const titleId = React.useId();
-  const descriptionId = React.useId();
   const modalRef = useRef<HTMLDivElement>(null);
   
   useScrollLock(titleId, isOpen);

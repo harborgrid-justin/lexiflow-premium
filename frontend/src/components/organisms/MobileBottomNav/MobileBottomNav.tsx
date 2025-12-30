@@ -58,13 +58,14 @@ export const MobileBottomNav = React.memo<MobileBottomNavProps>(({ activeView, s
     )}>
       <div className="flex justify-around items-center h-16 px-2">
         {primaryNavItems.map((item: unknown) => {
-          const Icon = item.icon;
-          const isActive = activeView === item.id;
-          
+          const typedItem = item as { id: AppView; label: string; icon: React.ComponentType<{ className?: string }> };
+          const Icon = typedItem.icon;
+          const isActive = activeView === typedItem.id;
+
           return (
             <button
-              key={item.id}
-              onClick={() => setActiveView(item.id as AppView)}
+              key={typedItem.id}
+              onClick={() => setActiveView(typedItem.id as AppView)}
               className={cn(
                 "flex flex-col items-center justify-center flex-1 h-full transition-colors rounded-lg",
                 isActive ? theme.primary.text : theme.text.secondary,
@@ -76,7 +77,7 @@ export const MobileBottomNav = React.memo<MobileBottomNavProps>(({ activeView, s
                 "text-[10px] font-medium",
                 isActive ? theme.primary.text : theme.text.tertiary
               )}>
-                {item.label}
+                {typedItem.label}
               </span>
             </button>
           );

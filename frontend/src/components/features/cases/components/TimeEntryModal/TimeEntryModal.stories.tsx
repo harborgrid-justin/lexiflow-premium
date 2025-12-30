@@ -17,7 +17,7 @@ export const Default: Story = {
   args: {
     isOpen: true,
     onClose: () => {},
-    caseId: "case-1",
-    onSubmit: (entry: unknown) => { console.log(entry); },
+    caseId: 'case-1' as any,
+    onSave: (entry: unknown) => { console.log(entry); },
   },
 };

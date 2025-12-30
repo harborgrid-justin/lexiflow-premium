@@ -17,12 +17,11 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { 
-  Save, 
-  AlertCircle, 
+import {
+  Save,
+  AlertCircle,
   CheckCircle,
   FileText,
-  Building2,
   Users,
   DollarSign,
   Scale,
@@ -259,7 +258,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   );
 
   // Load existing matter/case if editing
-  const { isLoading, isError: loadError } = useQuery<Matter | Case | null>(
+  const { isLoading } = useQuery<Matter | Case | null>(
     id ? queryKeys.cases.matters.detail(id) : ['no-matter'],
     () => {
       if (!id) return Promise.resolve(null);

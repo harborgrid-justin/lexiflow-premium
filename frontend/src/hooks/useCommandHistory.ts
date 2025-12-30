@@ -34,7 +34,7 @@
  * @module hooks/useCommandHistory
  */
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { CommandHistory, Command } from '@/services';
 
 export interface UseCommandHistoryReturn {

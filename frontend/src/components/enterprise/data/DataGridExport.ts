@@ -502,7 +502,7 @@ export function exportSelectedRows<T extends Record<string, unknown>>(
   filename: string,
   rowIdKey: keyof T = 'id' as keyof T
 ): void {
-  const selectedData = data.filter(row => selectedRowIds.has(row[rowIdKey]));
+  const selectedData = data.filter(row => selectedRowIds.has(row[rowIdKey] as string | number));
 
   switch (format) {
     case 'csv':

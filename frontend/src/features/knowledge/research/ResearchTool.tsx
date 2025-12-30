@@ -52,7 +52,7 @@ export const ResearchTool: React.FC<{ initialTab?: string; caseId?: string }> = 
   const [selectedJudgeId, setSelectedJudgeId] = useState<string>('');
 
   // Load judges from IndexedDB via useQuery for accurate, cached data
-  const { data: judges = [], isLoading: isLoadingJudges } = useQuery<JudgeProfile[]>(
+  const { data: judges = [] } = useQuery<JudgeProfile[]>(
     queryKeys.adminExtended.judgeProfiles(),
     () => DataService.analysis.getJudgeProfiles(),
     { enabled: activeView.startsWith('analytics_') }

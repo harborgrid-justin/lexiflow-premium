@@ -12,7 +12,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React from 'react';
-import { Loader2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -87,14 +86,14 @@ export const CaseListArchived: React.FC<CaseListArchivedProps> = ({ onSelectCase
           <TableHead className="text-right">Action</TableHead>
         </TableHeader>
         <TableBody>
-          {safeArchivedCases.map(c => (
-            <TableRow key={c.id}>
-                <TableCell className={cn("font-mono text-xs", theme.text.secondary)}>{c.date}</TableCell>
-                <TableCell className={cn("font-medium", theme.text.primary)}>{c.title}</TableCell>
-                <TableCell>{c.client}</TableCell>
-                <TableCell><Badge variant="success">{c.outcome}</Badge></TableCell>
+          {safeArchivedCases.map((c: unknown) => (
+            <TableRow key={(c as {id: string}).id}>
+                <TableCell className={cn("font-mono text-xs", theme.text.secondary)}>{(c as {date: string}).date}</TableCell>
+                <TableCell className={cn("font-medium", theme.text.primary)}>{(c as {title: string}).title}</TableCell>
+                <TableCell>{(c as {client: string}).client}</TableCell>
+                <TableCell><Badge variant="success">{(c as {outcome: string}).outcome}</Badge></TableCell>
                 <TableCell className="text-right">
-                    <Button variant="ghost" size="sm" onClick={() => handleRetrieve(c.id)}>Retrieve</Button>
+                    <Button variant="ghost" size="sm" onClick={() => handleRetrieve((c as {id: string}).id)}>Retrieve</Button>
                 </TableCell>
             </TableRow>
           ))}

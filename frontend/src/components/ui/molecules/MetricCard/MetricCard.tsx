@@ -4,7 +4,7 @@
  * @description Animated metric card with sparkline support, trend indicators, and live status
  */
 
-import React, { useEffect, useState, useRef, useMemo } from 'react';
+import React, { useEffect, useState, useRef} from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -38,9 +38,12 @@ export const MetricCard = React.memo<MetricCardProps>(({
     if (typeof value === 'number' && isNaN(value)) return 0;
     return value;
   }, [value]);
-  
-  const isNumeric = typeof normalizedValue === 'number';
-  const [displayValue, setDisplayValue] = useState<string | number>(isNumeric ? 0 : (false ? normalizedValue : ''));
+
+  const [displayValue, setDisplayValue] = useState<string | number>(() => {
+    if (typeof normalizedValue === 'number') return 0;
+    if (typeof normalizedValue === 'string') return '';
+    return '';
+  });
   const prevValueRef = useRef(normalizedValue);
 
   // Animation effect for numeric values

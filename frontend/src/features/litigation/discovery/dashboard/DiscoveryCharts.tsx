@@ -62,7 +62,7 @@ const DiscoveryCharts: React.FC = () => {
                     contentStyle={chartTheme.tooltipStyle}
                     />
                     <Bar dataKey="value" radius={[4, 4, 0, 0]} label={{ position: 'top', fontSize: 10, fill: chartTheme.text, formatter: (v: unknown) => typeof v === 'number' ? (funnelData.find((d: FunnelDataItem) => d.value === v)?.label ?? '') : '' }}>
-                    {funnelData.map((entry: FunnelDataItem, index: number) => (
+                    {funnelData.map((_: FunnelDataItem, index: number) => (
                         <Cell key={`cell-${index}`} fill={chartColors[index % chartColors.length]} />
                     ))}
                     </Bar>

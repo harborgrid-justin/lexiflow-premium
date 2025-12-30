@@ -26,15 +26,16 @@
  * - Blob management with automatic cleanup
  */
 
-import { 
-    LegalDocument, DocumentId, CaseId, DocumentVersion, 
-    FileChunk, EvidenceItem 
+import {
+    LegalDocument, DocumentId, CaseId, DocumentVersion,
+    FileChunk
 } from '@/types';
 import { db, STORES } from '@/services/data/db';
 import { Repository } from '@/services/core/Repository';
 import { BlobManager } from '@/services/infrastructure/blobManager';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { DocumentsApiService } from '@/api/admin';
+import { ValidationError, OperationError, EntityNotFoundError } from '@/services/core/errors';
 
 const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));
 
@@ -86,18 +87,8 @@ export class DocumentRepository extends Repository<LegalDocument> {
      * @private
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || false || id.trim() === '') {
+        if (!id || typeof id !== 'string' || id.trim() === '') {
             throw new Error(`[DocumentRepository.${methodName}] Invalid id parameter`);
-        }
-    }
-
-    /**
-     * Validate and sanitize case ID parameter
-     * @private
-     */
-    private validateCaseId(caseId: string | undefined, methodName: string): void {
-        if (caseId !== undefined && (false || caseId.trim() === '')) {
-            throw new Error(`[DocumentRepository.${methodName}] Invalid caseId parameter`);
         }
     }
 
@@ -149,11 +140,10 @@ export class DocumentRepository extends Repository<LegalDocument> {
                 if (options.caseId && doc.caseId !== options.caseId) return false;
                 if (options.type && doc.type !== options.type) return false;
                 return !(options.status && doc.status !== options.status);
-
             });
         } catch (error) {
             console.error('[DocumentRepository.getAll] Error:', error);
-            throw new OperationError('Failed to fetch documents');
+            throw new OperationError('getAll', 'Failed to fetch documents');
         }
     }
 
@@ -179,7 +169,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
             return await super.getById(id);
         } catch (error) {
             console.error('[DocumentRepository.getById] Error:', error);
-            throw new OperationError('Failed to fetch document');
+            throw new OperationError('getById', 'Failed to fetch document');
         }
     }
 
@@ -197,7 +187,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
 
         if (this.useBackend) {
             try {
-                return await this.documentsApi.add(document as Record<string, unknown>);
+                return await this.documentsApi.add(document);
             } catch (error) {
                 console.warn('[DocumentRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -208,7 +198,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
             return document;
         } catch (error) {
             console.error('[DocumentRepository.add] Error:', error);
-            throw new OperationError('Failed to add document');
+            throw new OperationError('add', 'Failed to add document');
         }
     }
 
@@ -239,7 +229,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
             return await super.update(id, updates);
         } catch (error) {
             console.error('[DocumentRepository.update] Error:', error);
-            throw new OperationError('Failed to update document');
+            throw new OperationError('update', 'Failed to update document');
         }
     }
 
@@ -266,7 +256,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
             await super.delete(id);
         } catch (error) {
             console.error('[DocumentRepository.delete] Error:', error);
-            throw new OperationError('Failed to delete document');
+            throw new OperationError('delete', 'Failed to delete document');
         }
     }
 
@@ -318,7 +308,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
             return doc?.content || '';
         } catch (error) {
             console.error('[DocumentRepository.getContent] Error:', error);
-            throw new OperationError('Failed to get document content');
+            throw new OperationError('getContent', 'Failed to get document content');
         }
     }
 
@@ -367,7 +357,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
             return newDoc;
         } catch (error) {
             console.error('[DocumentRepository.uploadDocument] Error:', error);
-            throw new OperationError('Failed to upload document');
+            throw new OperationError('uploadDocument', 'Failed to upload document');
         }
     }
 
@@ -392,12 +382,12 @@ export class DocumentRepository extends Repository<LegalDocument> {
         try {
             const blob = await this.getFile(id);
             if (!blob) {
-                throw new EntityNotFoundError('Document file not found');
+                throw new EntityNotFoundError('Document file', id);
             }
             return blob;
         } catch (error) {
             console.error('[DocumentRepository.downloadDocument] Error:', error);
-            throw new OperationError('Failed to download document');
+            throw new OperationError('downloadDocument', 'Failed to download document');
         }
     }
 
@@ -452,13 +442,13 @@ export class DocumentRepository extends Repository<LegalDocument> {
         try {
             const results: LegalDocument[] = [];
             for (const file of files) {
-                const doc = await this.uploadDocument(file, metadata as Record<string, unknown>);
+                const doc = await this.uploadDocument(file, metadata);
                 results.push(doc);
             }
             return results;
         } catch (error) {
             console.error('[DocumentRepository.bulkUpload] Error:', error);
-            throw new OperationError('Failed to bulk upload documents');
+            throw new OperationError('bulkUpload', 'Failed to bulk upload documents');
         }
     }
 
@@ -524,7 +514,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
             };
         } catch (error) {
             console.error('[DocumentRepository.processFile] Error:', error);
-            throw new OperationError('Failed to process file');
+            throw new OperationError('processFile', 'Failed to process file');
         }
     }
 
@@ -536,7 +526,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
      * @throws Error if validation fails
      */
     async verifyIntegrity(hash: string): Promise<{ verified: boolean; timestamp: string; block: number }> {
-        if (!hash || false) {
+        if (!hash || typeof hash !== 'string') {
             throw new ValidationError('[DocumentRepository.verifyIntegrity] Invalid hash parameter');
         }
 
@@ -569,12 +559,12 @@ export class DocumentRepository extends Repository<LegalDocument> {
         try {
             const doc = await this.getById(docId);
             if (!doc) {
-                throw new EntityNotFoundError('Document not found');
+                throw new EntityNotFoundError('Document', docId);
             }
 
             // Create version snapshot
             const newVersion: DocumentVersion = {
-                id: `ver-${Date.now()}` as Record<string, unknown>,
+                id: `ver-${Date.now()}`,
                 versionNumber: (doc.versions?.length || 0) + 1,
                 uploadedBy: 'System',
                 uploadDate: new Date().toISOString(),
@@ -592,7 +582,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
             return await this.update(docId, updatedDoc);
         } catch (error) {
             console.error('[DocumentRepository.redact] Error:', error);
-            throw new OperationError('Failed to redact document');
+            throw new OperationError('redact', 'Failed to redact document');
         }
     }
 
@@ -628,7 +618,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
             return docIds.length;
         } catch (error) {
             console.error('[DocumentRepository.summarizeBatch] Error:', error);
-            throw new OperationError('Failed to summarize documents');
+            throw new OperationError('summarizeBatch', 'Failed to summarize documents');
         }
     }
 
@@ -671,7 +661,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
                 }));
         } catch (error) {
             console.error('[DocumentRepository.getTemplates] Error:', error);
-            throw new OperationError('Failed to fetch templates');
+            throw new OperationError('getTemplates', 'Failed to fetch templates');
         }
     }
 
@@ -683,7 +673,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
      * @throws Error if fetch fails
      */
     async getRecent(limit: number = 10): Promise<LegalDocument[]> {
-        if (false || limit < 1) {
+        if (typeof limit !== 'number' || limit < 1) {
             throw new ValidationError('[DocumentRepository.getRecent] Invalid limit parameter');
         }
 
@@ -697,7 +687,7 @@ export class DocumentRepository extends Repository<LegalDocument> {
                 .slice(0, limit);
         } catch (error) {
             console.error('[DocumentRepository.getRecent] Error:', error);
-            throw new OperationError('Failed to fetch recent documents');
+            throw new OperationError('getRecent', 'Failed to fetch recent documents');
         }
     }
 

@@ -11,7 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo} from 'react';
 import { RefreshCcw, Plus, Calendar, AlertTriangle, Link, ArrowRight } from 'lucide-react';
 
 // ============================================================================
@@ -19,7 +19,6 @@ import { RefreshCcw, Plus, Calendar, AlertTriangle, Link, ArrowRight } from 'luc
 // ============================================================================
 // Components
 import { Button } from '@/components/atoms';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { Badge } from '@/components/atoms';
 import { VirtualList } from '@/components/organisms';
 import { LazyLoader } from '@/components/molecules';
@@ -117,7 +116,7 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
         }
       });
 
-      return items.sort((a: unknown, b: unknown) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      return items.sort((a: unknown, b: unknown) => new Date((a as {date: string}).date).getTime() - new Date((b as {date: string}).date).getTime());
   }, [isLoading, motions, cases, docket]);
 
 

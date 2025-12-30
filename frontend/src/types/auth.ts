@@ -3,7 +3,7 @@
  * Types for authentication, permissions, and security
  */
 
-import type { BaseEntity, UserId } from './primitives';
+import type { BaseEntity } from './primitives';
 
 export interface ApiKey extends BaseEntity {
   name: string;

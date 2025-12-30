@@ -49,17 +49,6 @@ import { ValidationError } from '@/services/core/errors';
 // =============================================================================
 
 /**
- * Validate object parameter for serialization
- * @private
- * @throws Error if object is invalid
- */
-function validateObject(obj: unknown, methodName: string): void {
-  if (obj === undefined) {
-    throw new ValidationError(`[queryUtils.${methodName}] Object is required`);
-  }
-}
-
-/**
  * Validate query key parameter
  * @private
  * @throws Error if key is invalid

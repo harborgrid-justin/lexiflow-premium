@@ -4,9 +4,8 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { dataPlatformApi } from '@/api/domains/data-platform.api';
 import { delay } from '@/utils/async';
-import { STORES, db } from '@/services/data/db';
+import { db} from '@/services/data/db';
 
 interface DataSource {
   id: string;
@@ -62,7 +61,7 @@ export const DataSourceService = {
     return sources;
   },
   
-  connect: async (sourceId: string, credentials: unknown): Promise<boolean> => {
+  connect: async (sourceId: string): Promise<boolean> => {
     await delay(300); // Simulate connection
     try {
       const source = await db.get<DataSource>(DATA_SOURCES_STORE, sourceId);

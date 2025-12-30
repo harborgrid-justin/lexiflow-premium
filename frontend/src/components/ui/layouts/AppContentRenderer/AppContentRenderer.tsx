@@ -131,7 +131,7 @@ export const AppContentRenderer = ({
 
     if (activeView === PATHS.CREATE_CASE) {
       dynamicProps.onBack = () => setActiveView(PATHS.CASES);
-      dynamicProps.onSuccess = (newCase: Case) => {
+      dynamicProps.onSuccess = () => {
         // Navigate back to cases after successful creation
         setActiveView(PATHS.CASES);
       };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useTransition } from 'react';
+import React, { useState, useMemo } from 'react';
 import { LegalRule } from '@/types';
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -17,11 +17,10 @@ import { useRuleSearchAndSelection } from '@/hooks/useRuleSearchAndSelection';
 
 interface RuleBookViewerProps {
   type: 'FRE' | 'FRCP' | 'FRAP' | 'Local';
-  title: string;
   isOrbital?: boolean; // Detect if running in window
 }
 
-export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isOrbital }) => {
+export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, isOrbital }) => {
   const { theme, mode } = useTheme();
   const { openWindow } = useWindow();
   const [activeTab, setActiveTab] = useState('text');
@@ -41,7 +40,6 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isO
     setSearchTerm,
     selectedRuleId,
     setSelectedRuleId,
-    expandedIds,
     toggleExpand,
     displayHierarchy,
     currentExpandedIds,
@@ -117,14 +115,14 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, title, isO
                     {selectedRule.structuredContent ? (
                         <>
                             <div className={cn("px-6 pt-4 border-b", theme.border.default)}>
-                                <Tabs 
+                                <Tabs
                                     tabs={[
                                         {id: 'text', label: 'Rule Text', icon: Scale},
                                         {id: 'history', label: 'History & Statutory Notes', icon: History},
                                         {id: 'notes', label: 'Advisory Committee Notes', icon: FileText}
-                                    ]} 
+                                    ]}
                                     activeTab={activeTab}
-                                    onChange={(t) => setActiveTab(t as Record<string, unknown>)}
+                                    onChange={(t) => setActiveTab(t as string)}
                                 />
                             </div>
                              <div className="flex-1 overflow-y-auto p-8">

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal } from '@/components/molecules';
 import { Button } from '@/components/atoms';
-import { Input, TextArea } from '@/components/atoms';
+import { Input} from '@/components/atoms';
 import { RLSPolicy, SqlCmd } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

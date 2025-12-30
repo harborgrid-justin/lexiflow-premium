@@ -19,7 +19,7 @@ export interface Dashboard extends BaseEntity {
   name: string;
   description?: string;
   widgets: DashboardWidget[];
-  layout?: DashboardLayout;
+  layout?: AnalyticsDashboardLayout;
   isPublic: boolean;
 }
 
@@ -35,7 +35,7 @@ export interface DashboardWidget {
   };
 }
 
-export interface DashboardLayout {
+export interface AnalyticsDashboardLayout {
   columns: number;
   rows: number;
   widgets: {
@@ -62,7 +62,7 @@ export interface TimeSeriesData {
   metadata?: MetadataRecord;
 }
 
-export interface ChartDataPoint {
+export interface AnalyticsDataPoint {
   name: string;
   count: number;
 }

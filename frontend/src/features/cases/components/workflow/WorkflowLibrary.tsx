@@ -10,7 +10,6 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useMemo } from 'react';
 import { Search, Shield, Plus } from 'lucide-react';
 
 // ============================================================================
@@ -27,9 +26,6 @@ import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
 import { TemplatePreview } from '@features/cases';
-import { EmptyState } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { LoadingState } from '@/components/molecules';
 import { ErrorState } from '@/components/molecules';
 import { AdaptiveLoader } from '@/components/molecules';
 

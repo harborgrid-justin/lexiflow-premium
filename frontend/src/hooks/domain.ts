@@ -42,7 +42,8 @@ export { useAutoTimeCapture } from './useAutoTimeCapture';
 export { useSLAMonitoring } from './useSLAMonitoring';
 
 // Data & Domain
-export { useDomainData } from './useDomainData';
+// useDomainData doesn't exist as a single export - use individual hooks from './useDomainData' (e.g., useCases, useDocuments)
+export * from './useDomainData';
 export { useReadAnalytics } from './useReadAnalytics';
 
 // Messaging & Real-time

@@ -207,12 +207,13 @@ export const NotificationPanel = React.memo(function NotificationPanel() {
    * Render notification group
    */
   const renderGroup = (group: unknown) => {
-    const isExpanded = expandedGroups.has(group.groupKey);
+    const typedGroup = group as NotificationGroup;
+    const isExpanded = expandedGroups.has(typedGroup.groupKey);
 
     return (
-      <div key={group.groupKey} className={cn("border-b", theme.border.default)}>
+      <div key={typedGroup.groupKey} className={cn("border-b", theme.border.default)}>
         <button
-          onClick={() => toggleGroup(group.groupKey)}
+          onClick={() => toggleGroup(typedGroup.groupKey)}
           className={cn(
             "w-full p-4 flex items-center justify-between transition-colors",
             theme.surface.default,
@@ -225,14 +226,14 @@ export const NotificationPanel = React.memo(function NotificationPanel() {
               theme.primary.DEFAULT,
               'text-white'
             )}>
-              {group.count}
+              {typedGroup.count}
             </div>
             <div className="text-left">
               <p className={cn("font-medium text-sm", theme.text.primary)}>
-                {group.notifications[0].title}
+                {typedGroup.notifications[0].title}
               </p>
               <p className={cn("text-xs", theme.text.tertiary)}>
-                {formatDistanceToNow(new Date(group.latestTimestamp), { addSuffix: true })}
+                {formatDistanceToNow(new Date(typedGroup.latestTimestamp), { addSuffix: true })}
               </p>
             </div>
           </div>
@@ -246,7 +247,7 @@ export const NotificationPanel = React.memo(function NotificationPanel() {
 
         {isExpanded && (
           <div className="pl-4">
-            {group.notifications.map((n: Notification) => renderNotification(n))}
+            {typedGroup.notifications.map((n) => renderNotification(n as unknown as Notification))}
           </div>
         )}
       </div>

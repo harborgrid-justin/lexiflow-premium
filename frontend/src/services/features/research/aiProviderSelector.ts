@@ -27,7 +27,7 @@ export const setAIProvider = (provider: AIProvider): void => {
 // Get the active AI service based on current provider
 export const getAIService = (): AIServiceInterface => {
   const provider = getAIProvider();
-  return provider === 'openai' ? OpenAIService : GeminiService;
+  return (provider === 'openai' ? OpenAIService : GeminiService) as unknown as AIServiceInterface;
 };
 
 // Check if API key is configured for a provider

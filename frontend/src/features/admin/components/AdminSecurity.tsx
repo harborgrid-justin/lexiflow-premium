@@ -15,8 +15,8 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React, { useState, useEffect } from 'react';
-import { Lock, Shield, Smartphone, Globe, Eye, FileText, Clock, AlertTriangle, CheckCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { Lock, Shield, Smartphone, Globe, FileText, Clock, AlertTriangle, CheckCircle } from 'lucide-react';
 
 // ========================================
 // INTERNAL DEPENDENCIES
@@ -81,21 +81,22 @@ export const AdminSecurity: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card title="Authentication Policy">
                 <div className={cn("divide-y", theme.border.subtle)}>
-                    {controls.map((ctrl) => {
-                        const Icon = getIcon(ctrl.type);
+                    {controls.map((ctrl: unknown) => {
+                        const typedCtrl = ctrl as { id: string; type: string; label: string; desc: string; enabled: boolean };
+                        const Icon = getIcon(typedCtrl.type);
                         return (
-                            <div key={ctrl.id} className="flex items-center justify-between py-4 first:pt-0 last:pb-0">
+                            <div key={typedCtrl.id} className="flex items-center justify-between py-4 first:pt-0 last:pb-0">
                                 <div className="flex items-start gap-3">
                                     <div className={cn("p-2 rounded-lg", theme.surface.highlight)}>
                                         <Icon className={cn("h-5 w-5", theme.text.secondary)}/>
                                     </div>
                                     <div>
-                                        <p className={cn("text-sm font-bold", theme.text.primary)}>{ctrl.label}</p>
-                                        <p className={cn("text-xs", theme.text.secondary)}>{ctrl.desc}</p>
+                                        <p className={cn("text-sm font-bold", theme.text.primary)}>{typedCtrl.label}</p>
+                                        <p className={cn("text-xs", theme.text.secondary)}>{typedCtrl.desc}</p>
                                     </div>
                                 </div>
-                                <div className={cn("relative w-11 h-6 rounded-full transition-colors cursor-pointer", ctrl.enabled ? "bg-green-500" : "bg-slate-300")}>
-                                    <div className={cn("absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow transition-transform", ctrl.enabled ? "translate-x-5" : "translate-x-0")}></div>
+                                <div className={cn("relative w-11 h-6 rounded-full transition-colors cursor-pointer", typedCtrl.enabled ? "bg-green-500" : "bg-slate-300")}>
+                                    <div className={cn("absolute top-1 left-1 bg-white w-4 h-4 rounded-full shadow transition-transform", typedCtrl.enabled ? "translate-x-5" : "translate-x-0")}></div>
                                 </div>
                             </div>
                         );

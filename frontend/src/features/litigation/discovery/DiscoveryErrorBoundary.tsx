@@ -161,7 +161,7 @@ export class DiscoveryErrorBoundary extends Component<Props, State> {
         window.location.href = '/';
     };
 
-    render(): ReactNode {
+    override render(): ReactNode {
         if (this.state.hasError && this.state.error) {
             return (
                 <ErrorFallback

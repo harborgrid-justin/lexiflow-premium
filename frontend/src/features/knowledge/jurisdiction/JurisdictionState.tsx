@@ -11,7 +11,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState } from 'react';
-import { Loader2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -20,14 +19,12 @@ import { Loader2 } from 'lucide-react';
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Badge } from '@/components/atoms';
 import { AdaptiveLoader } from '@/components/molecules';
 import { SearchToolbar } from '@/components/organisms';
 
@@ -47,7 +44,7 @@ export const JurisdictionState: React.FC = () => {
 
   // Defensive array validation
   const states = Array.isArray(rawStates) ? rawStates : [];
-  const filteredStates = filterStates(states, filter);
+  const filteredStates = filterStates(states as Array<{ name: string; region: string }>, filter);
 
   if (isLoading) return <AdaptiveLoader contentType="list" itemCount={10} shimmer />;
 
@@ -73,9 +70,9 @@ export const JurisdictionState: React.FC = () => {
         <TableBody>
           {filteredStates.map((s, i) => (
             <TableRow key={i}>
-              <TableCell className={cn("font-medium", theme.text.primary)}>{s.region}</TableCell>
-              <TableCell>{s.name}</TableCell>
-              <TableCell>{s.type}</TableCell>
+              <TableCell className={cn("font-medium", theme.text.primary)}>{(s as { name: string; region: string; type?: string }).region}</TableCell>
+              <TableCell>{(s as { name: string; region: string; type?: string }).name}</TableCell>
+              <TableCell>{(s as { name: string; region: string; type?: string }).type}</TableCell>
             </TableRow>
           ))}
         </TableBody>

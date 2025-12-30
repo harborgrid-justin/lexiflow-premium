@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { Copy, CheckCircle, AlertTriangle, FileText, Plus } from 'lucide-react';
+import { Copy, Plus } from 'lucide-react';
 
 // Common Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';

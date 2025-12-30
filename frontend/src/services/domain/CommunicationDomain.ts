@@ -1,4 +1,4 @@
-import { CommunicationItem, ServiceJob, DocketEntry, DocketId, DocumentId, EvidenceItem, EvidenceId, UUID } from '@/types';
+import { CommunicationItem, ServiceJob, CaseId, UserId, ServiceMethod } from '@/types';
 /**
  * ? Migrated to backend API (2025-12-21)
  */
@@ -46,13 +46,13 @@ export const CorrespondenceService = {
         // Mock job for type safety
         const job: ServiceJob = {
             id,
-            caseId: '' as Record<string, unknown>,
-            requestorId: '' as Record<string, unknown>,
+            caseId: '' as CaseId,
+            requestorId: '' as UserId,
             documentTitle: '',
             targetPerson: '',
             targetAddress: '',
             serverName: '',
-            method: 'Personal' as Record<string, unknown>,
+            method: 'Personal' as ServiceMethod,
             status: 'DRAFT',
             dueDate: new Date().toISOString(),
             attempts: 0,

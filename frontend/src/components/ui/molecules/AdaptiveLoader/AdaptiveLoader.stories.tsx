@@ -16,10 +16,9 @@ type Story = StoryObj<typeof AdaptiveLoader>;
 export const Default: Story = {
   args: {
   "structure": [],
-  "Alternative": {},
   "shimmer": true,
   "message": "Sample Text",
-  "staleContent": "<div>Sample Content</div>",
+  staleContent: undefined,
   "showStale": true,
   "itemCount": 42,
   "className": "Sample Text"

@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { GitMerge, MoreHorizontal, User, ListTodo } from 'lucide-react';
 import { TaskWorkflowBadges } from './TaskWorkflowBadges';
 import { EmptyState } from '@/components/molecules';

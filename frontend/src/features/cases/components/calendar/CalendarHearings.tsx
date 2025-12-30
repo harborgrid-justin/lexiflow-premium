@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { MapPin, User, Clock, Gavel } from 'lucide-react';
 
 // ============================================================================

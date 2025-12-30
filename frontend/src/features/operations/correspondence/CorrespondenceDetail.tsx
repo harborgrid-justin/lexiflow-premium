@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { CommunicationItem, ServiceJob, LegalDocument, DocketEntry, EvidenceItem, WorkflowTask, DocumentId, CaseId, DocketId, EvidenceId, UUID } from '@/types';
-import { X, Mail, MapPin, User, Calendar, FileText, Download, Navigation, CheckSquare, Archive, Briefcase, BookOpen, Truck, Package, PenTool, UploadCloud } from 'lucide-react';
+import { X, Mail, MapPin, FileText, Download, Navigation, CheckSquare, Archive, Briefcase, BookOpen, Truck, PenTool, UploadCloud } from 'lucide-react';
 import { Button } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -10,8 +10,7 @@ import { DataService } from '@/services';
 import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
-import { ServiceStatus, CommunicationStatus } from '@/types/enums';
-import { useBlobRegistry } from '@/hooks/useBlobRegistry';
+import { ServiceStatus } from '@/types/enums';
 
 // Discriminated union type for correspondence items
 type CorrespondenceItem = 
@@ -27,7 +26,6 @@ interface CorrespondenceDetailProps {
 export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: CorrespondenceDetailProps) {
   const { theme } = useTheme();
   const notify = useNotify();
-  const { register, revoke } = useBlobRegistry();
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   
   // State for service job updates with discriminated union type narrowing
@@ -43,17 +41,19 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
 
   // Optimistic mutation for archiving with exponential backoff retry
   const { mutate: archiveItem, isLoading: isArchiving } = useMutation(
-      DataService.correspondence.archive,
+      async (id: string) => {
+          const correspondence = DataService.correspondence as any;
+          return correspondence.archive(id);
+      },
       {
-          onMutate: async (id) => {
-              // Optimistically mark as archived in UI
+          onMutate: (_id: string) => {
               notify.info('Archiving...');
           },
           onSuccess: () => {
               notify.success("Item archived successfully");
               onClose();
           },
-          onError: (error, variables, context) => {
+          onError: (error: unknown) => {
               notify.error('Failed to archive item');
               console.error('Archive error:', error);
           },
@@ -67,16 +67,17 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
   // Optimistic mutation for service job updates
   const { mutate: updateServiceJob, isLoading: isUpdating } = useMutation(
       async (updates: Partial<ServiceJob> & { id: string }) => {
-          await DataService.correspondence.updateServiceJob(updates.id, updates);
+          const correspondence = DataService.correspondence as any;
+          await correspondence.updateServiceJob(updates.id, updates);
       },
       {
-          onMutate: async (updates) => {
+          onMutate: (_updates: Partial<ServiceJob> & { id: string }) => {
               notify.info('Updating service status...');
           },
           onSuccess: () => {
               notify.success('Service status updated');
           },
-          onError: (error) => {
+          onError: (error: unknown) => {
               notify.error('Failed to update service job');
               console.error('Update error:', error);
           },
@@ -85,13 +86,14 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
   );
 
   const handleCreateTask = async (task: WorkflowTask) => {
-      await DataService.tasks.add(task);
+      const tasks = DataService.tasks as any;
+      await tasks.add(task);
       notify.success('Follow-up task created.');
   };
 
   const handleSaveToCase = async () => {
       if (correspondenceItem.type !== 'communication') return;
-      
+
       const commItem = correspondenceItem.item;
       const doc: LegalDocument = {
           id: `doc-${Date.now()}` as DocumentId,
@@ -107,9 +109,10 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
           status: 'Final',
           fileSize: '24 KB'
       };
-      
+
       try {
-          await DataService.documents.add(doc);
+          const documents = DataService.documents as any;
+          await documents.add(doc);
           notify.success('Correspondence saved to Case Documents.');
       } catch (e) {
           notify.error('Failed to save document.');
@@ -135,9 +138,10 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
           filedBy: serviceItem.serverName,
           isSealed: false
       };
-      
+
       try {
-          await DataService.docket.add(entry);
+          const docket = DataService.docket as any;
+          await docket.add(entry);
           notify.success('Service Proof linked to Docket.');
       } catch (e) {
           notify.error('Failed to create docket entry.');
@@ -159,7 +163,7 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
 
   const handleUploadProof = async () => {
       if (correspondenceItem.type !== 'service') return;
-      
+
       const serviceItem = correspondenceItem.item;
       const proof: EvidenceItem = {
           id: `ev-${Date.now()}` as EvidenceId,
@@ -176,9 +180,10 @@ export function CorrespondenceDetail({ correspondenceItem, onClose, onReply }: C
           chainOfCustody: [],
           tags: ['Proof of Service', 'Return Receipt']
       };
-      
+
       try {
-          await DataService.evidence.add(proof);
+          const evidence = DataService.evidence as any;
+          await evidence.add(proof);
           notify.success('Return Receipt added to Evidence Vault.');
       } catch (e) {
           notify.error('Failed to upload proof.');

@@ -3,7 +3,7 @@
  * Module exports
  */
 
-export { AdminAuditLog } from './AdminAuditLog';
+// AdminAuditLog is obsolete - content moved to components/admin/AdminAuditLog.tsx
 export { AdminPanel } from './AdminPanel';
 export { default as ThemeSettingsPage } from './ThemeSettingsPage';
 

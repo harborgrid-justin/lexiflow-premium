@@ -37,18 +37,18 @@ export const MOCK_DOCUMENTS: LegalDocument[] = [
         formFields: []
     },
     {
-        id: 'doc-form-sent' as DocumentId, caseId: 'C-2024-112' as CaseId, title: 'OmniGlobal Merger Agreement - Signature Packet.pdf', type: 'PDF', 
+        id: 'doc-form-sent' as DocumentId, caseId: 'C-2024-112' as CaseId, title: 'OmniGlobal Merger Agreement - Signature Packet.pdf', type: 'PDF',
         content: 'Merger agreement details...',
         uploadDate: '2024-03-15', lastModified: '2024-03-15', tags: ['Form', 'Local'],
-        versions: [], status: 'Sent' as Record<string, unknown>, fileSize: '1.2 MB', 
+        versions: [], status: 'Sent', fileSize: '1.2 MB',
         authorId: 'usr-partner-alex' as UserId,
         formFields: []
     },
     {
-        id: 'doc-form-signed' as DocumentId, caseId: 'C-2023-892' as CaseId, title: 'Settlement Agreement - GreenEnergy.pdf', type: 'PDF', 
+        id: 'doc-form-signed' as DocumentId, caseId: 'C-2023-892' as CaseId, title: 'Settlement Agreement - GreenEnergy.pdf', type: 'PDF',
         content: 'Settlement details...',
         uploadDate: '2024-02-20', lastModified: '2024-02-21', tags: ['Form', 'Local'],
-        versions: [], status: 'Signed' as Record<string, unknown>, fileSize: '800 KB', 
+        versions: [], status: 'Signed', fileSize: '800 KB',
         authorId: 'usr-partner-alex' as UserId,
         formFields: []
     },

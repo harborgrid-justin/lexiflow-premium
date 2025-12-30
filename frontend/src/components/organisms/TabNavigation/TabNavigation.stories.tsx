@@ -17,7 +17,7 @@ export const Default: Story = {
   args: {
   "tabs": [],
   "activeTab": "Sample Text",
-  "onTabChange": "Sample Text",
+  "onTabChange": () => {},
   "className": "Sample Text"
 },
 };

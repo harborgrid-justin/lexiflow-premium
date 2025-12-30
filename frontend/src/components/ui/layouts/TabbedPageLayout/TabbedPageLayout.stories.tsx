@@ -17,10 +17,10 @@ export const Default: Story = {
   args: {
   "pageTitle": "Sample Text",
   "pageSubtitle": "Sample Text",
-  "pageActions": "<div>Sample Content</div>",
+  pageActions: undefined,
   "tabConfig": [],
-  "children": "<div>Sample Content</div>",
+  children: undefined,
   "activeTabId": "Sample Text",
-  "onTabChange": "Sample Text"
+  "onTabChange": () => {}
 },
 };

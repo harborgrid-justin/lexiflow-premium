@@ -20,7 +20,6 @@ import { MapPin, User, Truck } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '@/components/molecules';
 import { Badge } from '@/components/atoms';
 
 // Utils & Constants

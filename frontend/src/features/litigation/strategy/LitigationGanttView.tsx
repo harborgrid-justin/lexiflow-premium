@@ -9,11 +9,10 @@
  */
 
 import React, { useState, useMemo, useCallback } from 'react';
-import { Plus, TrendingUp } from 'lucide-react';
+import { TrendingUp } from 'lucide-react';
 
 // Internal Components
-import { PlanningSidebar, GanttTimeline } from '@features/cases';
-import { Button } from '@/components/atoms';
+import { PlanningSidebar, GanttTimeline } from '@features/cases/components/detail/planning';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -23,7 +22,6 @@ import { cn } from '@/utils/cn';
 import { Pathfinding } from '@/utils/pathfinding';
 
 // Types
-import { CasePhase, WorkflowTask, TaskId, CaseId } from '@/types';
 import { LitigationGanttViewProps, ZoomLevel } from './types';
 import { transformNodesToGantt, calculatePixelsPerDay, calculateNodePositionFromDate } from './utils';
 
@@ -47,7 +45,7 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
       return new Set(Pathfinding.findCriticalPath(tasks));
   }, [tasks, showCriticalPath]);
   
-  const handleTaskUpdate = useCallback((taskId: string, start: string, due: string) => {
+  const handleTaskUpdate = useCallback((taskId: string, start: string, _due: string) => {
     const newX = calculateNodePositionFromDate(start);
     updateNode(taskId, { x: newX });
   }, [updateNode]);
@@ -87,26 +85,30 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-        <PlanningSidebar 
-          phases={phases}
-          tasks={tasks}
-          collapsedPhases={collapsedPhases}
-          activeTaskId={activeTaskId}
-          onTogglePhase={togglePhase}
-          onHoverTask={setActiveTaskId}
-          onAddTask={handleAddTask}
-        />
-        <GanttTimeline
-          phases={phases}
-          tasks={tasks.map(t => ({ ...t, isCritical: criticalPathIds.has(t.id) } as Record<string, unknown>))} 
-          collapsedPhases={collapsedPhases}
-          zoom={zoom}
-          viewStartDate={viewStartDate}
-          activeTaskId={activeTaskId}
-          onHoverTask={setActiveTaskId}
-          pixelsPerDay={pixelsPerDay}
-          onUpdateTask={handleTaskUpdate}
-        />
+        <div className="shrink-0">
+          <PlanningSidebar
+            phases={phases}
+            tasks={tasks}
+            collapsedPhases={collapsedPhases}
+            activeTaskId={activeTaskId}
+            onTogglePhase={togglePhase}
+            onHoverTask={setActiveTaskId}
+            onAddTask={handleAddTask}
+          />
+        </div>
+        <div className="flex-1">
+          <GanttTimeline
+            phases={phases}
+            tasks={tasks.map(t => ({ ...t, isCritical: criticalPathIds.has(t.id) }))}
+            collapsedPhases={collapsedPhases}
+            zoom={zoom}
+            viewStartDate={viewStartDate}
+            activeTaskId={activeTaskId}
+            onHoverTask={setActiveTaskId}
+            pixelsPerDay={pixelsPerDay}
+            onUpdateTask={handleTaskUpdate}
+          />
+        </div>
       </div>
     </div>
   );

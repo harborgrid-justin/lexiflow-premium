@@ -15,7 +15,7 @@ type Story = StoryObj<typeof TabStrip>;
 
 export const Default: Story = {
   args: {
-  "children": "<div>Sample Content</div>",
+  children: undefined,
   "className": "Sample Text"
 },
 };

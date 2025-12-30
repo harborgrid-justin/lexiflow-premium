@@ -58,7 +58,7 @@ export async function asyncFilter<T>(
   const results = await Promise.all(items.map(async (item) => {
     return (await fn(item)) ? item : null;
   }));
-  return results.filter((item): item is T => item !== null);
+  return results.filter((item) => item !== null) as T[];
 }
 
 /**

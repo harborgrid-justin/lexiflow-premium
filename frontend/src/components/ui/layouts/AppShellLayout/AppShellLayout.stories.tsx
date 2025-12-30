@@ -15,11 +15,11 @@ type Story = StoryObj<typeof AppShellLayout>;
 
 export const Default: Story = {
   args: {
-  "sidebar": "<div>Sample Content</div>",
-  "headerContent": "<div>Sample Content</div>",
-  "children": "<div>Sample Content</div>",
+  sidebar: undefined,
+  headerContent: undefined,
+  children: undefined,
   "activeView": "Sample Text",
-  "onNavigate": "Sample Text",
+  "onNavigate": () => {},
   "selectedCaseId": "Sample Text"
 },
 };

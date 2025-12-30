@@ -21,7 +21,6 @@ import { ToastProvider } from '@/providers/ToastContext';
  */
 const meta = {
   title: 'Pages/Matter Financials Center',
-  component: MatterFinancialsCenter,
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -42,7 +41,7 @@ const meta = {
       </ThemeProvider>
     ),
   ],
-} satisfies Meta<typeof MatterFinancialsCenter>;
+} satisfies Meta;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

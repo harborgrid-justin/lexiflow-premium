@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect } from 'react';
-import { ShieldAlert, Eye, EyeOff, Check, AlertTriangle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ShieldAlert, Eye, EyeOff, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

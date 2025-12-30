@@ -2,10 +2,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Modal } from '@/components/molecules';
 import { Button } from '@/components/atoms';
-import { Input, TextArea } from '@/components/atoms';
-import { UserSelect } from '@/components/molecules';
+import { Input } from '@/components/atoms';
 import { Send, Paperclip, Wand2, X } from 'lucide-react';
-import { CommunicationItem, CommunicationType, UserId, User } from '@/types';
+import { CommunicationItem, CommunicationType, UserId } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services';
@@ -29,13 +28,7 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
   const { theme } = useTheme();
   const notify = useNotify();
   const { register, revoke } = useBlobRegistry();
-  
-  // Fetch users from backend API
-  const { data: users = [] } = useQuery<User[]>(
-    queryKeys.users.all(),
-    () => DataService.users.getAll()
-  );
-  
+
   const [formData, setFormData] = useState<Partial<CommunicationItem>>({
     type: 'Email',
     direction: 'Outbound',
@@ -43,7 +36,9 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
     status: CommunicationStatus.DRAFT
   });
   const [isDrafting, setIsDrafting] = useState(false);
-  
+  const [_validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  // Note: validationErrors is set but not currently displayed in UI - can be used to show field-level errors
+
   // Load cases from IndexedDB via useQuery for accurate, cached data
   const { data: cases = [] } = useQuery(
     queryKeys.cases.all(),
@@ -51,7 +46,6 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
   );
   const [body, setBody] = useState('');
   const [attachments, setAttachments] = useState<Array<{id: string; name: string; size: number}>>([]);
-  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   // Auto-save draft every 2 seconds
   useAutoSave({

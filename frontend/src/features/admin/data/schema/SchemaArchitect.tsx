@@ -1,1 +1,3 @@
-// Obsolete file - Content moved to components/admin/data/schema/SchemaArchitect.tsx
+// Re-export from the actual implementation
+export { SchemaArchitect } from '@/features/admin/components/data/schema/SchemaArchitect';
+export { default } from '@/features/admin/components/data/schema/SchemaArchitect';

@@ -31,10 +31,10 @@ interface WorkflowContentProps {
 const WORKFLOW_TABS: WorkflowTab[] = ['tasks', 'dependencies', 'approvals', 'history'];
 
 const TAB_COMPONENTS: Record<WorkflowTab, React.FC<Record<string, unknown>>> = {
-  tasks: ParallelTasksManager,
-  dependencies: TaskDependencyManager,
-  approvals: ApprovalWorkflow,
-  history: AuditTrailViewer
+  tasks: ParallelTasksManager as unknown as React.FC<Record<string, unknown>>,
+  dependencies: TaskDependencyManager as unknown as React.FC<Record<string, unknown>>,
+  approvals: ApprovalWorkflow as unknown as React.FC<Record<string, unknown>>,
+  history: AuditTrailViewer as unknown as React.FC<Record<string, unknown>>
 };
 
 // ============================================================================

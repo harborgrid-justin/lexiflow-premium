@@ -15,8 +15,8 @@ type Story = StoryObj<typeof RuleSelector>;
 
 export const Default: Story = {
   args: {
-  "selectedRules": "Sample Text",
-  "onRulesChange": "Sample Text",
+  "selectedRules": [],
+  "onRulesChange": () => {},
   "readOnly": true
 },
 };

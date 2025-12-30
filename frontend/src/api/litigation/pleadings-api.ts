@@ -77,20 +77,21 @@ export class PleadingsApiService {
             const url = queryString ? `${this.baseUrl}?${queryString}` : this.baseUrl;
             
             const response = await apiClient.get<Pleading[] | PaginatedResponse<Pleading>>(url);
-            
+
             // Handle paginated response (support both 'items' and 'data' properties)
             if (response && typeof response === 'object' && !Array.isArray(response)) {
-                const items = (response as Record<string, unknown>).items || (response as Record<string, unknown>).data;
+                const paginatedResponse = response as PaginatedResponse<Pleading>;
+                const items = (paginatedResponse as unknown as Record<string, unknown>).items || (paginatedResponse as unknown as Record<string, unknown>).data;
                 if (Array.isArray(items)) {
                     return items;
                 }
             }
-            
+
             // Handle direct array response
             if (Array.isArray(response)) {
                 return response;
             }
-            
+
             // Fallback
             return [];
         } catch (error) {

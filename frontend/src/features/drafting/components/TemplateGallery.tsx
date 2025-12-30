@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileCode, Plus, Edit, Copy, MoreVertical } from 'lucide-react';
+import { FileCode, Edit} from 'lucide-react';
 import { DraftingTemplate } from '@api/domains/drafting.api';
 
 interface TemplateGalleryProps {

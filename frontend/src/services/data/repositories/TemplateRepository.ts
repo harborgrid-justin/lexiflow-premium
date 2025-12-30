@@ -5,6 +5,7 @@
 
 import { WorkflowTemplateData } from '@/types';
 import { Repository } from '@/services/core/Repository';
+import { ValidationError } from '@/services/core/errors';
 import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
@@ -52,8 +53,8 @@ export class TemplateRepository extends Repository<WorkflowTemplateData> {
         const templates = await this.getAll();
         const lowerQuery = query.toLowerCase();
         return templates.filter(t =>
-            (t as Record<string, unknown>).name?.toLowerCase().includes(lowerQuery) ||
-            (t as Record<string, unknown>).description?.toLowerCase().includes(lowerQuery) ||
+            ((t as Record<string, unknown>).name as string | undefined)?.toLowerCase().includes(lowerQuery) ||
+            ((t as Record<string, unknown>).description as string | undefined)?.toLowerCase().includes(lowerQuery) ||
             t.id?.toLowerCase().includes(lowerQuery)
         );
     }

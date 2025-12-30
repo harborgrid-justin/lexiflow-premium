@@ -67,20 +67,20 @@ export const CaseListResources: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {resourceList.map((res, i) => (
+        {resourceList.map((res: unknown, i: number) => (
           <div key={i} className={cn("p-6 rounded-lg border shadow-sm transition-all hover:border-blue-300", theme.surface.default, theme.border.default)}>
             <div className="flex items-center gap-4 mb-4">
-              <UserAvatar name={res.name} size="lg"/>
+              <UserAvatar name={(res as {name: string}).name} size="lg"/>
               <div>
-                <h3 className={cn("font-bold text-lg", theme.text.primary)}>{res.name}</h3>
-                <p className={cn("text-sm", theme.text.secondary)}>{res.role}</p>
+                <h3 className={cn("font-bold text-lg", theme.text.primary)}>{(res as {name: string}).name}</h3>
+                <p className={cn("text-sm", theme.text.secondary)}>{(res as {role: string}).role}</p>
               </div>
             </div>
             <div className="space-y-4">
-              <ProgressBar label="Utilization" value={res.utilization} colorClass={res.utilization > 90 ? 'bg-red-500' : 'bg-blue-600'} />
+              <ProgressBar label="Utilization" value={(res as {utilization: number}).utilization} colorClass={(res as {utilization: number}).utilization > 90 ? 'bg-red-500' : 'bg-blue-600'} />
               <div className={cn("flex justify-between text-sm pt-2 border-t", theme.border.default)}>
                 <span className={theme.text.secondary}>Active Matters</span>
-                <span className={cn("font-bold", theme.text.primary)}>{res.cases}</span>
+                <span className={cn("font-bold", theme.text.primary)}>{(res as {cases: number}).cases}</span>
               </div>
             </div>
           </div>

@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { SearchToolbar } from '@/components/organisms';
 import { FileAttachment } from '@/components/molecules';
 import { Attachment } from '@/hooks/useSecureMessenger';

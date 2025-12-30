@@ -332,11 +332,12 @@ export class WorkflowApiService {
             if (filters?.caseId) params.append('caseId', filters.caseId);
             const queryString = params.toString();
             const url = queryString ? `${this.baseUrl}/instances?${queryString}` : `${this.baseUrl}/instances`;
-            
+
             return await apiClient.get<WorkflowInstance[]>(url);
         } catch (error: unknown) {
             // Graceful degradation: if endpoint doesn't exist yet, return empty array
-            if (error?.message?.includes('404') || error?.message?.includes('Cannot GET')) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            if (errorMessage.includes('404') || errorMessage.includes('Cannot GET')) {
                 console.warn('[WorkflowApiService.getInstances] Workflow instances endpoint not implemented yet, returning empty array');
                 return [];
             }

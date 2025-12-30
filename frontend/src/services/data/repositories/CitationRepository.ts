@@ -24,6 +24,7 @@ import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { CitationsApiService } from '@/api/analytics';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
+import { ValidationError, EntityNotFoundError } from '@/services/core/errors';
 
 export const CITATION_QUERY_KEYS = {
     all: () => ['citations'] as const,
@@ -45,7 +46,7 @@ export class CitationRepository extends Repository<Citation> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || false || id.trim() === '') {
+        if (!id || typeof id !== 'string' || id.trim() === '') {
             throw new Error(`[CitationRepository.${methodName}] Invalid id parameter`);
         }
     }
@@ -53,7 +54,7 @@ export class CitationRepository extends Repository<Citation> {
     override async getAll(): Promise<Citation[]> {
         if (this.useBackend) {
             try {
-                return await this.citationsApi.getAll() as Record<string, unknown>;
+                return await this.citationsApi.getAll() as unknown as Citation[];
             } catch (error) {
                 console.warn('[CitationRepository] Backend API unavailable', error);
             }
@@ -65,7 +66,7 @@ export class CitationRepository extends Repository<Citation> {
         this.validateId(id, 'getById');
         if (this.useBackend) {
             try {
-                return await this.citationsApi.getById(id) as Record<string, unknown>;
+                return await this.citationsApi.getById(id) as unknown as Citation;
             } catch (error) {
                 console.warn('[CitationRepository] Backend API unavailable', error);
             }
@@ -73,7 +74,7 @@ export class CitationRepository extends Repository<Citation> {
         return await super.getById(id);
     }
 
-    add = async (item: Citation): Promise<Citation> => {
+    override add = async (item: Citation): Promise<Citation> => {
         if (!item || typeof item !== 'object') {
             throw new ValidationError('[CitationRepository.add] Invalid citation data');
         }
@@ -81,7 +82,7 @@ export class CitationRepository extends Repository<Citation> {
         let result: Citation;
         if (this.useBackend) {
             try {
-                result = await this.citationsApi.create(item as Record<string, unknown>) as Record<string, unknown>;
+                result = await this.citationsApi.create(item as unknown as Parameters<typeof this.citationsApi.create>[0]) as unknown as Citation;
             } catch (error) {
                 console.warn('[CitationRepository] Backend API unavailable', error);
                 await super.add(item);
@@ -96,7 +97,7 @@ export class CitationRepository extends Repository<Citation> {
         try {
             await IntegrationEventPublisher.publish(SystemEventType.CITATION_SAVED, {
                 citation: result,
-                queryContext: (item as Record<string, unknown>).caseContext || ''
+                queryContext: (item as { caseContext?: string }).caseContext || ''
             });
         } catch (eventError) {
             console.warn('[CitationRepository] Failed to publish integration event', eventError);
@@ -109,7 +110,7 @@ export class CitationRepository extends Repository<Citation> {
         this.validateId(id, 'update');
         if (this.useBackend) {
             try {
-                return await this.citationsApi.update(id, updates as Record<string, unknown>) as Record<string, unknown>;
+                return await this.citationsApi.update(id, updates as unknown as Parameters<typeof this.citationsApi.update>[1]) as unknown as Citation;
             } catch (error) {
                 console.warn('[CitationRepository] Backend API unavailable', error);
             }
@@ -156,27 +157,27 @@ export class CitationRepository extends Repository<Citation> {
         this.validateId(id, 'shepardize');
         if (this.useBackend) {
             try {
-                return await this.citationsApi.shepardize(id) as Record<string, unknown>;
+                return await this.citationsApi.shepardize(id) as unknown as Citation;
             } catch (error) {
                 console.warn('[CitationRepository] Backend API unavailable', error);
             }
         }
         const citation = await this.getById(id);
-        if (!citation) throw new EntityNotFoundError('Citation not found');
-        return { ...citation, shepardized: true, shepardStatus: 'good_law' } as Record<string, unknown>;
+        if (!citation) throw new EntityNotFoundError('Citation', id);
+        return { ...citation, shepardized: true, shepardStatus: 'good_law' } as Citation;
     }
 
     async search(criteria: { caseId?: string; documentId?: string; type?: string; query?: string }): Promise<Citation[]> {
         let citations = await this.getAll();
-        if (criteria.caseId) citations = citations.filter(c => (c as Record<string, unknown>).caseId === criteria.caseId);
-        if (criteria.documentId) citations = citations.filter(c => (c as Record<string, unknown>).documentId === criteria.documentId);
-        if (criteria.type) citations = citations.filter(c => (c as Record<string, unknown>).type === criteria.type);
+        if (criteria.caseId) citations = citations.filter(c => (c as { caseId?: string }).caseId === criteria.caseId);
+        if (criteria.documentId) citations = citations.filter(c => (c as { documentId?: string }).documentId === criteria.documentId);
+        if (criteria.type) citations = citations.filter(c => (c as { type?: string }).type === criteria.type);
         if (criteria.query) {
             const lowerQuery = criteria.query.toLowerCase();
             citations = citations.filter(c =>
                 c.citation?.toLowerCase().includes(lowerQuery) ||
-                (c as Record<string, unknown>).citationText?.toLowerCase().includes(lowerQuery) ||
-                (c as Record<string, unknown>).bluebookFormat?.toLowerCase().includes(lowerQuery)
+                (c as { citationText?: string }).citationText?.toLowerCase().includes(lowerQuery) ||
+                (c as { bluebookFormat?: string }).bluebookFormat?.toLowerCase().includes(lowerQuery)
             );
         }
         return citations;

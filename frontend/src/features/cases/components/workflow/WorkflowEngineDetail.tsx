@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ArrowLeft, Settings, Play, Pause, AlertTriangle, CheckCircle, GitBranch, Clock, Loader2, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Settings, Play, Pause, AlertTriangle, CheckCircle, GitBranch, Clock, Loader2} from 'lucide-react';
 import { Button } from '@/components/atoms';
 import { Card } from '@/components/molecules';
 import { Badge } from '@/components/atoms';
@@ -117,10 +117,10 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
       {/* Main Content Area */}
       <div className={cn("flex-1 rounded-lg shadow-sm border flex flex-col overflow-hidden min-h-0", theme.surface.default, theme.border.default)}>
         <div className={cn("border-b px-4 pt-2", theme.border.default)}>
-          <Tabs 
-            tabs={['visualizer', 'tasks', 'audit', 'settings']} 
-            activeTab={activeTab} 
-            onChange={(t) => setActiveTab(t as Record<string, unknown>)} 
+          <Tabs
+            tabs={['visualizer', 'tasks', 'audit', 'settings']}
+            activeTab={activeTab}
+            onChange={(t) => setActiveTab(t as 'visualizer' | 'tasks' | 'audit' | 'settings')}
             variant="underline"
             className="border-none"
           />

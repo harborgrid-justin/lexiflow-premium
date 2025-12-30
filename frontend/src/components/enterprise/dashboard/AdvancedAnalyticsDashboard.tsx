@@ -86,7 +86,6 @@ export const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProp
   columns = 2,
   className,
   isLoading = false,
-  error,
   onRefresh,
   onExport,
   onExpand,
@@ -137,7 +136,7 @@ export const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProp
         <div
           className={cn(
             'p-3 rounded-lg shadow-lg border',
-            theme.surface.elevated,
+            theme.surface.raised,
             theme.border.default
           )}
         >
@@ -238,9 +237,9 @@ export const AdvancedAnalyticsDashboard: React.FC<AdvancedAnalyticsDashboardProp
             outerRadius={100}
             fill="#8884d8"
             dataKey="value"
-            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+            label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
           >
-            {config.data.map((entry, idx) => (
+            {config.data.map((_, idx) => (
               <Cell key={`cell-${idx}`} fill={colors[idx % colors.length]} />
             ))}
           </Pie>

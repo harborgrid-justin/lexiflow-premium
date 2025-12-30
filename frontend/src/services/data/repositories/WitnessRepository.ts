@@ -21,6 +21,7 @@ import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { WitnessesApiService, Witness } from '@/api/discovery';
+import { ValidationError } from '@/services/core/errors';
 
 export const WITNESS_QUERY_KEYS = {
     all: () => ['witnesses'] as const,
@@ -42,12 +43,12 @@ export class WitnessRepository extends Repository<Witness> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || false || id.trim() === '') {
+        if (!id || typeof id !== 'string' || id.trim() === '') {
             throw new Error(`[WitnessRepository.${methodName}] Invalid id parameter`);
         }
     }
 
-    override async getAll(): Promise<unknown[]> {
+    override async getAll(): Promise<Witness[]> {
         if (this.useBackend) {
             try {
                 return await this.witnessesApi.getAll();
@@ -58,7 +59,7 @@ export class WitnessRepository extends Repository<Witness> {
         return await super.getAll();
     }
 
-    async getByCaseId(caseId: string): Promise<unknown[]> {
+    override async getByCaseId(caseId: string): Promise<Witness[]> {
         this.validateId(caseId, 'getByCaseId');
         if (this.useBackend) {
             try {
@@ -70,13 +71,13 @@ export class WitnessRepository extends Repository<Witness> {
         return await this.getByIndex('caseId', caseId);
     }
     
-    async getByType(witnessType: string): Promise<unknown[]> {
+    async getByType(witnessType: string): Promise<Witness[]> {
         if (!witnessType) {
             throw new ValidationError('[WitnessRepository.getByType] Invalid witnessType');
         }
         if (this.useBackend) {
             try {
-                return await this.witnessesApi.getByType(witnessType as Record<string, unknown>);
+                return await this.witnessesApi.getByType(witnessType as Witness['witnessType']);
             } catch (error) {
                 console.warn('[WitnessRepository] Backend API unavailable', error);
             }
@@ -85,13 +86,13 @@ export class WitnessRepository extends Repository<Witness> {
         return all.filter(w => w.witnessType === witnessType);
     }
     
-    async getByStatus(status: string): Promise<unknown[]> {
+    async getByStatus(status: string): Promise<Witness[]> {
         if (!status) {
             throw new ValidationError('[WitnessRepository.getByStatus] Invalid status');
         }
         if (this.useBackend) {
             try {
-                return await this.witnessesApi.getByStatus(status as Record<string, unknown>);
+                return await this.witnessesApi.getByStatus(status as Witness['status']);
             } catch (error) {
                 console.warn('[WitnessRepository] Backend API unavailable', error);
             }
@@ -100,7 +101,7 @@ export class WitnessRepository extends Repository<Witness> {
         return all.filter(w => w.status === status);
     }
 
-    override async getById(id: string): Promise<any | undefined> {
+    override async getById(id: string): Promise<Witness | undefined> {
         this.validateId(id, 'getById');
         if (this.useBackend) {
             try {
@@ -131,7 +132,7 @@ export class WitnessRepository extends Repository<Witness> {
         this.validateId(id, 'update');
         if (this.useBackend) {
             try {
-                return await this.witnessesApi.update(id, updates as Record<string, unknown>) as Record<string, unknown>;
+                return await this.witnessesApi.update(id, updates);
             } catch (error) {
                 console.warn('[WitnessRepository] Backend API unavailable', error);
             }
@@ -141,12 +142,12 @@ export class WitnessRepository extends Repository<Witness> {
 
     async updateStatus(id: string, status: string): Promise<Witness> {
         this.validateId(id, 'updateStatus');
-        if (!status || false) {
+        if (!status || typeof status !== 'string') {
             throw new ValidationError('[WitnessRepository.updateStatus] Invalid status');
         }
         if (this.useBackend) {
             try {
-                return await this.witnessesApi.updateStatus(id, status as Record<string, unknown>) as Record<string, unknown>;
+                return await this.witnessesApi.updateStatus(id, status as Witness['status']);
             } catch (error) {
                 console.warn('[WitnessRepository] Backend API unavailable', error);
             }

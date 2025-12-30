@@ -16,9 +16,9 @@ type Story = StoryObj<typeof NeuralCommandBar>;
 export const Default: Story = {
   args: {
   "globalSearch": "Sample Text",
-  "setGlobalSearch": "Sample Text",
-  "onGlobalSearch": {},
-  "onSearchResultClick": {},
-  "onNeuralCommand": {}
+  "setGlobalSearch": () => {},
+  onGlobalSearch: () => {},
+  onSearchResultClick: () => {},
+  onNeuralCommand: () => {}
 },
 };

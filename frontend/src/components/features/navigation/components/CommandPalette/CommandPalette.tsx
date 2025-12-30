@@ -21,8 +21,6 @@ import {
   Search,
   Sparkles,
   Clock,
-  Hash,
-  FileText,
   X,
   CornerDownLeft,
   ArrowRight
@@ -323,7 +321,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     <>
       {/* Backdrop */}
       <div
-        className={styles.getBackdrop(theme)}
+        className={styles.getBackdrop()}
         onClick={() => onOpenChange(false)}
       />
 
@@ -386,7 +384,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                               {command.label}
                             </span>
                             {command.badge && (
-                              <span className={styles.getBadge(theme)}>
+                              <span className={styles.getBadge()}>
                                 {command.badge}
                               </span>
                             )}
@@ -449,7 +447,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           {enableAI && (
             <div className={styles.aiIndicator}>
               <Sparkles className="h-3 w-3" />
-              <span className={styles.getAiText(theme)}>AI Enabled</span>
+              <span className={styles.getAiText()}>AI Enabled</span>
             </div>
           )}
         </div>

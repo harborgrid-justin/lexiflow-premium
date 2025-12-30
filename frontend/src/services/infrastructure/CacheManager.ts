@@ -35,6 +35,7 @@
  */
 
 import type { QueryState } from './queryTypes';
+import { ValidationError } from '@/services/core/errors';
 
 /**
  * Cache statistics interface for monitoring

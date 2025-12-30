@@ -16,9 +16,9 @@ type Story = StoryObj<typeof FilterPanel>;
 export const Default: Story = {
   args: {
   "isOpen": true,
-  "onClose": {},
-  "onClear": {},
-  "children": "<div>Sample Content</div>",
+  onClose: () => {},
+  onClear: () => {},
+  children: undefined,
   "title": "Sample Text",
   "className": "Sample Text"
 },

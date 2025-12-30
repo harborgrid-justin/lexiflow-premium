@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Globe, ArrowRight, Server, Wifi } from 'lucide-react';
+import { Globe, Server, Wifi} from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
@@ -12,7 +12,7 @@ interface RegionMapProps {
  * RegionMap - React 18 optimized with React.memo
  */
 export const RegionMap = React.memo<RegionMapProps>(function RegionMap({ primaryRegion }) {
-  const { theme, mode } = useTheme();
+  const { theme} = useTheme();
   const isPrimaryEast = primaryRegion === 'US-East';
 
   return (

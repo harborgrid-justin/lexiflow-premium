@@ -43,14 +43,23 @@ export const CaseStatusWidget: React.FC<CaseStatusWidgetProps> = ({
   const [expanded, setExpanded] = useState(true);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const CustomTooltip = ({ active, payload }: unknown) => {
+  interface TooltipPayload {
+    payload: CaseStatusData;
+  }
+
+  interface CustomTooltipProps {
+    active?: boolean;
+    payload?: TooltipPayload[];
+  }
+
+  const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
         <div
           className={cn(
             'p-3 rounded-lg shadow-lg border',
-            theme.surface.elevated,
+            theme.surface.raised,
             theme.border.default
           )}
         >
@@ -127,7 +136,7 @@ export const CaseStatusWidget: React.FC<CaseStatusWidgetProps> = ({
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={data}
+                data={data as never[]}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
@@ -187,7 +196,7 @@ export const CaseStatusWidget: React.FC<CaseStatusWidgetProps> = ({
                     activeIndex === index
                       ? 'border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20'
                       : 'border-gray-200 dark:border-slate-700',
-                    theme.surface.elevated
+                    theme.surface.raised
                   )}
                   onMouseEnter={() => setActiveIndex(index)}
                   onMouseLeave={() => setActiveIndex(null)}

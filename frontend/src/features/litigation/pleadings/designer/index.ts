@@ -3,7 +3,7 @@
  * Visual pleading authoring and design tools
  */
 
-export { AIDraftingAssistant } from './AIDraftingAssistant';
-export { ContextPanel } from './ContextPanel';
-export { PleadingCanvas } from './PleadingCanvas';
-export { PleadingPaper } from './PleadingPaper';
+export { default as AIDraftingAssistant } from './AIDraftingAssistant';
+export { default as ContextPanel } from './ContextPanel';
+export { default as PleadingCanvas } from './PleadingCanvas';
+export { default as PleadingPaper } from './PleadingPaper';

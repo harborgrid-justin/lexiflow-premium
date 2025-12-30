@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, FileText, FolderOpen, Settings as SettingsIcon, Layout, BarChart3, Clock } from 'lucide-react';
+import { Plus, FileText, FolderOpen, BarChart3, Clock } from 'lucide-react';
 import { useTheme } from '@providers/ThemeContext';
 import { TabNavigation } from '@/components/organisms';
 import { PageHeader } from '@/components/organisms';
@@ -89,14 +89,14 @@ const DraftingDashboard: React.FC = () => {
     // TODO: Navigate to review interface
   };
 
-  const handleTemplateSaved = (template: DraftingTemplate) => {
+  const handleTemplateSaved = () => {
     addToast('Template saved successfully', 'success');
     setEditorView(null);
     setActiveTab('templates');
     loadData();
   };
 
-  const handleDocumentGenerated = (doc: GeneratedDocument) => {
+  const handleDocumentGenerated = () => {
     addToast('Document generated successfully', 'success');
     setEditorView(null);
     setActiveTab('recent');
@@ -145,7 +145,6 @@ const DraftingDashboard: React.FC = () => {
         <PageHeader
           title="Drafting & Assembly"
           subtitle="Enterprise document automation with template management"
-          icon={FileText}
           actions={
             <div className="flex items-center gap-2">
               <button 

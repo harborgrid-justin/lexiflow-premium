@@ -23,7 +23,7 @@ import { useTheme } from '@/providers/ThemeContext';
 
 // Utils & Data
 import { cn } from '@/utils/cn';
-import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS, StateJurisdiction } from '@/api/types/federalHierarchy';
+import { FEDERAL_CIRCUITS, STATE_JURISDICTIONS} from '@/api/types/federalHierarchy';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -137,7 +137,7 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
                 'District',
                 level2,
                 (val) => { setLevel2(val); setFinalCourt(val); },
-                level2Options,
+                [...level2Options],
                 'Select District...',
                 !level1
             )}
@@ -146,7 +146,7 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
                 'Court Level',
                 level2,
                 (val) => { setLevel2(val); setFinalCourt(null); },
-                level2Options,
+                [...level2Options],
                 'Select Level...',
                 !level1
             )}
@@ -155,7 +155,7 @@ export const JurisdictionSelector: React.FC<JurisdictionSelectorProps> = ({ onJu
                 'Court Name',
                 finalCourt,
                 (val) => setFinalCourt(val),
-                finalCourtOptions,
+                [...finalCourtOptions],
                 'Select Court...',
                 !level2
             )}

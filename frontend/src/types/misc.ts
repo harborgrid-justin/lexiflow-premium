@@ -2,7 +2,7 @@
 // Miscellaneous types - split from compatibility.ts
 
 import {
-  BaseEntity, UserId, OrgId, GroupId, DocumentId, EntityId, CaseId, MetadataRecord
+  BaseEntity, UserId, EntityId, CaseId, MetadataRecord
 } from './primitives';
 import {
   ServiceMethod, EntityType, EntityRole, ServiceStatus, NavCategory

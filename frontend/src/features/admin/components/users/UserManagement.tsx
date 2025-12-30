@@ -4,15 +4,13 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms';
 import { Badge } from '@/components/atoms';
-import { PageHeader } from '@/components/organisms';
 import { Modal } from '@/components/molecules';
 import { Input } from '@/components/atoms';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks';
 import { useSelection } from '@/hooks/useSelectionState';
-import { getTodayString } from '@/utils/dateUtils';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useQuery} from '@/hooks/useQueryHooks';
 import { DataService } from '@/services';
 import { queryKeys } from '@/utils/queryKeys';
 
@@ -30,14 +28,13 @@ interface UserData {
 /**
  * @deprecated Mock data - use backend API via DataService.users
  */
-const mockUsers: UserData[] = [];
 
 export const UserManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
   
   // Fetch users from backend API
-  const { data: users = [], isLoading, refetch } = useQuery<UserData[]>(
+  const { data: users = [], refetch} = useQuery<UserData[]>(
     queryKeys.users.all(),
     () => DataService.users.getAll()
   );

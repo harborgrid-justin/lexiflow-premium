@@ -10,7 +10,7 @@
 
 // External Dependencies
 import React, { useState } from 'react';
-import { X, Mail, MapPin, User, Calendar, FileText, Download, Navigation, CheckSquare, Archive, Briefcase, BookOpen, Truck, Package, PenTool, UploadCloud } from 'lucide-react';
+import { X, Mail, MapPin, FileText, Download, Navigation, CheckSquare, Archive, Briefcase, BookOpen, Truck, PenTool, UploadCloud } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { Button } from '@/components/atoms';
@@ -50,12 +50,15 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
   const [newStatus, setNewStatus] = useState(serviceItem?.status || 'Out for Service');
 
   // Type Guard helpers
-  const isComm = (i: CommunicationItem | ServiceJob): i is CommunicationItem => type === 'communication';
-  const isService = (i: CommunicationItem | ServiceJob): i is ServiceJob => type === 'service';
+  const isComm = (): boolean => type === 'communication';
+  const isService = (): boolean => type === 'service';
 
   // Mutations
   const { mutate: archiveItem } = useMutation(
-      DataService.correspondence.archive,
+      async (id: string) => {
+          const correspondence = (await DataService.correspondence) as any;
+          return correspondence.archive(id);
+      },
       {
           onSuccess: () => {
               notify.success("Item archived.");
@@ -65,30 +68,33 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
   );
 
   const handleCreateTask = async (task: WorkflowTask) => {
-      await DataService.tasks.add(task);
+      const tasks = (await DataService.tasks) as any;
+      await tasks.add(task);
       notify.success('Follow-up task created.');
   };
 
   const handleSaveToCase = async () => {
-      if (!isComm(item)) return;
-      
+      if (!isComm()) return;
+      const commItem = item as CommunicationItem;
+
       const doc: LegalDocument = {
           id: `doc-${Date.now()}` as DocumentId,
-          caseId: item.caseId as CaseId,
-          title: `Correspondence: ${item.subject}`,
+          caseId: commItem.caseId as CaseId,
+          title: `Correspondence: ${commItem.subject}`,
           type: 'Correspondence',
-          content: item.preview, // In real app, this is full body
+          content: commItem.preview,
           uploadDate: new Date().toISOString().split('T')[0],
           lastModified: new Date().toISOString().split('T')[0],
-          tags: ['Communication', item.type],
+          tags: ['Communication', commItem.type],
           versions: [],
           sourceModule: 'Correspondence',
           status: 'Final',
-          fileSize: '24 KB' // Mock
+          fileSize: '24 KB'
       };
-      
+
       try {
-          await DataService.documents.add(doc);
+          const documents = (await DataService.documents) as any;
+          await documents.add(doc);
           notify.success('Correspondence saved to Case Documents.');
       } catch (e) {
           notify.error('Failed to save document.');
@@ -96,24 +102,26 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
   };
 
   const handleLinkDocket = async () => {
-      if (!isService(item)) return;
-      
+      if (!isService()) return;
+      const serviceItem = item as ServiceJob;
+
       const entry: DocketEntry = {
           id: `dk-${Date.now()}` as DocketId,
           sequenceNumber: 999,
-          caseId: item.caseId,
+          caseId: serviceItem.caseId,
           date: new Date().toISOString().split('T')[0],
           dateFiled: new Date().toISOString(),
           entryDate: new Date().toISOString(),
           type: 'Filing',
-          title: `Proof of Service - ${item.documentTitle}`,
-          description: `Service on ${item.targetPerson} at ${item.targetAddress}. Status: ${item.status}. Server: ${item.serverName}. Signed by: ${signerName || 'N/A'}`,
-          filedBy: item.serverName,
+          title: `Proof of Service - ${serviceItem.documentTitle}`,
+          description: `Service on ${serviceItem.targetPerson} at ${serviceItem.targetAddress}. Status: ${serviceItem.status}. Server: ${serviceItem.serverName}. Signed by: ${signerName || 'N/A'}`,
+          filedBy: serviceItem.serverName,
           isSealed: false
       };
-      
+
       try {
-          await DataService.docket.add(entry);
+          const docket = (await DataService.docket) as any;
+          await docket.add(entry);
           notify.success('Service Proof linked to Docket.');
       } catch (e) {
           notify.error('Failed to create docket entry.');
@@ -121,25 +129,25 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
   };
 
   const handleUpdateServiceStatus = async () => {
-     if (!isService(item)) return;
-     // Simulate update via direct object mod (in real app, use a PATCH mutation)
-     item.status = newStatus as Record<string, unknown>;
-     item.signerName = signerName;
-     item.servedDate = deliveryDate;
-     // This would be: await DataService.correspondence.updateServiceJob(item.id, { status: newStatus, ... });
+     if (!isService()) return;
+     const serviceItem = item as ServiceJob;
+     (serviceItem.status as unknown) = newStatus;
+     serviceItem.signerName = signerName;
+     serviceItem.servedDate = deliveryDate;
      notify.success('Service status updated.');
   };
 
   const handleUploadProof = async () => {
-      if (!isService(item)) return;
-      
+      if (!isService()) return;
+      const serviceItem = item as ServiceJob;
+
       const proof: EvidenceItem = {
           id: `ev-${Date.now()}` as EvidenceId,
           trackingUuid: crypto.randomUUID() as UUID,
-          caseId: item.caseId,
-          title: `Return Receipt - ${item.documentTitle}`,
+          caseId: serviceItem.caseId,
+          title: `Return Receipt - ${serviceItem.documentTitle}`,
           type: 'Document',
-          description: `Proof of delivery/service for ${item.documentTitle} to ${item.targetPerson}. Signed by ${signerName}.`,
+          description: `Proof of delivery/service for ${serviceItem.documentTitle} to ${serviceItem.targetPerson}. Signed by ${signerName}.`,
           collectionDate: new Date().toISOString().split('T')[0],
           collectedBy: 'System Import',
           custodian: 'Firm Records',
@@ -148,21 +156,22 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
           chainOfCustody: [],
           tags: ['Proof of Service', 'Return Receipt']
       };
-      
-      await DataService.evidence.add(proof);
+
+      const evidence = (await DataService.evidence) as any;
+      await evidence.add(proof);
       notify.success('Return Receipt added to Evidence Vault.');
   };
 
   return (
     <div className={cn("h-full flex flex-col border-l shadow-xl bg-white", theme.border.default)}>
         {isTaskModalOpen && (
-            <TaskCreationModal 
-                isOpen={true} 
+            <TaskCreationModal
+                isOpen={true}
                 onClose={() => setIsTaskModalOpen(false)}
-                initialTitle={`Follow up on: ${isComm(item) ? item.subject : (item as ServiceJob).documentTitle}`}
+                initialTitle={`Follow up on: ${isComm() ? (item as CommunicationItem).subject : (item as ServiceJob).documentTitle}`}
                 relatedModule={type === 'communication' ? 'Correspondence' : 'Service'}
                 relatedItemId={item.id}
-                relatedItemTitle={isComm(item) ? item.subject : (item as ServiceJob).documentTitle}
+                relatedItemTitle={isComm() ? (item as CommunicationItem).subject : (item as ServiceJob).documentTitle}
                 onSave={handleCreateTask}
             />
         )}
@@ -175,39 +184,41 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
-            {isComm(item) && (
+            {isComm() && (() => {
+                const commItem = item as CommunicationItem;
+                return (
                 <>
                     <div>
-                        <h3 className={cn("text-lg font-bold mb-2", theme.text.primary)}>{item.subject}</h3>
+                        <h3 className={cn("text-lg font-bold mb-2", theme.text.primary)}>{commItem.subject}</h3>
                         <div className="flex items-center gap-2 mb-4">
-                            <span className={cn("px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-xs font-bold border")}>{item.type}</span>
-                            <span className={cn("text-xs", theme.text.tertiary)}>{item.date}</span>
+                            <span className={cn("px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-xs font-bold border")}>{commItem.type}</span>
+                            <span className={cn("text-xs", theme.text.tertiary)}>{commItem.date}</span>
                         </div>
                     </div>
 
                     <div className="space-y-3 p-4 rounded-lg bg-slate-50 border border-slate-100">
                         <div className="flex justify-between text-sm">
                             <span className={theme.text.secondary}>From:</span>
-                            <span className={cn("font-medium", theme.text.primary)}>{item.sender}</span>
+                            <span className={cn("font-medium", theme.text.primary)}>{commItem.sender}</span>
                         </div>
                         <div className="flex justify-between text-sm">
                             <span className={theme.text.secondary}>To:</span>
-                            <span className={cn("font-medium", theme.text.primary)}>{item.recipient}</span>
+                            <span className={cn("font-medium", theme.text.primary)}>{commItem.recipient}</span>
                         </div>
                         <div className="flex justify-between text-sm">
                             <span className={theme.text.secondary}>Case:</span>
-                            <span className={cn("font-mono text-xs", theme.primary.text)}>{item.caseId}</span>
+                            <span className={cn("font-mono text-xs", theme.primary.text)}>{commItem.caseId}</span>
                         </div>
                     </div>
 
                     <div>
                         <h4 className={cn("text-xs font-bold uppercase mb-2", theme.text.tertiary)}>Content Preview</h4>
                         <div className={cn("p-4 rounded border text-sm italic leading-relaxed", theme.surface.default, theme.border.default, theme.text.secondary)}>
-                            "{item.preview}..."
+                            "{commItem.preview}..."
                         </div>
                     </div>
 
-                    {item.hasAttachment && (
+                    {commItem.hasAttachment && (
                         <div className={cn("p-3 border rounded-lg flex items-center justify-between cursor-pointer", theme.border.default, theme.surface.default, "hover:shadow-sm")}>
                             <div className="flex items-center gap-2">
                                 <FileText className={cn("h-4 w-4", theme.text.link)}/>
@@ -217,16 +228,19 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                         </div>
                     )}
                 </>
-            )}
+            )
+            })()}
 
-            {isService(item) && (
+            {isService() && (() => {
+                const serviceItem = item as ServiceJob;
+                return (
                 <>
                     <div className="text-center pb-4 border-b border-slate-100">
                         <div className={cn("w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center", theme.surface.highlight, theme.action.primary.text)}>
-                            {item.method === 'Mail' ? <Truck className="h-6 w-6"/> : <MapPin className="h-6 w-6"/>}
+                            {serviceItem.method === 'Mail' ? <Truck className="h-6 w-6"/> : <MapPin className="h-6 w-6"/>}
                         </div>
-                        <h3 className={cn("text-lg font-bold", theme.text.primary)}>{item.targetPerson}</h3>
-                        <p className={cn("text-sm", theme.text.secondary)}>{item.targetAddress}</p>
+                        <h3 className={cn("text-lg font-bold", theme.text.primary)}>{serviceItem.targetPerson}</h3>
+                        <p className={cn("text-sm", theme.text.secondary)}>{serviceItem.targetAddress}</p>
                     </div>
 
                     <div className="space-y-4">
@@ -236,11 +250,11 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                             <div className="grid grid-cols-2 gap-2">
                                 <div>
                                     <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Current Status</label>
-                                    <select 
+                                    <select
                                         title="Select current status"
                                         className="w-full p-2 text-sm border rounded bg-white"
                                         value={newStatus}
-                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewStatus(e.target.value as Record<string, unknown>)}
+                                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewStatus(e.target.value)}
                                     >
                                         <option value="Out for Service">Out for Service</option>
                                         <option value="Served">Served / Delivered</option>
@@ -277,47 +291,47 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                         <div className="space-y-2 text-sm pt-2">
                             <div className="flex justify-between">
                                 <span className={theme.text.tertiary}>Method:</span>
-                                <span className="font-medium">{item.method}</span>
+                                <span className="font-medium">{serviceItem.method}</span>
                             </div>
                             <div className="flex justify-between">
                                 <span className={theme.text.tertiary}>Carrier/Server:</span>
-                                <span>{item.serverName}</span>
+                                <span>{serviceItem.serverName}</span>
                             </div>
-                            {item.mailType && (
+                            {serviceItem.mailType && (
                                 <div className="flex justify-between">
                                     <span className={theme.text.tertiary}>Mail Type:</span>
-                                    <span>{item.mailType}</span>
+                                    <span>{serviceItem.mailType}</span>
                                 </div>
                             )}
-                            {item.trackingNumber && (
+                            {serviceItem.trackingNumber && (
                                 <div className="flex justify-between">
                                     <span className={theme.text.tertiary}>Tracking #:</span>
-                                    <span className={cn("font-mono", theme.text.link)}>{item.trackingNumber}</span>
+                                    <span className={cn("font-mono", theme.text.link)}>{serviceItem.trackingNumber}</span>
                                 </div>
                             )}
-                             {item.addressedTo && (
+                             {serviceItem.addressedTo && (
                                 <div className="flex justify-between">
                                     <span className={theme.text.tertiary}>Addressed To:</span>
-                                    <span>{item.addressedTo}</span>
+                                    <span>{serviceItem.addressedTo}</span>
                                 </div>
                             )}
                             <div className="flex justify-between">
                                 <span className={theme.text.tertiary}>Due Date:</span>
-                                <span className="text-red-500 font-medium">{item.dueDate}</span>
+                                <span className="text-red-500 font-medium">{serviceItem.dueDate}</span>
                             </div>
                         </div>
 
-                        {item.gpsCoordinates && (
+                        {serviceItem.gpsCoordinates && (
                             <div className={cn("p-3 rounded bg-slate-50 border border-slate-100 text-xs flex items-center gap-2", theme.text.secondary)}>
                                 <Navigation className={cn("h-3 w-3", theme.text.link)}/>
-                                GPS Verified: {item.gpsCoordinates}
+                                GPS Verified: {serviceItem.gpsCoordinates}
                             </div>
                         )}
 
-                        {item.notes && (
+                        {serviceItem.notes && (
                             <div>
                                 <label className={cn("block text-xs font-bold uppercase mb-1", theme.text.secondary)}>Notes</label>
-                                <p className={cn("text-sm p-3 bg-yellow-50 border border-yellow-100 rounded text-yellow-800")}>{item.notes}</p>
+                                <p className={cn("text-sm p-3 bg-yellow-50 border border-yellow-100 rounded text-yellow-800")}>{serviceItem.notes}</p>
                             </div>
                         )}
                         
@@ -328,13 +342,14 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                         </div>
                     </div>
                 </>
-            )}
+            )
+            })()}
         </div>
 
         <div className={cn("p-4 border-t flex flex-col gap-2", theme.border.default)}>
-            {isComm(item) ? (
+            {isComm() ? (
                 <div className="grid grid-cols-2 gap-2">
-                    <Button variant="outline" size="sm" icon={Mail} onClick={() => onReply && onReply(item)}>Reply</Button>
+                    <Button variant="outline" size="sm" icon={Mail} onClick={() => onReply && onReply(item as CommunicationItem)}>Reply</Button>
                     <Button variant="secondary" size="sm" icon={CheckSquare} onClick={() => setIsTaskModalOpen(true)}>Create Task</Button>
                     <Button variant="secondary" size="sm" icon={Briefcase} onClick={handleSaveToCase}>Save to Case</Button>
                     <Button variant="ghost" size="sm" icon={Archive} className="text-slate-500" onClick={() => archiveItem(item.id)}>Archive</Button>

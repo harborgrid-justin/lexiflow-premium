@@ -66,7 +66,7 @@ export const PlanningSidebar: React.FC<PlanningSidebarProps> = ({
                     {!collapsedPhases.has(phase.id) && (
                         <div className={cn(theme.surface.highlight)}>
                             {/* Simple mock filter for tasks belonging to phase - in real app would check ID */}
-                            {tasks.filter(t => true).slice(0, 3).map(task => (
+                            {tasks.filter(() => true).slice(0, 3).map(task => (
                                 <div 
                                 key={task.id} 
                                 className={cn(

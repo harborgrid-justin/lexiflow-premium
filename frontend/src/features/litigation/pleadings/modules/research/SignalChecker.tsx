@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { CheckCircle, AlertTriangle, XCircle, HelpCircle } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 interface SignalCheckerProps {
@@ -9,8 +8,7 @@ interface SignalCheckerProps {
   status: 'Positive' | 'Caution' | 'Negative' | 'Unknown';
 }
 
-export const SignalChecker: React.FC<SignalCheckerProps> = ({ citation, status }) => {
-  const { theme } = useTheme();
+export const SignalChecker: React.FC<SignalCheckerProps> = ({ status }) => {
 
   const getIcon = () => {
     switch (status) {

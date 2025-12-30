@@ -10,7 +10,6 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Zap, Clock, Plus } from 'lucide-react';
 
 // ============================================================================
@@ -32,13 +31,27 @@ import { AdaptiveLoader } from '@/components/molecules';
 import { cn } from '@/utils/cn';
 
 // ============================================================================
+// TYPES
+// ============================================================================
+interface Automation {
+  id: string;
+  title: string;
+  description: string;
+  module: string;
+  target?: string;
+  color: 'amber' | 'blue';
+  icon: 'Zap' | 'Clock';
+  active: boolean;
+}
+
+// ============================================================================
 // COMPONENT
 // ============================================================================
 export const WorkflowAutomations = () => {
   const { theme } = useTheme();
-  
+
   // Load automations from IndexedDB via useQuery for accurate, cached data
-  const { data: automations = [], isLoading } = useQuery<unknown[]>(
+  const { data: automations = [], isLoading } = useQuery<Automation[]>(
     queryKeys.workflowsExtended.automations(),
     () => DataService.workflow.getAutomations()
   );

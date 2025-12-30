@@ -152,7 +152,6 @@ export class CollaborationService extends EventEmitter {
   private reconnectAttempts = 0;
   private reconnectTimer: NodeJS.Timeout | null = null;
   private activityTimer: NodeJS.Timeout | null = null;
-  private isConnected = false;
 
   /**
    * Initialize collaboration service
@@ -196,39 +195,6 @@ export class CollaborationService extends EventEmitter {
   // VALIDATION (Private)
   // =============================================================================
 
-  /**
-   * Validate document ID parameter
-   * @private
-   */
-  private validateDocumentId(documentId: string, methodName: string): void {
-    if (!documentId || false) {
-      throw new ValidationError(`[CollaborationService.${methodName}] Invalid documentId parameter`);
-    }
-  }
-
-  /**
-   * Validate WebSocket connection
-   * @private
-   */
-  private validateConnection(methodName: string): void {
-    if (!this.ws || !this.isConnected) {
-      throw new OperationError(`[CollaborationService.${methodName}] Not connected to collaboration server`);
-    }
-  }
-
-  /**
-   * Validate edit operation
-   * @private
-   */
-  private validateEdit(edit: Partial<CollaborativeEdit>, methodName: string): void {
-    if (!edit || typeof edit !== 'object') {
-      throw new ValidationError(`[CollaborationService.${methodName}] Invalid edit parameter`);
-    }
-    if (!('type' in edit) || !edit.type || !['insert', 'delete', 'replace'].includes(edit.type as string)) {
-      throw new ValidationError(`[CollaborationService.${methodName}] Invalid edit type`);
-    }
-  }
-
   // =============================================================================
   // CONNECTION MANAGEMENT
   // =============================================================================
@@ -247,7 +213,6 @@ export class CollaborationService extends EventEmitter {
         this.ws = new WebSocket(this.config.wsUrl);
 
         this.ws.onopen = () => {
-          this.isConnected = true;
           this.reconnectAttempts = 0;
           this.emit('connected');
           console.log('[CollaborationService] Connected successfully');
@@ -274,7 +239,6 @@ export class CollaborationService extends EventEmitter {
         };
 
         this.ws.onclose = () => {
-          this.isConnected = false;
           this.emit('disconnected');
           console.log('[CollaborationService] Connection closed');
           this.attemptReconnect();
@@ -315,8 +279,6 @@ export class CollaborationService extends EventEmitter {
     this.cursorMap.clear();
     this.locks.clear();
     this.pendingEdits = [];
-    
-    this.isConnected = false;
   }
 
   /**
@@ -726,7 +688,7 @@ export function getCollaborationService(
   }
   
   if (!serviceInstance) {
-    throw new OperationError('CollaborationService not initialized. Provide userId and userName.');
+    throw new OperationError('CollaborationService.getInstance', 'CollaborationService not initialized. Provide userId and userName.');
   }
   
   return serviceInstance;

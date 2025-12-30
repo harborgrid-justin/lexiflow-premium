@@ -109,9 +109,9 @@
 //                          CORE DEPENDENCIES
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { Case, CasePhase, Party, CaseId } from '@/types';
+import { Case, CasePhase, Party, CaseId, CaseStatus } from '@/types';
 import { Repository } from '@/services/core/Repository';
-import { STORES, db } from '@/services/data/db';
+import { STORES } from '@/services/data/db';
 import { delay } from '@/utils/async';
 
 // Backend API Integration (Primary Data Source)
@@ -151,11 +151,11 @@ export class CaseRepository extends Repository<Case> {
     /**
      * Retrieves all cases with optional filtering
      * Routes to backend API if enabled, otherwise uses IndexedDB
-     * 
+     *
      * @returns Promise<Case[]> - Array of all cases
      * @complexity O(1) API call or O(n) IndexedDB scan
      */
-    async getAll(): Promise<Case[]> {
+    override async getAll(): Promise<Case[]> {
         if (isBackendApiEnabled()) {
             return this.casesApi.getAll();
         }
@@ -164,12 +164,12 @@ export class CaseRepository extends Repository<Case> {
 
     /**
      * Retrieves a single case by ID
-     * 
+     *
      * @param id - Case identifier
      * @returns Promise<Case | undefined>
      * @complexity O(1) for both backend and IndexedDB
      */
-    async getById(id: string): Promise<Case | undefined> {
+    override async getById(id: string): Promise<Case | undefined> {
         if (isBackendApiEnabled()) {
             try {
                 return await this.casesApi.getById(id);
@@ -183,11 +183,11 @@ export class CaseRepository extends Repository<Case> {
 
     /**
      * Adds a new case
-     * 
+     *
      * @param caseData - Case data without system fields
      * @returns Promise<Case> - Created case with ID
      */
-    async add(caseData: Omit<Case, 'id' | 'createdAt' | 'updatedAt'>): Promise<Case> {
+    override async add(caseData: Omit<Case, 'id' | 'createdAt' | 'updatedAt'>): Promise<Case> {
         if (isBackendApiEnabled()) {
             return this.casesApi.add(caseData);
         }
@@ -196,12 +196,12 @@ export class CaseRepository extends Repository<Case> {
 
     /**
      * Updates an existing case
-     * 
+     *
      * @param id - Case identifier
      * @param updates - Partial case updates
      * @returns Promise<Case> - Updated case
      */
-    async update(id: string, updates: Partial<Case>): Promise<Case> {
+    override async update(id: string, updates: Partial<Case>): Promise<Case> {
         if (isBackendApiEnabled()) {
             return this.casesApi.update(id, updates);
         }
@@ -210,11 +210,11 @@ export class CaseRepository extends Repository<Case> {
 
     /**
      * Deletes a case
-     * 
+     *
      * @param id - Case identifier
      * @returns Promise<void>
      */
-    async delete(id: string): Promise<void> {
+    override async delete(id: string): Promise<void> {
         if (isBackendApiEnabled()) {
             await this.casesApi.delete(id);
             return;
@@ -302,7 +302,7 @@ export class CaseRepository extends Repository<Case> {
         await delay(300);
         const c = await this.getById(id);
         if (c) {
-            await this.update(id, { status: 'Closed' as Record<string, unknown> });
+            await this.update(id, { status: CaseStatus.Closed });
         }
     }
 
@@ -358,11 +358,11 @@ export class PhaseRepository extends Repository<CasePhase> {
 
     /**
      * Retrieves all phases with backend routing
-     * 
+     *
      * @returns Promise<CasePhase[]>
      * @complexity O(1) API call or O(n) IndexedDB scan
      */
-    async getAll(): Promise<CasePhase[]> {
+    override async getAll(): Promise<CasePhase[]> {
         if (isBackendApiEnabled()) {
             try {
                 return await apiClient.get<CasePhase[]>('/case-phases');
@@ -375,11 +375,11 @@ export class PhaseRepository extends Repository<CasePhase> {
 
     /**
      * Retrieves a single phase by ID
-     * 
+     *
      * @param id - Phase identifier
      * @returns Promise<CasePhase | undefined>
      */
-    async getById(id: string): Promise<CasePhase | undefined> {
+    override async getById(id: string): Promise<CasePhase | undefined> {
         if (isBackendApiEnabled()) {
             try {
                 return await apiClient.get<CasePhase>(`/case-phases/${id}`);
@@ -393,11 +393,11 @@ export class PhaseRepository extends Repository<CasePhase> {
 
     /**
      * Adds a new phase
-     * 
+     *
      * @param phaseData - Phase data
      * @returns Promise<CasePhase>
      */
-    async add(phaseData: Omit<CasePhase, 'id' | 'createdAt' | 'updatedAt'>): Promise<CasePhase> {
+    override async add(phaseData: Omit<CasePhase, 'id' | 'createdAt' | 'updatedAt'>): Promise<CasePhase> {
         if (isBackendApiEnabled()) {
             return apiClient.post<CasePhase>('/case-phases', phaseData);
         }
@@ -406,12 +406,12 @@ export class PhaseRepository extends Repository<CasePhase> {
 
     /**
      * Updates an existing phase
-     * 
+     *
      * @param id - Phase identifier
      * @param updates - Partial phase updates
      * @returns Promise<CasePhase>
      */
-    async update(id: string, updates: Partial<CasePhase>): Promise<CasePhase> {
+    override async update(id: string, updates: Partial<CasePhase>): Promise<CasePhase> {
         if (isBackendApiEnabled()) {
             return apiClient.patch<CasePhase>(`/case-phases/${id}`, updates);
         }
@@ -420,11 +420,11 @@ export class PhaseRepository extends Repository<CasePhase> {
 
     /**
      * Deletes a phase
-     * 
+     *
      * @param id - Phase identifier
      * @returns Promise<void>
      */
-    async delete(id: string): Promise<void> {
+    override async delete(id: string): Promise<void> {
         if (isBackendApiEnabled()) {
             await apiClient.delete(`/case-phases/${id}`);
             return;
@@ -442,7 +442,7 @@ export class PhaseRepository extends Repository<CasePhase> {
      * @returns Promise<CasePhase[]> - Ordered array of phases
      * @complexity O(1) API call or O(log n) IndexedDB index lookup
      */
-    getByCaseId = async (caseId: string): Promise<CasePhase[]> => {
+    override getByCaseId = async (caseId: string): Promise<CasePhase[]> => {
         // Try backend API first
         if (isBackendApiEnabled()) {
             try {

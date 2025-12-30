@@ -15,8 +15,8 @@ type Story = StoryObj<typeof TabbedView>;
 
 export const Default: Story = {
   args: {
-  "header": "<div>Sample Content</div>",
-  "tabs": "<div>Sample Content</div>",
-  "children": "<div>Sample Content</div>"
+  header: undefined,
+  tabs: undefined,
+  children: undefined
 },
 };

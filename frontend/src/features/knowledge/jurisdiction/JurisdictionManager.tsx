@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, Suspense, useTransition } from 'react';
 import { Plus } from 'lucide-react';
+import React, { Suspense, useState, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -20,9 +20,9 @@ import { Plus } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { PageHeader } from '@/components/organisms';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { LazyLoader } from '@/components/molecules';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -43,7 +43,7 @@ export const JurisdictionManager: React.FC = () => {
 
   const setActiveTab = (tab: JurisdictionView) => {
     startTransition(() => {
-        _setActiveTab(tab);
+      _setActiveTab(tab);
     });
   };
 
@@ -81,7 +81,7 @@ export const JurisdictionManager: React.FC = () => {
                     : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`)
                 )}
               >
-                <tab.icon className="h-4 w-4 mr-2"/>
+                <tab.icon className="h-4 w-4 mr-2" />
                 {tab.label}
               </button>
             ))}

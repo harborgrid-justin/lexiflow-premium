@@ -4,7 +4,7 @@
  * @description Production-grade security and compliance dashboard with authentication policy,
  * MFA enforcement, session management, IP whitelisting, threat detection using Bloom Filter,
  * and comprehensive access logs monitoring.
- * 
+ *
  * THEME SYSTEM USAGE:
  * - theme.surface.default/highlight - Card backgrounds and sections
  * - theme.text.primary/secondary - Labels and content
@@ -12,20 +12,30 @@
  * - theme.status.success/error/warning - Security status indicators
  */
 
-import React, { useState } from 'react';
-import {
-  Lock, Shield, Smartphone, Globe, FileText, Clock,
-  AlertTriangle, CheckCircle, XCircle, Activity, UserCheck,
-  Search, Download, TrendingUp, AlertOctagon
-} from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { Input } from '@/components/atoms';
-import { BloomFilter } from '@/utils/bloomFilter';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useNotify } from '@/hooks/useNotify';
+import { useTheme } from '@/providers/ThemeContext';
+import { BloomFilter } from '@/utils/bloomFilter';
+import { cn } from '@/utils/cn';
+import {
+  Activity,
+  AlertOctagon,
+  AlertTriangle, CheckCircle,
+  Clock,
+  Download,
+  FileText,
+  Globe,
+  Lock,
+  Search,
+  Shield, Smartphone,
+  TrendingUp,
+  UserCheck,
+  XCircle
+} from 'lucide-react';
+import React, { useState } from 'react';
 
 // ========================================
 // TYPES
@@ -80,7 +90,7 @@ const ipWhitelist: string[] = [
 export const SecurityCompliance: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  
+
   const [testIp, setTestIp] = useState('');
   const [checkResult, setCheckResult] = useState<{
     status: 'safe' | 'blocked' | 'whitelisted';
@@ -172,7 +182,7 @@ export const SecurityCompliance: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<'all' | 'success' | 'failed' | 'blocked'>('all');
 
   const getIcon = (type: string) => {
-    switch(type) {
+    switch (type) {
       case 'Smartphone': return Smartphone;
       case 'Lock': return Lock;
       case 'Globe': return Globe;
@@ -225,13 +235,13 @@ export const SecurityCompliance: React.FC = () => {
   };
 
   const filteredLogs = accessLogs.filter(log => {
-    const matchesSearch = 
+    const matchesSearch =
       log.user.toLowerCase().includes(searchQuery.toLowerCase()) ||
       log.ipAddress.includes(searchQuery) ||
       log.action.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesFilter = filterStatus === 'all' || log.status === filterStatus;
-    
+
     return matchesSearch && matchesFilter;
   });
 
@@ -240,7 +250,7 @@ export const SecurityCompliance: React.FC = () => {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
     const minutes = Math.floor(diff / 60000);
-    
+
     if (minutes < 1) return 'Just now';
     if (minutes < 60) return `${minutes}m ago`;
     const hours = Math.floor(minutes / 60);
@@ -298,7 +308,7 @@ export const SecurityCompliance: React.FC = () => {
                       "p-2 rounded-lg shrink-0",
                       theme.surface.highlight
                     )}>
-                      <Icon className={cn("h-5 w-5", theme.text.secondary)}/>
+                      <Icon className={cn("h-5 w-5", theme.text.secondary)} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className={cn("text-sm font-bold", theme.text.primary)}>
@@ -340,7 +350,7 @@ export const SecurityCompliance: React.FC = () => {
                       "p-2 rounded-lg shrink-0",
                       theme.surface.highlight
                     )}>
-                      <Icon className={cn("h-5 w-5", theme.text.secondary)}/>
+                      <Icon className={cn("h-5 w-5", theme.text.secondary)} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className={cn("text-sm font-bold", theme.text.primary)}>
@@ -562,11 +572,11 @@ export const SecurityCompliance: React.FC = () => {
                         {log.location || 'Unknown'}
                       </td>
                       <td className="px-4 py-3 text-sm">
-                        <Badge 
+                        <Badge
                           variant={
                             log.status === 'success' ? 'success' :
-                            log.status === 'failed' ? 'warning' :
-                            'error'
+                              log.status === 'failed' ? 'warning' :
+                                'error'
                           }
                         >
                           {log.status === 'success' && <CheckCircle className="h-3 w-3 mr-1" />}

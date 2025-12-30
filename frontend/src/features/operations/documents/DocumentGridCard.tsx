@@ -1,10 +1,10 @@
 
-import React from 'react';
-import { LegalDocument } from '@/types';
-import { FileIcon } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { FileIcon } from '@/components/ui/atoms/FileIcon/FileIcon';
 import { useTheme } from '@/providers/ThemeContext';
+import { LegalDocument } from '@/types';
 import { cn } from '@/utils/cn';
+import React from 'react';
 
 interface DocumentGridCardProps {
     doc: LegalDocument;
@@ -17,9 +17,9 @@ export function DocumentGridCard({ doc, isSelected, onToggleSelection, onPreview
     const { theme } = useTheme();
 
     return (
-        <div 
+        <div
             onClick={(e: React.MouseEvent) => {
-                if(e.ctrlKey || e.metaKey) onToggleSelection(doc.id, e);
+                if (e.ctrlKey || e.metaKey) onToggleSelection(doc.id, e);
                 else onPreview(doc);
             }}
             className={cn(
@@ -30,10 +30,10 @@ export function DocumentGridCard({ doc, isSelected, onToggleSelection, onPreview
             )}
         >
             <div className="absolute top-2 left-2 z-10" onClick={e => e.stopPropagation()}>
-                <input 
-                    type="checkbox" 
-                    checked={isSelected} 
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onToggleSelection(doc.id, e as any)} 
+                <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onToggleSelection(doc.id, e as any)}
                     className="rounded text-blue-600 cursor-pointer w-4 h-4"
                 />
             </div>

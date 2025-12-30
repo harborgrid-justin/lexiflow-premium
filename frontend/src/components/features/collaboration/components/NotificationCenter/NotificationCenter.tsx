@@ -22,8 +22,8 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useToast } from '@/providers/ToastContext';
 
 // Components
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button';
+import { Badge } from '@/components/ui/atoms/Badge';
 import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Database, RefreshCw, Trash2, Plus, Info, AlertTriangle, CheckCircle } from 'lucide-react';
+import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
+import { useModalState } from '@/hooks/useModalState';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { ConfirmDialog } from '@/components/molecules';
-import { useModalState } from '@/hooks/useModalState';
+import { AlertTriangle, CheckCircle, Database, Info, Plus, RefreshCw, Trash2 } from 'lucide-react';
+import React, { useState } from 'react';
 
 export const DatabaseManagement: React.FC = () => {
   const { theme } = useTheme();
@@ -28,7 +28,7 @@ export const DatabaseManagement: React.FC = () => {
   const handleIncrementVersion = async () => {
     setIsProcessing(true);
     try {
-      // await db.incrementVersion(); 
+      // await db.incrementVersion();
       setMessage({ type: 'info', text: `Version increment not yet implemented` });
       await refetch();
     } catch (error) {
@@ -41,7 +41,7 @@ export const DatabaseManagement: React.FC = () => {
   const handleResetDatabase = async () => {
     setIsProcessing(true);
     try {
-      // await db.resetDatabase(); 
+      // await db.resetDatabase();
       setMessage({ type: 'info', text: 'Database reset not yet implemented' });
       setTimeout(() => window.location.reload(), 1500);
     } catch (error) {
@@ -77,7 +77,7 @@ export const DatabaseManagement: React.FC = () => {
           <h3 className={cn("text-lg font-semibold flex items-center gap-2", theme.text.primary)}>
             <Database className="h-5 w-5 text-blue-500" /> Database Information
           </h3>
-          <button 
+          <button
             onClick={() => refetch()}
             disabled={isProcessing}
             className={cn("px-3 py-1.5 text-sm font-medium rounded-lg border flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors disabled:opacity-50", theme.border.default, theme.text.primary)}

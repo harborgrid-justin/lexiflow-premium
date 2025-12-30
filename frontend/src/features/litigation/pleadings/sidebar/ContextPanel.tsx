@@ -1,14 +1,14 @@
-import React, { useState, useMemo } from 'react';
-import { FileText, Plus, Search, BookOpen, Users, Scale, ChevronRight, Loader2 } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
+import { BookOpen, ChevronRight, FileText, Loader2, Plus, Scale, Search, Users } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
+import { SEARCH_DEBOUNCE_MS } from '@/config/master.config';
 import { useDebounce } from '@/hooks/useDebounce';
 import { DocketEntry } from '@/types';
-import { SEARCH_DEBOUNCE_MS } from '@/config/master.config';
 
 interface ContextPanelProps {
   caseId: string;
@@ -115,9 +115,9 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
   // Filter facts based on debounced search term
   const filteredFacts = useMemo(() => {
     if (!debouncedSearchTerm) return facts;
-    
+
     const searchLower = debouncedSearchTerm.toLowerCase();
-    return facts.filter(f => 
+    return facts.filter(f =>
       f.content.toLowerCase().includes(searchLower) ||
       f.source.toLowerCase().includes(searchLower)
     );
@@ -226,4 +226,3 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
 };
 
 export default ContextPanel;
-

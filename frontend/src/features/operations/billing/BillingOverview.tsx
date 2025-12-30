@@ -23,12 +23,12 @@ import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
-import { useChartTheme } from '@/components/organisms';
+import { useChartTheme } from '@/components/organisms/ChartHelpers';
 
 // Components
-import { Card } from '@/components/molecules';
-import { Currency } from '@/components/atoms';
-import { MetricCard } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card';
+import { Currency } from '@/components/ui/atoms/Currency';
+import { MetricCard } from '@/components/ui/molecules/MetricCard';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -51,18 +51,18 @@ interface BillingOverviewProps {
 export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) => {
   const { theme, mode } = useTheme();
   const chartTheme = useChartTheme();
-  
+
   // Enterprise Data Access: Parallel Queries with safety check
   const { data: rawWipData = [] } = useQuery<WIPStat[]>(
       ['billing', 'wipStats'],
       () => DataService.billing ? DataService.billing.getWIPStats() : Promise.resolve([])
   );
-  
+
   const { data: rawRealizationData = [] } = useQuery(
       ['billing', 'realization'],
       () => DataService.billing ? DataService.billing.getRealizationStats(mode) : Promise.resolve([])
   );
-  
+
   const { data: rawTopClients = [] } = useQuery(
       ['billing', 'topAccounts'],
       () => DataService.billing ? DataService.billing.getTopAccounts() : Promise.resolve([])
@@ -119,22 +119,22 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={wipData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid}/>
-                <XAxis 
-                    dataKey="name" 
-                    axisLine={false} 
-                    tickLine={false} 
-                    fontSize={12} 
-                    tick={{fill: chartTheme.text}} 
+                <XAxis
+                    dataKey="name"
+                    axisLine={false}
+                    tickLine={false}
+                    fontSize={12}
+                    tick={{fill: chartTheme.text}}
                     dy={10}
                 />
-                <YAxis 
-                    axisLine={false} 
-                    tickLine={false} 
-                    fontSize={12} 
+                <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    fontSize={12}
                     tick={{fill: chartTheme.text}}
                     tickFormatter={(val) => `$${val/1000}k`}
                 />
-                <Tooltip 
+                <Tooltip
                     cursor={{fill: chartTheme.grid}}
                     contentStyle={chartTheme.tooltipStyle}
                 />
@@ -160,11 +160,11 @@ export const BillingOverview: React.FC<BillingOverviewProps> = ({ onNavigate }) 
                 <>
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
-                        <Pie 
-                            data={realizationData} 
-                            innerRadius={70} 
-                            outerRadius={100} 
-                            paddingAngle={5} 
+                        <Pie
+                            data={realizationData}
+                            innerRadius={70}
+                            outerRadius={100}
+                            paddingAngle={5}
                             dataKey="value"
                             stroke="none"
                             isAnimationActive={true}

@@ -17,7 +17,7 @@ import { Search } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Input, InputProps } from '@/components/atoms';
+import { Input, InputProps } from '@/components/ui/atoms/Input';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -32,7 +32,7 @@ export function SearchInput(props: InputProps) {
   const { theme } = useTheme();
   const generatedId = useId();
   const inputId = props.id || generatedId;
-  
+
   return (
     <div className="relative">
       <Search className={cn("absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 pointer-events-none", theme.text.tertiary)} />

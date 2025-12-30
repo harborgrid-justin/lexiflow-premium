@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Shield, CheckCircle, XCircle } from 'lucide-react';
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { Input } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import { CheckCircle, Shield, XCircle } from 'lucide-react';
+import React, { useState } from 'react';
 import type { ThreatCheckResult } from './types';
 
 interface ThreatDetectionPanelProps {

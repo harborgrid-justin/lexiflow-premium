@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, useTransition } from 'react';
 import { Plus } from 'lucide-react';
+import React, { Suspense, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -21,13 +21,13 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { LazyLoader } from '@/components/molecules';
-import { KnowledgeContent } from './KnowledgeContent';
 import { Button } from '@/components/ui/atoms/Button/Button';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { KnowledgeContent } from './KnowledgeContent';
 
 // Utils & Config
-import { cn } from '@/utils/cn';
 import { KNOWLEDGE_BASE_TABS, KnowledgeView } from '@/config/tabs.config';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

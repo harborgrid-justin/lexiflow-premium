@@ -1,9 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { ShieldCheck, Plus, UserPlus, AlertTriangle, Loader2 } from 'lucide-react';
-import { Modal } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { Input } from '@/components/atoms';
+import { Modal } from '@/components/ui/molecules/Modal';
+import { Button } from '@/components/ui/atoms/Button';
+import { Input } from '@/components/ui/atoms/Input';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
@@ -20,7 +20,7 @@ export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, o
   const [name, setName] = useState('');
   const [industry, setIndustry] = useState('');
   const [contact, setContact] = useState('');
-  
+
   // Conflict State
   const [isChecking, setIsChecking] = useState(false);
   const [conflicts, setConflicts] = useState<string[]>([]);
@@ -52,11 +52,11 @@ export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, o
           parties.forEach((p: { name: string; role: string }) => {
               if (p.name.toLowerCase().includes(q)) found.push(`Party in Case: ${p.name} (${p.role})`);
           });
-          
+
           setConflicts(found);
           setIsChecking(false);
       };
-      
+
       runCheck();
   }, [debouncedName]);
 
@@ -78,7 +78,7 @@ export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, o
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
           autoFocus
         />
-        
+
         <div className="grid grid-cols-2 gap-4">
             <Input
                 label="Industry"
@@ -95,7 +95,7 @@ export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, o
         </div>
 
         <Input label="Opposing Parties (Conflict Check)" placeholder="Enter names separated by commas..." />
-        
+
         {/* Live Conflict Result */}
         <div className={cn("p-3 rounded border text-xs flex flex-col gap-1 transition-colors",
              isChecking ? "bg-slate-50 border-slate-200 text-slate-500" :
@@ -107,12 +107,12 @@ export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, o
               conflicts.length > 0 ? <AlertTriangle className="h-4 w-4 mr-2"/> :
               name.length > 2 ? <ShieldCheck className="h-4 w-4 mr-2"/> : <ShieldCheck className="h-4 w-4 mr-2 opacity-50"/>
              }
-             
+
              {isChecking ? "Scanning database..." :
               conflicts.length > 0 ? "Potential Conflicts Detected" :
               name.length > 2 ? "Clearance Check Passed" : "Enter name to scan conflicts"}
           </div>
-          
+
           {conflicts.length > 0 && (
               <ul className="list-disc pl-5 mt-1 space-y-0.5">
                   {conflicts.slice(0, 3).map((c, i) => <li key={i}>{c}</li>)}

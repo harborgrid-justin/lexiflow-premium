@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Plus, FileText, FolderOpen, BarChart3, Clock } from 'lucide-react';
-import { useTheme } from '@providers/ThemeContext';
-import { TabNavigation } from '@/components/organisms';
-import { PageHeader } from '@/components/organisms';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
 import { cn } from '@/utils/cn';
-import { RecentDrafts } from './components/RecentDrafts';
-import { TemplateGallery } from './components/TemplateGallery';
-import { ApprovalQueue } from './components/ApprovalQueue';
-import { DraftingStats } from './components/DraftingStats';
-import { TemplateEditor } from './components/TemplateEditor';
-import { DocumentGenerator } from './components/DocumentGenerator';
-import { draftingApi, GeneratedDocument, DraftingTemplate } from '@api/domains/drafting.api';
-import { DraftingStats as StatsType } from '@api/domains/drafting.api';
+import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@api/domains/drafting.api';
+import { useTheme } from '@providers/ThemeContext';
 import { useToast } from '@providers/ToastContext';
+import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { ApprovalQueue } from './components/ApprovalQueue';
+import { DocumentGenerator } from './components/DocumentGenerator';
+import { DraftingStats } from './components/DraftingStats';
+import { RecentDrafts } from './components/RecentDrafts';
+import { TemplateEditor } from './components/TemplateEditor';
+import { TemplateGallery } from './components/TemplateGallery';
 
 type View = 'overview' | 'recent' | 'templates' | 'approvals';
 type EditorView = 'template-editor' | 'document-generator' | null;
@@ -20,7 +19,7 @@ type EditorView = 'template-editor' | 'document-generator' | null;
 const DraftingDashboard: React.FC = () => {
   const { theme } = useTheme();
   const { addToast } = useToast();
-  
+
   const [activeTab, setActiveTab] = useState<View>('overview');
   const [editorView, setEditorView] = useState<EditorView>(null);
   const [recentDrafts, setRecentDrafts] = useState<GeneratedDocument[]>([]);
@@ -147,7 +146,7 @@ const DraftingDashboard: React.FC = () => {
           subtitle="Enterprise document automation with template management"
           actions={
             <div className="flex items-center gap-2">
-              <button 
+              <button
                 className={cn(
                   "px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2",
                   theme.action.secondary.bg,
@@ -160,7 +159,7 @@ const DraftingDashboard: React.FC = () => {
                 <FolderOpen className="h-4 w-4" />
                 <span>New Template</span>
               </button>
-              <button 
+              <button
                 className={cn(
                   "px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2",
                   theme.action.primary.bg,
@@ -197,7 +196,7 @@ const DraftingDashboard: React.FC = () => {
               <div className={cn("rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
                 <div className={cn("px-6 py-4 border-b flex items-center justify-between", theme.border.default)}>
                   <h3 className={cn("text-lg font-medium", theme.text.primary)}>Recent Drafts</h3>
-                  <button 
+                  <button
                     className={cn("text-sm", theme.text.link)}
                     onClick={() => setActiveTab('recent')}
                   >
@@ -212,7 +211,7 @@ const DraftingDashboard: React.FC = () => {
               <div className={cn("rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
                 <div className={cn("px-6 py-4 border-b flex items-center justify-between", theme.border.default)}>
                   <h3 className={cn("text-lg font-medium", theme.text.primary)}>Template Gallery</h3>
-                  <button 
+                  <button
                     className={cn("text-sm", theme.text.link)}
                     onClick={() => setActiveTab('templates')}
                   >
@@ -220,8 +219,8 @@ const DraftingDashboard: React.FC = () => {
                   </button>
                 </div>
                 <div>
-                  <TemplateGallery 
-                    templates={Array.isArray(templates) ? templates.slice(0, 4) : []} 
+                  <TemplateGallery
+                    templates={Array.isArray(templates) ? templates.slice(0, 4) : []}
                     onSelect={handleSelectTemplate}
                     onEdit={handleEditTemplate}
                   />
@@ -268,57 +267,57 @@ const DraftingDashboard: React.FC = () => {
           </div>
         )}
 
-        {activeTab === 'recent' && (
-          <div className={cn("rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
-            <div className={cn("px-6 py-4 border-b", theme.border.default)}>
-              <h3 className={cn("text-lg font-medium", theme.text.primary)}>All Recent Drafts</h3>
+          {activeTab === 'recent' && (
+            <div className={cn("rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
+              <div className={cn("px-6 py-4 border-b", theme.border.default)}>
+                <h3 className={cn("text-lg font-medium", theme.text.primary)}>All Recent Drafts</h3>
+              </div>
+              <div>
+                <RecentDrafts drafts={recentDrafts} onSelect={handleSelectDraft} />
+              </div>
             </div>
-            <div>
-              <RecentDrafts drafts={recentDrafts} onSelect={handleSelectDraft} />
-            </div>
-          </div>
-        )}
+          )}
 
-        {activeTab === 'templates' && (
-          <div className={cn("rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
-            <div className={cn("px-6 py-4 border-b flex items-center justify-between", theme.border.default)}>
-              <h3 className={cn("text-lg font-medium", theme.text.primary)}>All Templates</h3>
-              <button 
-                className={cn(
-                  "px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2",
-                  theme.action.primary.bg,
-                  theme.action.primary.text,
-                  theme.action.primary.hover
-                )}
-                onClick={handleCreateTemplate}
-              >
-                <Plus className="h-4 w-4" />
-                <span>New Template</span>
-              </button>
+          {activeTab === 'templates' && (
+            <div className={cn("rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
+              <div className={cn("px-6 py-4 border-b flex items-center justify-between", theme.border.default)}>
+                <h3 className={cn("text-lg font-medium", theme.text.primary)}>All Templates</h3>
+                <button
+                  className={cn(
+                    "px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2",
+                    theme.action.primary.bg,
+                    theme.action.primary.text,
+                    theme.action.primary.hover
+                  )}
+                  onClick={handleCreateTemplate}
+                >
+                  <Plus className="h-4 w-4" />
+                  <span>New Template</span>
+                </button>
+              </div>
+              <div>
+                <TemplateGallery
+                  templates={templates}
+                  onSelect={handleSelectTemplate}
+                  onEdit={handleEditTemplate}
+                />
+              </div>
             </div>
-            <div>
-              <TemplateGallery 
-                templates={templates} 
-                onSelect={handleSelectTemplate}
-                onEdit={handleEditTemplate}
-              />
-            </div>
-          </div>
-        )}
+          )}
 
-        {activeTab === 'approvals' && (
-          <div className={cn("rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
-            <div className={cn("px-6 py-4 border-b flex items-center justify-between", theme.border.default)}>
-              <h3 className={cn("text-lg font-medium", theme.text.primary)}>Approval Queue</h3>
-              <span className={cn("text-xs font-medium px-2.5 py-0.5 rounded", theme.status.warning.bg, theme.status.warning.text)}>
-                {Array.isArray(approvals) ? approvals.length : 0} Pending
-              </span>
+          {activeTab === 'approvals' && (
+            <div className={cn("rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
+              <div className={cn("px-6 py-4 border-b flex items-center justify-between", theme.border.default)}>
+                <h3 className={cn("text-lg font-medium", theme.text.primary)}>Approval Queue</h3>
+                <span className={cn("text-xs font-medium px-2.5 py-0.5 rounded", theme.status.warning.bg, theme.status.warning.text)}>
+                  {Array.isArray(approvals) ? approvals.length : 0} Pending
+                </span>
+              </div>
+              <div>
+                <ApprovalQueue approvals={approvals} onReview={handleReview} />
+              </div>
             </div>
-            <div>
-              <ApprovalQueue approvals={approvals} onReview={handleReview} />
-            </div>
-          </div>
-        )}
+          )}
         </div>
       </div>
     </div>
@@ -326,4 +325,3 @@ const DraftingDashboard: React.FC = () => {
 };
 
 export default DraftingDashboard;
-

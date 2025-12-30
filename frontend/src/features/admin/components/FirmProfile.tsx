@@ -9,8 +9,9 @@
  * - theme.border.default - Card and input borders
  */
 
-import { Button, Input } from '@/components/atoms';
-import { Card } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useNotify } from '@/hooks';
 import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
@@ -105,12 +106,12 @@ export const FirmProfile: React.FC = () => {
       // Handle nested updates
       const newData = { ...prev };
 
-      let current: unknown = newData;
+      let current = newData as Record<string, unknown>;
       for (let i = 0; i < keys.length - 1; i++) {
-        (current as any)[keys[i]] = { ...(current as any)[keys[i]] };
-        current = (current as any)[keys[i]];
+        current[keys[i]] = { ...(current[keys[i]] as Record<string, unknown>) };
+        current = current[keys[i]] as Record<string, unknown>;
       }
-      (current as any)[keys[keys.length - 1]] = value;
+      current[keys[keys.length - 1]] = value;
       return newData;
     });
   };

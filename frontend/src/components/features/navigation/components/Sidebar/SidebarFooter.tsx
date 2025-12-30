@@ -21,7 +21,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { UserAvatar } from '@/components/atoms';
+import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
 import { BackendStatusIndicator } from '@/components/organisms/BackendStatusIndicator/BackendStatusIndicator';
 
 // Utils & Constants
@@ -65,7 +65,7 @@ export const SidebarFooter = React.memo<SidebarFooterProps>(function SidebarFoot
 
       <div className={styles.holographicModeContainer}>
           <span className={styles.getHolographicModeLabel(theme)}>Holographic Mode</span>
-          <button 
+          <button
             onClick={toggleOrbitalMode}
             className={styles.getToggleButton(theme, isOrbitalEnabled)}
             title={isOrbitalEnabled ? "Windowed Interface" : "Flat Interface"}
@@ -74,7 +74,7 @@ export const SidebarFooter = React.memo<SidebarFooterProps>(function SidebarFoot
           </button>
       </div>
 
-      <button 
+      <button
         onClick={() => onNavigate(PATHS.PROFILE)}
         className={styles.getUserButton(theme, activeView === PATHS.PROFILE)}
       >
@@ -85,7 +85,7 @@ export const SidebarFooter = React.memo<SidebarFooterProps>(function SidebarFoot
         </div>
         <ChevronDown className={styles.getChevronIcon(theme)} />
       </button>
-      
+
       <div className={styles.actionButtonsGrid}>
          <button onClick={() => onNavigate(PATHS.ADMIN)} className={styles.getActionButton(theme)}>
             <Settings className={styles.actionButtonIcon}/> Settings

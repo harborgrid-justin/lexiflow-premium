@@ -1,8 +1,8 @@
-import React from 'react';
-import { Lock, Smartphone, Globe, Clock } from 'lucide-react';
-import { Card } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import { Clock, Globe, Lock, Smartphone } from 'lucide-react';
+import React from 'react';
 import type { SecurityControl } from './types';
 
 interface SecurityControlsPanelProps {

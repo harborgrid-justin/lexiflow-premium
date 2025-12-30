@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Plus, DollarSign } from 'lucide-react';
 import { useModalState } from '@/hooks/useModalState';
-import { KanbanBoard, KanbanColumn, KanbanCard } from '@/components/organisms';
+import { KanbanBoard, KanbanColumn, KanbanCard } from '@/components/features/cases/components/Kanban/Kanban';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
@@ -26,7 +26,7 @@ export const CRMPipeline = ({ leads }: CRMPipelineProps) => {
           const current = queryClient.getQueryState<unknown[]>(['crm', 'leads'])?.data || [];
           const updated = current.map((l: unknown) => (l as {id: string}).id === id ? { ...(l as object), stage } : l);
           // Determine which service method to call based on architecture
-          // DataService.crm.updateLead(id, { stage }); 
+          // DataService.crm.updateLead(id, { stage });
           return updated;
       },
       {

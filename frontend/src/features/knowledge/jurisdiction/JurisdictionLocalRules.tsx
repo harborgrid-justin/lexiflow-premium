@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, Book } from 'lucide-react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Button } from '@/components/atoms';
-import { Modal } from '@/components/molecules';
-import { Input, TextArea } from '@/components/atoms';
-import { SearchToolbar } from '@/components/organisms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table/Table';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
 import { DataService } from '@/services/data/dataService';
-import { ConfirmDialog } from '@/components/molecules';
+import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { LegalRule } from '@/types';
-import { Badge } from '@/components/atoms';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useModalState } from '@/hooks';
@@ -94,9 +95,9 @@ export const JurisdictionLocalRules: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <SearchToolbar 
-        value={filter} 
-        onChange={setFilter} 
+      <SearchToolbar
+        value={filter}
+        onChange={setFilter}
         placeholder="Search rules (Code, Name, Type)..."
         actions={
             <Button variant="primary" icon={Plus} onClick={openNew}>Add Rule</Button>
@@ -144,9 +145,9 @@ export const JurisdictionLocalRules: React.FC = () => {
       <Modal isOpen={ruleModal.isOpen} onClose={ruleModal.close} title={editingRule.id ? "Edit Rule" : "Add New Rule"}>
           <div className="p-6 space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                  <Input 
-                    label="Rule Code" 
-                    placeholder="e.g. L.R. 7-3" 
+                  <Input
+                    label="Rule Code"
+                    placeholder="e.g. L.R. 7-3"
                     value={editingRule.code || ''}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingRule({...editingRule, code: e.target.value})}
                   />
@@ -166,14 +167,14 @@ export const JurisdictionLocalRules: React.FC = () => {
                       </select>
                   </div>
               </div>
-              <Input 
-                label="Rule Name / Title" 
-                placeholder="e.g. Conference of the Parties" 
+              <Input
+                label="Rule Name / Title"
+                placeholder="e.g. Conference of the Parties"
                 value={editingRule.name || ''}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEditingRule({...editingRule, name: e.target.value})}
               />
-              <TextArea 
-                label="Summary / Requirements" 
+              <TextArea
+                label="Summary / Requirements"
                 rows={4}
                 placeholder="Brief summary of the rule's requirement..."
                 value={editingRule.summary || ''}

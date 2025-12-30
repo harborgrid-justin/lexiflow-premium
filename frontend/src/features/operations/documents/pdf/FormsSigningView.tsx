@@ -1,21 +1,21 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { FileSignature, Search, Send, Plus, CheckCircle, Clock, Loader2 } from 'lucide-react';
-import { LegalDocument } from '@/types';
-import { DataService } from '@/services/data/dataService';
-import { useQuery, queryClient } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
-import { DocumentService } from '@/services/features/documents/documentService';
-import { PDFViewer } from '@/components/organisms';
-import { AcrobatToolbar, PDFTool } from "../preview/AcrobatToolbar";
-import { InteractiveOverlay, Field } from "../preview/InteractiveOverlay";
-import { Modal } from '@/components/molecules';
-import { SignaturePad } from '@/components/organisms';
-import { Button } from '@/components/atoms';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { useNotify } from '@/hooks/useNotify';
+import { PDFViewer } from '@/components/features/discovery/components/PDFViewer/PDFViewer';
+import { SignaturePad } from '@/components/features/discovery/components/SignaturePad/SignaturePad';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { useModalState } from '@/hooks/useModalState';
-import { ErrorState } from '@/components/molecules';
+import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
+import { DataService } from '@/services/data/dataService';
+import { DocumentService } from '@/services/features/documents/documentService';
+import { LegalDocument } from '@/types';
+import { cn } from '@/utils/cn';
+import { queryKeys } from '@/utils/queryKeys';
+import { CheckCircle, Clock, FileSignature, Loader2, Plus, Search, Send } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { AcrobatToolbar, PDFTool } from "../preview/AcrobatToolbar";
+import { Field, InteractiveOverlay } from "../preview/InteractiveOverlay";
 
 type FormStatus = 'Draft' | 'Sent' | 'Signed';
 type FilterCategory = FormStatus | 'Templates' | 'Out for Signature' | 'Completed';
@@ -27,15 +27,15 @@ export const FormsSigningView = () => {
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [activeList, setActiveList] = useState<FilterCategory>('Templates');
     const [searchTerm, setSearchTerm] = useState('');
-    
+
     // Load documents from IndexedDB via useQuery for accurate, cached data
     const { data: allDocs = [], isLoading, error, refetch } = useQuery(
         queryKeys.documents.all(),
         () => DataService.documents.getAll()
     );
-    
+
     // Filter for form/PDF documents
-    const documents = useMemo(() => 
+    const documents = useMemo(() =>
         Array.isArray(allDocs) ? allDocs.filter(d => d.type.toUpperCase().includes('PDF') || d.type === 'Form' || d.title.toLowerCase().endsWith('.pdf')) : [],
         [allDocs]
     );
@@ -65,7 +65,7 @@ export const FormsSigningView = () => {
                     const url = await DocumentService.getDocumentUrl(selectedDocument.id);
                     setPreviewUrl(url);
                 } else {
-                    setPreviewUrl(null); 
+                    setPreviewUrl(null);
                 }
             };
             loadUrl();
@@ -99,7 +99,7 @@ export const FormsSigningView = () => {
                 ...selectedDocument,
                 formFields: (selectedDocument.formFields || []).map((f) =>
                     (f as { name: string; type: string; value: unknown }).name === activeField.id
-                        ? {...f, value: "Signed by User"}
+                        ? { ...f, value: "Signed by User" }
                         : f
                 )
             };
@@ -111,7 +111,7 @@ export const FormsSigningView = () => {
             notify.success("Document Signed");
         }
     };
-    
+
     const handleFieldsUpdate = async (updatedFields: Field[]) => {
         if (selectedDocument) {
             const updatedDoc: LegalDocument = {
@@ -156,8 +156,8 @@ export const FormsSigningView = () => {
                 <div className={cn("p-4 border-b", theme.border.default)}>
                     <h3 className={cn("font-bold", theme.text.primary)}>Forms & Templates</h3>
                     <div className="relative mt-2">
-                        <Search className={cn("absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)}/>
-                        <input 
+                        <Search className={cn("absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)} />
+                        <input
                             className={cn("w-full pl-8 pr-2 py-1.5 text-xs border rounded-md outline-none", theme.surface.default, theme.border.default)}
                             placeholder="Search documents..."
                             value={searchTerm}
@@ -172,7 +172,7 @@ export const FormsSigningView = () => {
                     <ListButton id="Completed" label="Completed" count={documents.filter(d => d.status === 'Signed').length} />
                 </div>
                 <div className="flex-1 overflow-y-auto p-2">
-                    {isLoading ? <Loader2 className="animate-spin m-4"/> : filteredDocuments.map(doc => (
+                    {isLoading ? <Loader2 className="animate-spin m-4" /> : filteredDocuments.map(doc => (
                         <button key={doc.id} onClick={() => setSelectedDocument(doc)} className={cn(
                             "w-full text-left p-3 border-b text-sm transition-colors",
                             theme.border.default,
@@ -180,7 +180,7 @@ export const FormsSigningView = () => {
                         )}>
                             <div className="font-medium truncate">{doc.title}</div>
                             <div className={cn("text-xs opacity-70 flex items-center mt-1", selectedDocument?.id === doc.id ? "" : theme.text.secondary)}>
-                                {doc.status === 'Signed' ? <CheckCircle className="h-3 w-3 mr-1 text-green-500"/> : <Clock className="h-3 w-3 mr-1"/>}
+                                {doc.status === 'Signed' ? <CheckCircle className="h-3 w-3 mr-1 text-green-500" /> : <Clock className="h-3 w-3 mr-1" />}
                                 {doc.status || 'Template'} • {doc.lastModified}
                             </div>
                         </button>
@@ -194,7 +194,7 @@ export const FormsSigningView = () => {
             <div className={cn("flex-1 flex flex-col", theme.surface.default)}>
                 {selectedDocument ? (
                     <>
-                        <AcrobatToolbar 
+                        <AcrobatToolbar
                             activeTool={activeTool} setActiveTool={setActiveTool}
                             scale={scale} setScale={setScale}
                             rotation={rotation} setRotation={setRotation}
@@ -218,13 +218,13 @@ export const FormsSigningView = () => {
                                 />
                             </PDFViewer>
                         </div>
-                         <div className={cn("p-4 border-t", theme.border.default)}>
+                        <div className={cn("p-4 border-t", theme.border.default)}>
                             <Button className="w-full" icon={Send} onClick={sendModal.open}>Send for Signature</Button>
                         </div>
                     </>
                 ) : (
                     <div className={cn("flex-1 flex flex-col items-center justify-center", theme.text.tertiary)}>
-                        <FileSignature className="h-12 w-12 mb-4 opacity-50"/>
+                        <FileSignature className="h-12 w-12 mb-4 opacity-50" />
                         {isLoading ? "Loading documents..." : "Select a document to prepare for signing."}
                     </div>
                 )}
@@ -234,13 +234,13 @@ export const FormsSigningView = () => {
             <Modal isOpen={signModal.isOpen} onClose={signModal.close} title="Sign Document" size="sm">
                 <div className="p-6">
                     <p className={cn("text-sm mb-4", theme.text.secondary)}>Draw your signature below to sign this field.</p>
-                    <SignaturePad value={false} onChange={handleSignatureSave} label="Draw Signature" subtext="I certify this signature is valid."/>
+                    <SignaturePad value={false} onChange={handleSignatureSave} label="Draw Signature" subtext="I certify this signature is valid." />
                 </div>
             </Modal>
             <Modal isOpen={sendModal.isOpen} onClose={sendModal.close} title="Send for Signature" size="md">
                 <div className="p-6 space-y-4">
-                    <input className={cn("w-full p-2 border rounded", theme.border.default)} placeholder="Recipient Email..."/>
-                    <textarea className={cn("w-full p-2 border rounded h-24", theme.border.default)} placeholder="Optional message..."/>
+                    <input className={cn("w-full p-2 border rounded", theme.border.default)} placeholder="Recipient Email..." />
+                    <textarea className={cn("w-full p-2 border rounded h-24", theme.border.default)} placeholder="Optional message..." />
                     <div className="flex justify-end gap-2">
                         <Button variant="secondary" onClick={sendModal.close}>Cancel</Button>
                         <Button variant="primary" icon={Send} onClick={handleSend}>Send</Button>

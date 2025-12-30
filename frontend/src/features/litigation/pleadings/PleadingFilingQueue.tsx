@@ -10,22 +10,22 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { AlertTriangle, CheckCircle, Clock, Send, XCircle } from 'lucide-react';
 import React from 'react';
-import { Send, Clock, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
-import { useQuery, useMutation } from '@/hooks/useQueryHooks';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { EmptyState } from '@/components/molecules';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -102,7 +102,7 @@ export const PleadingFilingQueue: React.FC = () => {
     if (pleadings.length === 0) {
         return (
             <div className="h-full flex items-center justify-center p-8">
-                <EmptyState 
+                <EmptyState
                     icon={Send}
                     title="Filing Queue is Empty"
                     description="Finalized pleadings ready for e-filing will appear here."
@@ -148,17 +148,17 @@ export const PleadingFilingQueue: React.FC = () => {
                         {pleadings.map((item: unknown) => {
                             const status = getFilingStatus(item as FilingQueueItem);
                             return (
-                                <TableRow key={(item as {id: string}).id}>
+                                <TableRow key={(item as { id: string }).id}>
                                     <TableCell>
                                         <div className="flex items-center gap-2">
                                             <Send className={cn("h-4 w-4", theme.text.secondary)} />
                                             <span className={cn("font-medium", theme.text.primary)}>
-                                                {(item as {title: string}).title}
+                                                {(item as { title: string }).title}
                                             </span>
                                         </div>
                                     </TableCell>
                                     <TableCell className={theme.text.secondary}>
-                                        {(item as {caseId?: string}).caseId || 'N/A'}
+                                        {(item as { caseId?: string }).caseId || 'N/A'}
                                     </TableCell>
                                     <TableCell className={theme.text.secondary}>
                                         {(item as FilingQueueItem).court || 'Not specified'}
@@ -173,7 +173,7 @@ export const PleadingFilingQueue: React.FC = () => {
                                                     size="sm"
                                                     variant="primary"
                                                     icon={Send}
-                                                    onClick={() => submitFiling((item as {id: string}).id)}
+                                                    onClick={() => submitFiling((item as { id: string }).id)}
                                                 >
                                                     File Now
                                                 </Button>
@@ -192,7 +192,7 @@ export const PleadingFilingQueue: React.FC = () => {
                                                     size="sm"
                                                     variant="danger"
                                                     icon={AlertTriangle}
-                                                    onClick={() => submitFiling((item as {id: string}).id)}
+                                                    onClick={() => submitFiling((item as { id: string }).id)}
                                                 >
                                                     Retry
                                                 </Button>
@@ -208,4 +208,3 @@ export const PleadingFilingQueue: React.FC = () => {
         </div>
     );
 };
-

@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, lazy, useTransition } from 'react';
-import { Plus, BookOpen, FileText } from 'lucide-react';
+import { BookOpen, FileText, Plus } from 'lucide-react';
+import React, { lazy, Suspense, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -19,11 +19,11 @@ import { Plus, BookOpen, FileText } from 'lucide-react';
 // Components
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { LazyLoader } from '@/components/molecules';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 
 // Hooks
-import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useSelection } from '@/hooks/useSelectionState';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Utils
 import { cn } from '@/utils/cn';

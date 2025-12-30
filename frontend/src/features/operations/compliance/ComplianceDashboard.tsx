@@ -20,9 +20,9 @@ import React, { Suspense, useTransition } from 'react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { Button } from '@/components/atoms';
 import { TabbedPageLayout } from '@/components/layouts';
-import { LazyLoader } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { ComplianceDashboardContent } from './ComplianceDashboardContent';
 
 // Utils & Config

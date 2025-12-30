@@ -1,7 +1,11 @@
-import { AppHeader, ErrorBoundary, GlobalHotkeys, HolographicDock, Sidebar } from '@/components/organisms';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { AppHeader } from '@/components/organisms/AppHeader/AppHeader';
+import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
+import { GlobalHotkeys } from '@/components/organisms/GlobalHotkeys/GlobalHotkeys';
+import { HolographicDock } from '@/components/organisms/HolographicDock/HolographicDock';
+import { Sidebar } from '@/components/organisms/Sidebar/Sidebar';
 import { AppContentRenderer } from '@/components/ui/layouts/AppContentRenderer/AppContentRenderer';
 import { AppShell } from '@/components/ui/layouts/AppShell/AppShell';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { initializeModules } from '@/config/modules';
 import { useAppController } from '@/hooks';
 import { DataSourceProvider, SyncProvider, ThemeProvider, ToastProvider, WindowProvider } from '@/providers';

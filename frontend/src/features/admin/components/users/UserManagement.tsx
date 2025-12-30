@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Users, Plus, Edit, Trash2, Shield, Mail, Search } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { Modal } from '@/components/molecules';
-import { Input } from '@/components/atoms';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { useNotify } from '@/hooks/useNotify';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
 import { useModalState } from '@/hooks';
+import { useNotify } from '@/hooks/useNotify';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelectionState';
-import { useQuery} from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
+import { Edit, Mail, Plus, Search, Shield, Trash2, Users } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface UserData {
   id: string;
@@ -32,13 +32,13 @@ interface UserData {
 export const UserManagement: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  
+
   // Fetch users from backend API
-  const { data: users = [], refetch} = useQuery<UserData[]>(
+  const { data: users = [], refetch } = useQuery<UserData[]>(
     queryKeys.users.all(),
     () => DataService.users.getAll()
   );
-  
+
   const [searchQuery, setSearchQuery] = useState('');
   const createModal = useModalState();
   const editModal = useModalState();
@@ -122,7 +122,7 @@ export const UserManagement: React.FC = () => {
       <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
-            <Users className="h-5 w-5 mr-2 text-blue-500"/> User Management
+            <Users className="h-5 w-5 mr-2 text-blue-500" /> User Management
           </h3>
           <p className={cn("text-sm", theme.text.secondary)}>Manage system users and their permissions.</p>
         </div>
@@ -165,13 +165,13 @@ export const UserManagement: React.FC = () => {
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-1 text-sm">
-                  <Mail className={cn("h-3 w-3", theme.text.tertiary)}/>
+                  <Mail className={cn("h-3 w-3", theme.text.tertiary)} />
                   {user.email}
                 </div>
               </TableCell>
               <TableCell>
                 <Badge variant={getRoleVariant(user.role)}>
-                  <Shield className="h-3 w-3 mr-1"/> {user.role}
+                  <Shield className="h-3 w-3 mr-1" /> {user.role}
                 </Badge>
               </TableCell>
               <TableCell>
@@ -197,16 +197,16 @@ export const UserManagement: React.FC = () => {
       <Modal isOpen={createModal.isOpen} onClose={createModal.close} title="Create New User">
         <div className="p-6 space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <Input label="First Name" value={formData.firstName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, firstName: e.target.value})} />
-            <Input label="Last Name" value={formData.lastName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, lastName: e.target.value})} />
+            <Input label="First Name" value={formData.firstName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, firstName: e.target.value })} />
+            <Input label="Last Name" value={formData.lastName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, lastName: e.target.value })} />
           </div>
-          <Input label="Email Address" type="email" value={formData.email || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, email: e.target.value})} />
+          <Input label="Email Address" type="email" value={formData.email || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })} />
           <div>
             <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Role</label>
             <select
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.role || ''}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, role: e.target.value as UserData['role']})}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, role: e.target.value as UserData['role'] })}
               aria-label="Role"
             >
               <option value="">Select role...</option>
@@ -228,17 +228,17 @@ export const UserManagement: React.FC = () => {
       <Modal isOpen={editModal.isOpen} onClose={editModal.close} title="Edit User">
         <div className="p-6 space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <Input label="First Name" value={formData.firstName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, firstName: e.target.value})} />
-            <Input label="Last Name" value={formData.lastName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, lastName: e.target.value})} />
+            <Input label="First Name" value={formData.firstName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, firstName: e.target.value })} />
+            <Input label="Last Name" value={formData.lastName || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, lastName: e.target.value })} />
           </div>
-          <Input label="Email Address" type="email" value={formData.email || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, email: e.target.value})} />
+          <Input label="Email Address" type="email" value={formData.email || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })} />
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Role</label>
               <select
                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                 value={formData.role || ''}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, role: e.target.value as UserData['role']})}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, role: e.target.value as UserData['role'] })}
                 aria-label="Role"
               >
                 <option value="Administrator">Administrator</option>
@@ -253,7 +253,7 @@ export const UserManagement: React.FC = () => {
               <select
                 className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
                 value={formData.status || ''}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, status: e.target.value as UserData['status']})}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, status: e.target.value as UserData['status'] })}
                 aria-label="Status"
               >
                 <option value="Active">Active</option>

@@ -10,24 +10,24 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { Book, Loader2, Search, Star } from 'lucide-react';
 import React, { useState, useTransition } from 'react';
-import { Search, Book, Star, Loader2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { AdaptiveLoader } from '@/components/molecules';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -40,9 +40,9 @@ import { WikiArticle } from '@/types';
 // ============================================================================
 
 const sanitizeHtml = (html: string) => {
-    return html.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gim, "")
-               .replace(/<iframe\b[^>]*>([\s\S]*?)<\/iframe>/gim, "")
-               .replace(/on\w+="[^"]*"/g, "");
+  return html.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gim, "")
+    .replace(/<iframe\b[^>]*>([\s\S]*?)<\/iframe>/gim, "")
+    .replace(/on\w+="[^"]*"/g, "");
 };
 
 export const WikiView: React.FC = () => {
@@ -84,10 +84,10 @@ export const WikiView: React.FC = () => {
           <div className="relative">
             <Search className={cn("absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)} />
             <input
-                className={cn("w-full pl-8 pr-3 py-1.5 text-sm border rounded-md outline-none", theme.surface.default, theme.border.default)}
-                placeholder="Search articles..."
-                value={searchQuery}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+              className={cn("w-full pl-8 pr-3 py-1.5 text-sm border rounded-md outline-none", theme.surface.default, theme.border.default)}
+              placeholder="Search articles..."
+              value={searchQuery}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
             />
           </div>
         </div>
@@ -106,7 +106,7 @@ export const WikiView: React.FC = () => {
                 <p className="text-sm font-bold truncate">{article.title}</p>
                 <p className="text-xs text-slate-500">{article.category}</p>
               </div>
-              {article.isFavorite && <Star className="h-4 w-4 text-amber-400 fill-current ml-2 shrink-0"/>}
+              {article.isFavorite && <Star className="h-4 w-4 text-amber-400 fill-current ml-2 shrink-0" />}
             </button>
           ))}
         </div>
@@ -116,15 +116,15 @@ export const WikiView: React.FC = () => {
         {activeArticle ? (
           <div className={cn("prose max-w-none", mode === 'dark' ? "prose-invert" : "")}>
             <div className="flex justify-between items-start mb-4">
-                <Badge variant="neutral">{activeArticle.category}</Badge>
-                <span className={cn("text-xs", theme.text.secondary)}>Last Updated: {activeArticle.lastUpdated} by {activeArticle.author}</span>
+              <Badge variant="neutral">{activeArticle.category}</Badge>
+              <span className={cn("text-xs", theme.text.secondary)}>Last Updated: {activeArticle.lastUpdated} by {activeArticle.author}</span>
             </div>
             <h1 className="mb-2">{activeArticle.title}</h1>
             <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(activeArticle.content) }} />
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full">
-            <Book className="h-16 w-16 text-slate-300 mb-4"/>
+            <Book className="h-16 w-16 text-slate-300 mb-4" />
             <p className={cn("font-medium", theme.text.secondary)}>Select an article to read</p>
           </div>
         )}
@@ -132,5 +132,3 @@ export const WikiView: React.FC = () => {
     </div>
   );
 };
-
-

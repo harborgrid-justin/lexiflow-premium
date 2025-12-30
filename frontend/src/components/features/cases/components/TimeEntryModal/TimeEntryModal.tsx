@@ -24,9 +24,9 @@ import { useTheme } from '@/providers/ThemeContext';
 
 // Components
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
-import { Button } from '@/components/atoms';
-import { Input } from '@/components/atoms';
-import { TextArea } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button';
+import { Input } from '@/components/ui/atoms/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

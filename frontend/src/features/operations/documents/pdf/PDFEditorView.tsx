@@ -1,21 +1,21 @@
 
-import React, { useState, useEffect } from 'react';
-import { LegalDocument } from '@/types';
-import { DataService } from '@/services/data/dataService';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
-import { PDFViewer } from '@/components/organisms';
-import { AcrobatToolbar, PDFTool } from '../preview/AcrobatToolbar';
-import { InteractiveOverlay, Field } from '../preview/InteractiveOverlay';
-import { Modal } from '@/components/molecules';
-import { SignaturePad } from '@/components/organisms';
-import { Button } from '@/components/atoms';
-import { Loader2 } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
+import { PDFViewer } from '@/components/features/discovery/components/PDFViewer/PDFViewer';
+import { SignaturePad } from '@/components/features/discovery/components/SignaturePad/SignaturePad';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { useBlobRegistry } from '@/hooks/useBlobRegistry';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
-import { ErrorState } from '@/components/molecules';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
+import { DataService } from '@/services/data/dataService';
+import { LegalDocument } from '@/types';
+import { cn } from '@/utils/cn';
+import { queryKeys } from '@/utils/queryKeys';
+import { Loader2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { AcrobatToolbar, PDFTool } from '../preview/AcrobatToolbar';
+import { Field, InteractiveOverlay } from '../preview/InteractiveOverlay';
 
 export function PDFEditorView() {
     const { theme } = useTheme();
@@ -24,15 +24,15 @@ export function PDFEditorView() {
 
     // Registry hook for managing blob lifecycle
     const { register } = useBlobRegistry();
-    
+
     // Load documents from IndexedDB via useQuery for accurate, cached data
     const { data: allDocs = [], isLoading, error, refetch } = useQuery(
         queryKeys.documents.all(),
         () => DataService.documents.getAll()
     );
-    
+
     // Filter PDF documents
-    const documents = React.useMemo(() => 
+    const documents = React.useMemo(() =>
         Array.isArray(allDocs) ? allDocs.filter(d => d.type.toUpperCase().includes('PDF') || d.title.toLowerCase().endsWith('.pdf')) : [],
         [allDocs]
     );
@@ -67,18 +67,18 @@ export function PDFEditorView() {
             };
             loadUrl();
         } else {
-             setPreviewUrl(null);
+            setPreviewUrl(null);
         }
         return () => { isMounted = false; };
     }, [documentSelection.selected, register]);
-    
+
     const handleFieldClick = (field: Field) => {
         if (field.type === 'signature' || field.type === 'initials') {
             setActiveField(field);
             setSignModalOpen(true);
         }
     };
-    
+
     const handleSignatureSave = (signed: boolean) => {
         if (signed && activeField) {
             activeField.value = "Signed by User";
@@ -97,7 +97,7 @@ export function PDFEditorView() {
             <div className={cn("w-72 border-r flex flex-col shrink-0", theme.border.default, theme.surface.highlight)}>
                 <div className={cn("p-4 border-b font-bold", theme.text.primary)}>PDF Documents</div>
                 <div className="flex-1 overflow-y-auto">
-                    {isLoading ? <Loader2 className="animate-spin m-4"/> : documents.map(doc => (
+                    {isLoading ? <Loader2 className="animate-spin m-4" /> : documents.map(doc => (
                         <button key={doc.id} onClick={() => documentSelection.select(doc)} className={cn(
                             "w-full text-left p-3 border-b text-sm transition-colors",
                             theme.border.default,
@@ -113,7 +113,7 @@ export function PDFEditorView() {
             <div className={cn("flex-1 flex flex-col", theme.surface.default)}>
                 {documentSelection.selected ? (
                     <>
-                        <AcrobatToolbar 
+                        <AcrobatToolbar
                             activeTool={activeTool} setActiveTool={setActiveTool}
                             scale={scale} setScale={setScale}
                             rotation={rotation} setRotation={setRotation}
@@ -131,10 +131,10 @@ export function PDFEditorView() {
                 )}
             </div>
             {/* Modals */}
-             <Modal isOpen={signModalOpen} onClose={() => setSignModalOpen(false)} title="Sign Document" size="sm">
+            <Modal isOpen={signModalOpen} onClose={() => setSignModalOpen(false)} title="Sign Document" size="sm">
                 <div className="p-6">
                     <p className={cn("text-sm mb-4", theme.text.secondary)}>Draw your signature below to sign this field.</p>
-                    <SignaturePad value={false} onChange={handleSignatureSave} label="Draw Signature" subtext="I certify this signature is valid."/>
+                    <SignaturePad value={false} onChange={handleSignatureSave} label="Draw Signature" subtext="I certify this signature is valid." />
                     <div className="mt-4 flex justify-end"> <Button variant="secondary" onClick={() => setSignModalOpen(false)}>Cancel</Button> </div>
                 </div>
             </Modal>

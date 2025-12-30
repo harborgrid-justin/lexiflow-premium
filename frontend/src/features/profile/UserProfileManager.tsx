@@ -4,7 +4,7 @@
  * @description Tabbed user profile management interface with overview, preferences, access matrix,
  * security settings, and audit logs. Uses TabbedPageLayout with lazy-loaded sub-components and
  * DataService for profile data fetching.
- * 
+ *
  * THEME SYSTEM USAGE:
  * - theme.surface.default - Page background
  * - Tab theming handled by TabbedPageLayout component
@@ -14,19 +14,19 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
+import { Activity, Settings, Shield, Sliders, UserCircle } from 'lucide-react';
 import { useState } from 'react';
-import { UserCircle, Shield, Settings, Sliders, Activity } from 'lucide-react';
 
 // ========================================
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { ProfileOverview } from './ProfileOverview';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { AccessMatrixEditor } from './AccessMatrixEditor';
-import { SecurityPane } from './SecurityPane';
 import { PreferencePane } from './PreferencePane';
-import { LazyLoader } from '@/components/molecules';
+import { ProfileOverview } from './ProfileOverview';
+import { SecurityPane } from './SecurityPane';
 
 // Services & Data
 import { DataService } from '@/services/data/dataService';
@@ -65,8 +65,8 @@ export const UserProfileManager = () => {
   const [activeTab, setActiveTab] = useState('overview');
 
   const { data: profile, isLoading } = useQuery<ExtendedUserProfile>(
-      ['profile', 'current'],
-      DataService.profile.getCurrentProfile
+    ['profile', 'current'],
+    DataService.profile.getCurrentProfile
   );
 
   const renderContent = () => {
@@ -98,4 +98,3 @@ export const UserProfileManager = () => {
   );
 };
 export default UserProfileManager;
-

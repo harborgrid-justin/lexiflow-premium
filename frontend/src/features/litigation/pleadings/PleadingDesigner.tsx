@@ -1,22 +1,22 @@
 
-import React, { useState, Suspense, lazy, useCallback } from 'react';
-import { PleadingDocument, FormattingRule, Case, PleadingSection } from '@/types';
-import { ArrowLeft, Save, Eye, PenTool, GitMerge, Loader2, Undo2, Redo2 } from 'lucide-react';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
-import { useQuery, queryClient } from '@/hooks/useQueryHooks';
+import { Case, FormattingRule, PleadingDocument, PleadingSection } from '@/types';
+import { cn } from '@/utils/cn';
+import { ArrowLeft, Eye, GitMerge, Loader2, PenTool, Redo2, Save, Undo2 } from 'lucide-react';
+import React, { Suspense, lazy, useCallback, useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
-import { useNotify } from '@/hooks/useNotify';
-import { LazyLoader } from '@/components/molecules';
-import { ViewMode, PleadingDesignerProps } from './types';
+import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useHistory } from '@/hooks/useHistory';
-import { VersionConflictError } from '@/services/data/repositories/PleadingRepository';
 import { useSingleSelection } from '@/hooks/useMultiSelection';
-import { ErrorState } from '@/components/molecules';
+import { useNotify } from '@/hooks/useNotify';
+import { VersionConflictError } from '@/services/data/repositories/PleadingRepository';
+import { queryKeys } from '@/utils/queryKeys';
+import { PleadingDesignerProps, ViewMode } from './types';
 
 // Lazy load new designer components with corrected relative paths
 const PleadingPaper = lazy(() => import('./designer/PleadingPaper'));
@@ -34,16 +34,16 @@ const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDo
   const sectionSelection = useSingleSelection<PleadingSection>(null, (a, b) => a.id === b.id);
   const [viewMode, setViewMode] = useState<ViewMode>('write');
   const [saveError, setSaveError] = useState<string | null>(null);
-  
+
   // Data Fetching
   const { data: formattingRules, isLoading: rulesLoading, error: rulesError, refetch: refetchRules } = useQuery<FormattingRule>(
     ['format_rules', document.jurisdictionRulesId],
     () => DataService.pleadings.getFormattingRules()
   );
-  
+
   const { data: caseData, isLoading: caseLoading, error: caseError, refetch: refetchCase } = useQuery<Case | undefined>(
-      ['cases', document.caseId],
-      () => DataService.cases.getById(document.caseId)
+    ['cases', document.caseId],
+    () => DataService.cases.getById(document.caseId)
   );
 
   // History management for undo/redo
@@ -95,16 +95,16 @@ const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDo
   }, [history, document.sections]);
 
   const handleInsertText = (text: string) => {
-      if (sectionSelection.selected) {
-          const section = document.sections.find(s => s.id === sectionSelection.selected?.id);
-          if (section) handleUpdateSection(sectionSelection.selected.id, { content: section.content + '\n\n' + text });
-      }
+    if (sectionSelection.selected) {
+      const section = document.sections.find(s => s.id === sectionSelection.selected?.id);
+      if (section) handleUpdateSection(sectionSelection.selected.id, { content: section.content + '\n\n' + text });
+    }
   };
 
-  if (rulesLoading || caseLoading) return <LazyLoader message="Loading Designer Environment..."/>;
+  if (rulesLoading || caseLoading) return <LazyLoader message="Loading Designer Environment..." />;
   if (rulesError) return <ErrorState message="Failed to load formatting rules" onRetry={refetchRules} />;
   if (caseError) return <ErrorState message="Failed to load case data" onRetry={refetchCase} />;
-  if (!formattingRules) return <LazyLoader message="Loading formatting rules..."/>;
+  if (!formattingRules) return <LazyLoader message="Loading formatting rules..." />;
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-slate-100 dark:bg-slate-900">
@@ -120,17 +120,17 @@ const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDo
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-1">
-            <Button 
-              variant="ghost" 
-              icon={Undo2} 
-              onClick={history.undo} 
+            <Button
+              variant="ghost"
+              icon={Undo2}
+              onClick={history.undo}
               disabled={!history.canUndo}
               title="Undo"
             />
-            <Button 
-              variant="ghost" 
-              icon={Redo2} 
-              onClick={history.redo} 
+            <Button
+              variant="ghost"
+              icon={Redo2}
+              onClick={history.redo}
               disabled={!history.canRedo}
               title="Redo"
             />
@@ -139,9 +139,9 @@ const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDo
           <div className={cn("flex p-1 rounded-lg border", theme.surface.highlight, theme.border.default)}>
             {(['write', 'logic', 'preview'] as ViewMode[]).map(mode => (
               <button key={mode} onClick={() => setViewMode(mode)} className={cn("px-3 py-1.5 text-xs font-bold rounded-md flex items-center gap-2 transition-all", viewMode === mode ? cn(theme.surface.default, "shadow", theme.primary.text) : theme.text.secondary)}>
-                {mode === 'write' && <PenTool className="h-3 w-3"/>}
-                {mode === 'logic' && <GitMerge className="h-3 w-3"/>}
-                {mode === 'preview' && <Eye className="h-3 w-3"/>}
+                {mode === 'write' && <PenTool className="h-3 w-3" />}
+                {mode === 'logic' && <GitMerge className="h-3 w-3" />}
+                {mode === 'preview' && <Eye className="h-3 w-3" />}
                 <span className="capitalize">{mode}</span>
               </button>
             ))}
@@ -158,30 +158,30 @@ const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDo
             <ContextPanel caseId={document.caseId} onInsertFact={handleInsertText} />
           </Suspense>
         </aside>
-        
+
         {/* Center Panel: Canvas */}
         <main className="flex-1 overflow-auto p-8 relative">
           <Suspense fallback={<div className="p-4"><Loader2 className="animate-spin" /></div>}>
             <PleadingPaper rules={formattingRules}>
-                <PleadingCanvas
-                    document={document}
-                    rules={formattingRules}
-                    readOnly={viewMode === 'preview'}
-                    viewMode={viewMode}
-                    onUpdateSection={handleUpdateSection}
-                    relatedCase={caseData}
-                />
-                {viewMode === 'logic' && <LogicOverlay document={document} />}
+              <PleadingCanvas
+                document={document}
+                rules={formattingRules}
+                readOnly={viewMode === 'preview'}
+                viewMode={viewMode}
+                onUpdateSection={handleUpdateSection}
+                relatedCase={caseData}
+              />
+              {viewMode === 'logic' && <LogicOverlay document={document} />}
             </PleadingPaper>
-            <ComplianceHUD rules={formattingRules} sections={document.sections} score={100}/>
+            <ComplianceHUD rules={formattingRules} sections={document.sections} score={100} />
           </Suspense>
         </main>
 
         {/* Right Panel: AI Assistant */}
         <aside className={cn("w-80 border-l flex flex-col shrink-0", theme.surface.default, theme.border.default)}>
           <Suspense fallback={<div className="p-4"><Loader2 className="animate-spin" /></div>}>
-            <AIDraftingAssistant 
-              onInsert={handleInsertText} 
+            <AIDraftingAssistant
+              onInsert={handleInsertText}
               caseContext={{ title: caseData?.title || '', summary: caseData?.description }}
             />
           </Suspense>
@@ -191,5 +191,3 @@ const PleadingDesigner: React.FC<PleadingDesignerProps> = ({ pleading: initialDo
   );
 };
 export default PleadingDesigner;
-
-

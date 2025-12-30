@@ -4,11 +4,11 @@
  * @description Error boundary for correspondence components with fallback UI
  */
 
-import React, { Component, ReactNode, ErrorInfo } from 'react';
-import { AlertTriangle, RefreshCw } from 'lucide-react';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import { AlertTriangle, RefreshCw } from 'lucide-react';
+import React, { Component, ErrorInfo, ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
@@ -44,7 +44,7 @@ export class CorrespondenceErrorBoundary extends Component<Props, State> {
   override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Log to console for debugging
     console.error('Correspondence Error Boundary caught:', error, errorInfo);
-    
+
     this.setState({
       error,
       errorInfo,
@@ -80,18 +80,18 @@ export class CorrespondenceErrorBoundary extends Component<Props, State> {
 const ErrorFallback: React.FC<{ error: Error | null; onReset: () => void }> = ({ error, onReset }) => {
   const FallbackContent = () => {
     const { theme } = useTheme();
-    
+
     return (
       <div className={cn("h-full flex items-center justify-center p-6", theme.background)}>
         <div className={cn("max-w-md w-full rounded-lg border p-8 text-center", theme.surface.default, theme.border.default)}>
           <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
             <AlertTriangle className="h-8 w-8 text-red-600" />
           </div>
-          
+
           <h3 className={cn("text-lg font-bold mb-2", theme.text.primary)}>
             Something went wrong
           </h3>
-          
+
           <p className={cn("text-sm mb-6", theme.text.secondary)}>
             We encountered an error in the correspondence module. This has been logged and we're working on it.
           </p>
@@ -105,14 +105,14 @@ const ErrorFallback: React.FC<{ error: Error | null; onReset: () => void }> = ({
           )}
 
           <div className="flex gap-3 justify-center">
-            <Button 
-              variant="secondary" 
+            <Button
+              variant="secondary"
               onClick={() => window.location.reload()}
             >
               Reload Page
             </Button>
-            <Button 
-              variant="primary" 
+            <Button
+              variant="primary"
               icon={RefreshCw}
               onClick={onReset}
             >

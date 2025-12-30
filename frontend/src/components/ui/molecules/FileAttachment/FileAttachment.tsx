@@ -20,7 +20,7 @@ import { Download, Eye } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { FileIcon } from '@/components/atoms';
+import { FileIcon } from '@/components/ui/atoms/FileIcon';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -42,8 +42,8 @@ interface FileAttachmentProps {
 /**
  * FileAttachment - React 18 optimized with React.memo
  */
-export const FileAttachment = React.memo<FileAttachmentProps>(({ 
-  name, size, type = 'doc', date, onDownload, onPreview, className = '', variant = 'card' 
+export const FileAttachment = React.memo<FileAttachmentProps>(({
+  name, size, type = 'doc', date, onDownload, onPreview, className = '', variant = 'card'
 }) => {
   const { theme } = useTheme();
 
@@ -56,7 +56,7 @@ export const FileAttachment = React.memo<FileAttachmentProps>(({
       <div className={cn("p-2 rounded-lg mr-3 shrink-0", theme.surface.highlight)}>
         <FileIcon type={type} className="h-6 w-6" />
       </div>
-      
+
       <div className="flex-1 min-w-0 mr-2">
         <h4 className={cn("text-sm font-medium truncate", theme.text.primary)} title={name}>{name}</h4>
         <div className={cn("flex items-center gap-2 text-xs mt-0.5", theme.text.secondary)}>
@@ -72,16 +72,16 @@ export const FileAttachment = React.memo<FileAttachmentProps>(({
 
       <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
         {onPreview && (
-          <button 
-            onClick={(e: React.MouseEvent) => { e.stopPropagation(); onPreview(); }} 
+          <button
+            onClick={(e: React.MouseEvent) => { e.stopPropagation(); onPreview(); }}
             className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}
             title="Preview"
           >
             <Eye className="h-4 w-4" />
           </button>
         )}
-        <button 
-          onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDownload ? onDownload() : null; }} 
+        <button
+          onClick={(e: React.MouseEvent) => { e.stopPropagation(); onDownload ? onDownload() : null; }}
           className={cn("p-1.5 rounded", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}
           title="Download"
         >

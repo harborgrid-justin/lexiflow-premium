@@ -22,9 +22,9 @@ import { Suspense, useTransition } from 'react';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { Button } from '@/components/atoms';
 import { TabbedPageLayout } from '@/components/layouts';
-import { LazyLoader } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { DocumentManagerContent } from './DocumentManagerContent';
 
 // Utils & Config
@@ -73,7 +73,7 @@ export function DocumentManager({ currentUserRole = 'Associate', initialTab }: D
           <Button variant="outline" icon={LayoutTemplate} onClick={() => setActiveTab('templates')}>New Draft</Button>
         </div>
       }
-      tabConfig={DOCUMENT_MANAGER_TAB_CONFIG}
+      tabConfig={DOCUMENT_MANAGER_TAB_CONFIG as any}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >

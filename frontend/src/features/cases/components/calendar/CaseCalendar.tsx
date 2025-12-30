@@ -1,9 +1,9 @@
 /**
  * Matter Calendar - Comprehensive Matter Timeline & Scheduling
- * 
+ *
  * @module MatterCalendar
  * @description Enterprise calendar view for matter management
- * 
+ *
  * Features:
  * - Multi-view calendar (month, week, day, agenda)
  * - Matter deadlines and court dates
@@ -17,19 +17,21 @@
  * - Export to external calendars (iCal, Google, Outlook)
  */
 
-import React, { useState, useMemo } from 'react';
-import {
-  Calendar as CalendarIcon, ChevronLeft, ChevronRight,
-  Clock, MapPin, Download
-} from 'lucide-react';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
-import { Card } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
-import { Modal } from '@/components/molecules';
+import {
+  Calendar as CalendarIcon, ChevronLeft, ChevronRight,
+  Clock,
+  Download,
+  MapPin
+} from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
 type CalendarView = 'month' | 'week' | 'day' | 'agenda';
 
@@ -82,8 +84,8 @@ export const CaseCalendar: React.FC = () => {
             matterTitle: matter?.title || 'Unknown Matter',
             title: entry.title || entry.description || 'Docket Entry',
             type: entry.type === 'Hearing' ? 'hearing' :
-                  entry.type === 'Filing' ? 'filing' :
-                  entry.type === 'Motion' ? 'deadline' : 'other',
+              entry.type === 'Filing' ? 'filing' :
+                entry.type === 'Motion' ? 'deadline' : 'other',
             startTime: entry.date,
             priority: 'medium',
             status: 'scheduled',
@@ -249,7 +251,7 @@ export const CaseCalendar: React.FC = () => {
             <div className={cn('flex items-center gap-1 p-1 rounded-lg', isDark ? 'bg-slate-700' : 'bg-slate-100')}>
               <button
                 onClick={() => setView('month')}
-                className={cn('px-3 py-1.5 rounded text-sm font-medium transition-colors', 
+                className={cn('px-3 py-1.5 rounded text-sm font-medium transition-colors',
                   view === 'month'
                     ? isDark ? 'bg-slate-600 text-slate-100' : 'bg-white text-slate-900 shadow-sm'
                     : isDark ? 'text-slate-400 hover:text-slate-200' : 'text-slate-600 hover:text-slate-900'
@@ -416,8 +418,8 @@ const MonthView: React.FC<MonthViewProps> = ({
                   isToday(date)
                     ? 'flex items-center justify-center w-7 h-7 rounded-full bg-blue-500 text-white'
                     : !isCurrentMonth(date)
-                    ? isDark ? 'text-slate-600' : 'text-slate-400'
-                    : isDark ? 'text-slate-300' : 'text-slate-700'
+                      ? isDark ? 'text-slate-600' : 'text-slate-400'
+                      : isDark ? 'text-slate-300' : 'text-slate-700'
                 )}>
                   {date.getDate()}
                 </div>
@@ -483,40 +485,40 @@ const AgendaView: React.FC<AgendaViewProps> = ({ events, onEventClick, getEventT
               <div key={event.id} className="cursor-pointer" onClick={() => onEventClick(event)}>
                 <Card className="p-4 hover:shadow-md transition-shadow">
                   <div className="flex items-start gap-4">
-                  <div className={cn('w-1 h-full rounded-full', getEventTypeColor(event.type))} />
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <h4 className={cn('font-semibold', isDark ? 'text-slate-100' : 'text-slate-900')}>
-                          {event.title}
-                        </h4>
-                        <p className={cn('text-sm mt-1', isDark ? 'text-slate-400' : 'text-slate-600')}>
-                          {event.matterTitle}
-                        </p>
+                    <div className={cn('w-1 h-full rounded-full', getEventTypeColor(event.type))} />
+                    <div className="flex-1">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h4 className={cn('font-semibold', isDark ? 'text-slate-100' : 'text-slate-900')}>
+                            {event.title}
+                          </h4>
+                          <p className={cn('text-sm mt-1', isDark ? 'text-slate-400' : 'text-slate-600')}>
+                            {event.matterTitle}
+                          </p>
+                        </div>
+                        <Badge variant={event.priority === 'high' ? 'error' : event.priority === 'medium' ? 'warning' : 'neutral'}>
+                          {event.priority}
+                        </Badge>
                       </div>
-                      <Badge variant={event.priority === 'high' ? 'error' : event.priority === 'medium' ? 'warning' : 'neutral'}>
-                        {event.priority}
-                      </Badge>
-                    </div>
-                    <div className="flex items-center gap-4 mt-3 text-sm">
-                      <div className="flex items-center gap-1">
-                        <Clock className={cn('w-4 h-4', isDark ? 'text-slate-400' : 'text-slate-500')} />
-                        <span className={cn(isDark ? 'text-slate-400' : 'text-slate-600')}>
-                          {new Date(event.startTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-                        </span>
-                      </div>
-                      {event.location && (
+                      <div className="flex items-center gap-4 mt-3 text-sm">
                         <div className="flex items-center gap-1">
-                          <MapPin className={cn('w-4 h-4', isDark ? 'text-slate-400' : 'text-slate-500')} />
+                          <Clock className={cn('w-4 h-4', isDark ? 'text-slate-400' : 'text-slate-500')} />
                           <span className={cn(isDark ? 'text-slate-400' : 'text-slate-600')}>
-                            {event.location}
+                            {new Date(event.startTime).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                           </span>
                         </div>
-                      )}
+                        {event.location && (
+                          <div className="flex items-center gap-1">
+                            <MapPin className={cn('w-4 h-4', isDark ? 'text-slate-400' : 'text-slate-500')} />
+                            <span className={cn(isDark ? 'text-slate-400' : 'text-slate-600')}>
+                              {event.location}
+                            </span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
               </div>
             ))}
           </div>

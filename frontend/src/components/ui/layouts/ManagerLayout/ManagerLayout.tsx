@@ -3,7 +3,7 @@
  * @category Layouts
  * @description Manager layout with header, optional sidebar, and content area.
  * Ideal for management interfaces with filtering and list/detail views.
- * 
+ *
  * THEME SYSTEM USAGE:
  * - theme.background - Page background
  * - theme.surface.default - Sidebar background
@@ -32,13 +32,13 @@ const sidebarWidthClasses = {
   lg: 'w-80',
 };
 
-export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ 
-  title, 
-  subtitle, 
-  actions, 
-  filterPanel, 
-  children, 
-  sidebar, 
+export const ManagerLayout: React.FC<ManagerLayoutProps> = ({
+  title,
+  subtitle,
+  actions,
+  filterPanel,
+  children,
+  sidebar,
   className,
   sidebarWidth = 'md'
 }) => {
@@ -47,8 +47,8 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({
   return (
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background, className)}>
       <div className="px-6 pt-6 shrink-0">
-        <PageHeader 
-          title={title} 
+        <PageHeader
+          title={title}
           subtitle={subtitle}
           actions={actions}
         />
@@ -63,8 +63,8 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({
         {sidebar && (
             <div className={cn(
               sidebarWidthClasses[sidebarWidth],
-              "border rounded-lg shadow-sm flex-col shrink-0 hidden md:flex overflow-y-auto", 
-              theme.surface.default, 
+              "border rounded-lg shadow-sm flex-col shrink-0 hidden md:flex overflow-y-auto",
+              theme.surface.default,
               theme.border.default
             )}>
                 {sidebar}

@@ -1,20 +1,20 @@
 
-import React from 'react';
-import { Globe, Plane } from 'lucide-react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { AdaptiveLoader } from '@/components/molecules';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { DataService } from '@/services/data/dataService';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
+import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
+import { Globe, Plane } from 'lucide-react';
+import React from 'react';
 
 export const JurisdictionInternational: React.FC = () => {
   const { theme } = useTheme();
 
   // Performance Engine: useQuery
   const { data: rawTreaties = [], isLoading } = useQuery<unknown[]>(
-      ['jurisdiction', 'treaties'],
-      DataService.jurisdiction.getTreaties
+    ['jurisdiction', 'treaties'],
+    DataService.jurisdiction.getTreaties
   );
 
   // Defensive array validation
@@ -26,10 +26,10 @@ export const JurisdictionInternational: React.FC = () => {
     <div className="space-y-6">
       <div className={cn("p-8 rounded-lg flex justify-between items-center shadow-lg relative overflow-hidden", theme.primary.DEFAULT, theme.text.inverse)}>
         <div className="relative z-10">
-          <h2 className="text-2xl font-bold flex items-center"><Globe className="h-6 w-6 mr-3"/> Cross-Border Jurisdiction</h2>
+          <h2 className="text-2xl font-bold flex items-center"><Globe className="h-6 w-6 mr-3" /> Cross-Border Jurisdiction</h2>
           <p className="opacity-80 mt-2">Manage international service, discovery (Hague Evidence), and enforcement.</p>
         </div>
-        <Plane className="h-24 w-24 absolute right-4 -bottom-4 opacity-10 rotate-[-15deg]"/>
+        <Plane className="h-24 w-24 absolute right-4 -bottom-4 opacity-10 rotate-[-15deg]" />
       </div>
 
       <TableContainer>
@@ -42,12 +42,12 @@ export const JurisdictionInternational: React.FC = () => {
         <TableBody>
           {treaties.map((t: unknown, i: number) => (
             <TableRow key={i}>
-              <TableCell className={cn("font-bold", theme.text.primary)}>{(t as {name: string}).name}</TableCell>
-              <TableCell>{(t as {type: string}).type}</TableCell>
+              <TableCell className={cn("font-bold", theme.text.primary)}>{(t as { name: string }).name}</TableCell>
+              <TableCell>{(t as { type: string }).type}</TableCell>
               <TableCell>
-                <span className={cn("font-bold", theme.status.success.text)}>{(t as {status: string}).status}</span>
+                <span className={cn("font-bold", theme.status.success.text)}>{(t as { status: string }).status}</span>
               </TableCell>
-              <TableCell>{(t as {parties: number}).parties}</TableCell>
+              <TableCell>{(t as { parties: number }).parties}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -55,4 +55,3 @@ export const JurisdictionInternational: React.FC = () => {
     </div>
   );
 };
-

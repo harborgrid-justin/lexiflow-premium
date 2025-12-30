@@ -1,15 +1,15 @@
 
-import { useState } from 'react';
-import { FileIcon } from '@/components/atoms';
-import { PDFViewer } from '@/components/organisms';
-import { AcrobatToolbar, PDFTool } from './AcrobatToolbar';
-import { InteractiveOverlay, Field } from './InteractiveOverlay';
-import { Modal } from '@/components/molecules';
-import { SignaturePad } from '@/components/organisms';
-import { Button } from '@/components/atoms';
+import { PDFViewer } from '@/components/features/discovery/components/PDFViewer/PDFViewer';
+import { SignaturePad } from '@/components/features/discovery/components/SignaturePad/SignaturePad';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { FileIcon } from '@/components/ui/atoms/FileIcon/FileIcon';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
 import { LegalDocument } from '@/types';
+import { cn } from '@/utils/cn';
+import { useState } from 'react';
+import { AcrobatToolbar, PDFTool } from './AcrobatToolbar';
+import { Field, InteractiveOverlay } from './InteractiveOverlay';
 
 interface PreviewContentProps {
     document: LegalDocument;
@@ -50,15 +50,15 @@ export function PreviewContent({ document, previewUrl, isRedactionMode }: Previe
         // Fallback for non-PDFs
         return (
             <div className={cn("border rounded-lg overflow-hidden flex items-center justify-center min-h-[400px] relative group", theme.surface.highlight, theme.border.default)}>
-                 {isImage && previewUrl ? (
+                {isImage && previewUrl ? (
                     <img src={previewUrl} alt="Preview" className="max-w-full max-h-[600px] object-contain" style={isRedactionMode ? { filter: 'blur(8px)' } : {}} />
-                 ) : (
+                ) : (
                     <div className="text-center p-4">
-                        <FileIcon type={document.type} className={cn("h-16 w-16 mx-auto mb-4 opacity-50", theme.text.tertiary)}/>
+                        <FileIcon type={document.type} className={cn("h-16 w-16 mx-auto mb-4 opacity-50", theme.text.tertiary)} />
                         <p className={cn("text-sm font-medium mb-2", theme.text.secondary)}>Preview not available for this file type.</p>
                         {previewUrl && <a href={previewUrl} download={document.title} className={cn("hover:underline text-xs", theme.primary.text)}>Download File</a>}
                     </div>
-                 )}
+                )}
             </div>
         );
     }
@@ -66,7 +66,7 @@ export function PreviewContent({ document, previewUrl, isRedactionMode }: Previe
     return (
         <div className={cn("flex flex-col h-full border rounded-lg overflow-hidden shadow-sm", theme.border.default, theme.surface.default)}>
             {/* Acrobat Toolbar */}
-            <AcrobatToolbar 
+            <AcrobatToolbar
                 activeTool={activeTool}
                 setActiveTool={setActiveTool}
                 scale={scale}
@@ -81,13 +81,13 @@ export function PreviewContent({ document, previewUrl, isRedactionMode }: Previe
             {/* PDF Canvas Container */}
             <div className={cn("flex-1 relative overflow-auto", theme.surface.highlight)}>
                 {previewUrl ? (
-                    <PDFViewer 
-                        url={previewUrl} 
-                        scale={scale} 
+                    <PDFViewer
+                        url={previewUrl}
+                        scale={scale}
                         rotation={rotation}
                         onPageLoad={setPageDims}
                     >
-                        <InteractiveOverlay 
+                        <InteractiveOverlay
                             activeTool={activeTool}
                             dimensions={pageDims}
                             onFieldClick={handleFieldClick}
@@ -104,9 +104,9 @@ export function PreviewContent({ document, previewUrl, isRedactionMode }: Previe
             <Modal isOpen={signModalOpen} onClose={() => setSignModalOpen(false)} title="Sign Document" size="sm">
                 <div className="p-6">
                     <p className={cn("text-sm mb-4", theme.text.secondary)}>Draw your signature below to sign this field.</p>
-                    <SignaturePad 
-                        value={false} 
-                        onChange={handleSignatureSave} 
+                    <SignaturePad
+                        value={false}
+                        onChange={handleSignatureSave}
                         label="Draw Signature"
                         subtext="I certify this signature is valid."
                     />

@@ -1,13 +1,13 @@
 /**
  * Trust Account Dashboard Component
- * 
+ *
  * ARCHITECTURAL PHILOSOPHY:
  * - **Separation of Concerns**: Business logic in hooks, UI in component
  * - **Type Safety**: Every prop, state, and callback is explicitly typed
  * - **Render Optimization**: React.memo prevents unnecessary re-renders
  * - **Accessibility**: ARIA labels, keyboard navigation, screen reader support
  * - **Compliance First**: Surfaces compliance issues prominently
- * 
+ *
  * WHY THIS DESIGN:
  * 1. Dashboard pattern provides at-a-glance compliance monitoring
  * 2. Card-based layout allows modular composition and responsive design
@@ -114,17 +114,17 @@ const StatCard = React.memo<StatCardProps>(({
               {title}
             </h3>
           </div>
-          
+
           <div className={cn('text-3xl font-bold mb-1', variantStyles.text)}>
             {value}
           </div>
-          
+
           {subtitle && (
             <p className={cn('text-sm', theme.text.secondary)}>
               {subtitle}
             </p>
           )}
-          
+
           {trend && (
             <div className="flex items-center gap-1 mt-2">
               <TrendingUp
@@ -271,11 +271,11 @@ const AccountListItem = React.memo<AccountListItemProps>(({ account, onClick }) 
               {account.status}
             </span>
           </div>
-          
+
           <p className={cn('text-xs mb-2', theme.text.secondary)}>
             {account.clientName} • {account.accountType.toUpperCase()}
           </p>
-          
+
           <div className="flex items-center gap-4">
             <div>
               <p className={cn('text-xs', theme.text.secondary)}>Balance</p>
@@ -283,7 +283,7 @@ const AccountListItem = React.memo<AccountListItemProps>(({ account, onClick }) 
                 {Formatters.currency(account.balance)}
               </p>
             </div>
-            
+
             {account.lastReconciledDate && (
               <div>
                 <p className={cn('text-xs', theme.text.secondary)}>Last Reconciled</p>
@@ -293,7 +293,7 @@ const AccountListItem = React.memo<AccountListItemProps>(({ account, onClick }) 
               </div>
             )}
           </div>
-          
+
           {needsReconciliation && (
             <div className="flex items-center gap-1 mt-2">
               <Clock className="h-3 w-3 text-amber-600" />
@@ -339,7 +339,7 @@ export const TrustAccountDashboard: React.FC = () => {
     const errorCount = complianceIssues.filter((i) => i.severity === 'error').length;
     const warningCount = complianceIssues.filter((i) => i.severity === 'warning').length;
     const ioltaBalance = ioltaAccounts.reduce((sum, acc) => sum + acc.balance, 0);
-    
+
     return {
       totalBalance,
       totalAccounts: accounts.length,
@@ -482,14 +482,14 @@ export const TrustAccountDashboard: React.FC = () => {
           subtitle="All trust accounts"
           variant="success"
         />
-        
+
         <StatCard
           icon={<Users className="h-5 w-5" />}
           title="Active Accounts"
           value={stats.activeAccounts}
           subtitle={`${stats.totalAccounts} total accounts`}
         />
-        
+
         <StatCard
           icon={<Clock className="h-5 w-5" />}
           title="Needs Reconciliation"
@@ -498,7 +498,7 @@ export const TrustAccountDashboard: React.FC = () => {
           variant={stats.needsReconciliation > 0 ? 'warning' : 'default'}
           onClick={stats.needsReconciliation > 0 ? () => handleReconcileAccount(accountsNeedingReconciliation[0].id) : undefined}
         />
-        
+
         <StatCard
           icon={<FileText className="h-5 w-5" />}
           title="IOLTA Balance"

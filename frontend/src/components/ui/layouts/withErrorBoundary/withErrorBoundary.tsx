@@ -4,7 +4,7 @@
  * @description Higher-Order Component that wraps layouts with error boundaries and
  * performance monitoring. Provides comprehensive error handling with automatic recovery
  * and telemetry integration.
- * 
+ *
  * FEATURES:
  * - Automatic error boundary wrapping
  * - Performance monitoring via React Profiler
@@ -65,14 +65,14 @@ const createProfilerCallback = (componentName: string): ProfilerOnRenderCallback
 /**
  * Higher-Order Component that wraps a layout component with error boundary and
  * optional performance profiling.
- * 
+ *
  * @example
  * ```tsx
  * const SafePageLayout = withErrorBoundary(PageContainerLayout, {
  *   componentName: 'PageContainerLayout',
  *   enableProfiling: true
  * });
- * 
+ *
  * // Use like normal component
  * <SafePageLayout>
  *   <YourContent />

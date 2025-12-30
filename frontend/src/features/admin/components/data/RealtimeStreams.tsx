@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Radio, Activity, Zap, AlertCircle, CheckCircle, Users, Plus } from 'lucide-react';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Card } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
-import { Tabs } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { Activity, AlertCircle, CheckCircle, Plus, Radio, Users, Zap } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface DataStream {
   id: string;
@@ -27,7 +27,7 @@ interface RealtimeStreamsProps {
 export const RealtimeStreams: React.FC<RealtimeStreamsProps> = ({ initialTab = 'streams' }) => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState(initialTab);
-  
+
   // Use real data from backend - fetching realtime streams configuration
   const { data: streams = [], isLoading: streamsLoading } = useQuery(['realtime', 'streams'], async () => {
     // Fetch from backend or return sample for now
@@ -73,7 +73,7 @@ export const RealtimeStreams: React.FC<RealtimeStreamsProps> = ({ initialTab = '
   useEffect(() => {
     // Simulate real-time updates only if we have streams
     if (liveStreams.length === 0) return;
-    
+
     const interval = setInterval(() => {
       setLiveStreams(prev => prev.map(stream => ({
         ...stream,
@@ -180,44 +180,44 @@ export const RealtimeStreams: React.FC<RealtimeStreamsProps> = ({ initialTab = '
               <div className="space-y-4">
                 {liveStreams.map(stream => {
                   return (
-              <Card key={stream.id}>
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-4 flex-1">
-                    {getStatusIcon(stream.status)}
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className={cn("font-semibold", theme.text.primary)}>{stream.name}</h3>
-                        <Badge variant={getStatusColor(stream.status)}>{stream.status}</Badge>
+                    <Card key={stream.id}>
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-start gap-4 flex-1">
+                          {getStatusIcon(stream.status)}
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <h3 className={cn("font-semibold", theme.text.primary)}>{stream.name}</h3>
+                              <Badge variant={getStatusColor(stream.status)}>{stream.status}</Badge>
+                            </div>
+                            <p className={cn("text-sm mb-3", theme.text.secondary)}>
+                              {stream.source} → {stream.target}
+                            </p>
+                            <div className="grid grid-cols-4 gap-4">
+                              <div>
+                                <p className={cn("text-xs font-semibold uppercase", theme.text.tertiary)}>Throughput</p>
+                                <p className={cn("text-sm font-mono", theme.text.primary)}>{stream.throughput}</p>
+                              </div>
+                              <div>
+                                <p className={cn("text-xs font-semibold uppercase", theme.text.tertiary)}>Latency</p>
+                                <p className={cn("text-sm font-mono", theme.text.primary)}>{stream.latency}</p>
+                              </div>
+                              <div>
+                                <p className={cn("text-xs font-semibold uppercase", theme.text.tertiary)}>Messages</p>
+                                <p className={cn("text-sm font-mono", theme.text.primary)}>
+                                  {stream.messagesProcessed.toLocaleString()}
+                                </p>
+                              </div>
+                              <div>
+                                <p className={cn("text-xs font-semibold uppercase", theme.text.tertiary)}>Last Activity</p>
+                                <p className={cn("text-sm font-mono", theme.text.primary)}>
+                                  {new Date(stream.lastActivity).toLocaleTimeString()}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <p className={cn("text-sm mb-3", theme.text.secondary)}>
-                        {stream.source} → {stream.target}
-                      </p>
-                      <div className="grid grid-cols-4 gap-4">
-                        <div>
-                          <p className={cn("text-xs font-semibold uppercase", theme.text.tertiary)}>Throughput</p>
-                          <p className={cn("text-sm font-mono", theme.text.primary)}>{stream.throughput}</p>
-                        </div>
-                        <div>
-                          <p className={cn("text-xs font-semibold uppercase", theme.text.tertiary)}>Latency</p>
-                          <p className={cn("text-sm font-mono", theme.text.primary)}>{stream.latency}</p>
-                        </div>
-                        <div>
-                          <p className={cn("text-xs font-semibold uppercase", theme.text.tertiary)}>Messages</p>
-                          <p className={cn("text-sm font-mono", theme.text.primary)}>
-                            {stream.messagesProcessed.toLocaleString()}
-                          </p>
-                        </div>
-                        <div>
-                          <p className={cn("text-xs font-semibold uppercase", theme.text.tertiary)}>Last Activity</p>
-                          <p className={cn("text-sm font-mono", theme.text.primary)}>
-                            {new Date(stream.lastActivity).toLocaleTimeString()}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Card>
+                    </Card>
                   );
                 })}
               </div>

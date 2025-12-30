@@ -15,7 +15,7 @@ import { DocumentTable } from './table/DocumentTable';
 import { TagManagementModal } from './TagManagementModal';
 import { DocumentPreviewPanel } from './viewer/DocumentPreviewPanel';
 // ✅ Migrated to backend API (2025-12-21)
-import { VirtualGrid } from '@/components/organisms';
+import { VirtualGrid } from '@/components/organisms/VirtualGrid/VirtualGrid';
 import { queryKeys } from '@/utils/queryKeys';
 import { DocumentGridCard } from './DocumentGridCard';
 

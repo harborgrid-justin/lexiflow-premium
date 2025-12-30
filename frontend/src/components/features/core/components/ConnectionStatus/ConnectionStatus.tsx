@@ -33,10 +33,10 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
     };
 
     checkBackend();
-    
+
     // Check periodically
     const interval = setInterval(checkBackend, 30000); // Every 30 seconds
-    
+
     return () => clearInterval(interval);
   }, [useBackendApi]);
 
@@ -86,7 +86,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
           {getIcon()}
           <span>{getStatusText()}</span>
         </div>
-        
+
         <button
           onClick={() => setShowCoverage(true)}
           className="p-1.5 rounded-full bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
@@ -94,7 +94,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
         >
           <Info className="w-4 h-4 text-gray-600 dark:text-gray-400" />
         </button>
-        
+
         {useBackendApi && (
           <button
             onClick={() => setShowHealthMonitor(true)}
@@ -106,16 +106,15 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
         )}
       </div>
 
-      <ServiceCoverageIndicator 
-        isOpen={showCoverage} 
-        onClose={() => setShowCoverage(false)} 
+      <ServiceCoverageIndicator
+        isOpen={showCoverage}
+        onClose={() => setShowCoverage(false)}
       />
 
-      <BackendHealthMonitor 
-        isOpen={showHealthMonitor} 
-        onClose={() => setShowHealthMonitor(false)} 
+      <BackendHealthMonitor
+        isOpen={showHealthMonitor}
+        onClose={() => setShowHealthMonitor(false)}
       />
     </>
   );
 };
-

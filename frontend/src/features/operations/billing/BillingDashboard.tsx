@@ -26,10 +26,11 @@ import { useNotify } from '@/hooks/useNotify';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button';
 import { ExportMenu } from '@/components/features/discovery/components/ExportMenu/ExportMenu';
 import { TabbedPageLayout } from '@/components/layouts';
-import { LazyLoader, PeriodSelector } from '@/components/molecules';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
+import { PeriodSelector } from '@/components/ui/molecules/PeriodSelector';
 import { BillingDashboardContent } from './BillingDashboardContent';
 import { BillingErrorBoundary } from './BillingErrorBoundary';
 
@@ -115,7 +116,7 @@ const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo,
           <Button variant="outline" size="sm" icon={RefreshCw} onClick={() => syncFinancials(undefined)} isLoading={isSyncing}>Sync</Button>
         </div>
       }
-      tabConfig={BILLING_TAB_CONFIG}
+      tabConfig={BILLING_TAB_CONFIG as any}
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >

@@ -1,11 +1,11 @@
 
 import { useState, useMemo } from 'react';
 import { Client, ClientStatus } from '@/types';
-import { SearchToolbar } from '@/components/organisms';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
-import { Currency } from '@/components/atoms';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
+import { Currency } from '@/components/ui/atoms/Currency';
 import { Lock, MoreVertical } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -42,10 +42,10 @@ export function ClientDirectory({ clients: propClients, onOpenPortal }: ClientDi
   );
 
   // Ensure clientsToRender is always an array
-  const clientsToRender = Array.isArray(propClients) 
-    ? propClients 
-    : Array.isArray(fetchedClients) 
-      ? fetchedClients 
+  const clientsToRender = Array.isArray(propClients)
+    ? propClients
+    : Array.isArray(fetchedClients)
+      ? fetchedClients
       : [];
 
   const filteredClients = useMemo(() => {
@@ -58,20 +58,20 @@ export function ClientDirectory({ clients: propClients, onOpenPortal }: ClientDi
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
-        <SearchToolbar 
-          value={searchTerm} 
-          onChange={setSearchTerm} 
-          placeholder="Search clients..." 
+        <SearchToolbar
+          value={searchTerm}
+          onChange={setSearchTerm}
+          placeholder="Search clients..."
           className="w-full max-w-lg"
         />
         <div className={cn("flex bg-slate-100 p-1 rounded-lg border", theme.border.default)}>
-          <button 
+          <button
             onClick={() => setViewMode('grid')}
             className={cn("px-3 py-1 text-xs font-medium rounded-md transition-all", viewMode === 'grid' ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-700")}
           >
             Grid
           </button>
-          <button 
+          <button
             onClick={() => setViewMode('list')}
             className={cn("px-3 py-1 text-xs font-medium rounded-md transition-all", viewMode === 'list' ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-700")}
           >
@@ -83,10 +83,10 @@ export function ClientDirectory({ clients: propClients, onOpenPortal }: ClientDi
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredClients.map(client => (
-              <ClientCard 
-                key={client.id} 
-                client={client} 
-                onGenerateToken={generateToken} 
+              <ClientCard
+                key={client.id}
+                client={client}
+                onGenerateToken={generateToken}
               />
           ))}
         </div>

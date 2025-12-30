@@ -3,10 +3,11 @@ import { FileText, Plus, Edit, Trash2, CheckCircle, Clock, AlertTriangle } from 
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { Badge } from '@/components/atoms';
-import { Modal } from '@/components/molecules';
-import { Input, TextArea } from '@/components/atoms';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Modal } from '@/components/ui/molecules/Modal';
+import { Input } from '@/components/ui/atoms/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks';
 import { useQuery } from '@/hooks/useQueryHooks';

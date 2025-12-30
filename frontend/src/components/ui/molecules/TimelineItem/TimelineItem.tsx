@@ -19,7 +19,7 @@ import React from 'react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { DateText } from '@/components/atoms';
+import { DateText } from '@/components/ui/atoms/DateText';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -40,13 +40,13 @@ interface TimelineItemProps {
 /**
  * TimelineItem - React 18 optimized with React.memo
  */
-export const TimelineItem = React.memo<TimelineItemProps>(({ 
-  date, title, description, icon, colorClass = 'bg-slate-400', onClick, isLast 
+export const TimelineItem = React.memo<TimelineItemProps>(({
+  date, title, description, icon, colorClass = 'bg-slate-400', onClick, isLast
 }) => {
   const { theme } = useTheme();
 
   return (
-    <div 
+    <div
       className="relative pl-10 h-full flex flex-col justify-center group py-2"
       style={{ contentVisibility: 'auto' } as React.CSSProperties}
     >
@@ -54,7 +54,7 @@ export const TimelineItem = React.memo<TimelineItemProps>(({
       {!isLast && (
         <div className={cn("absolute left-[11px] top-6 bottom-[-24px] w-0.5 transition-colors", theme.border.default, "group-hover:bg-slate-300")}></div>
       )}
-      
+
       {/* Icon Dot */}
       <div className={cn(
           "absolute left-0 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full border-2 border-white shadow-sm flex items-center justify-center text-white z-10 transition-transform duration-200 group-hover:scale-110",
@@ -62,9 +62,9 @@ export const TimelineItem = React.memo<TimelineItemProps>(({
       )}>
         {icon}
       </div>
-      
+
       {/* Content - Compact Layout */}
-      <div 
+      <div
         className={cn("flex flex-col justify-center h-full min-w-0 pr-2 transition-opacity", onClick ? 'cursor-pointer' : '')}
         onClick={onClick}
         title={description} // Native tooltip for zero-clutter detail access
@@ -75,7 +75,7 @@ export const TimelineItem = React.memo<TimelineItemProps>(({
             </span>
             <DateText date={date} className={cn("font-mono text-[10px] whitespace-nowrap shrink-0 opacity-60", theme.text.tertiary)} />
         </div>
-        
+
         {description && (
             <p className={cn("text-xs truncate opacity-60 mt-0.5 font-medium", theme.text.secondary)}>
                 {description}

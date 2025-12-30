@@ -10,26 +10,26 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { FileText, MapPin, PieChart, Target, TrendingUp, Users } from 'lucide-react';
 import React, { useState } from 'react';
-import { Target, TrendingUp, Users, PieChart, FileText, MapPin } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Tabs } from '@/components/molecules';
 import { MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
-import { KanbanBoard, KanbanColumn, KanbanCard } from '@/components/organisms';
-import { Card } from '@/components/molecules';
-import { ProgressBar } from '@/components/atoms';
+import { KanbanBoard, KanbanCard, KanbanColumn } from '@/components/organisms/KanbanBoard/KanbanBoard';
+import { ProgressBar } from '@/components/ui/atoms/ProgressBar/ProgressBar';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -49,12 +49,12 @@ export const StrategyBoard: React.FC = () => {
 
     return (
         <div className="flex flex-col h-full space-y-4">
-             <div className={cn("p-4 border-b shrink-0", theme.border.default)}>
+            <div className={cn("p-4 border-b shrink-0", theme.border.default)}>
                 <div className="mb-4">
                     <h3 className={cn("text-lg font-bold", theme.text.primary)}>Strategic Planning Office</h3>
                     <p className={cn("text-sm", theme.text.secondary)}>Long-term firm objectives, growth tracking, and governance.</p>
                 </div>
-                <Tabs 
+                <Tabs
                     tabs={[
                         { id: 'okr', label: 'OKRs & Goals', icon: Target },
                         { id: 'ma', label: 'M&A Pipeline', icon: PieChart },
@@ -76,17 +76,17 @@ export const StrategyBoard: React.FC = () => {
                             <MetricTile label="Expansion Mkts" value="2" icon={MapPin} />
                         </div>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                             {okrs.map((okr: unknown) => (
-                                 <Card key={(okr as {id: string}).id} title={(okr as {title: string}).title}>
-                                     <div className="space-y-2">
-                                         <div className="flex justify-between text-sm">
-                                             <span className={theme.text.secondary}>Owner: {(okr as {owner: string}).owner}</span>
-                                             <span className="font-bold">{(okr as {progress: number}).progress}%</span>
-                                         </div>
-                                         <ProgressBar label="" value={(okr as {progress: number}).progress} showValue={false} colorClass={(okr as {progress: number}).progress > 70 ? 'bg-green-500' : 'bg-blue-500'} />
-                                     </div>
-                                 </Card>
-                             ))}
+                            {okrs.map((okr: unknown) => (
+                                <Card key={(okr as { id: string }).id} title={(okr as { title: string }).title}>
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-sm">
+                                            <span className={theme.text.secondary}>Owner: {(okr as { owner: string }).owner}</span>
+                                            <span className="font-bold">{(okr as { progress: number }).progress}%</span>
+                                        </div>
+                                        <ProgressBar label="" value={(okr as { progress: number }).progress} showValue={false} colorClass={(okr as { progress: number }).progress > 70 ? 'bg-green-500' : 'bg-blue-500'} />
+                                    </div>
+                                </Card>
+                            ))}
                         </div>
                     </div>
                 )}
@@ -116,5 +116,3 @@ export const StrategyBoard: React.FC = () => {
         </div>
     );
 };
-
-

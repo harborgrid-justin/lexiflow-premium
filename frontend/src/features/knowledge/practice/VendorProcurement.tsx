@@ -10,27 +10,27 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { BarChart2, Briefcase, FileText, Loader2, Plus, ShoppingCart } from 'lucide-react';
 import React, { useState } from 'react';
-import { ShoppingCart, FileText, BarChart2, Briefcase, Plus, Loader2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Tabs } from '@/components/molecules';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { KanbanBoard, KanbanCard, KanbanColumn } from '@/components/organisms/KanbanBoard/KanbanBoard';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { SearchToolbar } from '@/components/organisms';
-import { KanbanBoard, KanbanColumn, KanbanCard } from '@/components/organisms';
+import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -92,8 +92,8 @@ export const VendorProcurement: React.FC = () => {
         <div className="flex flex-col h-full space-y-4">
             <div className={cn("p-4 border-b shrink-0", theme.border.default)}>
                 <div className="flex justify-between items-center mb-4">
-                     <h3 className={cn("text-lg font-bold", theme.text.primary)}>Procurement & Contracts</h3>
-                     <Button variant="primary" icon={Plus}>New Requisition</Button>
+                    <h3 className={cn("text-lg font-bold", theme.text.primary)}>Procurement & Contracts</h3>
+                    <Button variant="primary" icon={Plus}>New Requisition</Button>
                 </div>
                 <Tabs
                     tabs={[
@@ -108,11 +108,11 @@ export const VendorProcurement: React.FC = () => {
             </div>
 
             <div className="flex-1 overflow-hidden p-6">
-                {isLoading && <div className="flex justify-center p-8"><Loader2 className="animate-spin h-6 w-6 text-blue-600"/></div>}
+                {isLoading && <div className="flex justify-center p-8"><Loader2 className="animate-spin h-6 w-6 text-blue-600" /></div>}
 
                 {!isLoading && activeTab === 'directory' && (
                     <div className="space-y-4 animate-fade-in">
-                        <SearchToolbar value="" onChange={() => {}} placeholder="Search vendors..." />
+                        <SearchToolbar value="" onChange={() => { }} placeholder="Search vendors..." />
                         <TableContainer>
                             <TableHeader><TableHead>Vendor</TableHead><TableHead>Category</TableHead><TableHead>Rating</TableHead><TableHead>Status</TableHead></TableHeader>
                             <TableBody>
@@ -149,24 +149,24 @@ export const VendorProcurement: React.FC = () => {
                 )}
 
                 {!isLoading && activeTab === 'rfp' && (
-                     <KanbanBoard>
-                         {['Drafting', 'Published', 'Vendor Selection', 'Contract Negotiation', 'Closed'].map(stage => (
-                             <KanbanColumn key={stage} title={stage} count={rfps.filter(r => r.stage === stage).length}>
-                                 {rfps.filter(r => r.stage === stage).map(r => (
-                                     <KanbanCard key={r.id}>
-                                         <h4 className={cn("font-bold text-sm", theme.text.primary)}>{r.title}</h4>
-                                         <p className={cn("text-xs mt-1", theme.text.secondary)}>Budget: {r.budget}</p>
-                                     </KanbanCard>
-                                 ))}
-                             </KanbanColumn>
-                         ))}
-                     </KanbanBoard>
+                    <KanbanBoard>
+                        {['Drafting', 'Published', 'Vendor Selection', 'Contract Negotiation', 'Closed'].map(stage => (
+                            <KanbanColumn key={stage} title={stage} count={rfps.filter(r => r.stage === stage).length}>
+                                {rfps.filter(r => r.stage === stage).map(r => (
+                                    <KanbanCard key={r.id}>
+                                        <h4 className={cn("font-bold text-sm", theme.text.primary)}>{r.title}</h4>
+                                        <p className={cn("text-xs mt-1", theme.text.secondary)}>Budget: {r.budget}</p>
+                                    </KanbanCard>
+                                ))}
+                            </KanbanColumn>
+                        ))}
+                    </KanbanBoard>
                 )}
 
                 {!isLoading && activeTab === 'spend' && (
                     <div className={cn("flex items-center justify-center h-full border-2 border-dashed rounded-lg", theme.border.default)}>
                         <div className="text-center">
-                            <BarChart2 className={cn("h-12 w-12 mx-auto mb-4", theme.text.tertiary)}/>
+                            <BarChart2 className={cn("h-12 w-12 mx-auto mb-4", theme.text.tertiary)} />
                             <p className={theme.text.secondary}>Spend analytics visualization placeholder.</p>
                         </div>
                     </div>

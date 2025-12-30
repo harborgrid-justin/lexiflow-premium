@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { PageHeader } from '@/components/organisms';
-import { Button } from '@/components/atoms';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { Plus, FileText, LayoutTemplate, Clock } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -9,9 +9,9 @@ import { DataService } from '@/services/data/dataService';
 import { PleadingDocument, PleadingTemplate, PleadingSection } from '@/types/pleading-types';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { VirtualGrid } from '@/components/organisms';
-import { Modal } from '@/components/molecules';
-import { Input } from '@/components/atoms';
+import { VirtualGrid } from '@/components/organisms/VirtualGrid/VirtualGrid';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { Input } from '@/components/ui/atoms/Input/Input';
 import { Case, CaseId, UserId, DocumentId } from '@/types';
 
 interface PleadingDashboardProps {
@@ -24,7 +24,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
     const { theme } = useTheme();
     const createModal = useModalState();
     const [newDocData, setNewDocData] = useState({ title: '', caseId: caseId || '', templateId: '' });
-    
+
     const { data: pleadings = [] } = useQuery<PleadingDocument[]>(
         ['pleadings', caseId || 'all'],
         () => caseId ? DataService.pleadings.getByCaseId(caseId) : DataService.pleadings.getAll()
@@ -34,7 +34,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
         ['cases', 'all'],
         DataService.cases.getAll
     );
-    
+
     const { data: templates = [] } = useQuery<PleadingTemplate[]>(
         ['pleading-templates', 'all'],
         () => DataService.pleadings.getTemplates()
@@ -52,10 +52,10 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
 
     const handleCreateSubmit = () => {
         if (!newDocData.title || !newDocData.caseId || !newDocData.templateId) return;
-        
+
         const template = templates.find(t => t.id === newDocData.templateId);
-        const sections: PleadingSection[] = template 
-            ? template.defaultSections.map((s, idx) => ({ 
+        const sections: PleadingSection[] = template
+            ? template.defaultSections.map((s, idx) => ({
                 id: `sec-${Date.now()}-${idx}`,
                 type: s.type || 'Paragraph',
                 content: s.content || '',
@@ -78,8 +78,8 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
     };
 
     const renderItem = (item: PleadingDocument) => (
-        <div 
-            key={item.id} 
+        <div
+            key={item.id}
             className={cn("p-4 border rounded-lg h-full flex flex-col cursor-pointer transition-all hover:shadow-md group", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}
             onClick={() => onEdit(item.id)}
         >
@@ -97,12 +97,12 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
 
     return (
         <div className="h-full flex flex-col px-6 pt-6">
-            <PageHeader 
-                title="Pleading Builder" 
+            <PageHeader
+                title="Pleading Builder"
                 subtitle="Draft complaints, motions, and orders with automated formatting and case integration."
                 actions={<Button variant="primary" icon={Plus} onClick={createModal.open}>New Pleading</Button>}
             />
-            
+
             <div className="flex-1 overflow-hidden border-t pt-4">
                 <VirtualGrid
                     items={pleadings}
@@ -117,10 +117,10 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
             <Modal isOpen={createModal.isOpen} onClose={createModal.close} title="Create New Pleading">
                 <div className="p-6 space-y-4">
                     <Input label="Document Title" value={newDocData.title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewDocData({...newDocData, title: e.target.value})} placeholder="e.g. Plaintiff's Motion to Compel" />
-                    
+
                     <div>
                         <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Related Matter</label>
-                        <select 
+                        <select
                             title="Select related case"
                             className={cn("w-full p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={newDocData.caseId}
@@ -135,7 +135,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
                         <label className={cn("block text-xs font-bold uppercase mb-1.5", theme.text.secondary)}>Template</label>
                         <div className="grid grid-cols-2 gap-3">
                             {templates.map(t => (
-                                <div 
+                                <div
                                     key={t.id}
                                     onClick={() => setNewDocData({...newDocData, templateId: t.id})}
                                     className={cn(

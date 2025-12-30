@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { FileText, Save, Eye, X, CheckCircle, List, Edit, Layers, FileSearch, FolderCheck } from 'lucide-react';
-import { useTheme } from '@providers/ThemeContext';
-import { useToast } from '@providers/ToastContext';
-import { PageHeader } from '@/components/organisms';
-import { TabNavigation } from '@/components/organisms';
-import { cn } from '@/utils/cn';
 import {
   draftingApi,
   DraftingTemplate,
-  GenerateDocumentDto,
+  DraftingValidationService,
   GeneratedDocument,
-  DraftingValidationService
+  GenerateDocumentDto
 } from '@/api/domains/drafting.api';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigation';
 import { apiClient } from '@/services/infrastructure/apiClient';
+import { cn } from '@/utils/cn';
+import { useTheme } from '@providers/ThemeContext';
+import { useToast } from '@providers/ToastContext';
+import { CheckCircle, Edit, Eye, FileSearch, FileText, FolderCheck, Layers, List, Save, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface DocumentGeneratorProps {
   templateId?: string;
@@ -75,14 +75,14 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
       const template = await draftingApi.getTemplateById(id);
       setSelectedTemplate(template);
       setTitle(`${template.name} - ${new Date().toLocaleDateString()}`);
-      
+
       // Initialize variable values with defaults
       const initialValues: Record<string, unknown> = {};
       template.variables.forEach((v) => {
         initialValues[v.name] = v.defaultValue || '';
       });
       setVariableValues(initialValues);
-      
+
       if (!templateId) {
         setStep('variables');
       }
@@ -99,8 +99,8 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
   const tabs = [
     { id: 'template', label: 'Template', icon: List },
     { id: 'variables', label: 'Variables', icon: Edit },
-    ...(selectedTemplate?.clauseReferences && selectedTemplate.clauseReferences.length > 0 
-      ? [{ id: 'clauses', label: 'Clauses', icon: Layers }] 
+    ...(selectedTemplate?.clauseReferences && selectedTemplate.clauseReferences.length > 0
+      ? [{ id: 'clauses', label: 'Clauses', icon: Layers }]
       : []),
     { id: 'preview', label: 'Preview', icon: FileSearch },
     { id: 'save', label: 'Save', icon: FolderCheck },
@@ -238,7 +238,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
       };
 
       const document = await draftingApi.generateDocument(dto);
-      
+
       addToast('Document generated successfully!', 'success');
       onComplete(document);
     } catch (error: unknown) {
@@ -357,7 +357,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
             {variable.description && (
               <p className="text-xs text-slate-500 dark:text-slate-400 mb-1">{variable.description}</p>
             )}
-            
+
             {variable.type === 'text' && (
               <input
                 type="text"
@@ -421,7 +421,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
                 ))}
               </select>
             )}
-            
+
             {/* Display validation errors for this field */}
             {validationErrors[variable.name] && (
               <div className="mt-1">
@@ -432,7 +432,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
                 ))}
               </div>
             )}
-            
+
             {variable.type === 'boolean' && (
               <label className="flex items-center space-x-2">
                 <input
@@ -635,7 +635,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
               <span>Refresh Preview</span>
             </button>
           )}
-          
+
           {step === 'save' && (
             <button
               onClick={handleGenerate}

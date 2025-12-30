@@ -3,10 +3,10 @@
  * System-level settings including data source configuration
  */
 
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { DataSourceSelector } from '@/components/ui/molecules/DataSourceSelector/DataSourceSelector';
+import { Database, Settings, Zap } from 'lucide-react';
 import React from 'react';
-import { Settings, Database, Zap } from 'lucide-react';
-import { Card } from '@/components/molecules';
-import { DataSourceSelector } from '@/components/molecules';
 
 export const SystemSettings: React.FC = () => {
   return (
@@ -22,7 +22,7 @@ export const SystemSettings: React.FC = () => {
             <p className="text-sm text-slate-600">Configure system-level preferences and infrastructure</p>
           </div>
         </div>
-        
+
         {/* Real-time monitoring badge */}
         <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-lg">
           <div className="relative flex h-2 w-2">
@@ -34,7 +34,7 @@ export const SystemSettings: React.FC = () => {
       </div>
 
       {/* Data Source Configuration */}
-      <Card 
+      <Card
         title={
           <div className="flex items-center gap-2">
             <Database className="h-5 w-5 text-blue-600" />
@@ -52,7 +52,7 @@ export const SystemSettings: React.FC = () => {
       </Card>
 
       {/* Performance Settings */}
-      <Card 
+      <Card
         title={
           <div className="flex items-center gap-2">
             <Zap className="h-5 w-5 text-amber-600" />

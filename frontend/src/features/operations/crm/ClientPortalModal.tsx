@@ -2,9 +2,9 @@
 import React, { useState, Suspense, lazy } from 'react';
 import { Client } from '@/types';
 import { X, Lock, FileText, MessageSquare, UploadCloud, Activity, Shield } from 'lucide-react';
-import { Button } from '@/components/atoms';
-import { Tabs } from '@/components/molecules';
-import { LazyLoader } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button';
+import { Tabs } from '@/components/ui/molecules/Tabs';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
 
 // Lazy load dedicated components for each tab
 const ClientPortalDocuments = lazy(() => import('./client-portal/ClientPortalDocuments').then(m => ({ default: m.ClientPortalDocuments })));
@@ -72,7 +72,7 @@ export const ClientPortalModal: React.FC<ClientPortalModalProps> = ({ client, on
                 onChange={setActiveTab}
                 variant="underline"
             />
-            
+
             <div className="grid grid-cols-1 gap-8">
                 {renderContent()}
             </div>

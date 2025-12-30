@@ -10,25 +10,25 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { AlertTriangle, Grid, Key, Loader2, MapPin, Users, Wrench } from 'lucide-react';
 import React, { useState } from 'react';
-import { MapPin, Key, Wrench, Grid, Users, AlertTriangle, Loader2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Tabs } from '@/components/molecules';
-import { Card } from '@/components/molecules';
 import { MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -60,7 +60,7 @@ export const FacilitiesManager: React.FC = () => {
 
     return (
         <div className="flex flex-col h-full space-y-4">
-             <div className={cn("p-4 border-b shrink-0", theme.border.default)}>
+            <div className={cn("p-4 border-b shrink-0", theme.border.default)}>
                 <div className="mb-4">
                     <h2 className={cn("text-xl font-bold", theme.text.primary)}>Facilities & Real Estate</h2>
                     <p className={cn("text-sm", theme.text.secondary)}>Manage physical assets, leases, and office operations.</p>
@@ -81,7 +81,7 @@ export const FacilitiesManager: React.FC = () => {
             </div>
 
             <div className="flex-1 overflow-y-auto p-6">
-                {isLoading ? <div className="flex justify-center p-8"><Loader2 className="animate-spin h-6 w-6 text-blue-600"/></div> : (
+                {isLoading ? <div className="flex justify-center p-8"><Loader2 className="animate-spin h-6 w-6 text-blue-600" /></div> : (
                     <>
                         {activeTab === 'locations' && (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -104,13 +104,13 @@ export const FacilitiesManager: React.FC = () => {
                         {activeTab === 'leases' && (
                             <div className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                     <MetricTile label="Total Sq Ft" value="125,000" icon={Grid} />
-                                     <MetricTile label="Monthly Rent" value="$450k" icon={Key} />
-                                     <MetricTile label="Expiring (Year)" value="1" icon={AlertTriangle} trend="Action Required" trendUp={false} />
+                                    <MetricTile label="Total Sq Ft" value="125,000" icon={Grid} />
+                                    <MetricTile label="Monthly Rent" value="$450k" icon={Key} />
+                                    <MetricTile label="Expiring (Year)" value="1" icon={AlertTriangle} trend="Action Required" trendUp={false} />
                                 </div>
                                 <Card title="Lease Portfolio">
-                                     {/* Lease Table logic would go here */}
-                                     <div className={cn("p-4 text-center text-sm", theme.text.secondary)}>Lease portfolio details table...</div>
+                                    {/* Lease Table logic would go here */}
+                                    <div className={cn("p-4 text-center text-sm", theme.text.secondary)}>Lease portfolio details table...</div>
                                 </Card>
                             </div>
                         )}
@@ -140,13 +140,13 @@ export const FacilitiesManager: React.FC = () => {
                         {activeTab === 'floorplan' && (
                             <div className={cn("flex items-center justify-center h-full border-2 border-dashed rounded-lg p-12", theme.border.default)}>
                                 <div className="text-center">
-                                    <Grid className={cn("h-16 w-16 mx-auto mb-4", theme.text.tertiary)}/>
+                                    <Grid className={cn("h-16 w-16 mx-auto mb-4", theme.text.tertiary)} />
                                     <h3 className={cn("text-lg font-bold", theme.text.primary)}>Interactive Floorplan</h3>
                                     <p className={theme.text.secondary}>Drag and drop seating assignments module.</p>
                                 </div>
                             </div>
                         )}
-                   </>
+                    </>
                 )}
             </div>
         </div>

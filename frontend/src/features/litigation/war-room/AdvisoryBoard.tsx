@@ -12,32 +12,32 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { Filter, Layout, UserPlus } from 'lucide-react';
 import React, { useState } from 'react';
-import { UserPlus, Filter, Layout } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useToggle } from '@/hooks/useToggle';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '@/components/atoms';
-import { SearchToolbar } from '@/components/organisms';
-import { AdaptiveLoader } from '@/components/molecules';
-import { AdvisorySidebar } from './advisory/AdvisorySidebar';
-import { AdvisorList, Advisor } from './advisory/AdvisorList';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { AdvisorDetail } from './advisory/AdvisorDetail';
-import { Modal } from '@/components/molecules';
+import { Advisor, AdvisorList } from './advisory/AdvisorList';
+import { AdvisorySidebar } from './advisory/AdvisorySidebar';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -74,8 +74,8 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   // DATA FETCHING
   // ============================================================================
   const { data: advisors = [], isLoading } = useQuery<Advisor[]>(
-      queryKeys.warRoom.advisors(caseId || ''),
-      () => DataService.warRoom.getAdvisors(caseId || '')
+    queryKeys.warRoom.advisors(caseId || ''),
+    () => DataService.warRoom.getAdvisors(caseId || '')
   );
 
   // ============================================================================
@@ -130,63 +130,63 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
       {/* Header Toolbar */}
       <div className={cn("p-4 border-b flex justify-between items-center gap-4", theme.surface.highlight, theme.border.default)}>
         <div className="flex items-center gap-4 flex-1">
-            <h3 className={cn("font-bold text-lg whitespace-nowrap", theme.text.primary)}>Advisory Board</h3>
-            <div className={cn("h-6 w-px", theme.border.default)}></div>
-            <SearchToolbar 
-                value={searchQuery} 
-                onChange={setSearchQuery} 
-                placeholder="Search experts & consultants..." 
-                className="w-full max-w-md border-none shadow-none p-0 bg-transparent"
-            />
+          <h3 className={cn("font-bold text-lg whitespace-nowrap", theme.text.primary)}>Advisory Board</h3>
+          <div className={cn("h-6 w-px", theme.border.default)}></div>
+          <SearchToolbar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search experts & consultants..."
+            className="w-full max-w-md border-none shadow-none p-0 bg-transparent"
+          />
         </div>
         <div className="flex gap-2">
-            <Button 
-                variant={filterToggle.isOpen ? "primary" : "secondary"} 
-                icon={Filter} 
-                onClick={filterToggle.toggle} 
-                className="hidden sm:flex"
-            >
-                Filter
-            </Button>
-            <Button 
-                variant={inspectorToggle.isOpen ? "primary" : "secondary"} 
-                icon={Layout} 
-                onClick={inspectorToggle.toggle}
-                className="hidden sm:flex"
-            >
-                Inspector
-            </Button>
-            <Button variant="primary" icon={UserPlus}>Retain New</Button>
+          <Button
+            variant={filterToggle.isOpen ? "primary" : "secondary"}
+            icon={Filter}
+            onClick={filterToggle.toggle}
+            className="hidden sm:flex"
+          >
+            Filter
+          </Button>
+          <Button
+            variant={inspectorToggle.isOpen ? "primary" : "secondary"}
+            icon={Layout}
+            onClick={inspectorToggle.toggle}
+            className="hidden sm:flex"
+          >
+            Inspector
+          </Button>
+          <Button variant="primary" icon={UserPlus}>Retain New</Button>
         </div>
       </div>
 
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar */}
-        <AdvisorySidebar 
-            activeCategory={category} 
-            onSelectCategory={setCategory}
-            counts={{
-                all: advisors.length,
-                experts: advisors.filter(a => a.role === 'Expert Witness').length,
-                consultants: advisors.filter(a => a.role !== 'Expert Witness').length
-            }}
+        <AdvisorySidebar
+          activeCategory={category}
+          onSelectCategory={setCategory}
+          counts={{
+            all: advisors.length,
+            experts: advisors.filter(a => a.role === 'Expert Witness').length,
+            consultants: advisors.filter(a => a.role !== 'Expert Witness').length
+          }}
         />
 
         {/* Main Content */}
         <div className="flex-1 overflow-hidden flex flex-col relative">
-            <AdvisorList 
-                advisors={filteredAdvisors} 
-                onSelect={handleSelectAdvisor}
-                selectedId={advisorSelection.selected?.id}
-            />
+          <AdvisorList
+            advisors={filteredAdvisors}
+            onSelect={handleSelectAdvisor}
+            selectedId={advisorSelection.selected?.id}
+          />
         </div>
 
         {/* Right Inspector Panel */}
         {inspectorToggle.isOpen && advisorSelection.selected && (
-            <AdvisorDetail 
-                advisor={advisorSelection.selected} 
-                onClose={inspectorToggle.close}
-            />
+          <AdvisorDetail
+            advisor={advisorSelection.selected}
+            onClose={inspectorToggle.close}
+          />
         )}
       </div>
 
@@ -195,7 +195,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
         <div className="p-6 space-y-4">
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Role</label>
-            <select 
+            <select
               title="Filter by role"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterRole}
@@ -210,7 +210,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
 
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Specialty</label>
-            <select 
+            <select
               title="Filter by specialty"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterSpecialty}
@@ -227,7 +227,7 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
 
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Status</label>
-            <select 
+            <select
               title="Filter by status"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterStatus}
@@ -253,5 +253,3 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
     </div>
   );
 };
-
-

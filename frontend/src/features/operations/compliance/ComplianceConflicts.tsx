@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { Download, Filter, Plus, User } from 'lucide-react';
 import React, { useState } from 'react';
-import { Plus, User, Filter, Download } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -20,10 +20,10 @@ import { Plus, User, Filter, Download } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { SearchToolbar } from '@/components/organisms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -67,57 +67,57 @@ export const ComplianceConflicts: React.FC<ComplianceConflictsProps> = ({ confli
         onChange={setSearchTerm}
         placeholder="Search by entity or requester..."
         actions={
-            <div className="flex gap-2">
-                <Button variant="secondary" size="sm" icon={Filter}>Filter</Button>
-                <Button variant="outline" size="sm" icon={Download}>Export</Button>
-            </div>
+          <div className="flex gap-2">
+            <Button variant="secondary" size="sm" icon={Filter}>Filter</Button>
+            <Button variant="outline" size="sm" icon={Download}>Export</Button>
+          </div>
         }
       />
 
       <TableContainer responsive="card">
-         <TableHeader>
-           <TableHead>Entity Name</TableHead>
-           <TableHead>Date Checked</TableHead>
-           <TableHead>Status</TableHead>
-           <TableHead>Potential Matches</TableHead>
-           <TableHead>Checked By</TableHead>
-           <TableHead className="text-right">Report</TableHead>
-         </TableHeader>
-         <TableBody>
-           {filteredConflicts.map(c => (
-             <TableRow key={c.id}>
-               <TableCell className={cn("font-medium", theme.text.primary)}>{c.entityName}</TableCell>
-               <TableCell className={cn("text-xs font-mono", theme.text.secondary)}>{c.date}</TableCell>
-               <TableCell>
-                  <Badge variant={c.status === 'Cleared' ? 'success' : c.status === 'Flagged' ? 'error' : 'warning'}>
-                    {c.status}
-                  </Badge>
-               </TableCell>
-               <TableCell>
-                  {c.foundIn.length > 0 ? (
-                    <div className="flex flex-wrap gap-1">
-                      {c.foundIn.map((hit, i) => (
-                        <span key={i} className={cn("text-[10px] px-2 py-0.5 rounded border flex items-center", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
-                          {hit}
-                        </span>
-                      ))}
-                    </div>
-                  ) : (
-                    <span className={cn("text-xs italic", theme.text.tertiary)}>No hits found</span>
-                  )}
-               </TableCell>
-               <TableCell>
-                   <div className="flex items-center gap-2">
-                       <User className={cn("h-3 w-3", theme.text.tertiary)}/>
-                       <span className={cn("text-xs", theme.text.secondary)}>{c.checkedBy}</span>
-                   </div>
-               </TableCell>
-               <TableCell className="text-right">
-                   <Button variant="ghost" size="sm" className="text-blue-600">View PDF</Button>
-               </TableCell>
-             </TableRow>
-           ))}
-         </TableBody>
+        <TableHeader>
+          <TableHead>Entity Name</TableHead>
+          <TableHead>Date Checked</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead>Potential Matches</TableHead>
+          <TableHead>Checked By</TableHead>
+          <TableHead className="text-right">Report</TableHead>
+        </TableHeader>
+        <TableBody>
+          {filteredConflicts.map(c => (
+            <TableRow key={c.id}>
+              <TableCell className={cn("font-medium", theme.text.primary)}>{c.entityName}</TableCell>
+              <TableCell className={cn("text-xs font-mono", theme.text.secondary)}>{c.date}</TableCell>
+              <TableCell>
+                <Badge variant={c.status === 'Cleared' ? 'success' : c.status === 'Flagged' ? 'error' : 'warning'}>
+                  {c.status}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                {c.foundIn.length > 0 ? (
+                  <div className="flex flex-wrap gap-1">
+                    {c.foundIn.map((hit, i) => (
+                      <span key={i} className={cn("text-[10px] px-2 py-0.5 rounded border flex items-center", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
+                        {hit}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <span className={cn("text-xs italic", theme.text.tertiary)}>No hits found</span>
+                )}
+              </TableCell>
+              <TableCell>
+                <div className="flex items-center gap-2">
+                  <User className={cn("h-3 w-3", theme.text.tertiary)} />
+                  <span className={cn("text-xs", theme.text.secondary)}>{c.checkedBy}</span>
+                </div>
+              </TableCell>
+              <TableCell className="text-right">
+                <Button variant="ghost" size="sm" className="text-blue-600">View PDF</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
       </TableContainer>
     </div>
   );

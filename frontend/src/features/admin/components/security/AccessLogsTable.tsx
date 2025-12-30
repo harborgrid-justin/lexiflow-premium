@@ -1,10 +1,10 @@
-import React from 'react';
-import { Search, Download } from 'lucide-react';
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import { Download, Search } from 'lucide-react';
+import React from 'react';
 import type { AccessLogEntry } from './types';
 
 interface AccessLogsTableProps {

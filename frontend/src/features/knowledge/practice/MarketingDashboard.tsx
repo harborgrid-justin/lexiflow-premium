@@ -10,28 +10,28 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { ArrowRight, Megaphone, Target, Users } from 'lucide-react';
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { Users, Megaphone, Target, ArrowRight } from 'lucide-react';
+import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
 
 // Types
-import { MarketingMetric, MarketingCampaign } from '@/types';
+import { MarketingCampaign, MarketingMetric } from '@/types';
 
 // ============================================================================
 // COMPONENT
@@ -42,18 +42,18 @@ export const MarketingDashboard: React.FC = () => {
 
   // Enterprise Data Access
   const { data: metrics = [] } = useQuery<MarketingMetric[]>(
-      ['marketing', 'metrics'],
-      DataService.marketing.getMetrics
+    ['marketing', 'metrics'],
+    DataService.marketing.getMetrics
   );
 
   const { data: campaigns = [] } = useQuery<MarketingCampaign[]>(
-      ['marketing', 'campaigns'],
-      DataService.marketing.getCampaigns
+    ['marketing', 'campaigns'],
+    DataService.marketing.getCampaigns
   );
 
   // Calculate totals
   const totalPipelineValue = metrics.reduce((acc: unknown, curr: MarketingMetric) => (acc as number) + curr.revenue, 0);
-  const avgConversion = metrics.length > 0 ? (metrics.reduce((acc: unknown, curr: MarketingMetric) => (acc as number) + (curr.conversions/curr.leads), 0) / metrics.length) * 100 : 0;
+  const avgConversion = metrics.length > 0 ? (metrics.reduce((acc: unknown, curr: MarketingMetric) => (acc as number) + (curr.conversions / curr.leads), 0) / metrics.length) * 100 : 0;
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -64,18 +64,18 @@ export const MarketingDashboard: React.FC = () => {
               <p className="text-indigo-100 text-xs font-bold uppercase">Pipeline Value</p>
               <p className="text-3xl font-bold mt-1">${((totalPipelineValue as number) / 1000).toFixed(1)}M</p>
             </div>
-            <Target className="h-8 w-8 text-white opacity-20"/>
+            <Target className="h-8 w-8 text-white opacity-20" />
           </div>
           <p className="text-xs text-indigo-100 mt-4">Potential revenue from tracked leads.</p>
         </div>
-        
+
         <div className={cn("rounded-lg p-6 border shadow-sm", theme.surface.default, theme.border.default)}>
           <div className="flex justify-between items-start">
             <div>
               <p className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Avg Conversion Rate</p>
               <p className={cn("text-3xl font-bold mt-1", theme.text.primary)}>{avgConversion.toFixed(1)}%</p>
             </div>
-            <Users className="h-8 w-8 text-blue-500 opacity-20"/>
+            <Users className="h-8 w-8 text-blue-500 opacity-20" />
           </div>
           <p className="text-xs text-green-600 mt-4 font-bold">↑ 2.1% from last month</p>
         </div>
@@ -86,7 +86,7 @@ export const MarketingDashboard: React.FC = () => {
               <p className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Cost Per Acquisition</p>
               <p className={cn("text-3xl font-bold mt-1", theme.text.primary)}>$450</p>
             </div>
-            <Megaphone className="h-8 w-8 text-amber-500 opacity-20"/>
+            <Megaphone className="h-8 w-8 text-amber-500 opacity-20" />
           </div>
           <p className={cn("text-xs mt-4", theme.text.secondary)}>Based on ad spend vs retained matters</p>
         </div>
@@ -98,11 +98,11 @@ export const MarketingDashboard: React.FC = () => {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={metrics} layout="vertical" margin={{ left: 20 }}>
                 <XAxis type="number" hide />
-                <YAxis dataKey="source" type="category" width={100} tick={{fontSize: 11, fill: '#94a3b8'}} />
-                <Tooltip 
-                    cursor={{fill: 'transparent'}} 
-                    formatter={(value: number | undefined) => value !== undefined ? `$${value.toLocaleString()}` : '$0'}
-                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                <YAxis dataKey="source" type="category" width={100} tick={{ fontSize: 11, fill: '#94a3b8' }} />
+                <Tooltip
+                  cursor={{ fill: 'transparent' }}
+                  formatter={(value: number | undefined) => value !== undefined ? `$${value.toLocaleString()}` : '$0'}
+                  contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                 />
                 <Bar dataKey="revenue" radius={[0, 4, 4, 0]}>
                   {metrics.map((_, index) => (
@@ -123,15 +123,15 @@ export const MarketingDashboard: React.FC = () => {
                   <p className={cn("text-xs", theme.text.secondary)}>Target: {camp.target}</p>
                 </div>
                 <div className="text-right">
-                    <span className={cn("text-xs px-2 py-1 rounded font-bold mb-1 block", camp.status === 'Active' ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-600")}>
-                        {camp.status}
-                    </span>
-                    <span className="text-[10px] text-slate-500">{camp.budget || camp.dates}</span>
+                  <span className={cn("text-xs px-2 py-1 rounded font-bold mb-1 block", camp.status === 'Active' ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-600")}>
+                    {camp.status}
+                  </span>
+                  <span className="text-[10px] text-slate-500">{camp.budget || camp.dates}</span>
                 </div>
               </div>
             ))}
             <button className="w-full text-xs text-blue-600 font-medium hover:underline flex items-center justify-center mt-2">
-              View All Campaigns <ArrowRight className="h-3 w-3 ml-1"/>
+              View All Campaigns <ArrowRight className="h-3 w-3 ml-1" />
             </button>
           </div>
         </Card>
@@ -139,4 +139,3 @@ export const MarketingDashboard: React.FC = () => {
     </div>
   );
 };
-

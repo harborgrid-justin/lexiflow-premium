@@ -20,12 +20,12 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { LazyLoader } from '@/components/molecules';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { AdminPanelContent } from './AdminPanelContent';
 
 // Utils & Config
-import { cn } from '@/utils/cn';
 import { ADMIN_TAB_CONFIG } from '@/config/tabs.config';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -33,8 +33,8 @@ import { ADMIN_TAB_CONFIG } from '@/config/tabs.config';
 type AdminView = 'hierarchy' | 'security' | 'db' | 'data' | 'logs' | 'integrations';
 
 interface AdminPanelProps {
-    /** Optional initial tab to display. */
-    initialTab?: AdminView;
+  /** Optional initial tab to display. */
+  initialTab?: AdminView;
 }
 
 // ============================================================================
@@ -47,7 +47,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ initialTab }) => {
 
   const setActiveTab = (tab: string) => {
     startTransition(() => {
-        _setActiveTab(tab);
+      _setActiveTab(tab);
     });
   };
 
@@ -59,9 +59,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ initialTab }) => {
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >
-      <Suspense fallback={<LazyLoader message="Loading Admin Module..."/>}>
+      <Suspense fallback={<LazyLoader message="Loading Admin Module..." />}>
         <div className={cn(isPending && 'opacity-60 transition-opacity')}>
-            <AdminPanelContent activeTab={activeTab as AdminView} />
+          <AdminPanelContent activeTab={activeTab as AdminView} />
         </div>
       </Suspense>
     </TabbedPageLayout>

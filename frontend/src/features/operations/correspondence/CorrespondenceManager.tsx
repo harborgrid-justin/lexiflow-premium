@@ -29,15 +29,15 @@ import { useToggle } from '@/hooks/useToggle';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '@/components/atoms';
-import { PageHeader } from '@/components/organisms';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { CommunicationLog } from './CommunicationLog';
 import { ComposeMessageModal } from './ComposeMessageModal';
 import { CorrespondenceDetail } from './CorrespondenceDetail';
 import { CorrespondenceErrorBoundary } from './CorrespondenceErrorBoundary';
+import { CommunicationLogSkeleton, CorrespondenceDetailSkeleton, ServiceTrackerSkeleton } from './CorrespondenceSkeleton';
 import { CreateServiceJobModal } from './CreateServiceJobModal';
 import { ServiceTracker } from './ServiceTracker';
-import { CommunicationLogSkeleton, CorrespondenceDetailSkeleton, ServiceTrackerSkeleton } from './CorrespondenceSkeleton';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

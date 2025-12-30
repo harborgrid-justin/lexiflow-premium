@@ -10,27 +10,27 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { Users, DollarSign, Briefcase, TrendingUp, ArrowUpRight, Activity } from 'lucide-react';
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar, Cell } from 'recharts';
+import { Activity, ArrowUpRight, Briefcase, DollarSign, TrendingUp, Users } from 'lucide-react';
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { MetricCard } from '@/components/molecules';
-import { Card } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 
 // Utils & Constants
-import { cn } from '@/utils/cn';
 import { ChartColorService } from '@/services/theme/chartColorService';
 import { getChartTheme } from '@/utils/chartConfig';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // COMPONENT
@@ -42,8 +42,8 @@ export function CRMDashboard() {
 
   // Enterprise Data Access
   const { data: analyticsData } = useQuery(
-      ['crm', 'analytics'],
-      () => DataService.crm.getAnalytics(mode)
+    ['crm', 'analytics'],
+    () => DataService.crm.getAnalytics(mode)
   );
 
   // Type guard for analytics with proper array checks
@@ -104,32 +104,32 @@ export function CRMDashboard() {
     <div className="space-y-6 animate-fade-in">
       {/* Metrics Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard 
-          label="Total Active Clients" 
-          value={activeClients.toString()} 
-          icon={Users} 
-          trend="+12% YTD" 
+        <MetricCard
+          label="Total Active Clients"
+          value={activeClients.toString()}
+          icon={Users}
+          trend="+12% YTD"
           trendUp={true}
           className="border-l-4 border-l-blue-600"
         />
-        <MetricCard 
-          label="Lifetime Revenue" 
-          value={`$${(lifetimeRevenue / 1000000).toFixed(1)}M`} 
-          icon={DollarSign} 
-          trend="+8% vs Last Year" 
+        <MetricCard
+          label="Lifetime Revenue"
+          value={`$${(lifetimeRevenue / 1000000).toFixed(1)}M`}
+          icon={DollarSign}
+          trend="+8% vs Last Year"
           trendUp={true}
           className="border-l-4 border-l-emerald-600"
         />
-        <MetricCard 
-          label="Active Matters" 
-          value={activeMatters.toString()} 
-          icon={Briefcase} 
+        <MetricCard
+          label="Active Matters"
+          value={activeMatters.toString()}
+          icon={Briefcase}
           className="border-l-4 border-l-purple-600"
         />
-        <MetricCard 
-          label="Pipeline Value" 
-          value={`$${(pipelineValue / 1000).toFixed(0)}k`} 
-          icon={TrendingUp} 
+        <MetricCard
+          label="Pipeline Value"
+          value={`$${(pipelineValue / 1000).toFixed(0)}k`}
+          icon={TrendingUp}
           trend={`${leadsArray.length} Deals`}
           className="border-l-4 border-l-amber-500"
         />
@@ -143,15 +143,15 @@ export function CRMDashboard() {
               <AreaChart data={analytics.growth} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorClients" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={chartColors[0]} stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor={chartColors[0]} stopOpacity={0}/>
+                    <stop offset="5%" stopColor={chartColors[0]} stopOpacity={0.8} />
+                    <stop offset="95%" stopColor={chartColors[0]} stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: chartTheme.text, fontSize: 12}} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: chartTheme.text, fontSize: 12}} />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: chartTheme.text, fontSize: 12 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: chartTheme.text, fontSize: 12 }} />
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={chartTheme.grid} />
-                <Tooltip 
-                  cursor={{stroke: chartColors[0], strokeWidth: 1}}
+                <Tooltip
+                  cursor={{ stroke: chartColors[0], strokeWidth: 1 }}
                   contentStyle={chartTheme.tooltipStyle}
                 />
                 <Area type="monotone" dataKey="clients" stroke={chartColors[0]} fillOpacity={1} fill="url(#colorClients)" />
@@ -166,8 +166,8 @@ export function CRMDashboard() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={analytics.industry} layout="vertical" margin={{ left: 0, right: 20 }}>
                 <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" width={80} tick={{fontSize: 11, fill: '#64748b'}} />
-                <Tooltip cursor={{fill: 'transparent'}} />
+                <YAxis dataKey="name" type="category" width={80} tick={{ fontSize: 11, fill: '#64748b' }} />
+                <Tooltip cursor={{ fill: 'transparent' }} />
                 <Bar dataKey="value" radius={[0, 4, 4, 0]} barSize={20}>
                   {analytics.industry.map((entry: unknown, index: number) => {
                     const color = typeof entry === 'object' && entry !== null && 'color' in entry && typeof entry.color === 'string'
@@ -195,20 +195,20 @@ export function CRMDashboard() {
               const dateToShow = updatedAt || createdAt;
 
               return (
-              <div key={idx} className={cn("flex justify-between items-center p-3 border-b last:border-0", theme.border.default)}>
-                <div className="flex items-center gap-3">
-                  <div className={cn("p-2 rounded-full", theme.surface.highlight)}>
-                    <Activity className={cn("h-4 w-4", theme.text.secondary)} />
+                <div key={idx} className={cn("flex justify-between items-center p-3 border-b last:border-0", theme.border.default)}>
+                  <div className="flex items-center gap-3">
+                    <div className={cn("p-2 rounded-full", theme.surface.highlight)}>
+                      <Activity className={cn("h-4 w-4", theme.text.secondary)} />
+                    </div>
+                    <div>
+                      <p className={cn("text-sm font-bold", theme.text.primary)}>{client}</p>
+                      <p className={cn("text-xs", theme.text.secondary)}>{status} • {title}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className={cn("text-sm font-bold", theme.text.primary)}>{client}</p>
-                    <p className={cn("text-xs", theme.text.secondary)}>{status} • {title}</p>
-                  </div>
+                  <span className={cn("text-xs font-mono", theme.text.tertiary)}>
+                    {dateToShow && (typeof dateToShow === 'string' || typeof dateToShow === 'number' || dateToShow instanceof Date) ? new Date(dateToShow as string | number | Date).toLocaleDateString() : 'N/A'}
+                  </span>
                 </div>
-                <span className={cn("text-xs font-mono", theme.text.tertiary)}>
-                  {dateToShow && (typeof dateToShow === 'string' || typeof dateToShow === 'number' || dateToShow instanceof Date) ? new Date(dateToShow as string | number | Date).toLocaleDateString() : 'N/A'}
-                </span>
-              </div>
               );
             })}
             {casesArray.length === 0 && (
@@ -233,18 +233,18 @@ export function CRMDashboard() {
                 const clientTotalBilled = 'totalBilled' in client && typeof client.totalBilled === 'number' ? client.totalBilled : 0;
 
                 return (
-              <div key={idx} className={cn("flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition-all", theme.surface.default, theme.border.default)}>
-                <div>
-                  <p className={cn("font-bold text-sm", theme.text.primary)}>{clientName}</p>
-                  <p className={cn("text-xs", theme.text.secondary)}>{clientStatus}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className={cn("font-mono font-bold text-sm", theme.text.primary)}>
-                    ${(clientTotalBilled / 1000).toFixed(0)}k
-                  </span>
-                  <ArrowUpRight className={cn("h-4 w-4", theme.text.tertiary)} />
-                </div>
-              </div>
+                  <div key={idx} className={cn("flex justify-between items-center p-3 rounded-lg border hover:shadow-sm transition-all", theme.surface.default, theme.border.default)}>
+                    <div>
+                      <p className={cn("font-bold text-sm", theme.text.primary)}>{clientName}</p>
+                      <p className={cn("text-xs", theme.text.secondary)}>{clientStatus}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={cn("font-mono font-bold text-sm", theme.text.primary)}>
+                        ${(clientTotalBilled / 1000).toFixed(0)}k
+                      </span>
+                      <ArrowUpRight className={cn("h-4 w-4", theme.text.tertiary)} />
+                    </div>
+                  </div>
                 );
               })}
             {clientsArray.length === 0 && (
@@ -256,4 +256,3 @@ export function CRMDashboard() {
     </div>
   );
 }
-

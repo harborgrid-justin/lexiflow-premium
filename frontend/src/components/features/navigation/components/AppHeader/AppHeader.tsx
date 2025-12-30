@@ -4,7 +4,7 @@
  * @description Application header with neural command bar, quick action menu, connectivity HUD,
  * notifications, system heartbeat indicator, and user profile menu. Provides global search and
  * AI-powered command execution via NeuralCommandBar.
- * 
+ *
  * THEME SYSTEM USAGE:
  * - theme.text.primary/secondary/tertiary - Header text and icons
  * - theme.surface.default/highlight - Header background and button hover states
@@ -59,14 +59,14 @@ interface AppHeaderProps {
 // ========================================
 // COMPONENT
 // ========================================
-export const AppHeader: React.FC<AppHeaderProps> = ({ 
-  onToggleSidebar, globalSearch, setGlobalSearch, onGlobalSearch, currentUser, onSwitchUser, onSearchResultClick, onNeuralCommand 
+export const AppHeader: React.FC<AppHeaderProps> = ({
+  onToggleSidebar, globalSearch, setGlobalSearch, onGlobalSearch, currentUser, onSwitchUser, onSearchResultClick, onNeuralCommand
 }) => {
   const { theme } = useTheme();
   const [pulse, setPulse] = useState(false);
   const [isQuickActionOpen, setIsQuickActionOpen] = useState(false);
   const quickActionRef = React.useRef<HTMLDivElement>(null);
-  
+
   useClickOutside(quickActionRef as React.RefObject<HTMLElement>, () => setIsQuickActionOpen(false));
 
   // System Heartbeat Visual
@@ -75,24 +75,24 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   return (
     <header role="banner" className="flex-1 flex items-center justify-between h-full">
       <div className="flex items-center flex-1 gap-4">
-        <button 
-            onClick={onToggleSidebar} 
+        <button
+            onClick={onToggleSidebar}
             className={cn("md:hidden p-2 -ml-2 rounded-lg focus:outline-none transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`)}
         >
             <Menu className="h-6 w-6" />
         </button>
-        
-        <NeuralCommandBar 
+
+        <NeuralCommandBar
             globalSearch={globalSearch}
             setGlobalSearch={setGlobalSearch}
             onGlobalSearch={onGlobalSearch}
             onSearchResultClick={onSearchResultClick}
             onNeuralCommand={onNeuralCommand}
         />
-        
+
         {/* Connection Status - Shows IndexedDB vs PostgreSQL */}
         <ConnectionStatus className="hidden lg:flex" />
-        
+
         {/* System Heartbeat Dot - Desktop only */}
         <div className={cn("hidden xl:flex items-center gap-2 px-3 py-1 rounded border", theme.surface.highlight, theme.border.default)}>
              <div className={cn("w-2 h-2 rounded-full transition-opacity duration-1000", pulse ? `${theme.status.success.bg} opacity-100` : `${theme.status.success.text} opacity-40`)}></div>
@@ -102,13 +102,13 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
 
       <div className="flex items-center gap-2 md:gap-4">
         <div className="relative" ref={quickActionRef}>
-             <button 
+             <button
                 onClick={() => setIsQuickActionOpen(!isQuickActionOpen)}
                 className={cn("flex items-center gap-1 px-3 py-1.5 rounded-full border transition-all text-xs font-bold shadow-sm", theme.surface.default, theme.border.default, theme.text.primary, `hover:${theme.surface.highlight}`)}
              >
                  <PlusCircle className={cn("h-4 w-4", theme.primary.text)}/> Quick Add
              </button>
-             
+
              {isQuickActionOpen && (
                  <div className={cn("absolute top-full right-0 mt-2 w-48 rounded-lg shadow-xl border overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-100", theme.surface.default, theme.border.default)}>
                      <button className={cn("w-full text-left px-4 py-3 text-sm flex items-center gap-3 transition-colors", theme.text.primary, `hover:${theme.surface.highlight}`)}>
@@ -125,7 +125,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         </div>
 
         <ConnectivityHUD />
-        
+
         <button className={cn("relative p-2 rounded-lg transition-colors group", theme.text.tertiary, `hover:${theme.surface.highlight} hover:${theme.text.secondary}`)}>
             <Bell className="h-5 w-5" />
             <span className={cn("absolute top-2 right-2 h-2 w-2 rounded-full border-2 animate-pulse", theme.status.error.icon, theme.border.default)}></span>
@@ -148,4 +148,3 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
     </header>
   );
 };
-

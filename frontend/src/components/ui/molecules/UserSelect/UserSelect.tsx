@@ -20,7 +20,7 @@ import { ChevronDown } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { UserAvatar } from '@/components/atoms';
+import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

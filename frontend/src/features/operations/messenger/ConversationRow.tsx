@@ -25,8 +25,8 @@ export function ConversationRow({ conv, isActive, onSelect, onPopOut, formatTime
         className={cn(
           "p-4 border-b border-l-4 cursor-pointer transition-all group flex flex-col justify-center",
           theme.border.default,
-          isActive 
-              ? cn(theme.surface.default, "border-l-blue-600 shadow-sm") 
+          isActive
+              ? cn(theme.surface.default, "border-l-blue-600 shadow-sm")
               : cn("bg-transparent border-l-transparent", `hover:${theme.surface.highlight}`)
         )}
       >
@@ -43,7 +43,7 @@ export function ConversationRow({ conv, isActive, onSelect, onPopOut, formatTime
           </div>
           <div className="flex items-center gap-2">
               <span className={cn("text-[10px] whitespace-nowrap ml-2", theme.text.tertiary)}>{formatTime(lastMsg?.timestamp)}</span>
-              <button 
+              <button
                   onClick={onPopOut}
                   className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-slate-400 hover:text-blue-600"
                   title="Pop Out Chat"
@@ -54,7 +54,7 @@ export function ConversationRow({ conv, isActive, onSelect, onPopOut, formatTime
         </div>
         <div className="flex justify-between items-center pl-12">
           <p className={cn(
-              "text-sm truncate max-w-[180px]", 
+              "text-sm truncate max-w-[180px]",
               conv.draft ? "text-rose-500 italic" : (conv.unread > 0 ? theme.text.primary : theme.text.secondary)
           )}>
             {conv.draft ? `Draft: ${conv.draft}` : lastMsg?.text}

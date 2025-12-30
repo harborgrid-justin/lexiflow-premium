@@ -1,7 +1,7 @@
 /**
  * API Client for Backend Communication
  * Enterprise-grade HTTP client with authentication, error handling, and health monitoring
- * 
+ *
  * @module ApiClient
  * @description Comprehensive HTTP client for NestJS backend communication including:
  * - RESTful CRUD operations (GET, POST, PUT, PATCH, DELETE)
@@ -12,7 +12,7 @@
  * - Service health monitoring across 25+ backend endpoints
  * - Timeout handling and abort signal support
  * - Type-safe generic responses
- * 
+ *
  * @security
  * - JWT bearer token authentication
  * - Automatic token refresh on 401 errors
@@ -21,7 +21,7 @@
  * - XSS prevention through proper encoding
  * - CSRF protection via custom headers
  * - Sensitive data logging prevention
- * 
+ *
  * @architecture
  * - Singleton pattern for global access
  * - Backend: NestJS + PostgreSQL
@@ -29,7 +29,7 @@
  * - Case conversion: snake_case (backend) ↔ camelCase (frontend)
  * - Error propagation with structured ApiError types
  * - Abort signal support for request cancellation
- * 
+ *
  * @performance
  * - Connection pooling via native fetch
  * - Parallel health checks with Promise.allSettled
@@ -37,12 +37,18 @@
  * - Minimal memory footprint with streaming uploads
  */
 
-import { ValidationError, AuthenticationError, OperationError, ExternalServiceError, ApiTimeoutError } from '@/services/core/errors';
-import { getApiBaseUrl, getApiPrefix } from '@/config/network/api.config';
-import { keysToCamel } from '@/utils/caseConverter';
-import { defaultStorage } from './adapters/StorageAdapter';
+import { getApiBaseUrl } from "@/config/network/api.config";
+import { keysToCamel } from "@/utils/caseConverter";
+import {
+  ApiTimeoutError,
+  AuthenticationError,
+  ExternalServiceError,
+  OperationError,
+  ValidationError,
+} from "@/services/core/errors";
+import { defaultStorage } from "./adapters/StorageAdapter";
 
-const getBaseUrl = () => `${getApiBaseUrl()}${getApiPrefix()}`;
+const getBaseUrl = () => getApiBaseUrl();
 
 /**
  * Structured API error response
@@ -71,7 +77,7 @@ export interface PaginatedResponse<T> {
 /**
  * Service health status enumeration
  */
-export type ServiceHealthStatus = 'online' | 'degraded' | 'offline' | 'unknown';
+export type ServiceHealthStatus = "online" | "degraded" | "offline" | "unknown";
 
 /**
  * Individual service health information
@@ -111,8 +117,10 @@ class ApiClient {
 
   constructor() {
     this.baseURL = getBaseUrl();
-    this.authTokenKey = import.meta.env?.VITE_AUTH_TOKEN_KEY || 'lexiflow_auth_token';
-    this.refreshTokenKey = import.meta.env?.VITE_AUTH_REFRESH_TOKEN_KEY || 'lexiflow_refresh_token';
+    this.authTokenKey =
+      import.meta.env?.VITE_AUTH_TOKEN_KEY || "lexiflow_auth_token";
+    this.refreshTokenKey =
+      import.meta.env?.VITE_AUTH_REFRESH_TOKEN_KEY || "lexiflow_refresh_token";
     this.logInitialization();
   }
 
@@ -121,7 +129,7 @@ class ApiClient {
    * @private
    */
   private logInitialization(): void {
-    console.log('[ApiClient] Initialized', {
+    console.log("[ApiClient] Initialized", {
       baseURL: this.baseURL,
       authEnabled: !!this.getAuthToken(),
     });
@@ -133,10 +141,14 @@ class ApiClient {
    */
   private validateEndpoint(endpoint: string, methodName: string): void {
     if (!endpoint || false) {
-      throw new ValidationError(`[ApiClient.${methodName}] Invalid endpoint parameter`);
+      throw new ValidationError(
+        `[ApiClient.${methodName}] Invalid endpoint parameter`
+      );
     }
-    if (!endpoint.startsWith('/')) {
-      throw new ValidationError(`[ApiClient.${methodName}] Endpoint must start with /`);
+    if (!endpoint.startsWith("/")) {
+      throw new ValidationError(
+        `[ApiClient.${methodName}] Endpoint must start with /`
+      );
     }
   }
 
@@ -145,8 +157,10 @@ class ApiClient {
    * @private
    */
   private validateData(data: unknown, methodName: string): void {
-    if (data !== undefined && data !== null && typeof data !== 'object') {
-      throw new ValidationError(`[ApiClient.${methodName}] Data must be an object or undefined`);
+    if (data !== undefined && data !== null && typeof data !== "object") {
+      throw new ValidationError(
+        `[ApiClient.${methodName}] Data must be an object or undefined`
+      );
     }
   }
 
@@ -156,52 +170,57 @@ class ApiClient {
 
   /**
    * Get stored authentication token
-   * 
+   *
    * @returns string | null - JWT access token or null if not authenticated
    */
   public getAuthToken(): string | null {
     try {
       return defaultStorage.getItem(this.authTokenKey);
     } catch (error) {
-      console.error('[ApiClient.getAuthToken] Error:', error);
+      console.error("[ApiClient.getAuthToken] Error:", error);
       return null;
     }
   }
 
   /**
    * Get stored refresh token
-   * 
+   *
    * @returns string | null - JWT refresh token or null if not available
    */
   public getRefreshToken(): string | null {
     try {
       return defaultStorage.getItem(this.refreshTokenKey);
     } catch (error) {
-      console.error('[ApiClient.getRefreshToken] Error:', error);
+      console.error("[ApiClient.getRefreshToken] Error:", error);
       return null;
     }
   }
 
   /**
    * Store authentication tokens
-   * 
+   *
    * @param accessToken - JWT access token
    * @param refreshToken - Optional JWT refresh token
    * @throws Error if token storage fails
    */
   public setAuthTokens(accessToken: string, refreshToken?: string): void {
     if (!accessToken || false) {
-      throw new ValidationError('[ApiClient.setAuthTokens] Invalid accessToken parameter');
+      throw new ValidationError(
+        "[ApiClient.setAuthTokens] Invalid accessToken parameter"
+      );
     }
     try {
       defaultStorage.setItem(this.authTokenKey, accessToken);
       if (refreshToken) {
         defaultStorage.setItem(this.refreshTokenKey, refreshToken);
       }
-      console.log('[ApiClient] Auth tokens stored successfully');
+      console.log("[ApiClient] Auth tokens stored successfully");
     } catch (error) {
-      console.error('[ApiClient.setAuthTokens] Error:', error);
-      throw new OperationError('ApiClient.setAuthTokens', 'Failed to store authentication tokens');
+      console.error("[ApiClient.setAuthTokens] Error:", error);
+      throw new OperationError(
+        "ApiClient.setAuthTokens",
+        "Failed to store authentication tokens"
+      );
     }
   }
 
@@ -213,15 +232,15 @@ class ApiClient {
     try {
       defaultStorage.removeItem(this.authTokenKey);
       defaultStorage.removeItem(this.refreshTokenKey);
-      console.log('[ApiClient] Auth tokens cleared');
+      console.log("[ApiClient] Auth tokens cleared");
     } catch (error) {
-      console.error('[ApiClient.clearAuthTokens] Error:', error);
+      console.error("[ApiClient.clearAuthTokens] Error:", error);
     }
   }
 
   /**
    * Check if user is authenticated
-   * 
+   *
    * @returns boolean - True if access token exists
    */
   public isAuthenticated(): boolean {
@@ -230,7 +249,7 @@ class ApiClient {
 
   /**
    * Get the base URL for API requests
-   * 
+   *
    * @returns string - Base API URL with prefix
    */
   public getBaseUrl(): string {
@@ -248,14 +267,14 @@ class ApiClient {
    */
   private getHeaders(customHeaders: HeadersInit = {}): HeadersInit {
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest', // CSRF protection
+      "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest", // CSRF protection
       ...(customHeaders as Record<string, string>),
     };
 
     const token = this.getAuthToken();
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      headers["Authorization"] = `Bearer ${token}`;
     }
 
     return headers;
@@ -273,7 +292,7 @@ class ApiClient {
         errorData = await response.json();
       } catch (error) {
         errorData = {
-          message: response.statusText || 'An error occurred',
+          message: response.statusText || "An error occurred",
           statusCode: response.status,
           timestamp: new Date().toISOString(),
         };
@@ -281,35 +300,42 @@ class ApiClient {
 
       // Handle 401 Unauthorized - attempt token refresh
       if (response.status === 401) {
-        console.warn('[ApiClient] Received 401 Unauthorized, attempting token refresh');
+        console.warn(
+          "[ApiClient] Received 401 Unauthorized, attempting token refresh"
+        );
         const refreshToken = this.getRefreshToken();
         if (refreshToken) {
           try {
             const refreshed = await this.refreshAccessToken(refreshToken);
             if (refreshed) {
-              throw new AuthenticationError('TOKEN_REFRESHED'); // Signal to retry request
+              throw new AuthenticationError("TOKEN_REFRESHED"); // Signal to retry request
             }
           } catch (error) {
-            console.error('[ApiClient] Token refresh failed:', error);
+            console.error("[ApiClient] Token refresh failed:", error);
             this.clearAuthTokens();
-            window.location.href = '/login';
+            window.location.href = "/login";
           }
         } else {
-          console.warn('[ApiClient] No refresh token available, redirecting to login');
+          console.warn(
+            "[ApiClient] No refresh token available, redirecting to login"
+          );
           this.clearAuthTokens();
-          window.location.href = '/login';
+          window.location.href = "/login";
         }
       }
 
       // Log error for debugging (avoid logging sensitive data)
-      console.error('[ApiClient] Request failed:', {
+      console.error("[ApiClient] Request failed:", {
         status: response.status,
         statusText: response.statusText,
         url: response.url,
         message: errorData.message,
       });
 
-      throw new ExternalServiceError('API', errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+      throw new ExternalServiceError(
+        "API",
+        errorData.message || `HTTP ${response.status}: ${response.statusText}`
+      );
     }
 
     // Handle 204 No Content
@@ -319,12 +345,12 @@ class ApiClient {
 
     try {
       const jsonData = await response.json();
-      
+
       // Convert snake_case keys to camelCase for frontend consumption
       return keysToCamel<T>(jsonData);
     } catch (error) {
-      console.error('[ApiClient] Failed to parse response:', error);
-      throw new ValidationError('Invalid response format from server');
+      console.error("[ApiClient] Failed to parse response:", error);
+      throw new ValidationError("Invalid response format from server");
     }
   }
 
@@ -335,24 +361,29 @@ class ApiClient {
    */
   private async refreshAccessToken(refreshToken: string): Promise<boolean> {
     try {
-      const fullUrl = this.baseURL ? `${this.baseURL}/auth/refresh` : '/auth/refresh';
+      const fullUrl = this.baseURL
+        ? `${this.baseURL}/auth/refresh`
+        : "/auth/refresh";
       const url = new URL(fullUrl, window.location.origin);
       const response = await fetch(url.toString(), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refreshToken }),
       });
 
       if (response.ok) {
         const data = await response.json();
         this.setAuthTokens(data.accessToken, data.refreshToken);
-        console.log('[ApiClient] Token refreshed successfully');
+        console.log("[ApiClient] Token refreshed successfully");
         return true;
       }
-      console.warn('[ApiClient] Token refresh returned non-OK status:', response.status);
+      console.warn(
+        "[ApiClient] Token refresh returned non-OK status:",
+        response.status
+      );
       return false;
     } catch (error) {
-      console.error('[ApiClient] Token refresh error:', error);
+      console.error("[ApiClient] Token refresh error:", error);
       return false;
     }
   }
@@ -363,20 +394,20 @@ class ApiClient {
 
   /**
    * GET request
-   * 
+   *
    * @param endpoint - API endpoint (must start with /)
    * @param params - Optional query parameters
    * @returns Promise<T> - Parsed response data
    * @throws Error if request fails or validation fails
    */
   async get<T>(endpoint: string, params?: Record<string, unknown>): Promise<T> {
-    this.validateEndpoint(endpoint, 'get');
+    this.validateEndpoint(endpoint, "get");
     try {
       // Handle empty baseURL (for Vite proxy mode)
       const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
       const url = new URL(fullUrl, window.location.origin);
       if (params) {
-        Object.keys(params).forEach(key => {
+        Object.keys(params).forEach((key) => {
           if (params[key] !== undefined && params[key] !== null) {
             url.searchParams.append(key, String(params[key]));
           }
@@ -384,14 +415,14 @@ class ApiClient {
       }
 
       const response = await fetch(url.toString(), {
-        method: 'GET',
+        method: "GET",
         headers: this.getHeaders(),
         signal: AbortSignal.timeout(this.DEFAULT_TIMEOUT),
       });
 
       return await this.handleResponse<T>(response);
     } catch (error) {
-      console.error('[ApiClient.get] Error:', error);
+      console.error("[ApiClient.get] Error:", error);
       throw error;
     }
   }
@@ -405,14 +436,18 @@ class ApiClient {
    * @returns Promise<T> - Parsed response data
    * @throws Error if request fails or validation fails
    */
-  async post<T>(endpoint: string, data?: unknown, options?: RequestInit): Promise<T> {
-    this.validateEndpoint(endpoint, 'post');
-    this.validateData(data, 'post');
+  async post<T>(
+    endpoint: string,
+    data?: unknown,
+    options?: RequestInit
+  ): Promise<T> {
+    this.validateEndpoint(endpoint, "post");
+    this.validateData(data, "post");
     try {
       const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
       const url = new URL(fullUrl, window.location.origin);
       const response = await fetch(url.toString(), {
-        method: 'POST',
+        method: "POST",
         headers: this.getHeaders(options?.headers),
         body: data ? JSON.stringify(data) : undefined,
         signal: AbortSignal.timeout(this.DEFAULT_TIMEOUT),
@@ -421,27 +456,27 @@ class ApiClient {
 
       return await this.handleResponse<T>(response);
     } catch (error) {
-      console.error('[ApiClient.post] Error:', error);
+      console.error("[ApiClient.post] Error:", error);
       throw error;
     }
   }
 
   /**
    * PUT request
-   * 
+   *
    * @param endpoint - API endpoint (must start with /)
    * @param data - Optional request body
    * @returns Promise<T> - Parsed response data
    * @throws Error if request fails or validation fails
    */
   async put<T>(endpoint: string, data?: unknown): Promise<T> {
-    this.validateEndpoint(endpoint, 'put');
-    this.validateData(data, 'put');
+    this.validateEndpoint(endpoint, "put");
+    this.validateData(data, "put");
     try {
       const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
       const url = new URL(fullUrl, window.location.origin);
       const response = await fetch(url.toString(), {
-        method: 'PUT',
+        method: "PUT",
         headers: this.getHeaders(),
         body: data ? JSON.stringify(data) : undefined,
         signal: AbortSignal.timeout(this.DEFAULT_TIMEOUT),
@@ -449,27 +484,27 @@ class ApiClient {
 
       return await this.handleResponse<T>(response);
     } catch (error) {
-      console.error('[ApiClient.put] Error:', error);
+      console.error("[ApiClient.put] Error:", error);
       throw error;
     }
   }
 
   /**
    * PATCH request
-   * 
+   *
    * @param endpoint - API endpoint (must start with /)
    * @param data - Optional request body
    * @returns Promise<T> - Parsed response data
    * @throws Error if request fails or validation fails
    */
   async patch<T>(endpoint: string, data?: unknown): Promise<T> {
-    this.validateEndpoint(endpoint, 'patch');
-    this.validateData(data, 'patch');
+    this.validateEndpoint(endpoint, "patch");
+    this.validateData(data, "patch");
     try {
       const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
       const url = new URL(fullUrl, window.location.origin);
       const response = await fetch(url.toString(), {
-        method: 'PATCH',
+        method: "PATCH",
         headers: this.getHeaders(),
         body: data ? JSON.stringify(data) : undefined,
         signal: AbortSignal.timeout(this.DEFAULT_TIMEOUT),
@@ -477,32 +512,32 @@ class ApiClient {
 
       return await this.handleResponse<T>(response);
     } catch (error) {
-      console.error('[ApiClient.patch] Error:', error);
+      console.error("[ApiClient.patch] Error:", error);
       throw error;
     }
   }
 
   /**
    * DELETE request
-   * 
+   *
    * @param endpoint - API endpoint (must start with /)
    * @returns Promise<T> - Parsed response data
    * @throws Error if request fails or validation fails
    */
   async delete<T>(endpoint: string): Promise<T> {
-    this.validateEndpoint(endpoint, 'delete');
+    this.validateEndpoint(endpoint, "delete");
     try {
       const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
       const url = new URL(fullUrl, window.location.origin);
       const response = await fetch(url.toString(), {
-        method: 'DELETE',
+        method: "DELETE",
         headers: this.getHeaders(),
         signal: AbortSignal.timeout(this.DEFAULT_TIMEOUT),
       });
 
       return await this.handleResponse<T>(response);
     } catch (error) {
-      console.error('[ApiClient.delete] Error:', error);
+      console.error("[ApiClient.delete] Error:", error);
       throw error;
     }
   }
@@ -513,41 +548,45 @@ class ApiClient {
 
   /**
    * Upload file with multipart/form-data
-   * 
+   *
    * @param endpoint - API endpoint (must start with /)
    * @param file - File object to upload
    * @param additionalData - Optional additional form fields
    * @returns Promise<T> - Parsed response data
    * @throws Error if validation fails or upload fails
    */
-  async upload<T>(endpoint: string, file: File, additionalData?: Record<string, unknown>): Promise<T> {
-    this.validateEndpoint(endpoint, 'upload');
+  async upload<T>(
+    endpoint: string,
+    file: File,
+    additionalData?: Record<string, unknown>
+  ): Promise<T> {
+    this.validateEndpoint(endpoint, "upload");
     if (!file || !(file instanceof File)) {
-      throw new ValidationError('[ApiClient.upload] Invalid file parameter');
+      throw new ValidationError("[ApiClient.upload] Invalid file parameter");
     }
     try {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
 
       if (additionalData) {
-        Object.keys(additionalData).forEach(key => {
+        Object.keys(additionalData).forEach((key) => {
           formData.append(key, String(additionalData[key]));
         });
       }
 
       const token = this.getAuthToken();
       const headers: HeadersInit = {
-        'X-Requested-With': 'XMLHttpRequest',
+        "X-Requested-With": "XMLHttpRequest",
       };
       if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
+        headers["Authorization"] = `Bearer ${token}`;
       }
       // Do NOT set Content-Type for multipart/form-data (browser sets it with boundary)
 
       const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
       const url = new URL(fullUrl, window.location.origin);
       const response = await fetch(url.toString(), {
-        method: 'POST',
+        method: "POST",
         headers,
         body: formData,
         signal: AbortSignal.timeout(60000), // 60s timeout for file uploads
@@ -555,7 +594,7 @@ class ApiClient {
 
       return await this.handleResponse<T>(response);
     } catch (error) {
-      console.error('[ApiClient.upload] Error:', error);
+      console.error("[ApiClient.upload] Error:", error);
       throw error;
     }
   }
@@ -574,21 +613,21 @@ class ApiClient {
   async healthCheck(): Promise<{ status: string; timestamp: string }> {
     try {
       const response = await fetch(`${getApiBaseUrl()}/api/health`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
         signal: AbortSignal.timeout(this.HEALTH_CHECK_TIMEOUT),
       });
       return await response.json();
     } catch (error) {
-      console.error('[ApiClient.healthCheck] Error:', error);
-      throw new ApiTimeoutError('/health', 5000);
+      console.error("[ApiClient.healthCheck] Error:", error);
+      throw new ApiTimeoutError("/health", 5000);
     }
   }
 
   /**
    * Check health of a specific service endpoint
    * Uses HEAD request to minimize payload
-   * 
+   *
    * @param serviceName - Service identifier for logging
    * @param endpoint - Service endpoint to check
    * @returns Promise<ServiceHealth> - Service health information
@@ -601,7 +640,7 @@ class ApiClient {
       const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
       const url = new URL(fullUrl, window.location.origin);
       const response = await fetch(url.toString(), {
-        method: 'HEAD',
+        method: "HEAD",
         headers: this.getHeaders(),
         signal: AbortSignal.timeout(this.HEALTH_CHECK_TIMEOUT),
       });
@@ -610,13 +649,13 @@ class ApiClient {
 
       if (response.ok) {
         return {
-          status: latency > 2000 ? 'degraded' : 'online',
+          status: latency > 2000 ? "degraded" : "online",
           latency,
           lastChecked,
         };
       } else {
         return {
-          status: 'offline',
+          status: "offline",
           latency,
           lastChecked,
           error: `HTTP ${response.status}`,
@@ -624,9 +663,9 @@ class ApiClient {
       }
     } catch (error: unknown) {
       return {
-        status: 'offline',
+        status: "offline",
         lastChecked,
-        error: (error as Error).message || 'Network error',
+        error: (error as Error).message || "Network error",
       };
     }
   }
@@ -635,59 +674,59 @@ class ApiClient {
    * Check health of all backend services
    * Parallel execution with Promise.allSettled for resilience
    * Monitors 25+ microservices across the platform
-   * 
+   *
    * @returns Promise<SystemHealth> - Aggregated system health
    */
   async checkSystemHealth(): Promise<SystemHealth> {
     const serviceEndpoints = [
-      { name: 'cases', endpoint: '/cases' },
-      { name: 'docket', endpoint: '/docket' },
-      { name: 'documents', endpoint: '/documents' },
-      { name: 'evidence', endpoint: '/evidence' },
-      { name: 'billing', endpoint: '/billing/invoices' },
-      { name: 'users', endpoint: '/users' },
-      { name: 'pleadings', endpoint: '/pleadings' },
-      { name: 'motions', endpoint: '/motions' },
-      { name: 'parties', endpoint: '/parties' },
-      { name: 'clauses', endpoint: '/clauses' },
-      { name: 'calendar', endpoint: '/calendar' },
-      { name: 'trustAccounts', endpoint: '/billing/trust-accounts' },
-      { name: 'legalHolds', endpoint: '/legal-holds/health' },
-      { name: 'depositions', endpoint: '/depositions/health' },
-      { name: 'conflictChecks', endpoint: '/compliance/conflict-checks' },
-      { name: 'auditLogs', endpoint: '/audit-logs' },
-      { name: 'discovery', endpoint: '/discovery' },
-      { name: 'discoveryEvidence', endpoint: '/discovery/evidence' },
-      { name: 'compliance', endpoint: '/compliance' },
-      { name: 'tasks', endpoint: '/tasks' },
-      { name: 'reports', endpoint: '/reports' },
-      { name: 'hr', endpoint: '/hr' },
-      { name: 'workflow', endpoint: '/workflow/templates' },
-      { name: 'trial', endpoint: '/trial' },
-      { name: 'search', endpoint: '/search' },
-      { name: 'knowledge', endpoint: '/knowledge' },
-      { name: 'messenger', endpoint: '/messenger' },
-      { name: 'notifications', endpoint: '/notifications' },
-      { name: 'warRoom', endpoint: '/war-room/health' },
-      { name: 'webhooks', endpoint: '/webhooks/health' },
-      { name: 'versioning', endpoint: '/versioning/health' },
-      { name: 'sync', endpoint: '/sync/health' },
-      { name: 'queryWorkbench', endpoint: '/query-workbench/health' },
-      { name: 'schema', endpoint: '/schema/health' },
-      { name: 'monitoring', endpoint: '/monitoring/health' },
-      { name: 'ocr', endpoint: '/ocr/health' },
-      { name: 'risks', endpoint: '/risks/health' },
-      { name: 'pipelines', endpoint: '/pipelines/health' },
-      { name: 'production', endpoint: '/production/health' },
-      { name: 'processingJobs', endpoint: '/processing-jobs/health' },
-      { name: 'jurisdictions', endpoint: '/jurisdictions/health' },
-      { name: 'integrations', endpoint: '/integrations/health' },
-      { name: 'bluebook', endpoint: '/bluebook/health' },
-      { name: 'casePhases', endpoint: '/case-phases/health' },
-      { name: 'analytics', endpoint: '/analytics/health' },
-      { name: 'backups', endpoint: '/backups/health' },
-  { name: 'auth', endpoint: '/auth/health' },
-];
+      { name: "cases", endpoint: "/cases" },
+      { name: "docket", endpoint: "/docket" },
+      { name: "documents", endpoint: "/documents" },
+      { name: "evidence", endpoint: "/evidence" },
+      { name: "billing", endpoint: "/billing/invoices" },
+      { name: "users", endpoint: "/users" },
+      { name: "pleadings", endpoint: "/pleadings" },
+      { name: "motions", endpoint: "/motions" },
+      { name: "parties", endpoint: "/parties" },
+      { name: "clauses", endpoint: "/clauses" },
+      { name: "calendar", endpoint: "/calendar" },
+      { name: "trustAccounts", endpoint: "/billing/trust-accounts" },
+      { name: "legalHolds", endpoint: "/legal-holds/health" },
+      { name: "depositions", endpoint: "/depositions/health" },
+      { name: "conflictChecks", endpoint: "/compliance/conflict-checks" },
+      { name: "auditLogs", endpoint: "/audit-logs" },
+      { name: "discovery", endpoint: "/discovery" },
+      { name: "discoveryEvidence", endpoint: "/discovery/evidence" },
+      { name: "compliance", endpoint: "/compliance" },
+      { name: "tasks", endpoint: "/tasks" },
+      { name: "reports", endpoint: "/reports" },
+      { name: "hr", endpoint: "/hr" },
+      { name: "workflow", endpoint: "/workflow/templates" },
+      { name: "trial", endpoint: "/trial" },
+      { name: "search", endpoint: "/search" },
+      { name: "knowledge", endpoint: "/knowledge" },
+      { name: "messenger", endpoint: "/messenger" },
+      { name: "notifications", endpoint: "/notifications" },
+      { name: "warRoom", endpoint: "/war-room/health" },
+      { name: "webhooks", endpoint: "/webhooks/health" },
+      { name: "versioning", endpoint: "/versioning/health" },
+      { name: "sync", endpoint: "/sync/health" },
+      { name: "queryWorkbench", endpoint: "/query-workbench/health" },
+      { name: "schema", endpoint: "/schema/health" },
+      { name: "monitoring", endpoint: "/monitoring/health" },
+      { name: "ocr", endpoint: "/ocr/health" },
+      { name: "risks", endpoint: "/risks/health" },
+      { name: "pipelines", endpoint: "/pipelines/health" },
+      { name: "production", endpoint: "/production/health" },
+      { name: "processingJobs", endpoint: "/processing-jobs/health" },
+      { name: "jurisdictions", endpoint: "/jurisdictions/health" },
+      { name: "integrations", endpoint: "/integrations/health" },
+      { name: "bluebook", endpoint: "/bluebook/health" },
+      { name: "casePhases", endpoint: "/case-phases/health" },
+      { name: "analytics", endpoint: "/analytics/health" },
+      { name: "backups", endpoint: "/backups/health" },
+      { name: "auth", endpoint: "/auth/health" },
+    ];
 
     const healthChecks = await Promise.allSettled(
       serviceEndpoints.map(async ({ name, endpoint }) => ({
@@ -702,25 +741,25 @@ class ApiClient {
     let offlineCount = 0;
 
     healthChecks.forEach((result) => {
-      if (result.status === 'fulfilled') {
+      if (result.status === "fulfilled") {
         const { name, health } = result.value;
         services[name] = health;
 
-        if (health.status === 'online') onlineCount++;
-        else if (health.status === 'degraded') degradedCount++;
-        else if (health.status === 'offline') offlineCount++;
+        if (health.status === "online") onlineCount++;
+        else if (health.status === "degraded") degradedCount++;
+        else if (health.status === "offline") offlineCount++;
       }
     });
 
-    let overall: ServiceHealthStatus = 'unknown';
+    let overall: ServiceHealthStatus = "unknown";
     if (offlineCount === healthChecks.length) {
-      overall = 'offline';
+      overall = "offline";
     } else if (offlineCount > 0 || degradedCount > healthChecks.length / 2) {
-      overall = 'degraded';
+      overall = "degraded";
     } else if (onlineCount === healthChecks.length) {
-      overall = 'online';
+      overall = "online";
     } else {
-      overall = 'degraded';
+      overall = "degraded";
     }
 
     return {
@@ -736,4 +775,3 @@ export const apiClient = new ApiClient();
 
 // Export class for testing
 export { ApiClient };
-

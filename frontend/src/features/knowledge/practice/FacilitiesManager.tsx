@@ -28,7 +28,7 @@ import { Tabs } from '@/components/molecules';
 import { Card } from '@/components/molecules';
 import { MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Badge } from '@/components/atoms';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -66,7 +66,7 @@ export const FacilitiesManager: React.FC = () => {
                     <p className={cn("text-sm", theme.text.secondary)}>Manage physical assets, leases, and office operations.</p>
                 </div>
                 <div className="mt-4">
-                    <Tabs 
+                    <Tabs
                         tabs={[
                             { id: 'locations', label: 'Locations Directory', icon: MapPin },
                             { id: 'leases', label: 'Lease Management', icon: Key },
@@ -152,5 +152,3 @@ export const FacilitiesManager: React.FC = () => {
         </div>
     );
 };
-
-

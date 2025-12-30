@@ -27,8 +27,8 @@ import { useTheme } from '@/providers/ThemeContext';
 // Components
 import { Tabs } from '@/components/molecules';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { SearchToolbar } from '@/components/organisms';
 import { KanbanBoard, KanbanColumn, KanbanCard } from '@/components/organisms';
 
@@ -95,7 +95,7 @@ export const VendorProcurement: React.FC = () => {
                      <h3 className={cn("text-lg font-bold", theme.text.primary)}>Procurement & Contracts</h3>
                      <Button variant="primary" icon={Plus}>New Requisition</Button>
                 </div>
-                <Tabs 
+                <Tabs
                     tabs={[
                         { id: 'directory', label: 'Vendor Directory', icon: Briefcase },
                         { id: 'contracts', label: 'Contract Lifecycle', icon: FileText },
@@ -175,5 +175,3 @@ export const VendorProcurement: React.FC = () => {
         </div>
     );
 };
-
-

@@ -2,8 +2,8 @@
 import { FileText, Download, Eye, Calendar } from 'lucide-react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { AdaptiveLoader } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
@@ -23,7 +23,7 @@ interface PolicyItem {
 export function CompliancePolicies() {
   const { theme } = useTheme();
   const { openWindow } = useWindow();
-  
+
   // Performance Engine: Caching
   const { data: policies = [], isLoading } = useQuery<PolicyItem[]>(
       ['policies', 'all'],
@@ -111,5 +111,3 @@ export function CompliancePolicies() {
     </div>
   );
 }
-
-

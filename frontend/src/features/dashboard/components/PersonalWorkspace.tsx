@@ -18,18 +18,19 @@ import React from 'react';
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService, STORES } from '@/services/data/dataService';
+import { DataService } from '@/services/data/dataService';
+import { STORES } from '@/services/data/db';
 
 // Hooks & Context
 import { useTheme } from '@/providers';
 
 // Components
-import { Button } from '@/components/atoms/Button';
-import { Card } from '@/components/molecules/Card';
-import { NotificationCenter } from '@/components/organisms/NotificationCenter';
+import { Button } from '@/components/atoms';
+import { NotificationCenter } from '@/components/organisms/notifications/NotificationCenter';
+import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Utils & Constants
-import { cn } from '@/utils';
+import { cn } from '@/utils/cn';
 
 // Types
 import type { CalendarEventItem, User, WorkflowTask } from '@/types';

@@ -18,7 +18,7 @@ import { Plus, BookOpen, FileText } from 'lucide-react';
 // ============================================================================
 // Components
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { LazyLoader } from '@/components/molecules';
 
 // Hooks
@@ -38,9 +38,9 @@ const CitationLibrary = lazy(() => import('./CitationLibrary').then(m => ({ defa
 const BriefAnalyzer = lazy(() => import('./BriefAnalyzer'));
 
 const TAB_CONFIG: TabConfigItem[] = [
-  { 
-    id: 'citations', 
-    label: 'Citations', 
+  {
+    id: 'citations',
+    label: 'Citations',
     icon: BookOpen,
     subTabs: [
       { id: 'library', label: 'Citation Library', icon: BookOpen },

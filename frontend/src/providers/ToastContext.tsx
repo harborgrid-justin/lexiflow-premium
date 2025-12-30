@@ -1,5 +1,5 @@
 import { NOTIFICATION_AUTO_DISMISS_MS, NOTIFICATION_ERROR_DISMISS_MS } from '@/config/features/ui.config';
-import { cn } from '@/utils';
+import { cn } from '@/utils/cn';
 import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from 'lucide-react';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type {

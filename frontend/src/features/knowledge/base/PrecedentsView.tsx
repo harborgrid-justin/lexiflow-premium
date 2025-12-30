@@ -25,7 +25,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -39,7 +39,7 @@ import { Precedent } from '@/types';
 
 export const PrecedentsView: React.FC = () => {
   const { theme } = useTheme();
-  
+
   const { data: precedents = [] } = useQuery<Precedent[]>(
       ['precedents', 'all'],
       DataService.knowledge.getPrecedents
@@ -63,10 +63,10 @@ export const PrecedentsView: React.FC = () => {
                 {item.type}
             </span>
           </div>
-          
+
           <h3 className={cn("font-bold text-lg mb-2 group-hover:text-blue-600 transition-colors", theme.text.primary)}>{item.title}</h3>
           <p className={cn("text-sm mb-4 flex-1", theme.text.secondary)}>{item.description}</p>
-          
+
           <div className={cn("flex items-center justify-between pt-4 border-t", theme.border.default)}>
             <div className={cn("text-xs font-mono", theme.text.tertiary)}>{item.docId}</div>
             <Button size="sm" variant="ghost" icon={Download} className={theme.text.secondary}>Download</Button>

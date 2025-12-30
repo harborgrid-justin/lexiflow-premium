@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/molecules';
 import { ExternalLink, Clock } from 'lucide-react';
 import { SearchToolbar } from '@/components/organisms';
@@ -23,10 +23,10 @@ export const ResearchHistory: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <SearchToolbar 
-        value="" 
-        onChange={() => {}} 
-        placeholder="Search past queries..." 
+      <SearchToolbar
+        value=""
+        onChange={() => {}}
+        placeholder="Search past queries..."
       />
 
       <TableContainer>

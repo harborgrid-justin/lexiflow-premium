@@ -1,6 +1,6 @@
 import React from 'react';
 import { Filter, Copy, Table, FileDown, Info } from 'lucide-react';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/molecules';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -78,7 +78,7 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({
           <Button variant="outline" icon={Copy} size="sm" onClick={onCopyAll}>
             Copy All
           </Button>
-          
+
           <Button variant="outline" icon={Table} size="sm" onClick={onGenerateTOA}>
             Table of Authorities
           </Button>

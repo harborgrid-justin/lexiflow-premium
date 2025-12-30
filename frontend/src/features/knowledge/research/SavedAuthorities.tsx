@@ -4,8 +4,8 @@ import { Bookmark, FileText, Scale, BookmarkMinus } from 'lucide-react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { EmptyState } from '@/components/molecules';
 import { AdaptiveLoader } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
@@ -15,7 +15,7 @@ import { Citation } from '@/types';
 
 export const SavedAuthorities: React.FC = () => {
   const { theme } = useTheme();
-  
+
   // Enterprise Data Access
   const { data: savedItems = [], isLoading } = useQuery<Citation[]>(
       queryKeys.research.saved(),
@@ -72,4 +72,3 @@ export const SavedAuthorities: React.FC = () => {
     </div>
   );
 };
-

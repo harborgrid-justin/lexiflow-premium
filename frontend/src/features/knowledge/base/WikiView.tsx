@@ -26,7 +26,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
 
 // Components
-import { Badge } from '@/components/atoms';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { AdaptiveLoader } from '@/components/molecules';
 
 // Utils & Constants
@@ -83,7 +83,7 @@ export const WikiView: React.FC = () => {
         <div className="p-4 border-b">
           <div className="relative">
             <Search className={cn("absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4", theme.text.tertiary)} />
-            <input 
+            <input
                 className={cn("w-full pl-8 pr-3 py-1.5 text-sm border rounded-md outline-none", theme.surface.default, theme.border.default)}
                 placeholder="Search articles..."
                 value={searchQuery}

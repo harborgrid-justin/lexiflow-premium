@@ -41,9 +41,9 @@ import {
 // ============================================================================
 
 // Services & Data
-import { DataService } from "@/services";
+import { DataService } from "@/services/data/dataService";
+import { STORES } from "@/services/data/db";
 import { useQuery } from '@/hooks/useQueryHooks';
-import { STORES } from "@/services";
 
 // Hooks & Context
 import { useTheme } from "@/providers";
@@ -53,7 +53,7 @@ import { Button } from '@/components/atoms';
 import { LazyLoader } from '@/components/molecules';
 
 // Utils & Constants
-import { cn } from "@/utils";
+import { cn } from '@/utils/cn';
 
 // Types
 import type { Case } from "@/types";

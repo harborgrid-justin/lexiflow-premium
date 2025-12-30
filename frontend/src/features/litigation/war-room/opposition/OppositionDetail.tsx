@@ -25,11 +25,11 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/providers';
 
 // Components
-import { Button } from '@/components/atoms/Button';
-import { EmptyState } from '@/components/molecules/EmptyState';
+import { Button } from '@/components/atoms';
+import { EmptyState } from '@/components/molecules';
 
 // Utils & Constants
-import { cn } from '@/utils';
+import { cn } from '@/utils/cn';
 
 // Types
 import type { OppositionEntity } from './OppositionList';

@@ -8,7 +8,7 @@ import { AdaptiveLoader } from '@/components/molecules';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Bookmark, Share2, ExternalLink, BookOpen, Scale, FileText, History, Loader2, Search } from 'lucide-react';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { Tabs } from '@/components/molecules';
 import { useWindow } from '@/providers/WindowContext';
 import { RuleTreeViewer } from './rule-viewer/RuleTreeViewer';
@@ -46,7 +46,7 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, isOrbital 
     isLoadingSearch,
     selectedRule
   } = useRuleSearchAndSelection(filteredRules); // Pass filtered rules here
-  
+
   // Handlers for UI interaction
   const handlePopOut = (rule: LegalRule) => {
       const winId = `rule-${rule.id}`;
@@ -59,9 +59,9 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, isOrbital 
           </div>
       );
   };
-  
+
   if (isLoadingAllRules) return <AdaptiveLoader contentType="document" shimmer />;
-  
+
   return (
     <div className={cn("flex h-full rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
         {/* Sidebar: Table of Contents */}
@@ -74,7 +74,7 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, isOrbital 
                     ) : (
                         <Search className={cn("absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5", theme.text.tertiary)}/>
                     )}
-                    <input 
+                    <input
                         className={cn("w-full pl-8 pr-3 py-1.5 text-xs border rounded-md outline-none focus:ring-1 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                         placeholder="Search rules (e.g. '201')..."
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
@@ -82,7 +82,7 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, isOrbital 
                 </div>
             </div>
             <div className={cn("flex-1 overflow-y-auto p-2", isLoadingSearch ? "opacity-50" : "")}>
-                <RuleTreeViewer 
+                <RuleTreeViewer
                     nodes={displayHierarchy}
                     currentExpandedIds={currentExpandedIds}
                     selectedRuleId={selectedRuleId}
@@ -126,10 +126,10 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, isOrbital 
                                 />
                             </div>
                              <div className="flex-1 overflow-y-auto p-8">
-                                <RuleContentDisplay 
-                                    selectedRule={selectedRule} 
-                                    activeTab={activeTab} 
-                                    theme={theme} 
+                                <RuleContentDisplay
+                                    selectedRule={selectedRule}
+                                    activeTab={activeTab}
+                                    theme={theme}
                                 />
                              </div>
                         </>
@@ -138,7 +138,7 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, isOrbital 
                             <div className={cn("prose max-w-none leading-loose font-serif text-base", mode === 'dark' ? "prose-invert" : "prose-slate")}>
                                 <p>{selectedRule.text || selectedRule.summary}</p>
                             </div>
-                            
+
                             {selectedRule.summary && selectedRule.text && (
                                 <div className={cn("mt-8 p-4 border-l-4 rounded-r-lg", theme.primary.light, theme.primary.border)}>
                                     <h4 className={cn("text-sm font-bold mb-1", theme.primary.text)}>Official Commentary / Summary</h4>
@@ -158,4 +158,3 @@ export const RuleBookViewer: React.FC<RuleBookViewerProps> = ({ type, isOrbital 
     </div>
   );
 };
-

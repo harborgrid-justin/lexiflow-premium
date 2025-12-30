@@ -21,7 +21,7 @@ import { useTheme } from '@/providers/ThemeContext';
 
 // Components
 import { PageHeader } from '@/components/organisms';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { LazyLoader } from '@/components/molecules';
 
 // Utils & Constants
@@ -63,8 +63,8 @@ export const JurisdictionManager: React.FC = () => {
   return (
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
       <div className="px-6 pt-6 shrink-0">
-        <PageHeader 
-          title="Jurisdiction Explorer" 
+        <PageHeader
+          title="Jurisdiction Explorer"
           subtitle="Federal, state, and international court systems, rules, and procedures."
           actions={<Button variant="primary" icon={Plus}>Add Jurisdiction</Button>}
         />

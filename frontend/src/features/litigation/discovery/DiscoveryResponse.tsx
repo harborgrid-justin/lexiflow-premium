@@ -11,26 +11,23 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect, useCallback } from "react";
-import { ArrowLeft, Wand2, Save, Clock } from "lucide-react";
+import { ArrowLeft, Clock, Save, Wand2 } from "lucide-react";
+import React, { useCallback, useEffect, useState } from "react";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from "@/components";
-import { Badge } from "@/components";
+import { Badge, Button } from "@/components";
 
 // Hooks & Context
+import { useAutoSave, useKeyboardShortcuts, useNotify } from "@/hooks";
 import { useTheme } from "@/providers";
-import { useAutoSave } from "@/hooks";
-import { useKeyboardShortcuts } from "@/hooks";
-import { useNotify } from "@/hooks";
 
 // Services & Utils
 import { GeminiService } from "@/services";
-import { cn } from "@/utils";
 import { validateDiscoveryRequestSafe } from '@/services/validation/discoverySchemas';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES

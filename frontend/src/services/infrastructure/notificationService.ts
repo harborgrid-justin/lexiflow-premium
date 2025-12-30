@@ -1,7 +1,7 @@
 /**
  * Notification Service - Enterprise notification management with grouping, priority, and actions
  * Production-grade toast, desktop, and in-app notification system
- * 
+ *
  * @module services/infrastructure/notificationService
  * @description Comprehensive notification service providing:
  * - Multi-tier notification system (toast, desktop, in-app panel)
@@ -15,9 +15,16 @@
  * - Persistent storage via defaultStorage
  */
 
-import { defaultStorage } from '@/services/data/dataService';
-import { ValidationError } from '@/services/core/errors';
-import { NOTIFICATION_MAX_DISPLAY } from '@/config/master.config';
+import { defaultStorage } from "./adapters/StorageAdapter";
+
+class ValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "ValidationError";
+  }
+}
+
+const NOTIFICATION_MAX_DISPLAY = 50; // Maximum notifications to keep in memory
 
 // UUID generation inline
 function generateId(): string {
@@ -32,12 +39,12 @@ function generateId(): string {
  * Notification priority levels
  * Determines visual styling, sound frequency, and desktop behavior
  */
-export type NotificationPriority = 'low' | 'normal' | 'high' | 'urgent';
+export type NotificationPriority = "low" | "normal" | "high" | "urgent";
 
 /**
  * Notification types aligned with semantic colors
  */
-export type NotificationType = 'info' | 'success' | 'warning' | 'error';
+export type NotificationType = "info" | "success" | "warning" | "error";
 
 /**
  * Action button configuration for interactive notifications
@@ -45,7 +52,7 @@ export type NotificationType = 'info' | 'success' | 'warning' | 'error';
 export interface NotificationAction {
   label: string;
   onClick: () => void;
-  variant?: 'primary' | 'secondary' | 'danger';
+  variant?: "primary" | "secondary" | "danger";
 }
 
 /**
@@ -99,7 +106,8 @@ class NotificationServiceClass {
   private maxNotifications: number = NOTIFICATION_MAX_DISPLAY * 20;
   private initialized: boolean = false;
   private autoDismissTimers: Map<string, NodeJS.Timeout> = new Map();
-  private desktopNotifications: Map<string, globalThis.Notification> = new Map();
+  private desktopNotifications: Map<string, globalThis.Notification> =
+    new Map();
 
   // =============================================================================
   // INITIALIZATION
@@ -108,36 +116,41 @@ class NotificationServiceClass {
   /**
    * Initialize notification service
    * Requests desktop permission and loads user preferences
-   * 
+   *
    * @returns Promise<void>
    * @throws Error if initialization fails
-   * 
+   *
    * @example
    * await NotificationService.init();
    */
   async init(): Promise<void> {
     try {
       // Request desktop notification permission
-      if ('Notification' in window) {
+      if ("Notification" in window) {
         const permission = await Notification.requestPermission();
-        this.desktopEnabled = permission === 'granted';
-        console.log(`[NotificationService] Desktop notifications: ${permission}`);
+        this.desktopEnabled = permission === "granted";
+        console.log(
+          `[NotificationService] Desktop notifications: ${permission}`
+        );
       }
 
       // Load preferences from storage
       try {
-        const soundPref = defaultStorage.getItem('notification_sound');
+        const soundPref = defaultStorage.getItem("notification_sound");
         if (soundPref !== null) {
-          this.soundEnabled = soundPref === 'true';
+          this.soundEnabled = soundPref === "true";
         }
       } catch (error) {
-        console.warn('[NotificationService] Failed to load preferences:', error);
+        console.warn(
+          "[NotificationService] Failed to load preferences:",
+          error
+        );
       }
 
       this.initialized = true;
-      console.log('[NotificationService] Initialized successfully');
+      console.log("[NotificationService] Initialized successfully");
     } catch (error) {
-      console.error('[NotificationService.init] Error:', error);
+      console.error("[NotificationService.init] Error:", error);
       throw error;
     }
   }
@@ -150,15 +163,30 @@ class NotificationServiceClass {
    * Validate notification object
    * @private
    */
-  private validateNotification(notification: Partial<Notification>, methodName: string): void {
+  private validateNotification(
+    notification: Partial<Notification>,
+    methodName: string
+  ): void {
     if (!notification.title || false) {
-      throw new ValidationError(`[NotificationService.${methodName}] Invalid title parameter`);
+      throw new ValidationError(
+        `[NotificationService.${methodName}] Invalid title parameter`
+      );
     }
-    if (notification.type && !['info', 'success', 'warning', 'error'].includes(notification.type)) {
-      throw new ValidationError(`[NotificationService.${methodName}] Invalid type parameter`);
+    if (
+      notification.type &&
+      !["info", "success", "warning", "error"].includes(notification.type)
+    ) {
+      throw new ValidationError(
+        `[NotificationService.${methodName}] Invalid type parameter`
+      );
     }
-    if (notification.priority && !['low', 'normal', 'high', 'urgent'].includes(notification.priority)) {
-      throw new ValidationError(`[NotificationService.${methodName}] Invalid priority parameter`);
+    if (
+      notification.priority &&
+      !["low", "normal", "high", "urgent"].includes(notification.priority)
+    ) {
+      throw new ValidationError(
+        `[NotificationService.${methodName}] Invalid priority parameter`
+      );
     }
   }
 
@@ -168,7 +196,9 @@ class NotificationServiceClass {
    */
   private validateId(id: string, methodName: string): void {
     if (!id || false) {
-      throw new ValidationError(`[NotificationService.${methodName}] Invalid id parameter`);
+      throw new ValidationError(
+        `[NotificationService.${methodName}] Invalid id parameter`
+      );
     }
   }
 
@@ -176,9 +206,14 @@ class NotificationServiceClass {
    * Validate priority parameter
    * @private
    */
-  private validatePriority(priority: NotificationPriority, methodName: string): void {
-    if (!['low', 'normal', 'high', 'urgent'].includes(priority)) {
-      throw new ValidationError(`[NotificationService.${methodName}] Invalid priority parameter`);
+  private validatePriority(
+    priority: NotificationPriority,
+    methodName: string
+  ): void {
+    if (!["low", "normal", "high", "urgent"].includes(priority)) {
+      throw new ValidationError(
+        `[NotificationService.${methodName}] Invalid priority parameter`
+      );
     }
   }
 
@@ -189,14 +224,14 @@ class NotificationServiceClass {
   /**
    * Add new notification to system
    * Handles sound, desktop notifications, and auto-dismiss
-   * 
+   *
    * @param notification - Notification configuration without id/timestamp/read
    * @returns string - Generated notification ID
    * @throws Error if validation fails
    */
-  add(notification: Omit<Notification, 'id' | 'timestamp' | 'read'>): string {
+  add(notification: Omit<Notification, "id" | "timestamp" | "read">): string {
     try {
-      this.validateNotification(notification, 'add');
+      this.validateNotification(notification, "add");
 
       const id = generateId();
       const newNotification: Notification = {
@@ -212,7 +247,9 @@ class NotificationServiceClass {
       // Enforce limit (evict oldest)
       if (this.notifications.length > this.maxNotifications) {
         this.notifications = this.notifications.slice(0, this.maxNotifications);
-        console.debug(`[NotificationService] Evicted old notifications (limit: ${this.maxNotifications})`);
+        console.debug(
+          `[NotificationService] Evicted old notifications (limit: ${this.maxNotifications})`
+        );
       }
 
       // Play sound if enabled
@@ -239,7 +276,7 @@ class NotificationServiceClass {
 
       return id;
     } catch (error) {
-      console.error('[NotificationService.add] Error:', error);
+      console.error("[NotificationService.add] Error:", error);
       throw error;
     }
   }
@@ -252,9 +289,9 @@ class NotificationServiceClass {
    */
   remove(id: string): void {
     try {
-      this.validateId(id, 'remove');
+      this.validateId(id, "remove");
       const before = this.notifications.length;
-      this.notifications = this.notifications.filter(n => n.id !== id);
+      this.notifications = this.notifications.filter((n) => n.id !== id);
 
       // Clear auto-dismiss timer if exists
       const timer = this.autoDismissTimers.get(id);
@@ -274,27 +311,27 @@ class NotificationServiceClass {
         this.notifyListeners();
       }
     } catch (error) {
-      console.error('[NotificationService.remove] Error:', error);
+      console.error("[NotificationService.remove] Error:", error);
       throw error;
     }
   }
 
   /**
    * Mark notification as read
-   * 
+   *
    * @param id - Notification ID
    * @throws Error if validation fails
    */
   markAsRead(id: string): void {
     try {
-      this.validateId(id, 'markAsRead');
-      const notification = this.notifications.find(n => n.id === id);
+      this.validateId(id, "markAsRead");
+      const notification = this.notifications.find((n) => n.id === id);
       if (notification && !notification.read) {
         notification.read = true;
         this.notifyListeners();
       }
     } catch (error) {
-      console.error('[NotificationService.markAsRead] Error:', error);
+      console.error("[NotificationService.markAsRead] Error:", error);
       throw error;
     }
   }
@@ -305,7 +342,7 @@ class NotificationServiceClass {
   markAllAsRead(): void {
     try {
       let changed = false;
-      this.notifications.forEach(n => {
+      this.notifications.forEach((n) => {
         if (!n.read) {
           n.read = true;
           changed = true;
@@ -315,7 +352,7 @@ class NotificationServiceClass {
         this.notifyListeners();
       }
     } catch (error) {
-      console.error('[NotificationService.markAllAsRead] Error:', error);
+      console.error("[NotificationService.markAllAsRead] Error:", error);
       throw error;
     }
   }
@@ -329,11 +366,11 @@ class NotificationServiceClass {
       this.notifications = [];
 
       // Clear all auto-dismiss timers
-      this.autoDismissTimers.forEach(timer => clearTimeout(timer));
+      this.autoDismissTimers.forEach((timer) => clearTimeout(timer));
       this.autoDismissTimers.clear();
 
       // Close all desktop notifications
-      this.desktopNotifications.forEach(notif => notif.close());
+      this.desktopNotifications.forEach((notif) => notif.close());
       this.desktopNotifications.clear();
 
       if (count > 0) {
@@ -341,7 +378,7 @@ class NotificationServiceClass {
         console.log(`[NotificationService] Cleared ${count} notifications`);
       }
     } catch (error) {
-      console.error('[NotificationService.clearAll] Error:', error);
+      console.error("[NotificationService.clearAll] Error:", error);
       throw error;
     }
   }
@@ -352,7 +389,7 @@ class NotificationServiceClass {
 
   /**
    * Get all notifications
-   * 
+   *
    * @returns Notification[] - Copy of notification array
    */
   getAll(): Notification[] {
@@ -361,17 +398,17 @@ class NotificationServiceClass {
 
   /**
    * Get unread notification count
-   * 
+   *
    * @returns number - Count of unread notifications
    */
   getUnreadCount(): number {
-    return this.notifications.filter(n => !n.read).length;
+    return this.notifications.filter((n) => !n.read).length;
   }
 
   /**
    * Get grouped notifications
    * Groups 3+ similar notifications by groupKey
-   * 
+   *
    * @returns (Notification | NotificationGroup)[] - Sorted array with groups
    */
   getGrouped(): (Notification | NotificationGroup)[] {
@@ -380,7 +417,7 @@ class NotificationServiceClass {
       const ungrouped: Notification[] = [];
 
       // Group notifications by groupKey
-      this.notifications.forEach(notification => {
+      this.notifications.forEach((notification) => {
         if (notification.groupKey) {
           const existing = groups.get(notification.groupKey) || [];
           existing.push(notification);
@@ -400,7 +437,7 @@ class NotificationServiceClass {
             groupKey,
             notifications,
             count: notifications.length,
-            latestTimestamp: Math.max(...notifications.map(n => n.timestamp)),
+            latestTimestamp: Math.max(...notifications.map((n) => n.timestamp)),
             collapsed: true,
           });
         } else {
@@ -411,12 +448,12 @@ class NotificationServiceClass {
 
       // Sort by timestamp (newest first)
       return result.sort((a, b) => {
-        const aTime = 'latestTimestamp' in a ? a.latestTimestamp : a.timestamp;
-        const bTime = 'latestTimestamp' in b ? b.latestTimestamp : b.timestamp;
+        const aTime = "latestTimestamp" in a ? a.latestTimestamp : a.timestamp;
+        const bTime = "latestTimestamp" in b ? b.latestTimestamp : b.timestamp;
         return bTime - aTime;
       });
     } catch (error) {
-      console.error('[NotificationService.getGrouped] Error:', error);
+      console.error("[NotificationService.getGrouped] Error:", error);
       return [];
     }
   }
@@ -427,14 +464,16 @@ class NotificationServiceClass {
 
   /**
    * Subscribe to notification updates
-   * 
+   *
    * @param listener - Callback receiving notification array
    * @returns () => void - Unsubscribe function
    * @throws Error if validation fails
    */
   subscribe(listener: NotificationListener): () => void {
-    if (typeof listener !== 'function') {
-      throw new ValidationError('[NotificationService.subscribe] Listener must be a function');
+    if (typeof listener !== "function") {
+      throw new ValidationError(
+        "[NotificationService.subscribe] Listener must be a function"
+      );
     }
     try {
       this.listeners.add(listener);
@@ -445,7 +484,7 @@ class NotificationServiceClass {
         this.listeners.delete(listener);
       };
     } catch (error) {
-      console.error('[NotificationService.subscribe] Error:', error);
+      console.error("[NotificationService.subscribe] Error:", error);
       throw error;
     }
   }
@@ -456,22 +495,25 @@ class NotificationServiceClass {
 
   /**
    * Enable/disable sound notifications
-   * 
+   *
    * @param enabled - Sound enabled state
    */
   setSoundEnabled(enabled: boolean): void {
     try {
       this.soundEnabled = enabled;
-      defaultStorage.setItem('notification_sound', String(enabled));
+      defaultStorage.setItem("notification_sound", String(enabled));
       console.log(`[NotificationService] Sound: ${enabled}`);
     } catch (error) {
-      console.warn('[NotificationService.setSoundEnabled] Failed to save preference:', error);
+      console.warn(
+        "[NotificationService.setSoundEnabled] Failed to save preference:",
+        error
+      );
     }
   }
 
   /**
    * Get sound enabled state
-   * 
+   *
    * @returns boolean - Sound enabled state
    */
   getSoundEnabled(): boolean {
@@ -480,7 +522,7 @@ class NotificationServiceClass {
 
   /**
    * Get desktop notification enabled state
-   * 
+   *
    * @returns boolean - Desktop enabled state
    */
   getDesktopEnabled(): boolean {
@@ -489,7 +531,7 @@ class NotificationServiceClass {
 
   /**
    * Get initialization state
-   * 
+   *
    * @returns boolean - Initialization complete
    */
   isInitialized(): boolean {
@@ -506,7 +548,7 @@ class NotificationServiceClass {
    */
   private playSound(priority: NotificationPriority): void {
     try {
-      this.validatePriority(priority, 'playSound');
+      this.validatePriority(priority, "playSound");
       const audioContext = new AudioContext();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
@@ -516,22 +558,25 @@ class NotificationServiceClass {
 
       // Different frequencies for different priorities
       const frequencies: Record<NotificationPriority, number> = {
-        low: 440,     // A4
-        normal: 523,  // C5
-        high: 659,    // E5
-        urgent: 880,  // A5
+        low: 440, // A4
+        normal: 523, // C5
+        high: 659, // E5
+        urgent: 880, // A5
       };
 
       oscillator.frequency.value = frequencies[priority];
-      oscillator.type = 'sine';
+      oscillator.type = "sine";
 
       gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+      gainNode.gain.exponentialRampToValueAtTime(
+        0.01,
+        audioContext.currentTime + 0.1
+      );
 
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.1);
     } catch (error) {
-      console.warn('[NotificationService.playSound] Error:', error);
+      console.warn("[NotificationService.playSound] Error:", error);
     }
   }
 
@@ -540,15 +585,18 @@ class NotificationServiceClass {
    * @private
    */
   private showDesktopNotification(notification: Notification): void {
-    if (!this.desktopEnabled || !('Notification' in window)) return;
+    if (!this.desktopEnabled || !("Notification" in window)) return;
 
     try {
-      const desktopNotification = new globalThis.Notification(notification.title, {
-        body: notification.message,
-        icon: notification.icon || '/favicon.ico',
-        tag: notification.id,
-        requireInteraction: notification.priority === 'urgent',
-      });
+      const desktopNotification = new globalThis.Notification(
+        notification.title,
+        {
+          body: notification.message,
+          icon: notification.icon || "/favicon.ico",
+          tag: notification.id,
+          requireInteraction: notification.priority === "urgent",
+        }
+      );
 
       // Track desktop notification for cleanup
       this.desktopNotifications.set(notification.id, desktopNotification);
@@ -564,7 +612,10 @@ class NotificationServiceClass {
         this.desktopNotifications.delete(notification.id);
       };
     } catch (error) {
-      console.warn('[NotificationService.showDesktopNotification] Error:', error);
+      console.warn(
+        "[NotificationService.showDesktopNotification] Error:",
+        error
+      );
     }
   }
 
@@ -573,11 +624,14 @@ class NotificationServiceClass {
    * @private
    */
   private notifyListeners(): void {
-    this.listeners.forEach(listener => {
+    this.listeners.forEach((listener) => {
       try {
         listener(this.notifications);
       } catch (error) {
-        console.error('[NotificationService.notifyListeners] Listener error:', error);
+        console.error(
+          "[NotificationService.notifyListeners] Listener error:",
+          error
+        );
       }
     });
   }
@@ -587,18 +641,21 @@ class NotificationServiceClass {
    * Call this when shutting down to prevent memory leaks
    */
   dispose(): void {
-    console.log('[NotificationService] Disposing and cleaning up resources');
+    console.log("[NotificationService] Disposing and cleaning up resources");
 
     // Clear all auto-dismiss timers
-    this.autoDismissTimers.forEach(timer => clearTimeout(timer));
+    this.autoDismissTimers.forEach((timer) => clearTimeout(timer));
     this.autoDismissTimers.clear();
 
     // Close all desktop notifications
-    this.desktopNotifications.forEach(notif => {
+    this.desktopNotifications.forEach((notif) => {
       try {
         notif.close();
       } catch (error) {
-        console.warn('[NotificationService] Error closing desktop notification:', error);
+        console.warn(
+          "[NotificationService] Error closing desktop notification:",
+          error
+        );
       }
     });
     this.desktopNotifications.clear();
@@ -620,12 +677,13 @@ export const NotificationService = new NotificationServiceClass();
 // CONVENIENCE FUNCTIONS
 // ============================================================================
 
-import { NOTIFICATION_SUCCESS_DISMISS_MS, NOTIFICATION_AUTO_DISMISS_MS } from '@/config/master.config';
+const NOTIFICATION_SUCCESS_DISMISS_MS = 3000; // 3 seconds for success notifications
+const NOTIFICATION_AUTO_DISMISS_MS = 5000; // 5 seconds for auto-dismiss notifications
 
 /**
  * Convenience functions for common notification patterns
  * Provides semantic shortcuts for info, success, warning, error, and undo
- * 
+ *
  * @example
  * notify.success('Saved', 'Document saved successfully');
  * notify.error('Failed', 'Upload failed', { desktop: true });
@@ -635,12 +693,16 @@ export const notify = {
   /**
    * Info notification (normal priority, no auto-dismiss)
    */
-  info: (title: string, message?: string, options?: Partial<Omit<Notification, 'id' | 'timestamp' | 'type' | 'read'>>) => {
+  info: (
+    title: string,
+    message?: string,
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>
+  ) => {
     return NotificationService.add({
       title,
       message,
-      type: 'info',
-      priority: 'normal',
+      type: "info",
+      priority: "normal",
       ...options,
     });
   },
@@ -648,12 +710,16 @@ export const notify = {
   /**
    * Success notification (normal priority, auto-dismiss)
    */
-  success: (title: string, message?: string, options?: Partial<Omit<Notification, 'id' | 'timestamp' | 'type' | 'read'>>) => {
+  success: (
+    title: string,
+    message?: string,
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>
+  ) => {
     return NotificationService.add({
       title,
       message,
-      type: 'success',
-      priority: 'normal',
+      type: "success",
+      priority: "normal",
       duration: NOTIFICATION_SUCCESS_DISMISS_MS,
       ...options,
     });
@@ -662,12 +728,16 @@ export const notify = {
   /**
    * Warning notification (high priority, auto-dismiss)
    */
-  warning: (title: string, message?: string, options?: Partial<Omit<Notification, 'id' | 'timestamp' | 'type' | 'read'>>) => {
+  warning: (
+    title: string,
+    message?: string,
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>
+  ) => {
     return NotificationService.add({
       title,
       message,
-      type: 'warning',
-      priority: 'high',
+      type: "warning",
+      priority: "high",
       duration: NOTIFICATION_AUTO_DISMISS_MS,
       ...options,
     });
@@ -676,12 +746,16 @@ export const notify = {
   /**
    * Error notification (urgent priority, persistent)
    */
-  error: (title: string, message?: string, options?: Partial<Omit<Notification, 'id' | 'timestamp' | 'type' | 'read'>>) => {
+  error: (
+    title: string,
+    message?: string,
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>
+  ) => {
     return NotificationService.add({
       title,
       message,
-      type: 'error',
-      priority: 'urgent',
+      type: "error",
+      priority: "urgent",
       duration: 0, // Persistent
       ...options,
     });
@@ -690,18 +764,23 @@ export const notify = {
   /**
    * Notification with Undo action (success type, 5s duration)
    */
-  withUndo: (title: string, message: string, onUndo: () => void, options?: Partial<Omit<Notification, 'id' | 'timestamp' | 'type' | 'read'>>) => {
+  withUndo: (
+    title: string,
+    message: string,
+    onUndo: () => void,
+    options?: Partial<Omit<Notification, "id" | "timestamp" | "type" | "read">>
+  ) => {
     return NotificationService.add({
       title,
       message,
-      type: 'success',
-      priority: 'normal',
+      type: "success",
+      priority: "normal",
       duration: 5000,
       actions: [
         {
-          label: 'Undo',
+          label: "Undo",
           onClick: onUndo,
-          variant: 'primary',
+          variant: "primary",
         },
       ],
       ...options,
@@ -710,4 +789,3 @@ export const notify = {
 };
 
 export default NotificationService;
-

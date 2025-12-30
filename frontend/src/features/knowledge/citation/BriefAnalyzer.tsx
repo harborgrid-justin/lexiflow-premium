@@ -1,9 +1,9 @@
 /**
  * BriefAnalyzer.tsx
- * 
+ *
  * AI-powered brief analysis tool using Google Gemini for citation validation,
  * argument strength assessment, and counter-argument identification.
- * 
+ *
  * @module components/citation/BriefAnalyzer
  * @category Legal Research - AI Analysis
  */
@@ -12,8 +12,8 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState, useMemo } from 'react';
-import { 
-  FileText, Loader2, BrainCircuit, 
+import {
+  FileText, Loader2, BrainCircuit,
   Scale, Network, Save, ExternalLink
 } from 'lucide-react';
 
@@ -21,7 +21,7 @@ import {
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/molecules';
 import { Tabs } from '@/components/molecules';
 import { RiskMeter } from '@/components/organisms';
@@ -109,7 +109,7 @@ export const BriefAnalyzer: React.FC = () => {
           // 2. AI Analysis (Slow)
           const aiResult = await GeminiService.critiqueBrief(text);
           setCritique(aiResult);
-          
+
           if (aiResult.score) {
               setActiveTab('strategy'); // Switch to strategy if we got a good result
           }
@@ -134,7 +134,7 @@ export const BriefAnalyzer: React.FC = () => {
                       <h2 className="text-2xl font-bold">AI Critique Results</h2>
                       <p className="text-sm text-slate-500">Generated on {new Date().toLocaleString()}</p>
                   </div>
-                  <button 
+                  <button
                       onClick={() => handleCloseAnalysisWindow(winId)}
                       className="text-slate-400 hover:text-slate-600"
                   >
@@ -162,12 +162,12 @@ export const BriefAnalyzer: React.FC = () => {
 
   const matchedAuthorities = useMemo(() => {
       return extractedCitations.map(citeText => {
-          const match = authorityDb.find(dbCite => 
+          const match = authorityDb.find(dbCite =>
               citeText.includes(dbCite.citation) || dbCite.citation.includes(citeText)
           );
-          return { 
-              text: citeText, 
-              match 
+          return {
+              text: citeText,
+              match
           };
       });
   }, [extractedCitations, authorityDb]);
@@ -187,7 +187,7 @@ export const BriefAnalyzer: React.FC = () => {
                 </h3>
                 <span className={cn("text-xs font-mono", theme.text.tertiary)}>{text.length} chars</span>
             </div>
-            <textarea 
+            <textarea
                 className={cn("flex-1 w-full p-6 font-serif text-base leading-relaxed outline-none resize-none", theme.text.primary, theme.surface.input)}
                 placeholder="Paste your brief, motion, or opposing counsel's filing here for analysis..."
                 value={text}
@@ -216,10 +216,10 @@ export const BriefAnalyzer: React.FC = () => {
                          </>
                      )}
                  </div>
-                <Button 
-                    variant="primary" 
-                    icon={isAnalyzing ? Loader2 : BrainCircuit} 
-                    onClick={handleAnalyze} 
+                <Button
+                    variant="primary"
+                    icon={isAnalyzing ? Loader2 : BrainCircuit}
+                    onClick={handleAnalyze}
                     disabled={isAnalyzing || !text}
                     className="w-full md:w-auto"
                 >
@@ -231,7 +231,7 @@ export const BriefAnalyzer: React.FC = () => {
         {/* Right Pane: Intelligence Hub */}
         <div className={cn("w-full lg:w-[450px] flex flex-col rounded-xl shadow-sm border overflow-hidden", theme.surface.default, theme.border.default)}>
              <div className={cn("px-4 pt-4 border-b", theme.border.subtle)}>
-                 <Tabs 
+                 <Tabs
                     tabs={[
                         { id: 'authority', label: 'Authority', icon: Scale },
                         { id: 'strategy', label: 'Strategy', icon: BrainCircuit },
@@ -252,7 +252,7 @@ export const BriefAnalyzer: React.FC = () => {
                          <p className="text-xs mt-2">AI will extract citations, check signals, and critique arguments.</p>
                      </div>
                  )}
-                 
+
                  {/* Authority Tab Content */}
                  {activeTab === 'authority' && matchedAuthorities.length > 0 && (
                      <div className="space-y-4">
@@ -273,10 +273,10 @@ export const BriefAnalyzer: React.FC = () => {
                                          )}
                                      </div>
                                      {!item.match && (
-                                         <Button 
-                                             size="sm" 
+                                         <Button
+                                             size="sm"
                                              variant="outline"
-                                             onClick={() => _addToLibrary({ 
+                                             onClick={() => _addToLibrary({
                                                  id: `cite-${Date.now()}-${idx}`,
                                                  citation: item.text,
                                                  signal: 'unknown',
@@ -293,7 +293,7 @@ export const BriefAnalyzer: React.FC = () => {
                          ))}
                      </div>
                  )}
-                 
+
                  {/* Strategy Tab Content */}
                  {activeTab === 'strategy' && critique && (
                      <div className="space-y-4">
@@ -317,7 +317,7 @@ export const BriefAnalyzer: React.FC = () => {
                          </Card>
                      </div>
                  )}
-                 
+
                  {/* Nexus Tab Content */}
                  {activeTab === 'nexus' && conflicts.length > 0 && (
                      <div className="space-y-4">
@@ -325,7 +325,7 @@ export const BriefAnalyzer: React.FC = () => {
                          {conflicts.map((conflict, idx) => (
                              <Card key={idx} className="p-3">
                                  <div className={cn("text-sm font-semibold mb-1", theme.status.warning.text)}>
-                                     {conflict.type === 'client' ? 'Client Conflict' : 
+                                     {conflict.type === 'client' ? 'Client Conflict' :
                                       conflict.type === 'party' ? 'Party Conflict' : 'Position Conflict'}
                                  </div>
                                  <p className={cn("text-xs", theme.text.secondary)}>{conflict.description}</p>
@@ -341,5 +341,3 @@ export const BriefAnalyzer: React.FC = () => {
 };
 
 export default BriefAnalyzer;
-
-

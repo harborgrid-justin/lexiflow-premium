@@ -1,9 +1,9 @@
 /**
  * CitationLibrary.tsx
- * 
+ *
  * Searchable citation database with virtual scrolling and Shepardization indicators.
  * Provides quick access to case citations with validation status and related cases.
- * 
+ *
  * @module components/citation/CitationLibrary
  * @category Legal Research - Citation Database
  */
@@ -18,8 +18,8 @@ import { ExternalLink, Loader2, BookOpen } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { SearchToolbar } from '@/components/organisms';
 import { VirtualList } from '@/components/organisms';
 import { CitationDetail } from './CitationDetail';
@@ -67,17 +67,17 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
         openWindow(
             winId,
             `Authority: ${citation.citation}`,
-            <CitationDetail 
-               citation={citation} 
-               onClose={() => closeWindow(winId)} 
+            <CitationDetail
+               citation={citation}
+               onClose={() => closeWindow(winId)}
             />
         );
     };
 
     const renderRow = (cit: Citation) => (
-      <div 
-        key={cit.id} 
-        onClick={() => onSelect(cit)} 
+      <div
+        key={cit.id}
+        onClick={() => onSelect(cit)}
         className={cn("flex items-center border-b h-[64px] px-6 cursor-pointer hover:bg-slate-50 transition-colors group", theme.border.default)}
       >
           <div className="w-16 flex justify-center" title={cit.shepardsSignal}>{getSignalIcon(cit.shepardsSignal)}</div>
@@ -147,7 +147,7 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
                     {isSearching && <div className="absolute right-4 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-blue-500"/></div>}
                 </div>
             </div>
-            
+
             <div className={cn("flex-1 min-h-0 flex flex-col bg-white border-t", theme.border.default)}>
                 {isLoading ? <div className="flex items-center justify-center h-full"><Loader2 className="h-6 w-6 animate-spin text-blue-600"/></div>
                 : filteredCitations.length > 0 ? content
@@ -158,5 +158,3 @@ export const CitationLibrary: React.FC<CitationLibraryProps> = ({ onSelect }) =>
     );
 };
 export default CitationLibrary;
-
-

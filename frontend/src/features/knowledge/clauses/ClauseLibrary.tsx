@@ -21,9 +21,9 @@ import { Clause } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { Input } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { AdaptiveLoader } from '@/components/molecules';
 import { ErrorState } from '@/components/molecules';
 import { EmptyState } from '@/components/molecules';
@@ -55,7 +55,7 @@ const ClauseLibrary: React.FC<ClauseLibraryProps> = ({ onSelectClause }) => {
     const categories = ['Confidentiality', 'Liability', 'Payment Terms', 'Termination', 'Indemnification', 'Dispute Resolution'];
 
     const filteredClauses = clauses.filter((clause: Clause) => {
-        const matchesSearch = !searchTerm || 
+        const matchesSearch = !searchTerm ||
             clause.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             clause.content?.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = !selectedCategory || clause.category === selectedCategory;
@@ -122,8 +122,8 @@ const ClauseLibrary: React.FC<ClauseLibraryProps> = ({ onSelectClause }) => {
                     <EmptyState
                         icon={FileText}
                         title={searchTerm || selectedCategory ? 'No matching clauses' : 'No clauses available'}
-                        description={searchTerm || selectedCategory 
-                            ? 'Try adjusting your search or filters to find clauses' 
+                        description={searchTerm || selectedCategory
+                            ? 'Try adjusting your search or filters to find clauses'
                             : 'Create your first clause template to get started'}
                         action={!searchTerm && !selectedCategory ? (
                             <Button variant="primary" icon={Plus}>
@@ -135,7 +135,7 @@ const ClauseLibrary: React.FC<ClauseLibraryProps> = ({ onSelectClause }) => {
                     <div className="grid gap-3">
                         {filteredClauses.map((clause: Clause) => (
                             <Card key={clause.id} className="cursor-pointer hover:shadow-md transition-shadow">
-                                <div 
+                                <div
                                     className="p-4"
                                     onClick={() => onSelectClause(clause)}
                                 >
@@ -179,4 +179,3 @@ const ClauseLibrary: React.FC<ClauseLibraryProps> = ({ onSelectClause }) => {
 };
 
 export default ClauseLibrary;
-

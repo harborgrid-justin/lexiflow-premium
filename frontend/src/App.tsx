@@ -1,27 +1,17 @@
-import React, { useEffect } from 'react';
-import { Sidebar } from '@/components/organisms';
-import { AppShell } from '@/components/ui/layouts/AppShell/AppShell';
-import { AppHeader } from '@/components/organisms';
-import {
-  ThemeProvider,
-  ToastProvider,
-  WindowProvider,
-  SyncProvider,
-  DataSourceProvider
-} from '@/providers';
-import type { Case } from '@/types';
-import { HolographicDock } from '@/components/organisms';
-import { ErrorBoundary } from '@/components/organisms';
+import { AppHeader, ErrorBoundary, GlobalHotkeys, HolographicDock, Sidebar } from '@/components/organisms';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
-import { initializeModules } from '@/config/modules';
 import { AppContentRenderer } from '@/components/ui/layouts/AppContentRenderer/AppContentRenderer';
-import { GlobalHotkeys } from '@/components/organisms';
+import { AppShell } from '@/components/ui/layouts/AppShell/AppShell';
+import { initializeModules } from '@/config/modules';
 import { useAppController } from '@/hooks';
-import { useDataServiceCleanup } from './hooks/useDataServiceCleanup';
-import { backendDiscovery } from '@/services/data/dataService';
+import { DataSourceProvider, SyncProvider, ThemeProvider, ToastProvider, WindowProvider } from '@/providers';
+import { backendDiscovery } from '@/services/integration/backendDiscovery';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
+import type { Case } from '@/types';
 import type { IntentResult } from '@/types/ai';
-import type { GlobalSearchResult } from '@/services/search/searchService';
+import React, { useEffect } from 'react';
+import { useDataServiceCleanup } from './hooks/useDataServiceCleanup';
+import { GlobalSearchResult } from './services/search/searchService';
 
 // Initialize Module Registry
 initializeModules();
@@ -82,7 +72,7 @@ const InnerApp: React.FC = () => {
             onToggleSidebar={() => toggleSidebar()}
             globalSearch={globalSearch}
             setGlobalSearch={updateSearch}
-            onGlobalSearch={() => {}}
+            onGlobalSearch={() => { }}
             currentUser={currentUser}
             onSwitchUser={handleSwitchUser}
             onSearchResultClick={(result: GlobalSearchResult) => selectCase(result.id)}

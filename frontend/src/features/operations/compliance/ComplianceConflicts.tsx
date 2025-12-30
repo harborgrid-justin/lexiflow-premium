@@ -21,8 +21,8 @@ import { useTheme } from '@/providers/ThemeContext';
 
 // Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { SearchToolbar } from '@/components/organisms';
 
 // Utils & Constants
@@ -47,8 +47,8 @@ export const ComplianceConflicts: React.FC<ComplianceConflictsProps> = ({ confli
   const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredConflicts = conflicts.filter(c => 
-    c.entityName.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredConflicts = conflicts.filter(c =>
+    c.entityName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.checkedBy.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -62,9 +62,9 @@ export const ComplianceConflicts: React.FC<ComplianceConflictsProps> = ({ confli
         <Button variant="primary" icon={Plus}>Run New Check</Button>
       </div>
 
-      <SearchToolbar 
-        value={searchTerm} 
-        onChange={setSearchTerm} 
+      <SearchToolbar
+        value={searchTerm}
+        onChange={setSearchTerm}
         placeholder="Search by entity or requester..."
         actions={
             <div className="flex gap-2">
@@ -73,7 +73,7 @@ export const ComplianceConflicts: React.FC<ComplianceConflictsProps> = ({ confli
             </div>
         }
       />
-      
+
       <TableContainer responsive="card">
          <TableHeader>
            <TableHead>Entity Name</TableHead>

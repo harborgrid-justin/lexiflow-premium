@@ -23,7 +23,7 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules';
 import { KnowledgeContent } from './KnowledgeContent';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Utils & Config
 import { cn } from '@/utils/cn';

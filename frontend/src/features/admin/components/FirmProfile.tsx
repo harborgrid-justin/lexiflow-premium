@@ -2,24 +2,30 @@
  * @module components/admin/FirmProfile
  * @category Admin Panel
  * @description Firm profile management with organization details, branding, and configuration.
- * 
+ *
  * THEME SYSTEM USAGE:
  * - theme.surface.default/highlight - Card backgrounds
  * - theme.text.primary/secondary - Labels and content
  * - theme.border.default - Card and input borders
  */
 
-import React, { useState } from 'react';
-import { 
-  Building2, Mail, MapPin, Upload, Save,
-  Edit2, Users, Briefcase, CheckCircle, AlertCircle 
-} from 'lucide-react';
-import { useTheme } from '@/providers';
-import { cn } from '@/utils';
+import { Button, Input } from '@/components/atoms';
 import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { Input } from '@/components/atoms';
 import { useNotify } from '@/hooks';
+import { useTheme } from '@/providers';
+import { cn } from '@/utils/cn';
+import {
+  AlertCircle,
+  Briefcase,
+  Building2,
+  CheckCircle,
+  Edit2,
+  Mail, MapPin,
+  Save,
+  Upload,
+  Users
+} from 'lucide-react';
+import React, { useState } from 'react';
 
 interface FirmDetails {
   name: string;
@@ -98,7 +104,7 @@ export const FirmProfile: React.FC = () => {
       }
       // Handle nested updates
       const newData = { ...prev };
-       
+
       let current: unknown = newData;
       for (let i = 0; i < keys.length - 1; i++) {
         (current as any)[keys[i]] = { ...(current as any)[keys[i]] };
@@ -130,7 +136,7 @@ export const FirmProfile: React.FC = () => {
               <Building2 className={cn("h-10 w-10", theme.text.tertiary)} />
             )}
           </div>
-          
+
           <div>
             <h3 className={cn("text-xl font-bold flex items-center gap-2", theme.text.primary)}>
               {firmDetails.name}
@@ -150,15 +156,15 @@ export const FirmProfile: React.FC = () => {
         <div className="flex gap-2">
           {isEditing ? (
             <>
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 onClick={() => setIsEditing(false)}
                 disabled={isSaving}
               >
                 Cancel
               </Button>
-              <Button 
-                variant="primary" 
+              <Button
+                variant="primary"
                 icon={Save}
                 onClick={handleSave}
                 disabled={isSaving}
@@ -178,19 +184,19 @@ export const FirmProfile: React.FC = () => {
         {/* Basic Information */}
         <Card title={<span className="flex items-center gap-2"><Building2 className="h-4 w-4" />Basic Information</span>}>
           <div className="space-y-4">
-            <Input 
+            <Input
               label="Firm Name"
               value={firmDetails.name}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('name', e.target.value)}
               disabled={!isEditing}
             />
-            <Input 
+            <Input
               label="Legal Name"
               value={firmDetails.legalName}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('legalName', e.target.value)}
               disabled={!isEditing}
             />
-            <Input 
+            <Input
               label="Tax ID / EIN"
               value={firmDetails.taxId}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('taxId', e.target.value)}
@@ -198,14 +204,14 @@ export const FirmProfile: React.FC = () => {
               type="password"
             />
             <div className="grid grid-cols-2 gap-4">
-              <Input 
+              <Input
                 label="Founded Year"
                 value={firmDetails.foundedYear.toString()}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('foundedYear', parseInt(e.target.value) || 0)}
                 disabled={!isEditing}
                 type="number"
               />
-              <Input 
+              <Input
                 label="Attorney Count"
                 value={firmDetails.attorneyCount.toString()}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('attorneyCount', parseInt(e.target.value) || 0)}
@@ -219,20 +225,20 @@ export const FirmProfile: React.FC = () => {
         {/* Contact Information */}
         <Card title={<span className="flex items-center gap-2"><Mail className="h-4 w-4" />Contact Information</span>}>
           <div className="space-y-4">
-            <Input 
+            <Input
               label="Website"
               value={firmDetails.website}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('website', e.target.value)}
               disabled={!isEditing}
             />
-            <Input 
+            <Input
               label="Main Email"
               value={firmDetails.email}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('email', e.target.value)}
               disabled={!isEditing}
               type="email"
             />
-            <Input 
+            <Input
               label="Main Phone"
               value={firmDetails.phone}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('phone', e.target.value)}
@@ -244,20 +250,20 @@ export const FirmProfile: React.FC = () => {
         {/* Address */}
         <Card title={<span className="flex items-center gap-2"><MapPin className="h-4 w-4" />Primary Office Address</span>}>
           <div className="space-y-4">
-            <Input 
+            <Input
               label="Street Address"
               value={firmDetails.address.street}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('address.street', e.target.value)}
               disabled={!isEditing}
             />
             <div className="grid grid-cols-2 gap-4">
-              <Input 
+              <Input
                 label="City"
                 value={firmDetails.address.city}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('address.city', e.target.value)}
                 disabled={!isEditing}
               />
-              <Input 
+              <Input
                 label="State"
                 value={firmDetails.address.state}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('address.state', e.target.value)}
@@ -265,13 +271,13 @@ export const FirmProfile: React.FC = () => {
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <Input 
+              <Input
                 label="ZIP Code"
                 value={firmDetails.address.zip}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('address.zip', e.target.value)}
                 disabled={!isEditing}
               />
-              <Input 
+              <Input
                 label="Country"
                 value={firmDetails.address.country}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateField('address.country', e.target.value)}
@@ -325,9 +331,9 @@ export const FirmProfile: React.FC = () => {
               </div>
               {isEditing && !logoPreview && (
                 <label htmlFor="logo-upload">
-                  <Button 
-                    variant="secondary" 
-                    icon={Upload} 
+                  <Button
+                    variant="secondary"
+                    icon={Upload}
                     className="w-full mt-2"
                     onClick={() => document.getElementById('logo-upload')?.click()}
                   >

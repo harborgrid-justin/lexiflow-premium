@@ -10,29 +10,28 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { AlertCircle, ArrowRight, FileText, TrendingUp } from 'lucide-react';
 import React from 'react';
-import {AlertCircle, TrendingUp, FileText, ArrowRight} from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import {DataService} from '@/services/data/dataService';
+import { DataService } from '@/services/data/dataService';
 
 // CRITICAL FIX: Import from the Hooks layer to avoid the SyntaxError
-import {useQuery} from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
-import {useTheme} from '@/providers';
+import { useTheme } from '@/providers';
 
 // Components
-import {Card} from '@/components/molecules/Card';
-import {Button} from '@/components/atoms/Button';
-import {DateText} from '@/components/molecules/DateText';
-import {EmptyState} from '@/components/molecules/EmptyState';
+import { Button, DateText } from '@/components/atoms';
+import { EmptyState } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Utils & Constants
-import {cn} from '@/utils';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -62,14 +61,14 @@ interface DashboardSidebarProps {
 // COMPONENT
 // ============================================================================
 
-export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({onSelectCase, alerts}) => {
-    const {theme} = useTheme();
+export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ onSelectCase, alerts }) => {
+    const { theme } = useTheme();
 
     // Data Fetching via the centralized hook system
-    const {data: billingStats} = useQuery<BillingStats>(
+    const { data: billingStats } = useQuery<BillingStats>(
         ['billing', 'overview'],
         () => DataService.billing.getOverviewStats(),
-        {initialData: {realization: 0, totalBilled: 0, month: 'Loading...'}}
+        { initialData: { realization: 0, totalBilled: 0, month: 'Loading...' } }
     );
 
     return (
@@ -97,8 +96,8 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({onSelectCase,
                             >
                                 <div
                                     className={cn("mt-0.5 mr-3 shrink-0", alert.caseId ? "text-blue-500" : "text-slate-400")}>
-                                    {alert.caseId ? <AlertCircle className="h-5 w-5"/> :
-                                        <TrendingUp className="h-5 w-5"/>}
+                                    {alert.caseId ? <AlertCircle className="h-5 w-5" /> :
+                                        <TrendingUp className="h-5 w-5" />}
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <p className={cn("text-sm font-semibold leading-tight mb-1", theme.text.primary)}>
@@ -108,14 +107,14 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({onSelectCase,
                                         {alert.detail}
                                     </p>
                                     <div className="mt-2 flex items-center justify-between">
-                                        <DateText date={alert.time} className="text-[10px] font-medium opacity-70"/>
+                                        <DateText date={alert.time} className="text-[10px] font-medium opacity-70" />
                                         {alert.caseId && (
                                             <span className={cn(
                                                 "text-[10px] font-bold flex items-center opacity-0 group-hover:opacity-100 transition-opacity",
                                                 theme.primary.text
                                             )}>
-                        View Matter <ArrowRight className="h-2 w-2 ml-1"/>
-                      </span>
+                                                View Matter <ArrowRight className="h-2 w-2 ml-1" />
+                                            </span>
                                         )}
                                     </div>
                                 </div>
@@ -125,7 +124,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({onSelectCase,
                 </div>
                 <div className={cn("mt-6 pt-4 border-t text-center", theme.border.default)}>
                     <Button variant="ghost" size="sm"
-                            className={cn("text-xs uppercase tracking-wide", theme.text.secondary)}>
+                        className={cn("text-xs uppercase tracking-wide", theme.text.secondary)}>
                         View Notification Center
                     </Button>
                 </div>
@@ -135,7 +134,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({onSelectCase,
             <div className={cn("rounded-xl p-6 shadow-xl border", theme.surface.overlay, theme.text.inverse)}>
                 <div className="flex items-center mb-6">
                     <div className="p-2.5 bg-white/10 rounded-lg mr-4 border border-white/10">
-                        <FileText className="h-5 w-5 text-blue-300"/>
+                        <FileText className="h-5 w-5 text-blue-300" />
                     </div>
                     <div>
                         <h4 className="font-bold text-lg leading-none">Billing Cycle</h4>
@@ -160,7 +159,7 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({onSelectCase,
                 <div className="w-full bg-black/20 h-1.5 rounded-full mt-4 overflow-hidden">
                     <div
                         className="bg-blue-500 h-1.5 rounded-full transition-all duration-500"
-                        style={{width: `${billingStats?.realization}%`}}
+                        style={{ width: `${billingStats?.realization}%` }}
                     ></div>
                 </div>
             </div>

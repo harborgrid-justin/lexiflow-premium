@@ -1,11 +1,11 @@
 
-import React from 'react';
-import { SearchResult } from '@/types';
-import { ExternalLink } from 'lucide-react';
-import { Badge } from '@/components/atoms';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { useReadAnalytics } from '@/hooks/useReadAnalytics';
+import { useTheme } from '@/providers/ThemeContext';
+import { SearchResult } from '@/types';
+import { cn } from '@/utils/cn';
+import { ExternalLink } from 'lucide-react';
+import React from 'react';
 
 interface ResearchResultCardProps {
     source: SearchResult;
@@ -20,7 +20,7 @@ export const ResearchResultCard: React.FC<ResearchResultCardProps> = ({ source, 
     });
 
     return (
-        <div 
+        <div
             ref={ref}
             className={cn(
                 "p-4 rounded-lg border transition-all shadow-sm flex flex-col group cursor-pointer",

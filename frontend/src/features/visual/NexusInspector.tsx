@@ -19,7 +19,7 @@ import { X, User, Building, Fingerprint, ExternalLink } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -56,7 +56,7 @@ export const NexusInspector = ({ item, onClose }: NexusInspectorProps) => {
   };
 
   const original = item.original;
-  
+
   return (
     <div className={cn("h-full flex flex-col border-l shadow-xl bg-white animate-in slide-in-from-right duration-300", theme.border.default)}>
         <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
@@ -85,7 +85,7 @@ export const NexusInspector = ({ item, onClose }: NexusInspectorProps) => {
                     <p className="text-xs italic text-slate-500">"{(original as EvidenceItem).description}"</p>
                 </div>
             )}
-            
+
             <div className="pt-4 border-t">
                  <Button variant="outline" className="w-full" icon={ExternalLink}>View Full Record</Button>
             </div>

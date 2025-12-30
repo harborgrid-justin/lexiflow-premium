@@ -3,12 +3,18 @@
  * Provides fallback when Gemini quota is exceeded
  */
 
-import OpenAI from 'openai';
-import { ParsedDocket } from '@/types';
-import { withRetry } from '@/utils/apiUtils';
-import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, ShepardizeResult } from '@/types/ai';
-import { defaultStorage } from '@/services/data/dataService';
-import { MissingConfigurationError} from '@/services/core/errors';
+import { MissingConfigurationError } from "@/services/core/errors";
+import { defaultStorage } from "@/services/infrastructure/adapters/StorageAdapter";
+import { ParsedDocket } from "@/types";
+import {
+  AnalyzedDoc,
+  BriefCritique,
+  IntentResult,
+  ResearchResponse,
+  ShepardizeResult,
+} from "@/types/ai";
+import { withRetry } from "@/utils/apiUtils";
+import OpenAI from "openai";
 
 // Note: Import AI types from @/types, don't re-export them
 
@@ -17,17 +23,22 @@ import { MissingConfigurationError} from '@/services/core/errors';
 // =============================================================================
 
 const getClient = () => {
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY || 
-                 import.meta.env.OPENAI_API_KEY || 
-                 (typeof localStorage !== 'undefined' ? defaultStorage.getItem('openai_api_key') : null);
-  
+  const apiKey =
+    import.meta.env.VITE_OPENAI_API_KEY ||
+    import.meta.env.OPENAI_API_KEY ||
+    (typeof localStorage !== "undefined"
+      ? defaultStorage.getItem("openai_api_key")
+      : null);
+
   if (!apiKey) {
-    throw new MissingConfigurationError('OpenAI API key not configured. Please set VITE_OPENAI_API_KEY environment variable or openai_api_key in storage.');
+    throw new MissingConfigurationError(
+      "OpenAI API key not configured. Please set VITE_OPENAI_API_KEY environment variable or openai_api_key in storage."
+    );
   }
-  
-  return new OpenAI({ 
+
+  return new OpenAI({
     apiKey,
-    dangerouslyAllowBrowser: true // For client-side use - move to backend in production
+    dangerouslyAllowBrowser: true, // For client-side use - move to backend in production
   });
 };
 
@@ -41,23 +52,30 @@ export const OpenAIService = {
       try {
         const client = getClient();
         const response = await client.responses.create({
-          model: 'gpt-4o-mini',
-          instructions: 'You are a legal document analyzer. Analyze the document and provide a risk score (0-100) and summary.',
+          model: "gpt-4o-mini",
+          instructions:
+            "You are a legal document analyzer. Analyze the document and provide a risk score (0-100) and summary.",
           input: `Analyze this legal document and return JSON with {summary: string, riskScore: number}:\n\n${content.slice(0, 10000)}`,
           text: {
             format: {
-              type: 'json_object'
-            }
+              type: "json_object",
+            },
           },
-          temperature: 0.3
+          temperature: 0.3,
         });
 
-        const textContent = response.output_text || '';
-        const result = JSON.parse(textContent || '{}');
-        return { summary: result.summary || 'Analysis unavailable', riskScore: result.riskScore || 0 };
+        const textContent = response.output_text || "";
+        const result = JSON.parse(textContent || "{}");
+        return {
+          summary: result.summary || "Analysis unavailable",
+          riskScore: result.riskScore || 0,
+        };
       } catch (e) {
-        console.error('OpenAI Analysis Error:', e);
-        return { summary: 'Analysis unavailable due to service error.', riskScore: 0 };
+        console.error("OpenAI Analysis Error:", e);
+        return {
+          summary: "Analysis unavailable due to service error.",
+          riskScore: 0,
+        };
       }
     });
   },
@@ -67,29 +85,36 @@ export const OpenAIService = {
       try {
         const client = getClient();
         const response = await client.responses.create({
-          model: 'gpt-4o',
-          instructions: 'You are a senior legal partner reviewing a brief. Provide constructive critique.',
+          model: "gpt-4o",
+          instructions:
+            "You are a senior legal partner reviewing a brief. Provide constructive critique.",
           input: `Critique this brief and return JSON with {score: number, strengths: string[], weaknesses: string[], suggestions: string[], missingAuthority: string[]}:\n\n${text.slice(0, 15000)}`,
           text: {
             format: {
-              type: 'json_object'
-            }
+              type: "json_object",
+            },
           },
-          temperature: 0.4
+          temperature: 0.4,
         });
 
-        const textContent = response.output_text || '';
-        const result = JSON.parse(textContent || '{}');
+        const textContent = response.output_text || "";
+        const result = JSON.parse(textContent || "{}");
         return {
           score: result.score || 0,
           strengths: result.strengths || [],
-          weaknesses: result.weaknesses || ['Analysis unavailable'],
+          weaknesses: result.weaknesses || ["Analysis unavailable"],
           suggestions: result.suggestions || [],
-          missingAuthority: result.missingAuthority || []
+          missingAuthority: result.missingAuthority || [],
         };
       } catch (e) {
-        console.error('OpenAI Critique Error:', e);
-        return { score: 0, strengths: [], weaknesses: ['Service Error'], suggestions: [], missingAuthority: [] };
+        console.error("OpenAI Critique Error:", e);
+        return {
+          score: 0,
+          strengths: [],
+          weaknesses: ["Service Error"],
+          suggestions: [],
+          missingAuthority: [],
+        };
       }
     });
   },
@@ -99,46 +124,60 @@ export const OpenAIService = {
       try {
         const client = getClient();
         const response = await client.responses.create({
-          model: 'gpt-4o-mini',
-          instructions: 'You are a contract review attorney. Identify risks and missing clauses.',
+          model: "gpt-4o-mini",
+          instructions:
+            "You are a contract review attorney. Identify risks and missing clauses.",
           input: `Review this contract:\n\n${text.slice(0, 10000)}`,
-          temperature: 0.3
+          temperature: 0.3,
         });
 
-        return response.output_text || 'Error reviewing contract.';
+        return response.output_text || "Error reviewing contract.";
       } catch (e) {
-        return 'Contract review service unavailable.';
+        return "Contract review service unavailable.";
       }
     });
   },
 
-  async *streamDraft(context: string, type: string): AsyncGenerator<string, void, unknown> {
+  async *streamDraft(
+    context: string,
+    type: string
+  ): AsyncGenerator<string, void, unknown> {
     try {
       const client = getClient();
       const stream = await client.responses.create({
-        model: 'gpt-4o',
+        model: "gpt-4o",
         instructions: `You are a legal drafting assistant. Generate a professional ${type}.`,
         input: context.slice(0, 10000),
         stream: true,
-        temperature: 0.7
+        temperature: 0.7,
       });
 
       for await (const event of stream) {
-        const eventObj = event as { type?: string; item?: { type?: string; content?: Array<{ type?: string; text?: string }> }; delta?: { type?: string; text?: string } };
-        if (eventObj.type === 'response.output_item.added' && eventObj.item?.type === 'message') {
+        const eventObj = event as {
+          type?: string;
+          item?: {
+            type?: string;
+            content?: Array<{ type?: string; text?: string }>;
+          };
+          delta?: { type?: string; text?: string };
+        };
+        if (
+          eventObj.type === "response.output_item.added" &&
+          eventObj.item?.type === "message"
+        ) {
           const content = eventObj.item.content?.[0];
-          if (content && content.type === 'output_text') {
-            yield content.text || '';
+          if (content && content.type === "output_text") {
+            yield content.text || "";
           }
-        } else if (eventObj.type === 'response.output_item.delta') {
+        } else if (eventObj.type === "response.output_item.delta") {
           const delta = eventObj.delta;
-          if (delta && delta.type === 'output_text' && delta.text) {
+          if (delta && delta.type === "output_text" && delta.text) {
             yield delta.text;
           }
         }
       }
     } catch (e) {
-      yield 'Error streaming content.';
+      yield "Error streaming content.";
     }
   },
 
@@ -147,15 +186,15 @@ export const OpenAIService = {
       try {
         const client = getClient();
         const response = await client.responses.create({
-          model: 'gpt-4o',
+          model: "gpt-4o",
           instructions: `You are a legal drafting assistant. Generate a professional ${type}.`,
           input: prompt.slice(0, 10000),
-          temperature: 0.7
+          temperature: 0.7,
         });
 
-        return response.output_text || 'Error generating content.';
+        return response.output_text || "Error generating content.";
       } catch (e) {
-        return 'Generation failed.';
+        return "Generation failed.";
       }
     });
   },
@@ -165,22 +204,26 @@ export const OpenAIService = {
       try {
         const client = getClient();
         const response = await client.responses.create({
-          model: 'gpt-4o-mini',
-          instructions: 'Predict user intent and return JSON with {action: string, confidence: number}',
+          model: "gpt-4o-mini",
+          instructions:
+            "Predict user intent and return JSON with {action: string, confidence: number}",
           input: query,
           text: {
             format: {
-              type: 'json_object'
-            }
+              type: "json_object",
+            },
           },
-          temperature: 0.2
+          temperature: 0.2,
         });
 
-        const textContent = response.output_text || '';
-        const result = JSON.parse(textContent || '{}');
-        return { action: result.action || 'UNKNOWN', confidence: result.confidence || 0 };
+        const textContent = response.output_text || "";
+        const result = JSON.parse(textContent || "{}");
+        return {
+          action: result.action || "UNKNOWN",
+          confidence: result.confidence || 0,
+        };
       } catch (e) {
-        return { action: 'UNKNOWN', confidence: 0 };
+        return { action: "UNKNOWN", confidence: 0 };
       }
     });
   },
@@ -190,21 +233,22 @@ export const OpenAIService = {
       try {
         const client = getClient();
         const response = await client.responses.create({
-          model: 'gpt-4o-mini',
-          instructions: 'Extract case data from docket and return structured JSON.',
+          model: "gpt-4o-mini",
+          instructions:
+            "Extract case data from docket and return structured JSON.",
           input: `Parse this docket:\n\n${text.slice(0, 10000)}`,
           text: {
             format: {
-              type: 'json_object'
-            }
+              type: "json_object",
+            },
           },
-          temperature: 0.1
+          temperature: 0.1,
         });
 
-        const textContent = response.output_text || '';
-        return JSON.parse(textContent || '{}');
+        const textContent = response.output_text || "";
+        return JSON.parse(textContent || "{}");
       } catch (e) {
-        console.error('Docket Parse Error', e);
+        console.error("Docket Parse Error", e);
         return {};
       }
     });
@@ -215,20 +259,21 @@ export const OpenAIService = {
       try {
         const client = getClient();
         const response = await client.responses.create({
-          model: 'gpt-4o',
-          instructions: 'You are a legal research assistant. Provide thorough legal analysis.',
+          model: "gpt-4o",
+          instructions:
+            "You are a legal research assistant. Provide thorough legal analysis.",
           input: query,
-          temperature: 0.3
+          temperature: 0.3,
         });
 
         return {
-          text: response.output_text || 'Research unavailable.',
-          sources: []
+          text: response.output_text || "Research unavailable.",
+          sources: [],
         };
       } catch (e) {
         return {
-          text: 'Research service unavailable.',
-          sources: []
+          text: "Research service unavailable.",
+          sources: [],
         };
       }
     });
@@ -239,15 +284,15 @@ export const OpenAIService = {
       try {
         const client = getClient();
         const response = await client.responses.create({
-          model: 'gpt-4o-mini',
+          model: "gpt-4o-mini",
           instructions: `Draft a professional reply to this message from a ${role}.`,
           input: lastMsg,
-          temperature: 0.5
+          temperature: 0.5,
         });
 
-        return response.output_text || '';
+        return response.output_text || "";
       } catch (e) {
-        return 'Unable to generate reply.';
+        return "Unable to generate reply.";
       }
     });
   },
@@ -257,10 +302,11 @@ export const OpenAIService = {
       try {
         const client = getClient();
         const response = await client.responses.create({
-          model: 'gpt-4o-mini',
-          instructions: 'Rewrite time entries to be ABA-compliant and professional.',
+          model: "gpt-4o-mini",
+          instructions:
+            "Rewrite time entries to be ABA-compliant and professional.",
           input: desc,
-          temperature: 0.3
+          temperature: 0.3,
         });
 
         return response.output_text || desc;
@@ -275,34 +321,35 @@ export const OpenAIService = {
       try {
         const client = getClient();
         const response = await client.responses.create({
-          model: 'gpt-4o',
-          instructions: 'You are a legal research assistant. Analyze case citation validity and treatment history. Return JSON with {caseName: string, citation: string, summary: string, history: array, treatment: array}.',
+          model: "gpt-4o",
+          instructions:
+            "You are a legal research assistant. Analyze case citation validity and treatment history. Return JSON with {caseName: string, citation: string, summary: string, history: array, treatment: array}.",
           input: `Shepardize this citation: ${citation}`,
           text: {
             format: {
-              type: 'json_object'
-            }
+              type: "json_object",
+            },
           },
-          temperature: 0.2
+          temperature: 0.2,
         });
 
-        const textContent = response.output_text || '';
-        const result = JSON.parse(textContent || '{}');
+        const textContent = response.output_text || "";
+        const result = JSON.parse(textContent || "{}");
         return {
-          caseName: result.caseName || 'Unknown Case',
+          caseName: result.caseName || "Unknown Case",
           citation: result.citation || citation,
-          summary: result.summary || 'No summary available',
+          summary: result.summary || "No summary available",
           history: result.history || [],
-          treatment: result.treatment || []
+          treatment: result.treatment || [],
         };
       } catch (e) {
-        console.error('Shepardize Error:', e);
+        console.error("Shepardize Error:", e);
         return {
-          caseName: 'Unknown Case',
+          caseName: "Unknown Case",
           citation: citation,
-          summary: 'Analysis unavailable',
+          summary: "Analysis unavailable",
           history: [],
-          treatment: []
+          treatment: [],
         };
       }
     });
@@ -313,21 +360,22 @@ export const OpenAIService = {
       try {
         const client = getClient();
         const response = await client.responses.create({
-          model: 'gpt-4o',
-          instructions: 'Extract structured case data from unstructured text. Return JSON with case details including parties, attorneys, dates, court, etc.',
+          model: "gpt-4o",
+          instructions:
+            "Extract structured case data from unstructured text. Return JSON with case details including parties, attorneys, dates, court, etc.",
           input: `Extract case data from this text:\n\n${text.slice(0, 15000)}`,
           text: {
             format: {
-              type: 'json_object'
-            }
+              type: "json_object",
+            },
           },
-          temperature: 0.1
+          temperature: 0.1,
         });
 
-        const textContent = response.output_text || '';
-        return JSON.parse(textContent || '{}');
+        const textContent = response.output_text || "";
+        return JSON.parse(textContent || "{}");
       } catch (e) {
-        console.error('Extract Case Data Error:', e);
+        console.error("Extract Case Data Error:", e);
         return {};
       }
     });
@@ -342,7 +390,10 @@ export const OpenAIService = {
    * @param query - Research query
    * @param jurisdiction - Optional jurisdiction filter
    */
-  async legalResearch(query: string, _jurisdiction?: string): Promise<ResearchResponse> {
+  async legalResearch(
+    query: string,
+    _jurisdiction?: string
+  ): Promise<ResearchResponse> {
     return this.conductResearch(query);
   },
 
@@ -354,11 +405,11 @@ export const OpenAIService = {
     // Validate first citation for now (API limitation)
     if (citations.length === 0) {
       return {
-        caseName: 'No citations provided',
-        citation: '',
-        summary: 'No citations to validate',
+        caseName: "No citations provided",
+        citation: "",
+        summary: "No citations to validate",
         history: [],
-        treatment: []
+        treatment: [],
       };
     }
     return this.shepardizeCitation(citations[0]);
@@ -369,8 +420,11 @@ export const OpenAIService = {
    * @param prompt - Draft prompt
    * @param onChunk - Callback for streaming chunks
    */
-  async draftDocument(prompt: string, onChunk: (chunk: string) => void): Promise<void> {
-    const stream = this.streamDraft(prompt, 'document');
+  async draftDocument(
+    prompt: string,
+    onChunk: (chunk: string) => void
+  ): Promise<void> {
+    const stream = this.streamDraft(prompt, "document");
     for await (const chunk of stream) {
       onChunk(chunk);
     }
@@ -382,7 +436,7 @@ export const OpenAIService = {
    */
   async suggestReply(threadMessages: string[]): Promise<string> {
     // Use the last message for context
-    const lastMessage = threadMessages[threadMessages.length - 1] || '';
-    return this.generateReply(lastMessage, 'professional');
-  }
+    const lastMessage = threadMessages[threadMessages.length - 1] || "";
+    return this.generateReply(lastMessage, "professional");
+  },
 };

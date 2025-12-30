@@ -1,9 +1,9 @@
 /**
  * CitationDetail.tsx
- * 
+ *
  * Detailed citation view with AI-powered analysis, Shepardization status,
  * and linked cases. Shows treatment history and citing authority strength.
- * 
+ *
  * @module components/citation/CitationDetail
  * @category Legal Research - Citation Details
  */
@@ -18,7 +18,7 @@ import { X, BookOpen, ExternalLink, CheckCircle, AlertTriangle, Link, Wand2, Loa
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -109,8 +109,8 @@ export const CitationDetail: React.FC<CitationDetailProps> = ({ citation, onClos
             <div className="space-y-3">
                 <div className={cn("flex justify-between items-center border-b pb-2", theme.border.default)}>
                     <h4 className={cn("text-xs font-bold uppercase", theme.text.tertiary)}>AI Analysis</h4>
-                    <button 
-                        onClick={handleAIAnalysis} 
+                    <button
+                        onClick={handleAIAnalysis}
                         disabled={analyzing}
                         className="text-xs flex items-center text-purple-600 hover:bg-purple-50 px-2 py-1 rounded transition-colors"
                     >
@@ -136,5 +136,3 @@ export const CitationDetail: React.FC<CitationDetailProps> = ({ citation, onClos
     </div>
   );
 };
-
-

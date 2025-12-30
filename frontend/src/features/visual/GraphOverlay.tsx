@@ -20,7 +20,7 @@ import { ZoomIn, ZoomOut, RefreshCw, Activity, Layers } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -63,8 +63,8 @@ export const GraphOverlay = ({ scale: _scale, setScale, onReheat, isStable, node
         <div className="absolute top-4 left-4 z-10 flex gap-2">
             <span className={cn(
                 "text-[10px] font-bold px-2 py-1 rounded-full border flex items-center gap-1 transition-colors shadow-sm",
-                isStable 
-                    ? cn(theme.surface.default, theme.text.secondary, theme.border.default) 
+                isStable
+                    ? cn(theme.surface.default, theme.text.secondary, theme.border.default)
                     : cn(theme.status.success.bg, theme.status.success.text, theme.status.success.border)
             )}>
                 <Activity className={cn("h-3 w-3", !isStable && "animate-pulse")} />

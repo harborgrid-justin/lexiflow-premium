@@ -1,12 +1,12 @@
 /**
  * NotificationDomain - Real-time notification and alert service
  * Provides notification management, read/unread tracking, and channel subscriptions
- * 
+ *
  * ? Migrated to backend API (2025-12-21)
  */
 
 import { communicationsApi } from '@/api/domains/communications.api';
-import { defaultStorage } from '@/services/data/dataService';
+import { defaultStorage } from '@/services/infrastructure/adapters/StorageAdapter';
 
 interface Notification {
   id: string;
@@ -51,7 +51,7 @@ export const NotificationService = {
     await communicationsApi.notifications?.delete?.(id);
     return true;
   },
-  
+
   // Notification specific methods
   getNotifications: async (filters?: { read?: boolean; type?: string; limit?: number }): Promise<Notification[]> => {
     const rawNotifications = await communicationsApi.notifications?.getAll?.() || [];
@@ -78,7 +78,7 @@ export const NotificationService = {
 
     return notifications;
   },
-  
+
   markAsRead: async (notificationId: string): Promise<boolean> => {
     try {
       await NotificationService.update(notificationId, { read: true });
@@ -87,7 +87,7 @@ export const NotificationService = {
       return false;
     }
   },
-  
+
   markAllAsRead: async (): Promise<boolean> => {
     try {
       const rawNotifications = await communicationsApi.notifications?.getAll?.() || [];
@@ -105,36 +105,36 @@ export const NotificationService = {
       return false;
     }
   },
-  
+
   getUnreadCount: async (): Promise<number> => {
     const rawNotifications = await communicationsApi.notifications?.getAll?.() || [];
     const notifications = rawNotifications as unknown as Notification[];
     return notifications.filter((n: Notification) => !n.read).length;
   },
-  
+
   subscribe: async (channel: string): Promise<boolean> => {
     try {
       const stored = defaultStorage.getItem(SUBSCRIPTIONS_KEY);
       const subscriptions = stored ? JSON.parse(stored) : [];
-      
+
       if (!subscriptions.includes(channel)) {
         subscriptions.push(channel);
         defaultStorage.setItem(SUBSCRIPTIONS_KEY, JSON.stringify(subscriptions));
       }
-      
+
       console.log(`[NotificationService] Subscribed to channel: ${channel}`);
       return true;
     } catch (error) {
       return false;
     }
   },
-  
+
   unsubscribe: async (channel: string): Promise<boolean> => {
     try {
       const stored = defaultStorage.getItem(SUBSCRIPTIONS_KEY);
       const subscriptions = stored ? JSON.parse(stored) : [];
       const updated = subscriptions.filter((c: string) => c !== channel);
-      
+
       defaultStorage.setItem(SUBSCRIPTIONS_KEY, JSON.stringify(updated));
       console.log(`[NotificationService] Unsubscribed from channel: ${channel}`);
       return true;

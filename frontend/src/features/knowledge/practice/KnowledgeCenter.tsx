@@ -24,7 +24,7 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Badge } from '@/components/atoms';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Tabs } from '@/components/molecules';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms';
 import { KnowledgeAnalytics } from '../base/KnowledgeAnalytics';

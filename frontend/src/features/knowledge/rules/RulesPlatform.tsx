@@ -21,7 +21,7 @@ import { useTheme } from '@/providers/ThemeContext';
 
 // Components
 import { PageHeader } from '@/components/organisms';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { LazyLoader } from '@/components/molecules';
 import { RulesPlatformContent } from './RulesPlatformContent';
 
@@ -49,7 +49,7 @@ export const RulesPlatform: React.FC<RulesPlatformProps> = ({ initialTab }) => {
       if (initialTab) setActiveTab(initialTab);
   }, [initialTab]);
 
-  const activeParentTab = useMemo(() => 
+  const activeParentTab = useMemo(() =>
     RULES_PLATFORM_TABS.find(p => p.subTabs.some(s => s.id === activeTab)) || RULES_PLATFORM_TABS[0],
   [activeTab]);
 
@@ -63,8 +63,8 @@ export const RulesPlatform: React.FC<RulesPlatformProps> = ({ initialTab }) => {
   return (
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
       <div className="px-6 pt-6 shrink-0">
-        <PageHeader 
-            title="Legal Authority Management" 
+        <PageHeader
+            title="Legal Authority Management"
             subtitle="Comprehensive legal authority management, compliance tracking, and judicial standing orders."
             actions={
               <div className="flex gap-2">
@@ -82,7 +82,7 @@ export const RulesPlatform: React.FC<RulesPlatformProps> = ({ initialTab }) => {
                     onClick={() => handleParentTabChange(parent.id)}
                     className={cn(
                         "flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2",
-                        activeParentTab.id === parent.id 
+                        activeParentTab.id === parent.id
                             ? cn("border-current", theme.primary.text)
                             : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`)
                     )}
@@ -97,13 +97,13 @@ export const RulesPlatform: React.FC<RulesPlatformProps> = ({ initialTab }) => {
         {activeParentTab.subTabs.length > 1 && (
             <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surface.highlight, theme.border.default)}>
                 {activeParentTab.subTabs.map(tab => (
-                    <button 
-                        key={tab.id} 
-                        onClick={() => setActiveTab(tab.id as RulesView)} 
+                    <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id as RulesView)}
                         className={cn(
                             "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
-                            activeTab === tab.id 
-                                ? cn(theme.surface.default, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
+                            activeTab === tab.id
+                                ? cn(theme.surface.default, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border)
                                 : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface.default}`)
                         )}
                     >

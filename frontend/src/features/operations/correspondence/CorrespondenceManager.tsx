@@ -37,7 +37,7 @@ import { CorrespondenceDetail } from './CorrespondenceDetail';
 import { CorrespondenceErrorBoundary } from './CorrespondenceErrorBoundary';
 import { CreateServiceJobModal } from './CreateServiceJobModal';
 import { ServiceTracker } from './ServiceTracker';
-import { CommunicationLogSkeleton, CorrespondenceDetailSkeleton, ServiceTrackerSkeleton } from './skeletons';
+import { CommunicationLogSkeleton, CorrespondenceDetailSkeleton, ServiceTrackerSkeleton } from './CorrespondenceSkeleton';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

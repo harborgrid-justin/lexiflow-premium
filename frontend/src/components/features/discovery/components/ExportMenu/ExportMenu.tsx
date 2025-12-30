@@ -21,7 +21,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
 // Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -45,9 +45,9 @@ export const ExportMenu = React.memo<ExportMenuProps>(({ onExport }) => {
 
   return (
     <div className="relative inline-block text-left" ref={menuRef}>
-      <Button 
-        variant="secondary" 
-        icon={Download} 
+      <Button
+        variant="secondary"
+        icon={Download}
         onClick={() => setIsOpen(!isOpen)}
         aria-haspopup="true"
         aria-expanded={isOpen}

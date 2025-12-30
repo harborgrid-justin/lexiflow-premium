@@ -26,7 +26,7 @@ import { useTheme } from '@/providers/ThemeContext';
 
 // Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Badge } from '@/components/atoms';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { AdaptiveLoader } from '@/components/molecules';
 
 // Utils & Constants

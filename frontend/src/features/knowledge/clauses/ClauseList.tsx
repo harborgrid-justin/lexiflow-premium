@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { Clause } from '@/types';
 import { DataService } from '@/services/data/dataService';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { SearchToolbar } from '@/components/organisms';
 import { Copy, History, Loader2, BookOpen, Check } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
@@ -29,7 +29,7 @@ export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
     );
 
     const filteredClauses = useMemo(() => filterClauses(clauses, searchTerm), [clauses, searchTerm]);
-    
+
     const handleCopy = (content: string, id: string, e: React.MouseEvent) => {
         e.stopPropagation();
         navigator.clipboard.writeText(content);
@@ -38,9 +38,9 @@ export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
     };
 
     const renderRow = (clause: Clause) => (
-      <div 
-        key={clause.id} 
-        onClick={() => onSelectClause(clause)} 
+      <div
+        key={clause.id}
+        onClick={() => onSelectClause(clause)}
         className={cn("flex items-center border-b h-[64px] px-6 cursor-pointer hover:bg-slate-50 transition-colors group", theme.border.default)}
       >
           <div className="flex-1 min-w-0 pr-4">
@@ -66,7 +66,7 @@ export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
             <div className={cn("p-4 border-b shrink-0", theme.border.default)}>
                 <SearchToolbar value={searchTerm} onChange={setSearchTerm} placeholder="Search clauses..." className="border-none shadow-none p-0" />
             </div>
-            
+
             <div className={cn("flex-1 min-h-0 flex flex-col bg-white border-t", theme.border.default)}>
                 <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider bg-slate-50", theme.border.default, theme.text.secondary)}>
                     <div className="flex-1">Clause Name & Category</div>
@@ -86,5 +86,3 @@ export const ClauseList: React.FC<ClauseListProps> = ({ onSelectClause }) => {
     );
 };
 export default ClauseList;
-
-

@@ -1,6 +1,4 @@
 
-import React from 'react';
-
 import { DollarSign, TrendingDown, AlertTriangle, Loader2 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area, CartesianGrid } from 'recharts';
 

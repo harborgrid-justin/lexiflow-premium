@@ -9,7 +9,7 @@ import type { tokens } from '@/components/theme/tokens';
 
 type Theme = typeof tokens.colors.light;
 
-export const getBackdrop = (theme: Theme) => cn(
+export const getBackdrop = () => cn(
   "fixed inset-0 bg-black/50 backdrop-blur-sm z-[100]",
   "animate-in fade-in duration-200"
 );
@@ -86,7 +86,7 @@ export const getCommandDescription = (theme: Theme) => cn(
   theme.text.secondary
 );
 
-export const getBadge = (theme: Theme) => cn(
+export const getBadge = () => cn(
   "px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider",
   "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
 );
@@ -122,6 +122,6 @@ export const aiIndicator = cn(
   "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300"
 );
 
-export const getAiText = (theme: Theme) => cn(
+export const getAiText = () => cn(
   "text-[10px] font-bold uppercase tracking-wider"
 );

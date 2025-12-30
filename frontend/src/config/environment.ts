@@ -98,7 +98,7 @@ export const getEnvConfig = (): EnvironmentConfig => {
 
 // For backward compatibility, export as a constant but access via getter
 export const ENV_CONFIG = new Proxy({} as EnvironmentConfig, {
-  get(target, prop) {
+  get(_, prop) {
     return getEnvConfig()[prop as keyof EnvironmentConfig];
   }
 });

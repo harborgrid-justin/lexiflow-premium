@@ -15,10 +15,10 @@ type Story = StoryObj<typeof StatusIndicator>;
 
 export const Default: Story = {
   args: {
-  "type": {},
+  type: undefined,
   "label": "Sample Text",
   "className": "Sample Text",
-  "size": {},
+  size: undefined,
   "pulse": true
 },
 };

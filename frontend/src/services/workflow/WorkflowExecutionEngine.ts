@@ -6,7 +6,7 @@
  */
 
 import { EventEmitter } from 'events';
-import { WorkflowExecutionError, ValidationError, OperationError } from '@/services/core/errors';
+import { WorkflowExecutionError, OperationError } from '@/services/core/errors';
 import type { WorkflowNode, WorkflowConnection } from '@/types/workflow-types';
 import type {
   EnhancedWorkflowInstance,
@@ -15,7 +15,6 @@ import type {
   ParallelExecutionConfig,
   ParallelBranch,
   SLAConfig,
-  ApprovalChain,
   WorkflowState,
   WorkflowSnapshot,
 } from '@/types/workflow-advanced-types';
@@ -130,7 +129,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
       // Find start node
       const startNode = this.workflow.nodes.find((n: WorkflowNode) => n.type === 'Start');
       if (!startNode) {
-        throw new WorkflowExecutionError('No start node found in workflow');
+        throw new WorkflowExecutionError(this.workflow.id, 'none', 'No start node found in workflow');
       }
 
       // Setup auto-snapshots if enabled
@@ -174,7 +173,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
       this.emit('paused', this.context);
       
       // Pause SLA timers
-      this.slaTimers.forEach((timer, nodeId) => {
+      this.slaTimers.forEach((timer) => {
         clearTimeout(timer);
       });
     }
@@ -258,7 +257,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
       // Execute node based on type
       switch (node.type) {
         case 'Start':
-          result = await this._executeStartNode(node);
+          result = await this._executeStartNode();
           break;
         case 'End':
           result = await this._executeEndNode(node);
@@ -299,13 +298,14 @@ export class WorkflowExecutionEngine extends EventEmitter {
         return await this._executeParallelNodes(nextNodes);
       }
     } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
       this.context.errors.push({
         nodeId: node.id,
-        error: error.message,
+        error: errorMessage,
         timestamp: new Date(),
       });
-      
-      this.emit('node_failed', { node, context: this.context, error: error.message });
+
+      this.emit('node_failed', { node, context: this.context, error: errorMessage });
       
       // Check if we should retry
       if (this.options.maxRetries && this.options.maxRetries > 0) {
@@ -319,7 +319,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
   /**
    * Execute start node
    */
-  private async _executeStartNode(node: WorkflowNode): Promise<unknown> {
+  private async _executeStartNode(): Promise<unknown> {
     return { type: 'start', timestamp: new Date() };
   }
 
@@ -343,7 +343,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
     if (this.options.enableApprovals && node.config.requiresApproval) {
       const approved = await this._handleApproval(node);
       if (!approved) {
-        throw new WorkflowExecutionError('Approval rejected');
+        throw new WorkflowExecutionError(this.workflow.id, node.id, 'Approval rejected');
       }
     }
 
@@ -482,7 +482,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
    */
   private async _retryNode(node: WorkflowNode, attemptNumber: number = 1): Promise<unknown> {
     if (attemptNumber > (this.options.maxRetries || 3)) {
-      throw new OperationError(`Max retries exceeded for node ${node.id}`);
+      throw new OperationError(`node_retry_${node.id}`, `Max retries exceeded for node ${node.id}`);
     }
 
     await this._delay(1000 * attemptNumber); // Exponential backoff
@@ -557,9 +557,9 @@ export class WorkflowExecutionEngine extends EventEmitter {
         case 'equals':
           return value === rule.value;
         case 'greater_than':
-          return value > rule.value;
+          return (value as number) > (rule.value as number);
         case 'less_than':
-          return value < rule.value;
+          return (value as number) < (rule.value as number);
         default:
           return false;
       }

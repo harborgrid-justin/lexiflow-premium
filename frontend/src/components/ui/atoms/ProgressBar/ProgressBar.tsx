@@ -10,7 +10,6 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -52,10 +51,10 @@ export function ProgressBar({
         <span id={"progress-label-"}>{label}</span>
         {showValue && <span className={cn(valueStyles, theme.text.primary)}>{value}%</span>}
       </div>
-      <div 
+      <div
         className={cn(trackStyles, theme.surface.highlight)}
         role="progressbar"
-        aria-label={label || `Progress: ${progress}%`}
+        aria-label={label || `Progress: ${value}%`}
         aria-valuenow={value}
         aria-valuemin={0}
         aria-valuemax={100}

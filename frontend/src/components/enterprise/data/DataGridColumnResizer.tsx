@@ -18,12 +18,11 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // ============================================================================
@@ -113,6 +112,7 @@ export function useColumnResizer(
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
+    return undefined;
   }, [isResizing, handleMouseMove, handleMouseUp]);
 
   return {
@@ -137,7 +137,6 @@ export function ColumnResizer({
   onResizeEnd,
   className,
 }: ColumnResizerProps) {
-  const { theme } = useTheme();
   const { isResizing, handleMouseDown } = useColumnResizer(columnId, currentWidth, {
     minWidth,
     maxWidth,
@@ -195,7 +194,6 @@ ColumnResizer.displayName = 'ColumnResizer';
  */
 export function calculateAutoFitWidth<T>(
   data: T[],
-  columnId: string,
   accessor: (item: T) => unknown,
   headerText: string,
   minWidth: number = 50,

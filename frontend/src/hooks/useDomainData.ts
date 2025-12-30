@@ -47,35 +47,35 @@ export interface UseQueryResult<T> extends QueryState<T> {
  * Fetch all cases from the data service.
  */
 export function useCases(): UseQueryResult<Case[]> {
-    return useQuery<Case[]>(queryKeys.cases.all(), () => DataService.cases.getAll());
+    return useQuery<Case[]>(queryKeys.cases.all(), () => (DataService.cases as any).getAll());
 }
 
 /**
  * Fetch all documents from the data service.
  */
 export function useDocuments(): UseQueryResult<LegalDocument[]> {
-    return useQuery<LegalDocument[]>(queryKeys.documents.all(), () => DataService.documents.getAll());
+    return useQuery<LegalDocument[]>(queryKeys.documents.all(), () => (DataService.documents as any).getAll());
 }
 
 /**
  * Fetch all docket entries from the data service.
  */
 export function useDocket(): UseQueryResult<DocketEntry[]> {
-    return useQuery<DocketEntry[]>(queryKeys.docket.all(), () => DataService.docket.getAll());
+    return useQuery<DocketEntry[]>(queryKeys.docket.all(), () => (DataService.docket as any).getAll());
 }
 
 /**
  * Fetch all workflow tasks from the data service.
  */
 export function useTasks(): UseQueryResult<WorkflowTask[]> {
-    return useQuery<WorkflowTask[]>(queryKeys.tasks.all(), () => DataService.tasks.getAll());
+    return useQuery<WorkflowTask[]>(queryKeys.tasks.all(), () => (DataService.tasks as any).getAll());
 }
 
 /**
  * Fetch all evidence items from the data service.
  */
 export function useEvidence(): UseQueryResult<EvidenceItem[]> {
-    return useQuery<EvidenceItem[]>(queryKeys.evidence.all(), () => DataService.evidence.getAll());
+    return useQuery<EvidenceItem[]>(queryKeys.evidence.all(), () => (DataService.evidence as any).getAll());
 }
 
 /**
@@ -84,7 +84,7 @@ export function useEvidence(): UseQueryResult<EvidenceItem[]> {
 export function useExhibits(caseId?: string): UseQueryResult<TrialExhibit[]> {
     return useQuery<TrialExhibit[]>(
         queryKeys.exhibits.byCaseId(caseId || "all"),
-        () => DataService.trial.getExhibits(caseId)
+        () => (DataService.trial as any).getExhibits(caseId)
     );
 }
 
@@ -92,21 +92,21 @@ export function useExhibits(caseId?: string): UseQueryResult<TrialExhibit[]> {
  * Fetch all staff members from the data service.
  */
 export function useStaff(): UseQueryResult<User[]> {
-    return useQuery<User[]>(queryKeys.staff.all(), () => DataService.hr.getStaff());
+    return useQuery<User[]>(queryKeys.staff.all(), () => (DataService.hr as any).getStaff());
 }
 
 /**
  * Fetch all clients from the data service.
  */
 export function useClients(): UseQueryResult<Client[]> {
-    return useQuery<Client[]>(queryKeys.clients.all(), () => DataService.clients.getAll());
+    return useQuery<Client[]>(queryKeys.clients.all(), () => (DataService.clients as any).getAll());
 }
 
 /**
  * Fetch all users from the data service.
  */
 export function useUsers(): UseQueryResult<User[]> {
-    return useQuery<User[]>(queryKeys.users.all(), () => DataService.users.getAll());
+    return useQuery<User[]>(queryKeys.users.all(), () => (DataService.users as any).getAll());
 }
 
 /**
@@ -114,8 +114,8 @@ export function useUsers(): UseQueryResult<User[]> {
  */
 export function useProjects(caseId: string): UseQueryResult<Project[]> {
     return useQuery<Project[]>(
-        queryKeys.projects.byCaseId(caseId), 
-        () => DataService.projects.getByCaseId(caseId)
+        queryKeys.projects.byCaseId(caseId),
+        () => (DataService.projects as any).getByCaseId(caseId)
     );
 }
 
@@ -124,8 +124,8 @@ export function useProjects(caseId: string): UseQueryResult<Project[]> {
  */
 export function useConversations(): UseQueryResult<Conversation[]> {
     return useQuery<Conversation[]>(
-        ['conversations', 'all'], 
-        () => DataService.messenger.getConversations()
+        ['conversations', 'all'],
+        () => (DataService.messenger as any).getConversations()
     );
 }
 
@@ -134,8 +134,8 @@ export function useConversations(): UseQueryResult<Conversation[]> {
  */
 export function useResearchHistory(): UseQueryResult<ResearchSession[]> {
     return useQuery<ResearchSession[]>(
-        ['research', 'history'], 
-        () => DataService.research.getHistory()
+        ['research', 'history'],
+        () => (DataService.research as any).getHistory()
     );
 }
 
@@ -147,7 +147,7 @@ export function useResearchHistory(): UseQueryResult<ResearchSession[]> {
 export function useSchemaTables(): UseQueryResult<SchemaTable[]> {
     return useQuery<SchemaTable[]>(
         ['schema', 'tables'],
-        () => DataService.catalog.getSchemaTables()
+        () => (DataService.catalog as any).getSchemaTables()
     );
 }
 
@@ -157,7 +157,7 @@ export function useSchemaTables(): UseQueryResult<SchemaTable[]> {
 export function usePipelines(): UseQueryResult<PipelineJob[]> {
     return useQuery<PipelineJob[]>(
         ['admin', 'pipelines'],
-        () => DataService.admin.getPipelines()
+        () => (DataService.admin as any).getPipelines()
     );
 }
 
@@ -167,7 +167,7 @@ export function usePipelines(): UseQueryResult<PipelineJob[]> {
 export function useConnectors(): UseQueryResult<Connector[]> {
     return useQuery<Connector[]>(
         ['admin', 'connectors'],
-        () => DataService.admin.getConnectors()
+        () => (DataService.admin as any).getConnectors()
     );
 }
 
@@ -177,6 +177,6 @@ export function useConnectors(): UseQueryResult<Connector[]> {
 export function useDataDictionary(): UseQueryResult<DataDictionaryItem[]> {
     return useQuery<DataDictionaryItem[]>(
         ['catalog', 'dictionary'],
-        () => DataService.catalog.getDictionary()
+        () => (DataService.catalog as any).getDictionary()
     );
 }

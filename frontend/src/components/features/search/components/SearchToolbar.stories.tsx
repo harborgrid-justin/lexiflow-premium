@@ -16,9 +16,9 @@ type Story = StoryObj<typeof SearchToolbar>;
 export const Default: Story = {
   args: {
   "value": "Sample Text",
-  "onChange": "Sample Text",
+  "onChange": () => {},
   "placeholder": "Sample Text",
-  "actions": "<div>Sample Content</div>",
+  actions: undefined,
   "className": "Sample Text"
 },
 };

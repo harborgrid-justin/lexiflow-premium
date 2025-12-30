@@ -56,7 +56,7 @@ export class CitationSavedHandler extends BaseEventHandler<SystemEventPayloads[t
     const { DataService } = await import('@/services');
 
     const activePleadings = await DataService.pleadings.getByIndex('status', 'Draft');
-    const casePleadings = activePleadings.filter((pl: unknown) => pl.caseId === citation.caseId);
+    const casePleadings = activePleadings.filter((pl: unknown) => (pl as {caseId: string}).caseId === citation.caseId);
     
     for (const pleading of casePleadings) {
       await db.put('pleadingSuggestions', {

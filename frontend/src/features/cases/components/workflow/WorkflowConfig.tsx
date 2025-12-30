@@ -1,5 +1,4 @@
 
-import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/molecules';
 import { ToggleLeft, ToggleRight, Settings, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Folder, File, HardDrive, Search, Download, MoreHorizontal, FileText, Image, Film, UploadCloud, ChevronRight, Home, Loader2 } from 'lucide-react';
+import { Folder, File, HardDrive, Download, MoreHorizontal, FileText, UploadCloud, ChevronRight, Home, Loader2 } from 'lucide-react';
 
 import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';

@@ -4,9 +4,8 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { communicationsApi } from '@/api/domains/communications.api';
 import { delay } from '@/utils/async';
-import { STORES, db } from '@/services/data/db';
+import { db} from '@/services/data/db';
 
 interface Workspace {
   id: string;

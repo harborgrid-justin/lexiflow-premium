@@ -16,9 +16,9 @@ type Story = StoryObj<typeof Drawer>;
 export const Default: Story = {
   args: {
   "isOpen": true,
-  "onClose": {},
-  "title": "<div>Sample Content</div>",
-  "children": "<div>Sample Content</div>",
+  onClose: () => {},
+  title: undefined,
+  children: undefined,
   "width": "Sample Text"
 },
 };

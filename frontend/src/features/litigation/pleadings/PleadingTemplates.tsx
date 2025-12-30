@@ -75,12 +75,12 @@ export const PleadingTemplates: React.FC<PleadingTemplatesProps> = ({ templates,
     );
 
     return (
-         <VirtualGrid 
+         <VirtualGrid
             items={templates}
             height="100%"
             itemHeight={180}
             itemWidth={220}
-            renderItem={renderItem}
+            renderItem={(item: unknown) => renderItem(item as PleadingTemplate)}
             gap={16}
             emptyMessage="No templates found."
         />

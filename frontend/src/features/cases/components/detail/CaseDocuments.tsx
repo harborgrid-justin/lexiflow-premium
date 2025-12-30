@@ -10,12 +10,11 @@
 
 // External Dependencies
 import React, { useState, useRef, lazy, Suspense } from 'react';
-import { FileText, Plus, Wand2, Cpu, Loader2, ShieldCheck, Eye } from 'lucide-react';
+import { Plus, Wand2, Loader2, ShieldCheck } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { TaskCreationModal } from '@/components/organisms';
 import { CaseDocumentItem } from './documents/CaseDocumentItem';
-import { Button } from '@/components/atoms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -104,7 +103,7 @@ export const CaseDocuments: React.FC<CaseDocumentsProps> = ({ documents, analyzi
           // Auto-create Evidence Item
           const evidence: EvidenceItem = {
             id: `ev-${Date.now()}` as EvidenceId,
-            trackingUuid: crypto.randomUUID() as Record<string, unknown>,
+            trackingUuid: crypto.randomUUID() as any,
             caseId: savedDoc.caseId,
             title: savedDoc.title,
             type: 'Document',

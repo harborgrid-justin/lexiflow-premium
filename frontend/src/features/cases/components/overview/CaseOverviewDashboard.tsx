@@ -22,8 +22,7 @@
 
 import React, { useState, useMemo } from 'react';
 import {
-  Briefcase, TrendingUp, Clock, AlertTriangle, Users, DollarSign,
-  Filter, Search, Plus, ArrowRight, Calendar, FileText, Activity,
+  Briefcase, TrendingUp, Clock, AlertTriangle, Search, Plus, Activity,
   CheckCircle, Circle, AlertCircle, XCircle, ChevronRight, Loader2
 } from 'lucide-react';
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -34,20 +33,7 @@ import { Button } from '@/components/atoms';
 import { Card } from '@/components/molecules';
 import { Badge } from '@/components/atoms';
 import { ErrorState } from '@/components/molecules';
-import { EmptyState } from '@/components/molecules';
-import type { Matter } from '@/types';
-import { MatterStatus } from '@/types';
-
-interface MatterKPIs {
-  totalActive: number;
-  intakePipeline: number;
-  upcomingDeadlines: number;
-  atRisk: number;
-  totalValue: number;
-  utilizationRate: number;
-  averageAge: number;
-  conversionRate: number;
-}
+import { CaseStatus } from '@/types';
 
 interface IntakePipelineStage {
   stage: string;
@@ -77,9 +63,9 @@ interface RecentActivity {
 }
 
 export const CaseOverviewDashboard: React.FC = () => {
-  const { mode, isDark } = useTheme();
+  const { isDark } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<MatterStatus | 'all'>('all');
+  const [statusFilter, setStatusFilter] = useState<CaseStatus | 'all'>('all');
   const [dateRange, setDateRange] = useState<'7d' | '30d' | '90d' | 'all'>('30d');
 
   // Fetch matters data
@@ -98,13 +84,12 @@ export const CaseOverviewDashboard: React.FC = () => {
   const { data: pipelineStages } = useQuery(
     ['matters', 'pipeline'],
     async (): Promise<IntakePipelineStage[]> => {
-      const intakeMatters = (matters || []).filter(m => m.status === MatterStatus.ACTIVE && m.conflictCheckCompleted === false);
+      const intakeMatters = (matters || []).filter(m => m.status === CaseStatus.Open || m.status === CaseStatus.PreFiling);
       const stages = ['Initial Contact', 'Conflict Check', 'Engagement Review', 'Contract Pending'];
 
       return stages.map((stage, index) => {
-        // Distribute matters evenly across stages (simplified since intakeStage doesn't exist)
         const stageMatters = intakeMatters.slice(index * Math.floor(intakeMatters.length / 4), (index + 1) * Math.floor(intakeMatters.length / 4));
-        const value = stageMatters.reduce((sum, m) => sum + (m.estimatedValue || 0), 0);
+        const value = stageMatters.reduce((sum, m) => sum + (m.value || 0), 0);
         const avgDays = stageMatters.length > 0
           ? Math.round(stageMatters.reduce((sum, m) => {
               if (!m.createdAt) return sum;
@@ -113,13 +98,13 @@ export const CaseOverviewDashboard: React.FC = () => {
               return sum + (now.getTime() - created.getTime()) / (1000 * 60 * 60 * 24);
             }, 0) / stageMatters.length)
           : 0;
-        
+
         return {
           stage,
           count: stageMatters.length,
           value,
           avgDaysInStage: avgDays,
-          conversionRate: 100 - (index * 5), // Approximate based on stage
+          conversionRate: 100 - (index * 5),
         };
       });
     },
@@ -136,12 +121,12 @@ export const CaseOverviewDashboard: React.FC = () => {
 
         return users.map(user => {
           const userMatters = (matters || []).filter(m =>
-            m.leadAttorneyId === user.id || m.teamMembers?.includes(user.id)
+            m.leadAttorneyId === user.id || m.ownerId === user.id
           );
           const userTimeEntries = timeEntries.filter(t => t.userId === user.id);
           const totalHours = userTimeEntries.reduce((sum, t) => sum + (t.duration || 0), 0);
-          const capacity = 180; // Standard monthly capacity
-          
+          const capacity = 180;
+
           return {
             attorneyId: user.id,
             attorneyName: user.name || user.email,
@@ -167,20 +152,20 @@ export const CaseOverviewDashboard: React.FC = () => {
       const activities: RecentActivity[] = [];
       const now = new Date();
 
-      // Check for upcoming deadlines
+      // Check for upcoming trial dates
       allMatters.forEach(matter => {
-        if (matter.targetCloseDate) {
-          const deadline = new Date(matter.targetCloseDate);
+        if (matter.trialDate) {
+          const deadline = new Date(matter.trialDate);
           const daysUntil = (deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
-          if (daysUntil >= 0 && daysUntil <= 7) {
+          if (daysUntil >= 0 && daysUntil <= 30) {
             activities.push({
               id: `deadline-${matter.id}`,
               type: 'deadline_approaching',
               matterId: matter.id,
               matterTitle: matter.title,
-              description: `Deadline in ${Math.ceil(daysUntil)} days`,
-              timestamp: new Date(now.getTime() - (7 - daysUntil) * 24 * 60 * 60 * 1000).toISOString(),
-              priority: daysUntil <= 3 ? 'high' : 'medium',
+              description: `Trial in ${Math.ceil(daysUntil)} days`,
+              timestamp: new Date(now.getTime() - (30 - daysUntil) * 24 * 60 * 60 * 1000).toISOString(),
+              priority: daysUntil <= 7 ? 'high' : 'medium',
             });
           }
         }
@@ -231,13 +216,13 @@ export const CaseOverviewDashboard: React.FC = () => {
     return Array.from(distribution.entries()).map(([status, count]) => ({ status, count }));
   }, [matters]);
 
-  const filteredMatters = useMemo(() => {
+  useMemo(() => {
     if (!matters) return [];
     return matters.filter(matter => {
-      const matchesSearch = !searchQuery || 
+      const matchesSearch = !searchQuery ||
         matter.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        matter.matterNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        matter.clientName?.toLowerCase().includes(searchQuery.toLowerCase());
+        matter.caseNumber?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        matter.client?.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesStatus = statusFilter === 'all' || matter.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
@@ -271,7 +256,7 @@ export const CaseOverviewDashboard: React.FC = () => {
           </div>
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as MatterStatus | 'all')}
+            onChange={(e) => setStatusFilter(e.target.value as CaseStatus | 'all')}
             className={cn(
               'px-4 py-2 rounded-lg border text-sm',
               isDark
@@ -280,10 +265,10 @@ export const CaseOverviewDashboard: React.FC = () => {
             )}
           >
             <option value="all">All Status</option>
-            <option value="INTAKE">Intake</option>
-            <option value="ACTIVE">Active</option>
-            <option value="ON_HOLD">On Hold</option>
-            <option value="CLOSED">Closed</option>
+            <option value={CaseStatus.Open}>Open</option>
+            <option value={CaseStatus.Active}>Active</option>
+            <option value={CaseStatus.OnHold}>On Hold</option>
+            <option value={CaseStatus.Closed}>Closed</option>
           </select>
           <select
             value={dateRange}
@@ -420,7 +405,7 @@ export const CaseOverviewDashboard: React.FC = () => {
                     {statusDistribution.map(({ status, count }) => (
                       <div key={status} className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <StatusIcon status={status as MatterStatus} />
+                          <StatusIcon status={status} />
                           <span className={cn('text-sm', isDark ? 'text-slate-300' : 'text-slate-700')}>
                             {status}
                           </span>
@@ -496,7 +481,7 @@ export const CaseOverviewDashboard: React.FC = () => {
                   <div className="space-y-4">
                     {recentActivity?.map((activity) => (
                       <div key={activity.id} className="flex gap-3">
-                        <ActivityIcon type={activity.type} priority={activity.priority} isDark={isDark} />
+                        <ActivityIcon type={activity.type} priority={activity.priority} />
                         <div className="flex-1 min-w-0">
                           <div className={cn('text-sm font-medium truncate', isDark ? 'text-slate-300' : 'text-slate-700')}>
                             {activity.matterTitle}
@@ -569,22 +554,25 @@ const MetricCard: React.FC<{ label: string; value: string; isDark: boolean }> = 
   </Card>
 );
 
-const StatusIcon: React.FC<{ status: MatterStatus }> = ({ status }) => {
+const StatusIcon: React.FC<{ status: string }> = ({ status }) => {
   switch (status) {
-    case MatterStatus.ACTIVE:
+    case CaseStatus.Active:
+    case CaseStatus.Open:
       return <CheckCircle className="w-4 h-4 text-emerald-500" />;
-    case MatterStatus.PENDING:
+    case CaseStatus.Discovery:
+    case CaseStatus.Trial:
       return <Circle className="w-4 h-4 text-blue-500" />;
-    case MatterStatus.ON_HOLD:
+    case CaseStatus.OnHold:
       return <AlertCircle className="w-4 h-4 text-amber-500" />;
-    case MatterStatus.CLOSED:
+    case CaseStatus.Closed:
+    case CaseStatus.Settled:
       return <XCircle className="w-4 h-4 text-slate-400" />;
     default:
       return <Circle className="w-4 h-4 text-slate-400" />;
   }
 };
 
-const ActivityIcon: React.FC<{ type: string; priority: string; isDark: boolean }> = ({ type, priority, isDark }) => {
+const ActivityIcon: React.FC<{ type: string; priority: string }> = ({ type, priority }) => {
   const iconClass = cn('w-5 h-5',
     priority === 'high' ? 'text-red-500' :
     priority === 'medium' ? 'text-amber-500' :

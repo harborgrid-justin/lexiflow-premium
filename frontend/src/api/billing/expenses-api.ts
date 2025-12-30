@@ -54,7 +54,7 @@ export class ExpensesApiService {
    * GET ${API_PREFIX}/billing/expenses
    */
   async getAll(filters?: ExpenseFilters): Promise<FirmExpense[]> {
-    const response = await apiClient.get<PaginatedResponse<FirmExpense>>('/billing/expenses', filters);
+    const response = await apiClient.get<PaginatedResponse<FirmExpense>>('/billing/expenses', filters as Record<string, unknown>);
     return response.data;
   }
 

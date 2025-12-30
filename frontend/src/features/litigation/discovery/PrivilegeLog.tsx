@@ -11,7 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Wand2, Plus, Shield, Mail } from 'lucide-react';
 
 // ============================================================================
@@ -81,7 +81,7 @@ export const PrivilegeLog: React.FC = () => {
             <TableHead>Description (Rule 26)</TableHead>
           </TableHeader>
           <TableBody>
-            {logItems.map((item: unknown) => (
+            {logItems.map((item: { id: string; date: string; basis: string; author: string; recipient: string; desc: string }) => (
               <TableRow key={item.id}>
                 <TableCell className={cn("font-mono text-xs", theme.text.secondary)}>{item.id}</TableCell>
                 <TableCell>{item.date}</TableCell>
@@ -101,7 +101,7 @@ export const PrivilegeLog: React.FC = () => {
 
       {/* Mobile Card View */}
       <div className="md:hidden space-y-4">
-        {logItems.map(item => (
+        {logItems.map((item: { id: string; basis: string; desc: string; date: string; type: string; author: string; recipient: string }) => (
           <div key={item.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between items-start mb-3">
               <div className="flex items-center gap-2">
@@ -110,7 +110,7 @@ export const PrivilegeLog: React.FC = () => {
               </div>
               <Badge variant="warning">{item.basis}</Badge>
             </div>
-            
+
             <div className={cn("text-sm mb-3 p-2 rounded border", theme.text.primary, theme.surface.highlight, theme.border.default)}>
               {item.desc}
             </div>

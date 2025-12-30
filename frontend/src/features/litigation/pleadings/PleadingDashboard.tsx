@@ -7,13 +7,12 @@ import { cn } from '@/utils/cn';
 import { useModalState } from '@/hooks';
 import { DataService } from '@/services';
 import { PleadingDocument, PleadingTemplate, PleadingSection } from '@/types/pleading-types';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { VirtualGrid } from '@/components/organisms';
 import { Modal } from '@/components/molecules';
 import { Input } from '@/components/atoms';
-import { Case, CaseId, DocumentId, UserId } from '@/types';
+import { Case, CaseId, UserId, DocumentId } from '@/types';
 
 interface PleadingDashboardProps {
     onCreate: (newDoc: PleadingDocument) => void;
@@ -65,7 +64,7 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
             : [];
 
         const doc: PleadingDocument = {
-            id: `plead-${Date.now()}` as Record<string, unknown>,
+            id: `plead-${Date.now()}` as DocumentId,
             title: newDocData.title,
             caseId: newDocData.caseId as CaseId,
             status: 'Draft',
@@ -105,12 +104,12 @@ export const PleadingDashboard: React.FC<PleadingDashboardProps> = ({ onCreate, 
             />
             
             <div className="flex-1 overflow-hidden border-t pt-4">
-                <VirtualGrid 
+                <VirtualGrid
                     items={pleadings}
                     height="100%"
                     itemHeight={160}
                     itemWidth={250}
-                    renderItem={renderItem}
+                    renderItem={(item: unknown) => renderItem(item as PleadingDocument)}
                     emptyMessage="No pleadings found. Create one to get started."
                 />
             </div>

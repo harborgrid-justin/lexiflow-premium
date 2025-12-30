@@ -15,12 +15,11 @@ type Story = StoryObj<typeof CalendarToolbar>;
 
 export const Default: Story = {
   args: {
-  "label": "Sample Text",
-  "onPrev": {},
-  "onNext": {},
-  "onToday": {},
-  "view": {},
-  "onViewChange": {},
-  "actions": "<div>Sample Content</div>"
-},
+    label: "December 2025",
+    onPrev: () => console.log('Previous'),
+    onNext: () => console.log('Next'),
+    onToday: () => console.log('Today'),
+    view: 'month',
+    onViewChange: (view: 'month' | 'list') => console.log('View changed:', view),
+  },
 };

@@ -8,7 +8,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocumentVersions } from '../../../../features/operations/documents/DocumentVersions';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import { LegalDocument } from '@/types';
+import { LegalDocument, DocumentId, UserId, CaseId } from '@/types';
 
 const meta: Meta<typeof DocumentVersions> = {
   title: 'Documents/Document Versions',
@@ -50,7 +50,7 @@ export default meta;
 type Story = StoryObj<typeof DocumentVersions>;
 
 const mockDocument: LegalDocument = {
-  id: '1' as Record<string, unknown>,
+  id: '1' as DocumentId,
   title: 'Motion to Dismiss - Updated.pdf',
   type: 'Pleading',
   status: 'Active',
@@ -58,13 +58,13 @@ const mockDocument: LegalDocument = {
   uploadDate: '2024-12-01',
   createdAt: '2024-12-01',
   updatedAt: '2024-12-20',
-  creatorId: 'user1' as Record<string, unknown>,
-  caseId: 'case1' as Record<string, unknown>,
+  creatorId: 'user1' as UserId,
+  caseId: 'case1' as CaseId,
   content: '',
   tags: ['motion', 'dismiss', 'pleading'],
   versions: [
     {
-      id: 'v3' as Record<string, unknown>,
+      id: 'v3',
       versionNumber: 3,
       uploadDate: '2024-12-15 2:30 PM',
       uploadedBy: 'Sarah Johnson',
@@ -72,7 +72,7 @@ const mockDocument: LegalDocument = {
       updatedAt: '2024-12-15'
     },
     {
-      id: 'v2' as Record<string, unknown>,
+      id: 'v2',
       versionNumber: 2,
       uploadDate: '2024-12-10 10:15 AM',
       uploadedBy: 'Michael Chen',
@@ -80,7 +80,7 @@ const mockDocument: LegalDocument = {
       updatedAt: '2024-12-10'
     },
     {
-      id: 'v1' as Record<string, unknown>,
+      id: 'v1',
       versionNumber: 1,
       uploadDate: '2024-12-01 9:00 AM',
       uploadedBy: 'Sarah Johnson',
@@ -151,7 +151,7 @@ export const ManyVersions: Story = {
       versions: [
         ...mockDocument.versions,
         {
-          id: 'v4' as Record<string, unknown>,
+          id: 'v4',
           versionNumber: 4,
           uploadDate: '2024-12-18 4:20 PM',
           uploadedBy: 'David Rodriguez',
@@ -159,7 +159,7 @@ export const ManyVersions: Story = {
           updatedAt: '2024-12-18'
         },
         {
-          id: 'v5' as Record<string, unknown>,
+          id: 'v5',
           versionNumber: 5,
           uploadDate: '2024-12-19 11:30 AM',
           uploadedBy: 'Sarah Johnson',
@@ -167,7 +167,7 @@ export const ManyVersions: Story = {
           updatedAt: '2024-12-19'
         },
         {
-          id: 'v6' as Record<string, unknown>,
+          id: 'v6',
           versionNumber: 6,
           uploadDate: '2024-12-19 5:15 PM',
           uploadedBy: 'Michael Chen',

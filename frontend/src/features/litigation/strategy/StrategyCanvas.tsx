@@ -11,17 +11,16 @@
 import React, { useState, useRef, useCallback } from 'react';
 
 // Internal Components
-import { BuilderToolbar, BuilderCanvas } from '@features/cases';
+import { BuilderToolbar, BuilderCanvas } from '@features/cases/components/workflow/builder';
 import { LitigationPalette } from './LitigationPalette';
 import { LitigationProperties } from '@features/litigation';
 import { ContextMenu, ContextMenuItem } from '@/components/molecules';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
 import { useToggle } from '@/hooks/useToggle';
 
 // Types
-import { NodeType } from '@features/cases';
+import { NodeType } from '@/types/workflow-types';
 import { StrategyCanvasProps } from './types';
 import { LITIGATION_DESCRIPTIONS } from './constants';
 import { 
@@ -32,10 +31,9 @@ import {
 } from './utils';
 
 export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
-  nodes, connections, addNode, updateNode, deleteNode, 
+  nodes, connections, addNode, updateNode, deleteNode,
   addConnection, updateConnection, deleteConnection
 }) => {
-  const { theme } = useTheme();
   
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedConnectionId, setSelectedConnectionId] = useState<string | null>(null);
@@ -143,39 +141,43 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-        <BuilderToolbar scale={scale} setScale={setScale} onToggleSidebar={sidebarToggle.toggle} />
-        <div 
-          className="flex-1 flex overflow-hidden relative" 
-          onDrop={onDrop} 
-          onDragOver={e => e.preventDefault()} 
-          onMouseMove={handleMouseMove} 
+        <div className="shrink-0">
+          <BuilderToolbar scale={scale} setScale={setScale} onToggleSidebar={sidebarToggle.toggle} />
+        </div>
+        <div
+          className="flex-1 flex overflow-hidden relative"
+          onDrop={onDrop}
+          onDragOver={e => e.preventDefault()}
+          onMouseMove={handleMouseMove}
           onMouseUp={() => setDraggingNodeId(null)}
           onContextMenu={handleContextMenu}
         >
             <LitigationPalette isOpen={sidebarToggle.isOpen} onClose={sidebarToggle.close} />
-            
-            <BuilderCanvas 
-                nodes={nodes} 
-                connections={connections} 
-                selectedNodeId={selectedNodeId} 
-                selectedConnectionId={selectedConnectionId}
-                onSelectConnection={handleSelectConnection}
-                scale={scale} 
-                pan={pan} 
-                setPan={setPan} 
-                canvasRef={canvasRef} 
-                onMouseDownNode={handleMouseDownNode} 
-                onBackgroundClick={handleBackgroundClick}
-                onAddConnection={addConnection}
-            />
-            
-            <LitigationProperties 
-                isOpen={propertiesToggle.isOpen} 
-                onClose={propertiesToggle.close} 
-                selectedNode={nodes.find(n => n.id === selectedNodeId) || null} 
+
+            <div className="flex-1">
+              <BuilderCanvas
+                  nodes={nodes}
+                  connections={connections}
+                  selectedNodeId={selectedNodeId}
+                  selectedConnectionId={selectedConnectionId}
+                  onSelectConnection={handleSelectConnection}
+                  scale={scale}
+                  pan={pan}
+                  setPan={setPan}
+                  canvasRef={canvasRef}
+                  onMouseDownNode={handleMouseDownNode}
+                  onBackgroundClick={handleBackgroundClick}
+                  onAddConnection={addConnection}
+              />
+            </div>
+
+            <LitigationProperties
+                isOpen={propertiesToggle.isOpen}
+                onClose={propertiesToggle.close}
+                selectedNode={nodes.find(n => n.id === selectedNodeId) || null}
                 selectedConnection={connections.find(c => c.id === selectedConnectionId) || null}
-                onUpdateNode={updateNode} 
-                onDeleteNode={handleDeleteNode} 
+                onUpdateNode={updateNode}
+                onDeleteNode={handleDeleteNode}
                 onUpdateConnection={updateConnection}
                 onDeleteConnection={deleteConnection}
             />

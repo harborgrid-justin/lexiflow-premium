@@ -59,7 +59,7 @@ export class AnalyticsDashboardApiService {
 
   // Dashboard KPIs and Metrics
   async getKPIs(params: { period?: string }): Promise<unknown> {
-    const queryString = new URLSearchParams(params as Record<string, unknown>).toString();
+    const queryString = new URLSearchParams(params as Record<string, string>).toString();
     return apiClient.get(`/analytics/dashboard/kpis?${queryString}`);
   }
 

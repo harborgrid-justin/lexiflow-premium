@@ -1,12 +1,36 @@
 import React from 'react';
 import { LegalRule } from '@/types';
 import { cn } from '@/utils/cn';
-import { History, FileText, Scale } from 'lucide-react';
+import { History } from 'lucide-react';
+
+interface ThemeType {
+  mode?: string;
+  text: {
+    primary: string;
+    secondary: string;
+    tertiary: string;
+  };
+  border: {
+    default: string;
+  };
+  surface: {
+    highlight: string;
+  };
+  primary: {
+    border: string;
+    text: string;
+  };
+  status: {
+    success: { text: string };
+    error: { text: string };
+    warning: { text: string };
+  };
+}
 
 interface RuleContentDisplayProps {
   selectedRule: LegalRule;
   activeTab: string;
-  theme: unknown;
+  theme: ThemeType;
 }
 
 interface RuleTextSection {
@@ -43,8 +67,6 @@ interface RuleStructuredContent {
 }
 
 export const RuleContentDisplay: React.FC<RuleContentDisplayProps> = ({ selectedRule, activeTab, theme }) => {
-  const { mode } = theme;
-
   const renderStructuredContent = (data: unknown) => {
     if (!data) return null;
     const structuredData = data as RuleStructuredContent;

@@ -74,11 +74,9 @@
  * - Metrics endpoint available at /api/compliance/metrics
  */
 
-import { Risk, ConflictCheck, EthicalWall, ComplianceMetrics, CaseId, GroupId, UserId } from '@/types';
+import { Risk, ConflictCheck, EthicalWall, ComplianceMetrics } from '@/types';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { complianceApi } from "@/api/domains/compliance.api";
-import type { ConflictCheck as ApiConflictCheck } from '@/api/compliance';
-import type { EthicalWall as ApiEthicalWall } from '@/api/compliance';
 
 /**
  * Query keys for React Query integration
@@ -114,7 +112,7 @@ export const ComplianceService = {
      * @throws Error if entity name is invalid
      */
     validateEntityName: (entityName: string, methodName: string): void => {
-        if (!entityName || false || entityName.trim() === '') {
+        if (!entityName || entityName.trim() === '') {
             throw new Error(`[ComplianceService.${methodName}] Invalid entityName parameter`);
         }
     },
@@ -125,7 +123,7 @@ export const ComplianceService = {
      * @throws Error if ID is invalid
      */
     validateId: (id: string, methodName: string): void => {
-        if (!id || false || id.trim() === '') {
+        if (!id || id.trim() === '') {
             throw new Error(`[ComplianceService.${methodName}] Invalid id parameter`);
         }
     },
@@ -226,20 +224,18 @@ export const ComplianceService = {
     getConflicts: async (): Promise<ConflictCheck[]> => {
         try {
             const apiConflicts = await complianceApi.conflictChecks.getAll();
-            
-            // Map API ConflictCheck to frontend ConflictCheck type
-            return apiConflicts.map((apiCheck: ApiConflictCheck): ConflictCheck => ({
+
+            // API returns ConflictCheck[] directly
+            return apiConflicts.map((apiCheck): ConflictCheck => ({
                 id: apiCheck.id,
-                entityName: apiCheck.clientName,
-                date: apiCheck.checkedAt,
-                status: apiCheck.status === 'clear' ? 'Cleared' : 
-                        apiCheck.status === 'conflict_found' ? 'Flagged' : 
-                        apiCheck.status === 'requires_review' ? 'Review' : 'Pending',
-                foundIn: apiCheck.conflicts?.map(c => c.description) || [],
-                checkedById: (apiCheck.checkedBy || 'system') as Record<string, unknown>,
+                entityName: apiCheck.entityName,
+                date: apiCheck.date,
+                status: apiCheck.status,
+                foundIn: apiCheck.foundIn || [],
+                checkedById: apiCheck.checkedById,
                 checkedBy: apiCheck.checkedBy || 'System',
-                createdAt: apiCheck.checkedAt,
-                updatedAt: apiCheck.checkedAt
+                createdAt: apiCheck.createdAt,
+                updatedAt: apiCheck.updatedAt
             }));
         } catch (error) {
             console.error('[ComplianceService.getConflicts] Error:', error);
@@ -268,30 +264,15 @@ export const ComplianceService = {
 
         try {
             // Use backend conflict check service
-            const backendResult = await complianceApi.conflictChecks.check({
+            const result = await complianceApi.conflictChecks.check({
                 clientName: entityName
             });
-            
-            // Map API response to frontend type
-            const result: ConflictCheck = {
-                id: backendResult.id,
-                entityName: backendResult.clientName,
-                date: backendResult.checkedAt,
-                status: backendResult.status === 'clear' ? 'Cleared' : 
-                        backendResult.status === 'conflict_found' ? 'Flagged' : 
-                        backendResult.status === 'requires_review' ? 'Review' : 'Pending',
-                foundIn: backendResult.conflicts?.map(c => c.description) || [],
-                checkedById: (backendResult.checkedBy || 'system') as Record<string, unknown>,
-                checkedBy: backendResult.checkedBy || 'System',
-                createdAt: backendResult.checkedAt,
-                updatedAt: backendResult.checkedAt
-            };
 
             // Publish integration event if conflicts found
-            if (result.status === 'Flagged' && result.foundIn.length > 0) {
+            if (result.status === 'Flagged' && result.foundIn && result.foundIn.length > 0) {
                 try {
                     const { SystemEventType } = await import('@/types/integration-types');
-                    
+
                     await IntegrationEventPublisher.publish(SystemEventType.CONFLICT_DETECTED, {
                         check: result,
                         entityName,
@@ -325,16 +306,15 @@ export const ComplianceService = {
     getEthicalWalls: async (): Promise<EthicalWall[]> => {
         try {
             const apiWalls = await complianceApi.compliance.getEthicalWalls();
-            
-            // Map API EthicalWall to frontend EthicalWall type
-            return apiWalls.map((apiWall: ApiEthicalWall): EthicalWall => ({
+
+            // API returns EthicalWall[] directly
+            return apiWalls.map((apiWall): EthicalWall => ({
                 id: apiWall.id,
-                caseId: (apiWall.caseIds?.[0] || '') as CaseId,
-                title: apiWall.name,
-                restrictedGroups: [] as GroupId[], // API doesn't have groups, using empty array
-                authorizedUsers: apiWall.excludedUsers as UserId[],
-                status: apiWall.status === 'active' ? 'Active' : 
-                        apiWall.status === 'lifted' ? 'Lifted' : 'Inactive',
+                caseId: apiWall.caseId,
+                title: apiWall.title,
+                restrictedGroups: apiWall.restrictedGroups || [],
+                authorizedUsers: apiWall.authorizedUsers || [],
+                status: apiWall.status,
                 createdAt: apiWall.createdAt,
                 updatedAt: apiWall.updatedAt
             }));
@@ -378,34 +358,13 @@ export const ComplianceService = {
         }
 
         try {
-            // Map frontend EthicalWall to API format
-            const apiWall = await complianceApi.compliance.createEthicalWall({
-                name: wall.title,
-                reason: 'Created from frontend',
-                status: wall.status === 'Active' ? 'active' : 'inactive',
-                restrictedParties: [],
-                excludedUsers: wall.authorizedUsers as string[],
-                caseIds: wall.caseId ? [wall.caseId as string] : [],
-                effectiveDate: new Date().toISOString()
-            });
-            
-            // Map back to frontend type
-            const result: EthicalWall = {
-                id: apiWall.id,
-                caseId: (apiWall.caseIds?.[0] || '') as CaseId,
-                title: apiWall.name,
-                restrictedGroups: [] as GroupId[],
-                authorizedUsers: apiWall.excludedUsers as UserId[],
-                status: apiWall.status === 'active' ? 'Active' : 
-                        apiWall.status === 'lifted' ? 'Lifted' : 'Inactive',
-                createdAt: apiWall.createdAt,
-                updatedAt: apiWall.updatedAt
-            };
+            // Create ethical wall via backend API
+            const result = await complianceApi.compliance.createEthicalWall(wall);
 
             // Publish integration event
             try {
                 const { SystemEventType } = await import('@/types/integration-types');
-                
+
                 await IntegrationEventPublisher.publish(SystemEventType.ETHICAL_WALL_CREATED, {
                     wall: result,
                     caseId: wall.caseId

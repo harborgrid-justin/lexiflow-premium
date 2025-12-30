@@ -17,6 +17,6 @@ export const Default: Story = {
   args: {
   "status": "Sample Text",
   "className": "Sample Text",
-  "variantOverride": {}
+  "variantOverride": undefined
 },
 };

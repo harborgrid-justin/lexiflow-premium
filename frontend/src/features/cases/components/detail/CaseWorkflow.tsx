@@ -24,7 +24,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces
-import { WorkflowStage, WorkflowTask, StageStatus, TaskStatus, TaskStatusBackend } from '@/types';
+import { WorkflowStage, StageStatus, TaskStatusBackend } from '@/types';
 
 interface CaseWorkflowProps {
   stages: WorkflowStage[];
@@ -57,8 +57,8 @@ export const CaseWorkflow: React.FC<CaseWorkflowProps> = ({ stages: initialStage
     }));
   };
 
-  const totalTasks = stages.reduce((acc: unknown, s) => acc + s.tasks.length, 0);
-  const completedTasks = stages.reduce((acc: unknown, s) => acc + s.tasks.filter(t => t.status === TaskStatusBackend.COMPLETED).length, 0);
+  const totalTasks = stages.reduce((acc: number, s) => acc + s.tasks.length, 0);
+  const completedTasks = stages.reduce((acc: number, s) => acc + s.tasks.filter(t => t.status === TaskStatusBackend.COMPLETED).length, 0);
   const progress = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
   return (

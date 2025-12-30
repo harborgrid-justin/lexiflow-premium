@@ -25,7 +25,8 @@ import { Input } from '@/components/atoms';
 import { Button } from '@/components/atoms';
 
 // Hooks & Context
-import { useTheme, ThemeContextType } from '@/providers/ThemeContext';
+import { useTheme } from '@/providers/ThemeContext';
+import type { ThemeStateValue } from '@/providers/ThemeContext.types';
 import { useChartTheme } from '@/components/organisms';
 import { useSettlementSimulation } from '@/hooks/useSettlementSimulation';
 
@@ -35,6 +36,22 @@ import { cn } from '@/utils/cn';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
+interface ChartTheme {
+  colors: {
+    success: string;
+    danger: string;
+  };
+  text: string;
+  grid: string;
+  tooltipStyle: Record<string, string | number>;
+}
+
+interface SimulationResult {
+  range: string;
+  value: number;
+  count: number;
+}
+
 interface SimulationParametersPanelProps {
   low: number;
   high: number;
@@ -44,22 +61,20 @@ interface SimulationParametersPanelProps {
   onHighChange: (value: number) => void;
   onLiabilityProbChange: (value: number) => void;
   onRunSimulation: () => void;
-  theme: ThemeContextType['theme'];
+  theme: ThemeStateValue['theme'];
 }
 
 interface SimulationResultsChartProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  results: unknown[];
+  results: SimulationResult[];
   metrics: { ev: number; p25: number; p75: number };
   iterations: number;
-  theme: ThemeContextType['theme'];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  chartTheme: unknown;
+  theme: ThemeStateValue['theme'];
+  chartTheme: ChartTheme;
 }
 
 interface SimulationMetricsDisplayProps {
   metrics: { ev: number; p25: number; p75: number };
-  theme: ThemeContextType['theme'];
+  theme: ThemeStateValue['theme'];
 }
 
 // ============================================================================
@@ -234,8 +249,8 @@ const SimulationResultsChart: React.FC<SimulationResultsChartProps> = ({
  */
 export const SettlementCalculator: React.FC = () => {
   const { theme } = useTheme();
-  const chartTheme = useChartTheme();
-  
+  const chartTheme = useChartTheme() as ChartTheme;
+
   const {
     params,
     updateParam,
@@ -259,7 +274,7 @@ export const SettlementCalculator: React.FC = () => {
         theme={theme}
       />
       <SimulationResultsChart
-        results={results}
+        results={results as SimulationResult[]}
         metrics={metrics}
         iterations={params.iterations}
         theme={theme}

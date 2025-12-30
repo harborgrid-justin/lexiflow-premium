@@ -24,8 +24,6 @@ function generateId(): string {
   return `notif-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
 
-import { NOTIFICATION_MAX_DISPLAY } from '@/config/master.config';
-
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================

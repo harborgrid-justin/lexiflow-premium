@@ -11,7 +11,7 @@ const meta: Meta<typeof TableContainer> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Table>;
+type Story = StoryObj<typeof TableContainer>;
 
 export const Default: Story = {
   args: {},

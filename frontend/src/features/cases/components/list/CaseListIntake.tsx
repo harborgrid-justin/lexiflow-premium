@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState } from 'react';
-import { Calendar, Plus, DollarSign, Loader2 } from 'lucide-react';
+import { Calendar, Plus, DollarSign} from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -56,7 +56,7 @@ export const CaseListIntake: React.FC = () => {
           
           // Return updated cache state
           const current = queryClient.getQueryState<unknown[]>(['crm', 'leads'])?.data || [];
-          const updated = current.map(l => l.id === id ? { ...l, stage, updatedAt: new Date().toISOString() } : l);
+          const updated = current.map((l: unknown) => (l as {id: string}).id === id ? { ...(l as object), stage, updatedAt: new Date().toISOString() } : l);
           return updated;
       },
       {

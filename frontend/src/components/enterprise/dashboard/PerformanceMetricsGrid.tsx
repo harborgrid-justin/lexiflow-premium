@@ -226,12 +226,13 @@ export const PerformanceMetricsGrid: React.FC<PerformanceMetricsGridProps> = ({
                   initial={{ width: 0 }}
                   animate={{ width: `${progressWidth}%` }}
                   transition={{ duration: 1, ease: 'easeOut' }}
-                  className={cn('h-full rounded-full', {
-                    'bg-emerald-500': metric.status === 'excellent',
-                    'bg-blue-500': metric.status === 'good',
-                    'bg-amber-500': metric.status === 'fair',
-                    'bg-rose-500': metric.status === 'poor',
-                  })}
+                  className={cn(
+                    'h-full rounded-full',
+                    metric.status === 'excellent' && 'bg-emerald-500',
+                    metric.status === 'good' && 'bg-blue-500',
+                    metric.status === 'fair' && 'bg-amber-500',
+                    metric.status === 'poor' && 'bg-rose-500'
+                  )}
                 />
               </div>
               <div className="flex items-center justify-between mt-1">

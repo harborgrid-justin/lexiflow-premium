@@ -52,8 +52,8 @@ export const MarketingDashboard: React.FC = () => {
   );
 
   // Calculate totals
-  const totalPipelineValue = metrics.reduce((acc: unknown, curr) => acc + curr.revenue, 0);
-  const avgConversion = metrics.length > 0 ? (metrics.reduce((acc: unknown, curr) => acc + (curr.conversions/curr.leads), 0) / metrics.length) * 100 : 0;
+  const totalPipelineValue = metrics.reduce((acc: unknown, curr: MarketingMetric) => (acc as number) + curr.revenue, 0);
+  const avgConversion = metrics.length > 0 ? (metrics.reduce((acc: unknown, curr: MarketingMetric) => (acc as number) + (curr.conversions/curr.leads), 0) / metrics.length) * 100 : 0;
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -62,7 +62,7 @@ export const MarketingDashboard: React.FC = () => {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-indigo-100 text-xs font-bold uppercase">Pipeline Value</p>
-              <p className="text-3xl font-bold mt-1">${(totalPipelineValue / 1000).toFixed(1)}M</p>
+              <p className="text-3xl font-bold mt-1">${((totalPipelineValue as number) / 1000).toFixed(1)}M</p>
             </div>
             <Target className="h-8 w-8 text-white opacity-20"/>
           </div>
@@ -105,7 +105,7 @@ export const MarketingDashboard: React.FC = () => {
                     contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                 />
                 <Bar dataKey="revenue" radius={[0, 4, 4, 0]}>
-                  {metrics.map((entry, index) => (
+                  {metrics.map((_, index) => (
                     <Cell key={`cell-${index}`} fill={['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b'][index % 4]} />
                   ))}
                 </Bar>

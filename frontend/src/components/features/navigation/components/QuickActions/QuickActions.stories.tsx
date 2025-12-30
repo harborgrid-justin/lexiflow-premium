@@ -8,7 +8,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { QuickActions } from './QuickActions';
 import {
   Clock, FileText, UserPlus, Briefcase, Calendar,
-  FolderPlus, MessageSquare, Settings, Bell, Check
+  Settings, Bell, Check
 } from 'lucide-react';
 import type { QuickActionGroup } from './QuickActions';
 

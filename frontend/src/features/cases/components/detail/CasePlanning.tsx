@@ -107,10 +107,10 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
 
   return (
     <div className={cn("h-full flex flex-col overflow-hidden animate-fade-in", theme.background)}>
-      <TaskCreationModal 
-          isOpen={taskModal.isOpen} 
-          onClose={() => taskModal.close()} 
-          onSave={(task) => { notify.success("Task added"); taskModal.close(); }} 
+      <TaskCreationModal
+          isOpen={taskModal.isOpen}
+          onClose={() => taskModal.close()}
+          onSave={() => { notify.success("Task added"); taskModal.close(); }}
       />
 
       <div className={cn("p-4 border-b flex flex-col md:flex-row gap-4 justify-between shrink-0", theme.surface.default, theme.border.default)}>
@@ -152,9 +152,9 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
               onHoverTask={setActiveTaskId} 
               onAddTask={() => taskModal.open()}
           />
-          <GanttTimeline 
-              phases={phases} 
-              tasks={tasks.map(t => ({ ...t, isCritical: criticalPathIds.has(t.id) } as Record<string, unknown>))} 
+          <GanttTimeline
+              phases={phases}
+              tasks={tasks.map(t => ({ ...t, isCritical: criticalPathIds.has(t.id) }))}
               collapsedPhases={collapsedPhases} 
               zoom={zoom} 
               viewStartDate={viewStartDate} 

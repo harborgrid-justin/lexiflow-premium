@@ -5,15 +5,13 @@ import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms';
 import { Badge } from '@/components/atoms';
 import { Modal } from '@/components/molecules';
-import { Input, TextArea } from '@/components/atoms';
+import { Input } from '@/components/atoms';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { ErrorState } from '@/components/molecules';
-import { WebhooksApiService } from '@/api/integrations';
-import type { SystemWebhookConfig } from '@/types/system';
+import { WebhooksApiService, type SystemWebhookConfig } from '@/api/integrations';
 
 const webhooksApi = new WebhooksApiService();
 
@@ -32,18 +30,7 @@ export const WebhookManagement: React.FC = () => {
   // Fetch real webhooks from backend
   const { data: webhooks = [], isLoading, refetch } = useQuery(['webhooks'], async () => {
     const response = await webhooksApi.getAll();
-    const items = Array.isArray(response) ? response : (response as Record<string, unknown>).items || [];
-    return items.map((item: unknown) => ({
-      id: item.id,
-      name: item.name,
-      url: item.url,
-      events: item.events || [],
-      status: item.status || 'Active',
-      secret: item.secret,
-      lastTriggered: item.lastTriggered,
-      failureCount: item.failureCount || 0,
-      createdAt: item.createdAt,
-    })) as SystemWebhookConfig[];
+    return response as SystemWebhookConfig[];
   });
 
   const createModal = useModalState();
@@ -55,13 +42,12 @@ export const WebhookManagement: React.FC = () => {
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
 
   const handleCreate = async () => {
-    if (!formData.name || !formData.url || !formData.events?.length) {
-      notify.error('Name, URL, and at least one event are required');
+    if (!formData.url || !formData.events?.length) {
+      notify.error('URL and at least one event are required');
       return;
     }
     try {
       await webhooksApi.create({
-        name: formData.name,
         url: formData.url,
         events: formData.events,
         secret: formData.secret,
@@ -185,7 +171,7 @@ export const WebhookManagement: React.FC = () => {
             {webhooks.map(webhook => (
               <TableRow key={webhook.id}>
                 <TableCell>
-                  <span className={cn("font-medium", theme.text.primary)}>{webhook.name}</span>
+                  <span className={cn("font-medium", theme.text.primary)}>{webhook.id}</span>
                 </TableCell>
                 <TableCell>
                   <code className={cn("text-xs px-2 py-1 rounded", theme.surface.highlight)}>{webhook.url}</code>
@@ -194,8 +180,7 @@ export const WebhookManagement: React.FC = () => {
                   <Badge variant="info">{webhook.events.length} events</Badge>
                 </TableCell>
                 <TableCell>
-                  <Badge variant={webhook.status === 'Active' ? 'success' : webhook.status === 'Error' ? 'error' : 'neutral'}>
-                    {webhook.status === 'Error' && <AlertCircle className="h-3 w-3 mr-1" />}
+                  <Badge variant={webhook.status === 'active' ? 'success' : 'neutral'}>
                     {webhook.status}
                   </Badge>
                 </TableCell>
@@ -222,7 +207,6 @@ export const WebhookManagement: React.FC = () => {
         title={createModal.isOpen ? 'Create Webhook' : 'Edit Webhook'}
       >
         <div className="p-6 space-y-4">
-          <Input label="Webhook Name" value={formData.name || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})} placeholder="e.g., Case Update Notification" />
           <Input label="Endpoint URL" value={formData.url || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, url: e.target.value})} placeholder="https://api.example.com/webhook" />
           <Input label="Secret (optional)" value={formData.secret || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, secret: e.target.value})} placeholder="Shared secret for signature verification" />
 
@@ -270,7 +254,7 @@ export const WebhookManagement: React.FC = () => {
       <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.close} title="Delete Webhook">
         <div className="p-6">
           <p className={cn("mb-6", theme.text.primary)}>
-            Are you sure you want to delete <strong>{webhookSelection.selected?.name}</strong>? This action cannot be undone.
+            Are you sure you want to delete webhook <strong>{webhookSelection.selected?.id}</strong>? This action cannot be undone.
           </p>
           <div className="flex justify-end gap-2">
             <Button variant="secondary" onClick={deleteModal.close}>Cancel</Button>

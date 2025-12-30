@@ -15,7 +15,7 @@ type Story = StoryObj<typeof InfiniteScrollTrigger>;
 
 export const Default: Story = {
   args: {
-  "onLoadMore": {},
+  onLoadMore: () => {},
   "hasMore": true,
   "isLoading": true,
   "className": "Sample Text"

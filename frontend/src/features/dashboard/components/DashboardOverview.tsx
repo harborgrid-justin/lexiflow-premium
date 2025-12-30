@@ -30,7 +30,8 @@ import { LazyLoader } from '@/components/molecules';
 import { Scheduler } from '@/utils/scheduler';
 
 // Types
-import type { WorkflowTask, ChartDataPoint, TaskId, CaseId } from '@/types';
+import type { WorkflowTask, TaskId, CaseId } from '@/types';
+import type { ChartDataPoint as DashboardChartData } from '@/types/dashboard';
 import { TaskStatusBackend } from '@/types';
 
 // ============================================================================
@@ -63,7 +64,10 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCa
     highRisks: number;
   } | null>(['dashboard', 'stats'], () => DataService.dashboard.getStats());
   const { data: tasks = [] } = useQuery<WorkflowTask[]>(['tasks', 'all'], () => DataService.tasks.getAll());
-  const { data: chartData = [] } = useQuery<ChartDataPoint[]>(['dashboard', 'charts'], () => DataService.dashboard.getChartData());
+  const { data: rawChartData = [] } = useQuery<DashboardChartData[]>(['dashboard', 'charts'], () => DataService.dashboard.getChartData());
+
+  // Transform chart data from { name, value } to { name, count } for DashboardAnalytics
+  const chartData = rawChartData.map(item => ({ name: item.name, count: item.value }));
 
   interface RawAlert {
     id?: number | string;

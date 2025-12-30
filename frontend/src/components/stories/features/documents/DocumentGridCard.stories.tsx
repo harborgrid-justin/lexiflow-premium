@@ -51,7 +51,7 @@ export default meta;
 type Story = StoryObj<typeof DocumentGridCard>;
 
 const mockDocument: LegalDocument = {
-  id: '1' as Record<string, unknown>,
+  id: '1' as unknown as LegalDocument['id'],
   title: 'Motion to Dismiss.pdf',
   type: 'Pleading',
   status: 'Active',
@@ -60,8 +60,8 @@ const mockDocument: LegalDocument = {
   updatedAt: '2024-01-20',
   uploadDate: '2024-01-15',
   lastModified: '2024-01-20',
-  creatorId: 'user1' as Record<string, unknown>,
-  caseId: 'case1' as Record<string, unknown>,
+  creatorId: 'user1' as unknown as LegalDocument['creatorId'],
+  caseId: 'case1' as unknown as LegalDocument['caseId'],
   content: '',
   tags: ['motion', 'civil', 'litigation'],
   versions: []
@@ -192,7 +192,7 @@ export const GridLayout: Story = {
         </div>
         <div className="w-full h-64">
           <DocumentGridCard
-            doc={{ ...mockDocument, id: '2' as Record<string, unknown>, title: 'Brief.pdf' }}
+            doc={{ ...mockDocument, id: '2' as unknown as LegalDocument['id'], title: 'Brief.pdf' }}
             isSelected={true}
             onToggleSelection={fn()}
             onPreview={fn()}
@@ -200,7 +200,7 @@ export const GridLayout: Story = {
         </div>
         <div className="w-full h-64">
           <DocumentGridCard
-            doc={{ ...mockDocument, id: '3' as Record<string, unknown>, title: 'Evidence.pdf' }}
+            doc={{ ...mockDocument, id: '3' as unknown as LegalDocument['id'], title: 'Evidence.pdf' }}
             isSelected={false}
             onToggleSelection={fn()}
             onPreview={fn()}

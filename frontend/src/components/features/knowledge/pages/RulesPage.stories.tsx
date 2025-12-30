@@ -15,6 +15,6 @@ type Story = StoryObj<typeof RulesPage>;
 
 export const Default: Story = {
   args: {
-  "onNavigate": {}
+  onNavigate: () => {}
 },
 };

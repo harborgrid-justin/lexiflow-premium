@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ShieldAlert, FileText, AlertTriangle, CheckCircle, Activity } from 'lucide-react';
 import { MetricCard } from '@/components/molecules';
 import { Card } from '@/components/molecules';

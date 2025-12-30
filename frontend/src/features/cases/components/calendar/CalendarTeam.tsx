@@ -37,6 +37,7 @@ interface TeamMember {
   name: string;
   role: string;
   availability?: Record<string, unknown>;
+  schedule?: number[];
 }
 
 export const CalendarTeam: React.FC = () => {
@@ -72,13 +73,13 @@ export const CalendarTeam: React.FC = () => {
               </div>
               
               <div className="col-span-1 md:col-span-7 grid grid-cols-7 gap-2">
-                {member.schedule.map((status: number, i: number) => (
+                {member.schedule?.map((status: number, i: number) => (
                     <div key={i} className="flex flex-col items-center gap-1">
                         <span className={cn("md:hidden text-[10px] uppercase font-bold", theme.text.tertiary)}>{days[i].charAt(0)}</span>
                         <div className={cn(
                             "h-8 w-full rounded-md flex items-center justify-center border transition-colors",
-                            status 
-                                ? "bg-green-100 border-green-200" 
+                            status
+                                ? "bg-green-100 border-green-200"
                                 : cn(theme.surface.highlight, theme.border.default)
                         )}>
                             <span className={cn("text-[10px] md:text-xs font-medium", status ? "text-green-700" : theme.text.tertiary)}>

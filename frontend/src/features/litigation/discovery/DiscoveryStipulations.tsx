@@ -196,10 +196,6 @@ export const DiscoveryStipulations: React.FC<DiscoveryStipulationsProps> = ({ ca
       updateStipStatus({ id, status: newStatus });
   };
 
-  const handleRefresh = () => {
-    refetch();
-  };
-
   const handleInputChange = (field: keyof StipulationRequest) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {

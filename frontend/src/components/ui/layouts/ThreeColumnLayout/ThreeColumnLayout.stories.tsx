@@ -15,13 +15,13 @@ type Story = StoryObj<typeof ThreeColumnLayout>;
 
 export const Default: Story = {
   args: {
-  "leftColumn": "<div>Sample Content</div>",
-  "centerColumn": "<div>Sample Content</div>",
-  "rightColumn": "<div>Sample Content</div>",
-  "leftWidth": {},
-  "rightWidth": {},
-  "gap": {},
-  "showOnMobile": {},
+  leftColumn: undefined,
+  centerColumn: undefined,
+  rightColumn: undefined,
+  "leftWidth": undefined,
+  "rightWidth": undefined,
+  gap: undefined,
+  "showOnMobile": undefined,
   "className": "Sample Text"
 },
 };

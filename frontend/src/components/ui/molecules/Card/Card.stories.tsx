@@ -15,12 +15,12 @@ type Story = StoryObj<typeof Card>;
 
 export const Default: Story = {
   args: {
-  "children": "<div>Sample Content</div>",
+  children: undefined,
   "className": "Sample Text",
   "noPadding": true,
-  "title": "<div>Sample Content</div>",
+  title: undefined,
   "subtitle": "Sample Text",
-  "action": "<div>Sample Content</div>",
-  "footer": "<div>Sample Content</div>"
+  action: undefined,
+  footer: undefined
 },
 };

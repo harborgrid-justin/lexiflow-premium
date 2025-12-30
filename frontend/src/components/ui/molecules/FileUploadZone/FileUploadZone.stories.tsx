@@ -15,10 +15,10 @@ type Story = StoryObj<typeof FileUploadZone>;
 
 export const Default: Story = {
   args: {
-  "file": {},
+  "file": new File([''], 'example.pdf', { type: 'application/pdf' }),
   "processing": true,
   "processStage": "Sample Text",
-  "onFileSelect": {},
+  onFileSelect: () => {},
   "generatedHash": "Sample Text",
   "multiple": true
 },

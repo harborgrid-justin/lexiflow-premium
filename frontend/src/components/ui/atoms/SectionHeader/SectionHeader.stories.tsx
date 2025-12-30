@@ -17,6 +17,6 @@ export const Default: Story = {
   args: {
   "title": "Sample Text",
   "subtitle": "Sample Text",
-  "action": "<div>Sample Content</div>"
+  action: undefined
 },
 };

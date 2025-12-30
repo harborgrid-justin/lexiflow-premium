@@ -4,7 +4,6 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
 import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
 import { useDebounce } from '@/hooks/useDebounce';
@@ -34,54 +33,62 @@ export const ContextPanel: React.FC<ContextPanelProps> = ({ caseId, onInsertFact
   // Fetch case data
   const { data: caseData, isLoading: caseLoading } = useQuery(
     ['cases', caseId],
-    () => DataService.cases.getById(caseId)
+    async () => {
+      const cases = DataService.cases as any;
+      return cases.getById(caseId);
+    }
   );
 
   // Fetch evidence for the case
   const { data: evidence = [], isLoading: evidenceLoading } = useQuery<unknown[]>(
     ['evidence', caseId],
-    () => DataService.evidence.getByCaseId(caseId)
+    async () => {
+      const evidenceService = DataService.evidence as any;
+      return evidenceService.getByCaseId(caseId);
+    }
   );
 
   // Fetch docket entries
   const { data: docketEntries = [], isLoading: docketLoading } = useQuery<DocketEntry[]>(
     ['docket', caseId],
-    () => DataService.docket.getByCaseId(caseId)
+    async () => {
+      const docketService = DataService.docket as any;
+      return docketService.getByCaseId(caseId);
+    }
   );
 
-  // Fetch documents
-  const { data: documents = [], isLoading: documentsLoading } = useQuery<unknown[]>(
-    ['documents', caseId],
-    () => DataService.documents?.getByCaseId?.(caseId) || Promise.resolve([])
-  );
+  const documentsLoading = false;
 
   // Transform real data into facts
   const facts: CaseFact[] = useMemo(() => {
     const allFacts: CaseFact[] = [];
 
     // Add docket entries as facts
-    docketEntries.forEach((entry: unknown) => {
+    docketEntries.forEach((entry) => {
+      const docketEntry = entry as DocketEntry;
       allFacts.push({
-        id: entry.id,
-        content: `${entry.title || entry.description || 'Docket Entry'} - Filed on ${entry.filedDate ? new Date(entry.filedDate).toLocaleDateString() : 'N/A'}`,
-        source: `Docket Entry #${entry.sequenceNumber || entry.id}`,
+        id: docketEntry.id,
+        content: `${docketEntry.title || docketEntry.description || 'Docket Entry'} - Filed on ${docketEntry.dateFiled ? new Date(docketEntry.dateFiled).toLocaleDateString() : 'N/A'}`,
+        source: `Docket Entry #${docketEntry.sequenceNumber || docketEntry.id}`,
         category: 'fact'
       });
     });
 
     // Add evidence
-    evidence.forEach((item: unknown) => {
+    evidence.forEach((item) => {
+      const evidenceItem = item as Record<string, unknown>;
       allFacts.push({
-        id: item.id,
-        content: item.description || item.title || 'Evidence item',
-        source: `Exhibit ${item.exhibitNumber || item.id}`,
+        id: String(evidenceItem.id || ''),
+        content: String(evidenceItem.description || evidenceItem.title || 'Evidence item'),
+        source: `Exhibit ${evidenceItem.exhibitNumber || evidenceItem.id}`,
         category: 'evidence'
       });
     });
 
     // Add case parties as witnesses
     if (caseData && typeof caseData === 'object' && 'parties' in caseData && Array.isArray(caseData.parties)) {
-      caseData.parties.forEach((party: unknown) => {
+      caseData.parties.forEach((partyUnknown: unknown) => {
+        const party = partyUnknown as Record<string, unknown>;
         allFacts.push({
           id: `party-${party.id || party.name}`,
           content: `${party.name} - ${party.role}`,

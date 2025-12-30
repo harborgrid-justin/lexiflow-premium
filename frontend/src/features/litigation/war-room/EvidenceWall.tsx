@@ -12,7 +12,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useMemo, useTransition } from 'react';
+import React, { useMemo, useTransition } from 'react';
 import { Loader2 } from 'lucide-react';
 
 // ============================================================================
@@ -32,7 +32,7 @@ import { WallItemCard } from './cards/WallItemCard';
 import { cn } from '@/utils/cn';
 
 // Types
-import type { WarRoomData, LegalDocument, EvidenceItem, Motion, DocumentId, CaseId } from '@/types';
+import type { WarRoomData, LegalDocument, EvidenceItem, Motion } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -60,7 +60,7 @@ interface WallItem extends Record<string, unknown> {
 // COMPONENT
 // ============================================================================
 
-export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData }) => {
+export const EvidenceWall: React.FC<EvidenceWallProps> = ({ warRoomData }) => {
   // ============================================================================
   // HOOKS & CONTEXT
   // ============================================================================
@@ -76,29 +76,35 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
   // MEMOIZED VALUES
   // ============================================================================
   const allItems = useMemo<WallItem[]>(() => {
-      const docs = (warRoomData.documents || []).map((d: unknown) => ({
-          id: d.id,
-          title: d.title,
-          type: d.type,
-          status: d.status || 'Available',
-          hot: d.tags.includes('Hot') || d.tags.includes('Critical'),
-          party: 'Unknown', 
-          num: d.id,
-          desc: d.content?.substring(0, 100),
-          original: d
-      }));
+      const docs = (warRoomData.documents || []).map((docUnknown: unknown) => {
+          const d = docUnknown as LegalDocument;
+          return {
+              id: d.id,
+              title: d.title,
+              type: d.type,
+              status: d.status || 'Available',
+              hot: (d.tags || []).includes('Hot') || (d.tags || []).includes('Critical'),
+              party: 'Unknown',
+              num: d.id,
+              desc: d.content?.substring(0, 100),
+              original: d
+          };
+      });
 
-      const ev = (warRoomData.evidence || []).map((e: unknown) => ({
-          id: e.id,
-          title: e.title,
-          type: e.type,
-          status: e.admissibility || 'Pending',
-          hot: e.tags.includes('Key Doc'),
-          party: 'Joint', 
-          num: e.id,
-          desc: e.description,
-          original: e
-      }));
+      const ev = (warRoomData.evidence || []).map((evidenceUnknown: unknown) => {
+          const e = evidenceUnknown as EvidenceItem;
+          return {
+              id: e.id,
+              title: e.title,
+              type: e.type,
+              status: e.admissibility || 'Pending',
+              hot: (e.tags || []).includes('Key Doc'),
+              party: 'Joint',
+              num: e.id,
+              desc: e.description,
+              original: e
+          };
+      });
       
       const motions = (warRoomData.motions || []).map((m) => ({
           id: m.id,
@@ -128,13 +134,6 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
     initialCategory: 'All'
   });
 
-  // Handle input with transition to keep UI responsive during filtering
-  const handleSearch = (val: string) => {
-      startTransition(() => {
-          setSearchQuery(val);
-      });
-  };
-
   const handleFilterClick = (val: string) => {
       startTransition(() => {
           setFilter(val);
@@ -147,21 +146,9 @@ export const EvidenceWall: React.FC<EvidenceWallProps> = ({ caseId, warRoomData 
           winId,
           `Evidence Preview: ${item.title}`,
           <div className={cn("h-full", theme.background)}>
-              <DocumentPreviewPanel 
-                 document={{
-                     id: item.id as DocumentId,
-                     title: item.title,
-                     type: item.type,
-                     content: item.desc || '',
-                     uploadDate: new Date().toISOString(),
-                     lastModified: new Date().toISOString(),
-                     tags: item.hot ? ['Hot'] : [],
-                     versions: [],
-                     caseId: caseId as CaseId,
-                     status: item.status
-                 }}
-                 onViewHistory={() => {}}
-                 isOrbital={true}
+              <DocumentPreviewPanel
+                 documentId={item.id}
+                 className="h-full"
               />
           </div>
       );

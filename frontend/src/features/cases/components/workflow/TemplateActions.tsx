@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Copy, Edit3, Trash2, MoreHorizontal } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

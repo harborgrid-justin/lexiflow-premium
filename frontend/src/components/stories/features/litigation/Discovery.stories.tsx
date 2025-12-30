@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { CaseId, DiscoveryRequest, DiscoveryType, DiscoveryStatus } from '@/types';
 import { DiscoveryPlatform } from '@features/litigation/discovery/DiscoveryPlatform';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';

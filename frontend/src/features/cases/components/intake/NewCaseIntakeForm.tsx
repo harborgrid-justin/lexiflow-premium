@@ -16,9 +16,9 @@
  * - Engagement letter generation
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, Dispatch, SetStateAction } from 'react';
 import {
-  User, Briefcase, DollarSign, Users, FileText, Shield, CheckCircle,
+  User, Briefcase, DollarSign, Users, Shield, CheckCircle,
   AlertTriangle, ArrowRight, ArrowLeft, Save, Send
 } from 'lucide-react';
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -27,13 +27,12 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms';
 import { Card } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
-import type { Matter } from '@/types';
+import type { Matter, Case, User as UserType } from '@/types';
 
 type IntakeStep = 'client' | 'matter' | 'conflicts' | 'team' | 'financial' | 'review';
 
 export const NewCaseIntakeForm: React.FC = () => {
-  const { theme, mode } = useTheme();
+  const { mode } = useTheme();
   const [currentStep, setCurrentStep] = useState<IntakeStep>('client');
   const [formData, setFormData] = useState({
     // Client Info
@@ -72,11 +71,11 @@ export const NewCaseIntakeForm: React.FC = () => {
 
   // Check for conflicts
   const conflictCheck = useMemo(() => {
-    if (!existingMatters || !formData.clientName) return { hasConflict: false, conflicts: [] };
+    if (!existingMatters || !formData.clientName) return { hasConflict: false, conflicts: [] as Case[] };
 
-    const conflicts = existingMatters.filter(m =>
-      m.clientName?.toLowerCase().includes(formData.clientName.toLowerCase()) ||
-      m.opposingPartyName?.toLowerCase().includes(formData.clientName.toLowerCase())
+    const conflicts = existingMatters.filter((m: Case) =>
+      (m.client && m.client.toLowerCase().includes(formData.clientName.toLowerCase())) ||
+      (m.opposingCounsel && typeof m.opposingCounsel === 'string' && m.opposingCounsel.toLowerCase().includes(formData.clientName.toLowerCase()))
     );
 
     return {
@@ -116,22 +115,24 @@ export const NewCaseIntakeForm: React.FC = () => {
         clientName: formData.clientName,
         clientEmail: formData.clientEmail,
         clientPhone: formData.clientPhone,
-        matterType: formData.matterType as Record<string, unknown>,
-        practiceArea: formData.practiceArea as Record<string, unknown>,
+        matterType: formData.matterType as Matter['matterType'],
+        practiceArea: formData.practiceArea,
         description: formData.description,
         jurisdiction: formData.jurisdiction,
-        priority: formData.priority.toUpperCase() as Record<string, unknown>,
-        status: 'INTAKE' as Record<string, unknown>,
-        leadAttorneyId: formData.leadAttorneyId as Record<string, unknown>,
-        teamMembers: formData.supportTeam as Record<string, unknown>,
+        priority: formData.priority.toUpperCase() as Matter['priority'],
+        status: 'INTAKE' as Matter['status'],
+        leadAttorneyId: formData.leadAttorneyId,
+        teamMembers: formData.supportTeam as unknown as Matter['teamMembers'],
         billingType: formData.billingType,
         estimatedValue: parseFloat(formData.estimatedValue) || 0,
         retainerAmount: parseFloat(formData.retainerAmount) || 0,
+        openedDate: new Date().toISOString().split('T')[0],
+        conflictCheckCompleted: false,
+        createdBy: 'current-user' as Matter['createdBy'],
       };
 
-      await api.cases.create(newMatter);
-      
-      // Show success message and redirect
+      await api.matters.create(newMatter);
+
       alert('Matter successfully created!');
       window.location.href = '/matters';
     } catch (error) {
@@ -235,7 +236,31 @@ export const NewCaseIntakeForm: React.FC = () => {
 };
 
 // Step Components
-const ClientInfoStep: React.FC<unknown> = ({ formData, setFormData }) => {
+interface FormData {
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
+  clientType: string;
+  matterTitle: string;
+  matterType: string;
+  practiceArea: string;
+  description: string;
+  jurisdiction: string;
+  priority: string;
+  leadAttorneyId: string;
+  supportTeam: string[];
+  billingType: string;
+  hourlyRate: string;
+  estimatedValue: string;
+  retainerAmount: string;
+}
+
+interface ClientInfoStepProps {
+  formData: FormData;
+  setFormData: Dispatch<SetStateAction<FormData>>;
+}
+
+const ClientInfoStep: React.FC<ClientInfoStepProps> = ({ formData, setFormData }) => {
   const { mode } = useTheme();
   return (
   <div className="space-y-6">
@@ -316,7 +341,7 @@ const ClientInfoStep: React.FC<unknown> = ({ formData, setFormData }) => {
   );
 };
 
-const MatterDetailsStep: React.FC<unknown> = ({ formData, setFormData }) => {
+const MatterDetailsStep: React.FC<ClientInfoStepProps> = ({ formData, setFormData }) => {
   const { mode } = useTheme();
   return (
   <div className="space-y-6">
@@ -405,7 +430,14 @@ const MatterDetailsStep: React.FC<unknown> = ({ formData, setFormData }) => {
   );
 };
 
-const ConflictCheckStep: React.FC<unknown> = ({ conflictCheck }) => {
+interface ConflictCheckStepProps {
+  conflictCheck: {
+    hasConflict: boolean;
+    conflicts: Case[];
+  };
+}
+
+const ConflictCheckStep: React.FC<ConflictCheckStepProps> = ({ conflictCheck }) => {
   const { mode } = useTheme();
   return (
   <div className="space-y-6">
@@ -438,13 +470,13 @@ const ConflictCheckStep: React.FC<unknown> = ({ conflictCheck }) => {
               {conflictCheck.conflicts.length} potential conflict(s) detected. Please review before proceeding.
             </div>
             <div className="mt-4 space-y-2">
-              {conflictCheck.conflicts.map((matter: unknown) => (
-                <div key={matter.id} className={cn('p-3 rounded border text-sm', mode === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
+              {conflictCheck.conflicts.map((caseItem: Case) => (
+                <div key={caseItem.id} className={cn('p-3 rounded border text-sm', mode === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
                   <div className={cn('font-medium', mode === 'dark' ? 'text-slate-200' : 'text-slate-800')}>
-                    {matter.title}
+                    {caseItem.title}
                   </div>
                   <div className={cn('text-xs mt-1', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
-                    Client: {matter.clientName}
+                    Client: {caseItem.client}
                   </div>
                 </div>
               ))}
@@ -457,7 +489,13 @@ const ConflictCheckStep: React.FC<unknown> = ({ conflictCheck }) => {
   );
 };
 
-const TeamAssignmentStep: React.FC<unknown> = ({ formData, setFormData, users }) => {
+interface TeamAssignmentStepProps {
+  formData: FormData;
+  setFormData: Dispatch<SetStateAction<FormData>>;
+  users: UserType[] | undefined;
+}
+
+const TeamAssignmentStep: React.FC<TeamAssignmentStepProps> = ({ formData, setFormData, users }) => {
   const { mode } = useTheme();
   return (
   <div className="space-y-6">
@@ -479,7 +517,7 @@ const TeamAssignmentStep: React.FC<unknown> = ({ formData, setFormData, users })
         )}
       >
         <option value="">Select attorney...</option>
-        {users?.filter((u: unknown) => u.role === 'ATTORNEY' || u.role === 'PARTNER').map((user: unknown) => (
+        {users?.filter((u: UserType) => u.role === 'Senior Partner' || u.role === 'Associate').map((user: UserType) => (
           <option key={user.id} value={user.id}>
             {user.name || user.email} {user.role ? `- ${user.role}` : ''}
           </option>
@@ -490,7 +528,7 @@ const TeamAssignmentStep: React.FC<unknown> = ({ formData, setFormData, users })
   );
 };
 
-const FinancialSetupStep: React.FC<unknown> = ({ formData, setFormData }) => {
+const FinancialSetupStep: React.FC<ClientInfoStepProps> = ({ formData, setFormData }) => {
   const { mode } = useTheme();
   return (
   <div className="space-y-6">
@@ -539,7 +577,11 @@ const FinancialSetupStep: React.FC<unknown> = ({ formData, setFormData }) => {
   );
 };
 
-const ReviewStep: React.FC<unknown> = ({ formData }) => {
+interface ReviewStepProps {
+  formData: FormData;
+}
+
+const ReviewStep: React.FC<ReviewStepProps> = ({ formData }) => {
   const { mode } = useTheme();
   return (
   <div className="space-y-6">

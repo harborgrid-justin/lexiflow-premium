@@ -11,7 +11,6 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useMemo } from 'react';
-import { Loader2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -90,7 +89,7 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
 
   if (isLoading) return <AdaptiveLoader contentType="dashboard" shimmer />;
 
-  const handleNodeClick = (node: unknown) => {
+  const handleNodeClick = (_node: unknown) => {
     // Entity node interaction - can be extended for detailed entity profile viewing
   };
 

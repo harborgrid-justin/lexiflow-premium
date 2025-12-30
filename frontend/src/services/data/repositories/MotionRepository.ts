@@ -28,6 +28,7 @@ import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { MotionsApiService } from '@/api/litigation';
+import { ValidationError } from '@/services/core/errors';
 
 /**
  * Query keys for React Query integration
@@ -52,7 +53,7 @@ export class MotionRepository extends Repository<Motion> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || false || id.trim() === '') {
+        if (!id || typeof id !== 'string' || id.trim() === '') {
             throw new Error(`[MotionRepository.${methodName}] Invalid id parameter`);
         }
     }
@@ -60,7 +61,7 @@ export class MotionRepository extends Repository<Motion> {
     override async getAll(): Promise<Motion[]> {
         if (this.useBackend) {
             try {
-                return await this.motionsApi.getAll() as Record<string, unknown>;
+                return await this.motionsApi.getAll();
             } catch (error) {
                 console.warn('[MotionRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -68,11 +69,11 @@ export class MotionRepository extends Repository<Motion> {
         return await super.getAll();
     }
 
-    getByCaseId = async (caseId: string): Promise<Motion[]> => {
+    override getByCaseId = async (caseId: string): Promise<Motion[]> => {
         this.validateId(caseId, 'getByCaseId');
         if (this.useBackend) {
             try {
-                return await this.motionsApi.getByCaseId(caseId) as Record<string, unknown>;
+                return await this.motionsApi.getByCaseId(caseId);
             } catch (error) {
                 console.warn('[MotionRepository] Backend API unavailable', error);
             }
@@ -84,7 +85,7 @@ export class MotionRepository extends Repository<Motion> {
         this.validateId(id, 'getById');
         if (this.useBackend) {
             try {
-                return await this.motionsApi.getById(id) as Record<string, unknown>;
+                return await this.motionsApi.getById(id);
             } catch (error) {
                 console.warn('[MotionRepository] Backend API unavailable', error);
             }
@@ -98,7 +99,7 @@ export class MotionRepository extends Repository<Motion> {
         }
         if (this.useBackend) {
             try {
-                return await this.motionsApi.create(item as Record<string, unknown>) as Record<string, unknown>;
+                return await this.motionsApi.create(item);
             } catch (error) {
                 console.warn('[MotionRepository] Backend API unavailable', error);
             }
@@ -111,7 +112,7 @@ export class MotionRepository extends Repository<Motion> {
         this.validateId(id, 'update');
         if (this.useBackend) {
             try {
-                return await this.motionsApi.update(id, updates as Record<string, unknown>) as Record<string, unknown>;
+                return await this.motionsApi.update(id, updates);
             } catch (error) {
                 console.warn('[MotionRepository] Backend API unavailable', error);
             }
@@ -134,7 +135,7 @@ export class MotionRepository extends Repository<Motion> {
 
     async updateStatus(id: string, status: string): Promise<Motion> {
         this.validateId(id, 'updateStatus');
-        if (!status || false) {
+        if (!status || typeof status !== 'string') {
             throw new ValidationError('[MotionRepository.updateStatus] Invalid status');
         }
         return await this.update(id, { status } as Partial<Motion>);
@@ -149,7 +150,7 @@ export class MotionRepository extends Repository<Motion> {
             const lowerQuery = criteria.query.toLowerCase();
             motions = motions.filter(m =>
                 m.title?.toLowerCase().includes(lowerQuery) ||
-                (m as Record<string, unknown>).notes?.toLowerCase().includes(lowerQuery)
+                (m as { notes?: string }).notes?.toLowerCase().includes(lowerQuery)
             );
         }
         return motions;

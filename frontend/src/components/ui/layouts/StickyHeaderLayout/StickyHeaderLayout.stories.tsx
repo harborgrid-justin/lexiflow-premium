@@ -15,8 +15,8 @@ type Story = StoryObj<typeof StickyHeaderLayout>;
 
 export const Default: Story = {
   args: {
-  "header": "<div>Sample Content</div>",
-  "children": "<div>Sample Content</div>",
+  header: undefined,
+  children: undefined,
   "headerClassName": "Sample Text",
   "contentClassName": "Sample Text",
   "className": "Sample Text"

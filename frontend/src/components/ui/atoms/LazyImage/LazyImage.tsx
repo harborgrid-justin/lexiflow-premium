@@ -12,7 +12,7 @@
  * - Loading skeleton with pulse animation
  */
 
-import React, { useState, useEffect, useRef, useMemo, useCallback, ImgHTMLAttributes } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback, ImgHTMLAttributes } from 'react';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

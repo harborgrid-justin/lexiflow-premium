@@ -16,7 +16,7 @@ type Story = StoryObj<typeof BackendStatusIndicator>;
 export const Default: Story = {
   args: {
   "showLabel": true,
-  "variant": {},
+  variant: undefined,
   "showPulse": true
 },
 };

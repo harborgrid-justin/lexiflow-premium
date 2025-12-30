@@ -130,7 +130,7 @@ export const getMenuItemDescription = (theme: Theme) => cn(
   theme.text.secondary
 );
 
-export const getBadge = (theme: Theme, variant: 'primary' | 'success' | 'warning' | 'info') => {
+export const getBadge = (variant: 'primary' | 'success' | 'warning' | 'info') => {
   const variantClasses = {
     primary: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
     success: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",

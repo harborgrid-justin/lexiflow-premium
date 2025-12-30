@@ -16,7 +16,7 @@ type Story = StoryObj<typeof SignaturePad>;
 export const Default: Story = {
   args: {
   "value": true,
-  "onChange": true,
+  "onChange": () => {},
   "label": "Sample Text",
   "subtext": "Sample Text",
   "isSigning": true

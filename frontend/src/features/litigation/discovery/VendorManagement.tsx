@@ -27,7 +27,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState } from 'react';
-import { Briefcase, Phone, Mail, Star, Plus } from 'lucide-react';
+import { Briefcase, Star, Plus } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -45,10 +45,8 @@ import { useModalState } from '@/hooks';
 
 // Services & Utils
 import { DataService } from '@/services';
-import { cn } from '@/utils/cn';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -117,13 +115,13 @@ export function VendorManagement() {
       addVendor({
           id: `vnd-${Date.now()}`,
           name: newVendor.name,
-          serviceType: newVendor.serviceType as Record<string, unknown> || 'Court Reporting',
+          serviceType: newVendor.serviceType as unknown as Record<string, unknown> || 'Court Reporting',
           contactName: newVendor.contactName || '',
           phone: newVendor.phone || '',
           email: newVendor.email || '',
           status: 'Active',
           rating: 5
-      } as Vendor);
+      } as unknown as Vendor);
   };
 
   // ==========================================================================

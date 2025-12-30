@@ -1,14 +1,14 @@
 /**
  * Connection Card Component
- * 
+ *
  * Displays a single data source connection with status,
  * metrics, and action buttons.
  */
 
-import React, { useState } from 'react';
-import { 
-  RefreshCw, Trash2, ShieldCheck, Activity, 
-  Database, Cloud, Server, AlertTriangle, X 
+import React from 'react';
+import {
+  RefreshCw, Trash2, ShieldCheck, Activity,
+  Database, Cloud, Server, AlertTriangle, X
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/providers/ThemeContext';
@@ -31,10 +31,9 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
   connection, 
   onSync, 
   onDelete, 
-  onTest 
+  onTest
 }) => {
   const { theme } = useTheme();
-  const [isHovered, setIsHovered] = useState(false);
 
   const getProviderIcon = (type: string) => {
     switch (type) {
@@ -53,8 +52,6 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       className={cn(
         "relative p-5 rounded-xl border transition-all duration-300 group",
         theme.surface.default,

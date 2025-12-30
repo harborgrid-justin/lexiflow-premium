@@ -65,7 +65,7 @@ export class CorrespondenceErrorBoundary extends Component<Props, State> {
     this.props.onReset?.();
   };
 
-  render() {
+  override render() {
     if (this.state.hasError) {
       return <ErrorFallback error={this.state.error} onReset={this.handleReset} />;
     }

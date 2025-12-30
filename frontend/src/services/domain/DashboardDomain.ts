@@ -5,7 +5,6 @@
  */
 
 import { api } from '@/api';
-import { delay } from '@/utils/async';
 import { STORES, db } from '@/services/data/db';
 
 interface DashboardWidget {

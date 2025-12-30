@@ -69,9 +69,9 @@ export function WitnessPrep({ caseId: _caseId, warRoomData, initialWitnessId, on
   // ============================================================================
   const witnesses = useMemo(() => {
       return (warRoomData.witnesses || []).map((p: unknown) => ({
-          id: p.id,
-          name: p.name,
-          role: p.role,
+          id: (p as {id: string}).id,
+          name: (p as {name: string}).name,
+          role: (p as {role: string}).role,
           status: 'Available',
           scheduled: 'TBD',
           prep: 0,

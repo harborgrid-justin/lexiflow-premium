@@ -15,7 +15,7 @@ type Story = StoryObj<typeof ServiceCoverageIndicator>;
 
 export const Default: Story = {
   args: {
-  "className": "Sample Text",
-  "compact": true
+  "isOpen": true,
+  "onClose": () => {}
 },
 };

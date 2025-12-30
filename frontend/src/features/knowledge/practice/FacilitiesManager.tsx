@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState } from 'react';
-import { MapPin, Key, Wrench, Grid, Users, Plus, CheckCircle, AlertTriangle, Loader2 } from 'lucide-react';
+import { MapPin, Key, Wrench, Grid, Users, AlertTriangle, Loader2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -19,8 +19,6 @@ import { MapPin, Key, Wrench, Grid, Users, Plus, CheckCircle, AlertTriangle, Loa
 // Services & Data
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
-// ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -28,7 +26,7 @@ import { useTheme } from '@/providers/ThemeContext';
 // Components
 import { Tabs } from '@/components/molecules';
 import { Card } from '@/components/molecules';
-import { MetricTile, ActionRow } from '@/components/organisms/_legacy/RefactoredCommon';
+import { MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { Badge } from '@/components/atoms';
 
@@ -43,14 +41,19 @@ export const FacilitiesManager: React.FC = () => {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('locations');
 
+    const operationsService = DataService.operations as {
+        getMaintenanceTickets: () => Promise<unknown[]>;
+        getFacilities: () => Promise<unknown[]>;
+    };
+
     const { data: tickets = [], isLoading: ticketsLoading } = useQuery<unknown[]>(
         ['maintenance-tickets', 'all'],
-        DataService.operations.getMaintenanceTickets
+        operationsService.getMaintenanceTickets
     );
-    
+
     const { data: locations = [], isLoading: locationsLoading } = useQuery<unknown[]>(
         ['facilities', 'all'],
-        DataService.operations.getFacilities
+        operationsService.getFacilities
     );
 
     const isLoading = ticketsLoading || locationsLoading;
@@ -58,9 +61,10 @@ export const FacilitiesManager: React.FC = () => {
     return (
         <div className="flex flex-col h-full space-y-4">
              <div className={cn("p-4 border-b shrink-0", theme.border.default)}>
-                <ActionRow title="Facilities & Real Estate" subtitle="Manage physical assets, leases, and office operations.">
-                    <button className={cn("px-3 py-2 bg-blue-600 text-white rounded text-sm font-medium hover:bg-blue-700")}>Log Maintenance</button>
-                </ActionRow>
+                <div className="mb-4">
+                    <h2 className={cn("text-xl font-bold", theme.text.primary)}>Facilities & Real Estate</h2>
+                    <p className={cn("text-sm", theme.text.secondary)}>Manage physical assets, leases, and office operations.</p>
+                </div>
                 <div className="mt-4">
                     <Tabs 
                         tabs={[
@@ -81,16 +85,19 @@ export const FacilitiesManager: React.FC = () => {
                     <>
                         {activeTab === 'locations' && (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {locations.map(loc => (
-                                    <Card key={loc.id} title={loc.name} className="hover:shadow-md transition-shadow cursor-pointer">
-                                        <div className="space-y-3 text-sm">
-                                            <div className="flex justify-between"><span className={theme.text.secondary}>Capacity</span> <span className="font-bold">{loc.capacity * 100}%</span></div>
-                                            <div className="flex justify-between"><span className={theme.text.secondary}>Staff</span> <span className="font-bold">{loc.staffCount}</span></div>
-                                            <div className="flex justify-between"><span className={theme.text.secondary}>Status</span> <span className="text-green-600 font-bold">{loc.status}</span></div>
-                                            <div className="w-full h-32 bg-slate-100 rounded mt-4 flex items-center justify-center text-slate-400 text-xs">Map Placeholder</div>
-                                        </div>
-                                    </Card>
-                                ))}
+                                {locations.map((l: unknown) => {
+                                    const loc = l as { id: string; name?: string; capacity?: number; staffCount?: number; status?: string };
+                                    return (
+                                        <Card key={loc.id} title={loc.name || 'Unnamed Location'} className="hover:shadow-md transition-shadow cursor-pointer">
+                                            <div className="space-y-3 text-sm">
+                                                <div className="flex justify-between"><span className={theme.text.secondary}>Capacity</span> <span className="font-bold">{(loc.capacity || 0) * 100}%</span></div>
+                                                <div className="flex justify-between"><span className={theme.text.secondary}>Staff</span> <span className="font-bold">{loc.staffCount || 0}</span></div>
+                                                <div className="flex justify-between"><span className={theme.text.secondary}>Status</span> <span className="text-green-600 font-bold">{loc.status || 'N/A'}</span></div>
+                                                <div className="w-full h-32 bg-slate-100 rounded mt-4 flex items-center justify-center text-slate-400 text-xs">Map Placeholder</div>
+                                            </div>
+                                        </Card>
+                                    );
+                                })}
                             </div>
                         )}
 
@@ -113,15 +120,18 @@ export const FacilitiesManager: React.FC = () => {
                                 <TableContainer>
                                     <TableHeader><TableHead>ID</TableHead><TableHead>Location</TableHead><TableHead>Issue</TableHead><TableHead>Priority</TableHead><TableHead>Status</TableHead></TableHeader>
                                     <TableBody>
-                                        {tickets.map(t => (
-                                            <TableRow key={t.id}>
-                                                <TableCell className="font-mono text-xs">{t.id}</TableCell>
-                                                <TableCell>{t.loc}</TableCell>
-                                                <TableCell className="font-medium">{t.issue}</TableCell>
-                                                <TableCell><Badge variant={t.priority === 'High' ? 'error' : 'neutral'}>{t.priority}</Badge></TableCell>
-                                                <TableCell><Badge variant={t.status === 'Open' ? 'warning' : t.status === 'Closed' ? 'success' : 'info'}>{t.status}</Badge></TableCell>
-                                            </TableRow>
-                                        ))}
+                                        {tickets.map((tick: unknown) => {
+                                            const t = tick as { id: string; loc?: string; issue?: string; priority?: string; status?: string };
+                                            return (
+                                                <TableRow key={t.id}>
+                                                    <TableCell className="font-mono text-xs">{t.id}</TableCell>
+                                                    <TableCell>{t.loc || 'N/A'}</TableCell>
+                                                    <TableCell className="font-medium">{t.issue || 'No description'}</TableCell>
+                                                    <TableCell><Badge variant={t.priority === 'High' ? 'error' : 'neutral'}>{t.priority || 'Normal'}</Badge></TableCell>
+                                                    <TableCell><Badge variant={t.status === 'Open' ? 'warning' : t.status === 'Closed' ? 'success' : 'info'}>{t.status || 'Pending'}</Badge></TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
                                     </TableBody>
                                 </TableContainer>
                             </div>

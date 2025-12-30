@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocketFilterPanel } from '@/features/cases/components/docket/DocketFilterPanel';
-import { Case, CaseStatus } from '@/types';
+import { Case, CaseStatus, CaseId, PartyId, MatterType } from '@/types';
 import { ThemeProvider } from '@/providers/ThemeContext';
 
 /**
@@ -68,19 +68,19 @@ type Story = StoryObj<typeof meta>;
 // Mock case data
 const mockCases: Case[] = [
   {
-    id: 'case-1' as Record<string, unknown>,
+    id: 'case-1' as CaseId,
     title: 'Smith v. Acme Corporation',
     caseNumber: '2024-CV-12345',
     status: CaseStatus.Active,
-    matterType: 'Civil' as Record<string, unknown>,
+    matterType: MatterType.LITIGATION,
     isArchived: false,
     court: 'US District Court, Southern District of New York',
     judge: 'Hon. Sarah Martinez',
     filingDate: '2024-01-15',
     client: 'John Smith',
     parties: [
-      { id: 'party-1' as Record<string, unknown>, name: 'John Smith', type: 'Plaintiff', role: 'Primary', caseId: 'case-1' as Record<string, unknown>, createdAt: '', updatedAt: '' },
-      { id: 'party-2' as Record<string, unknown>, name: 'Acme Corporation', type: 'Defendant', role: 'Primary', caseId: 'case-1' as Record<string, unknown>, createdAt: '', updatedAt: '' },
+      { id: 'party-1' as PartyId, name: 'John Smith', type: 'Plaintiff', role: 'Primary', caseId: 'case-1' as CaseId, createdAt: '', updatedAt: '' },
+      { id: 'party-2' as PartyId, name: 'Acme Corporation', type: 'Defendant', role: 'Primary', caseId: 'case-1' as CaseId, createdAt: '', updatedAt: '' },
     ],
     citations: [],
     arguments: [],
@@ -89,19 +89,19 @@ const mockCases: Case[] = [
     updatedAt: '2024-12-20T15:30:00Z',
   },
   {
-    id: 'case-2' as Record<string, unknown>,
+    id: 'case-2' as CaseId,
     title: 'Johnson Industries v. XYZ Corp',
     caseNumber: '2024-CV-67890',
     status: CaseStatus.Active,
-    matterType: 'Civil' as Record<string, unknown>,
+    matterType: MatterType.LITIGATION,
     isArchived: false,
     court: 'US District Court, Southern District of New York',
     judge: 'Hon. Michael Chen',
     filingDate: '2024-03-20',
     client: 'Johnson Industries',
     parties: [
-      { id: 'party-3' as Record<string, unknown>, name: 'Johnson Industries', type: 'Plaintiff', role: 'Primary', caseId: 'case-2' as Record<string, unknown>, createdAt: '', updatedAt: '' },
-      { id: 'party-4' as Record<string, unknown>, name: 'XYZ Corp', type: 'Defendant', role: 'Primary', caseId: 'case-2' as Record<string, unknown>, createdAt: '', updatedAt: '' },
+      { id: 'party-3' as PartyId, name: 'Johnson Industries', type: 'Plaintiff', role: 'Primary', caseId: 'case-2' as CaseId, createdAt: '', updatedAt: '' },
+      { id: 'party-4' as PartyId, name: 'XYZ Corp', type: 'Defendant', role: 'Primary', caseId: 'case-2' as CaseId, createdAt: '', updatedAt: '' },
     ],
     citations: [],
     arguments: [],
@@ -110,19 +110,19 @@ const mockCases: Case[] = [
     updatedAt: '2024-12-22T11:15:00Z',
   },
   {
-    id: 'case-3' as Record<string, unknown>,
+    id: 'case-3' as CaseId,
     title: 'United States v. Anderson',
     caseNumber: '2024-CR-11111',
     status: CaseStatus.Active,
-    matterType: 'Criminal' as Record<string, unknown>,
+    matterType: MatterType.LITIGATION,
     isArchived: false,
     court: 'US District Court, Eastern District of California',
     judge: 'Hon. Robert Williams',
     filingDate: '2024-06-10',
     client: 'United States of America',
     parties: [
-      { id: 'party-5' as Record<string, unknown>, name: 'United States of America', type: 'Plaintiff', role: 'Primary', caseId: 'case-3' as Record<string, unknown>, createdAt: '', updatedAt: '' },
-      { id: 'party-6' as Record<string, unknown>, name: 'David Anderson', type: 'Defendant', role: 'Primary', caseId: 'case-3' as Record<string, unknown>, createdAt: '', updatedAt: '' },
+      { id: 'party-5' as PartyId, name: 'United States of America', type: 'Plaintiff', role: 'Primary', caseId: 'case-3' as CaseId, createdAt: '', updatedAt: '' },
+      { id: 'party-6' as PartyId, name: 'David Anderson', type: 'Defendant', role: 'Primary', caseId: 'case-3' as CaseId, createdAt: '', updatedAt: '' },
     ],
     citations: [],
     arguments: [],

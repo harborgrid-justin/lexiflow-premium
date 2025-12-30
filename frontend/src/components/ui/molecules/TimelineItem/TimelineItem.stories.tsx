@@ -18,9 +18,9 @@ export const Default: Story = {
   "date": "Sample Text",
   "title": "Sample Text",
   "description": "Sample Text",
-  "icon": "<div>Sample Content</div>",
+  icon: undefined,
   "colorClass": "Sample Text",
-  "onClick": {},
+  onClick: () => {},
   "isLast": true
 },
 };

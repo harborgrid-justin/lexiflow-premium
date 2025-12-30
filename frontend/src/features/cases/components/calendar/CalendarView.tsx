@@ -36,8 +36,6 @@ const CalendarSOL = lazy(() => import('./CalendarSOL').then(m => ({ default: m.C
 const CalendarRules = lazy(() => import('./CalendarRules').then(m => ({ default: m.CalendarRules })));
 const CalendarSync = lazy(() => import('./CalendarSync').then(m => ({ default: m.CalendarSync })));
 
-type CalendarViewType = 'master' | 'team' | 'deadlines' | 'hearings' | 'sol' | 'rules' | 'sync';
-
 const TAB_CONFIG: TabConfigItem[] = [
   {
     id: 'schedules', label: 'Schedules', icon: Calendar,

@@ -7,7 +7,6 @@ import { Badge } from '@/components/atoms';
 import { Tabs } from '@/components/molecules';
 import { Button } from '@/components/atoms';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
 
 interface DataStream {
   id: string;

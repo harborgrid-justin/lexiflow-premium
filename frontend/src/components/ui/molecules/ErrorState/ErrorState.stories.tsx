@@ -17,7 +17,7 @@ export const Default: Story = {
   args: {
   "title": "Sample Text",
   "message": "Sample Text",
-  "onRetry": {},
+  onRetry: () => {},
   "retryText": "Sample Text",
   "className": "Sample Text",
   "centered": true

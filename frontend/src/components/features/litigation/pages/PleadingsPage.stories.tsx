@@ -15,8 +15,8 @@ type Story = StoryObj<typeof PleadingsPage>;
 
 export const Default: Story = {
   args: {
-  "onCreate": {},
-  "onEdit": "Sample Text",
+  onCreate: () => {},
+  "onEdit": () => {},
   "caseId": "Sample Text"
 },
 };

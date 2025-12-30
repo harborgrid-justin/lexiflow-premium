@@ -15,8 +15,8 @@ type Story = StoryObj<typeof RiskMeter>;
 
 export const Default: Story = {
   args: {
-  "value": 42,
-  "label": "Sample Text",
-  "type": {}
-},
+    value: 42,
+    label: 'Sample Text',
+    type: 'risk',
+  },
 };

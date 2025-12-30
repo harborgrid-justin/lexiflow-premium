@@ -34,7 +34,7 @@ import { sanitizeHtml } from '@/utils/sanitize';
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Citation, Case } from '@/types';
+import { Case } from '@/types';
 import { CitationDetailProps } from './types';
 
 export const CitationDetail: React.FC<CitationDetailProps> = ({ citation, onClose }) => {

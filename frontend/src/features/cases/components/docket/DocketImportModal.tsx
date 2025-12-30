@@ -27,7 +27,6 @@ import { cn } from '@/utils/cn';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { XmlDocketParser } from '@/services/features/documents/xmlDocketParser';
 import { FallbackDocketParser } from '@/services/features/discovery/fallbackDocketParser';
-import type { FallbackParseResult } from '@/services/features/discovery/fallbackDocketParser';
 
 interface DocketImportModalProps {
   isOpen: boolean;

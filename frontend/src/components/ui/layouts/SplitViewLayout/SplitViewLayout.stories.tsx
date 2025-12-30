@@ -15,11 +15,11 @@ type Story = StoryObj<typeof SplitViewLayout>;
 
 export const Default: Story = {
   args: {
-  "sidebar": "<div>Sample Content</div>",
-  "content": "<div>Sample Content</div>",
+  sidebar: undefined,
+  content: undefined,
   "showSidebarOnMobile": true,
-  "sidebarPosition": {},
-  "sidebarWidth": {},
+  "sidebarPosition": undefined,
+  sidebarWidth: undefined,
   "className": "Sample Text"
 },
 };

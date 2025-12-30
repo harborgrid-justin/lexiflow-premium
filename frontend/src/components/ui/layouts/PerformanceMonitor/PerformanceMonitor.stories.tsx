@@ -15,11 +15,10 @@ type Story = StoryObj<typeof PerformanceMonitor>;
 
 export const Default: Story = {
   args: {
-  "children": "<div>Sample Content</div>",
+  children: undefined,
   "componentName": "Sample Text",
   "renderBudget": 42,
   "showIndicators": true,
-  "onBudgetExceeded": {},
-  "default": true
+  onBudgetExceeded: () => {}
 },
 };

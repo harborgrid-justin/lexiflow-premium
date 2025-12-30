@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { X, Plus, GripVertical } from 'lucide-react';
+import { X, GripVertical} from 'lucide-react';
 import { NodeType, getNodeIcon } from './types';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

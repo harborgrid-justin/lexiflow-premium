@@ -95,7 +95,7 @@ export const NotificationPreferences: React.FC<NotificationPreferencesProps> = (
     setPreferences((prev) => ({
       ...prev,
       [key]: {
-        ...prev[key],
+        ...(prev[key] as object),
         [nestedKey]: value,
       },
     }));

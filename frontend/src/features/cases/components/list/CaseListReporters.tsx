@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React from 'react';
-import { Mic2, Plus, User } from 'lucide-react';
+import { Mic2, Plus} from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES

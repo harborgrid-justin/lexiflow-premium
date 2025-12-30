@@ -5,7 +5,6 @@ import { Button } from '@/components/atoms';
 import { RecordModal } from './RecordModal';
 import { EntitySidebar, Category } from './EntitySidebar';
 import { EntityList } from './EntityList';
-import { TableContainer } from '@/components/organisms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useAdminData } from './useAdminData';
@@ -26,7 +25,7 @@ export const AdminPlatformManager: React.FC = () => {
   const { items, counts, saveItem, deleteItem } = useAdminData(activeCategory);
 
   const filteredItems = items.filter(item =>
-    Object.values(item).some(val =>
+    Object.values(item as Record<string, unknown>).some(val =>
       String(val).toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
@@ -93,9 +92,9 @@ export const AdminPlatformManager: React.FC = () => {
           </div>
 
           <div className="flex-1 overflow-auto p-0 md:p-4">
-             <EntityList 
+             <EntityList
                 activeCategory={activeCategory}
-                items={filteredItems}
+                items={filteredItems as Array<{ id: string; [key: string]: unknown }>}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
              />

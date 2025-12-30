@@ -12,7 +12,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Briefcase, Clock, FileText, AlertTriangle } from 'lucide-react';
 
 // ============================================================================

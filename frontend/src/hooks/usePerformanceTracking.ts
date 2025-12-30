@@ -69,19 +69,17 @@ export function usePerformanceTracking(options: PerformanceTrackingOptions): voi
 
 /**
  * Hook to track expensive computation
- * 
+ *
  * @example
  * ```tsx
  * const expensiveValue = useTrackedMemo(
  *   () => heavyComputation(data),
- *   [data],
  *   'heavyComputation'
  * );
  * ```
  */
 export function useTrackedMemo<T>(
   factory: () => T,
-  deps: React.DependencyList,
   name: string
 ): T {
   const startTime = performance.now();

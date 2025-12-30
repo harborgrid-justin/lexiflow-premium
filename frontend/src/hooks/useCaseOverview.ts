@@ -50,18 +50,24 @@ import { Case, TimeEntry, TimeEntryPayload, UserId, UUID, CaseId, CaseStatus, Ma
 export interface UseCaseOverviewReturn {
   /** Time modal visibility */
   showTimeModal: boolean;
+  /** Set time modal visibility */
+  setShowTimeModal: (show: boolean) => void;
   /** Open time modal */
   openTimeModal: () => void;
   /** Close time modal */
   closeTimeModal: () => void;
   /** Link modal visibility */
   showLinkModal: boolean;
+  /** Set link modal visibility */
+  setShowLinkModal: (show: boolean) => void;
   /** Open link modal */
   openLinkModal: () => void;
   /** Close link modal */
   closeLinkModal: () => void;
   /** Transfer modal visibility */
   showTransferModal: boolean;
+  /** Set transfer modal visibility */
+  setShowTransferModal: (show: boolean) => void;
   /** Open transfer modal */
   openTransferModal: () => void;
   /** Close transfer modal */
@@ -161,12 +167,15 @@ export function useCaseOverview(
 
     return {
         showTimeModal,
+        setShowTimeModal,
         openTimeModal: () => setShowTimeModal(true),
         closeTimeModal: () => setShowTimeModal(false),
         showLinkModal,
+        setShowLinkModal,
         openLinkModal: () => setShowLinkModal(true),
         closeLinkModal: () => setShowLinkModal(false),
         showTransferModal,
+        setShowTransferModal,
         openTransferModal: () => setShowTransferModal(true),
         closeTransferModal: () => setShowTransferModal(false),
         linkedCases,

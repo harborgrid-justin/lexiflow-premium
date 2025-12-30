@@ -70,8 +70,8 @@ export const NotificationCenter: React.FC = () => {
           notifications.map(n => (
           <div key={n.id} className={cn("p-3 transition-colors group flex justify-between items-start", n.read ? "opacity-60" : "", `hover:${theme.surface.highlight}`)}>
             <div className="flex-1">
-                <p className={cn("text-xs mb-1", theme.text.primary)}>{n.text}</p>
-                <span className={cn("text-[10px]", theme.text.tertiary)}>{n.time}</span>
+                <p className={cn("text-xs mb-1", theme.text.primary)}>{(n as { text?: string }).text || n.message}</p>
+                <span className={cn("text-[10px]", theme.text.tertiary)}>{(n as { time?: string }).time || new Date(n.timestamp).toLocaleString()}</span>
             </div>
             <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 {!n.read && (

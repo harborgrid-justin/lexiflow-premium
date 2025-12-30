@@ -13,7 +13,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState, useMemo } from 'react';
-import { Folder, FileText, ChevronRight, Gavel, BookOpen, Plus, File, Scale, MoreVertical } from 'lucide-react';
+import { Folder, FileText, ChevronRight, Gavel, Plus, File, Scale, MoreVertical } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -51,7 +51,7 @@ interface BinderSection {
 // COMPONENT
 // ============================================================================
 
-export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData }) => {
+export const TrialBinder: React.FC<TrialBinderProps> = ({ warRoomData }) => {
   // ============================================================================
   // HOOKS & CONTEXT
   // ============================================================================
@@ -66,21 +66,27 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
   // MEMOIZED VALUES
   // ============================================================================
   const sections: BinderSection[] = useMemo(() => {
-      const motions = (warRoomData.motions || []).map((m): LegalDocument & { docType: string; date: string } => ({
-        ...(m as Record<string, unknown>),
-        docType: 'Motion',
-        date: (m as Record<string, unknown>).filingDate || ''
-      })) as LegalDocument[];
-      const orders = (warRoomData.docket || []).filter((d: unknown) => d.type === 'Order').map((d: unknown): LegalDocument & { docType: string; date: string } => ({
-        ...(d as Record<string, unknown>),
-        docType: 'Order',
-        date: d.date || ''
-      })) as LegalDocument[];
-      const filings = (warRoomData.docket || []).filter((d: unknown) => d.type === 'Filing').map((d: unknown): LegalDocument & { docType: string; date: string } => ({
-        ...(d as Record<string, unknown>),
-        docType: 'Filing',
-        date: d.date || ''
-      })) as LegalDocument[];
+      const motions = (warRoomData.motions || []).map((m): LegalDocument => {
+        return {
+          ...(m as unknown as Record<string, unknown>),
+          docType: 'Motion',
+          date: ((m as unknown as Record<string, unknown>).filingDate as string) || ''
+        } as unknown as LegalDocument;
+      });
+      const orders = (warRoomData.docket || []).filter((d: unknown) => (d as { type: string }).type === 'Order').map((d: unknown): LegalDocument => {
+        return {
+          ...(d as Record<string, unknown>),
+          docType: 'Order',
+          date: ((d as { date: string }).date as string) || ''
+        } as unknown as LegalDocument;
+      });
+      const filings = (warRoomData.docket || []).filter((d: unknown) => (d as { type: string }).type === 'Filing').map((d: unknown): LegalDocument => {
+        return {
+          ...(d as Record<string, unknown>),
+          docType: 'Filing',
+          date: ((d as { date: string }).date as string) || ''
+        } as unknown as LegalDocument;
+      });
 
       return [
         { id: 'motions', title: 'Motions & Pleadings', icon: Gavel, documents: motions },
@@ -151,8 +157,8 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ caseId, warRoomData })
                                         <div className="min-w-0">
                                             <h4 className={cn("font-bold text-sm truncate", theme.text.primary)} title={doc.title}>{doc.title}</h4>
                                             <div className={cn("flex items-center gap-3 text-xs mt-1", theme.text.secondary)}>
-                                                <span className="font-bold">{(doc as Record<string, unknown>).docType}</span>
-                                                <span>• {(doc as Record<string, unknown>).date}</span>
+                                                <span className="font-bold">{(doc as Record<string, unknown>).docType as string}</span>
+                                                <span>• {(doc as Record<string, unknown>).date as string}</span>
                                                 {doc.status && <span className={cn("px-1.5 py-0.5 rounded border font-medium", theme.surface.default, theme.border.default)}>{doc.status}</span>}
                                             </div>
                                             {doc.description && <p className={cn("text-xs mt-1 truncate max-w-md", theme.text.tertiary)}>{doc.description}</p>}

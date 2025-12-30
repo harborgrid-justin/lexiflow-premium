@@ -38,6 +38,8 @@ interface Integration {
   type: string;
   status?: string;
   name?: string;
+  color?: string;
+  icon?: React.ReactNode;
 }
 
 export const CalendarSync: React.FC = () => {

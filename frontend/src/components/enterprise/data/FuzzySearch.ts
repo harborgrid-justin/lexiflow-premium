@@ -103,7 +103,6 @@ export function fuzzySearch<T extends Record<string, unknown>>(
     ignoreCase = true,
     ignoreAccents = true,
     limit,
-    includeScore = true,
     includeMatches = false,
     algorithm = 'combined',
     fieldWeights = {},

@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState } from 'react';
-import { ShieldAlert, Search, AlertCircle, ArrowRight, Loader2 } from 'lucide-react';
+import { ShieldAlert, Search, AlertCircle, Loader2} from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -38,7 +38,7 @@ interface CaseListConflictsProps {
   onSelectCase?: (c: Case) => void;
 }
 
-export const CaseListConflicts: React.FC<CaseListConflictsProps> = ({ onSelectCase }) => {
+export const CaseListConflicts: React.FC<CaseListConflictsProps> = () => {
   const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -48,16 +48,9 @@ export const CaseListConflicts: React.FC<CaseListConflictsProps> = ({ onSelectCa
       async () => {
           const all = await DataService.compliance.getConflicts();
           // Return flagged or recent items
-          return all.sort((a: unknown, b: unknown) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
+          return all.sort((a: unknown, b: unknown) => new Date((b as {date: string}).date).getTime() - new Date((a as {date: string}).date).getTime()).slice(0, 5);
       }
   );
-
-  const handleNav = async (caseId: string) => {
-      if(onSelectCase) {
-          const c = await DataService.cases.getById(caseId);
-          if(c) onSelectCase(c);
-      }
-  };
 
   const handleSearch = async () => {
       if (!searchTerm) return;

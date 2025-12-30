@@ -11,14 +11,14 @@ const meta: Meta<typeof EnhancedSearch> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof EnhancedSearch.old>;
+type Story = StoryObj<typeof EnhancedSearch>;
 
 export const Default: Story = {
   args: {
   "placeholder": "Sample Text",
   "suggestions": [],
-  "onSearch": "Sample Text",
-  "onSuggestionSelect": {},
+  "onSearch": () => {},
+  onSuggestionSelect: () => {},
   "debounceDelay": 42,
   "showCategories": true,
   "showSyntaxHints": true,

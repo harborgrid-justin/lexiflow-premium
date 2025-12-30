@@ -12,11 +12,11 @@
  * - theme.status.success/error/warning - Security status indicators
  */
 
-import React, { useState, useEffect } from 'react';
-import { 
-  Lock, Shield, Smartphone, Globe, Eye, FileText, Clock, 
+import React, { useState } from 'react';
+import {
+  Lock, Shield, Smartphone, Globe, FileText, Clock,
   AlertTriangle, CheckCircle, XCircle, Activity, UserCheck,
-  Settings, Search, Download, Filter, TrendingUp, AlertOctagon
+  Search, Download, TrendingUp, AlertOctagon
 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -122,7 +122,7 @@ export const SecurityCompliance: React.FC = () => {
     }
   ]);
 
-  const [accessLogs, setAccessLogs] = useState<AccessLogEntry[]>([
+  const [accessLogs] = useState<AccessLogEntry[]>([
     {
       id: '1',
       timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
@@ -498,7 +498,7 @@ export const SecurityCompliance: React.FC = () => {
             <div className="flex gap-2">
               <select
                 value={filterStatus}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterStatus(e.target.value as Record<string, unknown>)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterStatus(e.target.value as 'all' | 'success' | 'failed' | 'blocked')}
                 className={cn(
                   "px-3 py-2 rounded-lg border text-sm",
                   theme.surface.default,

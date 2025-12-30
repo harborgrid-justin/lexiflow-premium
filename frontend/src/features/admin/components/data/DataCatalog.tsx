@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Tag, Folder, Database, ChevronRight, ArrowLeft, Table, FileText, Key, Book, Info, Maximize2, Loader2 } from 'lucide-react';
+import { Tag, Database, ChevronRight, ArrowLeft, Maximize2, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Tabs } from '@/components/molecules';
-import { VirtualList } from '@/components/organisms';
-import { SearchToolbar } from '@/components/organisms';
 import { useWindow } from '@/providers/WindowContext';
 import { Button } from '@/components/atoms';
 import { AccessRequestManager } from './catalog/AccessRequestManager';
@@ -28,7 +26,6 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
   const { openWindow } = useWindow();
   const [activeTab, setActiveTab] = useState(initialTab);
   const [selectedDomain, setSelectedDomain] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
 
   // Sync initialTab prop to state
   useEffect(() => {
@@ -72,10 +69,10 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
                     )}
                 </div>
             </div>
-            <Tabs 
+            <Tabs
                 tabs={['browse', 'dictionary', 'requests']}
                 activeTab={activeTab}
-                onChange={(t) => setActiveTab(t as Record<string, unknown>)}
+                onChange={(t) => setActiveTab(t as string)}
             />
         </div>
 

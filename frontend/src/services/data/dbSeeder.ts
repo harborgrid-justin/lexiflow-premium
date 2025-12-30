@@ -108,9 +108,9 @@ export const Seeder = {
           }
       };
       
-      MOCK_USERS.forEach(u => addEntity({ ...u, id: u.id as Record<string, unknown>, type: 'Individual', roles: [u.role as any], status: 'Active', riskScore: 10, tags: ['Internal'] }));
-      MOCK_CLIENTS.forEach(c => addEntity({ id: `ent-cli-${c.id}` as EntityId, name: c.name ?? 'Unknown', type: 'Corporation', roles: ['Client'], status: c.status as Record<string, unknown>, riskScore: 30, tags: [c.industry ?? 'Unknown'] }));
-      MOCK_CASES.forEach(c => c.parties?.forEach(p => addEntity({ id: `ent-pty-${p.id}` as EntityId, name: p.name, type: p.type as Record<string, unknown>, roles: [p.role as Record<string, unknown>, 'Party'], status: 'Active', riskScore: 50, tags: [] })));
+      MOCK_USERS.forEach(u => addEntity({ ...u, id: u.id as unknown as EntityId, type: 'Individual', roles: [u.role as any], status: 'Active', riskScore: 10, tags: ['Internal'] }));
+      MOCK_CLIENTS.forEach(c => addEntity({ id: `ent-cli-${c.id}` as EntityId, name: c.name ?? 'Unknown', type: 'Corporation', roles: ['Client'], status: c.status as any, riskScore: 30, tags: [c.industry ?? 'Unknown'] }));
+      MOCK_CASES.forEach(c => c.parties?.forEach(p => addEntity({ id: `ent-pty-${p.id}` as EntityId, name: p.name, type: p.type as any, roles: [p.role as any], status: 'Active', riskScore: 50, tags: [] })));
       MOCK_JUDGES.forEach(j => addEntity({ id: `ent-jdg-${j.id}` as EntityId, name: j.name, type: 'Individual', roles: ['Judge'], status: 'Active', riskScore: 5, tags: [j.court] }));
       MOCK_COUNSEL.forEach(c => addEntity({ id: `ent-cnsl-${c.id}` as EntityId, name: c.name, type: 'Law Firm', roles: ['Opposing Counsel'], status: 'Active', riskScore: 60, tags: [] }));
 
@@ -118,7 +118,7 @@ export const Seeder = {
       const adminPermissions = createAdminPermissions();
       const extendedUsers: ExtendedUserProfile[] = MOCK_USERS.map(user => ({
         ...user,
-        entityId: user.id as Record<string, unknown>,
+        entityId: user.id as unknown as EntityId,
         title: user.id === 'usr-admin-justin' ? 'System Administrator' : user.role === 'Senior Partner' ? 'Senior Partner' : user.role,
         department: user.id === 'usr-admin-justin' ? 'Administration' : 'Litigation',
         accessMatrix: user.id === 'usr-admin-justin' ? adminPermissions : [

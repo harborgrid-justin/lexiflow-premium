@@ -48,7 +48,7 @@ export class DashboardErrorBoundary extends Component<ErrorBoundaryProps, ErrorB
     };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     this.setState({
       error,
       errorInfo,
@@ -61,7 +61,7 @@ export class DashboardErrorBoundary extends Component<ErrorBoundaryProps, ErrorB
     this.props.onError?.(error, errorInfo);
   }
 
-  componentDidUpdate(prevProps: ErrorBoundaryProps): void {
+  override componentDidUpdate(prevProps: ErrorBoundaryProps): void {
     const { resetKeys } = this.props;
     const { hasError } = this.state;
 
@@ -93,7 +93,7 @@ export class DashboardErrorBoundary extends Component<ErrorBoundaryProps, ErrorB
     }));
   };
 
-  render(): ReactNode {
+  override render(): ReactNode {
     const { hasError, error, errorInfo, showErrorDetails } = this.state;
     const { children, fallback, isolate = true, showDetails = true } = this.props;
 

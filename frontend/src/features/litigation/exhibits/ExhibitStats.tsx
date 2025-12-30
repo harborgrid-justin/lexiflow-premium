@@ -20,9 +20,6 @@ import { CheckCircle, XCircle, FileText, PieChart as PieIcon } from 'lucide-reac
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-// Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
-
 // Components
 import { MetricCard } from '@/components/molecules';
 import { Card } from '@/components/molecules';
@@ -43,8 +40,6 @@ interface ExhibitStatsProps {
 // ============================================================================
 
 export const ExhibitStats: React.FC<ExhibitStatsProps> = ({ exhibits }) => {
-  const { theme } = useTheme();
-
   const statusData = [
     { name: 'Admitted', value: exhibits.filter(e => e.status === 'Admitted').length, color: '#22c55e' },
     { name: 'Marked (Pending)', value: exhibits.filter(e => e.status === 'Marked').length, color: '#f59e0b' },

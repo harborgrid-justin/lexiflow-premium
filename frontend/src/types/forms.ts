@@ -244,6 +244,13 @@ export interface DateFieldSchema extends BaseFieldSchema<string | Date> {
 }
 
 /**
+ * Color field schema
+ */
+export interface ColorFieldSchema extends BaseFieldSchema<string> {
+  type: 'color';
+}
+
+/**
  * Select option
  */
 export interface SelectOption<T = string> {
@@ -293,6 +300,10 @@ export interface TextAreaFieldSchema extends BaseFieldSchema<string> {
   maxHeight?: number;
   /** Rich text editor */
   richText?: boolean;
+  /** Max length */
+  maxLength?: number;
+  /** Show character count */
+  showCharCount?: boolean;
 }
 
 /**
@@ -365,6 +376,7 @@ export type FieldSchema =
   | TextFieldSchema
   | NumberFieldSchema
   | DateFieldSchema
+  | ColorFieldSchema
   | SelectFieldSchema
   | TextAreaFieldSchema
   | CheckboxFieldSchema

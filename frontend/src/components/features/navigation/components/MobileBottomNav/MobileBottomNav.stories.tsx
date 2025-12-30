@@ -15,7 +15,7 @@ type Story = StoryObj<typeof MobileBottomNav>;
 
 export const Default: Story = {
   args: {
-  "activeView": {},
-  "setActiveView": {}
+  "activeView": "dashboard",
+  "setActiveView": () => {}
 },
 };

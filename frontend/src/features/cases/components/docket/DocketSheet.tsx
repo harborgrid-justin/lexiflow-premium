@@ -39,12 +39,10 @@ import { useToggle } from '@/hooks/useToggle';
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services';
 import { cn } from '@/utils/cn';
-// ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 import { IdGenerator } from '@/utils/idGenerator';
 
 // Types & Interfaces
-import { DocketEntry, Case, DocketId, CaseId } from '@/types';
+import { DocketEntry, Case, CaseId } from '@/types';
 
 interface DocketSheetProps {
   filterType: 'all' | 'filings' | 'orders';
@@ -63,14 +61,15 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   const [entryToDelete, setEntryToDelete] = React.useState<string | null>(null);
 
   // --- ENTERPRISE DATA ACCESS ---
-  const { data: docketEntries = [], refetch, isLoading } = useQuery<DocketEntry[]>(
+  const { data: docketEntries = [], isLoading } = useQuery<DocketEntry[]>(
       ['docket', 'all'],
       async () => {
-        const result = await DataService.docket.getAll();
+        const docketService = DataService.docket as { getAll: () => Promise<DocketEntry[] | { data: DocketEntry[] }> };
+        const result = await docketService.getAll();
         // Handle both array and paginated response formats
         if (Array.isArray(result)) return result;
-        if (result && typeof result === 'object' && 'data' in result && Array.isArray((result as Record<string, unknown>).data)) {
-          return (result as Record<string, unknown>).data;
+        if (result && typeof result === 'object' && 'data' in result && Array.isArray(result.data)) {
+          return result.data;
         }
         return [];
       }
@@ -79,7 +78,8 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   const { data: casesData = [] } = useQuery<Case[]>(
       ['cases', 'all'],
       async () => {
-        const result = await DataService.cases.getAll();
+        const casesService = DataService.cases as { getAll: () => Promise<Case[]> };
+        const result = await casesService.getAll();
         return Array.isArray(result) ? result : [];
       }
   );
@@ -92,8 +92,11 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   const caseParties = activeCase?.parties?.map(p => p.name) || [];
 
   const { mutate: addEntry } = useMutation(
-      DataService.docket.add,
-      { 
+      async (entry: DocketEntry) => {
+        const docketService = DataService.docket as { add: (entry: DocketEntry) => Promise<DocketEntry> };
+        return docketService.add(entry);
+      },
+      {
           invalidateKeys: [['docket', 'all']],
           onSuccess: () => {
               addModal.close();
@@ -106,12 +109,20 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
       caseId: selectedCaseId || undefined,
       enabled: liveModeToggle.isOpen,
       onNewEntry: (entry) => {
-          // Use type-safe ID generation
-          const entryWithId = {
-              ...(entry && typeof entry === 'object' ? entry : {}),
+          // Use type-safe ID generation and ensure all required fields are present
+          const now = new Date().toISOString();
+          const entryWithId: DocketEntry = {
+              ...(entry && typeof entry === 'object' ? entry as Partial<DocketEntry> : {}),
               id: IdGenerator.docket(),
-              sequenceNumber: docketEntries.length + 100
-          };
+              caseId: (selectedCaseId as CaseId) || (entry && typeof entry === 'object' && 'caseId' in entry ? entry.caseId as CaseId : '' as CaseId),
+              sequenceNumber: docketEntries.length + 100,
+              dateFiled: now.split('T')[0],
+              entryDate: now.split('T')[0],
+              description: entry && typeof entry === 'object' && 'description' in entry ? String(entry.description) : 'New Entry',
+              type: entry && typeof entry === 'object' && 'type' in entry ? entry.type as DocketEntry['type'] : 'Notice',
+              createdAt: now,
+              updatedAt: now
+          } as DocketEntry;
           addEntry(entryWithId);
       },
       reconnectInterval: 5000,
@@ -119,7 +130,10 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   });
 
   const { mutate: deleteEntry } = useMutation(
-      DataService.docket.delete,
+      async (id: string) => {
+        const docketService = DataService.docket as { delete: (id: string) => Promise<void> };
+        return docketService.delete(id);
+      },
       {
           invalidateKeys: [['docket', 'all']]
       }
@@ -136,15 +150,10 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
           caseId: selectedCaseId || entry.caseId,
           sequenceNumber: entry.sequenceNumber || docketEntries.filter(d => d.caseId === selectedCaseId).length + 1
       } as DocketEntry;
-      
+
       addEntry(finalEntry);
   };
 
-  const handleDeleteEntry = (id: string) => {
-      setEntryToDelete(id);
-      deleteModal.open();
-  };
-  
   const confirmDelete = () => {
       if (entryToDelete) {
           deleteEntry(entryToDelete);
@@ -191,10 +200,17 @@ export const DocketSheet: React.FC<DocketSheetProps> = ({ filterType }) => {
   });
 
   const sortedEntries = useMemo(() => {
-      return [...filteredEntries].sort((a: unknown, b: unknown) => {
-          const dateA = a.date || a.entryDate || a.dateFiled;
-          const dateB = b.date || b.entryDate || b.dateFiled;
-          return new Date(dateB).getTime() - new Date(dateA).getTime();
+      return [...filteredEntries].sort((a, b) => {
+          interface EntryWithDate {
+              date?: string;
+              entryDate?: string;
+              dateFiled?: string;
+          }
+          const entryA = a as EntryWithDate;
+          const entryB = b as EntryWithDate;
+          const dateA = entryA.date || entryA.entryDate || entryA.dateFiled;
+          const dateB = entryB.date || entryB.entryDate || entryB.dateFiled;
+          return new Date(dateB || 0).getTime() - new Date(dateA || 0).getTime();
       });
   }, [filteredEntries]);
 

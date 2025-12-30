@@ -15,7 +15,7 @@ interface AdvancedEditorProps {
   onInsertRequest?: () => void;
 }
 
-export const AdvancedEditor = ({ initialContent, onSave, placeholder, onInsertRequest }: AdvancedEditorProps) => {
+export const AdvancedEditor = ({ initialContent, onSave, placeholder }: AdvancedEditorProps) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
   const aiToolbarToggle = useToggle();

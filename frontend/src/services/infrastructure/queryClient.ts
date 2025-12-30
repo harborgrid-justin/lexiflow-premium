@@ -34,6 +34,7 @@
 
 import { hashQueryKey } from '@/services/utils/queryUtils';
 import type { QueryKey, QueryFunction, QueryState } from './queryTypes';
+import { ValidationError } from '@/services/core/errors';
 
 /**
  * QueryClient Class
@@ -358,7 +359,7 @@ class QueryClient {
       const search = typeof keyPattern === 'string' ? keyPattern : this.hashKey(keyPattern);
       const cancelledKeys: string[] = [];
 
-      this.inflight.forEach((promise, key) => {
+      this.inflight.forEach((_promise, key) => {
         if (key.includes(search)) {
           this.inflight.delete(key);
           cancelledKeys.push(key);

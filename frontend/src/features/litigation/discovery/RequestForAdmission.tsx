@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { Button } from '@/components/atoms';
 import { Badge } from '@/components/atoms';
@@ -9,7 +9,6 @@ import { DataService } from '@/services';
 import { DiscoveryRequest } from '@/types';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 
 export const RequestForAdmission: React.FC = () => {
   const { theme } = useTheme();

@@ -7,7 +7,6 @@
 
 import { BaseEventHandler } from './BaseEventHandler';
 import type { SystemEventPayloads } from '@/types/integration-types';
-import type { ConflictCheck } from '@/types';
 import { SystemEventType } from '@/types/integration-types';
 
 export class LeadStageChangedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.LEAD_STAGE_CHANGED]> {

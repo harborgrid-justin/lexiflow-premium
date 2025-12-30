@@ -97,7 +97,7 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
                               <div className="h-10 sticky left-0 right-0"></div> 
                               
                               {/* Tasks */}
-                              {tasks.filter(t => true).slice(0, 10).map((task) => (
+                              {tasks.filter(() => true).slice(0, 10).map((task) => (
                                   <div 
                                     key={task.id} 
                                     className={cn("h-10 relative flex items-center transition-colors", activeTaskId === task.id ? cn(theme.primary.light, "bg-opacity-50") : "hover:bg-black/5 dark:hover:bg-white/5")}

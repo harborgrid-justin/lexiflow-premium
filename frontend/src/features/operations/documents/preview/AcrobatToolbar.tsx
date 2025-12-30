@@ -1,9 +1,9 @@
 
 import React from 'react';
-import { 
-  MousePointer2, PenTool, Highlighter, Eraser, Type, 
-  Stamp, FileSignature, Calendar, RotateCw, RotateCcw, 
-  ChevronLeft, ChevronRight, ZoomIn, ZoomOut 
+import {
+  MousePointer2, PenTool, Highlighter, Type,
+  Stamp, FileSignature, Calendar, RotateCw, RotateCcw,
+  ChevronLeft, ChevronRight, ZoomIn, ZoomOut
 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -25,7 +25,7 @@ interface AcrobatToolbarProps {
 export function AcrobatToolbar({
   activeTool, setActiveTool,
   scale, setScale,
-  rotation, setRotation,
+  setRotation,
   pageNum, setPageNum,
   totalPages
 }: AcrobatToolbarProps) {

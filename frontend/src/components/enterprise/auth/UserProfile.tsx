@@ -179,7 +179,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({
 
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (err: unknown) {
-      setProfileErrors({ general: err.message || 'Failed to update profile' });
+      const message = err instanceof Error ? err.message : 'Failed to update profile';
+      setProfileErrors({ general: message });
     } finally {
       setIsLoading(false);
     }
@@ -195,9 +196,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({
     } catch (err) {
       if (err instanceof z.ZodError) {
         const errors: FormErrors = {};
-        err.errors.forEach((error) => {
-          const field = error.path[0] as string;
-          errors[field] = error.message;
+        err.issues.forEach((issue: z.ZodIssue) => {
+          const field = issue.path[0] as string;
+          errors[field] = issue.message;
         });
         setPasswordErrors(errors);
         return;
@@ -217,7 +218,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({
 
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (err: unknown) {
-      setPasswordErrors({ general: err.message || 'Failed to change password' });
+      const message = err instanceof Error ? err.message : 'Failed to change password';
+      setPasswordErrors({ general: message });
     } finally {
       setIsLoading(false);
     }

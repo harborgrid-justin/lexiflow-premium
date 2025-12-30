@@ -126,10 +126,10 @@ import { api } from '@/api';
 import { delay } from '@/utils/async';
 
 // Type Definitions
-import { 
-    Deposition, ESISource, ProductionSet, CustodianInterview, 
-    DiscoveryRequest, PrivilegeLogEntry, LegalHold, 
-    Examination, Vendor, Transcript, SanctionMotion, StipulationRequest 
+import {
+    Deposition, ESISource, ProductionSet, CustodianInterview,
+    DiscoveryRequest,
+    Examination, Vendor, Transcript, SanctionMotion, StipulationRequest
 } from '@/types';
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -155,14 +155,14 @@ export const DiscoveryService = {
     },
     addDeposition: async (dep: Deposition) => {
         try {
-            return await api.depositions.create(dep as Record<string, unknown>);
+            return await api.depositions.create(dep as unknown as Record<string, unknown>);
         } catch (error) {
             return dep;
         }
     },
     updateDepositionStatus: async (id: string, status: string) => {
         try {
-            return await api.depositions.update(id, { status: status as Record<string, unknown> });
+            return await api.depositions.update(id, { status } as unknown as Record<string, unknown>);
         } catch (error) {
             return { id, status };
         }
@@ -179,14 +179,14 @@ export const DiscoveryService = {
     },
     addESISource: async (source: ESISource) => {
         try {
-            return await api.esiSources.create(source as Record<string, unknown>);
+            return await api.esiSources.create(source as unknown as Record<string, unknown>);
         } catch (error) {
             return source;
         }
     },
     updateESISourceStatus: async (id: string, status: string) => {
         try {
-            return await api.esiSources.update(id, { status: status as Record<string, unknown> });
+            return await api.esiSources.update(id, { status } as unknown as Record<string, unknown>);
         } catch (error) {
             return { id, status };
         }
@@ -203,7 +203,7 @@ export const DiscoveryService = {
     },
     createProduction: async (prod: ProductionSet) => {
         try {
-            return await api.productions.create(prod as Record<string, unknown>);
+            return await api.productions.create(prod as unknown as Record<string, unknown>);
         } catch (error) {
             return prod;
         }
@@ -220,14 +220,14 @@ export const DiscoveryService = {
     },
     updateInterview: async (id: string, updates: Partial<CustodianInterview>) => {
         try {
-            return await api.custodianInterviews.update(id, updates as Record<string, unknown>);
+            return await api.custodianInterviews.update(id, updates as unknown as Record<string, unknown>);
         } catch (error) {
             return { id, ...updates };
         }
     },
     createInterview: async (interview: CustodianInterview) => {
         try {
-            return await api.custodianInterviews.create(interview as Record<string, unknown>);
+            return await api.custodianInterviews.create(interview as unknown as Record<string, unknown>);
         } catch (error) {
             return interview;
         }
@@ -244,14 +244,14 @@ export const DiscoveryService = {
     },
     addRequest: async (req: DiscoveryRequest) => {
         try {
-            return await api.discoveryRequests.create(req as Record<string, unknown>);
+            return await api.discoveryRequests.create(req as unknown as Record<string, unknown>);
         } catch (error) {
             return req;
         }
     },
     updateRequestStatus: async (id: string, status: string) => {
         try {
-            return await api.discoveryRequests.update(id, { status: status as Record<string, unknown> });
+            return await api.discoveryRequests.update(id, { status } as unknown as Record<string, unknown>);
         } catch (error) {
             return { id, status };
         }
@@ -276,7 +276,7 @@ export const DiscoveryService = {
     },
 
     // Rule 32 Transcripts - No dedicated API service, return fallback
-    getTranscripts: async (caseId?: string) => {
+    getTranscripts: async () => {
         return [];
     },
     addTranscript: async (transcript: Transcript) => {
@@ -290,7 +290,7 @@ export const DiscoveryService = {
     },
 
     // Rule 37 Sanctions - No dedicated API service, return fallback
-    getSanctions: async (caseId?: string) => {
+    getSanctions: async () => {
         return [];
     },
     addSanctionMotion: async (motion: SanctionMotion) => {
@@ -298,7 +298,7 @@ export const DiscoveryService = {
     },
 
     // Rule 29 Stipulations - No dedicated API service, return fallback
-    getStipulations: async (caseId?: string) => {
+    getStipulations: async () => {
         return [];
     },
     addStipulation: async (stip: StipulationRequest) => {
@@ -321,11 +321,11 @@ export const DiscoveryService = {
         }
     },
     syncDeadlines: async () => { await delay(1000); },
-    startCollection: async (id: string) => {
+    startCollection: async () => {
         await delay(500);
         return "job-123";
     },
-    downloadProduction: async (id: string) => {
+    downloadProduction: async () => {
         await delay(800);
         return "https://example.com/prod.zip";
     }

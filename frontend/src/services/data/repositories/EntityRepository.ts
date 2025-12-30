@@ -5,6 +5,7 @@
 
 import { LegalEntity } from '@/types';
 import { Repository } from '@/services/core/Repository';
+import { ValidationError } from '@/services/core/errors';
 import { STORES } from '@/services/data/db';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
@@ -40,17 +41,15 @@ export class EntityRepository extends Repository<LegalEntity> {
             try {
                 const entities = await this.legalEntitiesApi.getAll();
                 // Transform API format to frontend format
-                return entities.map(e => {
-                    const transformed: LegalEntity = {
-                        ...e,
-                        id: e.id as unknown as import('@/types').EntityId,
-                        type: this.mapEntityType(e.entityType),
-                        roles: [],
-                        riskScore: 0,
-                        tags: [],
-                    } as Record<string, unknown>;
-                    return transformed;
-                });
+                return entities.map(e => ({
+                    ...e,
+                    id: e.id as unknown as import('@/types').EntityId,
+                    type: this.mapEntityType(e.entityType),
+                    roles: [],
+                    riskScore: 0,
+                    tags: [],
+                    status: 'Active'
+                } as LegalEntity));
             } catch (error) {
                 console.error('[EntityRepository] Backend API unavailable', error);
                 return await super.getAll();
@@ -59,20 +58,21 @@ export class EntityRepository extends Repository<LegalEntity> {
         return await super.getAll();
     }
 
-    private mapEntityType(apiType: string): string {
-        const typeMap: Record<string, string> = {
+    private mapEntityType(apiType: string): 'Individual' | 'Corporation' | 'Court' | 'Government' | 'Vendor' | 'Law Firm' {
+        // Map API entity types to frontend EntityType values
+        const typeMap: Record<string, 'Individual' | 'Corporation' | 'Court' | 'Government' | 'Vendor' | 'Law Firm'> = {
             'individual': 'Individual',
             'corporation': 'Corporation',
-            'llc': 'LLC',
-            'partnership': 'Partnership',
-            'trust': 'Trust',
-            'estate': 'Estate',
-            'nonprofit': 'Nonprofit',
+            'llc': 'Corporation',
+            'partnership': 'Law Firm',
+            'trust': 'Vendor',
+            'estate': 'Vendor',
+            'nonprofit': 'Vendor',
             'government': 'Government',
-            'foreign_entity': 'Foreign Entity',
-            'other': 'Other'
+            'foreign_entity': 'Corporation',
+            'other': 'Vendor'
         };
-        return typeMap[apiType] || apiType;
+        return typeMap[apiType] || 'Vendor';
     }
 
     override async getById(id: string): Promise<LegalEntity | undefined> {
@@ -80,15 +80,15 @@ export class EntityRepository extends Repository<LegalEntity> {
         if (this.useBackend) {
             try {
                 const entity = await this.legalEntitiesApi.getById(id);
-                const transformed: LegalEntity = {
+                return {
                     ...entity,
                     id: entity.id as unknown as import('@/types').EntityId,
                     type: this.mapEntityType(entity.entityType),
                     roles: [],
                     riskScore: 0,
                     tags: [],
-                } as Record<string, unknown>;
-                return transformed;
+                    status: 'Active'
+                } as LegalEntity;
             } catch (error) {
                 console.error('[EntityRepository] Backend API unavailable', error);
                 return await super.getById(id);
@@ -110,8 +110,8 @@ export class EntityRepository extends Repository<LegalEntity> {
         // Mocked for now, in real app this would query a relationship table
         return [];
     }
-    
-    async add(item: LegalEntity): Promise<LegalEntity> {
+
+    override async add(item: LegalEntity): Promise<LegalEntity> {
         if (!item || typeof item !== 'object') {
             throw new ValidationError('[EntityRepository.add] Invalid entity data');
         }
@@ -149,7 +149,7 @@ export class EntityRepository extends Repository<LegalEntity> {
         const lowerQuery = query.toLowerCase();
         return entities.filter(e =>
             e.name?.toLowerCase().includes(lowerQuery) ||
-            (e as Record<string, unknown>).legalName?.toLowerCase().includes(lowerQuery)
+            ((e as unknown as Record<string, unknown>).legalName as string | undefined)?.toLowerCase().includes(lowerQuery)
         );
     }
 }

@@ -15,7 +15,7 @@ export { default as ReplicationManager } from './ReplicationManager';
 export { default as LineageGraph } from './LineageGraph';
 export { default as CostFinOps } from './CostFinOps';
 export { default as DataLakeExplorer } from './DataLakeExplorer';
-export { default as ShardingVisualizer } from './ShardingVisualizer';
+export { ShardingVisualizer } from './ShardingVisualizer';
 export { RealtimeStreams } from './RealtimeStreams';
 export { EventBusManager } from './EventBusManager';
 export { VersionControl } from './VersionControl';

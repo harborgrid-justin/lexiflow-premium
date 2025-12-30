@@ -48,8 +48,9 @@ import { CANVAS_CONSTANTS, VALIDATION_MESSAGES } from '@/types/canvas-constants'
 import { Playbook } from '@/api/types/mockLitigationPlaybooks';
 
 // Types - Direct imports to avoid barrel export overhead
-import type { Case, CasePhase, WorkflowTask, CaseId, TaskId } from '@/types/models';
-import type { TaskStatusBackend, TaskPriorityBackend } from '@/types/enums';
+import type { Case, CasePhase, WorkflowTask } from '@/types/models';
+import type { CaseId, TaskId } from '@/types/models';
+import { TaskStatusBackend, TaskPriorityBackend } from '@/types/workflow';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -101,6 +102,8 @@ export interface UseLitigationBuilderReturn {
   deleteNode: (id: string) => void;
   /** Add connection */
   addConnection: (from: string, to: string, fromPort?: string) => void;
+  /** Update connection */
+  updateConnection: (id: string, updates: Partial<WorkflowConnection>) => void;
   /** Delete connection */
   deleteConnection: (id: string) => void;
 }
@@ -205,7 +208,7 @@ export function useLitigationBuilder({ navigateToCaseTab }: UseLitigationBuilder
                                    node.type === 'Event' ? CANVAS_CONSTANTS.EVENT_DURATION : 
                                    CANVAS_CONSTANTS.DEFAULT_TASK_DURATION;
               const dueDate = DateCalculationService.calculateDueDate(startDate, durationDays);
-              
+
               ganttTasks.push({
                   id: node.id as TaskId,
                   caseId: selectedCaseId as CaseId,
@@ -293,7 +296,11 @@ export function useLitigationBuilder({ navigateToCaseTab }: UseLitigationBuilder
     const newConnection: WorkflowConnection = { id: `conn-${Date.now()}`, from, to, fromPort, toPort: 'input' };
     setConnections(prev => [...prev, newConnection]);
   }, []);
-  
+
+  const updateConnection = useCallback((id: string, updates: Partial<WorkflowConnection>) => {
+    setConnections(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
+  }, []);
+
   const deleteConnection = useCallback((id: string) => {
     setConnections(prev => prev.filter(c => c.id !== id));
   }, []);
@@ -330,6 +337,7 @@ export function useLitigationBuilder({ navigateToCaseTab }: UseLitigationBuilder
     updateNode,
     deleteNode,
     addConnection,
+    updateConnection,
     deleteConnection
   };
 };

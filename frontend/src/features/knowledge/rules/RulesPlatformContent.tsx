@@ -1,6 +1,5 @@
 import React, { lazy } from 'react';
 import { RulesView } from '@/config/tabs.config';
-import { LazyLoader } from '@/components/molecules';
 
 // Sub-components
 const RulesDashboard = lazy(() => import('./RulesDashboard').then(m => ({ default: m.RulesDashboard })));
@@ -16,8 +15,8 @@ interface RulesPlatformContentProps {
 export const RulesPlatformContent: React.FC<RulesPlatformContentProps> = ({ activeTab, setActiveTab }) => {
   switch (activeTab) {
     case 'dashboard': return <RulesDashboard onNavigate={setActiveTab} />;
-    case 'federal_evidence': return <RuleBookViewer type="FRE" title="Federal Rules of Evidence" />;
-    case 'federal_civil': return <RuleBookViewer type="FRCP" title="Federal Rules of Civil Procedure" />;
+    case 'federal_evidence': return <RuleBookViewer type="FRE" />;
+    case 'federal_civil': return <RuleBookViewer type="FRCP" />;
     case 'local': return <LocalRulesMap />;
     case 'standing_orders': return <StandingOrders />;
     case 'search': return <div className="p-12 text-center text-slate-400">Deep Semantic Search Module Loading...</div>;

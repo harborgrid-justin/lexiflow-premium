@@ -15,8 +15,8 @@ type Story = StoryObj<typeof CenteredLayout>;
 
 export const Default: Story = {
   args: {
-  "children": "<div>Sample Content</div>",
-  "maxWidth": {},
+  children: undefined,
+  maxWidth: undefined,
   "verticalCenter": true,
   "className": "Sample Text"
 },

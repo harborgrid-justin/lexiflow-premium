@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card } from '@/components/molecules';
-import { Scale, AlertTriangle, FileText, Loader2 } from 'lucide-react';
+import { Scale, AlertTriangle, FileText } from 'lucide-react';
 import { AdaptiveLoader } from '@/components/molecules';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -26,14 +26,14 @@ export const JurisdictionRegulatory: React.FC = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Card title="Administrative Bodies">
         <div className="space-y-4">
-          {bodies.map((body, i) => (
+          {bodies.map((body: unknown, i: number) => (
              <div key={i} className={cn("flex items-start p-4 border rounded-lg", theme.surface.highlight, theme.border.default)}>
-                <Scale className={cn("h-6 w-6 mr-3 mt-1", body.iconColor)}/>
+                <Scale className={cn("h-6 w-6 mr-3 mt-1", (body as {iconColor: string}).iconColor)}/>
                 <div>
-                    <h4 className={cn("font-bold", theme.text.primary)}>{body.name}</h4>
-                    <p className={cn("text-sm", theme.text.secondary)}>{body.desc}</p>
+                    <h4 className={cn("font-bold", theme.text.primary)}>{(body as {name: string}).name}</h4>
+                    <p className={cn("text-sm", theme.text.secondary)}>{(body as {desc: string}).desc}</p>
                     <div className={cn("mt-2 text-xs font-mono border px-2 py-1 rounded inline-block", theme.surface.default, theme.border.default, theme.text.tertiary)}>
-                        Ref: {body.ref}
+                        Ref: {(body as {ref: string}).ref}
                     </div>
                 </div>
              </div>

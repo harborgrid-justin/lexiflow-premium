@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo, useCallback, useEffect, useId, useDeferredValue } from 'react';
+import React, { useState, useRef, useMemo, useCallback, useEffect, useDeferredValue } from 'react';
 import { Search, X, Command } from 'lucide-react';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useTheme } from '@/providers/ThemeContext';
@@ -24,7 +24,6 @@ export const EnhancedSearch: React.FC<EnhancedSearchProps> = ({
   debounceDelay = 300
 }) => {
   const { theme } = useTheme();
-  const searchId = useId();
   const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query);
   const [category, setCategory] = useState<SearchCategory>('all');

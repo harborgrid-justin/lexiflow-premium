@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { Fingerprint, CheckCircle, MessageSquare, AlertTriangle, Send } from 'lucide-react';
+import { CheckCircle, MessageSquare, AlertTriangle, Send } from 'lucide-react';
 
 // Common Components
 import { MetricCard } from '@/components/molecules';
@@ -22,7 +22,6 @@ import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 import { EvidenceItem } from '@/types';
 
 export const AuthenticationManager: React.FC = () => {

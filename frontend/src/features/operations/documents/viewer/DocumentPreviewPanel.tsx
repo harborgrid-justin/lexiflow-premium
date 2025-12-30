@@ -10,14 +10,13 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useEffect, useState, useMemo } from 'react';
-import { Wand2, AlertCircle, Lock, Unlock, ExternalLink, Eraser, ShieldAlert, X } from 'lucide-react';
+import { useEffect, useState, useMemo } from 'react';
+import { Wand2, AlertCircle, Lock, Unlock, ExternalLink, Eraser, X } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DocumentService } from '@/services/features/documents/documentService';
 import { DataService } from '@/services';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
@@ -67,7 +66,7 @@ export function DocumentPreviewPanel({
   const { mutate: performRedaction, isLoading: isRedacting } = useMutation(
       DataService.documents.redact,
       {
-          onSuccess: (newDoc) => {
+          onSuccess: () => {
               notify.success("Document redacted and saved as new version.");
               setIsRedactionMode(false);
               queryClient.invalidate(queryKeys.documents.all());
@@ -116,7 +115,7 @@ export function DocumentPreviewPanel({
       }
   };
 
-  const handleApplyRedactions = (maskedContent: string) => {
+  const handleApplyRedactions = () => {
       if (!document) return;
       performRedaction(document.id);
   };
@@ -176,7 +175,7 @@ export function DocumentPreviewPanel({
 
                 <div>
                     <h4 className={cn("text-xs font-bold uppercase tracking-wide mb-3", theme.text.tertiary)}>Tags</h4>
-                    <TagList tags={document.tags} />
+                    <TagList tags={[...document.tags]} />
                 </div>
 
                 {document.summary && (

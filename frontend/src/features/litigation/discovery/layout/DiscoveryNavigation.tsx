@@ -4,7 +4,6 @@ import { Scale, Database, ClipboardList, Lock, MessageCircle, Package, Shield, M
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { DiscoveryView } from '@/utils/discoveryNavigation';
-import { getParentTabForView, getFirstTabOfParent } from '@/utils/discoveryNavigation';
 
 interface DiscoveryNavigationProps {
   activeTab: DiscoveryView;

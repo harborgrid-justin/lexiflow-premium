@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Server, Database, Plus, Trash2, ArrowRight } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -68,7 +68,7 @@ export const ShardingVisualizer = React.memo(function ShardingVisualizer() {
         
         // Draw key
         if(key && mappedNode) {
-            const keyHash = (ring as Record<string, unknown>).hash(key);
+            const keyHash = (ring as unknown as { hash: (k: string) => number }).hash(key);
             const angle = (keyHash / maxHash) * 2 * Math.PI;
             const x = center.x + radius * Math.cos(angle);
             const y = center.y + radius * Math.sin(angle);

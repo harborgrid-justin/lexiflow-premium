@@ -276,7 +276,23 @@
  * - Fallback models: Graceful degradation to gemini-2.5-flash on pro-preview failures
  */
 
+// Workaround for broken type definitions in @google/generative-ai
+// The package exports classes/enums at runtime but the .d.ts file has empty export block
+declare module "@google/generative-ai" {
+  export interface ModelParams {
+    model: string;
+    [key: string]: any;
+  }
+  export interface RequestOptions {
+    [key: string]: any;
+  }
+  export class GoogleGenerativeAI {
+    constructor(apiKey: string);
+    getGenerativeModel(modelParams: ModelParams, requestOptions?: RequestOptions): any;
+  }
+}
 import { GoogleGenerativeAI } from "@google/generative-ai";
+
 import { ParsedDocket } from '@/types';
 import type { SearchResult } from '@/types';
 import { Prompts } from '@/services/ai/prompts';
@@ -284,8 +300,8 @@ import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchem
 import { safeParseJSON, withRetry } from '@/utils/apiUtils';
 import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, GroundingChunk, ShepardizeResult } from '@/types/ai';
 
-// Re-export IntentResult for external use
-export type { IntentResult } from '@/types/ai';
+// Re-export IntentResult, ShepardizeResult, and TreatmentType for external use
+export type { IntentResult, ShepardizeResult, TreatmentType } from '@/types/ai';
 
 // =============================================================================
 // CLIENT FACTORY (Private)
@@ -298,12 +314,12 @@ export type { IntentResult } from '@/types/ai';
  */
 const getClient = () => {
   // Check environment variables (Vite-prefixed and standard)
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY || 
-                 import.meta.env.GEMINI_API_KEY || 
-                 (typeof localStorage !== 'undefined' ? defaultStorage.getItem('gemini_api_key') : null);
-  
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY ||
+                 import.meta.env.GEMINI_API_KEY ||
+                 (typeof localStorage !== 'undefined' ? localStorage.getItem('gemini_api_key') : null);
+
   if (!apiKey) {
-    throw new MissingConfigurationError('Gemini API key not configured. Please set VITE_GEMINI_API_KEY environment variable or gemini_api_key in storage.');
+    throw new Error('Gemini API key not configured. Please set VITE_GEMINI_API_KEY environment variable or gemini_api_key in storage.');
   }
   return new GoogleGenerativeAI(apiKey);
 };
@@ -331,8 +347,8 @@ export const GeminiService = {
                 const result = await model.generateContent(Prompts.Analysis(content));
                 const response = result.response;
                 const text = response.text();
-                
-                if (!text) throw new ExternalServiceError("No response text from Gemini");
+
+                if (!text) throw new Error("No response text from Gemini");
                 return safeParseJSON(text, { summary: "Analysis failed to parse", riskScore: 0 });
             } catch (e) {
                 console.error("Gemini Analysis Error:", e);
@@ -354,8 +370,8 @@ export const GeminiService = {
 
                 const result = await model.generateContent(Prompts.Critique(text));
                 const responseText = result.response.text();
-                
-                if (!responseText) throw new ExternalServiceError("No response text from Gemini");
+
+                if (!responseText) throw new Error("No response text from Gemini");
                 return safeParseJSON(responseText, {
                     score: 0,
                     strengths: [],
@@ -440,8 +456,8 @@ export const GeminiService = {
                 
                 const result = await model.generateContent(Prompts.Intent(query));
                 const responseText = result.response.text();
-                
-                if (!responseText) throw new ExternalServiceError("No response text from Gemini");
+
+                if (!responseText) throw new Error("No response text from Gemini");
                 return safeParseJSON(responseText, { action: 'UNKNOWN', confidence: 0 });
             } catch (e) {
                 return { action: 'UNKNOWN', confidence: 0 };
@@ -462,8 +478,8 @@ export const GeminiService = {
                 
                 const result = await model.generateContent(Prompts.Docket(text));
                 const responseText = result.response.text();
-                
-                if (!responseText) throw new ExternalServiceError("No response text from Gemini");
+
+                if (!responseText) throw new Error("No response text from Gemini");
                 return safeParseJSON<Partial<ParsedDocket>>(responseText, {});
             } catch(e) {
                 console.error("Docket Parse Error", e);
@@ -494,9 +510,7 @@ export const GeminiService = {
                                 type: 'web',
                                 title: c.web.title,
                                 score: 1.0,
-                                metadata: {
-                                    url: c.web.uri
-                                }
+                                url: c.web.uri
                             });
                         }
                     });
@@ -619,8 +633,8 @@ export const GeminiService = {
                     `Extract structured case data from the following text. Include all parties, attorneys, dates, court information, case numbers, and any other relevant case details:\n\n${text.slice(0, 15000)}`
                 );
                 const responseText = result.response.text();
-                
-                if (!responseText) throw new ExternalServiceError("No response text from Gemini");
+
+                if (!responseText) throw new Error("No response text from Gemini");
                 return safeParseJSON<Partial<ParsedDocket>>(responseText, {});
             } catch(e) {
                 console.error("Extract Case Data Error:", e);
@@ -628,5 +642,68 @@ export const GeminiService = {
             }
         });
     },
+
+    // ============================================================================
+    // AIServiceInterface Compatibility Methods
+    // ============================================================================
+
+    /**
+     * Legal research (wrapper for conductResearch)
+     * @param query - Research query
+     * @param jurisdiction - Optional jurisdiction filter
+     */
+    async legalResearch(query: string, _jurisdiction?: string): Promise<ResearchResponse> {
+        return this.conductResearch(query);
+    },
+
+    /**
+     * Validate citations (wrapper for shepardizeCitation)
+     * @param citations - Array of citations to validate
+     */
+    async validateCitations(citations: string[]): Promise<ShepardizeResult> {
+        // Validate first citation for now (API limitation)
+        if (citations.length === 0) {
+            return {
+                caseName: 'No citations provided',
+                citation: '',
+                summary: 'No citations to validate',
+                history: [],
+                treatment: []
+            };
+        }
+        const result = await this.shepardizeCitation(citations[0]);
+        if (!result) {
+            return {
+                caseName: 'Unknown Case',
+                citation: citations[0],
+                summary: 'Analysis unavailable',
+                history: [],
+                treatment: []
+            };
+        }
+        return result;
+    },
+
+    /**
+     * Draft document (wrapper for generateDraft with callback support)
+     * @param prompt - Draft prompt
+     * @param onChunk - Callback for streaming chunks
+     */
+    async draftDocument(prompt: string, onChunk: (chunk: string) => void): Promise<void> {
+        const stream = this.streamDraft(prompt, 'document');
+        for await (const chunk of stream) {
+            onChunk(chunk);
+        }
+    },
+
+    /**
+     * Suggest reply (wrapper for generateReply)
+     * @param threadMessages - Array of thread messages
+     */
+    async suggestReply(threadMessages: string[]): Promise<string> {
+        // Use the last message for context
+        const lastMessage = threadMessages[threadMessages.length - 1] || '';
+        return this.generateReply(lastMessage, 'professional');
+    }
 };
 

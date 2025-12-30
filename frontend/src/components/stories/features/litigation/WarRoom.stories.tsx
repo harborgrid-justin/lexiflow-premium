@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { CaseId, Witness, Expert, Advisor, CaseStrategy, TrialExhibit, WarRoomData } from '@/types';
+import type { CaseId, WarRoomData } from '@/types';
 import { CaseStatus, MatterType } from '@/types';
 import { WarRoom } from '../../../../features/litigation/war-room/WarRoom';
 import { CommandCenter } from '../../../../features/litigation/war-room/CommandCenter';

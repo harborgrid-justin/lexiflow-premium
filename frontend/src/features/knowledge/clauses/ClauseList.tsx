@@ -4,7 +4,7 @@ import { Clause } from '@/types';
 import { DataService } from '@/services';
 import { Button } from '@/components/atoms';
 import { SearchToolbar } from '@/components/organisms';
-import { Book, Copy, History, Loader2, BookOpen, Check } from 'lucide-react';
+import { Copy, History, Loader2, BookOpen, Check } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { filterClauses } from './clauseList.utils';

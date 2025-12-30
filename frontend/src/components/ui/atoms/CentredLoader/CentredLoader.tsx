@@ -3,8 +3,6 @@
  * @category Common Components - Loading States
  * @description Full-container centered loading spinner with optional message
  */
-
-import React from 'react';
 import { Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

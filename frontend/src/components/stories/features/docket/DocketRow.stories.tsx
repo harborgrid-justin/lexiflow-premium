@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { DocketRow } from '@/features/cases/components/docket/DocketRow';
-import { DocketEntry, DocketEntryType } from '@/types';
+import { DocketEntry, DocketEntryType, DocketId, CaseId, DocumentId } from '@/types';
 import { ThemeProvider } from '@/providers/ThemeContext';
 
 /**
@@ -63,38 +63,38 @@ type Story = StoryObj<typeof meta>;
 
 // Mock data
 const mockFilingEntry: DocketEntry = {
-  id: 'docket-1' as Record<string, unknown>,
-  caseId: 'case-123' as Record<string, unknown>,
+  id: 'docket-1' as DocketId,
+  caseId: 'case-123' as CaseId,
   sequenceNumber: 42,
   dateFiled: '2024-12-15',
   entryDate: '2024-12-15',
   description: 'MOTION to Dismiss for Failure to State a Claim filed by Defendant Acme Corp.',
   type: 'Filing' as DocketEntryType,
   filedBy: 'Defendant Acme Corp.',
-  documentId: 'doc-1' as Record<string, unknown>,
+  documentId: 'doc-1' as DocumentId,
   isSealed: false,
   createdAt: '2024-12-15T10:30:00Z',
   updatedAt: '2024-12-15T10:30:00Z',
 };
 
 const mockOrderEntry: DocketEntry = {
-  id: 'docket-2' as Record<string, unknown>,
-  caseId: 'case-123' as Record<string, unknown>,
+  id: 'docket-2' as DocketId,
+  caseId: 'case-123' as CaseId,
   sequenceNumber: 43,
   dateFiled: '2024-12-18',
   entryDate: '2024-12-18',
   description: 'ORDER granting Motion to Dismiss. Case dismissed with prejudice.',
   type: 'Order' as DocketEntryType,
   filedBy: 'Hon. Sarah Martinez',
-  documentId: 'doc-3' as Record<string, unknown>,
+  documentId: 'doc-3' as DocumentId,
   isSealed: false,
   createdAt: '2024-12-18T14:00:00Z',
   updatedAt: '2024-12-18T14:00:00Z',
 };
 
 const mockSealedEntry: DocketEntry = {
-  id: 'docket-3' as Record<string, unknown>,
-  caseId: 'case-123' as Record<string, unknown>,
+  id: 'docket-3' as DocketId,
+  caseId: 'case-123' as CaseId,
   sequenceNumber: 44,
   dateFiled: '2024-12-20',
   entryDate: '2024-12-20',
@@ -107,14 +107,14 @@ const mockSealedEntry: DocketEntry = {
 };
 
 const mockHearingEntry: DocketEntry = {
-  id: 'docket-4' as Record<string, unknown>,
-  caseId: 'case-123' as Record<string, unknown>,
+  id: 'docket-4' as DocketId,
+  caseId: 'case-123' as CaseId,
   sequenceNumber: 45,
   dateFiled: '2024-12-22',
   entryDate: '2024-12-22',
   description: 'NOTICE of Hearing on Motion for Summary Judgment scheduled for January 15, 2025 at 2:00 PM',
   type: 'Hearing' as DocketEntryType,
-  documentId: 'doc-4' as Record<string, unknown>,
+  documentId: 'doc-4' as DocumentId,
   isSealed: false,
   createdAt: '2024-12-22T11:00:00Z',
   updatedAt: '2024-12-22T11:00:00Z',

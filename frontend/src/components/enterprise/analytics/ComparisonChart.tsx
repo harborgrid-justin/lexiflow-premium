@@ -29,7 +29,6 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  Cell,
   TooltipProps,
   ReferenceLine
 } from 'recharts';
@@ -37,7 +36,6 @@ import {
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/providers/ThemeContext';
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 
 // ============================================================================
@@ -120,7 +118,6 @@ export const ComparisonChart: React.FC<ComparisonChartProps> = ({
   loading = false
 }) => {
   const chartTheme = useChartTheme();
-  const { theme } = useTheme();
 
   // Default labels based on comparison type
   const defaultLabels = useMemo(() => {
@@ -169,10 +166,11 @@ export const ComparisonChart: React.FC<ComparisonChartProps> = ({
   );
 
   // Custom tooltip
-  const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload, label }) => {
+  const CustomTooltip = (props: TooltipProps<number, string>) => {
+    const { active, payload, label } = props as { active?: boolean; payload?: Array<{ payload: ComparisonDataPoint & { change: number; changeAbs: number } }>; label?: string };
     if (!active || !payload || payload.length === 0) return null;
 
-    const data = payload[0].payload;
+    const data = payload[0].payload as ComparisonDataPoint & { change: number; changeAbs: number };
     const change = data.change || 0;
     const isPositive = change >= 0;
 
@@ -432,7 +430,8 @@ export const ComparisonChart: React.FC<ComparisonChartProps> = ({
             stroke={colorConfig.positive}
             strokeWidth={2}
             dot={(props: unknown) => {
-              const { cx, cy, payload } = props;
+              const typedProps = props as { cx: number; cy: number; payload: ComparisonDataPoint & { change: number } };
+              const { cx, cy, payload } = typedProps;
               const isPositive = payload.change >= 0;
               return (
                 <circle

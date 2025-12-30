@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect } from 'react';
-import { UploadCloud, Shield, Loader2, FileWarning, CheckCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { UploadCloud, Loader2, FileWarning, CheckCircle } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -20,7 +20,6 @@ import { UploadCloud, Shield, Loader2, FileWarning, CheckCircle } from 'lucide-r
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

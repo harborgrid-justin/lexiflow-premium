@@ -26,7 +26,7 @@
  * - Event-driven integration
  */
 
-import { EvidenceItem, CaseId } from '@/types';
+import { EvidenceItem } from '@/types';
 import { delay } from '@/utils/async';
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
@@ -34,6 +34,7 @@ import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { EvidenceApiService } from '@/api/discovery';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
+import { OperationError, ValidationError, EntityNotFoundError } from '@/services/core/errors';
 
 /**
  * Query keys for React Query integration
@@ -122,18 +123,18 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             return await super.getAll();
         } catch (error) {
             console.error('[EvidenceRepository.getAll] Error:', error);
-            throw new OperationError('Failed to fetch evidence items');
+            throw new OperationError('getAll', 'Failed to fetch evidence items');
         }
     }
 
     /**
      * Get evidence items by case ID
-     * 
+     *
      * @param caseId - Case ID
      * @returns Promise<EvidenceItem[]> Array of evidence items
      * @throws Error if caseId is invalid or fetch fails
      */
-    getByCaseId = async (caseId: string): Promise<EvidenceItem[]> => {
+    override getByCaseId = async (caseId: string): Promise<EvidenceItem[]> => {
         this.validateCaseId(caseId, 'getByCaseId');
 
         if (this.useBackend) {
@@ -148,13 +149,13 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             return await this.getByIndex('caseId', caseId);
         } catch (error) {
             console.error('[EvidenceRepository.getByCaseId] Error:', error);
-            throw new OperationError('Failed to fetch evidence items by case ID');
+            throw new OperationError('getByCaseId', 'Failed to fetch evidence items by case ID');
         }
     }
 
     /**
      * Get evidence item by ID
-     * 
+     *
      * @param id - Evidence ID
      * @returns Promise<EvidenceItem | undefined> Evidence item or undefined
      * @throws Error if id is invalid or fetch fails
@@ -174,13 +175,13 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             return await super.getById(id);
         } catch (error) {
             console.error('[EvidenceRepository.getById] Error:', error);
-            throw new OperationError('Failed to fetch evidence item');
+            throw new OperationError('getById', 'Failed to fetch evidence item');
         }
     }
 
     /**
      * Add a new evidence item
-     * 
+     *
      * @param item - Evidence item data
      * @returns Promise<EvidenceItem> Created evidence item
      * @throws Error if validation fails or create fails
@@ -192,7 +193,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
 
         if (this.useBackend) {
             try {
-                return await this.evidenceApi.add(item as Record<string, unknown>);
+                return await this.evidenceApi.add(item);
             } catch (error) {
                 console.warn('[EvidenceRepository] Backend API unavailable, falling back to IndexedDB', error);
             }
@@ -203,7 +204,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             return item;
         } catch (error) {
             console.error('[EvidenceRepository.add] Error:', error);
-            throw new OperationError('Failed to add evidence item');
+            throw new OperationError('add', 'Failed to add evidence item');
         }
     }
 
@@ -227,12 +228,12 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             // Get existing item to capture old status
             const existing = await this.getById(id);
             if (!existing) {
-                throw new Error(`Evidence item ${id} not found`);
+                throw new EntityNotFoundError('EvidenceItem', id);
             }
 
             // Perform the update
             let result: EvidenceItem;
-            
+
             if (this.useBackend) {
                 try {
                     result = await this.evidenceApi.update(id, updates);
@@ -260,13 +261,13 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             return result;
         } catch (error) {
             console.error('[EvidenceRepository.update] Error:', error);
-            throw new OperationError('Failed to update evidence item');
+            throw new OperationError('update', 'Failed to update evidence item');
         }
     }
 
     /**
      * Delete an evidence item
-     * 
+     *
      * @param id - Evidence ID
      * @returns Promise<void>
      * @throws Error if id is invalid or delete fails
@@ -287,7 +288,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             await super.delete(id);
         } catch (error) {
             console.error('[EvidenceRepository.delete] Error:', error);
-            throw new OperationError('Failed to delete evidence item');
+            throw new OperationError('delete', 'Failed to delete evidence item');
         }
     }
 
@@ -306,8 +307,8 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
      * const result = await repo.verifyIntegrity('evidence-123');
      * // Returns: { verified: true, timestamp: '2025-12-22T...', ... }
      */
-    verifyIntegrity = async (id: string): Promise<{ 
-        verified: boolean; 
+    verifyIntegrity = async (id: string): Promise<{
+        verified: boolean;
         timestamp: string;
         chainIntact?: boolean;
         lastCustodian?: string;
@@ -316,31 +317,32 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
 
         try {
             await delay(1500);
-            
+
             const item = await this.getById(id);
-            
+            const itemExt = item as unknown as { chainOfCustodyIntact?: boolean; currentCustodian?: string };
+
             return {
                 verified: true,
                 timestamp: new Date().toISOString(),
-                chainIntact: (item as Record<string, unknown>)?.chainOfCustodyIntact ?? true,
-                lastCustodian: (item as Record<string, unknown>)?.currentCustodian ?? item?.custodian
+                chainIntact: itemExt?.chainOfCustodyIntact ?? true,
+                lastCustodian: itemExt?.currentCustodian ?? item?.custodian
             };
         } catch (error) {
             console.error('[EvidenceRepository.verifyIntegrity] Error:', error);
-            throw new OperationError('Failed to verify evidence integrity');
+            throw new OperationError('verifyIntegrity', 'Failed to verify evidence integrity');
         }
     }
 
     /**
      * Update admissibility status of evidence
-     * 
+     *
      * @param id - Evidence ID
      * @param status - New admissibility status
      * @returns Promise<EvidenceItem> Updated evidence item
      * @throws Error if validation fails or update fails
      */
     async updateAdmissibility(
-        id: string, 
+        id: string,
         status: 'pending' | 'admissible' | 'inadmissible' | 'challenged'
     ): Promise<EvidenceItem> {
         this.validateId(id, 'updateAdmissibility');
@@ -349,12 +351,12 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             throw new ValidationError('[EvidenceRepository.updateAdmissibility] Invalid status parameter');
         }
 
-        return await this.update(id, { admissibility: status } as Record<string, unknown> as Partial<EvidenceItem>);
+        return await this.update(id, { admissibility: status as unknown as EvidenceItem['admissibility'] });
     }
 
     /**
      * Update chain of custody for evidence
-     * 
+     *
      * @param id - Evidence ID
      * @param custodian - New custodian name
      * @param notes - Optional custody transfer notes
@@ -364,14 +366,14 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
     async updateCustody(id: string, custodian: string, notes?: string): Promise<EvidenceItem> {
         this.validateId(id, 'updateCustody');
 
-        if (!custodian || false || custodian.trim() === '') {
+        if (!custodian || custodian.trim() === '') {
             throw new ValidationError('[EvidenceRepository.updateCustody] Invalid custodian parameter');
         }
 
         try {
             const item = await this.getById(id);
             if (!item) {
-                throw new EntityNotFoundError('Evidence item not found');
+                throw new EntityNotFoundError('EvidenceItem', id);
             }
 
             const custodyEntry = {
@@ -383,13 +385,13 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
 
             const updates: Partial<EvidenceItem> = {
                 custodian: custodian,
-                chainOfCustody: [...(item.chainOfCustody || []), custodyEntry as any]
+                chainOfCustody: [...(item.chainOfCustody || []), custodyEntry as unknown as typeof item.chainOfCustody[0]]
             };
 
             return await this.update(id, updates);
         } catch (error) {
             console.error('[EvidenceRepository.updateCustody] Error:', error);
-            throw new OperationError('Failed to update chain of custody');
+            throw new OperationError('updateCustody', 'Failed to update chain of custody');
         }
     }
 
@@ -412,13 +414,13 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             console.log(`[EvidenceRepository] Report generated for evidence ${id}`);
         } catch (error) {
             console.error('[EvidenceRepository.generateReport] Error:', error);
-            throw new OperationError('Failed to generate evidence report');
+            throw new OperationError('generateReport', 'Failed to generate evidence report');
         }
     }
 
     /**
      * Get evidence statistics for a case
-     * 
+     *
      * @param caseId - Case ID
      * @returns Promise with statistics
      * @throws Error if caseId is invalid or fetch fails
@@ -434,7 +436,7 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
 
         try {
             const items = await this.getByCaseId(caseId);
-            
+
             const byType: Record<string, number> = {};
             const byStatus: Record<string, number> = {};
             let admitted = 0;
@@ -442,15 +444,17 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
 
             items.forEach(item => {
                 // Count by type
-                const type = item.type || (item as Record<string, unknown>).evidenceType || 'Unknown';
-                byType[type] = (byType[type] || 0) + 1;
+                const itemExt = item as unknown as { evidenceType?: string; isAdmitted?: boolean };
+                const type = item.type || itemExt.evidenceType || 'Unknown';
+                const typeStr = String(type);
+                byType[typeStr] = (byType[typeStr] || 0) + 1;
 
                 // Count by status
                 const status = item.status || 'Unknown';
                 byStatus[status] = (byStatus[status] || 0) + 1;
 
                 // Count admissibility
-                if (item.admissibility?.toString() === 'ADMISSIBLE' || item.admissibility?.toString() === 'admissible' || (item as Record<string, unknown>).isAdmitted) {
+                if (item.admissibility?.toString() === 'ADMISSIBLE' || item.admissibility?.toString() === 'admissible' || itemExt.isAdmitted) {
                     admitted++;
                 } else if (item.admissibility?.toString() === 'PENDING' || item.admissibility?.toString() === 'pending') {
                     pending++;
@@ -466,13 +470,13 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             };
         } catch (error) {
             console.error('[EvidenceRepository.getStatistics] Error:', error);
-            throw new OperationError('Failed to get evidence statistics');
+            throw new OperationError('getStatistics', 'Failed to get evidence statistics');
         }
     }
 
     /**
      * Search evidence by criteria
-     * 
+     *
      * @param criteria - Search criteria
      * @returns Promise<EvidenceItem[]> Matching evidence items
      * @throws Error if search fails
@@ -493,19 +497,22 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
 
             if (criteria.query) {
                 const lowerQuery = criteria.query.toLowerCase();
-                items = items.filter(item =>
-                    item.title?.toLowerCase().includes(lowerQuery) ||
-                    item.description?.toLowerCase().includes(lowerQuery) ||
-                    (item as Record<string, unknown>).evidenceNumber?.toLowerCase().includes(lowerQuery) ||
-                    (item as Record<string, unknown>).batesNumber?.toLowerCase().includes(lowerQuery)
-                );
+                items = items.filter(item => {
+                    const itemExt = item as unknown as { evidenceNumber?: string; batesNumber?: string };
+                    return (
+                        item.title?.toLowerCase().includes(lowerQuery) ||
+                        item.description?.toLowerCase().includes(lowerQuery) ||
+                        itemExt.evidenceNumber?.toLowerCase().includes(lowerQuery) ||
+                        itemExt.batesNumber?.toLowerCase().includes(lowerQuery)
+                    );
+                });
             }
 
             if (criteria.type) {
-                items = items.filter(item =>
-                    item.type === criteria.type ||
-                    (item as Record<string, unknown>).evidenceType === criteria.type
-                );
+                items = items.filter(item => {
+                    const itemExt = item as unknown as { evidenceType?: string };
+                    return item.type === criteria.type || itemExt.evidenceType === criteria.type;
+                });
             }
 
             if (criteria.admissibility) {
@@ -517,16 +524,16 @@ export class EvidenceRepository extends Repository<EvidenceItem> {
             }
 
             if (criteria.custodian) {
-                items = items.filter(item =>
-                    (item as Record<string, unknown>).currentCustodian === criteria.custodian ||
-                    item.custodian === criteria.custodian
-                );
+                items = items.filter(item => {
+                    const itemExt = item as unknown as { currentCustodian?: string };
+                    return itemExt.currentCustodian === criteria.custodian || item.custodian === criteria.custodian;
+                });
             }
 
             return items;
         } catch (error) {
             console.error('[EvidenceRepository.search] Error:', error);
-            throw new OperationError('Failed to search evidence');
+            throw new OperationError('search', 'Failed to search evidence');
         }
     }
 }

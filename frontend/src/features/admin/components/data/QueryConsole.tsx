@@ -25,7 +25,6 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
   const [query, setQuery] = useState('SELECT id, title, status FROM cases\nWHERE status = \'Active\'\nLIMIT 10;');
   const [results, setResults] = useState<Record<string, unknown>[] | null>(null);
   const [executionTime, setExecutionTime] = useState<string | null>(null);
-  const [isExecuting, setIsExecuting] = useState(false);
 
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [explainPlan, setExplainPlan] = useState<unknown | null>(null);
@@ -55,7 +54,6 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
   }, [initialTab]);
 
   const handleRun = async () => {
-      setIsExecuting(true);
       try {
           const result = await dataPlatformApi.queryWorkbench.executeQuery(query);
           
@@ -73,8 +71,6 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
           console.error('Query execution error:', error);
           setResults(null);
           setExecutionTime(null);
-      } finally {
-          setIsExecuting(false);
       }
   };
 
@@ -173,10 +169,10 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
                 
                 <div className={cn("flex-1 overflow-hidden flex flex-col", theme.surface.default, "border-t", theme.border.default)}>
                     <div className={cn("p-2 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
-                        <Tabs 
+                        <Tabs
                             tabs={['results', 'explain', 'visualize']}
                             activeTab={activeResultsTab}
-                            onChange={(t) => setActiveResultsTab(t as Record<string, unknown>)}
+                            onChange={(t) => setActiveResultsTab(t as 'results' | 'explain' | 'visualize')}
                         />
                         {results && (
                         <div className="flex items-center gap-2">
@@ -207,7 +203,7 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
                             </div>
                         )}
                          {activeResultsTab === 'results' && (!results || results.length === 0) && <div className={cn("p-4 text-sm text-center", theme.text.tertiary)}>No results or query not executed.</div>}
-                         {activeResultsTab === 'explain' && explainPlan && (
+                         {activeResultsTab === 'explain' && !!explainPlan && (
                            <div className={cn("p-4 text-xs font-mono whitespace-pre-wrap", theme.text.primary)}>
                              {JSON.stringify(explainPlan, null, 2)}
                            </div>

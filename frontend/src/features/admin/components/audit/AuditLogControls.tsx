@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Shield, LayoutList, GitCommit, RefreshCw, Skull, ShieldCheck, Loader2, Download, AlertOctagon } from 'lucide-react';
+import { Shield, LayoutList, GitCommit, RefreshCw, Skull, ShieldCheck, Loader2, Download } from 'lucide-react';
 import { Button } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

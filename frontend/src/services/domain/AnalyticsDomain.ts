@@ -75,7 +75,7 @@
  */
 
 import { analyticsApi } from "@/api/domains/analytics.api";
-import { JudgeMotionStat, OpposingCounselProfile, OutcomePredictionData, Motion } from '@/types';
+import { JudgeMotionStat, OpposingCounselProfile, OutcomePredictionData} from '@/types';
 
 /**
  * Query keys for React Query integration

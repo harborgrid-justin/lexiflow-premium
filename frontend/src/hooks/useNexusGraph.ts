@@ -141,6 +141,16 @@ export interface UseNexusGraphReturn {
   isStable: boolean;
   /** Reheat simulation for re-animation */
   reheat: () => void;
+  /** Physics state ref */
+  physicsState: React.MutableRefObject<{
+    buffer: Float32Array;
+    links: NexusLink[];
+    idMap: Map<string, number>;
+    count: number;
+    alpha: number;
+    width: number;
+    height: number;
+  }>;
 }
 
 // ============================================================================

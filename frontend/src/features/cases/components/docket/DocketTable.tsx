@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useRef } from 'react';
-import { FileText, Gavel, Clock, Bell, Lock, Hash } from 'lucide-react';
+import { FileText, Gavel, Bell } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -21,7 +21,6 @@ import { VirtualList } from '@/components/organisms';
 import { InfiniteScrollTrigger } from '@/components/organisms/InfiniteScrollTrigger';
 import { DocketRow } from './DocketRow';
 import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

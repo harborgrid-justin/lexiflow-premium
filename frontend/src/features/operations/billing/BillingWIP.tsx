@@ -19,7 +19,6 @@ import { CheckSquare, Loader2 } from 'lucide-react';
 // Services & Data
 import { DataService } from '@/services';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
-import { STORES } from '@/services/data/db';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -91,7 +90,7 @@ const BillingWIPComponent: React.FC = () => {
   const notify = useNotify();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const [draftEntry, setDraftEntry] = useState<Partial<TimeEntry> | null>(null);
+  const [draftEntry] = useState<Partial<TimeEntry> | null>(null);
 
   // Enterprise Data Access with query keys
   const { data: entries = [] } = useQuery<TimeEntry[]>(
@@ -137,7 +136,7 @@ const BillingWIPComponent: React.FC = () => {
           // Validate all entries before invoicing
           const validationErrors: string[] = [];
           selectedEntries.forEach((entry, index) => {
-            const result = validateTimeEntrySafe(entry as Record<string, unknown>);
+            const result = validateTimeEntrySafe(entry as any);
             if (!result.valid) {
               validationErrors.push(`Entry ${index + 1}: ${result.errors.join(', ')}`);
             }

@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, lazy, useState, useTransition } from 'react';
+import React, { Suspense, useState, useTransition } from 'react';
 import { RefreshCw } from 'lucide-react';
 
 // ============================================================================
@@ -29,7 +29,7 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { Button } from '@/components/atoms';
 import { PeriodSelector } from '@/components/molecules';
 import { ExportMenu } from '@/components/features/discovery/components/ExportMenu/ExportMenu';
-import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
+import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules';
 import { BillingDashboardContent } from '@features/operations';
 import { BillingErrorBoundary } from './BillingErrorBoundary';

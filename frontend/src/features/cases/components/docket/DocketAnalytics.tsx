@@ -31,17 +31,17 @@ import { cn } from '@/utils/cn';
 import { DataService } from '@/services';
 import { aggregateFilingActivity, aggregateJudgeRulings } from './docketAnalytics.utils';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 
 // Types & Interfaces
 import { DocketEntry } from '@/types';
 
 export const DocketAnalytics: React.FC = () => {
-  const { theme } = useTheme();
-  
+  const { theme, mode } = useTheme();
+
   // Get chart theme colors
-  const chartColors = ChartColorService.getPalette(theme.mode as 'light' | 'dark');
-  const chartTheme = ChartColorService.getTheme(theme.mode as 'light' | 'dark');
+  const chartColors = ChartColorService.getPalette(mode as 'light' | 'dark');
+  const chartTheme = ChartColorService.getChartTheme(mode as 'light' | 'dark');
+  const tooltipStyle = ChartColorService.getTooltipStyle(mode as 'light' | 'dark');
   
   // Enterprise Data Access
   const { data: entries } = useQuery<DocketEntry[]>(
@@ -65,12 +65,12 @@ export const DocketAnalytics: React.FC = () => {
     if (safeEntries.length < 1000) {
       return aggregateFilingActivity(safeEntries);
     }
-    
+
     // For large datasets, use the aggregation function but leverage browser caching
     // Note: In production, this could use Web Workers or IndexedDB-based aggregation
     console.log(`Computing filing activity for ${safeEntries.length} entries (cached: ${cacheKey})`);
     return aggregateFilingActivity(safeEntries);
-  }, [safeEntries, cacheKey]);
+  }, [safeEntries, cacheKey]) as Array<{ month: string; filings: number; orders: number }>;
 
   // Aggregate Rulings with incremental update logic
   const judgeRulings = useMemo(() => {
@@ -78,11 +78,11 @@ export const DocketAnalytics: React.FC = () => {
     if (safeEntries.length < 1000) {
       return aggregateJudgeRulings(safeEntries);
     }
-    
+
     // For large datasets, log performance and compute
     console.log(`Computing judge rulings for ${safeEntries.length} entries (cached: ${cacheKey})`);
     return aggregateJudgeRulings(safeEntries);
-  }, [safeEntries, cacheKey]);
+  }, [safeEntries, cacheKey]) as Array<{ name: string; value: number; color: string }>;
 
   return (
     <div className="space-y-6">
@@ -93,7 +93,7 @@ export const DocketAnalytics: React.FC = () => {
               <BarChart data={filingActivity} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
                 <XAxis dataKey="month" fontSize={12} tickLine={false} axisLine={false} />
                 <YAxis fontSize={12} tickLine={false} axisLine={false} />
-                <Tooltip cursor={{fill: chartTheme.grid}} contentStyle={chartTheme.tooltipStyle} />
+                <Tooltip cursor={{fill: chartTheme.grid}} contentStyle={tooltipStyle} />
                 <Legend />
                 <Bar dataKey="filings" name="Filings" fill={chartColors[0]} radius={[4, 4, 0, 0]} />
                 <Bar dataKey="orders" name="Orders" fill={chartColors[1]} radius={[4, 4, 0, 0]} />
@@ -115,7 +115,7 @@ export const DocketAnalytics: React.FC = () => {
                   paddingAngle={5}
                   dataKey="value"
                 >
-                  {judgeRulings.map((entry: { name: string; value: number; color: string }, index: number) => (
+                  {(judgeRulings as Array<{ name: string; value: number; color: string }>).map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>

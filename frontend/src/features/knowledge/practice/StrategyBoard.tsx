@@ -20,7 +20,6 @@ import { Target, TrendingUp, Users, PieChart, FileText, MapPin } from 'lucide-re
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -77,14 +76,14 @@ export const StrategyBoard: React.FC = () => {
                             <MetricTile label="Expansion Mkts" value="2" icon={MapPin} />
                         </div>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                             {okrs.map(okr => (
-                                 <Card key={okr.id} title={okr.title}>
+                             {okrs.map((okr: unknown) => (
+                                 <Card key={(okr as {id: string}).id} title={(okr as {title: string}).title}>
                                      <div className="space-y-2">
                                          <div className="flex justify-between text-sm">
-                                             <span className={theme.text.secondary}>Owner: {okr.owner}</span>
-                                             <span className="font-bold">{okr.progress}%</span>
+                                             <span className={theme.text.secondary}>Owner: {(okr as {owner: string}).owner}</span>
+                                             <span className="font-bold">{(okr as {progress: number}).progress}%</span>
                                          </div>
-                                         <ProgressBar label="" value={okr.progress} showValue={false} colorClass={okr.progress > 70 ? 'bg-green-500' : 'bg-blue-500'} />
+                                         <ProgressBar label="" value={(okr as {progress: number}).progress} showValue={false} colorClass={(okr as {progress: number}).progress > 70 ? 'bg-green-500' : 'bg-blue-500'} />
                                      </div>
                                  </Card>
                              ))}

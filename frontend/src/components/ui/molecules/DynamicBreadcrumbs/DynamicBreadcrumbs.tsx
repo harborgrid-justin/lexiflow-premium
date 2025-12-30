@@ -140,8 +140,10 @@ export const DynamicBreadcrumbs: React.FC<DynamicBreadcrumbsProps> = ({
 
       // Sort by access count and recency
       updated.sort((a: unknown, b: unknown) => {
-        const scoreDiff = (b.accessCount * 2 + b.timestamp.getTime() / 1000000) -
-                         (a.accessCount * 2 + a.timestamp.getTime() / 1000000);
+        const typedA = a as { accessCount: number; timestamp: Date };
+        const typedB = b as { accessCount: number; timestamp: Date };
+        const scoreDiff = (typedB.accessCount * 2 + typedB.timestamp.getTime() / 1000000) -
+                         (typedA.accessCount * 2 + typedA.timestamp.getTime() / 1000000);
         return scoreDiff;
       });
 

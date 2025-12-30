@@ -141,13 +141,6 @@ function defaultIsEqual<T>(a: T, b: T): boolean {
 }
 
 /**
- * Generate version identifier
- */
-function generateVersion(): string {
-  return `v${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-}
-
-/**
  * Sleep utility for retries
  */
 function sleep(ms: number): Promise<void> {
@@ -229,7 +222,7 @@ export function useEnhancedAutoSave<T>({
           // Wait for manual resolution
           return new Promise((resolve) => {
             // Store resolver for manual resolution
-            (window as Record<string, unknown>).__autoSaveConflictResolver = resolve;
+            (window as unknown as Record<string, unknown>).__autoSaveConflictResolver = resolve;
           });
         default:
           return local;
@@ -259,10 +252,10 @@ export function useEnhancedAutoSave<T>({
       setStatus('idle');
 
       // Call resolver if exists
-      const resolver = (window as Record<string, unknown>).__autoSaveConflictResolver;
-      if (resolver) {
-        resolver(resolvedData);
-        delete (window as Record<string, unknown>).__autoSaveConflictResolver;
+      const resolver = (window as unknown as Record<string, unknown>).__autoSaveConflictResolver;
+      if (resolver && typeof resolver === 'function') {
+        (resolver as (data: T) => void)(resolvedData);
+        delete (window as unknown as Record<string, unknown>).__autoSaveConflictResolver;
       }
 
       // Trigger save with resolved data
@@ -407,7 +400,8 @@ export function useEnhancedAutoSave<T>({
    * Debounced save
    */
   const debouncedSave = useDebouncedCallback(
-    (dataToSave: T) => {
+    (...args: unknown[]) => {
+      const dataToSave = args[0] as T;
       performSave(dataToSave, false);
     },
     delay

@@ -17,11 +17,11 @@ export const Default: Story = {
   args: {
   "label": "Sample Text",
   "value": "Sample Text",
-  "icon": {},
+  icon: undefined,
   "trend": "Sample Text",
   "trendUp": true,
   "className": "Sample Text",
   "isLive": true,
-  "sparklineData": 42
+  "sparklineData": []
 },
 };

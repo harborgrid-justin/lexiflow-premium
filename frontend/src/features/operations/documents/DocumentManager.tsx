@@ -10,10 +10,9 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { Suspense, lazy, useTransition } from 'react';
+import { Suspense, useTransition } from 'react';
 import {
-  Folder, Clock, Star, FileText, LayoutTemplate,
-  PenTool, Share2, CheckCircle, FileSignature, Edit, Eraser, Cpu
+  Clock, LayoutTemplate
 } from 'lucide-react';
 
 // ============================================================================
@@ -24,7 +23,7 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Components
 import { Button } from '@/components/atoms';
-import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
+import { TabbedPageLayout } from '@/components/layouts';
 import { LazyLoader } from '@/components/molecules';
 import { DocumentManagerContent } from '@features/operations';
 

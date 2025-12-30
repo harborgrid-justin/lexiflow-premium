@@ -59,7 +59,7 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 // ============================================================================
 // Services & Data
 import { DataService } from '@/services';
-import { useQuery, useMutation, queryClient } from './useQueryHooks';
+import { useQuery, useMutation } from './useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Types
@@ -174,24 +174,32 @@ export interface UseEvidenceVaultReturn {
   selectItem: (item: EvidenceItem | null) => void;
   /** All evidence items */
   allItems: EvidenceItem[];
+  /** All evidence items (alias for backward compatibility) */
+  evidenceItems: EvidenceItem[];
   /** Filtered evidence items */
   filteredItems: EvidenceItem[];
   /** Active filters */
   filters: EvidenceFilters;
+  /** Set filters (alias for backward compatibility) */
+  setFilters: React.Dispatch<React.SetStateAction<EvidenceFilters>>;
   /** Update filter */
   updateFilter: <K extends keyof EvidenceFilters>(key: K, value: EvidenceFilters[K]) => void;
   /** Clear all filters */
   clearFilters: () => void;
   /** Handle custody update */
-  handleCustodyUpdate: (event: ChainOfCustodyEvent) => Promise<void>;
+  handleCustodyUpdate: (event: ChainOfCustodyEvent) => void;
   /** Handle intake complete */
-  handleIntakeComplete: (item: EvidenceItem) => Promise<void>;
+  handleIntakeComplete: (item: EvidenceItem) => void;
   /** Whether items are loading */
   isLoading: boolean;
   /** Navigate to detail view */
   viewDetail: (item: EvidenceItem) => void;
+  /** Navigate to detail view (alias for backward compatibility) */
+  handleItemClick: (item: EvidenceItem) => void;
   /** Go back to list */
   goBack: () => void;
+  /** Go back to list (alias for backward compatibility) */
+  handleBack: () => void;
 }
 
 // ============================================================================
@@ -254,8 +262,8 @@ export function useEvidenceVault(caseId?: string): UseEvidenceVaultReturn {
    * Applied at React Query level for optimal performance
    */
   const evidenceItems = useMemo(() => {
-      if (!caseId) return allEvidenceItems;
-      return allEvidenceItems.filter((e: EvidenceItem) => e.caseId === caseId);
+      if (!caseId) return allEvidenceItems as EvidenceItem[];
+      return (allEvidenceItems as EvidenceItem[]).filter((e: EvidenceItem) => e.caseId === caseId);
   }, [allEvidenceItems, caseId]);
 
   // ============================================================================
@@ -540,25 +548,66 @@ export function useEvidenceVault(caseId?: string): UseEvidenceVaultReturn {
   }, [filters, evidenceItems]);
 
   // ============================================================================
+  // FILTER HELPERS
+  // ============================================================================
+
+  /**
+   * Update individual filter
+   * Type-safe filter update helper
+   */
+  const updateFilter = useCallback(<K extends keyof EvidenceFilters>(
+    key: K,
+    value: EvidenceFilters[K]
+  ) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+  }, []);
+
+  /**
+   * Clear all filters
+   * Resets all filter values to defaults
+   */
+  const clearFilters = useCallback(() => {
+    setFilters({
+      search: '',
+      type: '',
+      admissibility: '',
+      caseId: caseId || '',
+      custodian: '',
+      dateFrom: '',
+      dateTo: '',
+      location: '',
+      tags: '',
+      collectedBy: '',
+      hasBlockchain: false
+    });
+  }, [caseId]);
+
+  // ============================================================================
   // RETURN INTERFACE
   // ============================================================================
 
   /**
    * Return comprehensive evidence vault management interface
    * All handlers are memoized for optimal performance
-   * 
+   *
    * @returns {Object} Evidence vault management interface
    * @property {ViewMode} view - Current view mode
    * @property {Function} setView - View mode setter
    * @property {DetailTab} activeTab - Active detail tab
    * @property {Function} setActiveTab - Detail tab setter
    * @property {EvidenceItem | null} selectedItem - Currently selected evidence item
+   * @property {Function} selectItem - Set selected item
+   * @property {EvidenceItem[]} allItems - All evidence items
    * @property {EvidenceItem[]} evidenceItems - All evidence items (case-scoped if applicable)
    * @property {EvidenceFilters} filters - Current filter state
    * @property {Function} setFilters - Filter state setter
+   * @property {Function} updateFilter - Update individual filter
+   * @property {Function} clearFilters - Clear all filters
    * @property {EvidenceItem[]} filteredItems - Filtered evidence items
    * @property {Function} handleItemClick - Navigate to detail view
+   * @property {Function} viewDetail - Navigate to detail view (alias)
    * @property {Function} handleBack - Navigate back to inventory
+   * @property {Function} goBack - Navigate back to inventory (alias)
    * @property {Function} handleIntakeComplete - Complete intake workflow
    * @property {Function} handleCustodyUpdate - Update chain of custody
    * @property {boolean} isLoading - Loading state indicator
@@ -569,12 +618,18 @@ export function useEvidenceVault(caseId?: string): UseEvidenceVaultReturn {
     activeTab,
     setActiveTab,
     selectedItem,
+    selectItem: setSelectedItem,
+    allItems: allEvidenceItems as EvidenceItem[],
     evidenceItems,
     filters,
     setFilters,
+    updateFilter,
+    clearFilters,
     filteredItems,
     handleItemClick,
+    viewDetail: handleItemClick,
     handleBack,
+    goBack: handleBack,
     handleIntakeComplete,
     handleCustodyUpdate,
     isLoading

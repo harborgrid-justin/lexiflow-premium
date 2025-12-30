@@ -204,7 +204,7 @@ export class MattersApiService {
   async getKPIs(dateRange?: string): Promise<unknown> {
     const url = dateRange ? `${this.baseUrl}/kpis?dateRange=${dateRange}` : `${this.baseUrl}/kpis`;
     const response = await apiClient.get<unknown>(url);
-    return response.data || response;
+    return (response as { data?: unknown }).data || response;
   }
 
   /**
@@ -213,7 +213,7 @@ export class MattersApiService {
   async getPipeline(dateRange?: string): Promise<unknown> {
     const url = dateRange ? `${this.baseUrl}/pipeline?dateRange=${dateRange}` : `${this.baseUrl}/pipeline`;
     const response = await apiClient.get<unknown>(url);
-    return response.data || response;
+    return (response as { data?: unknown }).data || response;
   }
 
   /**
@@ -224,7 +224,7 @@ export class MattersApiService {
     if (endDate) params.append('endDate', endDate);
     if (matterIds?.length) params.append('matterIds', matterIds.join(','));
     const response = await apiClient.get<unknown>(`${this.baseUrl}/calendar/events?${params.toString()}`);
-    return response.data || response;
+    return (response as { data?: unknown }).data || response;
   }
 
   /**
@@ -233,18 +233,18 @@ export class MattersApiService {
   async getRevenueAnalytics(dateRange?: string): Promise<unknown> {
     const url = dateRange ? `${this.baseUrl}/analytics/revenue?dateRange=${dateRange}` : `${this.baseUrl}/analytics/revenue`;
     const response = await apiClient.get<unknown>(url);
-    return response.data || response;
+    return (response as { data?: unknown }).data || response;
   }
 
   /**
    * Get risk insights
    */
   async getRiskInsights(matterIds?: string[]): Promise<unknown> {
-    const url = matterIds?.length 
+    const url = matterIds?.length
       ? `${this.baseUrl}/insights/risk?matterIds=${matterIds.join(',')}`
       : `${this.baseUrl}/insights/risk`;
     const response = await apiClient.get<unknown>(url);
-    return response.data || response;
+    return (response as { data?: unknown }).data || response;
   }
 
   /**
@@ -253,7 +253,7 @@ export class MattersApiService {
   async getFinancialOverview(dateRange?: string): Promise<unknown> {
     const url = dateRange ? `${this.baseUrl}/financials/overview?dateRange=${dateRange}` : `${this.baseUrl}/financials/overview`;
     const response = await apiClient.get<unknown>(url);
-    return response.data || response;
+    return (response as { data?: unknown }).data || response;
   }
 
   /**

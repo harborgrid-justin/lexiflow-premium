@@ -123,8 +123,13 @@ export const calculatePasswordStrength = (
     score = Math.min(4, score + 1);
   }
 
-  // Cap score at 4
-  score = Math.min(4, Math.max(0, score)) as 0 | 1 | 2 | 3 | 4;
+  // Cap score at 4 and ensure it's a valid literal type
+  const clampedScore = Math.min(4, Math.max(0, Math.round(score)));
+  if (clampedScore === 0) score = 0;
+  else if (clampedScore === 1) score = 1;
+  else if (clampedScore === 2) score = 2;
+  else if (clampedScore === 3) score = 3;
+  else score = 4;
 
   // If no feedback, password is strong
   if (feedback.length === 0) {
@@ -141,7 +146,7 @@ export const calculatePasswordStrength = (
   };
 
   return {
-    score,
+    score: score as 0 | 1 | 2 | 3 | 4,
     ...strengthMap[score],
     feedback,
   };

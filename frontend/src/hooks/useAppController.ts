@@ -33,13 +33,6 @@ import { useState, useCallback, useEffect, useTransition, useRef } from 'react';
 // ============================================================================
 // Services & Data
 import { DataService } from '@/services';
-import { ModuleRegistry } from '@/services';
-import { HolographicRouting } from '@/services';
-import { queryKeys } from '@/utils/queryKeys';
-import { Seeder } from '@/services';
-import { queryClient } from '@/services';
-import { GlobalSearchResult } from '@/services';
-import { IntentResult } from '@/types';
 import { apiClient } from '@/services';
 import { isBackendApiEnabled } from '@/api';
 
@@ -52,7 +45,7 @@ import { useUsers } from './useDomainData';
 import { PATHS } from '@/config';
 
 // Types
-import { Case, AppView } from '@/types';
+import { Case, AppView, User } from '@/types';
 
 // ============================================================================
 // TYPES
@@ -73,7 +66,7 @@ export interface UseAppControllerReturn {
   /** Select case */
   selectCase: (caseId: string | null, tab?: string) => void;
   /** Current user */
-  currentUser: unknown;
+  currentUser: User;
   /** Switch user */
   switchUser: (index: number) => void;
   /** Sidebar open state */
@@ -109,9 +102,9 @@ export function useAppController(): UseAppControllerReturn {
   const [selectedCase, setSelectedCase] = useState<Case | null>(null);
   const { addToast } = useToast();
   
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
-  const [globalSearch, setGlobalSearch] = useState('');
+  const [globalSearch] = useState('');
   const [, startTransition] = useTransition();
 
   const [initialTab, setInitialTab] = useState<string | undefined>(undefined);
@@ -263,15 +256,7 @@ export function useAppController(): UseAppControllerReturn {
     });
   }, [setSelectedCaseId, addToast, setActiveView]);
   
-  const handleSelectCase = useCallback((c: Case) => {
-    if (!c) return;
-    startTransition(() => {
-      setSelectedCase(c);
-      setSelectedCaseId(c.id);
-      setActiveView(PATHS.CASES);
-      setInitialTab(undefined);
-    });
-  }, [setSelectedCaseId, setActiveView]);
+  // Removed unused handleSelectCase - can be re-added if needed
 
   const handleNavigation = useCallback((view: AppView) => {
       startTransition(() => {
@@ -297,33 +282,9 @@ export function useAppController(): UseAppControllerReturn {
     });
   }, [setSelectedCaseId, setActiveView]);
 
-  const handleSearchResultClick = useCallback((result: GlobalSearchResult) => {
-    startTransition(() => {
-      if (result.type === 'case') {
-        handleSelectCase(result.data as Case);
-      } else {
-        const targetModule = ModuleRegistry.getAllModules().find(m => m.id.includes(result.type))?.id || PATHS.DASHBOARD;
-        handleNavigation(targetModule);
-      }
-      setIsSidebarOpen(false);
-    });
-  }, [handleSelectCase, handleNavigation]);
-
-  const handleNeuralCommand = useCallback((intent: IntentResult) => {
-    startTransition(() => {
-      if (intent.action === 'NAVIGATE' && intent.targetModule) {
-        const moduleId = ModuleRegistry.resolveIntent(intent.targetModule.toLowerCase());
-        if (moduleId) {
-            const deepLinkTab = HolographicRouting.resolveTab(moduleId, intent.context);
-            setInitialTab(deepLinkTab);
-            handleNavigation(moduleId);
-        }
-      }
-      if ((intent.action === 'NAVIGATE' || intent.action === 'SEARCH') && intent.entityId) {
-          handleSelectCaseById(intent.entityId);
-      }
-    });
-  }, [handleSelectCaseById, handleNavigation]);
+  // Removed unused handlers - can be re-added to interface if needed
+  // const handleSearchResultClick = useCallback((result: GlobalSearchResult) => { ... });
+  // const handleNeuralCommand = useCallback((intent: IntentResult) => { ... });
 
   const handleSwitchUser = useCallback(() => {
     startTransition(() => {
@@ -344,31 +305,33 @@ export function useAppController(): UseAppControllerReturn {
       });
   }, [setSelectedCaseId, setActiveView]);
 
-  const focusSearch = useCallback(() => {
-      const input = document.querySelector('input[placeholder*="Search or type a command"]');
-      if (input) (input as HTMLElement).focus();
-  }, []);
+  // Removed unused focusSearch - can be re-added to interface if needed
 
   return {
     activeView,
+    navigateToView: handleNavigation,
+    selectedCaseId,
     selectedCase,
-    isSidebarOpen,
-    setIsSidebarOpen,
+    selectCase: (caseId: string | null, tab?: string) => {
+      if (caseId) {
+        if (tab) {
+          navigateToCaseTab(caseId, tab);
+        } else {
+          handleSelectCaseById(caseId);
+        }
+      } else {
+        handleBackToMain();
+      }
+    },
     currentUser,
+    switchUser: handleSwitchUser,
+    isSidebarOpen,
+    toggleSidebar: () => setIsSidebarOpen(!isSidebarOpen),
     globalSearch,
-    setGlobalSearch,
-    handleNavigation,
-    handleSelectCase,
-    handleSelectCaseById,
-    navigateToCaseTab,
-    handleBackToMain,
-    handleSearchResultClick,
-    handleNeuralCommand,
-    handleSwitchUser,
-    focusSearch,
-    initialTab,
+    updateSearch: () => {}, // Not implemented in current version
     isAppLoading,
+    isAuthenticated,
     appStatusMessage,
-    isAuthenticated
+    initialTab
   };
 };

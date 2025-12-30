@@ -6,14 +6,11 @@ import { Button } from '@/components/atoms';
 import { Badge } from '@/components/atoms';
 import { Modal } from '@/components/molecules';
 import { Input } from '@/components/atoms';
-import { TextArea } from '@/components/atoms';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/useModalState';
-import { getTodayString } from '@/utils/dateUtils';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useQuery} from '@/hooks/useQueryHooks';
 import { DataService } from '@/services';
-import { queryKeys } from '@/utils/queryKeys';
 
 interface ApiKey {
   id: string;
@@ -27,11 +24,6 @@ interface ApiKey {
   createdAt: string;
   createdBy: string;
 }
-
-/**
- * @deprecated Mock data - use backend API via DataService.admin
- */
-const mockApiKeys: ApiKey[] = [];
 
 const availableScopes = [
   { id: 'read:cases', label: 'Read Cases', description: 'View case information' },
@@ -49,7 +41,7 @@ export const ApiKeyManagement: React.FC = () => {
   const notify = useNotify();
   
   // Fetch API keys from backend
-  const { data: apiKeys = [], isLoading, refetch } = useQuery<ApiKey[]>(
+  const { data: apiKeys = [], refetch } = useQuery<ApiKey[]>(
     ['admin', 'apiKeys'],
     () => DataService.admin.getApiKeys?.() || Promise.resolve([])
   );
@@ -70,20 +62,6 @@ export const ApiKeyManagement: React.FC = () => {
     return key;
   };
 
-  const createMutation = useMutation(
-    (data: { name: string; scopes: string[]; expiresAt?: string }) => 
-      DataService.admin.createApiKey?.(data),
-    {
-      onSuccess: () => {
-        refetch();
-        notify.success('API key created successfully');
-      },
-      onError: () => {
-        notify.error('Failed to create API key');
-      }
-    }
-  );
-
   const handleCreate = async () => {
     if (!formData.name || !formData.scopes.length) {
       notify.error('Name and at least one scope are required');
@@ -91,17 +69,6 @@ export const ApiKeyManagement: React.FC = () => {
     }
     try {
       const newKey = generateKey();
-      const apiKey: ApiKey = {
-        id: `key-${Date.now()}`,
-        name: formData.name,
-        key: newKey,
-        prefix: newKey.substring(0, 8),
-        scopes: formData.scopes,
-        status: 'Active',
-        expiresAt: formData.expiresAt,
-        createdAt: new Date().toISOString().split('T')[0],
-        createdBy: 'Current User',
-      };
       // Create API key via backend
       // await DataService.admin.createApiKey(apiKey);
       setNewKeyValue(newKey);

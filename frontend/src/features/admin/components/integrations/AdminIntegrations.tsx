@@ -3,17 +3,26 @@ import React from 'react';
 import { Card } from '@/components/molecules';
 import { Button } from '@/components/atoms';
 import { Badge } from '@/components/atoms';
-import { RefreshCw, Link as LinkIcon, Settings, Plus, Loader2 } from 'lucide-react';
+import { RefreshCw, Link as LinkIcon, Settings, Loader2 } from 'lucide-react';
 import { useTheme } from '@providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 
+interface Integration {
+  id: string;
+  name: string;
+  type: string;
+  icon: React.ReactNode;
+  color: string;
+  status: string;
+}
+
 export const AdminIntegrations: React.FC = () => {
   const { theme } = useTheme();
-  
+
   // Enterprise Data Access
-  const { data: integrations = [], isLoading } = useQuery<unknown[]>(
+  const { data: integrations = [], isLoading } = useQuery<Integration[]>(
       ['admin', 'integrations'],
       DataService.admin.getIntegrations
   );
@@ -33,7 +42,7 @@ export const AdminIntegrations: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {integrations.map((app) => (
+            {integrations.map((app: Integration) => (
                 <Card key={app.id} noPadding className={cn("flex flex-col h-full hover:shadow-md transition-shadow", app.status === 'Disconnected' ? "opacity-75" : "")}>
                     <div className={cn("p-5 border-b flex justify-between items-start", theme.border.subtle)}>
                         <div className="flex items-center gap-3">

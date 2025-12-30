@@ -1,12 +1,12 @@
 /**
  * types.ts
- * 
+ *
  * Shared types for the Litigation module.
- * 
+ *
  * @module components/litigation/types
  */
 
-import { WorkflowNode, WorkflowConnection, NodeType } from '@features/cases';
+import { WorkflowNode, WorkflowConnection, NodeType } from '@/types/workflow-types';
 import { Playbook } from '@/api/types/mockLitigationPlaybooks';
 
 export type ZoomLevel = 'Quarter' | 'Month' | 'Week' | 'Day';

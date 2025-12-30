@@ -96,16 +96,6 @@ export const RealTimeActivityFeed: React.FC<RealTimeActivityFeedProps> = ({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
-  useEffect(() => {
-    if (autoRefresh && onRefresh) {
-      const interval = setInterval(() => {
-        handleRefresh();
-      }, refreshInterval);
-
-      return () => clearInterval(interval);
-    }
-  }, [autoRefresh, onRefresh, refreshInterval]);
-
   const handleRefresh = async () => {
     if (onRefresh && !isRefreshing) {
       setIsRefreshing(true);
@@ -117,6 +107,17 @@ export const RealTimeActivityFeed: React.FC<RealTimeActivityFeedProps> = ({
       }
     }
   };
+
+  useEffect(() => {
+    if (autoRefresh && onRefresh) {
+      const interval = setInterval(() => {
+        handleRefresh();
+      }, refreshInterval);
+
+      return () => clearInterval(interval);
+    }
+    return undefined;
+  }, [autoRefresh, onRefresh, refreshInterval, isRefreshing]);
 
   const filteredActivities = useMemo(() => {
     let filtered = activities;
@@ -223,7 +224,7 @@ export const RealTimeActivityFeed: React.FC<RealTimeActivityFeedProps> = ({
                   className={cn(
                     'pl-8 pr-3 py-2 text-sm rounded-lg border appearance-none cursor-pointer',
                     'focus:outline-none focus:ring-2 focus:ring-blue-500',
-                    theme.surface.elevated,
+                    theme.surface.raised,
                     theme.border.default,
                     theme.text.primary
                   )}
@@ -293,7 +294,7 @@ export const RealTimeActivityFeed: React.FC<RealTimeActivityFeedProps> = ({
                     onClick={() => onActivityClick?.(activity)}
                     className={cn(
                       'p-4 rounded-lg border transition-all',
-                      theme.surface.elevated,
+                      theme.surface.raised,
                       theme.border.default,
                       'hover:border-blue-300 dark:hover:border-blue-700',
                       onActivityClick && 'cursor-pointer',

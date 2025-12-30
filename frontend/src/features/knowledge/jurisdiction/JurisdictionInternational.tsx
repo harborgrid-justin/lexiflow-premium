@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Globe, Plane, Loader2 } from 'lucide-react';
+import { Globe, Plane } from 'lucide-react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { AdaptiveLoader } from '@/components/molecules';
 import { useTheme } from '@/providers/ThemeContext';
@@ -40,14 +40,14 @@ export const JurisdictionInternational: React.FC = () => {
           <TableHead>Signatory Count</TableHead>
         </TableHeader>
         <TableBody>
-          {treaties.map((t, i) => (
+          {treaties.map((t: unknown, i: number) => (
             <TableRow key={i}>
-              <TableCell className={cn("font-bold", theme.text.primary)}>{t.name}</TableCell>
-              <TableCell>{t.type}</TableCell>
+              <TableCell className={cn("font-bold", theme.text.primary)}>{(t as {name: string}).name}</TableCell>
+              <TableCell>{(t as {type: string}).type}</TableCell>
               <TableCell>
-                <span className={cn("font-bold", theme.status.success.text)}>{t.status}</span>
+                <span className={cn("font-bold", theme.status.success.text)}>{(t as {status: string}).status}</span>
               </TableCell>
-              <TableCell>{t.parties}</TableCell>
+              <TableCell>{(t as {parties: number}).parties}</TableCell>
             </TableRow>
           ))}
         </TableBody>

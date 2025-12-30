@@ -6,12 +6,12 @@
  */
 
 import {
-  LayoutDashboard, Briefcase, FileText, Search, ShieldCheck, Scale,
+  LayoutDashboard, Briefcase, FileText, Search, ShieldCheck,
   Calendar, Book, DollarSign, Users, BarChart3, Settings,
   FileQuestion, Fingerprint, MessageSquare, Globe, GitBranch,
-  ScrollText, BookOpen, Building2, Target, StickyNote, Send, Library, Gavel, Network, Database, UserCircle, PenTool, Milestone, LucideIcon,
-  Lightbulb, TrendingUp, LayoutGrid, ClipboardCheck, Wallet, FolderKanban,
-  Home, Package, PieChart, FileSpreadsheet, Receipt, MapPin, Repeat, Share2, Trash2, ShoppingCart, AlertTriangle, UserCog, FileCheck
+  ScrollText, BookOpen, Building2, Target, StickyNote, Send, Library, Gavel, Network, Database, PenTool, Milestone, LucideIcon,
+  LayoutGrid,
+  Home, Package, PieChart, FileSpreadsheet, Receipt, MapPin, Share2, Trash2, ShoppingCart, AlertTriangle, UserCog, FileCheck
 } from 'lucide-react';
 import { AppView, NavCategory } from '@/types';
 import { PATHS } from './paths.config';

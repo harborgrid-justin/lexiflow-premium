@@ -64,7 +64,7 @@
  */
 
 import { defaultWindowAdapter, type IWindowAdapter } from '@/services/infrastructure/adapters/WindowAdapter';
-import { ValidationError, WorkerPoolInitializationError, OperationError } from '@/services/core/errors';
+import { ValidationError, WorkerPoolInitializationError} from '@/services/core/errors';
 
 // =============================================================================
 // TYPES
@@ -101,16 +101,6 @@ function validateFactory(factory: unknown, methodName: string): void {
 function validatePoolSize(size: unknown, methodName: string): void {
   if (typeof size !== 'number' || size <= 0 || !Number.isInteger(size)) {
     throw new ValidationError(`[WorkerPool.${methodName}] Pool size must be a positive integer`, { size });
-  }
-}
-
-/**
- * Validate worker parameter
- * @private
- */
-function validateWorker(worker: unknown, methodName: string): void {
-  if (!worker || !(worker instanceof Worker)) {
-    throw new ValidationError(`[WorkerPool.${methodName}] Invalid worker object`, { worker: typeof worker });
   }
 }
 

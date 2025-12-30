@@ -4,7 +4,6 @@
  * ? Migrated to backend API (2025-12-21)
  */
 
-import { api } from '@/api';
 import { delay } from '@/utils/async';
 
 interface Transaction {
@@ -35,7 +34,7 @@ export const TransactionService = {
     await delay(200);
     return [];
   },
-  getById: async (id: string) => {
+  getById: async () => {
     await delay(200);
     return undefined;
   },
@@ -126,7 +125,7 @@ export const TransactionService = {
     return newTransaction;
   },
 
-  getBalance: async (caseId?: string): Promise<Balance> => {
+  getBalance: async (): Promise<Balance> => {
     // Fallback calculation (API not available)
     await delay(50);
     const transactions: Transaction[] = [];

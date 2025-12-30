@@ -30,7 +30,6 @@ import {
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/providers/ThemeContext';
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 
 // ============================================================================
@@ -88,7 +87,6 @@ export const CaseDistributionChart: React.FC<CaseDistributionChartProps> = ({
   innerRadius = 60
 }) => {
   const chartTheme = useChartTheme();
-  const { theme } = useTheme();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   // Default color palette
@@ -124,20 +122,22 @@ export const CaseDistributionChart: React.FC<CaseDistributionChartProps> = ({
   const renderLabel = (entry: unknown) => {
     if (!showLabels) return null;
 
-    const percent = entry.percent * 100;
-    if (percent < 5) return null; // Hide label for small slices
+    const typedEntry = entry as { percent: number; name: string };
+    const percent = typedEntry.percent * 100;
+    if (percent < 5) return null;
 
     if (showPercentages) {
-      return `${entry.name} (${percent.toFixed(0)}%)`;
+      return `${typedEntry.name} (${percent.toFixed(0)}%)`;
     }
-    return entry.name;
+    return typedEntry.name;
   };
 
   // Custom tooltip
-  const CustomTooltip: React.FC<TooltipProps<number, string>> = ({ active, payload }) => {
+  const CustomTooltip = (props: TooltipProps<number, string>) => {
+    const { active, payload } = props as { active?: boolean; payload?: Array<{ payload: CaseDistributionData & { percentage: number } }> };
     if (!active || !payload || payload.length === 0) return null;
 
-    const data = payload[0].payload;
+    const data = payload[0].payload as CaseDistributionData & { percentage: number };
     const percentage = ((data.value / total) * 100).toFixed(1);
 
     return (
@@ -170,7 +170,7 @@ export const CaseDistributionChart: React.FC<CaseDistributionChartProps> = ({
   // Handle slice click
   const handleClick = (entry: unknown) => {
     if (onSliceClick) {
-      onSliceClick(entry);
+      onSliceClick(entry as CaseDistributionData);
     }
   };
 

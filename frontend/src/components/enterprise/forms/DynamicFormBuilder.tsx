@@ -19,7 +19,6 @@ import { useEnhancedAutoSave } from '@/hooks/useEnhancedAutoSave';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import type {
-  FormSchema,
   FieldSchema,
   FormSection,
   FormConfig,
@@ -82,7 +81,7 @@ export function DynamicFormBuilder<TFormData extends Record<string, unknown>>({
   isLoading = false,
   readOnly = false,
 }: DynamicFormBuilderProps<TFormData>) {
-  const { theme, mode } = useTheme();
+  const { theme } = useTheme();
   const { schema, initialValues, onSubmit, onCancel } = config;
 
   // Form validation
@@ -378,7 +377,7 @@ export function DynamicFormBuilder<TFormData extends Record<string, unknown>>({
                 disabled={isLoading}
                 className={cn(
                   'px-6 py-2.5 rounded-lg font-medium transition-colors',
-                  theme.surface.hover,
+                  theme.surface.highlight,
                   theme.text.primary,
                   'disabled:opacity-50 disabled:cursor-not-allowed',
                   'focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2'

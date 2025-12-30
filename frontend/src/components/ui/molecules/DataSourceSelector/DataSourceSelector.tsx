@@ -4,7 +4,7 @@
  * Shows backend availability status and only enables backend option when available
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState} from 'react';
 import { Database, Cloud, HardDrive, Wifi, WifiOff, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
 import { useDataSource } from '@/providers/DataSourceContext';
 import { useBackendHealth } from '@/hooks/useBackendHealth';
@@ -142,14 +142,14 @@ export function DataSourceSelector() {
         </div>
 
         <div className="text-sm space-y-1 pl-6">
-          {isAvailable && latency !== undefined && (
+          {isAvailable && latency !== undefined && latency !== null && (
             <div>Latency: {latency}ms {latency < 100 ? '⚡' : ''}</div>
           )}
           {version && (
             <div>Version: {version}</div>
           )}
           {error && (
-            <div className="text-rose-600">Error: {error}</div>
+            <div className="text-rose-600">Error: {error.message || String(error)}</div>
           )}
           <div className="text-xs opacity-75 flex items-center gap-1">
             <span>Last checked: {timeSinceCheck}s ago</span>

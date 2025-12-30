@@ -29,7 +29,8 @@ export class CustodiansApiService {
     }
 
     // Backend returns paginated response, extract items
-    const items = (response as Record<string, unknown>).items || response.data || [];
+    const paginatedResponse = response as unknown as PaginatedResponse<Custodian>;
+    const items = (paginatedResponse as unknown as Record<string, unknown>).items || paginatedResponse.data || [];
     return Array.isArray(items) ? items : [];
   }
 

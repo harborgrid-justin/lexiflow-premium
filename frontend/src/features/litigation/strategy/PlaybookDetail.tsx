@@ -20,7 +20,7 @@ import { ResearchTool } from '@features/knowledge';
 import { WarRoom } from '../war-room/WarRoom';
 import { PlaybookDetailProps } from './types';
 
-export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onClose, onApply }) => {
+export const PlaybookDetail: React.FC<PlaybookDetailProps> = ({ playbook, onApply }) => {
   const { theme } = useTheme();
   const { openWindow } = useWindow();
   const [activeTab, setActiveTab] = useState('workflow');

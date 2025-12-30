@@ -1,6 +1,5 @@
 
-import React from 'react';
-import { Lock, Unlock, CheckCircle2, ChevronDown } from 'lucide-react';
+import { Lock, CheckCircle2, ChevronDown } from 'lucide-react';
 import { FileIcon } from '@/components/atoms';
 import { LegalDocument } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';
@@ -12,7 +11,7 @@ interface PreviewHeaderProps {
     onToggleEncryption?: () => void;
 }
 
-export function PreviewHeader({ document, onCloseMobile, onToggleEncryption }: PreviewHeaderProps) {
+export function PreviewHeader({ document, onCloseMobile }: PreviewHeaderProps) {
     const { theme } = useTheme();
     return (
         <div className={cn("p-5 border-b relative shrink-0", theme.border.default, theme.surface.default)}>

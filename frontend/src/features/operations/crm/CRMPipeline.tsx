@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Calendar, Plus, DollarSign, Loader2 } from 'lucide-react';
+import { Calendar, Plus, DollarSign } from 'lucide-react';
 import { useModalState } from '@/hooks/useModalState';
 import { KanbanBoard, KanbanColumn, KanbanCard } from '@/components/organisms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
 
 interface CRMPipelineProps {
@@ -22,10 +21,10 @@ export const CRMPipeline = ({ leads }: CRMPipelineProps) => {
   // Performance Engine: useMutation for Sync Queue
   const { mutate: updateStage } = useMutation(
       async ({ id, stage }: { id: string, stage: string }) => {
-          // In a real scenario, we'd call an API endpoint. 
+          // In a real scenario, we'd call an API endpoint.
           // For local simulation, we update the cache directly to mimic optimistic UI
           const current = queryClient.getQueryState<unknown[]>(['crm', 'leads'])?.data || [];
-          const updated = current.map(l => l.id === id ? { ...l, stage } : l);
+          const updated = current.map((l: unknown) => (l as {id: string}).id === id ? { ...(l as object), stage } : l);
           // Determine which service method to call based on architecture
           // DataService.crm.updateLead(id, { stage }); 
           return updated;
@@ -40,11 +39,6 @@ export const CRMPipeline = ({ leads }: CRMPipelineProps) => {
   const handleDragStart = (e: React.DragEvent, id: string) => {
     setDraggedLeadId(id);
     e.dataTransfer.effectAllowed = 'move';
-  };
-  
-  const handleDragOver = (e: React.DragEvent, stage: string) => {
-    e.preventDefault();
-    setDragOverStage(stage);
   };
 
   const handleDrop = (stage: string) => {

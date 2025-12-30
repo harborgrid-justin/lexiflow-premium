@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { FileIcon } from '@/components/atoms';
 import { Button } from '@/components/atoms';

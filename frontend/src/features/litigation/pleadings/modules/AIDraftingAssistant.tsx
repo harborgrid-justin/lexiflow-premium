@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Wand2, Sparkles, AlertCircle, Play, RefreshCw, FileText, WifiOff } from 'lucide-react';
+import { Wand2, Sparkles, AlertCircle, RefreshCw, FileText, WifiOff } from 'lucide-react';
 import { Button } from '@/components/atoms';
 import { TextArea } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
@@ -118,7 +118,7 @@ export const AIDraftingAssistant: React.FC<AIDraftingAssistantProps> = ({ onInse
                     {['Persuasive', 'Neutral', 'Aggressive'].map(t => (
                         <button
                             key={t}
-                            onClick={() => setTone(t as Record<string, unknown>)}
+                            onClick={() => setTone(t as 'Persuasive' | 'Neutral' | 'Aggressive')}
                             className={cn(
                                 "flex-1 py-1.5 text-xs font-medium rounded border transition-colors",
                                 tone === t 

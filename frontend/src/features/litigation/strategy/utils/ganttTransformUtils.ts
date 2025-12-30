@@ -63,7 +63,7 @@ export const transformNodesToGantt = (
       const startDate = DateCalculationService.calculateStartDateFromPosition(
         node.x - minX,
         CANVAS_CONSTANTS.PIXELS_PER_DAY,
-        today
+        today.getTime()
       );
       
       const durationDays = getNodeDurationDays(node.type);
@@ -100,7 +100,8 @@ export const calculateNodePositionFromDate = (
   const startDate = DateCalculationService.parseFromISO(startDateStr);
   return DateCalculationService.calculatePositionFromDate(
     startDate,
+    referenceDate,
     CANVAS_CONSTANTS.PIXELS_PER_DAY,
-    referenceDate
+    0
   );
 };

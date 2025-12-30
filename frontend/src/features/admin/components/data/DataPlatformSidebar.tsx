@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Server, ChevronDown, ChevronRight, Layers } from 'lucide-react';
+import { Server, ChevronDown, ChevronRight } from 'lucide-react';
 import { PlatformView } from './types';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DATA_PLATFORM_MENU, MenuItem } from '@/config/tabs.config';
+import { DATA_PLATFORM_MENU, type MenuItem } from '@/config/tabs.config';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services';
 import { TenantConfig } from '@/types';
@@ -40,7 +40,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
     if (parent && !expanded[parent.id]) {
       setExpanded(prev => ({ ...prev, [parent.id]: true }));
     }
-  }, [activeView, menu]);
+  }, [activeView, menu, expanded]);
 
   const toggleExpand = (id: string) => {
     setExpanded(prev => ({ ...prev, [id]: !prev[id] }));
@@ -103,10 +103,10 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
               
               {hasChildren && isExpanded && item.children && (
                 <div className={cn("ml-4 pl-3 border-l space-y-1 mt-1 mb-1", theme.border.default)}>
-                  {(item.children as Record<string, unknown>).map((sub: unknown) => (
+                  {item.children.map((sub: MenuItem) => (
                     <button
                       key={sub.id}
-                      onClick={() => onChange(sub.id)}
+                      onClick={() => onChange(sub.id as PlatformView)}
                       className={cn(
                         "w-full flex items-center px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
                         activeView === sub.id

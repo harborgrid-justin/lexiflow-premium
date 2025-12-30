@@ -135,7 +135,6 @@ export class ChartColorService {
    */
   static getEntityColors(mode: ThemeMode) {
     const colors = tokens.colors[mode].chart.colors;
-    const base = tokens.colors[mode];
     
     return {
       case: mode === 'dark' ? '#1e293b' : '#0f172a',

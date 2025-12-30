@@ -17,8 +17,7 @@
 
 import React, { useState, useMemo } from 'react';
 import {
-  CheckSquare, Users, FileText, Clock, Calendar, MessageSquare,
-  Activity, Filter, Search, Plus, List, Grid, Kanban, Loader2
+  Calendar, Search, Plus, List, Kanban, Loader2
 } from 'lucide-react';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
@@ -27,22 +26,23 @@ import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms';
 import { Card } from '@/components/molecules';
 import { Badge } from '@/components/atoms';
+import type { WorkflowInstance } from '@/api/workflow/workflow-api';
+import type { User } from '@/types';
 
 type ViewMode = 'list' | 'kanban' | 'calendar';
 
 export const CaseOperationsCenter: React.FC = () => {
-  const { mode, isDark } = useTheme();
+  const { isDark } = useTheme();
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [filterStatus, setFilterStatus] = useState('all');
 
   // Fetch tasks from workflow API with error handling
-  const { data: tasks, isLoading: tasksLoading, error: tasksError } = useQuery(
+  const { data: tasks, isLoading: tasksLoading } = useQuery(
     ['workflow', 'instances'],
     () => api.workflow.getInstances(),
     {
-      suspense: false,
       retry: false,
-      onError: (error) => console.warn('[CaseOperationsCenter] Workflow API not available:', error)
+      onError: (error: Error) => console.warn('[CaseOperationsCenter] Workflow API not available:', error)
     }
   );
 
@@ -51,8 +51,7 @@ export const CaseOperationsCenter: React.FC = () => {
     ['users', 'team'],
     () => api.users.getAll(),
     {
-      suspense: false,
-      onError: (error) => console.warn('[CaseOperationsCenter] Users API error:', error)
+      onError: (error: Error) => console.warn('[CaseOperationsCenter] Users API error:', error)
     }
   );
 
@@ -60,19 +59,18 @@ export const CaseOperationsCenter: React.FC = () => {
   const stats = useMemo(() => {
     if (!tasks) return { active: 0, dueToday: 0, inProgress: 0, completed: 0 };
 
-    const today = new Date().toDateString();
     return {
-      active: (tasks || []).filter((t: unknown) => t.status === 'running' || t.status === 'paused').length,
-      dueToday: 0, // Workflow instances don't have due dates
-      inProgress: (tasks || []).filter((t: unknown) => t.status === 'running').length,
-      completed: (tasks || []).filter((t: unknown) => t.status === 'completed').length,
+      active: (tasks || []).filter((t: WorkflowInstance) => t.status === 'running' || t.status === 'paused').length,
+      dueToday: 0,
+      inProgress: (tasks || []).filter((t: WorkflowInstance) => t.status === 'running').length,
+      completed: (tasks || []).filter((t: WorkflowInstance) => t.status === 'completed').length,
     };
   }, [tasks]);
 
   const filteredTasks = useMemo(() => {
     if (!tasks) return [];
     if (filterStatus === 'all') return tasks;
-    return (tasks || []).filter((t: unknown) => t.status.toLowerCase() === filterStatus);
+    return (tasks || []).filter((t: WorkflowInstance) => t.status.toLowerCase() === filterStatus);
   }, [tasks, filterStatus]);
 
   return (
@@ -174,7 +172,7 @@ export const CaseOperationsCenter: React.FC = () => {
               </div>
             ) : (
               <div className="space-y-3">
-                {filteredTasks.slice(0, 10).map((task: unknown) => (
+                {filteredTasks.slice(0, 10).map((task: WorkflowInstance) => (
                   <TaskItem key={task.id} task={task} isDark={isDark} />
                 ))}
               </div>
@@ -187,7 +185,7 @@ export const CaseOperationsCenter: React.FC = () => {
                 Team Activity
               </h3>
               <div className="space-y-3">
-                {teamMembers?.slice(0, 5).map((member) => (
+                {teamMembers?.slice(0, 5).map((member: User) => (
                   <ActivityItem key={member.id} member={member} isDark={isDark} />
                 ))}
               </div>
@@ -210,7 +208,7 @@ const StatCard: React.FC<{ title: string; value: string; isDark: boolean }> = ({
   </Card>
 );
 
-const TaskItem: React.FC<{ task: unknown; isDark: boolean }> = ({ task, isDark }) => (
+const TaskItem: React.FC<{ task: WorkflowInstance; isDark: boolean }> = ({ task, isDark }) => (
   <div className={cn('p-4 rounded-lg border', isDark ? 'border-slate-700 bg-slate-800/50' : 'border-slate-200 bg-white')}>
     <div className="flex items-start justify-between">
       <div className="flex items-start gap-3 flex-1">
@@ -237,7 +235,7 @@ const TaskItem: React.FC<{ task: unknown; isDark: boolean }> = ({ task, isDark }
   </div>
 );
 
-const ActivityItem: React.FC<{ member: unknown; isDark: boolean }> = ({ member, isDark }) => (
+const ActivityItem: React.FC<{ member: User; isDark: boolean }> = ({ member, isDark }) => (
   <div className="flex gap-3">
     <div className={cn('w-2 h-2 rounded-full mt-2', 'bg-blue-500')} />
     <div className="flex-1">

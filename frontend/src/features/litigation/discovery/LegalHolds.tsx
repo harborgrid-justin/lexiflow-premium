@@ -11,8 +11,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect } from 'react';
-import { AlertCircle, Plus, User, Building2, Calendar, Loader2 } from 'lucide-react';
+import React from 'react';
+import { AlertCircle, Plus, User, Building2, Calendar } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -78,7 +78,7 @@ export const LegalHolds: React.FC = () => {
               
               return { previousHolds };
           },
-          onError: (err, holdId, context) => {
+          onError: (_, __, context) => {
               // Rollback on error
               if (context?.previousHolds) {
                   queryClient.setQueryData(

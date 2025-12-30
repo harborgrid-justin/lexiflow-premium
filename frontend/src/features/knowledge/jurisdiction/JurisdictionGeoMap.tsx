@@ -15,7 +15,7 @@ import {
 
 export const JurisdictionGeoMap: React.FC = () => {
   const { theme } = useTheme();
-  const { openWindow, closeWindow } = useWindow();
+  const { openWindow } = useWindow();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isAnimating, setIsAnimating] = useState(true);
   const nodesRef = useRef<MapNode[]>([]);

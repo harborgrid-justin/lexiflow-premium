@@ -13,7 +13,6 @@ import { Case } from '@/types';
 // Lazy load tab content components - from Case Management Suite
 const CaseOverviewDashboard = lazy(() => import('../overview/CaseOverviewDashboard').then(m => ({ default: m.CaseOverviewDashboard })));
 const CaseOperationsCenter = lazy(() => import('../operations/CaseOperationsCenter').then(m => ({ default: m.CaseOperationsCenter })));
-const NewCaseIntakeForm = lazy(() => import('../intake/NewCaseIntakeForm').then(m => ({ default: m.NewCaseIntakeForm })));
 const CaseCalendar = lazy(() => import('../calendar/CaseCalendar').then(m => ({ default: m.CaseCalendar })));
 const CaseFinancialsCenter = lazy(() => import('../financials/CaseFinancialsCenter').then(m => ({ default: m.CaseFinancialsCenter })));
 const CaseInsightsDashboard = lazy(() => import('../insights/CaseInsightsDashboard').then(m => ({ default: m.CaseInsightsDashboard })));
@@ -88,7 +87,7 @@ export const CaseManagerContent: React.FC<CaseManagerContentProps> = ({ activeTa
       case 'operations':
         return <CaseOperationsCenter />;
       case 'workflows':
-        return <MasterWorkflow />;
+        return <MasterWorkflow onSelectCase={(c) => console.log('Selected:', c)} />;
       case 'docket':
         return <CaseListDocket onSelectCase={(c) => console.log('Selected:', c)} />;
       case 'tasks':

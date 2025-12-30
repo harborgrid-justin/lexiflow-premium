@@ -11,7 +11,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { Plus, FileText, Scale, Box, Gavel, ArrowRight } from 'lucide-react';
 
 // ============================================================================
@@ -48,7 +48,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
   const [filter, setFilter] = useState('All');
   const { theme } = useTheme();
 
-  const { data: tasks = [], isLoading, refetch, error } = useQuery<WorkflowTask[]>(['tasks', 'all'], () => DataService.tasks.getAll());
+  const { data: tasks = [], isLoading, error} = useQuery<WorkflowTask[]>(['tasks', 'all'], () => DataService.tasks.getAll());
   
   const { mutate: addTask } = useMutation(DataService.tasks.add, {
       onSuccess: () => queryClient.invalidate(queryKeys.tasks.all())

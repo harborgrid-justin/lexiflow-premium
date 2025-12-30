@@ -58,7 +58,7 @@ export class TimeEntriesApiService {
    * GET ${API_PREFIX}/billing/time-entries
    */
   async getAll(filters?: TimeEntryFilters): Promise<TimeEntry[]> {
-    const response = await apiClient.get<PaginatedResponse<TimeEntry>>('/billing/time-entries', filters);
+    const response = await apiClient.get<PaginatedResponse<TimeEntry>>('/billing/time-entries', filters as Record<string, unknown>);
     return response.data;
   }
 

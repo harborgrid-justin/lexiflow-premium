@@ -9,11 +9,9 @@ import { VirtualList } from '@/components/organisms';
 import { SearchToolbar } from '@/components/organisms';
 import { Badge } from '@/components/atoms';
 import { Button } from '@/components/atoms';
-import { FilterPanel } from '@/components/organisms';
-import { TableContainer, TableHeader, TableHead, TableCell, TableRow } from '@/components/organisms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Eye, Shield, Tag, Loader2, Filter } from 'lucide-react';
+import { Eye, Loader2, Filter } from 'lucide-react';
 import { DictionaryItemDetail } from './DictionaryItemDetail';
 
 export const DataDictionary: React.FC = () => {

@@ -96,10 +96,5 @@ export function useHoverIntent<T>(
   }, [clearTimer]);
 
   // Return a stable function factory to be spread onto the element
-  const hoverHandlers = useCallback((item: T) => ({
-      onMouseEnter: () => onMouseEnter(item),
-      onMouseLeave: onMouseLeave
-  }), [onMouseEnter, onMouseLeave]);
-  
-  return { hoverHandlers };
+  return { onMouseEnter, onMouseLeave };
 };

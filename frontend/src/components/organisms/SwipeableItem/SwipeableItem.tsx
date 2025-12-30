@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef} from 'react';
 import { Trash2, Check } from 'lucide-react';
 
 // ============================================================================

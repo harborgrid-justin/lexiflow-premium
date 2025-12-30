@@ -20,7 +20,7 @@ import { CryptoService } from '@/services/infrastructure/cryptoService';
 import { Formatters } from '@/utils/formatters';
 
 // Types
-import { EvidenceItem, FileChunk, LegalDocument, DocumentId, CaseId } from '@/types';
+import { FileChunk, LegalDocument, DocumentId, CaseId} from '@/types';
 
 // ============================================================================
 // HELPER FUNCTIONS
@@ -124,7 +124,7 @@ export const DocumentService = {
   // Re-export for compatibility if needed, but components should prefer Formatters.fileSize
   formatBytes: Formatters.fileSize,
 
-  async verifyIntegrity(hash: string): Promise<{ verified: boolean; timestamp: string; block: number }> {
+  async verifyIntegrity(): Promise<{ verified: boolean; timestamp: string; block: number }> {
       return new Promise(resolve => {
           setTimeout(() => {
               resolve({

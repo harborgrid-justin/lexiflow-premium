@@ -4,22 +4,22 @@
 import { BaseEntity, MetadataRecord } from './primitives';
 
 export type SqlCmd = 'SELECT' | 'INSERT' | 'UPDATE' | 'DELETE' | 'ALL';
-export type PermissionLevel = 'None' | 'Read' | 'Write' | 'Full' | 'Own';
+export type RLSPermissionLevel = 'None' | 'Read' | 'Write' | 'Full' | 'Own';
 
-export interface RLSPolicy extends BaseEntity { 
-  name: string; 
-  table: string; 
-  cmd: SqlCmd; 
-  roles: string[]; 
-  using: string; 
+export interface RLSPolicy extends BaseEntity {
+  name: string;
+  table: string;
+  cmd: SqlCmd;
+  roles: string[];
+  using: string;
   withCheck?: string; 
   status: 'Active' | 'Disabled'; 
 }
 
-export interface RolePermission extends BaseEntity { 
-  role: string; 
-  resource: string; 
-  access: PermissionLevel; 
+export interface RolePermission extends BaseEntity {
+  role: string;
+  resource: string;
+  access: RLSPermissionLevel;
 }
 
 export interface DataAnomaly { 

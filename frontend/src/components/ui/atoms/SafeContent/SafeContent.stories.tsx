@@ -16,7 +16,7 @@ type Story = StoryObj<typeof SafeContent>;
 export const Default: Story = {
   args: {
   "content": "Sample Text",
-  "as": {},
+  "as": undefined,
   "className": "Sample Text"
 },
 };

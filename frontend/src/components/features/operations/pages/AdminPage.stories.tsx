@@ -15,6 +15,6 @@ type Story = StoryObj<typeof AdminPage>;
 
 export const Default: Story = {
   args: {
-  "initialTab": {}
+  "initialTab": undefined
 },
 };

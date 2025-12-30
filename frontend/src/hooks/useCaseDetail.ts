@@ -21,9 +21,8 @@
 
 import { useState, useMemo } from 'react';
 import { Case, LegalDocument, WorkflowStage, TimeEntry, TimelineEvent, Party, Project, WorkflowTask, Motion } from '@/types';
-import { GeminiService } from '@/services/features/research/geminiService';
 import { DataService } from '@/services';
-import { useQuery, useMutation, queryClient } from './useQueryHooks';
+import { useQuery, queryClient } from './useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { useNotify } from './useNotify';
 import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config';
@@ -104,16 +103,16 @@ export interface UseCaseDetailReturn {
 export function useCaseDetail(caseData: Case, initialTab: string = 'Overview'): UseCaseDetailReturn {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [generatingWorkflow, setGeneratingWorkflow] = useState(false);
-  const [analyzingId, setAnalyzingId] = useState<string | null>(null);
+  const [analyzingId] = useState<string | null>(null);
   const [draftPrompt, setDraftPrompt] = useState('');
-  const [draftResult, setDraftResult] = useState('');
-  const [isDrafting, setIsDrafting] = useState(false);
+  const [draftResult] = useState('');
+  const [isDrafting] = useState(false);
   const notify = useNotify();
 
   // --- DATA QUERIES (Parallel Fetching) ---
   
   // 1. Documents
-  const { data: documents = [], isLoading: loadingDocs } = useQuery<LegalDocument[]>(
+  const { data: documents = [] } = useQuery<LegalDocument[]>(
     queryKeys.documents.byCaseId(caseData?.id),
     () => DataService.documents.getByCaseId(caseData.id),
     { enabled: !!caseData?.id }
@@ -197,39 +196,6 @@ export function useCaseDetail(caseData: Case, initialTab: string = 'Overview'): 
 
   // --- ACTIONS ---
 
-  const { mutate: updateDocuments } = useMutation(
-      (doc: LegalDocument) => DataService.documents.update(doc.id, doc),
-      { invalidateKeys: [queryKeys.documents.byCaseId(caseData.id)] }
-  );
-
-  const handleAnalyze = async (doc: LegalDocument) => {
-    setAnalyzingId(doc.id);
-    try {
-        const result = await GeminiService.analyzeDocument(doc.content);
-        const updated = { ...doc, summary: result.summary, riskScore: result.riskScore };
-        await updateDocuments(updated); // Optimistic update via mutation
-    } catch (e) {
-        console.error("Analysis failed", e);
-        notify.error("AI analysis failed to complete.");
-    } finally {
-        setAnalyzingId(null);
-    }
-  };
-
-  const handleDraft = async () => {
-    if(!draftPrompt.trim()) return;
-    setIsDrafting(true);
-    try {
-        const text = await GeminiService.generateDraft(`${draftPrompt}\n\nCase: ${caseData.title}\nClient: ${caseData.client}`, 'Motion/Clause');
-        setDraftResult(text);
-    } catch (e) {
-        console.error("Drafting failed", e);
-        notify.error("AI drafting failed to complete.");
-    } finally {
-        setIsDrafting(false);
-    }
-  };
-
   const handleGenerateWorkflow = async () => {
     setGeneratingWorkflow(true);
     // In real app, this would call a mutation to add tasks to DB
@@ -250,14 +216,14 @@ export function useCaseDetail(caseData: Case, initialTab: string = 'Overview'): 
       queryClient.setQueryData(queryKeys.projects.byCaseId(caseData.id), [...projects, project]);
   };
 
-  const addTaskToProject = (projectId: string, task: WorkflowTask) => {
-      // Logic handled in components via direct DB calls mostly, 
+  const addTaskToProject = () => {
+      // Logic handled in components via direct DB calls mostly,
       // but this forces a refresh of the projects query
       queryClient.invalidate(queryKeys.projects.byCaseId(caseData.id));
       queryClient.invalidate(queryKeys.tasks.byCaseId(caseData.id));
   };
 
-  const updateProjectTaskStatus = async (projectId: string, taskId: string) => {
+  const updateProjectTaskStatus = async (taskId: string) => {
       try {
           // Find the task in the current tasks list
           const task = allTasks.find(t => t.id === taskId);
@@ -289,26 +255,26 @@ export function useCaseDetail(caseData: Case, initialTab: string = 'Overview'): 
     documents,
     setDocuments: setDocumentsWrapper,
     stages,
-    setStages: () => {}, // Read-only derived from tasks now
+    allTasks,
     parties,
     setParties,
+    motions,
     projects,
-    setProjects: () => {}, // Handled via query
     addProject,
     addTaskToProject,
     updateProjectTaskStatus,
     billingEntries,
     setBillingEntries: setBillingWrapper,
     generatingWorkflow,
+    generateAIWorkflow: handleGenerateWorkflow,
+    analyzeWithAI: async () => {}, // Not implemented
     analyzingId,
     draftPrompt,
     setDraftPrompt,
     draftResult,
+    draftDocument: async () => {}, // Not implemented
     isDrafting,
-    timelineEvents,
-    handleAnalyze,
-    handleDraft,
-    handleGenerateWorkflow
+    timelineEvents
   };
 };
 

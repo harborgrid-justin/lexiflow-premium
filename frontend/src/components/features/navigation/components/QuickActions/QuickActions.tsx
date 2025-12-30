@@ -392,7 +392,6 @@ export const QuickActions = React.memo<QuickActionsProps>(({
                         {/* Icon */}
                         <div
                           className={styles.getActionIconContainer(
-                            theme,
                             action.iconVariant || 'primary'
                           )}
                         >
@@ -406,7 +405,7 @@ export const QuickActions = React.memo<QuickActionsProps>(({
                               {action.label}
                             </span>
                             {action.badge && (
-                              <span className={styles.getBadge(theme)}>
+                              <span className={styles.getBadge()}>
                                 {action.badge}
                               </span>
                             )}

@@ -102,7 +102,7 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
       const newEntity: LegalEntity = {
           id: `ent-${Date.now()}` as EntityId,
           name,
-          type: type as Record<string, unknown>,
+          type: type as any,
           roles: ['Prospect'],
           status: 'Active',
           riskScore: 0,

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Database, RefreshCw, Trash2, Plus, Info, AlertTriangle, CheckCircle } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { db } from '@/services/data/db';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { ConfirmDialog } from '@/components/molecules';
 import { useModalState } from '@/hooks/useModalState';

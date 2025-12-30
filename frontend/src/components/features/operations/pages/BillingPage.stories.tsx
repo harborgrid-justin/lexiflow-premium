@@ -15,7 +15,7 @@ type Story = StoryObj<typeof BillingPage>;
 
 export const Default: Story = {
   args: {
-  "navigateTo": "Sample Text",
+  "navigateTo": () => {},
   "initialTab": "Sample Text"
 },
 };

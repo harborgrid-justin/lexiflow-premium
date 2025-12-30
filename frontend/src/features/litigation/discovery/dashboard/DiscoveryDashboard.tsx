@@ -8,7 +8,6 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 import DiscoveryMetrics from './DiscoveryMetrics';
 import DiscoveryCharts from './DiscoveryCharts';
 import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';

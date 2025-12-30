@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { CheckCircle, AlertTriangle, XCircle, ChevronDown, ChevronUp, FileText, Ruler } from 'lucide-react';
+import { CheckCircle, AlertTriangle, XCircle, ChevronDown, ChevronUp, Ruler } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { FormattingRule, PleadingSection } from '@/types';
@@ -58,7 +58,7 @@ export const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ rules, sections, s
     });
 
     // Page estimate (no pageLimit in type, use reasonable default)
-    const estimatedPages = Math.ceil(sections.reduce((acc: unknown, s) => acc + (s.content?.length || 0), 0) / 3000);
+    const estimatedPages = Math.ceil(sections.reduce((acc: unknown, s: unknown) => (acc as number) + ((s as {content?: string}).content?.length || 0), 0) / 3000);
     const pageLimit = 25; // Default page limit
     results.push({
       id: 'pageLimit',

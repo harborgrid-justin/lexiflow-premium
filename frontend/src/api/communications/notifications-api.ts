@@ -130,7 +130,7 @@ export class NotificationsApiService {
    */
   async getAll(filters?: ApiNotificationFilters): Promise<ApiNotification[]> {
     try {
-      const response = await apiClient.get<PaginatedResponse<ApiNotification>>(this.baseUrl, filters);
+      const response = await apiClient.get<PaginatedResponse<ApiNotification>>(this.baseUrl, filters as Record<string, unknown>);
       return response.data;
     } catch (error) {
       console.error('[NotificationsApiService.getAll] Error:', error);

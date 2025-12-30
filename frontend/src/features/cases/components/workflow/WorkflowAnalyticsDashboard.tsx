@@ -53,7 +53,7 @@ export const WorkflowAnalyticsDashboard: React.FC = () => {
     () => DataService.workflow.getAnalytics()
   );
   
-  const chartTheme = getChartTheme(mode === 'dark');
+  const chartTheme = getChartTheme(mode);
   const axisConfig = getAxisConfig(chartTheme);
   const gridConfig = getGridConfig(chartTheme);
   const tooltipConfig = getTooltipConfig(chartTheme);

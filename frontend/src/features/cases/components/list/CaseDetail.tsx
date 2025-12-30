@@ -6,19 +6,18 @@ import { queryClient } from '@/services/infrastructure/queryClient';
 import { Matter, MatterStatus, MatterPriority } from '@/types';
 import { ConfirmDialog } from '@/components/molecules';
 import { useModalState } from '@/hooks/useModalState';
-import { 
-  ArrowLeft, 
-  Edit, 
-  Trash2, 
-  FileText, 
-  Users, 
-  Calendar, 
+import {
+  ArrowLeft,
+  Edit,
+  Trash2,
+  FileText,
+  Users,
+  Calendar,
   DollarSign,
   Building2,
   Scale,
   CheckCircle,
-  AlertCircle,
-  Clock
+  AlertCircle
 } from 'lucide-react';
 import { MatterForm } from './matter-form';
 import { PATHS } from '@/config/paths.config';
@@ -40,7 +39,7 @@ export const CaseDetail: React.FC = () => {
     return uuidRegex.test(id);
   };
 
-  const isValidMatterId = matterId && isValidUUID(matterId);
+  const isValidMatterId = !!(matterId && isValidUUID(matterId));
 
   // ✅ Migrated to backend API with queryKeys (2025-12-21)
   const { data: matter, isLoading: loading, error } = useQuery<Matter | null>(

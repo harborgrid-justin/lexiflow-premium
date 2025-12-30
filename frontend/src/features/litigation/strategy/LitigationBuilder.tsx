@@ -73,7 +73,7 @@ export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateTo
           <Suspense fallback={<LazyLoader message="Loading Strategy Engine..." />}>
               {activeTab === 'canvas' && <StrategyCanvas {...builderProps} />}
               {activeTab === 'timeline' && <LitigationGanttView {...builderProps} />}
-              {activeTab === 'templates' && <PlaybookLibrary onApply={(p) => builderProps.loadFromPlaybook(p)} />}
+              {activeTab === 'templates' && <PlaybookLibrary onApply={(p) => builderProps.loadPlaybook(p)} />}
               {activeTab === 'simulate' && <OutcomeSimulator />}
           </Suspense>
         </ErrorBoundary>

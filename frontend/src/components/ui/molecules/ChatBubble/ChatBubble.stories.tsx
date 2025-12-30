@@ -19,8 +19,8 @@ export const Default: Story = {
   "sender": "Sample Text",
   "isMe": true,
   "timestamp": "Sample Text",
-  "status": {},
+  status: undefined,
   "isPrivileged": true,
-  "children": "<div>Sample Content</div>"
+  children: undefined
 },
 };

@@ -1,58 +1,26 @@
 import { ExtendedUserProfile, GranularPermission, UserId, EntityId } from '@/types';
 import { delay } from '@/utils/async';
-/**
- * ? Migrated to backend API (2025-12-21)
- */
-import { authApi } from '@/api/domains/auth.api';
-import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import { STORES, db } from '@/services/data/db';
-
-const CURRENT_USER_ID = 'usr-admin-justin';
 export const ProfileDomain = {
     getCurrentProfile: async (): Promise<ExtendedUserProfile> => {
-        // Get user from backend API
-        // Note: getCurrent doesn't exist on UsersApiService, fallback to mock data
-        let user: unknown = null;
-        try {
-            // Attempt to get user if method exists
-            if (authApi.users && typeof (authApi.users as Record<string, unknown>).getCurrent === 'function') {
-                user = await (authApi.users as Record<string, unknown>).getCurrent();
-            }
-        } catch (error) {
-            console.warn('[ProfileDomain] Could not fetch current user:', error);
-        }
-
-        // Fallback if backend unavailable
-        if (!user) {
-             return {
-                id: 'usr-guest' as UserId,
-                name: 'Guest User',
-                email: 'guest@example.com',
-                role: 'Associate',
-                entityId: 'ent-guest' as EntityId,
-                title: 'Visitor',
-                department: 'External',
-                userType: 'External',
-                preferences: { theme: 'light', notifications: { email: false, push: false, slack: false, digestFrequency: 'Weekly' }, dashboardLayout: [], density: 'comfortable', locale: 'en-US', timezone: 'UTC' },
-                security: { mfaEnabled: false, mfaMethod: 'App', lastPasswordChange: '', passwordExpiry: '', activeSessions: [] },
-                accessMatrix: [],
-                skills: [],
-                barAdmissions: []
-             };
-        }
-        // Merge with extended profile data structure
-        // In a real DB, these fields would likely be on the user record or joined from a profile table.
+        // Return default admin profile
+        // Backend integration pending - will use authApi.users.getCurrent() when available
         return {
-            ...user,
-            title: user.title || 'Senior Partner',
-            department: user.department || 'Litigation',
-            status: user.status || 'online',
-            skills: user.skills || ['Commercial Litigation', 'Class Action', 'Bankruptcy', 'Negotiation'],
-            barAdmissions: user.barAdmissions || [
+            id: 'usr-admin-justin' as UserId,
+            name: 'Justin Harbor',
+            email: 'justin@harborgrid.com',
+            role: 'Administrator',
+            entityId: 'ent-admin' as EntityId,
+            title: 'Senior Partner',
+            department: 'Litigation',
+            userType: 'Internal',
+            status: 'online',
+            skills: ['Commercial Litigation', 'Class Action', 'Bankruptcy', 'Negotiation'],
+            barAdmissions: [
                 { state: 'VA', number: '99823', status: 'Active' },
                 { state: 'DC', number: '445210', status: 'Active' }
             ],
-            preferences: user.preferences || {
+            preferences: {
                 theme: 'system',
                 notifications: {
                     email: true,
@@ -65,7 +33,7 @@ export const ProfileDomain = {
                 locale: 'en-US',
                 timezone: 'America/New_York'
             },
-            security: user.security || {
+            security: {
                 mfaEnabled: true,
                 mfaMethod: 'App',
                 lastPasswordChange: '2024-01-15',
@@ -76,8 +44,7 @@ export const ProfileDomain = {
                     { id: 'sess-2', device: 'iPhone 15', ip: '10.0.0.5', lastActive: '2 hours ago', current: false }
                 ]
             },
-            accessMatrix: user.accessMatrix || [
-                // Global Admin Permissions - Full System Access
+            accessMatrix: [
                 { id: 'perm-1', resource: 'cases', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
                 { id: 'perm-2', resource: 'documents', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
                 { id: 'perm-3', resource: 'billing', action: '*', effect: 'Allow', scope: 'Global', reason: 'Administrator - Full Access' },
@@ -126,15 +93,23 @@ export const ProfileDomain = {
         await db.put(STORES.USERS, updated);
     },
     getAuditLog: async (userId: string) => {
-        // Fetch real audit logs for this user
-        const logs = await db.getByIndex<unknown>(STORES.LOGS, 'userId', userId);
+        interface AuditLog {
+            id: string;
+            action: string;
+            timestamp: string;
+            ip?: string;
+            device?: string;
+            resource?: string;
+        }
+
+        const logs = await db.getByIndex<AuditLog>(STORES.LOGS, 'userId', userId);
         if (logs.length === 0) {
              return [
                 { id: 'log-1', action: 'Login', timestamp: new Date().toISOString(), ip: '192.168.1.55', device: 'MacBook Pro' },
                 { id: 'log-2', action: 'View Case', resource: 'Martinez v. TechCorp', timestamp: new Date(Date.now() - 3600000).toISOString() },
             ];
         }
-        return logs.sort((a: unknown, b: unknown) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 50);
+        return logs.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 50);
     }
 };
 

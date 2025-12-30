@@ -5,15 +5,15 @@
  * @optimization React.memo, useMemo for expensive analytics calculations
  */
 
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo} from 'react';
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { Matter } from '@/types';
-import { BarChart3, TrendingUp, DollarSign, Users, Briefcase, AlertCircle, RefreshCw } from 'lucide-react';
+import { BarChart3, TrendingUp, DollarSign, Users, Briefcase} from 'lucide-react';
 
 export const CaseAnalyticsView: React.FC = React.memo(() => {
-  const { data: matters = [], isLoading, isError, refetch } = useQuery<Matter[]>(
+  const { data: matters = []} = useQuery<Matter[]>(
     queryKeys.cases.matters.all(),
     () => DataService.cases.getAll(),
     { staleTime: 30000 } // Cache for 30 seconds
@@ -228,6 +228,4 @@ export const CaseAnalyticsView: React.FC = React.memo(() => {
   );
 });
 
-MatterAnalyticsView.displayName = 'MatterAnalyticsView';
-
-MatterAnalyticsView.displayName = 'MatterAnalyticsView';
+CaseAnalyticsView.displayName = 'CaseAnalyticsView';

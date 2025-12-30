@@ -19,8 +19,8 @@
 
 import React, { useState, useMemo } from 'react';
 import {
-  TrendingUp, DollarSign, Clock, Users, Briefcase, BarChart3,
-  PieChart, LineChart, Download, Filter, Calendar, ArrowUp, ArrowDown
+  DollarSign, Clock, Users, Briefcase,
+  PieChart, LineChart, Download, ArrowUp, ArrowDown
 } from 'lucide-react';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
@@ -28,12 +28,12 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms';
 import { Card } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
+import { CaseStatus } from '@/types';
 
 export const CaseAnalyticsDashboard: React.FC = () => {
-  const { mode, isDark } = useTheme();
+  const { isDark } = useTheme();
   const [dateRange, setDateRange] = useState<'7d' | '30d' | '90d' | 'ytd' | 'all'>('30d');
-  const [practiceAreaFilter, setPracticeAreaFilter] = useState('all');
+  const practiceAreaFilter = 'all';
 
   // Fetch matters data
   const { data: matters } = useQuery(
@@ -70,10 +70,10 @@ export const CaseAnalyticsDashboard: React.FC = () => {
     );
 
     const totalRevenue = invoices?.filter(inv =>
-      inv.createdAt && new Date(inv.createdAt) >= cutoffDate
-    ).reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0;
+      (inv as { createdAt?: string }).createdAt && new Date((inv as { createdAt: string }).createdAt) >= cutoffDate
+    ).reduce((sum: number, inv) => sum + ((inv as { totalAmount?: number }).totalAmount || 0), 0) || 0;
 
-    const closedMatters = filteredMatters.filter(m => m.status === 'CLOSED');
+    const closedMatters = filteredMatters.filter(m => m.status === CaseStatus.Closed);
     const avgResolution = closedMatters.length > 0
       ? Math.round(closedMatters.reduce((sum, m) => {
           if (!m.createdAt || !m.updatedAt) return sum;

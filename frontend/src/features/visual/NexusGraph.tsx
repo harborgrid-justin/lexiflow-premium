@@ -73,8 +73,18 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Custom hooks for state management (Practice #3)
-  const dimensions = useResizeObserver(containerRef);
-  const { state: { scale, pan }, setScale } = usePanZoom(0.8);
+  const dimensions = useResizeObserver(containerRef as React.RefObject<HTMLElement>);
+  const panZoom = usePanZoom(0.8);
+  const { scale, pan } = panZoom.state;
+
+  // Wrap setZoom to match React.Dispatch signature expected by GraphOverlay
+  const setScale: React.Dispatch<React.SetStateAction<number>> = useCallback((action) => {
+    if (typeof action === 'function') {
+      panZoom.setZoom(action(scale));
+    } else {
+      panZoom.setZoom(action);
+    }
+  }, [panZoom, scale]);
   
   // Memoized graph data computation (Practice #4)
   const graphData = useMemo(
@@ -149,7 +159,7 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
 
   // Memoized stroke color getter (Practice #4)
   const getStroke = useCallback(
-    (type: string) => getNodeStrokeColor(type, chartTheme, theme.chart.text),
+    (type: string) => getNodeStrokeColor(type, chartTheme as { primary?: string; secondary?: string; accent?: string }, theme.chart.text),
     [chartTheme, theme.chart.text]
   );
 

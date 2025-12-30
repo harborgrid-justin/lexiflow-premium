@@ -10,6 +10,7 @@ import { IntegrationEventPublisher } from '@/services/data/integration/Integrati
 import { SystemEventType } from '@/types/integration-types';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 import { RisksApiService } from '@/api/workflow';
+import { ValidationError } from '@/services/core/errors';
 
 export const RISK_QUERY_KEYS = {
     all: () => ['risks'] as const,
@@ -39,7 +40,7 @@ export class RiskRepository extends Repository<Risk> {
     override async getAll(): Promise<Risk[]> {
         if (this.useBackend) {
             try {
-                return await this.risksApi.getAll() as Record<string, unknown>;
+                return await this.risksApi.getAll() as unknown as Risk[];
             } catch (error) {
                 console.warn('[RiskRepository] Backend API unavailable', error);
             }
@@ -47,12 +48,12 @@ export class RiskRepository extends Repository<Risk> {
         return await super.getAll();
     }
 
-    async getByCaseId(caseId: string): Promise<Risk[]> {
+    override async getByCaseId(caseId: string): Promise<Risk[]> {
         this.validateId(caseId, 'getByCaseId');
         if (this.useBackend) {
             try {
                 const risks = await this.risksApi.getAll({ caseId });
-                return risks as Record<string, unknown>;
+                return risks as unknown as Risk[];
             } catch (error) {
                 console.warn('[RiskRepository] Backend API unavailable', error);
             }
@@ -64,7 +65,7 @@ export class RiskRepository extends Repository<Risk> {
         this.validateId(id, 'getById');
         if (this.useBackend) {
             try {
-                return await this.risksApi.getById(id) as Record<string, unknown>;
+                return await this.risksApi.getById(id) as unknown as Risk;
             } catch (error) {
                 console.warn('[RiskRepository] Backend API unavailable', error);
             }
@@ -72,7 +73,7 @@ export class RiskRepository extends Repository<Risk> {
         return await super.getById(id);
     }
 
-    async add(item: Risk): Promise<Risk> {
+    override async add(item: Risk): Promise<Risk> {
         if (!item || typeof item !== 'object') {
             throw new ValidationError('[RiskRepository.add] Invalid risk data');
         }
@@ -80,7 +81,7 @@ export class RiskRepository extends Repository<Risk> {
         let result: Risk;
         if (this.useBackend) {
             try {
-                result = await this.risksApi.create(item as Record<string, unknown>) as Record<string, unknown>;
+                result = await this.risksApi.create(item) as unknown as Risk;
             } catch (error) {
                 console.warn('[RiskRepository] Backend API unavailable', error);
                 await super.add(item);
@@ -105,7 +106,7 @@ export class RiskRepository extends Repository<Risk> {
         this.validateId(id, 'update');
         if (this.useBackend) {
             try {
-                return await this.risksApi.update(id, updates) as Record<string, unknown>;
+                return await this.risksApi.update(id, updates) as unknown as Risk;
             } catch (error) {
                 console.warn('[RiskRepository] Backend API unavailable', error);
             }

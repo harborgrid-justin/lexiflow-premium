@@ -35,7 +35,7 @@ export const QualityDashboard: React.FC<QualityDashboardProps> = ({ anomalies, h
                 
                 return { previousAnomalies };
             },
-            onError: (err, id, context) => {
+            onError: (_err, id, context) => {
                 if (context?.previousAnomalies) {
                     queryClient.setQueryData(['admin', 'anomalies'], context.previousAnomalies);
                 }

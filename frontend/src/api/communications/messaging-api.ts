@@ -106,7 +106,7 @@ export class MessagingApiService {
   // Legacy methods for backward compatibility
   async getAll(filters?: MessageFilters): Promise<Message[]> {
     // Deprecated - use getConversations() instead
-    return apiClient.get<Message[]>(`${this.baseUrl}/conversations`, filters);
+    return apiClient.get<Message[]>(`${this.baseUrl}/conversations`, filters as Record<string, unknown>);
   }
 
   async getById(id: string): Promise<Message> {
@@ -116,7 +116,13 @@ export class MessagingApiService {
 
   async send(data: Partial<Message>): Promise<Message> {
     // Deprecated - use sendMessage() instead
-    return this.sendMessage(data as Record<string, unknown>);
+    const messageData = {
+      conversationId: data.threadId || '',
+      body: data.body || '',
+      priority: data.priority,
+      attachments: data.attachments,
+    };
+    return this.sendMessage(messageData);
   }
 
   async delete(id: string): Promise<void> {

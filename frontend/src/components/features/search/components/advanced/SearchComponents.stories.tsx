@@ -11,12 +11,12 @@ const meta: Meta<typeof CategoryFilter> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof SearchComponents>;
+type Story = StoryObj<typeof CategoryFilter>;
 
 export const Default: Story = {
   args: {
-  "activeCategory": {},
-  "onCategoryChange": {},
-  "theme": "Sample Text"
+  "activeCategory": undefined,
+  onCategoryChange: () => {},
+  "theme": {} as any
 },
 };

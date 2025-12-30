@@ -19,7 +19,6 @@ import { Plus, Mail, Download, Filter, CheckCircle } from 'lucide-react';
 // Services & Data
 import { DataService } from '@/services';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { STORES } from '@/services/data/db';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -74,7 +73,7 @@ const BillingInvoicesComponent: React.FC = () => {
       }
   });
 
-  const { mutate: sendInvoice, isLoading: isSending } = useMutation(
+  const { mutate: sendInvoice } = useMutation(
       (id: string) => (DataService && DataService.billing) ? DataService.billing.sendInvoice(id) : Promise.resolve(false),
       {
           // Optimistic update
@@ -94,7 +93,7 @@ const BillingInvoicesComponent: React.FC = () => {
           onSuccess: (_, id) => {
               notify.success(`Invoice ${id} sent successfully.`);
           },
-          onError: (error, id, context?: MutationContext) => {
+          onError: (_, __, context?: MutationContext) => {
             // Rollback on error
             if (context?.previousInvoices) {
               queryClient.setQueryData(billingQueryKeys.billing.invoices(), context.previousInvoices);
@@ -128,7 +127,7 @@ const BillingInvoicesComponent: React.FC = () => {
           onSuccess: () => {
               notify.success("Invoice marked as PAID. Transaction recorded in immutable ledger.");
           },
-          onError: (error, id, context?: MutationContext) => {
+          onError: (_, __, context?: MutationContext) => {
             // Rollback on error
             if (context?.previousInvoices) {
               queryClient.setQueryData(billingQueryKeys.billing.invoices(), context.previousInvoices);

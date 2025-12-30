@@ -220,7 +220,7 @@ export function useLazyImage(
     };
   }, [src, threshold, rootMargin]);
 
-  return { imageSrc, ref: imgRef, isLoading, error };
+  return { imageSrc, ref: imgRef as React.RefObject<HTMLImageElement>, isLoading, error };
 }
 
 /**

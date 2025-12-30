@@ -46,14 +46,15 @@ export const EntityAnalytics: React.FC<EntityAnalyticsProps> = ({ entities }) =>
 
   // Memoize Stats Calculation
   const { typeStats, riskStats, jurisdictionCount, topHighRisk } = useMemo(() => {
+      const colorArray = Object.values(colors);
       const tStats = [
-        { name: 'Individual', value: entities.filter(e => e.type === 'Individual').length, color: colors[0] },
-        { name: 'Corporation', value: entities.filter(e => e.type === 'Corporation').length, color: colors[1] },
-        { name: 'Court/Gov', value: entities.filter(e => e.type === 'Court' || e.type === 'Government').length, color: colors[2] },
-        { name: 'Vendor', value: entities.filter(e => e.type === 'Vendor').length, color: colors[3] },
+        { name: 'Individual', value: entities.filter(e => e.type === 'Individual').length, color: colorArray[0] },
+        { name: 'Corporation', value: entities.filter(e => e.type === 'Corporation').length, color: colorArray[1] },
+        { name: 'Court/Gov', value: entities.filter(e => e.type === 'Court' || e.type === 'Government').length, color: colorArray[2] },
+        { name: 'Vendor', value: entities.filter(e => e.type === 'Vendor').length, color: colorArray[3] },
       ];
 
-      const rStats = entities.reduce((acc: unknown, e) => {
+      const rStats = entities.reduce((acc: { high: number; medium: number; low: number }, e) => {
           if (e.riskScore > 75) acc.high++;
           else if (e.riskScore > 40) acc.medium++;
           else acc.low++;
@@ -61,7 +62,8 @@ export const EntityAnalytics: React.FC<EntityAnalyticsProps> = ({ entities }) =>
       }, { high: 0, medium: 0, low: 0 });
 
       const jCount = new Set(entities.map(e => e.jurisdiction || e.state)).size;
-      const highRiskEntities = entities.sort((a: unknown, b: unknown) => b.riskScore - a.riskScore).slice(0, 10).map(e => ({ name: e.name.substring(0, 10), score: e.riskScore }));
+      const sortedEntities = [...entities].sort((a, b) => b.riskScore - a.riskScore);
+      const highRiskEntities = sortedEntities.slice(0, 10).map(e => ({ name: e.name.substring(0, 10), score: e.riskScore }));
 
       return { typeStats: tStats, riskStats: rStats, jurisdictionCount: jCount, topHighRisk: highRiskEntities };
   }, [entities, colors]);

@@ -28,8 +28,6 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   height,
   animated = true,
 }) => {
-  const { theme } = useTheme();
-
   const getVariantClasses = () => {
     switch (variant) {
       case 'text':
@@ -182,11 +180,7 @@ export const ActivityFeedSkeleton: React.FC<{
         {Array.from({ length: items }).map((_, index) => (
           <div
             key={index}
-            className={cn(
-              'p-4 rounded-lg border',
-              theme.surface.elevated,
-              theme.border.default
-            )}
+            className="p-4 rounded-lg border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700"
           >
             <div className="flex items-start gap-3">
               <Skeleton variant="rounded" width={40} height={40} />

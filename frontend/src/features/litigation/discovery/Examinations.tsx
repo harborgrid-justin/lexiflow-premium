@@ -9,11 +9,9 @@ import { DataService } from '@/services';
 import { Examination } from '@/types';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 import { Modal } from '@/components/molecules';
 import { Input, TextArea } from '@/components/atoms';
 import { useModalState } from '@/hooks';
-import { getTodayString } from '@/utils/dateUtils';
 
 export const Examinations = () => {
   const { theme } = useTheme();

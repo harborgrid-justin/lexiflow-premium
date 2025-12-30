@@ -3,8 +3,6 @@
  * @category Common Components - UI Primitives
  * @description Formatted currency display using standardized Formatters
  */
-
-import React from 'react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Formatters } from '@/utils/formatters';

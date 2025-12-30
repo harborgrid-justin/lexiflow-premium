@@ -22,7 +22,6 @@ import { useTheme } from '@/providers/ThemeContext';
 
 // Components
 import { Button } from '@/components/atoms';
-import { SectionTitle } from '@/components/organisms/_legacy/RefactoredCommon';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -50,7 +49,7 @@ export const AdvisorDetail: React.FC<AdvisorDetailProps> = ({ advisor, onClose }
   return (
     <div className={cn("w-96 border-l flex flex-col shadow-xl animate-in slide-in-from-right duration-300 z-10", theme.surface.default, theme.border.default)}>
         <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
-            <SectionTitle className="mb-0">Advisor Profile</SectionTitle>
+            <h3 className={cn("font-bold text-lg mb-0", theme.text.primary)}>Advisor Profile</h3>
             <button onClick={onClose} className={cn("p-1 rounded transition-colors", theme.text.tertiary, `hover:${theme.surface.default}`)}><X className="h-4 w-4"/></button>
         </div>
 
@@ -68,7 +67,7 @@ export const AdvisorDetail: React.FC<AdvisorDetailProps> = ({ advisor, onClose }
             </div>
 
             <div className="space-y-4">
-                <SectionTitle className="border-b pb-2">Deliverables</SectionTitle>
+                <h4 className={cn("font-bold text-base border-b pb-2", theme.text.primary)}>Deliverables</h4>
                 <div className="space-y-3">
                     <div className={cn("p-3 rounded border flex items-start gap-3 transition-colors cursor-pointer", theme.surface.default, theme.border.default, `hover:${theme.primary.border}`)}>
                         <FileText className="h-5 w-5 text-rose-500 shrink-0"/>
@@ -89,7 +88,7 @@ export const AdvisorDetail: React.FC<AdvisorDetailProps> = ({ advisor, onClose }
             </div>
 
             <div className="space-y-4">
-                <SectionTitle className="border-b pb-2">Financials</SectionTitle>
+                <h4 className={cn("font-bold text-base border-b pb-2", theme.text.primary)}>Financials</h4>
                 <div className={cn("grid grid-cols-2 gap-3 text-sm", theme.text.secondary)}>
                     <div><strong className={theme.text.primary}>Hourly Rate:</strong> ${advisor.rate}</div>
                     <div><strong className={theme.text.primary}>Total Billed:</strong> $45,000</div>

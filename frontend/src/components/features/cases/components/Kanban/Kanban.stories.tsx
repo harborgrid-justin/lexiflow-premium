@@ -15,11 +15,7 @@ type Story = StoryObj<typeof KanbanBoard>;
 
 export const Default: Story = {
   args: {
-  "title": "Sample Text",
-  "count": 42,
-  "children": "<div>Sample Content</div>",
-  "onDrop": {},
-  "isDragOver": true,
-  "action": "<div>Sample Content</div>"
+  children: undefined,
+  className: ''
 },
 };

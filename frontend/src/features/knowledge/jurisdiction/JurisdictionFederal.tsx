@@ -20,7 +20,6 @@ import { ExternalLink, Landmark } from 'lucide-react';
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -67,11 +66,11 @@ export const JurisdictionFederal: React.FC = () => {
           <TableHead className="text-right">Rules</TableHead>
         </TableHeader>
         <TableBody>
-          {courts.map((court, i) => (
+          {courts.map((court: unknown, i: number) => (
             <TableRow key={i}>
-              <TableCell className={cn("font-bold", theme.text.primary)}>{court.name}</TableCell>
-              <TableCell>{court.region}</TableCell>
-              <TableCell><Badge variant="neutral">{court.type}</Badge></TableCell>
+              <TableCell className={cn("font-bold", theme.text.primary)}>{(court as {name: string}).name}</TableCell>
+              <TableCell>{(court as {region: string}).region}</TableCell>
+              <TableCell><Badge variant="neutral">{(court as {type: string}).type}</Badge></TableCell>
               <TableCell className="text-right">
                 <button className={cn("hover:underline text-xs flex items-center justify-end", theme.primary.text)}>
                   View Rules <ExternalLink className="h-3 w-3 ml-1"/>

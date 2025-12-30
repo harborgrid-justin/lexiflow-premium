@@ -30,7 +30,7 @@ export const RecordModal: React.FC<RecordModalProps> = ({ isOpen, onClose, title
           <label className="block text-xs font-semibold text-slate-500 uppercase mb-1">{key}</label>
           <input
             className="w-full px-3 py-2 border border-slate-300 rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500"
-            value={formData[key] || ''}
+            value={String(formData[key] || '')}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, [key]: e.target.value })}
           />
         </div>

@@ -17,10 +17,10 @@ export const Default: Story = {
   args: {
   "value": 42,
   "label": "Sample Text",
-  "variant": {},
+  variant: undefined,
   "showPercentage": true,
   "className": "Sample Text",
-  "height": {},
+  "height": undefined,
   "animated": true
 },
 };

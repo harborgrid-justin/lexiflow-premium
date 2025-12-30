@@ -4,7 +4,6 @@
  * @description Dashboard for managing Data Access Framework (DAF) operations
  */
 
-import React from 'react';
 import { ShieldCheck, Database, Lock, Key } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

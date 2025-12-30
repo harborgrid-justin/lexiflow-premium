@@ -43,7 +43,7 @@ export const useAdminData = (activeCategory: Category) => {
             if (variables.isNew) {
                 newData = [savedItem, ...currentData];
             } else {
-                newData = currentData.map(i => i.id === savedItem.id ? savedItem : i);
+                newData = currentData.map((i: unknown) => (i as any).id === (savedItem as any).id ? savedItem : i);
             }
             queryClient.setQueryData(key, newData);
         }
@@ -64,7 +64,7 @@ export const useAdminData = (activeCategory: Category) => {
                 'all'
             ];
             const currentData = queryClient.getQueryState<unknown[]>(key)?.data || [];
-            queryClient.setQueryData(key, currentData.filter(i => i.id !== id));
+            queryClient.setQueryData(key, currentData.filter((i: unknown) => (i as any).id !== id));
           }
       }
   );

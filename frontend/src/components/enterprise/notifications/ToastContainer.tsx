@@ -4,7 +4,7 @@
  * @description Enterprise toast notification system with sound, animations, and priority handling
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback} from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X,
@@ -88,7 +88,7 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
       if (!isSoundEnabled) return;
 
       // Create audio context for different notification types
-      const audioContext = new (window.AudioContext || (window as Record<string, unknown>).webkitAudioContext)();
+      const audioContext = new (window.AudioContext || (window as unknown as Record<string, unknown>).webkitAudioContext)();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
 
@@ -204,41 +204,60 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
   };
 
   // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
+
+  const getToastVariants = () => {
+    if (position.includes('right')) {
+      return {
+        initial: { opacity: 0, x: 100, scale: 0.8 },
+        animate: {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          scale: 1,
+          transition: {
+            type: 'spring' as const,
+            stiffness: 500,
+            damping: 30,
+          },
+        },
+        exit: { opacity: 0, x: 100, scale: 0.8 },
+      };
+    } else if (position.includes('left')) {
+      return {
+        initial: { opacity: 0, x: -100, scale: 0.8 },
+        animate: {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          scale: 1,
+          transition: {
+            type: 'spring' as const,
+            stiffness: 500,
+            damping: 30,
+          },
+        },
+        exit: { opacity: 0, x: -100, scale: 0.8 },
+      };
+    } else {
+      return {
+        initial: { opacity: 0, y: position.includes('top') ? -100 : 100, scale: 0.8 },
+        animate: {
+          opacity: 1,
+          x: 0,
+          y: 0,
+          scale: 1,
+          transition: {
+            type: 'spring' as const,
+            stiffness: 500,
+            damping: 30,
+          },
+        },
+        exit: { opacity: 0, y: position.includes('top') ? -100 : 100, scale: 0.8 },
+      };
+    }
   };
 
-  const toastVariants = {
-    initial:
-      position.includes('right')
-        ? { opacity: 0, x: 100, scale: 0.8 }
-        : position.includes('left')
-        ? { opacity: 0, x: -100, scale: 0.8 }
-        : { opacity: 0, y: position.includes('top') ? -100 : 100, scale: 0.8 },
-    animate: {
-      opacity: 1,
-      x: 0,
-      y: 0,
-      scale: 1,
-      transition: {
-        type: 'spring',
-        stiffness: 500,
-        damping: 30,
-      },
-    },
-    exit:
-      position.includes('right')
-        ? { opacity: 0, x: 100, scale: 0.8 }
-        : position.includes('left')
-        ? { opacity: 0, x: -100, scale: 0.8 }
-        : { opacity: 0, y: position.includes('top') ? -100 : 100, scale: 0.8 },
-  };
+  const toastVariants = getToastVariants();
 
   const contextValue: ToastContextValue = {
     addToast,
@@ -264,7 +283,7 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
         aria-atomic="true"
       >
         <AnimatePresence mode="popLayout">
-          {toasts.map((toast, index) => (
+          {toasts.map((toast) => (
             <motion.div
               key={toast.id}
               layout

@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { Wand2, Upload, CheckSquare } from 'lucide-react';
 
 // ============================================================================
@@ -19,8 +19,6 @@ import { Wand2, Upload, CheckSquare } from 'lucide-react';
 // Components
 import { Button } from '@/components/atoms';
 import { Badge } from '@/components/atoms';
-import { TableContainer, TableHeader, TableHead } from '@/components/organisms';
-import { AdaptiveLoader } from '@/components/molecules';
 import { TaskCreationModal } from '@/components/organisms';
 import { VirtualList } from '@/components/organisms';
 

@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState, Suspense, lazy } from 'react';
-import { Plus, Loader2 } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -38,11 +38,10 @@ import { LazyLoader } from '@/components/molecules';
 // Utils & Config
 import { cn } from '@/utils/cn';
 import { PLEADING_BUILDER_TAB_CONFIG } from '@/config/tabs.config';
-import { IdGenerator } from '@/utils/idGenerator';
 import { validateTemplate } from '@/utils/validation';
 
 // Types
-import { Case, PleadingDocument, PleadingTemplate, PleadingSection, CaseId, UserId } from '@/types';
+import { Case, PleadingDocument, PleadingTemplate } from '@/types';
 
 // Lazy imports with named export handling
 const PleadingDesigner = lazy(() => import('./PleadingDesigner')); // Export default exists
@@ -54,7 +53,7 @@ const PleadingAnalytics = lazy(() => import('./PleadingAnalytics').then(m => ({ 
 
 import { PleadingBuilderProps } from './types';
 
-export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, caseId }) => {
+export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ caseId }) => {
     const { theme } = useTheme();
     const [view, setView] = useState<'workspace' | 'designer'>('workspace');
     const [activePleading, setActivePleading] = useState<PleadingDocument | null>(null);
@@ -167,7 +166,7 @@ export const PleadingBuilder: React.FC<PleadingBuilderProps> = ({ onSelectCase, 
                 return <PleadingTemplates templates={templates} onCreateFromTemplate={handleCreateNew} isLoading={templatesLoading} />;
             case 'clauses':
                 return <ClauseLibrary onSelectClause={(clause: unknown) => {
-                    notifySuccess(`Clause "${clause.name}" added to editor`);
+                    notifySuccess(`Clause "${(clause as {name: string}).name}" added to editor`);
                     // If there's an active pleading, we would append the clause
                     // For now, log to console for integration
                     console.log('Clause selected for insertion:', clause);

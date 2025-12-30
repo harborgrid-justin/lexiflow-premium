@@ -60,6 +60,8 @@ interface DragOptions {
 export interface UseGanttDragReturn {
   /** Initialize drag operation */
   initDrag: (e: React.MouseEvent, taskId: string, mode: DragMode, element: HTMLElement) => void;
+  /** Initialize drag operation (alias for backward compatibility) */
+  onMouseDown: (e: React.MouseEvent, taskId: string, mode: DragMode, element?: HTMLElement) => void;
 }
 
 // ========================================
@@ -211,5 +213,5 @@ export function useGanttDrag({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions)
         window.addEventListener('mouseup', handleMouseUp);
     }, [handleMouseMove, handleMouseUp]);
 
-    return { initDrag: onMouseDown };
+    return { initDrag: onMouseDown, onMouseDown };
 };

@@ -8,8 +8,6 @@
  * @example
  * ```tsx
  * import { RuleService, ruleQueryKeys } from './services/features/legal/ruleService';
-
-import { OperationError } from '@/services/core/errors';
  * import { useQuery, useMutation } from './hooks/useQueryHooks';
  * 
  * // Fetch all rules
@@ -32,6 +30,9 @@ import { OperationError } from '@/services/core/errors';
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
+// Errors
+import { OperationError } from '@/services/core/errors';
+
 // API & Query Keys
 import { api } from '@/api';
 import { queryKeys } from '@/utils/queryKeys';
@@ -113,9 +114,9 @@ export const RuleService = {
   add: async (rule: Omit<LegalRule, 'id'>): Promise<LegalRule> => {
     const dto = mapToCreateDto(rule);
     const created = await api.jurisdiction.createRule(dto);
-    
+
     if (!created) {
-      throw new OperationError('Failed to create rule');
+      throw new OperationError('RuleService.add', 'Failed to create rule');
     }
     
     // Invalidate relevant queries
@@ -139,9 +140,9 @@ export const RuleService = {
     if (updates.url) updateDto.url = updates.url;
     
     const updated = await api.jurisdiction.updateRule(id, updateDto);
-    
+
     if (!updated) {
-      throw new OperationError('Failed to update rule');
+      throw new OperationError('RuleService.update', 'Failed to update rule');
     }
     
     // Invalidate relevant queries
@@ -156,9 +157,9 @@ export const RuleService = {
    */
   delete: async (id: string): Promise<void> => {
     const success = await api.jurisdiction.deleteRule(id);
-    
+
     if (!success) {
-      throw new OperationError('Failed to delete rule');
+      throw new OperationError('RuleService.delete', 'Failed to delete rule');
     }
     
     // Invalidate relevant queries

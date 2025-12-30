@@ -203,7 +203,7 @@ export class DatabaseManager {
     if (this.mode === 'LocalStorage') return Promise.resolve();
     if (this.initPromise) return this.initPromise;
 
-    this.initPromise = new Promise((resolve, reject) => {
+    this.initPromise = new Promise((resolve) => {
       const request = indexedDB.open(this.dbName, this.dbVersion);
 
       request.onupgradeneeded = (event) => {
@@ -356,7 +356,7 @@ export class DatabaseManager {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
           const items = StorageUtils.get<T[]>(storeName, []);
-          const idx = items.findIndex((i: unknown) => i.id === (item as Record<string, unknown>).id);
+          const idx = items.findIndex((i: unknown) => (i as {id: string}).id === (item as Record<string, unknown>).id);
           if (idx >= 0) items[idx] = item;
           else items.push(item);
           StorageUtils.set(storeName, items);
@@ -391,7 +391,7 @@ export class DatabaseManager {
           const currentItems = StorageUtils.get<T[]>(storeName, []);
           const newItems = [...currentItems];
           items.forEach(item => {
-             const idx = newItems.findIndex((i: unknown) => i.id === (item as Record<string, unknown>).id);
+             const idx = newItems.findIndex((i: unknown) => (i as {id: string}).id === (item as Record<string, unknown>).id);
              if (idx >= 0) newItems[idx] = item;
              else newItems.push(item);
           });
@@ -416,7 +416,7 @@ export class DatabaseManager {
       await this.init();
       if (this.mode === 'LocalStorage' || !this.db) {
           const items = StorageUtils.get<unknown[]>(storeName, []);
-          StorageUtils.set(storeName, items.filter(i => i.id !== id));
+          StorageUtils.set(storeName, items.filter((i: unknown) => (i as {id: string}).id !== id));
           return Promise.resolve();
       }
 

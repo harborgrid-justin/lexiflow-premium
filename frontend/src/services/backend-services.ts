@@ -1,9 +1,8 @@
 /**
  * Backend Integration Services Barrel Export
- * 
+ *
  * Backend API, health checks, and configuration.
  * Import from '@/services/backend' for better tree-shaking.
- */
  */
 
 // API Client

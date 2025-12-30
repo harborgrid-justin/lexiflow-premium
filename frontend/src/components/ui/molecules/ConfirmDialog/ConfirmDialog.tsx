@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useId } from 'react';
+import React from 'react';
 import { AlertTriangle, Info } from 'lucide-react';
 
 // ============================================================================
@@ -48,8 +48,6 @@ export const ConfirmDialog = React.memo<ConfirmDialogProps>(function ConfirmDial
   confirmText = 'Confirm', cancelText = 'Cancel', variant = 'danger'
 }) {
   const { theme } = useTheme();
-  const dialogId = useId();
-  const descriptionId = useId();
 
   const variantStyles = {
       danger: { bg: theme.status.error.bg, text: theme.status.error.text },

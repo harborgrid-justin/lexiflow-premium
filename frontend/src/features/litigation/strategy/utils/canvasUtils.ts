@@ -6,7 +6,7 @@
  * @module components/litigation/utils/canvasUtils
  */
 
-import { LucideIcon, Edit2, Copy, Trash2, Layout, GitBranch, BoxSelect } from 'lucide-react';
+import { Edit2, Copy, Trash2, Layout, GitBranch, BoxSelect } from 'lucide-react';
 import { NodeType } from '@/features/cases/components/workflow/builder/types';
 import { ContextMenuItem } from '@/components/molecules';
 import { CANVAS_CONSTANTS } from '../canvasConstants';

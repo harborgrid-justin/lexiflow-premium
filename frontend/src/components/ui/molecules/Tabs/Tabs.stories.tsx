@@ -15,10 +15,10 @@ type Story = StoryObj<typeof Tabs>;
 
 export const Default: Story = {
   args: {
-  "tabs": "Sample Text",
+  "tabs": [],
   "activeTab": "Sample Text",
-  "onChange": "Sample Text",
+  "onChange": () => {},
   "className": "Sample Text",
-  "variant": {}
+  variant: undefined
 },
 };

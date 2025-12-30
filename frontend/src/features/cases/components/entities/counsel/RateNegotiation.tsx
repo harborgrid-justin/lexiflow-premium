@@ -2,7 +2,7 @@
 import React from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { Button } from '@/components/atoms';
-import { Download, TrendingDown, Clock, CheckCircle } from 'lucide-react';
+import { TrendingDown, Clock, CheckCircle} from 'lucide-react';
 import { LegalEntity } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -17,7 +17,7 @@ export const RateNegotiation: React.FC<RateNegotiationProps> = ({ entities }) =>
   const lawFirms = entities.filter(e => e.type === 'Law Firm');
 
   // Mock rate data
-  const rates = lawFirms.map((firm, i) => ({
+  const rates = lawFirms.map((firm) => ({
       firm: firm.name,
       role: 'Partner',
       standardRate: 1100,
@@ -28,7 +28,7 @@ export const RateNegotiation: React.FC<RateNegotiationProps> = ({ entities }) =>
   }));
   
   // Add associate rows
-  lawFirms.forEach((firm, i) => {
+  lawFirms.forEach((firm) => {
       rates.push({
           firm: firm.name,
           role: 'Associate',

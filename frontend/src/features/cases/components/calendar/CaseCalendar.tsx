@@ -19,11 +19,10 @@
 
 import React, { useState, useMemo } from 'react';
 import {
-  Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus, Filter,
-  Clock, AlertTriangle, Users, MapPin, FileText, Bell, Download,
-  Briefcase, Scale, List, Grid, Maximize2, Check, X
+  Calendar as CalendarIcon, ChevronLeft, ChevronRight,
+  Clock, MapPin, Download
 } from 'lucide-react';
-import { useQuery, queryClient } from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -31,7 +30,6 @@ import { Button } from '@/components/atoms';
 import { Card } from '@/components/molecules';
 import { Badge } from '@/components/atoms';
 import { Modal } from '@/components/molecules';
-import type { Matter } from '@/types';
 
 type CalendarView = 'month' | 'week' | 'day' | 'agenda';
 
@@ -55,28 +53,17 @@ interface CalendarEvent {
   };
 }
 
-interface TeamAvailability {
-  userId: string;
-  userName: string;
-  availability: {
-    date: string;
-    available: boolean;
-    conflicts: string[];
-  }[];
-}
-
 export const CaseCalendar: React.FC = () => {
-  const { mode, isDark } = useTheme();
+  const { isDark } = useTheme();
   const [view, setView] = useState<CalendarView>('month');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [showEventModal, setShowEventModal] = useState(false);
-  const [showNewEventModal, setShowNewEventModal] = useState(false);
   const [filterType, setFilterType] = useState<string>('all');
   const [filterMatter, setFilterMatter] = useState<string>('all');
 
   // Fetch calendar events
-  const { data: events, isLoading: eventsLoading } = useQuery(
+  const { data: events } = useQuery(
     ['calendar', 'events', currentDate.toISOString().split('T')[0]],
     async (): Promise<CalendarEvent[]> => {
       // Fetch docket entries which contain court dates and deadlines
@@ -105,23 +92,23 @@ export const CaseCalendar: React.FC = () => {
         }
       });
 
-      // Add matter deadlines from targetCloseDate
+      // Add matter deadlines from closeDate
       matters.forEach(matter => {
-        if (matter.targetCloseDate) {
+        if (matter.closeDate) {
           calendarEvents.push({
             id: `deadline-${matter.id}`,
             matterId: matter.id,
             matterTitle: matter.title,
             title: 'Matter Deadline',
             type: 'deadline',
-            startTime: matter.targetCloseDate,
-            priority: matter.priority === 'HIGH' ? 'high' : matter.priority === 'MEDIUM' ? 'medium' : 'low',
+            startTime: matter.closeDate,
+            priority: 'medium',
             status: 'scheduled',
             reminder: 1440, // 24 hours
           });
         }
       });
-      
+
       return calendarEvents;
     }
   );
@@ -130,20 +117,6 @@ export const CaseCalendar: React.FC = () => {
   const { data: matters } = useQuery(
     ['matters', 'all'],
     () => api.cases.getAll()
-  );
-
-  // Fetch team availability
-  const { data: teamAvailability } = useQuery(
-    ['calendar', 'team-availability', currentDate.toISOString().split('T')[0]],
-    async (): Promise<TeamAvailability[]> => {
-      // Fetch team members from users API
-      const users = await api.users.getAll();
-      return users.map(user => ({
-        userId: user.id,
-        userName: user.name || user.email,
-        availability: [], // Availability tracking not yet implemented in backend
-      }));
-    }
   );
 
   const filteredEvents = useMemo(() => {
@@ -187,24 +160,23 @@ export const CaseCalendar: React.FC = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
     const startDate = new Date(firstDay);
     startDate.setDate(startDate.getDate() - firstDay.getDay());
-    
+
     const weeks: Date[][] = [];
     let currentWeek: Date[] = [];
-    
+
     for (let i = 0; i < 42; i++) {
       const date = new Date(startDate);
       date.setDate(date.getDate() + i);
       currentWeek.push(date);
-      
+
       if (currentWeek.length === 7) {
         weeks.push(currentWeek);
         currentWeek = [];
       }
     }
-    
+
     return weeks;
   };
 
@@ -246,10 +218,6 @@ export const CaseCalendar: React.FC = () => {
             <Button variant="outline" size="sm">
               <Download className="w-4 h-4 mr-2" />
               Export
-            </Button>
-            <Button variant="primary" size="sm" onClick={() => setShowNewEventModal(true)}>
-              <Plus className="w-4 h-4 mr-2" />
-              New Event
             </Button>
           </div>
         </div>
@@ -354,7 +322,7 @@ export const CaseCalendar: React.FC = () => {
               <option value="all">All Matters</option>
               {matters?.map(matter => (
                 <option key={matter.id} value={matter.id}>
-                  {matter.matterNumber} - {matter.title}
+                  {matter.caseNumber || matter.id} - {matter.title}
                 </option>
               ))}
             </select>
@@ -368,7 +336,6 @@ export const CaseCalendar: React.FC = () => {
           <MonthView
             weeks={getMonthCalendar()}
             currentDate={currentDate}
-            events={filteredEvents || []}
             onEventClick={handleEventClick}
             getEventsForDate={getEventsForDate}
             getEventTypeColor={getEventTypeColor}
@@ -401,7 +368,6 @@ export const CaseCalendar: React.FC = () => {
 interface MonthViewProps {
   weeks: Date[][];
   currentDate: Date;
-  events: CalendarEvent[];
   onEventClick: (event: CalendarEvent) => void;
   getEventsForDate: (date: Date) => CalendarEvent[];
   getEventTypeColor: (type: string) => string;
@@ -411,7 +377,6 @@ interface MonthViewProps {
 const MonthView: React.FC<MonthViewProps> = ({
   weeks,
   currentDate,
-  events,
   onEventClick,
   getEventsForDate,
   getEventTypeColor,

@@ -63,7 +63,8 @@ export const MFASetup: React.FC<MFASetupProps> = ({
       setSecret(response.secret);
       setStep('qr-display');
     } catch (err: unknown) {
-      setError(err.message || 'Failed to initialize MFA setup');
+      const message = err instanceof Error ? err.message : 'Failed to initialize MFA setup';
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -95,7 +96,8 @@ export const MFASetup: React.FC<MFASetupProps> = ({
         setError('Invalid verification code. Please try again.');
       }
     } catch (err: unknown) {
-      setError(err.message || 'Verification failed. Please try again.');
+      const message = err instanceof Error ? err.message : 'Verification failed. Please try again.';
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -115,7 +117,8 @@ export const MFASetup: React.FC<MFASetupProps> = ({
       setStep('qr-display');
       onSuccess?.();
     } catch (err: unknown) {
-      setError(err.message || 'Failed to disable MFA');
+      const message = err instanceof Error ? err.message : 'Failed to disable MFA';
+      setError(message);
     } finally {
       setIsLoading(false);
     }

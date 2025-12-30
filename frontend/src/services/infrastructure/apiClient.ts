@@ -37,24 +37,12 @@
  * - Minimal memory footprint with streaming uploads
  */
 
-import { ValidationError, AuthenticationError, OperationError, ExternalServiceError } from '@/services/core/errors';
+import { ValidationError, AuthenticationError, OperationError, ExternalServiceError, ApiTimeoutError } from '@/services/core/errors';
 import { getApiBaseUrl, getApiPrefix } from '@/config/network/api.config';
 import { keysToCamel } from '@/utils/caseConverter';
 import { defaultStorage } from './adapters/StorageAdapter';
 
 const getBaseUrl = () => `${getApiBaseUrl()}${getApiPrefix()}`;
-
-/**
- * Vite environment variables type definition
- */
-interface ImportMetaEnv {
-  readonly VITE_AUTH_TOKEN_KEY?: string;
-  readonly VITE_AUTH_REFRESH_TOKEN_KEY?: string;
-}
-
-interface _ImportMeta {
-  readonly env: ImportMetaEnv;
-}
 
 /**
  * Structured API error response
@@ -213,7 +201,7 @@ class ApiClient {
       console.log('[ApiClient] Auth tokens stored successfully');
     } catch (error) {
       console.error('[ApiClient.setAuthTokens] Error:', error);
-      throw new OperationError('Failed to store authentication tokens');
+      throw new OperationError('ApiClient.setAuthTokens', 'Failed to store authentication tokens');
     }
   }
 
@@ -321,7 +309,7 @@ class ApiClient {
         message: errorData.message,
       });
 
-      throw new ExternalServiceError(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+      throw new ExternalServiceError('API', errorData.message || `HTTP ${response.status}: ${response.statusText}`);
     }
 
     // Handle 204 No Content
@@ -593,7 +581,7 @@ class ApiClient {
       return await response.json();
     } catch (error) {
       console.error('[ApiClient.healthCheck] Error:', error);
-      throw new ApiTimeoutError('Backend server is not reachable');
+      throw new ApiTimeoutError('/health', 5000);
     }
   }
 
@@ -605,7 +593,7 @@ class ApiClient {
    * @param endpoint - Service endpoint to check
    * @returns Promise<ServiceHealth> - Service health information
    */
-  async checkServiceHealth(serviceName: string, endpoint: string): Promise<ServiceHealth> {
+  async checkServiceHealth(endpoint: string): Promise<ServiceHealth> {
     const startTime = performance.now();
     const lastChecked = new Date().toISOString();
 
@@ -704,7 +692,7 @@ class ApiClient {
     const healthChecks = await Promise.allSettled(
       serviceEndpoints.map(async ({ name, endpoint }) => ({
         name,
-        health: await this.checkServiceHealth(name, endpoint),
+        health: await this.checkServiceHealth(endpoint),
       }))
     );
 

@@ -5,27 +5,25 @@
  * @optimization React 18 - React.memo, useTransition for filters, useMemo for computed values, proper error handling
  */
 
-import React, { useState, useMemo, useCallback, useTransition } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { Matter, MatterStatus, MatterPriority, MatterType, PracticeArea } from '@/types';
-import { 
-  Plus, 
-  Search, 
-  Filter, 
-  Calendar, 
-  DollarSign, 
-  Users, 
+import {
+  Plus,
+  Search,
+  Filter,
+  Calendar,
+  DollarSign,
+  Users,
   AlertCircle,
   Clock,
   CheckCircle,
   XCircle,
   ArrowUpCircle,
   FileText,
-  Building2,
-  RefreshCw,
-  Loader2
+  Building2
 } from 'lucide-react';
 import { PATHS } from '@/config/paths.config';
 import { cn } from '@/utils/cn';
@@ -46,11 +44,8 @@ export const CaseListView = React.memo<CaseListViewProps>(({ filter = 'all' }) =
   const [typeFilter, setTypeFilter] = useState<MatterType | 'all'>('all');
   const [practiceAreaFilter, setPracticeAreaFilter] = useState<PracticeArea | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
-  
-  // React 18 useTransition for non-blocking filter updates
-  const [isPending, startTransition] = useTransition();
 
-  const { data: matters = [], isLoading: loading, isError, refetch } = useQuery<Matter[]>(
+  const { data: matters = [], isLoading: loading} = useQuery<Matter[]>(
     queryKeys.cases.matters.all(),
     () => DataService.cases.getAll(),
     { staleTime: 30000 } // Cache for 30 seconds
@@ -94,25 +89,6 @@ export const CaseListView = React.memo<CaseListViewProps>(({ filter = 'all' }) =
 
     return filtered;
   }, [matters, filter, searchTerm, statusFilter, priorityFilter, typeFilter, practiceAreaFilter]);
-  
-  // React 18 concurrent-safe filter updaters
-  const handleSearchChange = useCallback((value: string) => {
-    startTransition(() => {
-      setSearchTerm(value);
-    });
-  }, []);
-  
-  const handleStatusFilterChange = useCallback((value: MatterStatus | 'all') => {
-    startTransition(() => {
-      setStatusFilter(value);
-    });
-  }, []);
-  
-  const handlePriorityFilterChange = useCallback((value: MatterPriority | 'all') => {
-    startTransition(() => {
-      setPriorityFilter(value);
-    });
-  }, []);
 
   const getStatusIcon = (status: MatterStatus) => {
     switch (status) {

@@ -16,8 +16,8 @@ type Story = StoryObj<typeof UserAvatar>;
 export const Default: Story = {
   args: {
   "name": "Sample Text",
-  "size": {},
+  size: undefined,
   "className": "Sample Text",
-  "indicatorStatus": {}
+  indicatorStatus: undefined
 },
 };

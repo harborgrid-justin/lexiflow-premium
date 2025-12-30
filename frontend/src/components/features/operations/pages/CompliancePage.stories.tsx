@@ -15,6 +15,6 @@ type Story = StoryObj<typeof CompliancePage>;
 
 export const Default: Story = {
   args: {
-  "initialTab": {}
+  "initialTab": undefined
 },
 };

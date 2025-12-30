@@ -10,7 +10,6 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { X, User, Building, Fingerprint, ExternalLink } from 'lucide-react';
 
 // ============================================================================
@@ -26,7 +25,7 @@ import { Button } from '@/components/atoms';
 import { cn } from '@/utils/cn';
 
 // Types
-import { Party, EvidenceItem, Case, NexusNodeData } from '@/types';
+import { Party, EvidenceItem, NexusNodeData } from '@/types';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -51,7 +50,7 @@ export const NexusInspector = ({ item, onClose }: NexusInspectorProps) => {
     switch (item.type) {
         case 'party': return <User className={cn("h-6 w-6", theme.text.link)}/>;
         case 'org': return <Building className="h-6 w-6 text-purple-600"/>;
-        case 'evidence': return <Fingerprint className={cn("h-6 w-6", theme.text.warning)}/>;
+        case 'evidence': return <Fingerprint className={cn("h-6 w-6", theme.status.warning.text)}/>;
         default: return null;
     }
   };

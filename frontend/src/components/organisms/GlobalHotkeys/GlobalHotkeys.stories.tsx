@@ -15,7 +15,7 @@ type Story = StoryObj<typeof GlobalHotkeys>;
 
 export const Default: Story = {
   args: {
-  "onToggleCommand": {},
-  "onNavigate": "Sample Text"
+  onToggleCommand: () => {},
+  "onNavigate": () => {}
 },
 };

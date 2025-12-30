@@ -44,13 +44,13 @@ export const XmlDocketParser = {
       // Check for XML parse errors
       const parserError = doc.querySelector('parsererror');
       if (parserError) {
-        throw new FileProcessingError(`XML parsing error: ${parserError.textContent || 'Malformed XML'}`);
+        throw new FileProcessingError('XML Document', `XML parsing error: ${parserError.textContent || 'Malformed XML'}`);
       }
     } catch (error) {
       if (error instanceof FileProcessingError) {
         throw error;
       }
-      throw new FileProcessingError(`Failed to parse XML: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new FileProcessingError('XML Document', `Failed to parse XML: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
 
     // 1. Extract Case Info

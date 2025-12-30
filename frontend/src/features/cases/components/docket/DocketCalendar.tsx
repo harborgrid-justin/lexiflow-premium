@@ -19,16 +19,12 @@ import { useQuery } from '@/hooks/useQueryHooks';
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services';
-// ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 
-import { 
-    getDaysInMonth, 
-    getFirstDayOfMonth, 
-    getPaddingDays, 
-    getDaysArray, 
-    getAllDeadlines, 
-    getDeadlinesForDay 
+import {
+    getPaddingDays,
+    getDaysArray,
+    getAllDeadlines,
+    getDeadlinesForDay
 } from './docketCalendar.utils';
 
 // Types & Interfaces
@@ -48,8 +44,6 @@ export const DocketCalendar: React.FC = () => {
   const entries = useMemo(() => Array.isArray(entriesData) ? entriesData : [], [entriesData]);
 
   // Memoize date calculations
-  const daysInMonth = useMemo(() => getDaysInMonth(currentDate), [currentDate]);
-  const firstDay = useMemo(() => getFirstDayOfMonth(currentDate), [currentDate]);
   const daysArray = useMemo(() => getDaysArray(currentDate), [currentDate]);
   const paddingDays = useMemo(() => getPaddingDays(currentDate), [currentDate]);
 
@@ -120,24 +114,27 @@ export const DocketCalendar: React.FC = () => {
               </div>
               
               <div className="space-y-1">
-                {deadlines.map((dl, idx) => (
-                  <div 
-                    key={idx} 
-                    className={cn(
-                      "text-[10px] p-1.5 rounded border mb-1 cursor-pointer truncate transition-all hover:shadow-md",
-                      dl.status === 'Satisfied' 
-                        ? cn(theme.status.success.bg, theme.status.success.border, theme.status.success.text) 
-                        : cn(theme.status.warning.bg, theme.status.warning.border, theme.status.warning.text)
-                    )}
-                    title={`${dl.title} - ${dl.caseId}`}
-                  >
-                    <div className="flex items-center gap-1 font-bold">
-                        {dl.status === 'Satisfied' ? <CheckCircle2 className="h-3 w-3"/> : <AlertCircle className="h-3 w-3"/>}
-                        {dl.title}
+                {deadlines.map((dl, idx) => {
+                  const deadline = dl as { title: string; caseId: string; status: string };
+                  return (
+                    <div
+                      key={idx}
+                      className={cn(
+                        "text-[10px] p-1.5 rounded border mb-1 cursor-pointer truncate transition-all hover:shadow-md",
+                        deadline.status === 'Satisfied'
+                          ? cn(theme.status.success.bg, theme.status.success.border, theme.status.success.text)
+                          : cn(theme.status.warning.bg, theme.status.warning.border, theme.status.warning.text)
+                      )}
+                      title={`${deadline.title} - ${deadline.caseId}`}
+                    >
+                      <div className="flex items-center gap-1 font-bold">
+                          {deadline.status === 'Satisfied' ? <CheckCircle2 className="h-3 w-3"/> : <AlertCircle className="h-3 w-3"/>}
+                          {deadline.title}
+                      </div>
+                      <div className="opacity-75 font-mono mt-0.5 truncate">{deadline.caseId}</div>
                     </div>
-                    <div className="opacity-75 font-mono mt-0.5 truncate">{dl.caseId}</div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           );

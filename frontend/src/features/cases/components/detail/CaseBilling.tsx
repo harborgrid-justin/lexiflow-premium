@@ -10,7 +10,7 @@
 
 // External Dependencies
 import React from 'react';
-import { Download, Clock, DollarSign, TrendingUp, AlertCircle } from 'lucide-react';
+import { Download, Clock, TrendingUp } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
@@ -97,7 +97,9 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                         <TableHead>Status</TableHead>
                     </TableHeader>
                     <TableBody>
-                        {entries.length > 0 ? entries.map((e: unknown) => (
+                        {entries.length > 0 ? entries.map((entry) => {
+                            const e = entry as TimeEntry;
+                            return (
                             <TableRow key={e.id}>
                                 <TableCell className={cn("font-mono", theme.text.secondary)}>{e.date}</TableCell>
                                 <TableCell className={cn("font-medium", theme.text.primary)}>{e.description}</TableCell>
@@ -108,7 +110,8 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                                     <Badge variant={e.status === 'Billed' ? 'success' : 'warning'}>{e.status}</Badge>
                                 </TableCell>
                             </TableRow>
-                        )) : (
+                            );
+                        }) : (
                             <TableRow>
                                 <TableCell colSpan={6} className={cn("px-6 py-12 text-center italic", theme.text.tertiary)}>
                                     No time entries recorded for this matter.

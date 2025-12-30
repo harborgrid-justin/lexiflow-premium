@@ -15,11 +15,11 @@ type Story = StoryObj<typeof StackLayout>;
 
 export const Default: Story = {
   args: {
-  "children": "<div>Sample Content</div>",
-  "direction": {},
-  "spacing": {},
-  "align": {},
-  "justify": {},
+  children: undefined,
+  direction: undefined,
+  spacing: undefined,
+  align: undefined,
+  justify: undefined,
   "wrap": true,
   "className": "Sample Text"
 },

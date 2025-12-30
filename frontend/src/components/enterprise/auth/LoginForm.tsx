@@ -29,8 +29,6 @@ const mfaSchema = z.object({
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
- 
-type _MFAFormData = z.infer<typeof mfaSchema>;
 
 export interface LoginFormProps {
   onSuccess: (user: User, tokens: { accessToken: string; refreshToken: string }) => void;
@@ -113,7 +111,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       // Check if MFA is required (this would be indicated by the backend)
       // For now, we'll assume MFA is required if the user has it enabled
       // In a real implementation, the backend would return a flag or different status
-      if ((response.user as Record<string, unknown>).mfaEnabled) {
+      if ('mfaEnabled' in response.user && response.user.mfaEnabled) {
         setStep('mfa');
       } else {
         onSuccess(response.user, {
@@ -122,8 +120,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         });
       }
     } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Invalid email or password. Please try again.';
       setErrors({
-        general: error.message || 'Invalid email or password. Please try again.',
+        general: message,
       });
     } finally {
       setIsLoading(false);
@@ -154,8 +153,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         setErrors({ code: 'Invalid MFA code. Please try again.' });
       }
     } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Invalid MFA code. Please try again.';
       setErrors({
-        code: error.message || 'Invalid MFA code. Please try again.',
+        code: message,
       });
     } finally {
       setIsLoading(false);

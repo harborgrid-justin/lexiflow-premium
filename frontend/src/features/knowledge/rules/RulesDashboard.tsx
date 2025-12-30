@@ -2,7 +2,7 @@ import React from 'react';
 import { MetricCard } from '@/components/molecules';
 import { Card } from '@/components/molecules';
 import { AdaptiveLoader } from '@/components/molecules';
-import { BookOpen, Gavel, AlertTriangle, Clock, ArrowRight, Scale, MapPin, Loader2 } from 'lucide-react';
+import { BookOpen, Gavel, AlertTriangle, Clock, ArrowRight, Scale, MapPin } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms';
@@ -41,7 +41,7 @@ export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) =>
                 <div className="space-y-3">
                     <div className={cn("flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md", theme.surface.default, theme.border.default)} onClick={() => onNavigate('federal_evidence')}>
                         <div className="flex items-center gap-3">
-                            <div className={cn("p-2 rounded-lg", theme.surface.emphasis, theme.text.link)}><BookOpen className="h-6 w-6"/></div>
+                            <div className={cn("p-2 rounded-lg", theme.surface.highlight, theme.text.link)}><BookOpen className="h-6 w-6"/></div>
                             <div>
                                 <h4 className={cn("font-bold text-lg", theme.text.primary)}>Federal Rules of Evidence</h4>
                                 <p className={cn("text-xs", theme.text.secondary)}>FRE • Last Updated Dec 2023</p>
@@ -52,7 +52,7 @@ export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) =>
 
                     <div className={cn("flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md", theme.surface.default, theme.border.default)} onClick={() => onNavigate('federal_civil')}>
                         <div className="flex items-center gap-3">
-                            <div className={cn("p-2 rounded-lg", theme.surface.muted, "text-purple-700")}><Scale className="h-6 w-6"/></div>
+                            <div className={cn("p-2 rounded-lg bg-purple-50 dark:bg-purple-900/20", "text-purple-700")}><Scale className="h-6 w-6"/></div>
                             <div>
                                 <h4 className={cn("font-bold text-lg", theme.text.primary)}>Federal Rules of Civil Procedure</h4>
                                 <p className={cn("text-xs", theme.text.secondary)}>FRCP • Last Updated Dec 2023</p>
@@ -63,7 +63,7 @@ export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) =>
 
                     <div className={cn("flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md", theme.surface.default, theme.border.default)} onClick={() => onNavigate('local')}>
                         <div className="flex items-center gap-3">
-                            <div className={cn("p-2 rounded-lg", theme.surface.success, "text-emerald-700")}><MapPin className="h-6 w-6"/></div>
+                            <div className={cn("p-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/20", "text-emerald-700")}><MapPin className="h-6 w-6"/></div>
                             <div>
                                 <h4 className={cn("font-bold text-lg", theme.text.primary)}>N.D. Cal. Local Rules</h4>
                                 <p className={cn("text-xs", theme.text.secondary)}>Civil & Admiralty • Effective Nov 2023</p>
@@ -77,15 +77,15 @@ export const RulesDashboard: React.FC<RulesDashboardProps> = ({ onNavigate }) =>
             <div className="space-y-6">
                 <Card title="Compliance Alerts">
                     <div className="space-y-4">
-                    <div className={cn("p-3 rounded-lg border flex items-start gap-3", theme.surface.warning, theme.border.warning, theme.text.primary)}>
-                            <AlertTriangle className={cn("h-5 w-5 shrink-0 mt-0.5", theme.text.warning)}/>
+                    <div className={cn("p-3 rounded-lg border flex items-start gap-3 bg-amber-50 dark:bg-amber-900/20", theme.border.default, theme.text.primary)}>
+                            <AlertTriangle className="h-5 w-5 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400"/>
                             <div>
-                                <h4 className={cn("font-bold text-sm", theme.text.warning)}>FRCP Amendment Pending</h4>
+                                <h4 className="font-bold text-sm text-amber-700 dark:text-amber-400">FRCP Amendment Pending</h4>
                                 <p className={cn("text-xs mt-1", theme.text.secondary)}>Proposed changes to Rule 16 and 26 regarding privilege logs take effect Dec 1, 2024.</p>
-                                <button className={cn("text-xs font-bold mt-2 hover:underline", theme.text.warning)}>Review Impact</button>
+                                <button className="text-xs font-bold mt-2 hover:underline text-amber-700 dark:text-amber-400">Review Impact</button>
                             </div>
                         </div>
-                        <div className={cn("p-3 rounded-lg border flex items-start gap-3", theme.surface.info, theme.border.info, theme.text.primary)}>
+                        <div className={cn("p-3 rounded-lg border flex items-start gap-3 bg-blue-50 dark:bg-blue-900/20", theme.border.default, theme.text.primary)}>
                             <Clock className={cn("h-5 w-5 shrink-0 mt-0.5", theme.text.link)}/>
                             <div>
                                 <h4 className={cn("font-bold text-sm", theme.text.link)}>Judge Brinkema Standing Order</h4>

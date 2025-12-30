@@ -174,13 +174,13 @@ export const PlaybookLibrary: React.FC<PlaybookLibraryProps> = ({ onApply }) => 
                     </div>
                 </div>
             ) : (
-                <VirtualGrid 
+                <VirtualGrid
                     items={filteredPlaybooks}
                     itemHeight={340}
                     itemWidth={320}
                     height="100%"
                     gap={16}
-                    renderItem={renderPlaybookCard}
+                    renderItem={(item: unknown) => renderPlaybookCard(item as Playbook)}
                     emptyMessage="No playbooks match your criteria."
                 />
             )}

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ArrowLeft, Save, LayoutTemplate, Link, BookOpen, MessageSquare, UploadCloud, Download, FileText } from 'lucide-react';
 import jsPDF from 'jspdf';
 import { Button } from '@/components/atoms';
@@ -47,7 +47,7 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
 
   const { mutate: saveDocument } = useMutation<PleadingDocument, PleadingDocument>(
       async (doc: PleadingDocument) => {
-          const result = await DataService.pleadings.update(doc.id, doc as Record<string, unknown>);
+          const result = await DataService.pleadings.update(doc.id, doc as unknown as Record<string, unknown>);
           return result as PleadingDocument;
       },
       {
@@ -73,10 +73,6 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
           ...prev,
           sections: prev.sections.map(s => s.id === id ? { ...s, ...updates } : s)
       }));
-  }, []);
-
-  const handleReorderSections = useCallback((newSections: PleadingSection[]) => {
-      setDocument(prev => ({ ...prev, sections: newSections }));
   }, []);
 
   const handleDeleteSection = useCallback((id: string) => {
@@ -152,7 +148,6 @@ export const PleadingEditor: React.FC<PleadingEditorProps> = ({ document: initia
                         if(activeTool !== 'review') setActiveTool('properties');
                     }}
                     onUpdateSection={handleUpdateSection}
-                    onReorderSections={handleReorderSections}
                     onDeleteSection={handleDeleteSection}
                     caseId={document.caseId}
                  />

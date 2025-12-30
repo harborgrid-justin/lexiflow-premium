@@ -4,7 +4,7 @@
  * @description Detects calendar conflicts and suggests optimal meeting times with travel considerations.
  */
 
-import { addMinutes, differenceInMinutes, isWithinInterval, format, addDays } from 'date-fns';
+import { addMinutes, differenceInMinutes, format, addDays} from 'date-fns';
 import { SEARCH_PREVIEW_RESULTS } from '@/config/features/search.config';
 
 /**

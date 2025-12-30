@@ -16,10 +16,10 @@ export class MatterRepository extends Repository<Matter> {
   /**
    * Override getAll to use backend API when available
    */
-  async getAll(): Promise<Matter[]> {
+  override async getAll(): Promise<Matter[]> {
     if (this.useBackend) {
       try {
-        return await casesApi.getAll();
+        return await casesApi.getAll() as unknown as Matter[];
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
         return super.getAll();
@@ -31,10 +31,10 @@ export class MatterRepository extends Repository<Matter> {
   /**
    * Override getById to use backend API when available
    */
-  async getById(id: MatterId): Promise<Matter | undefined> {
+  override async getById(id: MatterId): Promise<Matter | undefined> {
     if (this.useBackend) {
       try {
-        return await casesApi.getById(id);
+        return await casesApi.getById(id) as unknown as Matter;
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
         return super.getById(id);
@@ -46,10 +46,10 @@ export class MatterRepository extends Repository<Matter> {
   /**
    * Override add to use backend API when available
    */
-  async add(matter: Matter): Promise<Matter> {
+  override async add(matter: Matter): Promise<Matter> {
     if (this.useBackend) {
       try {
-        return await casesApi.create(matter);
+        return await casesApi.add(matter as unknown as Parameters<typeof casesApi.add>[0]) as unknown as Matter;
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
         return super.add(matter);
@@ -61,10 +61,10 @@ export class MatterRepository extends Repository<Matter> {
   /**
    * Override update to use backend API when available
    */
-  async update(id: MatterId, updates: Partial<Matter>): Promise<Matter> {
+  override async update(id: MatterId, updates: Partial<Matter>): Promise<Matter> {
     if (this.useBackend) {
       try {
-        return await casesApi.update(id, updates);
+        return await casesApi.update(id, updates as unknown as Parameters<typeof casesApi.update>[1]) as unknown as Matter;
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
         return super.update(id, updates);
@@ -76,7 +76,7 @@ export class MatterRepository extends Repository<Matter> {
   /**
    * Override delete to use backend API when available
    */
-  async delete(id: MatterId): Promise<void> {
+  override async delete(id: MatterId): Promise<void> {
     if (this.useBackend) {
       try {
         await casesApi.delete(id);
@@ -95,7 +95,8 @@ export class MatterRepository extends Repository<Matter> {
   async getByStatus(status: string): Promise<Matter[]> {
     if (this.useBackend) {
       try {
-        return await casesApi.getByStatus(status);
+        const allMatters = await casesApi.getAll({ status }) as unknown as Matter[];
+        return allMatters;
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
       }
@@ -107,13 +108,6 @@ export class MatterRepository extends Repository<Matter> {
    * Get matters by client ID
    */
   async getByClientId(clientId: string): Promise<Matter[]> {
-    if (this.useBackend) {
-      try {
-        return await casesApi.getByClient(clientId);
-      } catch (error) {
-        console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
-      }
-    }
     const allMatters = await this.getAll();
     return allMatters.filter(matter => matter.clientId === clientId);
   }
@@ -122,16 +116,9 @@ export class MatterRepository extends Repository<Matter> {
    * Get matters by lead attorney ID
    */
   async getByLeadAttorney(leadAttorneyId: string): Promise<Matter[]> {
-    if (this.useBackend) {
-      try {
-        return await casesApi.getByAttorney(leadAttorneyId);
-      } catch (error) {
-        console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
-      }
-    }
     const allMatters = await this.getAll();
-    return allMatters.filter(matter => 
-      matter.leadAttorneyId === leadAttorneyId || 
+    return allMatters.filter(matter =>
+      matter.leadAttorneyId === leadAttorneyId ||
       matter.responsibleAttorneyId === leadAttorneyId
     );
   }
@@ -150,15 +137,15 @@ export class MatterRepository extends Repository<Matter> {
   async search(query: string): Promise<Matter[]> {
     if (this.useBackend) {
       try {
-        return await casesApi.search(query);
+        return await casesApi.search(query) as unknown as Matter[];
       } catch (error) {
         console.warn('[MatterRepository] Backend API unavailable, falling back to IndexedDB', error);
       }
     }
     const allMatters = await this.getAll();
     const lowerQuery = query.toLowerCase();
-    
-    return allMatters.filter(matter => 
+
+    return allMatters.filter(matter =>
       matter.title.toLowerCase().includes(lowerQuery) ||
       matter.matterNumber.toLowerCase().includes(lowerQuery) ||
       matter.clientName?.toLowerCase().includes(lowerQuery) ||

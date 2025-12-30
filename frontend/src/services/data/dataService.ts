@@ -221,7 +221,7 @@ const IntegratedDocumentRepository = createIntegratedRepository(
 );
 
 class IntegratedBillingRepository extends BillingRepository {
-  async addTimeEntry(entry: TimeEntry): Promise<TimeEntry> {
+  override async addTimeEntry(entry: TimeEntry): Promise<TimeEntry> {
     const result = await super.addTimeEntry(entry);
     await IntegrationEventPublisher.publishTimeLogged(result);
     return result;
@@ -328,7 +328,7 @@ import { repositoryRegistry as legacyRepositoryRegistry } from '@/services/core/
  * Type safety is enforced at the property access level through the descriptors.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Required for dynamic property descriptor pattern
-const DataServiceBase: Record<string, unknown> = {};
+const DataServiceBase: any = {};
 
 Object.defineProperties(DataServiceBase, {
   
@@ -399,21 +399,21 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.legalHolds
    * @features Hold notices, custodian tracking, compliance
    */
-  legalHolds: DataSourceRouter.createPropertyDescriptor('legalHolds', () => legacyRepositoryRegistry.getOrCreate(STORES.LEGAL_HOLDS)),
+  legalHolds: DataSourceRouter.createPropertyDescriptor('legalHolds', () => legacyRepositoryRegistry.getOrCreate<import('@/types').BaseEntity>(STORES.LEGAL_HOLDS)),
   
   /**
    * Depositions API - Deposition scheduling and tracking
    * @backend api.depositions
    * @features Scheduling, transcripts, exhibit management
    */
-  depositions: DataSourceRouter.createPropertyDescriptor('depositions', () => legacyRepositoryRegistry.getOrCreate('depositions')),
+  depositions: DataSourceRouter.createPropertyDescriptor('depositions', () => legacyRepositoryRegistry.getOrCreate<import('@/types').BaseEntity>('depositions')),
   
   /**
    * Discovery Requests API - Discovery request/response management
    * @backend api.discoveryRequests
    * @features Interrogatories, RFPs, RFAs, responses
    */
-  discoveryRequests: DataSourceRouter.createPropertyDescriptor('discoveryRequests', () => legacyRepositoryRegistry.getOrCreate('discoveryRequests')),
+  discoveryRequests: DataSourceRouter.createPropertyDescriptor('discoveryRequests', () => legacyRepositoryRegistry.getOrCreate<import('@/types').BaseEntity>('discoveryRequests')),
   
   /**
    * ESI Sources API - Electronic source tracking
@@ -1031,7 +1031,7 @@ Object.defineProperties(DataServiceBase, {
       },
       add: async (rule: unknown) => {
         try {
-          return await api.jurisdiction?.createRule?.(rule as Record<string, unknown>);
+          return await api.jurisdiction?.createRule?.(rule as any);
         } catch (error) {
           console.error('[DataService.rules] Failed to create rule:', error);
           throw error;

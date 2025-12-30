@@ -25,7 +25,6 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { SimulationEngine } from '@/utils/simulationEngine';
 import { Scheduler } from '@/utils/scheduler';
-import { formatCurrency } from '@/utils/formatUtils';
 
 export const OutcomeSimulator: React.FC = () => {
   const { theme } = useTheme();
@@ -33,7 +32,7 @@ export const OutcomeSimulator: React.FC = () => {
   const [low, setLow] = useState(500000);
   const [high, setHigh] = useState(1500000);
   const [liabilityProb, setLiabilityProb] = useState(75);
-  const [iterations, setIterations] = useState(1000);
+  const [iterations] = useState(1000);
   const [isCalculating, setIsCalculating] = useState(false);
   const [results, setResults] = useState<unknown[]>([]);
   const [metrics, setMetrics] = useState({ ev: 0, p25: 0, p75: 0 });
@@ -131,7 +130,7 @@ export const OutcomeSimulator: React.FC = () => {
                   contentStyle={chartTheme.tooltipStyle}
                 />
                 <Area type="monotone" dataKey="count" stroke={chartTheme.colors.success} fillOpacity={1} fill="url(#colorCount)" />
-                <ReferenceLine x={results.find(r => r.value >= metrics.ev)?.range} stroke={chartTheme.colors.danger} strokeDasharray="3 3" label="EV" />
+                <ReferenceLine x={(results.find((r: unknown) => (r as {value: number}).value >= metrics.ev) as {range?: string})?.range} stroke={chartTheme.colors.danger} strokeDasharray="3 3" label="EV" />
               </AreaChart>
             </ResponsiveContainer>
          </div>

@@ -8,8 +8,7 @@
  */
 
 import React, { memo } from 'react';
-import { TypedWorkflowNode } from '@/types';
-import { WorkflowConnection } from '@features/cases';
+import { TypedWorkflowNode, WorkflowConnection } from '@/types/workflow-types';
 
 interface MemoizedNodeProps {
   node: TypedWorkflowNode;
@@ -24,7 +23,7 @@ interface MemoizedNodeProps {
  * Only re-renders when node data, selection state, or dragging state changes
  */
 export const MemoizedNode = memo<MemoizedNodeProps>(
-  ({ node, isSelected, isDragging, onMouseDown, theme }) => {
+  ({ node, isDragging, onMouseDown }) => {
     return (
       <div
         data-drag-id={node.id}
@@ -71,7 +70,7 @@ interface MemoizedConnectionProps {
  * Only re-renders when connection data or connected nodes change
  */
 export const MemoizedConnection = memo<MemoizedConnectionProps>(
-  ({ connection, isSelected, fromNode, toNode, onSelect, theme }) => {
+  ({ connection, fromNode, toNode, onSelect }) => {
     if (!fromNode || !toNode) return null;
 
     return (
@@ -111,7 +110,7 @@ interface MemoizedPropertiesPanelProps {
 }
 
 export const MemoizedPropertiesPanel = memo<MemoizedPropertiesPanelProps>(
-  (props) => {
+  () => {
     // Properties panel implementation
     return null;
   },

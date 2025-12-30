@@ -23,8 +23,6 @@
  * - Calendar sync: ~500ms per provider
  *
  * @security
-
-import { ValidationError } from '@/services/core/errors';
  * - Case-based access control
  * - Attendee privacy protection
  * - External calendar OAuth flow
@@ -57,7 +55,7 @@ import { ValidationError } from '@/services/core/errors';
  * @modified 2025-12-22
  */
 
-import { integrationsApi } from "@/api/domains/integrations.api";
+import { ValidationError } from '@/services/core/errors';
 import { delay } from '@/utils/async';
 
 // =============================================================================

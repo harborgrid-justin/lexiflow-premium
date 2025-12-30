@@ -1,14 +1,13 @@
 /**
  * aiValidationService.ts
- * 
+ *
  * Security and validation service for AI-generated content.
  * Implements rate limiting, input sanitization, and output validation.
- * 
+ *
  * @module services/aiValidationService
  */
 
-import { CANVAS_CONSTANTS, VALIDATION_MESSAGES } from '@/types/canvas-constants';
-import { TypedWorkflowNode, WorkflowConnection } from '@/types/workflow-types';
+import { CANVAS_CONSTANTS} from '@/types/canvas-constants';
 
 /**
  * Rate limiter state

@@ -56,7 +56,7 @@ export class GraphValidationService {
     this.validateNodeCount(nodes, errors);
     this.validateConnectionCount(connections, errors);
     this.validateStartAndEndNodes(nodes, errors);
-    this.validateConnectivity(nodes, connections, errors, warnings);
+    this.validateConnectivity(nodes, connections, warnings);
     this.validateCircularDependencies(nodes, connections, errors);
     this.validateDecisionNodes(nodes, connections, warnings);
     this.validatePhaseStructure(nodes, warnings);
@@ -129,7 +129,6 @@ export class GraphValidationService {
   private static validateConnectivity(
     nodes: TypedWorkflowNode[],
     connections: WorkflowConnection[],
-    errors: ValidationError[],
     warnings: ValidationWarning[]
   ): void {
     const startNode = nodes.find(n => n.type === 'Start');

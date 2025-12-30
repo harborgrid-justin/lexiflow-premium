@@ -38,6 +38,7 @@ export const MATTER_TYPE_TO_CASE_TYPE: Record<MatterType, BackendCaseType> = {
   [MatterType.INTELLECTUAL_PROPERTY]: BackendCaseType.INTELLECTUAL_PROPERTY,
   [MatterType.REAL_ESTATE]: BackendCaseType.REAL_ESTATE,
   [MatterType.ADVISORY]: BackendCaseType.CIVIL,
+  [MatterType.COMPLIANCE]: BackendCaseType.CORPORATE,
   [MatterType.EMPLOYMENT]: BackendCaseType.LABOR,
   [MatterType.CORPORATE]: BackendCaseType.CORPORATE,
   [MatterType.OTHER]: BackendCaseType.CIVIL,

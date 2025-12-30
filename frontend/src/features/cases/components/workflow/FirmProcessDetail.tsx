@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ArrowLeft, Play, Loader2, AlertTriangle, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Play, Loader2} from 'lucide-react';
 import { Button } from '@/components/atoms';
 import { Card } from '@/components/molecules';
 import { Tabs } from '@/components/molecules';
@@ -69,10 +69,10 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
         </div>
       </div>
 
-      <Tabs 
-        tabs={['overview', 'designer', 'instances', 'analytics']} 
-        activeTab={activeTab} 
-        onChange={(t) => setActiveTab(t as Record<string, unknown>)} 
+      <Tabs
+        tabs={['overview', 'designer', 'instances', 'analytics']}
+        activeTab={activeTab}
+        onChange={(t) => setActiveTab(t as 'overview' | 'designer' | 'instances' | 'analytics')}
       />
 
       <div className="flex-1 overflow-hidden flex flex-col min-h-0">
@@ -90,7 +90,7 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
               </Card>
               <Card title="Recent Executions">
                 <div className="space-y-2">
-                  {[1, 2, 3].map(i => (
+                  {[1, 2, 3].map((i: number) => (
                     <div key={i} className={cn("flex justify-between items-center p-3 border rounded-lg", theme.border.default, `hover:${theme.surface.highlight}`)}>
                       <div>
                         <p className={cn("font-bold text-sm", theme.text.primary)}>Instance #{2040 + i} - {process.name} Run</p>
@@ -146,16 +146,16 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
               </thead>
               <tbody className={cn("divide-y", theme.surface.default, theme.border.default)}>
                 {[1, 2, 3, 4, 5].map((i: unknown) => (
-                  <tr key={i}>
-                    <td className={cn("px-6 py-4 whitespace-nowrap text-sm font-mono", theme.text.secondary)}>BP-{2040+i}</td>
+                  <tr key={i as number}>
+                    <td className={cn("px-6 py-4 whitespace-nowrap text-sm font-mono", theme.text.secondary)}>BP-{2040+(i as number)}</td>
                     <td className={cn("px-6 py-4 whitespace-nowrap text-sm font-medium", theme.text.primary)}>Client Onboarding: Acme Corp</td>
-                    <td className={cn("px-6 py-4 whitespace-nowrap text-sm", theme.text.secondary)}>2024-03-{10+i}</td>
+                    <td className={cn("px-6 py-4 whitespace-nowrap text-sm", theme.text.secondary)}>2024-03-{10+(i as number)}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={cn("px-2 inline-flex text-xs leading-5 font-semibold rounded-full", i === 2 ? theme.status.error.bg + " " + theme.status.error.text : theme.status.success.bg + " " + theme.status.success.text)}>
-                        {i === 2 ? 'Stalled' : 'Active'}
+                      <span className={cn("px-2 inline-flex text-xs leading-5 font-semibold rounded-full", (i as number) === 2 ? theme.status.error.bg + " " + theme.status.error.text : theme.status.success.bg + " " + theme.status.success.text)}>
+                        {(i as number) === 2 ? 'Stalled' : 'Active'}
                       </span>
                     </td>
-                    <td className={cn("px-6 py-4 whitespace-nowrap text-sm", theme.text.secondary)}>{i === 2 ? 'Conflict Resolution' : 'Engagement Letter'}</td>
+                    <td className={cn("px-6 py-4 whitespace-nowrap text-sm", theme.text.secondary)}>{(i as number) === 2 ? 'Conflict Resolution' : 'Engagement Letter'}</td>
                   </tr>
                 ))}
               </tbody>

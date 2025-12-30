@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useState } from 'react';
-import { ShoppingCart, FileText, BarChart2, Briefcase, Plus, Search, Filter, Loader2 } from 'lucide-react';
+import { ShoppingCart, FileText, BarChart2, Briefcase, Plus, Loader2 } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -20,7 +20,6 @@ import { ShoppingCart, FileText, BarChart2, Briefcase, Plus, Search, Filter, Loa
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

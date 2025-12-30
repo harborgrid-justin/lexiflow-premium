@@ -1,40 +1,22 @@
 
-import React, { useState, useEffect } from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import React, { useState } from 'react';
 import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { Landmark, ArrowUpRight, ArrowDownLeft, Plus, FileText } from 'lucide-react';
-import { FirmExpense } from '@/types';
+import { Plus, FileText } from 'lucide-react';
 import { DataService } from '@/services';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { useQuery } from '@/hooks/useQueryHooks';
-// ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 import { useWindow } from '@/providers/WindowContext';
-import { Formatters } from '@/utils/formatters';
 import { getTodayString } from '@/utils/dateUtils';
 import { OperatingLedger, TrustLedger } from '@features/knowledge';
 import { useNotify } from '@/hooks/useNotify';
 
 export const BillingLedger: React.FC = () => {
-  const { theme, mode } = useTheme();
+  const { theme } = useTheme();
   const { openWindow, closeWindow } = useWindow();
   const { success: notifySuccess, error: notifyError } = useNotify();
   const [activeTab, setActiveTab] = useState<'operating' | 'trust'>('operating');
   const [receiptFile, setReceiptFile] = useState<File | null>(null);
   const [receiptPreview, setReceiptPreview] = useState<string | null>(null);
-  
-  // Enterprise Data Access
-  const { data: expenses = [] } = useQuery<FirmExpense[]>(
-      ['expenses', 'all'],
-      DataService.expenses.getAll
-  );
-  
-  const { data: trustAccounts = [] } = useQuery<unknown[]>(
-      ['trust', 'all'],
-      () => Promise.resolve([])
-  );
 
   const handleRecordTransaction = () => {
       const winId = `txn-new-${Date.now()}`;
@@ -209,9 +191,9 @@ export const BillingLedger: React.FC = () => {
       </div>
 
       {activeTab === 'operating' ? (
-        <OperatingLedger expenses={expenses} />
+        <OperatingLedger />
       ) : (
-        <TrustLedger trustAccounts={trustAccounts} />
+        <TrustLedger />
       )}
     </div>
   );

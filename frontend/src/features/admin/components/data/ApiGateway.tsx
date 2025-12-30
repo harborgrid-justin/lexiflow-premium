@@ -9,7 +9,6 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { ApiServiceSpec, ApiMethod } from '@/types';
 import { cn } from '@/utils/cn';
 import { encodeHtmlEntities } from '@/utils/sanitize';
-import { Badge } from '@/components/atoms';
 
 // Internal CodeBlock component for syntax highlighting
 function CodeBlock({ code }: { code: string }): React.JSX.Element {

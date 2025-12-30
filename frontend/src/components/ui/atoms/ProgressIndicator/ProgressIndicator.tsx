@@ -15,6 +15,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { CheckCircle, XCircle, Loader2, X } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/master.config';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -97,17 +98,18 @@ function calculateETA(
  * Get progress bar color class
  */
 function getProgressColor(variant: string, theme: unknown): string {
+  const typedTheme = theme as any;
   switch (variant) {
     case 'success':
-      return theme.status.success.bg;
+      return typedTheme.status.success.bg;
     case 'warning':
-      return theme.status.warning.bg;
+      return typedTheme.status.warning.bg;
     case 'error':
-      return theme.status.error.bg;
+      return typedTheme.status.error.bg;
     case 'primary':
-      return theme.action.primary.bg;
+      return typedTheme.action.primary.bg;
     default:
-      return theme.action.primary.bg;
+      return typedTheme.action.primary.bg;
   }
 }
 

@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
 import { Button } from '@/components/atoms';
-import { FileText, Upload, CheckCircle, Clock, Search, Plus } from 'lucide-react';
+import { FileText, Upload, CheckCircle, Clock, Search } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services';
 import { Transcript } from '@/types';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 import { useModalState } from '@/hooks';
 import { Modal } from '@/components/molecules';
 import { Input } from '@/components/atoms';

@@ -274,7 +274,7 @@ export const useNotifications = (
           type: toastType,
           title: notification.title,
           message: notification.message,
-          priority: notification.priority,
+          priority: notification.priority === 'medium' ? 'normal' : notification.priority,
           action: notification.actionUrl
             ? {
                 label: notification.actionLabel || 'View',
@@ -426,6 +426,7 @@ export const useNotifications = (
       const interval = setInterval(fetchNotifications, pollingInterval);
       return () => clearInterval(interval);
     }
+    return () => {};
   }, [pollingInterval, isConnected, fetchNotifications]);
 
   return {

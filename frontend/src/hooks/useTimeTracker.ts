@@ -298,6 +298,15 @@ export function useTimeTracker(options: UseTimeTrackerOptions = {}): UseTimeTrac
    */
   const formattedTime = useMemo(() => formatTime(seconds), [seconds, formatTime]);
 
+  /**
+   * Calculate billable amount
+   * Based on current elapsed time and hourly rate
+   */
+  const billableAmount = useMemo(() => {
+    const durationMinutes = Math.ceil(seconds / 60);
+    return (durationMinutes / 60) * rate;
+  }, [seconds, rate]);
+
   // ============================================================================
   // TIMER CONTROLS
   // ============================================================================
@@ -425,11 +434,15 @@ export function useTimeTracker(options: UseTimeTrackerOptions = {}): UseTimeTrac
   /**
    * Return comprehensive time tracker interface
    * All handlers are memoized for optimal performance
-   * 
+   *
    * @returns {Object} Time tracker interface
    * @property {boolean} isActive - Timer active state
    * @property {number} seconds - Elapsed seconds
    * @property {string} formattedTime - Formatted time display (HH:MM:SS)
+   * @property {number} billableAmount - Calculated billable amount
+   * @property {string} caseId - Current case ID
+   * @property {string} userId - Current user ID
+   * @property {number} rate - Hourly rate
    * @property {Function} start - Start timer
    * @property {Function} pause - Pause timer
    * @property {Function} stop - Stop timer and create entry
@@ -439,6 +452,10 @@ export function useTimeTracker(options: UseTimeTrackerOptions = {}): UseTimeTrac
     isActive,
     seconds,
     formattedTime,
+    billableAmount,
+    caseId,
+    userId,
+    rate,
     start,
     pause,
     stop,

@@ -60,6 +60,7 @@ export const MetricsWidget: React.FC<MetricsWidgetProps> = ({
 
       return () => clearInterval(interval);
     }
+    return undefined;
   }, [autoRefresh, onRefresh, refreshInterval]);
 
   const handleRefresh = () => {
@@ -172,7 +173,7 @@ export const MetricsWidget: React.FC<MetricsWidgetProps> = ({
                   className={cn(
                     'p-4 rounded-lg border',
                     'hover:border-blue-300 dark:hover:border-blue-700 transition-colors',
-                    theme.surface.elevated,
+                    theme.surface.raised,
                     theme.border.default
                   )}
                 >

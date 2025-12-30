@@ -12,7 +12,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { useCallback } from 'react';
-import { ArrowUp, ArrowDown, Briefcase } from 'lucide-react';
+import { ArrowUp, ArrowDown } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -94,9 +94,8 @@ export const ActiveCaseTable: React.FC<ActiveCaseTableProps> = ({
         <div className="flex-1 bg-white relative">
             {filteredCases.length === 0 ? (
                 <div className="p-8 h-full">
-                    <EmptyListState 
-                        icon={Briefcase}
-                        label="No Matters Found"
+                    <EmptyListState
+                        title="No Matters Found"
                         message="No cases match your current filter criteria. Try broadening your search or resetting the filters."
                     />
                  </div>

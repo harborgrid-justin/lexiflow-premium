@@ -129,5 +129,5 @@ export function useReadAnalytics(
         };
     }, [id]);
 
-    return { ref, isRead, duration };
+    return { ref: ref as React.RefObject<HTMLDivElement>, isRead, duration };
 };

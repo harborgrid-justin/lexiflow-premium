@@ -14,8 +14,7 @@ import { TableData, TableColumn } from './schemaTypes';
 import { SchemaToolbar } from './SchemaToolbar';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { dataPlatformApi } from '@/api/data-platform';
-import { Loader2 } from 'lucide-react';
-import { Input, TextArea } from '@/components/atoms';
+import { Input } from '@/components/atoms';
 
 interface SchemaArchitectProps {
   initialTab?: string;
@@ -50,26 +49,29 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
   useEffect(() => {
       if (fetchedTables.length > 0) {
           // Map SchemaTable to TableData format
-          const mappedTables: TableData[] = fetchedTables.map((table: unknown) => ({
-              name: table.name,
-              x: table.x || 0,
-              y: table.y || 0,
-              columns: table.columns.map((col: unknown) => ({
-                  name: col.name,
-                  type: col.type,
-                  pk: col.pk,
-                  notNull: col.notNull !== undefined ? col.notNull : !col.nullable,
-                  unique: col.unique,
-                  fk: col.fk,
-                  index: col.index
-              }))
-          }));
+          const mappedTables: TableData[] = fetchedTables.map((table) => {
+              const tableAny = table as unknown as Record<string, unknown>;
+              return {
+              name: String(table.name ?? ''),
+              x: typeof tableAny.x === 'number' ? tableAny.x : 0,
+              y: typeof tableAny.y === 'number' ? tableAny.y : 0,
+              columns: Array.isArray(table.columns) ? table.columns.map((col: Record<string, unknown>) => ({
+                  name: String(col.name ?? ''),
+                  type: String(col.type ?? 'VARCHAR(255)'),
+                  pk: Boolean(col.pk),
+                  notNull: col.notNull !== undefined ? Boolean(col.notNull) : (col.nullable !== undefined ? !col.nullable : false),
+                  unique: Boolean(col.unique),
+                  fk: col.fk ? String(col.fk) : undefined,
+                  index: Boolean(col.index)
+              })) : []
+          };
+          });
           setTables(mappedTables);
       }
   }, [fetchedTables]);
   
   const [isColumnModalOpen, setIsColumnModalOpen] = useState(false);
-  const [editingColumn, setEditingColumn] = useState<{tableName: string, columnName?: string, data: any} | null>(null);
+  const [editingColumn, setEditingColumn] = useState<{tableName: string, columnName?: string, data: Partial<TableColumn> & { name: string }} | null>(null);
   const deleteColumnModal = useModalState();
   const deleteTableModal = useModalState();
   const [deleteColumnData, setDeleteColumnData] = useState<{tableName: string, columnName: string} | null>(null);
@@ -86,7 +88,7 @@ export const SchemaArchitect: React.FC<SchemaArchitectProps> = ({ initialTab = '
           if (c.fk) colDef += ` REFERENCES ${c.fk.split('.')[0]}(${c.fk.split('.')[1]})`;
           return colDef;
       }).join(',\n');
-      const indexes = t.columns.filter(c => (c as Record<string, unknown>).index && !c.pk).map(c => `CREATE INDEX idx_${t.name}_${c.name} ON ${t.name}(${c.name});`).join('\n');
+      const indexes = t.columns.filter(c => c.index && !c.pk).map(c => `CREATE INDEX idx_${t.name}_${c.name} ON ${t.name}(${c.name});`).join('\n');
       return `CREATE TABLE ${t.name} (\n${cols}\n);\n${indexes ? indexes + '\n' : ''}`;
   }).join('\n'), [tables]);
   

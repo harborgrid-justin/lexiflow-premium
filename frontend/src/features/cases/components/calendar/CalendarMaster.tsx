@@ -29,7 +29,6 @@ import { CalendarToolbar, CalendarGrid, CalendarEvent } from '@/components/featu
 export const CalendarMaster: React.FC = () => {
   const {
     currentMonth,
-    events,
     changeMonth,
     goToToday,
     monthLabel,

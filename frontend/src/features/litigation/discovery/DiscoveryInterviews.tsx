@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { CustodianInterview, CaseId } from '@/types';
 import { DataService } from '@/services';
 import { Button } from '@/components/atoms';
@@ -9,7 +9,6 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 import { useModalState } from '@/hooks';
 
 export const DiscoveryInterviews: React.FC = () => {

@@ -56,9 +56,9 @@ export const CloudDatabaseContent: React.FC = () => {
   );
 
   const syncMutation = useMutation(DataService.sources.syncConnection, {
-    onMutate: async (id: string) => {
+    onMutate: (id: string) => {
       queryClient.setQueryData<DataConnection[]>(
-        ['admin', 'sources', 'connections'], 
+        ['admin', 'sources', 'connections'],
         (old) => old ? old.map(c => c.id === id ? { ...c, status: 'syncing' as ConnectionStatus } : c) : []
       );
     },

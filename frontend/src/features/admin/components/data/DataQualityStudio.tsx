@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-import { Sparkles, RefreshCw, FileSearch, Plus, Settings, Edit2, Loader2, GitMerge, Wand2, Activity, CheckCircle } from 'lucide-react';
+import { Sparkles, RefreshCw, FileSearch, Plus, Settings, Edit2, Loader2, GitMerge, Wand2, Activity } from 'lucide-react';
 import { JSX } from 'react/jsx-runtime';
 
 import { useTheme } from '@/providers/ThemeContext';
@@ -19,7 +19,7 @@ import { RuleBuilder, QualityRule } from './quality/RuleBuilder';
 import { StandardizationConsole } from './quality/StandardizationConsole';
 
 // Helper function for severity styling
-const getSeverityClassName = (severity: string, theme: unknown) => {
+const getSeverityClassName = (severity: string) => {
   switch (severity.toLowerCase()) {
     case 'critical':
       return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
@@ -171,7 +171,7 @@ export function DataQualityStudio({ initialTab = 'dashboard' }: DataQualityStudi
                                 <div>
                                     <div className="flex items-center gap-2 mb-1">
                                         <h5 className={cn("font-bold text-sm", theme.text.primary)}>{rule.name}</h5>
-                                        <span className={cn("text-[10px] px-1.5 rounded uppercase font-bold", getSeverityClassName(rule.severity, theme))}>{rule.severity}</span>
+                                        <span className={cn("text-[10px] px-1.5 rounded uppercase font-bold", getSeverityClassName(rule.severity))}>{rule.severity}</span>
                                     </div>
                                     <div className="flex gap-2 items-center flex-wrap">
                                         <code className={cn("text-xs px-2 py-1 rounded font-mono", theme.surface.highlight, theme.text.secondary)}>

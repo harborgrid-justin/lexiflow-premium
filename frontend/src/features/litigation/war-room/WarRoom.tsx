@@ -44,7 +44,6 @@ import {
 import { DataService } from "@/services";
 import { useQuery } from '@/hooks/useQueryHooks';
 import { STORES } from "@/services";
-import { queryKeys } from "@/utils/queryKeys";
 
 // Hooks & Context
 import { useTheme } from "@/providers";
@@ -157,7 +156,10 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   // ============================================================================
   const { data: allCasesRaw } = useQuery<Case[]>(
     [STORES.CASES, "all"],
-    DataService.cases.getAll,
+    async () => {
+      const cases = DataService.cases as any;
+      return cases.getAll();
+    },
     { enabled: !caseId },
   );
 
@@ -175,7 +177,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   } = useQuery(
     [STORES.CASES, currentCaseId, "warRoom"],
     async () => {
-      const warRoomService = await DataService.warRoom;
+      const warRoomService = DataService.warRoom as any;
       return warRoomService.getData(currentCaseId);
     },
     { enabled: !!currentCaseId },
@@ -193,7 +195,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   // ============================================================================
   const activeParentTab = useMemo(
     () =>
-      PARENT_TABS.find((p: unknown) => p.subTabs.some((s: unknown) => s.id === activeTab)) ||
+      PARENT_TABS.find((p) => p.subTabs.some((s) => s.id === activeTab)) ||
       PARENT_TABS[0],
     [activeTab],
   );
@@ -202,7 +204,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
   // EVENT HANDLERS
   // ============================================================================
   const handleParentTabChange = useCallback((parentId: string) => {
-    const parent = PARENT_TABS.find((p: unknown) => p.id === parentId);
+    const parent = PARENT_TABS.find((p) => p.id === parentId);
     if (parent && parent.subTabs.length > 0) {
       setActiveTab(parent.subTabs[0].id as WarRoomView);
     }
@@ -224,7 +226,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
 
   useEffect(() => {
     if (!caseId && allCases.length > 0) {
-      if (!currentCaseId || !allCases.find((c: unknown) => c.id === currentCaseId)) {
+      if (!currentCaseId || !allCases.find((c) => c.id === currentCaseId)) {
         setCurrentCaseId(allCases[0].id);
       }
     }
@@ -232,7 +234,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
 
   // Get the current case object for display
   const currentCase = useMemo(() => {
-    return allCases.find((c: unknown) => c.id === currentCaseId);
+    return allCases.find((c) => c.id === currentCaseId);
   }, [allCases, currentCaseId]);
 
   useEffect(() => {
@@ -349,7 +351,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
               theme.text.primary,
             )}
           >
-            {allCases.map((c: unknown) => (
+            {allCases.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.title}
               </option>
@@ -412,7 +414,7 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
                       `hover:${theme.border.default}`,
                     )}
                   >
-                    {allCases.map((c: unknown) => (
+                    {allCases.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.title}
                       </option>

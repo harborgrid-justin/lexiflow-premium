@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Save, X, Eye, Code, FileDown, Settings } from 'lucide-react';
-import { useTheme } from '@providers/ThemeContext';
+import { FileText, Save, X, Eye, Code } from 'lucide-react';
 import { useToast } from '@providers/ToastContext';
 import { draftingApi, DraftingTemplate, TemplateVariable, TemplateCategory, ClauseReference } from '@api/domains/drafting.api';
 import { api } from '@/api';
@@ -16,7 +15,6 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
   onSave,
   onCancel,
 }) => {
-  const { theme } = useTheme();
   const { addToast } = useToast();
 
   const [name, setName] = useState(template?.name || '');
@@ -27,9 +25,14 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
   const [clauseRefs, setClauseRefs] = useState<ClauseReference[]>(template?.clauseReferences || []);
   const [jurisdiction, setJurisdiction] = useState(template?.jurisdiction || '');
   const [practiceArea, setPracticeArea] = useState(template?.practiceArea || '');
-  const [tags, setTags] = useState<string[]>(template?.tags || []);
+  const [tags] = useState<string[]>(template?.tags || []);
   const [showPreview, setShowPreview] = useState(false);
-  const [availableClauses, setAvailableClauses] = useState<unknown[]>([]);
+  interface ClauseItem {
+    id: string;
+    title: string;
+  }
+
+  const [availableClauses, setAvailableClauses] = useState<ClauseItem[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -39,7 +42,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
   const loadClauses = async () => {
     try {
       const clauses = await api.clauses.getAll();
-      setAvailableClauses(Array.isArray(clauses) ? clauses : []);
+      setAvailableClauses(Array.isArray(clauses) ? clauses as unknown as ClauseItem[] : []);
     } catch (error) {
       console.error('Failed to load clauses:', error);
       setAvailableClauses([]);
@@ -128,12 +131,12 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
         jurisdiction,
         practiceArea,
         tags,
-        status: 'active' as Record<string, unknown>,
+        status: 'active' as const,
       };
 
       const saved = template
-        ? await draftingApi.updateTemplate(template.id, dto)
-        : await draftingApi.createTemplate(dto);
+        ? await draftingApi.updateTemplate(template.id, dto as any)
+        : await draftingApi.createTemplate(dto as any);
 
       addToast(`Template ${template ? 'updated' : 'created'} successfully`, 'success');
       onSave(saved);
@@ -360,7 +363,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
                     <div className="flex items-center space-x-2">
                       <select
                         value={variable.type}
-                        onChange={(e) => handleUpdateVariable(index, { type: e.target.value as Record<string, unknown> })}
+                        onChange={(e) => handleUpdateVariable(index, { type: e.target.value as any })}
                         className="flex-1 text-xs px-2 py-1 border border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100"
                       >
                         <option value="text">Text</option>

@@ -1,9 +1,8 @@
 
-import React, { useRef, useState } from 'react';
-import { PleadingSection, PleadingSectionType } from '@/types/pleading-types';
-import { useTheme } from '@/providers/ThemeContext';
+import React from 'react';
+import { PleadingSection } from '@/types/pleading-types';
 import { cn } from '@/utils/cn';
-import { Trash2, GripVertical, MoreHorizontal } from 'lucide-react';
+import { Trash2, GripVertical } from 'lucide-react';
 import { CaseId } from '@/types';
 
 interface DocumentCanvasProps {
@@ -11,25 +10,13 @@ interface DocumentCanvasProps {
   selectedSectionId: string | null;
   onSelectSection: (id: string | null) => void;
   onUpdateSection: (id: string, updates: Partial<PleadingSection>) => void;
-  onReorderSections: (sections: PleadingSection[]) => void;
   onDeleteSection: (id: string) => void;
   caseId: CaseId;
 }
 
 export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
-  sections, selectedSectionId, onSelectSection, onUpdateSection, onReorderSections, onDeleteSection, caseId
+  sections, selectedSectionId, onSelectSection, onUpdateSection, onDeleteSection, caseId
 }) => {
-  const { theme } = useTheme();
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-
-  const handleDrop = (e: React.DragEvent, index: number) => {
-      e.preventDefault();
-      setDragOverIndex(null);
-      const type = e.dataTransfer.getData('pleading/section-type');
-      if (type) {
-          console.log("Dropped type", type, "at index", index);
-      }
-  };
 
   const handleKeyDown = (e: React.KeyboardEvent, id: string) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -113,8 +100,8 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
             </div>
         )}
 
-        {sections.map((section, idx) => (
-            <div 
+        {sections.map((section) => (
+            <div
                 key={section.id}
                 role="button"
                 tabIndex={0}

@@ -23,7 +23,7 @@ import { useAutoSave } from '@/hooks/useAutoSave';
 
 // Services & Types
 import { DocumentService } from '@/services/features/documents/documentService';
-import { EvidenceItem, EvidenceId, CaseId, UUID } from '@/types';
+import { EvidenceItem, EvidenceId, CaseId, UUID, EvidenceType } from '@/types';
 import { validateEvidenceItemSafe } from '@/services/validation/evidenceSchemas';
 import { AdmissibilityStatusEnum } from '@/types/enums';
 
@@ -117,7 +117,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
           trackingUuid: (generatedData.uuid || crypto.randomUUID()) as UUID,
           caseId: 'Pending Assignment' as CaseId,
           title: title,
-          type: type as Record<string, unknown>,
+          type: type as EvidenceType,
           description: description,
           collectionDate: new Date().toISOString().split('T')[0],
           collectedBy: 'Current User',
@@ -133,7 +133,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
               actor: 'Current User',
               notes: 'Intake via Digital Wizard'
           }]
-      } as Record<string, unknown>; // Cast needed for BaseEntity fields
+      }
       
       // Validate before submission
       const validation = validateEvidenceItemSafe(newItem);

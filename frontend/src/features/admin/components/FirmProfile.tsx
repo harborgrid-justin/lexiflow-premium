@@ -98,13 +98,13 @@ export const FirmProfile: React.FC = () => {
       }
       // Handle nested updates
       const newData = { ...prev };
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       let current: unknown = newData;
       for (let i = 0; i < keys.length - 1; i++) {
-        current[keys[i]] = { ...current[keys[i]] };
-        current = current[keys[i]];
+        (current as any)[keys[i]] = { ...(current as any)[keys[i]] };
+        current = (current as any)[keys[i]];
       }
-      current[keys[keys.length - 1]] = value;
+      (current as any)[keys[keys.length - 1]] = value;
       return newData;
     });
   };

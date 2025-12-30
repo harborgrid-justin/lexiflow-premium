@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Database, Server, FileText, ArrowRight, Layers, Box, CheckCircle, Play, Settings } from 'lucide-react';
+import { Database, Server, Layers, Box, Settings } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 

@@ -17,7 +17,7 @@
  * @template TCreateData - The data shape for creating new entities
  */
 
-import React, { useState, useRef, useEffect, useMemo, useCallback, useId } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback} from 'react';
 import { createPortal } from 'react-dom';
 import { Search, Plus, Loader, AlertCircle, Check } from 'lucide-react';
 import { useEntityAutocomplete, EntityAutocompleteConfig } from '@/hooks/useEntityAutocomplete';

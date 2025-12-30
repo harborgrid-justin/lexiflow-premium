@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { CaseId, EvidenceId, EvidenceItem, EvidenceType, AdmissibilityStatus } from '@/types';
+import type { CaseId, EvidenceId, UserId, UUID } from '@/types';
 import { EvidenceDashboard } from '../../../../features/litigation/evidence/EvidenceDashboard';
 import { EvidenceVault } from '../../../../features/litigation/evidence/EvidenceVault';
 import { EvidenceInventory } from '../../../../features/litigation/evidence/EvidenceInventory';
@@ -156,22 +156,22 @@ export const Intake: StoryObj<Meta<typeof EvidenceIntake>> = {
 export const ChainOfCustody: StoryObj<Meta<typeof EvidenceChainOfCustody>> = {
   render: () => {
     const mockEvidence = {
-      id: 'evidence-123' as Record<string, unknown>,
-      trackingUuid: 'uuid-123' as Record<string, unknown>,
-      caseId: 'case-123' as Record<string, unknown>,
+      id: 'evidence-123' as EvidenceId,
+      trackingUuid: 'uuid-123' as UUID,
+      caseId: 'case-123' as CaseId,
       title: 'Sample Evidence',
-      type: 'Document' as Record<string, unknown>,
+      type: 'Document' as const,
       description: 'Sample evidence item',
       collectionDate: '2024-01-15',
       collectedBy: 'John Doe',
       custodian: 'Evidence Locker',
       location: 'Building A',
-      admissibility: 'Pending' as Record<string, unknown>,
+      admissibility: 'Pending' as const,
       tags: [],
       chainOfCustody: [],
       createdAt: '',
       updatedAt: '',
-      userId: 'user-1' as Record<string, unknown>,
+      userId: 'user-1' as UserId,
     };
 
     return (
@@ -203,23 +203,23 @@ export const ChainOfCustody: StoryObj<Meta<typeof EvidenceChainOfCustody>> = {
 export const Admissibility: StoryObj<Meta<typeof EvidenceAdmissibility>> = {
   render: () => {
     const mockEvidence = {
-      id: 'evidence-123' as Record<string, unknown>,
-      trackingUuid: 'uuid-123' as Record<string, unknown>,
-      caseId: 'case-123' as Record<string, unknown>,
+      id: 'evidence-123' as EvidenceId,
+      trackingUuid: 'uuid-123' as UUID,
+      caseId: 'case-123' as CaseId,
       title: 'Sample Evidence',
-      type: 'Document' as Record<string, unknown>,
+      type: 'Document' as const,
       description: 'Sample evidence item',
       collectionDate: '2024-01-15',
       collectedBy: 'John Doe',
       custodian: 'Evidence Locker',
       location: 'Building A',
-      admissibility: 'Challenged' as Record<string, unknown>,
+      admissibility: 'Challenged' as const,
       tags: [],
       chainOfCustody: [],
       linkedRules: ['FRE 401', 'FRE 901'],
       createdAt: '',
       updatedAt: '',
-      userId: 'user-1' as Record<string, unknown>,
+      userId: 'user-1' as UserId,
     };
 
     return (
@@ -250,17 +250,17 @@ export const Admissibility: StoryObj<Meta<typeof EvidenceAdmissibility>> = {
 export const Forensics: StoryObj<Meta<typeof EvidenceForensics>> = {
   render: () => {
     const mockEvidence = {
-      id: 'evidence-123' as Record<string, unknown>,
-      trackingUuid: 'uuid-123' as Record<string, unknown>,
-      caseId: 'case-123' as Record<string, unknown>,
+      id: 'evidence-123' as EvidenceId,
+      trackingUuid: 'uuid-123' as UUID,
+      caseId: 'case-123' as CaseId,
       title: 'Sample Digital Evidence.pdf',
-      type: 'Digital' as Record<string, unknown>,
+      type: 'Digital' as const,
       description: 'Sample evidence item for forensics',
       collectionDate: '2024-01-15',
       collectedBy: 'John Doe',
       custodian: 'Evidence Locker',
       location: 'Digital Storage',
-      admissibility: 'Pending' as Record<string, unknown>,
+      admissibility: 'Pending' as const,
       tags: [],
       chainOfCustody: [],
       blockchainHash: 'abc123def456789abc123def456789abc123def456789abc123def456789',
@@ -268,7 +268,7 @@ export const Forensics: StoryObj<Meta<typeof EvidenceForensics>> = {
       fileType: 'application/pdf',
       createdAt: '',
       updatedAt: '',
-      userId: 'user-1' as Record<string, unknown>,
+      userId: 'user-1' as UserId,
     };
 
     return (
@@ -299,22 +299,22 @@ export const Forensics: StoryObj<Meta<typeof EvidenceForensics>> = {
 export const Detail: StoryObj<Meta<typeof EvidenceDetail>> = {
   render: () => {
     const mockEvidence = {
-      id: 'evidence-123' as Record<string, unknown>,
-      trackingUuid: 'uuid-123' as Record<string, unknown>,
-      caseId: 'case-123' as Record<string, unknown>,
+      id: 'evidence-123' as EvidenceId,
+      trackingUuid: 'uuid-123' as UUID,
+      caseId: 'case-123' as CaseId,
       title: 'Sample Evidence',
-      type: 'Document' as Record<string, unknown>,
+      type: 'Document' as const,
       description: 'Sample evidence item',
       collectionDate: '2024-01-15',
       collectedBy: 'John Doe',
       custodian: 'Evidence Locker',
       location: 'Building A',
-      admissibility: 'Pending' as Record<string, unknown>,
+      admissibility: 'Pending' as const,
       tags: [],
       chainOfCustody: [],
       createdAt: '',
       updatedAt: '',
-      userId: 'user-1' as Record<string, unknown>,
+      userId: 'user-1' as UserId,
     };
 
     return (

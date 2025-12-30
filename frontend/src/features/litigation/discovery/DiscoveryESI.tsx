@@ -25,7 +25,7 @@ import { EvidenceCustodyLog } from '@features/litigation/evidence';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
 import { useWindow } from '@/providers/WindowContext';
 
@@ -51,7 +51,7 @@ import { ESICollectionStatusEnum } from '@/types/enums';
 class CollectionQueue {
   private queue: Array<{ id: string; source: ESISource }> = [];
   private running = 0;
-  private readonly maxConcurrent = 3;
+  private readonly maxConcurrent: number;
   private readonly onProgress?: (id: string, status: string) => void;
 
   constructor(maxConcurrent = 3, onProgress?: (id: string, status: string) => void) {
@@ -85,7 +85,7 @@ class CollectionQueue {
       const item = this.queue.shift();
       if (item) {
         this.running++;
-        this.collectSource(item.id, item.source)
+        this.collectSource(item.id)
           .finally(() => {
             this.running--;
             this.processQueue();
@@ -94,13 +94,13 @@ class CollectionQueue {
     }
   }
 
-  private async collectSource(id: string, source: ESISource): Promise<void> {
+  private async collectSource(id: string): Promise<void> {
     try {
       this.onProgress?.(id, ESICollectionStatusEnum.COLLECTING);
-      
+
       // Simulate collection process
       await new Promise(resolve => setTimeout(resolve, DEBUG_API_SIMULATION_DELAY_MS * 2));
-      
+
       this.onProgress?.(id, ESICollectionStatusEnum.COLLECTED);
     } catch (err: unknown) {
       this.onProgress?.(id, ESICollectionStatusEnum.ERROR);
@@ -118,15 +118,15 @@ class CollectionQueue {
 }
 
 export const DiscoveryESI: React.FC = () => {
-  const { theme, mode } = useTheme();
+  const { theme } = useTheme();
   const notify = useNotify();
-  const { openWindow, closeWindow } = useWindow();
+  const { openWindow } = useWindow();
   const collectionQueueRef = React.useRef<CollectionQueue | null>(null);
 
   // Initialize collection queue
   if (!collectionQueueRef.current) {
-    collectionQueueRef.current = new CollectionQueue(3, (id, status) => {
-      updateStatus({ id, status });
+    collectionQueueRef.current = new CollectionQueue(3 as const, (_, status) => {
+      updateStatus({ status });
     });
   }
 
@@ -137,8 +137,8 @@ export const DiscoveryESI: React.FC = () => {
   );
 
   const { mutate: updateStatus } = useMutation(
-      async (payload: { id: string, status: string }) => {
-          return DataService.discovery.updateESISourceStatus(payload.id, payload.status);
+      async (payload: { status: string }) => {
+          return DataService.discovery.updateESISourceStatus(payload.status);
       },
       { invalidateKeys: [discoveryQueryKeys.discovery.esi.all] }
   );
@@ -153,7 +153,7 @@ export const DiscoveryESI: React.FC = () => {
           return DataService.discovery.startCollection(sourceId);
       },
       {
-          onSuccess: (_, id) => {
+          onSuccess: () => {
               notify.success("ESI Collection Job completed successfully.");
           },
           onError: () => {
@@ -248,7 +248,7 @@ export const DiscoveryESI: React.FC = () => {
                                 <div className="flex items-center text-green-600 text-xs font-bold">
                                     <CheckCircle className="h-4 w-4 mr-1"/> Collection Verified
                                 </div>
-                                <Button size="sm" variant="outline" className="w-full" onClick={() => updateStatus({ id: source.id, status: 'Processed' })}>Process to Review</Button>
+                                <Button size="sm" variant="outline" className="w-full" onClick={() => updateStatus({ status: 'Processed' })}>Process to Review</Button>
                             </div>
                         )}
                          {source.status === 'Processed' && (

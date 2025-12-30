@@ -102,7 +102,7 @@ export const CaseImporter: React.FC = () => {
       if (parsed && Object.keys(parsed).length > 0) {
         setParsedData(parsed);
         // Check if we got a full extraction or partial fallback
-        const isFullExtraction = parsed.title && parsed.caseNumber && parsed.description;
+        const isFullExtraction = (parsed as { title?: string; caseNumber?: string; description?: string }).title && (parsed as { title?: string; caseNumber?: string; description?: string }).caseNumber && (parsed as { title?: string; caseNumber?: string; description?: string }).description;
         if (isFullExtraction) {
           setSuccessMessage('Successfully extracted case data using AI!');
         } else {

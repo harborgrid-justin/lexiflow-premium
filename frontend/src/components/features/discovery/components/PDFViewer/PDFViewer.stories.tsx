@@ -18,6 +18,6 @@ export const Default: Story = {
   "url": "Sample Text",
   "scale": 42,
   "rotation": 42,
-  "onPageLoad": 42
+  "onPageLoad": () => {}
 },
 };

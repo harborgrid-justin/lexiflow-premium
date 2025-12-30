@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useMemo, useCallback, useEffect, useTransition } from 'react';
+import { useState, useMemo, useCallback, useEffect, useTransition } from 'react';
 import { MessageSquare, Users, FileText, Archive } from 'lucide-react';
 
 // ============================================================================
@@ -112,7 +112,7 @@ export const SecureMessenger = ({ initialTab }: SecureMessengerProps) => {
         )}>
           {activeTab === 'contacts' && (
             <MessengerContacts
-              contacts={contacts}
+              contacts={contacts as any[]}
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
               onMessageClick={() => setActiveTab('chats')}

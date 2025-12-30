@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import { useState } from 'react';
 import { UserRole, LegalDocument } from '@/types';
 import { DocumentVersions } from './DocumentVersions';
 import { useDocumentManager } from '@/hooks/useDocumentManager';
@@ -30,10 +30,10 @@ export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExpl
   // Enhanced useDocumentManager with drag-drop functionality enabled
   const {
     searchTerm, setSearchTerm, selectedDocForHistory, setSelectedDocForHistory,
-    isProcessingAI, handleRestore,
+    handleRestore,
     addTag, removeTag, allTags, filtered, currentFolder, setCurrentFolder,
     isDetailsOpen, setIsDetailsOpen, previewDoc, setPreviewDoc, updateDocument, isLoading,
-    isDragging, isUploading, handleDragEnter, handleDragLeave, handleDragOver, handleDrop
+    isDragging, handleDragEnter, handleDragLeave, handleDrop
   } = useDocumentManager({ enableDragDrop: true });
 
   const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
@@ -55,9 +55,10 @@ export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExpl
       }
   );
 
-  const renderGridCell = (doc: LegalDocument) => {
+  const renderGridCell = (item: unknown) => {
+    const doc = item as LegalDocument;
     return (
-        <DocumentGridCard 
+        <DocumentGridCard
             doc={doc}
             isSelected={isSelected(doc.id)}
             onToggleSelection={(id, e) => toggleSelection(id, e)}

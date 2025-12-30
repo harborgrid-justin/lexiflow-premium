@@ -14,7 +14,7 @@
 // ========================================
 // EXTERNAL DEPENDENCIES
 // ========================================
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { UserCircle, Shield, Settings, Sliders, Activity } from 'lucide-react';
 
 // ========================================
@@ -32,11 +32,7 @@ import { LazyLoader } from '@/components/molecules';
 import { DataService } from '@/services';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-
-// Utils & Constants
-import { cn } from '@/utils/cn';
 
 // Types
 import { ExtendedUserProfile } from '@/types';
@@ -66,7 +62,6 @@ const PROFILE_TABS = [
 // COMPONENT
 // ========================================
 export const UserProfileManager = () => {
-  const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('overview');
 
   const { data: profile, isLoading } = useQuery<ExtendedUserProfile>(
@@ -96,7 +91,7 @@ export const UserProfileManager = () => {
       activeTabId={activeTab}
       onTabChange={setActiveTab}
     >
-      <div className={cn("h-full", theme.surface.default)}>
+      <div className="h-full">
         {renderContent()}
       </div>
     </TabbedPageLayout>

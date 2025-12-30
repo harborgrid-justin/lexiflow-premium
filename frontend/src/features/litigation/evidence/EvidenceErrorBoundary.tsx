@@ -3,7 +3,7 @@
  * @description Error boundary for Evidence Vault to catch and display errors gracefully
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertOctagon, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/atoms';
 
@@ -60,7 +60,7 @@ export class EvidenceErrorBoundary extends Component<Props, State> {
     window.location.href = '/';
   };
 
-  render() {
+  override render() {
     if (this.state.hasError) {
       const isDevelopment = process.env.NODE_ENV === 'development';
 

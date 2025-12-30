@@ -9,7 +9,6 @@ import { BaseEventHandler } from './BaseEventHandler';
 import type { SystemEventPayloads } from '@/types/integration-types';
 import type { DocketEntry, DocketId } from '@/types';
 import { SystemEventType } from '@/types/integration-types';
-import { ServiceStatus } from '@/types/enums';
 
 export class ServiceCompletedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.SERVICE_COMPLETED]> {
   readonly eventType = SystemEventType.SERVICE_COMPLETED;

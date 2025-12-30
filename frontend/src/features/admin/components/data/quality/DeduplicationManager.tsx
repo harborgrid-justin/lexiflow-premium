@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Users, GitMerge, XCircle, CheckCircle, ArrowRight, Layers } from 'lucide-react';
+import React from 'react';
+import { GitMerge, CheckCircle, ArrowRight, Layers } from 'lucide-react';
 import { Card } from '@/components/molecules';
 import { Button } from '@/components/atoms';
 import { Badge } from '@/components/atoms';

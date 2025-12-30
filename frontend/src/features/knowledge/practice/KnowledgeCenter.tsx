@@ -19,8 +19,6 @@ import { BookOpen, FileText, GraduationCap, Users, BarChart3 } from 'lucide-reac
 // Services & Data
 import { DataService } from '@/services';
 import { useQuery } from '@/hooks/useQueryHooks';
-// ✅ Migrated to backend API (2025-12-21)
-import { queryKeys } from '@/utils/queryKeys';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -45,7 +43,16 @@ export const KnowledgeCenter: React.FC = () => {
     const { theme } = useTheme();
     const [activeTab, setActiveTab] = useState('wiki');
 
-    const { data: cleTracker = [] } = useQuery<unknown[]>(
+    interface CleTrackerRow {
+        id: string;
+        attorney: string;
+        req: number;
+        completed: number;
+        deadline: string;
+        status: string;
+    }
+
+    const { data: cleTracker = [] } = useQuery<CleTrackerRow[]>(
         ['cle-tracking', 'all'],
         DataService.operations.getCleTracking
     );

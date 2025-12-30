@@ -10,13 +10,11 @@
 
 // External Dependencies
 import React, { useState, useEffect } from 'react';
-import { FileText, Save, CheckSquare } from 'lucide-react';
+import { Save, CheckSquare } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { Input, TextArea } from '@/components/atoms';
 import { Button } from '@/components/atoms';
-import { RuleSelector } from '@/components/molecules';
-import { UserSelect } from '@/components/molecules';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -26,7 +24,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/utils/cn';
 import { getTodayString } from '@/utils/dateUtils';
 import { DataService } from '@/services';
-import { validateDocketEntry, validateStructuredData, sanitizeDocketEntry } from '@/utils/docketValidation';
+import { validateDocketEntry, sanitizeDocketEntry } from '@/utils/docketValidation';
 import { DeadlineEngine } from '@/services/features/deadlines/deadlineEngine';
 import { IdGenerator } from '@/utils/idGenerator';
 
@@ -127,9 +125,17 @@ export const DocketEntryBuilder: React.FC<DocketEntryBuilderProps> = ({
         entry as DocketEntry,
         jurisdiction
       );
-      
+
       if (calculatedDeadlines.length > 0) {
-        entry.triggersDeadlines = calculatedDeadlines as Record<string, unknown>;
+        entry.triggersDeadlines = calculatedDeadlines.map(d => ({
+          id: d.id,
+          type: 'Response',
+          date: d.dueDate,
+          title: d.description,
+          status: d.status,
+          ruleReference: d.rule,
+          description: `${d.description} (${d.daysFromTrigger} days from trigger)`
+        }));
         notifySuccess(`Generated ${calculatedDeadlines.length} deadline(s)`);
       }
     }

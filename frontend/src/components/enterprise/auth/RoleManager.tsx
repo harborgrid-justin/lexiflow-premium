@@ -14,27 +14,14 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { z } from 'zod';
 import { PermissionsApiService } from '@/api/auth/permissions-api';
 import type { Permission } from '@/types';
-
- 
-const _permissionSchema = z.object({
-  resource: z.string().min(1, 'Resource is required'),
-  action: z.enum(['create', 'read', 'update', 'delete', 'execute', '*']),
-  effect: z.enum(['allow', 'deny']),
-});
 
 export interface RoleManagerProps {
   roleId: string;
   roleName: string;
   onPermissionsUpdated?: (permissions: Permission[]) => void;
   className?: string;
-}
-
-interface PermissionGroup {
-  category: string;
-  permissions: Permission[];
 }
 
 const RESOURCE_CATEGORIES = {
@@ -87,7 +74,8 @@ export const RoleManager: React.FC<RoleManagerProps> = ({
       const response = await permissionsService.getRolePermissions(roleId);
       setPermissions(response.permissions || []);
     } catch (err: unknown) {
-      setError(err.message || 'Failed to load permissions');
+      const message = err instanceof Error ? err.message : 'Failed to load permissions';
+      setError(message);
     } finally {
       setIsLoading(false);
     }
@@ -107,7 +95,8 @@ export const RoleManager: React.FC<RoleManagerProps> = ({
 
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (err: unknown) {
-      setError(err.message || 'Failed to update permissions');
+      const message = err instanceof Error ? err.message : 'Failed to update permissions';
+      setError(message);
     } finally {
       setIsSaving(false);
     }
@@ -168,22 +157,7 @@ export const RoleManager: React.FC<RoleManagerProps> = ({
     });
   };
 
-  const groupPermissionsByCategory = (): PermissionGroup[] => {
-    const groups: Record<string, Permission[]> = {};
-
-    Object.keys(RESOURCE_CATEGORIES).forEach((category) => {
-      groups[category] = permissions.filter((p) =>
-        p.resource.toLowerCase().startsWith(category.toLowerCase())
-      );
-    });
-
-    return Object.entries(groups).map(([category, perms]) => ({
-      category,
-      permissions: perms,
-    }));
-  };
-
-  const getPermissionIcon = (state: 'allow' | 'deny' | 'none'): JSX.Element => {
+  const getPermissionIcon = (state: 'allow' | 'deny' | 'none'): React.JSX.Element => {
     if (state === 'allow') {
       return (
         <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">

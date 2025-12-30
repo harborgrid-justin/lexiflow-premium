@@ -254,14 +254,14 @@ export function useNotifications() {
     const handleNotificationRead = (data: { notificationId: string }) => {
       setNotifications((prev) =>
         prev.map((n: unknown) =>
-          n.id === data.notificationId ? { ...n, read: true } : n,
+          (n as {id: string}).id === data.notificationId ? { ...(n as object), read: true } : n,
         ),
       );
     };
 
     // Listen for notification deleted
     const handleNotificationDeleted = (data: { notificationId: string }) => {
-      setNotifications((prev) => prev.filter((n: unknown) => n.id !== data.notificationId));
+      setNotifications((prev) => prev.filter((n: unknown) => (n as {id: string}).id !== data.notificationId));
     };
 
     // Listen for unread count
@@ -293,13 +293,13 @@ export function useNotifications() {
   const markAllAsRead = useCallback(async () => {
     if (!socket || !isConnected) return;
     await emit('notification:mark-all-read', {});
-    setNotifications((prev) => prev.map((n: unknown) => ({ ...n, read: true })));
+    setNotifications((prev) => prev.map((n: unknown) => ({ ...(n as object), read: true })));
   }, [socket, isConnected, emit]);
 
   const deleteNotification = useCallback(
     async (notificationId: string) => {
       if (!socket || !isConnected) return;
-      const notification = notifications.find((n: unknown) => n.id === notificationId);
+      const notification = notifications.find((n: unknown) => (n as {id: string}).id === notificationId);
       await emit('notification:delete', {
         notificationId,
         wasUnread: notification && !(notification as Record<string, unknown>).read,
@@ -349,7 +349,7 @@ export function useDashboard() {
     };
 
     const handleCaseStats = (stats: unknown) => {
-      setCaseStats((prev) => new Map(prev).set(stats.caseId, stats));
+      setCaseStats((prev) => new Map(prev).set((stats as {caseId: string}).caseId, stats));
     };
 
     on('dashboard:metrics', handleMetrics);

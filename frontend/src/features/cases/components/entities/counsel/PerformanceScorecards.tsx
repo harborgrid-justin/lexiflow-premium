@@ -3,7 +3,7 @@ import React from 'react';
 import { Card } from '@/components/molecules';
 import { RiskMeter } from '@/components/organisms';
 import { Badge } from '@/components/atoms';
-import { Star, TrendingUp, DollarSign, Scale } from 'lucide-react';
+import { Star, DollarSign, Scale} from 'lucide-react';
 import { LegalEntity } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -20,7 +20,7 @@ export const PerformanceScorecards: React.FC<PerformanceScorecardsProps> = ({ en
   return (
     <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {lawFirms.map((firm, idx) => (
+            {lawFirms.map((firm) => (
                 <Card key={firm.id} title={firm.name} subtitle="Outside Counsel Evaluation">
                     <div className="grid grid-cols-2 gap-6 mb-6">
                         <div className="text-center p-4 bg-slate-50 rounded-lg border border-slate-100">

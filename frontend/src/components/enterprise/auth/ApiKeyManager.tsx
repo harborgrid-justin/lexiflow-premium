@@ -81,7 +81,8 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
       setApiKeys(keys);
       setAvailableScopes(scopes);
     } catch (err: unknown) {
-      setErrors({ general: err.message || 'Failed to load API keys' });
+      const message = err instanceof Error ? err.message : 'Failed to load API keys';
+      setErrors({ general: message });
     } finally {
       setIsLoading(false);
     }
@@ -146,7 +147,8 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
         expiresAt: '',
       });
     } catch (err: unknown) {
-      setErrors({ general: err.message || 'Failed to create API key' });
+      const message = err instanceof Error ? err.message : 'Failed to create API key';
+      setErrors({ general: message });
     } finally {
       setIsCreating(false);
     }
@@ -164,7 +166,8 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
       setApiKeys((prev) => prev.map((key) => (key.id === keyId ? revokedKey : key)));
       onKeyRevoked?.(revokedKey);
     } catch (err: unknown) {
-      setErrors({ general: err.message || 'Failed to revoke API key' });
+      const message = err instanceof Error ? err.message : 'Failed to revoke API key';
+      setErrors({ general: message });
     } finally {
       setRevokingKeyId(null);
     }
@@ -179,7 +182,8 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
       await apiKeysService.delete(keyId);
       setApiKeys((prev) => prev.filter((key) => key.id !== keyId));
     } catch (err: unknown) {
-      setErrors({ general: err.message || 'Failed to delete API key' });
+      const message = err instanceof Error ? err.message : 'Failed to delete API key';
+      setErrors({ general: message });
     }
   };
 
@@ -203,7 +207,7 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
     return new Date(dateString) < new Date();
   };
 
-  const getStatusBadge = (apiKey: ApiKey): JSX.Element => {
+  const getStatusBadge = (apiKey: ApiKey): React.JSX.Element => {
     if (apiKey.status === 'revoked') {
       return (
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">

@@ -26,7 +26,7 @@ import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react'
 // ============================================================================
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { fuzzySearch, type FuzzySearchOptions, type SearchResult } from './FuzzySearch';
+import { fuzzySearch, type FuzzySearchOptions } from './FuzzySearch';
 import type { ColumnDefinition } from './DataGridColumn';
 
 // ============================================================================

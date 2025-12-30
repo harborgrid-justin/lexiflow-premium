@@ -124,7 +124,6 @@ export interface CommentNode extends BaseNodeProps {
 /**
  * Default config factory for each node type (component-specific)
  */
-import { StartNode, EndNode } from '@/types/workflow-types';
 export const DEFAULT_NODE_CONFIG: Record<NodeType, unknown> = {
   Start: { description: 'Workflow start point' },
   End: { outcome: 'success', description: 'Workflow end point' },

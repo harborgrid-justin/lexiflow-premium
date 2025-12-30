@@ -5,7 +5,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
-import { Flag, Calendar, Plus, Loader2, Link } from 'lucide-react';
+import { Calendar, Plus, Loader2, Link } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
@@ -18,7 +18,7 @@ export const FactIntegrator: React.FC<FactIntegratorProps> = ({ caseId, onInsert
   const { theme } = useTheme();
 
   // Cross-Module Integration: Fetching from Case Domain
-  const { data: caseData, isLoading } = useQuery(
+  const { isLoading } = useQuery(
     queryKeys.cases.detail(caseId),
     () => DataService.cases.getById(caseId)
   );

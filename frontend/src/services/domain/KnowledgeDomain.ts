@@ -32,7 +32,6 @@
 
 import { WikiArticle, Precedent, QAItem } from '@/types';
 import { delay } from '@/utils/async';
-import { analyticsApi } from "@/api/domains/analytics.api";
 
 /**
  * Query keys for React Query integration
@@ -202,7 +201,7 @@ export class KnowledgeRepository {
 
                 // WIKI_ARTICLE_CREATED event type may not be defined, using generic event
                 if ('WIKI_ARTICLE_CREATED' in SystemEventType) {
-                    await IntegrationOrchestrator.publish((SystemEventType as Record<string, unknown>).WIKI_ARTICLE_CREATED, {
+                    await IntegrationOrchestrator.publish((SystemEventType as any).WIKI_ARTICLE_CREATED, {
                         article,
                         title: article.title
                     });

@@ -15,14 +15,14 @@ type Story = StoryObj<typeof AsyncBoundary>;
 
 export const Default: Story = {
   args: {
-  "children": "<div>Sample Content</div>",
+  children: undefined,
   "loadingMessage": "Sample Text",
-  "loadingFallback": "<div>Sample Content</div>",
+  loadingFallback: undefined,
   "scope": "Sample Text",
   "enableRetry": true,
   "maxRetries": 42,
   "timeout": 42,
-  "onLoad": {},
-  "onError": {}
+  onLoad: () => {},
+  onError: () => {}
 },
 };

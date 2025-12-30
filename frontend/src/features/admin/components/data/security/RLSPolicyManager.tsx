@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms';
-import { Plus, Edit2, Trash2, Shield, Lock, Play, Pause } from 'lucide-react';
+import { Plus, Edit2, Trash2, Play, Pause, Shield } from 'lucide-react';
 import { RLSPolicy } from '@/types';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
@@ -84,14 +84,14 @@ export const RLSPolicyManager: React.FC = () => {
 
         <div className="space-y-4 flex-1 overflow-y-auto pr-2">
             {policies.length === 0 ? (
-                 <EmptyListState label="No policies defined" icon={Shield} />
+                 <EmptyListState title="No policies defined" />
             ) : (
                 policies.map(p => (
                     <div key={p.id} className={cn("p-4 rounded-lg border shadow-sm transition-all hover:shadow-md group", theme.surface.default, theme.border.default)}>
                         <div className="flex justify-between items-start mb-3">
                             <div className="flex items-center gap-3">
                                 <div className={cn("p-2 rounded bg-blue-50 text-blue-600")}>
-                                    <Lock className="h-5 w-5"/>
+                                    <Shield className="h-5 w-5"/>
                                 </div>
                                 <div>
                                     <h4 className={cn("font-bold text-sm", theme.text.primary)}>{p.name}</h4>

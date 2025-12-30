@@ -76,13 +76,13 @@ export const AccessMatrixEditor = ({ profile }: AccessMatrixEditorProps) => {
 
   const handleAdd = () => {
       if(!newPerm.resource || !newPerm.action) return;
-      
+
       const perm: GranularPermission = {
           id: `perm-${Date.now()}`,
           resource: newPerm.resource,
-          action: newPerm.action as Record<string, unknown>,
-          effect: newPerm.effect as Record<string, unknown>,
-          scope: newPerm.scope as Record<string, unknown>,
+          action: newPerm.action as 'read' | 'create' | 'update' | 'delete' | '*' | 'export' | 'approve',
+          effect: newPerm.effect as AccessEffect,
+          scope: newPerm.scope as 'Global' | 'Region' | 'Office' | 'Personal',
           expiration: newPerm.expiration,
           conditions: []
       };

@@ -15,8 +15,7 @@ type Story = StoryObj<typeof DescriptionList>;
 
 export const Default: Story = {
   args: {
-  "label": "Sample Text",
-  "value": "<div>Sample Content</div>",
+  children: undefined,
   "className": "Sample Text"
 },
 };

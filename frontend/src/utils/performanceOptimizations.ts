@@ -6,7 +6,7 @@
  * Includes React.memo wrappers, component profiling, and render optimization helpers.
  */
 
-import React, { ComponentType, memo, PropsWithChildren } from 'react';
+import React, { ComponentType, memo } from 'react';
 
 /**
  * Performance optimization configuration
@@ -98,11 +98,11 @@ export function createMemoizedComponent<P>(
   }
 
   // Wrap with performance tracking
-  return (props: P) => {
-    const startTime = performance.now();
+  function WrappedComponent(props: P) {
+    const startTime = React.useRef(performance.now());
 
     React.useEffect(() => {
-      const duration = performance.now() - startTime;
+      const duration = performance.now() - startTime.current;
 
       if (enableWarnings && duration > warnThreshold) {
         console.warn(
@@ -117,10 +117,12 @@ export function createMemoizedComponent<P>(
           `rendered in ${duration.toFixed(2)}ms`
         );
       }
-    });
+    }, []);
 
-    return React.createElement(MemoizedComponent, props);
-  };
+    return React.createElement(MemoizedComponent as ComponentType<any>, props as any);
+  }
+
+  return WrappedComponent as ComponentType<P>;
 }
 
 /**
@@ -188,9 +190,9 @@ export function profileComponent<P>(
     commitTime: number,
   ) => void,
 ): ComponentType<P> {
-  return (props: P) => {
+  function ProfiledComponent(props: P): React.ReactElement {
     const handleRender = (
-      id: string,
+      profId: string,
       phase: 'mount' | 'update',
       actualDuration: number,
       baseDuration: number,
@@ -198,21 +200,19 @@ export function profileComponent<P>(
       commitTime: number,
     ) => {
       if (onRender) {
-        onRender(id, phase, actualDuration, baseDuration, startTime, commitTime);
+        onRender(profId, phase, actualDuration, baseDuration, startTime, commitTime);
       } else if (import.meta.env.DEV) {
         console.log(
-          `[Profiler] ${id} ${phase}: ${actualDuration.toFixed(2)}ms ` +
+          `[Profiler] ${profId} ${phase}: ${actualDuration.toFixed(2)}ms ` +
           `(base: ${baseDuration.toFixed(2)}ms)`
         );
       }
     };
 
-    return React.createElement(
-      React.Profiler,
-      { id, onRender: handleRender },
-      React.createElement(Component, props)
-    );
-  };
+    return React.createElement(React.Profiler as any, { id, onRender: handleRender }, React.createElement(Component as any, props as any));
+  }
+
+  return ProfiledComponent as ComponentType<P>;
 }
 
 /**
@@ -224,30 +224,22 @@ export function profileComponent<P>(
  * @param fallback - Error fallback component
  * @returns Lazy component
  */
-export function lazyWithErrorBoundary<T = any>(
+export function lazyWithErrorBoundary<T extends Record<string, unknown> = Record<string, unknown>>(
   importFunc: () => Promise<{ default: ComponentType<T> }>,
-  fallback?: ComponentType<{ error: Error }>,
 ): ComponentType<T> {
   const LazyComponent = React.lazy(importFunc);
 
-  return (props: T) => {
-    const [error, setError] = React.useState<Error | null>(null);
-
-    if (error && fallback) {
-      return React.createElement(fallback, { error });
-    }
-
+  const LazyWrapper = (props: T) => {
     return React.createElement(
       React.Suspense,
       {
-        fallback: React.createElement('div', null, 'Loading...'),
+        fallback: React.createElement('div', {}, 'Loading...'),
       },
-      React.createElement(LazyComponent, {
-        ...props,
-        onError: setError,
-      } as Record<string, unknown>)
+      React.createElement(LazyComponent, props)
     );
   };
+
+  return LazyWrapper as ComponentType<T>;
 }
 
 /**
@@ -268,13 +260,13 @@ export function lazyWithErrorBoundary<T = any>(
  * );
  * ```
  */
-export function debounceRenders<P>(
+export function debounceRenders<P extends Record<string, unknown>>(
   Component: ComponentType<P>,
   delay: number = 300,
 ): ComponentType<P> {
-  return (props: P) => {
+  const DebouncedComponent = (props: P) => {
     const [debouncedProps, setDebouncedProps] = React.useState<P>(props);
-    const timeoutRef = React.useRef<NodeJS.Timeout>();
+    const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     React.useEffect(() => {
       if (timeoutRef.current) {
@@ -294,6 +286,8 @@ export function debounceRenders<P>(
 
     return React.createElement(Component, debouncedProps);
   };
+
+  return DebouncedComponent as ComponentType<P>;
 }
 
 /**
@@ -305,11 +299,11 @@ export function debounceRenders<P>(
  * @param interval - Throttle interval in ms
  * @returns Throttled component
  */
-export function throttleRenders<P>(
+export function throttleRenders<P extends Record<string, unknown>>(
   Component: ComponentType<P>,
   interval: number = 100,
 ): ComponentType<P> {
-  return (props: P) => {
+  const ThrottledComponent = (props: P) => {
     const [throttledProps, setThrottledProps] = React.useState<P>(props);
     const lastUpdateRef = React.useRef<number>(0);
     const pendingPropsRef = React.useRef<P | null>(null);
@@ -322,6 +316,7 @@ export function throttleRenders<P>(
         setThrottledProps(props);
         lastUpdateRef.current = now;
         pendingPropsRef.current = null;
+        return undefined;
       } else {
         pendingPropsRef.current = props;
 
@@ -339,6 +334,8 @@ export function throttleRenders<P>(
 
     return React.createElement(Component, throttledProps);
   };
+
+  return ThrottledComponent as ComponentType<P>;
 }
 
 /**
@@ -350,14 +347,14 @@ export function throttleRenders<P>(
  * @param batchWindow - Batch window in ms
  * @returns Batched component
  */
-export function batchRenders<P>(
+export function batchRenders<P extends Record<string, unknown>>(
   Component: ComponentType<P>,
   batchWindow: number = 50,
 ): ComponentType<P> {
-  return (props: P) => {
+  const BatchedComponent = (props: P) => {
     const [batchedProps, setBatchedProps] = React.useState<P>(props);
     const propsQueueRef = React.useRef<P[]>([]);
-    const timerRef = React.useRef<NodeJS.Timeout>();
+    const timerRef = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     React.useEffect(() => {
       propsQueueRef.current.push(props);
@@ -367,7 +364,6 @@ export function batchRenders<P>(
       }
 
       timerRef.current = setTimeout(() => {
-        // Get latest props from queue
         const latestProps = propsQueueRef.current[propsQueueRef.current.length - 1];
         if (latestProps) {
           setBatchedProps(latestProps);
@@ -384,6 +380,8 @@ export function batchRenders<P>(
 
     return React.createElement(Component, batchedProps);
   };
+
+  return BatchedComponent as ComponentType<P>;
 }
 
 /**
@@ -403,17 +401,19 @@ export function batchRenders<P>(
  * );
  * ```
  */
-export function conditionallyRender<P>(
+export function conditionallyRender<P extends Record<string, unknown>>(
   Component: ComponentType<P>,
   shouldRender: (props: P) => boolean,
 ): ComponentType<P> {
-  return (props: P) => {
+  const ConditionalComponent = (props: P) => {
     if (!shouldRender(props)) {
       return null;
     }
 
     return React.createElement(Component, props);
   };
+
+  return ConditionalComponent as ComponentType<P>;
 }
 
 // Helper functions
@@ -429,12 +429,14 @@ function deepEqual(a: unknown, b: unknown): boolean {
   }
 
   if (typeof a === 'object' && typeof b === 'object') {
-    const keysA = Object.keys(a);
-    const keysB = Object.keys(b);
+    const objA = a as Record<string, unknown>;
+    const objB = b as Record<string, unknown>;
+    const keysA = Object.keys(objA);
+    const keysB = Object.keys(objB);
 
     if (keysA.length !== keysB.length) return false;
 
-    return keysA.every(key => deepEqual(a[key], b[key]));
+    return keysA.every(key => deepEqual(objA[key], objB[key]));
   }
 
   return false;
@@ -455,7 +457,7 @@ export const ComponentUtils = {
    * Set display name for component
    */
   setDisplayName<P>(Component: ComponentType<P>, name: string): ComponentType<P> {
-    (Component as Record<string, unknown>).displayName = name;
+    (Component as unknown as Record<string, unknown>).displayName = name;
     return Component;
   },
 

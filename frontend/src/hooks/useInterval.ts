@@ -129,7 +129,8 @@ export function useInterval(callback: () => void, delay: number | null): void {
         clearInterval(intervalId);
       };
     }
-    
-    // No cleanup needed when paused (delay === null)
+
+    // Return empty cleanup function when paused (delay === null)
+    return () => {};
   }, [delay]);
 }

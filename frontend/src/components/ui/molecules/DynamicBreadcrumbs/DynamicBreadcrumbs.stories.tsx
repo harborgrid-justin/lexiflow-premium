@@ -19,7 +19,7 @@ export const Default: Story = {
   "maxVisible": 42,
   "maxRecent": 42,
   "showHome": true,
-  "onNavigate": "Sample Text",
+  "onNavigate": () => {},
   "className": "Sample Text"
 },
 };

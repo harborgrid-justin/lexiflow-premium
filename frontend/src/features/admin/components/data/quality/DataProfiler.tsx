@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Card } from '@/components/molecules';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -69,7 +69,7 @@ export const DataProfiler = React.memo(function DataProfiler() {
                                         contentStyle={chartTheme.tooltipStyle}
                                     />
                                     <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                                        {profile.distribution.map((entry, index) => (
+                                        {profile.distribution.map((_, index) => (
                                             <Cell key={`cell-${index}`} fill={chartTheme.colors.blue} fillOpacity={0.6 + (index * 0.1)} />
                                         ))}
                                     </Bar>

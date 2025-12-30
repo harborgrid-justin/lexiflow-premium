@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { NotificationCenter } from '@/components/organisms/NotificationCenter';
+import { NotificationCenter } from '@/components/organisms/notifications/NotificationCenter';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@providers/ToastContext';
 
@@ -45,27 +45,89 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// Mock notification data
+const mockNotifications = [
+  {
+    id: '1',
+    type: 'deadline' as const,
+    title: 'Motion Response Due',
+    message: 'Response to Motion to Dismiss due in 3 days',
+    read: false,
+    priority: 'urgent' as const,
+    timestamp: Date.now() - 1000 * 60 * 30,
+    actionLabel: 'View Motion',
+  },
+  {
+    id: '2',
+    type: 'case_update' as const,
+    title: 'New Docket Entry',
+    message: 'Judge ordered discovery conference for Case #2024-001',
+    read: false,
+    priority: 'high' as const,
+    timestamp: Date.now() - 1000 * 60 * 60 * 2,
+  },
+  {
+    id: '3',
+    type: 'document' as const,
+    title: 'Document Uploaded',
+    message: 'Client uploaded medical records to Evidence folder',
+    read: true,
+    priority: 'medium' as const,
+    timestamp: Date.now() - 1000 * 60 * 60 * 5,
+    actionLabel: 'View Documents',
+  },
+];
+
 export const Default: Story = {
+  args: {
+    notifications: mockNotifications,
+    unreadCount: 2,
+    onMarkAsRead: (id: string) => console.log('Mark as read:', id),
+    onMarkAllAsRead: () => console.log('Mark all as read'),
+    onDelete: (id: string) => console.log('Delete:', id),
+    onNotificationClick: (notification) => console.log('Clicked:', notification),
+  },
   parameters: {
     backgrounds: { default: 'light' },
   },
 };
 
 export const DarkMode: Story = {
+  args: {
+    notifications: mockNotifications,
+    unreadCount: 2,
+    onMarkAsRead: (id: string) => console.log('Mark as read:', id),
+    onMarkAllAsRead: () => console.log('Mark all as read'),
+    onDelete: (id: string) => console.log('Delete:', id),
+  },
   parameters: {
     backgrounds: { default: 'dark' },
   },
 };
 
-export const Mobile: Story = { 
-  parameters: { 
+export const Mobile: Story = {
+  args: {
+    notifications: mockNotifications,
+    unreadCount: 2,
+    onMarkAsRead: (id: string) => console.log('Mark as read:', id),
+    onMarkAllAsRead: () => console.log('Mark all as read'),
+    onDelete: (id: string) => console.log('Delete:', id),
+  },
+  parameters: {
     viewport: { defaultViewport: 'mobile1' },
     backgrounds: { default: 'neutral' },
   },
 };
 
-export const Tablet: Story = { 
-  parameters: { 
+export const Tablet: Story = {
+  args: {
+    notifications: mockNotifications,
+    unreadCount: 2,
+    onMarkAsRead: (id: string) => console.log('Mark as read:', id),
+    onMarkAllAsRead: () => console.log('Mark all as read'),
+    onDelete: (id: string) => console.log('Delete:', id),
+  },
+  parameters: {
     viewport: { defaultViewport: 'tablet' },
     backgrounds: { default: 'light' },
   },

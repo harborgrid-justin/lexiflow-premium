@@ -17,7 +17,7 @@ const meta: Meta<typeof ChartHelpersDemo> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ChartHelpers>;
+type Story = StoryObj<typeof ChartHelpersDemo>;
 
 export const Default: Story = {
   args: {},

@@ -10,11 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
-import { 
-  MessageCircle, Plus, Scale, Shield, Users, Lock, Clock,
-  Mic2, Database, Package, ClipboardList, FileText
-} from 'lucide-react';
+import { useState, useMemo, useCallback, useEffect, lazy, Suspense } from 'react';
+import { Plus, Users, Clock } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -83,19 +80,25 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
   // Enterprise Query: Requests are central to many sub-views
   // We pass caseId to the service layer to scope the data fetch
   const { data: requests = [] } = useQuery<DiscoveryRequest[]>(
-      [STORES.REQUESTS, caseId || 'all'], 
-      () => DataService.discovery.getRequests(caseId) 
+      [STORES.REQUESTS, caseId || 'all'],
+      async () => {
+        const discovery = DataService.discovery as any;
+        return discovery.getRequests(caseId);
+      }
   );
 
   const { mutate: syncDeadlines, isLoading: isSyncing } = useMutation(
-      DataService.discovery.syncDeadlines,
+      async () => {
+        const discovery = DataService.discovery as any;
+        return discovery.syncDeadlines();
+      },
       {
           onSuccess: () => {
               notify.success("Synced discovery deadlines with court calendar.");
               queryClient.invalidate(queryKeys.discovery.all());
               queryClient.invalidate(queryKeys.calendar.events());
           },
-          onError: (error) => {
+          onError: (error: unknown) => {
               notify.error('Failed to sync deadlines. Please try again later.');
               console.error('Sync error:', error);
           }
@@ -138,9 +141,9 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
       }
   });
 
-  const handleSaveResponse = async (reqId: string, text: string) => {
-      await DataService.discovery.updateRequestStatus(reqId, 'Responded');
-      // Invalidate query to refresh lists
+  const handleSaveResponse = async (reqId: string) => {
+      const discovery = DataService.discovery as any;
+      await discovery.updateRequestStatus(reqId, 'Responded');
       queryClient.invalidate(caseId ? queryKeys.discovery.byCaseId(caseId) : queryKeys.discovery.all());
       alert(`Response saved for ${reqId}. Status updated to Responded.`);
       setActiveTab('requests');

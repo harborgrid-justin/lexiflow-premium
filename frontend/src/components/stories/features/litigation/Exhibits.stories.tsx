@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { CaseId, ExhibitId, TrialExhibit, ExhibitStatus, ExhibitParty } from '@/types';
 import { ExhibitManager } from '../../../../features/litigation/exhibits/ExhibitManager';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { ToastProvider } from '@/providers/ToastContext';

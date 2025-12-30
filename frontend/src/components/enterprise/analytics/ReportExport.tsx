@@ -115,7 +115,6 @@ export const ReportExport: React.FC<ReportExportProps> = ({
   const [exportProgress, setExportProgress] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [showOptions, setShowOptions] = useState(false);
-  const [selectedFormat, setSelectedFormat] = useState<ExportFormat>('pdf');
   const [exportOptions, setExportOptions] = useState<ExportOptions>({
     format: 'pdf',
     includeCharts: true,
@@ -193,7 +192,7 @@ export const ReportExport: React.FC<ReportExportProps> = ({
     cursor: disabled || isExporting ? 'not-allowed' : 'pointer',
     transition: 'all 0.2s',
     opacity: disabled || isExporting ? 0.6 : 1,
-    backgroundColor: theme.colors.primary.main,
+    backgroundColor: theme.primary?.main || '#3b82f6',
     color: '#ffffff',
     display: 'flex',
     alignItems: 'center',
@@ -210,8 +209,8 @@ export const ReportExport: React.FC<ReportExportProps> = ({
     top: '100%',
     right: 0,
     marginTop: '8px',
-    backgroundColor: theme.colors.background.secondary,
-    border: `1px solid ${theme.colors.border.primary}`,
+    backgroundColor: theme.surface?.raised || '#ffffff',
+    border: `1px solid ${theme.border?.default || '#e2e8f0'}`,
     borderRadius: '8px',
     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
     minWidth: '280px',
@@ -225,7 +224,7 @@ export const ReportExport: React.FC<ReportExportProps> = ({
     border: 'none',
     borderRadius: '6px',
     backgroundColor: 'transparent',
-    color: theme.colors.text.primary,
+    color: theme.text?.primary || '#1e293b',
     cursor: 'pointer',
     transition: 'background-color 0.2s',
     display: 'flex',
@@ -240,7 +239,7 @@ export const ReportExport: React.FC<ReportExportProps> = ({
     display: 'flex',
     alignItems: 'center',
     fontSize: '14px',
-    color: theme.colors.text.primary
+    color: theme.text?.primary || '#1e293b'
   };
 
   const checkboxStyle: React.CSSProperties = {
@@ -264,7 +263,7 @@ export const ReportExport: React.FC<ReportExportProps> = ({
         {showOptions && !isExporting && (
           <div style={dropdownContentStyle}>
             <div style={{ marginBottom: '16px' }}>
-              <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: 600, color: theme.colors.text.primary }}>
+              <h4 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: 600, color: theme.text?.primary || '#1e293b' }}>
                 Export Options
               </h4>
 
@@ -299,8 +298,8 @@ export const ReportExport: React.FC<ReportExportProps> = ({
               </label>
             </div>
 
-            <div style={{ borderTop: `1px solid ${theme.colors.border.primary}`, paddingTop: '12px' }}>
-              <h4 style={{ margin: '0 0 8px 0', fontSize: '12px', fontWeight: 600, color: theme.colors.text.secondary }}>
+            <div style={{ borderTop: `1px solid ${theme.border?.default || '#e2e8f0'}`, paddingTop: '12px' }}>
+              <h4 style={{ margin: '0 0 8px 0', fontSize: '12px', fontWeight: 600, color: theme.text?.secondary || '#64748b' }}>
                 Select Format
               </h4>
               {formats.map(format => (
@@ -309,7 +308,7 @@ export const ReportExport: React.FC<ReportExportProps> = ({
                   onClick={() => handleQuickExport(format)}
                   style={formatButtonStyle}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = theme.colors.background.tertiary;
+                    e.currentTarget.style.backgroundColor = theme.surface?.highlight || '#f8fafc';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'transparent';
@@ -318,7 +317,7 @@ export const ReportExport: React.FC<ReportExportProps> = ({
                   <span style={{ fontSize: '20px' }}>{formatIcons[format]}</span>
                   <div>
                     <div style={{ fontWeight: 500 }}>{formatLabels[format]}</div>
-                    <div style={{ fontSize: '12px', color: theme.colors.text.secondary }}>
+                    <div style={{ fontSize: '12px', color: theme.text?.secondary || '#64748b' }}>
                       {formatExtensions[format]}
                     </div>
                   </div>
@@ -332,8 +331,8 @@ export const ReportExport: React.FC<ReportExportProps> = ({
                   marginTop: '12px',
                   padding: '8px 12px',
                   borderRadius: '6px',
-                  backgroundColor: theme.colors.status.error.bg,
-                  color: theme.colors.status.error.text,
+                  backgroundColor: theme.status?.error?.bg || '#fef2f2',
+                  color: theme.status?.error?.text || '#991b1b',
                   fontSize: '12px'
                 }}
               >
@@ -351,11 +350,11 @@ export const ReportExport: React.FC<ReportExportProps> = ({
               right: 0,
               marginTop: '8px',
               padding: '12px 16px',
-              backgroundColor: theme.colors.background.secondary,
-              border: `1px solid ${theme.colors.border.primary}`,
+              backgroundColor: theme.surface?.raised || '#ffffff',
+              border: `1px solid ${theme.border?.default || '#e2e8f0'}`,
               borderRadius: '6px',
               fontSize: '14px',
-              color: theme.colors.text.primary,
+              color: theme.text?.primary || '#1e293b',
               whiteSpace: 'nowrap',
               boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
             }}
@@ -388,8 +387,8 @@ export const ReportExport: React.FC<ReportExportProps> = ({
             width: '100%',
             padding: '8px 12px',
             borderRadius: '6px',
-            backgroundColor: theme.colors.status.error.bg,
-            color: theme.colors.status.error.text,
+            backgroundColor: theme.status?.error?.bg || '#fef2f2',
+            color: theme.status?.error?.text || '#991b1b',
             fontSize: '12px'
           }}
         >
@@ -403,8 +402,8 @@ export const ReportExport: React.FC<ReportExportProps> = ({
             width: '100%',
             padding: '8px 12px',
             borderRadius: '6px',
-            backgroundColor: theme.colors.status.info.bg,
-            color: theme.colors.status.info.text,
+            backgroundColor: theme.status?.info?.bg || '#eff6ff',
+            color: theme.status?.info?.text || '#1e3a8a',
             fontSize: '12px'
           }}
         >

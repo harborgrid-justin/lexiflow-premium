@@ -9,7 +9,7 @@
 
 // External Dependencies
 import React, { useState } from 'react';
-import { RefreshCw, CheckCircle, AlertTriangle, Key } from 'lucide-react';
+import { CheckCircle, AlertTriangle, Key } from 'lucide-react';
 
 // Internal Dependencies - Components
 import { Card } from '@/components/molecules';

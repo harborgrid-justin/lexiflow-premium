@@ -80,7 +80,7 @@ export class CacheConfigService {
 
   // Cache Tiers
   getCacheTierConfig(tier: 'memory' | 'redis' | 'database'): Record<string, unknown> {
-    const configs: Record<string, Record<string, unknown>> = {
+    const configs = {
       memory: {
         maxEntries: this.maxMemoryEntries,
         maxSize: this.maxMemorySize,
@@ -96,7 +96,7 @@ export class CacheConfigService {
         duration: this.dbCacheDuration,
         type: this.dbCacheType,
       },
-    };
+    } as const;
     return configs[tier];
   }
 

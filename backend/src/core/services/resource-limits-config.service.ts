@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import * as MasterConfig from '@config/master.config';
 
 /**
@@ -10,7 +9,6 @@ import * as MasterConfig from '@config/master.config';
  */
 @Injectable()
 export class ResourceLimitsConfigService {
-  constructor(private readonly configService: ConfigService) {}
 
   // WebSocket Limits
   get wsMaxConnectionsPerUser(): number {

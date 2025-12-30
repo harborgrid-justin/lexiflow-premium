@@ -75,7 +75,7 @@ export class RateLimitConfigService {
       basic: { requestsPerMinute: 60, burstLimit: 10 },
       guest: { requestsPerMinute: 20, burstLimit: 5 },
     };
-    return roleLimits[role] || roleLimits.guest;
+    return roleLimits[role] ?? { requestsPerMinute: 20, burstLimit: 5 };
   }
 
   // Endpoint-specific limits

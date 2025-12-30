@@ -123,17 +123,18 @@ export class UsersService implements OnModuleInit {
 
     const profile = this.userProfileRepository.create({
       userId,
-      barNumber: profileConfig.barNumber,
-      jurisdictions: profileConfig.jurisdictions,
-      practiceAreas: profileConfig.practiceAreas,
-      bio: profileConfig.bio,
-      yearsOfExperience: profileConfig.yearsOfExperience,
-      defaultHourlyRate: profileConfig.defaultHourlyRate,
+      barNumber: profileConfig.barNumber ?? '',
+      jurisdictions: profileConfig.jurisdictions ?? [],
+      practiceAreas: profileConfig.practiceAreas ?? [],
+      bio: profileConfig.bio ?? '',
+      yearsOfExperience: profileConfig.yearsOfExperience ?? 0,
+      defaultHourlyRate: profileConfig.defaultHourlyRate ?? 0,
       skills: ['System Administration', 'User Management', 'Platform Configuration'],
       specializations: 'Global Platform Administration',
-    });
+    } as Partial<UserProfile>);
 
-    return this.userProfileRepository.save(profile);
+    const saved = await this.userProfileRepository.save(profile);
+    return saved as UserProfile;
   }
 
   /**

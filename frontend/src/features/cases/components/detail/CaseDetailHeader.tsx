@@ -23,7 +23,7 @@ import { useWindow } from '@/providers/WindowContext';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 // Types & Interfaces

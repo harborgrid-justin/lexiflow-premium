@@ -10,7 +10,7 @@ import { CheckCircle2, AlertOctagon, RefreshCw, Check } from 'lucide-react';
 import { Button } from '@/components/atoms';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';
 
 interface QualityDashboardProps {

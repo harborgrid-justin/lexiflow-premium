@@ -10,7 +10,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/useModalState';
 import { useQuery} from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 
 interface ApiKey {
   id: string;

@@ -8,7 +8,7 @@ import { ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { Formatters } from '@/utils/formatters';
 
 interface OperatingLedgerProps {

@@ -3,7 +3,7 @@ import { Card } from '@/components/molecules';
 import { Button } from '@/components/atoms';
 import { Badge } from '@/components/atoms';
 import { ArrowRight, Database, FileText, CheckCircle, Scale, AlertTriangle } from 'lucide-react';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';

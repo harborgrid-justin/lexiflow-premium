@@ -16,7 +16,7 @@ import { Search, Shield, Plus } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 

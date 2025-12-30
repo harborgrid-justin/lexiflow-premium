@@ -1,6 +1,6 @@
 import React from 'react';
 import { CustodianInterview, CaseId } from '@/types';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { Button } from '@/components/atoms';
 import { MessageSquare, Plus } from 'lucide-react';
 import { InterviewList } from './interviews/InterviewList';

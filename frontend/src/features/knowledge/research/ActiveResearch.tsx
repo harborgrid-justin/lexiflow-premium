@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ResearchSession } from '@/types';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { ResearchSidebar } from './ResearchSidebar';
 import { ResearchResults } from './ResearchResults';
 import { ResearchInput } from './ResearchInput';

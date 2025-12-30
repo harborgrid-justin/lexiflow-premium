@@ -29,7 +29,7 @@ import { PreferencePane } from './PreferencePane';
 import { LazyLoader } from '@/components/molecules';
 
 // Services & Data
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useQuery } from '@/hooks/useQueryHooks';

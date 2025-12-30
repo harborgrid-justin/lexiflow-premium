@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     /* Base Options */
-    "target": "ESNext", 
+    "target": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
@@ -25,7 +25,7 @@
     "noImplicitReturns": true,
     "noImplicitOverride": true,
     "useDefineForClassFields": true,
-    
+
     /* Interop & Resolution */
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -37,27 +37,45 @@
     "paths": {
       "@/*": ["src/*"],
       "@api/*": ["src/api/*"],
+      "@api/domains/*": ["src/api/domains/*"],
       "@data/*": ["src/api/data/*"],
       "@components/*": ["src/components/*"],
       "@theme/*": ["src/components/theme/*"],
       "@features/*": ["src/features/*"],
+      "@features/litigation": ["src/features/litigation"],
+      "@features/document-assembly": ["src/features/drafting"],
+      "@features/knowledge": ["src/features/knowledge"],
+      "@features/operations": ["src/features/operations"],
+      "@features/cases": ["src/features/cases"],
+      "@features/admin": ["src/features/admin"],
+      "@features/visual": ["src/features/visual"],
       "@hooks/*": ["src/hooks/*"],
       "@providers/*": ["src/providers/*"],
+      "@providers/ToastContext": ["src/providers/ToastContext.tsx"],
+      "@providers/ThemeContext": ["src/providers/ThemeContext.tsx"],
       "@services/*": ["src/services/*"],
+      "@services/integrationOrchestrator": [
+        "src/services/integrationOrchestrator.ts"
+      ],
+      "@services/db": ["src/services/data/db.ts"],
+      "@services/domains": ["src/services/domain"],
+      "@services/repositories": ["src/services/data/repositories"],
+      "@services/core": ["src/services/core"],
       "@types/*": ["src/types/*"],
       "@utils/*": ["src/utils/*"],
       "@config/*": ["src/config/*"],
+      "@config/tabs.config": ["src/config/tabs.config.ts"],
       "@constants/*": ["src/constants/*"]
     },
     "types": ["vite/client"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
   "exclude": [
-    "node_modules", 
-    "dist", 
-    "**/*.test.ts", 
-    "**/*.test.tsx", 
-    "**/*.spec.ts", 
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
     "**/*.spec.tsx",
     "cypress"
   ]

@@ -5,7 +5,7 @@ import { Badge } from '@/components/atoms';
 import { CheckSquare, Plus, AlertTriangle } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { DiscoveryRequest } from '@/types';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)

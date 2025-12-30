@@ -4,7 +4,7 @@ import { FileIcon } from '@/components/atoms';
 import { Button } from '@/components/atoms';
 import { Clock, Eye, Loader2, FolderOpen } from 'lucide-react';
 import { EmptyState } from '@/components/molecules';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { LegalDocument } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

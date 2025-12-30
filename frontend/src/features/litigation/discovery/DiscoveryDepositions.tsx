@@ -29,9 +29,9 @@ import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { useWindow } from '@/providers/WindowContext';
 
 // Services & Utils
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils';
-import { STORES } from '@/services';
+import { STORES } from '@/services/data/dataService';
 
 // ============================================================================
 // TYPES & INTERFACES

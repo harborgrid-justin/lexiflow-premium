@@ -29,7 +29,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Services & Types
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { EvidenceItem, ChainOfCustodyEvent, TrialExhibit } from '@/types';

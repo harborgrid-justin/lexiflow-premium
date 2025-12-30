@@ -6,7 +6,7 @@ import { Shield, CheckCircle, XCircle, Info, Lock } from 'lucide-react';
 import { RolePermission, RLSPermissionLevel as PermissionLevel } from '@/types/data-quality';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';
 
 /**

@@ -8,7 +8,7 @@ import { Badge } from '@/components/atoms';
 import { Button } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { Citation } from '@/types';

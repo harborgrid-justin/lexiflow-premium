@@ -17,7 +17,7 @@ import { Target, TrendingUp, Users, PieChart, FileText, MapPin } from 'lucide-re
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 

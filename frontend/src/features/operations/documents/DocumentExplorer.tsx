@@ -3,7 +3,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelection';
 import { useTheme } from '@/providers/ThemeContext';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { LegalDocument, UserRole } from '@/types';
 import { cn } from '@/utils/cn';
 import { useState } from 'react';

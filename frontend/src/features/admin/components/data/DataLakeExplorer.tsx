@@ -4,7 +4,7 @@ import { Folder, File, HardDrive, Download, MoreHorizontal, FileText, UploadClou
 
 import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataLakeItem } from '@/types';
 import { cn } from '@/utils/cn';

@@ -30,7 +30,7 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 
 // Services & Utils
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
 

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { DataDictionaryItem } from '@/types';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { Button } from '@/components/atoms';
 import { Card } from '@/components/molecules';

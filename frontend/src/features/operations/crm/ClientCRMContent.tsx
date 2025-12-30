@@ -2,7 +2,7 @@ import React, { lazy } from 'react';
 import { CRMView } from '@/config/tabs.config';
 import { Client } from '@/types';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { Loader2 } from 'lucide-react';
 
 const CRMDashboard = lazy(() => import('./CRMDashboard').then(m => ({ default: m.CRMDashboard })));

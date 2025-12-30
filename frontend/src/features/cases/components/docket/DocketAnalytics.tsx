@@ -28,7 +28,7 @@ import { Card } from '@/components/molecules';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { aggregateFilingActivity, aggregateJudgeRulings } from './docketAnalytics.utils';
 // ✅ Migrated to backend API (2025-12-21)
 

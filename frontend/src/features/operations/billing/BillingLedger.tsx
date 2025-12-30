@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/atoms';
 import { Plus, FileText } from 'lucide-react';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useWindow } from '@/providers/WindowContext';

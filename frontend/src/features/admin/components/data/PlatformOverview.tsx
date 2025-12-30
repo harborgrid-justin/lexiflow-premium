@@ -8,7 +8,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useChartTheme } from '@/components/organisms';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { TenantConfig } from '@/types';
 import { useInterval } from '@/hooks/useInterval';
 

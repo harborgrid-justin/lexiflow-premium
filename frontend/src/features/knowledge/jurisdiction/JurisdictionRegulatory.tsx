@@ -5,7 +5,7 @@ import { Scale, AlertTriangle, FileText } from 'lucide-react';
 import { AdaptiveLoader } from '@/components/molecules';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 export const JurisdictionRegulatory: React.FC = () => {

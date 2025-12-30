@@ -5,7 +5,7 @@ import { Button } from '@/components/atoms';
 import { Download, ExternalLink, Gavel } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import type { JudgeProfile } from '@/types';
 

@@ -80,7 +80,7 @@ export {
 // ==================== INTEGRATION & ORCHESTRATION ====================
 // DO NOT export integrationOrchestrator or handlers here - they cause circular dependencies
 // Import directly: import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
-export * from "./infrastructure/backendDiscovery";
+export * from "./integration/backendDiscovery";
 
 // ==================== INFRASTRUCTURE SERVICES ====================
 export * from "./infrastructure/aiValidationService";

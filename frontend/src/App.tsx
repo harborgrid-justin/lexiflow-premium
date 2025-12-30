@@ -18,7 +18,7 @@ import { AppContentRenderer } from '@/components/ui/layouts/AppContentRenderer/A
 import { GlobalHotkeys } from '@/components/organisms';
 import { useAppController } from '@/hooks';
 import { useDataServiceCleanup } from './hooks/useDataServiceCleanup';
-import { backendDiscovery } from '@/services';
+import { backendDiscovery } from '@/services/data/dataService';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import type { IntentResult } from '@/types/ai';
 import type { GlobalSearchResult } from '@/services/search/searchService';

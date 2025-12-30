@@ -23,7 +23,7 @@ import { useNotify } from '@/hooks/useNotify';
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
 import { getTodayString } from '@/utils/dateUtils';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { validateDocketEntry, sanitizeDocketEntry } from '@/utils/docketValidation';
 import { DeadlineEngine } from '@/services/features/deadlines/deadlineEngine';
 import { IdGenerator } from '@/utils/idGenerator';

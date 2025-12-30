@@ -17,7 +17,7 @@ import { MapPin, Key, Wrench, Grid, Users, AlertTriangle, Loader2 } from 'lucide
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context

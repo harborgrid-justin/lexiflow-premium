@@ -5,7 +5,7 @@ import { UserPlus } from 'lucide-react';
 import { ClientIntakeModal } from './ClientIntakeModal';
 import { ClientPortalModal } from './ClientPortalModal';
 import { Button } from '@/components/atoms';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { TabbedPageLayout } from '@/components/layouts';

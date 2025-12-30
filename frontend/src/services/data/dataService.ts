@@ -1215,7 +1215,7 @@ Object.defineProperties(DataServiceBase, {
  * Main DataService export - Use this for all data access operations
  * 
  * @example
- * import { DataService } from '@/services';
+ * import { DataService } from '@/services/data/dataService';
  * 
  * const cases = await DataService.cases.getAll();
  * const newCase = await DataService.cases.add(caseData);

@@ -18,7 +18,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 
 import {
     getPaddingDays,

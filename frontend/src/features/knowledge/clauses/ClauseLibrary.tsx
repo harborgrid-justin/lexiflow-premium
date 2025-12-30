@@ -28,7 +28,7 @@ import { AdaptiveLoader } from '@/components/molecules';
 import { ErrorState } from '@/components/molecules';
 import { EmptyState } from '@/components/molecules';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 
 // ============================================================================
 // TYPES & INTERFACES

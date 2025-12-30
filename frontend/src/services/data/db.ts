@@ -1,7 +1,7 @@
 import { StorageUtils } from '@/utils/storage';
 import { BTree } from '@/utils/datastructures/bTree';
 import { DB_NAME, DB_VERSION, DB_MAX_BUFFER_SIZE, DB_FORCE_FLUSH_THRESHOLD, DB_BTREE_ORDER } from '@/config/master.config';
-import { defaultWindowAdapter } from '@/services';
+import { defaultWindowAdapter } from '@/services/data/dataService';
 
 export const STORES = {
   // Core entities (aligned with backend tables)

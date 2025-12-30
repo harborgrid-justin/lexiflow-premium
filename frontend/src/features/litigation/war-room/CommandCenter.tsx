@@ -19,7 +19,7 @@ import { CheckSquare, FileText, Activity, AlertCircle, Users, AlertTriangle } fr
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context

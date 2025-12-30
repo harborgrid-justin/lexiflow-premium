@@ -25,7 +25,7 @@ import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { getTodayString } from '@/utils/dateUtils';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 import { cn } from '@/utils/cn';
 

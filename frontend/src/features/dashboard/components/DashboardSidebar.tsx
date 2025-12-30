@@ -17,7 +17,7 @@ import {AlertCircle, TrendingUp, FileText, ArrowRight} from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import {DataService} from '@/services';
+import {DataService} from '@/services/data/dataService';
 
 // CRITICAL FIX: Import from the Hooks layer to avoid the SyntaxError
 import {useQuery} from '@/hooks/useQueryHooks';

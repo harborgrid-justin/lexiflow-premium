@@ -6,7 +6,7 @@ import { Button } from '@/components/atoms';
 import { Badge } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { useWindow } from '@/providers/WindowContext';

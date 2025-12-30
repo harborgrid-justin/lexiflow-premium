@@ -31,7 +31,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/useModalState';
 
 // Services & Utils
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 
 export const CaseListIntake: React.FC = () => {

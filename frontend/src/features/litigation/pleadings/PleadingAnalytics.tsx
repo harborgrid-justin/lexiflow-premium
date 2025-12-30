@@ -26,7 +26,7 @@ import { Card } from '@/components/molecules';
 import { MetricCard } from '@/components/molecules';
 
 // Services & Utils
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { ChartColorService } from '@/services/theme/chartColorService';
 // ✅ Migrated to backend API (2025-12-21)
 

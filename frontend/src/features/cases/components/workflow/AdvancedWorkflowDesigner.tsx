@@ -31,7 +31,7 @@ import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms';
 import { Card } from '@/components/molecules';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';
 import type {
   EnhancedWorkflowInstance,

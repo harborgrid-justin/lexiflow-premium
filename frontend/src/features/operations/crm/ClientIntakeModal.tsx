@@ -6,7 +6,7 @@ import { Button } from '@/components/atoms';
 import { Input } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useDebounce } from '@/hooks/useDebounce';
 import { SEARCH_DEBOUNCE_MS } from '@/config/master.config';
 

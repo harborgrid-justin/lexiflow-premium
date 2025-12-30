@@ -6,7 +6,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { CleansingRule } from '@/types';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';
 
 /**

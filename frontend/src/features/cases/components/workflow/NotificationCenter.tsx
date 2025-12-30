@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Bell, Check, X, BellOff } from 'lucide-react';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { EmptyState } from '@/components/molecules';
 import { SystemNotification } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';

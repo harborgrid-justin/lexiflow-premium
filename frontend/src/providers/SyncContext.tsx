@@ -1,12 +1,12 @@
 
-import { createContext, useState, useEffect, useCallback, useRef, useMemo, useContext } from 'react';
-import { SyncEngine } from '@/services';
-import { DataService } from '@/services';
+import { SyncEngine } from '@/services/data/dataService';
+import { DataService } from '@/services/data/dataService';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type {
-  SyncStatus,
-  SyncStateValue,
   SyncActionsValue,
   SyncProviderProps,
+  SyncStateValue,
+  SyncStatus,
 } from './SyncContext.types';
 
 // Extend SyncProviderProps to include initialOnlineStatus for testing
@@ -16,7 +16,7 @@ interface ExtendedSyncProviderProps extends SyncProviderProps {
 
 /**
  * SyncContext - Application-level offline sync boundary
- * 
+ *
  * Best Practices Applied:
  * - BP1: Cross-cutting concern (offline sync) justifies context usage
  * - BP2: Narrow interface with minimal surface area
@@ -79,66 +79,66 @@ type MutationHandler = (payload: unknown) => Promise<unknown>;
 // BP13: Registry of handlers to replay mutations
 // Maps mutation types to their corresponding DataService methods
 const MUTATION_HANDLERS: Record<string, MutationHandler> = {
-    'CASE_CREATE': (p) => DataService.cases.add(p as Parameters<typeof DataService.cases.add>[0]),
-    'CASE_UPDATE': (p) => {
-        const payload = p as { id: string; data: Record<string, unknown> };
-        return DataService.cases.update(payload.id, payload.data);
-    },
-    'TASK_ADD': (p) => DataService.tasks.add(p as Parameters<typeof DataService.tasks.add>[0]),
-    'TASK_UPDATE': (p) => {
-        const payload = p as { id: string; data: Record<string, unknown> };
-        return DataService.tasks.update(payload.id, payload.data);
-    },
-    'DOC_UPLOAD': (p) => DataService.documents.add(p as Parameters<typeof DataService.documents.add>[0]),
-    'BILLING_LOG': (p) => DataService.billing.addTimeEntry(p as Parameters<typeof DataService.billing.addTimeEntry>[0]),
-    // Default fallback handler for unknown mutation types
-    'DEFAULT': async () => {
-        console.warn('[SyncContext] Unknown mutation type encountered, using default handler');
-        return new Promise(resolve => setTimeout(resolve, 1000));
-    }
+  'CASE_CREATE': (p) => DataService.cases.add(p as Parameters<typeof DataService.cases.add>[0]),
+  'CASE_UPDATE': (p) => {
+    const payload = p as { id: string; data: Record<string, unknown> };
+    return DataService.cases.update(payload.id, payload.data);
+  },
+  'TASK_ADD': (p) => DataService.tasks.add(p as Parameters<typeof DataService.tasks.add>[0]),
+  'TASK_UPDATE': (p) => {
+    const payload = p as { id: string; data: Record<string, unknown> };
+    return DataService.tasks.update(payload.id, payload.data);
+  },
+  'DOC_UPLOAD': (p) => DataService.documents.add(p as Parameters<typeof DataService.documents.add>[0]),
+  'BILLING_LOG': (p) => DataService.billing.addTimeEntry(p as Parameters<typeof DataService.billing.addTimeEntry>[0]),
+  // Default fallback handler for unknown mutation types
+  'DEFAULT': async () => {
+    console.warn('[SyncContext] Unknown mutation type encountered, using default handler');
+    return new Promise(resolve => setTimeout(resolve, 1000));
+  }
 };
 
 /**
  * SyncProvider
- * 
+ *
  * BP13: Responsibilities:
  * - Monitor online/offline status
  * - Queue mutations when offline
  * - Replay queued mutations when online
  * - Handle retry logic with exponential backoff
- * 
+ *
  * Lifecycle:
  * - Initializes online status from navigator.onLine
  * - Attaches online/offline event listeners
  * - Processes queue on mount if pending items exist
  * - Cleans up event listeners on unmount
  */
-export const SyncProvider = ({ 
-  children, 
+export const SyncProvider = ({
+  children,
   initialOnlineStatus,
   onSyncSuccess: _onSyncSuccess,
   onSyncError
 }: ExtendedSyncProviderProps) => {
   const [isOnline, setIsOnline] = useState(
-    initialOnlineStatus !== undefined 
-      ? initialOnlineStatus 
+    initialOnlineStatus !== undefined
+      ? initialOnlineStatus
       : (typeof navigator !== 'undefined' ? navigator.onLine : true)
   );
   const [pendingCount, setPendingCount] = useState(0);
   const [failedCount, setFailedCount] = useState(0);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(
-    initialOnlineStatus !== undefined 
+    initialOnlineStatus !== undefined
       ? (initialOnlineStatus ? 'idle' : 'offline')
       : (typeof navigator !== 'undefined' && navigator.onLine ? 'idle' : 'offline')
   );
-  
+
   // BP6: Ref to prevent concurrent queue processing (not high-frequency state)
   const isProcessingRef = useRef(false);
 
   // BP10: Stabilize function references with useCallback
   const refreshCounts = useCallback(() => {
-      setPendingCount(SyncEngine.count());
-      setFailedCount(SyncEngine.getFailed().length);
+    setPendingCount(SyncEngine.count());
+    setFailedCount(SyncEngine.getFailed().length);
   }, []);
 
 
@@ -148,14 +148,14 @@ export const SyncProvider = ({
 
     const mutation = SyncEngine.peek();
     if (!mutation) {
-        setSyncStatus('idle');
-        return;
+      setSyncStatus('idle');
+      return;
     }
 
     // Stop if head is failed to preserve order dependency
     if (mutation.status === 'failed') {
-        setSyncStatus('error');
-        return;
+      setSyncStatus('error');
+      return;
     }
 
     isProcessingRef.current = true;
@@ -165,59 +165,59 @@ export const SyncProvider = ({
     SyncEngine.update(mutation.id, { status: 'syncing' });
 
     try {
-        const handler = MUTATION_HANDLERS[mutation.type] || MUTATION_HANDLERS['DEFAULT'];
-        console.log(`[Sync] Replaying: ${mutation.type}`, mutation.payload);
-        
-        await handler(mutation.payload);
-        
-        // Success
-        SyncEngine.dequeue();
-        refreshCounts();
-        isProcessingRef.current = false;
-        
-        // Process next immediately
-        await processQueue();
+      const handler = MUTATION_HANDLERS[mutation.type] || MUTATION_HANDLERS['DEFAULT'];
+      console.log(`[Sync] Replaying: ${mutation.type}`, mutation.payload);
+
+      await handler(mutation.payload);
+
+      // Success
+      SyncEngine.dequeue();
+      refreshCounts();
+      isProcessingRef.current = false;
+
+      // Process next immediately
+      await processQueue();
 
     } catch (err) {
-        console.error(`[Sync] Failed ${mutation.type}:`, err);
+      console.error(`[Sync] Failed ${mutation.type}:`, err);
 
-        const newRetryCount = mutation.retryCount + 1;
-        const errorMsg = err instanceof Error ? err.message : 'Unknown error';
+      const newRetryCount = mutation.retryCount + 1;
+      const errorMsg = err instanceof Error ? err.message : 'Unknown error';
 
-        if (newRetryCount >= MAX_RETRIES) {
-            // Permanent Failure
-            SyncEngine.update(mutation.id, { 
-                status: 'failed', 
-                lastError: errorMsg,
-                retryCount: newRetryCount 
-            });
-            setSyncStatus('error');
-            if (onSyncError) {
-                onSyncError(`Sync failed for ${mutation.type}. Action required.`);
-            }
-            isProcessingRef.current = false;
-            refreshCounts();
-        } else {
-            // Temporary Failure - Backoff
-            SyncEngine.update(mutation.id, { 
-                status: 'pending', 
-                lastError: errorMsg,
-                retryCount: newRetryCount 
-            });
-            
-            const delay = Math.pow(2, newRetryCount) * BASE_DELAY;
-            console.log(`[Sync] Retrying in ${delay}ms...`);
-            
-            isProcessingRef.current = false;
-            setTimeout(() => processQueue(), delay);
+      if (newRetryCount >= MAX_RETRIES) {
+        // Permanent Failure
+        SyncEngine.update(mutation.id, {
+          status: 'failed',
+          lastError: errorMsg,
+          retryCount: newRetryCount
+        });
+        setSyncStatus('error');
+        if (onSyncError) {
+          onSyncError(`Sync failed for ${mutation.type}. Action required.`);
         }
+        isProcessingRef.current = false;
+        refreshCounts();
+      } else {
+        // Temporary Failure - Backoff
+        SyncEngine.update(mutation.id, {
+          status: 'pending',
+          lastError: errorMsg,
+          retryCount: newRetryCount
+        });
+
+        const delay = Math.pow(2, newRetryCount) * BASE_DELAY;
+        console.log(`[Sync] Retrying in ${delay}ms...`);
+
+        isProcessingRef.current = false;
+        setTimeout(() => processQueue(), delay);
+      }
     }
   }, [onSyncError, refreshCounts]);
 
   useEffect(() => {
     // BP13: Lifecycle - initialize counts and event listeners
     refreshCounts();
-    
+
     const handleOnline = () => {
       setIsOnline(true);
       setSyncStatus('syncing');
@@ -247,7 +247,7 @@ export const SyncProvider = ({
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-    // Note: _onSyncSuccess and onSyncError are function props that may change, but we intentionally 
+    // Note: _onSyncSuccess and onSyncError are function props that may change, but we intentionally
     // exclude them from dependencies to avoid recreating event handlers on every render
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [processQueue, refreshCounts]);
@@ -275,30 +275,30 @@ export const SyncProvider = ({
 
   // BP10: Stabilize function references with useCallback
   const retryFailed = useCallback(() => {
-      SyncEngine.resetFailed();
-      refreshCounts();
-      setSyncStatus('syncing');
-      processQueue();
-      if (_onSyncSuccess) {
-        _onSyncSuccess('Retrying failed items...');
-      }
-    // Note: _onSyncSuccess is a function prop that may change, but we intentionally 
+    SyncEngine.resetFailed();
+    refreshCounts();
+    setSyncStatus('syncing');
+    processQueue();
+    if (_onSyncSuccess) {
+      _onSyncSuccess('Retrying failed items...');
+    }
+    // Note: _onSyncSuccess is a function prop that may change, but we intentionally
     // exclude it from dependencies to maintain stable callback identity
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [processQueue, refreshCounts]);
 
   // BP7: Memoize provider values explicitly - state context
-  const stateValue = useMemo<SyncStateValue>(() => ({ 
-    isOnline, 
-    pendingCount, 
-    failedCount, 
-    syncStatus 
+  const stateValue = useMemo<SyncStateValue>(() => ({
+    isOnline,
+    pendingCount,
+    failedCount,
+    syncStatus
   }), [isOnline, pendingCount, failedCount, syncStatus]);
 
   // BP7: Memoize provider values explicitly - actions context
-  const actionsValue = useMemo<SyncActionsValue>(() => ({ 
-    performMutation, 
-    retryFailed 
+  const actionsValue = useMemo<SyncActionsValue>(() => ({
+    performMutation,
+    retryFailed
   }), [performMutation, retryFailed]);
 
   // BP3 & BP8: Multiple providers for split read/write
@@ -310,4 +310,3 @@ export const SyncProvider = ({
     </SyncStateContext.Provider>
   );
 };
-

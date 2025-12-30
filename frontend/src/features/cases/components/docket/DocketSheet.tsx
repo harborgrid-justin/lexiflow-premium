@@ -37,7 +37,7 @@ import { useModalState } from '@/hooks';
 import { useToggle } from '@/hooks/useToggle';
 
 // Internal Dependencies - Services & Utils
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { IdGenerator } from '@/utils/idGenerator';
 

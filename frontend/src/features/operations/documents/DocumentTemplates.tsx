@@ -2,7 +2,7 @@
 import { FileText, Wand2, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/atoms';
 import { AdaptiveLoader } from '@/components/molecules';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';

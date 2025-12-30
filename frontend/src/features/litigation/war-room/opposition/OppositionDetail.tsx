@@ -19,7 +19,7 @@ import React from 'react';
 // ============================================================================
 // Services & Data
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context
 import { useTheme } from '@/providers';

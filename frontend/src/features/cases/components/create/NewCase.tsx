@@ -29,7 +29,7 @@ import {
   Trash2,
   X
 } from 'lucide-react';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { queryClient } from '@/services/infrastructure/queryClient';

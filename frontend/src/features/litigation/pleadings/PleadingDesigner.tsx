@@ -5,7 +5,7 @@ import { ArrowLeft, Save, Eye, PenTool, GitMerge, Loader2, Undo2, Redo2 } from '
 import { Button } from '@/components/atoms';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';

@@ -33,7 +33,7 @@ import { useWindow } from '@/providers/WindowContext';
 import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/master.config';
 
 // Services & Utils
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 // ✅ Migrated to backend API (2025-12-21)
 

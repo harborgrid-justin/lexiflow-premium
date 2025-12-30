@@ -7,7 +7,7 @@ import OpenAI from 'openai';
 import { ParsedDocket } from '@/types';
 import { withRetry } from '@/utils/apiUtils';
 import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, ShepardizeResult } from '@/types/ai';
-import { defaultStorage } from '@/services';
+import { defaultStorage } from '@/services/data/dataService';
 import { MissingConfigurationError} from '@/services/core/errors';
 
 // Note: Import AI types from @/types, don't re-export them

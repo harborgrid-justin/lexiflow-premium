@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from '@/components/molecules';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useChartTheme } from '@/components/organisms';
 import { useTheme } from '@/providers/ThemeContext';

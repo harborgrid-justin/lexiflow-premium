@@ -6,7 +6,7 @@
  */
 
 import { communicationsApi } from '@/api/domains/communications.api';
-import { defaultStorage } from '@/services';
+import { defaultStorage } from '@/services/data/dataService';
 
 interface Notification {
   id: string;

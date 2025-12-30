@@ -7,7 +7,7 @@ import { Send, Paperclip, Wand2, X } from 'lucide-react';
 import { CommunicationItem, CommunicationType, UserId } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { useAutoSave } from '@/hooks/useAutoSave';

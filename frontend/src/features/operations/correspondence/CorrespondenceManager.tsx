@@ -18,7 +18,7 @@ import React, { useEffect, useState } from 'react';
 // ============================================================================
 // Services & Data
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 
 // Hooks & Context

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Loader2, Server, ChevronRight } from 'lucide-react';
 
 import { useTheme } from '@/providers/ThemeContext';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { ApiServiceSpec, ApiMethod } from '@/types';
 import { cn } from '@/utils/cn';

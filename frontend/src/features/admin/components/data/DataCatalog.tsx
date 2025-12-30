@@ -7,7 +7,7 @@ import { useWindow } from '@/providers/WindowContext';
 import { Button } from '@/components/atoms';
 import { AccessRequestManager } from './catalog/AccessRequestManager';
 import { DataDictionary } from './catalog/DataDictionary';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 
 interface DataDomain {

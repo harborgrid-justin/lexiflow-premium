@@ -7,7 +7,7 @@ import { Briefcase, Building, Mail, Linkedin, GraduationCap, Network } from 'luc
 import { LegalEntity } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';
 import { cn } from '@/utils/cn';
 

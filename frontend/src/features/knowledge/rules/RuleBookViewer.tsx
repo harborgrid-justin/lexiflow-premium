@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { LegalRule } from '@/types';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { AdaptiveLoader } from '@/components/molecules';

@@ -5,7 +5,7 @@ import { X, Wand2, Minus } from 'lucide-react';
 import { GeminiService } from '@/services/features/research/geminiService';
 import { LegalDocument, DocumentId, CaseId } from '@/types';
 import { useWindow } from '@/providers/WindowContext';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';

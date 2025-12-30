@@ -4,7 +4,7 @@ import { Button } from '@/components/atoms';
 import { FileText, Upload, CheckCircle, Clock, Search } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { Transcript } from '@/types';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)

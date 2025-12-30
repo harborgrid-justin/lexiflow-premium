@@ -1,7 +1,7 @@
 import { Card } from '@/components/molecules/Card';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { FinancialPerformanceData } from '@/types';
 import React from 'react';
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';

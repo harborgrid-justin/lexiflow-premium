@@ -9,7 +9,7 @@ import { Plus, User, Award, TrendingUp, MoreHorizontal, Trash2, Loader2, AlertCi
 import { StaffMember, UserId } from '@/types';
 
 type StaffRole = 'Associate' | 'Paralegal' | 'Senior Partner' | 'Administrator';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { AddStaffModal } from './AddStaffModal';

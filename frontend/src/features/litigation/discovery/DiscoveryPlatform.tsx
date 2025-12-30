@@ -30,7 +30,7 @@ import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 
 // Services & Utils
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { STORES } from '@/services/data/db';
 import { queryKeys } from '@/utils/queryKeys';

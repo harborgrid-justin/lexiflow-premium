@@ -7,7 +7,7 @@
 
 import { BaseEventHandler } from './BaseEventHandler';
 import { ChainService } from '@/services/infrastructure/chainService';
-import { defaultStorage } from '@/services';
+import { defaultStorage } from '@/services/data/dataService';
 import type { SystemEventPayloads, IntegrationResult } from '@/types/integration-types';
 import type { UserId } from '@/types';
 import { SystemEventType } from '@/types/integration-types';

@@ -5,7 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 
 import { useTheme } from '@/providers/ThemeContext';
 import { useChartTheme } from '@/components/organisms';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { ChartColorService } from '@/services/theme/chartColorService';
 // ✅ Migrated to backend API (2025-12-21)
 import { Loader2 } from 'lucide-react';

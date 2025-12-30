@@ -6,7 +6,7 @@ import { adminApi } from "@/api/domains/admin.api";
 import { MOCK_API_SPEC } from '@/api/types/mockApiSpec';
 import { API_PREFIX } from '@/config/network/api.config';
 import { delay } from '@/utils/async';
-import { defaultStorage } from '@/services';
+import { defaultStorage } from '@/services/data/dataService';
 
 export const AdminService = {
     // Real backend API access

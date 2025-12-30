@@ -18,7 +18,7 @@ import { Plus } from 'lucide-react';
 // ============================================================================
 // Services & Data
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API with queryKeys (2025-12-21)
 

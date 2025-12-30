@@ -11,7 +11,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useQuery} from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';
 
 interface UserData {

@@ -18,7 +18,7 @@ import React, { Suspense, useState, useTransition } from 'react';
 // ============================================================================
 // Services & Data
 import { useMutation } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 
 // Hooks
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';

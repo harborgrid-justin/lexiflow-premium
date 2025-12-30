@@ -45,7 +45,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks';
 
 // Services & Utils
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { IdGenerator } from '@/utils/idGenerator';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';

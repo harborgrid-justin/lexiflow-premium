@@ -19,7 +19,7 @@ import { cn } from '@/utils/cn';
 
 // Services & Types
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 
 export const ExpertEvidenceManager: React.FC = () => {
     const { theme } = useTheme();

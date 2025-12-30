@@ -15,7 +15,7 @@
  * - Persistent storage via defaultStorage
  */
 
-import { defaultStorage } from '@/services';
+import { defaultStorage } from '@/services/data/dataService';
 import { ValidationError } from '@/services/core/errors';
 import { NOTIFICATION_MAX_DISPLAY } from '@/config/master.config';
 

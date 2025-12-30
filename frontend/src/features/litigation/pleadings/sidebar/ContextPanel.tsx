@@ -4,7 +4,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 import { useDebounce } from '@/hooks/useDebounce';
 import { DocketEntry } from '@/types';

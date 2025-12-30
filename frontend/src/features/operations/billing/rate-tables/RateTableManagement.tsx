@@ -12,7 +12,7 @@ import { useModalState } from '@/hooks/useModalState';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 
 interface RateTable {
   id: string;

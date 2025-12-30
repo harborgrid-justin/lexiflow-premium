@@ -4,7 +4,7 @@
 
 import { GeminiService } from '../research/geminiService';
 import { OpenAIService } from './openaiService';
-import { defaultStorage } from '@/services';
+import { defaultStorage } from '@/services/data/dataService';
 import type { AIServiceInterface } from './aiProvider';
 
 export type AIProvider = 'gemini' | 'openai';

@@ -1,7 +1,7 @@
 
 // config/prefetchConfig.ts
 import { queryKeys } from '../utils/queryKeys';
-import { DataService } from '@/services';
+import { DataService } from '@/services/data/dataService';
 import { PATHS } from './paths.config';
 
 export const PREFETCH_MAP: Record<string, { key: unknown; fn: () => Promise<unknown> }> = {

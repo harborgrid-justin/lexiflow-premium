@@ -23,6 +23,7 @@ import resourceLimitsConfig from './config/resource-limits.config';
 import memoryConfig from './config/memory.config';
 import { getDatabaseConfig } from './config/database.config';
 import { validationSchema, validationOptions } from './config/env.validation';
+import { GlobalConfigModule } from './config/global-config.module';
 
 import { CoreModule } from './core/core.module';
 import { MemoryModule } from './common/memory.module';
@@ -93,6 +94,9 @@ function queueModules(): DynamicModule[] {
       cache: true,
       expandVariables: true,
     }),
+
+    /* Global Config Services (loaded early for injection in ALL modules) */
+    GlobalConfigModule,
 
     /* Database */
     TypeOrmModule.forRootAsync({
@@ -170,6 +174,7 @@ export class AppModule implements NestModule, OnModuleInit {
 
     SystemStartupReporter.section('Core Infrastructure');
     SystemStartupReporter.module({ name: 'ConfigModule', status: 'ENABLED' });
+    SystemStartupReporter.module({ name: 'GlobalConfigModule', status: 'ENABLED' });
     SystemStartupReporter.module({ name: 'TypeOrmModule', status: 'ENABLED' });
     SystemStartupReporter.module({
       name: 'Bull / Redis',

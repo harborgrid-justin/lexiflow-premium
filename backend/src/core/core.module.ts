@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BootstrapService } from './services/bootstrap.service';
 import { ShutdownService } from './services/shutdown.service';
 import { ConfigurationValidatorService } from './services/configuration.validator.service';
-import { DefaultAdminConfigService } from './services/default-admin-config.service';
+// Note: DefaultAdminConfigService is provided by GlobalConfigModule (loaded before CoreModule)
 
 // Import Enterprise Modules (in dependency order)
 import { CommonModule } from '@common/common.module';
@@ -81,16 +81,14 @@ import { ApiSecurityModule } from '@api-security/api.security.module';
     BootstrapService,
     ShutdownService,
     ConfigurationValidatorService,
-    // Global configuration services (injectable across all 40+ feature modules)
-    DefaultAdminConfigService,
+    // Note: DefaultAdminConfigService is provided globally by GlobalConfigModule
   ],
   exports: [
     // Export core services for use in other modules
     BootstrapService,
     ShutdownService,
     ConfigurationValidatorService,
-    // Export global configuration services for injection in any module
-    DefaultAdminConfigService,
+    // Note: DefaultAdminConfigService is exported globally by GlobalConfigModule
 
     // Re-export all enterprise modules so they're available when CoreModule is imported
     CommonModule,
@@ -127,7 +125,7 @@ export class CoreModule {
     console.log('  ✓ Performance Module');
     console.log('  ✓ API Security Module');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('  Global Services:');
+    console.log('  Global Services (via GlobalConfigModule):');
     console.log('  ✓ DefaultAdminConfigService (injectable in all modules)');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }

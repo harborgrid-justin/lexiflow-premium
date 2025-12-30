@@ -57,4 +57,29 @@ export default registerAs('app', (): Configuration => ({
     uploadDir: process.env.UPLOAD_DIR || './uploads',
     maxFileSize: parseInt(process.env.MAX_FILE_SIZE || '10485760', 10),
   },
+  defaultAdmin: {
+    enabled: process.env.DEFAULT_ADMIN_ENABLED !== 'false',
+    user: {
+      email: process.env.DEFAULT_ADMIN_EMAIL || 'admin@lexiflow.com',
+      password: process.env.DEFAULT_ADMIN_PASSWORD || 'Admin123!',
+      firstName: process.env.DEFAULT_ADMIN_FIRST_NAME || 'Super',
+      lastName: process.env.DEFAULT_ADMIN_LAST_NAME || 'Admin',
+      title: process.env.DEFAULT_ADMIN_TITLE || 'System Administrator',
+      department: process.env.DEFAULT_ADMIN_DEPARTMENT || 'Administration',
+    },
+    profile: {
+      enabled: process.env.DEFAULT_ADMIN_PROFILE_ENABLED !== 'false',
+      barNumber: process.env.DEFAULT_ADMIN_BAR_NUMBER || null,
+      jurisdictions: process.env.DEFAULT_ADMIN_JURISDICTIONS
+        ? JSON.parse(process.env.DEFAULT_ADMIN_JURISDICTIONS)
+        : ['Global'],
+      practiceAreas: process.env.DEFAULT_ADMIN_PRACTICE_AREAS
+        ? JSON.parse(process.env.DEFAULT_ADMIN_PRACTICE_AREAS)
+        : ['System Administration', 'Platform Management'],
+      bio: process.env.DEFAULT_ADMIN_BIO ||
+        'Global system administrator with full platform access and management capabilities.',
+      yearsOfExperience: parseInt(process.env.DEFAULT_ADMIN_YEARS_OF_EXPERIENCE || '0', 10),
+      defaultHourlyRate: parseFloat(process.env.DEFAULT_ADMIN_DEFAULT_HOURLY_RATE || '0'),
+    },
+  },
 }));

@@ -3,6 +3,7 @@ import {
   NotFoundException,
   ConflictException,
   OnModuleInit,
+  Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -14,53 +15,140 @@ import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface
 import { ROLE_PERMISSIONS } from '@common/constants/role-permissions.constant';
 import { Role } from '@common/enums/role.enum';
 import { User, UserRole, UserStatus } from './entities/user.entity';
+import { UserProfile } from './entities/user-profile.entity';
 
 @Injectable()
 export class UsersService implements OnModuleInit {
+  private readonly logger = new Logger(UsersService.name);
+
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(UserProfile)
+    private readonly userProfileRepository: Repository<UserProfile>,
   ) {}
 
   async onModuleInit() {
-    // Create default admin user for testing only if not in test environment
-    if (process.env.NODE_ENV !== 'test') {
+    // Create default admin user only if enabled and not in test environment
+    if (process.env.NODE_ENV !== 'test' && MasterConfig.DEFAULT_ADMIN_CONFIG.enabled) {
       await this.createDefaultAdmin();
     }
   }
 
-  private async createDefaultAdmin() {
+  /**
+   * Creates the default global admin user with linked profile based on configuration.
+   * Uses settings from master.config.ts which can be overridden via environment variables.
+   *
+   * This method:
+   * 1. Checks if default admin creation is enabled
+   * 2. Verifies admin doesn't already exist
+   * 3. Creates the admin user with SUPER_ADMIN role
+   * 4. Creates a linked UserProfile if profile creation is enabled
+   * 5. Associates the profile with the admin user
+   */
+  private async createDefaultAdmin(): Promise<void> {
+    const config = MasterConfig.DEFAULT_ADMIN_CONFIG;
+
+    if (!config.enabled) {
+      this.logger.debug('Default admin creation is disabled via configuration');
+      return;
+    }
+
     try {
-      // Check if admin already exists
+      // Check if admin already exists using configured email
       const existingAdmin = await this.userRepository.findOne({
-        where: { email: 'admin@lexiflow.com' },
+        where: { email: config.user.email },
       });
 
-      if (!existingAdmin) {
-        const hashedPassword = await bcrypt.hash('Admin123!', MasterConfig.BCRYPT_ROUNDS);
-        const admin = this.userRepository.create({
-          email: 'admin@lexiflow.com',
-          passwordHash: hashedPassword,
-          firstName: 'Super',
-          lastName: 'Admin',
-          role: UserRole.SUPER_ADMIN,
-          status: UserStatus.ACTIVE,
-          twoFactorEnabled: false,
-          emailVerified: true,
-        });
-        await this.userRepository.save(admin);
-        // Admin user created - Log only in non-production environments
-        if (process.env.NODE_ENV !== 'production') {
-           
-          console.info('[UsersService] Default admin user created successfully');
+      if (existingAdmin) {
+        this.logger.debug(`Default admin already exists: ${config.user.email}`);
+        // Ensure profile exists if profile creation is enabled
+        if (config.profile.enabled) {
+          await this.ensureAdminProfile(existingAdmin.id);
         }
+        return;
       }
-    } catch {
+
+      // Create the admin user with configured values
+      const hashedPassword = await bcrypt.hash(
+        config.user.password,
+        MasterConfig.BCRYPT_ROUNDS
+      );
+
+      const admin = this.userRepository.create({
+        email: config.user.email,
+        passwordHash: hashedPassword,
+        firstName: config.user.firstName,
+        lastName: config.user.lastName,
+        title: config.user.title,
+        department: config.user.department,
+        role: UserRole.SUPER_ADMIN,
+        status: UserStatus.ACTIVE,
+        twoFactorEnabled: false,
+        emailVerified: true,
+      });
+
+      const savedAdmin = await this.userRepository.save(admin);
+
+      // Create linked profile if enabled
+      if (config.profile.enabled) {
+        await this.createAdminProfile(savedAdmin.id);
+      }
+
+      // Log success in non-production environments
+      if (process.env.NODE_ENV !== 'production') {
+        this.logger.log(
+          `Default global admin created: ${config.user.email} ` +
+          `(profile: ${config.profile.enabled ? 'created' : 'skipped'})`
+        );
+      }
+    } catch (error) {
       // Silently fail if table doesn't exist yet (during initial schema creation)
       // The admin will be created on next restart or can be seeded manually
       if (process.env.NODE_ENV !== 'production') {
+        this.logger.warn(
+          'Skipping default admin creation - database schema not ready yet',
+          error instanceof Error ? error.message : 'Unknown error'
+        );
+      }
+    }
+  }
 
-        console.info('[UsersService] Skipping default admin creation - database schema not ready yet');
+  /**
+   * Creates a UserProfile linked to the default admin user.
+   * Uses configuration values from master.config.ts
+   */
+  private async createAdminProfile(userId: string): Promise<UserProfile> {
+    const profileConfig = MasterConfig.DEFAULT_ADMIN_CONFIG.profile;
+
+    const profile = this.userProfileRepository.create({
+      userId,
+      barNumber: profileConfig.barNumber,
+      jurisdictions: profileConfig.jurisdictions,
+      practiceAreas: profileConfig.practiceAreas,
+      bio: profileConfig.bio,
+      yearsOfExperience: profileConfig.yearsOfExperience,
+      defaultHourlyRate: profileConfig.defaultHourlyRate,
+      skills: ['System Administration', 'User Management', 'Platform Configuration'],
+      specializations: 'Global Platform Administration',
+    });
+
+    return this.userProfileRepository.save(profile);
+  }
+
+  /**
+   * Ensures the admin user has a linked profile.
+   * Creates one if it doesn't exist.
+   */
+  private async ensureAdminProfile(userId: string): Promise<void> {
+    const existingProfile = await this.userProfileRepository.findOne({
+      where: { userId },
+    });
+
+    if (!existingProfile) {
+      await this.createAdminProfile(userId);
+      if (process.env.NODE_ENV !== 'production') {
+        this.logger.log(`Created missing profile for existing admin user`);
       }
     }
   }

@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BootstrapService } from './services/bootstrap.service';
 import { ShutdownService } from './services/shutdown.service';
 import { ConfigurationValidatorService } from './services/configuration.validator.service';
+// Note: 19 Global Configuration Services are provided by GlobalConfigModule (loaded before CoreModule)
 
 // Import Enterprise Modules (in dependency order)
 import { CommonModule } from '@common/common.module';
@@ -80,12 +81,14 @@ import { ApiSecurityModule } from '@api-security/api.security.module';
     BootstrapService,
     ShutdownService,
     ConfigurationValidatorService,
+    // Note: DefaultAdminConfigService is provided globally by GlobalConfigModule
   ],
   exports: [
     // Export core services for use in other modules
     BootstrapService,
     ShutdownService,
     ConfigurationValidatorService,
+    // Note: DefaultAdminConfigService is exported globally by GlobalConfigModule
 
     // Re-export all enterprise modules so they're available when CoreModule is imported
     CommonModule,
@@ -121,6 +124,18 @@ export class CoreModule {
     console.log('  ✓ Health Module');
     console.log('  ✓ Performance Module');
     console.log('  ✓ API Security Module');
+    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('  Global Config Services (19 via GlobalConfigModule):');
+    console.log('  ✓ DefaultAdminConfigService    ✓ FeatureFlagsConfigService');
+    console.log('  ✓ RateLimitConfigService       ✓ AuthSecurityConfigService');
+    console.log('  ✓ SecurityHeadersConfigService ✓ CacheConfigService');
+    console.log('  ✓ CorsConfigService            ✓ ResourceLimitsConfigService');
+    console.log('  ✓ CircuitBreakerConfigService  ✓ RetryConfigService');
+    console.log('  ✓ DatabasePoolConfigService    ✓ RedisConfigService');
+    console.log('  ✓ JwtConfigService             ✓ FileStorageConfigService');
+    console.log('  ✓ QueueConfigService           ✓ WebSocketConfigService');
+    console.log('  ✓ PaginationConfigService      ✓ ValidationConfigService');
+    console.log('  ✓ AuditConfigService');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }
 }

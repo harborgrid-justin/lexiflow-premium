@@ -23,7 +23,7 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Modal } from '@/components/molecules';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { Button } from '@/components/atoms';
 import { Input } from '@/components/atoms';
 import { TextArea } from '@/components/atoms';
@@ -89,7 +89,7 @@ export const TimeEntryModal: React.FC<TimeEntryModalProps> = ({ isOpen, onClose,
           disabled
           className={cn(theme.surface.input, theme.border.default, theme.text.primary)}
         />
-        
+
         <div className="grid grid-cols-2 gap-4">
           <Input
             label="Duration (Hours)"

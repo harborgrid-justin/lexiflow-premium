@@ -4,7 +4,7 @@
  * @description Dynamic content renderer for application views with lazy-loaded modules, access
  * control enforcement, case detail routing, and module prop injection. Routes between registered
  * modules from ModuleRegistry and handles special case for CaseDetail named export.
- * 
+ *
  * THEME SYSTEM USAGE:
  * - No direct theme usage (routing component)
  * - Child components handle their own theme integration
@@ -20,7 +20,7 @@ import { HelpCircle, Lock } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { LazyLoader } from '@/components/molecules';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 
 // Services & Data
 import { ModuleRegistry } from '@/services/infrastructure/moduleRegistry';
@@ -70,13 +70,13 @@ export const AppContentRenderer = ({
   // Only show CaseDetail when we have a valid case with an ID
   // This prevents showing CaseDetail with empty/undefined case data
   const hasValidCase = selectedCase && selectedCase.id;
-  
+
   if (hasValidCase) {
     return (
       <Suspense fallback={<LazyLoader message="Initializing Case Context & Workspace..." />}>
-        <CaseDetail 
-          caseData={selectedCase} 
-          onBack={handleBackToMain} 
+        <CaseDetail
+          caseData={selectedCase}
+          onBack={handleBackToMain}
           onSelectCase={handleSelectCase}
           initialTab={initialTab}
         />
@@ -90,7 +90,7 @@ export const AppContentRenderer = ({
     // Check admin permission - support both backend role names (snake_case) and legacy frontend names
     const adminRoles = ['super_admin', 'admin', 'Administrator', 'Senior Partner', 'partner', 'it_admin'];
     const hasAdminAccess = currentUser && adminRoles.includes(currentUser.role);
-    
+
     if (moduleDef.requiresAdmin && !hasAdminAccess) {
       return (
         <div className="flex flex-col justify-center items-center h-full text-slate-500 animate-fade-in">
@@ -99,7 +99,7 @@ export const AppContentRenderer = ({
           </div>
           <h3 className="text-xl font-bold text-slate-800">Access Denied</h3>
           <p className="text-sm mt-2 max-w-md text-center text-slate-600">
-            You do not have permission to view the <strong>{moduleDef.label}</strong> module. 
+            You do not have permission to view the <strong>{moduleDef.label}</strong> module.
             Please contact your system administrator.
           </p>
         </div>

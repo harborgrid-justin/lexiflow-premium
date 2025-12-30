@@ -28,9 +28,9 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useCallback } from 'react';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Button } from '@/components/atoms';
-import { SearchToolbar } from '@/components/organisms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -121,7 +121,7 @@ const BillingWIPComponent: React.FC = () => {
   });
 
   const filteredEntries = useMemo(() => {
-    return entries.filter(e => 
+    return entries.filter(e =>
         e.status === WIPStatusEnum.UNBILLED &&
         (e.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         e.caseId.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -132,7 +132,7 @@ const BillingWIPComponent: React.FC = () => {
       async (selectedEntries: TimeEntry[]) => {
           if (!DataService || !DataService.billing) throw new Error("Billing service unavailable");
           if (selectedEntries.length === 0) throw new Error("No entries selected");
-          
+
           // Validate all entries before invoicing
           const validationErrors: string[] = [];
           selectedEntries.forEach((entry, index) => {
@@ -141,12 +141,12 @@ const BillingWIPComponent: React.FC = () => {
               validationErrors.push(`Entry ${index + 1}: ${result.errors.join(', ')}`);
             }
           });
-          
+
           if (validationErrors.length > 0) {
             notify.error(`Validation failed: ${validationErrors[0]}`);
             throw new Error('Validation failed');
           }
-          
+
           // Use queue for PDF generation
           return invoiceQueue.add(selectedEntries);
       },
@@ -207,14 +207,14 @@ const BillingWIPComponent: React.FC = () => {
             </div>
         </div>
 
-        <SearchToolbar 
-            value={searchTerm} 
-            onChange={setSearchTerm} 
+        <SearchToolbar
+            value={searchTerm}
+            onChange={setSearchTerm}
             placeholder="Search unbilled time..."
             actions={
-                <Button 
-                    variant="primary" 
-                    icon={isGenerating ? undefined : CheckSquare} 
+                <Button
+                    variant="primary"
+                    icon={isGenerating ? undefined : CheckSquare}
                     onClick={handleGenerateClick}
                     disabled={isGenerating || selectedIds.size === 0}
                 >
@@ -227,8 +227,8 @@ const BillingWIPComponent: React.FC = () => {
         <TableContainer responsive="card">
             <TableHeader>
                 <TableHead className="w-10">
-                    <input 
-                        type="checkbox" 
+                    <input
+                        type="checkbox"
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                         checked={filteredEntries.length > 0 && selectedIds.size === filteredEntries.length}
                         onChange={toggleAll}
@@ -247,8 +247,8 @@ const BillingWIPComponent: React.FC = () => {
                 {filteredEntries.map(entry => (
                     <TableRow key={entry.id} className={selectedIds.has(entry.id) ? "bg-blue-50/50" : ""}>
                         <TableCell>
-                            <input 
-                                type="checkbox" 
+                            <input
+                                type="checkbox"
                                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                                 checked={selectedIds.has(entry.id)}
                                 onChange={() => toggleSelection(entry.id)}

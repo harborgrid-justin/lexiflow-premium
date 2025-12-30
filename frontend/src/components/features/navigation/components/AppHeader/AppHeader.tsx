@@ -22,10 +22,10 @@ import { Menu, Bell, PlusCircle, UserPlus, Clock, FileText } from 'lucide-react'
 // INTERNAL DEPENDENCIES
 // ========================================
 // Components
-import { ConnectivityHUD } from '@/components/organisms';
-import { NeuralCommandBar } from '@/components/organisms';
-import { UserAvatar } from '@/components/atoms';
-import { ConnectionStatus } from '@/components/organisms';
+import { ConnectivityHUD } from '@/components/organisms/ConnectivityHUD/ConnectivityHUD';
+import { NeuralCommandBar } from '@/components/organisms/NeuralCommandBar/NeuralCommandBar';
+import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
+import { ConnectionStatus } from '@/components/organisms/ConnectionStatus/ConnectionStatus';
 
 // Services & Data
 import { GlobalSearchResult } from '@/services/search/searchService';

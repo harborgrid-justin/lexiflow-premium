@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Drawer } from '@/components/molecules';
+import { Drawer } from '@/components/ui/molecules/Drawer/Drawer';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { Button } from '@/components/atoms';
 import React, { useState } from 'react';

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FileText, Plus, Edit, Trash2, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { Badge } from '@/components/atoms';
 import { Modal } from '@/components/molecules';
 import { Input, TextArea } from '@/components/atoms';
@@ -39,7 +39,7 @@ export const FeeAgreementManagement: React.FC = () => {
     queryKeys.billing.feeAgreements?.() || ['billing', 'feeAgreements'],
     () => DataService.feeAgreements.getAll()
   );
-  
+
   const createModal = useModalState();
   const editModal = useModalState();
   const deleteModal = useModalState();

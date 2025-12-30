@@ -1,10 +1,10 @@
 
 import { MessageSquare } from 'lucide-react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { UserAvatar } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
-import { SearchToolbar } from '@/components/organisms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
@@ -30,11 +30,11 @@ export const MessengerContacts = ({ contacts, searchTerm, setSearchTerm, onMessa
   return (
     <div className="w-full flex flex-col h-full">
       <div className={cn("p-4 border-b", theme.border.default)}>
-        <SearchToolbar 
-            value={searchTerm} 
-            onChange={setSearchTerm} 
+        <SearchToolbar
+            value={searchTerm}
+            onChange={setSearchTerm}
             placeholder="Search directory..."
-            className="border-none shadow-none p-0" 
+            className="border-none shadow-none p-0"
         />
       </div>
       <div className="overflow-auto flex-1">

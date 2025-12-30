@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Card } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { Button } from '@/components/atoms';
 import React from "react";

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ContextMenu } from '@/components/molecules';
+import { ContextMenu } from '@/components/ui/molecules/ContextMenu/ContextMenu';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { Copy, Edit, Trash2 } from 'lucide-react';
 

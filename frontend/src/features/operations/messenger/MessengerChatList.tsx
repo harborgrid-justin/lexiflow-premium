@@ -1,5 +1,6 @@
-import { Button } from '@/components/atoms';
-import { SearchToolbar, VirtualList } from '@/components/organisms';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { Conversation } from '@/hooks/useSecureMessenger';
 import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';

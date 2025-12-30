@@ -22,7 +22,7 @@ import { useWindow } from '@/providers/WindowContext';
 
 // Components
 import { UserAvatar } from '@/components/atoms';
-import { BackendStatusIndicator } from '@/components/organisms';
+import { BackendStatusIndicator } from '@/components/organisms/BackendStatusIndicator/BackendStatusIndicator';
 
 // Utils & Constants
 import { PATHS } from '@/config/paths.config';

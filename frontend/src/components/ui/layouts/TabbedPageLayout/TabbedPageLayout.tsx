@@ -3,7 +3,7 @@
  * @category Layouts
  * @description Tabbed page layout with parent/child tab navigation.
  * Ideal for complex pages with multiple sections and subsections.
- * 
+ *
  * THEME SYSTEM USAGE:
  * - theme.background - Page background
  * - theme.border.default - Border colors
@@ -13,7 +13,7 @@
 
 import React, { useMemo, useCallback, ReactNode } from 'react';
 import { LucideIcon } from 'lucide-react';
-import { PageHeader } from '@/components/organisms';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
@@ -39,17 +39,17 @@ interface TabbedPageLayoutProps {
 }
 
 export const TabbedPageLayout = React.memo<TabbedPageLayoutProps>(({
-  pageTitle, 
-  pageSubtitle, 
-  pageActions, 
-  tabConfig, 
-  children, 
-  activeTabId, 
+  pageTitle,
+  pageSubtitle,
+  pageActions,
+  tabConfig,
+  children,
+  activeTabId,
   onTabChange
 }) => {
   const { theme } = useTheme();
 
-  const activeParentTab = useMemo(() => 
+  const activeParentTab = useMemo(() =>
     tabConfig.find(p => p.subTabs.some(s => s.id === activeTabId)) || tabConfig[0],
   [activeTabId, tabConfig]);
 
@@ -64,7 +64,7 @@ export const TabbedPageLayout = React.memo<TabbedPageLayoutProps>(({
   return (
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
       <div className="px-6 pt-6 shrink-0">
-        <PageHeader 
+        <PageHeader
           title={pageTitle}
           subtitle={pageSubtitle}
           actions={pageActions}
@@ -78,7 +78,7 @@ export const TabbedPageLayout = React.memo<TabbedPageLayoutProps>(({
                     onClick={() => handleParentTabChange(parent.id)}
                     className={cn(
                         "flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2",
-                        activeParentTab.id === parent.id 
+                        activeParentTab.id === parent.id
                             ? cn("border-current", theme.primary.text)
                             : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`)
                     )}
@@ -93,13 +93,13 @@ export const TabbedPageLayout = React.memo<TabbedPageLayoutProps>(({
         {activeParentTab.subTabs.length > 0 && (
             <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4 touch-pan-x", theme.surface.highlight, theme.border.default)}>
                 {activeParentTab.subTabs.map(tab => (
-                    <button 
-                        key={tab.id} 
-                        onClick={() => onTabChange(tab.id)} 
+                    <button
+                        key={tab.id}
+                        onClick={() => onTabChange(tab.id)}
                         className={cn(
                             "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
-                            activeTabId === tab.id 
-                                ? cn(theme.surface.default, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) 
+                            activeTabId === tab.id
+                                ? cn(theme.surface.default, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border)
                                 : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface.default}`)
                         )}
                     >

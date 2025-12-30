@@ -1,8 +1,8 @@
 
 import { Lock, CheckCircle, Plus, Users, Briefcase } from 'lucide-react';
 import { EthicalWall } from '@/types';
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
@@ -27,7 +27,7 @@ export function ComplianceWalls({ walls }: ComplianceWallsProps) {
        {walls.map(w => (
          <Card key={w.id} noPadding className={cn("flex flex-col md:flex-row justify-between items-stretch transition-all hover:shadow-md overflow-hidden", `hover:${theme.border.default}`)}>
             <div className={cn("w-2 bg-red-500 md:w-2 md:h-auto h-2")}></div>
-            
+
             <div className="flex-1 p-6 flex flex-col md:flex-row gap-6">
                 <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
@@ -37,7 +37,7 @@ export function ComplianceWalls({ walls }: ComplianceWallsProps) {
                     <p className={cn("text-sm mb-4 flex items-center", theme.text.secondary)}>
                         <Briefcase className="h-3.5 w-3.5 mr-1.5"/> Matter Ref: <span className={cn("font-mono ml-1", theme.text.primary)}>{w.caseId}</span>
                     </p>
-                    
+
                     <div className="flex items-center text-xs text-green-600 font-medium">
                         <CheckCircle className="h-3 w-3 mr-1"/> Enforced via IAM Policy
                     </div>
@@ -66,7 +66,7 @@ export function ComplianceWalls({ walls }: ComplianceWallsProps) {
                     </div>
                 </div>
             </div>
-            
+
             <div className={cn("flex md:flex-col items-center justify-center p-4 border-t md:border-t-0 md:border-l gap-2", theme.surface.highlight, theme.border.default)}>
                <Button variant="ghost" size="sm" className="w-full">Audit Log</Button>
                <Button variant="outline" size="sm" className="w-full">Edit Policy</Button>

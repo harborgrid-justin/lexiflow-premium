@@ -3,7 +3,7 @@
  * @category Layouts - Suspense
  * @description Combined Suspense + Error Boundary component for handling async operations
  * in layouts. Provides loading states, error recovery, and automatic retry mechanisms.
- * 
+ *
  * FEATURES:
  * - Suspense boundary for lazy-loaded components
  * - Error boundary for async failures
@@ -16,12 +16,12 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import React, { Suspense, ReactNode, useState, useEffect, useCallback } from 'react';
-import { ErrorBoundary } from '@/components/organisms';
-import { LazyLoader } from '@/components/molecules';
+import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -85,11 +85,11 @@ interface ErrorFallbackProps {
   maxRetries: number;
 }
 
-const ErrorFallback: React.FC<ErrorFallbackProps> = ({ 
-  error, 
-  onRetry, 
-  retryCount, 
-  maxRetries 
+const ErrorFallback: React.FC<ErrorFallbackProps> = ({
+  error,
+  onRetry,
+  retryCount,
+  maxRetries
 }) => {
   const { theme } = useTheme();
 
@@ -103,7 +103,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
         {error.message || 'An unexpected error occurred'}
       </p>
       {retryCount < maxRetries && (
-        <Button 
+        <Button
           onClick={onRetry}
           icon={RefreshCw}
           variant="outline"
@@ -127,7 +127,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
 /**
  * AsyncBoundary combines Suspense and ErrorBoundary to handle async component loading
  * with automatic retry, timeout handling, and comprehensive error recovery.
- * 
+ *
  * @example
  * ```tsx
  * <AsyncBoundary
@@ -167,12 +167,12 @@ export const AsyncBoundary: React.FC<AsyncBoundaryProps> = ({
       console.warn('[AsyncBoundary] Retry disabled or max retries reached');
       return;
     }
-    
+
     if (retryCount < maxRetries) {
       setRetryCount(prev => prev + 1);
       setHasTimedOut(false);
       setKey(prev => prev + 1); // Force remount
-      
+
       // Exponential backoff: 1s, 2s, 4s, 8s...
       const delay = Math.min(1000 * Math.pow(2, retryCount), 8000);
       setTimeout(() => {
@@ -204,7 +204,7 @@ export const AsyncBoundary: React.FC<AsyncBoundaryProps> = ({
   }
 
   return (
-    <ErrorBoundary 
+    <ErrorBoundary
       scope={scope}
       fallback={
         <ErrorFallback
@@ -250,9 +250,9 @@ export const PageAsyncBoundary: React.FC<{ children: ReactNode }> = ({ children 
 /**
  * AsyncBoundary optimized for component-level async operations
  */
-export const ComponentAsyncBoundary: React.FC<{ children: ReactNode; name: string }> = ({ 
-  children, 
-  name 
+export const ComponentAsyncBoundary: React.FC<{ children: ReactNode; name: string }> = ({
+  children,
+  name
 }) => {
   return (
     <AsyncBoundary

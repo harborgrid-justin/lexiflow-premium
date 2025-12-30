@@ -27,10 +27,10 @@ import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useCallback } from 'react';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { SearchToolbar } from '@/components/organisms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -79,15 +79,15 @@ const BillingInvoicesComponent: React.FC = () => {
           // Optimistic update
           onMutate: async (id: string) => {
             const previousInvoices = queryClient.getQueryState<Invoice[]>(billingQueryKeys.billing.invoices())?.data;
-            
+
             // Optimistically update to "Sent"
             queryClient.setQueryData<Invoice[]>(
               billingQueryKeys.billing.invoices(),
-              (old = []) => old.map(inv => 
+              (old = []) => old.map(inv =>
                 inv.id === id ? { ...inv, status: InvoiceStatusEnum.SENT } : inv
               )
             );
-            
+
             return { previousInvoices };
           },
           onSuccess: (_, id) => {
@@ -113,15 +113,15 @@ const BillingInvoicesComponent: React.FC = () => {
           // Optimistic update
           onMutate: async (id: string) => {
             const previousInvoices = queryClient.getQueryState<Invoice[]>(billingQueryKeys.billing.invoices())?.data;
-            
+
             // Optimistically update to "Paid"
             queryClient.setQueryData<Invoice[]>(
               billingQueryKeys.billing.invoices(),
-              (old = []) => old.map(inv => 
+              (old = []) => old.map(inv =>
                 inv.id === id ? { ...inv, status: InvoiceStatusEnum.PAID } : inv
               )
             );
-            
+
             return { previousInvoices };
           },
           onSuccess: () => {
@@ -147,7 +147,7 @@ const BillingInvoicesComponent: React.FC = () => {
         return matchesSearch && matchesStatus;
       });
   }, [invoices, searchTerm, filterStatus]);
-  
+
   const getBadgeVariant = useCallback((status: string) => {
     if (status === InvoiceStatusEnum.PAID) return 'success';
     if (status === InvoiceStatusEnum.OVERDUE) return 'error';
@@ -157,15 +157,15 @@ const BillingInvoicesComponent: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fade-in">
-        <SearchToolbar 
-            value={searchTerm} 
-            onChange={setSearchTerm} 
+        <SearchToolbar
+            value={searchTerm}
+            onChange={setSearchTerm}
             placeholder="Search invoices..."
             actions={
                 <div className="flex gap-2">
                     <div className={cn("flex items-center px-3 py-1.5 border rounded-md", theme.surface.highlight, theme.border.default)}>
                         <Filter className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/>
-                        <select 
+                        <select
                             className={cn("bg-transparent text-sm outline-none border-none cursor-pointer", theme.text.primary)}
                             value={filterStatus}
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterStatus(e.target.value)}

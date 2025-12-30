@@ -30,7 +30,7 @@ import { Conversation, Attachment } from '@/hooks/useSecureMessenger';
 import { ChatHeader } from './ChatHeader';
 import { ChatInput } from './ChatInput';
 import { MessageList } from './MessageList';
-import { FileAttachment } from '@/components/molecules';
+import { FileAttachment } from '@/components/ui/molecules/FileAttachment/FileAttachment';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -62,7 +62,7 @@ export const MessengerChatWindow = ({
   const notify = useNotify();
   const { openWindow } = useWindow();
   const [isThinking, setIsThinking] = useState(false);
-  
+
   // Real-time Simulation State
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -75,7 +75,7 @@ export const MessengerChatWindow = ({
   // Simulate incoming messages/typing
   useInterval(() => {
       if (!activeConversation) return;
-      
+
       // Randomly start typing if not already
       if (!isTyping && Math.random() > 0.92) {
           setIsTyping(true);
@@ -104,7 +104,7 @@ export const MessengerChatWindow = ({
           setIsThinking(false);
       }
   };
-  
+
   const handlePreviewAttachment = (att: Attachment) => {
       const winId = `preview-${att.name}`;
       openWindow(
@@ -135,12 +135,12 @@ export const MessengerChatWindow = ({
   return (
     <div className={cn("flex-1 flex flex-col h-full", theme.surface.highlight)}>
       <ChatHeader conversation={activeConversation} onBack={() => setActiveConvId(null)} />
-      
+
       <div className="flex-1 overflow-hidden relative">
-         <MessageList 
-            conversation={activeConversation} 
-            currentUserId="me" 
-            formatTime={formatTime} 
+         <MessageList
+            conversation={activeConversation}
+            currentUserId="me"
+            formatTime={formatTime}
          />
          {isTyping && (
              <div className="absolute bottom-4 left-4 text-xs text-slate-500 animate-pulse bg-white/80 px-2 py-1 rounded-full shadow-sm">
@@ -155,7 +155,7 @@ export const MessengerChatWindow = ({
           {pendingAttachments.map((att, i) => (
             <div key={i} className="relative group cursor-pointer" onClick={() => handlePreviewAttachment(att)}>
               <FileAttachment name={att.name} size={typeof att.size === 'number' ? String(att.size) : att.size} type={att.type} className="w-48 shadow-sm"/>
-              <button 
+              <button
                 onClick={(e: React.MouseEvent) => { e.stopPropagation(); setPendingAttachments(prev => prev.filter((_, idx) => idx !== i)); }}
                 className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-md hover:bg-red-600"
               >
@@ -166,7 +166,7 @@ export const MessengerChatWindow = ({
         </div>
       )}
 
-      <ChatInput 
+      <ChatInput
         inputText={inputText}
         setInputText={setInputText}
         pendingAttachments={pendingAttachments}

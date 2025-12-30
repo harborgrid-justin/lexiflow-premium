@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ErrorState } from '@/components/molecules';
+import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import React from "react";
 

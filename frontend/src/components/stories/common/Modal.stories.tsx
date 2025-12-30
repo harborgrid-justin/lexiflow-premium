@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Modal } from '@/components/molecules';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { Button } from '@/components/atoms';
 import React, { useState } from 'react';

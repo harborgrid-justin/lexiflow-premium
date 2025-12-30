@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Accordion, AccordionItem } from '@/components/molecules';
+import { Accordion, AccordionItem } from '@/components/ui/molecules/Accordion/Accordion';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import React from "react";
 

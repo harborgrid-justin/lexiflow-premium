@@ -25,7 +25,7 @@ import React, { useRef, useEffect, useMemo, useCallback } from 'react';
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 import { useNexusGraph } from '@/hooks/useNexusGraph';
-import { useChartTheme } from '@/components/organisms';
+import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 import { useResizeObserver } from '@/hooks/useResizeObserver';
 import { usePanZoom } from '@/hooks/usePanZoom';
 
@@ -62,16 +62,16 @@ interface NexusGraphProps {
  * Pure presentational component for graph visualization
  * State and logic delegated to custom hooks
  */
-export const NexusGraph = React.memo<NexusGraphProps>(({ 
-  caseData, 
-  parties, 
-  evidence, 
-  onNodeClick 
+export const NexusGraph = React.memo<NexusGraphProps>(({
+  caseData,
+  parties,
+  evidence,
+  onNodeClick
 }) => {
   const { theme, mode } = useTheme();
   const chartTheme = useChartTheme();
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   // Custom hooks for state management (Practice #3)
   const dimensions = useResizeObserver(containerRef as React.RefObject<HTMLElement>);
   const panZoom = usePanZoom(0.8);
@@ -85,16 +85,16 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
       panZoom.setZoom(action);
     }
   }, [panZoom, scale]);
-  
+
   // Memoized graph data computation (Practice #4)
   const graphData = useMemo(
-    () => buildGraphData(caseData, parties, evidence), 
+    () => buildGraphData(caseData, parties, evidence),
     [caseData, parties, evidence]
   );
 
   // Hook receives updated dimensions to recenter physics
   const { nodesMeta, isStable, reheat, physicsState } = useNexusGraph(
-    containerRef as React.RefObject<HTMLDivElement>, 
+    containerRef as React.RefObject<HTMLDivElement>,
     graphData
   );
 
@@ -104,9 +104,9 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
   // DOM synchronization effect (Practice #9: Strict effect management)
   useEffect(() => {
     if (isStable) return; // Early return when stable
-    
+
     let frameId: number;
-    
+
     const syncDOM = () => {
       const state = physicsState.current;
       if (!state.buffer) return;
@@ -121,20 +121,20 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
           el.setAttribute('transform', `translate(${x},${y})`);
         }
       }
-      
+
       // Update link positions
       for (let i = 0; i < state.links.length; i++) {
         const link = state.links[i];
         const idxS = link.sourceIndex * NODE_STRIDE;
         const idxT = link.targetIndex * NODE_STRIDE;
         const line = linkRefs.current[i];
-        
+
         // Safety check: ensure buffer indices are valid
         if (
-          line && 
-          state.buffer[idxS] !== undefined && 
-          state.buffer[idxS + 1] !== undefined && 
-          state.buffer[idxT] !== undefined && 
+          line &&
+          state.buffer[idxS] !== undefined &&
+          state.buffer[idxS + 1] !== undefined &&
+          state.buffer[idxT] !== undefined &&
           state.buffer[idxT + 1] !== undefined
         ) {
           line.setAttribute('x1', state.buffer[idxS].toString());
@@ -143,14 +143,14 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
           line.setAttribute('y2', state.buffer[idxT + 1].toString());
         }
       }
-      
+
       if (!isStable) {
         frameId = requestAnimationFrame(syncDOM);
       }
     };
-    
+
     frameId = requestAnimationFrame(syncDOM);
-    
+
     // Cleanup on unmount or when stable
     return () => {
       cancelAnimationFrame(frameId);
@@ -173,25 +173,25 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
 
   // Render (Practice #8: Semantic HTML and accessibility)
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className={cn(
-        "h-full flex flex-col relative overflow-hidden rounded-xl border shadow-inner", 
-        theme.surface.default, 
+        "h-full flex flex-col relative overflow-hidden rounded-xl border shadow-inner",
+        theme.surface.default,
         theme.border.default
       )}
       role="img"
       aria-label={`Graph visualization of ${caseData.title} with ${nodesMeta.length} nodes`}
     >
-      <GraphOverlay 
-        scale={scale} 
-        setScale={setScale} 
-        onReheat={reheat} 
-        isStable={isStable} 
-        nodeCount={nodesMeta.length} 
+      <GraphOverlay
+        scale={scale}
+        setScale={setScale}
+        onReheat={reheat}
+        isStable={isStable}
+        nodeCount={nodesMeta.length}
       />
       <div className="flex-1 overflow-hidden cursor-move">
-        <svg 
+        <svg
           className="w-full h-full touch-none"
           viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
           aria-hidden="true"
@@ -199,20 +199,20 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
           <g transform={`translate(${pan.x},${pan.y}) scale(${scale})`}>
             {/* Links */}
             {physicsState.current.links.map((_, i) => (
-              <line 
-                key={`link-${i}`} 
-                ref={el => { if (el) linkRefs.current[i] = el; }} 
-                stroke={theme.chart.grid} 
-                strokeWidth="1.5" 
-                strokeOpacity="0.4" 
+              <line
+                key={`link-${i}`}
+                ref={el => { if (el) linkRefs.current[i] = el; }}
+                stroke={theme.chart.grid}
+                strokeWidth="1.5"
+                strokeOpacity="0.4"
               />
             ))}
-            
+
             {/* Nodes */}
             {nodesMeta.map((node, i) => (
-              <g 
-                key={node.id} 
-                ref={el => { if (el) domRefs.current.set(node.id, el); }} 
+              <g
+                key={node.id}
+                ref={el => { if (el) domRefs.current.set(node.id, el); }}
                 className="cursor-pointer hover:opacity-80 transition-opacity"
                 onClick={() => handleNodeClick(i)}
                 role="button"
@@ -225,17 +225,17 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
                 }}
                 aria-label={`${node.type} node: ${node.label}`}
               >
-                <circle 
-                  r={getNodeRadius(node.type)} 
-                  fill={node.type === 'root' ? getStroke('root') : theme.surface.default} 
+                <circle
+                  r={getNodeRadius(node.type)}
+                  fill={node.type === 'root' ? getStroke('root') : theme.surface.default}
                   stroke={getStroke(node.type)}
-                  strokeWidth={node.type === 'root' ? 0 : 3} 
+                  strokeWidth={node.type === 'root' ? 0 : 3}
                 />
-                <text 
-                  y={getNodeLabelYOffset(node.type)} 
-                  textAnchor="middle" 
+                <text
+                  y={getNodeLabelYOffset(node.type)}
+                  textAnchor="middle"
                   className={cn(
-                    "text-[10px] font-bold uppercase pointer-events-none", 
+                    "text-[10px] font-bold uppercase pointer-events-none",
                     mode === 'dark' ? "fill-slate-300" : "fill-slate-600"
                   )}
                 >

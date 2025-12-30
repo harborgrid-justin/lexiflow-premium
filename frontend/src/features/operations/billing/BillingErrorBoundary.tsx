@@ -6,7 +6,7 @@
 
 import { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, DollarSign } from 'lucide-react';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 
 interface Props {
   children: ReactNode;
@@ -38,14 +38,14 @@ export class BillingErrorBoundary extends Component<Props, State> {
   override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Log to error reporting service
     console.error('Billing Error Boundary caught error:', error, errorInfo);
-    
+
     // Log error for monitoring - integrate with error tracking service in production
     if (import.meta.env.PROD) {
       // Production error logging can be integrated here
       console.error('Billing Error:', error, errorInfo);
     }
     // Sentry.captureException(error, { extra: errorInfo });
-    
+
     this.setState({
       error,
       errorInfo,
@@ -58,7 +58,7 @@ export class BillingErrorBoundary extends Component<Props, State> {
       error: null,
       errorInfo: null,
     });
-    
+
     if (this.props.onReset) {
       this.props.onReset();
     }
@@ -139,7 +139,7 @@ export class BillingErrorBoundary extends Component<Props, State> {
                 Financial Data Protected
               </h3>
               <p className="text-sm text-emerald-800 dark:text-emerald-200">
-                All financial data is securely stored. No transactions were lost or corrupted. 
+                All financial data is securely stored. No transactions were lost or corrupted.
                 Your billing records, invoices, and time entries are safe.
               </p>
             </div>

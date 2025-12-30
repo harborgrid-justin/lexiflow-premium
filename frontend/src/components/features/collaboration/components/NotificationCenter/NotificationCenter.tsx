@@ -24,8 +24,8 @@ import { useToast } from '@/providers/ToastContext';
 // Components
 import { Button } from '@/components/atoms';
 import { Badge } from '@/components/atoms';
-import { PageHeader } from '@/components/organisms';
-import { Modal } from '@/components/molecules';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
 
 // Utils
 import { cn } from '@/utils/cn';
@@ -49,7 +49,7 @@ interface Notification {
 export const NotificationCenter: React.FC = () => {
   const { theme } = useTheme();
   const { addToast } = useToast();
-  
+
   // Local State for UI only
   const [filter, setFilter] = useState<string>('all');
   const deferredFilter = useDeferredValue(filter);
@@ -135,10 +135,10 @@ export const NotificationCenter: React.FC = () => {
         subtitle={`${unreadCount} unread notifications`}
         actions={
           <div className="flex gap-2">
-            <Button 
-                variant="secondary" 
-                icon={CheckCheck} 
-                onClick={() => markAllAsRead(undefined)} 
+            <Button
+                variant="secondary"
+                icon={CheckCheck}
+                onClick={() => markAllAsRead(undefined)}
                 disabled={unreadCount === 0}
             >
               Mark All Read

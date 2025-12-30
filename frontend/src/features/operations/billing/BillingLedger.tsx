@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { Plus, FileText } from 'lucide-react';
 import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/providers/ThemeContext';
@@ -55,15 +55,15 @@ export const BillingLedger: React.FC = () => {
                   </div>
                   <div>
                       <label className="block text-xs font-bold text-slate-500 mb-1">Description</label>
-                      <textarea 
-                          className="w-full border rounded p-2 text-sm h-24" 
+                      <textarea
+                          className="w-full border rounded p-2 text-sm h-24"
                           placeholder="Transaction details..."
                           id="transaction-description"
                       />
                   </div>
                   <div>
                       <label className="block text-xs font-bold text-slate-500 mb-1">Receipt/Invoice</label>
-                      <input 
+                      <input
                           type="file"
                           id="receipt-upload"
                           accept=".pdf,.jpg,.jpeg,.png"
@@ -102,9 +102,9 @@ export const BillingLedger: React.FC = () => {
                           </div>
                       )}
                   </div>
-                  <Button 
-                      variant="primary" 
-                      className="w-full" 
+                  <Button
+                      variant="primary"
+                      className="w-full"
                       onClick={async () => {
                           try {
                               const accountSelect = document.querySelector<HTMLSelectElement>('#transaction-account');
@@ -141,7 +141,7 @@ export const BillingLedger: React.FC = () => {
                               };
 
                               await DataService.transactions.add(transaction);
-                              
+
                               notifySuccess(`Transaction logged successfully${receiptFile ? ' with receipt' : ''}`);
                               setReceiptFile(null);
                               setReceiptPreview(null);
@@ -158,28 +158,28 @@ export const BillingLedger: React.FC = () => {
           </div>
       );
   };
-  
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center gap-4 mb-4">
           <div className={cn("flex p-1 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
-            <button 
+            <button
                 onClick={() => setActiveTab('operating')}
                 className={cn(
                     "px-4 py-2 text-sm font-medium rounded-md transition-all",
-                    activeTab === 'operating' 
-                        ? cn(theme.primary.DEFAULT, theme.text.inverse) 
+                    activeTab === 'operating'
+                        ? cn(theme.primary.DEFAULT, theme.text.inverse)
                         : cn(theme.text.secondary, `hover:${theme.surface.highlight}`)
                 )}
             >
                 Operating Expenses
             </button>
-            <button 
+            <button
                 onClick={() => setActiveTab('trust')}
                 className={cn(
                     "px-4 py-2 text-sm font-medium rounded-md transition-all",
-                    activeTab === 'trust' 
-                        ? "bg-green-600 text-white shadow" 
+                    activeTab === 'trust'
+                        ? "bg-green-600 text-white shadow"
                         : cn(theme.text.secondary, `hover:${theme.surface.highlight}`)
                 )}
             >

@@ -20,8 +20,8 @@ import { useTheme } from '@/providers/ThemeContext';
 import { Conversation } from '@/hooks/useSecureMessenger';
 
 // Components
-import { FileAttachment } from '@/components/molecules';
-import { ChatBubble } from '@/components/molecules';
+import { FileAttachment } from '@/components/ui/molecules/FileAttachment/FileAttachment';
+import { ChatBubble } from '@/components/ui/molecules/ChatBubble/ChatBubble';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -59,10 +59,10 @@ export const MessageList = memo(function MessageList({ conversation, currentUser
             >
               {msg.attachments && msg.attachments.map((att, i) => (
                 <div key={i} className="mt-2 w-full max-w-sm">
-                  <FileAttachment 
-                    name={att.name} 
-                    size={(typeof att.size === 'number' ? String(att.size) : att.size) as string | undefined} 
-                    type={att.type} 
+                  <FileAttachment
+                    name={att.name}
+                    size={(typeof att.size === 'number' ? String(att.size) : att.size) as string | undefined}
+                    type={att.type}
                     className={cn(isMe ? cn(theme.primary.light, "text-current border-blue-500/30") : theme.surface.default)}
                     variant="card"
                     onDownload={() => console.log('Downloading', att.name)}

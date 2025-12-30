@@ -1,13 +1,13 @@
 /**
  * Create Trust Account Form Component
- * 
+ *
  * ARCHITECTURAL PHILOSOPHY:
  * - **Multi-Step Pattern**: Complex forms broken into logical steps
  * - **Progressive Disclosure**: Show fields relevant to current step
  * - **Real-Time Validation**: Validate on blur with immediate feedback
  * - **Type Safety**: Form state fully typed with no implicit any
  * - **Compliance Enforcement**: Pre-validate state bar requirements
- * 
+ *
  * WHY THIS DESIGN:
  * 1. Multi-step reduces cognitive load and form abandonment
  * 2. Step validation prevents advancing with invalid data
@@ -18,7 +18,7 @@
 
 import React, { useState, useCallback, useMemo } from 'react';
 import { AlertCircle, CheckCircle, Landmark, Building, Shield, Users, ArrowRight, ArrowLeft } from 'lucide-react';
-import { Card } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useCreateTrustAccount, useTrustAccountValidation } from '@/hooks/useTrustAccounts';
@@ -285,7 +285,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
         const Icon = step.icon;
         const isActive = currentStep === step.id;
         const isCompleted = currentStep > step.id;
-        
+
         return (
           <React.Fragment key={step.id}>
             <div className="flex flex-col items-center">
@@ -336,7 +336,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
     helperText?: string;
   }) => {
     const error = getFieldError(field);
-    
+
     return (
       <div>
         <label className={cn('block text-sm font-medium mb-1', theme.text.primary)}>
@@ -379,7 +379,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
             <h3 className={cn('text-lg font-bold mb-4', theme.text.primary)}>
               Account Information
             </h3>
-            
+
             <Input
               label="Account Number"
               field="accountNumber"
@@ -387,7 +387,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
               placeholder="e.g., TR-2025-001"
               helperText="Unique identifier for this trust account"
             />
-            
+
             <Input
               label="Account Name"
               field="accountName"
@@ -395,7 +395,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
               placeholder='e.g., "Client Trust Account - IOLTA"'
               helperText='Must include "Trust Account" or "Escrow Account" per state bar rules'
             />
-            
+
             <div>
               <label className={cn('block text-sm font-medium mb-1', theme.text.primary)}>
                 Account Type <span className="text-rose-600">*</span>
@@ -415,21 +415,21 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
                 <option value={AccountType.OPERATING}>Operating Account</option>
               </select>
             </div>
-            
+
             <Input
               label="Client ID"
               field="clientId"
               required
               placeholder="Client UUID or identifier"
             />
-            
+
             <Input
               label="Client Name"
               field="clientName"
               required
               placeholder="Full client name"
             />
-            
+
             <Input
               label="Case ID (Optional)"
               field="caseId"
@@ -444,21 +444,21 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
             <h3 className={cn('text-lg font-bold mb-4', theme.text.primary)}>
               Bank Details
             </h3>
-            
+
             <Input
               label="Bank Name"
               field="bankName"
               required
               placeholder="e.g., First National Bank"
             />
-            
+
             <Input
               label="Bank Account Number"
               field="bankAccountNumber"
               required
               placeholder="Account number"
             />
-            
+
             <Input
               label="Routing Number"
               field="routingNumber"
@@ -466,14 +466,14 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
               placeholder="9-digit routing number"
               helperText="Must be 9 digits"
             />
-            
+
             <Input
               label="Minimum Balance (Optional)"
               field="minimumBalance"
               type="number"
               placeholder="0.00"
             />
-            
+
             <div>
               <label className="flex items-center gap-2">
                 <input
@@ -499,7 +499,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
             <h3 className={cn('text-lg font-bold mb-4', theme.text.primary)}>
               State Bar Compliance
             </h3>
-            
+
             <Input
               label="Jurisdiction (State)"
               field="jurisdiction"
@@ -507,7 +507,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
               placeholder="e.g., CA, NY, TX"
               helperText="Two-letter state code"
             />
-            
+
             {formData.accountType === AccountType.IOLTA && (
               <Input
                 label="IOLTA Program ID"
@@ -516,7 +516,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
                 placeholder="State IOLTA program registration ID"
               />
             )}
-            
+
             <div>
               <label className="flex items-center gap-2">
                 <input
@@ -530,7 +530,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
                 </span>
               </label>
             </div>
-            
+
             <div>
               <label className="flex items-center gap-2">
                 <input
@@ -544,7 +544,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
                 </span>
               </label>
             </div>
-            
+
             <div>
               <label className={cn('block text-sm font-medium mb-1', theme.text.primary)}>
                 Record Retention Period (Years)
@@ -574,13 +574,13 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
             <h3 className={cn('text-lg font-bold mb-4', theme.text.primary)}>
               Authorized Signatories
             </h3>
-            
+
             <div className={cn('p-4 rounded-lg border', theme.status.info.bg, theme.status.info.border)}>
               <p className={cn('text-sm', theme.status.info.text)}>
                 Only licensed attorneys may be authorized signatories on trust accounts per state bar rules.
               </p>
             </div>
-            
+
             <Input
               label="Primary Signatory ID"
               field="primarySignatory"
@@ -588,7 +588,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
               placeholder="Attorney user ID"
               helperText="Primary responsible attorney"
             />
-            
+
             <div>
               <label className={cn('block text-sm font-medium mb-1', theme.text.primary)}>
                 Additional Authorized Signatories
@@ -618,7 +618,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
             <h3 className={cn('text-lg font-bold mb-4', theme.text.primary)}>
               Review & Submit
             </h3>
-            
+
             <div className="space-y-4">
               <div className={cn('p-4 rounded-lg border', theme.surface.default, theme.border.default)}>
                 <h4 className={cn('font-medium mb-2', theme.text.primary)}>Account Information</h4>
@@ -674,7 +674,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
                 </dl>
               </div>
             </div>
-            
+
             {apiError && (
               <div className={cn('p-4 rounded-lg border', theme.status.error.bg, theme.status.error.border)}>
                 <div className="flex items-start gap-2">
@@ -701,9 +701,9 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
     <Card className="max-w-4xl mx-auto">
       <div className="p-6">
         {StepIndicator}
-        
+
         {renderStepContent()}
-        
+
         {validationErrors.length > 0 && currentStep !== FormStep.REVIEW && (
           <div className={cn('mt-4 p-4 rounded-lg border', theme.status.error.bg, theme.status.error.border)}>
             <h4 className={cn('font-medium mb-2', theme.status.error.text)}>
@@ -718,7 +718,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
             </ul>
           </div>
         )}
-        
+
         <div className="flex items-center justify-between mt-8 pt-6 border-t">
           <button
             onClick={onCancel}
@@ -730,7 +730,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
           >
             Cancel
           </button>
-          
+
           <div className="flex items-center gap-3">
             {currentStep > FormStep.ACCOUNT_INFO && (
               <button
@@ -746,7 +746,7 @@ export const CreateTrustAccountForm: React.FC<CreateTrustAccountFormProps> = ({
                 Back
               </button>
             )}
-            
+
             {currentStep < FormStep.REVIEW ? (
               <button
                 onClick={handleNext}

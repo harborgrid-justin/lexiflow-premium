@@ -2,7 +2,7 @@ import './index.css';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { ErrorBoundary } from '@/components/organisms';
+import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
 
 /**
  * Enterprise Entry Point (Vite 7 + React 18)
@@ -14,7 +14,7 @@ const mountRoot = (): void => {
   if (!container) {
     const errorMsg = "Fatal: Root element '#root' not found.";
     console.error(errorMsg);
-    
+
     // Fallback UI if the DOM isn't ready or is corrupted
     document.body.innerHTML = `
       <div style="display:grid; place-items:center; height:100vh; font-family:sans-serif; background:#0a0a0a; color:#fff;">

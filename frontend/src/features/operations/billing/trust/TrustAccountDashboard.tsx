@@ -18,7 +18,7 @@
 
 import React, { useMemo, useCallback, useState } from 'react';
 import { Landmark, AlertCircle, Clock, TrendingUp, Users, FileText } from 'lucide-react';
-import { Card } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Formatters } from '@/utils/formatters';

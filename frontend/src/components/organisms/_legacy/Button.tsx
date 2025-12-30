@@ -1,2 +1,2 @@
-export { Button } from '@/components/atoms';
-export type { ButtonProps } from '@/components/atoms';
+export { Button } from '@/components/ui/atoms/Button/Button';
+export type { ButtonProps } from '@/components/ui/atoms/Button/Button';

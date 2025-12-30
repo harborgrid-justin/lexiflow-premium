@@ -20,7 +20,7 @@ import { AlertTriangle, FileText, ShieldAlert } from 'lucide-react';
 import { DataService } from '@/services/data/dataService';
 
 // Components
-import { MetricCard } from '@/components/molecules';
+import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 
 // ============================================================================
 // COMPONENT
@@ -38,21 +38,21 @@ export function ComplianceRisk() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-       <MetricCard 
-          label="High Risk Clients" 
-          value={metrics.high} 
+       <MetricCard
+          label="High Risk Clients"
+          value={metrics.high}
           icon={ShieldAlert}
           className="border-l-4 border-l-rose-500"
        />
-       <MetricCard 
-          label="Missing Engagement Letters" 
-          value={metrics.missingDocs} 
+       <MetricCard
+          label="Missing Engagement Letters"
+          value={metrics.missingDocs}
           icon={FileText}
           className="border-l-4 border-l-amber-500"
        />
-       <MetricCard 
-          label="Data Policy Violations" 
-          value={metrics.violations} 
+       <MetricCard
+          label="Data Policy Violations"
+          value={metrics.violations}
           icon={AlertTriangle}
           className="border-l-4 border-l-blue-500"
        />

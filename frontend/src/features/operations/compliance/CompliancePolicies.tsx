@@ -1,7 +1,7 @@
 
 import { FileText, Download, Eye, Calendar } from 'lucide-react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { AdaptiveLoader } from '@/components/molecules';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { useTheme } from '@/providers/ThemeContext';

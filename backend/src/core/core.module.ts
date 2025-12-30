@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BootstrapService } from './services/bootstrap.service';
 import { ShutdownService } from './services/shutdown.service';
 import { ConfigurationValidatorService } from './services/configuration.validator.service';
-// Note: DefaultAdminConfigService is provided by GlobalConfigModule (loaded before CoreModule)
+// Note: 19 Global Configuration Services are provided by GlobalConfigModule (loaded before CoreModule)
 
 // Import Enterprise Modules (in dependency order)
 import { CommonModule } from '@common/common.module';
@@ -125,8 +125,17 @@ export class CoreModule {
     console.log('  ✓ Performance Module');
     console.log('  ✓ API Security Module');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('  Global Services (via GlobalConfigModule):');
-    console.log('  ✓ DefaultAdminConfigService (injectable in all modules)');
+    console.log('  Global Config Services (19 via GlobalConfigModule):');
+    console.log('  ✓ DefaultAdminConfigService    ✓ FeatureFlagsConfigService');
+    console.log('  ✓ RateLimitConfigService       ✓ AuthSecurityConfigService');
+    console.log('  ✓ SecurityHeadersConfigService ✓ CacheConfigService');
+    console.log('  ✓ CorsConfigService            ✓ ResourceLimitsConfigService');
+    console.log('  ✓ CircuitBreakerConfigService  ✓ RetryConfigService');
+    console.log('  ✓ DatabasePoolConfigService    ✓ RedisConfigService');
+    console.log('  ✓ JwtConfigService             ✓ FileStorageConfigService');
+    console.log('  ✓ QueueConfigService           ✓ WebSocketConfigService');
+    console.log('  ✓ PaginationConfigService      ✓ ValidationConfigService');
+    console.log('  ✓ AuditConfigService');
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   }
 }

@@ -10,6 +10,7 @@ export * from './core.module';
 export * from './services/bootstrap.service';
 export * from './services/shutdown.service';
 export * from './services/configuration.validator.service';
+export * from './services/default-admin-config.service';
 
 // Interfaces
 export * from './interfaces/module.config.interface';

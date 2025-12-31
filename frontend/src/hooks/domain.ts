@@ -1,9 +1,9 @@
 /**
  * Domain-Specific Hooks Barrel Export
- * 
+ *
  * Business logic hooks for cases, litigation, discovery, etc.
  * Import from '@/hooks/domain' for better tree-shaking.
- * 
+ *
  * WARNING: These hooks may have heavy dependencies. Import only what you need.
  */
 
@@ -18,7 +18,7 @@ export { useBlobRegistry } from './useBlobRegistry';
 
 // Discovery & Evidence
 export { useDiscoveryPlatform } from './useDiscoveryPlatform';
-export { useEvidenceVault } from './useEvidenceVault';
+export { useEvidenceManager } from './useEvidenceManager';
 
 // Litigation & Strategy
 export { useLitigationBuilder } from './useLitigationBuilder';

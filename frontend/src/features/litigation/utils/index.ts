@@ -6,7 +6,7 @@
  * @module components/litigation/utils
  */
 
-export * from '../strategy/utils/ganttTransformUtils';
+export * from '../strategy/utils/scheduleTransformUtils';
 export * from '../strategy/utils/canvasUtils';
 export * from './playbookHelpers';
 export * from './minimapUtils';

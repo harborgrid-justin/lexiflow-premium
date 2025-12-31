@@ -31,7 +31,7 @@ import { LitigationBuilderProps } from './types';
 const StrategyCanvas = lazy(() => import('./StrategyCanvas').then(m => ({ default: m.StrategyCanvas })));
 const PlaybookLibrary = lazy(() => import('./PlaybookLibrary').then(m => ({ default: m.PlaybookLibrary })));
 const OutcomeSimulator = lazy(() => import('./OutcomeSimulator').then(m => ({ default: m.OutcomeSimulator })));
-const LitigationGanttView = lazy(() => import('./LitigationGanttView').then(m => ({ default: m.LitigationGanttView })));
+const LitigationScheduleView = lazy(() => import('./LitigationScheduleView').then(m => ({ default: m.LitigationScheduleView })));
 
 export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateToCaseTab }) => {
   const { theme } = useTheme();
@@ -72,7 +72,7 @@ export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateTo
         <ErrorBoundary>
           <Suspense fallback={<LazyLoader message="Loading Strategy Engine..." />}>
             {activeTab === 'canvas' && <StrategyCanvas {...builderProps} />}
-            {activeTab === 'timeline' && <LitigationGanttView {...builderProps} />}
+            {activeTab === 'timeline' && <LitigationScheduleView {...builderProps} />}
             {activeTab === 'templates' && <PlaybookLibrary onApply={(p) => builderProps.loadPlaybook(p)} />}
             {activeTab === 'simulate' && <OutcomeSimulator />}
           </Suspense>

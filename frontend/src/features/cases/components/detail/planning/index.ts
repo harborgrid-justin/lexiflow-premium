@@ -3,6 +3,6 @@
  * Module exports
  */
 
-export * from './GanttTimeline';
+export * from './ScheduleTimeline';
 export * from './PlanningSidebar';
 

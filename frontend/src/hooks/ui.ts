@@ -17,7 +17,7 @@ export { useScrollLock } from './useScrollLock';
 
 // Drag & Drop
 export { useCanvasDrag } from './useCanvasDrag';
-export { useGanttDrag } from './useGanttDrag';
+export { useScheduleController as useGanttDrag } from './useScheduleController';
 export { useDragToReorder } from './useDragToReorder';
 export { useDocumentDragDrop } from './useDocumentDragDrop';
 

@@ -1,9 +1,9 @@
 /**
- * ganttTransformUtils.ts
- * 
- * Utility functions for transforming litigation strategy nodes into Gantt timeline data.
- * 
- * @module components/litigation/utils/ganttTransformUtils
+ * scheduleTransformUtils.ts
+ *
+ * Utility functions for transforming litigation strategy nodes into schedule timeline data.
+ *
+ * @module components/litigation/utils/scheduleTransformUtils
  */
 
 import { CasePhase, WorkflowTask, TaskId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
@@ -11,7 +11,7 @@ import { WorkflowNode, WorkflowConnection } from '@/features/cases/components/wo
 import { GANTT_ZOOM_SCALE, NODE_DURATION_MAP, CANVAS_CONSTANTS } from '../canvasConstants';
 import { DateCalculationService } from '@/services/infrastructure/dateCalculationService';
 
-export interface TransformedGanttData {
+export interface TransformedScheduleData {
   phases: CasePhase[];
   tasks: WorkflowTask[];
 }
@@ -33,8 +33,8 @@ export const getNodeDurationDays = (nodeType: string): number => {
 /**
  * Transforms workflow nodes and connections into Gantt chart format
  */
-export const transformNodesToGantt = (
-  nodes: WorkflowNode[], 
+export const transformNodesToSchedule = (
+  nodes: WorkflowNode[],
   connections: WorkflowConnection[]
 ): TransformedGanttData => {
   const ganttPhases: CasePhase[] = [];
@@ -43,7 +43,7 @@ export const transformNodesToGantt = (
   if (nodes.length === 0) {
     return { phases: [], tasks: [] };
   }
-  
+
   const sortedNodes = [...nodes].sort((a, b) => a.x - b.x);
   const minX = sortedNodes.length > 0 ? Math.min(...sortedNodes.map(n => n.x)) : 0;
   const today = new Date();
@@ -65,10 +65,10 @@ export const transformNodesToGantt = (
         CANVAS_CONSTANTS.PIXELS_PER_DAY,
         today.getTime()
       );
-      
+
       const durationDays = getNodeDurationDays(node.type);
       const dueDate = DateCalculationService.calculateDueDate(startDate, durationDays);
-      
+
       const dependencies = connections
         .filter(c => c.to === node.id)
         .map(c => c.from as TaskId);

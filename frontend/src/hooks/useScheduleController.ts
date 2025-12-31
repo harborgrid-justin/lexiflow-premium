@@ -1,13 +1,13 @@
 /**
- * @module hooks/useGanttDrag
+ * @module hooks/useScheduleDrag
  * @category Hooks - Workflow Management
  *
- * Gantt chart drag-and-drop with move and resize modes.
+ * Schedule chart drag-and-drop with move and resize modes.
  * Uses RAF for 60fps visual updates without React re-renders.
  *
  * @example
  * ```typescript
- * const drag = useGanttController({
+ * const drag = useScheduleController({
  *   pixelsPerDay: 30,
  *   tasks,
  *   onTaskUpdate: (id, start, end) => updateTask(id, { start, end })
@@ -74,7 +74,7 @@ export interface UseGanttDragReturn {
  * @param options - Configuration options
  * @returns Object with initDrag method
  */
-export function useGanttController({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions): UseGanttDragReturn {
+export function useScheduleController({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions): UseGanttDragReturn {
     const dragRef = useRef<{
         taskId: string;
         mode: DragMode;

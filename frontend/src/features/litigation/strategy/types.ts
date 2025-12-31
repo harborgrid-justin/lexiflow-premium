@@ -22,7 +22,7 @@ export interface StrategyCanvasProps {
   deleteConnection: (id: string) => void;
 }
 
-export interface LitigationGanttViewProps {
+export interface LitigationScheduleViewProps {
   nodes: WorkflowNode[];
   connections: WorkflowConnection[];
   addNode: (type: NodeType, x: number, y: number, label?: string) => string;

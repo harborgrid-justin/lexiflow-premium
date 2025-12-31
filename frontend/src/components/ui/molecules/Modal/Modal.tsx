@@ -19,7 +19,7 @@ import { createPortal } from 'react-dom';
 // ============================================================================
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
-import { useScrollLock } from '@/hooks/useScrollLock';
+import { useScrollLock } from '@/hooks/ui';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -44,22 +44,22 @@ interface ModalProps {
   /** Optional footer content. */
   footer?: React.ReactNode;
   /** Whether clicking backdrop closes modal. */
-  closeOnBackdrop?: boolean; 
+  closeOnBackdrop?: boolean;
 }
 
 // ============================================================================
 // COMPONENT
 // ============================================================================
 
-export function Modal({ 
-    isOpen, onClose, title, children, size = 'md', className = '', footer, closeOnBackdrop = true 
+export function Modal({
+    isOpen, onClose, title, children, size = 'md', className = '', footer, closeOnBackdrop = true
 }: ModalProps) {
   const [mounted, setMounted] = useState(false);
   const { theme } = useTheme();
   // React 18: useId generates stable, unique IDs (SSR-safe)
   const titleId = React.useId();
   const modalRef = useRef<HTMLDivElement>(null);
-  
+
   useScrollLock(titleId, isOpen);
 
   useEffect(() => {
@@ -134,7 +134,7 @@ export function Modal({
       />
 
       {/* Panel */}
-      <div 
+      <div
         ref={modalRef}
         className={cn(
         "relative z-10 flex flex-col w-full mx-auto transform transition-all animate-in zoom-in-95 duration-200 border shadow-2xl rounded-xl",

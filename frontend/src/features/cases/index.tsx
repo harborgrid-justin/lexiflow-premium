@@ -38,6 +38,6 @@ export * from './components/calendar';
 // Stub components (temporary)
 import React from 'react';
 export const PlanningSidebar: React.FC<{ className?: string }> = ({ className }) => <div className={className}>Planning Sidebar (stub)</div>;
-export const GanttTimeline: React.FC<{ className?: string }> = ({ className }) => <div className={className}>Gantt Timeline (stub)</div>;
+export const ScheduleTimeline: React.FC<{ className?: string }> = ({ className }) => <div className={className}>Schedule Timeline (stub)</div>;
 export const BuilderToolbar: React.FC<{ className?: string }> = ({ className }) => <div className={className}>Builder Toolbar (stub)</div>;
 export const BuilderCanvas: React.FC<{ className?: string }> = ({ className }) => <div className={className}>Builder Canvas (stub)</div>;

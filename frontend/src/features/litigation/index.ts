@@ -3,7 +3,7 @@
 // Strategy Module
 export * from './strategy/AICommandBar';
 export * from './strategy/LitigationBuilder';
-export * from './strategy/LitigationGanttView';
+export * from './strategy/LitigationScheduleView';
 export * from './strategy/LitigationPalette';
 export * from './strategy/LitigationProperties';
 export * from './strategy/Minimap';

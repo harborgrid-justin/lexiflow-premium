@@ -9,7 +9,7 @@ export * from "./crdt";
 export * from "./docketValidation";
 export * from "./errorHandler";
 export * from "./formatters";
-export * from "./ganttHelpers";
+export * from "./scheduleHelpers";
 export * from "./idGenerator";
 export * from "./layoutAlgorithms";
 export * from "./nexusPhysics";

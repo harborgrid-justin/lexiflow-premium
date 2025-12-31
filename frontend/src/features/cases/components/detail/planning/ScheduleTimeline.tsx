@@ -1,10 +1,10 @@
 /**
- * GanttTimeline.tsx
+ * ScheduleTimeline.tsx
  *
- * Interactive Gantt chart timeline with drag-to-reschedule, zoom controls,
+ * Interactive schedule chart timeline with drag-to-reschedule, zoom controls,
  * and dependency visualization.
  *
- * @module components/case-detail/planning/GanttTimeline
+ * @module components/case-detail/planning/ScheduleTimeline
  * @category Case Management - Planning
  */
 
@@ -26,7 +26,7 @@ import { cn } from '@/utils/cn';
 // Types & Interfaces
 import { WorkflowTask, CasePhase, TaskStatusBackend } from '@/types';
 
-interface GanttTimelineProps {
+interface ScheduleTimelineProps {
   phases: CasePhase[];
   tasks: WorkflowTask[];
   collapsedPhases: Set<string>;
@@ -38,7 +38,7 @@ interface GanttTimelineProps {
   onUpdateTask: (taskId: string, start: string, due: string) => void;
 }
 
-export const GanttTimeline: React.FC<GanttTimelineProps> = ({
+export const ScheduleTimeline: React.FC<ScheduleTimelineProps> = ({
   phases, tasks, collapsedPhases, zoom, viewStartDate, activeTaskId, onHoverTask, pixelsPerDay, onUpdateTask
 }) => {
   const { theme } = useTheme();

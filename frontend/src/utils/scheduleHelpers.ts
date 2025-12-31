@@ -1,7 +1,7 @@
 /**
- * @module utils/ganttHelpers
+ * @module utils/scheduleHelpers
  * @category Utils - Visualization
- * @description Gantt chart calculation utilities for task positioning and timeline generation. Provides
+ * @description Schedule chart calculation utilities for task positioning and timeline generation. Provides
  * CSS positioning style calculation from task dates with pixelsPerDay scaling, default 5-day duration
  * fallback, and offscreen optimization. Generates timeline header dates with configurable step intervals.
  */
@@ -15,7 +15,7 @@ import { WorkflowTask } from '@/types';
 // ============================================================================
 // HELPERS
 // ============================================================================
-export const GanttHelpers = {
+export const ScheduleHelpers = {
     /**
      * Calculates CSS positioning style for a Gantt task bar.
      */
@@ -26,7 +26,7 @@ export const GanttHelpers = {
         }
         const due = new Date(task.dueDate).getTime();
         let start;
-        
+
         if (task.startDate) {
             start = new Date(task.startDate).getTime();
         } else {
@@ -41,7 +41,7 @@ export const GanttHelpers = {
         const left = (start - viewStart) / (1000 * 60 * 60 * 24) * pixelsPerDay;
         const width = durationDays * pixelsPerDay;
 
-        return { 
+        return {
             left: `${Math.max(-100, left)}px`, // Allow slightly offscreen to left
             width: `${Math.max(20, width)}px`,
             display: (left + width < 0) ? 'none' : 'flex' // Optimization
@@ -54,7 +54,7 @@ export const GanttHelpers = {
     generateTimeScale: (viewStartDate: Date, days: number, step: number) => {
         const dates: { date: Date, label: string }[] = [];
         const now = new Date(viewStartDate);
-        
+
         for(let i=0; i < days; i++) {
             const d = new Date(now);
             d.setDate(d.getDate() + i * step);

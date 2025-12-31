@@ -2,7 +2,7 @@
 
 export { AICommandBar } from './AICommandBar';
 export { default as LitigationBuilder } from './LitigationBuilder';
-export { default as LitigationGanttView } from './LitigationGanttView';
+export { default as LitigationScheduleView } from './LitigationScheduleView';
 export { LitigationPalette } from './LitigationPalette';
 export { LitigationProperties } from './LitigationProperties';
 export { Minimap } from './Minimap';

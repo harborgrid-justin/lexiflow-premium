@@ -1,18 +1,18 @@
 
 /**
- * LitigationGanttView.tsx
- * 
+ * LitigationScheduleView.tsx
+ *
  * Timeline visualization of the litigation strategy.
- * Transforms node-based graph data into a Gantt chart format.
- * 
- * @module components/litigation/LitigationGanttView
+ * Transforms node-based graph data into a schedule chart format.
+ *
+ * @module components/litigation/LitigationScheduleView
  */
 
 import React, { useState, useMemo, useCallback } from 'react';
 import { TrendingUp } from 'lucide-react';
 
 // Internal Components
-import { PlanningSidebar, GanttTimeline } from '@features/cases/components/detail/planning';
+import { PlanningSidebar, ScheduleTimeline } from '@features/cases/components/detail/planning';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -22,12 +22,12 @@ import { cn } from '@/utils/cn';
 import { Pathfinding } from '@/utils/pathfinding';
 
 // Types
-import { LitigationGanttViewProps, ZoomLevel } from './types';
-import { transformNodesToGantt, calculatePixelsPerDay, calculateNodePositionFromDate } from './utils';
+import { LitigationScheduleViewProps, ZoomLevel } from './types';
+import { transformNodesToSchedule, calculatePixelsPerDay, calculateNodePositionFromDate } from './utils';
 
-export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes, connections, updateNode, addNode }) => {
+export const LitigationScheduleView: React.FC<LitigationScheduleViewProps> = ({ nodes, connections, updateNode, addNode }) => {
   const { theme } = useTheme();
-  
+
   const [zoom, setZoom] = useState<ZoomLevel>('Month');
   const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
   const [collapsedPhases, setCollapsedPhases] = useState<Set<string>>(new Set());
@@ -35,7 +35,7 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
   const [showCriticalPath, setShowCriticalPath] = useState(true);
 
   // Memoized transformation logic
-  const { phases, tasks } = useMemo(() => transformNodesToGantt(nodes, connections), [nodes, connections]);
+  const { phases, tasks } = useMemo(() => transformNodesToSchedule(nodes, connections), [nodes, connections]);
 
   const pixelsPerDay = useMemo(() => calculatePixelsPerDay(zoom), [zoom]);
 
@@ -44,7 +44,7 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
       if (!showCriticalPath) return new Set<string>();
       return new Set(Pathfinding.findCriticalPath(tasks));
   }, [tasks, showCriticalPath]);
-  
+
   const handleTaskUpdate = useCallback((taskId: string, start: string, _due: string) => {
     const newX = calculateNodePositionFromDate(start);
     updateNode(taskId, { x: newX });
@@ -68,7 +68,7 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
       <div className={cn("p-4 border-b shrink-0 flex items-center justify-between", theme.surface.default, theme.border.default)}>
         <h3 className="text-lg font-bold">Gantt Timeline View</h3>
         <div className="flex items-center gap-2">
-           <button 
+           <button
               onClick={() => setShowCriticalPath(!showCriticalPath)}
               className={cn("flex items-center px-3 py-1.5 text-xs font-bold rounded-md border transition-all", showCriticalPath ? "bg-red-50 text-red-600 border-red-200" : cn(theme.surface.default, "text-slate-500"))}
             >
@@ -97,7 +97,7 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
           />
         </div>
         <div className="flex-1">
-          <GanttTimeline
+          <ScheduleTimeline
             phases={phases}
             tasks={tasks.map(t => ({ ...t, isCritical: criticalPathIds.has(t.id) }))}
             collapsedPhases={collapsedPhases}
@@ -114,4 +114,4 @@ export const LitigationGanttView: React.FC<LitigationGanttViewProps> = ({ nodes,
   );
 };
 
-export default LitigationGanttView;
+export default LitigationScheduleView;

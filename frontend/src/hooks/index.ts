@@ -107,7 +107,7 @@ export {
   type UseQueryResult
 } from './useDomainData';
 export { useEvidenceManager, type UseEvidenceManagerReturn } from './useEvidenceManager';
-export * from './useGanttController';
+export * from './useScheduleController';
 export { useLitigationBuilder, type UseLitigationBuilderReturn } from './useLitigationBuilder';
 export * from './useNexusGraph';
 export { useRuleSearchAndSelection, type UseRuleSearchReturn } from './useRuleSearchAndSelection';

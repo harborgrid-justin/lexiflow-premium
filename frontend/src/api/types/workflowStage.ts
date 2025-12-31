@@ -8,7 +8,8 @@
  * Backend alignment: /backend/src/workflow/entities/workflow-stage.entity.ts
  */
 
-import { WorkflowStage, TaskId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
+import { WorkflowStage, TaskStatusBackend, TaskPriorityBackend } from '@/types/workflow';
+import { TaskId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.workflow instead

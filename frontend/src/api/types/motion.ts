@@ -8,7 +8,8 @@
  * Backend alignment: /backend/src/motions/entities/motion.entity.ts
  */
 
-import { Motion, MotionId, CaseId, DocumentId, EvidenceId } from '@/types';
+import { Motion } from '@/types/motion-docket';
+import { MotionId, CaseId, DocumentId, EvidenceId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.pleadings instead

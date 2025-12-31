@@ -31,7 +31,7 @@ import { delay } from '@/utils/async';
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { EvidenceApiService } from '@/api/discovery';
+import { EvidenceApiService } from '@/api/discovery/evidence-api';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
 import { OperationError, ValidationError, EntityNotFoundError } from '@/services/core/errors';

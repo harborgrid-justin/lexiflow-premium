@@ -5,9 +5,9 @@
  */
 
 import React from 'react';
-import { ClauseLibrary } from '@/features/knowledge/clauses';
-import { PageContainerLayout } from '@/components/layouts';
-import type { Clause } from '@/types';
+import { ClauseLibrary } from '@/features/knowledge/clauses/ClauseLibrary';
+import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
+import type { Clause } from '@/types/pleadings';
 
 /**
  * ClauseLibraryPage - React 18 optimized with React.memo

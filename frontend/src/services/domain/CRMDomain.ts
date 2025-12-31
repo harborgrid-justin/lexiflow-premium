@@ -90,8 +90,8 @@ import { SystemEventType } from "@/types/integration-types";
 import { delay } from '@/utils/async';
 
 // Backend API Services
-import { ClientsApiService } from '@/api/communications';
-import { CasesApiService } from '@/api/litigation';
+import { ClientsApiService } from '@/api/communications/clients-api';
+import { CasesApiService } from '@/api/litigation/cases-api';
 
 // Lead type definition
 interface Lead {

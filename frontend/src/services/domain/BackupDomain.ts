@@ -50,7 +50,7 @@ import { ValidationError } from '@/services/core/errors';
 
 import { BackupSnapshot, ArchiveStats, SnapshotType } from '@/types';
 import { delay } from '@/utils/async';
-import { BackupsApiService } from '@/api/admin';
+import { BackupsApiService } from '@/api/admin/backups-api';
 
 // =============================================================================
 // REACT QUERY KEYS

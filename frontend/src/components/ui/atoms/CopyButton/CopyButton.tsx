@@ -20,7 +20,7 @@ import { Copy, Check } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '../Button';
+import { Button } from '../Button/Button';
 
 // Utils & Constants
 import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/master.config';

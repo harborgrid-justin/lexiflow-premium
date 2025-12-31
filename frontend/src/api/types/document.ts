@@ -9,7 +9,8 @@
  * Shared types: packages/shared-types/src/entities/document.entity.ts
  */
 
-import { LegalDocument, DocumentId, CaseId, UserId } from '@/types';
+import { LegalDocument } from '@/types/documents';
+import { DocumentId, CaseId, UserId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.documents instead

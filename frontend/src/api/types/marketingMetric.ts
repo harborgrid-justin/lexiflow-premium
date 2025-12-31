@@ -6,7 +6,7 @@
  * This constant is only for seeding and testing purposes.
  */
 
-import { MarketingMetric } from '@/types';
+import { MarketingMetric } from '@/types/data-infrastructure';
 
 /**
  * @deprecated MOCK DATA - Use DataService.marketing instead

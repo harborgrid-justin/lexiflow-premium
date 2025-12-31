@@ -4,7 +4,7 @@
  */
 
 import { api } from '@/api';
-import type { CreateAdvisorDto, CreateExpertDto, UpdateStrategyDto } from '@/api/workflow';
+import type { CreateAdvisorDto, CreateExpertDto, UpdateStrategyDto } from '@/api/workflow/war-room-api';
 
 export const WarRoomService = {
   getAll: async () => {

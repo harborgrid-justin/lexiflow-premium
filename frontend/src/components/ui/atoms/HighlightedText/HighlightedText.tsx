@@ -28,11 +28,11 @@ interface HighlightedTextProps {
   highlightClassName?: string;
 }
 
-export const HighlightedText: React.FC<HighlightedTextProps> = memo(({ 
-  text, 
-  query, 
-  className = "", 
-  highlightClassName = defaultHighlightClass 
+export const HighlightedText: React.FC<HighlightedTextProps> = memo(({
+  text,
+  query,
+  className = "",
+  highlightClassName = defaultHighlightClass
 }) => {
   if (!query) return <span className={className}>{text}</span>;
 
@@ -42,13 +42,14 @@ export const HighlightedText: React.FC<HighlightedTextProps> = memo(({
 
   return (
     <span className={className}>
-      {parts.map((part, i) => 
+      {/* IDENTITY-STABLE KEYS: Use text content + index for reconciliation */}
+      {parts.map((part, i) =>
         part.toLowerCase() === query.toLowerCase() ? (
-          <span key={i} className={getHighlightClass(highlightClassName)}>
+          <span key={`highlight-${i}-${part}`} className={getHighlightClass(highlightClassName)}>
             {part}
           </span>
         ) : (
-          part
+          <React.Fragment key={`text-${i}-${part}`}>{part}</React.Fragment>
         )
       )}
     </span>

@@ -28,7 +28,7 @@ const Skeleton: React.FC<{ className?: string }> = ({ className }) => {
  */
 export const DiscoveryRequestsSkeleton: React.FC = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className="space-y-4 animate-fade-in">
       {/* Header Actions */}
@@ -56,7 +56,7 @@ export const DiscoveryRequestsSkeleton: React.FC = () => {
         {/* Table Rows */}
         {[...Array(5)].map((_, i) => (
           <div
-            key={i}
+            key={`discovery-request-row-${i}`}
             className={cn('p-6 border-b', theme.border.default)}
           >
             <div className="flex items-center gap-4">
@@ -95,7 +95,7 @@ export const DiscoveryRequestsSkeleton: React.FC = () => {
  */
 export const PrivilegeLogSkeleton: React.FC = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className="space-y-4 animate-fade-in">
       {/* Header */}
@@ -160,7 +160,7 @@ export const PrivilegeLogSkeleton: React.FC = () => {
  */
 export const ESIDashboardSkeleton: React.FC = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Stats Header */}
@@ -194,7 +194,7 @@ export const ESIDashboardSkeleton: React.FC = () => {
               </div>
               <Skeleton className="h-6 w-20 rounded-full" />
             </div>
-            
+
             <div className="space-y-3">
               <div className="flex justify-between">
                 <Skeleton className="h-4 w-20" />
@@ -223,7 +223,7 @@ export const ESIDashboardSkeleton: React.FC = () => {
  */
 export const ProductionWizardSkeleton: React.FC = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className={cn('flex flex-col h-full rounded-lg shadow-sm border animate-fade-in', theme.surface.default, theme.border.default)}>
       {/* Header */}
@@ -263,7 +263,7 @@ export const ProductionWizardSkeleton: React.FC = () => {
             <Skeleton className="h-6 w-48" />
             <Skeleton className="h-4 w-96" />
           </div>
-          
+
           <div className={cn('border-2 border-dashed rounded-lg p-12 text-center', theme.border.default)}>
             <Skeleton className="h-16 w-16 rounded-full mx-auto mb-4" />
             <Skeleton className="h-5 w-64 mx-auto mb-2" />
@@ -274,7 +274,7 @@ export const ProductionWizardSkeleton: React.FC = () => {
             <Skeleton className="h-5 w-32" />
             <div className="space-y-2">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className={cn('flex items-center justify-between p-3 rounded border', theme.border.default)}>
+                <div key={`timeline-item-${i}`} className={cn('flex items-center justify-between p-3 rounded border', theme.border.default)}>
                   <div className="flex items-center gap-3">
                     <Skeleton className="h-10 w-10 rounded" />
                     <div className="space-y-1">
@@ -299,7 +299,7 @@ export const ProductionWizardSkeleton: React.FC = () => {
  */
 export const LegalHoldsSkeleton: React.FC = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className="space-y-4 animate-fade-in">
       {/* Warning Banner */}

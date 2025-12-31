@@ -1,8 +1,8 @@
 /**
  * ProjectCard.tsx
- * 
+ *
  * Expandable project card with progress bar, task list, and module navigation.
- * 
+ *
  * @module components/case-detail/projects/ProjectCard
  * @category Case Management - Projects
  */
@@ -32,8 +32,8 @@ interface ProjectCardProps {
     onNavigateToModule?: (module: string) => void;
 }
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ 
-    project, isExpanded, onToggleExpand, onAddTask, onUpdateTaskStatus 
+export const ProjectCard: React.FC<ProjectCardProps> = ({
+    project, isExpanded, onToggleExpand, onAddTask, onUpdateTaskStatus
 }) => {
     const { theme } = useTheme();
 
@@ -53,7 +53,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     return (
         <div className={cn("rounded-xl border transition-all duration-300 shadow-sm overflow-hidden", theme.surface.default, project.priority === 'Urgent' ? 'border-l-4 border-l-red-500' : theme.border.default)}>
             {/* Project Header */}
-            <div 
+            <div
               className={cn("p-5 flex flex-col md:flex-row md:items-center justify-between cursor-pointer gap-4", `hover:${theme.surface.highlight}`)}
               onClick={onToggleExpand}
             >
@@ -66,7 +66,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                   {project.priority === 'Urgent' && <Badge variant="error">Urgent</Badge>}
                 </div>
                 <p className={cn("text-sm line-clamp-1", theme.text.secondary)}>{project.description}</p>
-                
+
                 <div className={cn("flex flex-wrap items-center gap-4 mt-3 text-xs", theme.text.tertiary)}>
                   {project.startDate && <span className="flex items-center gap-1"><Calendar className="h-3 w-3"/> Started: {new Date(project.startDate).toLocaleDateString()}</span>}
                   {project.dueDate && <span className="flex items-center gap-1"><Calendar className="h-3 w-3"/> Due: {new Date(project.dueDate).toLocaleDateString()}</span>}
@@ -89,7 +89,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                     }
                   `}</style>
                 </div>
-                <button 
+                <button
                   className={cn("transition-colors", theme.text.tertiary, `hover:${theme.text.link}`)}
                   title={isExpanded ? "Collapse project" : "Expand project"}
                   aria-label={isExpanded ? "Collapse project details" : "Expand project details"}
@@ -105,19 +105,19 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                 <div className="space-y-3 mt-4 max-h-[400px] overflow-y-auto custom-scrollbar pr-1">
                   {project.tasks?.map((task) => (
                     <div key={task.id} className={cn("group flex flex-col md:flex-row gap-3 items-start md:items-center p-3 rounded-lg border transition-all hover:shadow-sm", theme.surface.default, theme.border.default)}>
-                      <button 
+                      <button
                         onClick={() => onUpdateTaskStatus(project.id, task.id)}
                         title={task.status === 'Done' ? 'Mark as incomplete' : 'Mark as complete'}
                         aria-label={task.status === 'Done' ? 'Mark task as incomplete' : 'Mark task as complete'}
                         className={`shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${
-                          task.status === 'Done' 
-                          ? 'bg-green-500 border-green-500 text-white' 
+                          task.status === 'Done'
+                          ? 'bg-green-500 border-green-500 text-white'
                           : cn('text-transparent', theme.border.default, `hover:${theme.action.primary.border}`)
                         }`}
                       >
                         <CheckCircle className="h-3.5 w-3.5 fill-current"/>
                       </button>
-                      
+
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <h5 className={cn("text-sm font-medium truncate", task.status === 'Done' ? "text-slate-400 line-through" : theme.text.primary)}>
@@ -131,12 +131,12 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
                       </div>
                     </div>
                   ))}
-                  
+
                   {(project.tasks?.length ?? 0) === 0 && (
                     <div className={cn("text-center py-4 text-sm italic", theme.text.tertiary)}>No tasks in this project.</div>
                   )}
 
-                  <button 
+                  <button
                     onClick={() => onAddTask(project.id)}
                     className={cn("w-full py-2 text-xs font-medium rounded border border-dashed transition-colors flex items-center justify-center gap-1", theme.text.primary, theme.border.default, `hover:${theme.surface.default}`, `hover:${theme.primary.text}`)}
                   >

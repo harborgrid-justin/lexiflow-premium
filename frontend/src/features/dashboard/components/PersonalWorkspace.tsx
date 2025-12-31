@@ -102,8 +102,9 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
                                         <p className="text-center text-sm text-slate-500 py-8">No pending tasks assigned
                                             to you.</p>}
                                     {myTasks.map((task, i) => (
-                                        <div key={i}
+                                        <div key={`task-${task.caseId}-${task.title}`}
                                             className={cn("p-4 border rounded-lg flex items-center justify-between transition-colors", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
+
                                             <div className="flex items-start gap-4">
                                                 <div
                                                     className={cn("p-2 rounded-full", task.priority === 'High' ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600")}>
@@ -124,7 +125,7 @@ export const PersonalWorkspace: React.FC<PersonalWorkspaceProps> = ({ activeTab,
                             <Card title="Upcoming Meetings">
                                 <div className="space-y-3">
                                     {myMeetings.slice(0, 2).map((event, i) => (
-                                        <div key={i}
+                                        <div key={`meeting-${event.date}-${event.priority}`}
                                             className={cn("flex items-center gap-3 p-3 rounded border-l-4 bg-slate-50", theme.border.default, event.priority === 'High' ? "border-l-red-500" : "border-l-blue-500")}>
                                             <div className="text-center w-12">
                                                 <span

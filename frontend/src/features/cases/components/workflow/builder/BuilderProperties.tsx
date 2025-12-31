@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { Settings, X, Move, Trash2 } from 'lucide-react';
-import { Input, TextArea } from '@/components/atoms';
-import { Button } from '@/components/atoms';
-import { ConfirmDialog } from '@/components/molecules';
+import { Input } from '@/components/ui/atoms/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Button } from '@/components/ui/atoms/Button';
+import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { useModalState } from '@/hooks';
 import { WorkflowNode, getNodeIcon } from './types';
 import { useTheme } from '@/providers/ThemeContext';
@@ -17,20 +18,20 @@ interface BuilderPropertiesProps {
   onDeleteNode: (id: string) => void;
 }
 
-export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({ 
-  isOpen, onClose, selectedNode, onUpdateNode, onDeleteNode 
+export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
+  isOpen, onClose, selectedNode, onUpdateNode, onDeleteNode
 }) => {
   const { theme } = useTheme();
   const deleteModal = useModalState();
   const [nodeToDelete, setNodeToDelete] = React.useState<string | null>(null);
-  
+
   const handleDeleteClick = () => {
     if (selectedNode) {
       setNodeToDelete(selectedNode.id);
       deleteModal.open();
     }
   };
-  
+
   const confirmDelete = () => {
     if (nodeToDelete) {
       onDeleteNode(nodeToDelete);
@@ -61,7 +62,7 @@ export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
             <>
               <div>
                 <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Label / Name</label>
-                <Input 
+                <Input
                   value={selectedNode.label}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdateNode(selectedNode.id, { label: e.target.value })}
                 />
@@ -126,7 +127,7 @@ export const BuilderProperties: React.FC<BuilderPropertiesProps> = ({
           )}
         </div>
       </div>
-      
+
       <ConfirmDialog
         isOpen={deleteModal.isOpen}
         onClose={deleteModal.close}

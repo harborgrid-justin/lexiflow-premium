@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table';
+import { Button } from '@/components/ui/atoms/Button';
+import { Badge } from '@/components/ui/atoms/Badge';
 import { Stethoscope, Plus, Calendar, User } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -9,8 +9,9 @@ import { DataService } from '@/services/data/dataService';
 import { Examination } from '@/types';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { Modal } from '@/components/molecules';
-import { Input, TextArea } from '@/components/atoms';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { Input } from '@/components/ui/atoms/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea';
 import { useModalState } from '@/hooks';
 
 export const Examinations = () => {

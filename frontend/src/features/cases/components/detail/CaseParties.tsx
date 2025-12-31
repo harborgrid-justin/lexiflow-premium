@@ -1,9 +1,9 @@
 /**
  * CaseParties.tsx
- * 
+ *
  * Party management interface with grouping capabilities, contact information,
  * and hierarchical organization structure (parent entities, groups).
- * 
+ *
  * @module components/case-detail/CaseParties
  * @category Case Management - Parties & Contacts
  */
@@ -67,10 +67,10 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
         setGrouped(groups);
     });
   }, [parties, groupBy]);
-  
+
   const handleSave = () => {
     if (!currentParty.name || !currentParty.role) return;
-    
+
     let newParties = [...parties];
     if (currentParty.id) {
         // Edit
@@ -137,7 +137,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
             <p className={cn("text-sm", theme.text.secondary)}>Manage plaintiffs, defendants, and groups.</p>
         </div>
         <div className="flex gap-2 w-full sm:w-auto">
-            <select 
+            <select
                 className={cn("text-sm border rounded-md px-2 py-1.5 outline-none flex-1 sm:flex-none", theme.surface.highlight, theme.border.default, theme.text.primary)}
                 value={groupBy}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setGroupBy(e.target.value as GroupByOption)}
@@ -160,7 +160,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                     <span className={cn("text-xs", theme.text.tertiary)}>({groupParties.length})</span>
                 </div>
             )}
-            
+
             <TableContainer responsive="card">
                 <TableHeader>
                     <TableHead>Entity Name</TableHead>
@@ -258,7 +258,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                   </div>
                   <div>
                       <label htmlFor="partyType" className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
-                      <select 
+                      <select
                         id="partyType"
                         aria-label="Party Type"
                         className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
@@ -271,7 +271,7 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
                       </select>
                   </div>
               </div>
-              
+
               <Input label="Party Group" value={currentParty.partyGroup || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, partyGroup: e.target.value})} placeholder="e.g. Class Reps, Subsidiaries"/>
 
               <div className="grid grid-cols-2 gap-4">
@@ -281,19 +281,19 @@ export const CaseParties: React.FC<CasePartiesProps> = ({ parties = [], onUpdate
               <Input label="Address" value={currentParty.address || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, address: e.target.value})} />
 
               <Input label="Representation Type" value={currentParty.representationType || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, representationType: e.target.value})} placeholder="e.g. Pro Se, Retained" />
-              
+
               {!(currentParty.attorneys && Array.isArray(currentParty.attorneys) && currentParty.attorneys.length > 0) && (
                   <Input label="Legal Counsel (Simple String)" value={currentParty.counsel || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentParty({...currentParty, counsel: e.target.value})} placeholder="Firm or Attorney Name"/>
               )}
-              
+
               {currentParty.type === 'Corporation' && (
                   <div>
                       <label htmlFor="linkedOrgId" className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Link to Organization (Internal DB)</label>
-                      <select 
+                      <select
                         id="linkedOrgId"
                         aria-label="Link to Organization"
-                        className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)} 
-                        value={currentParty.linkedOrgId || ''} 
+                        className={cn("w-full px-3 py-2 border rounded-md text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
+                        value={currentParty.linkedOrgId || ''}
                         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCurrentParty({...currentParty, linkedOrgId: (e.target.value || undefined) as any})}
                       >
                           <option value="">No Link</option>

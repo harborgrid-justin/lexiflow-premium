@@ -239,14 +239,14 @@ export const NotificationBadgeGroup: React.FC<{
     label: string;
     count: number;
     variant?: NotificationBadgeProps['variant'];
-  }>;
-  className?: string;
+  }>;  className?: string;
 }> = ({ badges, className = '' }) => {
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      {badges.map((badge, index) => (
+      {/* IDENTITY-STABLE KEYS: Use label as unique key */}
+      {badges.map((badge) => (
         <InlineNotificationBadge
-          key={index}
+          key={badge.label}
           label={badge.label}
           count={badge.count}
           badgeProps={{ variant: badge.variant }}

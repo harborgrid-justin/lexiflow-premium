@@ -30,9 +30,16 @@ interface Notification {
 export const NotificationPanel = React.memo(function NotificationPanel() {
   const { theme } = useTheme();
   const panel = useModalState();
+  // HYDRATION-SAFE: Track mounted state for browser-only APIs
+  const [isMounted, setIsMounted] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [groupedNotifications, setGroupedNotifications] = useState<(Notification | NotificationGroup)[]>([]);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+
+  // Set mounted flag
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Load notifications
   useEffect(() => {

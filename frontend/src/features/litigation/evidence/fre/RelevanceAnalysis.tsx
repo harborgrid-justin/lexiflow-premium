@@ -30,7 +30,7 @@ export const RelevanceAnalysis: React.FC = () => {
         ['evidence', 'all'],
         () => DataService.evidence.getAll()
     );
-    
+
     // Mock state for selected item
     const selectedItem = evidence.length > 0 ? evidence[2] : null;
 
@@ -38,7 +38,7 @@ export const RelevanceAnalysis: React.FC = () => {
         <div className="space-y-6">
             <div className={cn("flex items-center gap-3 p-2 rounded-lg border", theme.surface.default, theme.border.default)}>
                 <Filter className={cn("h-4 w-4", theme.text.secondary)}/>
-                <select 
+                <select
                     className={cn("flex-1 text-sm bg-transparent outline-none", theme.text.primary)}
                     aria-label="Select evidence to analyze"
                 >
@@ -65,7 +65,7 @@ export const RelevanceAnalysis: React.FC = () => {
                     </Card>
                 </div>
             )}
-             
+
             <Card title="FRE 403 Balancing Test">
                  <div className="flex flex-col md:flex-row items-center gap-6">
                     <div className="flex-1 w-full">

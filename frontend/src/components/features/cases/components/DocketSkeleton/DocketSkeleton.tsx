@@ -27,11 +27,11 @@ export const DocketTableSkeleton: React.FC<{ rows?: number }> = ({ rows = 10 }) 
         <div className="w-32 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse shrink-0 ml-6" />
       </div>
       
-      {/* Rows */}
+      {/* Rows - IDENTITY-STABLE KEYS */}
       <div className="flex-1 overflow-hidden">
         {Array.from({ length: rows }).map((_, i) => (
           <div
-            key={i}
+            key={`docket-row-${i}`}
             className={cn("hidden md:flex items-center px-6 border-b h-[72px]", theme.border.default)}
           >
             {/* Sequence */}
@@ -67,11 +67,11 @@ export const DocketTableSkeleton: React.FC<{ rows?: number }> = ({ rows = 10 }) 
           </div>
         ))}
         
-        {/* Mobile View */}
+        {/* Mobile View - IDENTITY-STABLE KEYS */}
         <div className="md:hidden space-y-3 p-4">
           {Array.from({ length: rows }).map((_, i) => (
             <div
-              key={i}
+              key={`docket-mobile-${i}`}
               className={cn("p-4 rounded-lg border h-[140px]", theme.border.default, theme.surface.default)}
             >
               <div className="flex justify-between items-start mb-3">
@@ -133,19 +133,19 @@ export const DocketCalendarSkeleton: React.FC = () => {
           </div>
         ))}
         
-        {/* Calendar Days */}
+        {/* Calendar Days - DETERMINISTIC RENDERING: Use stable pattern instead of Math.random */}
         {Array.from({ length: 35 }).map((_, i) => (
           <div
-            key={i}
+            key={`calendar-day-${i}`}
             className={cn("p-2 min-h-[120px] flex flex-col", theme.surface.default)}
           >
             <div className="w-6 h-6 bg-slate-200 dark:bg-slate-700 rounded-full animate-pulse mb-2" />
             
-            {/* Random deadline indicators */}
-            {Math.random() > 0.7 && (
+            {/* DETERMINISTIC: Show deadlines for specific days (e.g., every 3rd and 5th day) */}
+            {(i % 3 === 0 || i % 5 === 0) && (
               <div className="space-y-1">
                 <div className="w-full h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
-                {Math.random() > 0.5 && (
+                {i % 2 === 0 && (
                   <div className="w-3/4 h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
                 )}
               </div>

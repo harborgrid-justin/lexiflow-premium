@@ -46,39 +46,52 @@ interface TaskCreationModalProps {
   relatedModule?: string;
   relatedItemId?: string;
   relatedItemTitle?: string;
-  projects?: { id: string; title: string }[]; 
+  projects?: { id: string; title: string }[];
   onSave?: (task: WorkflowTask) => void;
 }
 
 /**
  * TaskCreationModal - React 18 optimized with useId
  */
-export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({ 
-  isOpen, onClose, initialTitle, relatedModule, relatedItemId, relatedItemTitle, projects = [], onSave 
+export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
+  isOpen, onClose, initialTitle, relatedModule, relatedItemId, relatedItemTitle, projects = [], onSave
 }) => {
   const notify = useNotify();
-  
+
   // Fetch users from backend API
   const { data: users = [] } = useQuery<User[]>(
     queryKeys.users.all(),
     () => DataService.users.getAll()
   );
-  
-  const [task, setTask] = useState<Partial<WorkflowTask>>({
+
+  // DETERMINISTIC FIRST RENDER: Defer non-deterministic values to effects
+  const [task, setTask] = useState<Partial<WorkflowTask>>(() => ({
     title: initialTitle || '',
     priority: TaskPriorityBackend.MEDIUM,
     status: TaskStatusBackend.TODO,
     assignee: 'James Doe',
-    dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    dueDate: '', // Set in effect
     projectId: '' as ProjectId,
     linkedRules: []
-  });
+  }));
+
+  // Set default due date after mount to ensure deterministic rendering
+  React.useEffect(() => {
+    if (!task.dueDate) {
+      const defaultDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      setTask(prev => ({
+        ...prev,
+        dueDate: defaultDate.toISOString().split('T')[0]
+      }));
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSave = async () => {
     if (!task.title) return;
-    
+
+    // DETERMINISTIC RENDERING: Use proper ID generation (backend will assign final ID)
     const newTask: WorkflowTask = {
-        id: `t-${Date.now()}` as TaskId,
+        id: `t-${crypto.randomUUID ? crypto.randomUUID() : `temp-${Math.random()}`}` as TaskId,
         title: task.title!,
         status: TaskStatusBackend.TODO,
         assignee: task.assignee || 'Unassigned',
@@ -115,17 +128,17 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
             </div>
         )}
 
-        <Input 
-            label="Task Title" 
-            placeholder="e.g. Review Document" 
-            value={task.title} 
+        <Input
+            label="Task Title"
+            placeholder="e.g. Review Document"
+            value={task.title}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTask({...task, title: e.target.value})}
             autoFocus
         />
-        
+
         <div className="grid grid-cols-2 gap-4">
             <div>
-                <UserSelect 
+                <UserSelect
                   label="Assignee"
                   value={task.assignee || ''}
                   onChange={(val) => setTask({...task, assignee: val})}
@@ -136,7 +149,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                 <label className="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Due Date</label>
                 <div className="relative">
                     <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400"/>
-                    <input 
+                    <input
                         type="date"
                         className="w-full pl-9 pr-3 py-2 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-500"
                         value={task.dueDate}
@@ -150,7 +163,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
         <div className="grid grid-cols-2 gap-4">
             <div>
                 <label className="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Priority</label>
-                <select 
+                <select
                     className="w-full px-3 py-2 border rounded-md text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
                     value={task.priority}
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTask({...task, priority: e.target.value as any})}
@@ -165,7 +178,7 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
                 <label className="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Link to Project</label>
                 <div className="relative">
                     <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400"/>
-                    <select 
+                    <select
                         className="w-full pl-9 pr-3 py-2 border rounded-md text-sm bg-white outline-none focus:ring-2 focus:ring-blue-500"
                         value={task.projectId}
                         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setTask({...task, projectId: e.target.value as any})}
@@ -182,15 +195,15 @@ export const TaskCreationModal: React.FC<TaskCreationModalProps> = ({
 
         <div>
             <label className="block text-xs font-semibold text-slate-500 uppercase mb-1.5">Governing Rules</label>
-            <RuleSelector 
-              selectedRules={task.linkedRules || []} 
-              onRulesChange={rules => setTask({...task, linkedRules: rules})} 
+            <RuleSelector
+              selectedRules={task.linkedRules || []}
+              onRulesChange={rules => setTask({...task, linkedRules: rules})}
             />
         </div>
 
-        <TextArea 
-            label="Instructions" 
-            rows={3} 
+        <TextArea
+            label="Instructions"
+            rows={3}
             placeholder="Add specific instructions for the assignee..."
             value={task.description || ''}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setTask({...task, description: e.target.value})}

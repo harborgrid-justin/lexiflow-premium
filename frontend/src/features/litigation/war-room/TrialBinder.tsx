@@ -22,7 +22,7 @@ import { Folder, FileText, ChevronRight, Gavel, Plus, File, Scale, MoreVertical 
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

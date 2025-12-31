@@ -1,9 +1,9 @@
 /**
  * CaseCollaboration.tsx
- * 
+ *
  * Multi-party collaboration hub with conferral logs, discovery plan builder,
  * and stipulation management.
- * 
+ *
  * @module components/case-detail/collaboration/CaseCollaboration
  * @category Case Management - Collaboration
  */
@@ -48,7 +48,7 @@ export const CaseCollaboration: React.FC<CaseCollaborationProps> = ({ caseId }) 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-full">
       <div className="lg:col-span-1 space-y-2">
-        <button 
+        <button
           onClick={() => setActiveView('conferral')}
           className={cn(
             "w-full text-left p-4 rounded-lg border transition-all flex items-center gap-3",
@@ -61,8 +61,8 @@ export const CaseCollaboration: React.FC<CaseCollaborationProps> = ({ caseId }) 
             <span className="text-xs opacity-80">Track compliance logs</span>
           </div>
         </button>
-        
-        <button 
+
+        <button
           onClick={() => setActiveView('plans')}
           className={cn(
             "w-full text-left p-4 rounded-lg border transition-all flex items-center gap-3",
@@ -76,7 +76,7 @@ export const CaseCollaboration: React.FC<CaseCollaborationProps> = ({ caseId }) 
           </div>
         </button>
 
-        <button 
+        <button
           onClick={() => setActiveView('stipulations')}
           className={cn(
             "w-full text-left p-4 rounded-lg border transition-all flex items-center gap-3",

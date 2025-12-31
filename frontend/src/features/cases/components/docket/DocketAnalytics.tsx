@@ -24,7 +24,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { ChartColorService } from '@/services/theme/chartColorService';
 
 // Components
-import { Card } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Internal Dependencies - Services & Utils
 import { cn } from '@/utils/cn';
@@ -42,13 +42,13 @@ export const DocketAnalytics: React.FC = () => {
   const chartColors = ChartColorService.getPalette(mode as 'light' | 'dark');
   const chartTheme = ChartColorService.getChartTheme(mode as 'light' | 'dark');
   const tooltipStyle = ChartColorService.getTooltipStyle(mode as 'light' | 'dark');
-  
+
   // Enterprise Data Access
   const { data: entries } = useQuery<DocketEntry[]>(
       ['docket', 'all'],
       DataService.docket.getAll
   );
-  
+
   // Safety check: ensure entries is always an array
   const safeEntries = Array.isArray(entries) ? entries : [];
 

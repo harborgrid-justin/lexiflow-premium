@@ -1,9 +1,9 @@
 /**
  * MotionModal.tsx
- * 
+ *
  * Motion creation/editing modal with rule selector, document linking,
  * and AI-assisted brief generation.
- * 
+ *
  * @module components/case-detail/motions/MotionModal
  * @category Case Management - Motions
  */
@@ -13,10 +13,10 @@ import React, { useState, useEffect } from 'react';
 import { Wand2, ArrowRight, CheckSquare, Clock } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Modal } from '@/components/molecules';
-import { Input } from '@/components/atoms';
-import { Button } from '@/components/atoms';
-import { RuleSelector } from '@/components/molecules';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { Input } from '@/components/ui/atoms/Input';
+import { Button } from '@/components/ui/atoms/Button';
+import { RuleSelector } from '@/components/ui/molecules/RuleSelector/RuleSelector';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -54,7 +54,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
         opp.setDate(hearing.getDate() - 14);
         const reply = new Date(hearing);
         reply.setDate(hearing.getDate() - 7);
-        
+
         setNewMotion(prev => ({
           ...prev,
           oppositionDueDate: opp.toISOString().split('T')[0],
@@ -86,7 +86,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
       <div className={cn("p-6 space-y-4 h-full overflow-y-auto", theme.surface.default)}>
         <div>
           <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Motion Type</label>
-          <select 
+          <select
             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
             value={newMotion.type}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewMotion({...newMotion, type: e.target.value as MotionType})}
@@ -99,9 +99,9 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
             <option value="Continuance">Motion for Continuance</option>
           </select>
         </div>
-        
-        <Input 
-          label="Title" 
+
+        <Input
+          label="Title"
           placeholder="e.g. Motion to Dismiss Count III"
           value={newMotion.title || ''}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMotion({...newMotion, title: e.target.value})}
@@ -109,7 +109,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
 
         <div>
           <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Hearing Date (Optional)</label>
-          <input 
+          <input
             type="date"
             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
             value={newMotion.hearingDate || ''}
@@ -126,7 +126,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
 
         <div>
           <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Governing Rules</label>
-          <RuleSelector 
+          <RuleSelector
             selectedRules={newMotion.linkedRules || []}
             onRulesChange={(rules) => setNewMotion({...newMotion, linkedRules: rules})}
           />
@@ -152,7 +152,7 @@ export const MotionModal: React.FC<MotionModalProps> = ({ isOpen, onClose, onSav
           <div>
             <h4 className="text-sm font-bold text-indigo-900">AI Strategy Assistance</h4>
             <p className="text-xs text-indigo-700 mt-1 mb-2">Analyze case facts and local rules to suggest arguments.</p>
-            <button 
+            <button
               onClick={handleGenerateStrategy}
               disabled={isGenerating || !newMotion.title}
               className="text-xs bg-indigo-600 text-white px-3 py-1.5 rounded hover:bg-indigo-700 disabled:opacity-50 transition-colors"

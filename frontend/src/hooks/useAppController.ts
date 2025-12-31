@@ -114,7 +114,8 @@ export function useAppController(): UseAppControllerReturn {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [appStatusMessage, setAppStatusMessage] = useState('Initializing Secure Data Layer...');
 
-  // CRITICAL: Prevent double-initialization in React 18 Strict Mode
+  // Strict Mode readiness: Prevent double-initialization (Principle #7)
+  // Critical for preventing duplicate API calls and race conditions
   const isInitialized = useRef(false);
 
   // Domain Data
@@ -133,8 +134,10 @@ export function useAppController(): UseAppControllerReturn {
   // ==========================================================================
   // INITIALIZATION LOGIC
   // ==========================================================================
+  // Effect discipline: App initialization is synchronization with external systems (Principle #6)
+  // Cleanup pattern prevents double-execution in Strict Mode (Principle #7)
   useEffect(() => {
-    // If we've already started or finished init, skip the second execution
+    // Guard against double-invocation in React 18 Strict Mode
     if (isInitialized.current) return;
     isInitialized.current = true;
 

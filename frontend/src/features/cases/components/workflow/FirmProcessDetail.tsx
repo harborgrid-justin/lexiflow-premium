@@ -1,16 +1,16 @@
 
 import React, { useState } from 'react';
 import { ArrowLeft, Play, Loader2} from 'lucide-react';
-import { Button } from '@/components/atoms';
-import { Card } from '@/components/molecules';
-import { Tabs } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
 import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
 import { WorkflowAnalyticsDashboard } from './WorkflowAnalyticsDashboard';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { ErrorState } from '@/components/molecules';
+import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
 
 interface ProcessDetails {
   id: string;
@@ -42,8 +42,8 @@ export const FirmProcessDetail: React.FC<FirmProcessDetailProps> = ({ processId,
   if (isError || !process) {
     return (
       <div className="h-full flex flex-col items-center justify-center">
-        <ErrorState 
-          title="Process Not Found" 
+        <ErrorState
+          title="Process Not Found"
           message="Could not load process details."
           onRetry={refetch}
         />

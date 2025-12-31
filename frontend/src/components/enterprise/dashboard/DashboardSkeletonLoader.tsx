@@ -95,8 +95,9 @@ export const MetricsGridSkeleton: React.FC<{
 }> = ({ columns = 4, rows = 2, className }) => {
   return (
     <div className={cn('grid gap-4', className)}>
+      {/* IDENTITY-STABLE KEYS: Use stable identifiers */}
       {Array.from({ length: rows * columns }).map((_, index) => (
-        <KPICardSkeleton key={index} />
+        <KPICardSkeleton key={`kpi-${index}`} />
       ))}
     </div>
   );
@@ -175,11 +176,11 @@ export const ActivityFeedSkeleton: React.FC<{
         </div>
       </div>
 
-      {/* Activity Items */}
+      {/* Activity Items - IDENTITY-STABLE KEYS */}
       <div className="p-6 space-y-3">
         {Array.from({ length: items }).map((_, index) => (
           <div
-            key={index}
+            key={`activity-${index}`}
             className="p-4 rounded-lg border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700"
           >
             <div className="flex items-start gap-3">
@@ -220,21 +221,23 @@ export const TableSkeleton: React.FC<{
       {showHeader && (
         <div className="border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800">
           <div className="grid gap-4 p-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+            {/* IDENTITY-STABLE KEYS */}
             {Array.from({ length: columns }).map((_, index) => (
-              <Skeleton key={index} width="80%" height={16} />
+              <Skeleton key={`header-${index}`} width="80%" height={16} />
             ))}
           </div>
         </div>
       )}
       <div className="divide-y divide-gray-200 dark:divide-slate-700">
+        {/* IDENTITY-STABLE KEYS */}
         {Array.from({ length: rows }).map((_, rowIndex) => (
           <div
-            key={rowIndex}
+            key={`row-${rowIndex}`}
             className="grid gap-4 p-4"
             style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
           >
             {Array.from({ length: columns }).map((_, colIndex) => (
-              <Skeleton key={colIndex} width="90%" height={14} />
+              <Skeleton key={`cell-${rowIndex}-${colIndex}`} width="90%" height={14} />
             ))}
           </div>
         ))}

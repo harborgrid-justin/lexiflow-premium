@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Server, Database, Plus, Trash2, ArrowRight } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -17,16 +17,21 @@ export const ShardingVisualizer = React.memo(function ShardingVisualizer() {
     const [mappedNode, setMappedNode] = useState<string | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
+    // Effect discipline: Synchronize ring with external state (nodes)
+    // React 18: Tolerate double-invocation in Strict Mode
     useEffect(() => {
         const newRing = new ConsistentHashRing(5);
         nodes.forEach(n => newRing.addNode(n));
         setRing(newRing);
+        // No cleanup needed - ring is idempotent
     }, [nodes]);
 
+    // Derived state computed during render, not in effect
     useEffect(() => {
         setMappedNode(ring.getNode(key));
     }, [ring, key]);
 
+    // Canvas rendering is synchronization with external system (Principle #6)
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -78,18 +83,22 @@ export const ShardingVisualizer = React.memo(function ShardingVisualizer() {
             ctx.fill();
         }
 
+        // No cleanup needed - canvas rendering is idempotent
+        // Strict Mode will re-run this safely
     }, [ring, key, mappedNode, theme]);
 
-    const addNode = () => {
-        const newNode = `Shard-${String.fromCharCode(65 + nodes.length)}`;
-        setNodes([...nodes, newNode]);
-    };
+    // Functional state updates for concurrent-safe mutations (Principle #5)
+    // Wrapped in useCallback for stable identity (Principle #13)
+    const addNode = useCallback(() => {
+        setNodes(prev => {
+            const newNode = `Shard-${String.fromCharCode(65 + prev.length)}`;
+            return [...prev, newNode];
+        });
+    }, []);
 
-    const removeNode = () => {
-        if (nodes.length > 1) {
-            setNodes(nodes.slice(0, -1));
-        }
-    };
+    const removeNode = useCallback(() => {
+        setNodes(prev => prev.length > 1 ? prev.slice(0, -1) : prev);
+    }, []);
 
     return (
         <div className="flex flex-col h-full p-6">

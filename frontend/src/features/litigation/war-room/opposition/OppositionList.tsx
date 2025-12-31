@@ -20,9 +20,9 @@ import { Phone, Mail, MoreHorizontal, TrendingUp, Flame } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { UserAvatar } from '@/components/atoms';
-import { Button } from '@/components/atoms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table';
+import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
+import { Button } from '@/components/ui/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -80,8 +80,8 @@ export const OppositionList: React.FC<OppositionListProps> = ({ entities, onSele
             </TableHeader>
             <TableBody>
                 {entities.map(ent => (
-                    <TableRow 
-                        key={ent.id} 
+                    <TableRow
+                        key={ent.id}
                         onClick={() => onSelect(ent)}
                         className={cn("cursor-pointer", selectedId === ent.id ? theme.surface.highlight : "")}
                     >

@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { UserAvatar } from '@/components/atoms';
-import { Button } from '@/components/atoms';
+import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
+import { Button } from '@/components/ui/atoms/Button';
 import { SearchInputBar, MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
 import { Briefcase, Building, Mail, Linkedin, GraduationCap, Network } from 'lucide-react';
 import { LegalEntity } from '@/types';
@@ -89,7 +89,7 @@ export const AlumniDirectory: React.FC<AlumniDirectoryProps> = () => {
                               )}
                           </div>
                       </div>
-                      
+
                       <h4 className={cn("font-bold text-lg mb-0.5", theme.text.primary)}>{person.name}</h4>
                       <p className={cn("text-xs uppercase font-bold tracking-wide mb-3", theme.text.tertiary)}>
                         {String(person.metadata?.previousRole || 'Former Employee')} ({String(person.metadata?.yearLeft || 'N/A')})

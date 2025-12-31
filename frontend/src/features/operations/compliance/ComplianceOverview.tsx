@@ -85,7 +85,7 @@ export const ComplianceOverview = memo(() => {
                                         dataKey="value"
                                     >
                                         {riskData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={entry.color} />
+                                            <Cell key={`compliance-risk-${entry.name}-${index}`} fill={entry.color} />
                                         ))}
                                     </Pie>
                                     <Tooltip contentStyle={chartTheme.tooltipStyle} />

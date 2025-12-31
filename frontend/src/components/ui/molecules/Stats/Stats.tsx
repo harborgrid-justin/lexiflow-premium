@@ -44,8 +44,9 @@ export const Stats = React.memo<StatsProps>(({ items }) => {
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {items.map((item, index) => (
-                <div key={index} className={cn("p-5 rounded-lg border shadow-sm flex items-start gap-4", theme.surface.default, theme.border.default)}>
+            {/* IDENTITY-STABLE KEYS: Use label as stable identifier */}
+            {items.map((item) => (
+                <div key={item.label} className={cn("p-5 rounded-lg border shadow-sm flex items-start gap-4", theme.surface.default, theme.border.default)}>
                     <div className={cn("p-3 rounded-lg", item.bg)}>
                         <item.icon className={cn("h-6 w-6", item.color)} />
                     </div>
@@ -58,3 +59,5 @@ export const Stats = React.memo<StatsProps>(({ items }) => {
         </div>
     );
 });
+
+Stats.displayName = 'Stats';

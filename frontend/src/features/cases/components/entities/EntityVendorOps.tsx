@@ -20,8 +20,8 @@ import { Star, DollarSign, TrendingDown, Briefcase } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Button } from '@/components/ui/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -39,9 +39,9 @@ interface EntityVendorOpsProps {
 
 export const EntityVendorOps: React.FC<EntityVendorOpsProps> = ({ entities, onSelect }) => {
   const { theme } = useTheme();
-  
-  const vendors = useMemo(() => 
-      entities.filter(e => e.type === 'Law Firm' || e.type === 'Vendor' || e.roles.includes('Expert')), 
+
+  const vendors = useMemo(() =>
+      entities.filter(e => e.type === 'Law Firm' || e.type === 'Vendor' || e.roles.includes('Expert')),
   [entities]);
 
   return (

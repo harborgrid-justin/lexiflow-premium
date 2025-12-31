@@ -1,9 +1,9 @@
 /**
  * CorrespondenceDetail.tsx
- * 
+ *
  * Detailed view for correspondence items and service of process tracking,
  * with document linking, task creation, and delivery confirmation.
- * 
+ *
  * @module components/case-detail/collaboration/CorrespondenceDetail
  * @category Case Management - Correspondence
  */
@@ -39,12 +39,12 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
   const { theme } = useTheme();
   const notify = useNotify();
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
-  
-  // Local state for service updates - type narrowing required inside render or handlers, 
+
+  // Local state for service updates - type narrowing required inside render or handlers,
   // but initial state setup needs careful handling if item is wrong type.
   // We assume item matches type based on parent logic.
   const serviceItem = type === 'service' ? (item as ServiceJob) : null;
-  
+
   const [signerName, setSignerName] = useState(serviceItem?.signerName || '');
   const [deliveryDate, setDeliveryDate] = useState(serviceItem?.servedDate || '');
   const [newStatus, setNewStatus] = useState(serviceItem?.status || 'Out for Service');
@@ -264,8 +264,8 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                                 </div>
                                 <div>
                                     <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Date</label>
-                                    <input 
-                                        type="date" 
+                                    <input
+                                        type="date"
                                         title="Select delivery date"
                                         className="w-full p-2 text-sm border rounded bg-white"
                                         value={deliveryDate}
@@ -277,8 +277,8 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                                 <label className="text-[10px] font-bold text-slate-400 uppercase block mb-1">Signed By</label>
                                 <div className="relative">
                                     <PenTool className="absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3 text-slate-400"/>
-                                    <input 
-                                        className="w-full pl-7 p-2 text-sm border rounded bg-white" 
+                                    <input
+                                        className="w-full pl-7 p-2 text-sm border rounded bg-white"
                                         placeholder="Name of signatory..."
                                         value={signerName}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSignerName(e.target.value)}
@@ -334,7 +334,7 @@ export const CorrespondenceDetail: React.FC<CorrespondenceDetailProps> = ({ item
                                 <p className={cn("text-sm p-3 bg-yellow-50 border border-yellow-100 rounded text-yellow-800")}>{serviceItem.notes}</p>
                             </div>
                         )}
-                        
+
                         <div className="pt-2">
                             <Button variant="outline" size="sm" className="w-full border-dashed" icon={UploadCloud} onClick={handleUploadProof}>
                                 Upload Return Receipt / Proof

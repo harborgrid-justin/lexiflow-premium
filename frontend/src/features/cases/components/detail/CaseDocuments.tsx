@@ -1,9 +1,9 @@
 /**
  * CaseDocuments.tsx
- * 
+ *
  * Document management interface with AI analysis, task creation, compliance scanning,
  * and lazy-loaded document assembly integration.
- * 
+ *
  * @module components/case-detail/CaseDocuments
  * @category Case Management - Documents & Analysis
  */

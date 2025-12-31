@@ -188,7 +188,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const debouncedQuery = useDebounce(query, 150);
 
-  // Filter commands based on role
+  // Memoization with purpose: Role filtering is expensive for large command lists (Principle #13)
   const visibleCommands = React.useMemo(() => {
     return commands.filter(command => {
       if (!command.allowedRoles || command.allowedRoles.length === 0) {

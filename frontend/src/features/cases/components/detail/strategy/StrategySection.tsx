@@ -1,9 +1,9 @@
 /**
  * StrategySection.tsx
- * 
+ *
  * Reusable strategy section component displaying arguments, defenses, or citations
  * with supporting evidence and authority links.
- * 
+ *
  * @module components/case-detail/strategy/StrategySection
  * @category Case Management - Legal Strategy
  */
@@ -107,7 +107,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
                   </div>
                 </div>
                 <p className={cn("text-xs line-clamp-3 mb-3", theme.text.secondary)}>{typedItem.description}</p>
-                
+
                 {type === 'Argument' && (
                    <>
                        <RiskMeter value={(typedItem as LegalArgument).strength} label="Strength" type="strength" />
@@ -134,7 +134,7 @@ export const StrategySection: React.FC<StrategySectionProps> = ({ title, items, 
                        </div>
                    </>
                 )}
-                
+
                 {type === 'Defense' && (
                     <div className={cn("flex justify-between items-center pt-2 border-t", theme.border.default)}>
                         <span className={cn("text-[10px] uppercase font-bold", theme.text.tertiary)}>{(typedItem as Defense).type}</span>

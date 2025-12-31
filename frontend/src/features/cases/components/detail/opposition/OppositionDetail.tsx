@@ -1,9 +1,9 @@
 /**
  * OppositionDetail.tsx
- * 
+ *
  * Detailed dossier view for opposing parties with strategy notes,
  * related cases, and counsel information.
- * 
+ *
  * @module components/case-detail/opposition/OppositionDetail
  * @category Case Management - Opposition Research
  */
@@ -61,7 +61,7 @@ export const OppositionDetail: React.FC<OppositionDetailProps> = ({ entity, onCl
 
             <div className="space-y-4">
                 <h4 className={cn("text-xs font-bold uppercase border-b pb-2", theme.text.tertiary, theme.border.default)}>Strategic Analysis</h4>
-                
+
                 <div className={cn("p-4 rounded-lg border space-y-3", theme.surface.highlight, theme.border.default)}>
                     <div className="flex justify-between items-center">
                         <span className={cn("text-xs font-medium", theme.text.secondary)}>Aggression Index</span>

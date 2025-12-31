@@ -22,8 +22,8 @@ import { useTheme } from '@/providers/ThemeContext';
 import { ChartColorService } from '@/services/theme/chartColorService';
 
 // Components
-import { MetricCard } from '@/components/molecules';
-import { Card } from '@/components/molecules';
+import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
+import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Types
 import { LegalEntity } from '@/types';
@@ -71,30 +71,30 @@ export const EntityAnalytics: React.FC<EntityAnalyticsProps> = ({ entities }) =>
   return (
     <div className="space-y-6 animate-fade-in">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <MetricCard 
-                label="Total Entities" 
-                value={entities.length} 
-                icon={Users} 
+            <MetricCard
+                label="Total Entities"
+                value={entities.length}
+                icon={Users}
                 className="border-l-4 border-l-blue-600"
             />
-            <MetricCard 
-                label="High Risk" 
-                value={riskStats.high} 
-                icon={ShieldAlert} 
+            <MetricCard
+                label="High Risk"
+                value={riskStats.high}
+                icon={ShieldAlert}
                 className="border-l-4 border-l-red-500"
                 trend="Action Required"
                 trendUp={false}
             />
-            <MetricCard 
-                label="Corporations" 
-                value={typeStats.find(t => t.name === 'Corporation')?.value || 0} 
-                icon={Building2} 
+            <MetricCard
+                label="Corporations"
+                value={typeStats.find(t => t.name === 'Corporation')?.value || 0}
+                icon={Building2}
                 className="border-l-4 border-l-purple-600"
             />
-            <MetricCard 
-                label="Jurisdictions" 
-                value={jurisdictionCount} 
-                icon={Globe} 
+            <MetricCard
+                label="Jurisdictions"
+                value={jurisdictionCount}
+                icon={Globe}
                 className="border-l-4 border-l-emerald-500"
             />
         </div>
@@ -126,8 +126,8 @@ export const EntityAnalytics: React.FC<EntityAnalyticsProps> = ({ entities }) =>
             <Card title="Highest Risk Entities">
                 <div className="h-72 w-full">
                     <ResponsiveContainer width="100%" height="100%">
-                        <BarChart 
-                            data={topHighRisk} 
+                        <BarChart
+                            data={topHighRisk}
                             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                         >
                             <CartesianGrid strokeDasharray="3 3" vertical={false} />

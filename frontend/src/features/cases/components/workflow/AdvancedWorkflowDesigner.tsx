@@ -28,8 +28,8 @@ import {
 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
-import { Card } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';

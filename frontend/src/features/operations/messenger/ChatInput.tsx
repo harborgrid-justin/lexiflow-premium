@@ -57,12 +57,14 @@ export const ChatInput = ({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { theme } = useTheme();
 
-  // Auto-resize textarea
+  // Effect discipline: Synchronize textarea height with content (Principle #6)
+  // useLayoutEffect would block paint - useEffect is correct here (Principle #8)
   useEffect(() => {
     if (textareaRef.current) {
         textareaRef.current.style.height = 'auto';
         textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 120) + 'px';
     }
+    // No cleanup needed - style mutation is idempotent
   }, [inputText]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -80,6 +82,7 @@ export const ChatInput = ({
               <div key={`attachment-${att.name}-${i}`} className={cn("flex items-center rounded-full px-3 py-1 text-xs border shrink-0", theme.surface.highlight, theme.border.default)}>")
                 <FileText className={cn("h-3 w-3 mr-2", theme.text.secondary)}/>
                 <span className={cn("max-w-[100px] truncate", theme.text.primary)}>{att.name}</span>
+                {/* Concurrent-safe: Functional update prevents stale closures (Principle #5) */}
                 <button onClick={() => setPendingAttachments(prev => prev.filter((_, idx) => idx !== i))} className={cn("ml-2 hover:text-rose-500", theme.text.tertiary)}>
                   <X className="h-3 w-3"/>
                 </button>

@@ -105,8 +105,8 @@ export const MarketingDashboard: React.FC = () => {
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                 />
                 <Bar dataKey="revenue" radius={[0, 4, 4, 0]}>
-                  {metrics.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b'][index % 4]} />
+                  {metrics.map((entry, index) => (
+                    <Cell key={`revenue-cell-${entry.source || index}`} fill={['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b'][index % 4]} />
                   ))}
                 </Bar>
               </BarChart>

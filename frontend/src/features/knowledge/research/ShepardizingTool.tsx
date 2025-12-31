@@ -76,7 +76,7 @@ export const ShepardizingTool: React.FC = () => {
             <Card title="Appellate History">
               <div className="space-y-3">
                 {result.history.map((h, i) => (
-                  <div key={i} className={cn("flex items-center gap-3 p-3 rounded-lg border", theme.surface.highlight, theme.border.default)}>
+                  <div key={`history-${h.citingCase}-${i}`} className={cn("flex items-center gap-3 p-3 rounded-lg border", theme.surface.highlight, theme.border.default)}>
                     {getHistoryIcon(h.action)}
                     <div>
                       <p className={cn("text-sm font-medium", theme.text.primary)}>{h.action}</p>
@@ -91,7 +91,7 @@ export const ShepardizingTool: React.FC = () => {
             <Card title="Citing Treatment">
               <div className="space-y-4 max-h-[500px] overflow-y-auto custom-scrollbar pr-2">
                 {result.treatment.map((t, i) => (
-                  <div key={i} className={cn("p-4 rounded-lg border", theme.surface.default, theme.border.default)}>
+                  <div key={`treatment-${t.citingCase}-${i}`} className={cn("p-4 rounded-lg border", theme.surface.default, theme.border.default)}>
                     <div className="flex justify-between items-center mb-2">
                       <h5 className={cn("font-bold text-sm", theme.text.primary)}>{t.citingCase}</h5>
                       {getTreatmentBadge(t.treatment)}

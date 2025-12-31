@@ -30,10 +30,13 @@ interface LazyLoaderProps {
 
 export function LazyLoader({ message = "Loading..." }: LazyLoaderProps) {
   const { theme } = useTheme();
+  // HYDRATION-SAFE: Initialize as false, will be set in effect
   const [isLowBandwidth, setIsLowBandwidth] = useState(false);
 
   useEffect(() => {
-    // Adaptive Loading: Check connection type
+    // HYDRATION-SAFE: Adaptive Loading - Check connection type only in browser
+    if (typeof navigator === 'undefined') return;
+
     if ('connection' in navigator) {
         const nav = navigator as Navigator & {
           connection?: {
@@ -62,10 +65,11 @@ export function LazyLoader({ message = "Loading..." }: LazyLoaderProps) {
 
   return (
     <div className="h-full w-full p-6 space-y-6 overflow-hidden" role="status" aria-live="polite" aria-label={message}>
-      {/* Skeleton Metrics Row - Matches MetricCard height ~120px */}
+      {/* Skeleton Metrics Row - LAYOUT STABILITY: Fixed dimensions for predictable layout */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 animate-pulse">
+        {/* IDENTITY-STABLE KEYS: Use stable identifiers */}
         {[1, 2, 3, 4].map((i: number) => (
-          <div key={i} className={cn("h-32 rounded-xl border shadow-sm relative overflow-hidden", theme.surface.default, theme.border.default)}>
+          <div key={`skeleton-metric-${i}`} className={cn("h-32 rounded-xl border shadow-sm relative overflow-hidden", theme.surface.default, theme.border.default)}>
              <div className={cn("absolute inset-0 bg-gradient-to-r from-transparent via-current to-transparent opacity-10 animate-shimmer", theme.surface.highlight)} style={{ backgroundSize: '200% 100%' }}></div>
           </div>
         ))}
@@ -90,7 +94,7 @@ export function LazyLoader({ message = "Loading..." }: LazyLoaderProps) {
              </div>
         </div>
       </div>
-      
+
       <div className="flex justify-center mt-4">
          <span className={cn("text-xs font-medium animate-pulse uppercase tracking-widest", theme.text.tertiary)}>{message}</span>
       </div>

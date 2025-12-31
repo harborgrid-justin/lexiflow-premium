@@ -90,7 +90,7 @@ export const JudgeAnalytics: React.FC<JudgeAnalyticsProps> = ({ judge, stats }) 
             <h4 className={cn("font-semibold text-sm mb-3", theme.text.primary)}>Judicial Tendencies</h4>
             <ul className="space-y-2">
               {judge.tendencies.map((t, i) => (
-                <li key={i} className={cn("text-sm flex items-start", theme.text.secondary)}>
+                <li key={`tendency-${i}-${t.substring(0, 20)}`} className={cn("text-sm flex items-start", theme.text.secondary)}>
                   <Scale className="h-4 w-4 mr-2 shrink-0 mt-0.5 opacity-50" />
                   {t}
                 </li>

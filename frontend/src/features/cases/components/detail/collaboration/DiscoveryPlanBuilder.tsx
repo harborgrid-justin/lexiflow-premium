@@ -1,9 +1,9 @@
 /**
  * DiscoveryPlanBuilder.tsx
- * 
+ *
  * Collaborative FRCP 26(f) discovery plan builder with section-by-section
  * editing, status tracking, and agreement export.
- * 
+ *
  * @module components/case-detail/collaboration/DiscoveryPlanBuilder
  * @category Case Management - Discovery Planning
  */
@@ -58,11 +58,11 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
 
   const handleSaveSection = async () => {
     if (!activePlan || !editingSectionId) return;
-    
-    const updatedSections = activePlan.sections.map(s => 
+
+    const updatedSections = activePlan.sections.map(s =>
       s.id === editingSectionId ? { ...s, content: editContent } : s
     );
-    
+
     const updatedPlan = { ...activePlan, sections: updatedSections };
     updatePlan(updatedPlan);
     setEditingSectionId(null);
@@ -70,7 +70,7 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
 
   const toggleSectionStatus = async (sectionId: string, status: PlanSection['status']) => {
     if (!activePlan) return;
-    const updatedSections = activePlan.sections.map(s => 
+    const updatedSections = activePlan.sections.map(s =>
       s.id === sectionId ? { ...s, status } : s
     );
     const updatedPlan = { ...activePlan, sections: updatedSections };
@@ -110,18 +110,18 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
               <div className="flex items-center gap-2">
                 {section.status === 'Agreed' && <span className="text-xs font-bold text-green-600 flex items-center"><CheckCircle className="h-3 w-3 mr-1"/> Agreed</span>}
                 {section.status === 'Disputed' && <span className="text-xs font-bold text-red-600 flex items-center"><AlertCircle className="h-3 w-3 mr-1"/> Disputed</span>}
-                
+
                 <div className={cn("h-4 w-px mx-1", theme.border.default)}></div>
-                
+
                 <div className="flex gap-1">
-                  <button 
+                  <button
                     onClick={() => toggleSectionStatus(section.id, 'Agreed')}
                     className={`p-1 rounded hover:bg-green-100 ${section.status === 'Agreed' ? 'text-green-600 bg-green-50' : 'text-slate-400'}`}
                     title="Mark Agreed"
                   >
                     <CheckCircle className="h-4 w-4"/>
                   </button>
-                  <button 
+                  <button
                     onClick={() => toggleSectionStatus(section.id, 'Disputed')}
                     className={`p-1 rounded hover:bg-red-100 ${section.status === 'Disputed' ? 'text-red-600 bg-red-50' : 'text-slate-400'}`}
                     title="Mark Disputed"
@@ -135,7 +135,7 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
             <div className="p-4">
               {editingSectionId === section.id ? (
                 <div>
-                  <textarea 
+                  <textarea
                     className={cn("w-full p-3 border rounded-md text-sm outline-none focus:ring-2 focus:ring-blue-100 min-h-[100px]", theme.border.default, theme.surface.default, theme.text.primary)}
                     value={editContent}
                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setEditContent(e.target.value)}
@@ -149,7 +149,7 @@ export const DiscoveryPlanBuilder: React.FC<DiscoveryPlanBuilderProps> = ({ case
               ) : (
                 <div className="group relative">
                   <p className={cn("text-sm whitespace-pre-wrap leading-relaxed", theme.text.secondary)}>{section.content}</p>
-                  <button 
+                  <button
                     onClick={() => handleEditSection(section)}
                     title="Edit section"
                     className={cn("absolute top-0 right-0 opacity-0 group-hover:opacity-100 p-1 rounded transition-opacity", theme.text.primary, `hover:${theme.primary.light}`)}

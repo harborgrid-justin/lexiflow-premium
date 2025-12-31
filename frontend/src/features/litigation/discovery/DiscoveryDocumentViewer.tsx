@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Printer, Download, FileText, ZoomIn, ZoomOut, Tag } from 'lucide-react';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button';
 import { DataService } from '@/services/data/dataService';
 import { CodingPanel } from './viewer/CodingPanel';
 import { useTheme } from '@/providers/ThemeContext';
@@ -18,7 +18,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
           // Fetch metadata and content
           const metadata = await DataService.documents.getById(docId);
           const content = await DataService.documents.getContent(docId);
-          
+
           if (metadata) {
               setDoc({
                   title: metadata.title,
@@ -52,7 +52,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
                     <p className={cn("text-[10px] font-mono", theme.text.secondary)}>ID: {docId} • {doc.date}</p>
                 </div>
             </div>
-            
+
             <div className="flex items-center gap-2">
                 <div className={cn("hidden md:flex items-center rounded px-2 py-1 mr-2 border", theme.surface.highlight, theme.border.default)}>
                     <button onClick={() => setScale(s => Math.max(50, s - 10))} className={cn("p-1 hover:text-blue-400", theme.text.secondary)} aria-label="Zoom out"><ZoomOut className="h-4 w-4"/></button>
@@ -61,7 +61,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
                 </div>
                 <Button size="sm" variant="secondary" icon={Printer}>Print</Button>
                 <Button size="sm" variant="primary" icon={Download}>Download</Button>
-                <button 
+                <button
                     onClick={() => setShowCodingPanel(!showCodingPanel)}
                     className={cn("ml-2 p-2 rounded transition-colors", showCodingPanel ? "bg-blue-600 text-white" : cn(theme.surface.highlight, theme.text.secondary, `hover:${theme.text.primary}`))}
                     aria-label={showCodingPanel ? "Hide coding panel" : "Show coding panel"}
@@ -73,11 +73,11 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
 
         {/* Main Content Area */}
         <div className="flex-1 flex overflow-hidden">
-            
+
             {/* Document Canvas */}
             <div className={cn("flex-1 overflow-auto relative flex justify-center p-8", theme.surface.highlight)}>
                 { }
-                <div 
+                <div
                     className={cn("shadow-2xl min-h-[1100px] w-full max-w-4xl transition-transform origin-top duration-200 ease-out", theme.surface.default)}
                     style={{ transform: `scale(${scale / 100})` }}
                 >
@@ -86,7 +86,7 @@ export const DiscoveryDocumentViewer: React.FC<DiscoveryDocumentViewerProps> = (
                         <span className={cn("font-serif font-bold text-2xl uppercase", theme.text.primary)}>Legal Document</span>
                         <span className={cn("font-mono text-sm", theme.text.secondary)}>{docId}</span>
                     </div>
-                    
+
                     <div className={cn("px-16 py-4 font-serif text-sm leading-loose whitespace-pre-wrap select-text", theme.text.primary)}>
                         {doc.content}
                     </div>

@@ -14,7 +14,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import { ChevronDown, ExternalLink } from 'lucide-react';
 

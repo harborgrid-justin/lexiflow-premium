@@ -1,9 +1,9 @@
 /**
  * CaseListTasks.tsx
- * 
+ *
  * Task management view with filtering by category (all, discovery, pleadings, evidence, trial).
  * Virtual scrolling for performance with large task lists.
- * 
+ *
  * @module components/case-list/CaseListTasks
  * @category Case Management - Task Views
  */
@@ -49,7 +49,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
   const { theme } = useTheme();
 
   const { data: tasks = [], isLoading, error} = useQuery<WorkflowTask[]>(['tasks', 'all'], () => DataService.tasks.getAll());
-  
+
   const { mutate: addTask } = useMutation(DataService.tasks.add, {
       onSuccess: () => queryClient.invalidate(queryKeys.tasks.all())
   });
@@ -73,7 +73,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
 
   // Ensure tasks is always an array
   const safeTasks = Array.isArray(tasks) ? tasks : [];
-  
+
   const filteredTasks = safeTasks.filter(t => {
       if (filter === 'All') return true;
       if (filter === 'Pending') return t.status === TaskStatusBackend.TODO || t.status === TaskStatusBackend.IN_PROGRESS;
@@ -99,7 +99,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
           if (found) onSelectCase(found);
       }
   };
-  
+
   const renderRow = (t: WorkflowTask) => (
     <div key={t.id} className={cn("p-4 flex items-start transition-colors group h-[90px] border-b", theme.border.default, `hover:${theme.surface.highlight}`)}>
         <div className="pt-0.5 mr-4">
@@ -117,7 +117,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
               <div className="flex items-center gap-2 shrink-0">
                 <Badge variant={t.priority === 'High' ? 'error' : t.priority === 'Medium' ? 'warning' : 'neutral'}>{t.priority}</Badge>
                 {t.caseId && (
-                    <button 
+                    <button
                         onClick={() => handleTaskClick(t)}
                         className={cn("flex items-center px-2 py-1 rounded text-[10px] font-medium transition-colors border border-transparent", "text-blue-600 bg-blue-50 hover:bg-blue-100 hover:border-blue-200")}
                         title="Go to Case"
@@ -144,16 +144,16 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
   return (
     <div className="space-y-4 h-full flex flex-col">
       {taskModal.isOpen && <TaskCreationModal isOpen={true} onClose={taskModal.close} onSave={handleAddTask} />}
-      
+
       <div className={cn("flex flex-col sm:flex-row justify-between items-center gap-4 p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <div>
             <h3 className={cn("font-bold", theme.text.primary)}>Task Manager</h3>
             <p className={cn("text-sm", theme.text.secondary)}>Cross-module workflow & assignments</p>
         </div>
         <div className="flex gap-2 w-full sm:w-auto">
-            <select 
-              className={cn("border text-sm rounded-md px-3 py-1.5 outline-none", theme.surface.default, theme.border.default, theme.text.primary)} 
-              value={filter} 
+            <select
+              className={cn("border text-sm rounded-md px-3 py-1.5 outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
+              value={filter}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilter(e.target.value)}
               aria-label="Filter Tasks"
             >
@@ -161,7 +161,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
                 <option value="Pending">Pending</option>
                 <option value="High Priority">High Priority</option>
             </select>
-            <button 
+            <button
               onClick={taskModal.open}
               className={cn("flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium transition-colors", theme.primary.DEFAULT, theme.text.inverse, theme.primary.hover)}
             >
@@ -185,7 +185,7 @@ export const CaseListTasks: React.FC<CaseListTasksProps> = ({ onSelectCase }) =>
             </div>
           </div>
         ) : (
-          <VirtualList 
+          <VirtualList
             items={filteredTasks}
             height="100%"
             itemHeight={90}

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Button } from '@/components/ui/atoms/Button';
+import { Badge } from '@/components/ui/atoms/Badge';
 import { ArrowRight, Database, FileText, CheckCircle, Scale, AlertTriangle } from 'lucide-react';
 import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/providers/ThemeContext';
@@ -36,7 +36,7 @@ const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNavigate }) =
   return (
     <div className="space-y-6 animate-fade-in">
       <DiscoveryMetrics stats={stats} onNavigate={onNavigate} />
-      
+
       {/* FRCP Compliance Status */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
            <Card title="FRCP Compliance Tracker">
@@ -51,7 +51,7 @@ const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNavigate }) =
                        </div>
                        <CheckCircle className="h-5 w-5 text-green-600"/>
                    </div>
-                   
+
                    <div className="flex items-center justify-between p-3 rounded border cursor-pointer hover:bg-slate-50 transition-colors" onClick={() => onNavigate('requests')}>
                        <div className="flex items-center gap-3">
                            <FileText className="h-5 w-5 text-blue-600"/>
@@ -77,7 +77,7 @@ const DiscoveryDashboard: React.FC<DiscoveryDashboardProps> = ({ onNavigate }) =
                    )}
                </div>
            </Card>
-           
+
            <div className="md:col-span-2">
                 <DiscoveryCharts />
            </div>

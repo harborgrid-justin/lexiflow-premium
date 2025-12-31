@@ -189,6 +189,10 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
 
   const handleCopyKey = async (key: string, keyId: string) => {
     try {
+      if (typeof navigator === 'undefined' || !navigator.clipboard) {
+        setErrors({ general: 'Clipboard not available' });
+        return;
+      }
       await navigator.clipboard.writeText(key);
       setCopiedKeyId(keyId);
       setTimeout(() => setCopiedKeyId(null), 2000);

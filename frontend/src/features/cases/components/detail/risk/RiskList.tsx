@@ -1,9 +1,9 @@
 /**
  * RiskList.tsx
- * 
+ *
  * Scrollable list of identified risks with category icons, severity badges,
  * and selection highlighting.
- * 
+ *
  * @module components/case-detail/risk/RiskList
  * @category Case Management - Risk Assessment
  */
@@ -13,7 +13,7 @@ import React from 'react';
 import { Shield, DollarSign, Zap, Eye } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Badge } from '@/components/atoms';
+import { Badge } from '@/components/ui/atoms/Badge';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -55,7 +55,7 @@ export const RiskList: React.FC<RiskListProps> = ({ risks, selectedId, onSelect 
   return (
     <div className={cn("divide-y", theme.border.default)}>
         {risks.map(risk => (
-            <div 
+            <div
                 key={risk.id}
                 onClick={() => onSelect(risk)}
                 className={cn(

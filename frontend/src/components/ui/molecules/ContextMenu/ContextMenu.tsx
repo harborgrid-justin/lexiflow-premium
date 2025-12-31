@@ -59,11 +59,12 @@ export const ContextMenu: React.FC<ContextMenuProps> = ({ x, y, items, onClose }
       )}
       style={{ top: y, left: x }}
     >
-      {items.map((item, index) => {
+      {/* IDENTITY-STABLE KEYS: Use label as key */}
+      {items.map((item) => {
           const Icon = item.icon;
           return (
             <button
-            key={index}
+            key={item.label}
             onClick={() => { item.action(); onClose(); }}
             className={cn(
                 "w-full flex items-center gap-3 px-3 py-2 text-sm rounded-lg transition-colors",

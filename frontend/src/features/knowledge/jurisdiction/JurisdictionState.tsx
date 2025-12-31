@@ -69,7 +69,7 @@ export const JurisdictionState: React.FC = () => {
         </TableHeader>
         <TableBody>
           {filteredStates.map((s, i) => (
-            <TableRow key={i}>
+            <TableRow key={`state-${(s as { region: string }).region}-${i}`}>
               <TableCell className={cn("font-medium", theme.text.primary)}>{(s as { name: string; region: string; type?: string }).region}</TableCell>
               <TableCell>{(s as { name: string; region: string; type?: string }).name}</TableCell>
               <TableCell>{(s as { name: string; region: string; type?: string }).type}</TableCell>

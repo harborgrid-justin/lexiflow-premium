@@ -72,9 +72,9 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
   });
 
   const renderRow = (ent: LegalEntity) => (
-      <div 
-        key={ent.id} 
-        onClick={() => onSelect(ent)} 
+      <div
+        key={ent.id}
+        onClick={() => onSelect(ent)}
         className={cn("flex items-center border-b h-[72px] px-6 transition-colors cursor-pointer group", theme.border.default, `hover:${theme.surface.highlight}`)}
       >
         <div className="w-[35%] flex items-center gap-3 pr-4">
@@ -120,7 +120,7 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
                 />
                 {isSearching && <div className="absolute right-3 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-blue-500"/></div>}
             </div>
-            <select 
+            <select
                 className={cn("p-2 border rounded text-sm outline-none bg-transparent ml-4", theme.border.default, theme.text.primary)}
                 value={filterType}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterType(e.target.value)}
@@ -142,7 +142,7 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
                 <div className="w-[15%]">Location</div>
                 <div className="w-[15%]">Risk & Status</div>
              </div>
-             
+
              {/* Virtual Body */}
              <div className="flex-1 relative">
                 {filtered.length === 0 ? (
@@ -150,7 +150,7 @@ export const EntityGrid: React.FC<EntityGridProps> = ({ entities, onSelect }) =>
                          {isSearching ? "Searching..." : "No entities found."}
                      </div>
                 ) : (
-                    <VirtualList 
+                    <VirtualList
                         items={filtered}
                         height="100%"
                         itemHeight={72}

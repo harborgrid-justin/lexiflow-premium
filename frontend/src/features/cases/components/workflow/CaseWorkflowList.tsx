@@ -1,12 +1,12 @@
 
 import React from 'react';
 import { GitBranch, Users, ChevronRight, CheckCircle, Clock, Settings, Search } from 'lucide-react';
-import { Badge } from '@/components/atoms';
+import { Badge } from '@/components/ui/atoms/Badge';
 import { Case, WorkflowTask } from '@/types';
 import { WorkflowQuickActions } from './WorkflowQuickActions';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { EmptyState } from '@/components/molecules';
+import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { getCaseProgress, getNextTask } from './utils';
 
 interface CaseWorkflowListProps {
@@ -21,8 +21,8 @@ export const CaseWorkflowList: React.FC<CaseWorkflowListProps> = ({ cases, tasks
 
   if (!cases || cases.length === 0) {
     return (
-      <EmptyState 
-        title="No Active Case Workflows" 
+      <EmptyState
+        title="No Active Case Workflows"
         description="There are no cases with active workflows at the moment. Start a new case to see it here."
         icon={Search}
       />
@@ -34,8 +34,8 @@ export const CaseWorkflowList: React.FC<CaseWorkflowListProps> = ({ cases, tasks
         {cases.map(c => {
             const progress = getCaseProgress(c.id, tasks);
             return (
-            <div 
-                key={c.id} 
+            <div
+                key={c.id}
                 className={cn(
                   "rounded-lg border shadow-sm p-5 transition-all group relative",
                   theme.surface.default,
@@ -70,13 +70,13 @@ export const CaseWorkflowList: React.FC<CaseWorkflowListProps> = ({ cases, tasks
                         <span className={cn("font-bold", theme.text.primary)}>{progress}%</span>
                       </div>
                       <div className={cn("w-full rounded-full h-2", theme.surface.highlight)}>
-                        <div 
-                          className={`h-2 rounded-full transition-all duration-1000 ${progress === 100 ? 'bg-green-500' : theme.primary.DEFAULT}`} 
+                        <div
+                          className={`h-2 rounded-full transition-all duration-1000 ${progress === 100 ? 'bg-green-500' : theme.primary.DEFAULT}`}
                           style={{ '--progress-width': `${progress}%` } as React.CSSProperties}
                         ></div>
                       </div>
                   </div>
-                  
+
                   <div className={cn("p-3 rounded border flex items-center justify-between", theme.surface.highlight, theme.border.default)}>
                       <div className="flex items-center gap-3">
                         {progress === 100 ? <CheckCircle className="h-5 w-5 text-green-500"/> : <Clock className="h-5 w-5 text-amber-500"/>}
@@ -88,7 +88,7 @@ export const CaseWorkflowList: React.FC<CaseWorkflowListProps> = ({ cases, tasks
                       <div className="flex items-center gap-1">
                         <WorkflowQuickActions caseId={c.id} onAction={(action) => console.log(action, c.id)} />
                         {onManageWorkflow && (
-                            <button 
+                            <button
                                 onClick={(e: React.MouseEvent) => { e.stopPropagation(); onManageWorkflow(c.id); }}
                                 className={cn("p-1 rounded transition-colors ml-1", theme.text.tertiary, `hover:${theme.primary.text}`, `hover:${theme.surface.default}`)}
                                 title="Manage Workflow Engine"

@@ -1,9 +1,9 @@
 /**
  * CaseEvidence.tsx
- * 
+ *
  * Case-scoped evidence management wrapper that delegates to EvidenceInventory
  * component with filtering and intake capabilities.
- * 
+ *
  * @module components/case-detail/CaseEvidence
  * @category Case Management - Evidence Management
  */
@@ -17,7 +17,7 @@ import { EvidenceInventory } from '@features/litigation';
 import { EmptyState } from '@/components/ui/molecules/EmptyState';
 
 // Internal Dependencies - Hooks & Context
-import { useEvidenceVault } from '@/hooks/useEvidenceVault'; 
+import { useEvidenceVault } from '@/hooks/useEvidenceVault';
 
 interface CaseEvidenceProps {
   caseId: string;
@@ -26,13 +26,13 @@ interface CaseEvidenceProps {
 export const CaseEvidence: React.FC<CaseEvidenceProps> = ({ caseId }) => {
   // Use useEvidenceVault hook, scoped to the specific caseId.
   // This hook now encapsulates all data fetching and state management.
-  const { 
+  const {
     evidenceItems,
-    filteredItems, 
-    filters, 
-    setFilters, 
-    handleItemClick, 
-    handleIntakeComplete: _handleIntakeComplete 
+    filteredItems,
+    filters,
+    setFilters,
+    handleItemClick,
+    handleIntakeComplete: _handleIntakeComplete
   } = useEvidenceVault(caseId);
 
   // isLoading can be derived from the hook's underlying useQuery if needed,
@@ -49,7 +49,7 @@ export const CaseEvidence: React.FC<CaseEvidenceProps> = ({ caseId }) => {
         />
       ) : (
         <EvidenceInventory
-          items={evidenceItems} 
+          items={evidenceItems}
           filteredItems={filteredItems}
           filters={filters}
           setFilters={setFilters}

@@ -1,9 +1,9 @@
 /**
  * CaseTimeline.tsx
- * 
+ *
  * Chronological case activity view with list and story modes, type filtering,
  * and virtualized scrolling for large event histories.
- * 
+ *
  * @module components/case-detail/CaseTimeline
  * @category Case Management - Timeline & Events
  */
@@ -13,9 +13,9 @@ import React, { useState, useMemo } from 'react';
 import { FileText, CheckCircle, DollarSign, Flag, Briefcase, Gavel, Calendar, BookOpen, List, Filter } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TimelineItem } from '@/components/molecules';
+import { TimelineItem } from '@/components/ui/molecules/TimelineItem/TimelineItem';
 import { StoryModeTimeline } from './timeline/StoryModeTimeline';
-import { VirtualList } from '@/components/organisms';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -92,11 +92,11 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
             <h3 className={cn("font-bold text-sm uppercase tracking-wide", theme.text.primary)}>Case Timeline</h3>
             <span className={cn("text-xs px-1.5 rounded-full", theme.surface.default, theme.border.default, theme.text.secondary, "border")}>{filteredEvents.length}</span>
         </div>
-        
+
         <div className="flex gap-2">
             <div className="relative">
                 <Filter className={cn("absolute left-2 top-1/2 -translate-y-1/2 h-3 w-3", theme.text.tertiary)} />
-                <select 
+                <select
                     className={cn("pl-6 pr-2 py-1 text-xs border rounded bg-transparent outline-none appearance-none cursor-pointer", theme.border.default, theme.text.primary)}
                     value={filterType}
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterType(e.target.value)}
@@ -110,7 +110,7 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
                     <option value="billing">Billing</option>
                 </select>
             </div>
-            
+
             <div className={cn("flex p-0.5 rounded-lg border", theme.surface.highlight, theme.border.default)}>
                 <button
                     onClick={() => setViewMode('list')}
@@ -131,7 +131,7 @@ export const CaseTimeline: React.FC<CaseTimelineProps> = ({ events, onEventClick
             </div>
         </div>
       </div>
-      
+
       <div className="flex-1 overflow-hidden p-0 relative">
         {filteredEvents.length === 0 ? (
           <p className={cn("text-sm text-center italic py-4", theme.text.tertiary)}>No events found.</p>

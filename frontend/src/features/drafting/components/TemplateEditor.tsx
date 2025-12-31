@@ -99,7 +99,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
       const end = textarea.selectionEnd;
       const newContent = content.substring(0, start) + placeholder + content.substring(end);
       setContent(newContent);
-      
+
       // Set cursor after inserted placeholder
       setTimeout(() => {
         textarea.focus();
@@ -150,7 +150,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
 
   const renderPreview = () => {
     let preview = content;
-    
+
     // Highlight placeholders
     preview = preview.replace(/\{\{(\w+)\}\}/g, '<span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-1 rounded">{{$1}}</span>');
     preview = preview.replace(/\{\{case\.(\w+)\}\}/g, '<span class="bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-1 rounded">{{case.$1}}</span>');
@@ -300,7 +300,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
                   </button>
                 </div>
               </div>
-              
+
               {!showPreview ? (
                 <textarea
                   id="content-editor"
@@ -335,7 +335,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {variables.map((variable, index) => (
                   <div
-                    key={index}
+                    key={`variable-${variable.name}-${index}`}
                     className="p-3 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700"
                   >
                     <div className="flex items-start justify-between mb-2">

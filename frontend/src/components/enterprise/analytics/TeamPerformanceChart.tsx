@@ -162,12 +162,13 @@ export const TeamPerformanceChart: React.FC<TeamPerformanceChartProps> = ({
         <p style={{ fontWeight: 600, marginBottom: '8px', fontSize: '14px' }}>
           {label}
         </p>
-        {payload.map((entry: { dataKey?: string; value?: number; color?: string }, index: number) => {
+        {/* IDENTITY-STABLE KEYS: Use dataKey as stable identifier */}
+        {payload.map((entry: { dataKey?: string; value?: number; color?: string }) => {
           const metricKey = entry.dataKey as string;
           const metricLabel = metricConfig[metricKey]?.label || metricKey;
 
           return (
-            <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+            <div key={metricKey} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
               <div
                 style={{
                   width: '12px',

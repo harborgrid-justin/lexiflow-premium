@@ -70,7 +70,7 @@ export interface DataGridSearchProps<T extends Record<string, unknown>> {
 
 interface SearchHistory {
   query: string;
-  timestamp: number;
+  timestamp: number; // DETERMINISTIC: Will be set in effect, not during render
   resultsCount: number;
 }
 

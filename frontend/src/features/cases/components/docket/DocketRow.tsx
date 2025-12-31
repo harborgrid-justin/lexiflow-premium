@@ -1,8 +1,8 @@
 /**
  * DocketRow.tsx
- * 
+ *
  * Individual docket entry row with type icons, badges, and action buttons.
- * 
+ *
  * @module components/docket/DocketRow
  * @category Case Management - Docket
  */
@@ -34,14 +34,14 @@ interface DocketRowProps {
     dataIndex?: number;
 }
 
-export const DocketRow: React.FC<DocketRowProps> = ({ 
-    entry, 
-    showCaseColumn, 
-    onSelect, 
-    onSelectCaseId, 
-    onViewDoc, 
+export const DocketRow: React.FC<DocketRowProps> = ({
+    entry,
+    showCaseColumn,
+    onSelect,
+    onSelectCaseId,
+    onViewDoc,
     isFocused = false,
-    dataIndex 
+    dataIndex
 }) => {
     const { theme } = useTheme();
 
@@ -73,7 +73,7 @@ export const DocketRow: React.FC<DocketRowProps> = ({
     };
 
     return (
-        <div 
+        <div
             className={cn(
                 "flex items-center border-b transition-colors cursor-pointer px-6 group",
                 theme.border.default,
@@ -107,8 +107,8 @@ export const DocketRow: React.FC<DocketRowProps> = ({
             {/* Case Ref */}
             {showCaseColumn && (
                 <div className="w-32 shrink-0 px-2">
-                     <span 
-                        className={cn("text-xs hover:underline font-medium truncate block", theme.primary.text)} 
+                     <span
+                        className={cn("text-xs hover:underline font-medium truncate block", theme.primary.text)}
                         onClick={(e: React.MouseEvent) => { e.stopPropagation(); onSelectCaseId(entry.caseId); }}
                         title={entry.caseId}
                      >
@@ -134,9 +134,9 @@ export const DocketRow: React.FC<DocketRowProps> = ({
             {/* Doc Icon */}
             <div className="w-16 shrink-0 text-center">
                  {entry.documentId && (
-                    <Button 
-                        size="sm" 
-                        variant="ghost" 
+                    <Button
+                        size="sm"
+                        variant="ghost"
                         className={cn("h-8 w-8 p-0", theme.text.tertiary, `hover:${theme.primary.text}`)}
                         onClick={(e: React.MouseEvent) => { e.stopPropagation(); onViewDoc(entry.documentId!); }}
                     >
@@ -148,10 +148,10 @@ export const DocketRow: React.FC<DocketRowProps> = ({
             {/* Deadlines / Status */}
             <div className="w-32 shrink-0 text-right flex justify-end">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button 
-                        size="xs" 
-                        variant="ghost" 
-                        icon={ExternalLink} 
+                    <Button
+                        size="xs"
+                        variant="ghost"
+                        icon={ExternalLink}
                         onClick={(e: React.MouseEvent) => { e.stopPropagation(); onSelect(entry); }}
                         className={cn("text-slate-500 transition-colors", `hover:${theme.text.link}`)}
                     >

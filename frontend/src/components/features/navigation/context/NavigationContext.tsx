@@ -136,12 +136,13 @@ export const NavigationProvider: React.FC<NavigationProviderProps> = ({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
 
-  // Actions
+  // Concurrent-safe: Functional state updates prevent stale closures (Principle #5)
+  // Actions wrapped in useCallback for stable context values (Principle #14)
   const navigateTo = useCallback(
     (item: NavigationItem) => {
       setCurrentItem(item);
 
-      // Add to history
+      // Functional update ensures we work with latest state
       setHistory((prev) => {
         const newEntry: NavigationHistoryEntry = {
           item,
@@ -183,11 +184,13 @@ export const NavigationProvider: React.FC<NavigationProviderProps> = ({
     [maxHistoryEntries]
   );
 
+  // Stable callbacks minimize context updates (Principle #14)
   const setBreadcrumbs = useCallback((breadcrumbs: BreadcrumbItem[]) => {
     setBreadcrumbsState(breadcrumbs);
   }, []);
 
   const addBreadcrumb = useCallback((breadcrumb: BreadcrumbItem) => {
+    // Functional update for concurrent safety (Principle #5)
     setBreadcrumbsState((prev) => [...prev, breadcrumb]);
   }, []);
 

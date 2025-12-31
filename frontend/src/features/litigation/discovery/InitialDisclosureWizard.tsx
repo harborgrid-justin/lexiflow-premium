@@ -1,9 +1,10 @@
 
 import React, { useState } from 'react';
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { Stepper } from '@/components/molecules';
-import { Input, TextArea } from '@/components/atoms';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Button } from '@/components/ui/atoms/Button';
+import { Stepper } from '@/components/ui/molecules/Stepper/Stepper';
+import { Input } from '@/components/ui/atoms/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea';
 import { Users, FileText, Calculator, ShieldCheck } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -48,9 +49,9 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
           <p className={cn("text-sm", theme.text.secondary)}>Mandatory exchange of information without awaiting a discovery request.</p>
        </div>
 
-       <Stepper 
-          steps={['Individuals (i)', 'Documents (ii)', 'Damages (iii)', 'Insurance (iv)']} 
-          currentStep={wizard.currentStep} 
+       <Stepper
+          steps={['Individuals (i)', 'Documents (ii)', 'Damages (iii)', 'Insurance (iv)']}
+          currentStep={wizard.currentStep}
           className="mb-8"
        />
 
@@ -65,7 +66,7 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
                         <p className={cn("text-xs", theme.text.secondary)}>Rule 26(a)(1)(A)(i)</p>
                     </div>
                 </div>
-                
+
                 {individuals.map((ind, idx) => (
                     <div key={idx} className={cn("p-4 border rounded-lg space-y-3 relative", theme.border.default)}>
                         <div className="grid grid-cols-2 gap-4">
@@ -89,7 +90,7 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
                         <p className={cn("text-xs", theme.text.secondary)}>Rule 26(a)(1)(A)(ii)</p>
                     </div>
                 </div>
-                 
+
                 {documents.map((doc, idx) => (
                     <div key={idx} className={cn("p-4 border rounded-lg space-y-3", theme.border.default)}>
                         <Input label="Description / Category" value={doc.description} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setDocuments, documents, idx, 'description', e.target.value)} placeholder="e.g. Emails regarding contract negotiation" />
@@ -110,7 +111,7 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
                         <p className={cn("text-xs", theme.text.secondary)}>Rule 26(a)(1)(A)(iii)</p>
                     </div>
                 </div>
-                 
+
                 {damages.map((dmg, idx) => (
                     <div key={idx} className={cn("p-4 border rounded-lg space-y-3", theme.border.default)}>
                         <div className="grid grid-cols-2 gap-4">
@@ -134,7 +135,7 @@ export const InitialDisclosureWizard: React.FC<InitialDisclosureWizardProps> = (
                         <p className={cn("text-xs", theme.text.secondary)}>Rule 26(a)(1)(A)(iv)</p>
                     </div>
                 </div>
-                 
+
                 {insurance.map((ins, idx) => (
                     <div key={idx} className={cn("p-4 border rounded-lg space-y-3", theme.border.default)}>
                          <Input label="Insurance Carrier" value={ins.carrier} onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateItem(setInsurance, insurance, idx, 'carrier', e.target.value)} />

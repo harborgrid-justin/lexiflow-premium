@@ -17,10 +17,10 @@ import { Wand2, Upload, CheckSquare } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { TaskCreationModal } from '@/components/organisms';
-import { VirtualList } from '@/components/organisms';
+import { Button } from '@/components/ui/atoms/Button';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { TaskCreationModal } from '@/features/cases/components/TaskCreationModal/TaskCreationModal';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

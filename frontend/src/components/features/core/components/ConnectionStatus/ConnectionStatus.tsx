@@ -10,11 +10,18 @@ interface ConnectionStatusProps {
 }
 
 export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = '' }) => {
+  // HYDRATION-SAFE: Track mounted state for browser-only APIs
+  const [isMounted, setIsMounted] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
   const [backendStatus, setBackendStatus] = useState<'connected' | 'disconnected' | 'checking'>('checking');
   const [showHealthMonitor, setShowHealthMonitor] = useState(false);
   const [showCoverage, setShowCoverage] = useState(false);
   const { currentSource, isBackendApiEnabled: useBackendApi } = useDataSource();
+
+  // Set mounted flag after hydration
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     // Check backend connection if API mode is enabled
@@ -41,6 +48,9 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
   }, [useBackendApi]);
 
   useEffect(() => {
+    // HYDRATION-SAFE: Only attach browser listeners after mount
+    if (!isMounted || typeof window === 'undefined') return;
+
     // Listen to network status
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -52,7 +62,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, []);
+  }, [isMounted]);
 
   const getStatusColor = () => {
     if (!useBackendApi) return 'text-blue-600 bg-blue-50';

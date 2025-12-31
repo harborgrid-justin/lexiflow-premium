@@ -20,7 +20,7 @@ import { Plus, Trash2, GripVertical } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -48,7 +48,7 @@ export const StageEditor: React.FC = () => {
         {stages.map((stage, idx) => (
           <div key={idx} className={cn("flex items-center gap-2 p-2 rounded border shadow-sm group", theme.surface.default, theme.border.default)}>
             <GripVertical className={cn("h-4 w-4 cursor-move", theme.text.tertiary)} />
-            <input 
+            <input
               className={cn("flex-1 text-sm bg-transparent outline-none font-medium", theme.text.primary)}
               defaultValue={stage}
             />

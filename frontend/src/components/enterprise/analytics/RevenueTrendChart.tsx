@@ -131,8 +131,9 @@ export const RevenueTrendChart: React.FC<RevenueTrendChartProps> = ({
         <p style={{ fontWeight: 600, marginBottom: '8px', fontSize: '14px' }}>
           {label}
         </p>
-        {payload.map((entry: { name?: string; value?: number; color?: string }, index: number) => (
-          <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+        {/* IDENTITY-STABLE KEYS: Use dataKey or name */}
+        {payload.map((entry: { name?: string; value?: number; color?: string; dataKey?: string }) => (
+          <div key={entry.dataKey || entry.name || `entry-${entry.value}`} style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
             <div
               style={{
                 width: '12px',

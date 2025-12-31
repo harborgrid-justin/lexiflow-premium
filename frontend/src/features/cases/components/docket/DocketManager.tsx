@@ -28,8 +28,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/atoms';
-import { PageHeader } from '@/components/organisms';
+import { Button } from '@/components/ui/atoms/Button';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { DocketAnalytics } from './DocketAnalytics';
 import { DocketCalendar } from './DocketCalendar';
 import { DocketSettings } from './DocketSettings';

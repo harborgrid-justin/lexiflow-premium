@@ -69,7 +69,7 @@ export const CalendarSOL: React.FC = () => {
           </TableHeader>
           <TableBody>
             {safeData.map((row, i) => (
-              <TableRow key={i} className={row.critical ? 'bg-red-50/50' : ''}>
+              <TableRow key={`sol-table-${row.date}-${row.matter}`} className={row.critical ? 'bg-red-50/50' : ''}>
                 <TableCell className={`font-bold ${row.critical ? 'text-red-700' : 'text-slate-700'}`}>{row.date}</TableCell>
                 <TableCell className="font-medium text-slate-900">{row.matter}</TableCell>
                 <TableCell>{row.cause}</TableCell>
@@ -92,7 +92,7 @@ export const CalendarSOL: React.FC = () => {
       {/* Mobile Card View */}
       <div className="md:hidden space-y-4">
         {safeData.map((row, i) => (
-          <div key={i} className={`p-4 rounded-lg border shadow-sm ${row.critical ? 'bg-red-50 border-red-200' : 'bg-white border-slate-200'}`}>
+          <div key={`sol-card-${row.date}-${row.matter}`} className={`p-4 rounded-lg border shadow-sm ${row.critical ? 'bg-red-50 border-red-200' : 'bg-white border-slate-200'}`}>
             <div className="flex justify-between items-start mb-2">
               <span className={`text-lg font-bold ${row.critical ? 'text-red-700' : 'text-slate-700'}`}>{row.date}</span>
               <span className={`text-xs font-bold px-2 py-1 rounded ${row.critical ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-500'}`}>

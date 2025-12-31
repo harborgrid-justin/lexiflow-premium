@@ -1,9 +1,9 @@
 /**
  * CaseListResources.tsx
- * 
+ *
  * Resource utilization dashboard showing attorney/paralegal allocation
  * and capacity across active cases.
- * 
+ *
  * @module components/case-list/CaseListResources
  * @category Case Management - Resource Views
  */
@@ -31,7 +31,7 @@ import { cn } from '@/utils/cn';
 
 export const CaseListResources: React.FC = () => {
   const { theme } = useTheme();
-  
+
   const { data: resources = [], isLoading } = useQuery<unknown[]>(
       ['hr', 'utilization'],
       () => DataService.hr.getUtilizationMetrics()

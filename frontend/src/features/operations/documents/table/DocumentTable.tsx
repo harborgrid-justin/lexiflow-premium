@@ -28,8 +28,11 @@ export const DocumentTable = ({
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
   const [isPending, startTransition] = useTransition();
 
+  // Concurrent-safe: Non-urgent sort updates wrapped in transition (Principle #3)
+  // Keeps table responsive during sorting operations
   const handleSort = useCallback((field: keyof LegalDocument) => {
     startTransition(() => {
+      // Functional updates ensure concurrent safety (Principle #5)
       setSortDir(prev => (sortField === field && prev === 'asc' ? 'desc' : 'asc'));
       if (sortField !== field) setSortField(field);
     });
@@ -40,6 +43,7 @@ export const DocumentTable = ({
     return sortDir === 'asc' ? <ArrowUp className="h-3 w-3 ml-1" /> : <ArrowDown className="h-3 w-3 ml-1" />;
   };
 
+  // Memoization with purpose: Sort is expensive, recalc only when deps change (Principle #13)
   const sortedDocuments = useMemo(() => {
     return [...documents].sort((a, b) => {
       const aVal = a[sortField];

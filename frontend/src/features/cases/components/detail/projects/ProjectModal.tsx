@@ -1,8 +1,8 @@
 /**
  * ProjectModal.tsx
- * 
+ *
  * Project creation/editing modal with name, description, lead, and deadline fields.
- * 
+ *
  * @module components/case-detail/projects/ProjectModal
  * @category Case Management - Projects
  */
@@ -49,23 +49,23 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, onS
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Create New Project">
       <div className="p-6 space-y-4">
-        <Input 
-          label="Project Title" 
-          placeholder="e.g. Expert Witness Prep" 
-          value={newProject.title} 
+        <Input
+          label="Project Title"
+          placeholder="e.g. Expert Witness Prep"
+          value={newProject.title}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewProject({...newProject, title: e.target.value})}
         />
-        <TextArea 
-          label="Description" 
-          rows={3} 
-          placeholder="Objectives and scope..." 
+        <TextArea
+          label="Description"
+          rows={3}
+          placeholder="Objectives and scope..."
           value={newProject.description}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewProject({...newProject, description: e.target.value})}
         />
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Status</label>
-            <select 
+            <select
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
               value={newProject.status}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewProject({...newProject, status: e.target.value as Project['status']})}
@@ -80,7 +80,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, onS
           </div>
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Priority</label>
-            <select 
+            <select
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.input, theme.border.default, theme.text.primary)}
               value={newProject.priority}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setNewProject({...newProject, priority: e.target.value as Project['priority']})}
@@ -94,15 +94,15 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ isOpen, onClose, onS
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <Input 
-            label="Lead" 
-            value={newProject.lead} 
+          <Input
+            label="Lead"
+            value={newProject.lead}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewProject({...newProject, lead: e.target.value})}
           />
-          <Input 
+          <Input
             type="date"
-            label="Due Date" 
-            value={newProject.dueDate || ''} 
+            label="Due Date"
+            value={newProject.dueDate || ''}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewProject({...newProject, dueDate: e.target.value})}
           />
         </div>

@@ -1,9 +1,9 @@
 /**
  * CaseOverview.tsx
- * 
+ *
  * Comprehensive case overview dashboard with matter info, active workstreams,
  * key stats, and quick action modals.
- * 
+ *
  * @module components/case-detail/overview/CaseOverview
  * @category Case Management - Overview
  */
@@ -19,7 +19,7 @@ import { ActiveWorkstreams } from './ActiveWorkstreams';
 import { OverviewSidebar } from './OverviewSidebar';
 import { CaseOverviewStats } from './CaseOverviewStats';
 import { CaseOverviewModals } from './CaseOverviewModals';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -42,7 +42,7 @@ interface CaseOverviewProps {
 
 export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntryAdded, onNavigateToCase }) => {
   const { theme } = useTheme();
-  
+
   const {
     showTimeModal, setShowTimeModal,
     showLinkModal, setShowLinkModal,
@@ -59,7 +59,7 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
       () => DataService.cases.getParties(caseData.id),
       { initialData: caseData.parties || [] }
   );
-  
+
   const activeProjects = caseData.projects?.filter(p => p.status === 'In Progress') || [];
 
   return (
@@ -74,14 +74,14 @@ export const CaseOverview: React.FC<CaseOverviewProps> = ({ caseData, onTimeEntr
           onLinkCase={handleLinkCase}
           onTransfer={handleTransferToAppeal}
       />
-      
+
       <CaseOverviewStats />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="col-span-1 md:col-span-2 space-y-6">
             <MatterInfo caseData={caseData} />
             <ActiveWorkstreams activeProjects={activeProjects} />
-            
+
             <div className={cn("p-6 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
                 <div className="flex justify-between items-center mb-4">
                     <h3 className={cn("text-lg font-bold flex items-center", theme.text.primary)}>

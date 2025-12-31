@@ -148,7 +148,7 @@ export const ToastProvider = ({
       console.warn(`[ToastContext] Queue at capacity (${maxQueue}), dropped toast: ${removed?.message}`);
     }
 
-    const id = Math.random().toString(36).substring(2, 9);
+    const id = crypto.randomUUID ? crypto.randomUUID() : `toast-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
     const newToast: Toast = {
       id,
       message,

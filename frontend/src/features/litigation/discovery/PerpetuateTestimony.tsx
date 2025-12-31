@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Button } from '@/components/ui/atoms/Button';
 import { Clock, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -45,7 +45,7 @@ export const PerpetuateTestimony: React.FC = () => {
                 ) : (
                     <div className="space-y-2">
                         {petitions.map((p, i) => (
-                            <div key={i} className="p-3 border rounded">
+                            <div key={`petition-${p.title}-${p.date}`} className="p-3 border rounded">
                                 <p className="font-bold">{p.title}</p>
                                 <p className="text-xs text-slate-500">{p.date}</p>
                             </div>
@@ -53,7 +53,7 @@ export const PerpetuateTestimony: React.FC = () => {
                     </div>
                 )}
             </Card>
-            
+
             <Card title="Requirements Checklist">
                 <ul className={cn("space-y-2 text-sm", theme.text.secondary)}>
                     <li className="flex items-start gap-2"><div className="w-4 h-4 rounded-full border flex items-center justify-center mt-0.5 text-[10px]">1</div> Petitioner expects to be a party to an action cognizable in US court.</li>

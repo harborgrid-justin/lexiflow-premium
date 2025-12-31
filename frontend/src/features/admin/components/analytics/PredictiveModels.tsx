@@ -41,7 +41,7 @@ const PredictiveModelsSkeleton: React.FC = () => {
     <div className="space-y-6 p-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {[1, 2].map((i: number) => (
-          <div key={i} className={cn("h-96 rounded-lg animate-pulse", theme.surface.raised)} />
+          <div key={`predictive-model-skeleton-${i}`} className={cn("h-96 rounded-lg animate-pulse", theme.surface.raised)} />
         ))}
       </div>
     </div>

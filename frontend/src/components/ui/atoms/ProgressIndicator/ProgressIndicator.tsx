@@ -2,7 +2,7 @@
  * @module components/common/ProgressIndicator
  * @category Common
  * @description Animated progress indicator with ETA calculation and cancellation support.
- * 
+ *
  * FEATURES:
  * - Percentage-based progress bars
  * - Estimated time remaining
@@ -74,9 +74,9 @@ function calculateETA(
   if (progress === 0 || progress === 100) return null;
 
   const elapsedMs = Date.now() - startTime;
-  
+
   let remainingMs: number;
-  
+
   if (estimatedDuration) {
     // Use estimated duration if provided
     const progressRatio = progress / 100;
@@ -192,19 +192,19 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
           {status === 'error' && (
             <XCircle className="h-4 w-4 text-rose-500" />
           )}
-          
+
           {showPercentage && status === 'in-progress' && (
             <span className={cn("font-medium", theme.text.primary)}>
               {Math.round(clampedProgress)}%
             </span>
           )}
-          
+
           {status === 'completed' && (
             <span className="font-medium text-emerald-600">
               {successMessage}
             </span>
           )}
-          
+
           {status === 'error' && error && (
             <span className="font-medium text-rose-600">{error}</span>
           )}
@@ -214,7 +214,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
           {eta && status === 'in-progress' && (
             <span className={cn("text-xs", theme.text.tertiary)}>{eta}</span>
           )}
-          
+
           {canCancel && status === 'in-progress' && onCancel && (
             <button
               onClick={onCancel}
@@ -252,7 +252,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
         />
       </div>
 
-      {/* Steps */}
+      {/* Steps - IDENTITY-STABLE KEYS: Use step.id */}
       {steps && steps.length > 0 && (
         <div className="mt-4 space-y-2">
           {steps.map((step, index) => (
@@ -291,7 +291,7 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
                 )}>
                   {step.label}
                 </p>
-                
+
                 {/* Step Progress */}
                 {step.status === 'in-progress' && step.progress !== undefined && (
                   <div className="mt-1">
@@ -317,18 +317,19 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
         </div>
       )}
 
-      {/* Success Confetti Animation (CSS-based) */}
+      {/* Success Confetti Animation (CSS-based) - DETERMINISTIC RENDERING */}
       {showSuccess && (
         <div className="relative h-0 overflow-visible">
           <div className="absolute inset-0 pointer-events-none">
+            {/* LAYOUT STABILITY: Fixed count for predictable layout */}
             {[...Array(10)].map((_, i) => (
               <div
-                key={i}
+                key={`confetti-${i}`}
                 className="absolute w-2 h-2 bg-emerald-500 rounded-full animate-confetti"
                 style={{
-                  left: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 0.5}s`,
-                  opacity: Math.random(),
+                  left: `${(i * 10) % 100}%`, // Deterministic position
+                  animationDelay: `${i * 0.1}s`, // Deterministic delay
+                  opacity: 0.5 + (i % 3) * 0.2, // Deterministic opacity
                 }}
               />
             ))}

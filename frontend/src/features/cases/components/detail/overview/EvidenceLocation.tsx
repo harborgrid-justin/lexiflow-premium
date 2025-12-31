@@ -1,8 +1,8 @@
 /**
  * EvidenceLocation.tsx
- * 
+ *
  * Evidence physical location card with map integration placeholder.
- * 
+ *
  * @module components/case-detail/overview/EvidenceLocation
  * @category Case Management - Evidence
  */

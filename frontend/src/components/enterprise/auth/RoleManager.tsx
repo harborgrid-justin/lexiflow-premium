@@ -126,7 +126,7 @@ export const RoleManager: React.FC<RoleManagerProps> = ({
         return [
           ...prev,
           {
-            id: `temp-${Date.now()}-${Math.random()}`,
+            id: crypto.randomUUID ? crypto.randomUUID() : `perm-${Date.now()}-${Math.random()}`,
             resource,
             action,
             effect: 'allow' as const,

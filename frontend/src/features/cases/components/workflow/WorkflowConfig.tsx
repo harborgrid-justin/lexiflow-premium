@@ -1,5 +1,5 @@
 
-import { Card } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { ToggleLeft, ToggleRight, Settings, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -68,7 +68,7 @@ export const WorkflowConfig: React.FC = () => {
             </button>
           </div>
         ))}
-        
+
         <div className={cn("pt-4 mt-4 border-t", theme.border.default)}>
             <button className={cn("flex items-center text-sm font-medium", theme.text.secondary, `hover:${theme.primary.text}`)}>
                 <Settings className="h-4 w-4 mr-2" /> Advanced Configuration

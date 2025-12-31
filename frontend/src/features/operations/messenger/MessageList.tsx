@@ -39,8 +39,11 @@ export const MessageList = memo(function MessageList({ conversation, currentUser
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { theme } = useTheme();
 
+  // Effect discipline: Synchronize with DOM scrolling (Principle #6)
+  // Strict Mode ready: scrollIntoView is idempotent (Principle #7)
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // No cleanup needed - idempotent DOM operation
   }, [conversation.messages]);
 
   return (

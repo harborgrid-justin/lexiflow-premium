@@ -13,7 +13,7 @@ import { cn } from '@/utils/cn';
 
 export const BillingOverviewSkeleton = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className="space-y-6 animate-pulse">
       {/* Stats Cards Row */}
@@ -73,7 +73,7 @@ export const BillingOverviewSkeleton = () => {
 
 export const BillingWIPSkeleton = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className="space-y-4 animate-pulse">
       {/* Header Actions */}
@@ -112,7 +112,7 @@ export const BillingWIPSkeleton = () => {
         <div className={theme.surface.default}>
           {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
             <div
-              key={i}
+              key={`wip-skeleton-row-${i}`}
               className={cn(
                 'px-4 py-3 border-b last:border-b-0',
                 theme.border.default
@@ -152,7 +152,7 @@ export const BillingWIPSkeleton = () => {
 
 export const BillingInvoicesSkeleton = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className="space-y-4 animate-pulse">
       {/* Header Actions */}
@@ -218,7 +218,7 @@ export const BillingInvoicesSkeleton = () => {
 
 export const BillingLedgerSkeleton = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className="space-y-4 animate-pulse">
       {/* Summary Cards */}
@@ -250,7 +250,7 @@ export const BillingLedgerSkeleton = () => {
         <div className={cn('px-4 py-3 border-b', theme.surface.raised, theme.border.default)}>
           <div className={cn('h-5 w-32 rounded', theme.surface.highlight)} />
         </div>
-        
+
         <div className={theme.surface.default}>
           {[1, 2, 3, 4, 5].map((i) => (
             <div
@@ -280,7 +280,7 @@ export const BillingLedgerSkeleton = () => {
         <div className={cn('px-4 py-3 border-b', theme.surface.raised, theme.border.default)}>
           <div className={cn('h-5 w-40 rounded', theme.surface.highlight)} />
         </div>
-        
+
         <div className={theme.surface.default}>
           {[1, 2, 3].map((i) => (
             <div
@@ -311,7 +311,7 @@ export const BillingLedgerSkeleton = () => {
 
 export const TrustAccountDetailSkeleton = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className="space-y-6 animate-pulse">
       {/* Account Header */}
@@ -341,7 +341,7 @@ export const TrustAccountDetailSkeleton = () => {
         <div className={cn('px-4 py-3 border-b', theme.surface.raised, theme.border.default)}>
           <div className={cn('h-5 w-40 rounded', theme.surface.highlight)} />
         </div>
-        
+
         <div className={theme.surface.default}>
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div

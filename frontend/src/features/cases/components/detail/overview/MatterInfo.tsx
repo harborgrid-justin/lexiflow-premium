@@ -1,9 +1,9 @@
 /**
  * MatterInfo.tsx
- * 
+ *
  * Case matter details card with jurisdiction, venue, judge, billing model,
  * and filing date information.
- * 
+ *
  * @module components/case-detail/overview/MatterInfo
  * @category Case Management - Overview
  */
@@ -41,12 +41,12 @@ export const MatterInfo: React.FC<MatterInfoProps> = ({ caseData }) => {
   const { theme } = useTheme();
 
   // Helper to format jurisdiction
-  const jurisdictionDisplay = caseData.jurisdictionConfig 
-    ? `${caseData.jurisdictionConfig.courtLevel} - ${caseData.jurisdictionConfig.state}` 
+  const jurisdictionDisplay = caseData.jurisdictionConfig
+    ? `${caseData.jurisdictionConfig.courtLevel} - ${caseData.jurisdictionConfig.state}`
     : caseData.jurisdiction || 'N/A';
-  
+
   // Helper for Valuation
-  const valDisplay = caseData.valuation 
+  const valDisplay = caseData.valuation
     ? `${caseData.valuation.amount.toLocaleString()} ${caseData.valuation.currency}`
     : `$${(caseData.value || 0).toLocaleString()}`;
 
@@ -75,12 +75,12 @@ export const MatterInfo: React.FC<MatterInfoProps> = ({ caseData }) => {
                     </dd>
                 </div>
             ))}
-            
+
             <div className={cn("col-span-1 sm:col-span-2 p-3 rounded border", theme.surface.highlight, theme.border.default)}>
                 <dt className={cn("text-xs font-bold uppercase mb-1", theme.text.secondary)}>Case Abstract</dt>
                 <dd className={cn("text-sm leading-relaxed max-h-32 overflow-y-auto custom-scrollbar", theme.text.secondary)}>{caseData.description}</dd>
             </div>
-            
+
             {caseData.origJudgmentDate && (
                 <div className="min-w-0">
                    <dt className={cn("text-xs font-bold uppercase mb-1 flex items-center", theme.text.tertiary)}><Gavel className="h-3 w-3 mr-1 opacity-50"/>Orig. Judgment</dt>

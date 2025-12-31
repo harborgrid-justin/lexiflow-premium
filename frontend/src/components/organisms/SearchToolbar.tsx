@@ -42,12 +42,22 @@ export function SearchToolbar({ value, onChange, placeholder = "Search (Press /)
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputId = useId();
+  // HYDRATION-SAFE: Track mounted state
+  const [isMounted, setIsMounted] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const history = SearchService.getHistory();
 
   useClickOutside(containerRef as React.RefObject<HTMLElement>, () => setShowHistory(false));
 
+  // Set mounted flag
   React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // HYDRATION-SAFE: Only attach keyboard listener after mount
+  React.useEffect(() => {
+    if (!isMounted || typeof document === 'undefined') return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === '/' && document.activeElement !== inputRef.current) {
         e.preventDefault();
@@ -56,7 +66,7 @@ export function SearchToolbar({ value, onChange, placeholder = "Search (Press /)
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [isMounted]);
 
   const handleFocus = () => {
     if (history.length > 0) setShowHistory(true);

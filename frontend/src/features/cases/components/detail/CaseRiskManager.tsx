@@ -1,9 +1,9 @@
 /**
  * CaseRiskManager.tsx
- * 
+ *
  * Risk assessment and management dashboard with risk matrix visualization,
  * impact/probability tracking, and mitigation planning.
- * 
+ *
  * @module components/case-detail/CaseRiskManager
  * @category Case Management - Risk Assessment
  */
@@ -13,8 +13,8 @@ import React from 'react';
 import { ShieldAlert, Plus, AlertTriangle, TrendingUp, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/atoms';
-import { MetricCard } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button';
+import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { RiskList } from './risk/RiskList';
 import { RiskDetail } from './risk/RiskDetail';
 
@@ -38,7 +38,7 @@ interface CaseRiskManagerProps {
 export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) => {
   const { theme } = useTheme();
   const { openWindow, closeWindow } = useWindow();
-  
+
   // Enterprise Data Access
   const { data: risks = [], isLoading } = useQuery<Risk[]>(
       ['risks', caseData.id],
@@ -52,7 +52,7 @@ export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) =>
 
   const { mutate: updateRisk } = useMutation(
       (updated: Risk) => DataService.risks.update(updated.id, updated),
-      { 
+      {
           invalidateKeys: [['risks', caseData.id]],
           onSuccess: (data: Risk) => closeWindow(`risk-detail-${data.id}`)
       }
@@ -60,9 +60,9 @@ export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) =>
 
   const { mutate: deleteRisk } = useMutation(
       DataService.risks.delete,
-      { 
+      {
           invalidateKeys: [['risks', caseData.id]],
-          onSuccess: (_, id) => closeWindow(`risk-detail-${id}`) 
+          onSuccess: (_, id) => closeWindow(`risk-detail-${id}`)
       }
   );
 
@@ -88,10 +88,10 @@ export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) =>
       openWindow(
           winId,
           `Risk: ${risk.title}`,
-          <RiskDetail 
-              risk={risk} 
-              onUpdate={updateRisk} 
-              onDelete={deleteRisk} 
+          <RiskDetail
+              risk={risk}
+              onUpdate={updateRisk}
+              onDelete={deleteRisk}
               onClose={() => closeWindow(winId)}
           />
       );
@@ -106,24 +106,24 @@ export const CaseRiskManager: React.FC<CaseRiskManagerProps> = ({ caseData }) =>
     <div className="flex flex-col h-full space-y-6">
         {/* Header Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 shrink-0">
-            <MetricCard 
-                label="Total Risks Identified" 
-                value={risks.length} 
-                icon={ShieldAlert} 
+            <MetricCard
+                label="Total Risks Identified"
+                value={risks.length}
+                icon={ShieldAlert}
                 className="border-l-4 border-l-blue-500"
             />
-            <MetricCard 
-                label="Critical Exposure" 
-                value={highRisks} 
-                icon={AlertTriangle} 
+            <MetricCard
+                label="Critical Exposure"
+                value={highRisks}
+                icon={AlertTriangle}
                 trend="Requires Action"
                 trendUp={false}
                 className="border-l-4 border-l-red-500"
             />
-            <MetricCard 
-                label="Est. Financial Impact" 
-                value={`$${(exposure/1000).toFixed(0)}k`} 
-                icon={TrendingUp} 
+            <MetricCard
+                label="Est. Financial Impact"
+                value={`$${(exposure/1000).toFixed(0)}k`}
+                icon={TrendingUp}
                 className="border-l-4 border-l-amber-500"
             />
         </div>

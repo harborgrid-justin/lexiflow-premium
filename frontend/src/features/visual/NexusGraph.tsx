@@ -201,7 +201,6 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
             {physicsState.current.links.map((link, i) => (
               <line
                 key={`link-${link.sourceIndex}-${link.targetIndex}-${i}`}
-                key={`link-${i}`}
                 ref={el => { if (el) linkRefs.current[i] = el; }}
                 stroke={theme.chart.grid}
                 strokeWidth="1.5"
@@ -212,7 +211,6 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
             {/* Nodes */}
             {nodesMeta.map((node, i) => (
               // Use stable node ID for key (not index) for proper React reconciliation
-              <g key={node.id}
               <g
                 key={node.id}
                 ref={el => { if (el) domRefs.current.set(node.id, el); }}

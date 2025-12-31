@@ -1,8 +1,8 @@
 /**
  * EvidenceFRCPStatus.tsx
- * 
+ *
  * FRCP 26(a) initial disclosure compliance status indicator.
- * 
+ *
  * @module components/case-detail/overview/EvidenceFRCPStatus
  * @category Case Management - Evidence
  */

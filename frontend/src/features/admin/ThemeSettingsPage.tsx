@@ -1,6 +1,6 @@
 /**
  * Theme Settings & Testing Dashboard
- * 
+ *
  * Admin page for:
  * - Testing theme centralization
  * - Previewing color tokens in both light/dark modes
@@ -53,7 +53,7 @@ export const ThemeSettingsPage: React.FC = () => {
               Test theme centralization and preview all color tokens across light/dark modes
             </p>
           </div>
-          
+
           <button
             onClick={toggleTheme}
             className={cn(
@@ -177,7 +177,7 @@ export const ThemeSettingsPage: React.FC = () => {
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              
+
               <div>
                 <h4 className={cn("font-semibold mb-3", theme.text.secondary)}>Risk Color Palette</h4>
                 <div className="space-y-2">
@@ -222,7 +222,7 @@ export const ThemeSettingsPage: React.FC = () => {
             <h3 className={cn("text-xl font-bold mb-4", theme.text.primary)}>Complete Chart Palette</h3>
             <div className="grid grid-cols-6 gap-4">
               {palette.map((color, index) => (
-                <div key={index} className="text-center">
+                <div key={`palette-${color}`} className="text-center">
                   <div
                     className="w-full h-16 rounded-lg mb-2 border"
                     style={{ backgroundColor: color }}

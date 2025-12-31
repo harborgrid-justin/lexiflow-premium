@@ -1,9 +1,9 @@
 /**
  * CaseMessages.tsx
- * 
+ *
  * Case-specific messaging interface with privilege indicators, attachments,
  * and session-persisted draft messages.
- * 
+ *
  * @module components/case-detail/CaseMessages
  * @category Case Management - Communications
  */
@@ -35,12 +35,12 @@ interface CaseMessagesProps {
 
 export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
   const { theme } = useTheme();
-  
+
   const conversationId = `conv-case-${caseData.id}`;
-  
+
   // Persist draft in session storage
   const [inputText, setInputText] = useSessionStorage<string>(`draft-msg-${conversationId}`, '');
-  
+
   // Enterprise Data Fetching
   const { data: conversation, isLoading: isLoadingConversation } = useQuery<Conversation | undefined>(
     ['conversations', conversationId],
@@ -87,7 +87,7 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
 
       {/* Messages Area */}
       <div className={cn("flex-1 overflow-y-auto p-6 space-y-6", theme.surface.highlight)}>
-        {messages.map((msg: Message) => { 
+        {messages.map((msg: Message) => {
           const isMe = msg.senderId === 'me';
           const user = users.find(u => u.id === msg.senderId);
           const senderName = user ? user.name : isMe ? 'Me' : 'Unknown';
@@ -102,8 +102,8 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
                 </div>
                 <div className={cn(
                     "p-4 rounded-2xl text-sm shadow-sm relative break-words whitespace-pre-wrap w-full",
-                    isMe 
-                        ? cn(theme.primary.DEFAULT, theme.text.inverse, "rounded-tr-none") 
+                    isMe
+                        ? cn(theme.primary.DEFAULT, theme.text.inverse, "rounded-tr-none")
                         : cn(theme.surface.default, theme.text.primary, theme.border.default, "border rounded-tl-none")
                 )}>
                    {msg.text}
@@ -129,7 +129,7 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
       {/* Input Area */}
       <div className={cn("p-4 border-t shrink-0", theme.surface.default, theme.border.default)}>
          <div className="flex items-center gap-3">
-            <button 
+            <button
               className={cn("p-2 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}
               aria-label="Attach file"
               title="Attach file"
@@ -137,7 +137,7 @@ export const CaseMessages: React.FC<CaseMessagesProps> = ({ caseData }) => {
                 <Paperclip className="h-5 w-5"/>
             </button>
             <div className="flex-1 relative">
-                <input 
+                <input
                   className={cn("w-full border-none rounded-full px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none", theme.surface.highlight, theme.text.primary)}
                   placeholder="Type a secure message..."
                   value={inputText}

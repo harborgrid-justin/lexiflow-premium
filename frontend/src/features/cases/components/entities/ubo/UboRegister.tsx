@@ -1,8 +1,8 @@
 
 import React, { useMemo } from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
 import { ActionRow, MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
 import { Building, User, AlertTriangle, ShieldCheck, Network, Download, Plus } from 'lucide-react';
 import { LegalEntity } from '@/types';
@@ -11,8 +11,8 @@ import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { api } from '@/api';
-import { AdaptiveLoader } from '@/components/molecules';
-import { ErrorState } from '@/components/molecules';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
+import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
 
 interface UboRegisterProps {
   entities: LegalEntity[];

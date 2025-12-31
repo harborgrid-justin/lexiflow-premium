@@ -1,9 +1,9 @@
 /**
  * CasePlanning.tsx
- * 
+ *
  * Gantt-style case planning interface with phase management, task dependencies,
  * zoom controls, and critical path analysis.
- * 
+ *
  * @module components/case-detail/CasePlanning
  * @category Case Management - Planning & Gantt
  */
@@ -48,24 +48,24 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
   const [collapsedPhases, setCollapsedPhases] = useState<Set<string>>(new Set());
   const taskModal = useModalState();
   const [showCriticalPath, setShowCriticalPath] = useState(false);
-  
+
   // Set start date to 1 month ago for context
   const [viewStartDate] = useState(new Date(new Date().setMonth(new Date().getMonth() - 1)));
 
   // Data Queries
   const { data: phases = [] } = useQuery<CasePhase[]>(
-      ['cases', caseData.id, 'phases'], 
+      ['cases', caseData.id, 'phases'],
       () => DataService.phases.getByCaseId(caseData.id)
   );
   const { data: tasks = [] } = useQuery<WorkflowTask[]>(
-      ['tasks', caseData.id], 
+      ['tasks', caseData.id],
       () => DataService.tasks.getByCaseId(caseData.id)
   );
-  
+
   const { mutate: updateTask } = useMutation(
-      (task: WorkflowTask) => DataService.tasks.update(task.id, task), 
-      { 
-          invalidateKeys: [['tasks', caseData.id]], 
+      (task: WorkflowTask) => DataService.tasks.update(task.id, task),
+      {
+          invalidateKeys: [['tasks', caseData.id]],
           // Optimistic Update
           onSuccess: (updatedTask: WorkflowTask) => {
               const current = queryClient.getQueryState<WorkflowTask[]>(['tasks', caseData.id])?.data || [];
@@ -84,7 +84,7 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
           default: return 5;
       }
   }, [zoom]);
-  
+
   // A* Critical Path Calculation
   const criticalPathIds = useMemo(() => {
       if (!showCriticalPath) return new Set<string>();
@@ -123,9 +123,9 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
                   <p className={cn("text-xs", theme.text.secondary)}>{phases.length} Phases • {tasks.length} Tasks</p>
               </div>
           </div>
-          
+
           <div className="flex items-center gap-2">
-              <button 
+              <button
                 onClick={() => setShowCriticalPath(!showCriticalPath)}
                 className={cn("flex items-center px-3 py-1.5 text-xs font-bold rounded-md border transition-all", showCriticalPath ? "bg-red-50 text-red-600 border-red-200" : "bg-white text-slate-500")}
               >
@@ -143,23 +143,23 @@ export const CasePlanning: React.FC<CasePlanningProps> = ({ caseData }) => {
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-          <PlanningSidebar 
-              phases={phases} 
-              tasks={tasks} 
-              collapsedPhases={collapsedPhases} 
-              activeTaskId={activeTaskId} 
-              onTogglePhase={togglePhase} 
-              onHoverTask={setActiveTaskId} 
+          <PlanningSidebar
+              phases={phases}
+              tasks={tasks}
+              collapsedPhases={collapsedPhases}
+              activeTaskId={activeTaskId}
+              onTogglePhase={togglePhase}
+              onHoverTask={setActiveTaskId}
               onAddTask={() => taskModal.open()}
           />
           <GanttTimeline
               phases={phases}
               tasks={tasks.map(t => ({ ...t, isCritical: criticalPathIds.has(t.id) }))}
-              collapsedPhases={collapsedPhases} 
-              zoom={zoom} 
-              viewStartDate={viewStartDate} 
-              activeTaskId={activeTaskId} 
-              onHoverTask={setActiveTaskId} 
+              collapsedPhases={collapsedPhases}
+              zoom={zoom}
+              viewStartDate={viewStartDate}
+              activeTaskId={activeTaskId}
+              onHoverTask={setActiveTaskId}
               pixelsPerDay={pixelsPerDay}
               onUpdateTask={handleTaskUpdate}
           />

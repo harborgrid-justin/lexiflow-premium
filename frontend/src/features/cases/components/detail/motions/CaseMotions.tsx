@@ -13,8 +13,8 @@ import React, { useState } from 'react';
 import { Plus, RefreshCw } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/atoms';
-import { TaskCreationModal } from '@/components/organisms';
+import { Button } from '@/components/ui/atoms/Button';
+import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
 import { MotionList } from './MotionList';
 import { MotionModal } from './MotionModal';
 

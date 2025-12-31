@@ -1,9 +1,9 @@
 /**
  * CaseOverviewModals.tsx
- * 
+ *
  * Modal collection for overview quick actions including time entry,
  * case linking, and matter transfer workflows.
- * 
+ *
  * @module components/case-detail/overview/CaseOverviewModals
  * @category Case Management - Overview
  */

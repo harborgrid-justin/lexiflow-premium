@@ -57,6 +57,8 @@ const BillingDashboardInternal: React.FC<BillingDashboardProps> = ({ navigateTo,
   const [activeTab, _setActiveTab] = useSessionStorage<string>('billing_active_tab', initialTab || 'overview');
   const [period, setPeriod] = useState('30d');
 
+  // Concurrent-safe: Non-urgent tab changes wrapped in transition (Principle #3)
+  // Keeps UI responsive during tab transitions
   const setActiveTab = (tab: string) => {
     startTransition(() => {
       _setActiveTab(tab);

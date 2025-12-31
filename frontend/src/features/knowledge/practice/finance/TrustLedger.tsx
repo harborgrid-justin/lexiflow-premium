@@ -52,7 +52,7 @@ export const TrustLedger: React.FC<TrustLedgerProps> = ({ trustAccounts }) => {
                     </TableHeader>
                     <TableBody>
                         {trustAccounts.map((c, i) => (
-                            <TableRow key={i}>
+                            <TableRow key={c.matterId || `trust-account-${i}`}>
                                 <TableCell className={cn("font-bold", theme.text.primary)}>{c.client}</TableCell>
                                 <TableCell>
                                     <div className="flex flex-col">

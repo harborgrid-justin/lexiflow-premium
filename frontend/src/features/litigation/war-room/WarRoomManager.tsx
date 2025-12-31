@@ -12,8 +12,8 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { Case } from '@/types';
-import { Button } from '@/components/atoms';
-import { LazyLoader } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 
 interface WarRoomManagerProps {
   onSelectCase: (caseId: string) => void;

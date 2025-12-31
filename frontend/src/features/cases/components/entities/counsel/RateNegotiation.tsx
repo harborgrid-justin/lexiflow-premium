@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Button } from '@/components/atoms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table';
+import { Button } from '@/components/ui/atoms/Button';
 import { TrendingDown, Clock, CheckCircle} from 'lucide-react';
 import { LegalEntity } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';
@@ -13,7 +13,7 @@ interface RateNegotiationProps {
 
 export const RateNegotiation: React.FC<RateNegotiationProps> = ({ entities }) => {
   const { theme } = useTheme();
-  
+
   const lawFirms = entities.filter(e => e.type === 'Law Firm');
 
   // Mock rate data
@@ -26,7 +26,7 @@ export const RateNegotiation: React.FC<RateNegotiationProps> = ({ entities }) =>
       effectiveDate: '2024-01-01',
       status: 'Approved'
   }));
-  
+
   // Add associate rows
   lawFirms.forEach((firm) => {
       rates.push({

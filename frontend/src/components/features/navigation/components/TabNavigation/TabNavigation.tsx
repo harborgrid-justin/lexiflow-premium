@@ -72,3 +72,6 @@ export const TabNavigation = React.memo<TabNavigationProps>(({ tabs, activeTab, 
     </div>
   );
 });
+
+// React.memo displayName for debugging (Principle #13)
+TabNavigation.displayName = 'TabNavigation';

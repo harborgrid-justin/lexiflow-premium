@@ -1,8 +1,8 @@
 /**
  * ActiveWorkstreams.tsx
- * 
+ *
  * Dashboard widget displaying active project workstreams with progress tracking.
- * 
+ *
  * @module components/case-detail/overview/ActiveWorkstreams
  * @category Case Management - Overview
  */
@@ -26,7 +26,7 @@ interface ActiveWorkstreamsProps {
 
 export const ActiveWorkstreams: React.FC<ActiveWorkstreamsProps> = ({ activeProjects }) => {
   const { theme } = useTheme();
-  
+
   // LAYOUT-STABLE: Render empty state with same structure instead of null
   if (activeProjects.length === 0) {
     return (
@@ -63,7 +63,7 @@ export const ActiveWorkstreams: React.FC<ActiveWorkstreamsProps> = ({ activeProj
                                 <span className={cn("text-sm font-bold", theme.text.primary)}>{proj.title}</span>
                                 <span className={cn("text-xs font-bold", theme.primary.text)}>{pct}%</span>
                             </div>
-                            <div 
+                            <div
                                 className={cn("w-full rounded-full h-1.5", theme.surface.highlight)}
                                 role="progressbar"
                                 aria-valuenow={pct}

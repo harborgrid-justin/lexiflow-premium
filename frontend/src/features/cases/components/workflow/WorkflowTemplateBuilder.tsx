@@ -6,13 +6,13 @@ import { BuilderToolbar } from './builder/BuilderToolbar';
 import { BuilderPalette } from './builder/BuilderPalette';
 import { BuilderCanvas } from './builder/BuilderCanvas';
 import { BuilderProperties } from './builder/BuilderProperties';
-import { PageHeader } from '@/components/organisms';
-import { Button } from '@/components/atoms';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Save, Rocket, ArrowLeft, Loader2 } from 'lucide-react';
 import { useWorkflowBuilder } from '@/hooks/useWorkflowBuilder';
-import { ErrorBoundary } from '@/components/organisms';
+import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
 import { useToggle } from '@/hooks/useToggle';
 import { DataService } from '@/services/data/dataService';
 import { useNotify } from '@/hooks/useNotify';
@@ -26,14 +26,14 @@ export const WorkflowTemplateBuilder = ({ initialTemplate, onBack }: WorkflowTem
   const { theme } = useTheme();
   const notify = useNotify();
   const { nodes, connections, addNode, updateNode, deleteNode } = useWorkflowBuilder(initialTemplate);
-  
+
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [scale, setScale] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const sidebarToggle = useToggle(true);
   const propertiesToggle = useToggle(true);
   const [isSaving, setIsSaving] = useState(false);
-  
+
   const [draggingNodeId, setDraggingNodeId] = useState<string | null>(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -86,7 +86,7 @@ export const WorkflowTemplateBuilder = ({ initialTemplate, onBack }: WorkflowTem
               auditReady: false,
               stages: nodes.filter(n => n.type === 'Task').map(n => n.label)
           };
-          
+
           await DataService.workflow.saveTemplate(template);
           notify.success("Workflow template saved.");
       } catch (error) {
@@ -138,9 +138,9 @@ export const WorkflowTemplateBuilder = ({ initialTemplate, onBack }: WorkflowTem
                     const id = addNode(type, centerX, centerY);
                     setSelectedNodeId(id);
                 }} />
-                <BuilderCanvas 
-                    nodes={nodes} connections={connections} selectedNodeId={selectedNodeId} 
-                    scale={scale} pan={pan} setPan={setPan} canvasRef={canvasRef} 
+                <BuilderCanvas
+                    nodes={nodes} connections={connections} selectedNodeId={selectedNodeId}
+                    scale={scale} pan={pan} setPan={setPan} canvasRef={canvasRef}
                     onMouseDownNode={handleMouseDownNode} onBackgroundClick={() => setSelectedNodeId(null)}
                     selectedConnectionId={null}
                     onSelectConnection={() => {}}

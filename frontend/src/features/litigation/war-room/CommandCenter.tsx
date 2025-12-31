@@ -26,8 +26,8 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '@/components/molecules';
-import { MetricCard } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -55,15 +55,15 @@ export function CommandCenter({ warRoomData }: CommandCenterProps) {
   // HOOKS & CONTEXT
   // ============================================================================
   const { theme } = useTheme();
-  
+
   // ============================================================================
   // DATA FETCHING
   // ============================================================================
   const { data: sanctions = [] } = useQuery<SanctionMotion[]>(
-    ['sanctions', 'all'], 
+    ['sanctions', 'all'],
     DataService.discovery.getSanctions
   );
-  
+
   // ============================================================================
   // DERIVED STATE & MEMOIZED VALUES
   // ============================================================================
@@ -100,24 +100,24 @@ export function CommandCenter({ warRoomData }: CommandCenterProps) {
 
         {/* Key Metrics */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <MetricCard 
-                label="Exhibits Admitted" 
-                value={`${exhibitsAdmitted} / ${exhibitsTotal}`} 
+            <MetricCard
+                label="Exhibits Admitted"
+                value={`${exhibitsAdmitted} / ${exhibitsTotal}`}
                 icon={FileText}
             />
-            <MetricCard 
-                label="Witnesses Ready" 
-                value={`${witnessCount}`} 
+            <MetricCard
+                label="Witnesses Ready"
+                value={`${witnessCount}`}
                 icon={Users}
             />
-            <MetricCard 
-                label="High-Priority Tasks" 
-                value={tasksDue} 
+            <MetricCard
+                label="High-Priority Tasks"
+                value={tasksDue}
                 icon={CheckSquare}
             />
-            <MetricCard 
-                label="Sanctions Filed" 
-                value={sanctionsCount} 
+            <MetricCard
+                label="Sanctions Filed"
+                value={sanctionsCount}
                 icon={AlertTriangle}
             />
         </div>
@@ -127,7 +127,7 @@ export function CommandCenter({ warRoomData }: CommandCenterProps) {
             <Card title={<div className="flex items-center gap-2"><Activity className="h-5 w-5" /> Recent Docket Activity</div>}>
                     <ul className="space-y-3">
                         {recentDocket.map((entry, index) => (
-                            <li key={index} className={cn("flex items-start justify-between text-sm", theme.text.secondary)}>
+                            <li key={`docket-${entry.date}-${index}`} className={cn("flex items-start justify-between text-sm", theme.text.secondary)}>
                                 <div className="flex-1 pr-4">
                                     <p className={cn("font-medium", theme.text.primary)}>{entry.description}</p>
                                     <span className="text-xs">{new Date(entry.date as string).toLocaleDateString()} - Doc #{index + 1}</span>
@@ -141,7 +141,7 @@ export function CommandCenter({ warRoomData }: CommandCenterProps) {
                     <div className="space-y-3">
                         {/* Skeleton loaders for alerts */}
                         {[...Array(2)].map((_, i) => (
-                            <div key={i} className={cn("p-3 rounded-lg flex items-start gap-3", theme.surface.highlight, "border", theme.border.default)}>
+                            <div key={`alert-skeleton-${i}`} className={cn("p-3 rounded-lg flex items-start gap-3", theme.surface.highlight, "border", theme.border.default)}>
                                 <Skeleton className="h-10 w-10 rounded-full flex-shrink-0" />
                                 <div className="flex-1 space-y-2">
                                     <Skeleton className="h-4 w-3/4" />

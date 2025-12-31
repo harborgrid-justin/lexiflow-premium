@@ -142,7 +142,9 @@ export const SSOLogin: React.FC<SSOLoginProps> = ({
       } else {
         // Default behavior: redirect to SSO URL
         const ssoUrl = `/api/auth/sso/${provider.type}/${provider.id}`;
-        window.location.href = ssoUrl;
+        if (typeof window !== 'undefined') {
+          window.location.href = ssoUrl;
+        }
       }
     } catch (error) {
       onError?.(error as Error);

@@ -26,10 +26,10 @@ export const CloudDatabaseContent: React.FC = () => {
   const notify = useNotify();
   const [isAdding, setIsAdding] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
-  const [formData, setFormData] = useState<ConnectionFormData>({ 
-    name: '', 
-    host: '', 
-    region: 'us-east-1' 
+  const [formData, setFormData] = useState<ConnectionFormData>({
+    name: '',
+    host: '',
+    region: 'us-east-1'
   });
 
   const { data: connections = [], isLoading, refetch } = useQuery<DataConnection[]>(
@@ -41,11 +41,13 @@ export const CloudDatabaseContent: React.FC = () => {
     }
   );
 
+  // Concurrent-safe: Functional state updates in cache (Principle #5)
   const addConnectionMutation = useMutation(
     DataService.sources.addConnection,
     {
       onSuccess: (newConnection: DataConnection) => {
-        queryClient.setQueryData(['admin', 'sources', 'connections'], 
+        // Functional update prevents stale closures
+        queryClient.setQueryData(['admin', 'sources', 'connections'],
           (old: DataConnection[] | undefined) => [...(old || []), newConnection]
         );
         setIsAdding(false);
@@ -55,8 +57,10 @@ export const CloudDatabaseContent: React.FC = () => {
     }
   );
 
+  // Concurrent-safe: Optimistic updates with functional state (Principle #5)
   const syncMutation = useMutation(DataService.sources.syncConnection, {
     onMutate: (id: string) => {
+      // Functional update ensures we work with latest state
       queryClient.setQueryData<DataConnection[]>(
         ['admin', 'sources', 'connections'],
         (old) => old ? old.map(c => c.id === id ? { ...c, status: 'syncing' as ConnectionStatus } : c) : []
@@ -65,7 +69,7 @@ export const CloudDatabaseContent: React.FC = () => {
     onSuccess: (data: unknown, id: string) => {
       setTimeout(() => {
         queryClient.setQueryData<DataConnection[]>(
-          ['admin', 'sources', 'connections'], 
+          ['admin', 'sources', 'connections'],
           (old) => old ? old.map(c => c.id === id ? { ...c, status: 'active' as ConnectionStatus, lastSync: 'Just now' } : c) : []
         );
         if (data && typeof data === 'object' && 'recordsSynced' in data) {
@@ -75,10 +79,12 @@ export const CloudDatabaseContent: React.FC = () => {
     }
   });
 
+  // Concurrent-safe: Functional filter for deletions (Principle #5)
   const deleteMutation = useMutation(DataService.sources.deleteConnection, {
     onSuccess: (_: unknown, id: string) => {
+      // Functional update prevents race conditions
       queryClient.setQueryData<DataConnection[]>(
-        ['admin', 'sources', 'connections'], 
+        ['admin', 'sources', 'connections'],
         (old) => old ? old.filter(c => c.id !== id) : []
       );
     }
@@ -113,7 +119,7 @@ export const CloudDatabaseContent: React.FC = () => {
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <button 
+          <button
             onClick={() => refetch()}
             disabled={isLoading}
             className={cn(
@@ -125,11 +131,11 @@ export const CloudDatabaseContent: React.FC = () => {
             <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} />
             Refresh
           </button>
-          <button 
+          <button
             onClick={() => setIsAdding(!isAdding)}
             className={cn(
               "px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 shadow-sm",
-              isAdding 
+              isAdding
                 ? "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-slate-800 dark:text-gray-300"
                 : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-500/25"
             )}
@@ -156,16 +162,16 @@ export const CloudDatabaseContent: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <AnimatePresence>
           {connections.map((conn) => (
-            <ConnectionCard 
-              key={conn.id} 
-              connection={conn} 
+            <ConnectionCard
+              key={conn.id}
+              connection={conn}
               onSync={(id: string) => syncMutation.mutate(id)}
               onDelete={(id: string) => deleteMutation.mutate(id)}
               onTest={(conn: DataConnection) => testMutation.mutate(conn.id)}
             />
           ))}
         </AnimatePresence>
-        
+
         {connections.length === 0 && !isLoading && (
           <div className="col-span-full py-12 flex flex-col items-center justify-center text-center border-2 border-dashed border-gray-200 rounded-xl">
             <div className="p-4 rounded-full bg-gray-50 mb-4">
@@ -175,7 +181,7 @@ export const CloudDatabaseContent: React.FC = () => {
             <p className="text-sm text-gray-500 mt-1 max-w-sm">
               Connect your first data source to start syncing data across your enterprise.
             </p>
-            <button 
+            <button
               onClick={() => setIsAdding(true)}
               className="mt-4 text-blue-600 font-medium text-sm hover:underline"
             >

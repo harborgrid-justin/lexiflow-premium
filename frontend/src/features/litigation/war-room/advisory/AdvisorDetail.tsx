@@ -21,7 +21,7 @@ import { X, FileText, Download, Clock, CheckCircle } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

@@ -1,13 +1,13 @@
 /**
  * FederalLitigationCaseForm Component
- * 
+ *
  * Comprehensive form for creating/editing federal litigation cases with:
  * - Type-safe autocomplete dropdowns for all entity references
  * - Quick-add modals for parties, courts, and judges
  * - Field-level validation with real-time error feedback
  * - Optimistic UI updates
  * - Automatic form state persistence (auto-save)
- * 
+ *
  * Architecture Decisions:
  * 1. Form state managed with useReducer for complex state logic
  * 2. Field updates are debounced to prevent excessive re-renders
@@ -73,35 +73,35 @@ interface FederalLitigationFormState {
   description: string;
   type: CaseType;
   status: CaseStatus;
-  
+
   // Court Information
   court: string;
   jurisdiction: string;
   judge: string | null;
   referredJudge: string | null;
   magistrateJudge: string | null;
-  
+
   // Federal Litigation Specific
   causeOfAction: string;
   natureOfSuit: string;
   natureOfSuitCode: string;
   juryDemand: 'None' | 'Plaintiff' | 'Defendant' | 'Both';
-  
+
   // Dates
   filingDate: string;
   trialDate: string | null;
   dateTerminated: string | null;
-  
+
   // Parties
   parties: string[]; // Party IDs
-  
+
   // Related Cases
   relatedCases: Array<{ court: string; caseNumber: string; relationship?: string }>;
-  
+
   // Client & Team
   clientId: string | null;
   leadAttorneyId: string | null;
-  
+
   // Metadata
   errors: Partial<Record<keyof CreateCaseDto, string>>;
   isDirty: boolean;
@@ -154,32 +154,32 @@ function formReducer(state: FederalLitigationFormState, action: FormAction): Fed
         isDirty: true,
         errors: { ...state.errors, [action.field]: undefined },
       };
-      
+
     case 'UPDATE_MULTIPLE':
       return {
         ...state,
         ...action.updates,
         isDirty: true,
       };
-      
+
     case 'SET_ERROR':
       return {
         ...state,
         errors: { ...state.errors, [action.field]: action.error },
       };
-      
+
     case 'CLEAR_ERROR':
       return {
         ...state,
         errors: { ...state.errors, [action.field]: undefined },
       };
-      
+
     case 'CLEAR_ALL_ERRORS':
       return { ...state, errors: {} };
-      
+
     case 'RESET':
       return initialState;
-      
+
     case 'LOAD_CASE': {
       const loadedCase = action.case;
       return {
@@ -209,7 +209,7 @@ function formReducer(state: FederalLitigationFormState, action: FormAction): Fed
         isDirty: false,
       };
     }
-      
+
     default:
       return state;
   }
@@ -218,13 +218,13 @@ function formReducer(state: FederalLitigationFormState, action: FormAction): Fed
 interface FederalLitigationCaseFormProps {
   /** Existing case to edit (optional - omit for create mode) */
   case?: Case;
-  
+
   /** Callback when form is submitted */
   onSubmit: (data: CreateCaseDto) => Promise<void>;
-  
+
   /** Callback when form is cancelled */
   onCancel?: () => void;
-  
+
   /** Auto-save functionality */
   enableAutoSave?: boolean;
 }
@@ -237,14 +237,14 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
 }) => {
   const [state, dispatch] = useReducer(formReducer, initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Load existing case on mount
   useEffect(() => {
     if (existingCase) {
       dispatch({ type: 'LOAD_CASE', case: existingCase });
     }
   }, [existingCase]);
-  
+
   /**
    * Type-safe field updater
    */
@@ -254,7 +254,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
   ) => {
     dispatch({ type: 'UPDATE_FIELD', field, value });
   }, []);
-  
+
   /**
    * Validate form before submission
    * Returns true if valid
@@ -262,42 +262,42 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
   const validate = useCallback((): boolean => {
     dispatch({ type: 'CLEAR_ALL_ERRORS' });
     let isValid = true;
-    
+
     if (!state.title.trim()) {
       dispatch({ type: 'SET_ERROR', field: 'title', error: 'Case title is required' });
       isValid = false;
     }
-    
+
     if (!state.caseNumber.trim()) {
       dispatch({ type: 'SET_ERROR', field: 'caseNumber', error: 'Case number is required' });
       isValid = false;
     }
-    
+
     if (!state.court.trim()) {
       dispatch({ type: 'SET_ERROR', field: 'court', error: 'Court is required' });
       isValid = false;
     }
-    
+
     if (!state.jurisdiction.trim()) {
       dispatch({ type: 'SET_ERROR', field: 'jurisdiction', error: 'Jurisdiction is required' });
       isValid = false;
     }
-    
+
     return isValid;
   }, [state]);
-  
+
   /**
    * Handle form submission
    */
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validate()) {
       return;
     }
-    
+
     setIsSubmitting(true);
-    
+
     try {
       const submitData: CreateCaseDto = {
         title: state.title,
@@ -321,7 +321,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
         clientId: state.clientId,
         leadAttorneyId: state.leadAttorneyId,
       };
-      
+
       await onSubmit(submitData);
       dispatch({ type: 'RESET' });
     } catch (err) {
@@ -333,7 +333,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
       setIsSubmitting(false);
     }
   }, [state, validate, onSubmit]);
-  
+
   /**
    * Auto-save functionality (debounced)
    */
@@ -346,7 +346,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
     },
     delay: 2000,
   });
-  
+
   return (
     <form onSubmit={handleSubmit} className="space-y-8 p-6 bg-white dark:bg-slate-800 rounded-lg shadow-lg">
       {/* Header */}
@@ -361,14 +361,14 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
           <span className="text-sm text-slate-500 italic">Auto-saving...</span>
         )}
       </div>
-      
+
       {/* Section 1: Core Case Information */}
       <section className="space-y-4">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 flex items-center">
           <FileText className="w-5 h-5 mr-2" />
           Core Information
         </h3>
-        
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
@@ -390,7 +390,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
               </p>
             )}
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               Case Number <span className="text-red-500">*</span>
@@ -409,7 +409,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
             )}
           </div>
         </div>
-        
+
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Description
@@ -422,7 +422,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
             placeholder="Brief description of the case..."
           />
         </div>
-        
+
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
@@ -440,7 +440,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
               <option value={CaseType.FAMILY}>Family</option>
             </select>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               Status
@@ -457,7 +457,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
               <option value={CaseStatus.Settled}>Settled</option>
             </select>
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               Jury Demand
@@ -476,14 +476,14 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
           </div>
         </div>
       </section>
-      
+
       {/* Section 2: Court & Jurisdiction */}
       <section className="space-y-4">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 flex items-center">
           <Building className="w-5 h-5 mr-2" />
           Court & Jurisdiction
         </h3>
-        
+
         <div className="grid grid-cols-2 gap-4">
           <AutocompleteSelect
             value={state.court}
@@ -505,7 +505,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
             getValue={(court) => (court as unknown as { name: string }).name}
             queryKey={['courts']}
           />
-          
+
           <AutocompleteSelect
             value={state.jurisdiction}
             onChange={(value) => updateField('jurisdiction', value || '')}
@@ -526,7 +526,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
             queryKey={['jurisdictions']}
           />
         </div>
-        
+
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
@@ -540,7 +540,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
               placeholder="District Judge Leonie M. Brinkema"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               Referred Judge
@@ -553,7 +553,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
               placeholder="Magistrate Judge Ivan D. Davis"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               Magistrate Judge
@@ -568,13 +568,13 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
           </div>
         </div>
       </section>
-      
+
       {/* Section 3: Federal Litigation Details */}
       <section className="space-y-4">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
           Federal Litigation Details
         </h3>
-        
+
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
             Cause of Action
@@ -588,7 +588,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
           />
           <p className="mt-1 text-xs text-slate-500">Full cause description with code</p>
         </div>
-        
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
@@ -602,7 +602,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
               placeholder="Bankruptcy Appeal"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               Nature of Suit Code
@@ -618,14 +618,14 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
           </div>
         </div>
       </section>
-      
+
       {/* Section 4: Dates */}
       <section className="space-y-4">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 flex items-center">
           <Calendar className="w-5 h-5 mr-2" />
           Important Dates
         </h3>
-        
+
         <div className="grid grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
@@ -639,7 +639,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
               aria-label="Filing Date"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               Trial Date
@@ -652,7 +652,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
               aria-label="Trial Date"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               Date Terminated
@@ -667,14 +667,14 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
           </div>
         </div>
       </section>
-      
+
       {/* Section 5: Parties */}
       <section className="space-y-4">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 flex items-center">
           <Users className="w-5 h-5 mr-2" />
           Parties
         </h3>
-        
+
         <AutocompleteSelect
           value={null}
           onChange={(_value, party) => {
@@ -714,7 +714,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
             );
           }}
         />
-        
+
         {/* Display selected parties */}
         {state.parties.length > 0 && (
           <div className="mt-4 space-y-2">
@@ -736,7 +736,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
           </div>
         )}
       </section>
-      
+
       {/* Form Actions */}
       <div className="flex items-center justify-between pt-6 border-t border-slate-200 dark:border-slate-700">
         {onCancel && (
@@ -749,7 +749,7 @@ export const FederalLitigationCaseForm: React.FC<FederalLitigationCaseFormProps>
             Cancel
           </button>
         )}
-        
+
         <button
           type="submit"
           disabled={isSubmitting || !state.isDirty}

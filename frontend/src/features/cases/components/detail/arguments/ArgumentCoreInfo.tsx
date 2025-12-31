@@ -1,9 +1,9 @@
 /**
  * ArgumentCoreInfo.tsx
- * 
+ *
  * Core argument information editor with narrative text area,
  * element tagging, and AI analysis trigger.
- * 
+ *
  * @module components/case-detail/arguments/ArgumentCoreInfo
  * @category Case Management - Arguments
  */
@@ -13,8 +13,8 @@ import React from 'react';
 import { Wand2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TextArea } from '@/components/atoms';
-import { Button } from '@/components/atoms';
+import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Button } from '@/components/ui/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -38,8 +38,8 @@ export const ArgumentCoreInfo: React.FC<ArgumentCoreInfoProps> = ({ argument, on
     <div className="space-y-6">
         <div>
             <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Argument Narrative</label>
-            <TextArea 
-                value={argument.description} 
+            <TextArea
+                value={argument.description}
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdate({ ...argument, description: e.target.value })}
                 rows={8}
                 className="font-serif text-base leading-relaxed"
@@ -51,10 +51,10 @@ export const ArgumentCoreInfo: React.FC<ArgumentCoreInfoProps> = ({ argument, on
             <div>
                 <label className={cn("block text-xs font-bold uppercase mb-2", theme.text.secondary)}>Strength Assessment</label>
                 <div className="flex items-center gap-4">
-                    <input 
-                        type="range" 
-                        min="0" max="100" 
-                        value={argument.strength} 
+                    <input
+                        type="range"
+                        min="0" max="100"
+                        value={argument.strength}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ ...argument, strength: parseInt(e.target.value) })}
                         title="Adjust argument strength"
                         className="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
@@ -71,8 +71,8 @@ export const ArgumentCoreInfo: React.FC<ArgumentCoreInfoProps> = ({ argument, on
                             onClick={() => onUpdate({ ...argument, status: s as any })}
                             className={cn(
                                 "px-3 py-1.5 text-xs rounded border transition-all",
-                                argument.status === s 
-                                    ? "bg-slate-800 text-white border-slate-800" 
+                                argument.status === s
+                                    ? "bg-slate-800 text-white border-slate-800"
                                     : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"
                             )}
                         >

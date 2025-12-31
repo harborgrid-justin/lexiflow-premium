@@ -12,7 +12,7 @@ import React from 'react';
 import { Filter } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { SearchToolbar } from '@/components/organisms';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

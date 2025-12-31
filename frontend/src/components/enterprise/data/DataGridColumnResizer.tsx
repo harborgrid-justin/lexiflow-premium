@@ -60,9 +60,15 @@ export function useColumnResizer(
 ) {
   const { minWidth = 50, maxWidth = 1000, onResize, onResizeEnd } = options;
 
+  // HYDRATION-SAFE: Track mounted state
+  const [isMounted, setIsMounted] = React.useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [startX, setStartX] = useState(0);
   const [startWidth, setStartWidth] = useState(0);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -72,10 +78,12 @@ export function useColumnResizer(
     setStartX(e.clientX);
     setStartWidth(currentWidth);
 
-    // Change cursor for entire document
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
-  }, [currentWidth]);
+    // HYDRATION-SAFE: Change cursor for entire document only in browser
+    if (isMounted && typeof document !== 'undefined') {
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    }
+  }, [currentWidth, isMounted]);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isResizing) return;
@@ -91,19 +99,21 @@ export function useColumnResizer(
 
     setIsResizing(false);
 
-    // Reset cursor
-    document.body.style.cursor = '';
-    document.body.style.userSelect = '';
+    // HYDRATION-SAFE: Reset cursor only in browser
+    if (isMounted && typeof document !== 'undefined') {
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    }
 
     // Call onResizeEnd if provided
     if (onResizeEnd) {
       onResizeEnd(columnId, currentWidth);
     }
-  }, [isResizing, columnId, currentWidth, onResizeEnd]);
+  }, [isResizing, columnId, currentWidth, onResizeEnd, isMounted]);
 
-  // Add global listeners when resizing
+  // HYDRATION-SAFE: Add global listeners when resizing, only in browser
   useEffect(() => {
-    if (isResizing) {
+    if (isResizing && isMounted && typeof document !== 'undefined') {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
 
@@ -113,7 +123,7 @@ export function useColumnResizer(
       };
     }
     return undefined;
-  }, [isResizing, handleMouseMove, handleMouseUp]);
+  }, [isResizing, isMounted, handleMouseMove, handleMouseUp]);
 
   return {
     isResizing,

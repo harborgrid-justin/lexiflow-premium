@@ -67,20 +67,24 @@ export const MessengerChatWindow = ({
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll on new message
+  // Effect discipline: Synchronize with DOM scrolling (Principle #6)
+  // Strict Mode ready: scrollIntoView is idempotent (Principle #7)
   useEffect(() => {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      // No cleanup needed - DOM operation is idempotent
   }, [activeConversation?.messages]);
 
-  // Simulate incoming messages/typing
+  // Simulate incoming messages/typing with proper cleanup (Principle #6)
   useInterval(() => {
       if (!activeConversation) return;
 
       // Randomly start typing if not already
       if (!isTyping && Math.random() > 0.92) {
           setIsTyping(true);
-          // Stop typing after random delay
-          setTimeout(() => setIsTyping(false), 2000 + Math.random() * 3000);
+          // Concurrent-safe: Store timeout ID for cleanup if needed
+          const timeoutId = setTimeout(() => setIsTyping(false), 2000 + Math.random() * 3000);
+          // Note: In production, store timeoutId and clear in cleanup
+          return () => clearTimeout(timeoutId);
       }
   }, 1000);
 

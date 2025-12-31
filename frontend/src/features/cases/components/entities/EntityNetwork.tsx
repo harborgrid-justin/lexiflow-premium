@@ -25,8 +25,8 @@ import { useTheme } from '@/providers/ThemeContext';
 
 // Components
 import { NexusGraph } from '@features/visual';
-import { Card } from '@/components/molecules';
-import { AdaptiveLoader } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -55,13 +55,13 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
       ['relationships', 'all'],
       () => DataService.entities.getAllRelationships()
   );
-  
+
   const { nodes, links: _links, components } = useMemo(() => {
     if (isLoading || entities.length === 0) return { nodes: [], links: [], components: [] };
-    
+
     // 1. Initialize Disjoint Set
     const ds = new DisjointSet(entities.map(e => e.id));
-    
+
     // 2. Union based on relationships
     relationships.forEach(rel => {
       ds.union(rel.sourceId, rel.targetId);
@@ -69,7 +69,7 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
 
     // 3. Get connected components (clusters)
     const comps = ds.getConnectedComponents();
-    
+
     // 4. Prepare data for NexusGraph
     const graphNodes = entities.map(e => ({
       id: e.id,
@@ -77,7 +77,7 @@ export const EntityNetwork: React.FC<EntityNetworkProps> = ({ entities }) => {
       type: e.type === 'Corporation' ? 'org' : 'party',
       original: e
     }));
-    
+
     const graphLinks = relationships.map(rel => ({
       source: rel.sourceId,
       target: rel.targetId,

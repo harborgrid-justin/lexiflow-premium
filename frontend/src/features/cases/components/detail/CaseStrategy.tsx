@@ -1,9 +1,9 @@
 /**
  * CaseStrategy.tsx
- * 
+ *
  * Legal strategy management with arguments, defenses, citations, and supporting evidence.
  * Tabbed interface for organizing strategic elements.
- * 
+ *
  * @module components/case-detail/CaseStrategy
  * @category Case Management - Legal Strategy
  */
@@ -41,10 +41,10 @@ interface CaseStrategyProps {
   evidence?: EvidenceItem[];
 }
 
-export const CaseStrategy: React.FC<CaseStrategyProps> = ({ 
+export const CaseStrategy: React.FC<CaseStrategyProps> = ({
   caseId,
-  citations: initialCitations = [], 
-  arguments: initialArgs = [], 
+  citations: initialCitations = [],
+  arguments: initialArgs = [],
   defenses: initialDefenses = [],
   evidence = []
 }) => {
@@ -53,7 +53,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
   const [citations, setCitations] = useState(initialCitations);
   const [args, setArgs] = useState(initialArgs);
   const [defenses, setDefenses] = useState(initialDefenses);
-  
+
   const strategyModal = useModalState();
   const [modalType, setModalType] = useState<'Citation' | 'Argument' | 'Defense'>('Citation');
   const [newItem, setNewItem] = useState<Partial<Citation | LegalArgument | Defense>>({});
@@ -100,7 +100,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
       onSuccess: (data) => {
         success(`${data.type} deleted successfully`);
         queryClient.invalidate(queryKeys.caseStrategy.detail(caseId));
-        
+
         // Update local state
         if (data.type === 'Citation') {
           setCitations(citations.filter(c => c.id !== data.id));
@@ -109,7 +109,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
         } else {
           setDefenses(defenses.filter(d => d.id !== data.id));
         }
-        
+
         setIsDeleteConfirmOpen(false);
         setItemToDelete(null);
       },
@@ -221,31 +221,31 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <StrategySection 
-            title="Arguments" 
-            items={args} 
-            type="Argument" 
-            icon={Target} 
+        <StrategySection
+            title="Arguments"
+            items={args}
+            type="Argument"
+            icon={Target}
             colorClass={theme.text.link}
             evidence={evidence}
             citations={citations}
             onEdit={(item) => handleEdit('Argument', item)}
             onDelete={(id) => handleDelete('Argument', id)}
         />
-        <StrategySection 
-            title="Defenses" 
-            items={defenses} 
-            type="Defense" 
-            icon={Shield} 
+        <StrategySection
+            title="Defenses"
+            items={defenses}
+            type="Defense"
+            icon={Shield}
             colorClass={theme.status.warning.text}
             onEdit={(item) => handleEdit('Defense', item)}
             onDelete={(id) => handleDelete('Defense', id)}
         />
-        <StrategySection 
-            title="Authority" 
-            items={citations} 
-            type="Citation" 
-            icon={Scale} 
+        <StrategySection
+            title="Authority"
+            items={citations}
+            type="Citation"
+            icon={Scale}
             colorClass={theme.action.primary.text}
             onEdit={(item) => handleEdit('Citation', item)}
             onDelete={(id) => handleDelete('Citation', id)}
@@ -255,7 +255,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
       <Modal isOpen={strategyModal.isOpen} onClose={() => { strategyModal.close(); setEditingItem(null); setNewItem({}); }} title={`${editingItem ? 'Edit' : 'Add'} ${modalType}`}>
         <div className="p-6 space-y-4">
             <Input label="Title / Citation" placeholder={modalType === 'Citation' ? 'e.g. 123 U.S. 456' : 'Title'} value={newItem.title || ''} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewItem({...newItem, title: e.target.value, citation: e.target.value})} />
-            
+
             {modalType === 'Defense' && (
                 <div>
                     <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
@@ -268,7 +268,7 @@ export const CaseStrategy: React.FC<CaseStrategyProps> = ({
             )}
 
             <TextArea label="Description" rows={4} value={newItem.description || ''} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewItem({...newItem, description: e.target.value})} />
-            
+
             <div className={cn("flex justify-end gap-2 pt-4 border-t", theme.border.default)}>
                 <Button variant="ghost" onClick={() => { strategyModal.close(); setEditingItem(null); setNewItem({}); }}>Cancel</Button>
                 <Button variant="primary" onClick={handleSave} disabled={isSaving}>

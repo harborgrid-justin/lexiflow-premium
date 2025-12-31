@@ -25,8 +25,8 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/providers';
 
 // Components
-import { Button } from '@/components/atoms';
-import { EmptyState } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button';
+import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

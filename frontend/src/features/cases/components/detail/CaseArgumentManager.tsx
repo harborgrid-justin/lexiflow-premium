@@ -1,9 +1,9 @@
 /**
  * CaseArgumentManager.tsx
- * 
+ *
  * Legal argument construction and management with search, filtering,
  * and evidence linking capabilities.
- * 
+ *
  * @module components/case-detail/CaseArgumentManager
  * @category Case Management - Arguments & Evidence
  */
@@ -13,10 +13,10 @@ import React, { useState } from 'react';
 import { Target, Plus, Filter } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button';
 import { ArgumentList } from './arguments/ArgumentList';
 import { ArgumentDetail } from './arguments/ArgumentDetail';
-import { SearchToolbar } from '@/components/organisms';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -85,17 +85,17 @@ export const CaseArgumentManager: React.FC<CaseArgumentManagerProps> = ({ caseDa
                 <p className={cn("text-xs hidden md:block", theme.text.secondary)}>Construct and strengthen core case theories.</p>
             </div>
             <div className={cn("h-8 w-px mx-2 hidden md:block", theme.border.default)}></div>
-            <SearchToolbar 
-                value={searchTerm} 
-                onChange={setSearchTerm} 
-                placeholder="Search arguments..." 
+            <SearchToolbar
+                value={searchTerm}
+                onChange={setSearchTerm}
+                placeholder="Search arguments..."
                 className="w-full max-w-md border-none shadow-none p-0 bg-transparent hidden md:flex"
             />
         </div>
         <div className="flex gap-2">
             <div className={cn("hidden md:flex items-center border rounded-lg px-3", theme.surface.default, theme.border.default)}>
                 <Filter className={cn("h-4 w-4 mr-2", theme.text.tertiary)}/>
-                <select 
+                <select
                     className={cn("text-sm bg-transparent outline-none py-1.5", theme.text.primary)}
                     value={filterStatus}
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterStatus(e.target.value)}
@@ -114,9 +114,9 @@ export const CaseArgumentManager: React.FC<CaseArgumentManagerProps> = ({ caseDa
       <div className="flex-1 flex overflow-hidden">
         {/* Left List */}
         <div className={cn("flex-1 flex flex-col overflow-hidden", activeArgumentId ? "hidden lg:flex lg:w-1/2 border-r" : "w-full", theme.border.default)}>
-             <ArgumentList 
-                argumentsList={filteredArguments} 
-                selectedId={activeArgumentId} 
+             <ArgumentList
+                argumentsList={filteredArguments}
+                selectedId={activeArgumentId}
                 onSelect={setActiveArgumentId}
              />
         </div>
@@ -124,8 +124,8 @@ export const CaseArgumentManager: React.FC<CaseArgumentManagerProps> = ({ caseDa
         {/* Right Inspector */}
         {activeArgumentId && activeArgument && (
             <div className={cn("flex-1 flex flex-col overflow-hidden animate-in slide-in-from-right duration-200", theme.surface.default)}>
-                <ArgumentDetail 
-                    argument={activeArgument} 
+                <ArgumentDetail
+                    argument={activeArgument}
                     onUpdate={handleUpdateArgument}
                     onDelete={handleDeleteArgument}
                     onClose={() => setActiveArgumentId(null)}
@@ -134,7 +134,7 @@ export const CaseArgumentManager: React.FC<CaseArgumentManagerProps> = ({ caseDa
                 />
             </div>
         )}
-        
+
         {!activeArgumentId && (
             <div className={cn("hidden lg:flex flex-1 items-center justify-center", theme.surface.highlight, theme.text.tertiary)}>
                 <div className="text-center">

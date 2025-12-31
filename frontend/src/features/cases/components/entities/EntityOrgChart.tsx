@@ -25,7 +25,7 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { AdaptiveLoader } from '@/components/molecules';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -43,7 +43,7 @@ interface EntityOrgChartProps {
 
 export const EntityOrgChart: React.FC<EntityOrgChartProps> = ({ entities: propEntities, onSelect }) => {
   const { theme } = useTheme();
-  
+
   // Enterprise Data Access
   const { data: fetchedEntities = [], isLoading } = useQuery<LegalEntity[]>(
       ['entities', 'all'],
@@ -52,7 +52,7 @@ export const EntityOrgChart: React.FC<EntityOrgChartProps> = ({ entities: propEn
   );
 
   const entities = propEntities || fetchedEntities;
-  
+
   const { root, children } = useMemo(() => {
       // Mock hierarchy logic: Find "TechCorp" as root, others as children
       // In a real app, this would traverse relationships recursively
@@ -68,7 +68,7 @@ export const EntityOrgChart: React.FC<EntityOrgChartProps> = ({ entities: propEn
     <div className="h-full p-8 overflow-auto flex justify-center">
         <div className="flex flex-col items-center space-y-8">
             {/* Root Node */}
-            <div 
+            <div
                 onClick={() => onSelect(root)}
                 className={cn(
                     "p-6 rounded-xl border-2 shadow-lg w-64 text-center cursor-pointer transition-transform hover:scale-105 z-10",
@@ -84,13 +84,13 @@ export const EntityOrgChart: React.FC<EntityOrgChartProps> = ({ entities: propEn
             {/* Connector */}
             <div className={cn("h-8 w-0.5 -my-4", theme.border.default, "bg-current opacity-30")}></div>
             <div className={cn("w-96 h-0.5", theme.border.default, "bg-current opacity-30")}></div>
-            
+
             {/* Children */}
             <div className="flex gap-8">
                 {children.map(child => (
                     <div key={child.id} className="flex flex-col items-center">
                         <div className={cn("h-8 w-0.5 -mt-8 mb-2", theme.border.default, "bg-current opacity-30")}></div>
-                        <div 
+                        <div
                             onClick={() => onSelect(child)}
                             className={cn(
                                 "p-4 rounded-lg border shadow-sm w-48 text-center cursor-pointer hover:border-blue-400 transition-colors",

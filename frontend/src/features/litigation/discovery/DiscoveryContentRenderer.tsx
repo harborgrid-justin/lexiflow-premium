@@ -2,23 +2,23 @@
  * @module components/discovery/DiscoveryContentRenderer
  * @category Discovery
  * @description Content router for Discovery Platform - maps activeTab to appropriate component.
- * 
+ *
  * ROUTING STRUCTURE:
  * - Main tab views: dashboard, requests, depositions, esi, productions, interviews, privilege, holds
  * - Additional views: custodians, examinations, plan
  * - Wizard/Detail views: doc_viewer, response, production_wizard
- * 
+ *
  * EXPORTED UTILITIES:
  * Workflow components (InitialDisclosureWizard, MotionToCompelBuilder, etc.) are exported
  * for use by parent components, action buttons, or future routing extensions.
- * 
+ *
  * NO THEME USAGE: Pure routing logic
  */
 
 import React, { lazy, Suspense } from 'react';
 import { DiscoveryRequest } from '@/types';
 import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
-import { LazyLoader } from '@/components/molecules';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 
 // Lazy load components ensuring named exports are handled correctly
 const DiscoveryDashboard = lazy(() => import('./dashboard/DiscoveryDashboard'));

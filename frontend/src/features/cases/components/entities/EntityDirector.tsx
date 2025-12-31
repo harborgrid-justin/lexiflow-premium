@@ -27,9 +27,9 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { PageHeader } from '@/components/organisms';
-import { Button } from '@/components/atoms';
-import { LazyLoader } from '@/components/molecules';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
+import { Button } from '@/components/ui/atoms/Button';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { EntityNavigation, DirectorView, getEntityParentTab, getEntityFirstTab } from './layout/EntityNavigation';
 
 // Utils & Constants
@@ -86,9 +86,9 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
           winId,
           `Profile: ${entity.name}`,
           <Suspense fallback={<LazyLoader message="Loading Profile..." />}>
-            <EntityProfile 
-              entityId={entity.id} 
-              onClose={() => closeWindow(winId)} 
+            <EntityProfile
+              entityId={entity.id}
+              onClose={() => closeWindow(winId)}
             />
           </Suspense>
       );
@@ -98,7 +98,7 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
       const name = prompt("Enter Entity Name:");
       if (!name) return;
       const type = prompt("Type (Individual/Corporation/Law Firm):") || 'Individual';
-      
+
       const newEntity: LegalEntity = {
           id: `ent-${Date.now()}` as EntityId,
           name,
@@ -108,15 +108,15 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
           riskScore: 0,
           tags: []
       };
-      
+
       await DataService.entities.add(newEntity);
   };
 
   return (
     <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
       <div className="px-6 pt-6 shrink-0">
-        <PageHeader 
-            title="Entity Director" 
+        <PageHeader
+            title="Entity Director"
             subtitle="Centralized identity management, relationship mapping, and conflict resolution."
             actions={
               <div className="flex gap-2">
@@ -125,10 +125,10 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
               </div>
             }
         />
-        
-        <EntityNavigation 
-            activeTab={activeTab} 
-            setActiveTab={setActiveTab} 
+
+        <EntityNavigation
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
             activeParentTabId={activeParentTab.id}
             onParentTabChange={handleParentTabChange}
         />
@@ -146,7 +146,7 @@ export const EntityDirector: React.FC<EntityDirectorProps> = ({ initialTab }) =>
               {activeTab === 'ingestion' && <EntityIngestion />}
               {activeTab === 'governance' && <EntityGovernance entities={entities} onSelect={handleSelectEntity} />}
               {activeTab === 'vendors' && <EntityVendorOps entities={entities} onSelect={handleSelectEntity} />}
-              
+
               {/* New Modules */}
               {activeTab === 'ubo_register' && <UboRegister entities={entities} onSelect={handleSelectEntity} />}
               {activeTab === 'kyc_docs' && <KycManager entities={entities} />}

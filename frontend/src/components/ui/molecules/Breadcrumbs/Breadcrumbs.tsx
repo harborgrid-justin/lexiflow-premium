@@ -35,21 +35,22 @@ interface BreadcrumbItem {
  */
 export const Breadcrumbs = React.memo<{ items: BreadcrumbItem[] }>(({ items }) => {
   const { theme } = useTheme();
-  
+
   return (
     <nav className={cn("flex items-center text-xs mb-4 flex-wrap", theme.text.secondary)} aria-label="Breadcrumb">
       <div className="flex items-center py-1">
          <Home className={cn("h-3 w-3 mr-1", theme.text.tertiary)} />
       </div>
-      {items.map((item, index) => (
-        <div key={index} className="flex items-center">
+      {/* IDENTITY-STABLE KEYS: Use label for stable reconciliation */}
+      {items.map((item) => (
+        <div key={item.label} className="flex items-center">
           <ChevronRight className={cn("h-3 w-3 mx-1 shrink-0", theme.text.tertiary)} />
-          <button 
+          <button
             onClick={item.onClick}
             disabled={!item.onClick}
             className={cn(
               "transition-colors py-1 px-1 rounded -ml-1",
-              item.onClick 
+              item.onClick
                 ? cn(`hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)
                 : cn("font-semibold cursor-default", theme.text.primary)
             )}

@@ -1,9 +1,9 @@
 /**
  * PlanningSidebar.tsx
- * 
+ *
  * Collapsible phase/task hierarchy sidebar for Gantt planning view
  * with task counts and status badges.
- * 
+ *
  * @module components/case-detail/planning/PlanningSidebar
  * @category Case Management - Planning
  */
@@ -47,7 +47,7 @@ export const PlanningSidebar: React.FC<PlanningSidebarProps> = ({
         <div className="flex-1 overflow-y-auto custom-scrollbar">
             {phases.map(phase => (
                 <div key={phase.id} className={cn("border-b last:border-0", theme.border.default)}>
-                    <div 
+                    <div
                     className={cn(
                         "flex items-center justify-between p-3 cursor-pointer transition-colors sticky top-0 z-10 border-b border-transparent",
                         theme.surface.default,
@@ -67,10 +67,10 @@ export const PlanningSidebar: React.FC<PlanningSidebarProps> = ({
                         <div className={cn(theme.surface.highlight)}>
                             {/* Simple mock filter for tasks belonging to phase - in real app would check ID */}
                             {tasks.filter(() => true).slice(0, 3).map(task => (
-                                <div 
-                                key={task.id} 
+                                <div
+                                key={task.id}
                                 className={cn(
-                                    "flex items-center gap-3 pl-8 pr-3 py-2 text-sm cursor-pointer border-l-2 border-transparent group transition-colors hover:border-blue-500", 
+                                    "flex items-center gap-3 pl-8 pr-3 py-2 text-sm cursor-pointer border-l-2 border-transparent group transition-colors hover:border-blue-500",
                                     activeTaskId === task.id ? cn(theme.primary.light, theme.action.primary.border) : theme.surface.default
                                 )}
                                 onMouseEnter={() => onHoverTask(task.id)}

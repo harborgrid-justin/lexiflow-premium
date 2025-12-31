@@ -48,7 +48,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
 
   return (
     <div className="relative inline-block text-left" ref={menuRef}>
-      <button 
+      <button
         id={buttonId}
         onClick={(e: React.MouseEvent) => { e.stopPropagation(); setIsOpen(!isOpen); }}
         className={cn("p-1 rounded-full transition-colors", theme.text.tertiary, `hover:${theme.surface.highlight}`, `hover:${theme.text.secondary}`)}
@@ -62,11 +62,12 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
       {isOpen && (
         <div id={menuId} className={cn("absolute right-0 mt-2 w-40 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50 animate-in fade-in zoom-in-95 duration-100", theme.surface.default, theme.border.default, "border")}>
           <div className="py-1" role="menu" aria-labelledby={buttonId}>
-            {actions.map((action, index) => {
+            {/* IDENTITY-STABLE KEYS: Use label as key */}
+            {actions.map((action) => {
               const Icon = action.icon;
               return (
                 <button
-                  key={index}
+                  key={action.label}
                   onClick={(e: React.MouseEvent) => {
                     e.stopPropagation();
                     action.onClick();
@@ -74,7 +75,7 @@ export const ActionMenu: React.FC<ActionMenuProps> = ({ actions }) => {
                   }}
                   className={cn(
                     "w-full text-left px-4 py-2 text-xs flex items-center gap-2 transition-colors",
-                    action.variant === 'danger' 
+                    action.variant === 'danger'
                       ? cn(theme.status.error.text, theme.action.danger.hover)
                       : cn(theme.text.primary, `hover:${theme.surface.highlight}`)
                   )}

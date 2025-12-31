@@ -80,7 +80,7 @@ export const ExhibitStats: React.FC<ExhibitStatsProps> = ({ exhibits }) => {
                 dataKey="value"
               >
                 {statusData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                  <Cell key={`exhibit-${entry.name}-${index}`} fill={entry.color} />
                 ))}
               </Pie>
               <Tooltip />

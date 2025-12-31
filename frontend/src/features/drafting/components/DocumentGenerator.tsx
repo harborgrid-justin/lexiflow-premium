@@ -44,53 +44,75 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
   const [loading, setLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string[]>>({});
 
+  // Effect discipline: Synchronize with external data sources (Principle #6)
+  // Strict Mode ready: Runs twice in dev, idempotent (Principle #7)
   useEffect(() => {
-    loadInitialData();
-  }, []);
+    let isMounted = true;
 
-  useEffect(() => {
-    if (templateId) {
-      loadTemplate(templateId);
-    }
-  }, [templateId]);
+    const loadData = async () => {
+      try {
+        const [templatesData, casesData, clausesData] = await Promise.all([
+          draftingApi.getAllTemplates(),
+          apiClient.get<unknown[]>('/cases'),
+          apiClient.get<unknown[]>('/clauses'),
+        ]);
 
-  const loadInitialData = async () => {
-    try {
-      const [templatesData, casesData, clausesData] = await Promise.all([
-        draftingApi.getAllTemplates(),
-        apiClient.get<unknown[]>('/cases'),
-        apiClient.get<unknown[]>('/clauses'),
-      ]);
-      setTemplates(Array.isArray(templatesData) ? templatesData : []);
-      setCases(Array.isArray(casesData) ? casesData : []);
-      setAvailableClauses(Array.isArray(clausesData) ? clausesData : []);
-    } catch (error) {
-      console.error('Failed to load data:', error);
-      addToast('Failed to load data', 'error');
-    }
-  };
-
-  const loadTemplate = async (id: string) => {
-    try {
-      const template = await draftingApi.getTemplateById(id);
-      setSelectedTemplate(template);
-      setTitle(`${template.name} - ${new Date().toLocaleDateString()}`);
-
-      // Initialize variable values with defaults
-      const initialValues: Record<string, unknown> = {};
-      template.variables.forEach((v) => {
-        initialValues[v.name] = v.defaultValue || '';
-      });
-      setVariableValues(initialValues);
-
-      if (!templateId) {
-        setStep('variables');
+        // Only update state if component is still mounted
+        if (isMounted) {
+          setTemplates(Array.isArray(templatesData) ? templatesData : []);
+          setCases(Array.isArray(casesData) ? casesData : []);
+          setAvailableClauses(Array.isArray(clausesData) ? clausesData : []);
+        }
+      } catch (error) {
+        if (isMounted) {
+          console.error('Failed to load data:', error);
+          addToast('Failed to load data', 'error');
+        }
       }
-    } catch (error) {
-      console.error('Failed to load template:', error);
-      addToast('Failed to load template', 'error');
-    }
-  };
+    };
+
+    loadData();
+
+    // Cleanup: Prevent state updates after unmount (Principle #6)
+    return () => {
+      isMounted = false;
+    };
+  }, [addToast]);
+
+  // Template-specific loading effect
+  useEffect(() => {
+    if (!templateId) return;
+
+    let isMounted = true;
+
+    const loadData = async () => {
+      try {
+        const template = await draftingApi.getTemplateById(templateId);
+        if (!isMounted) return;
+
+        setSelectedTemplate(template);
+        setTitle(`${template.name} - ${new Date().toLocaleDateString()}`);
+
+        // Initialize variable values with defaults
+        const initialValues: Record<string, unknown> = {};
+        template.variables.forEach((v) => {
+          initialValues[v.name] = v.defaultValue || '';
+        });
+        setVariableValues(initialValues);
+      } catch (error) {
+        if (isMounted) {
+          console.error('Failed to load template:', error);
+          addToast('Failed to load template', 'error');
+        }
+      }
+    };
+
+    loadData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [templateId, addToast]);
 
   const handleSelectTemplate = (template: DraftingTemplate) => {
     loadTemplate(template.id);
@@ -457,7 +479,7 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
       </h3>
       <div className="space-y-3">
         {selectedTemplate?.clauseReferences?.map((ref, index) => (
-          <div key={index} className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg">
+          <div key={`clause-ref-${ref.clauseId}-${index}`} className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg">
             <div className="flex items-start space-x-3">
               <input
                 type="checkbox"

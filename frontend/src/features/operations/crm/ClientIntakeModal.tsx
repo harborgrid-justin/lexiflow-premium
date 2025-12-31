@@ -115,7 +115,7 @@ export const ClientIntakeModal: React.FC<ClientIntakeModalProps> = ({ onClose, o
 
           {conflicts.length > 0 && (
               <ul className="list-disc pl-5 mt-1 space-y-0.5">
-                  {conflicts.slice(0, 3).map((c, i) => <li key={i}>{c}</li>)}
+                  {conflicts.slice(0, 3).map((c, i) => <li key={`conflict-${i}-${c.substring(0, 30)}`}>{c}</li>)}
                   {conflicts.length > 3 && <li>...and {conflicts.length - 3} more</li>}
               </ul>
           )}

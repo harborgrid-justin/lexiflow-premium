@@ -75,11 +75,11 @@ const BillingInvoicesComponent: React.FC = () => {
   const { mutate: sendInvoice } = useMutation(
     (id: string) => (DataService && DataService.billing) ? DataService.billing.sendInvoice(id) : Promise.resolve(false),
     {
-      // Optimistic update
+      // Concurrent-safe optimistic update: Functional state ensures latest data (Principle #5)
       onMutate: async (id: string) => {
         const previousInvoices = queryClient.getQueryState<Invoice[]>(billingQueryKeys.billing.invoices())?.data;
 
-        // Optimistically update to "Sent"
+        // Optimistically update to "Sent" - functional update pattern
         queryClient.setQueryData<Invoice[]>(
           billingQueryKeys.billing.invoices(),
           (old = []) => old.map(inv =>
@@ -105,11 +105,11 @@ const BillingInvoicesComponent: React.FC = () => {
     }
   );
 
-  // Mark Paid Mutation with optimistic updates
+  // Mark Paid Mutation with concurrent-safe optimistic updates (Principle #5)
   const { mutate: markPaid } = useMutation(
     (id: string) => DataService.billing.updateInvoice(id, { status: InvoiceStatusEnum.PAID }),
     {
-      // Optimistic update
+      // Functional update pattern prevents stale closures
       onMutate: async (id: string) => {
         const previousInvoices = queryClient.getQueryState<Invoice[]>(billingQueryKeys.billing.invoices())?.data;
 
@@ -139,6 +139,7 @@ const BillingInvoicesComponent: React.FC = () => {
     }
   );
 
+  // Memoization with purpose: Filter recalc only on data/filter changes (Principle #13)
   const filteredInvoices = useMemo(() => {
     return invoices.filter(inv => {
       const matchesSearch = (inv.client || '').toLowerCase().includes(searchTerm.toLowerCase()) || inv.id.toLowerCase().includes(searchTerm.toLowerCase());

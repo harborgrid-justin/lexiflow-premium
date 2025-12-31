@@ -82,6 +82,9 @@ export function InlineEditor({
       }
     };
 
+    // Guard browser API access for SSR compatibility
+    if (typeof document === 'undefined') return;
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [value]);

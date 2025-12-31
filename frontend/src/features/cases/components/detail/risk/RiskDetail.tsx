@@ -13,8 +13,9 @@ import React, { useState } from 'react';
 import { X, Save, Trash2, Wand2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/atoms';
-import { Input, TextArea } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button';
+import { Input } from '@/components/ui/atoms/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea';
 import { RiskMatrix } from './RiskMatrix';
 
 // Internal Dependencies - Hooks & Context

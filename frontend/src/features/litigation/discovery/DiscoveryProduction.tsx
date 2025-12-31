@@ -1,9 +1,9 @@
 /**
  * DiscoveryProduction.tsx
- * 
+ *
  * Document production interface with Bates stamping, OCR, and load file generation.
  * Handles document upload, metadata extraction, and production formatting.
- * 
+ *
  * @module components/discovery/DiscoveryProduction
  * @category Discovery - Production
  */
@@ -18,8 +18,8 @@ import { ArrowLeft, Upload, FileText, Check, ShieldCheck, Database, Printer, Har
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/atoms';
-import { Card } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -46,7 +46,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
   const { theme } = useTheme();
   const [uploading, setUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
-  
+
   // Cache production config with 24h TTL
   const { data: cachedConfig } = useQuery(
       discoveryQueryKeys.discovery.productions.config(),
@@ -63,7 +63,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
       },
       { staleTime: 86400000 } // 24 hours
   );
-  
+
   const [config, setConfig] = useState(cachedConfig || {
       batesPrefix: 'PROD-',
       startNumber: 100,
@@ -95,10 +95,10 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
       if (e.target.files && e.target.files.length > 0) {
           setUploading(true);
           const files = Array.from(e.target.files) as File[];
-          
+
           // Lazy load DocumentService
           const DocumentService = await loadDocumentService();
-          
+
           for (const file of files) {
               await DocumentService.processFile(file); // Simulate processing
               setUploadedFiles(prev => [...prev, file.name]);
@@ -146,7 +146,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
                             </div>
                             <p className={cn("text-xs mt-1", theme.text.tertiary)}>Next: {config.batesPrefix}{String(config.startNumber).padStart(6, '0')}</p>
                         </div>
-                        
+
                         <div>
                             <label className={cn("block text-xs font-semibold uppercase mb-1", theme.text.secondary)}>Format</label>
                             <select className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)} value={config.format} onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setConfig({...config, format: e.target.value})}>
@@ -177,7 +177,7 @@ export const DiscoveryProduction: React.FC<DiscoveryProductionProps> = ({ reques
                         </div>
                     </div>
                 </Card>
-                
+
                 <div className="p-3 bg-green-50 border border-green-200 rounded text-green-800 text-xs flex items-start">
                     <ShieldCheck className="h-4 w-4 mr-2 shrink-0 mt-0.5"/>
                     <p>Privilege filter active. Documents tagged 'Privileged' will be auto-flagged for withheld log and excluded from export.</p>

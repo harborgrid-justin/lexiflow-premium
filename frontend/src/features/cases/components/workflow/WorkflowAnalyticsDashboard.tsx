@@ -25,16 +25,16 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '@/components/molecules';
-import { LoadingState } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { LoadingState } from '@/components/ui/molecules/LoadingState/LoadingState';
 
 // Utils & Constants
-import { 
-  getChartTheme, 
-  DEFAULT_MARGINS, 
-  getAxisConfig, 
-  getGridConfig, 
-  getTooltipConfig 
+import {
+  getChartTheme,
+  DEFAULT_MARGINS,
+  getAxisConfig,
+  getGridConfig,
+  getTooltipConfig
 } from '@/utils/chartConfig';
 
 // Types
@@ -46,13 +46,13 @@ import { WorkflowAnalyticsData } from './types';
 
 export const WorkflowAnalyticsDashboard: React.FC = () => {
   const { mode } = useTheme();
-  
+
   // Load analytics from IndexedDB via useQuery for accurate, cached data
   const { data: analytics = { completion: [], status: [] }, isLoading } = useQuery<WorkflowAnalyticsData>(
     queryKeys.workflowsExtended.analytics(),
     () => DataService.workflow.getAnalytics()
   );
-  
+
   const chartTheme = getChartTheme(mode);
   const axisConfig = getAxisConfig(chartTheme);
   const gridConfig = getGridConfig(chartTheme);

@@ -1,9 +1,9 @@
 /**
  * GanttTimeline.tsx
- * 
+ *
  * Interactive Gantt chart timeline with drag-to-reschedule, zoom controls,
  * and dependency visualization.
- * 
+ *
  * @module components/case-detail/planning/GanttTimeline
  * @category Case Management - Planning
  */
@@ -45,10 +45,10 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
   const { openWindow } = useWindow();
   const timelineRef = useRef<HTMLDivElement>(null);
 
-  const { onMouseDown } = useGanttDrag({ 
-      pixelsPerDay, 
-      tasks, 
-      onTaskUpdate: onUpdateTask 
+  const { onMouseDown } = useGanttDrag({
+      pixelsPerDay,
+      tasks,
+      onTaskUpdate: onUpdateTask
   });
 
   const renderTimeScale = () => {
@@ -58,8 +58,8 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
       return (
         <div className={cn("flex h-8 border-b", theme.border.default)}>
           {days.map((d, i) => (
-             <div 
-                key={i} 
+             <div
+                key={i}
                 className={cn("border-r text-[10px] font-bold uppercase p-2 flex-shrink-0 select-none", theme.border.default, theme.text.tertiary)}
                 style={{ width: pixelsPerDay * step }}
               >
@@ -76,7 +76,7 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
               <div className={cn("sticky top-0 z-20 border-b shadow-sm min-w-max", theme.surface.highlight, theme.border.default)}>
                   {renderTimeScale()}
               </div>
-              
+
               <div className="relative min-w-max pb-20">
                   {/* Grid Lines */}
                   <div className="absolute inset-0 pointer-events-none z-0 flex">
@@ -94,12 +94,12 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
                       return (
                           <div key={phase.id} className="relative mt-2">
                               {/* Phase Row Background */}
-                              <div className="h-10 sticky left-0 right-0"></div> 
-                              
+                              <div className="h-10 sticky left-0 right-0"></div>
+
                               {/* Tasks */}
                               {tasks.filter(() => true).slice(0, 10).map((task) => (
-                                  <div 
-                                    key={task.id} 
+                                  <div
+                                    key={task.id}
                                     className={cn("h-10 relative flex items-center transition-colors", activeTaskId === task.id ? cn(theme.primary.light, "bg-opacity-50") : "hover:bg-black/5 dark:hover:bg-white/5")}
                                   >
                                       <div
@@ -119,17 +119,17 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
                                           }}
                                       >
                                           <span className="truncate drop-shadow-md z-10 pr-2">{task.title}</span>
-                                          
+
                                           {/* Drag Overlay */}
                                           <div className="absolute inset-0 bg-gradient-to-b from-white/30 to-transparent pointer-events-none"></div>
-                                          
+
                                           {/* Resize Handles */}
-                                          <div 
-                                            className="absolute left-0 top-0 bottom-0 w-3 cursor-w-resize hover:bg-black/20 z-20" 
+                                          <div
+                                            className="absolute left-0 top-0 bottom-0 w-3 cursor-w-resize hover:bg-black/20 z-20"
                                             onMouseDown={(e) => onMouseDown(e, task.id, 'resize-left')}
                                           ></div>
-                                          <div 
-                                            className="absolute right-0 top-0 bottom-0 w-3 cursor-e-resize hover:bg-black/20 z-20" 
+                                          <div
+                                            className="absolute right-0 top-0 bottom-0 w-3 cursor-e-resize hover:bg-black/20 z-20"
                                             onMouseDown={(e) => onMouseDown(e, task.id, 'resize-right')}
                                           ></div>
                                       </div>

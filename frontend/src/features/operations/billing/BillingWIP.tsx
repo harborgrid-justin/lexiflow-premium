@@ -89,6 +89,7 @@ const BillingWIPComponent: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
   const [searchTerm, setSearchTerm] = useState('');
+  // Concurrent-safe: Set operations need functional updates (Principle #5)
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [draftEntry] = useState<Partial<TimeEntry> | null>(null);
 
@@ -120,6 +121,7 @@ const BillingWIPComponent: React.FC = () => {
       }
   });
 
+  // Memoization with purpose: Filter only recalculates on deps change (Principle #13)
   const filteredEntries = useMemo(() => {
     return entries.filter(e =>
         e.status === WIPStatusEnum.UNBILLED &&

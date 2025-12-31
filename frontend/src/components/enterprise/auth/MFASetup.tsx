@@ -39,6 +39,7 @@ export const MFASetup: React.FC<MFASetupProps> = ({
   const [qrCode, setQrCode] = useState('');
   const [secret, setSecret] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
+  // LAYOUT STABILITY: Backup codes are immutable once generated
   const [backupCodes, setBackupCodes] = useState<string[]>([]);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -126,6 +127,10 @@ export const MFASetup: React.FC<MFASetupProps> = ({
 
   const handleCopyToClipboard = async (text: string, label: string) => {
     try {
+      if (typeof navigator === 'undefined' || !navigator.clipboard) {
+        setError('Clipboard not available');
+        return;
+      }
       await navigator.clipboard.writeText(text);
       setCopiedItem(label);
       setTimeout(() => setCopiedItem(null), 2000);

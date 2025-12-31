@@ -53,17 +53,18 @@ export function useTheme() {
 }
 
 export const ThemeProvider = ({ children, initialMode }: ThemeProviderProps) => {
-  // Principle 35/38: Deterministic First Render
-  // Start with a stable default (e.g. 'light') during initial render/hydration
-  // to avoid mismatched markup. Sync with storage/preference in effect.
+  // Context update minimization: Split contexts prevent unnecessary rerenders (Principle #14)
+  // Concurrent-safe: Deterministic first render prevents hydration mismatches
+  // Start with stable default during initial render to avoid markup mismatch
   const [mode, setMode] = useState<ThemeMode>(
     initialMode || (DEFAULT_THEME === 'auto' ? 'light' : DEFAULT_THEME)
   );
 
   const [mounted, setMounted] = useState(false);
 
+  // Effect discipline: Synchronize theme with localStorage/system (Principle #6)
+  // Strict Mode ready: Effect runs twice in dev, but is idempotent (Principle #7)
   useEffect(() => {
-    // BP13: Document lifecycle - theme initialization from storage/preference
     setMounted(true);
     // Sync with localStorage or system preference after mount
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -79,7 +80,8 @@ export const ThemeProvider = ({ children, initialMode }: ThemeProviderProps) => 
     }
   }, []);
 
-  // BP10: Stabilize function references with useCallback
+  // Stable callbacks minimize context updates (Principle #14)
+  // Functional state update ensures concurrent safety (Principle #5)
   const toggleTheme = useCallback(() => {
     setMode((prevMode) => {
       const newMode = prevMode === 'light' ? 'dark' : 'light';
@@ -94,9 +96,9 @@ export const ThemeProvider = ({ children, initialMode }: ThemeProviderProps) => 
     localStorage.setItem(THEME_STORAGE_KEY, newMode);
   }, []);
 
+  // Effect discipline: Synchronize theme class with DOM (Principle #6)
+  // This is legitimate external system synchronization
   useEffect(() => {
-    // BP13: Document lifecycle - DOM manipulation for theme application
-    // Only apply class changes if mounted to avoid side-effects during render phase (though useEffect is post-render)
     if (!mounted) return;
 
     const root = window.document.documentElement;

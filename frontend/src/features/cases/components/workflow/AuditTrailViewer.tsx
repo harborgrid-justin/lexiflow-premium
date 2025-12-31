@@ -8,7 +8,7 @@ import { AuditLogEntry } from '@/types';
 import { useQuery, queryClient } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
-import { VirtualList } from '@/components/organisms';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { AuditEvent } from './types';
 
 export const AuditTrailViewer = () => {
@@ -67,7 +67,7 @@ export const AuditTrailViewer = () => {
         {isLoading ? (
             <div className="flex justify-center items-center h-full"><Loader2 className="animate-spin text-blue-600"/></div>
         ) : (
-            <VirtualList 
+            <VirtualList
                 items={events}
                 height="100%"
                 itemHeight={64}

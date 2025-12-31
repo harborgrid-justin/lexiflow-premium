@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { Card } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
 import { MoreHorizontal, Play, Search } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { EmptyState } from '@/components/molecules';
+import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { Process } from './types';
 import { getProcessIcon } from './utils';
 
@@ -20,8 +20,8 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
 
   if (!processes || processes.length === 0) {
     return (
-      <EmptyState 
-        title="No Firm Processes" 
+      <EmptyState
+        title="No Firm Processes"
         description="There are no active firm processes defined. Create a new process template to get started."
         icon={Search}
       />
@@ -32,7 +32,7 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {processes.map(bp => (
             <Card key={bp.id} noPadding className={cn("flex flex-col h-full transition-colors group cursor-pointer", `hover:${theme.primary.border}`)}>
-            <div 
+            <div
                 className={cn("p-5 border-b flex justify-between items-start", theme.border.default, theme.surface.highlight)}
                 onClick={() => onSelectProcess && onSelectProcess(bp.id)}
             >
@@ -50,8 +50,8 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
                     <button className={cn(theme.text.tertiary, `hover:${theme.text.secondary}`)} onClick={(e: React.MouseEvent) => e.stopPropagation()} aria-label="Process options"><MoreHorizontal className="h-4 w-4"/></button>
                 </div>
             </div>
-            
-            <div 
+
+            <div
                 className="p-5 flex-1 space-y-4"
                 onClick={() => onSelectProcess && onSelectProcess(bp.id)}
             >
@@ -59,7 +59,7 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
                 <span>Trigger: <strong className={theme.text.primary}>{bp.triggers}</strong></span>
                 <span>Tasks: <strong>{bp.tasks}</strong></span>
                 </div>
-                
+
                 {bp.status === 'Active' && (
                 <div className="space-y-2">
                     <div className="flex justify-between text-xs font-medium">
@@ -67,8 +67,8 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
                     <span>{Math.round((bp.completed / bp.tasks) * 100)}%</span>
                     </div>
                     <div className={cn("w-full rounded-full h-1.5 overflow-hidden", theme.surface.highlight)}>
-                    <div 
-                      className={cn("h-1.5 rounded-full transition-all", theme.primary.DEFAULT)} 
+                    <div
+                      className={cn("h-1.5 rounded-full transition-all", theme.primary.DEFAULT)}
                       style={{ width: `${(bp.completed / bp.tasks) * 100}%` }}
                     ></div>
                     </div>
@@ -89,7 +89,7 @@ export const FirmProcessList: React.FC<FirmProcessListProps> = ({ processes, onS
             </div>
             </Card>
         ))}
-        
+
         {/* New Process Card */}
         <div className={cn("border-2 border-dashed rounded-lg flex flex-col items-center justify-center p-8 transition-all cursor-pointer min-h-[200px]", theme.border.default, theme.text.tertiary, `hover:${theme.primary.border}`, `hover:${theme.primary.text}`, `hover:${theme.surface.highlight}`)}>
             <div className={cn("p-4 rounded-full shadow-sm mb-3", theme.surface.default)}>

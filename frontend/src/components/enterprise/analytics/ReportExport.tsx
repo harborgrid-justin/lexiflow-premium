@@ -153,7 +153,9 @@ export const ReportExport: React.FC<ReportExportProps> = ({
       const timestamp = new Date().toISOString().split('T')[0];
       const filename = `${reportName}-${timestamp}${formatExtensions[format]}`;
 
-      // Create download link
+      // Create download link (guard for SSR)
+      if (typeof document === 'undefined') return;
+
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;

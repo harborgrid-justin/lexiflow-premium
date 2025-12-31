@@ -1,9 +1,9 @@
 /**
  * CaseBilling.tsx
- * 
+ *
  * Case-specific billing summary with time entries, billed/unbilled totals,
  * and export functionality for invoicing.
- * 
+ *
  * @module components/case-detail/CaseBilling
  * @category Case Management - Billing & Time Tracking
  */
@@ -13,10 +13,10 @@ import React from 'react';
 import { Download, Clock, TrendingUp } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Card } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table';
+import { Card } from '@/components/ui/molecules/Card/Card';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -40,7 +40,7 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
     const unbilledTotal = entries
         .filter(e => e.status === 'Unbilled')
         .reduce((sum, e) => sum + e.total, 0);
-    
+
     const billedTotal = entries
         .filter(e => e.status === 'Billed')
         .reduce((sum, e) => sum + e.total, 0);
@@ -82,8 +82,8 @@ export const CaseBilling: React.FC<CaseBillingProps> = ({ billingModel, value, e
                 </div>
             </div>
 
-            <Card 
-                title="Time Ledger" 
+            <Card
+                title="Time Ledger"
                 action={<Button size="sm" variant="outline" icon={Download}>Export LEDES</Button>}
                 noPadding
             >

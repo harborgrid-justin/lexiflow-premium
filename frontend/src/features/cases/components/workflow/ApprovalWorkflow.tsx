@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { CheckCircle, XCircle, Clock, User, Shield } from 'lucide-react';
-import { Button } from '@/components/atoms';
-import { Card } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button';
+import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
@@ -16,20 +16,20 @@ interface ApprovalWorkflowProps {
   onReject: (id: string) => void;
 }
 
-export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({ 
+export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
   requests: propRequests,
   onApprove,
-  onReject 
+  onReject
 }) => {
   const { theme } = useTheme();
-  
+
   // Load approvals from IndexedDB via useQuery when not provided as props
   const { data: internalRequests = [] } = useQuery<ApprovalRequest[]>(
     queryKeys.workflowsExtended.approvals(),
     () => DataService.workflow.getApprovals(),
     { enabled: !propRequests }
   );
-  
+
   const requests = propRequests || internalRequests;
 
   return (
@@ -37,7 +37,7 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
       <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
         <Shield className="h-5 w-5 mr-2 text-purple-600" /> Pending Approvals
       </h3>
-      
+
       {requests.length === 0 ? (
         <div className={cn("text-center p-6 rounded-lg border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
           No pending approvals required.
@@ -62,7 +62,7 @@ export const ApprovalWorkflow: React.FC<ApprovalWorkflowProps> = ({
                   {req.priority}
                 </span>
               </div>
-              
+
               <p className={cn("text-sm p-3 rounded border mb-4", theme.surface.highlight, theme.border.default, theme.text.primary)}>
                 {req.description}
               </p>

@@ -24,8 +24,8 @@ import { queryKeys } from '@/utils/queryKeys';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { EmptyState } from '@/components/molecules';
-import { AdaptiveLoader } from '@/components/molecules';
+import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -62,8 +62,8 @@ export const WorkflowAutomations = () => {
 
   if (automations.length === 0) {
       return (
-        <EmptyState 
-            title="No Automations Configured" 
+        <EmptyState
+            title="No Automations Configured"
             description="Create your first automation rule to streamline your workflow."
             icon={Zap}
             action={

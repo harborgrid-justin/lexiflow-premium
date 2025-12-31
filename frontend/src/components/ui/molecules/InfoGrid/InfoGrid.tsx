@@ -21,11 +21,12 @@ export interface InfoGridProps {
 
 export const InfoGrid = React.memo<InfoGridProps>(({ items, cols = 2 }) => {
   const { theme } = useTheme();
-  
+
   return (
     <div className={`grid grid-cols-${cols} gap-4`}>
-      {items.map((item, i) => (
-        <div key={i} className={item.span ? `col-span-${item.span}` : ''}>
+      {/* IDENTITY-STABLE KEYS: Use label as key for stable reconciliation */}
+      {items.map((item) => (
+        <div key={item.label} className={item.span ? `col-span-${item.span}` : ''}>
           <p className={cn("text-xs font-bold uppercase mb-1", theme.text.secondary)}>
             {item.label}
           </p>

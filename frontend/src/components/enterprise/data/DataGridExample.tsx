@@ -60,6 +60,7 @@ function generateMockUsers(count: number): User[] {
   const statuses: Array<'active' | 'inactive' | 'pending'> = ['active', 'inactive', 'pending'];
   const users: User[] = [];
 
+  // Note: Math.random() is intentional here for demo data generation (not used in render)
   for (let i = 1; i <= count; i++) {
     users.push({
       id: i,

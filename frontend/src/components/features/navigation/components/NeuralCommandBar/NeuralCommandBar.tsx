@@ -59,18 +59,31 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
   
   useClickOutside(searchRef as React.RefObject<HTMLElement>, () => setShowResults(false));
   
+  // Effect discipline: Synchronize search results with debounced query (Principle #6)
+  // Strict Mode ready: Search is idempotent, cleanup prevents stale results (Principle #7)
   useEffect(() => {
+    let isMounted = true;
+    
     const performSearch = async () => {
       if (debouncedSearch.length >= SEARCH_MIN_QUERY_LENGTH && !isProcessingIntent) {
         const serviceResults = await SearchService.search(debouncedSearch);
-        setResults(serviceResults.slice(0, 10));
-        setShowResults(true);
-      } else {
+        // Only update if still mounted and query hasn't changed
+        if (isMounted) {
+          setResults(serviceResults.slice(0, 10));
+          setShowResults(true);
+        }
+      } else if (isMounted) {
         setResults([]);
         setShowResults(false);
       }
     };
+    
     performSearch();
+    
+    // Cleanup: Prevent stale results from updating state
+    return () => {
+      isMounted = false;
+    };
   }, [debouncedSearch, isProcessingIntent]);
 
   const handleResultSelect = (result: GlobalSearchResult) => {

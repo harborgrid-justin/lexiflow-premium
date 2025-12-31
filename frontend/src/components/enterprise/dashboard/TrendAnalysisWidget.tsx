@@ -69,6 +69,7 @@ const TrendAnalysisWidgetComponent: React.FC<TrendAnalysisWidgetProps> = ({
   const { theme } = useTheme();
   const [selectedTimeRange, setSelectedTimeRange] = useState<'7d' | '30d' | '90d' | 'all'>('30d');
 
+  // DETERMINISTIC RENDERING: Memoize combined data to avoid recalculation on every render
   const combinedData = useMemo(() => {
     const historical = data.map((point) => ({
       ...point,
@@ -91,6 +92,7 @@ const TrendAnalysisWidgetComponent: React.FC<TrendAnalysisWidgetProps> = ({
     return [...historical, ...predicted];
   }, [data, predictions, showConfidenceInterval]);
 
+  // LAYOUT STABILITY: Memoize filtered data for consistent rendering
   const filteredData = useMemo(() => {
     if (selectedTimeRange === 'all') return combinedData;
 

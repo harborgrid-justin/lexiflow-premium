@@ -82,9 +82,12 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
         }
     ], isOpen);
 
-    // Effect to load initial data when modal opens
+    // Effect discipline: Synchronize form with external data (Principle #6)
+    // Strict Mode ready: State updates are idempotent (Principle #7)
     useEffect(() => {
-        if (isOpen && initialData) {
+        if (!isOpen) return;
+        
+        if (initialData) {
             setFormData(prev => ({
                 ...prev,
                 ...initialData,
@@ -95,7 +98,7 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
             if (initialData.preview) {
                 setBody(`\n\n--- Original Message ---\n${initialData.preview}`);
             }
-        } else if (isOpen && !initialData) {
+        } else {
             // Reset if opening fresh
             setFormData({
                 type: 'Email',

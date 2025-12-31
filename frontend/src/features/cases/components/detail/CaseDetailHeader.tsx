@@ -1,9 +1,9 @@
 /**
  * CaseDetailHeader.tsx
- * 
+ *
  * Sticky header bar for case detail views showing key case metadata, status badges,
  * and quick action buttons with live counts for tasks and messages.
- * 
+ *
  * @module components/case-detail/CaseDetailHeader
  * @category Case Management - Detail Views
  */
@@ -40,7 +40,7 @@ interface CaseDetailHeaderProps {
   onShowTimeline: () => void;
 }
 
-export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({ 
+export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
   id, title, status, client, clientId, jurisdiction, onBack, onShowTimeline
 }) => {
   // ============================================================================
@@ -129,7 +129,7 @@ export const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = React.memo(({
                                 )}
                             </div>
                             <Button variant="outline" size="sm" className="hidden sm:flex" icon={ArrowUpRight} onClick={handleOpenPortal}>Client Portal</Button>
-                            <button 
+                            <button
                                 className={cn("lg:hidden p-2 rounded-full", theme.text.secondary, `hover:${theme.surface.highlight}`)}
                                 onClick={onShowTimeline}                                title="View timeline"
                                 aria-label="Open case timeline"                            >

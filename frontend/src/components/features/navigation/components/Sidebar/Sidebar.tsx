@@ -63,3 +63,6 @@ export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, is
     </>
   );
 });
+
+// React.memo displayName for debugging (Principle #13)
+Sidebar.displayName = 'Sidebar';

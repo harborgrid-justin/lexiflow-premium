@@ -3,7 +3,7 @@
  * @category Layouts - Composition
  * @description Advanced layout composition utility for creating complex nested layouts
  * with automatic spacing, responsive behavior, and accessibility features.
- * 
+ *
  * FEATURES:
  * - Declarative layout composition
  * - Automatic ARIA landmarks
@@ -100,9 +100,12 @@ interface SkipLinkProps {
 
 const SkipLink: React.FC<SkipLinkProps> = ({ targetId, label }) => {
   const { theme } = useTheme();
-  
+
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    // HYDRATION-SAFE: Only access document in browser
+    if (typeof document === 'undefined') return;
+
     const target = document.getElementById(targetId);
     if (target) {
       target.focus();
@@ -165,7 +168,7 @@ const Section: React.FC<SectionProps> = ({ section }) => {
 /**
  * LayoutComposer enables declarative composition of complex layouts with
  * automatic accessibility features and responsive behavior.
- * 
+ *
  * @example
  * ```tsx
  * <LayoutComposer

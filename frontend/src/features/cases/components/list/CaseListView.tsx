@@ -34,6 +34,7 @@ interface CaseListViewProps {
 }
 
 export const CaseListView = React.memo<CaseListViewProps>(({ filter = 'all' }) => {
+  // Identity-stable navigation callback (Principle #13)
   const navigate = useCallback((path: string) => {
     window.location.hash = `#/${path}`;
   }, []);
@@ -45,13 +46,15 @@ export const CaseListView = React.memo<CaseListViewProps>(({ filter = 'all' }) =
   const [practiceAreaFilter, setPracticeAreaFilter] = useState<PracticeArea | 'all'>('all');
   const [showFilters, setShowFilters] = useState(false);
 
+  // Concurrent-safe data fetching with cache (Principle #11)
   const { data: matters = [], isLoading: loading} = useQuery<Matter[]>(
     queryKeys.cases.matters.all(),
     () => DataService.cases.getAll(),
     { staleTime: 30000 } // Cache for 30 seconds
   );
 
-  // Memoize filtering logic for performance
+  // Memoization with purpose: Filtering is expensive for large lists (Principle #13)
+  // Recalculates only when dependencies change
   const filteredMatters = useMemo(() => {
     let filtered = [...matters];
 

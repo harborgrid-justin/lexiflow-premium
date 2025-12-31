@@ -169,7 +169,7 @@ export const PleadingAnalytics: React.FC = () => {
                                 label
                             >
                                 {analytics.clauseUsage.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={entry.color} />
+                                    <Cell key={`clause-${entry.name}-${index}`} fill={entry.color} />
                                 ))}
                             </Pie>
                             <Tooltip />

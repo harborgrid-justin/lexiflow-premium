@@ -1,10 +1,10 @@
 /**
  * CaseList.tsx
- * 
+ *
  * Main case management dashboard with tabbed interface for different case views.
  * Provides unified navigation across active cases, intake pipeline, dockets,
  * tasks, conflicts, resources, trust accounting, closing, and archives.
- * 
+ *
  * @module components/case-list/CaseList
  * @category Case Management - List Views
  */
@@ -20,8 +20,8 @@ import { Plus, Download } from 'lucide-react';
 // ============================================================================
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { LazyLoader } from '@/components/molecules';
-import { Button } from '@/components/atoms';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { Button } from '@/components/ui/atoms/Button';
 import { CaseListActive } from '@features/cases';
 import { CaseListIntake } from '@features/cases';
 import { CaseListDocket } from '@features/cases';
@@ -60,7 +60,7 @@ interface CaseListProps {
 
 /**
  * CaseList - Tabbed case management dashboard
- * 
+ *
  * Features:
  * - 9 specialized views (active, intake, docket, tasks, conflicts, resources, trust, closing, archived)
  * - Session-persisted active tab
@@ -74,27 +74,27 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab, se
   // ==========================================================================
   const [isPending, startTransition] = useTransition();
   const [activeTab, _setActiveTab] = useSessionStorage<string>('case_list_active_tab', initialTab || 'active');
-  
+
   const caseListData = useCaseList();
-  const { 
-    statusFilter, 
-    setStatusFilter, 
-    typeFilter, 
-    setTypeFilter, 
-    searchTerm, 
+  const {
+    statusFilter,
+    setStatusFilter,
+    typeFilter,
+    setTypeFilter,
+    searchTerm,
     setSearchTerm,
     dateFrom,
     setDateFrom,
     dateTo,
     setDateTo,
     filteredCases,
-    resetFilters 
+    resetFilters
   } = caseListData;
 
   // ==========================================================================
   // CALLBACKS
   // ==========================================================================
-  
+
   const setActiveTab = (tab: string) => {
     startTransition(() => {
       _setActiveTab(tab);
@@ -116,11 +116,11 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab, se
   // ==========================================================================
   // RENDER HELPERS
   // ==========================================================================
-  
+
   const renderContent = () => {
     switch (activeTab) {
       case 'active':
-        return <CaseListActive 
+        return <CaseListActive
           onSelectCase={onSelectCase}
           filteredCases={filteredCases}
           statusFilter={statusFilter}
@@ -152,7 +152,7 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab, se
       case 'archived':
         return <CaseListArchived onSelectCase={onSelectCase} />;
       default:
-        return <CaseListActive 
+        return <CaseListActive
           onSelectCase={onSelectCase}
           filteredCases={filteredCases}
           statusFilter={statusFilter}

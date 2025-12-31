@@ -67,7 +67,7 @@ export const ClauseAnalytics: React.FC = () => {
                                     dataKey="value"
                                 >
                                     {riskData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.color} />
+                                        <Cell key={`risk-${entry.name}-${index}`} fill={entry.color} />
                                     ))}
                                 </Pie>
                                 <Tooltip

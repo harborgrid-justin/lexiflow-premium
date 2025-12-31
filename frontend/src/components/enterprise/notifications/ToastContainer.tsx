@@ -79,13 +79,19 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
   className,
   gap = 8,
 }) => {
+  // HYDRATION-SAFE: Track mounted state for browser-only APIs
+  const [isMounted, setIsMounted] = React.useState(false);
   const [toasts, setToasts] = useState<ToastNotification[]>([]);
   const [isSoundEnabled, setIsSoundEnabled] = useState(initialEnableSound);
 
-  // HYDRATION-SAFE: Play notification sound only in browser environment
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // HYDRATION-SAFE: Play notification sound only in browser environment after mount
   const playSound = useCallback(
     (type: ToastNotification['type']) => {
-      if (!isSoundEnabled || typeof window === 'undefined') return;
+      if (!isSoundEnabled || !isMounted || typeof window === 'undefined') return;
 
       // Create audio context for different notification types
       // AudioContext is browser-only, checked above
@@ -114,13 +120,14 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + 0.1);
     },
-    [isSoundEnabled]
+    [isSoundEnabled, isMounted]
   );
 
   // Add toast
   const addToast = useCallback(
     (toast: Omit<ToastNotification, 'id' | 'timestamp'>) => {
-      const id = Math.random().toString(36).substring(2, 9);
+      // DETERMINISTIC RENDERING: Use crypto.randomUUID when available
+      const id = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9);
       const timestamp = Date.now();
 
       const newToast: ToastNotification = {

@@ -150,13 +150,13 @@ export const BriefAnalyzer: React.FC = () => {
                     </Card>
                     <Card title="Key Weaknesses">
                         <ul className="list-disc pl-5 space-y-1 text-sm">
-                            {critique.weaknesses.map((w: string, i: number) => <li key={i} className="text-red-700">{w}</li>)}
+                            {critique.weaknesses.map((w: string, i: number) => <li key={`weakness-${i}-${w.substring(0, 20)}`} className="text-red-700">{w}</li>)}
                         </ul>
                     </Card>
                 </div>
                 <Card title="Recommendations">
                     <ul className="list-disc pl-5 space-y-1 text-sm">
-                        {critique.suggestions.map((s: string, i: number) => <li key={i}>{s}</li>)}
+                        {critique.suggestions.map((s: string, i: number) => <li key={`suggestion-${i}-${s.substring(0, 20)}`}>{s}</li>)}
                     </ul>
                 </Card>
             </div>
@@ -305,17 +305,17 @@ export const BriefAnalyzer: React.FC = () => {
                             </Card>
                             <Card title="Strengths">
                                 <ul className={cn("list-disc pl-5 space-y-1 text-sm", theme.status.success.text)}>
-                                    {critique.strengths.map((s: string, i: number) => <li key={i}>{s}</li>)}
+                                    {critique.strengths.map((s: string, i: number) => <li key={`strength-strat-${i}-${s.substring(0, 20)}`}>{s}</li>)}
                                 </ul>
                             </Card>
                             <Card title="Weaknesses">
                                 <ul className={cn("list-disc pl-5 space-y-1 text-sm", theme.status.error.text)}>
-                                    {critique.weaknesses.map((w: string, i: number) => <li key={i}>{w}</li>)}
+                                    {critique.weaknesses.map((w: string, i: number) => <li key={`weakness-strat-${i}-${w.substring(0, 20)}`}>{w}</li>)}
                                 </ul>
                             </Card>
                             <Card title="Recommendations">
                                 <ul className={cn("list-disc pl-5 space-y-1 text-sm", theme.text.secondary)}>
-                                    {critique.suggestions.map((s: string, i: number) => <li key={i}>{s}</li>)}
+                                    {critique.suggestions.map((s: string, i: number) => <li key={`recommendation-strat-${i}-${s.substring(0, 20)}`}>{s}</li>)}
                                 </ul>
                             </Card>
                         </div>

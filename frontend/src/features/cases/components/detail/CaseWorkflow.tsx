@@ -1,9 +1,9 @@
 /**
  * CaseWorkflow.tsx
- * 
+ *
  * Case workflow management with AI-generated stages, task tracking,
  * and automation configuration interface.
- * 
+ *
  * @module components/case-detail/CaseWorkflow
  * @category Case Management - Workflow & Automation
  */
@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 import { Cpu, Sparkles, BookOpen } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button';
 import { WorkflowTimeline } from './workflow/WorkflowTimeline';
 import { WorkflowAutomations } from './workflow/WorkflowAutomations';
 
@@ -76,15 +76,15 @@ export const CaseWorkflow: React.FC<CaseWorkflowProps> = ({ stages: initialStage
                   <div className={cn("h-2.5 rounded-full transition-all duration-1000 ease-out", theme.action.primary.bg)} style={{ width: `${progress}%` }}></div>
               </div>
           </div>
-          
+
           <div className="flex gap-3 w-full md:w-auto">
-             <button 
+             <button
                 onClick={() => setActiveTab('timeline')}
                 className={cn("flex-1 md:flex-none px-4 py-2 rounded-lg font-medium text-sm transition-colors", activeTab === 'timeline' ? "bg-slate-900 text-white shadow-lg" : cn("border", theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`))}
              >
                  Timeline
              </button>
-             <button 
+             <button
                 onClick={() => setActiveTab('automation')}
                 className={cn("flex-1 md:flex-none px-4 py-2 rounded-lg font-medium text-sm transition-colors", activeTab === 'automation' ? "bg-slate-900 text-white shadow-lg" : cn("border", theme.surface.default, theme.text.secondary, theme.border.default, `hover:${theme.surface.highlight}`))}
              >
@@ -94,10 +94,10 @@ export const CaseWorkflow: React.FC<CaseWorkflowProps> = ({ stages: initialStage
 
           <div className="flex gap-2">
              <Button variant="outline" icon={BookOpen} onClick={() => alert("Loading Playbook...")}>Templates</Button>
-             <Button 
-                variant="primary" 
-                icon={generatingWorkflow ? Cpu : Sparkles} 
-                onClick={onGenerateWorkflow} 
+             <Button
+                variant="primary"
+                icon={generatingWorkflow ? Cpu : Sparkles}
+                onClick={onGenerateWorkflow}
                 disabled={generatingWorkflow}
                 className="bg-purple-600 hover:bg-purple-700 border-transparent text-white"
              >

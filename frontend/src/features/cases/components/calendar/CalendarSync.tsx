@@ -72,7 +72,7 @@ export const CalendarSync: React.FC = () => {
       </div>
       <div className={cn("divide-y", theme.border.default)}>
         {calendarIntegrations.map((acc, i) => (
-          <div key={i} className={cn("p-4 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-0 transition-colors", `hover:${theme.surface.highlight}`)}>
+          <div key={`calendar-${acc.name}-${acc.type}`} className={cn("p-4 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-0 transition-colors", `hover:${theme.surface.highlight}`)}>
             <div className="flex items-center gap-4">
               <div className={cn("h-10 w-10 rounded-full flex items-center justify-center font-bold text-white shrink-0", acc.color)}>
                 {acc.icon}

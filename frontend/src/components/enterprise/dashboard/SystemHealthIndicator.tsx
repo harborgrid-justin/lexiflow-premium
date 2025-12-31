@@ -4,22 +4,22 @@
  * @description System health status indicator with real-time monitoring
  */
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Activity,
-  CheckCircle,
-  AlertTriangle,
-  XCircle,
-  Server,
-  Database,
-  Wifi,
-  HardDrive,
-  Cpu,
-  RefreshCw,
-} from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Activity,
+  AlertTriangle,
+  CheckCircle,
+  Cpu,
+  Database,
+  HardDrive,
+  RefreshCw,
+  Server,
+  Wifi,
+  XCircle,
+} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 export type HealthStatus = 'healthy' | 'warning' | 'critical' | 'offline';
 
@@ -286,8 +286,8 @@ export const SystemHealthIndicator: React.FC<SystemHealthIndicatorProps> = ({
                                 service.latency < 100
                                   ? 'text-emerald-600 dark:text-emerald-400'
                                   : service.latency < 300
-                                  ? 'text-amber-600 dark:text-amber-400'
-                                  : 'text-rose-600 dark:text-rose-400'
+                                    ? 'text-amber-600 dark:text-amber-400'
+                                    : 'text-rose-600 dark:text-rose-400'
                               )}
                             >
                               {service.latency}ms

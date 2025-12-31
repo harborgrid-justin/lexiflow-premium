@@ -1,21 +1,21 @@
 
 /**
  * AICommandBar.tsx
- * 
+ *
  * Floating command bar for AI-assisted strategy generation.
- * 
+ *
  * @module components/litigation/AICommandBar
  */
 
+import { AlertCircle, Sparkles, Wand2 } from 'lucide-react';
 import React, { useState } from 'react';
-import { Sparkles, Wand2, AlertCircle } from 'lucide-react';
 
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
-import { GeminiService } from '@/services/features/research/geminiService';
+import { Button } from '@/components/ui/atoms/Button';
 import { useNotify } from '@/hooks/useNotify';
+import { useTheme } from '@/providers/ThemeContext';
+import { GeminiService } from '@/services/features/research/geminiService';
 import { AIValidationService } from '@/services/infrastructure/aiValidationService';
+import { cn } from '@/utils/cn';
 import { AICommandBarProps } from './types';
 
 export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
@@ -39,7 +39,7 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
         setIsLoading(true);
         try {
             const result = await GeminiService.generateStrategyFromPrompt(promptValidation.sanitizedPrompt!);
-            
+
             // Validate AI response
             const responseValidation = AIValidationService.validateAIResponse(result);
             if (!responseValidation.isValid) {
@@ -55,7 +55,7 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
             } else {
                 notify.error('AI failed to generate a valid graph.');
             }
-        } catch(e) {
+        } catch (e) {
             notify.error('An error occurred during generation.');
         } finally {
             setIsLoading(false);
@@ -67,9 +67,9 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
             <div className={cn("p-2 rounded-xl shadow-2xl border backdrop-blur-md", theme.surface.default, "bg-opacity-80", theme.border.default)}>
                 <div className="relative flex items-center gap-2">
                     <div className="pl-2">
-                         <Sparkles className="h-5 w-5 text-purple-500"/>
+                        <Sparkles className="h-5 w-5 text-purple-500" />
                     </div>
-                    <input 
+                    <input
                         className="flex-1 bg-transparent border-none outline-none text-sm p-2 placeholder:text-slate-400"
                         placeholder="Generate a strategy (e.g., 'Standard breach of contract litigation plan')"
                         value={prompt}
@@ -98,4 +98,3 @@ export const AICommandBar: React.FC<AICommandBarProps> = ({ onGenerate }) => {
         </div>
     );
 };
-

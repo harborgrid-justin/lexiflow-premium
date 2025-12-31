@@ -12,33 +12,33 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
 import { Filter, Layout, Plus } from 'lucide-react';
+import React, { useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
 import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
-import { useToggle } from '@/hooks/useToggle';
-import { useSingleSelection } from '@/hooks/useMultiSelection';
 import { useFilterAndSearch } from '@/hooks/useFilterAndSearch';
+import { useSingleSelection } from '@/hooks/useMultiSelection';
+import { useToggle } from '@/hooks/useToggle';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '@/components/atoms';
-import { SearchToolbar } from '@/components/organisms';
-import { AdaptiveLoader } from '@/components/molecules';
-import { OppositionSidebar } from './opposition/OppositionSidebar';
-import { OppositionList, OppositionEntity } from './opposition/OppositionList';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { Button } from '@/components/ui/atoms/Button';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader';
+import { ErrorState } from '@/components/ui/molecules/ErrorState';
+import { Modal } from '@/components/ui/molecules/Modal';
 import { OppositionDetail } from './opposition/OppositionDetail';
-import { Modal } from '@/components/molecules';
-import { ErrorState } from '@/components/molecules';
+import { OppositionEntity, OppositionList } from './opposition/OppositionList';
+import { OppositionSidebar } from './opposition/OppositionSidebar';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -75,8 +75,8 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
   // DATA FETCHING
   // ============================================================================
   const { data: oppositionData = [], isLoading, error, refetch } = useQuery<OppositionEntity[]>(
-      queryKeys.warRoom.opposition(caseId || ''),
-      () => DataService.warRoom.getOpposition(caseId || '')
+    queryKeys.warRoom.opposition(caseId || ''),
+    () => DataService.warRoom.getOpposition(caseId || '')
   );
 
   // ============================================================================
@@ -133,64 +133,64 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
       {/* Header Toolbar */}
       <div className={cn("p-4 border-b flex justify-between items-center gap-4", theme.surface.highlight, theme.border.default)}>
         <div className="flex items-center gap-4 flex-1">
-            <h3 className={cn("font-bold text-lg whitespace-nowrap", theme.text.primary)}>Opposition Intel</h3>
-            <div className={cn("h-6 w-px", theme.border.default)}></div>
-            <SearchToolbar 
-                value={searchQuery} 
-                onChange={setSearchQuery} 
-                placeholder="Search counsel, parties, experts..." 
-                className="w-full max-w-md border-none shadow-none p-0 bg-transparent"
-            />
+          <h3 className={cn("font-bold text-lg whitespace-nowrap", theme.text.primary)}>Opposition Intel</h3>
+          <div className={cn("h-6 w-px", theme.border.default)}></div>
+          <SearchToolbar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search counsel, parties, experts..."
+            className="w-full max-w-md border-none shadow-none p-0 bg-transparent"
+          />
         </div>
         <div className="flex gap-2">
-            <Button 
-                variant={filterToggle.isOpen ? "primary" : "secondary"} 
-                icon={Filter} 
-                onClick={filterToggle.toggle} 
-                className="hidden sm:flex"
-            >
-                Filter
-            </Button>
-            <Button 
-                variant={inspectorToggle.isOpen ? "primary" : "secondary"} 
-                icon={Layout} 
-                onClick={inspectorToggle.toggle}
-                className="hidden sm:flex"
-            >
-                Inspector
-            </Button>
-            <Button variant="primary" icon={Plus}>Add Profile</Button>
+          <Button
+            variant={filterToggle.isOpen ? "primary" : "secondary"}
+            icon={Filter}
+            onClick={filterToggle.toggle}
+            className="hidden sm:flex"
+          >
+            Filter
+          </Button>
+          <Button
+            variant={inspectorToggle.isOpen ? "primary" : "secondary"}
+            icon={Layout}
+            onClick={inspectorToggle.toggle}
+            className="hidden sm:flex"
+          >
+            Inspector
+          </Button>
+          <Button variant="primary" icon={Plus}>Add Profile</Button>
         </div>
       </div>
 
       <div className="flex-1 flex overflow-hidden">
         {/* Left Sidebar */}
         <OppositionSidebar
-            activeCategory={category}
-            onSelectCategory={setCategory}
-            counts={{
-                all: oppositionData.length,
-                counsel: oppositionData.filter(e => e.role.includes('Counsel')).length,
-                parties: oppositionData.filter(e => e.role === 'Defendant').length,
-                experts: oppositionData.filter(e => e.role === 'Opposing Expert').length
-            }}
+          activeCategory={category}
+          onSelectCategory={setCategory}
+          counts={{
+            all: oppositionData.length,
+            counsel: oppositionData.filter(e => e.role.includes('Counsel')).length,
+            parties: oppositionData.filter(e => e.role === 'Defendant').length,
+            experts: oppositionData.filter(e => e.role === 'Opposing Expert').length
+          }}
         />
 
         {/* Main Content */}
         <div className="flex-1 overflow-hidden flex flex-col relative">
-            <OppositionList 
-                entities={filteredEntities} 
-                onSelect={handleSelectEntity}
-                selectedId={entitySelection.selected?.id}
-            />
+          <OppositionList
+            entities={filteredEntities}
+            onSelect={handleSelectEntity}
+            selectedId={entitySelection.selected?.id}
+          />
         </div>
 
         {/* Right Inspector Panel */}
         {inspectorToggle.isOpen && entitySelection.selected && (
-            <OppositionDetail 
-                entity={entitySelection.selected} 
-                onClose={inspectorToggle.close}
-            />
+          <OppositionDetail
+            entity={entitySelection.selected}
+            onClose={inspectorToggle.close}
+          />
         )}
       </div>
 
@@ -199,7 +199,7 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
         <div className="p-6 space-y-4">
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Role</label>
-            <select 
+            <select
               title="Filter by role"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterRole}
@@ -215,7 +215,7 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
 
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Firm</label>
-            <select 
+            <select
               title="Filter by firm"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterFirm}
@@ -230,7 +230,7 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
 
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Status</label>
-            <select 
+            <select
               title="Filter by status"
               className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default)}
               value={filterStatus}
@@ -256,5 +256,3 @@ export const OppositionManager: React.FC<OppositionManagerProps> = ({ caseId }) 
     </div>
   );
 };
-
-

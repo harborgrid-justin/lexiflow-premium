@@ -27,7 +27,22 @@ interface ActiveWorkstreamsProps {
 export const ActiveWorkstreams: React.FC<ActiveWorkstreamsProps> = ({ activeProjects }) => {
   const { theme } = useTheme();
   
-  if (activeProjects.length === 0) return null;
+  // LAYOUT-STABLE: Render empty state with same structure instead of null
+  if (activeProjects.length === 0) {
+    return (
+      <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
+        <div className={cn("p-4 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
+          <h3 className={cn("text-sm font-bold flex items-center", theme.text.primary)}>
+            <Briefcase className={cn("h-4 w-4 mr-2", theme.primary.text)}/> Active Workstreams
+          </h3>
+        </div>
+        <div className={cn("p-8 text-center", theme.text.tertiary)}>
+          <Briefcase className="h-10 w-10 mx-auto mb-3 opacity-30" />
+          <p className="text-sm">No active workstreams</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={cn("rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>

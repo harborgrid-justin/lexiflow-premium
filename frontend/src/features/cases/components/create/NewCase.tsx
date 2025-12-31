@@ -1,9 +1,9 @@
 /**
  * NewMatter Component (Default Export)
- * 
+ *
  * Unified matter/case creation and editing form combining general matter intake
  * with federal litigation case fields. Supports full CRUD operations.
- * 
+ *
  * Features:
  * - Tabbed interface: Intake, Court Info, Parties, Financial, Related Cases
  * - Real-time validation with error feedback
@@ -11,44 +11,44 @@
  * - Conflict checking
  * - Full CRUD operations (Create, Read, Update, Delete)
  * - Backend-first architecture via DataService
- * 
+ *
  * @optimization useMemo for expensive computations, useCallback for event handlers
  * @performance Lazy loading, proper dependency arrays, stale time configuration
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { Button } from '@/components/ui/atoms/Button';
+import { Breadcrumbs } from '@/components/ui/molecules/Breadcrumbs';
+import { PATHS } from '@/config/paths.config';
+import { useNotify } from '@/hooks/useNotify';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
+import { DataService } from '@/services/data/dataService';
+import { queryClient } from '@/services/infrastructure/queryClient';
 import {
-  Save,
+  Case,
+  CaseStatus,
+  Matter,
+  MatterPriority,
+  MatterStatus,
+  MatterType,
+  PracticeArea
+} from '@/types';
+import { cn } from '@/utils/cn';
+import { queryKeys } from '@/utils/queryKeys';
+import {
   AlertCircle,
   CheckCircle,
-  FileText,
-  Users,
   DollarSign,
-  Scale,
+  FileText,
   Link2,
+  Save,
+  Scale,
   Trash2,
+  Users,
   X
 } from 'lucide-react';
-import { DataService } from '@/services/data/dataService';
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
-import { queryClient } from '@/services/infrastructure/queryClient';
-import { 
-  Case, 
-  Matter, 
-  CaseStatus, 
-  MatterStatus, 
-  MatterPriority, 
-  MatterType, 
-  PracticeArea 
-} from '@/types';
-import { PATHS } from '@/config/paths.config';
-import { Button } from '@/components/atoms';
-import { PageHeader } from '@/components/organisms';
-import { Breadcrumbs } from '@/components/molecules';
-import { useTheme } from '@/providers/ThemeContext';
-import { useNotify } from '@/hooks/useNotify';
-import { cn } from '@/utils/cn';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 // Federal Case Type enum
 export enum CaseType {
@@ -70,10 +70,10 @@ import { User } from '@/types';
 interface NewMatterProps {
   /** Matter/Case ID for editing (omit for create mode) */
   id?: string;
-  
+
   /** Callback when user navigates back */
   onBack?: () => void;
-  
+
   /** Callback after successful save */
   onSaved?: (id: string) => void;
 
@@ -94,7 +94,7 @@ interface FormData {
   priority: MatterPriority;
   practiceArea: PracticeArea | string;
   tags?: string[];
-  
+
   // Client & Team (aligned with backend)
   clientName: string;
   clientId: string | null;
@@ -105,7 +105,7 @@ interface FormData {
   originatingAttorneyName: string;
   originatingAttorneyId?: string | null;
   assignedTeamId?: string | null;
-  
+
   // Court Information (Federal Litigation - CreateCaseDto fields)
   court: string;
   jurisdiction: string;
@@ -117,12 +117,12 @@ interface FormData {
   natureOfSuit: string;
   natureOfSuitCode: string;
   juryDemand: 'None' | 'Plaintiff' | 'Defendant' | 'Both';
-  
+
   // Opposing Party (CreateMatterDto fields)
   opposingPartyName?: string;
   opposingCounsel?: string;
   opposingCounselFirm?: string;
-  
+
   // Dates (aligned with backend Date types)
   intakeDate: string;
   openedDate: string;
@@ -132,7 +132,7 @@ interface FormData {
   targetCloseDate?: string | null;
   closedDate?: string | null;
   statuteOfLimitations?: string | null;
-  
+
   // Financial (aligned with CreateMatterDto decimal fields)
   billingType?: string; // Backend: billingarrangement
   estimatedValue: number;
@@ -141,22 +141,22 @@ interface FormData {
   flatFee?: number;
   contingencyPercentage?: number;
   retainerAmount: number;
-  
+
   // Conflict Check (CreateMatterDto fields)
   conflictCheckCompleted?: boolean;
   conflictCheckDate?: string | null;
   conflictCheckStatus?: string;
   conflictCheckNotes?: string;
-  
+
   // Risk Management (CreateMatterDto fields)
   riskLevel?: string;
   riskNotes?: string;
-  
+
   // Resources (CreateMatterDto & CreateCaseDto arrays)
   linkedCaseIds?: string[];
   linkedDocumentIds?: string[];
   relatedCases: Array<{ court: string; caseNumber: string; relationship?: string }>;
-  
+
   // Notes & Metadata (CreateMatterDto fields)
   internalNotes?: string;
   customFields?: Record<string, unknown>;
@@ -167,7 +167,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   const { theme } = useTheme();
   const notify = useNotify();
   const isEditMode = Boolean(id);
-  
+
   const navigate = (path: string) => {
     if (onBack) {
       onBack();
@@ -249,7 +249,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   // ========================================
   // DATA FETCHING
   // ========================================
-  
+
   // Load existing matters for conflict checking (with caching)
   const { data: existingMatters = [] } = useQuery<Matter[]>(
     queryKeys.cases.matters.all(),
@@ -278,7 +278,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   // ========================================
   // MUTATIONS
   // ========================================
-  
+
   const createMutation = useMutation(
     (data: Matter | Case) => DataService.cases.add(data as Matter),
     {
@@ -304,7 +304,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   );
 
   const updateMutation = useMutation(
-    ({ itemId, data }: { itemId: string; data: Partial<Matter | Case> }) => 
+    ({ itemId, data }: { itemId: string; data: Partial<Matter | Case> }) =>
       DataService.cases.update(itemId, data as Partial<Matter>),
     {
       onSuccess: () => {
@@ -340,7 +340,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   // ========================================
   // HELPERS
   // ========================================
-  
+
   const loadFormData = (data: Matter | Case) => {
     setFormData({
       title: data.title || '',
@@ -421,7 +421,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
       return;
     }
 
-    const hasConflict = existingMatters.some(m => 
+    const hasConflict = existingMatters.some(m =>
       m.clientName?.toLowerCase() === formData.clientName?.toLowerCase() &&
       m.status === MatterStatus.ACTIVE &&
       m.id !== id
@@ -457,7 +457,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   // ========================================
   // FORM HANDLERS
   // ========================================
-  
+
   const handleChange = (field: keyof FormData, value: unknown) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
@@ -471,7 +471,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validate()) {
       notify.error('Please fix validation errors');
       return;
@@ -503,7 +503,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
 
   const handleDelete = useCallback(async () => {
     if (!id) return;
-    
+
     setDeleting(true);
     try {
       await deleteMutation.mutateAsync(id);
@@ -536,7 +536,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   const updateRelatedCase = useCallback((index: number, field: string, value: string) => {
     setFormData(prev => ({
       ...prev,
-      relatedCases: prev.relatedCases.map((rc, i) => 
+      relatedCases: prev.relatedCases.map((rc, i) =>
         i === index ? { ...rc, [field]: value } : rc
       )
     }));
@@ -545,7 +545,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   // ========================================
   // TABS CONFIGURATION
   // ========================================
-  
+
   const tabs = [
     { id: 'intake', label: 'Intake & Basic Info', icon: FileText },
     { id: 'court', label: 'Court Information', icon: Scale },
@@ -568,12 +568,12 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
   // ========================================
   // RENDER
   // ========================================
-  
+
   return (
     <div className={cn("h-full flex flex-col", theme.background)}>
       {/* Header */}
       <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4">
-        <Breadcrumbs 
+        <Breadcrumbs
           items={[
             { label: 'Matter Management', onClick: handleCancel },
             { label: isEditMode ? 'Edit Matter' : 'New Matter' }
@@ -621,7 +621,7 @@ const NewMatter: React.FC<NewMatterProps> = ({ id, onBack, onSaved, currentUser 
           {tabs.map(tab => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
-            
+
             return (
               <button
                 key={tab.id}

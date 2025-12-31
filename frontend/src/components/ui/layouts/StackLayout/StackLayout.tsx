@@ -5,8 +5,8 @@
  * Ideal for forms, toolbars, and linear content flow.
  */
 
-import React from 'react';
 import { cn } from '@/utils/cn';
+import React, { memo } from 'react';
 
 interface StackLayoutProps {
   children: React.ReactNode;
@@ -52,7 +52,7 @@ const justifyClasses = {
   around: 'justify-around',
 };
 
-export const StackLayout: React.FC<StackLayoutProps> = ({
+export const StackLayout = memo<StackLayoutProps>(({
   children,
   direction = 'vertical',
   spacing = 'md',
@@ -74,4 +74,6 @@ export const StackLayout: React.FC<StackLayoutProps> = ({
       {children}
     </div>
   );
-};
+});
+
+StackLayout.displayName = 'StackLayout';

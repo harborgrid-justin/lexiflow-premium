@@ -13,44 +13,44 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, {
-  useState,
-  useMemo,
-  useCallback,
-  useEffect,
-  Suspense,
-  lazy,
-} from "react";
 import {
-  Target,
-  Monitor,
-  Layers,
+  Briefcase,
+  CheckCircle,
+  ChevronDown,
   FileText,
   Gavel,
-  Users,
+  Layers,
   Mic2,
+  Monitor,
   Shield,
-  CheckCircle,
-  Briefcase,
   Swords,
-  ChevronDown,
+  Target,
+  Users,
 } from "lucide-react";
+import React, {
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 
 // Services & Data
+import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from "@/services/data/dataService";
 import { STORES } from "@/services/data/db";
-import { useQuery } from '@/hooks/useQueryHooks';
 
 // Hooks & Context
 import { useTheme } from "@/providers";
 
 // Components
-import { Button } from '@/components/atoms';
-import { LazyLoader } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -241,11 +241,20 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
     if (initialTab) setActiveTab(initialTab);
   }, [initialTab]);
 
-  // ============================================================================
-  // RENDER LOGIC
-  // ============================================================================
+  // LAYOUT-STABLE: Always render something to prevent layout shift
   const renderContent = () => {
-    if (!trialData) return null;
+    if (!trialData) {
+      return (
+        <div className={cn("flex items-center justify-center h-full", theme.surface.default)}>
+          <div className="text-center">
+            <div className={cn("animate-pulse mb-4", theme.text.tertiary)}>
+              <Loader2 className="h-8 w-8 mx-auto animate-spin" />
+            </div>
+            <p className={cn("text-sm", theme.text.secondary)}>Loading trial data...</p>
+          </div>
+        </div>
+      );
+    }
 
     switch (activeTab) {
       case "command":
@@ -492,10 +501,10 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
                 activeParentTab.id === parent.id
                   ? cn("border-current", theme.primary.text)
                   : cn(
-                      "border-transparent",
-                      theme.text.secondary,
-                      `hover:${theme.text.primary}`,
-                    ),
+                    "border-transparent",
+                    theme.text.secondary,
+                    `hover:${theme.text.primary}`,
+                  ),
               )}
             >
               <parent.icon
@@ -528,17 +537,17 @@ export function WarRoom({ initialTab, caseId }: WarRoomProps) {
                   "flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border",
                   activeTab === tab.id
                     ? cn(
-                        theme.surface.default,
-                        theme.primary.text,
-                        "shadow-sm border-transparent ring-1",
-                        theme.primary.border,
-                      )
+                      theme.surface.default,
+                      theme.primary.text,
+                      "shadow-sm border-transparent ring-1",
+                      theme.primary.border,
+                    )
                     : cn(
-                        "bg-transparent",
-                        theme.text.secondary,
-                        "border-transparent",
-                        `hover:${theme.surface.default}`,
-                      ),
+                      "bg-transparent",
+                      theme.text.secondary,
+                      "border-transparent",
+                      `hover:${theme.surface.default}`,
+                    ),
                 )}
               >
                 <tab.icon

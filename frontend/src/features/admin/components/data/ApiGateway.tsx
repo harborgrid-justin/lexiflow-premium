@@ -1,4 +1,11 @@
 // components/admin/data/ApiGateway.tsx
+/**
+ * VIEW-ONLY CONTRACT NOTES:
+ * - CodeBlock: Pure render function (props → JSX, no side effects)
+ * - MethodCard: Pure render function (props → JSX, no side effects)
+ * - ApiGateway: Data-fetching view (uses query hook, renders only)
+ * - All browser interactions delegated to callbacks
+ */
 import React, { useState } from 'react';
 
 import { Loader2, Server, ChevronRight } from 'lucide-react';
@@ -26,6 +33,7 @@ function CodeBlock({ code }: { code: string }): React.JSX.Element {
 
     return (
         <pre className={cn("bg-slate-800 text-slate-300 p-4 rounded-lg text-xs font-mono overflow-x-auto", theme.border.default)}>
+            {/* SECURITY: dangerouslySetInnerHTML justified - content is sanitized via encodeHtmlEntities */}
             <code dangerouslySetInnerHTML={{ __html: highlighted }} />
         </pre>
     );
@@ -50,13 +58,13 @@ function MethodCard({ method }: { method: ApiMethod }) {
                 </div>
             </div>
             <p className={cn("text-sm mb-6", theme.text.secondary)}>{method.description}</p>
-            
+
             {method.params.length > 0 && (
                 <div className="mb-6">
                     <h5 className={cn("text-xs font-bold uppercase mb-2", theme.text.tertiary)}>Parameters</h5>
                     <div className={cn("border rounded-lg overflow-hidden", theme.border.default)}>
                         {method.params.map((p, i) => (
-                            <div key={i} className={cn("grid grid-cols-3 gap-4 p-3 border-b last:border-0", theme.border.default)}>
+                            <div key={`param-${p.name}-${i}`} className={cn("grid grid-cols-3 gap-4 p-3 border-b last:border-0", theme.border.default)}>
                                 <code className={cn("font-bold", theme.text.primary)}>{p.name}</code>
                                 <code className={cn("text-purple-600 dark:text-purple-400", theme.text.secondary)}>{p.type}</code>
                                 <p className={cn("text-xs", theme.text.tertiary)}>{p.desc}</p>
@@ -65,7 +73,7 @@ function MethodCard({ method }: { method: ApiMethod }) {
                     </div>
                 </div>
             )}
-            
+
              <div>
                 <h5 className={cn("text-xs font-bold uppercase mb-2", theme.text.tertiary)}>Example Response</h5>
                 <CodeBlock code={method.response} />
@@ -96,13 +104,13 @@ export function ApiGateway(): React.JSX.Element {
                 </div>
                 <div className="flex-1 overflow-y-auto p-2">
                     {apiSpec.map(service => (
-                        <button 
+                        <button
                             key={service.name}
                             onClick={() => setSelectedService(service)}
                             className={cn(
                                 "w-full text-left flex items-center justify-between p-3 rounded-md text-sm font-medium transition-colors",
-                                selectedService?.name === service.name 
-                                    ? cn(theme.primary.light, theme.primary.text) 
+                                selectedService?.name === service.name
+                                    ? cn(theme.primary.light, theme.primary.text)
                                     : cn(theme.text.secondary, `hover:${theme.surface.highlight}`)
                             )}
                         >

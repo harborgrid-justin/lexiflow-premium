@@ -1,25 +1,25 @@
-import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
-import { isBackendApiEnabled as checkBackendEnabled } from '../services/integration/apiConfig';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { DataService } from '../services/data/dataService';
+import { isBackendApiEnabled as checkBackendEnabled } from '../services/integration/apiConfig';
 import type {
-  DataSourceType,
-  DataSourceStateValue,
   DataSourceActionsValue,
   DataSourceProviderProps,
+  DataSourceStateValue,
+  DataSourceType,
 } from './DataSourceContext.types';
-import type { RepositoryRegistry } from './repository/types';
 import type { DataSourceConfig } from './repository/config';
 import { createConfigFromEnv } from './repository/config';
+import type { RepositoryRegistry } from './repository/types';
 
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════╗
  * ║                DATA SOURCE PROVIDER (INFRASTRUCTURE)                      ║
  * ║                   Enterprise Pattern Implementation                       ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
- * 
+ *
  * @module providers/DataSourceContext
  * @description Infrastructure boundary for data access layer
- * 
+ *
  * ENTERPRISE PATTERNS APPLIED:
  * ✓ 1. Treat as Infrastructure (not business logic)
  * ✓ 2. Expose Stable Repository Interface (not raw clients)
@@ -36,7 +36,7 @@ import { createConfigFromEnv } from './repository/config';
  * ✓ 13. Enable Mock and Stub Injection
  * ✓ 14. Version API Access Explicitly
  * ✓ 15. Document Data Ownership and Consistency Rules
- * 
+ *
  * ARCHITECTURE:
  * Provider = Infrastructure boundary
  * Repositories = Domain contracts
@@ -46,9 +46,9 @@ import { createConfigFromEnv } from './repository/config';
 
 // Re-export types for convenience
 export type { DataSourceType } from './DataSourceContext.types';
-export type { RepositoryRegistry } from './repository/types';
 export type { DataSourceConfig } from './repository/config';
 export * from './repository/errors';
+export type { RepositoryRegistry } from './repository/types';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                         REPOSITORY FACTORY
@@ -68,7 +68,7 @@ function createRepositories(config: DataSourceConfig): RepositoryRegistry {
     environment: config.environment.environment,
     apiVersion: config.environment.apiVersion,
   });
-  
+
   // Pattern 2: Wrap DataService with stable repository interface
   // Pattern 3: DataService already hides HTTP details
   // Pattern 9: Each repository is independent (no cross-domain deps)
@@ -129,27 +129,27 @@ export function useDataSource() {
 
 /**
  * DataSourceProvider
- * 
+ *
  * RESPONSIBILITIES (Pattern 15: Documentation):
  * - Initialize data source from localStorage or config
  * - Create and memoize repository instances (Pattern 8)
  * - Provide configuration with env/versioning (Pattern 7, 14)
  * - Handle source switching with hard reload
  * - Instrument observability (Pattern 11)
- * 
+ *
  * LIFECYCLE:
  * - Initializes from localStorage/config on mount (Pattern 12: SSR-safe)
  * - Logs source changes for debugging (Pattern 11)
  * - Hard reload required for switching to reset service registry
- * 
+ *
  * DATA OWNERSHIP (Pattern 15):
  * - OWNS: Configuration state, current source type
  * - FETCHES: Nothing (stateless provider - Pattern 6)
  * - NEVER CACHES: Repository data (belongs in React Query layer)
  * - CONSISTENCY: Strong (configuration is local state)
  */
-export const DataSourceProvider = ({ 
-  children, 
+export const DataSourceProvider = ({
+  children,
   initialSource,
   // Pattern 13: Enable mock and stub injection for tests
   repositories: mockRepositories,
@@ -189,12 +189,15 @@ export const DataSourceProvider = ({
     if (source === currentSource) return;
 
     // Pattern 11: Instrument observability
-    config.observability.logger?.info('Switching data source', {
-      from: currentSource,
-      to: source,
-    });
-    
+    if (config?.observability?.logger) {
+      config.observability.logger.info('Switching data source', {
+        from: currentSource,
+        to: source,
+      });
+    }
+
     // Update storage so the next load picks up the right source
+    // HYDRATION-SAFE: Only access window/localStorage in browser environment
     if (typeof window !== 'undefined') {
       // Use VITE_USE_INDEXEDDB for consistency with apiConfig.ts
       if (source === 'indexeddb') {
@@ -202,14 +205,14 @@ export const DataSourceProvider = ({
       } else {
         localStorage.removeItem('VITE_USE_INDEXEDDB');
       }
-      
-      // We do NOT call queryClient here. 
+
+      // We do NOT call queryClient here.
       // The reload ensures a clean slate for all singleton services.
       window.location.reload();
     }
 
     setCurrentSource(source);
-  }, [currentSource, config.observability]);
+  }, [currentSource, config]);
 
   useEffect(() => {
     // Pattern 11: Lifecycle logging
@@ -221,8 +224,8 @@ export const DataSourceProvider = ({
   }, [currentSource, config]);
 
   // Pattern 8: Memoize provider values explicitly - state context
-  const stateValue = useMemo<DataSourceStateValue>(() => ({ 
-    currentSource, 
+  const stateValue = useMemo<DataSourceStateValue>(() => ({
+    currentSource,
     isBackendApiEnabled,
     repositories, // Pattern 2: Expose stable repository interface
     config,       // Pattern 7: Environment configuration

@@ -1,6 +1,6 @@
 
-import { Button } from '@/components/atoms';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button';
 import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
 import { SearchToolbar } from '@/components/ui/organisms/SearchToolbar/SearchToolbar';
 import { VirtualList } from '@/components/ui/organisms/VirtualList/VirtualList';

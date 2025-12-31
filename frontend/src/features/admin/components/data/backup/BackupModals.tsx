@@ -1,11 +1,11 @@
 
-import React from 'react';
-import { Modal } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { Clock, Database, AlertCircle } from 'lucide-react';
+import { BackupSnapshot } from '@/api/data-platform/backups-api';
+import { Button } from '@/components/ui/atoms/Button';
+import { Modal } from '@/components/ui/molecules/Modal';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { BackupSnapshot } from '@/api/data-platform/backups-api';
+import { AlertCircle, Clock, Database } from 'lucide-react';
+import React from 'react';
 
 interface CreateSnapshotModalProps {
     isOpen: boolean;
@@ -23,21 +23,21 @@ export const CreateSnapshotModal: React.FC<CreateSnapshotModalProps> = ({ isOpen
                     Manual snapshots are retained for 90 days by default. Choose snapshot type:
                 </p>
                 <div className="grid grid-cols-2 gap-4">
-                    <button 
+                    <button
                         onClick={() => onSnapshot('Incremental')}
                         className={cn("p-4 border rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all text-left group", theme.border.default)}
                     >
                         <div className="flex items-center gap-2 mb-2 font-bold group-hover:text-blue-700">
-                            <Clock className="h-5 w-5"/> Incremental
+                            <Clock className="h-5 w-5" /> Incremental
                         </div>
                         <p className="text-xs text-slate-500">Fast. Captures changes since last backup. Low storage impact.</p>
                     </button>
-                    <button 
-                         onClick={() => onSnapshot('Full')}
-                         className={cn("p-4 border rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all text-left group", theme.border.default)}
+                    <button
+                        onClick={() => onSnapshot('Full')}
+                        className={cn("p-4 border rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all text-left group", theme.border.default)}
                     >
                         <div className="flex items-center gap-2 mb-2 font-bold group-hover:text-purple-700">
-                            <Database className="h-5 w-5"/> Full Backup
+                            <Database className="h-5 w-5" /> Full Backup
                         </div>
                         <p className="text-xs text-slate-500">Complete cluster copy. High storage impact. Use for major milestones.</p>
                     </button>
@@ -63,7 +63,7 @@ export const RestoreSnapshotModal: React.FC<RestoreSnapshotModalProps> = ({ snap
         <Modal isOpen={!!snapshot} onClose={onClose} title="Confirm System Restore" size="sm">
             <div className="p-6">
                 <div className={cn("border rounded p-4 mb-4 flex items-start gap-3", theme.status.error.bg, theme.status.error.border)}>
-                    <AlertCircle className={cn("h-6 w-6 shrink-0", theme.status.error.text)}/>
+                    <AlertCircle className={cn("h-6 w-6 shrink-0", theme.status.error.text)} />
                     <div>
                         <h4 className={cn("text-sm font-bold", theme.status.error.text)}>Warning: Destructive Action</h4>
                         <p className={cn("text-xs mt-1", theme.status.error.text)}>

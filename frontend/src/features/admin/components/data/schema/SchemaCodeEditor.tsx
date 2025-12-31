@@ -32,6 +32,7 @@ export const SchemaCodeEditor = React.memo<SchemaCodeEditorProps>(function Schem
                     </div>
                 </div>
                 <pre className={cn("flex-1 p-4 font-mono text-sm overflow-auto leading-relaxed selection:bg-blue-500/30", theme.text.primary)}>
+                    {/* SECURITY: dangerouslySetInnerHTML justified - content is sanitized via encodeHtmlEntities */}
                     <code dangerouslySetInnerHTML={{
                         __html: encodeHtmlEntities(ddl)
                             .replace(/--.*/g, `<span class="${commentColor}">$&</span>`)

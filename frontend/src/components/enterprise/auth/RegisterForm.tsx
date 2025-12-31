@@ -13,7 +13,7 @@
  * - GDPR-compliant data collection
  */
 
-import React, { useState } from 'react';
+import React, { useState, memo, useCallback } from 'react';
 import { z } from 'zod';
 import { AuthApiService } from '@/api/auth/auth-api';
 import { PasswordStrengthMeter, calculatePasswordStrength } from './PasswordStrengthMeter';
@@ -69,7 +69,7 @@ interface FormErrors {
   general?: string;
 }
 
-export const RegisterForm: React.FC<RegisterFormProps> = ({
+const RegisterFormComponent: React.FC<RegisterFormProps> = ({
   onSuccess,
   onLoginClick,
   allowedDomains = [],
@@ -495,3 +495,6 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
     </div>
   );
 };
+
+export const RegisterForm = memo(RegisterFormComponent);
+RegisterForm.displayName = 'RegisterForm';

@@ -12,10 +12,10 @@
  * - WCAG 2.1 AA compliant
  */
 
-import React, { useState } from 'react';
-import { z } from 'zod';
 import { AuthApiService } from '@/api/auth/auth-api';
 import type { User } from '@/types';
+import React, { useState } from 'react';
+import { z } from 'zod';
 
 // Validation schemas
 const loginSchema = z.object({
@@ -221,9 +221,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 autoComplete="one-time-code"
                 aria-invalid={!!errors.code}
                 aria-describedby={errors.code ? 'mfa-code-error' : undefined}
-                className={`w-full px-4 py-3 text-center text-2xl tracking-widest border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  errors.code ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`w-full px-4 py-3 text-center text-2xl tracking-widest border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.code ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 placeholder="000000"
                 disabled={isLoading}
               />
@@ -295,9 +294,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 autoComplete="email"
                 aria-invalid={!!errors.email}
                 aria-describedby={errors.email ? 'email-error' : undefined}
-                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  errors.email ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.email ? 'border-red-500' : 'border-gray-300'
+                  }`}
                 placeholder="you@company.com"
                 disabled={isLoading}
                 required
@@ -325,9 +323,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                   autoComplete="current-password"
                   aria-invalid={!!errors.password}
                   aria-describedby={errors.password ? 'password-error' : undefined}
-                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    errors.password ? 'border-red-500' : 'border-gray-300'
-                  }`}
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${errors.password ? 'border-red-500' : 'border-gray-300'
+                    }`}
                   placeholder="Enter your password"
                   disabled={isLoading}
                   required

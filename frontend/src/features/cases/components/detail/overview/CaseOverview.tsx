@@ -13,7 +13,7 @@ import React from 'react';
 import { Users } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button';
 import { MatterInfo } from './MatterInfo';
 import { ActiveWorkstreams } from './ActiveWorkstreams';
 import { OverviewSidebar } from './OverviewSidebar';

@@ -1,9 +1,9 @@
 /**
  * CaseListArchived.tsx
- * 
+ *
  * View for archived/closed cases with restore functionality.
  * Displays historical case data in table format.
- * 
+ *
  * @module components/case-list/CaseListArchived
  * @category Case Management - Archive Views
  */
@@ -17,16 +17,16 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
-import { ConfirmDialog } from '@/components/molecules';
-import { AdaptiveLoader } from '@/components/molecules';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader';
+import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useModalState } from '@/hooks/useModalState';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -48,26 +48,26 @@ export const CaseListArchived: React.FC<CaseListArchivedProps> = ({ onSelectCase
 
   // Enterprise Data Access
   const { data: archivedCases = [], isLoading } = useQuery<unknown[]>(
-      ['cases', 'archived'],
-      () => DataService.cases.getArchived()
+    ['cases', 'archived'],
+    () => DataService.cases.getArchived()
   );
 
   // Ensure archivedCases is always an array
   const safeArchivedCases = Array.isArray(archivedCases) ? archivedCases : [];
 
   const handleRetrieve = async (id: string) => {
-      setRetrieveCaseId(id);
-      retrieveModal.open();
+    setRetrieveCaseId(id);
+    retrieveModal.open();
   };
 
   const confirmRetrieve = async () => {
-      if (retrieveCaseId) {
-          const found = await DataService.cases.getById(retrieveCaseId);
-          if (found && onSelectCase) {
-              onSelectCase(found);
-          }
-          setRetrieveCaseId(null);
+    if (retrieveCaseId) {
+      const found = await DataService.cases.getById(retrieveCaseId);
+      if (found && onSelectCase) {
+        onSelectCase(found);
       }
+      setRetrieveCaseId(null);
+    }
   };
 
   if (isLoading) return <AdaptiveLoader contentType="table" itemCount={8} shimmer />;
@@ -87,14 +87,14 @@ export const CaseListArchived: React.FC<CaseListArchivedProps> = ({ onSelectCase
         </TableHeader>
         <TableBody>
           {safeArchivedCases.map((c: unknown) => (
-            <TableRow key={(c as {id: string}).id}>
-                <TableCell className={cn("font-mono text-xs", theme.text.secondary)}>{(c as {date: string}).date}</TableCell>
-                <TableCell className={cn("font-medium", theme.text.primary)}>{(c as {title: string}).title}</TableCell>
-                <TableCell>{(c as {client: string}).client}</TableCell>
-                <TableCell><Badge variant="success">{(c as {outcome: string}).outcome}</Badge></TableCell>
-                <TableCell className="text-right">
-                    <Button variant="ghost" size="sm" onClick={() => handleRetrieve((c as {id: string}).id)}>Retrieve</Button>
-                </TableCell>
+            <TableRow key={(c as { id: string }).id}>
+              <TableCell className={cn("font-mono text-xs", theme.text.secondary)}>{(c as { date: string }).date}</TableCell>
+              <TableCell className={cn("font-medium", theme.text.primary)}>{(c as { title: string }).title}</TableCell>
+              <TableCell>{(c as { client: string }).client}</TableCell>
+              <TableCell><Badge variant="success">{(c as { outcome: string }).outcome}</Badge></TableCell>
+              <TableCell className="text-right">
+                <Button variant="ghost" size="sm" onClick={() => handleRetrieve((c as { id: string }).id)}>Retrieve</Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

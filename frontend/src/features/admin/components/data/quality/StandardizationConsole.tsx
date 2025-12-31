@@ -1,13 +1,13 @@
 
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/atoms';
-import { Wand2, Play, CheckCircle, Phone, Calendar, Type, Plus, Loader2 } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { CleansingRule } from '@/types';
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
-import { DataService } from '@/services/data/dataService';
+import { Button } from '@/components/ui/atoms/Button';
 import { useNotify } from '@/hooks/useNotify';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
+import { DataService } from '@/services/data/dataService';
+import { CleansingRule } from '@/types';
+import { cn } from '@/utils/cn';
+import { Calendar, CheckCircle, Loader2, Phone, Play, Plus, Type, Wand2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 /**
  * StandardizationConsole - React 18 optimized with React.memo
@@ -16,7 +16,7 @@ export const StandardizationConsole = React.memo(function StandardizationConsole
     const { theme } = useTheme();
     const notify = useNotify();
     const [isRunning, setIsRunning] = useState(false);
-    const [lastRunStats, setLastRunStats] = useState<{processed: number, fixed: number} | null>(null);
+    const [lastRunStats, setLastRunStats] = useState<{ processed: number, fixed: number } | null>(null);
 
     const { data: fetchedRules = [], isLoading } = useQuery<CleansingRule[]>(
         ['quality', 'rules'],
@@ -32,7 +32,7 @@ export const StandardizationConsole = React.memo(function StandardizationConsole
     const { mutate: runJob } = useMutation(
         DataService.quality.runCleansingJob,
         {
-            onSuccess: (stats: {processed: number, fixed: number}) => {
+            onSuccess: (stats: { processed: number, fixed: number }) => {
                 setLastRunStats(stats);
                 setIsRunning(false);
                 notify.success(`Standardization Complete. Fixed ${stats.fixed} records.`);
@@ -50,13 +50,13 @@ export const StandardizationConsole = React.memo(function StandardizationConsole
     };
 
     const getIcon = (op: string) => {
-        if (op.includes('Phone')) return <Phone className="h-4 w-4 text-green-600"/>;
-        if (op.includes('Date')) return <Calendar className="h-4 w-4 text-blue-600"/>;
-        if (op.includes('Trim')) return <Wand2 className="h-4 w-4 text-purple-600"/>;
-        return <Type className="h-4 w-4 text-slate-600"/>;
+        if (op.includes('Phone')) return <Phone className="h-4 w-4 text-green-600" />;
+        if (op.includes('Date')) return <Calendar className="h-4 w-4 text-blue-600" />;
+        if (op.includes('Trim')) return <Wand2 className="h-4 w-4 text-purple-600" />;
+        return <Type className="h-4 w-4 text-slate-600" />;
     };
 
-    if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600"/></div>;
+    if (isLoading) return <div className="flex h-full items-center justify-center"><Loader2 className="animate-spin text-blue-600" /></div>;
 
     return (
         <div className="space-y-6 animate-fade-in">
@@ -80,8 +80,8 @@ export const StandardizationConsole = React.memo(function StandardizationConsole
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {rules.map(rule => (
-                    <div 
-                        key={rule.id} 
+                    <div
+                        key={rule.id}
                         className={cn(
                             "p-4 rounded-xl border transition-all cursor-pointer relative overflow-hidden group",
                             theme.surface.default,
@@ -97,24 +97,24 @@ export const StandardizationConsole = React.memo(function StandardizationConsole
                                 <div className={cn("w-3 h-3 bg-white rounded-full shadow-sm transition-transform", rule.isActive ? "translate-x-5" : "")}></div>
                             </div>
                         </div>
-                        
+
                         <h4 className={cn("font-bold text-sm mb-1", theme.text.primary)}>{rule.name}</h4>
                         <div className={cn("flex items-center gap-2 text-xs", theme.text.secondary)}>
                             <span className={cn("font-mono px-1.5 rounded", theme.surface.highlight)}>{rule.targetField}</span>
                             <span>•</span>
                             <span>{rule.operation}</span>
                         </div>
-                        
+
                         {rule.isActive && (
                             <div className="absolute top-0 right-0 p-1.5 bg-blue-600 rounded-bl-xl text-white">
-                                <CheckCircle className="h-3 w-3"/>
+                                <CheckCircle className="h-3 w-3" />
                             </div>
                         )}
                     </div>
                 ))}
 
                 <button className={cn("border-2 border-dashed rounded-xl flex flex-col items-center justify-center p-6 transition-all text-slate-400 hover:text-blue-500 hover:border-blue-400", theme.border.default)}>
-                    <Plus className="h-8 w-8 mb-2"/>
+                    <Plus className="h-8 w-8 mb-2" />
                     <span className="font-bold text-sm">Add New Transformer</span>
                 </button>
             </div>

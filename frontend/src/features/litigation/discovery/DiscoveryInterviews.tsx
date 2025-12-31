@@ -31,8 +31,10 @@ export const DiscoveryInterviews: React.FC = () => {
 
   const handleCreate = (newInterview: Partial<CustodianInterview>) => {
       if (!newInterview.custodianName) return;
+      // Generate ID in event handler (not during render) for deterministic rendering
+      const newId = `INT-${Date.now()}`;
       createInterview({
-          id: `INT-${Date.now()}`,
+          id: newId,
           caseId: 'C-2024-001' as CaseId, // Mock default
           custodianName: newInterview.custodianName,
           department: newInterview.department || 'General',

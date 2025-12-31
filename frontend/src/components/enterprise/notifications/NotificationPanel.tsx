@@ -4,26 +4,26 @@
  * @description Dropdown panel for displaying and managing notifications
  */
 
-import React, { useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import type { UINotification } from '@/types/notifications';
+import { cn } from '@/utils/cn';
+import { formatDistanceToNow } from 'date-fns';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Bell,
-  X,
-  Trash2,
-  CheckCheck,
-  Clock,
   AlertCircle,
   AlertTriangle,
-  CheckCircle,
-  Info,
-  FileText,
-  Calendar,
+  Bell,
   Briefcase,
+  Calendar,
+  CheckCheck,
+  CheckCircle,
+  Clock,
   CreditCard,
+  FileText,
+  Info,
+  Trash2,
+  X,
 } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
-import { cn } from '@/utils/cn';
-import type { UINotification } from '@/types/notifications';
+import React, { useMemo } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -58,7 +58,7 @@ export interface NotificationPanelProps {
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const NotificationPanel: React.FC<NotificationPanelProps> = ({
+const NotificationPanelComponent: React.FC<NotificationPanelProps> = ({
   isOpen,
   onClose,
   notifications,
@@ -292,11 +292,11 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
                                     className={cn(
                                       'px-3 py-1.5 text-xs font-medium rounded-md transition-colors',
                                       action.variant === 'primary' &&
-                                        'bg-blue-600 text-white hover:bg-blue-700',
+                                      'bg-blue-600 text-white hover:bg-blue-700',
                                       action.variant === 'danger' &&
-                                        'bg-red-600 text-white hover:bg-red-700',
+                                      'bg-red-600 text-white hover:bg-red-700',
                                       (!action.variant || action.variant === 'secondary') &&
-                                        'bg-slate-200 text-slate-700 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600'
+                                      'bg-slate-200 text-slate-700 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600'
                                     )}
                                   >
                                     {action.label}
@@ -352,4 +352,6 @@ export const NotificationPanel: React.FC<NotificationPanelProps> = ({
   );
 };
 
+export const NotificationPanel = React.memo(NotificationPanelComponent);
+NotificationPanel.displayName = 'NotificationPanel';
 export default NotificationPanel;

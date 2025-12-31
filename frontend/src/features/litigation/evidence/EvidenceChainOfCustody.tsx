@@ -14,10 +14,11 @@ import React, { useState } from 'react';
 import { Layers, Plus, AlertOctagon, Link } from 'lucide-react';
 
 // Common Components
-import { Button } from '@/components/atoms';
-import { Modal } from '@/components/molecules';
-import { Input, TextArea } from '@/components/atoms';
-import { SignaturePad } from '@/components/organisms';
+import { Button } from '@/components/ui/atoms/Button';
+import { Modal } from '@/components/ui/molecules/Modal';
+import { Input } from '@/components/ui/atoms/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea';
+import { SignaturePad } from '@/components/features/discovery/components/SignaturePad/SignaturePad';
 
 // Context & Utils
 import { useTheme } from '@/providers/ThemeContext';
@@ -61,7 +62,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
               chainOfCustody: [payload.event, ...payload.item.chainOfCustody]
           };
           await DataService.evidence.update(payload.item.id, updatedItem);
-          
+
           // Log to internal immutable ledger
           const prevHash = selectedItem.chainOfCustody.length > 0
                            ? ((selectedItem.chainOfCustody[0] as unknown as Record<string, unknown>).curr_hash as string) || '0'
@@ -77,7 +78,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
               previousValue: selectedItem.chainOfCustody[0]?.id || '',
               newValue: payload.event.id
           }, prevHash);
-          
+
           return { updatedItem, chainedLog };
       },
       {
@@ -90,23 +91,23 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
               const previousEvidence = queryClient.getQueryState(
                   evidenceQueryKeys.evidence.all
               )?.data as EvidenceItem[] | undefined;
-              
+
               // Optimistically update cache
               queryClient.setQueryData<EvidenceItem[]>(
                   evidenceQueryKeys.evidence.all,
-                  (old) => old?.map(item => 
-                      item.id === payload.item.id 
+                  (old) => old?.map(item =>
+                      item.id === payload.item.id
                           ? { ...item, chainOfCustody: [payload.event, ...item.chainOfCustody] }
                           : item
                   ) || []
               );
-              
+
               return { previousEvidence };
           },
           onSuccess: (data, variables) => {
               if (onCustodyUpdate) {
                   const enrichedEvent = { ...variables.event, hash: data.chainedLog.hash };
-                  onCustodyUpdate(enrichedEvent as unknown as ChainOfCustodyEvent); 
+                  onCustodyUpdate(enrichedEvent as unknown as ChainOfCustodyEvent);
               }
               notify.success("Custody log updated and immutably recorded.");
               custodyModal.close();
@@ -145,14 +146,14 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
       actor: newEvent.actor,
       notes: newEvent.notes,
     };
-    
+
     // Validate event data before submission
     const validation = validateCustodyEventSafe(event);
     if (!validation.success) {
       notify.error(`Validation failed: ${validation.error.errors[0].message}`);
       return;
     }
-    
+
     updateEvidenceWithCustody({ item: selectedItem, event });
   };
 
@@ -199,32 +200,32 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
 
       <Modal isOpen={custodyModal.isOpen} onClose={custodyModal.close} title="Log Custody Event" size="sm">
         <div className="p-6 space-y-4">
-          <Input 
-            label="Date of Event" 
-            type="date" 
-            value={newEvent.date} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({...newEvent, date: e.target.value})} 
+          <Input
+            label="Date of Event"
+            type="date"
+            value={newEvent.date}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({...newEvent, date: e.target.value})}
           />
-          <Input 
-            label="Action Performed" 
-            value={newEvent.action || ''} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({...newEvent, action: e.target.value})} 
+          <Input
+            label="Action Performed"
+            value={newEvent.action || ''}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({...newEvent, action: e.target.value})}
             placeholder="e.g. Transferred to Lab, Returned to Client"
           />
-          <Input 
-            label="Actor / Recorder" 
-            value={newEvent.actor || ''} 
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({...newEvent, actor: e.target.value})} 
+          <Input
+            label="Actor / Recorder"
+            value={newEvent.actor || ''}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewEvent({...newEvent, actor: e.target.value})}
             placeholder="Name of person performing action"
           />
-          <TextArea 
-            label="Notes (Optional)" 
-            value={newEvent.notes || ''} 
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewEvent({...newEvent, notes: e.target.value})} 
+          <TextArea
+            label="Notes (Optional)"
+            value={newEvent.notes || ''}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setNewEvent({...newEvent, notes: e.target.value})}
             rows={3}
             placeholder="Additional details regarding the transfer/event..."
           />
-          
+
           <div className={cn("p-4 rounded-lg border flex items-center justify-between", theme.status.warning.bg, theme.status.warning.border)}>
             <div className="flex items-start gap-3">
               <AlertOctagon className={cn("h-5 w-5 mt-0.5 shrink-0", theme.status.warning.text)}/>
@@ -234,14 +235,14 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({ 
               </div>
             </div>
           </div>
-          <SignaturePad 
-            value={isSigned} 
-            onChange={setIsSigned} 
+          <SignaturePad
+            value={isSigned}
+            onChange={setIsSigned}
             isSigning={isUpdating}
-            label="Digital Signature" 
-            subtext="I certify this event is accurate and occurred as logged." 
+            label="Digital Signature"
+            subtext="I certify this event is accurate and occurred as logged."
           />
-          
+
           <div className={cn("pt-4 flex justify-end gap-3 border-t mt-4", theme.border.default)}>
             <Button variant="secondary" onClick={custodyModal.close}>Cancel</Button>
             <Button variant="primary" onClick={handleSaveEvent} disabled={isUpdating || !isSigned}>

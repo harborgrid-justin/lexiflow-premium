@@ -4,22 +4,22 @@
  * @description Revenue and billing overview widget with charts
  */
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-} from 'recharts';
-import { DollarSign, TrendingUp, Calendar } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import { motion } from 'framer-motion';
+import { Calendar, DollarSign, TrendingUp } from 'lucide-react';
+import React, { useState } from 'react';
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
 export interface RevenueDataPoint {
   period: string;
@@ -44,7 +44,7 @@ export interface RevenueOverviewProps {
  * RevenueOverview - Revenue and billing visualization widget
  * Displays revenue trends with interactive charts
  */
-export const RevenueOverview: React.FC<RevenueOverviewProps> = ({
+const RevenueOverviewComponent: React.FC<RevenueOverviewProps> = ({
   data,
   totalRevenue,
   totalExpenses,
@@ -323,3 +323,7 @@ export const RevenueOverview: React.FC<RevenueOverviewProps> = ({
     </motion.div>
   );
 };
+
+export const RevenueOverview = React.memo(RevenueOverviewComponent);
+RevenueOverview.displayName = 'RevenueOverview';
+export default RevenueOverview;

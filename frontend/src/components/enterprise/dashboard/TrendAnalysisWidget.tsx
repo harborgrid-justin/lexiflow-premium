@@ -5,7 +5,7 @@
  * Displays historical trends with AI-powered predictions
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, memo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   LineChart,
@@ -51,7 +51,7 @@ export interface TrendAnalysisWidgetProps extends BaseDashboardProps {
  * TrendAnalysisWidget - Advanced trend analysis with predictions
  * Shows historical data with AI-powered forecasting
  */
-export const TrendAnalysisWidget: React.FC<TrendAnalysisWidgetProps> = ({
+const TrendAnalysisWidgetComponent: React.FC<TrendAnalysisWidgetProps> = ({
   title,
   data,
   predictions = [],

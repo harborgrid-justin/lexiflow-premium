@@ -11,7 +11,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 
 // Internal Components
-import { ContextMenu, ContextMenuItem } from '@/components/molecules';
+import { ContextMenu, type ContextMenuItem } from '@/components/ui/molecules/ContextMenu';
 import { BuilderCanvas, BuilderToolbar } from '@features/cases/components/workflow/builder';
 import { LitigationPalette } from './LitigationPalette';
 import { LitigationProperties } from './LitigationProperties';

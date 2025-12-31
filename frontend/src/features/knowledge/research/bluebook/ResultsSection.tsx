@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/molecules/Card/Card';
 import { useTheme } from '@/providers/ThemeContext';
 import { BluebookCitationType, ExportFormat } from '@/types/bluebook';
 import { cn } from '@/utils/cn';
-import { Copy, FileDown, Filter, Info, Table } from 'lucide-react';
+import { Copy, FileDown, FileText, Filter, Info, Table } from 'lucide-react';
 import React from 'react';
 import { ResultItem } from './ResultItem';
 import type { FilterOptions, FormattingResult } from './types';
@@ -35,7 +35,21 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({
 }) => {
   const { theme } = useTheme();
 
-  if (results.length === 0) return null;
+  // LAYOUT-STABLE: Render empty state with same card structure instead of null
+  if (results.length === 0) {
+    return (
+      <Card
+        title="Formatted Citations"
+        subtitle="0 citations"
+      >
+        <div className={cn("py-12 text-center", theme.text.tertiary)}>
+          <FileText className="h-12 w-12 mx-auto mb-3 opacity-30" />
+          <p className="text-sm">No citations formatted yet</p>
+          <p className="text-xs mt-1">Enter citation details above to generate</p>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card

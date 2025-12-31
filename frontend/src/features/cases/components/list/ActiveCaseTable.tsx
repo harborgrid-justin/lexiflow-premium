@@ -18,7 +18,7 @@ import { ArrowUp, ArrowDown } from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { VirtualList } from '@/components/organisms';
+import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { EmptyListState } from '@/components/organisms/_legacy/RefactoredCommon';
 import { CaseRow } from './CaseRow';
 

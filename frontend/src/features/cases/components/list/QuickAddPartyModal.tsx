@@ -1,8 +1,8 @@
 /**
  * QuickAddPartyModal Component
- * 
+ *
  * Modal for quickly creating a party entity with attorney representation.
- * 
+ *
  * Architecture:
  * - Form state managed with discriminated union for party types
  * - Attorney fields conditionally shown based on representation type
@@ -11,10 +11,10 @@
  * - Error boundary for graceful failure handling
  */
 
-import React, { useState, useCallback } from 'react';
-import { X, User, Building2, Gavel } from 'lucide-react';
-import { CreatePartyDto, PartyTypeBackend, PartyRoleBackend } from '@/api/litigation';
-import { CreateComponentProps } from '@/components/molecules';
+import { CreatePartyDto, PartyRoleBackend, PartyTypeBackend } from '@/api/litigation';
+import { type CreateComponentProps } from '@/components/ui/molecules/AutocompleteSelect/AutocompleteSelect';
+import { Building2, Gavel, User, X } from 'lucide-react';
+import React, { useCallback, useState } from 'react';
 
 // Type aliases for cleaner code
 type PartyType = PartyTypeBackend;
@@ -65,9 +65,9 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
     role: 'Primary',
     hasAttorney: false,
   });
-  
+
   const [errors, setErrors] = useState<Partial<Record<keyof PartyFormData, string>>>({});
-  
+
   /**
    * Type-safe form field updater
    */
@@ -81,46 +81,46 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
   }, [errors]);
-  
+
   /**
    * Client-side validation
    * Returns true if valid, false otherwise
    */
   const validate = useCallback((): boolean => {
     const newErrors: Partial<Record<keyof PartyFormData, string>> = {};
-    
+
     if (!formData.name.trim()) {
       newErrors.name = 'Party name is required';
     }
-    
+
     if (!formData.caseId) {
       newErrors.caseId = 'Case ID is required';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   }, [formData]);
-  
+
   /**
    * Handle form submission
    */
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validate()) {
       return;
     }
-    
+
     // Remove form-only fields before submission
     const { hasAttorney: _hasAttorney, ...submitData } = formData;
-    
+
     try {
       onCreated(submitData);
     } catch (err) {
       console.error('Failed to create party:', err);
     }
   }, [formData, validate, onCreated]);
-  
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
@@ -138,7 +138,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
             <X className="w-5 h-5" />
           </button>
         </div>
-        
+
         {/* Form */}
         <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4 overflow-y-auto max-h-[calc(90vh-140px)]">
           {/* Party Name */}
@@ -150,9 +150,8 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
               type="text"
               value={formData.name}
               onChange={(e) => updateField('name', e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.name ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'
-              } bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100`}
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.name ? 'border-red-500' : 'border-slate-300 dark:border-slate-600'
+                } bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100`}
               placeholder="Enter party name"
               autoFocus
             />
@@ -160,7 +159,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
               <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.name}</p>
             )}
           </div>
-          
+
           {/* Party Type */}
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
@@ -172,11 +171,10 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
                   key={value}
                   type="button"
                   onClick={() => updateField('type', value)}
-                  className={`flex items-center px-4 py-2 border rounded-lg transition-colors ${
-                    formData.type === value
+                  className={`flex items-center px-4 py-2 border rounded-lg transition-colors ${formData.type === value
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
                       : 'border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
-                  }`}
+                    }`}
                 >
                   <Icon className="w-4 h-4 mr-2" />
                   {label}
@@ -184,7 +182,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
               ))}
             </div>
           </div>
-          
+
           {/* Party Role */}
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
@@ -196,18 +194,17 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
                   key={value}
                   type="button"
                   onClick={() => updateField('role', value)}
-                  className={`px-4 py-2 border rounded-lg transition-colors ${
-                    formData.role === value
+                  className={`px-4 py-2 border rounded-lg transition-colors ${formData.role === value
                       ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
                       : 'border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700'
-                  }`}
+                    }`}
                 >
                   {label}
                 </button>
               ))}
             </div>
           </div>
-          
+
           {/* Organization */}
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
@@ -224,7 +221,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
               />
             </div>
           </div>
-          
+
           {/* Contact Information */}
           <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -240,7 +237,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
                   placeholder="email@example.com"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                   Phone
@@ -254,7 +251,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
                 />
               </div>
             </div>
-            
+
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Address
@@ -267,7 +264,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
                 placeholder="Street address"
               />
             </div>
-            
+
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
@@ -281,7 +278,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
                   placeholder="City"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                   State
@@ -294,7 +291,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
                   placeholder="State"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                   Zip Code
@@ -309,7 +306,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
               </div>
             </div>
           </div>
-          
+
           {/* Legal Representation */}
           <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
             <label className="flex items-center text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
@@ -324,7 +321,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
               placeholder="Attorney or law firm name"
             />
           </div>
-          
+
           {/* Notes */}
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
@@ -339,7 +336,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
             />
           </div>
         </form>
-        
+
         {/* Footer */}
         <div className="flex items-center justify-between px-6 py-4 border-t border-slate-200 dark:border-slate-700">
           <button
@@ -350,7 +347,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = React.memo(
           >
             Cancel
           </button>
-          
+
           <button
             onClick={handleSubmit}
             disabled={isCreating}

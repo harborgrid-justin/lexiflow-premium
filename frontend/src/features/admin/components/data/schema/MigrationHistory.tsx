@@ -1,9 +1,9 @@
 
-import React from 'react';
-import { Clock, CheckCircle, XCircle, RotateCcw, FileCode } from 'lucide-react';
+import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
+import { CheckCircle, Clock, FileCode, RotateCcw, XCircle } from 'lucide-react';
+import React from 'react';
 
 /**
  * MigrationHistory - React 18 optimized with React.memo
@@ -24,11 +24,11 @@ export const MigrationHistory = React.memo(function MigrationHistory() {
                 {migrations.map((mig, idx) => (
                     <div key={mig.id} className="flex gap-4">
                         <div className="flex flex-col items-center">
-                            <div className={cn("w-8 h-8 rounded-full flex items-center justify-center border-2 z-10", 
+                            <div className={cn("w-8 h-8 rounded-full flex items-center justify-center border-2 z-10",
                                 theme.surface.default,
                                 mig.status === 'Applied' ? "border-green-500 text-green-500" : "border-red-500 text-red-500"
                             )}>
-                                {mig.status === 'Applied' ? <CheckCircle className="h-4 w-4"/> : <XCircle className="h-4 w-4"/>}
+                                {mig.status === 'Applied' ? <CheckCircle className="h-4 w-4" /> : <XCircle className="h-4 w-4" />}
                             </div>
                             {idx !== migrations.length - 1 && <div className={cn("w-0.5 flex-1 -mb-4", theme.surface.highlight)}></div>}
                         </div>
@@ -40,7 +40,7 @@ export const MigrationHistory = React.memo(function MigrationHistory() {
                             <p className={cn("text-sm mb-3", theme.text.secondary)}>{mig.desc}</p>
                             <div className={cn("flex items-center justify-between pt-3 border-t", theme.border.default)}>
                                 <span className={cn("text-xs flex items-center", theme.text.secondary)}>
-                                    <Clock className="h-3 w-3 mr-1"/> by {mig.author}
+                                    <Clock className="h-3 w-3 mr-1" /> by {mig.author}
                                 </span>
                                 <div className="flex gap-2">
                                     <Button size="xs" variant="ghost" icon={FileCode}>SQL</Button>

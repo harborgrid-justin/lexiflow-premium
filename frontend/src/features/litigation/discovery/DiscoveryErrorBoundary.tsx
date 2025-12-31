@@ -109,6 +109,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
 
                 {/* Footer Note */}
                 <p className="text-xs text-slate-500 dark:text-slate-400 text-center mt-6">
+                    {/* Error ID generation with Date.now() OK here - error boundary render, not normal component render */}
                     Error ID: {Date.now().toString(36)} • This error has been logged for investigation
                 </p>
             </div>

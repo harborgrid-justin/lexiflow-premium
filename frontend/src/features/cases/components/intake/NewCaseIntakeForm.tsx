@@ -1,9 +1,9 @@
 /**
  * New Matter Intake Form - Multi-Step Matter Onboarding Wizard
- * 
+ *
  * @module NewMatterIntakeForm
  * @description Enterprise intake pipeline with validation and conflict checking
- * 
+ *
  * Features:
  * - Multi-step wizard interface
  * - Client information capture
@@ -16,18 +16,26 @@
  * - Engagement letter generation
  */
 
-import React, { useState, useMemo, Dispatch, SetStateAction } from 'react';
-import {
-  User, Briefcase, DollarSign, Users, Shield, CheckCircle,
-  AlertTriangle, ArrowRight, ArrowLeft, Save, Send
-} from 'lucide-react';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { api } from '@/api';
+import { Button } from '@/components/ui/atoms/Button';
+import { Card } from '@/components/ui/molecules/Card';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
+import type { Case, Matter, User as UserType } from '@/types';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
-import { Card } from '@/components/molecules';
-import type { Matter, Case, User as UserType } from '@/types';
+import {
+  AlertTriangle,
+  ArrowLeft,
+  ArrowRight,
+  Briefcase,
+  CheckCircle,
+  DollarSign,
+  Save, Send,
+  Shield,
+  User,
+  Users
+} from 'lucide-react';
+import React, { Dispatch, SetStateAction, useMemo, useState } from 'react';
 
 type IntakeStep = 'client' | 'matter' | 'conflicts' | 'team' | 'financial' | 'review';
 
@@ -150,7 +158,7 @@ export const NewCaseIntakeForm: React.FC = () => {
             const Icon = step.icon;
             const isActive = step.id === currentStep;
             const isCompleted = index < currentStepIndex;
-            
+
             return (
               <div key={step.id} className="flex items-center flex-1">
                 <div className="flex flex-col items-center flex-1">
@@ -159,10 +167,10 @@ export const NewCaseIntakeForm: React.FC = () => {
                     isActive
                       ? 'bg-blue-500 text-white'
                       : isCompleted
-                      ? 'bg-emerald-500 text-white'
-                      : mode === 'dark'
-                      ? 'bg-slate-700 text-slate-400'
-                      : 'bg-slate-200 text-slate-600'
+                        ? 'bg-emerald-500 text-white'
+                        : mode === 'dark'
+                          ? 'bg-slate-700 text-slate-400'
+                          : 'bg-slate-200 text-slate-600'
                   )}>
                     {isCompleted ? <CheckCircle className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
                   </div>
@@ -263,170 +271,170 @@ interface ClientInfoStepProps {
 const ClientInfoStep: React.FC<ClientInfoStepProps> = ({ formData, setFormData }) => {
   const { mode } = useTheme();
   return (
-  <div className="space-y-6">
-    <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
-      Client Information
-    </h2>
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
-          Client Name *
-        </label>
-        <input
-          type="text"
-          value={formData.clientName}
-          onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
-          className={cn(
-            'w-full px-3 py-2 rounded-lg border',
-            mode === 'dark'
-              ? 'bg-slate-700 border-slate-600 text-slate-100'
-              : 'bg-white border-slate-300 text-slate-900'
-          )}
-        />
-      </div>
-      <div>
-        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
-          Client Type *
-        </label>
-        <select
-          value={formData.clientType}
-          onChange={(e) => setFormData({ ...formData, clientType: e.target.value })}
-          className={cn(
-            'w-full px-3 py-2 rounded-lg border',
-            mode === 'dark'
-              ? 'bg-slate-700 border-slate-600 text-slate-100'
-              : 'bg-white border-slate-300 text-slate-900'
-          )}
-        >
-          <option value="individual">Individual</option>
-          <option value="corporation">Corporation</option>
-          <option value="government">Government</option>
-          <option value="nonprofit">Non-Profit</option>
-        </select>
-      </div>
-      <div>
-        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
-          Email *
-        </label>
-        <input
-          type="email"
-          value={formData.clientEmail}
-          onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
-          className={cn(
-            'w-full px-3 py-2 rounded-lg border',
-            mode === 'dark'
-              ? 'bg-slate-700 border-slate-600 text-slate-100'
-              : 'bg-white border-slate-300 text-slate-900'
-          )}
-        />
-      </div>
-      <div>
-        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
-          Phone
-        </label>
-        <input
-          type="tel"
-          value={formData.clientPhone}
-          onChange={(e) => setFormData({ ...formData, clientPhone: e.target.value })}
-          className={cn(
-            'w-full px-3 py-2 rounded-lg border',
-            mode === 'dark'
-              ? 'bg-slate-700 border-slate-600 text-slate-100'
-              : 'bg-white border-slate-300 text-slate-900'
-          )}
-        />
+    <div className="space-y-6">
+      <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+        Client Information
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+            Client Name *
+          </label>
+          <input
+            type="text"
+            value={formData.clientName}
+            onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
+            className={cn(
+              'w-full px-3 py-2 rounded-lg border',
+              mode === 'dark'
+                ? 'bg-slate-700 border-slate-600 text-slate-100'
+                : 'bg-white border-slate-300 text-slate-900'
+            )}
+          />
+        </div>
+        <div>
+          <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+            Client Type *
+          </label>
+          <select
+            value={formData.clientType}
+            onChange={(e) => setFormData({ ...formData, clientType: e.target.value })}
+            className={cn(
+              'w-full px-3 py-2 rounded-lg border',
+              mode === 'dark'
+                ? 'bg-slate-700 border-slate-600 text-slate-100'
+                : 'bg-white border-slate-300 text-slate-900'
+            )}
+          >
+            <option value="individual">Individual</option>
+            <option value="corporation">Corporation</option>
+            <option value="government">Government</option>
+            <option value="nonprofit">Non-Profit</option>
+          </select>
+        </div>
+        <div>
+          <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+            Email *
+          </label>
+          <input
+            type="email"
+            value={formData.clientEmail}
+            onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
+            className={cn(
+              'w-full px-3 py-2 rounded-lg border',
+              mode === 'dark'
+                ? 'bg-slate-700 border-slate-600 text-slate-100'
+                : 'bg-white border-slate-300 text-slate-900'
+            )}
+          />
+        </div>
+        <div>
+          <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+            Phone
+          </label>
+          <input
+            type="tel"
+            value={formData.clientPhone}
+            onChange={(e) => setFormData({ ...formData, clientPhone: e.target.value })}
+            className={cn(
+              'w-full px-3 py-2 rounded-lg border',
+              mode === 'dark'
+                ? 'bg-slate-700 border-slate-600 text-slate-100'
+                : 'bg-white border-slate-300 text-slate-900'
+            )}
+          />
+        </div>
       </div>
     </div>
-  </div>
   );
 };
 
 const MatterDetailsStep: React.FC<ClientInfoStepProps> = ({ formData, setFormData }) => {
   const { mode } = useTheme();
   return (
-  <div className="space-y-6">
-    <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
-      Matter Details
-    </h2>
-    <div className="space-y-4">
-      <div>
-        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
-          Matter Title *
-        </label>
-        <input
-          type="text"
-          value={formData.matterTitle}
-          onChange={(e) => setFormData({ ...formData, matterTitle: e.target.value })}
-          className={cn(
-            'w-full px-3 py-2 rounded-lg border',
-            mode === 'dark'
-              ? 'bg-slate-700 border-slate-600 text-slate-100'
-              : 'bg-white border-slate-300 text-slate-900'
-          )}
-        />
-      </div>
-      <div className="grid grid-cols-2 gap-4">
+    <div className="space-y-6">
+      <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+        Matter Details
+      </h2>
+      <div className="space-y-4">
         <div>
           <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
-            Matter Type *
+            Matter Title *
           </label>
-          <select
-            value={formData.matterType}
-            onChange={(e) => setFormData({ ...formData, matterType: e.target.value })}
+          <input
+            type="text"
+            value={formData.matterTitle}
+            onChange={(e) => setFormData({ ...formData, matterTitle: e.target.value })}
             className={cn(
               'w-full px-3 py-2 rounded-lg border',
               mode === 'dark'
                 ? 'bg-slate-700 border-slate-600 text-slate-100'
                 : 'bg-white border-slate-300 text-slate-900'
             )}
-          >
-            <option value="">Select type...</option>
-            <option value="litigation">Litigation</option>
-            <option value="transactional">Transactional</option>
-            <option value="advisory">Advisory</option>
-            <option value="compliance">Compliance</option>
-          </select>
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+              Matter Type *
+            </label>
+            <select
+              value={formData.matterType}
+              onChange={(e) => setFormData({ ...formData, matterType: e.target.value })}
+              className={cn(
+                'w-full px-3 py-2 rounded-lg border',
+                mode === 'dark'
+                  ? 'bg-slate-700 border-slate-600 text-slate-100'
+                  : 'bg-white border-slate-300 text-slate-900'
+              )}
+            >
+              <option value="">Select type...</option>
+              <option value="litigation">Litigation</option>
+              <option value="transactional">Transactional</option>
+              <option value="advisory">Advisory</option>
+              <option value="compliance">Compliance</option>
+            </select>
+          </div>
+          <div>
+            <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+              Practice Area *
+            </label>
+            <select
+              value={formData.practiceArea}
+              onChange={(e) => setFormData({ ...formData, practiceArea: e.target.value })}
+              className={cn(
+                'w-full px-3 py-2 rounded-lg border',
+                mode === 'dark'
+                  ? 'bg-slate-700 border-slate-600 text-slate-100'
+                  : 'bg-white border-slate-300 text-slate-900'
+              )}
+            >
+              <option value="">Select area...</option>
+              <option value="corporate">Corporate Law</option>
+              <option value="employment">Employment Law</option>
+              <option value="ip">Intellectual Property</option>
+              <option value="real-estate">Real Estate</option>
+            </select>
+          </div>
         </div>
         <div>
           <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
-            Practice Area *
+            Description
           </label>
-          <select
-            value={formData.practiceArea}
-            onChange={(e) => setFormData({ ...formData, practiceArea: e.target.value })}
+          <textarea
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            rows={4}
             className={cn(
               'w-full px-3 py-2 rounded-lg border',
               mode === 'dark'
                 ? 'bg-slate-700 border-slate-600 text-slate-100'
                 : 'bg-white border-slate-300 text-slate-900'
             )}
-          >
-            <option value="">Select area...</option>
-            <option value="corporate">Corporate Law</option>
-            <option value="employment">Employment Law</option>
-            <option value="ip">Intellectual Property</option>
-            <option value="real-estate">Real Estate</option>
-          </select>
+          />
         </div>
-      </div>
-      <div>
-        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
-          Description
-        </label>
-        <textarea
-          value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          rows={4}
-          className={cn(
-            'w-full px-3 py-2 rounded-lg border',
-            mode === 'dark'
-              ? 'bg-slate-700 border-slate-600 text-slate-100'
-              : 'bg-white border-slate-300 text-slate-900'
-          )}
-        />
       </div>
     </div>
-  </div>
   );
 };
 
@@ -440,52 +448,52 @@ interface ConflictCheckStepProps {
 const ConflictCheckStep: React.FC<ConflictCheckStepProps> = ({ conflictCheck }) => {
   const { mode } = useTheme();
   return (
-  <div className="space-y-6">
-    <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
-      Conflict Check
-    </h2>
-    {!conflictCheck.hasConflict ? (
-      <div className={cn('p-6 rounded-lg border', mode === 'dark' ? 'bg-emerald-900/20 border-emerald-700' : 'bg-emerald-50 border-emerald-200')}>
-        <div className="flex items-center gap-3">
-          <CheckCircle className="w-6 h-6 text-emerald-500" />
-          <div>
-            <div className={cn('font-semibold', mode === 'dark' ? 'text-emerald-400' : 'text-emerald-700')}>
-              No Conflicts Detected
-            </div>
-            <div className={cn('text-sm mt-1', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
-              Automated conflict check completed successfully. No conflicts found with existing matters or clients.
-            </div>
-          </div>
-        </div>
-      </div>
-    ) : (
-      <div className={cn('p-6 rounded-lg border', mode === 'dark' ? 'bg-amber-900/20 border-amber-700' : 'bg-amber-50 border-amber-200')}>
-        <div className="flex items-start gap-3">
-          <AlertTriangle className="w-6 h-6 text-amber-500" />
-          <div className="flex-1">
-            <div className={cn('font-semibold', mode === 'dark' ? 'text-amber-400' : 'text-amber-700')}>
-              Potential Conflicts Found
-            </div>
-            <div className={cn('text-sm mt-1', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
-              {conflictCheck.conflicts.length} potential conflict(s) detected. Please review before proceeding.
-            </div>
-            <div className="mt-4 space-y-2">
-              {conflictCheck.conflicts.map((caseItem: Case) => (
-                <div key={caseItem.id} className={cn('p-3 rounded border text-sm', mode === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
-                  <div className={cn('font-medium', mode === 'dark' ? 'text-slate-200' : 'text-slate-800')}>
-                    {caseItem.title}
-                  </div>
-                  <div className={cn('text-xs mt-1', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
-                    Client: {caseItem.client}
-                  </div>
-                </div>
-              ))}
+    <div className="space-y-6">
+      <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+        Conflict Check
+      </h2>
+      {!conflictCheck.hasConflict ? (
+        <div className={cn('p-6 rounded-lg border', mode === 'dark' ? 'bg-emerald-900/20 border-emerald-700' : 'bg-emerald-50 border-emerald-200')}>
+          <div className="flex items-center gap-3">
+            <CheckCircle className="w-6 h-6 text-emerald-500" />
+            <div>
+              <div className={cn('font-semibold', mode === 'dark' ? 'text-emerald-400' : 'text-emerald-700')}>
+                No Conflicts Detected
+              </div>
+              <div className={cn('text-sm mt-1', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+                Automated conflict check completed successfully. No conflicts found with existing matters or clients.
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    )}
-  </div>
+      ) : (
+        <div className={cn('p-6 rounded-lg border', mode === 'dark' ? 'bg-amber-900/20 border-amber-700' : 'bg-amber-50 border-amber-200')}>
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-6 h-6 text-amber-500" />
+            <div className="flex-1">
+              <div className={cn('font-semibold', mode === 'dark' ? 'text-amber-400' : 'text-amber-700')}>
+                Potential Conflicts Found
+              </div>
+              <div className={cn('text-sm mt-1', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+                {conflictCheck.conflicts.length} potential conflict(s) detected. Please review before proceeding.
+              </div>
+              <div className="mt-4 space-y-2">
+                {conflictCheck.conflicts.map((caseItem: Case) => (
+                  <div key={caseItem.id} className={cn('p-3 rounded border text-sm', mode === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-white border-slate-200')}>
+                    <div className={cn('font-medium', mode === 'dark' ? 'text-slate-200' : 'text-slate-800')}>
+                      {caseItem.title}
+                    </div>
+                    <div className={cn('text-xs mt-1', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+                      Client: {caseItem.client}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -498,51 +506,17 @@ interface TeamAssignmentStepProps {
 const TeamAssignmentStep: React.FC<TeamAssignmentStepProps> = ({ formData, setFormData, users }) => {
   const { mode } = useTheme();
   return (
-  <div className="space-y-6">
-    <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
-      Team Assignment
-    </h2>
-    <div>
-      <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
-        Lead Attorney *
-      </label>
-      <select
-        value={formData.leadAttorneyId}
-        onChange={(e) => setFormData({ ...formData, leadAttorneyId: e.target.value })}
-        className={cn(
-          'w-full px-3 py-2 rounded-lg border',
-          mode === 'dark'
-            ? 'bg-slate-700 border-slate-600 text-slate-100'
-            : 'bg-white border-slate-300 text-slate-900'
-        )}
-      >
-        <option value="">Select attorney...</option>
-        {users?.filter((u: UserType) => u.role === 'Senior Partner' || u.role === 'Associate').map((user: UserType) => (
-          <option key={user.id} value={user.id}>
-            {user.name || user.email} {user.role ? `- ${user.role}` : ''}
-          </option>
-        ))}
-      </select>
-    </div>
-  </div>
-  );
-};
-
-const FinancialSetupStep: React.FC<ClientInfoStepProps> = ({ formData, setFormData }) => {
-  const { mode } = useTheme();
-  return (
-  <div className="space-y-6">
-    <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
-      Financial Setup
-    </h2>
-    <div className="grid grid-cols-2 gap-4">
+    <div className="space-y-6">
+      <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+        Team Assignment
+      </h2>
       <div>
         <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
-          Billing Type *
+          Lead Attorney *
         </label>
         <select
-          value={formData.billingType}
-          onChange={(e) => setFormData({ ...formData, billingType: e.target.value })}
+          value={formData.leadAttorneyId}
+          onChange={(e) => setFormData({ ...formData, leadAttorneyId: e.target.value })}
           className={cn(
             'w-full px-3 py-2 rounded-lg border',
             mode === 'dark'
@@ -550,30 +524,64 @@ const FinancialSetupStep: React.FC<ClientInfoStepProps> = ({ formData, setFormDa
               : 'bg-white border-slate-300 text-slate-900'
           )}
         >
-          <option value="hourly">Hourly</option>
-          <option value="flat">Flat Fee</option>
-          <option value="contingency">Contingency</option>
-          <option value="retainer">Retainer</option>
+          <option value="">Select attorney...</option>
+          {users?.filter((u: UserType) => u.role === 'Senior Partner' || u.role === 'Associate').map((user: UserType) => (
+            <option key={user.id} value={user.id}>
+              {user.name || user.email} {user.role ? `- ${user.role}` : ''}
+            </option>
+          ))}
         </select>
       </div>
-      <div>
-        <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
-          Hourly Rate
-        </label>
-        <input
-          type="number"
-          value={formData.hourlyRate}
-          onChange={(e) => setFormData({ ...formData, hourlyRate: e.target.value })}
-          className={cn(
-            'w-full px-3 py-2 rounded-lg border',
-            mode === 'dark'
-              ? 'bg-slate-700 border-slate-600 text-slate-100'
-              : 'bg-white border-slate-300 text-slate-900'
-          )}
-        />
+    </div>
+  );
+};
+
+const FinancialSetupStep: React.FC<ClientInfoStepProps> = ({ formData, setFormData }) => {
+  const { mode } = useTheme();
+  return (
+    <div className="space-y-6">
+      <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+        Financial Setup
+      </h2>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+            Billing Type *
+          </label>
+          <select
+            value={formData.billingType}
+            onChange={(e) => setFormData({ ...formData, billingType: e.target.value })}
+            className={cn(
+              'w-full px-3 py-2 rounded-lg border',
+              mode === 'dark'
+                ? 'bg-slate-700 border-slate-600 text-slate-100'
+                : 'bg-white border-slate-300 text-slate-900'
+            )}
+          >
+            <option value="hourly">Hourly</option>
+            <option value="flat">Flat Fee</option>
+            <option value="contingency">Contingency</option>
+            <option value="retainer">Retainer</option>
+          </select>
+        </div>
+        <div>
+          <label className={cn('block text-sm font-medium mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+            Hourly Rate
+          </label>
+          <input
+            type="number"
+            value={formData.hourlyRate}
+            onChange={(e) => setFormData({ ...formData, hourlyRate: e.target.value })}
+            className={cn(
+              'w-full px-3 py-2 rounded-lg border',
+              mode === 'dark'
+                ? 'bg-slate-700 border-slate-600 text-slate-100'
+                : 'bg-white border-slate-300 text-slate-900'
+            )}
+          />
+        </div>
       </div>
     </div>
-  </div>
   );
 };
 
@@ -584,28 +592,28 @@ interface ReviewStepProps {
 const ReviewStep: React.FC<ReviewStepProps> = ({ formData }) => {
   const { mode } = useTheme();
   return (
-  <div className="space-y-6">
-    <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
-      Review & Submit
-    </h2>
-    <div className="space-y-4">
-      <div>
-        <h3 className={cn('font-semibold mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
-          Client Information
-        </h3>
-        <div className={cn('text-sm', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
-          {formData.clientName} • {formData.clientType} • {formData.clientEmail}
+    <div className="space-y-6">
+      <h2 className={cn('text-xl font-semibold mb-4', mode === 'dark' ? 'text-slate-100' : 'text-slate-900')}>
+        Review & Submit
+      </h2>
+      <div className="space-y-4">
+        <div>
+          <h3 className={cn('font-semibold mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+            Client Information
+          </h3>
+          <div className={cn('text-sm', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+            {formData.clientName} • {formData.clientType} • {formData.clientEmail}
+          </div>
         </div>
-      </div>
-      <div>
-        <h3 className={cn('font-semibold mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
-          Matter Details
-        </h3>
-        <div className={cn('text-sm', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
-          {formData.matterTitle} • {formData.matterType} • {formData.practiceArea}
+        <div>
+          <h3 className={cn('font-semibold mb-2', mode === 'dark' ? 'text-slate-300' : 'text-slate-700')}>
+            Matter Details
+          </h3>
+          <div className={cn('text-sm', mode === 'dark' ? 'text-slate-400' : 'text-slate-600')}>
+            {formData.matterTitle} • {formData.matterType} • {formData.practiceArea}
+          </div>
         </div>
       </div>
     </div>
-  </div>
   );
 };

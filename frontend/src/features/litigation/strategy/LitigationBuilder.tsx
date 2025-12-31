@@ -7,18 +7,18 @@
  * Uses useTheme hook to apply semantic colors.
  */
 
-import React, { useState, Suspense, lazy } from 'react';
-import { Save, Rocket, Loader2 } from 'lucide-react';
+import { Loader2, Rocket, Save } from 'lucide-react';
+import React, { Suspense, lazy, useState } from 'react';
 
 // Internal Components
-import { LazyLoader } from '@/components/molecules';
 import { TabbedPageLayout } from '@/components/layouts';
-import { Button } from '@/components/atoms';
-import { ErrorBoundary } from '@/components/organisms';
+import { ErrorBoundary } from '@/components/organisms/ErrorBoundary';
+import { Button } from '@/components/ui/atoms/Button';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
 import { useLitigationBuilder } from '@/hooks/useLitigationBuilder';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Utils
 import { cn } from '@/utils/cn';
@@ -36,7 +36,7 @@ const LitigationGanttView = lazy(() => import('./LitigationGanttView').then(m =>
 export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateToCaseTab }) => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState('canvas');
-  
+
   // LIFTED STATE: `useLitigationBuilder` now lives here as the source of truth
   const builderProps = useLitigationBuilder({ navigateToCaseTab });
   const { cases, selectedCaseId, setSelectedCaseId, deployToCase, isDeploying } = builderProps;
@@ -50,18 +50,18 @@ export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateTo
       pageSubtitle="Design case lifecycles, map motion sequences, and visualize strategic timelines."
       pageActions={
         <div className="flex gap-2 items-center">
-            <select
-                value={selectedCaseId || ''}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedCaseId(e.target.value)}
-                className={cn("p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
-            >
-                <option value="">Select a Case to Deploy To...</option>
-                {safeCases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
-            </select>
-            <Button variant="primary" icon={isDeploying ? Loader2 : Rocket} onClick={deployToCase} disabled={!selectedCaseId || isDeploying}>
-                {isDeploying ? 'Deploying...' : 'Deploy'}
-            </Button>
-            <Button variant="outline" icon={Save}>Save Draft</Button>
+          <select
+            value={selectedCaseId || ''}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedCaseId(e.target.value)}
+            className={cn("p-2 border rounded text-sm outline-none", theme.surface.default, theme.border.default, theme.text.primary)}
+          >
+            <option value="">Select a Case to Deploy To...</option>
+            {safeCases.map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
+          </select>
+          <Button variant="primary" icon={isDeploying ? Loader2 : Rocket} onClick={deployToCase} disabled={!selectedCaseId || isDeploying}>
+            {isDeploying ? 'Deploying...' : 'Deploy'}
+          </Button>
+          <Button variant="outline" icon={Save}>Save Draft</Button>
         </div>
       }
       tabConfig={LITIGATION_TABS}
@@ -71,10 +71,10 @@ export const LitigationBuilder: React.FC<LitigationBuilderProps> = ({ navigateTo
       <div className={cn("h-full w-full", theme.background)}>
         <ErrorBoundary>
           <Suspense fallback={<LazyLoader message="Loading Strategy Engine..." />}>
-              {activeTab === 'canvas' && <StrategyCanvas {...builderProps} />}
-              {activeTab === 'timeline' && <LitigationGanttView {...builderProps} />}
-              {activeTab === 'templates' && <PlaybookLibrary onApply={(p) => builderProps.loadPlaybook(p)} />}
-              {activeTab === 'simulate' && <OutcomeSimulator />}
+            {activeTab === 'canvas' && <StrategyCanvas {...builderProps} />}
+            {activeTab === 'timeline' && <LitigationGanttView {...builderProps} />}
+            {activeTab === 'templates' && <PlaybookLibrary onApply={(p) => builderProps.loadPlaybook(p)} />}
+            {activeTab === 'simulate' && <OutcomeSimulator />}
           </Suspense>
         </ErrorBoundary>
       </div>

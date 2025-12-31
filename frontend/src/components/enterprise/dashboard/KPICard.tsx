@@ -4,11 +4,11 @@
  * @description Animated KPI card component with counter animation
  */
 
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { LucideIcon, TrendingUp, TrendingDown } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import { motion } from 'framer-motion';
+import { LucideIcon, TrendingDown, TrendingUp } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 export interface KPICardProps {
   title: string;
@@ -30,7 +30,7 @@ export interface KPICardProps {
  * KPICard - Enterprise KPI card with animated counter
  * Displays key metrics with trend indicators and smooth animations
  */
-export const KPICard: React.FC<KPICardProps> = ({
+const KPICardComponent: React.FC<KPICardProps> = ({
   title,
   value,
   prefix = '',
@@ -49,13 +49,13 @@ export const KPICard: React.FC<KPICardProps> = ({
 
   // Animated counter effect
   useEffect(() => {
-    const startTime = Date.now();
+    const startTime = performance.now();
     const startValue = displayValue;
     const endValue = value;
     const duration = animationDuration;
 
     const animate = () => {
-      const now = Date.now();
+      const now = performance.now();
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / duration, 1);
 
@@ -71,7 +71,7 @@ export const KPICard: React.FC<KPICardProps> = ({
     };
 
     requestAnimationFrame(animate);
-  }, [value, animationDuration]);
+  }, [value, animationDuration, displayValue]);
 
   const formatValue = (val: number): string => {
     switch (format) {
@@ -156,3 +156,7 @@ export const KPICard: React.FC<KPICardProps> = ({
     </motion.div>
   );
 };
+
+export const KPICard = React.memo(KPICardComponent);
+KPICard.displayName = 'KPICard';
+export default KPICard;

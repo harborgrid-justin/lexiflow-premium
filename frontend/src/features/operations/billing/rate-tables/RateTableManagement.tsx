@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { DollarSign, Plus, Edit, Trash2, Users } from 'lucide-react';
-import { useTheme } from '@providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
-import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
-import { useNotify } from '@/hooks/useNotify';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { useModalState } from '@/hooks/useModalState';
-import { useSelection } from '@/hooks/useSelectionState';
+import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
+import { useSelection } from '@/hooks/useSelectionState';
 import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
+import { queryKeys } from '@/utils/queryKeys';
+import { useTheme } from '@providers/ThemeContext';
+import { DollarSign, Edit, Plus, Trash2, Users } from 'lucide-react';
+import React, { useCallback, useState } from 'react';
 
 interface RateTable {
   id: string;
@@ -27,7 +27,7 @@ interface RateTable {
   createdAt: string;
 }
 
-export const RateTableManagement: React.FC = () => {
+const RateTableManagementComponent: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
 
@@ -106,30 +106,34 @@ export const RateTableManagement: React.FC = () => {
     deleteModal.open();
   };
 
-  const addRate = () => {
-    setFormData({
-      ...formData,
-      rates: [...(formData.rates || []), { role: '', rate: 0 }],
+  const addRate = useCallback(() => {
+    setFormData(prev => ({
+      ...prev,
+      rates: [...(prev.rates || []), { role: '', rate: 0 }],
+    }));
+  }, []);
+
+  const updateRate = useCallback((index: number, field: 'role' | 'rate', value: string | number) => {
+    setFormData(prev => {
+      const newRates = [...(prev.rates || [])];
+      newRates[index] = { ...newRates[index], [field]: value };
+      return { ...prev, rates: newRates };
     });
-  };
+  }, []);
 
-  const updateRate = (index: number, field: 'role' | 'rate', value: string | number) => {
-    const newRates = [...(formData.rates || [])];
-    newRates[index] = { ...newRates[index], [field]: value };
-    setFormData({ ...formData, rates: newRates });
-  };
-
-  const removeRate = (index: number) => {
-    const newRates = (formData.rates || []).filter((_, i) => i !== index);
-    setFormData({ ...formData, rates: newRates });
-  };
+  const removeRate = useCallback((index: number) => {
+    setFormData(prev => {
+      const newRates = (prev.rates || []).filter((_, i) => i !== index);
+      return { ...prev, rates: newRates };
+    });
+  }, []);
 
   return (
     <div className="space-y-6 animate-fade-in">
       <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
-            <DollarSign className="h-5 w-5 mr-2 text-green-500"/> Rate Table Management
+            <DollarSign className="h-5 w-5 mr-2 text-green-500" /> Rate Table Management
           </h3>
           <p className={cn("text-sm", theme.text.secondary)}>Configure billing rates for different roles and clients.</p>
         </div>
@@ -167,7 +171,7 @@ export const RateTableManagement: React.FC = () => {
               <TableCell className="text-sm">{table.effectiveDate}</TableCell>
               <TableCell>
                 <Badge variant="info">
-                  <Users className="h-3 w-3 mr-1"/> {table.rates.length} roles
+                  <Users className="h-3 w-3 mr-1" /> {table.rates.length} roles
                 </Badge>
               </TableCell>
               <TableCell>
@@ -191,13 +195,13 @@ export const RateTableManagement: React.FC = () => {
           <Input
             label="Table Name"
             value={formData.name || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })}
             placeholder="e.g., Standard Client Rates 2024"
           />
           <Input
             label="Description"
             value={formData.description || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, description: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, description: e.target.value })}
             placeholder="Brief description of this rate table"
           />
           <div className="grid grid-cols-2 gap-4">
@@ -205,13 +209,13 @@ export const RateTableManagement: React.FC = () => {
               label="Default Rate ($/hr)"
               type="number"
               value={formData.defaultRate || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, defaultRate: parseFloat(e.target.value)})}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, defaultRate: parseFloat(e.target.value) })}
             />
             <Input
               label="Effective Date"
               type="date"
               value={formData.effectiveDate || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, effectiveDate: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, effectiveDate: e.target.value })}
             />
           </div>
 
@@ -223,7 +227,7 @@ export const RateTableManagement: React.FC = () => {
             </div>
             <div className="space-y-2">
               {(formData.rates || []).map((rate, index) => (
-                <div key={index} className="flex gap-2 items-center">
+                <div key={`rate-${index}-${formData.rates?.[index]?.role || 'new'}`} className="flex gap-2 items-center">
                   <Input
                     placeholder="Role name"
                     value={rate.role}
@@ -272,5 +276,8 @@ export const RateTableManagement: React.FC = () => {
     </div>
   );
 };
+
+export const RateTableManagement = memo(RateTableManagementComponent);
+RateTableManagement.displayName = 'RateTableManagement';
 
 export default RateTableManagement;

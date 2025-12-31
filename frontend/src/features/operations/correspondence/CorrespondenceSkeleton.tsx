@@ -30,7 +30,7 @@ export const CommunicationLogSkeleton: React.FC = () => {
       <div className="flex-1 overflow-hidden">
         {[...Array(10)].map((_, i) => (
           <div
-            key={i}
+            key={`comm-log-skeleton-${i}`}
             className={cn(
               "flex items-center border-b px-4 h-[60px]",
               theme.border.default
@@ -73,7 +73,7 @@ export const ServiceTrackerSkeleton: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[...Array(6)].map((_, i) => (
           <div
-            key={i}
+            key={`service-tracker-skeleton-${i}`}
             className={cn(
               "p-5 rounded-xl border shadow-sm flex flex-col",
               theme.surface.default,

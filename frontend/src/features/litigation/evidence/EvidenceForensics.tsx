@@ -70,10 +70,12 @@ class VerificationQueue {
     try {
       // Simulate blockchain verification (in real app, calls Ethereum/Hyperledger)
       await new Promise(resolve => setTimeout(resolve, DEBUG_API_SIMULATION_DELAY_MS + 500));
+      // Generate random block height in async callback (not during render) for deterministic rendering
+      const randomBlockSuffix = Math.floor(Math.random() * 1000);
       const result = {
         verified: true,
         timestamp: new Date().toISOString(),
-        blockHeight: '18452' + Math.floor(Math.random() * 1000)
+        blockHeight: '18452' + randomBlockSuffix
       };
       job.resolve(result);
     } catch (error) {
@@ -101,6 +103,7 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
         evidenceQueryKeys.evidence.verification(selectedItem.id)
       );
 
+      // Date.now() OK here - inside useEffect, not during render phase
       if (cached?.data && (cached.data as any).expiresAt > Date.now()) {
         setVerifyData((cached.data as any).data);
         setVerificationStatus('verified');
@@ -129,6 +132,7 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
       setVerificationStatus('verified');
 
       // Cache result for 24 hours (86400000 ms)
+      // Date.now() OK here - inside async handler, not during render phase
       queryClient.setQueryData(
         evidenceQueryKeys.evidence.verification(selectedItem.id),
         {

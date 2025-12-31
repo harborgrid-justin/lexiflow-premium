@@ -70,7 +70,14 @@ export const UserProfileManager = () => {
   );
 
   const renderContent = () => {
-    if (!profile) return null;
+    // LAYOUT-STABLE: Always render something to prevent layout shift
+    if (!profile) {
+      return (
+        <div className="p-6 flex items-center justify-center">
+          <div className="text-slate-400 animate-pulse">Loading profile data...</div>
+        </div>
+      );
+    }
     switch (activeTab) {
       case 'overview': return <ProfileOverview profile={profile} />;
       case 'preferences': return <PreferencePane profile={profile} />;

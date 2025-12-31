@@ -17,7 +17,8 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Input, TextArea } from '@/components/atoms';
+import { Input } from '@/components/ui/atoms/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

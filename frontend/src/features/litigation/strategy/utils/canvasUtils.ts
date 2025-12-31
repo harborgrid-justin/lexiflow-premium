@@ -1,15 +1,22 @@
 /**
  * canvasUtils.ts
- * 
+ *
  * Utility functions for Strategy Canvas interaction logic.
- * 
+ *
  * @module components/litigation/utils/canvasUtils
  */
 
-import { Edit2, Copy, Trash2, Layout, GitBranch, BoxSelect } from 'lucide-react';
-import { NodeType } from '@/features/cases/components/workflow/builder/types';
-import { ContextMenuItem } from '@/components/molecules';
-import { CANVAS_CONSTANTS } from '../canvasConstants';
+import { type ContextMenuItem } from "@/components/ui/molecules/ContextMenu";
+import { NodeType } from "@/features/cases/components/workflow/builder/types";
+import {
+  BoxSelect,
+  Copy,
+  Edit2,
+  GitBranch,
+  Layout,
+  Trash2,
+} from "lucide-react";
+import { CANVAS_CONSTANTS } from "../canvasConstants";
 
 /**
  * Calculates canvas position from drop event
@@ -21,8 +28,12 @@ export const calculateDropPosition = (
   scale: number
 ): { x: number; y: number } => {
   const rect = canvasElement.getBoundingClientRect();
-  const x = (event.clientX - rect.left - pan.x) / scale - CANVAS_CONSTANTS.NODE_WIDTH_HALF;
-  const y = (event.clientY - rect.top - pan.y) / scale - CANVAS_CONSTANTS.NODE_HEIGHT_HALF;
+  const x =
+    (event.clientX - rect.left - pan.x) / scale -
+    CANVAS_CONSTANTS.NODE_WIDTH_HALF;
+  const y =
+    (event.clientY - rect.top - pan.y) / scale -
+    CANVAS_CONSTANTS.NODE_HEIGHT_HALF;
   return { x, y };
 };
 
@@ -51,22 +62,22 @@ export const generateNodeContextMenuItems = (
   onDelete: (id: string) => void
 ): ContextMenuItem[] => {
   return [
-    { 
-      label: 'Edit Properties', 
-      icon: Edit2, 
-      action: () => onEdit(nodeId)
+    {
+      label: "Edit Properties",
+      icon: Edit2,
+      action: () => onEdit(nodeId),
     },
-    { 
-      label: 'Duplicate Node', 
-      icon: Copy, 
-      action: () => onDuplicate(nodeId)
+    {
+      label: "Duplicate Node",
+      icon: Copy,
+      action: () => onDuplicate(nodeId),
     },
-    { 
-      label: 'Delete Node', 
-      icon: Trash2, 
-      danger: true, 
-      action: () => onDelete(nodeId)
-    }
+    {
+      label: "Delete Node",
+      icon: Trash2,
+      danger: true,
+      action: () => onDelete(nodeId),
+    },
   ];
 };
 
@@ -78,20 +89,35 @@ export const generateCanvasContextMenuItems = (
   onAddNode: (type: NodeType, x: number, y: number) => void
 ): ContextMenuItem[] => {
   return [
-    { 
-      label: 'Add Task Node', 
-      icon: Layout, 
-      action: () => onAddNode('Task', position.x - CANVAS_CONSTANTS.NODE_WIDTH_HALF, position.y - CANVAS_CONSTANTS.NODE_HEIGHT_HALF)
+    {
+      label: "Add Task Node",
+      icon: Layout,
+      action: () =>
+        onAddNode(
+          "Task",
+          position.x - CANVAS_CONSTANTS.NODE_WIDTH_HALF,
+          position.y - CANVAS_CONSTANTS.NODE_HEIGHT_HALF
+        ),
     },
-    { 
-      label: 'Add Decision Node', 
-      icon: GitBranch, 
-      action: () => onAddNode('Decision', position.x - CANVAS_CONSTANTS.DECISION_NODE_SIZE, position.y - CANVAS_CONSTANTS.DECISION_NODE_SIZE)
+    {
+      label: "Add Decision Node",
+      icon: GitBranch,
+      action: () =>
+        onAddNode(
+          "Decision",
+          position.x - CANVAS_CONSTANTS.DECISION_NODE_SIZE,
+          position.y - CANVAS_CONSTANTS.DECISION_NODE_SIZE
+        ),
     },
-    { 
-      label: 'Add Phase Container', 
-      icon: BoxSelect, 
-      action: () => onAddNode('Phase', position.x - CANVAS_CONSTANTS.PHASE_WIDTH, position.y - CANVAS_CONSTANTS.PHASE_HEIGHT)
-    }
+    {
+      label: "Add Phase Container",
+      icon: BoxSelect,
+      action: () =>
+        onAddNode(
+          "Phase",
+          position.x - CANVAS_CONSTANTS.PHASE_WIDTH,
+          position.y - CANVAS_CONSTANTS.PHASE_HEIGHT
+        ),
+    },
   ];
 };

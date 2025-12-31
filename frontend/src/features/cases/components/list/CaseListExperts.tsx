@@ -1,9 +1,9 @@
 /**
  * CaseListExperts.tsx
- * 
+ *
  * Expert witness management view with specialization tracking,
  * availability status, and retention information.
- * 
+ *
  * @module components/case-list/CaseListExperts
  * @category Case Management - Expert Views
  */
@@ -11,19 +11,19 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Loader2 } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -42,14 +42,14 @@ interface Expert {
 
 export const CaseListExperts: React.FC = () => {
   const { theme } = useTheme();
-  
+
   // Performance Engine: Caching
   const { data: experts = [], isLoading } = useQuery<Expert[]>(
-      ['advisors', 'experts'],
-      () => DataService.warRoom.getExperts()
+    ['advisors', 'experts'],
+    () => DataService.warRoom.getExperts()
   );
 
-  if (isLoading) return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600"/></div>;
+  if (isLoading) return <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600" /></div>;
 
   // Ensure experts is an array
   const expertsList = Array.isArray(experts) ? experts : [];
@@ -74,12 +74,10 @@ export const CaseListExperts: React.FC = () => {
         </div>
       ))}
       {expertsList.length === 0 && (
-          <div className="col-span-3 py-12 text-center text-slate-400 border-2 border-dashed rounded-lg">
-              No expert witnesses retained.
-          </div>
+        <div className="col-span-3 py-12 text-center text-slate-400 border-2 border-dashed rounded-lg">
+          No expert witnesses retained.
+        </div>
       )}
     </div>
   );
 };
-
-

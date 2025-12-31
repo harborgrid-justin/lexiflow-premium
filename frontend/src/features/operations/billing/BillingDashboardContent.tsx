@@ -1,5 +1,5 @@
-import React, { lazy } from 'react';
 import { BillingView } from '@/config/tabs.config';
+import React, { lazy, memo } from 'react';
 
 const BillingOverview = lazy(() => import('./BillingOverview').then(m => ({ default: m.BillingOverview })));
 const BillingInvoices = lazy(() => import('./BillingInvoices').then(m => ({ default: m.BillingInvoices })));
@@ -8,11 +8,11 @@ const BillingLedger = lazy(() => import('./BillingLedger').then(m => ({ default:
 const Analytics = () => <div className="p-8 text-center text-slate-500">Financial Analytics Module Loading...</div>;
 
 interface BillingDashboardContentProps {
-  activeTab: BillingView;
-  navigateTo?: (view: string) => void;
+    activeTab: BillingView;
+    navigateTo?: (view: string) => void;
 }
 
-export const BillingDashboardContent: React.FC<BillingDashboardContentProps> = ({ activeTab, navigateTo }) => {
+const BillingDashboardContentComponent: React.FC<BillingDashboardContentProps> = ({ activeTab, navigateTo }) => {
     switch (activeTab as string) {
         case 'overview': return <BillingOverview onNavigate={navigateTo} />;
         case 'invoices': return <BillingInvoices />;
@@ -24,3 +24,6 @@ export const BillingDashboardContent: React.FC<BillingDashboardContentProps> = (
         default: return <BillingOverview onNavigate={navigateTo} />;
     }
 };
+
+export const BillingDashboardContent = memo(BillingDashboardContentComponent);
+BillingDashboardContent.displayName = 'BillingDashboardContent';

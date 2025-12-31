@@ -20,7 +20,7 @@ export const BillingOverviewSkeleton = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[1, 2, 3, 4].map((i) => (
           <div
-            key={i}
+            key={`stat-skeleton-${i}`}
             className={cn(
               'p-4 rounded-lg border',
               theme.surface.default,
@@ -54,7 +54,7 @@ export const BillingOverviewSkeleton = () => {
         <div className={cn('h-5 w-32 rounded mb-4', theme.surface.raised)} />
         <div className="space-y-3">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="flex items-center gap-4">
+            <div key={`top-client-skeleton-${i}`} className="flex items-center gap-4">
               <div className={cn('h-4 w-8 rounded', theme.surface.highlight)} />
               <div className={cn('h-4 flex-1 rounded', theme.surface.highlight)} />
               <div className={cn('h-4 w-24 rounded', theme.surface.highlight)} />

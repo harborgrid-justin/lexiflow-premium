@@ -4,11 +4,11 @@
  * @description Real-time metrics widget with live updates
  */
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { LucideIcon, RefreshCw, AlertCircle } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import { AnimatePresence, motion } from 'framer-motion';
+import { AlertCircle, LucideIcon, RefreshCw } from 'lucide-react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 export interface MetricItem {
   id: string;
@@ -37,7 +37,7 @@ export interface MetricsWidgetProps {
  * MetricsWidget - Real-time metrics display widget
  * Shows multiple metrics in a grid with optional auto-refresh
  */
-export const MetricsWidget: React.FC<MetricsWidgetProps> = ({
+const MetricsWidgetComponent: React.FC<MetricsWidgetProps> = ({
   title,
   metrics,
   isLoading = false,
@@ -58,17 +58,18 @@ export const MetricsWidget: React.FC<MetricsWidgetProps> = ({
         setLastUpdate(new Date());
       }, refreshInterval);
 
-      return () => clearInterval(interval);
+      return () => {
+        clearInterval(interval);
+      };
     }
-    return undefined;
   }, [autoRefresh, onRefresh, refreshInterval]);
 
-  const handleRefresh = () => {
+  const handleRefresh = useCallback(() => {
     if (onRefresh) {
       onRefresh();
       setLastUpdate(new Date());
     }
-  };
+  }, [onRefresh]);
 
   const getGridColumns = () => {
     switch (columns) {
@@ -222,3 +223,7 @@ export const MetricsWidget: React.FC<MetricsWidgetProps> = ({
     </motion.div>
   );
 };
+
+export const MetricsWidget = React.memo(MetricsWidgetComponent);
+MetricsWidget.displayName = 'MetricsWidget';
+export default MetricsWidget;

@@ -4,10 +4,10 @@
  * @description Bell icon with animated badge counter for real-time notifications
  */
 
-import React, { useState, useEffect } from 'react';
-import { Bell } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/utils/cn';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Bell } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -34,7 +34,7 @@ export interface NotificationBellProps {
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const NotificationBell: React.FC<NotificationBellProps> = ({
+const NotificationBellComponent: React.FC<NotificationBellProps> = ({
   unreadCount = 0,
   onClick,
   className,
@@ -52,11 +52,13 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
     if (animated && unreadCount > prevCount && unreadCount > 0) {
       setShouldShake(true);
       const timer = setTimeout(() => setShouldShake(false), 500);
-      setPrevCount(unreadCount);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+      };
     }
-    setPrevCount(unreadCount);
-    return undefined;
+    if (prevCount !== unreadCount) {
+      setPrevCount(unreadCount);
+    }
   }, [unreadCount, prevCount, animated]);
 
   // Size mappings
@@ -160,4 +162,6 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
   );
 };
 
+export const NotificationBell = React.memo(NotificationBellComponent);
+NotificationBell.displayName = 'NotificationBell';
 export default NotificationBell;

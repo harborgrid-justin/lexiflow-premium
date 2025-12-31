@@ -103,6 +103,7 @@ const InnerApp: React.FC = () => {
     </AppShell>
   );
 };
+InnerApp.displayName = 'InnerApp';
 
 const App: React.FC = () => {
   // Use Vite built-in env flags
@@ -133,5 +134,6 @@ const App: React.FC = () => {
     </ErrorBoundary>
   );
 };
+App.displayName = 'App';
 
 export default App;

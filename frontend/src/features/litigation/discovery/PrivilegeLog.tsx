@@ -1,9 +1,9 @@
 /**
  * PrivilegeLog.tsx
- * 
+ *
  * FRCP 26(b)(5) privilege log for documenting withheld documents
  * claiming attorney-client or work product privilege.
- * 
+ *
  * @module components/discovery/PrivilegeLog
  * @category Discovery - Privilege
  */
@@ -11,28 +11,28 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { Mail, Plus, Shield, Wand2 } from 'lucide-react';
 import React from 'react';
-import { Wand2, Plus, Shield, Mail } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { AdaptiveLoader } from '@/components/molecules';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader';
 
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
+import { useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
-import { cn } from '@/utils/cn';
 import { discoveryQueryKeys } from '@/services/infrastructure/queryKeys';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -42,17 +42,17 @@ import { PrivilegeLogEntry } from '@/types';
 export const PrivilegeLog: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  
+
   const { data: logItems = [], isLoading } = useQuery<PrivilegeLogEntry[]>(
-      discoveryQueryKeys.discovery.privilege.all,
-      DataService.discovery.getPrivilegeLog
+    discoveryQueryKeys.discovery.privilege.all,
+    DataService.discovery.getPrivilegeLog
   );
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
-      'mod+shift+p': () => {
-          notify.info('Add new privilege log entry (to be implemented)');
-      }
+    'mod+shift+p': () => {
+      notify.info('Add new privilege log entry (to be implemented)');
+    }
   });
 
   if (isLoading) return <AdaptiveLoader contentType="table" itemCount={8} shimmer />;
@@ -65,8 +65,8 @@ export const PrivilegeLog: React.FC = () => {
           <p className={cn("text-sm", theme.text.secondary)}>Index of withheld documents claiming Attorney-Client or Work Product privilege.</p>
         </div>
         <div className="flex gap-2 w-full md:w-auto">
-           <Button variant="outline" icon={Wand2} className="flex-1 md:flex-none">AI Scan</Button>
-           <Button variant="primary" icon={Plus} className="flex-1 md:flex-none">Manual Entry</Button>
+          <Button variant="outline" icon={Wand2} className="flex-1 md:flex-none">AI Scan</Button>
+          <Button variant="primary" icon={Plus} className="flex-1 md:flex-none">Manual Entry</Button>
         </div>
       </div>
 
@@ -105,7 +105,7 @@ export const PrivilegeLog: React.FC = () => {
           <div key={item.id} className={cn("p-4 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
             <div className="flex justify-between items-start mb-3">
               <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-amber-500"/>
+                <Shield className="h-4 w-4 text-amber-500" />
                 <span className={cn("font-mono text-xs font-bold", theme.text.primary)}>{item.id}</span>
               </div>
               <Badge variant="warning">{item.basis}</Badge>
@@ -127,7 +127,7 @@ export const PrivilegeLog: React.FC = () => {
             </div>
 
             <div className={cn("flex items-start gap-2 pt-3 border-t text-xs mt-2", theme.border.default, theme.text.secondary)}>
-              <Mail className={cn("h-3.5 w-3.5 mt-0.5", theme.text.tertiary)}/>
+              <Mail className={cn("h-3.5 w-3.5 mt-0.5", theme.text.tertiary)} />
               <div className="flex-1">
                 <p><strong>From:</strong> {item.author}</p>
                 <p><strong>To:</strong> {item.recipient}</p>

@@ -13,7 +13,7 @@ import React, { useState, useRef, lazy, Suspense } from 'react';
 import { Plus, Wand2, Loader2, ShieldCheck } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { TaskCreationModal } from '@/components/organisms';
+import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
 import { CaseDocumentItem } from './documents/CaseDocumentItem';
 
 // Internal Dependencies - Hooks & Context

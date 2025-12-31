@@ -12,7 +12,7 @@
  * - WCAG 2.1 AA compliant
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo, useCallback } from 'react';
 import { z } from 'zod';
 import { AuthApiService } from '@/api/auth/auth-api';
 import { PasswordStrengthMeter, calculatePasswordStrength } from './PasswordStrengthMeter';
@@ -45,7 +45,7 @@ interface FormErrors {
 
 type FormStep = 'reset' | 'success' | 'expired';
 
-export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
+const PasswordResetFormComponent: React.FC<PasswordResetFormProps> = ({
   token,
   onSuccess,
   onExpiredToken,
@@ -422,3 +422,6 @@ export const PasswordResetForm: React.FC<PasswordResetFormProps> = ({
     </div>
   );
 };
+
+export const PasswordResetForm = memo(PasswordResetFormComponent);
+PasswordResetForm.displayName = 'PasswordResetForm';

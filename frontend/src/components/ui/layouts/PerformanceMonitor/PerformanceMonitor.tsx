@@ -3,7 +3,7 @@
  * @category Layouts - Performance
  * @description React component for monitoring and optimizing layout performance with
  * real-time metrics, render tracking, and performance budgets.
- * 
+ *
  * FEATURES:
  * - Real-time render tracking
  * - Performance budget enforcement
@@ -16,10 +16,10 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useEffect, useRef, useState, ReactNode } from 'react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { AlertTriangle, CheckCircle } from 'lucide-react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -127,7 +127,7 @@ export const measureRenderTime = (callback: () => void): number => {
 /**
  * PerformanceMonitor tracks render performance and enforces performance budgets.
  * Only active in development by default to avoid production overhead.
- * 
+ *
  * @example
  * ```tsx
  * <PerformanceMonitor
@@ -159,13 +159,19 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
 
   const renderTimesRef = useRef<number[]>([]);
   const renderCountRef = useRef(0);
-  const mountTimeRef = useRef(performance.now());
+  const mountTimeRef = useRef<number | null>(null);
 
   // Only run in development unless explicitly enabled
   const isEnabled = process.env.NODE_ENV === 'development' || enableInProduction;
 
   useEffect(() => {
     if (!isEnabled) return;
+
+    // Initialize mount time on first effect run
+    if (mountTimeRef.current === null) {
+      mountTimeRef.current = performance.now();
+      return;
+    }
 
     const renderTime = performance.now() - mountTimeRef.current;
     renderCountRef.current += 1;
@@ -193,7 +199,7 @@ export const PerformanceMonitor: React.FC<PerformanceMonitorProps> = ({
     setMetrics(newMetrics);
 
     // Log to console in development
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       const status = renderTime > renderBudget ? '⚠️ SLOW' : '✅ OK';
       console.log(
         `[Performance] ${componentName} ${status}`,
@@ -257,7 +263,7 @@ export const useRenderMetrics = (componentName: string) => {
     const renderTime = currentTime - lastRenderTime.current;
     lastRenderTime.current = currentTime;
 
-    if (process.env.NODE_ENV === 'development') {
+    if (import.meta.env.DEV) {
       console.log(`[Render] ${componentName} #${renderCount.current} - ${renderTime.toFixed(2)}ms`);
     }
   });

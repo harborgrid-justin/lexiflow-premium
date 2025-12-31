@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { GitCommit, Zap, Play, Pause, AlertCircle, Plus } from 'lucide-react';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
+import { Card } from '@/components/ui/molecules/Card';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Card } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
-import { Button } from '@/components/atoms';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { AlertCircle, GitCommit, Pause, Play, Plus, Zap } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface EventBusEvent {
   id: string;
@@ -19,7 +19,7 @@ interface EventBusEvent {
 export const EventBusManager: React.FC = () => {
   const { theme } = useTheme();
   const [isMonitoring, setIsMonitoring] = useState(true);
-  
+
   // Fetch real event bus data from backend
   const { data: events = [], isLoading } = useQuery(['eventBus', 'events'], async () => {
     // Fetch from backend event bus service
@@ -143,7 +143,7 @@ export const EventBusManager: React.FC = () => {
                         <Badge
                           variant={
                             event.status === 'delivered' ? 'success' :
-                            event.status === 'pending' ? 'warning' : 'error'
+                              event.status === 'pending' ? 'warning' : 'error'
                           }
                         >
                           {event.status}

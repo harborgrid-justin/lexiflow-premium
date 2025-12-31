@@ -2,7 +2,7 @@
  * @module components/matters/CaseManagement
  * @category Case Management
  * @description Main case management interface with tabbed navigation following Case Workflows pattern
- * 
+ *
  * ARCHITECTURE:
  * - Uses PageHeader + two-level tabs (parent/sub) like MasterWorkflow
  * - Stats cards between navigation and content
@@ -11,19 +11,19 @@
  * - Backend API integration via DataService
  */
 
-import React, { useTransition, useMemo, Suspense } from 'react';
-import { Plus, Clock, Briefcase, Settings, Eye, Activity, DollarSign, Lightbulb, TrendingUp, RefreshCw, FileText, Shield, Users, Archive, ClipboardList, Scale } from 'lucide-react';
+import { api } from '@/api';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { Button } from '@/components/ui/atoms/Button';
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader';
+import { MatterView } from '@/config/tabs.config';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from '@/providers/ThemeContext';
-import { useQuery } from '@/hooks/useQueryHooks';
-import { api } from '@/api';
-import { PageHeader } from '@/components/organisms';
-import { Button } from '@/components/atoms';
-import { LazyLoader } from '@/components/molecules';
-import { CaseManagerContent } from './CaseManagerContent';
-import { cn } from '@/utils/cn';
-import { MatterView } from '@/config/tabs.config';
 import { CaseStatus } from '@/types';
+import { cn } from '@/utils/cn';
+import { Activity, Archive, Briefcase, ClipboardList, Clock, DollarSign, Eye, FileText, Lightbulb, Plus, RefreshCw, Scale, Settings, Shield, TrendingUp, Users } from 'lucide-react';
+import React, { Suspense, useMemo, useTransition } from 'react';
+import { CaseManagerContent } from './CaseManagerContent';
 
 // Two-level tab configuration
 const CASE_TABS = [
@@ -228,4 +228,3 @@ export const CaseManagement: React.FC = () => {
     </div>
   );
 };
-

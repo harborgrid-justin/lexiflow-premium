@@ -19,15 +19,15 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { fuzzySearch, type FuzzySearchOptions } from './FuzzySearch';
 import type { ColumnDefinition } from './DataGridColumn';
+import { fuzzySearch, type FuzzySearchOptions } from './FuzzySearch';
 
 // ============================================================================
 // TYPES & INTERFACES

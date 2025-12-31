@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TabNavigation } from '@/components/organisms';
+import { TabNavigation } from '@/components/organisms/TabNavigation';
 import { ThemeProvider } from '@/providers/ThemeContext';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { BarChart3, Calendar, FileText, Users } from 'lucide-react';
 import React, { useState } from 'react';
-import { FileText, Users, Calendar, BarChart3 } from 'lucide-react';
 
 /**
  * TabNavigation - Basic single-level navigation
- * 
+ *
  * The simplest tab pattern with icons. Use this for straightforward navigation
  * within a single context or page section.
  */

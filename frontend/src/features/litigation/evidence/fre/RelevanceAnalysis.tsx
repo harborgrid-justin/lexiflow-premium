@@ -9,10 +9,10 @@ import React from 'react';
 import { Filter, ThumbsUp, ThumbsDown, Scale, Wand2 } from 'lucide-react';
 
 // Common Components
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { RiskMeter } from '@/components/organisms';
+import { Card } from '@/components/ui/molecules/Card';
+import { Button } from '@/components/ui/atoms/Button';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { RiskMeter } from '@/components/features/cases/components/RiskMeter/RiskMeter';
 
 // Context & Utils
 import { useTheme } from '@/providers/ThemeContext';

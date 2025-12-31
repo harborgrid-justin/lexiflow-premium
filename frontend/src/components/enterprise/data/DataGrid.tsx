@@ -20,7 +20,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -28,12 +28,12 @@ import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react'
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { ColumnDefinition } from './DataGridColumn';
-import { DataGridFilters, FilterValue, FilterConfig } from './DataGridFilters';
+import { ColumnResizer } from './DataGridColumnResizer';
+import { exportToCSV, exportToExcel, exportToPDF } from './DataGridExport';
+import { DataGridFilters, FilterConfig, FilterValue } from './DataGridFilters';
 import { DataGridPagination } from './DataGridPagination';
 import { DataGridToolbar } from './DataGridToolbar';
 import { InlineEditor } from './InlineEditor';
-import { ColumnResizer } from './DataGridColumnResizer';
-import { exportToCSV, exportToExcel, exportToPDF } from './DataGridExport';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -331,8 +331,8 @@ export function DataGrid<T extends Record<string, unknown>>({
       const existing = sortState[existingIndex];
       const newDirection: SortDirection =
         existing.direction === 'asc' ? 'desc' :
-        existing.direction === 'desc' ? null :
-        'asc';
+          existing.direction === 'desc' ? null :
+            'asc';
 
       if (newDirection === null) {
         setSortState(sortState.filter((_: SortState<T>, i: number) => i !== existingIndex));

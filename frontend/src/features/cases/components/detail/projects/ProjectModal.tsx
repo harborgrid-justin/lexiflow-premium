@@ -11,9 +11,10 @@
 import React, { useState } from 'react';
 
 // Internal Dependencies - Components
-import { Modal } from '@/components/molecules';
-import { Input, TextArea } from '@/components/atoms';
-import { Button } from '@/components/atoms';
+import { Modal } from '@/components/ui/molecules/Modal';
+import { Input } from '@/components/ui/atoms/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Button } from '@/components/ui/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

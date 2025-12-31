@@ -112,8 +112,10 @@ export function VendorManagement() {
 
   const handleSave = () => {
     if (!newVendor.name) return;
+    // Generate ID in event handler (not during render) for deterministic rendering
+    const newId = `vnd-${Date.now()}`;
     addVendor({
-      id: `vnd-${Date.now()}`,
+      id: newId,
       name: newVendor.name,
       serviceType: newVendor.serviceType as unknown as Record<string, unknown> || 'Court Reporting',
       contactName: newVendor.contactName || '',

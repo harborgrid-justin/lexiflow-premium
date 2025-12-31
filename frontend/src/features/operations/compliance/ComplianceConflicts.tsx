@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Download, Filter, Plus, User } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -43,7 +43,7 @@ interface ComplianceConflictsProps {
 // COMPONENT
 // ============================================================================
 
-export const ComplianceConflicts: React.FC<ComplianceConflictsProps> = ({ conflicts }) => {
+const ComplianceConflictsComponent: React.FC<ComplianceConflictsProps> = ({ conflicts }) => {
   const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -97,7 +97,7 @@ export const ComplianceConflicts: React.FC<ComplianceConflictsProps> = ({ confli
                 {c.foundIn.length > 0 ? (
                   <div className="flex flex-wrap gap-1">
                     {c.foundIn.map((hit, i) => (
-                      <span key={i} className={cn("text-[10px] px-2 py-0.5 rounded border flex items-center", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
+                      <span key={`conflict-${c.id}-hit-${hit}-${i}`} className={cn("text-[10px] px-2 py-0.5 rounded border flex items-center", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
                         {hit}
                       </span>
                     ))}
@@ -122,3 +122,6 @@ export const ComplianceConflicts: React.FC<ComplianceConflictsProps> = ({ confli
     </div>
   );
 };
+
+export const ComplianceConflicts = memo(ComplianceConflictsComponent);
+ComplianceConflicts.displayName = 'ComplianceConflicts';

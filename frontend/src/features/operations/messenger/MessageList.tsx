@@ -58,7 +58,7 @@ export const MessageList = memo(function MessageList({ conversation, currentUser
               isPrivileged={msg.isPrivileged}
             >
               {msg.attachments && msg.attachments.map((att, i) => (
-                <div key={i} className="mt-2 w-full max-w-sm">
+                <div key={`msg-${msg.id}-att-${att.name}-${i}`} className="mt-2 w-full max-w-sm">
                   <FileAttachment
                     name={att.name}
                     size={(typeof att.size === 'number' ? String(att.size) : att.size) as string | undefined}

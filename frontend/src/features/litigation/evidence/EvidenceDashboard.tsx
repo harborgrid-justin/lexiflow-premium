@@ -11,9 +11,9 @@ import { ShieldCheck, AlertTriangle, HardDrive, Box, Activity } from 'lucide-rea
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 // Common Components
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { MetricCard } from '@/components/molecules';
+import { Card } from '@/components/ui/molecules/Card';
+import { Button } from '@/components/ui/atoms/Button';
+import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 
 // Context & Utils
 import { useTheme } from '@/providers/ThemeContext';
@@ -32,7 +32,7 @@ interface EvidenceDashboardProps {
 
 export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate }) => {
   const { theme, mode } = useTheme();
-  
+
   // Load evidence from IndexedDB via useQuery for accurate, cached data
   const { data } = useQuery(
     queryKeys.evidence.all(),
@@ -80,28 +80,28 @@ export const EvidenceDashboard: React.FC<EvidenceDashboardProps> = ({ onNavigate
     <div className="space-y-6 animate-fade-in">
       {/* Top Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <MetricCard 
-            label="Total Evidence" 
-            value={stats.total} 
-            icon={Box} 
+        <MetricCard
+            label="Total Evidence"
+            value={stats.total}
+            icon={Box}
             className="border-l-4 border-l-blue-600"
         />
-        <MetricCard 
-            label="Digital Assets" 
-            value={stats.digital} 
-            icon={HardDrive} 
+        <MetricCard
+            label="Digital Assets"
+            value={stats.digital}
+            icon={HardDrive}
             className="border-l-4 border-l-purple-600"
         />
-        <MetricCard 
-            label="Admissibility Risk" 
-            value={stats.challenged} 
-            icon={AlertTriangle} 
+        <MetricCard
+            label="Admissibility Risk"
+            value={stats.challenged}
+            icon={AlertTriangle}
             className="border-l-4 border-l-amber-500"
         />
-        <MetricCard 
-            label="Chain Integrity" 
-            value={100} 
-            icon={ShieldCheck} 
+        <MetricCard
+            label="Chain Integrity"
+            value={100}
+            icon={ShieldCheck}
             className="border-l-4 border-l-emerald-600"
         />
       </div>

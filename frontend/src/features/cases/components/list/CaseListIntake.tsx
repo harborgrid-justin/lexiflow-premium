@@ -18,11 +18,12 @@ import { Calendar, Plus, DollarSign} from 'lucide-react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { KanbanBoard, KanbanColumn, KanbanCard } from '@/components/organisms';
-import { Modal } from '@/components/molecules';
-import { Input, TextArea } from '@/components/atoms';
-import { Button } from '@/components/atoms';
-import { AdaptiveLoader } from '@/components/molecules';
+import { KanbanBoard, KanbanColumn, KanbanCard } from '@/components/features/cases/components/Kanban/Kanban';
+import { Modal } from '@/components/ui/molecules/Modal';
+import { Input } from '@/components/ui/atoms/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Button } from '@/components/ui/atoms/Button';
+import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

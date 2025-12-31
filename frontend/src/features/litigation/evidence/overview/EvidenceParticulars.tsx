@@ -10,9 +10,9 @@ import React, { useState } from 'react';
 import { User, Activity, Link, Sparkles } from 'lucide-react';
 
 // Common Components
-import { Card } from '@/components/molecules';
-import { Badge } from '@/components/atoms';
-import { EvidenceTypeIcon } from '@/components/atoms';
+import { Card } from '@/components/ui/molecules/Card';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { EvidenceTypeIcon } from '@/components/ui/atoms/EvidenceTypeIcon/EvidenceTypeIcon';
 
 // Context & Utils
 import { useTheme } from '@/providers/ThemeContext';
@@ -46,8 +46,8 @@ export const EvidenceParticulars: React.FC<EvidenceParticularsProps> = ({ select
           <div>
             <div className="flex justify-between items-center mb-2">
               <label className={cn("block text-xs font-semibold uppercase", theme.text.secondary)}>Description</label>
-              <button 
-                onClick={handleAnalyze} 
+              <button
+                onClick={handleAnalyze}
                 disabled={isAnalyzing}
                 className={cn(
                   "text-xs flex items-center px-2 py-1 rounded transition-colors",
@@ -89,7 +89,7 @@ export const EvidenceParticulars: React.FC<EvidenceParticularsProps> = ({ select
               <label className={cn("block text-xs font-semibold uppercase mb-1", theme.text.secondary)}>Collection Date</label>
               <div className={cn("text-sm", theme.text.primary)}>{selectedItem.collectionDate}</div>
             </div>
-            
+
             <div className="col-span-2">
               <label className={cn("block text-xs font-semibold uppercase mb-2", theme.text.secondary)}>Blockchain Verification</label>
               <div className="flex items-center p-3 bg-slate-900 rounded-md text-white font-mono text-xs">

@@ -83,7 +83,7 @@ export const DataCatalog: React.FC<DataCatalogProps> = ({ initialTab = 'browse',
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4">
                                 {domains.map((domain, i) => (
                                     <div
-                                        key={i}
+                                        key={`domain-${domain.name}-${i}`}
                                         onClick={() => setSelectedDomain(domain.name)}
                                         className={cn(
                                             "p-5 rounded-lg border transition-all cursor-pointer group relative overflow-hidden hover:shadow-md",

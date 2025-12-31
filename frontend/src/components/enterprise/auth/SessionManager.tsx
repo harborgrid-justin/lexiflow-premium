@@ -48,6 +48,7 @@ export const SessionManager: React.FC<SessionManagerProps> = ({
   const [revokingSessionId, setRevokingSessionId] = useState<string | null>(null);
   const [error, setError] = useState('');
 
+  // Sync internal state when prop changes
   useEffect(() => {
     setSessions(initialSessions);
   }, [initialSessions]);

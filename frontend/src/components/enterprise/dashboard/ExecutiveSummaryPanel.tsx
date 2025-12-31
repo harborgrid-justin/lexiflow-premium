@@ -5,23 +5,23 @@
  * Displays high-level metrics for executive decision-making
  */
 
-import React, { useMemo } from 'react';
+import { useTheme } from '@/providers/ThemeContext';
+import type { BaseDashboardProps, ExecutiveSummary } from '@/types/dashboard';
+import { cn } from '@/utils/cn';
 import { motion } from 'framer-motion';
 import {
-  DollarSign,
-  Briefcase,
-  Users,
-  TrendingUp,
-  Clock,
-  Target,
-  Award,
   AlertCircle,
+  Award,
+  Briefcase,
   Calendar,
   CheckCircle,
+  Clock,
+  DollarSign,
+  Target,
+  TrendingUp,
+  Users,
 } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import type { ExecutiveSummary, BaseDashboardProps } from '@/types/dashboard';
+import React, { useMemo } from 'react';
 
 export interface ExecutiveSummaryPanelProps extends BaseDashboardProps {
   summary: ExecutiveSummary;
@@ -33,7 +33,7 @@ export interface ExecutiveSummaryPanelProps extends BaseDashboardProps {
  * ExecutiveSummaryPanel - High-level executive dashboard
  * Provides a comprehensive overview of key business metrics
  */
-export const ExecutiveSummaryPanel: React.FC<ExecutiveSummaryPanelProps> = ({
+const ExecutiveSummaryPanelComponent: React.FC<ExecutiveSummaryPanelProps> = ({
   summary,
   period = 'This Month',
   comparisonPeriod = 'vs Last Month',
@@ -306,3 +306,6 @@ export const ExecutiveSummaryPanel: React.FC<ExecutiveSummaryPanelProps> = ({
     </motion.div>
   );
 };
+
+export const ExecutiveSummaryPanel = React.memo(ExecutiveSummaryPanelComponent);
+ExecutiveSummaryPanel.displayName = 'ExecutiveSummaryPanel';

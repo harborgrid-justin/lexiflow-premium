@@ -17,7 +17,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -338,6 +338,7 @@ export function DataGridPagination({
       )}
     </div>
   );
-}
+};
 
+export const DataGridPagination = memo(DataGridPaginationComponent);
 DataGridPagination.displayName = 'DataGridPagination';

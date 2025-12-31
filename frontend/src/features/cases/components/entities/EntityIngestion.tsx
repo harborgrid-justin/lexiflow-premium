@@ -20,8 +20,8 @@ import { UploadCloud, CheckCircle, RefreshCw, Link, AlertTriangle } from 'lucide
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
+import { Card } from '@/components/ui/molecules/Card';
+import { Button } from '@/components/ui/atoms/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

@@ -1,23 +1,23 @@
 
-import React, { useState, useMemo, useCallback, useEffect, useTransition } from 'react';
-import { Plus, RefreshCw, Play, Loader2, AlertTriangle } from 'lucide-react';
-import { PageHeader } from '@/components/organisms';
-import { Button } from '@/components/atoms';
+import { ErrorBoundary } from '@/components/organisms/ErrorBoundary';
+import { PageHeader } from '@/components/organisms/PageHeader';
+import { Button } from '@/components/ui/atoms/Button';
+import { EmptyState } from '@/components/ui/molecules/EmptyState';
 import { DataService } from '@/services/data/dataService';
-import { ErrorBoundary } from '@/components/organisms';
-import { EmptyState } from '@/components/molecules';
+import { AlertTriangle, Loader2, Play, Plus, RefreshCw } from 'lucide-react';
+import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';
 
 // Direct Imports to optimize Tree-Shaking and HMR
+import { TaskStatusBackend, WorkflowTask, WorkflowTemplateData } from '@/types';
 import { CaseWorkflowList } from './CaseWorkflowList';
-import { FirmProcessList } from './FirmProcessList';
 import { EnhancedWorkflowPanel } from './EnhancedWorkflowPanel';
-import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
+import { FirmProcessDetail } from './FirmProcessDetail';
+import { FirmProcessList } from './FirmProcessList';
 import { WorkflowAnalyticsDashboard } from './WorkflowAnalyticsDashboard';
 import { WorkflowConfig } from './WorkflowConfig';
 import { WorkflowEngineDetail } from './WorkflowEngineDetail';
-import { FirmProcessDetail } from './FirmProcessDetail';
 import { WorkflowLibrary } from './WorkflowLibrary';
-import { WorkflowTemplateData, WorkflowTask, TaskStatusBackend } from '@/types';
+import { WorkflowTemplateBuilder } from './WorkflowTemplateBuilder';
 
 // Type derived from BUSINESS_PROCESSES data model
 interface FirmProcess {
@@ -30,14 +30,14 @@ interface FirmProcess {
   owner: string;
 }
 
+import { useNotify } from '@/hooks/useNotify';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
+import { WorkflowRepository } from '@/services/data/repositories/WorkflowRepository';
+import { Case } from '@/types';
 import { cn } from '@/utils/cn';
 import { getTodayString } from '@/utils/dateUtils';
 import { WORKFLOW_TABS } from './WorkflowTabs';
-import { Case } from '@/types';
-import { useQuery, useMutation } from '@/hooks/useQueryHooks';
-import { useNotify } from '@/hooks/useNotify';
-import { WorkflowRepository } from '@/services/data/repositories/WorkflowRepository';
 // ✅ Migrated to backend API (2025-12-21)
 import { WorkflowView } from './types';
 
@@ -70,13 +70,13 @@ const calculateMetrics = (
   tasks: WorkflowTask[]
 ): WorkflowMetrics => {
   const today = getTodayString();
-  
+
   const activeWorkflows = cases.length + processes.filter(p => p.status === 'Active').length;
-  
+
   const tasksDueToday = tasks.filter(
-    t => t.dueDate === today && 
-         t.status !== TaskStatusBackend.COMPLETED && 
-         t.status !== TaskStatusBackend.CANCELLED
+    t => t.dueDate === today &&
+      t.status !== TaskStatusBackend.COMPLETED &&
+      t.status !== TaskStatusBackend.CANCELLED
   ).length;
 
   // Calculate automations ran (completed tasks in last 30 days)
@@ -97,7 +97,7 @@ const calculateMetrics = (
     if (!t.updatedAt || !t.dueDate) return true;
     return new Date(t.updatedAt) <= new Date(t.dueDate);
   });
-  const efficiencyGain = tasksWithDueDate.length > 0 
+  const efficiencyGain = tasksWithDueDate.length > 0
     ? Math.round((onTimeTasks.length / tasksWithDueDate.length) * 100) - 78 // Base efficiency is 78%
     : 0;
 
@@ -125,24 +125,24 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedType, setSelectedType] = useState<'case' | 'process'>('case');
   const [selectedTemplate, setSelectedTemplate] = useState<WorkflowTemplateData | null>(null);
-  
+
   const setActiveTab = useCallback((tab: WorkflowView) => {
     startTransition(() => {
-        _setActiveTab(tab);
+      _setActiveTab(tab);
     });
   }, []);
 
   // ==========================================================================
   // HOOKS - Data Fetching
   // ==========================================================================
-  const { 
-    data: cases = [], 
-    isLoading: casesLoading, 
-    status: casesStatus, 
-    refetch: refetchCases 
+  const {
+    data: cases = [],
+    isLoading: casesLoading,
+    status: casesStatus,
+    refetch: refetchCases
   } = useQuery<Case[]>(
-      ['cases', 'all'],
-      DataService.cases.getAll
+    ['cases', 'all'],
+    DataService.cases.getAll
   );
 
   const {
@@ -151,37 +151,37 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
     status: procsStatus,
     refetch: refetchProcesses
   } = useQuery<FirmProcess[]>(
-      ['processes', 'all'],
-      async () => {
-        const result = await WorkflowRepository.getProcesses();
-        return result as FirmProcess[];
-      }
+    ['processes', 'all'],
+    async () => {
+      const result = await WorkflowRepository.getProcesses();
+      return result as FirmProcess[];
+    }
   );
 
-  const { 
+  const {
     data: tasks = [],
-    refetch: refetchTasks 
+    refetch: refetchTasks
   } = useQuery<WorkflowTask[]>(
-      ['tasks', 'all'],
-      () => DataService.tasks.getAll()
+    ['tasks', 'all'],
+    () => DataService.tasks.getAll()
   );
 
   // ==========================================================================
   // COMPUTED VALUES
   // ==========================================================================
-  
+
   // Ensure all data is always an array
   const casesArray = useMemo(() => Array.isArray(cases) ? cases : [], [cases]);
   const tasksArray = useMemo(() => Array.isArray(tasks) ? tasks : [], [tasks]);
   const firmProcessesArray = useMemo(() => Array.isArray(firmProcesses) ? firmProcesses : [], [firmProcesses]);
 
   // Calculate metrics from real data
-  const metrics = useMemo(() => 
+  const metrics = useMemo(() =>
     calculateMetrics(casesArray, firmProcessesArray, tasksArray),
     [casesArray, firmProcessesArray, tasksArray]
   );
 
-  const activeParentTab = useMemo(() => 
+  const activeParentTab = useMemo(() =>
     WORKFLOW_TABS.find(p => p.subTabs.some(s => s.id === activeTab)) || WORKFLOW_TABS[0],
     [activeTab]
   );
@@ -193,38 +193,38 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   // EFFECTS
   // ==========================================================================
   useEffect(() => {
-      if (initialTab) setActiveTab(initialTab);
+    if (initialTab) setActiveTab(initialTab);
   }, [initialTab, setActiveTab]);
 
   // ==========================================================================
   // HOOKS - Mutations
   // ==========================================================================
   const { mutate: runAutomation, isLoading: isRunning } = useMutation(
-      DataService.workflow.runAutomation,
-      { 
-          onSuccess: () => {
-              notify.success("Automation sequence initiated successfully.");
-              refetchTasks();
-          },
-          onError: (err: Error) => {
-              notify.error(`Failed to run automation: ${err.message}`);
-          }
+    DataService.workflow.runAutomation,
+    {
+      onSuccess: () => {
+        notify.success("Automation sequence initiated successfully.");
+        refetchTasks();
+      },
+      onError: (err: Error) => {
+        notify.error(`Failed to run automation: ${err.message}`);
       }
+    }
   );
 
   const { mutate: syncEngine, isLoading: isSyncing } = useMutation(
-      DataService.workflow.syncEngine,
-      { 
-          onSuccess: () => {
-              notify.info("Workflow engine state synchronized.");
-              refetchCases();
-              refetchProcesses();
-              refetchTasks();
-          },
-          onError: (err: Error) => {
-              notify.error(`Failed to sync engine: ${err.message}`);
-          }
+    DataService.workflow.syncEngine,
+    {
+      onSuccess: () => {
+        notify.info("Workflow engine state synchronized.");
+        refetchCases();
+        refetchProcesses();
+        refetchTasks();
+      },
+      onError: (err: Error) => {
+        notify.error(`Failed to sync engine: ${err.message}`);
       }
+    }
   );
 
   // ==========================================================================
@@ -282,9 +282,9 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   if (hasError) {
     return (
       <div className="h-full flex items-center justify-center">
-        <EmptyState 
-          title="Unable to load workflow data" 
-          description="There was a problem connecting to the database. Please try refreshing." 
+        <EmptyState
+          title="Unable to load workflow data"
+          description="There was a problem connecting to the database. Please try refreshing."
           icon={AlertTriangle}
           action={
             <Button onClick={() => window.location.reload()} icon={RefreshCw}>
@@ -301,23 +301,23 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
   // ==========================================================================
   return (
     <ErrorBoundary scope="MasterWorkflow">
-    <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
-      <div className="px-6 pt-6 shrink-0">
-        <PageHeader 
-          title="Case Workflows" 
-          subtitle="Orchestrate case lifecycles, automate tasks, and manage firm-wide business process automation."
-          actions={
-            <div className="flex gap-2">
-              {activeTab === 'templates' && <Button variant="primary" icon={Plus} onClick={() => handleCreateTemplate()}>New Template</Button>}
-              {activeTab === 'cases' && <Button variant="primary" icon={Play} onClick={() => runAutomation('all')} isLoading={isRunning}>Run Automation</Button>}
-              <Button variant="outline" icon={RefreshCw} onClick={() => syncEngine(undefined)} isLoading={isSyncing}>Sync Engine</Button>
-            </div>
-          }
-        />
+      <div className={cn("h-full flex flex-col animate-fade-in", theme.background)}>
+        <div className="px-6 pt-6 shrink-0">
+          <PageHeader
+            title="Case Workflows"
+            subtitle="Orchestrate case lifecycles, automate tasks, and manage firm-wide business process automation."
+            actions={
+              <div className="flex gap-2">
+                {activeTab === 'templates' && <Button variant="primary" icon={Plus} onClick={() => handleCreateTemplate()}>New Template</Button>}
+                {activeTab === 'cases' && <Button variant="primary" icon={Play} onClick={() => runAutomation('all')} isLoading={isRunning}>Run Automation</Button>}
+                <Button variant="outline" icon={RefreshCw} onClick={() => syncEngine(undefined)} isLoading={isSyncing}>Sync Engine</Button>
+              </div>
+            }
+          />
 
-        {/* Stats Overview - Only show on Execution tabs */}
-        {['cases', 'firm'].includes(activeTab) && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          {/* Stats Overview - Only show on Execution tabs */}
+          {['cases', 'firm'].includes(activeTab) && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <div className={cn("p-4 rounded-lg shadow-sm border", theme.surface.default, theme.border.default)}>
                 <p className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Active Workflows</p>
                 <p className={cn("text-2xl font-bold", theme.primary.text)}>{metrics.activeWorkflows}</p>
@@ -336,43 +336,42 @@ export const MasterWorkflow: React.FC<MasterWorkflowProps> = ({ onSelectCase, in
                   {metrics.efficiencyGain > 0 ? '+' : ''}{metrics.efficiencyGain}%
                 </p>
               </div>
-          </div>
-        )}
+            </div>
+          )}
 
-        {/* Desktop Parent Navigation */}
-        <div className={cn("hidden md:flex space-x-6 border-b mb-4", theme.border.default)}>
+          {/* Desktop Parent Navigation */}
+          <div className={cn("hidden md:flex space-x-6 border-b mb-4", theme.border.default)}>
             {WORKFLOW_TABS.map(parent => (
-                <button key={parent.id} onClick={() => handleParentTabChange(parent.id)} className={cn("flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2", activeParentTab.id === parent.id ? cn("border-current", theme.primary.text) : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`))}>
-                    <parent.icon className={cn("h-4 w-4 mr-2", activeParentTab.id === parent.id ? theme.primary.text : theme.text.tertiary)}/>{parent.label}
-                </button>
+              <button key={parent.id} onClick={() => handleParentTabChange(parent.id)} className={cn("flex items-center pb-3 px-1 text-sm font-medium transition-all border-b-2", activeParentTab.id === parent.id ? cn("border-current", theme.primary.text) : cn("border-transparent", theme.text.secondary, `hover:${theme.text.primary}`))}>
+                <parent.icon className={cn("h-4 w-4 mr-2", activeParentTab.id === parent.id ? theme.primary.text : theme.text.tertiary)} />{parent.label}
+              </button>
             ))}
-        </div>
+          </div>
 
-        {/* Sub-Navigation (Pills) */}
-        <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surface.highlight, theme.border.default)}>
+          {/* Sub-Navigation (Pills) */}
+          <div className={cn("flex space-x-2 overflow-x-auto no-scrollbar py-3 px-4 md:px-6 rounded-lg border mb-4", theme.surface.highlight, theme.border.default)}>
             {activeParentTab.subTabs.map(tab => (
-                <button key={tab.id} onClick={() => setActiveTab(tab.id as WorkflowView)} className={cn("flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border", activeTab === tab.id ? cn(theme.surface.default, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface.default}`))}>
-                    <tab.icon className={cn("h-3.5 w-3.5", activeTab === tab.id ? theme.primary.text : theme.text.tertiary)}/>{tab.label}
-                </button>
+              <button key={tab.id} onClick={() => setActiveTab(tab.id as WorkflowView)} className={cn("flex-shrink-0 px-3 py-1.5 rounded-full font-medium text-xs md:text-sm transition-all duration-200 whitespace-nowrap flex items-center gap-2 border", activeTab === tab.id ? cn(theme.surface.default, theme.primary.text, "shadow-sm border-transparent ring-1", theme.primary.border) : cn("bg-transparent", theme.text.secondary, "border-transparent", `hover:${theme.surface.default}`))}>
+                <tab.icon className={cn("h-3.5 w-3.5", activeTab === tab.id ? theme.primary.text : theme.text.tertiary)} />{tab.label}
+              </button>
             ))}
+          </div>
         </div>
-      </div>
 
-      <div className="flex-1 min-h-0 overflow-y-auto px-6 pb-6 custom-scrollbar">
-        <div className={cn(isPending && 'opacity-60 transition-opacity')}>
-            {isLoading && <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600 h-8 w-8"/></div>}
+        <div className="flex-1 min-h-0 overflow-y-auto px-6 pb-6 custom-scrollbar">
+          <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+            {isLoading && <div className="flex justify-center p-10"><Loader2 className="animate-spin text-blue-600 h-8 w-8" /></div>}
             {!isLoading && activeTab === 'templates' && <WorkflowLibrary onCreate={handleCreateTemplate} />}
             {!isLoading && activeTab === 'cases' && <CaseWorkflowList cases={casesArray} tasks={tasksArray} onSelectCase={onSelectCase} onManageWorkflow={handleManageWorkflow} />}
             {!isLoading && activeTab === 'firm' && <FirmProcessList processes={firmProcessesArray} onSelectProcess={handleSelectProcess} />}
             {activeTab === 'ops_center' && <EnhancedWorkflowPanel />}
             {activeTab === 'analytics' && <WorkflowAnalyticsDashboard />}
             {activeTab === 'settings' && <WorkflowConfig />}
+          </div>
         </div>
       </div>
-    </div>
     </ErrorBoundary>
   );
 };
 
 export default MasterWorkflow;
-

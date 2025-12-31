@@ -1,16 +1,16 @@
 
-import React from 'react';
-import { GitMerge, CheckCircle, ArrowRight, Layers } from 'lucide-react';
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { DataService } from '@/services/data/dataService';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
-import { DedupeCluster } from '@/types';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
+import { Card } from '@/components/ui/molecules/Card';
 import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
+import { DataService } from '@/services/data/dataService';
+import { DedupeCluster } from '@/types';
+import { cn } from '@/utils/cn';
+import { queryKeys } from '@/utils/queryKeys';
+import { ArrowRight, CheckCircle, GitMerge, Layers } from 'lucide-react';
+import React from 'react';
 
 /**
  * DeduplicationManager - React 18 optimized with React.memo
@@ -52,7 +52,7 @@ export const DeduplicationManager = React.memo(function DeduplicationManager() {
         <div className="space-y-6 animate-fade-in">
             <div className={cn("p-4 rounded-lg border flex justify-between items-center", theme.status.warning.bg, theme.status.warning.border, theme.status.warning.text)}>
                 <div className="flex items-center gap-3">
-                    <Layers className="h-5 w-5"/>
+                    <Layers className="h-5 w-5" />
                     <div>
                         <h3 className="font-bold text-sm">Duplicate Detection Active</h3>
                         <p className="text-xs">{activeClusters.length} clusters require manual review.</p>
@@ -71,7 +71,7 @@ export const DeduplicationManager = React.memo(function DeduplicationManager() {
                                 <Button size="sm" variant="primary" icon={GitMerge} onClick={() => mergeCluster({ clusterId: cluster.id, masterId: cluster.masterId })}>Merge All</Button>
                             </div>
                         </div>
-                        
+
                         <div className={cn("divide-y border-b", theme.border.default)}>
                             {cluster.duplicates.map(record => (
                                 <div key={record.id} className={cn("p-4 flex items-center justify-between transition-colors", record.id === cluster.masterId ? theme.primary.light : "", `hover:${theme.surface.highlight}`)}>
@@ -81,17 +81,17 @@ export const DeduplicationManager = React.memo(function DeduplicationManager() {
                                         </div>
                                         <div>
                                             <p className={cn("text-sm font-medium", theme.text.primary)}>
-                                                {record.name} 
+                                                {record.name}
                                                 {record.id === cluster.masterId && <Badge variant="info" className="ml-2">Master</Badge>}
                                             </p>
                                             <p className={cn("text-xs font-mono", theme.text.tertiary)}>{record.id}</p>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="flex items-center gap-4">
                                         <span className={cn("text-xs px-2 py-1 rounded border", theme.surface.default, theme.border.default, theme.text.secondary)}>Match: {record.fieldMatch}</span>
                                         {record.id !== cluster.masterId && (
-                                            <ArrowRight className="h-4 w-4 text-slate-300"/>
+                                            <ArrowRight className="h-4 w-4 text-slate-300" />
                                         )}
                                     </div>
                                 </div>
@@ -99,10 +99,10 @@ export const DeduplicationManager = React.memo(function DeduplicationManager() {
                         </div>
                     </Card>
                 ))}
-                
+
                 {activeClusters.length === 0 && (
                     <div className={cn("text-center py-12", theme.text.tertiary)}>
-                        <CheckCircle className="h-12 w-12 mx-auto mb-3 opacity-20 text-green-500"/>
+                        <CheckCircle className="h-12 w-12 mx-auto mb-3 opacity-20 text-green-500" />
                         <p>No duplicates found. Your data is clean.</p>
                     </div>
                 )}

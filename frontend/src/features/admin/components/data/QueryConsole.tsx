@@ -125,9 +125,9 @@ export const QueryConsole: React.FC<QueryConsoleProps> = ({ initialTab = 'editor
     }, [results]);
 
     const renderResultRow = (row: unknown, index: number) => (
-        <div key={index} className={cn("flex border-b transition-colors h-8", theme.border.default, `hover:${theme.surface.highlight}`)}>
+        <div key={`query-result-row-${index}`} className={cn("flex border-b transition-colors h-8", theme.border.default, `hover:${theme.surface.highlight}`)}>
             {Object.values(row as Record<string, unknown>).map((v: unknown, j) => (
-                <div key={j} className={cn("flex-1 px-4 py-1.5 font-mono text-xs whitespace-nowrap overflow-hidden text-ellipsis border-r last:border-r-0", theme.border.default)}>
+                <div key={`query-result-cell-${index}-${j}`} className={cn("flex-1 px-4 py-1.5 font-mono text-xs whitespace-nowrap overflow-hidden text-ellipsis border-r last:border-r-0", theme.border.default)}>
                     {String(v)}
                 </div>
             ))}

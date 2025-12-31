@@ -15,8 +15,8 @@ import { Users, FileText, CalendarClock, PenTool, Loader2 } from 'lucide-react';
 // Internal Dependencies - Components
 import { ConferralLog } from './ConferralLog';
 import { DiscoveryPlanBuilder } from './DiscoveryPlanBuilder';
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
+import { Card } from '@/components/ui/molecules/Card';
+import { Button } from '@/components/ui/atoms/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

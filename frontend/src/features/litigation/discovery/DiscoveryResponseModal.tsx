@@ -1,16 +1,16 @@
 
-import React, { useState } from 'react';
-import { Modal } from '@/components/molecules';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { Wand2 } from 'lucide-react';
-import { DiscoveryRequest } from '@/types';
-import { GeminiService } from '@/services/features/research/geminiService';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { DataService } from '@/services/data/dataService';
-import { useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
+import { Modal } from '@/components/ui/molecules/Modal';
 import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
+import { DataService } from '@/services/data/dataService';
+import { GeminiService } from '@/services/features/research/geminiService';
+import { DiscoveryRequest } from '@/types';
+import { cn } from '@/utils/cn';
+import { Wand2 } from 'lucide-react';
+import React, { useState } from 'react';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
 
@@ -41,7 +41,7 @@ export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ 
   const saveDraftMutation = useMutation(
     async () => {
       if (!request || !draftResponse) return;
-      
+
       const draftPleading = {
         caseId: request.caseId || '',
         title: `Response to ${request.title}`,
@@ -52,7 +52,7 @@ export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ 
         dueDate: '',
         parties: [request.respondingParty, request.propoundingParty],
       };
-      
+
       await DataService.pleadings.add(draftPleading);
     },
     {
@@ -92,41 +92,41 @@ export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ 
         </div>
 
         <div className="space-y-3">
-           <div className="flex justify-between items-center">
-              <h4 className={cn("font-bold text-slate-900 flex items-center gap-2", theme.text.primary)}>
-                <Wand2 className={cn("h-4 w-4", theme.primary.text)}/> AI Draft (FRCP Compliant)
-              </h4>
-              <Button size="sm" variant="outline" onClick={handleGenerateResponse} disabled={isDrafting}>
-                  {isDrafting ? 'Generating...' : 'Regenerate'}
-              </Button>
-           </div>
-           <div className="relative">
-             <textarea
-                placeholder="AI-generated response will appear here..."
-                className={cn("w-full h-64 p-4 border rounded-lg text-sm font-mono leading-relaxed focus:ring-2 focus:ring-blue-500 outline-none resize-none", theme.surface.default, theme.border.default, theme.text.primary)}
-                value={draftResponse || initialDraft}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDraftResponse(e.target.value)}
-             />
-             {!draftResponse && !isDrafting && (
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                   <p className={cn("text-slate-400 text-sm", theme.text.tertiary)}>AI Assistant Ready</p>
-                </div>
-             )}
-           </div>
-           <p className={cn("text-xs text-slate-500", theme.text.secondary)}>
-             *This draft includes standard objections pursuant to Rule 33/34. Review for specific privilege claims before finalizing.
-           </p>
+          <div className="flex justify-between items-center">
+            <h4 className={cn("font-bold text-slate-900 flex items-center gap-2", theme.text.primary)}>
+              <Wand2 className={cn("h-4 w-4", theme.primary.text)} /> AI Draft (FRCP Compliant)
+            </h4>
+            <Button size="sm" variant="outline" onClick={handleGenerateResponse} disabled={isDrafting}>
+              {isDrafting ? 'Generating...' : 'Regenerate'}
+            </Button>
+          </div>
+          <div className="relative">
+            <textarea
+              placeholder="AI-generated response will appear here..."
+              className={cn("w-full h-64 p-4 border rounded-lg text-sm font-mono leading-relaxed focus:ring-2 focus:ring-blue-500 outline-none resize-none", theme.surface.default, theme.border.default, theme.text.primary)}
+              value={draftResponse || initialDraft}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDraftResponse(e.target.value)}
+            />
+            {!draftResponse && !isDrafting && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <p className={cn("text-slate-400 text-sm", theme.text.tertiary)}>AI Assistant Ready</p>
+              </div>
+            )}
+          </div>
+          <p className={cn("text-xs text-slate-500", theme.text.secondary)}>
+            *This draft includes standard objections pursuant to Rule 33/34. Review for specific privilege claims before finalizing.
+          </p>
         </div>
 
         <div className={cn("flex justify-end gap-3 pt-4 border-t border-slate-100", theme.border.default)}>
-           <Button variant="secondary" onClick={onClose}>Discard</Button>
-           <Button
-             variant="primary"
-             onClick={() => saveDraftMutation.mutate(undefined as unknown as Record<string, unknown>)}
-             disabled={saveDraftMutation.isLoading || !draftResponse}
-           >
-             {saveDraftMutation.isLoading ? 'Saving...' : 'Save to Matter File'}
-           </Button>
+          <Button variant="secondary" onClick={onClose}>Discard</Button>
+          <Button
+            variant="primary"
+            onClick={() => saveDraftMutation.mutate(undefined as unknown as Record<string, unknown>)}
+            disabled={saveDraftMutation.isLoading || !draftResponse}
+          >
+            {saveDraftMutation.isLoading ? 'Saving...' : 'Save to Matter File'}
+          </Button>
         </div>
       </div>
     </Modal>
@@ -134,4 +134,3 @@ export const DiscoveryResponseModal: React.FC<DiscoveryResponseModalProps> = ({ 
 };
 
 export default DiscoveryResponseModal;
-

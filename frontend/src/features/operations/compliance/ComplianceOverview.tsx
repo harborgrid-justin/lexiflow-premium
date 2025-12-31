@@ -8,7 +8,7 @@ import { DataService } from '@/services/data/dataService';
 import { ComplianceMetrics } from '@/types';
 import { cn } from '@/utils/cn';
 import { Activity, AlertTriangle, CheckCircle, FileText, Loader2, ShieldAlert } from 'lucide-react';
-import React from 'react';
+import { memo } from 'react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 interface RiskChartData {
@@ -18,7 +18,7 @@ interface RiskChartData {
     [key: string]: unknown;
 }
 
-export const ComplianceOverview: React.FC = () => {
+export const ComplianceOverview = memo(() => {
     const { theme, mode } = useTheme();
     const chartTheme = useChartTheme();
 
@@ -114,7 +114,7 @@ export const ComplianceOverview: React.FC = () => {
                             { title: 'Ethical Wall Update', time: '5 hours ago', severity: 'low' },
                             { title: 'GDPR Data Request', time: 'Yesterday', severity: 'high' },
                         ].map((alert, i) => (
-                            <div key={i} className={cn("flex items-start p-3 rounded-lg border transition-colors", theme.surface.highlight, theme.border.default)}>
+                            <div key={`alert-${alert.title.replace(/\s+/g, '-')}-${i}`} className={cn("flex items-start p-3 rounded-lg border transition-colors", theme.surface.highlight, theme.border.default)}>
                                 <Activity className={cn("h-4 w-4 mt-0.5 mr-3", alert.severity === 'high' ? "text-red-500" : alert.severity === 'medium' ? "text-amber-500" : "text-blue-500")} />
                                 <div>
                                     <p className={cn("text-sm font-bold", theme.text.primary)}>{alert.title}</p>
@@ -127,4 +127,6 @@ export const ComplianceOverview: React.FC = () => {
             </div>
         </div>
     );
-};
+});
+
+ComplianceOverview.displayName = 'ComplianceOverview';

@@ -4,19 +4,19 @@
  * @description Enterprise toast notification system with sound, animations, and priority handling
  */
 
-import React, { useState, useCallback} from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import type { UINotification } from '@/types/notifications';
+import { cn } from '@/utils/cn';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  X,
-  CheckCircle,
   AlertCircle,
-  Info,
   AlertTriangle,
+  CheckCircle,
+  Info,
   Volume2,
   VolumeX,
+  X,
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
-import type { UINotification } from '@/types/notifications';
+import React, { useCallback, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -30,12 +30,12 @@ export interface ToastContainerProps {
   maxVisible?: number;
   /** Position of toast container */
   position?:
-    | 'top-left'
-    | 'top-center'
-    | 'top-right'
-    | 'bottom-left'
-    | 'bottom-center'
-    | 'bottom-right';
+  | 'top-left'
+  | 'top-center'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-center'
+  | 'bottom-right';
   /** Enable sound notifications */
   enableSound?: boolean;
   /** Enable visual effects */
@@ -82,12 +82,13 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
   const [toasts, setToasts] = useState<ToastNotification[]>([]);
   const [isSoundEnabled, setIsSoundEnabled] = useState(initialEnableSound);
 
-  // Play notification sound
+  // HYDRATION-SAFE: Play notification sound only in browser environment
   const playSound = useCallback(
     (type: ToastNotification['type']) => {
-      if (!isSoundEnabled) return;
+      if (!isSoundEnabled || typeof window === 'undefined') return;
 
       // Create audio context for different notification types
+      // AudioContext is browser-only, checked above
       const audioContext = new (window.AudioContext || (window as unknown as Record<string, unknown>).webkitAudioContext)();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
@@ -325,11 +326,11 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
                         className={cn(
                           'px-3 py-1.5 text-xs font-medium rounded-md transition-colors',
                           action.variant === 'primary' &&
-                            'bg-blue-600 text-white hover:bg-blue-700',
+                          'bg-blue-600 text-white hover:bg-blue-700',
                           action.variant === 'danger' &&
-                            'bg-red-600 text-white hover:bg-red-700',
+                          'bg-red-600 text-white hover:bg-red-700',
                           (!action.variant || action.variant === 'secondary') &&
-                            'bg-slate-200 text-slate-700 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600'
+                          'bg-slate-200 text-slate-700 hover:bg-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:hover:bg-slate-600'
                         )}
                       >
                         {action.label}

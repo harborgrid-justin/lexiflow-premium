@@ -4,7 +4,7 @@
  * @description Full-featured notification center page with filtering, search, and bulk actions
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, memo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bell,
@@ -64,7 +64,7 @@ type SortOption = 'newest' | 'oldest' | 'priority';
 // ============================================================================
 // COMPONENT
 // ============================================================================
-export const NotificationCenter: React.FC<NotificationCenterProps> = ({
+const NotificationCenterComponent: React.FC<NotificationCenterProps> = ({
   notifications,
   onMarkAsRead,
   onMarkAsReadBulk,

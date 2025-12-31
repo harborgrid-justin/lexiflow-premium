@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useId } from 'react';
 import { LucideIcon } from 'lucide-react';
+import React, { useId } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -23,8 +23,8 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Primitives
-import { Box } from '@/components/atoms';
-import { Text } from '@/components/atoms';
+import { Box } from '@/components/ui/atoms/Box';
+import { Text } from '@/components/ui/atoms/Text';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -40,7 +40,7 @@ interface EmptyStateProps {
 export const EmptyState: React.FC<EmptyStateProps> = ({ icon: Icon, title, description, action, className = '' }) => {
   const { theme } = useTheme();
   const titleId = useId();
-  
+
   return (
     <Box
       aria-labelledby={titleId}

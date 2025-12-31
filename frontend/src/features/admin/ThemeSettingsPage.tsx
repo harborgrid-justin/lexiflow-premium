@@ -170,7 +170,7 @@ export const ThemeSettingsPage: React.FC = () => {
                       dataKey="value"
                     >
                       {mockRiskData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
+                        <Cell key={`risk-cell-${entry.name}-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
                     <Tooltip contentStyle={chartTheme.tooltipStyle} />

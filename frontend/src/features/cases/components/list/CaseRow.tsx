@@ -1,9 +1,9 @@
 /**
  * CaseRow.tsx
- * 
+ *
  * Memoized case table row component for virtual scrolling performance.
  * Displays case metadata with keyboard navigation and hover prefetching.
- * 
+ *
  * @module components/case-list/CaseRow
  * @category Case Management - Table Components
  */
@@ -11,15 +11,15 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { Eye, User } from 'lucide-react';
 import React, { memo } from 'react';
-import { User, Eye } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { StatusBadge } from '@/components/atoms';
-import { Currency } from '@/components/atoms';
+import { Currency } from '@/components/ui/atoms/Currency';
+import { StatusBadge } from '@/components/ui/atoms/StatusBadge';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -50,20 +50,20 @@ export const CaseRow = memo<CaseRowProps>(({ caseData, onSelect, onPrefetch }) =
     };
 
     return (
-        <div 
+        <div
             role="button"
             tabIndex={0}
             className={cn("flex items-center border-b hover:bg-slate-50 transition-colors h-16 px-6 group outline-none focus:bg-slate-50 focus:ring-1 focus:ring-inset focus:ring-blue-500", theme.border.default)}
             onMouseEnter={() => onPrefetch(caseData.id)}
             onClick={() => onSelect(caseData)}
             onKeyDown={handleKeyDown}
-            style={{ 
+            style={{
                 contentVisibility: 'auto', // OPTIMIZATION: Browser skips layout work for off-screen rows
-                containIntrinsicSize: '0 64px' 
+                containIntrinsicSize: '0 64px'
             }}
         >
             <div className="w-[35%] flex flex-col items-start pr-4 min-w-0">
-                <span 
+                <span
                     className={cn("font-bold text-sm transition-colors flex items-center hover:underline cursor-pointer truncate w-full", theme.primary.text)}
                     title={caseData.title}
                 >
@@ -73,7 +73,7 @@ export const CaseRow = memo<CaseRowProps>(({ caseData, onSelect, onPrefetch }) =
             </div>
             <div className="w-[15%]"><StatusBadge status={caseData.matterType} /></div>
             <div className="w-[20%] flex items-center text-sm text-slate-500 min-w-0 pr-2">
-                <User className="h-3.5 w-3.5 mr-2 text-slate-400 shrink-0"/>
+                <User className="h-3.5 w-3.5 mr-2 text-slate-400 shrink-0" />
                 <span className="truncate" title={caseData.client}>{caseData.client}</span>
             </div>
             <div className="w-[15%]"><Currency value={caseData.value || 0} className={cn("font-medium text-sm", theme.text.primary)} /></div>
@@ -81,13 +81,13 @@ export const CaseRow = memo<CaseRowProps>(({ caseData, onSelect, onPrefetch }) =
                 <StatusBadge status={caseData.status} />
             </div>
             <div className="w-[5%] flex justify-end items-center gap-1 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity">
-                <button 
-                    onClick={(e: React.MouseEvent) => { e.stopPropagation(); onSelect(caseData); }} 
-                    className={cn("p-1.5 rounded-md transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)} 
+                <button
+                    onClick={(e: React.MouseEvent) => { e.stopPropagation(); onSelect(caseData); }}
+                    className={cn("p-1.5 rounded-md transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}
                     title="View Details"
                     tabIndex={-1}
                 >
-                    <Eye className="h-4 w-4"/>
+                    <Eye className="h-4 w-4" />
                 </button>
             </div>
         </div>

@@ -13,10 +13,11 @@ import React, { useState } from 'react';
 import { Phone, Mail, Users, Video, Plus, CheckCircle, Loader2 } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { Input, TextArea } from '@/components/atoms';
-import { Modal } from '@/components/molecules';
+import { Button } from '@/components/ui/atoms/Button';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Input } from '@/components/ui/atoms/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Modal } from '@/components/ui/molecules/Modal';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

@@ -119,6 +119,8 @@ export const SyncProvider = ({
   onSyncSuccess: _onSyncSuccess,
   onSyncError
 }: ExtendedSyncProviderProps) => {
+  // HYDRATION-SAFE: Check for browser environment before accessing navigator
+  // Default to true for SSR to prevent server/client mismatch
   const [isOnline, setIsOnline] = useState(
     initialOnlineStatus !== undefined
       ? initialOnlineStatus
@@ -126,6 +128,7 @@ export const SyncProvider = ({
   );
   const [pendingCount, setPendingCount] = useState(0);
   const [failedCount, setFailedCount] = useState(0);
+  // HYDRATION-SAFE: Sync status initialization also checks environment
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(
     initialOnlineStatus !== undefined
       ? (initialOnlineStatus ? 'idle' : 'offline')

@@ -13,7 +13,7 @@ import React from 'react';
 import { X, FileText, Gavel, Scale, Activity } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button';
 
 // Internal Dependencies - Types
 export interface OppositionEntity {

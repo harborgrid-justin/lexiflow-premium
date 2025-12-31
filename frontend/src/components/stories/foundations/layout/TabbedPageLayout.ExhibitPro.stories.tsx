@@ -1,23 +1,23 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
+import { Button } from '@/components/ui/atoms/Button';
 import { ThemeProvider } from '@/providers/ThemeContext';
-import React, { useState } from 'react';
-import { 
-  Layers,
-  PenTool,
+import { cn } from '@/utils/cn';
+import type { Meta, StoryObj } from '@storybook/react';
+import {
   BarChart2,
+  Calendar,
+  Filter,
+  Grid,
   Grid as GridIcon,
+  Layers,
+  List,
+  PenTool,
   Plus,
   Printer,
   Search,
-  Filter,
-  List,
-  Grid,
-  Users,
-  Calendar
+  Users
 } from 'lucide-react';
-import { Button } from '@/components/atoms';
-import { cn } from '@/utils/cn';
+import React, { useState } from 'react';
 
 /**
  * Exhibit Pro demonstrates the complete trial exhibit management interface.
@@ -27,7 +27,7 @@ import { cn } from '@/utils/cn';
  * - List/Grid view toggle
  * - Data table with sortable columns
  * - Status badges and formatting
- * 
+ *
  * This builds upon the basic TabbedPageLayout by adding:
  * - Complex sidebar navigation
  * - Inline search functionality
@@ -106,7 +106,7 @@ export const ExhibitPro: Story = {
       Court: 0,
     };
 
-    const filteredExhibits = exhibits.filter(e => 
+    const filteredExhibits = exhibits.filter(e =>
       (filterParty === 'All' || e.party === filterParty) &&
       (searchQuery === '' || e.description.toLowerCase().includes(searchQuery.toLowerCase()) || e.number.toLowerCase().includes(searchQuery.toLowerCase()))
     );
@@ -139,8 +139,8 @@ export const ExhibitPro: Story = {
                     onClick={() => setFilterParty(party)}
                     className={cn(
                       "w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors flex justify-between items-center",
-                      filterParty === party 
-                        ? "bg-blue-50 text-blue-700" 
+                      filterParty === party
+                        ? "bg-blue-50 text-blue-700"
                         : "text-slate-600 hover:bg-slate-50"
                     )}
                   >
@@ -157,7 +157,7 @@ export const ExhibitPro: Story = {
               <div className="space-y-1">
                 {witnesses.map(witness => (
                   <button key={witness} className="w-full text-left px-3 py-1.5 rounded text-sm flex items-center text-slate-600 hover:bg-slate-50">
-                    <Users className="h-3 w-3 mr-2 opacity-50"/> {witness}
+                    <Users className="h-3 w-3 mr-2 opacity-50" /> {witness}
                   </button>
                 ))}
               </div>
@@ -171,8 +171,8 @@ export const ExhibitPro: Story = {
                 {/* Toolbar */}
                 <div className="flex justify-between items-center">
                   <div className="relative w-72">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400"/>
-                    <input 
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <input
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white"
@@ -181,23 +181,23 @@ export const ExhibitPro: Story = {
                   </div>
                   <div className="flex gap-2">
                     <div className="flex p-1 rounded-lg border border-slate-300 bg-white">
-                      <button 
-                        onClick={() => setViewMode('list')} 
+                      <button
+                        onClick={() => setViewMode('list')}
                         className={cn(
                           "p-1.5 rounded transition-colors",
                           viewMode === 'list' ? "bg-white shadow text-blue-600" : "text-slate-500"
                         )}
                       >
-                        <List className="h-4 w-4"/>
+                        <List className="h-4 w-4" />
                       </button>
-                      <button 
-                        onClick={() => setViewMode('grid')} 
+                      <button
+                        onClick={() => setViewMode('grid')}
                         className={cn(
                           "p-1.5 rounded transition-colors",
                           viewMode === 'grid' ? "bg-white shadow text-blue-600" : "text-slate-500"
                         )}
                       >
-                        <Grid className="h-4 w-4"/>
+                        <Grid className="h-4 w-4" />
                       </button>
                     </div>
                     <Button variant="secondary" icon={Filter}>Filter</Button>
@@ -230,8 +230,8 @@ export const ExhibitPro: Story = {
                               <span className={cn(
                                 "inline-flex px-2 py-1 text-xs font-semibold rounded-full",
                                 exhibit.status === 'Admitted' ? "bg-green-100 text-green-700" :
-                                exhibit.status === 'Marked' ? "bg-blue-100 text-blue-700" :
-                                "bg-amber-100 text-amber-700"
+                                  exhibit.status === 'Marked' ? "bg-blue-100 text-blue-700" :
+                                    "bg-amber-100 text-amber-700"
                               )}>
                                 {exhibit.status}
                               </span>
@@ -250,8 +250,8 @@ export const ExhibitPro: Story = {
                           <span className={cn(
                             "inline-flex px-2 py-0.5 text-xs font-semibold rounded-full",
                             exhibit.status === 'Admitted' ? "bg-green-100 text-green-700" :
-                            exhibit.status === 'Marked' ? "bg-blue-100 text-blue-700" :
-                            "bg-amber-100 text-amber-700"
+                              exhibit.status === 'Marked' ? "bg-blue-100 text-blue-700" :
+                                "bg-amber-100 text-amber-700"
                           )}>
                             {exhibit.status}
                           </span>
@@ -259,11 +259,11 @@ export const ExhibitPro: Story = {
                         <h4 className="text-sm font-semibold text-slate-800 mb-2">{exhibit.description}</h4>
                         <div className="space-y-1 text-xs text-slate-600">
                           <div className="flex items-center gap-2">
-                            <Users className="h-3 w-3"/>
+                            <Users className="h-3 w-3" />
                             {exhibit.party}
                           </div>
                           <div className="flex items-center gap-2">
-                            <Calendar className="h-3 w-3"/>
+                            <Calendar className="h-3 w-3" />
                             {exhibit.dateMarked}
                           </div>
                         </div>
@@ -276,7 +276,7 @@ export const ExhibitPro: Story = {
 
             {activeTab === 'sticker' && (
               <div className="bg-white rounded-lg shadow p-8 text-center">
-                <PenTool className="h-12 w-12 mx-auto mb-4 text-slate-400"/>
+                <PenTool className="h-12 w-12 mx-auto mb-4 text-slate-400" />
                 <h3 className="text-lg font-semibold text-slate-800 mb-2">Sticker Designer</h3>
                 <p className="text-slate-600">Design and print exhibit stickers</p>
               </div>

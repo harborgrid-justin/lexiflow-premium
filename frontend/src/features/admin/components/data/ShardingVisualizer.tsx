@@ -4,7 +4,7 @@ import { Server, Database, Plus, Trash2, ArrowRight } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { ConsistentHashRing } from '@/utils/datastructures/consistentHashRing';
-import { Button } from '@/components/atoms';
+import { Button } from '@/components/ui/atoms/Button';
 
 /**
  * ShardingVisualizer - React 18 optimized with React.memo
@@ -42,7 +42,7 @@ export const ShardingVisualizer = React.memo(function ShardingVisualizer() {
         ctx.beginPath();
         ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
         // Extract border color from class if possible or fallback
-        ctx.strokeStyle = theme.chart.grid; 
+        ctx.strokeStyle = theme.chart.grid;
         ctx.lineWidth = 4;
         ctx.stroke();
 
@@ -55,17 +55,17 @@ export const ShardingVisualizer = React.memo(function ShardingVisualizer() {
             const x = center.x + radius * Math.cos(angle);
             const y = center.y + radius * Math.sin(angle);
             const nodeName = ringMap.get(hash)!;
-            
+
             ctx.beginPath();
             ctx.arc(x, y, 10, 0, 2 * Math.PI);
             ctx.fillStyle = mappedNode === nodeName ? theme.chart.colors.primary : theme.chart.colors.neutral;
             ctx.fill();
-            
+
             ctx.fillStyle = theme.chart.text;
             ctx.font = '12px sans-serif';
             ctx.fillText(nodeName.split(':')[0], x + 15, y + 5);
         });
-        
+
         // Draw key
         if(key && mappedNode) {
             const keyHash = (ring as unknown as { hash: (k: string) => number }).hash(key);
@@ -90,7 +90,7 @@ export const ShardingVisualizer = React.memo(function ShardingVisualizer() {
             setNodes(nodes.slice(0, -1));
         }
     };
-    
+
     return (
         <div className="flex flex-col h-full p-6">
             <div className="flex justify-between items-center mb-4">

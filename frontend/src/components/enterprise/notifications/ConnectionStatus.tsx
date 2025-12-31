@@ -4,17 +4,17 @@
  * @description Real-time WebSocket connection status indicator with animations
  */
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/utils/cn';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
+  Activity,
+  AlertCircle,
+  Check,
+  RefreshCw,
   Wifi,
   WifiOff,
-  AlertCircle,
-  RefreshCw,
-  Check,
-  Activity,
 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import React, { useEffect, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -196,8 +196,8 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
             animate={
               animated && config.pulse
                 ? {
-                    rotate: [0, 360],
-                  }
+                  rotate: [0, 360],
+                }
                 : {}
             }
             transition={{
@@ -263,8 +263,8 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
           animate={
             animated && config.pulse
               ? {
-                  rotate: [0, 360],
-                }
+                rotate: [0, 360],
+              }
               : {}
           }
           transition={{
@@ -316,8 +316,8 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({
             animate={
               animated && config.pulse
                 ? {
-                    rotate: [0, 360],
-                  }
+                  rotate: [0, 360],
+                }
                 : {}
             }
             transition={{

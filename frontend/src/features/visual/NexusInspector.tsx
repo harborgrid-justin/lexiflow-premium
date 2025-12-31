@@ -44,7 +44,19 @@ interface NexusInspectorProps {
 export const NexusInspector = ({ item, onClose }: NexusInspectorProps) => {
   const { theme } = useTheme();
 
-  if (!item) return null;
+  // LAYOUT-STABLE: Render empty state with same structure instead of null
+  if (!item) {
+    return (
+      <div className={cn("w-80 border-l h-full flex flex-col", theme.surface.default, theme.border.default)}>
+        <div className="flex-1 flex items-center justify-center p-8">
+          <div className={cn("text-center", theme.text.tertiary)}>
+            <Fingerprint className="h-12 w-12 mx-auto mb-3 opacity-30" />
+            <p className="text-sm">Select a node to inspect</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const getIcon = () => {
     switch (item.type) {

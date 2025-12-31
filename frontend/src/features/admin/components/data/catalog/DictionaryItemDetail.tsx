@@ -1,18 +1,18 @@
 
-import React, { useState } from 'react';
-import { DataDictionaryItem } from '@/types';
-import { DataService } from '@/services/data/dataService';
-import { useMutation } from '@/hooks/useQueryHooks';
-import { Button } from '@/components/atoms';
-import { Card } from '@/components/molecules';
-import { Input } from '@/components/atoms';
-import { TextArea } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { ArrowLeft, Save, Shield, Wand2, Activity } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
+import { Input } from '@/components/ui/atoms/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Card } from '@/components/ui/molecules/Card';
 import { useNotify } from '@/hooks/useNotify';
+import { useMutation } from '@/hooks/useQueryHooks';
+import { useTheme } from '@/providers/ThemeContext';
+import { DataService } from '@/services/data/dataService';
 import { GeminiService } from '@/services/features/research/geminiService';
+import { DataDictionaryItem } from '@/types';
+import { cn } from '@/utils/cn';
+import { Activity, ArrowLeft, Save, Shield, Wand2 } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface DictionaryItemDetailProps {
     item: DataDictionaryItem;
@@ -42,7 +42,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
         setIsGenerating(true);
         try {
             const suggestion = await GeminiService.generateDraft(
-                `Generate a concise technical description for a database column named '${formData.column}' in table '${formData.table}'. 
+                `Generate a concise technical description for a database column named '${formData.column}' in table '${formData.table}'.
                 Context: Legal Tech Enterprise Application. Domain: ${formData.domain}.`,
                 'Description'
             );
@@ -79,25 +79,25 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                     <div className="relative">
                                         <div className="flex justify-between mb-1">
                                             <label className={cn("text-xs font-bold uppercase", theme.text.secondary)}>Description</label>
-                                            <button 
+                                            <button
                                                 onClick={handleAISuggestion}
                                                 disabled={isGenerating}
                                                 className="text-xs text-purple-600 flex items-center hover:underline"
                                             >
-                                                <Wand2 className="h-3 w-3 mr-1"/> {isGenerating ? 'Generating...' : 'AI Suggest'}
+                                                <Wand2 className="h-3 w-3 mr-1" /> {isGenerating ? 'Generating...' : 'AI Suggest'}
                                             </button>
                                         </div>
                                         <TextArea
                                             value={formData.description}
-                                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, description: e.target.value})}
+                                            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, description: e.target.value })}
                                             rows={4}
                                         />
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
-                                        <Input 
-                                            label="Data Type" 
-                                            value={formData.dataType} 
-                                            disabled 
+                                        <Input
+                                            label="Data Type"
+                                            value={formData.dataType}
+                                            disabled
                                             className="font-mono text-xs"
                                         />
                                         <div>
@@ -105,7 +105,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                             <select
                                                 className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                                 value={formData.domain}
-                                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, domain: e.target.value})}
+                                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, domain: e.target.value })}
                                             >
                                                 <option value="Legal">Legal</option>
                                                 <option value="Finance">Finance</option>
@@ -125,7 +125,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                             {(['Public', 'Internal', 'Confidential', 'Restricted'] as const).map(cls => (
                                                 <div
                                                     key={cls}
-                                                    onClick={() => setFormData({...formData, classification: cls})}
+                                                    onClick={() => setFormData({ ...formData, classification: cls })}
                                                     className={cn(
                                                         "flex items-center p-2 rounded border cursor-pointer transition-colors",
                                                         formData.classification === cls
@@ -133,7 +133,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                                             : cn(theme.surface.default, theme.border.default)
                                                     )}
                                                 >
-                                                    <Shield className={cn("h-4 w-4 mr-2", formData.classification === cls ? "text-blue-600" : theme.text.tertiary)}/>
+                                                    <Shield className={cn("h-4 w-4 mr-2", formData.classification === cls ? "text-blue-600" : theme.text.tertiary)} />
                                                     <span className="text-sm font-medium">{cls}</span>
                                                 </div>
                                             ))}
@@ -147,7 +147,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                                     type="checkbox"
                                                     className="w-5 h-5 text-red-600 rounded focus:ring-red-500"
                                                     checked={formData.isPII}
-                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, isPII: e.target.checked})}
+                                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, isPII: e.target.checked })}
                                                 />
                                             </div>
                                             <p className={cn("text-xs", theme.status.error.text)}>Checking this enforces column-level encryption and strict access logging.</p>
@@ -155,7 +155,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
                                         <Input
                                             label="Data Steward / Owner"
                                             value={formData.owner}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, owner: e.target.value})}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, owner: e.target.value })}
                                         />
                                     </div>
                                 </div>
@@ -185,7 +185,7 @@ export const DictionaryItemDetail: React.FC<DictionaryItemDetailProps> = ({ item
 
                             <div className={cn("p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
                                 <h4 className={cn("font-bold text-sm mb-3 flex items-center gap-2", theme.text.primary)}>
-                                    <Activity className="h-4 w-4 text-blue-500"/> Usage Stats
+                                    <Activity className="h-4 w-4 text-blue-500" /> Usage Stats
                                 </h4>
                                 <div className={cn("space-y-2 text-xs", theme.text.secondary)}>
                                     <p>• Used in <strong>12</strong> Reports</p>

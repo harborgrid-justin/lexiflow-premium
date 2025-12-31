@@ -4,11 +4,13 @@
  * @description Dashboard for managing Data Access Framework (DAF) operations
  */
 
-import { ShieldCheck, Database, Lock, Key } from 'lucide-react';
+import { memo } from 'react';
+
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import { Database, Key, Lock, ShieldCheck } from 'lucide-react';
 
-export function DafDashboard() {
+const DafDashboardComponent = () => {
   const { theme } = useTheme();
 
   return (
@@ -77,3 +79,6 @@ export function DafDashboard() {
     </div>
   );
 }
+
+export const DafDashboard = memo(DafDashboardComponent);
+DafDashboard.displayName = 'DafDashboard';

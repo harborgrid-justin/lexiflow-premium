@@ -1,8 +1,8 @@
 
 import React from 'react';
 import { ShieldCheck, AlertTriangle, FileSearch, Scale, Edit2 } from 'lucide-react';
-import { Card } from '@/components/molecules';
-import { Button } from '@/components/atoms';
+import { Card } from '@/components/ui/molecules/Card';
+import { Button } from '@/components/ui/atoms/Button';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
@@ -21,8 +21,8 @@ interface GovernanceDashboardProps {
   setEditingRule: (rule: GovernanceRule) => void;
 }
 
-export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({ 
-  rules, isScanning, scanProgress, handleScan, setEditingRule 
+export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({
+  rules, isScanning, scanProgress, handleScan, setEditingRule
 }) => {
   const { theme } = useTheme();
 
@@ -51,7 +51,7 @@ export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({
                 <FileSearch className={cn("h-10 w-10 opacity-50", theme.status.info.text)}/>
             </div>
         </div>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card title="Compliance Frameworks">
                 <div className="space-y-4">
@@ -66,7 +66,7 @@ export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({
                     ))}
                 </div>
             </Card>
-            
+
             <Card title="Active Rules" action={<Button size="sm" variant="outline" onClick={handleScan}>{isScanning ? `Scanning ${scanProgress}%` : 'Run Scan'}</Button>}>
                 <div className="space-y-2">
                     {rules.map(r => (

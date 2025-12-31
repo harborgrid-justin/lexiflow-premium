@@ -123,7 +123,7 @@ export const SchemaVisualizer: React.FC<SchemaVisualizerProps> = ({ tables, onAd
                         const midX = (rel.x1 + rel.x2) / 2;
                         return (
                             <path
-                                key={i}
+                                key={`rel-${rel.from}-${rel.to}-${i}`}
                                 d={`M ${rel.x1} ${rel.y1} C ${midX} ${rel.y1}, ${midX} ${rel.y2}, ${rel.x2} ${rel.y2}`}
                                 stroke={lineColor}
                                 strokeWidth="2"

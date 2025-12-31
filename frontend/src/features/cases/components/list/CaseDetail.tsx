@@ -1,26 +1,28 @@
-import React, { useState } from 'react';
-import { DataService } from '@/services/data/dataService';
-import { useQuery, useMutation } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
-import { queryClient } from '@/services/infrastructure/queryClient';
-import { Matter, MatterStatus, MatterPriority } from '@/types';
-import { ConfirmDialog } from '@/components/molecules';
-import { useModalState } from '@/hooks/useModalState';
-import {
-  ArrowLeft,
-  Edit,
-  Trash2,
-  FileText,
-  Users,
-  Calendar,
-  DollarSign,
-  Building2,
-  Scale,
-  CheckCircle,
-  AlertCircle
-} from 'lucide-react';
-import { MatterForm } from './matter-form';
+import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { PATHS } from '@/config/paths.config';
+import { useModalState } from '@/hooks/useModalState';
+import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+import { queryClient } from '@/services/infrastructure/queryClient';
+import { Matter, MatterPriority, MatterStatus } from '@/types';
+import { queryKeys } from '@/utils/queryKeys';
+import {
+  AlertCircle,
+  AlertTriangle,
+  ArrowLeft,
+  Building2,
+  Calendar,
+  CheckCircle,
+  DollarSign,
+  Edit,
+  FileText,
+  Loader2,
+  Scale,
+  Trash2,
+  Users
+} from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { MatterForm } from './matter-form';
 
 export const CaseDetail: React.FC = () => {
   // Extract matterId from hash
@@ -28,7 +30,7 @@ export const CaseDetail: React.FC = () => {
   const navigate = (path: string) => {
     window.location.hash = `#/${path}`;
   };
-  
+
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const deleteModal = useModalState();
@@ -68,13 +70,26 @@ export const CaseDetail: React.FC = () => {
     }
   );
 
-  // Redirect if invalid UUID or matter not found
+  // PREDICTABLE ERROR STATE: Render structured error view instead of null
+  // Prevents hydration mismatch and provides user feedback
   if (!isValidMatterId || error || (!loading && !matter)) {
     if (!isValidMatterId && matterId) {
       console.error(`[MatterDetail] Invalid UUID format: ${matterId}`);
     }
-    navigate(PATHS.MATTERS);
-    return null;
+    // Navigate in effect, not during render
+    useEffect(() => {
+      navigate(PATHS.MATTERS);
+    }, [navigate]);
+
+    return (
+      <div className="flex items-center justify-center h-full p-8">
+        <div className="text-center max-w-md">
+          <AlertTriangle className="h-12 w-12 mx-auto mb-4 text-amber-500" />
+          <h3 className="text-lg font-semibold mb-2">Matter Not Found</h3>
+          <p className="text-sm text-slate-600">Redirecting to matters list...</p>
+        </div>
+      </div>
+    );
   }
 
   const handleSave = async (matterData: Partial<Matter>) => {
@@ -230,11 +245,10 @@ export const CaseDetail: React.FC = () => {
                 <Scale className="w-4 h-4" />
                 <span>{matter.practiceArea?.replace(/_/g, ' ') || '-'}</span>
               </div>
-              <div className={`flex items-center gap-2 font-medium ${
-                matter.priority === MatterPriority.URGENT ? 'text-rose-600 dark:text-rose-400' :
-                matter.priority === MatterPriority.HIGH ? 'text-orange-600 dark:text-orange-400' :
-                'text-blue-600 dark:text-blue-400'
-              }`}>
+              <div className={`flex items-center gap-2 font-medium ${matter.priority === MatterPriority.URGENT ? 'text-rose-600 dark:text-rose-400' :
+                  matter.priority === MatterPriority.HIGH ? 'text-orange-600 dark:text-orange-400' :
+                    'text-blue-600 dark:text-blue-400'
+                }`}>
                 <span>{matter.priority} Priority</span>
               </div>
             </div>
@@ -424,4 +438,3 @@ export const CaseDetail: React.FC = () => {
     </div>
   );
 };
-

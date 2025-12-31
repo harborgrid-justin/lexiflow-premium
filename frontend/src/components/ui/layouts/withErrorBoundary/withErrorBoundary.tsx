@@ -16,8 +16,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { ComponentType, Profiler, ProfilerOnRenderCallback } from 'react';
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary/ErrorBoundary';
+import React, { ComponentType, Profiler, ProfilerOnRenderCallback } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -41,7 +41,7 @@ interface WithErrorBoundaryOptions {
 const createProfilerCallback = (componentName: string): ProfilerOnRenderCallback => {
   return (_id, phase, actualDuration, _baseDuration, _startTime, _commitTime) => {
     // Log performance metrics in development
-    if (process.env.NODE_ENV === 'development' && actualDuration > 16) {
+    if (import.meta.env.DEV && actualDuration > 16) {
       console.warn(
         `[Performance] ${componentName} ${phase} took ${actualDuration.toFixed(2)}ms`,
         {
@@ -53,7 +53,7 @@ const createProfilerCallback = (componentName: string): ProfilerOnRenderCallback
     }
 
     // In production, send to telemetry service
-    if (process.env.NODE_ENV === 'production') {
+    if (import.meta.env.PROD) {
       // Example: sendToTelemetry({ component: componentName, phase, actualDuration });
     }
   };
@@ -87,7 +87,7 @@ export function withErrorBoundary<P extends object>(
     componentName,
     fallback,
     onReset,
-    enableProfiling = process.env.NODE_ENV === 'development',
+    enableProfiling = import.meta.env.DEV,
     onError: _onError, // Reserved for future use when ErrorBoundary supports onError
   } = options;
 

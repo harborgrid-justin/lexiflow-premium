@@ -1,14 +1,14 @@
 /**
  * ErrorState.tsx
- * 
+ *
  * Reusable error state component
  * Replaces repeated error UI patterns
  */
 
-import React from 'react';
-import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { Button } from '@/components/ui/atoms/Button';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/atoms';
+import { AlertTriangle, RefreshCw } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // TYPES
@@ -34,7 +34,7 @@ export interface ErrorStateProps {
 
 /**
  * ErrorState - Consistent error UI component
- * 
+ *
  * @example
  * ```tsx
  * <ErrorState message="Failed to load data" onRetry={refetch} />

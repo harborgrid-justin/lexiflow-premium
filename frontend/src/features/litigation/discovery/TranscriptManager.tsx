@@ -32,8 +32,10 @@ export const TranscriptManager: React.FC = () => {
 
   const handleSave = () => {
       if (!newTranscript.deponent) return;
+      // Generate ID in event handler (not during render) for deterministic rendering
+      const newId = `tran-${Date.now()}`;
       addTranscript({
-          id: `tran-${Date.now()}`,
+          id: newId,
           caseId: 'General',
           deponent: newTranscript.deponent,
           date: newTranscript.date || '',

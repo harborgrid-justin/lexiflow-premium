@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms';
-import { Button } from '@/components/atoms';
-import { Badge } from '@/components/atoms';
-import { Users, Plus, Mail, Building2, Trash2, Edit } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Modal } from '@/components/molecules';
-import { Input, TextArea } from '@/components/atoms';
-import { useNotify } from '@/hooks/useNotify';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
+import { Input } from '@/components/ui/atoms/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Modal } from '@/components/ui/molecules/Modal';
 import { useModalState } from '@/hooks';
+import { useNotify } from '@/hooks/useNotify';
+import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useSelection } from '@/hooks/useSelectionState';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { queryKeys } from '@/utils/queryKeys';
+import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';
+import { cn } from '@/utils/cn';
+import { queryKeys } from '@/utils/queryKeys';
+import { Building2, Edit, Mail, Plus, Trash2, Users } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface Custodian {
   id: string;
@@ -31,7 +32,7 @@ interface Custodian {
 export const Custodians: React.FC = () => {
   const { theme } = useTheme();
   const notify = useNotify();
-  
+
   // Load custodians from backend/IndexedDB via useQuery for accurate, cached data
   const { data: rawCustodians = [], isLoading: _isLoading } = useQuery<Custodian[]>(
     queryKeys.discoveryExtended.custodians(),
@@ -40,7 +41,7 @@ export const Custodians: React.FC = () => {
 
   // Ensure custodians is always an array to prevent .map() errors
   const custodians = Array.isArray(rawCustodians) ? rawCustodians : [];
-  
+
   const createModal = useModalState();
   const editModal = useModalState();
   const deleteModal = useModalState();
@@ -93,8 +94,12 @@ export const Custodians: React.FC = () => {
       notify.error('Name and email are required');
       return;
     }
+    // Generate ID and timestamps in event handler (not during render) for deterministic rendering
+    const now = new Date();
+    const newId = `cust-${Date.now()}`;
+    const dateStr = now.toISOString().split('T')[0];
     const newCustodian: Custodian = {
-      id: `cust-${Date.now()}`,
+      id: newId,
       caseId: 'case-1',
       name: formData.name,
       email: formData.email,
@@ -102,8 +107,8 @@ export const Custodians: React.FC = () => {
       role: formData.role || '',
       status: 'Pending',
       notes: formData.notes,
-      createdAt: new Date().toISOString().split('T')[0],
-      updatedAt: new Date().toISOString().split('T')[0]
+      createdAt: dateStr,
+      updatedAt: dateStr
     };
     createCustodian(newCustodian);
   };
@@ -152,7 +157,7 @@ export const Custodians: React.FC = () => {
       <div className={cn("flex justify-between items-center p-4 rounded-lg border shadow-sm", theme.surface.default, theme.border.default)}>
         <div>
           <h3 className={cn("font-bold flex items-center", theme.text.primary)}>
-            <Users className="h-5 w-5 mr-2 text-blue-500"/> Custodian Management
+            <Users className="h-5 w-5 mr-2 text-blue-500" /> Custodian Management
           </h3>
           <p className={cn("text-sm", theme.text.secondary)}>Manage data custodians and legal hold recipients.</p>
         </div>
@@ -175,19 +180,19 @@ export const Custodians: React.FC = () => {
             <TableRow key={custodian.id}>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  <Users className={cn("h-4 w-4", theme.text.tertiary)}/>
+                  <Users className={cn("h-4 w-4", theme.text.tertiary)} />
                   <span className={cn("font-medium", theme.text.primary)}>{custodian.name}</span>
                 </div>
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-1 text-sm">
-                  <Mail className={cn("h-3 w-3", theme.text.tertiary)}/>
+                  <Mail className={cn("h-3 w-3", theme.text.tertiary)} />
                   {custodian.email}
                 </div>
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-1 text-sm">
-                  <Building2 className={cn("h-3 w-3", theme.text.tertiary)}/>
+                  <Building2 className={cn("h-3 w-3", theme.text.tertiary)} />
                   {custodian.department || '-'}
                 </div>
               </TableCell>
@@ -223,34 +228,34 @@ export const Custodians: React.FC = () => {
           <Input
             label="Full Name"
             value={formData.name || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })}
             placeholder="Enter custodian's full name"
           />
           <Input
             label="Email Address"
             type="email"
             value={formData.email || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, email: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })}
             placeholder="custodian@company.com"
           />
           <div className="grid grid-cols-2 gap-4">
             <Input
               label="Department"
               value={formData.department || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, department: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, department: e.target.value })}
               placeholder="e.g., Engineering"
             />
             <Input
               label="Role / Title"
               value={formData.role || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, role: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, role: e.target.value })}
               placeholder="e.g., Senior Developer"
             />
           </div>
           <TextArea
             label="Notes"
             value={formData.notes || ''}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, notes: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, notes: e.target.value })}
             placeholder="Additional notes about this custodian..."
             rows={3}
           />
@@ -267,24 +272,24 @@ export const Custodians: React.FC = () => {
           <Input
             label="Full Name"
             value={formData.name || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, name: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, name: e.target.value })}
           />
           <Input
             label="Email Address"
             type="email"
             value={formData.email || ''}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, email: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, email: e.target.value })}
           />
           <div className="grid grid-cols-2 gap-4">
             <Input
               label="Department"
               value={formData.department || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, department: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, department: e.target.value })}
             />
             <Input
               label="Role / Title"
               value={formData.role || ''}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, role: e.target.value})}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, role: e.target.value })}
             />
           </div>
           <div>
@@ -293,7 +298,7 @@ export const Custodians: React.FC = () => {
               title="Select custodian status"
               className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default)}
               value={formData.status || ''}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, status: e.target.value as Custodian['status']})}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, status: e.target.value as Custodian['status'] })}
             >
               <option value="Pending">Pending</option>
               <option value="Active">Active</option>
@@ -304,7 +309,7 @@ export const Custodians: React.FC = () => {
           <TextArea
             label="Notes"
             value={formData.notes || ''}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, notes: e.target.value})}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, notes: e.target.value })}
             rows={3}
           />
           <div className="flex justify-end gap-2 pt-4">
@@ -331,4 +336,3 @@ export const Custodians: React.FC = () => {
 };
 
 export default Custodians;
-

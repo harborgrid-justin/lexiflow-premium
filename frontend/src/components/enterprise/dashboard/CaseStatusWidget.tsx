@@ -4,12 +4,12 @@
  * @description Case status distribution visualization widget
  */
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { Briefcase, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Briefcase, ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useCallback, useState } from 'react';
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 
 export interface CaseStatusData {
   status: string;
@@ -42,6 +42,10 @@ export const CaseStatusWidget: React.FC<CaseStatusWidgetProps> = ({
   const { theme } = useTheme();
   const [expanded, setExpanded] = useState(true);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const toggleExpanded = useCallback(() => {
+    setExpanded(prev => !prev);
+  }, []);
 
   interface TooltipPayload {
     payload: CaseStatusData;

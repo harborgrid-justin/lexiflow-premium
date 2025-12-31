@@ -1,7 +1,7 @@
 /**
  * Legal Deadline Engine - Rule-based deadline calculation for docket entries
  * Production-grade deadline automation based on FRCP, FRAP, and local rules
- * 
+ *
  * @module services/features/legal/deadlineEngine
  * @description Comprehensive deadline calculation service providing:
  * - **Rule-based calculation** (FRCP, FRAP, local rules)
@@ -14,7 +14,7 @@
  * - **Status tracking** (Upcoming, Due Soon, Overdue, Satisfied)
  * - **Batch processing** (generate deadlines for multiple entries)
  * - **Custom rules** (add firm-specific deadline rules)
- * 
+ *
  * @architecture
  * - Pattern: Rule Engine + Pattern Matcher
  * - Rules: Array of DeadlineRule objects with regex triggers
@@ -23,7 +23,7 @@
  * - Priority: Critical (< 7 days), High (7-30 days), Normal (> 30 days)
  * - Status: Real-time calculation based on today's date
  * - Extensibility: addRule() for custom firm rules
- * 
+ *
  * @rules
  * **Federal Rules Covered:**
  * - FRCP 4(m): Service deadline (90 days)
@@ -34,12 +34,12 @@
  * - FRAP 4(a)(1)(A): Notice of appeal (30 days)
  * - Local Rule 7.1: Motion opposition (21 business days)
  * - Local Rule 56.1: Summary judgment reply (42 business days)
- * 
+ *
  * **Entry Types:**
  * - Filing: Complaint, Motion, Brief
  * - Order: Discovery Order, Scheduling Order, Final Judgment
  * - Notice: Settlement Conference, Hearing Notice
- * 
+ *
  * **Pattern Triggers:**
  * - Complaint: /complaint/i → Answer (21 days), Service (90 days)
  * - Motion: /motion\s+(to|for)/i → Opposition (21 biz days), Reply (35 biz days)
@@ -47,44 +47,44 @@
  * - Discovery Order: /discovery\s+(order|schedule)/i → Fact cutoff (90 biz days)
  * - Final Judgment: /final\s+(judgment|order)/i → Notice of appeal (30 days)
  * - Scheduling Order: /scheduling\s+order/i → Amend pleadings (60 biz days)
- * 
+ *
  * @performance
  * - Rule matching: O(n*m) where n = rules, m = regex checks
  * - Business day calc: O(d) where d = days to add (iterates over days)
  * - Calendar day calc: O(1) - simple date arithmetic
  * - Batch processing: O(n*r) where n = entries, r = matching rules
  * - Sorting: O(n log n) for deadline list
- * 
+ *
  * @calculation
  * **Business Days:**
  * - Excludes: Saturdays (6), Sundays (0)
  * - Includes: Federal holidays NOT excluded (simplification)
  * - Algorithm: Iterate forward, skip weekends, decrement counter
- * 
+ *
  * **Calendar Days:**
  * - Includes: All days (weekends, holidays)
  * - Algorithm: Simple date addition
- * 
+ *
  * **Date Format:**
  * - Input: ISO 8601 (YYYY-MM-DD or full timestamp)
  * - Output: YYYY-MM-DD (local time zone)
- * 
+ *
  * @priority
  * **Priority Levels:**
  * - **Critical**: Statute of limitations, notice of appeal, answer deadlines
  * - **High**: Discovery cutoffs, expert disclosures, summary judgment opposition
  * - **Normal**: Reply briefs, non-dispositive motions
- * 
+ *
  * **Status Calculation:**
  * - Overdue: Deadline date < today
  * - Due Soon: 0 ≤ days until deadline ≤ 7
  * - Upcoming: Days until deadline > 7
  * - Satisfied: Manually marked complete
- * 
+ *
  * @usage
  * ```typescript
  * import { DeadlineEngine } from './deadlineEngine';
- * 
+ *
  * // Generate deadlines for complaint filing
  * const complaint: DocketEntry = {
  *   id: 'entry-123',
@@ -94,7 +94,7 @@
  *   date: '2025-01-15',
  *   description: 'Plaintiff files complaint'
  * };
- * 
+ *
  * const deadlines = DeadlineEngine.generateDeadlines(complaint, 'Federal');
  * deadlines.forEach(d => {
  *   console.log(`${d.title}: ${d.date} (${d.priority})`);
@@ -105,15 +105,15 @@
  * //   Defendant must file answer or motion - FRCP 12(a)(1)(A)
  * // Service Deadline: 2025-04-15 (Critical)
  * //   Complete service on all defendants - FRCP 4(m)
- * 
+ *
  * // Batch generate for multiple entries
  * const allDeadlines = DeadlineEngine.generateBatchDeadlines(docketEntries, 'Federal');
  * const sortedByPriority = allDeadlines.filter(d => d.priority === 'Critical');
- * 
+ *
  * // Check deadline status
  * const status = DeadlineEngine.calculateDeadlineStatus(deadlines[0]);
  * // Returns: 'Upcoming' | 'Due Soon' | 'Overdue' | 'Satisfied'
- * 
+ *
  * // Add custom firm rule
  * DeadlineEngine.addRule({
  *   entryType: 'Filing',
@@ -129,7 +129,7 @@
  *   }]
  * });
  * ```
- * 
+ *
  * @data_structures
  * **DeadlineRule:**
  * ```typescript
@@ -140,7 +140,7 @@
  *   deadlines: DeadlineDefinition[]             // Array of deadlines to generate
  * }
  * ```
- * 
+ *
  * **DeadlineDefinition:**
  * ```typescript
  * {
@@ -152,7 +152,7 @@
  *   ruleReference?: string                      // Rule citation (e.g., 'FRCP 12(a)')
  * }
  * ```
- * 
+ *
  * **GeneratedDeadline:**
  * ```typescript
  * {
@@ -167,7 +167,7 @@
  *   ruleReference?: string                      // Rule citation
  * }
  * ```
- * 
+ *
  * @integration
  * - Docket Module: Auto-generate deadlines on entry creation
  * - Calendar: Display deadlines with color-coded priority
@@ -175,7 +175,7 @@
  * - Task Management: Create tasks from deadline definitions
  * - Compliance: Track adherence to court rules
  * - Analytics: Measure on-time deadline compliance rate
- * 
+ *
  * @testing
  * **Test Coverage:**
  * - Business day calculation: Weekend skipping, multi-week spans
@@ -186,7 +186,7 @@
  * - Status calculation: Overdue, Due Soon, Upcoming, Satisfied
  * - Batch processing: Multiple entries, sorting by date
  * - Custom rules: addRule() integration
- * 
+ *
  * @limitations
  * - No federal holiday calendar (treats holidays as business days)
  * - No state-specific rules (generic State jurisdiction)
@@ -194,7 +194,7 @@
  * - No extension requests (assumes original deadlines)
  * - No time zone handling (uses local browser time)
  * - No conflict resolution (multiple rules = multiple deadlines)
- * 
+ *
  * @future
  * - Federal holiday calendar: Exclude federal holidays from business days
  * - State rules: California, New York, Texas-specific rules
@@ -297,7 +297,7 @@ const DEADLINE_RULES: DeadlineRule[] = [
       }
     ]
   },
-  
+
   // Motion Deadlines (Federal)
   {
     entryType: 'Filing',
@@ -322,7 +322,7 @@ const DEADLINE_RULES: DeadlineRule[] = [
       }
     ]
   },
-  
+
   // Complaint Filing Deadlines
   {
     entryType: 'Filing',
@@ -347,7 +347,7 @@ const DEADLINE_RULES: DeadlineRule[] = [
       }
     ]
   },
-  
+
   // Scheduling Order Deadlines
   {
     entryType: 'Order',
@@ -372,7 +372,7 @@ const DEADLINE_RULES: DeadlineRule[] = [
       }
     ]
   },
-  
+
   // Summary Judgment Deadlines
   {
     entryType: 'Filing',
@@ -397,7 +397,7 @@ const DEADLINE_RULES: DeadlineRule[] = [
       }
     ]
   },
-  
+
   // Orders Requiring Response
   {
     entryType: 'Order',
@@ -414,7 +414,7 @@ const DEADLINE_RULES: DeadlineRule[] = [
       }
     ]
   },
-  
+
   // Appeal Deadlines
   {
     entryType: 'Order',
@@ -431,7 +431,7 @@ const DEADLINE_RULES: DeadlineRule[] = [
       }
     ]
   },
-  
+
   // Settlement Conference
   {
     entryType: 'Notice',
@@ -461,7 +461,7 @@ const DEADLINE_RULES: DeadlineRule[] = [
 function addBusinessDays(startDate: Date, days: number): Date {
   const current = new Date(startDate);
   let remaining = days;
-  
+
   while (remaining > 0) {
     current.setDate(current.getDate() + 1);
     const dayOfWeek = current.getDay();
@@ -470,7 +470,7 @@ function addBusinessDays(startDate: Date, days: number): Date {
       remaining--;
     }
   }
-  
+
   return current;
 }
 
@@ -489,7 +489,7 @@ function addCalendarDays(startDate: Date, days: number): Date {
  * @private
  */
 function formatDate(date: Date): string {
-  return date.toISOString().split('T')[0];
+  return date.toISOString().split('T')[0]!;
 }
 
 /**
@@ -515,31 +515,31 @@ export const DeadlineEngine = {
   generateDeadlines(entry: DocketEntry, jurisdiction: 'Federal' | 'State' = 'Federal'): GeneratedDeadline[] {
     const deadlines: GeneratedDeadline[] = [];
     const entryDate = new Date(entry.date || entry.entryDate || entry.dateFiled);
-    
+
     // Find matching rules
     const matchingRules = DEADLINE_RULES.filter(rule => {
       // Check entry type
       if (rule.entryType !== entry.type) return false;
-      
+
       // Check jurisdiction
       if (rule.jurisdiction !== 'Both' && rule.jurisdiction !== jurisdiction) return false;
-      
+
       // Check trigger pattern if specified
       if (rule.triggerPattern) {
         const searchText = `${entry.title} ${entry.description || ''}`;
         if (!rule.triggerPattern.test(searchText)) return false;
       }
-      
+
       return true;
     });
-    
+
     // Generate deadlines from matching rules
     matchingRules.forEach((rule, ruleIndex) => {
       rule.deadlines.forEach((def, defIndex) => {
         const deadlineDate = def.businessDaysOnly
           ? addBusinessDays(entryDate, def.daysFromFiling)
           : addCalendarDays(entryDate, def.daysFromFiling);
-        
+
         deadlines.push({
           id: generateDeadlineId(entry.id, ruleIndex * 100 + defIndex),
           title: def.title,
@@ -553,54 +553,54 @@ export const DeadlineEngine = {
         });
       });
     });
-    
+
     return deadlines;
   },
-  
+
   /**
    * Get all deadline rules
    */
   getRules(): DeadlineRule[] {
     return [...DEADLINE_RULES];
   },
-  
+
   /**
    * Add custom deadline rule
    */
   addRule(rule: DeadlineRule): void {
     DEADLINE_RULES.push(rule);
   },
-  
+
   /**
    * Calculate deadline status
    */
   calculateDeadlineStatus(deadline: GeneratedDeadline): 'Upcoming' | 'Due Soon' | 'Overdue' | 'Satisfied' {
     if (deadline.status === 'Satisfied') return 'Satisfied';
-    
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     const deadlineDate = new Date(deadline.date);
     deadlineDate.setHours(0, 0, 0, 0);
-    
+
     const daysUntilDeadline = Math.ceil((deadlineDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-    
+
     if (daysUntilDeadline < 0) return 'Overdue';
     if (daysUntilDeadline <= 7) return 'Due Soon';
     return 'Upcoming';
   },
-  
+
   /**
    * Get deadlines for multiple entries
    */
   generateBatchDeadlines(entries: DocketEntry[], jurisdiction: 'Federal' | 'State' = 'Federal'): GeneratedDeadline[] {
     const allDeadlines: GeneratedDeadline[] = [];
-    
+
     for (const entry of entries) {
       const entryDeadlines = this.generateDeadlines(entry, jurisdiction);
       allDeadlines.push(...entryDeadlines);
     }
-    
+
     // Sort by date
     return allDeadlines.sort((a, b) => a.date.localeCompare(b.date));
   }

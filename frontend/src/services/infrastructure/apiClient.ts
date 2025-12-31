@@ -37,7 +37,7 @@
  * - Minimal memory footprint with streaming uploads
  */
 
-import { getApiBaseUrl } from "@/config/network/api.config";
+import { getApiBaseUrl, getApiPrefix } from "@/config/network/api.config";
 import {
   ApiTimeoutError,
   AuthenticationError,
@@ -111,13 +111,28 @@ export type { PaginatedResponse as PaginatedApiResponse };
 class ApiClient {
   // Dynamic getter to support HMR and runtime config changes
   private get baseURL(): string {
-    return getBaseUrl();
+    const base = getBaseUrl();
+    const prefix = getApiPrefix();
+
+    // If base is empty (dev proxy), return prefix
+    if (!base) {
+      return prefix;
+    }
+
+    // If base already ends with prefix, return as is
+    if (base.endsWith(prefix)) {
+      return base;
+    }
+
+    // Append prefix, ensuring no double slashes
+    return `${base.replace(/\/$/, "")}${prefix}`;
   }
 
   private readonly authTokenKey: string;
   private readonly refreshTokenKey: string;
   private readonly DEFAULT_TIMEOUT = 30000; // 30 seconds
   private readonly HEALTH_CHECK_TIMEOUT = 5000; // 5 seconds
+  private refreshPromise: Promise<boolean> | null = null;
 
   constructor() {
     // this.baseURL is now a getter
@@ -313,11 +328,20 @@ class ApiClient {
             const refreshed = await this.refreshAccessToken(refreshToken);
             if (refreshed) {
               throw new AuthenticationError("TOKEN_REFRESHED"); // Signal to retry request
+            } else {
+              console.warn("[ApiClient] Token refresh failed, clearing tokens and redirecting");
+              this.clearAuthTokens();
+              window.location.href = "/login";
+              throw new AuthenticationError("Session expired. Please login again.");
             }
           } catch (error) {
+            if (error instanceof AuthenticationError && error.message === "TOKEN_REFRESHED") {
+              throw error;
+            }
             console.error("[ApiClient] Token refresh failed:", error);
             this.clearAuthTokens();
             window.location.href = "/login";
+            throw new AuthenticationError("Session expired. Please login again.");
           }
         } else {
           console.warn(
@@ -364,32 +388,50 @@ class ApiClient {
    * @private
    */
   private async refreshAccessToken(refreshToken: string): Promise<boolean> {
-    try {
-      const fullUrl = this.baseURL
-        ? `${this.baseURL}/auth/refresh`
-        : "/auth/refresh";
-      const url = new URL(fullUrl, window.location.origin);
-      const response = await fetch(url.toString(), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refreshToken }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        this.setAuthTokens(data.accessToken, data.refreshToken);
-        console.log("[ApiClient] Token refreshed successfully");
-        return true;
-      }
-      console.warn(
-        "[ApiClient] Token refresh returned non-OK status:",
-        response.status
-      );
-      return false;
-    } catch (error) {
-      console.error("[ApiClient] Token refresh error:", error);
-      return false;
+    if (this.refreshPromise) {
+      return this.refreshPromise;
     }
+
+    this.refreshPromise = (async () => {
+      try {
+        const fullUrl = this.baseURL
+          ? `${this.baseURL}/auth/refresh`
+          : "/auth/refresh";
+        const url = new URL(fullUrl, window.location.origin);
+        const response = await fetch(url.toString(), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refreshToken }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          // Handle wrapped response from NestJS interceptor
+          const accessToken = data.accessToken || data.data?.accessToken;
+          const newRefreshToken = data.refreshToken || data.data?.refreshToken;
+
+          if (accessToken) {
+            this.setAuthTokens(accessToken, newRefreshToken);
+            console.log("[ApiClient] Token refreshed successfully");
+            return true;
+          }
+          console.error("[ApiClient] Token refresh failed: Invalid response format", data);
+          return false;
+        }
+        console.warn(
+          "[ApiClient] Token refresh returned non-OK status:",
+          response.status
+        );
+        return false;
+      } catch (error) {
+        console.error("[ApiClient] Token refresh error:", error);
+        return false;
+      } finally {
+        this.refreshPromise = null;
+      }
+    })();
+
+    return this.refreshPromise;
   }
 
   // =============================================================================
@@ -426,6 +468,9 @@ class ApiClient {
 
       return await this.handleResponse<T>(response);
     } catch (error) {
+      if (error instanceof AuthenticationError && error.message === "TOKEN_REFRESHED") {
+        return this.get<T>(endpoint, params);
+      }
       console.error("[ApiClient.get] Error:", error);
       throw error;
     }
@@ -460,6 +505,9 @@ class ApiClient {
 
       return await this.handleResponse<T>(response);
     } catch (error) {
+      if (error instanceof AuthenticationError && error.message === "TOKEN_REFRESHED") {
+        return this.post<T>(endpoint, data, options);
+      }
       console.error("[ApiClient.post] Error:", error);
       throw error;
     }
@@ -488,6 +536,9 @@ class ApiClient {
 
       return await this.handleResponse<T>(response);
     } catch (error) {
+      if (error instanceof AuthenticationError && error.message === "TOKEN_REFRESHED") {
+        return this.put<T>(endpoint, data);
+      }
       console.error("[ApiClient.put] Error:", error);
       throw error;
     }
@@ -516,6 +567,9 @@ class ApiClient {
 
       return await this.handleResponse<T>(response);
     } catch (error) {
+      if (error instanceof AuthenticationError && error.message === "TOKEN_REFRESHED") {
+        return this.patch<T>(endpoint, data);
+      }
       console.error("[ApiClient.patch] Error:", error);
       throw error;
     }
@@ -541,6 +595,9 @@ class ApiClient {
 
       return await this.handleResponse<T>(response);
     } catch (error) {
+      if (error instanceof AuthenticationError && error.message === "TOKEN_REFRESHED") {
+        return this.delete<T>(endpoint);
+      }
       console.error("[ApiClient.delete] Error:", error);
       throw error;
     }
@@ -598,6 +655,9 @@ class ApiClient {
 
       return await this.handleResponse<T>(response);
     } catch (error) {
+      if (error instanceof AuthenticationError && error.message === "TOKEN_REFRESHED") {
+        return this.upload<T>(endpoint, file, additionalData);
+      }
       console.error("[ApiClient.upload] Error:", error);
       throw error;
     }

@@ -55,12 +55,11 @@ export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExpl
         }
     );
 
-    const renderGridCell = (item: unknown) => {
-        const doc = item as LegalDocument;
+    const renderGridCell = (item: LegalDocument, index: number) => {
         return (
             <DocumentGridCard
-                doc={doc}
-                isSelected={isSelected(doc.id)}
+                doc={item}
+                isSelected={isSelected(item.id)}
                 onToggleSelection={(id, e) => toggleSelection(id, e)}
                 onPreview={setPreviewDoc}
             />

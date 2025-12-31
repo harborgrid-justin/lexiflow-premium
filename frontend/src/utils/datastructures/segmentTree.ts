@@ -13,13 +13,13 @@ export class SegmentTree {
 
     private build(arr: number[], node: number, start: number, end: number) {
         if (start === end) {
-            this.tree[node] = arr[start];
+            this.tree[node] = arr[start]!;
             return;
         }
         const mid = Math.floor((start + end) / 2);
         this.build(arr, 2 * node + 1, start, mid);
         this.build(arr, 2 * node + 2, mid + 1, end);
-        this.tree[node] = this.operation(this.tree[2 * node + 1], this.tree[2 * node + 2]);
+        this.tree[node] = this.operation(this.tree[2 * node + 1]!, this.tree[2 * node + 2]!);
     }
 
     query(l: number, r: number): number {
@@ -31,7 +31,7 @@ export class SegmentTree {
             return this.operation === Math.max ? -Infinity : Infinity; // Identity
         }
         if (l <= start && end <= r) {
-            return this.tree[node];
+            return this.tree[node]!;
         }
         const mid = Math.floor((start + end) / 2);
         const p1 = this._query(2 * node + 1, start, mid, l, r);

@@ -76,7 +76,7 @@ export function extractTemplateVariables(content: string): string[] {
   const matches = content.matchAll(TEMPLATE_VARIABLE_PATTERN);
 
   for (const match of matches) {
-    variables.add(match[1].trim());
+    variables.add(match[1]!.trim());
   }
 
   return Array.from(variables);
@@ -109,11 +109,11 @@ export function validateTemplateContext(
  * Creates standard template context from case data
  */
 export function createTemplateContext(caseData: Case): TemplateContext {
-  const plaintiff = caseData.parties?.find(p => 
+  const plaintiff = caseData.parties?.find(p =>
     p.role.includes('Plaintiff') || p.role.includes('Appellant')
   );
-  
-  const defendant = caseData.parties?.find(p => 
+
+  const defendant = caseData.parties?.find(p =>
     p.role.includes('Defendant') || p.role.includes('Appellee')
   );
 

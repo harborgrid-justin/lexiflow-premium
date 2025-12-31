@@ -23,10 +23,10 @@ import { PacerCase, PacerParty, PacerJurisdictionType } from '@/types/pacer';
 // SERVICE
 // ============================================================================
 export const XmlDocketParser = {
-  parse: async (xmlString: string): Promise<{ 
-    caseInfo: Partial<Case>, 
-    parties: Party[], 
-    docketEntries: DocketEntry[] 
+  parse: async (xmlString: string): Promise<{
+    caseInfo: Partial<Case>,
+    parties: Party[],
+    docketEntries: DocketEntry[]
   }> => {
     // Validate input
     if (!xmlString || !xmlString.trim()) {
@@ -40,7 +40,7 @@ export const XmlDocketParser = {
       // We assume the XML string load itself isn't the blocker, but the traversal is.
       const parser = new DOMParser();
       doc = parser.parseFromString(xmlString, "text/xml");
-      
+
       // Check for XML parse errors
       const parserError = doc.querySelector('parsererror');
       if (parserError) {
@@ -58,23 +58,23 @@ export const XmlDocketParser = {
     try {
       const stub = doc.querySelector("stub");
       const caseTypeNode = doc.querySelector("caseType");
-      
+
       // Require at minimum a stub node
       if (!stub) {
         throw new ValidationError('Missing required <stub> element in XML');
       }
-      
+
       const pacerData: Partial<PacerCase> = {
           caseTitle: stub.getAttribute("shortTitle") || "Unknown Case",
           caseNumberFull: stub.getAttribute("caseNumber") || "",
           dateFiled: stub.getAttribute("dateFiled") || "",
-          courtId: stub.getAttribute("origCourt") || "", 
+          courtId: stub.getAttribute("origCourt") || "",
           natureOfSuit: stub.getAttribute("natureOfSuit") || "",
           caseType: caseTypeNode?.getAttribute("type") || "cv",
           jurisdictionType: (caseTypeNode?.getAttribute("type") === "Bankruptcy-District Court" ? 'ap' : 'cv') as PacerJurisdictionType,
           caseStatus: stub.getAttribute("dateTerminated") ? 'C' : 'O',
       };
-      
+
       caseInfo = {
         title: pacerData.caseTitle,
         id: (pacerData.caseNumberFull || "Unknown ID") as CaseId,
@@ -106,22 +106,23 @@ export const XmlDocketParser = {
     const parties: Party[] = [];
     try {
       const partyNodes = Array.from(doc.querySelectorAll("party"));
-      
+
       for (let i = 0; i < partyNodes.length; i++) {
         try {
           const p = partyNodes[i];
+          if (!p) continue;
           const attorney = p.querySelector("attorney");
           const name = p.getAttribute("info") || "Unknown";
           const typeStr = p.getAttribute("type") || "";
-          
+
           let type: 'Individual' | 'Corporation' | 'Government' = 'Individual';
           if (name.includes("Inc") || name.includes("Corp") || name.includes("LLC")) type = 'Corporation';
-          
+
           const pacerParty: Partial<PacerParty> = {
               lastName: name,
               partyRole: typeStr.trim(),
           };
-          
+
           parties.push({
             id: `p-xml-${i}` as PartyId,
             caseId: (caseInfo.id || `case-${Date.now()}`) as CaseId,
@@ -131,7 +132,7 @@ export const XmlDocketParser = {
             type: type,
             counsel: attorney ? `${attorney.getAttribute("firstName") || ''} ${attorney.getAttribute("lastName") || ''}`.trim() : undefined,
             partyGroup: p.getAttribute("prisonerNumber") ? "Prisoner" : undefined,
-            pacerData: pacerParty as any
+            pacerData: JSON.parse(JSON.stringify(pacerParty))
           });
 
           // Yield every 50 parties to avoid blocking
@@ -150,24 +151,25 @@ export const XmlDocketParser = {
     const docketEntries: DocketEntry[] = [];
     try {
       const docketNodes = Array.from(doc.querySelectorAll("docketText"));
-      
+
       if (docketNodes.length === 0) {
         console.warn('No docket entries found in XML');
       }
-      
+
       for (let i = 0; i < docketNodes.length; i++) {
         try {
           const dt = docketNodes[i];
+          if (!dt) continue;
           const text = dt.getAttribute("text") || "";
           const date = dt.getAttribute("dateFiled") || "";
           const docLink = dt.getAttribute("docLink") || undefined;
-          
+
           // Skip entries with no text
           if (!text.trim()) {
             console.warn(`Skipping empty docket entry at index ${i}`);
             continue;
           }
-          
+
           let type: DocketEntryType = 'Filing';
           if (text.toUpperCase().includes("ORDER")) type = 'Order';
           else if (text.toUpperCase().includes("NOTICE")) type = 'Notice';
@@ -175,7 +177,7 @@ export const XmlDocketParser = {
           else if (text.toUpperCase().includes("EXHIBIT")) type = 'Exhibit';
 
           const seqMatch = text.match(/\[(\d+)\]/);
-          const seq = seqMatch ? parseInt(seqMatch[1]) : i + 1;
+          const seq = (seqMatch && seqMatch[1]) ? parseInt(seqMatch[1]) : i + 1;
 
           docketEntries.push({
             id: `dk-xml-${i}` as DocketId,

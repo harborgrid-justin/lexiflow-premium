@@ -14,13 +14,13 @@ export class BloomFilter {
     private readonly size: number;
     private readonly hashes: number;
     private readonly buffer: Uint8Array;
-  
+
     constructor(expectedItems: number, falsePositiveRate: number) {
       this.size = Math.ceil(-1 * (expectedItems * Math.log(falsePositiveRate)) / (Math.log(2) ** 2));
       this.hashes = Math.ceil((this.size / expectedItems) * Math.log(2));
       this.buffer = new Uint8Array(Math.ceil(this.size / 8));
     }
-  
+
     // FNV-1a Hash
     private hash1(str: string): number {
       let hash = 0x811c9dc5;
@@ -30,7 +30,7 @@ export class BloomFilter {
       }
       return hash >>> 0;
     }
-  
+
     // Simple variant for second hash
     private hash2(str: string): number {
       let hash = 0;
@@ -40,19 +40,19 @@ export class BloomFilter {
       }
       return hash >>> 0;
     }
-  
+
     add(item: string) {
       const h1 = this.hash1(item);
       const h2 = this.hash2(item);
-  
+
       for (let i = 0; i < this.hashes; i++) {
         const hash = (h1 + i * h2) % this.size;
         const byteIndex = Math.floor(hash / 8);
         const bitIndex = hash % 8;
-        this.buffer[byteIndex] |= (1 << bitIndex);
+        this.buffer[byteIndex]! |= (1 << bitIndex);
       }
     }
-  
+
     test(item: string): boolean {
       const h1 = this.hash1(item);
       const h2 = this.hash2(item);
@@ -61,7 +61,7 @@ export class BloomFilter {
         const hash = (h1 + i * h2) % this.size;
         const byteIndex = Math.floor(hash / 8);
         const bitIndex = hash % 8;
-        if ((this.buffer[byteIndex] & (1 << bitIndex)) === 0) {
+        if ((this.buffer[byteIndex]! & (1 << bitIndex)) === 0) {
           return false;
         }
       }

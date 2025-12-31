@@ -22,16 +22,16 @@ export class BTree<K, V> {
 
     private _search(node: BTreeNode<K, V>, key: K): V | null {
         let i = 0;
-        while (i < node.keys.length && key > node.keys[i]) {
+        while (i < node.keys.length && key > node.keys[i]!) {
             i++;
         }
         if (i < node.keys.length && key === node.keys[i]) {
-            return node.values[i];
+            return node.values[i]!;
         }
         if (node.isLeaf) {
             return null;
         }
-        return this._search(node.children[i], key);
+        return this._search(node.children[i]!, key);
     }
     
     // Insert and split logic is complex and omitted for this demonstration.
@@ -62,16 +62,16 @@ export class BTree<K, V> {
     
     private _rangeSearch(node: BTreeNode<K, V>, startKey: K, endKey: K, results: V[]) {
         let i = 0;
-        while(i < node.keys.length && startKey > node.keys[i]) i++;
+        while(i < node.keys.length && startKey > node.keys[i]!) i++;
 
         if (!node.isLeaf) {
-            this._rangeSearch(node.children[i], startKey, endKey, results);
+            this._rangeSearch(node.children[i]!, startKey, endKey, results);
         }
         
-        while(i < node.keys.length && node.keys[i] <= endKey) {
-            results.push(node.values[i]);
+        while(i < node.keys.length && node.keys[i]! <= endKey) {
+            results.push(node.values[i]!);
             if (!node.isLeaf) {
-                this._rangeSearch(node.children[i+1], startKey, endKey, results);
+                this._rangeSearch(node.children[i+1]!, startKey, endKey, results);
             }
             i++;
         }

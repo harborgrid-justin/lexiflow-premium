@@ -38,15 +38,15 @@ export class ConsistentHashRing {
         if (this.sortedKeys.length === 0) return null;
         const hash = this.hash(key);
         const index = this.binarySearch(this.sortedKeys, hash);
-        return this.ring.get(this.sortedKeys[index])!;
+        return this.ring.get(this.sortedKeys[index]!)!;
     }
-    
+
     // Custom binary search to find the next highest key
     private binarySearch(arr: number[], value: number): number {
         let low = 0, high = arr.length;
         while (low < high) {
             const mid = (low + high) >> 1;
-            if (arr[mid] >= value) high = mid;
+            if (arr[mid]! >= value) high = mid;
             else low = mid + 1;
         }
         return low % arr.length;

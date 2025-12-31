@@ -1,7 +1,7 @@
 /**
  * @module FormattersService
  * @description Enterprise-grade formatting utilities for LexiFlow legal platform
- * 
+ *
  * Provides type-safe, validated formatting operations for:
  * - Currency (multi-currency support with Intl.NumberFormat)
  * - Dates (ISO 8601 standard with localization)
@@ -9,33 +9,33 @@
  * - String manipulation (case transformations, truncation)
  * - Phone numbers (E.164 format support)
  * - Legal citations (case name formatting)
- * 
+ *
  * @architecture
  * - Immutable formatters with pure functions
  * - Intl API for localization (ECMA-402 compliant)
  * - Input validation with fallbacks
  * - Type-safe with TypeScript strict mode
  * - Zero dependencies (native APIs only)
- * 
+ *
  * @security
  * - Input sanitization for all string inputs
  * - NaN/Infinity detection in numeric formatters
  * - Safe string truncation (no buffer overflow)
  * - Locale validation for Intl formatters
  * - No eval() or unsafe operations
- * 
+ *
  * @example
  * import { FormattersService } from './formatters';
- * 
+ *
  * // Currency formatting
  * const price = FormattersService.currency(1299.99, 'USD'); // "$1,299.99"
- * 
+ *
  * // Date formatting
  * const date = FormattersService.date(new Date(), { month: 'long', day: 'numeric' }); // "December 18"
- * 
+ *
  * // File size formatting
  * const size = FormattersService.fileSize(1048576); // "1.00 MB"
- * 
+ *
  * @created 2025-12-18
  * @modified 2025-12-18
  */
@@ -152,7 +152,7 @@ const validateCurrency = (currency: string): string => {
 /**
  * FormattersService
  * Centralized formatting utilities with comprehensive validation
- * 
+ *
  * @constant FormattersService
  */
 export const FormattersService = {
@@ -162,19 +162,19 @@ export const FormattersService = {
 
   /**
    * Format a numeric value as currency
-   * 
+   *
    * @param amount - Numeric value to format
    * @param currency - ISO 4217 currency code (default: USD)
    * @param locale - BCP 47 locale code (default: en-US)
    * @returns Formatted currency string
    * @throws Error if amount is invalid
-   * 
+   *
    * @example
    * FormattersService.currency(1299.99);              // "$1,299.99"
    * FormattersService.currency(1299.99, 'EUR');       // "€1,299.99"
    * FormattersService.currency('1299.99', 'GBP');     // "£1,299.99"
    * FormattersService.currency(1299.999);             // "$1,300.00" (rounds)
-   * 
+   *
    * @security
    * - NaN/Infinity detection
    * - Type coercion with validation
@@ -204,11 +204,11 @@ export const FormattersService = {
 
   /**
    * Format currency without symbol (for calculations display)
-   * 
+   *
    * @param amount - Numeric value
    * @param decimals - Decimal places (default: 2)
    * @returns Formatted number string
-   * 
+   *
    * @example
    * FormattersService.currencyValue(1299.99);    // "1,299.99"
    */
@@ -232,22 +232,22 @@ export const FormattersService = {
 
   /**
    * Format a date with optional Intl options
-   * 
+   *
    * @param date - Date string or Date object
    * @param options - Intl.DateTimeFormatOptions for localization
    * @returns Formatted date string (ISO YYYY-MM-DD by default)
    * @throws Error if date is invalid
-   * 
+   *
    * @example
    * FormattersService.date(new Date());                           // "2025-12-18"
    * FormattersService.date('2025-12-18');                         // "2025-12-18"
    * FormattersService.date(new Date(), { month: 'long' });        // "December"
-   * FormattersService.date(new Date(), { 
-   *   year: 'numeric', 
-   *   month: 'long', 
-   *   day: 'numeric' 
+   * FormattersService.date(new Date(), {
+   *   year: 'numeric',
+   *   month: 'long',
+   *   day: 'numeric'
    * }); // "December 18, 2025"
-   * 
+   *
    * @security
    * - Date validation (prevents invalid dates)
    * - ISO 8601 default format
@@ -262,7 +262,7 @@ export const FormattersService = {
       }
 
       // Default: ISO-like YYYY-MM-DD for consistency
-      return validDate.toISOString().split('T')[0];
+      return validDate.toISOString().split('T')[0]!;
     } catch (error) {
       console.error('[FormattersService.date] Error:', error);
       return 'N/A';
@@ -271,10 +271,10 @@ export const FormattersService = {
 
   /**
    * Format date with time
-   * 
+   *
    * @param date - Date string or Date object
    * @returns Formatted datetime string
-   * 
+   *
    * @example
    * FormattersService.datetime(new Date()); // "12/18/2025, 3:45 PM"
    */
@@ -297,10 +297,10 @@ export const FormattersService = {
 
   /**
    * Format date as relative time (e.g., "2 hours ago")
-   * 
+   *
    * @param date - Date string or Date object
    * @returns Relative time string
-   * 
+   *
    * @example
    * FormattersService.relativeTime(new Date(Date.now() - 3600000)); // "1 hour ago"
    */
@@ -338,18 +338,18 @@ export const FormattersService = {
 
   /**
    * Format bytes as human-readable file size
-   * 
+   *
    * @param bytes - Numeric byte count
    * @param decimals - Decimal precision (default: 2)
    * @returns Formatted file size string
    * @throws Error if bytes is invalid
-   * 
+   *
    * @example
    * FormattersService.fileSize(0);          // "0 Bytes"
    * FormattersService.fileSize(1024);       // "1.00 KB"
    * FormattersService.fileSize(1048576);    // "1.00 MB"
    * FormattersService.fileSize(1048576, 0); // "1 MB"
-   * 
+   *
    * @security
    * - Validates numeric input
    * - Prevents negative values
@@ -384,15 +384,15 @@ export const FormattersService = {
 
   /**
    * Capitalize first letter of a string
-   * 
+   *
    * @param str - String to capitalize
    * @returns Capitalized string
-   * 
+   *
    * @example
    * FormattersService.capitalize('hello');      // "Hello"
    * FormattersService.capitalize('HELLO');      // "Hello"
    * FormattersService.capitalize('hello world'); // "Hello world"
-   * 
+   *
    * @security
    * - Safe string manipulation (no buffer overflow)
    * - Type validation
@@ -414,10 +414,10 @@ export const FormattersService = {
 
   /**
    * Title case a string (capitalize each word)
-   * 
+   *
    * @param str - String to title case
    * @returns Title-cased string
-   * 
+   *
    * @example
    * FormattersService.titleCase('hello world'); // "Hello World"
    */
@@ -438,15 +438,15 @@ export const FormattersService = {
 
   /**
    * Truncate string with ellipsis
-   * 
+   *
    * @param str - String to truncate
    * @param maxLength - Maximum length (default: 50)
    * @param ellipsis - Ellipsis string (default: "...")
    * @returns Truncated string
-   * 
+   *
    * @example
    * FormattersService.truncate('This is a long string', 10); // "This is a..."
-   * 
+   *
    * @security
    * - Length validation (prevents overflow)
    * - Safe substring operations
@@ -472,10 +472,10 @@ export const FormattersService = {
 
   /**
    * Format phone number (US format)
-   * 
+   *
    * @param phone - Phone number string
    * @returns Formatted phone number
-   * 
+   *
    * @example
    * FormattersService.phone('1234567890');    // "(123) 456-7890"
    * FormattersService.phone('123-456-7890');  // "(123) 456-7890"
@@ -503,10 +503,10 @@ export const FormattersService = {
 
   /**
    * Format legal case name (proper citation format)
-   * 
+   *
    * @param caseName - Case name string
    * @returns Formatted case name
-   * 
+   *
    * @example
    * FormattersService.legalCaseName('smith v. jones'); // "Smith v. Jones"
    */
@@ -536,12 +536,12 @@ export const FormattersService = {
 
   /**
    * Format number as percentage
-   * 
+   *
    * @param value - Numeric value (0-1 for fraction, or 0-100 for percentage)
    * @param decimals - Decimal places (default: 0)
    * @param isFraction - If true, value is 0-1 (default: false)
    * @returns Formatted percentage string
-   * 
+   *
    * @example
    * FormattersService.percentage(0.75, 0, true);   // "75%"
    * FormattersService.percentage(75, 0);           // "75%"

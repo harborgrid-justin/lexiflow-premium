@@ -139,8 +139,8 @@ export class TokenSecurityService {
       refreshPayload.familyId = tokenFamilyId;
     }
 
-    const jwtSecret = this.configService.get<string>('jwt.secret');
-    const refreshSecret = this.configService.get<string>('jwt.refreshSecret');
+    const jwtSecret = this.configService.get<string>('app.jwt.secret');
+    const refreshSecret = this.configService.get<string>('app.jwt.refreshSecret');
 
     if (!jwtSecret || !refreshSecret) {
       throw new UnauthorizedException('Server configuration error');
@@ -189,7 +189,7 @@ export class TokenSecurityService {
     fingerprint: ClientFingerprint,
   ): Promise<TokenPair> {
     // Verify refresh token
-    const refreshSecret = this.configService.get<string>('jwt.refreshSecret');
+    const refreshSecret = this.configService.get<string>('app.jwt.refreshSecret');
     if (!refreshSecret) {
       throw new UnauthorizedException('Server configuration error');
     }

@@ -1,7 +1,7 @@
 /**
  * Blockchain Chain Service - Cryptographic audit log with tamper detection
  * Production-grade blockchain-style chaining for legal audit logs and evidence integrity
- * 
+ *
  * @module services/infrastructure/chainService
  * @description Comprehensive blockchain service providing:
  * - **Cryptographic chaining** (SHA-256 hash linkage between log entries)
@@ -12,7 +12,7 @@
  * - **Web Crypto API** (native browser crypto, no external dependencies)
  * - **Immutability guarantee** (any modification breaks hash chain)
  * - **Regulatory compliance** (audit trail for legal/financial systems)
- * 
+ *
  * @architecture
  * - Pattern: Blockchain + Merkle Chain
  * - Hashing: SHA-256 via Web Crypto API (native, secure)
@@ -21,40 +21,40 @@
  * - Verification: Full chain recalculation (O(n) complexity)
  * - Immutability: Hash includes (id, timestamp, user, action, resource, prevHash)
  * - Export: JSON blob download for external verification
- * 
+ *
  * @security
  * **Cryptographic Guarantees:**
  * - Hash function: SHA-256 (collision-resistant, one-way)
  * - Tamper evidence: Any modification invalidates hash chain
  * - Linkage: Each block cryptographically bound to previous block
  * - Genesis anchor: Known starting point (all-zero hash)
- * 
+ *
  * **Attack Resistance:**
  * - Content modification: Changes data → hash mismatch detected
  * - Block reordering: Changes prevHash → linkage broken
  * - Block insertion: Requires recalculating all subsequent hashes
  * - Block deletion: Creates prevHash gap → verification fails
  * - Replay attacks: Timestamps in hash prevent reuse
- * 
+ *
  * **Limitations:**
  * - Not distributed: Single-node chain (not consensus-based)
  * - No mining: Hashes generated immediately (no proof-of-work)
  * - Centralized: No peer verification or Byzantine fault tolerance
  * - Client-side: Chain stored in IndexedDB (vulnerable to local tampering if entire DB replaced)
- * 
+ *
  * @performance
  * - Hash generation: ~1-2ms per entry (Web Crypto API)
  * - Chain verification: O(n) - must recalculate all hashes
  * - Memory: Minimal - processes chain sequentially
  * - Export: Fast JSON serialization, browser download API
- * 
+ *
  * @verification
  * **Integrity Checks:**
  * 1. **Linkage verification**: current.prevHash === previous.hash
  * 2. **Content verification**: recalculated hash === stored hash
  * 3. **Genesis check**: First entry has prevHash = '0000...0000'
  * 4. **Sequential validation**: Entire chain verified from genesis to tip
- * 
+ *
  * **Verification Algorithm:**
  * ```
  * FOR each block in chain:
@@ -62,21 +62,21 @@
  *     expected_prev = '0000...0000'
  *   ELSE:
  *     expected_prev = previous_block.hash
- *   
+ *
  *   IF block.prevHash != expected_prev:
  *     RETURN broken (linkage failure)
- *   
+ *
  *   recalculated_hash = SHA256(block.data + block.prevHash)
  *   IF recalculated_hash != block.hash:
  *     RETURN broken (content tampered)
- * 
+ *
  * RETURN valid (all blocks verified)
  * ```
- * 
+ *
  * @usage
  * ```typescript
  * import { ChainService } from './chainService';
- * 
+ *
  * // Create genesis entry (first entry in chain)
  * const genesisHash = '0000000000000000000000000000000000000000000000000000000000000000';
  * const firstEntry = await ChainService.createEntry({
@@ -87,7 +87,7 @@
  *   metadata: {}
  * }, genesisHash);
  * // Returns: { id, timestamp, user, action, resource, metadata, hash, prevHash }
- * 
+ *
  * // Create subsequent entry (links to previous)
  * const secondEntry = await ChainService.createEntry({
  *   timestamp: new Date().toISOString(),
@@ -97,7 +97,7 @@
  *   metadata: { caseNumber: 'C-2024-001' }
  * }, firstEntry.hash);
  * // prevHash now links to firstEntry, creating cryptographic chain
- * 
+ *
  * // Verify entire chain integrity
  * const chain = [firstEntry, secondEntry];
  * const report = await ChainService.verifyChain(chain);
@@ -107,12 +107,12 @@
  *   console.error(`Chain broken at block ${report.brokenIndex}`);
  * }
  * // Returns: { isValid: true, totalBlocks: 2, brokenIndex: -1, verifiedAt: ISO timestamp }
- * 
+ *
  * // Export ledger for external auditing
  * ChainService.exportLedger(chain);
  * // Downloads: lexiflow_ledger_export_2025-12-22.json
  * ```
- * 
+ *
  * @data_structure
  * **ChainedLogEntry:**
  * ```typescript
@@ -127,7 +127,7 @@
  *   prevHash: string    // Previous block hash (linkage)
  * }
  * ```
- * 
+ *
  * **IntegrityReport:**
  * ```typescript
  * {
@@ -137,14 +137,14 @@
  *   verifiedAt: string     // ISO 8601 verification timestamp
  * }
  * ```
- * 
+ *
  * @integration
  * - Audit Logs: System actions logged via ChainService
  * - Evidence Vault: Chain of custody events use chaining
  * - Compliance: Regulatory audit trails (SOX, HIPAA)
  * - Admin Console: Integrity reports displayed in admin dashboard
  * - Export: JSON ledger for external auditors/forensics
- * 
+ *
  * @testing
  * **Test Coverage:**
  * - Hash generation: Consistent output, collision resistance
@@ -152,14 +152,14 @@
  * - Integrity verification: Valid chains, tampered content, broken linkage
  * - Edge cases: Empty chain, single entry, missing hash fields
  * - Export: File download, JSON format, filename generation
- * 
+ *
  * @compliance
  * - SOX: Immutable audit trail for financial transactions
  * - HIPAA: PHI access logging with tamper detection
  * - GDPR: Data access audit trail
  * - Legal Hold: Evidence chain of custody for litigation
  * - ABA: Attorney trust account transaction logging
- * 
+ *
  * @future
  * - Distributed consensus: Multi-node verification (Byzantine)
  * - Merkle trees: Efficient partial chain verification
@@ -231,7 +231,7 @@ export const ChainService = {
     // The data string includes the previous hash, locking the chain.
     const dataString = `${id}:${entry.timestamp}:${entry.user}:${entry.action}:${entry.resource}:${prevHash}`;
     const hash = await generateHash(dataString);
-    
+
     return {
       ...entry,
       id,
@@ -249,13 +249,17 @@ export const ChainService = {
 
     for (let i = 0; i < chain.length; i++) {
       const current = chain[i];
-      
+      if (!current) {
+        return { isValid: false, brokenIndex: i, totalBlocks: chain.length, verifiedAt: new Date().toISOString() };
+      }
+
       // Skip verification if block lacks hash (legacy data)
       if (!current.hash) {
           return { isValid: false, brokenIndex: i, totalBlocks: chain.length, verifiedAt: new Date().toISOString() };
       }
 
-      const expectedPrevHash = i === 0 ? genesisHash : chain[i - 1].hash;
+      const prevBlock = chain[i - 1];
+      const expectedPrevHash = i === 0 ? genesisHash : (prevBlock?.hash || '');
 
       // 1. Verify Linkage (Pointer Check)
       if (current.prevHash !== expectedPrevHash) {
@@ -272,7 +276,7 @@ export const ChainService = {
          return { isValid: false, brokenIndex: i, totalBlocks: chain.length, verifiedAt: new Date().toISOString() };
       }
     }
-    
+
     return { isValid: true, brokenIndex: -1, totalBlocks: chain.length, verifiedAt: new Date().toISOString() };
   },
 
@@ -283,7 +287,7 @@ export const ChainService = {
       const dataStr = JSON.stringify(chain, null, 2);
       const blob = new Blob([dataStr], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
-      
+
       const link = document.createElement('a');
       link.href = url;
       link.download = `lexiflow_ledger_export_${new Date().toISOString().split('T')[0]}.json`;

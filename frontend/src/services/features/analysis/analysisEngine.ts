@@ -4,19 +4,19 @@
  * ║              Legal Text Processing & Conflict Detection v2.0              ║
  * ║                       PhD-Level Systems Architecture                      ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
- * 
+ *
  * @module services/features/analysis/analysisEngine
  * @architecture Rule-Based NLP with Indexed Conflict Detection
  * @author LexiFlow Engineering Team
  * @since 2025-12-18 (Enterprise Analysis System)
  * @status PRODUCTION READY
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                            ARCHITECTURAL OVERVIEW
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * This module provides production-grade legal text analysis with:
- * 
+ *
  * ┌─────────────────────────────────────────────────────────────────────────┐
  * │  CITATION EXTRACTION CAPABILITIES                                        │
  * │  • Case reporters: U.S. Reports, Federal Reporter, state reporters      │
@@ -25,7 +25,7 @@
  * │  • Pattern-based: Pre-compiled regex for O(n) scanning                  │
  * │  • Deduplication: Set-based collection prevents duplicates              │
  * └─────────────────────────────────────────────────────────────────────────┘
- * 
+ *
  * ┌─────────────────────────────────────────────────────────────────────────┐
  * │  CONFLICT DETECTION SYSTEM                                               │
  * │  • Party name indexing: Map-based O(1) lookup performance               │
@@ -34,74 +34,74 @@
  * │  • Entity recognition: Organizations, individuals, legal entities       │
  * │  • Case-insensitive: Normalized matching for reliability                │
  * └─────────────────────────────────────────────────────────────────────────┘
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                              DESIGN PRINCIPLES
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * 1. **Zero Dependencies**: Native regex, no external NLP libraries
  * 2. **Performance First**: O(n) text scanning, O(1) party lookup
  * 3. **Noise Reduction**: Multi-layered false positive filtering
  * 4. **Bluebook Compliance**: Standard legal citation formats
  * 5. **Memory Efficient**: Streaming-ready design for large documents
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                           PERFORMANCE METRICS
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * • Citation Extraction: O(n) where n = text length
  * • Party Indexing: O(m) where m = total parties across cases
  * • Conflict Scanning: O(n + k) where k = unique party names
  * • Regex Compilation: One-time cost, patterns compiled at module load
  * • Memory Footprint: ~2KB per 1000 citations extracted
  * • Throughput: ~500KB/sec text processing on average hardware
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                          CITATION FORMATS SUPPORTED
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * **Case Law Citations:**
  * - U.S. Reports: "410 U.S. 113" (Supreme Court)
  * - Federal Reporter: "24 F.3d 100" (Federal Circuit)
  * - State Reporters: "123 Cal.Rptr.2d 456" (California Reporter)
  * - Pinpoint Citations: "410 U.S. 113, 120" (with page reference)
- * 
+ *
  * **Statutory Citations:**
  * - U.S. Code: "11 U.S.C. § 362" (Title 11, Section 362)
  * - C.F.R.: "29 C.F.R. § 1630.2" (Code of Federal Regulations)
  * - State Codes: "Cal. Civ. Code § 1234" (California statutes)
- * 
+ *
  * **False Positive Filters:**
  * - Date patterns: "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
  * - Time markers: "AM", "PM"
  * - Currency: Dollar amounts with numeric patterns
  * - Short names: Party names < 5 characters excluded
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                          USAGE EXAMPLES
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * @example Basic Citation Extraction
  * ```typescript
  * import { AnalysisEngine } from './analysisEngine';
- * 
+ *
  * const brief = "In Roe v. Wade, 410 U.S. 113 (1973), the Court held...";
  * const citations = AnalysisEngine.extractCitations(brief);
  * console.log(citations); // ["410 U.S. 113"]
  * ```
- * 
+ *
  * @example Statutory Citation Extraction
  * ```typescript
  * const contract = "Pursuant to 11 U.S.C. § 362, the automatic stay applies...";
  * const codeCitations = AnalysisEngine.extractCitations(contract);
  * console.log(codeCitations); // ["11 U.S.C. § 362"]
  * ```
- * 
+ *
  * @example Conflict Detection
  * ```typescript
  * const intakeMemo = "Prospective client Acme Corp seeks representation against Widgets Inc...";
  * const conflicts = AnalysisEngine.scanForInternalNexus(intakeMemo, allCases);
- * 
+ *
  * conflicts.forEach(conflict => {
  *   console.log(`Conflict: ${conflict.entity}`);
  *   conflict.potentialMatches.forEach(match => {
@@ -109,18 +109,18 @@
  *   });
  * });
  * ```
- * 
+ *
  * @example Batch Processing
  * ```typescript
  * const documents = await getDocuments();
- * const allCitations = documents.flatMap(doc => 
+ * const allCitations = documents.flatMap(doc =>
  *   AnalysisEngine.extractCitations(doc.content)
  * );
  * const uniqueCitations = [...new Set(allCitations)];
  * ```
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * @description Comprehensive legal text analysis providing:
  * - **Citation extraction** (case reporters, code sections, USC citations)
  * - **Conflict detection** (party name nexus scanning across cases)
@@ -130,7 +130,7 @@
  * - **Reporter formats** (U.S. Reports, Federal Reporter, state reporters)
  * - **Code citations** (U.S.C., C.F.R., state codes)
  * - **Zero dependencies** (native regex, no NLP libraries)
- * 
+ *
  * @architecture
  * - Pattern: Rule-Based NLP + Indexed Scanning
  * - Citation extraction: Pre-compiled regex patterns for common reporter formats
@@ -139,7 +139,7 @@
  * - False positives: Filtered by date/currency patterns, min length threshold
  * - Case-insensitive: All matching normalized to lowercase
  * - Deduplication: Set-based citation collection
- * 
+ *
  * @patterns
  * **Citation Formats:**
  * - U.S. Reports: "410 U.S. 113" (volume, reporter, page)
@@ -148,26 +148,26 @@
  * - USC: "11 U.S.C. § 362" (United States Code with section)
  * - CFR: "29 C.F.R. § 1630.2" (Code of Federal Regulations)
  * - Bluebook: Standard citation format with volume-reporter-page structure
- * 
+ *
  * **False Positive Filters:**
  * - Dates: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec
  * - Time: AM, PM
  * - Currency: Dollar amounts with similar patterns
  * - Short names: Party names < 5 chars ignored (reduces noise)
- * 
+ *
  * @performance
  * - Citation extraction: O(n) where n = text length
  * - Party indexing: O(m) where m = total parties across all cases
  * - Conflict scanning: O(n + k) where k = unique party names
  * - Regex compilation: Patterns compiled once (static)
  * - Deduplication: Set operations for O(1) insert and dedup
- * 
+ *
  * @security
  * - Input validation: Text length limits should be enforced by caller
  * - XSS prevention: No HTML rendering in this service
  * - Regex DoS: Patterns designed to avoid catastrophic backtracking
  * - Memory: Large text inputs could cause memory issues (consider streaming)
- * 
+ *
  * @conflict_detection
  * **Algorithm:**
  * 1. Build party index: Map<partyName, Array<{ caseId, caseTitle, role }>>
@@ -175,34 +175,34 @@
  * 3. Scan text for each party name (case-insensitive)
  * 4. Filter matches by min length (> 4 chars)
  * 5. Return conflicts with case details and roles
- * 
+ *
  * **Use Cases:**
  * - Client intake: Check if new client has opposing party in existing case
  * - Matter conflicts: Detect if party appears in multiple matters
  * - Document review: Flag documents mentioning existing clients/parties
  * - Ethical walls: Identify potential conflicts requiring barriers
- * 
+ *
  * **Conflict Severity (Future):**
  * - Critical: Same client on both sides
  * - High: Opposing party in active matter
  * - Medium: Related party (subsidiary, affiliate)
  * - Low: Same name, different entity
- * 
+ *
  * @usage
  * ```typescript
  * import { AnalysisEngine } from './analysisEngine';
- * 
+ *
  * // Extract citations from legal brief
  * const brief = "In Roe v. Wade, 410 U.S. 113 (1973), the Court held...";
  * const citations = AnalysisEngine.extractCitations(brief);
  * console.log(citations);
  * // Returns: ["410 U.S. 113"]
- * 
+ *
  * // Extract USC citations
  * const contract = "Pursuant to 11 U.S.C. § 362, the automatic stay applies...";
  * const codeCitations = AnalysisEngine.extractCitations(contract);
  * // Returns: ["11 U.S.C. § 362"]
- * 
+ *
  * // Detect conflicts in new matter intake
  * const intakeMemo = "Prospective client Acme Corp seeks representation against Widgets Inc...";
  * const conflicts = AnalysisEngine.scanForInternalNexus(intakeMemo, allCases);
@@ -218,7 +218,7 @@
  * // Conflict: widgets inc
  * //   - Case: Widgets Inc v. Jones (Plaintiff)
  * ```
- * 
+ *
  * @data_structures
  * **ExtractionResult:**
  * ```typescript
@@ -228,7 +228,7 @@
  *   dates: string[]       // Date references (future)
  * }
  * ```
- * 
+ *
  * **ConflictResult:**
  * ```typescript
  * {
@@ -243,7 +243,7 @@
  *   severity?: 'low' | 'medium' | 'high' | 'critical'  // Risk level (future)
  * }
  * ```
- * 
+ *
  * @integration
  * - Document Upload: Auto-extract citations on document ingestion
  * - Case Intake: Scan intake forms for conflicts before case creation
@@ -251,7 +251,7 @@
  * - Compliance: Conflict checks required before engagement letter
  * - Discovery: Extract citations from opposing counsel's briefs
  * - Bluebook: Citation format validation (future enhancement)
- * 
+ *
  * @testing
  * **Test Coverage:**
  * - Citation extraction: All reporter formats, USC, CFR, state codes
@@ -260,14 +260,14 @@
  * - Edge cases: Empty text, special characters, Unicode
  * - Performance: Large documents (100K+ chars), many cases (1K+ cases)
  * - Regex safety: Catastrophic backtracking patterns
- * 
+ *
  * @limitations
  * - No machine learning: Rule-based extraction (no NER model)
  * - Simple patterns: May miss non-standard citation formats
  * - Case sensitivity: Conflicts normalized to lowercase (may miss proper names)
  * - No disambiguation: Same name = same entity (no entity resolution)
  * - No context: Citation extraction ignores surrounding text
- * 
+ *
  * @future
  * - Machine learning: NER model for entity recognition
  * - Citation normalization: Standardize formats to Bluebook
@@ -329,13 +329,13 @@ export const AnalysisEngine = {
     const reporterRegex = /(\d+)\s+([a-zA-Z0-9\.\s]+?)\s+(\d+)/g;
     // Regex for codes (e.g., 11 U.S.C. § 362)
     const codeRegex = /(\d+)\s+U\.?S\.?C\.?(\s+§+\s+)?(\d+)/gi;
-    
+
     const citations = new Set<string>();
-    
+
     let match;
     while ((match = reporterRegex.exec(text)) !== null) {
         // Filter out common false positives (dates, currency)
-        if (!match[2].match(/Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|AM|PM/i)) {
+        if (match[2] && !match[2].match(/Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|AM|PM/i)) {
              citations.add(match[0]);
         }
     }

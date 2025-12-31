@@ -1,9 +1,9 @@
 /**
  * graphValidationService.ts
- * 
+ *
  * Validation service for strategy graph structure before deployment.
  * Checks for graph integrity, cycles, disconnected nodes, and business rules.
- * 
+ *
  * @module services/graphValidationService
  */
 
@@ -169,7 +169,7 @@ export class GraphValidationService {
       warnings.push({
         code: 'DISCONNECTED_NODES',
         message: `${unreachableNodes.length} node(s) are not connected to the main workflow`,
-        nodeId: unreachableNodes[0].id,
+        nodeId: unreachableNodes[0]!.id,
       });
     }
   }

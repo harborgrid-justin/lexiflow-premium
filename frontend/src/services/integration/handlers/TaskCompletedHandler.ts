@@ -1,6 +1,6 @@
 /**
  * TaskCompletedHandler - Task -> Billing Integration
- * 
+ *
  * Responsibility: Auto-create billable time entries from completed tasks
  * Integration: Opp #3 from architecture docs
  */
@@ -12,24 +12,25 @@ import { SystemEventType } from '@/types/integration-types';
 
 export class TaskCompletedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.TASK_COMPLETED]> {
   readonly eventType = SystemEventType.TASK_COMPLETED;
-  
+
   async handle(payload: SystemEventPayloads[typeof SystemEventType.TASK_COMPLETED]): Promise<IntegrationResult> {
     const actions: string[] = [];
     const { task } = payload;
-    
+
     // Validate task is billable
     if (!this.isBillable(task)) {
       return this.createSuccess([]);
     }
-    
+
     // Dynamic import to avoid circular dependency
-    const { DataService } = await import('@/services');
-    
+    const { DataService } = await import('@/services/data/dataService');
+    const { getTodayString } = await import('@/utils/dateUtils');
+
     const draftTimeEntry: TimeEntry = {
       id: `time-auto-${Date.now()}` as UUID,
       caseId: task.caseId as CaseId,
       userId: task.assigneeId as UserId,
-      date: new Date().toISOString().split('T')[0],
+      date: getTodayString(),
       duration: 0, // User will fill in actual duration
       description: `Task Completion: ${task.title}`,
       rate: 0, // Will be filled by billing rules
@@ -37,13 +38,13 @@ export class TaskCompletedHandler extends BaseEventHandler<SystemEventPayloads[t
       status: 'Unbilled',
       billable: true
     };
-    
+
     await DataService.billing.addTimeEntry(draftTimeEntry);
     actions.push('Created Draft Billable Entry from Task');
-    
+
     return this.createSuccess(actions);
   }
-  
+
   /**
    * Business rules for determining if a task should generate a time entry
    */

@@ -1,6 +1,6 @@
 /**
  * formatUtils.ts
- * 
+ *
  * Number and currency formatting utilities
  * Replaces repeated toLocaleString patterns
  */
@@ -134,8 +134,8 @@ export const formatPhone = (phone: string): string => {
 export const maskEmail = (email: string): string => {
   const [local, domain] = email.split('@');
   if (!domain) return email;
-  const maskedLocal = local.length > 3
-    ? `${local.slice(0, 2)}...${local.slice(-1)}`
-    : local;
+  const maskedLocal = local!.length > 3
+    ? `${local!.slice(0, 2)}...${local!.slice(-1)}`
+    : local!;
   return `${maskedLocal}@${domain}`;
 };

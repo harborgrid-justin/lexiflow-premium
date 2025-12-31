@@ -4,18 +4,18 @@
  * ║         Legal Citation Formatting Engine (21st Edition) v2.0              ║
  * ║                       PhD-Level Systems Architecture                      ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
- * 
+ *
  * @module services/features/bluebook/bluebookFormatter
  * @architecture Rule-Based Citation Formatting with Style Variants
  * @author LexiFlow Engineering Team
  * @since 2025-12-18 (Enterprise Bluebook System)
  * @status PRODUCTION READY
  * @compliance The Bluebook: A Uniform System of Citation (21st ed. 2020)
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                            ARCHITECTURAL OVERVIEW
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * ┌─────────────────────────────────────────────────────────────────────────┐
  * │  CITATION TYPES SUPPORTED                                                │
  * │  • Cases: Full, short, and id. citations with italics                   │
@@ -24,7 +24,7 @@
  * │  • Secondary: Treatises, restatements, legal encyclopedias              │
  * │  • Court Rules: FRCP, FRAP, local rules                                 │
  * └─────────────────────────────────────────────────────────────────────────┘
- * 
+ *
  * ┌─────────────────────────────────────────────────────────────────────────┐
  * │  FORMATTING OPTIONS                                                      │
  * │  • Full citations: Complete Bluebook format with all elements           │
@@ -33,11 +33,11 @@
  * │  • Italics: Case names, book titles (configurable)                      │
  * │  • Small caps: Author names in secondary sources (configurable)         │
  * └─────────────────────────────────────────────────────────────────────────┘
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                          USAGE EXAMPLES
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * @example Format Case Citation (Full)
  * ```typescript
  * const citation = {
@@ -49,13 +49,13 @@
  * const formatted = BluebookFormatter.format(citation);
  * // "_Roe v. Wade_, 410 U.S. 113 (1973)"
  * ```
- * 
+ *
  * @example Short Citation
  * ```typescript
  * const formatted = BluebookFormatter.format(citation, { format: 'short' });
  * // "_Roe_, 410 U.S. at 120"
  * ```
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
@@ -202,9 +202,9 @@ class BluebookFormatterClass {
 
     // Get author - handle both arrays and strings
     let authorStr = '';
-    if (periodical.authors && Array.isArray(periodical.authors) && periodical.authors.length > 0) {
+    if (periodical.authors && Array.isArray(periodical.authors) && periodical.authors.length > 0 && periodical.authors[0]) {
       authorStr = periodical.authors[0].fullName;
-    } else if (book.authors && Array.isArray(book.authors) && book.authors.length > 0) {
+    } else if (book.authors && Array.isArray(book.authors) && book.authors.length > 0 && book.authors[0]) {
       authorStr = book.authors[0].fullName;
     }
     const author = smallCaps ? this.toSmallCaps(authorStr) : authorStr;

@@ -9,24 +9,24 @@ export class BitSet {
     set(index: number) {
         const i = Math.floor(index / 32);
         const bit = index % 32;
-        this.buffer[i] |= (1 << bit);
+        this.buffer[i]! |= (1 << bit);
     }
 
     clear(index: number) {
         const i = Math.floor(index / 32);
         const bit = index % 32;
-        this.buffer[i] &= ~(1 << bit);
+        this.buffer[i]! &= ~(1 << bit);
     }
 
     get(index: number): boolean {
         const i = Math.floor(index / 32);
         const bit = index % 32;
-        return (this.buffer[i] & (1 << bit)) !== 0;
+        return (this.buffer[i]! & (1 << bit)) !== 0;
     }
 
     toggle(index: number) {
         const i = Math.floor(index / 32);
         const bit = index % 32;
-        this.buffer[i] ^= (1 << bit);
+        this.buffer[i]! ^= (1 << bit);
     }
 }

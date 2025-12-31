@@ -1,7 +1,7 @@
 /**
  * Frontend Memory Monitor
  * React performance and memory tracking for production
- * 
+ *
  * @module utils/memoryMonitor
  */
 
@@ -190,8 +190,8 @@ class FrontendMemoryMonitor {
       return { current: null, average: null, trend: 'unknown' };
     }
 
-    const current = this.metrics.memorySnapshots[this.metrics.memorySnapshots.length - 1];
-    
+    const current = this.metrics.memorySnapshots[this.metrics.memorySnapshots.length - 1]!;
+
     // Calculate average
     const sum = this.metrics.memorySnapshots.reduce(
       (acc, s) => ({
@@ -209,8 +209,8 @@ class FrontendMemoryMonitor {
     // Determine trend (compare first and last snapshots)
     let trend: 'stable' | 'growing' | 'declining' | 'unknown' = 'stable';
     if (this.metrics.memorySnapshots.length >= 5) {
-      const first = this.metrics.memorySnapshots[0];
-      const last = this.metrics.memorySnapshots[this.metrics.memorySnapshots.length - 1];
+      const first = this.metrics.memorySnapshots[0]!;
+      const last = this.metrics.memorySnapshots[this.metrics.memorySnapshots.length - 1]!;
       const growth = ((last.usedJSHeapSize - first.usedJSHeapSize) / first.usedJSHeapSize) * 100;
 
       if (growth > 10) trend = 'growing';

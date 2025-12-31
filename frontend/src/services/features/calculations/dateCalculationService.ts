@@ -4,17 +4,17 @@
  * ║        Business Day & Timeline Computation Engine v2.0                    ║
  * ║                       PhD-Level Systems Architecture                      ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
- * 
+ *
  * @module services/features/calculations/dateCalculationService
  * @architecture Pure Function Library for Date Operations
  * @author LexiFlow Engineering Team
  * @since 2025-12-18 (Enterprise Date System)
  * @status PRODUCTION READY
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                            ARCHITECTURAL OVERVIEW
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * ┌─────────────────────────────────────────────────────────────────────────┐
  * │  DATE CALCULATION CAPABILITIES                                           │
  * │  • Business days: Weekend/holiday-aware date arithmetic                 │
@@ -23,30 +23,30 @@
  * │  • ISO formatting: YYYY-MM-DD string conversions                        │
  * │  • Gantt chart support: Position-based task scheduling                  │
  * └─────────────────────────────────────────────────────────────────────────┘
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                          DESIGN PRINCIPLES
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * 1. **Pure Functions**: No side effects, referentially transparent
  * 2. **Business Day Logic**: Weekend exclusion (Saturday/Sunday)
  * 3. **Canvas Integration**: Pixel-to-date bidirectional mapping
  * 4. **ISO 8601**: Standard date string format for API interop
  * 5. **Zero Dependencies**: Native Date API only
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                           PERFORMANCE METRICS
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * • Date Arithmetic: O(1) - constant time operations
  * • Business Day Count: O(n) where n = days between dates
  * • Timeline Conversion: O(1) - simple arithmetic
  * • Memory: Zero heap allocations per call (stack-only)
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                          USAGE EXAMPLES
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * @example Calculate Business Days
  * ```typescript
  * const start = new Date('2025-01-15'); // Wednesday
@@ -54,7 +54,7 @@
  * const businessDays = DateCalculationService.calculateBusinessDays(start, end);
  * console.log(businessDays); // 5 (excludes weekend)
  * ```
- * 
+ *
  * @example Timeline Position Conversion
  * ```typescript
  * const date = new Date('2025-02-01');
@@ -65,7 +65,7 @@
  * );
  * // Returns: 620 (31 days * 20 pixels)
  * ```
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
@@ -111,7 +111,7 @@ class DateCalculationServiceClass {
    * @param date Date to format
    */
   formatToISO(date: Date): string {
-    return date.toISOString().split('T')[0];
+    return date.toISOString().split('T')[0]!;
   }
 
   /**
@@ -146,7 +146,7 @@ class DateCalculationServiceClass {
   calculateBusinessDays(startDate: Date, endDate: Date): number {
     let count = 0;
     const current = new Date(startDate);
-    
+
     while (current <= endDate) {
       const dayOfWeek = current.getDay();
       if (dayOfWeek !== 0 && dayOfWeek !== 6) { // Not Sunday (0) or Saturday (6)
@@ -154,7 +154,7 @@ class DateCalculationServiceClass {
       }
       current.setDate(current.getDate() + 1);
     }
-    
+
     return count;
   }
 
@@ -166,7 +166,7 @@ class DateCalculationServiceClass {
   addBusinessDays(startDate: Date, businessDays: number): Date {
     const result = new Date(startDate);
     let daysAdded = 0;
-    
+
     while (daysAdded < businessDays) {
       result.setDate(result.getDate() + 1);
       const dayOfWeek = result.getDay();
@@ -174,7 +174,7 @@ class DateCalculationServiceClass {
         daysAdded++;
       }
     }
-    
+
     return result;
   }
 

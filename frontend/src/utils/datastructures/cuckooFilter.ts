@@ -42,8 +42,8 @@ export class CuckooFilter {
         let i = Math.random() < 0.5 ? i1 : i2;
         for (let k = 0; k < this.maxKicks; k++) {
             const kickedIndex = Math.floor(Math.random() * this.bucketSize);
-            const kickedFp = this.buckets[i][kickedIndex];
-            this.buckets[i][kickedIndex] = fp;
+            const kickedFp = this.buckets[i]![kickedIndex];
+            this.buckets[i]![kickedIndex] = fp;
 
             const kickedItem = kickedFp!; // In a real scenario, we'd need a way to get the item from fp. This is a simplification.
             i = (i ^ this.hash(kickedItem)) % this.numBuckets;
@@ -51,12 +51,12 @@ export class CuckooFilter {
         }
         return false; // Filter is full
     }
-    
+
     private insert(fp: string, index: number): boolean {
-        const bucket = this.buckets[index];
+        const bucket = this.buckets[index]!;
         for (let i = 0; i < this.bucketSize; i++) {
             if (bucket[i] === null) {
-                bucket[i] = fp;
+                bucket[i]! = fp;
                 return true;
             }
         }
@@ -66,7 +66,7 @@ export class CuckooFilter {
     contains(item: string): boolean {
         const fp = this.fingerprint(item);
         const [i1, i2] = this.getIndices(item);
-        return this.buckets[i1].includes(fp) || this.buckets[i2].includes(fp);
+        return (this.buckets[i1]?.includes(fp) || false) || (this.buckets[i2]?.includes(fp) || false);
     }
 
     remove(item: string): boolean {
@@ -74,12 +74,12 @@ export class CuckooFilter {
         const [i1, i2] = this.getIndices(item);
 
         for (let i = 0; i < this.bucketSize; i++) {
-            if (this.buckets[i1][i] === fp) {
-                this.buckets[i1][i] = null;
+            if (this.buckets[i1]![i] === fp) {
+                this.buckets[i1]![i] = null;
                 return true;
             }
-            if (this.buckets[i2][i] === fp) {
-                this.buckets[i2][i] = null;
+            if (this.buckets[i2]![i] === fp) {
+                this.buckets[i2]![i] = null;
                 return true;
             }
         }

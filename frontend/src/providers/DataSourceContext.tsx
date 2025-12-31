@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DataService } from '../services/data/dataService';
 import { isBackendApiEnabled as checkBackendEnabled } from '../config/network/api.config';
 import type {
@@ -7,6 +7,7 @@ import type {
   DataSourceStateValue,
   DataSourceType,
 } from './DataSourceContext.types';
+import { DataSourceStateContext, DataSourceActionsContext } from './DataSourceHooks';
 import type { DataSourceConfig } from './repository/config';
 import { createConfigFromEnv } from './repository/config';
 import type { RepositoryRegistry } from './repository/types';
@@ -49,6 +50,7 @@ export type { DataSourceType } from './DataSourceContext.types';
 export type { DataSourceConfig } from './repository/config';
 export * from './repository/errors';
 export type { RepositoryRegistry } from './repository/types';
+export * from './DataSourceHooks';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                         REPOSITORY FACTORY
@@ -99,37 +101,6 @@ function getInitialDataSource(): DataSourceType {
 // BP3: Split contexts for state and actions
 const contextId = Math.random().toString(36).substring(7);
 console.log('[DataSourceContext] Module loaded, ID:', contextId);
-
-const DataSourceStateContext = createContext<DataSourceStateValue | undefined>(undefined);
-const DataSourceActionsContext = createContext<DataSourceActionsValue | undefined>(undefined);
-
-// BP4: Export only custom hooks, not raw contexts
-export function useDataSourceState(): DataSourceStateValue {
-  const context = useContext(DataSourceStateContext);
-  // BP5: Fail fast when provider is missing
-  if (!context) {
-    console.error('[useDataSourceState] Context is missing! Provider not found in tree. Module ID:', contextId);
-    throw new Error('useDataSourceState must be used within a DataSourceProvider');
-  }
-  return context;
-}
-
-export function useDataSourceActions(): DataSourceActionsValue {
-  const context = useContext(DataSourceActionsContext);
-  // BP5: Fail fast when provider is missing
-  if (!context) {
-    throw new Error('useDataSourceActions must be used within a DataSourceProvider');
-  }
-  return context;
-}
-
-// Convenience hook for consumers that need both (backward compatibility)
-export function useDataSource() {
-  return {
-    ...useDataSourceState(),
-    ...useDataSourceActions(),
-  };
-}
 
 /**
  * DataSourceProvider

@@ -4,19 +4,19 @@
  * ║                   Enterprise Docket Management Layer v2.0                 ║
  * ║                       PhD-Level Systems Architecture                      ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
- * 
+ *
  * @module services/domain/DocketDomain
  * @architecture Backend-First Repository Pattern with PACER Integration
  * @author LexiFlow Engineering Team
  * @since 2025-12-22
  * @status PRODUCTION READY
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                            ARCHITECTURAL OVERVIEW
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * This module provides enterprise-grade docket entry management with:
- * 
+ *
  * ┌─────────────────────────────────────────────────────────────────────────┐
  * │  DOCKET REPOSITORY                                                      │
  * │  • Full CRUD operations for docket entries                              │
@@ -26,17 +26,17 @@
  * │  • Version conflict detection                                           │
  * │  • Integration event publishing                                         │
  * └─────────────────────────────────────────────────────────────────────────┘
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                              DESIGN PRINCIPLES
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * 1. **Single Responsibility**: Manages docket entries and PACER sync
  * 2. **Retry Pattern**: Resilient PACER integration with exponential backoff
  * 3. **Event-Driven**: Publishes integration events for orchestration
  * 4. **Backend-First**: Routes to PostgreSQL API, falls back to IndexedDB
  * 5. **Type Safety**: Full TypeScript validation with custom error types
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
@@ -81,7 +81,7 @@ export interface DocketEntryWithVersion extends DocketEntry {
 
 /**
  * DocketRepository - Enterprise Docket Entry Management
- * 
+ *
  * Provides comprehensive docket management including:
  * • CRUD operations with validation
  * • PACER integration with retry logic
@@ -89,18 +89,18 @@ export interface DocketEntryWithVersion extends DocketEntry {
  * • Sequential numbering
  * • Version conflict detection
  * • Integration event publishing
- * 
+ *
  * **Backend-First Architecture:**
  * - Uses DocketApiService (PostgreSQL + NestJS) by default
  * - Falls back to IndexedDB only if backend is disabled
  * - Automatic routing via isBackendApiEnabled() check
- * 
+ *
  * @extends Repository<DocketEntry>
  */
 export class DocketRepository extends Repository<DocketEntry> {
     private readonly docketApi: DocketApiService;
 
-    constructor() { 
+    constructor() {
         super(STORES.DOCKET);
         this.docketApi = new DocketApiService();
     }
@@ -188,7 +188,7 @@ export class DocketRepository extends Repository<DocketEntry> {
         }
         return super.delete(id);
     }
-    
+
     /**
      * Retrieves all docket entries for a specific case
      *
@@ -196,38 +196,38 @@ export class DocketRepository extends Repository<DocketEntry> {
      * @returns Promise<DocketEntry[]>
      * @complexity O(1) API call or O(log n) IndexedDB index lookup
      */
-    override async getByCaseId(caseId: string): Promise<DocketEntry[]> { 
+    override async getByCaseId(caseId: string): Promise<DocketEntry[]> {
         if (isBackendApiEnabled()) {
             return this.docketApi.getAll(caseId);
         }
-        return this.getByIndex('caseId', caseId); 
+        return this.getByIndex('caseId', caseId);
     }
-    
+
     /**
      * Synchronizes docket entries from PACER with retry logic
-     * 
+     *
      * Uses exponential backoff retry pattern for resilience:
      * - Max retries: 3
      * - Initial delay: 1000ms
      * - Max delay: 10000ms
-     * 
+     *
      * @param courtId - Federal court identifier
      * @param caseNumber - Case number in PACER format
      * @returns Promise<boolean> - Success indicator
      * @throws RetryError if all retries exhausted
-     * 
+     *
      * @example
      * await repo.syncFromPacer('caed', '1:24-cv-01442');
      */
     async syncFromPacer(courtId: string, caseNumber: string): Promise<boolean> {
         console.log(`[PACER] Syncing for ${caseNumber} in ${courtId}...`);
-        
+
         return retryWithBackoff(async () => {
             // Simulate PACER API call delay
             await delay(1500);
 
             // Simulate finding a new entry from PACER
-            const dateStr = new Date().toISOString().split('T')[0];
+            const dateStr = new Date().toISOString().split('T')[0]!;
             const newEntry: DocketEntry = {
                 id: `dk-sync-${Date.now()}` as DocketId,
                 sequenceNumber: 9999, // Next available sequence
@@ -245,9 +245,9 @@ export class DocketRepository extends Repository<DocketEntry> {
 
             // Add to database (will use backend API if enabled)
             await this.add(newEntry);
-            
+
             // Integration event already published by add() method
-            
+
             return true;
         }, {
             maxRetries: 3,

@@ -1,6 +1,6 @@
 /**
  * ServiceCompletedHandler - Service -> Docket Integration
- * 
+ *
  * Responsibility: Auto-file proof of service to docket
  * Integration: Opp #10 from architecture docs
  */
@@ -12,7 +12,7 @@ import { SystemEventType } from '@/types/integration-types';
 
 export class ServiceCompletedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.SERVICE_COMPLETED]> {
   readonly eventType = SystemEventType.SERVICE_COMPLETED;
-  
+
   async handle(payload: SystemEventPayloads[typeof SystemEventType.SERVICE_COMPLETED]) {
     const actions: string[] = [];
     const { job } = payload;
@@ -22,9 +22,9 @@ export class ServiceCompletedHandler extends BaseEventHandler<SystemEventPayload
       return this.createSuccess([]);
     }
 
-    const { DataService } = await import('@/services');
+    const { DataService } = await import('@/services/data/dataService');
 
-    const todayDate = new Date().toISOString().split('T')[0];
+    const todayDate = new Date().toISOString().split('T')[0]!;
     const entry: DocketEntry = {
       id: `dk-proof-${Date.now()}` as DocketId,
       sequenceNumber: 999,
@@ -38,10 +38,10 @@ export class ServiceCompletedHandler extends BaseEventHandler<SystemEventPayload
       filedBy: 'System Automation',
       isSealed: false
     };
-    
+
     await DataService.docket.add(entry);
     actions.push('Auto-filed Proof of Service to Docket');
-    
+
     return this.createSuccess(actions);
   }
 }

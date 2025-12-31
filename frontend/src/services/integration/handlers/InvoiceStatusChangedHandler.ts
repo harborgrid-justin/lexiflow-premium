@@ -40,7 +40,7 @@ export class InvoiceStatusChangedHandler extends BaseEventHandler<SystemEventPay
     actions: string[],
     errors: string[]
   ): Promise<void> {
-    const { DataService } = await import('@/services');
+    const { DataService } = await import('@/services/data/dataService');
 
     // Check if workflow services are available
     if (!DataService.playbooks || !DataService.workflow || typeof DataService.workflow.deploy !== 'function') {

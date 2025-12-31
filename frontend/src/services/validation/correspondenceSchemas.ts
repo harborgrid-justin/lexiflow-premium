@@ -6,6 +6,7 @@
 
 import { z } from 'zod';
 import { CommunicationStatus, ServiceStatus } from '@/types/enums';
+import { getTodayString } from '@/utils/dateUtils';
 
 // Base validation rules
 const sanitizeString = (str: string) => str.trim().replace(/[<>]/g, ''); // Basic XSS prevention
@@ -76,7 +77,7 @@ export const serviceJobSchema = z.object({
   dueDate: z.string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid due date format (YYYY-MM-DD)')
     .refine(
-      (date) => new Date(date) >= new Date(new Date().toISOString().split('T')[0]),
+      (date) => new Date(date) >= new Date(getTodayString()),
       'Due date cannot be in the past'
     ),
   attempts: z.number().int().min(0).max(10, 'Attempts exceeded maximum').default(0),

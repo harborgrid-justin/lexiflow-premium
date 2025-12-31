@@ -21,7 +21,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -71,12 +71,18 @@ export function useWorkerSearch<T>(
   props: UseWorkerSearchProps<T>
 ): UseWorkerSearchReturn<T> {
   const { items, query, fields, idKey = "id" as keyof T } = props;
-  const [filteredItems, setFilteredItems] = useState<T[]>(items);
+
+  // Stabilize items based on idKey to prevent unnecessary re-indexing
+  const stableItems = useMemo(() => items, [
+    items.map(item => String(item[idKey])).join(',')
+  ]);
+
+  const [filteredItems, setFilteredItems] = useState<T[]>(stableItems);
   const [isSearching, setIsSearching] = useState(false);
   const workerRef = useRef<Worker | null>(null);
   const requestIdRef = useRef(0);
   const cancelTokenRef = useRef<number | null>(null);
-  const prevItemsRef = useRef<T[]>(items);
+  const prevItemsRef = useRef<T[]>(stableItems);
 
   // Initialize Worker
   useEffect(() => {
@@ -107,15 +113,16 @@ export function useWorkerSearch<T>(
 
   // Dispatch Data Update (Only when items/config change)
   useEffect(() => {
-    if (!workerRef.current) return;
+    const worker = workerRef.current;
+    if (!worker) return;
 
     // Check if items actually changed (deep equality check on array reference)
-    const itemsChanged = prevItemsRef.current !== items;
+    const itemsChanged = prevItemsRef.current !== stableItems;
     if (!itemsChanged) return;
 
-    prevItemsRef.current = items;
+    prevItemsRef.current = stableItems;
 
-    workerRef.current.postMessage({
+    worker.postMessage({
       type: "UPDATE",
       payload: {
         items,
@@ -128,13 +135,13 @@ export function useWorkerSearch<T>(
     // But ONLY if we haven't already done this for this items reference
     if (!query) {
       // Only update filteredItems once per items reference to prevent loops
-      setFilteredItems(items);
+      setFilteredItems(stableItems);
     } else {
       // If data updated while searching, re-trigger search
       const currentRequestId = ++requestIdRef.current;
       cancelTokenRef.current = currentRequestId;
       setIsSearching(true);
-      workerRef.current.postMessage({
+      worker.postMessage({
         type: "SEARCH",
         payload: {
           query,
@@ -145,11 +152,12 @@ export function useWorkerSearch<T>(
     // Intentionally only depend on data changes, not query/fields
     // Query changes are handled in separate effect below to avoid re-indexing on every keystroke
     // eslint-disable-next-line react-hooks/exhaustive-deps -- Separated concerns: data updates vs query updates
-  }, [items, fieldsKey, idKey]);
+  }, [stableItems, fieldsKey, idKey]);
 
   // Dispatch Search Task (Only when query changes) with cancellation
   useEffect(() => {
-    if (!workerRef.current) return;
+    const worker = workerRef.current;
+    if (!worker) return;
 
     // Cancel previous search
     if (cancelTokenRef.current !== null) {
@@ -157,7 +165,7 @@ export function useWorkerSearch<T>(
     }
 
     if (!query) {
-      setFilteredItems((prev) => (prev === items ? prev : items));
+      setFilteredItems((prev) => (prev === stableItems ? prev : stableItems));
       setIsSearching(false);
       return;
     }
@@ -166,14 +174,14 @@ export function useWorkerSearch<T>(
     const currentRequestId = ++requestIdRef.current;
     cancelTokenRef.current = currentRequestId;
 
-    workerRef.current.postMessage({
+    worker.postMessage({
       type: "SEARCH",
       payload: {
         query,
         requestId: currentRequestId,
       },
     });
-  }, [query, items]); // Added 'items' to prevent stale data when query is empty
+  }, [query, stableItems]); // Added 'stableItems' to prevent stale data when query is empty
 
   return { filteredItems, isSearching };
 }

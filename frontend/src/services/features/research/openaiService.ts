@@ -412,7 +412,17 @@ export const OpenAIService = {
         treatment: [],
       };
     }
-    return this.shepardizeCitation(citations[0]);
+    const firstCitation = citations[0];
+    if (!firstCitation) {
+      return {
+        caseName: 'Unknown Case',
+        citation: '',
+        summary: 'No citation found',
+        history: [],
+        treatment: []
+      };
+    }
+    return this.shepardizeCitation(firstCitation);
   },
 
   /**

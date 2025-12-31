@@ -80,7 +80,7 @@ export class LinearHash<K, V> {
 
     private split() {
         this.buckets.push(new Map());
-        const oldBucket = this.buckets[this.splitPointer];
+        const oldBucket = this.buckets[this.splitPointer]!;
         this.buckets[this.splitPointer] = new Map();
         this.numItems -= oldBucket.size;
 

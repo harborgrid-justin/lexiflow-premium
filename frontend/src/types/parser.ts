@@ -3,7 +3,7 @@
  * @category Types - Parsing
  * @description Unified parser result types for consistent error handling across
  * XML, fallback, and AI parsers. Provides type-safe parsing with confidence levels.
- * 
+ *
  * FEATURES:
  * - Consistent error interface across all parsers
  * - Confidence scoring (high/medium/low)
@@ -204,11 +204,11 @@ export function mergeParseResults(
   }
 
   const merged: DocketParseResult = {
-    caseInfo: results[0].caseInfo,
+    caseInfo: results[0]!.caseInfo,
     parties: [],
     docketEntries: [],
-    confidence: results.reduce((min, r) => 
-      r.confidence === 'low' ? 'low' : 
+    confidence: results.reduce((min, r) =>
+      r.confidence === 'low' ? 'low' :
       r.confidence === 'medium' || min === 'medium' ? 'medium' : 'high',
       'high' as ParseConfidence
     ),

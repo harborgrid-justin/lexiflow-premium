@@ -36,12 +36,12 @@ export const Pathfinding = {
      */
     findCriticalPath: (tasks: WorkflowTask[]): string[] => {
         if (tasks.length === 0) return [];
-        
+
         // Build Adjacency List and Durations
         const adj = new Map<string, string[]>();
         const durations = new Map<string, number>();
         const inDegree = new Map<string, number>();
-        
+
         tasks.forEach(t => {
             const dueDate = t.dueDate || new Date().toISOString();
             const start = t.startDate ? new Date(t.startDate) : new Date(dueDate);
@@ -78,9 +78,9 @@ export const Pathfinding = {
         while (queue.length > 0) {
             const u = queue.shift()!;
             sortedOrder.push(u);
-            
+
             const ef_u = (earliestFinish.get(u) || 0) + (durations.get(u) || 0);
-            
+
             const neighbors = adj.get(u) || [];
             neighbors.forEach(v => {
                 const existing_ef_v = earliestFinish.get(v) || 0;
@@ -88,7 +88,7 @@ export const Pathfinding = {
                     earliestFinish.set(v, ef_u);
                     predecessors.set(v, u);
                 }
-                
+
                 inDegree.set(v, (inDegree.get(v) || 1) - 1);
                 if (inDegree.get(v) === 0) {
                     queue.push(v);
@@ -106,9 +106,9 @@ export const Pathfinding = {
                 maxNode = key;
             }
         });
-        
+
         if (!maxNode) { // Handle case with no links
-            return tasks.length > 0 ? [tasks[0].id] : [];
+            return tasks.length > 0 ? [tasks[0]!.id] : [];
         }
 
         const path: string[] = [];
@@ -117,7 +117,7 @@ export const Pathfinding = {
             path.unshift(current);
             current = predecessors.get(current) || null;
         }
-        
+
         return path;
     }
 };

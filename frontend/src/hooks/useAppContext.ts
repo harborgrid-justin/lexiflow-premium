@@ -170,7 +170,7 @@ export function useAppContext(): UseAppControllerReturn {
                         // Auto-login logic (Dev Mode)
                         const loginResponse = await apiClient.post<{ accessToken?: string; refreshToken?: string; data?: { accessToken?: string; refreshToken?: string } }>('/auth/login', {
                             email: 'admin@lexiflow.com',
-                            password: 'Password123!'
+                            password: 'Demo123!'
                         });
 
                         // Handle wrapped response format (common in NestJS with interceptors)

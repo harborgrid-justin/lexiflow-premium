@@ -56,7 +56,7 @@ export class TokenBlacklistGuard implements CanActivate {
     }
 
     try {
-      const jwtSecret = this.configService.get<string>('JWT_SECRET');
+      const jwtSecret = this.configService.get<string>('app.jwt.secret');
       if (!jwtSecret) {
         throw new UnauthorizedException('Server configuration error');
       }

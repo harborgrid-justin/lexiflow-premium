@@ -1,7 +1,7 @@
 /**
  * Error Handler
  * Enterprise-grade centralized error handling and logging with aggregation
- * 
+ *
  * @module utils/errorHandler
  * @description Comprehensive error management including:
  * - Centralized error logging
@@ -10,7 +10,7 @@
  * - Context-aware error tracking
  * - Integration with monitoring services
  * - Error message formatting
- * 
+ *
  * @security
  * - Prevents information disclosure in error messages
  * - Sanitizes stack traces for production
@@ -18,7 +18,7 @@
  * - Secure error transmission
  * - PII protection in error context
  * - Proper error handling without exposing internals
- * 
+ *
  * @architecture
  * - Singleton pattern for global state
  * - Time-window based aggregation
@@ -42,7 +42,7 @@ export interface AppError extends Error {
 
 /**
  * Log entry for error tracking
- * 
+ *
  * @interface LogEntry
  * @private
  */
@@ -68,7 +68,7 @@ interface ErrorDetails {
 /**
  * Error Handler Class
  * Singleton implementation for centralized error management
- * 
+ *
  * @class ErrorHandler
  * @singleton
  */
@@ -90,9 +90,9 @@ export class ErrorHandler {
 
   /**
    * Get singleton instance
-   * 
+   *
    * @returns ErrorHandler instance
-   * 
+   *
    * @example
    * const handler = ErrorHandler.getInstance();
    * handler.logError(new Error('Something went wrong'));
@@ -176,12 +176,12 @@ export class ErrorHandler {
   private enforceCacheLimit(): void {
     if (this.errorLogCache.size >= this.MAX_CACHE_SIZE) {
       console.warn(`[ErrorHandler] Cache size limit reached (${this.MAX_CACHE_SIZE}), clearing oldest entries`);
-      
+
       // Remove oldest 20% of entries
       const entriesToRemove = Math.floor(this.MAX_CACHE_SIZE * 0.2);
       const sortedEntries = Array.from(this.errorLogCache.entries())
         .sort((a, b) => a[1].timestamp - b[1].timestamp);
-      
+
       sortedEntries.slice(0, entriesToRemove).forEach(([key]) => {
         this.errorLogCache.delete(key);
       });
@@ -194,21 +194,21 @@ export class ErrorHandler {
 
   /**
    * Log an error with context and aggregation
-   * 
+   *
    * @param error - Error object to log
    * @param context - Optional context string for error categorization
    * @returns void
-   * 
+   *
    * @example
    * errorHandler.logError(new Error('API request failed'), 'API');
    * errorHandler.logError(error, 'Database');
-   * 
+   *
    * @architecture
    * - Aggregates duplicate errors within time window
    * - Prevents log flooding
    * - Maintains error counts
    * - Integrates with monitoring services
-   * 
+   *
    * @security
    * - Sanitizes sensitive data from stack traces
    * - Prevents information disclosure
@@ -264,19 +264,19 @@ export class ErrorHandler {
 
   /**
    * Handle fatal errors that require immediate attention
-   * 
+   *
    * @param error - Fatal error object
    * @returns void
-   * 
+   *
    * @example
    * errorHandler.handleFatalError(new Error('Critical system failure'));
-   * 
+   *
    * @architecture
    * - Logs with FATAL severity
    * - Triggers recovery mechanisms
    * - Integrates with ErrorBoundary
    * - May trigger application restart
-   * 
+   *
    * @security
    * - Ensures graceful degradation
    * - Prevents cascading failures
@@ -319,14 +319,14 @@ export class ErrorHandler {
 
   /**
    * Format error message for user display
-   * 
+   *
    * @param error - Error object or message
    * @returns Formatted error message string
-   * 
+   *
    * @example
    * const message = errorHandler.formatErrorMessage(error);
    * alert(message);
-   * 
+   *
    * @security
    * - Prevents information disclosure
    * - Sanitizes technical details
@@ -337,11 +337,11 @@ export class ErrorHandler {
       if (error instanceof Error) {
         return error.message || 'An unexpected error occurred.';
       }
-      
+
       if (typeof error === 'string') {
         return error || 'An unexpected error occurred.';
       }
-      
+
       if (typeof error === 'object' && error !== null) {
         try {
           return JSON.stringify(error);
@@ -350,7 +350,7 @@ export class ErrorHandler {
           return String(error);
         }
       }
-      
+
       return 'An unexpected error occurred.';
     } catch (formattingError) {
       console.error('[ErrorHandler] Failed to format error message:', formattingError);
@@ -360,10 +360,10 @@ export class ErrorHandler {
 
   /**
    * Get user-friendly error message
-   * 
+   *
    * @param error - Error object
    * @returns User-friendly error message
-   * 
+   *
    * @example
    * const message = errorHandler.getUserFriendlyMessage(error);
    */
@@ -379,7 +379,7 @@ export class ErrorHandler {
 
       const code = (error as AppError).code;
       if (code && code in knownErrors) {
-        return knownErrors[code];
+        return knownErrors[code]!;
       }
 
       return this.formatErrorMessage(error);
@@ -460,9 +460,9 @@ export class ErrorHandler {
 
   /**
    * Get error statistics
-   * 
+   *
    * @returns Error statistics object
-   * 
+   *
    * @example
    * const stats = errorHandler.getStatistics();
    * console.log(`Total errors cached: ${stats.totalCached}`);
@@ -486,7 +486,7 @@ export class ErrorHandler {
 
   /**
    * Clear error cache
-   * 
+   *
    * @example
    * errorHandler.clearCache();
    */
@@ -498,7 +498,7 @@ export class ErrorHandler {
 
 /**
  * Global error handler instance
- * 
+ *
  * @constant errorHandler
  * @example
  * import { errorHandler } from './utils/errorHandler';

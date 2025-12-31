@@ -1,6 +1,6 @@
 /**
  * dateUtils.ts
- * 
+ *
  * Date formatting and manipulation utilities
  * Replaces 40+ instances of date string operations
  */
@@ -14,15 +14,15 @@
  * Replaces: new Date().toISOString().split('T')[0]
  */
 export const getTodayString = (): string => {
-  return new Date().toISOString().split('T')[0];
+  return new Date().toISOString().split('T')[0]!;
 };
 
 /**
  * Format date object to YYYY-MM-DD string
  */
 export const toDateString = (date: Date | string): string => {
-  if (typeof date === 'string') return date.split('T')[0];
-  return date.toISOString().split('T')[0];
+  if (typeof date === 'string') return date.split('T')[0]!;
+  return date.toISOString().split('T')[0]!;
 };
 
 /**
@@ -65,8 +65,8 @@ export const getRelativeTimeString = (dateString: string): string => {
 
   if (Math.abs(diffMinutes) < 1) return 'just now';
   if (Math.abs(diffMinutes) < 60) {
-    return diffMinutes < 0 
-      ? `${Math.abs(diffMinutes)} minutes ago` 
+    return diffMinutes < 0
+      ? `${Math.abs(diffMinutes)} minutes ago`
       : `in ${diffMinutes} minutes`;
   }
   if (Math.abs(diffHours) < 24) {

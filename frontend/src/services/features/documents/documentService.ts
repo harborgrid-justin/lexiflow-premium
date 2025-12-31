@@ -48,8 +48,8 @@ export const DocumentService = {
       title: file.name,
       type: meta.type || file.type.split("/")[1]?.toUpperCase() || "FILE",
       content: "Binary content stored in secure blob storage.",
-      uploadDate: new Date().toISOString().split("T")[0],
-      lastModified: new Date().toISOString().split("T")[0],
+      uploadDate: new Date().toISOString().split("T")[0]!,
+      lastModified: new Date().toISOString().split("T")[0]!,
       tags: ["Uploaded", "Local"],
       versions: [],
       fileSize: Formatters.fileSize(file.size), // Use shared formatter

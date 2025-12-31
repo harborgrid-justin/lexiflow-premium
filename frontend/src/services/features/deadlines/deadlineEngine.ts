@@ -4,19 +4,19 @@
  * ║          Multi-Jurisdiction Deadline Calculation System v2.0              ║
  * ║                       PhD-Level Systems Architecture                      ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
- * 
+ *
  * @module services/features/deadlines/deadlineEngine
  * @architecture Rule-Based Deadline Computation with Business Day Logic
  * @author LexiFlow Engineering Team
  * @since 2025-12-18 (Enterprise Deadline System)
  * @status PRODUCTION READY
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                            ARCHITECTURAL OVERVIEW
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * This module provides production-grade deadline calculation with:
- * 
+ *
  * ┌─────────────────────────────────────────────────────────────────────────┐
  * │  MULTI-JURISDICTION SUPPORT                                              │
  * │  • Federal Rules: FRCP-compliant deadline calculations                  │
@@ -25,7 +25,7 @@
  * │  • Court-specific: District and appellate court variations              │
  * │  • Business days: Configurable weekend/holiday exclusion                │
  * └─────────────────────────────────────────────────────────────────────────┘
- * 
+ *
  * ┌─────────────────────────────────────────────────────────────────────────┐
  * │  DEADLINE TYPES SUPPORTED                                                │
  * │  • Motion responses: MTD, MSJ, MTC (21 days Federal)                    │
@@ -34,54 +34,54 @@
  * │  • Appeals: Notice of appeal (30 days from judgment)                    │
  * │  • Orders: OSC responses (14 days typically)                            │
  * └─────────────────────────────────────────────────────────────────────────┘
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                              DESIGN PRINCIPLES
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * 1. **Rule-Based Architecture**: Extensible rule table for jurisdiction-specific logic
  * 2. **Pattern Matching**: Trigger text detection via case-insensitive search
  * 3. **Business Day Calculation**: Accurate weekday counting with holiday support
  * 4. **Fail-Safe Defaults**: Conservative estimates when rules unclear
  * 5. **Audit Trail**: Each deadline includes source rule for verification
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                           PERFORMANCE METRICS
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * • Rule Matching: O(r) where r = number of rules (~30 rules currently)
  * • Text Scanning: O(n) where n = text length (case-insensitive includes)
  * • Date Calculation: O(d) where d = days to add (business day iteration)
  * • Memory Footprint: ~1KB for entire rule table
  * • Throughput: 10,000+ deadlines/second on average hardware
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                          USAGE EXAMPLES
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * @example Generate Deadlines from Docket Entry
  * ```typescript
  * import { DeadlineEngine } from './deadlineEngine';
- * 
+ *
  * const docketEntry = {
  *   id: 'doc-123',
  *   title: 'Defendant\'s Motion to Dismiss',
  *   filingDate: '2025-01-15',
  *   description: 'Motion filed pursuant to FRCP 12(b)(6)'
  * };
- * 
+ *
  * const deadlines = DeadlineEngine.generateDeadlines(docketEntry, 'Federal');
  * console.log(deadlines);
  * // [{ description: 'Response to Motion to Dismiss', dueDate: '2025-02-05', ... }]
  * ```
- * 
+ *
  * @example Calculate Business Days
  * ```typescript
  * const triggerDate = new Date('2025-01-15'); // Wednesday
  * const deadline = DeadlineEngine.calculateDeadline(triggerDate, 21, true);
  * console.log(deadline); // 21 business days later, skipping weekends
  * ```
- * 
+ *
  * @example California-Specific Deadlines
  * ```typescript
  * const docket = {
@@ -89,11 +89,11 @@
  *   title: 'Demurrer to Complaint',
  *   filingDate: '2025-01-20'
  * };
- * 
+ *
  * const deadlines = DeadlineEngine.generateDeadlines(docket, 'California');
  * // Returns 30-day response deadline per California CCP
  * ```
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
@@ -109,7 +109,7 @@ import { DocketEntry, DeadlineComputation } from '@/types';
 
 /**
  * Represents a jurisdiction-specific deadline rule.
- * 
+ *
  * @property {string} jurisdiction - Jurisdiction name (e.g., 'Federal', 'California')
  * @property {string} triggerText - Text pattern to match in docket entries
  * @property {number} daysToRespond - Number of days allowed for response
@@ -129,7 +129,7 @@ interface DeadlineRule {
 /**
  * Comprehensive deadline rule table covering federal and state jurisdictions.
  * Rules are matched via case-insensitive text search in docket entry titles/descriptions.
- * 
+ *
  * @architecture Extensible rule table - add new jurisdictions by appending rules
  * @compliance FRCP-compliant for federal rules, state-specific for others
  */
@@ -144,7 +144,7 @@ const DEADLINE_RULES: DeadlineRule[] = [
   { jurisdiction: 'Federal', triggerText: 'Appeal', daysToRespond: 30, description: 'Notice of Appeal Deadline' },
   { jurisdiction: 'Federal', triggerText: 'Order to Show Cause', daysToRespond: 14, description: 'Response to Order to Show Cause' },
   { jurisdiction: 'Federal', triggerText: 'Complaint', daysToRespond: 21, description: 'Answer to Complaint' },
-  
+
   // California
   { jurisdiction: 'California', triggerText: 'Motion', daysToRespond: 9, description: 'Opposition to Motion (CA)' },
   { jurisdiction: 'California', triggerText: 'Discovery', daysToRespond: 30, description: 'Response to Discovery (CA)' },
@@ -167,7 +167,7 @@ class DeadlineEngineClass {
     // Find matching rules
     const matchingRules = DEADLINE_RULES.filter(rule => {
       if (rule.jurisdiction !== jurisdiction) return false;
-      
+
       const triggerLower = rule.triggerText.toLowerCase();
       return titleLower.includes(triggerLower) || descLower.includes(triggerLower);
     });
@@ -181,7 +181,7 @@ class DeadlineEngineClass {
         id: `deadline-${entry.id}-${rule.daysToRespond}`,
         docketEntryId: entry.id,
         description: rule.description,
-        dueDate: dueDate.toISOString().split('T')[0],
+        dueDate: dueDate.toISOString().split('T')[0]!,
         jurisdiction,
         rule: rule.triggerText,
         daysFromTrigger: rule.daysToRespond,
@@ -200,7 +200,7 @@ class DeadlineEngineClass {
    */
   calculateDeadline(triggerDate: Date, days: number, excludeWeekends: boolean = false): Date {
     const result = new Date(triggerDate);
-    
+
     if (!excludeWeekends) {
       result.setDate(result.getDate() + days);
       return result;
@@ -245,7 +245,7 @@ class DeadlineEngineClass {
     const deadline = new Date(deadlineDate);
     const now = new Date();
     const daysUntil = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-    
+
     return daysUntil <= warningDays && daysUntil > 0;
   }
 

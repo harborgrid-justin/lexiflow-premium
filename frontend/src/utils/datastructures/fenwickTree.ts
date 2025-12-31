@@ -12,7 +12,7 @@ export class FenwickTree {
     update(index: number, delta: number) {
         index++; // 1-based indexing
         while (index <= this.size) {
-            this.bit[index] += delta;
+            this.bit[index]! += delta;
             index += index & -index; // Add last set bit
         }
     }
@@ -22,12 +22,12 @@ export class FenwickTree {
         index++; // 1-based indexing
         let sum = 0;
         while (index > 0) {
-            sum += this.bit[index];
+            sum += this.bit[index]!;
             index -= index & -index; // Subtract last set bit
         }
         return sum;
     }
-    
+
     // Get sum of a range [start, end]
     queryRange(start: number, end: number): number {
         return this.query(end) - this.query(start - 1);

@@ -7,9 +7,9 @@ import { delay } from '@/utils/async';
 import { STORES, db } from '@/services/data/db';
 
 export class DataQualityService {
-    async getAnomalies(): Promise<DataAnomaly[]> { 
+    async getAnomalies(): Promise<DataAnomaly[]> {
         // In real app, scan DB. Here we return seeded anomalies.
-        const anomalies = await db.getAll<DataAnomaly>('anomalies'); 
+        const anomalies = await db.getAll<DataAnomaly>('anomalies');
         if (anomalies.length === 0) {
              return [
                 { id: 1, table: 'clients', field: 'email', issue: 'Invalid Format', count: 12, sample: 'john-doe@', status: 'Detected', severity: 'High'},
@@ -25,7 +25,7 @@ export class DataQualityService {
     async mergeCluster(): Promise<void> { await delay(100); }
     async ignoreCluster(): Promise<void> { await delay(100); }
     async applyFix(): Promise<void> { await delay(100); }
-    
+
     // Optimized Profiler with single-pass aggregation and yielding
     async getProfiles(): Promise<DataProfile[]> {
         const cases = await db.getAll<Case>(STORES.CASES);
@@ -70,7 +70,7 @@ export class DataQualityService {
         }
 
         const statusDistArray = Object.keys(statusCounts).map(k => ({ name: k, value: statusCounts[k] }));
-        
+
         return [
             {
                 column: 'status',
@@ -96,14 +96,14 @@ export class DataQualityService {
                 nulls: 0,
                 unique: uniqueDates.size,
                 distribution: [
-                  { name: '2023', value: filingYears['2023'] },
-                  { name: '2024', value: filingYears['2024'] },
-                  { name: '2025', value: filingYears['2025'] },
+                  { name: '2023', value: filingYears['2023'] ?? 0 },
+                  { name: '2024', value: filingYears['2024'] ?? 0 },
+                  { name: '2025', value: filingYears['2025'] ?? 0 },
                 ]
             }
         ];
     }
-    
+
     async getStandardizationRules(): Promise<CleansingRule[]> {
         await delay(100);
         return [

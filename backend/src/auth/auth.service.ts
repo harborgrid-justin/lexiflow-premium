@@ -107,7 +107,7 @@ export class AuthService {
 
   async refresh(refreshToken: string) {
     try {
-      const refreshSecret = this.configService.get<string>('jwt.refreshSecret');
+      const refreshSecret = this.configService.get<string>('app.jwt.refreshSecret');
       if (!refreshSecret) {
         throw new UnauthorizedException('Server configuration error');
       }
@@ -222,7 +222,7 @@ export class AuthService {
 
     // Generate reset token
     const ttlHours = parseInt(this.configService.get('RESET_TOKEN_TTL_HOURS', '1'), 10);
-    const jwtSecret = this.configService.get<string>('jwt.secret');
+    const jwtSecret = this.configService.get<string>('app.jwt.secret');
     if (!jwtSecret) {
       throw new BadRequestException('Server configuration error');
     }
@@ -473,15 +473,15 @@ export class AuthService {
       jti: refreshJti,
     };
 
-    const jwtSecret = this.configService.get<string>('jwt.secret');
-    const refreshSecret = this.configService.get<string>('jwt.refreshSecret');
+    const jwtSecret = this.configService.get<string>('app.jwt.secret');
+    const refreshSecret = this.configService.get<string>('app.jwt.refreshSecret');
 
     if (!jwtSecret || !refreshSecret) {
       throw new UnauthorizedException('Server configuration error');
     }
 
-    const accessExpiresIn = parseInt(this.configService.get<string>('jwt.expiresIn') || '900', 10);
-    const refreshExpiresIn = parseInt(this.configService.get<string>('jwt.refreshExpiresIn') || '604800', 10);
+    const accessExpiresIn = parseInt(this.configService.get<string>('app.jwt.expiresIn') || '900', 10);
+    const refreshExpiresIn = parseInt(this.configService.get<string>('app.jwt.refreshExpiresIn') || '604800', 10);
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(accessPayload as unknown as Record<string, unknown>, {
@@ -502,7 +502,7 @@ export class AuthService {
 
   private async generateMfaToken(userId: string): Promise<string> {
     const ttlMinutes = parseInt(this.configService.get('MFA_TOKEN_TTL_MINUTES', '5'), 10);
-    const jwtSecret = this.configService.get<string>('jwt.secret');
+    const jwtSecret = this.configService.get<string>('app.jwt.secret');
     if (!jwtSecret) {
       throw new UnauthorizedException('Server configuration error');
     }

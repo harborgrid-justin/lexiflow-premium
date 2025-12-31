@@ -26,13 +26,13 @@ import { IdGenerator } from '@/utils/idGenerator';
  * Citation parser class with regex-based pattern matching
  */
 export class BluebookParser {
-  
+
   /**
    * Parse a raw citation string into structured format
    */
   static parse(rawCitation: string): BluebookCitation | null {
     const cleaned = rawCitation.trim();
-    
+
     // Try each parser in order of specificity
     return (
       this.parseCaseCitation(cleaned) ||
@@ -54,13 +54,13 @@ export class BluebookParser {
     const patterns = [
       // Federal Supreme Court: Party v. Party, Vol U.S. Page (Year)
       /^(.+?)\s+v\.\s+(.+?),\s*(\d+)\s+(U\.S\.|S\.\s*Ct\.|L\.\s*Ed\.(?:\s*2d)?)\s+(\d+)(?:,\s*(\d+))?\s*\((\d{4})\)/i,
-      
+
       // Circuit Court: Party v. Party, Vol F.2d/F.3d Page (Circuit Year)
       /^(.+?)\s+v\.\s+(.+?),\s*(\d+)\s+(F\.\s*2d|F\.\s*3d|F\.\s*4th)\s+(\d+)(?:,\s*(\d+))?\s*\(([\w\s.]+\s+Cir\.\s+)?(\d{4})\)/i,
-      
+
       // District Court: Party v. Party, Vol F.Supp Page (D. Dist. Year)
       /^(.+?)\s+v\.\s+(.+?),\s*(\d+)\s+(F\.\s*Supp\.(?:\s*2d|\s*3d)?)\s+(\d+)(?:,\s*(\d+))?\s*\((D\.\s+[\w.]+\s+)?(\d{4})\)/i,
-      
+
       // State Court: Party v. Party, Vol Reporter Page (State Year)
       /^(.+?)\s+v\.\s+(.+?),\s*(\d+)\s+([\w.]+)\s+(\d+)(?:,\s*(\d+))?\s*\(([\w\s.]+)?(\d{4})\)/i,
     ];
@@ -69,7 +69,7 @@ export class BluebookParser {
       const match = text.match(pattern);
       if (match) {
         const [, party1, party2, volume, reporter, page, pinpoint, courtOrYear, year] = match;
-        
+
         // Determine if last group is court or year
         const actualYear = year || courtOrYear;
         const court = year ? courtOrYear : undefined;
@@ -79,15 +79,15 @@ export class BluebookParser {
           type: BluebookCitationType.CASE,
           rawText: text,
           formatted: text,
-          caseName: `${party1.trim()} v. ${party2.trim()}`,
-          party1: party1.trim(),
-          party2: party2.trim(),
-          volume: parseInt(volume),
-          reporter: reporter.replace(/\s+/g, ' ').trim(),
-          page: parseInt(page),
-          court: this.determineCourtLevel(reporter, court),
+          caseName: `${party1?.trim() || ''} v. ${party2?.trim() || ''}`,
+          party1: party1?.trim() || '',
+          party2: party2?.trim() || '',
+          volume: parseInt(volume || '0'),
+          reporter: reporter?.replace(/\s+/g, ' ').trim() || '',
+          page: parseInt(page || '0'),
+          court: this.determineCourtLevel(reporter || '', court),
           courtAbbreviation: court?.trim() || '',
-          year: parseInt(actualYear),
+          year: parseInt(actualYear || '0'),
           pinpoint: pinpoint,
           isValid: true,
           validationErrors: [],
@@ -106,7 +106,7 @@ export class BluebookParser {
     const patterns = [
       // U.S. Code: Title U.S.C. § Section (Year)
       /^(\d+)\s+(U\.S\.C\.|U\.S\.C\.A\.|U\.S\.C\.S\.)\s+§+\s*([\d\w-]+(?:\([a-z0-9]\))*(?:-[\d\w]+)?)\s*(?:\((\d{4})\))?/i,
-      
+
       // State Code: State Code § Section (Year)
       /^([\w.]+)\s+(?:Code|Stat\.?|Rev\. Stat\.?)\s+(?:Ann\.\s+)?§+\s*([\d\w.-]+)\s*(?:\((\d{4})\))?/i,
     ];
@@ -123,9 +123,9 @@ export class BluebookParser {
           type: BluebookCitationType.STATUTE,
           rawText: text,
           formatted: text,
-          title: isNaN(parseInt(titleOrCode)) ? titleOrCode : parseInt(titleOrCode),
+          title: (titleOrCode && isNaN(parseInt(titleOrCode))) ? titleOrCode : parseInt(titleOrCode || '0'),
           code: match[2] || 'U.S.C.',
-          section: section,
+          section: section || '',
           year: year ? parseInt(year) : undefined,
           isValid: true,
           validationErrors: [],
@@ -144,10 +144,10 @@ export class BluebookParser {
     const patterns = [
       // U.S. Constitution Amendment
       /^(U\.S\.|United States)\s+Const\.?\s+amend\.\s+([IVX]+),?\s*(?:§\s*(\d+))?/i,
-      
+
       // U.S. Constitution Article
       /^(U\.S\.|United States)\s+Const\.?\s+art\.\s+([IVX]+),?\s*(?:§\s*(\d+))?/i,
-      
+
       // State Constitution
       /^([\w.]+)\s+Const\.?\s+art\.\s+([IVX\d]+),?\s*(?:§\s*(\d+))?/i,
     ];
@@ -156,8 +156,8 @@ export class BluebookParser {
       const match = text.match(pattern);
       if (match) {
         const isAmendment = text.toLowerCase().includes('amend');
-        const jurisdiction = match[1].includes('.') ? 'U.S.' : match[1];
-        
+        const jurisdiction = match[1]?.includes('.') ? 'U.S.' : (match[1] || 'U.S.');
+
         return {
           id: IdGenerator.generic('cite'),
           type: BluebookCitationType.CONSTITUTION,
@@ -165,7 +165,7 @@ export class BluebookParser {
           formatted: text,
           jurisdiction,
           article: !isAmendment ? match[2] : undefined,
-          amendment: isAmendment ? this.romanToDecimal(match[2]) : undefined,
+          amendment: isAmendment ? this.romanToDecimal(match[2] || '') : undefined,
           section: match[3],
           isValid: true,
           validationErrors: [],
@@ -190,8 +190,8 @@ export class BluebookParser {
         type: BluebookCitationType.REGULATION,
         rawText: text,
         formatted: text,
-        title: parseInt(match[1]),
-        section: match[2],
+        title: parseInt(match[1] || '0'),
+        section: match[2] || '',
         year: match[3] ? parseInt(match[3]) : new Date().getFullYear(),
         isValid: true,
         validationErrors: [],
@@ -211,17 +211,17 @@ export class BluebookParser {
     const match = text.match(pattern);
 
     if (match && text.includes('(')) {
-      const authors = this.parseAuthors(match[1]);
-      
+      const authors = this.parseAuthors(match[1] || '');
+
       return {
         id: IdGenerator.generic('cite'),
         type: BluebookCitationType.BOOK,
         rawText: text,
         formatted: text,
         authors,
-        title: match[2].trim(),
+        title: match[2]?.trim() || '',
         edition: match[3] ? parseInt(match[3]) : undefined,
-        year: parseInt(match[4]),
+        year: parseInt(match[4] || '0'),
         isValid: true,
         validationErrors: [],
         metadata: this.createDefaultMetadata()
@@ -240,19 +240,19 @@ export class BluebookParser {
     const match = text.match(pattern);
 
     if (match) {
-      const authors = this.parseAuthors(match[1]);
-      
+      const authors = this.parseAuthors(match[1] || '');
+
       return {
         id: IdGenerator.generic('cite'),
         type: BluebookCitationType.LAW_REVIEW,
         rawText: text,
         formatted: text,
         authors,
-        title: match[2].trim(),
-        volume: parseInt(match[3]),
-        publication: match[4].trim(),
-        page: parseInt(match[5]),
-        year: parseInt(match[7]),
+        title: match[2]?.trim() || '',
+        volume: parseInt(match[3] || '0'),
+        publication: match[4]?.trim() || '',
+        page: parseInt(match[5] || '0'),
+        year: parseInt(match[7] || '0'),
         isValid: true,
         validationErrors: [],
         metadata: this.createDefaultMetadata()
@@ -272,14 +272,14 @@ export class BluebookParser {
     if (match) {
       // Extract title (text before URL)
       const title = text.substring(0, text.indexOf(match[0])).trim().replace(/,$/, '');
-      
+
       return {
         id: IdGenerator.generic('cite'),
         type: BluebookCitationType.WEB_RESOURCE,
         rawText: text,
         formatted: text,
         title: title || 'Untitled Web Resource',
-        url: match[1],
+        url: match[1] || '',
         accessDate: new Date().toISOString(),
         isValid: true,
         validationErrors: [],
@@ -310,7 +310,7 @@ export class BluebookParser {
     };
 
     const lower = text.toLowerCase().trim();
-    
+
     for (const [key, value] of Object.entries(signals)) {
       if (lower.startsWith(key)) {
         return {
@@ -331,14 +331,14 @@ export class BluebookParser {
     return authors.map((name): Author => {
       const parts = name.trim().split(/\s+/);
       if (parts.length === 1) {
-        return { firstName: '', lastName: parts[0], fullName: parts[0] };
+        return { firstName: '', lastName: parts[0] || '', fullName: parts[0] || '' };
       } else if (parts.length === 2) {
-        return { firstName: parts[0], lastName: parts[1], fullName: name.trim() };
+        return { firstName: parts[0] || '', lastName: parts[1] || '', fullName: name.trim() };
       } else {
         return {
-          firstName: parts[0],
+          firstName: parts[0] || '',
           middleName: parts.slice(1, -1).join(' '),
-          lastName: parts[parts.length - 1],
+          lastName: parts[parts.length - 1] || '',
           fullName: name.trim()
         };
       }
@@ -350,14 +350,14 @@ export class BluebookParser {
    */
   private static determineCourtLevel(reporter: string, court?: string): CourtLevel {
     const r = reporter.replace(/\s+/g, '').toLowerCase();
-    
+
     if (r.includes('u.s.') && !r.includes('f.')) return CourtLevel.SUPREME_COURT;
     if (r.includes('f.2d') || r.includes('f.3d') || r.includes('f.4th')) return CourtLevel.CIRCUIT;
     if (r.includes('f.supp')) return CourtLevel.DISTRICT;
     if (r.includes('bankr')) return CourtLevel.BANKRUPTCY;
     if (court && court.toLowerCase().includes('cir.')) return CourtLevel.CIRCUIT;
     if (court && court.toLowerCase().includes('d.')) return CourtLevel.DISTRICT;
-    
+
     return CourtLevel.STATE_SUPREME; // Default for state reporters
   }
 
@@ -368,8 +368,10 @@ export class BluebookParser {
     const map: Record<string, number> = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
     let result = 0;
     for (let i = 0; i < roman.length; i++) {
-      const current = map[roman[i]];
-      const next = map[roman[i + 1]];
+      const currentChar = roman.charAt(i);
+      const nextChar = roman.charAt(i + 1);
+      const current = map[currentChar] || 0;
+      const next = map[nextChar] || 0;
       if (next && current < next) {
         result -= current;
       } else {

@@ -1,7 +1,7 @@
 class SkipNode<T> {
     constructor(
         public value: T,
-        public next: (SkipNode<T> | null)[] = []
+        public next: (SkipNode<T> | null | undefined)[] = []
     ) {}
 }
 
@@ -29,8 +29,8 @@ export class SkipList<T> {
         let current: SkipNode<T> | null = this.head;
 
         for (let i = this.maxLevel - 1; i >= 0; i--) {
-            while (current!.next[i] && current!.next[i]!.value < value) {
-                current = current!.next[i];
+            while (current && current.next[i] && current.next[i]!.value < value) {
+                current = current.next[i] || null;
             }
             update[i] = current;
         }
@@ -47,14 +47,14 @@ export class SkipList<T> {
     search(value: T): boolean {
         let current: SkipNode<T> | null = this.head;
         for (let i = this.maxLevel - 1; i >= 0; i--) {
-            while (current!.next[i] && current!.next[i]!.value < value) {
-                current = current!.next[i];
+            while (current && current.next[i] && current.next[i]!.value < value) {
+                current = current.next[i] || null;
             }
         }
-        current = current!.next[0];
+        current = current ? (current.next[0] || null) : null;
         return current !== null && current.value === value;
     }
-    
+
     // Return all items in sorted order
     toArray(): T[] {
         const arr: T[] = [];

@@ -89,7 +89,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
     options: ExecutionOptions = {},
   ) {
     super();
-    
+
     this.workflow = workflow;
     this.context = {
       workflowId: workflow.id,
@@ -171,7 +171,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
     if (this.state === 'running') {
       this.state = 'paused';
       this.emit('paused', this.context);
-      
+
       // Pause SLA timers
       this.slaTimers.forEach((timer) => {
         clearTimeout(timer);
@@ -186,12 +186,12 @@ export class WorkflowExecutionEngine extends EventEmitter {
     if (this.state === 'paused' && this.currentNode) {
       this.state = 'running';
       this.emit('resumed', this.context);
-      
+
       // Resume SLA timers
       if (this.options.enableSLA) {
         this._setupSLAMonitoring(this.currentNode);
       }
-      
+
       await this._executeNode(this.currentNode);
     }
   }
@@ -285,14 +285,14 @@ export class WorkflowExecutionEngine extends EventEmitter {
 
       // Find and execute next nodes
       const nextNodes = this._getNextNodes(node.id);
-      
+
       if (nextNodes.length === 0) {
         return result; // Workflow complete
       }
 
       // Execute next nodes (may be multiple for parallel execution)
       if (nextNodes.length === 1) {
-        return await this._executeNode(nextNodes[0]);
+        return await this._executeNode(nextNodes[0]!);
       } else {
         // Parallel execution of next nodes
         return await this._executeParallelNodes(nextNodes);
@@ -306,12 +306,12 @@ export class WorkflowExecutionEngine extends EventEmitter {
       });
 
       this.emit('node_failed', { node, context: this.context, error: errorMessage });
-      
+
       // Check if we should retry
       if (this.options.maxRetries && this.options.maxRetries > 0) {
         return await this._retryNode(node);
       }
-      
+
       throw error;
     }
   }
@@ -371,7 +371,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
 
     // Evaluate conditional rules
     const evaluation = await this._evaluateConditionalBranching(conditionalConfig);
-    
+
     this.emit('conditional_evaluated', {
       node,
       branchId: evaluation.branchId,
@@ -458,7 +458,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
    */
   private async _executeParallelBranch(branch: ParallelBranch): Promise<unknown> {
     const results = [];
-    
+
     for (const nodeId of branch.nodeIds) {
       const node = this.nodeMap.get(nodeId);
       if (node) {
@@ -466,7 +466,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
         results.push(result);
       }
     }
-    
+
     return results;
   }
 
@@ -486,7 +486,7 @@ export class WorkflowExecutionEngine extends EventEmitter {
     }
 
     await this._delay(1000 * attemptNumber); // Exponential backoff
-    
+
     try {
       return await this._executeNode(node);
     } catch (error) {

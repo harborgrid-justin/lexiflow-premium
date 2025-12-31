@@ -671,11 +671,21 @@ export const GeminiService = {
                 treatment: []
             };
         }
-        const result = await this.shepardizeCitation(citations[0]);
+        const firstCitation = citations[0];
+        if (!firstCitation) {
+            return {
+                caseName: 'Unknown Case',
+                citation: '',
+                summary: 'No citation found',
+                history: [],
+                treatment: []
+            };
+        }
+        const result = await this.shepardizeCitation(firstCitation);
         if (!result) {
             return {
                 caseName: 'Unknown Case',
-                citation: citations[0],
+                citation: firstCitation,
                 summary: 'Analysis unavailable',
                 history: [],
                 treatment: []

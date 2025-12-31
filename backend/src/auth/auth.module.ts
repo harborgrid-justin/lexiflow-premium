@@ -33,12 +33,15 @@ import { RefreshToken } from './entities/refresh-token.entity';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('app.jwt.secret') ?? 'default-jwt-secret',
-        signOptions: {
-          expiresIn: parseInt(configService.get<string>('app.jwt.expiresIn') ?? '900', 10),
-        },
-      }),
+      useFactory: (configService: ConfigService) => {
+        const expiresIn = configService.get<string>('app.jwt.expiresIn') ?? '900';
+        return {
+          secret: configService.get<string>('app.jwt.secret') ?? 'default-jwt-secret',
+          signOptions: {
+            expiresIn: isNaN(Number(expiresIn)) ? expiresIn : parseInt(expiresIn, 10),
+          },
+        };
+      },
     }),
     UsersModule,
     ScheduleModule.forRoot(), // Enable scheduled tasks

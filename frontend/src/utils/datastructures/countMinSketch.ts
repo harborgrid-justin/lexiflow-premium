@@ -10,7 +10,7 @@ export class CountMinSketch {
         this.table = Array.from({ length: depth }, () => Array(width).fill(0));
         this.seeds = Array.from({ length: depth }, () => Math.floor(Math.random() * Number.MAX_SAFE_INTEGER));
     }
-    
+
     // Simple string hash
     private hash(str: string, seed: number): number {
         let hash = 0;
@@ -19,19 +19,19 @@ export class CountMinSketch {
         }
         return Math.abs(hash);
     }
-    
+
     add(item: string) {
         for (let i = 0; i < this.depth; i++) {
-            const index = this.hash(item, this.seeds[i]) % this.width;
-            this.table[i][index]++;
+            const index = this.hash(item, this.seeds[i]!) % this.width;
+            this.table[i]![index]!++;
         }
     }
 
     estimate(item: string): number {
         let min = Infinity;
         for (let i = 0; i < this.depth; i++) {
-            const index = this.hash(item, this.seeds[i]) % this.width;
-            min = Math.min(min, this.table[i][index]);
+            const index = this.hash(item, this.seeds[i]!) % this.width;
+            min = Math.min(min, this.table[i]![index]!);
         }
         return min;
     }

@@ -1,10 +1,10 @@
 /**
  * ChartColorService
- * 
+ *
  * Centralized service for theme-aware chart colors and color palettes.
  * Eliminates hardcoded hex values and provides consistent color mapping
  * across all chart components and data services.
- * 
+ *
  * @module services/theme/chartColorService
  */
 
@@ -63,7 +63,7 @@ export class ChartColorService {
   /**
    * Get a color from the chart palette by index
    * Used for dynamic color assignment (e.g., multiple series)
-   * 
+   *
    * @param index - Index in the palette (will wrap around)
    * @param mode - Theme mode
    */
@@ -77,13 +77,13 @@ export class ChartColorService {
       colors.danger,
       colors.neutral
     ];
-    return palette[index % palette.length];
+    return palette[index % palette.length]!;
   }
 
   /**
    * Get user/collaboration color by index
    * Ensures consistent color assignment for users in collaborative features
-   * 
+   *
    * @param index - User index
    * @param mode - Theme mode
    */
@@ -99,7 +99,7 @@ export class ChartColorService {
       '#14b8a6',        // teal (fallback - TODO: add to tokens)
       '#f97316'         // orange (fallback - TODO: add to tokens)
     ];
-    return userPalette[index % userPalette.length];
+    return userPalette[index % userPalette.length]!;
   }
 
   /**
@@ -135,7 +135,7 @@ export class ChartColorService {
    */
   static getEntityColors(mode: ThemeMode) {
     const colors = tokens.colors[mode].chart.colors;
-    
+
     return {
       case: mode === 'dark' ? '#1e293b' : '#0f172a',
       individual: colors.blue,
@@ -172,8 +172,8 @@ export class ChartColorService {
       color: tooltip.text,
       borderRadius: '8px',
       border: 'none',
-      boxShadow: mode === 'dark' 
-        ? '0 4px 6px -1px rgb(0 0 0 / 0.3)' 
+      boxShadow: mode === 'dark'
+        ? '0 4px 6px -1px rgb(0 0 0 / 0.3)'
         : '0 4px 6px -1px rgb(0 0 0 / 0.1)'
     };
   }

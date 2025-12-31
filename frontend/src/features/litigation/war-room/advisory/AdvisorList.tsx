@@ -20,7 +20,7 @@ import { Phone, Mail, MoreHorizontal, FileText, CheckSquare } from 'lucide-react
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';

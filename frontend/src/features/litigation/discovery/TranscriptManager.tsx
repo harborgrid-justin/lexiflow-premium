@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 import { Button } from '@/components/ui/atoms/Button';
 import { FileText, Upload, CheckCircle, Clock, Search } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';

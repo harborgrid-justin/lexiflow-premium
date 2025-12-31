@@ -11,7 +11,7 @@
  * - WCAG 2.1 AA compliant
  */
 
-import React, { useMemo, memo } from 'react';
+import React, { useMemo } from 'react';
 
 export interface PasswordStrength {
   score: 0 | 1 | 2 | 3 | 4;
@@ -277,6 +277,3 @@ export const PasswordStrengthMeter: React.FC<PasswordStrengthMeterProps> = ({
     </div>
   );
 };
-
-export const PasswordStrengthMeter = memo(PasswordStrengthMeterComponent);
-PasswordStrengthMeter.displayName = 'PasswordStrengthMeter';

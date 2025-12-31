@@ -21,7 +21,7 @@ export interface TabConfigItem {
   id: string;
   label: string;
   icon: LucideIcon;
-  subTabs: {
+  subTabs?: {
     id: string;
     label: string;
     icon: LucideIcon;

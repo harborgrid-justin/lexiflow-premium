@@ -18,7 +18,8 @@ import React, { useCallback, useEffect, useState } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Badge, Button } from "@/components";
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
 
 // Hooks & Context
 import { useAutoSave, useKeyboardShortcuts, useNotify } from "@/hooks";

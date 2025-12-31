@@ -16,8 +16,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useState, useCallback, memo } from 'react';
-import React from 'react';
+import { useState, useCallback } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -415,7 +414,4 @@ function SelectFilter<T extends Record<string, unknown>>({
       </select>
     </div>
   );
-};
-
-export const DataGridFilters = memo(DataGridFiltersComponent) as typeof DataGridFiltersComponent;
-DataGridFilters.displayName = 'DataGridFilters';
+}

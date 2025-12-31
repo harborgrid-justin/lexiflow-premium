@@ -62,6 +62,7 @@ const MetricsWidgetComponent: React.FC<MetricsWidgetProps> = ({
         clearInterval(interval);
       };
     }
+    return undefined;
   }, [autoRefresh, onRefresh, refreshInterval]);
 
   const handleRefresh = useCallback(() => {

@@ -59,6 +59,7 @@ const NotificationBellComponent: React.FC<NotificationBellProps> = ({
     if (prevCount !== unreadCount) {
       setPrevCount(unreadCount);
     }
+    return undefined;
   }, [unreadCount, prevCount, animated]);
 
   // Size mappings

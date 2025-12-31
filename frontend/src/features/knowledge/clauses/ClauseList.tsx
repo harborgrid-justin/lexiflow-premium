@@ -1,6 +1,6 @@
 
-import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
+import { Button } from '@/components/ui/atoms/Button';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';

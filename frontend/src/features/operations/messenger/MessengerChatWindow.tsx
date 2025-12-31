@@ -82,9 +82,7 @@ export const MessengerChatWindow = ({
       if (!isTyping && Math.random() > 0.92) {
           setIsTyping(true);
           // Concurrent-safe: Store timeout ID for cleanup if needed
-          const timeoutId = setTimeout(() => setIsTyping(false), 2000 + Math.random() * 3000);
-          // Note: In production, store timeoutId and clear in cleanup
-          return () => clearTimeout(timeoutId);
+          setTimeout(() => setIsTyping(false), 2000 + Math.random() * 3000);
       }
   }, 1000);
 

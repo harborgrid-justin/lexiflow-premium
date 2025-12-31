@@ -9,7 +9,9 @@
  * Backend alignment: /backend/src/discovery/entities/
  */
 
-import { Deposition, ESISource, ProductionSet, CustodianInterview, UUID, CaseId } from '@/types';
+import { Deposition, ESISource, CustodianInterview } from '@/types/discovery';
+import { ProductionSet } from '@/types/misc';
+import { UUID, CaseId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.discovery instead

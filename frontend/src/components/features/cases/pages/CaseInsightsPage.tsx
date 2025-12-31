@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
-import { CaseInsightsDashboard } from '@/features/cases';
-import { PageContainerLayout } from '@/components/layouts';
+import { CaseInsightsDashboard } from '@/features/cases/components/insights/CaseInsightsDashboard';
+import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 interface CaseInsightsPageProps {
   caseId: string;

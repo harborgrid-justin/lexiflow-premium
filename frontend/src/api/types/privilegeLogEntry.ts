@@ -6,7 +6,8 @@
  * This constant is only for seeding and testing purposes.
  */
 
-import { PrivilegeLogEntry, UUID } from '@/types';
+import { PrivilegeLogEntry } from '@/types/discovery';
+import { UUID } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.discovery instead

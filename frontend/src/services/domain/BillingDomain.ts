@@ -102,7 +102,7 @@ import { delay } from '@/utils/async';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
 // Backend API Integration (Primary Data Source)
-import { BillingApiService } from '@/api/billing';
+import { BillingApiService } from '@/api/billing/billing-api';
 import { apiClient } from '@/services/infrastructure/apiClient';
 
 // Error Classes

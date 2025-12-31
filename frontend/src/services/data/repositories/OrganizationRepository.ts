@@ -7,7 +7,7 @@ import { Organization } from '@/types';
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { OrganizationsApiService } from '@/api/integrations';
+import { OrganizationsApiService } from '@/api/integrations/organizations-api';
 import { ValidationError } from '@/services/core/errors';
 
 export const ORGANIZATION_QUERY_KEYS = {

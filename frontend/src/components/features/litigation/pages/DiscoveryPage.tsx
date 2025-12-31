@@ -6,7 +6,7 @@
 
 import React from 'react';
 import DiscoveryDashboard from '@/features/litigation/discovery/dashboard/DiscoveryDashboard';
-import { PageContainerLayout } from '@/components/layouts';
+import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
 import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';
 
 interface DiscoveryPageProps {

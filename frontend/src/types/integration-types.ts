@@ -1,11 +1,15 @@
 
 // types/integration-types.ts
 
-import { 
-    Case, Matter, WorkflowTask, DocketEntry, LegalDocument, 
-    TimeEntry, EvidenceItem, LegalEntity, ServiceJob,
-    Risk, Invoice, Citation, StaffMember, EthicalWall
-} from './models';
+import { Case, Matter } from './case';
+import { WorkflowTask } from './workflow';
+import { DocketEntry } from './motion-docket';
+import { LegalDocument } from './documents';
+import { TimeEntry, Invoice } from './financial';
+import { EvidenceItem } from './evidence';
+import { LegalEntity, ServiceJob, StaffMember } from './misc';
+import { Risk, EthicalWall } from './compliance-risk';
+import { Citation } from './legal-research';
 
 export enum SystemEventType {
     // Core Lifecycle

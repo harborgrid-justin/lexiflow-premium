@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
-import { LitigationBuilder } from '@/features/litigation';
-import { PageContainerLayout } from '@/components/layouts';
+import { LitigationBuilder } from '@/features/litigation/strategy/LitigationBuilder';
+import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 interface LitigationStrategyPageProps {
   caseId: string;

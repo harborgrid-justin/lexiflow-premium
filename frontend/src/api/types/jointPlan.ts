@@ -6,7 +6,8 @@
  * This constant is only for seeding and testing purposes.
  */
 
-import { JointPlan, UUID, CaseId } from '@/types';
+import { JointPlan } from '@/types/pleadings';
+import { UUID, CaseId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.discovery instead

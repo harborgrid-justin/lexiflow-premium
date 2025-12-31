@@ -34,7 +34,7 @@ import { db, STORES } from '@/services/data/db';
 import { Repository } from '@/services/core/Repository';
 import { BlobManager } from '@/services/infrastructure/blobManager';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { DocumentsApiService } from '@/api/admin';
+import { DocumentsApiService } from '@/api/admin/documents-api';
 import { ValidationError, OperationError, EntityNotFoundError } from '@/services/core/errors';
 
 const yieldToMain = () => new Promise(resolve => setTimeout(resolve, 0));

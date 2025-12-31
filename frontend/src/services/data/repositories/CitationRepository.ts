@@ -21,7 +21,7 @@ import { Citation } from '@/types';
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { CitationsApiService } from '@/api/intelligence';
+import { CitationsApiService } from '@/api/intelligence/citations-api';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
 import { ValidationError, EntityNotFoundError } from '@/services/core/errors';

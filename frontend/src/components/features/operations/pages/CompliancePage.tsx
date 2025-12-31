@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { ComplianceDashboard } from '@/features/operations/compliance/ComplianceDashboard';
-import { PageContainerLayout } from '@/components/layouts';
+import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 type ComplianceView = 'overview' | 'conflicts' | 'walls' | 'policies';
 

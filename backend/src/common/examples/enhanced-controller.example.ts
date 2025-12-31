@@ -78,7 +78,7 @@ import {
   ResponseHelper,
   PaginationHelper,
   ErrorHelper,
-} from '@common/helpers';
+} from '@common/helpers/response.helper';
 
 // Types
 import { UUID } from '@common/types';

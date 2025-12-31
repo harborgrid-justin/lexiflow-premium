@@ -116,7 +116,7 @@ import { delay } from '@/utils/async';
 
 // Backend API Integration (Primary Data Source)
 import { isBackendApiEnabled } from '@/api';
-import { CasesApiService } from '@/api/litigation';
+import { CasesApiService } from '@/api/litigation/cases-api';
 import { apiClient } from '@/services/infrastructure/apiClient';
 
 // ═══════════════════════════════════════════════════════════════════════════

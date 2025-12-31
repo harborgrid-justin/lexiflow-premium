@@ -33,7 +33,7 @@ import { IdGenerator } from '@/utils/idGenerator';
 import { createTemplateContext, hydrateTemplateSections } from '@/utils/templateEngine';
 import { validateTemplate } from '@/utils/validation';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { PleadingsApiService } from '@/api/litigation';
+import { PleadingsApiService } from '@/api/litigation/pleadings-api';
 import { ValidationError, OperationError } from '@/services/core/errors';
 
 /**

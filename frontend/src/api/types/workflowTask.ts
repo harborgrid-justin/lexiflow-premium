@@ -8,7 +8,8 @@
  * Backend alignment: /backend/src/workflow/entities/workflow-task.entity.ts
  */
 
-import { WorkflowTask, TaskId, UserId, CaseId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
+import { WorkflowTask, TaskStatusBackend, TaskPriorityBackend } from '@/types/workflow';
+import { TaskId, UserId, CaseId } from '@/types/primitives';
 
 const CID = '1:24-cv-01442-LMB-IDD' as CaseId;
 

@@ -6,7 +6,8 @@
  * This constant is only for seeding and testing purposes.
  */
 
-import { FirmExpense, UUID } from '@/types';
+import { FirmExpense } from '@/types/financial';
+import { UUID } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.operations instead

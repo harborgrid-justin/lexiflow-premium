@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { ResearchTool } from '@/features/knowledge/research/ResearchTool';
-import { PageContainerLayout } from '@/components/layouts';
+import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 /**
  * LegalResearchPage - React 18 optimized with React.memo

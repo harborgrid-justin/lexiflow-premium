@@ -12,7 +12,7 @@ import { filterClauses } from './clauseList.utils';
 // ✅ Migrated to backend API (2025-12-21)
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
-import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/master.config';
+import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/features/ui.config';
 
 interface ClauseListProps {
     onSelectClause: (clause: Clause) => void;

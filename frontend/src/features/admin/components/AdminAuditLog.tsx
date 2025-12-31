@@ -13,7 +13,7 @@ import { AlertOctagon, Link, Loader2, User } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { LedgerVisualizer } from './ledger/LedgerVisualizer';
 // ✅ Migrated to backend API (2025-12-21)
-import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/master.config';
+import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/features/features.config';
 import { AuditLogControls } from './audit/AuditLogControls';
 
 interface AdminAuditLogProps {

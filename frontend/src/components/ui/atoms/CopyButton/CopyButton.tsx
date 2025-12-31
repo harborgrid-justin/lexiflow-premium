@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useRef, useEffect } from 'react';
-import { Copy, Check } from 'lucide-react';
+import { Check, Copy } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -23,7 +23,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { Button } from '../Button';
 
 // Utils & Constants
-import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/master.config';
+import { NOTIFICATION_AUTO_DISMISS_MS } from '@/config/features/ui.config';
 import { getSuccessStyles } from './CopyButton.styles';
 
 // ============================================================================
@@ -56,10 +56,10 @@ export const CopyButton = React.memo<CopyButtonProps>(({ text, label = "Copy", v
   };
 
   return (
-    <Button 
-      variant={variant} 
-      size={size} 
-      onClick={handleCopy} 
+    <Button
+      variant={variant}
+      size={size}
+      onClick={handleCopy}
       icon={copied ? Check : Copy}
       className={copied ? getSuccessStyles(theme) : ''}
     >

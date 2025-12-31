@@ -18,7 +18,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types
-import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/master.config';
+import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/features/features.config';
 import { queryClient } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { evidenceQueryKeys } from '@/services/infrastructure/queryKeys';

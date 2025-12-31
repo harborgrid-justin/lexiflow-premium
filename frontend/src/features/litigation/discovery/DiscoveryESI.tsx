@@ -30,7 +30,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Config
-import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/master.config';
+import { DEBUG_API_SIMULATION_DELAY_MS } from '@/config/features/features.config';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';

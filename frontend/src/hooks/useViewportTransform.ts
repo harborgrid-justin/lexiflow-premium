@@ -21,7 +21,7 @@
  * ```
  */
 
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from "react";
 
 // ============================================================================
 // TYPES
@@ -70,7 +70,9 @@ const MAX_SCALE = 3;
  * @param initialScale - Initial zoom scale (default: 0.8)
  * @returns Object with state and control methods
  */
-export function useViewportTransform(initialScale: number = DEFAULT_SCALE): PanZoomControls {
+export function useViewportTransform(
+  initialScale: number = DEFAULT_SCALE
+): PanZoomControls {
   // Re-export as usePanZoom for backward compatibility
   // This avoids ad blocker issues while maintaining API
   const [scale, setScale] = useState(initialScale);
@@ -82,11 +84,11 @@ export function useViewportTransform(initialScale: number = DEFAULT_SCALE): PanZ
   }, [initialScale]);
 
   const zoomIn = useCallback(() => {
-    setScale(prev => Math.min(prev + ZOOM_STEP, MAX_SCALE));
+    setScale((prev) => Math.min(prev + ZOOM_STEP, MAX_SCALE));
   }, []);
 
   const zoomOut = useCallback(() => {
-    setScale(prev => Math.max(prev - ZOOM_STEP, MIN_SCALE));
+    setScale((prev) => Math.max(prev - ZOOM_STEP, MIN_SCALE));
   }, []);
 
   const setZoom = useCallback((scale: number) => {
@@ -103,6 +105,9 @@ export function useViewportTransform(initialScale: number = DEFAULT_SCALE): PanZ
     zoomOut,
     setZoom,
     panTo,
-    reset
+    reset,
   };
-};
+}
+
+// Backward compatibility alias
+export const usePanZoom = useViewportTransform;

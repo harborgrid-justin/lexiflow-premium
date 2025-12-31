@@ -4,7 +4,7 @@ import {
   DB_MAX_BUFFER_SIZE,
   DB_NAME,
   DB_VERSION,
-} from "@/config/master.config";
+} from "@/config/database/indexeddb.config";
 import { defaultWindowAdapter } from "@/services/infrastructure/adapters/WindowAdapter";
 import { BTree } from "@/utils/datastructures/bTree";
 import { StorageUtils } from "@/utils/storage";

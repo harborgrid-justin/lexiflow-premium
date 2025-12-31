@@ -1,10 +1,10 @@
 
+import { REPOSITORY_CACHE_MAX_SIZE } from '@/config/database/cache.config';
+import { queryClient } from '@/services/infrastructure/queryClient';
 import { BaseEntity, UserId } from '@/types';
-import { MicroORM } from './microORM';
 import { errorHandler } from '@/utils/errorHandler';
 import { LRUCache } from '@/utils/LRUCache';
-import { queryClient } from '@/services/infrastructure/queryClient';
-import { REPOSITORY_CACHE_MAX_SIZE } from '@/config/master.config';
+import { MicroORM } from './microORM';
 
 type Listener<T> = (item: T) => void;
 
@@ -44,7 +44,7 @@ export abstract class Repository<T extends BaseEntity> {
             throw new Error(`Database Error (${operationName}): ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     }
-    
+
     subscribe(listener: Listener<T>) {
         this.listeners.add(listener);
 
@@ -144,7 +144,7 @@ export abstract class Repository<T extends BaseEntity> {
         return this.safeExecute(async () => {
             const results: T[] = [];
             const missingIds: string[] = [];
-            
+
             ids.forEach(id => {
                 const cached = this.cache.get(id);
                 if (cached && !cached.deletedAt) {
@@ -156,9 +156,9 @@ export abstract class Repository<T extends BaseEntity> {
 
             if (missingIds.length === 0) return results;
 
-            const allItems = await this.orm.findAll(); 
+            const allItems = await this.orm.findAll();
             const fetched = allItems.filter(item => missingIds.includes(item.id) && !item.deletedAt);
-            
+
             fetched.forEach(item => {
                 this.cache.put(item.id, item);
                 results.push(item);
@@ -167,7 +167,7 @@ export abstract class Repository<T extends BaseEntity> {
             return results;
         }, 'getMany');
     }
-    
+
     async getByIndex(indexName: string, value: string): Promise<T[]> {
         return this.safeExecute(async () => {
             const items = await this.orm.findBy(indexName, value);
@@ -190,25 +190,25 @@ export abstract class Repository<T extends BaseEntity> {
             const entity = {
                 ...item,
                 id: item.id || crypto.randomUUID(),
-                createdAt: now, 
-                updatedAt: now, 
-                version: 1, 
+                createdAt: now,
+                updatedAt: now,
+                version: 1,
                 createdBy: 'current-user' as UserId
             };
-            
+
             await this.orm.save(entity as T);
             this.cache.put(entity.id, entity as T);
             this.notify(entity as T);
             await this.logAction(`CREATE_${this.storeName.toUpperCase().slice(0, -1)}`, entity.id, 'Record Created', null, entity);
-            
+
             // Automatically invalidate React Query cache
             queryClient.invalidate([this.storeName, 'all']);
             queryClient.invalidate([this.storeName]);
-            
+
             return entity as T;
         }, 'add');
     }
-    
+
     async createMany(items: T[]): Promise<T[]> {
         return this.safeExecute(async () => {
             const createdItems: T[] = [];
@@ -223,7 +223,7 @@ export abstract class Repository<T extends BaseEntity> {
         return this.safeExecute(async () => {
             const current = await this.getById(id, { includeDeleted: true });
             if (!current) throw new Error(`${this.storeName} record not found: ${id}`);
-            
+
             if (updates.version && updates.version !== current.version) {
                 throw new Error("Conflict: Record has been modified by another process.");
             }
@@ -239,12 +239,12 @@ export abstract class Repository<T extends BaseEntity> {
             this.cache.put(id, updated);
             this.notify(updated);
             await this.logAction(`UPDATE_${this.storeName.toUpperCase().slice(0, -1)}`, id, `Fields: ${Object.keys(updates).join(', ')}`, current, updated);
-            
+
             // Automatically invalidate React Query cache
             queryClient.invalidate([this.storeName, 'all']);
             queryClient.invalidate([this.storeName, 'detail', id]);
             queryClient.invalidate([this.storeName]);
-            
+
             return updated;
         }, 'update');
     }
@@ -268,7 +268,7 @@ export abstract class Repository<T extends BaseEntity> {
                 this.cache.delete(id);
                 this.notify(deleted);
                 await this.logAction(`DELETE_${this.storeName.toUpperCase().slice(0, -1)}`, id, 'Soft Delete', current, deleted);
-                
+
                 // Automatically invalidate React Query cache
                 queryClient.invalidate([this.storeName, 'all']);
                 queryClient.invalidate([this.storeName, 'detail', id]);

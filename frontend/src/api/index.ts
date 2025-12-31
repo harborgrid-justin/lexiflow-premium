@@ -50,22 +50,37 @@ export {
 
 // ==================== DOMAIN EXPORTS ====================
 // Re-export domain API services for direct access
-export * from "./domains/admin.api";
-export * from "./domains/analytics.api";
-export * from "./domains/auth.api";
-export * from "./domains/billing.api";
-export * from "./domains/communications.api";
-export * from "./domains/compliance.api";
-export * from "./domains/discovery.api";
-export * from "./domains/integrations.api";
-export * from "./domains/litigation.api";
-export * from "./domains/trial.api";
-export * from "./domains/workflow.api";
+export { adminApi } from "./domains/admin.api";
+export { analyticsApi } from "./domains/analytics.api";
+export { authApi } from "./domains/auth.api";
+export { billingApi } from "./domains/billing.api";
+export { communicationsApi } from "./domains/communications.api";
+export { complianceApi } from "./domains/compliance.api";
+export { discoveryApi } from "./domains/discovery.api";
+export { integrationsApi } from "./domains/integrations.api";
+export { litigationApi } from "./domains/litigation.api";
+export { trialApi } from "./domains/trial.api";
+export { workflowApi } from "./domains/workflow.api";
 // Note: domains/data-platform.api exports dataPlatformApi (conflicts with data-platform/index.ts)
-// export * from './domains/data-platform.api';
-export * from "./domains/drafting.api";
-export * from "./domains/hr.api";
-export * from "./domains/legal-entities.api";
+// export { dataPlatformApi } from './domains/data-platform.api';
+export {
+  DraftingApiService,
+  type ClauseReference,
+  type CreateTemplateDto,
+  type DraftingStats,
+  type DraftingTemplate,
+  type GeneratedDocument,
+  type GenerateDocumentDto,
+  type TemplateVariable,
+  type UpdateGeneratedDocumentDto,
+  type UpdateTemplateDto,
+} from "./domains/drafting.api";
+export { hrApi } from "./domains/hr.api";
+export {
+  LegalEntitiesApiService,
+  type EntityRelationship,
+  type LegalEntityApi,
+} from "./domains/legal-entities.api";
 
 // ==================== ORGANIZED FOLDER EXPORTS ====================
 // Export from organized domain folders

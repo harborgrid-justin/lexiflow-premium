@@ -33,7 +33,7 @@ import { HighlightedText } from '@/components/ui/atoms/HighlightedText/Highlight
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
-import { SEARCH_DEBOUNCE_MS, SEARCH_MIN_QUERY_LENGTH } from '@/config/master.config';
+import { SEARCH_DEBOUNCE_MS, SEARCH_MIN_QUERY_LENGTH } from '@/config/features/search.config';
 
 interface NeuralCommandBarProps {
   globalSearch: string;

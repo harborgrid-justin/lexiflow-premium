@@ -20,8 +20,8 @@ import React from 'react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { Button } from '../../atoms/Button';
-import { Modal } from '../Modal';
+import { Button } from '../../atoms/Button/Button';
+import { Modal } from '../Modal/Modal';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

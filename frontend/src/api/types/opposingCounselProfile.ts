@@ -6,7 +6,8 @@
  * This constant is only for seeding and testing purposes.
  */
 
-import { OpposingCounselProfile, UUID } from '@/types';
+import { OpposingCounselProfile } from '@/types/misc';
+import { UUID } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.trial instead

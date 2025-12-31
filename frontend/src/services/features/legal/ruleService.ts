@@ -40,7 +40,7 @@ import { queryClient } from '@/services/infrastructure/queryClient';
 
 // Types
 import { LegalRule } from '@/types';
-import type { JurisdictionRule, CreateJurisdictionRuleDto } from '@/api/intelligence';
+import type { JurisdictionRule, CreateJurisdictionRuleDto } from '@/api/intelligence/jurisdiction-api';
 
 // ============================================================================
 // TYPE MAPPING UTILITIES

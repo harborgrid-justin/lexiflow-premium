@@ -5,8 +5,8 @@
  */
 
 import React from 'react';
-import { CorrespondenceManager } from '@/features/operations/correspondence';
-import { PageContainerLayout } from '@/components/layouts';
+import { CorrespondenceManager } from '@/features/operations/correspondence/CorrespondenceManager';
+import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 interface CorrespondencePageProps {
   caseId?: string;

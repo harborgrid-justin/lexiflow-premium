@@ -6,7 +6,8 @@
  * This constant is only for seeding and testing purposes.
  */
 
-import { JudgeProfile, UUID } from '@/types';
+import { JudgeProfile } from '@/types/misc';
+import { UUID } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.jurisdiction instead

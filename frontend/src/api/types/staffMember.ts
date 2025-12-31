@@ -8,7 +8,8 @@
  * Backend alignment: /backend/src/hr/entities/employee.entity.ts
  */
 
-import { StaffMember, UUID, UserId } from '@/types';
+import { StaffMember } from '@/types/misc';
+import { UUID, UserId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.hr instead

@@ -20,7 +20,9 @@ import { Briefcase, CheckSquare, Shield, AlertCircle } from 'lucide-react';
 import { useCalendarView } from '@/hooks/useCalendarView';
 
 // Components
-import { CalendarToolbar, CalendarGrid, CalendarEvent } from '@/components/features/calendar/components';
+import { CalendarToolbar } from '@/components/features/calendar/components/CalendarToolbar/CalendarToolbar';
+import { CalendarGrid } from '@/components/features/calendar/components/CalendarGrid/CalendarGrid';
+import { CalendarEvent } from '@/components/features/calendar/components/CalendarEvent/CalendarEvent';
 
 // ============================================================================
 // COMPONENT

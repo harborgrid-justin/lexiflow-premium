@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { AdminPanel } from '@/features/admin/AdminPanel';
-import { PageContainerLayout } from '@/components/layouts';
+import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 type AdminView = 'hierarchy' | 'security' | 'db' | 'data' | 'logs' | 'integrations';
 

@@ -54,7 +54,7 @@ import { delay } from '@/utils/async';
 
 // Backend API Integration (Primary Data Source)
 import { isBackendApiEnabled } from '@/api';
-import { DocketApiService } from '@/api/litigation';
+import { DocketApiService } from '@/api/litigation/docket-api';
 
 // ============================================================================
 // ERROR CLASSES

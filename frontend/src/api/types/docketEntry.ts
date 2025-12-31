@@ -8,7 +8,8 @@
  * Backend alignment: /backend/src/docket/entities/docket-entry.entity.ts
  */
 
-import { DocketEntry, DocketId, CaseId, DocumentId } from '@/types';
+import { DocketEntry } from '@/types/motion-docket';
+import { DocketId, CaseId, DocumentId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.docket instead

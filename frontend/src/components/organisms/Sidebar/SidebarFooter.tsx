@@ -28,7 +28,7 @@ const UserAvatar = ({ user, className }: { user?: { name?: string; [key: string]
     {user?.name?.[0] || 'U'}
   </div>
 );
-import { BackendStatusIndicator } from '../BackendStatusIndicator';
+import { BackendStatusIndicator } from '../BackendStatusIndicator/BackendStatusIndicator';
 
 // Utils & Constants
 import { PATHS } from '@/config/paths.config';

@@ -20,7 +20,7 @@
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { WitnessesApiService, Witness } from '@/api/discovery';
+import { WitnessesApiService, Witness } from '@/api/discovery/witnesses-api';
 import { ValidationError } from '@/services/core/errors';
 
 export const WITNESS_QUERY_KEYS = {

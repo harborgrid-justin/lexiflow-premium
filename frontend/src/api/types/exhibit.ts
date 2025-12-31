@@ -8,7 +8,8 @@
  * Backend alignment: /backend/src/trial/entities/exhibit.entity.ts
  */
 
-import { TrialExhibit, CaseId } from '@/types';
+import { TrialExhibit } from '@/types/evidence';
+import { CaseId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.trial instead

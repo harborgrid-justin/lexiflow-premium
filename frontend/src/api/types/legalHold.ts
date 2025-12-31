@@ -8,7 +8,8 @@
  * Backend alignment: /backend/src/discovery/entities/legal-hold.entity.ts
  */
 
-import { LegalHold, UUID } from '@/types';
+import { LegalHold } from '@/types/discovery';
+import { UUID } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.discovery instead

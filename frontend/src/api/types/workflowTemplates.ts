@@ -8,7 +8,8 @@
  * Backend alignment: /backend/src/workflow/entities/workflow-template.entity.ts
  */
 
-import { WorkflowTemplateData, WorkflowTemplateId } from '@/types';
+import { WorkflowTemplateData } from '@/types/workflow';
+import { WorkflowTemplateId } from '@/types/primitives';
 
 /**
  * @deprecated MOCK DATA - Use DataService.workflow instead

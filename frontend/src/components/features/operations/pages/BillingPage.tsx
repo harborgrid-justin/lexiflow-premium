@@ -6,7 +6,7 @@
 
 import React from 'react';
 import BillingDashboard from '@/features/operations/billing/BillingDashboard';
-import { PageContainerLayout } from '@/components/layouts';
+import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 interface BillingPageProps {
   navigateTo?: (view: string) => void;

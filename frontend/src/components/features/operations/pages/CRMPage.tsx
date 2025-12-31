@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { CRMDashboard } from '@/features/operations/crm/CRMDashboard';
-import { PageContainerLayout } from '@/components/layouts';
+import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
 
 /**
  * CRMPage - React 18 optimized with React.memo

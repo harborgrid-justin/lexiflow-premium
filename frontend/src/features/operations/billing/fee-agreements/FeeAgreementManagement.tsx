@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
 import { useNotify } from '@/hooks/useNotify';
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { DataService } from '@/services/data/dataService';

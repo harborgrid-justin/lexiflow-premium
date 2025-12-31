@@ -9,7 +9,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 // ✅ Migrated to backend API (2025-12-21)
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 
 export const DiscoveryInterviews: React.FC = () => {
   const { theme } = useTheme();

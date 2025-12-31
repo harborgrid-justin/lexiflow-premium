@@ -2,8 +2,8 @@
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
-import { useInterval } from '@/hooks/useInterval';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useInterval } from '@/hooks/core';
+import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { TenantConfig } from '@/types';

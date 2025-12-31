@@ -23,7 +23,7 @@ import { queryKeys } from '@/utils/queryKeys';
 // ✅ Migrated to backend API with queryKeys (2025-12-21)
 
 // Hooks & Context
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { useTheme } from '@/providers/ThemeContext';

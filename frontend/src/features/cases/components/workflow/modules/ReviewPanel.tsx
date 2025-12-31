@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { MessageSquare, CheckCircle, Send, MessagesSquare } from 'lucide-react';
-import { PleadingComment } from '@/types/pleading-types';
+import { PleadingComment } from '@/types';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

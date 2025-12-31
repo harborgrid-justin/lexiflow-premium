@@ -3,7 +3,7 @@ import { SignaturePad } from '@/components/features/discovery/components/Signatu
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
-import { useModalState } from '@/hooks/useModalState';
+import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';

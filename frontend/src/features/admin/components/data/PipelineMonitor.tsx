@@ -5,7 +5,7 @@ import { Activity, ArrowLeft, Cloud, Database, FileText, GitMerge, Loader2, Play
 import { dataPlatformApi, Pipeline } from '@/api/data-platform';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useMutation, useQuery } from '@/hooks/backend';
 import { useTheme } from '@/providers/ThemeContext';
 import { Connector } from '@/types';
 import { cn } from '@/utils/cn';

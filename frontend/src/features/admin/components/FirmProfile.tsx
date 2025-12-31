@@ -12,7 +12,7 @@
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useNotify } from '@/hooks';
+import { useNotify } from '@/hooks/core';
 import { useTheme } from '@/providers';
 import { cn } from '@/utils/cn';
 import {

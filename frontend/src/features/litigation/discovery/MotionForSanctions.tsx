@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
 import { Card } from '@/components/ui/molecules/Card';
 import { Modal } from '@/components/ui/molecules/Modal';
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers';
 import { DataService } from '@/services/data/dataService';

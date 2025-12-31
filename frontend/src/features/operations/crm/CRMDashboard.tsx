@@ -17,7 +17,7 @@ import { Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, ResponsiveContaine
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 
 // Hooks & Context

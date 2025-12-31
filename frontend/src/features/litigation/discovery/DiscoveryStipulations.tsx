@@ -41,7 +41,7 @@ import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 
 // Hooks & Context
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '@/providers/ThemeContext';
 

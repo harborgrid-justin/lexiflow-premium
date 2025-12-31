@@ -1,9 +1,13 @@
 /**
  * Core Utility Hooks Barrel Export
- * 
+ *
  * Basic hooks for state management, side effects, and utilities.
  * Import from '@/hooks/core' for better tree-shaking.
  */
+
+// App Context
+export { useAppContext, type UseAppControllerReturn } from './useAppContext';
+export { useAppContext as useAppController } from './useAppContext'; // Backward compatibility alias
 
 // State Management
 export { useToggle, type UseToggleReturn } from './useToggle';
@@ -14,14 +18,15 @@ export { useModal } from './useModal';
 export { useModalState } from './useModalState';
 
 // Selection Hooks
+export { useSelection, type UseSelectionReturn } from './useSelection';
 export {
   useSelection as useMultiRowSelection,
   type UseSelectionReturn as UseMultiRowSelectionReturn
 } from './useSelection';
-export { 
-  useSelection as useSingleSelection, 
-  useMultiSelection, 
-  type UseMultiSelectionReturn 
+export {
+  useSelection as useSingleSelection,
+  useMultiSelection,
+  type UseMultiSelectionReturn
 } from './useSelectionState';
 export type { UseSelectionReturn as UseSingleSelectionReturn } from './useSelectionState';
 

@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
-import { useModalState } from '@/hooks/useModalState';
+import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';

@@ -15,7 +15,7 @@ import { AddStaffModal } from './AddStaffModal';
 
 type StaffRole = 'Associate' | 'Paralegal' | 'Senior Partner' | 'Administrator';
 // ✅ Migrated to backend API (2025-12-21)
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 import { useStaff } from '@/hooks/useDomainData';
 import { useNotify } from '@/hooks/useNotify';
 import { getTodayString } from '@/utils/dateUtils';

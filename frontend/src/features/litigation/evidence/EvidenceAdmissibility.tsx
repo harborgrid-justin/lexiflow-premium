@@ -17,7 +17,7 @@ import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { RuleSelector } from '@/components/ui/molecules/RuleSelector/RuleSelector';
 
 // Context & Utils
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 

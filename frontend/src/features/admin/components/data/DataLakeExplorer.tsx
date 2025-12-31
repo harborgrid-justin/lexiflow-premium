@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { DocumentPreviewPanel } from '@/features/operations/documents/viewer/DocumentPreviewPanel';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 import { DataService } from '@/services/data/dataService';

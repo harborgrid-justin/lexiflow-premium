@@ -23,7 +23,7 @@ import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 
 // Hooks & Context
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
-import { useModalState } from '@/hooks/useModalState';
+import { useModalState } from '@/hooks/core';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useToggle } from '@/hooks/useToggle';
 import { useTheme } from '@/providers/ThemeContext';

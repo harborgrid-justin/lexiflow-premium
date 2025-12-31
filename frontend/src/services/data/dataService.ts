@@ -179,8 +179,7 @@ import { EntityRepository } from './repositories/EntityRepository';
 import { AnalysisRepository } from './repositories/AnalysisRepository';
 import { CitationRepository } from './repositories/CitationRepository';
 import { RiskRepository } from './repositories/RiskAssessmentRepository';
-import { DashboardService } from '@/services/domain/DashboardDomain';
-import { WarRoomService } from '@/services/domain/WarRoomDomain';
+// NOTE: DashboardService and WarRoomService use dynamic imports to avoid circular dependencies
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                            TYPE DEFINITIONS
@@ -794,7 +793,10 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.warRoom
    * @features Strategy, advisory board, opposition intel
    */
-  warRoom: DataSourceRouter.createPropertyDescriptor(null, () => WarRoomService),
+  warRoom: DataSourceRouter.createPropertyDescriptor(null, async () => {
+    const { WarRoomService } = await import('@/services/domain/WarRoomDomain');
+    return WarRoomService;
+  }),
 
   /**
    * Processing Jobs API - Background job management
@@ -915,7 +917,10 @@ Object.defineProperties(DataServiceBase, {
    * @backend api.dashboard
    * @features Custom dashboards, widgets, layouts
    */
-  dashboard: DataSourceRouter.createPropertyDescriptor(null, () => DashboardService),
+  dashboard: DataSourceRouter.createPropertyDescriptor(null, async () => {
+    const { DashboardService } = await import('@/services/domain/DashboardDomain');
+    return DashboardService;
+  }),
 
   /**
    * Metrics API - System metrics and monitoring

@@ -70,8 +70,8 @@ export { useSort, type UseSortReturn, type SortConfig, type SortDirection } from
 export { useToggle, type UseToggleReturn } from './useToggle';
 export * from './useWizard';
 export * from './useWorkerSearch';
-export { useTimeTracker, type TimeTrackerOptions, type UseTimeTrackerReturn } from './useTimeTracker';
-export { useSettlementSimulation, type SettlementScenario, type UseSettlementSimulationReturn } from './useSettlementSimulation';
+export { useTimeTracker, type UseTimeTrackerOptions, type UseTimeTrackerReturn } from './useTimeTracker';
+export { useSettlementSimulation, type UseSettlementSimulationReturn } from './useSettlementSimulation';
 export { useSLAMonitoring, type SLAItem, type UseSLAMonitoringReturn } from './useSLAMonitoring';
 export * from './useFilterAndSearch';
 export * from './useModalState';
@@ -106,11 +106,11 @@ export {
   useDataDictionary,
   type UseQueryResult
 } from './useDomainData';
-export { useEvidenceManager, type UseEvidenceManagerReturn } from './useEvidenceManager';
+export { useEvidenceManager, type UseEvidenceVaultReturn } from './useEvidenceManager';
 export * from './useScheduleController';
 export { useLitigationBuilder, type UseLitigationBuilderReturn } from './useLitigationBuilder';
 export * from './useNexusGraph';
-export { useRuleSearchAndSelection, type UseRuleSearchReturn } from './useRuleSearchAndSelection';
+export { useRuleSearchAndSelection, type UseRuleSearchAndSelectionReturn } from './useRuleSearchAndSelection';
 export * from './useSecureMessenger';
 export * from './useWorkflowBuilder';
 
@@ -123,8 +123,8 @@ export type { FilterConfig, UseFilterAndSearchOptions, UseFilterAndSearchReturn 
 // STRATEGY CANVAS & COMMAND MANAGEMENT
 // ============================================================================
 export { useStrategyCanvas, type UseStrategyCanvasReturn } from './useStrategyCanvas';
-export { useCommandHistory, type Command, type UseCommandHistoryReturn } from './useCommandHistory';
-export { useKeyboardShortcuts, type KeyboardShortcutConfig, type UseKeyboardShortcutsReturn } from './useKeyboardShortcuts';
+export { useCommandHistory, type UseCommandHistoryReturn } from './useCommandHistory';
+export { useKeyboardShortcuts } from './useKeyboardShortcuts';
 
 // Form Validation
 export { useFormValidation, ValidationRules } from './useFormValidation';
@@ -160,7 +160,6 @@ export type { LoadingState, UseAdaptiveLoadingOptions, UseAdaptiveLoadingReturn 
 export * from './useVirtualizedDocket';
 export {
   useLiveDocketFeed,
-  type ConnectionStatus,
   type LiveDocketFeedConfig,
   type LiveDocketFeedResult
 } from './useLiveDocketFeed';
@@ -168,20 +167,18 @@ export {
 // ============================================================================
 // ADDITIONAL HOOKS (Previously Missing)
 // ============================================================================
-export { useBackendDiscovery, type BackendDiscoveryState } from './useBackendDiscovery';
+export { useBackendDiscovery } from './useBackendDiscovery';
 export { useDataServiceCleanup } from './useDataServiceCleanup';
 export { useDocumentDragDrop, type UseDocumentDragDropReturn } from './useDocumentDragDrop';
-export { useEntityAutocomplete, type UseEntityAutocompleteReturn } from './useEntityAutocomplete';
+export { useEntityAutocomplete, type EntityAutocompleteReturn } from './useEntityAutocomplete';
 export * from './useKeyboardNavigation';
 export * from './usePerformanceTracking';
 export { useQuery, useMutation, queryClient } from './useQueryHooks';
-export type { QueryKey, QueryState, UseMutationOptions, UseQueryOptions, MutationContext } from './useQueryHooks';
 export * from './useSync';
 export {
   useTrustAccounts,
   useCreateTrustAccount,
-  useTrustAccountValidation,
-  type TrustAccountFilters
+  useTrustAccountValidation
 } from './useTrustAccounts';
 
 // ============================================================================

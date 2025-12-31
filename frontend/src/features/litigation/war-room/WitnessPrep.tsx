@@ -19,7 +19,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components

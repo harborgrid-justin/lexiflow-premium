@@ -22,7 +22,7 @@ import { ScheduleTimeline } from './planning/ScheduleTimeline';
 import { useTheme } from '@/providers/ThemeContext';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
 import { useNotify } from '@/hooks/useNotify';
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';

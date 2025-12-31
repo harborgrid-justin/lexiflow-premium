@@ -6,7 +6,7 @@
  */
 
 import { useState } from 'react';
-import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useQuery, useMutation, queryClient } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import type { 
   DataSourceConnection, 

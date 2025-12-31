@@ -1,7 +1,7 @@
 
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { useModalState } from '@/hooks/useModalState';
+import { useModalState } from '@/hooks/core';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { Plus, Search } from 'lucide-react';

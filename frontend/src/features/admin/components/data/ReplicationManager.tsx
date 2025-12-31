@@ -6,7 +6,7 @@ import { CheckCircle, Loader2, Power, ShieldAlert } from 'lucide-react';
 import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card';
 import { Modal } from '@/components/ui/molecules/Modal';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';

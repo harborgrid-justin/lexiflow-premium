@@ -23,7 +23,7 @@ import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDi
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 import { useQuery } from '@/hooks/useQueryHooks';
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 
 // Internal Dependencies - Services & Utils
 import { DataService } from '@/services/data/dataService';

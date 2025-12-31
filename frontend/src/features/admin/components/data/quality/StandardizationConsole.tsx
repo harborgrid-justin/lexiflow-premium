@@ -1,7 +1,7 @@
 
 import { Button } from '@/components/ui/atoms/Button';
-import { useNotify } from '@/hooks/useNotify';
-import { useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/core';
+import { useMutation, useQuery } from '@/hooks/backend';
 import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { CleansingRule } from '@/types';

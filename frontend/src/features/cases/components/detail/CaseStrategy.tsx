@@ -22,7 +22,7 @@ import { StrategySection } from './strategy/StrategySection';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 import { useMutation, queryClient } from '@/hooks/useQueryHooks';
 
 // Internal Dependencies - Services & Utils

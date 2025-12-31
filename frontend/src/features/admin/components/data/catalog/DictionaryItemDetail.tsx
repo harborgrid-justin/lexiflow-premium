@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
 import { Card } from '@/components/ui/molecules/Card';
 import { useNotify } from '@/hooks/useNotify';
-import { useMutation } from '@/hooks/useQueryHooks';
+import { useMutation } from '@/hooks/backend';
 import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { GeminiService } from '@/services/features/research/geminiService';

@@ -40,7 +40,7 @@ import { Input } from '@/components/ui/atoms/Input/Input';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 
 // Hooks & Context
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Services & Utils

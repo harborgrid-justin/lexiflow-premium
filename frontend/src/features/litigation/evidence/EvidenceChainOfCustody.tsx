@@ -24,7 +24,7 @@ import { SignaturePad } from '@/components/features/discovery/components/Signatu
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { useNotify } from '@/hooks/useNotify';
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 import { getTodayString } from '@/utils/dateUtils';
 
 // Services & Types

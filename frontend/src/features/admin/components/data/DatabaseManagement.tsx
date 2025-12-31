@@ -1,6 +1,6 @@
 import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
-import { useModalState } from '@/hooks/useModalState';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useModalState } from '@/hooks/core';
+import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { AlertTriangle, CheckCircle, Database, Info, Plus, RefreshCw, Trash2 } from 'lucide-react';

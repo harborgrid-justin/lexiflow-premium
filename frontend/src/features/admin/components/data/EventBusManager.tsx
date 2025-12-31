@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { AlertCircle, GitCommit, Pause, Play, Plus, Zap } from 'lucide-react';

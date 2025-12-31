@@ -7,7 +7,7 @@
 import React from 'react';
 import { PleadingDashboard } from '@/features/litigation/pleadings/PleadingDashboard';
 import { PageContainerLayout } from '@/components/ui/layouts/PageContainerLayout/PageContainerLayout';
-import type { PleadingDocument } from '@/types/pleading-types';
+import type { PleadingDocument } from '@/types';
 
 interface PleadingsPageProps {
   onCreate: (newDoc: PleadingDocument) => void;
@@ -18,14 +18,14 @@ interface PleadingsPageProps {
 /**
  * PleadingsPage - React 18 optimized with React.memo
  */
-export const PleadingsPage = React.memo<PleadingsPageProps>(({ 
-  onCreate, 
-  onEdit, 
-  caseId 
+export const PleadingsPage = React.memo<PleadingsPageProps>(({
+  onCreate,
+  onEdit,
+  caseId
 }) => {
   return (
     <PageContainerLayout>
-      <PleadingDashboard 
+      <PleadingDashboard
         onCreate={onCreate}
         onEdit={onEdit}
         caseId={caseId}

@@ -2,8 +2,8 @@
 import { VirtualList } from '@/components/organisms/VirtualList';
 import { Button } from '@/components/ui/atoms/Button';
 import { Card } from '@/components/ui/molecules/Card';
-import { useNotify } from '@/hooks/useNotify';
-import { queryClient, useMutation } from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/core';
+import { queryClient, useMutation } from '@/hooks/backend';
 import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { DataAnomaly, QualityMetricHistory } from '@/types';

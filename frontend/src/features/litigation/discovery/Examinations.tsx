@@ -12,7 +12,7 @@ import { useQuery, useMutation } from '@/hooks/useQueryHooks';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 
 export const Examinations = () => {
   const { theme } = useTheme();

@@ -87,7 +87,7 @@ export {
 export * from "./auth";
 export * from "./billing";
 export * from "./communications";
-export * from "./compliance";
+// REMOVED: export * from "./compliance"; // Circular dependency - use complianceApi from domains instead
 export * from "./discovery";
 export * from "./integrations";
 export * from "./intelligence";

@@ -1,12 +1,12 @@
 
-import { 
-  Folder, FolderOpen, Clock, Star, Cloud, 
-  FileText, Image as ImageIcon, Video, AlertOctagon, CheckCircle2, File, Loader2 
+import {
+  Folder, FolderOpen, Clock, Star, Cloud,
+  FileText, Image as ImageIcon, Video, AlertOctagon, CheckCircle2, File, Loader2
 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DataService } from '@/services/data/dataService';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/backend';
 
 interface DocumentFiltersProps {
   currentFolder: string;
@@ -15,7 +15,7 @@ interface DocumentFiltersProps {
 
 export function DocumentFilters({ currentFolder, setCurrentFolder }: DocumentFiltersProps) {
   const { theme } = useTheme();
-  
+
   // Enterprise Data Access
   const { data: folders = [], isLoading } = useQuery<unknown[]>(
       ['documents', 'folders'],
@@ -46,7 +46,7 @@ export function DocumentFilters({ currentFolder, setCurrentFolder }: DocumentFil
             <h3 className={cn("font-bold text-xs uppercase tracking-wide mb-3 px-2", theme.text.tertiary)}>Smart Views</h3>
             <div className="space-y-0.5">
                 {smartViews.map(sf => (
-                    <button 
+                    <button
                         key={sf.id}
                         className={cn(
                             "w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors group",

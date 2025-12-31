@@ -6,10 +6,10 @@ import { GeminiService } from '@/services/features/research/geminiService';
 import { LegalDocument, DocumentId, CaseId } from '@/types';
 import { useWindow } from '@/providers/WindowContext';
 import { DataService } from '@/services/data/dataService';
-import { useMutation, queryClient } from '@/hooks/useQueryHooks';
+import { useMutation, queryClient } from '@/hooks/backend';
 // ✅ Migrated to backend API (2025-12-21)
 import { queryKeys } from '@/utils/queryKeys';
-import { useNotify } from '@/hooks/useNotify';
+import { useNotify } from '@/hooks/core';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { getTodayString } from '@/utils/dateUtils';
@@ -36,11 +36,11 @@ export function DocumentAssembly({ onClose, caseTitle, onSave, windowId }: Docum
     setStep(3);
     setIsStreaming(true);
     setResult('');
-    
+
     const context = `Template: ${template}. Case: ${caseTitle}. Recipient: ${formData.recipient}. Point: ${formData.mainPoint}.`;
-    
+
     const stream = GeminiService.streamDraft(context, 'Document');
-    
+
     for await (const chunk of stream) {
         setResult(prev => prev + chunk);
     }

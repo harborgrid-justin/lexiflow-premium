@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { CopyButton } from '@/components/ui/atoms/CopyButton/CopyButton';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { SqlHelpers } from '@/utils/sqlHelpers';

@@ -4,7 +4,7 @@ import { Loader2 } from 'lucide-react';
 import { JSX } from 'react/jsx-runtime';
 
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { LineageLink, LineageNode } from '@/types';

@@ -22,7 +22,7 @@ import { DataService } from '@/services/data/dataService';
 // ✅ Migrated to backend API (2025-12-21)
 
 // Hooks & Context
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';
 import { useTheme } from '@/providers/ThemeContext';
 import { getTodayString } from '@/utils/dateUtils';

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Database, RefreshCw } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { DataSourceSelector } from './DataSourceSelector';
 import { SystemHealthDisplay } from './SystemHealthDisplay';

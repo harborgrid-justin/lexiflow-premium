@@ -5,7 +5,7 @@ import { PlatformView } from './types';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import { DATA_PLATFORM_MENU, type MenuItem } from '@/config/tabs.config';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
 import { TenantConfig } from '@/types';
 

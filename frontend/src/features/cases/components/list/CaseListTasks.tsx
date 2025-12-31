@@ -26,7 +26,7 @@ import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 import { useQuery, useMutation, queryClient } from '@/hooks/useQueryHooks';
-import { useModalState } from '@/hooks';
+import { useModalState } from '@/hooks/core';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';

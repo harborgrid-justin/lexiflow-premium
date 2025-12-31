@@ -1,7 +1,7 @@
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { useQuery } from '@/hooks/useQueryHooks';
+import { useQuery } from '@/hooks/backend';
 import { useTheme } from '@/providers/ThemeContext';
 import { useToast } from '@/providers/ToastContext';
 import { useWindow } from '@/providers/WindowContext';

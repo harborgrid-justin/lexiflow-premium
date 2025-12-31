@@ -4,7 +4,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';
-import { PleadingComment, PleadingDocument, PleadingSection, PleadingVariable } from '@/types/pleading-types';
+import { PleadingComment, PleadingDocument, PleadingSection, PleadingVariable } from '@/types';
 import { cn } from '@/utils/cn';
 import jsPDF from 'jspdf';
 import { ArrowLeft, BookOpen, Download, FileText, LayoutTemplate, Link, MessageSquare, Save, UploadCloud } from 'lucide-react';

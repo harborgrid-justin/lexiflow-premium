@@ -1,8 +1,8 @@
 
 import { EmptyListState } from '@/components/organisms/_legacy/RefactoredCommon';
 import { Button } from '@/components/ui/atoms/Button';
-import { useNotify } from '@/hooks/useNotify';
-import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
+import { useNotify } from '@/hooks/core';
+import { queryClient, useMutation, useQuery } from '@/hooks/backend';
 import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { RLSPolicy } from '@/types';

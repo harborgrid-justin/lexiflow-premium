@@ -22,7 +22,9 @@ import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 
 // Hooks & Context
-import { useAutoSave, useKeyboardShortcuts, useNotify } from "@/hooks";
+import { useAutoSave } from "@/hooks/core";
+import { useKeyboardShortcuts } from "@/hooks/ui";
+import { useNotify } from "@/hooks/core";
 import { useTheme } from "@/providers";
 
 // Services & Utils

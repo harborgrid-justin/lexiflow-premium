@@ -19,7 +19,7 @@ import { Suspense, useTransition } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks
-import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { useSessionStorage } from '@/hooks/core';
 
 // Components
 import { TabbedPageLayout } from '@/components/layouts';

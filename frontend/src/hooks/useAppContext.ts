@@ -37,7 +37,7 @@ import { DataService } from '@/services/data/dataService';
 import { apiClient } from '@/services/infrastructure/apiClient';
 
 // Hooks & Context
-import { useToast } from '@providers/ToastContext';
+import { useToast } from '@/providers';
 import { useUsers } from './useDomainData';
 import { useSessionStorage } from './useSessionStorage';
 

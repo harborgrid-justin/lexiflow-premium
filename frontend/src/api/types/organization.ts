@@ -1,4 +1,3 @@
-
 import { Organization, OrganizationStatusEnum, OrganizationTypeEnum } from '@/types/system';
 import { OrgId } from '@/types/primitives';
 

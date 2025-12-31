@@ -74,8 +74,14 @@ export const ToastProvider = ({
   maxQueue = 50
 }: ToastProviderProps) => {
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const toastsRef = useRef<Toast[]>([]);
   const queueRef = useRef<Toast[]>([]);
   const timeoutIdsRef = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
+
+  // Keep toastsRef in sync with state for stable callbacks
+  useEffect(() => {
+    toastsRef.current = toasts;
+  }, [toasts]);
 
   // BP13: Document lifecycle - cleanup all timeouts on unmount
   useEffect(() => {
@@ -127,7 +133,7 @@ export const ToastProvider = ({
   // BP10: Stabilize function references with useCallback
   const addToast = useCallback((message: string, type: ToastType = 'info') => {
     // DEDUPLICATION: Check if identical toast is already visible or in queue
-    const isDuplicateVisible = toasts.some(t => t.message === message && t.type === type);
+    const isDuplicateVisible = toastsRef.current.some(t => t.message === message && t.type === type);
     const isDuplicateQueued = queueRef.current.some(t => t.message === message && t.type === type);
 
     if (isDuplicateVisible || isDuplicateQueued) {
@@ -159,7 +165,7 @@ export const ToastProvider = ({
 
     queueRef.current.push(newToast);
     processQueue();
-  }, [toasts, processQueue, maxQueue]);
+  }, [processQueue, maxQueue]);
 
   // BP10: Stabilize function references - helper methods
   const success = useCallback((message: string) => addToast(message, 'success'), [addToast]);

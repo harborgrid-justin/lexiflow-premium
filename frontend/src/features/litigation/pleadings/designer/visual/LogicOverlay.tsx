@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from 'react';
 import { PleadingDocument, PleadingSection } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';

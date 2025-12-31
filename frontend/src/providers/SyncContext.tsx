@@ -137,6 +137,15 @@ export const SyncProvider = ({
   // BP6: Ref to prevent concurrent queue processing (not high-frequency state)
   const isProcessingRef = useRef(false);
 
+  // Refs for callbacks to prevent dependency cycles
+  const onSyncSuccessRef = useRef(_onSyncSuccess);
+  const onSyncErrorRef = useRef(onSyncError);
+
+  useEffect(() => {
+    onSyncSuccessRef.current = _onSyncSuccess;
+    onSyncErrorRef.current = onSyncError;
+  }, [_onSyncSuccess, onSyncError]);
+
   // BP10: Stabilize function references with useCallback
   const refreshCounts = useCallback(() => {
     setPendingCount(SyncEngine.count());
@@ -194,8 +203,8 @@ export const SyncProvider = ({
           retryCount: newRetryCount
         });
         setSyncStatus('error');
-        if (onSyncError) {
-          onSyncError(`Sync failed for ${mutation.type}. Action required.`);
+        if (onSyncErrorRef.current) {
+          onSyncErrorRef.current(`Sync failed for ${mutation.type}. Action required.`);
         }
         isProcessingRef.current = false;
         refreshCounts();
@@ -214,7 +223,7 @@ export const SyncProvider = ({
         setTimeout(() => processQueue(), delay);
       }
     }
-  }, [onSyncError, refreshCounts]);
+  }, [refreshCounts]);
 
   useEffect(() => {
     // BP13: Lifecycle - initialize counts and event listeners
@@ -223,8 +232,8 @@ export const SyncProvider = ({
     const handleOnline = () => {
       setIsOnline(true);
       setSyncStatus('syncing');
-      if (_onSyncSuccess) {
-        _onSyncSuccess('Connection restored. Syncing changes...');
+      if (onSyncSuccessRef.current) {
+        onSyncSuccessRef.current('Connection restored. Syncing changes...');
       }
       processQueue();
     };
@@ -232,8 +241,8 @@ export const SyncProvider = ({
     const handleOffline = () => {
       setIsOnline(false);
       setSyncStatus('offline');
-      if (onSyncError) {
-        onSyncError('You are offline. Changes will be saved locally.');
+      if (onSyncErrorRef.current) {
+        onSyncErrorRef.current('You are offline. Changes will be saved locally.');
       }
     };
 
@@ -281,8 +290,8 @@ export const SyncProvider = ({
     refreshCounts();
     setSyncStatus('syncing');
     processQueue();
-    if (_onSyncSuccess) {
-      _onSyncSuccess('Retrying failed items...');
+    if (onSyncSuccessRef.current) {
+      onSyncSuccessRef.current('Retrying failed items...');
     }
     // Note: _onSyncSuccess is a function prop that may change, but we intentionally
     // exclude it from dependencies to maintain stable callback identity

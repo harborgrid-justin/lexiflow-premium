@@ -1,7 +1,3 @@
-
-
-
-
 /**
  * @module EvidenceChainOfCustody
  * @category Evidence

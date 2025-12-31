@@ -1,7 +1,7 @@
 /**
  * Parties API Service
  * Manages parties (plaintiffs, defendants, third-parties) in cases
- * 
+ *
  * ALIGNED WITH BACKEND:
  * - Entity: backend/src/parties/entities/party.entity.ts
  * - DTOs: backend/src/parties/dto/create-party.dto.ts, update-party.dto.ts
@@ -11,16 +11,16 @@ import { apiClient } from '@/services/infrastructure/apiClient';
 import type { Party, PartyFilters } from '@/types';
 
 // Backend PartyType enum values
-export type PartyTypeBackend = 
-  | 'Plaintiff' 
-  | 'Defendant' 
-  | 'Petitioner' 
-  | 'Respondent' 
-  | 'Appellant' 
-  | 'Appellee' 
-  | 'Third Party' 
-  | 'Witness' 
-  | 'Expert Witness' 
+export type PartyTypeBackend =
+  | 'Plaintiff'
+  | 'Defendant'
+  | 'Petitioner'
+  | 'Respondent'
+  | 'Appellant'
+  | 'Appellee'
+  | 'Third Party'
+  | 'Witness'
+  | 'Expert Witness'
   | 'Other'
   | 'individual'
   | 'corporation'
@@ -28,11 +28,11 @@ export type PartyTypeBackend =
   | 'organization';
 
 // Backend PartyRole enum values
-export type PartyRoleBackend = 
-  | 'Primary' 
-  | 'Co-Party' 
-  | 'Interested Party' 
-  | 'Guardian' 
+export type PartyRoleBackend =
+  | 'Primary'
+  | 'Co-Party'
+  | 'Interested Party'
+  | 'Guardian'
   | 'Representative'
   | 'plaintiff'
   | 'defendant'
@@ -117,7 +117,7 @@ export class PartiesApiService {
     if (!params.query || params.query.trim().length === 0) {
       return [];
     }
-    
+
     const searchParams = new URLSearchParams();
     searchParams.append('q', params.query);
     const url = `${this.baseUrl}/search?${searchParams.toString()}`;

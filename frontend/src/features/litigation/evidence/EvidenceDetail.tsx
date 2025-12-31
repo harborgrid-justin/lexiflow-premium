@@ -1,5 +1,3 @@
-
-
 /**
  * @module EvidenceDetail
  * @category Evidence

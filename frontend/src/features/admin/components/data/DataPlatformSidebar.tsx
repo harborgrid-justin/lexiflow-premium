@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Server, ChevronDown, ChevronRight } from 'lucide-react';
 import { PlatformView } from './types';

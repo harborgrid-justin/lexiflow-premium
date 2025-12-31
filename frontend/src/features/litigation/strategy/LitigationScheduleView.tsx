@@ -1,4 +1,3 @@
-
 /**
  * LitigationScheduleView.tsx
  *

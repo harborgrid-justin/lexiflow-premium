@@ -1,4 +1,3 @@
-
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';

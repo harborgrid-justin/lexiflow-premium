@@ -1,4 +1,3 @@
-
 // types/integration-types.ts
 
 import { Case, Matter } from './case';
@@ -15,25 +14,25 @@ export enum SystemEventType {
     // Core Lifecycle
     CASE_CREATED = 'CASE_CREATED',
     MATTER_CREATED = 'MATTER_CREATED',
-    
+
     // Opp #1: CRM -> Compliance
     LEAD_STAGE_CHANGED = 'LEAD_STAGE_CHANGED',
-    
+
     // Opp #2: Docket -> Calendar
     DOCKET_INGESTED = 'DOCKET_INGESTED',
-    
+
     // Opp #3: Task -> Billing
     TASK_COMPLETED = 'TASK_COMPLETED',
-    
+
     // Opp #4: Doc -> Evidence
     DOCUMENT_UPLOADED = 'DOCUMENT_UPLOADED',
-    
+
     // Opp #5: Billing -> Workflow
     INVOICE_STATUS_CHANGED = 'INVOICE_STATUS_CHANGED',
 
     // Opp #6: Evidence -> Audit
     EVIDENCE_STATUS_UPDATED = 'EVIDENCE_STATUS_UPDATED',
-    
+
     // Opp #7: Research -> Pleading
     CITATION_SAVED = 'CITATION_SAVED',
 
@@ -48,7 +47,7 @@ export enum SystemEventType {
 
     // Opp #10: Service -> Docket
     SERVICE_COMPLETED = 'SERVICE_COMPLETED',
-    
+
     // Opp #11: Data Platform -> Infrastructure
     DATA_SOURCE_CONNECTED = 'DATA_SOURCE_CONNECTED',
     CLOUD_SYNC_STARTED = 'CLOUD_SYNC_STARTED',
@@ -63,22 +62,22 @@ export enum SystemEventType {
 export interface SystemEventPayloads {
     [SystemEventType.CASE_CREATED]: { caseData: Case };
     [SystemEventType.MATTER_CREATED]: { matter: Matter };
-    
+
     // Opp #1
     [SystemEventType.LEAD_STAGE_CHANGED]: { leadId: string; stage: string; clientName: string; value: string };
-    
+
     // Opp #2
     [SystemEventType.DOCKET_INGESTED]: { entry: DocketEntry; caseId: string };
-    
+
     // Opp #3
     [SystemEventType.TASK_COMPLETED]: { task: WorkflowTask };
-    
+
     // Opp #4
     [SystemEventType.DOCUMENT_UPLOADED]: { document: LegalDocument };
-    
+
     // Opp #5
     [SystemEventType.INVOICE_STATUS_CHANGED]: { invoice: Invoice };
-    
+
     // Opp #6
     [SystemEventType.EVIDENCE_STATUS_UPDATED]: { item: EvidenceItem; oldStatus: string; newStatus: string };
 

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { DiscoveryRequest } from '@/types';
 import { Card } from '@/components/ui/molecules/Card/Card';

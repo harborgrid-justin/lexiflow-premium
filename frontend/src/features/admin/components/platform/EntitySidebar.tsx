@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Users, Briefcase, FileText, Book, Building, Database } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';

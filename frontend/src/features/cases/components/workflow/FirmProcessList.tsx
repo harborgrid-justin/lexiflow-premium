@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { Badge } from '@/components/ui/atoms/Badge';

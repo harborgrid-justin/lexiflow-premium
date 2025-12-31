@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ShieldCheck, AlertTriangle, FileSearch, Scale, Edit2 } from 'lucide-react';
 import { Card } from '@/components/ui/molecules/Card';

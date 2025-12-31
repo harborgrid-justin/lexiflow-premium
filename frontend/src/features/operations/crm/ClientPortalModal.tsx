@@ -1,4 +1,3 @@
-
 import React, { useState, Suspense, lazy } from 'react';
 import { Client } from '@/types';
 import { X, Lock, FileText, MessageSquare, UploadCloud, Activity, Shield } from 'lucide-react';

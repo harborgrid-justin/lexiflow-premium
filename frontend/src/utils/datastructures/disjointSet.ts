@@ -1,4 +1,3 @@
-
 export class DisjointSet {
     private parent: Map<string, string> = new Map();
     private rank: Map<string, number> = new Map();

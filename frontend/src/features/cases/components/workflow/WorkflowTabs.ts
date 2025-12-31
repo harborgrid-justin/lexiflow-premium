@@ -1,4 +1,3 @@
-
 import { LayoutTemplate, Briefcase, Layers, Activity, BarChart2, Settings, Play } from 'lucide-react';
 
 export const WORKFLOW_TABS = [

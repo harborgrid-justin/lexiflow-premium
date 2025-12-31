@@ -1,4 +1,3 @@
-
 // Copy-on-Write (CoW) wrapper for demonstrating efficient snapshots
 export class CoW<T extends object> {
     private data: T;

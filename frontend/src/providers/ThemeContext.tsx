@@ -1,4 +1,3 @@
-
 import { DEFAULT_THEME, THEME_STORAGE_KEY } from '../config/app.config';
 import { ThemeMode, tokens } from '@theme/tokens';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';

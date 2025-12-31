@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Terminal, PlayCircle } from 'lucide-react';
 import { Button } from '@/components/ui/atoms/Button';

@@ -1,4 +1,3 @@
-
 /**
  * SYSTEMS ENGINEERING: OFF-MAIN-THREAD SEARCH ENGINE
  * This worker handles CPU-intensive string matching, Levenshtein distance calculation,

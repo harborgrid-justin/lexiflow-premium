@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Database, Clock, Star, Table } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';

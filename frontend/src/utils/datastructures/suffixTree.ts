@@ -1,4 +1,3 @@
-
 // Simplified Suffix Tree implementation using a Map-based trie.
 // A full Ukkonen's algorithm implementation is highly complex.
 

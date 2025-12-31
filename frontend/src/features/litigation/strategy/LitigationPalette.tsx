@@ -1,4 +1,3 @@
-
 /**
  * LitigationPalette.tsx
  * 

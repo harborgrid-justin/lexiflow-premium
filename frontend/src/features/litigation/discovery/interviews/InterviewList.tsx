@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CustodianInterview } from '@/types';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';

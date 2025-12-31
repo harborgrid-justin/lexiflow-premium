@@ -1,4 +1,3 @@
-
 import { Badge } from '@/components/ui/atoms/Badge';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { useTheme } from '@/providers/ThemeContext';

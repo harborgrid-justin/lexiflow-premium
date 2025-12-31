@@ -1,4 +1,3 @@
-
 // Piecewise Constant Approximation for Time-Series Compression
 interface TimePoint {
     time: number;

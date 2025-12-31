@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Wand2, RotateCcw } from 'lucide-react';
 import { useToggle } from '@/hooks/useToggle';

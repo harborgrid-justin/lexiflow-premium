@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Database, Server, Layers, Box, Settings } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';

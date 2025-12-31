@@ -1,4 +1,3 @@
-
 import { BackupSnapshot } from '@/api/data-platform/backups-api';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
 import { Button } from '@/components/ui/atoms/Button';

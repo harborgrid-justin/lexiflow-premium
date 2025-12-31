@@ -1,8 +1,8 @@
 /**
  * index.ts
- * 
+ *
  * Barrel export for litigation utility functions.
- * 
+ *
  * @module components/litigation/utils
  */
 

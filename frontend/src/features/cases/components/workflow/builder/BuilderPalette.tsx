@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { X, GripVertical} from 'lucide-react';
 import { NodeType, getNodeIcon } from './types';

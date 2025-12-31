@@ -1,4 +1,3 @@
-
 import { db } from '@/services/data/db';
 import { BaseEntity } from '@/types';
 

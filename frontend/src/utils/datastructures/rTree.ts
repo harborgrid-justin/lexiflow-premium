@@ -1,4 +1,3 @@
-
 // Simplified R-Tree (QuadTree) for 2D spatial indexing demonstration
 
 interface Bounds {

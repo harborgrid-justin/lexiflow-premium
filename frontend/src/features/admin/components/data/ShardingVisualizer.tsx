@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Server, Database, Plus, Trash2, ArrowRight } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';

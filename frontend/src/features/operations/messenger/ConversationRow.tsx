@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Conversation } from '@/hooks/useSecureMessenger';
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';

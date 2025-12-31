@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Gavel, CheckCircle, AlertTriangle } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';

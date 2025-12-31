@@ -1,6 +1,6 @@
 /**
  * Case Management Module - Barrel Export
- * 
+ *
  * Comprehensive case management components for LexiFlow
  * Enterprise-grade case lifecycle management
  */

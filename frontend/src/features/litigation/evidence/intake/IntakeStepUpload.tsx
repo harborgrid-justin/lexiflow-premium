@@ -1,4 +1,3 @@
-
 /**
  * @module IntakeStepUpload
  * @category Evidence

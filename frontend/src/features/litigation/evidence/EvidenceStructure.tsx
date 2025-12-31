@@ -1,4 +1,3 @@
-
 /**
  * @module EvidenceStructure
  * @category Evidence

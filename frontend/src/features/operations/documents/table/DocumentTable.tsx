@@ -1,4 +1,3 @@
-
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { useTheme } from '@/providers/ThemeContext';
 import { LegalDocument } from '@/types';

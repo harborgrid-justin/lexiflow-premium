@@ -1,4 +1,3 @@
-
 /**
  * @module components/war-room/CommandCenter
  * @category WarRoom

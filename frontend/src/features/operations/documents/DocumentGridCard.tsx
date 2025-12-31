@@ -1,4 +1,3 @@
-
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { FileIcon } from '@/components/ui/atoms/FileIcon/FileIcon';
 import { useTheme } from '@/providers/ThemeContext';

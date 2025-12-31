@@ -1,4 +1,3 @@
-
 import { MessageSquare } from 'lucide-react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';

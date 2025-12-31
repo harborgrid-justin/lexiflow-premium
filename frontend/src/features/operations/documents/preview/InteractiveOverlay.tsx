@@ -1,4 +1,3 @@
-
 import React, { useRef, useState, useEffect } from 'react';
 import { X, Move } from 'lucide-react';
 import { PDFTool } from './AcrobatToolbar';

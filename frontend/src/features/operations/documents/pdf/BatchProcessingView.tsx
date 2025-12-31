@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { Cpu } from 'lucide-react';

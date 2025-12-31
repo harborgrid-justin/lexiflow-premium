@@ -1,4 +1,3 @@
-
 /**
  * Centralized registry for status colors and variants.
  * Removes inconsistent switch/if-else logic from UI components.

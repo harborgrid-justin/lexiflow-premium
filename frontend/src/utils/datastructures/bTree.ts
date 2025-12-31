@@ -1,4 +1,3 @@
-
 // Simplified B-Tree implementation for demonstration
 class BTreeNode<K, V> {
     keys: K[] = [];

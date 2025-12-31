@@ -1,4 +1,3 @@
-
 /**
  * StrategyToolbar.tsx
  *

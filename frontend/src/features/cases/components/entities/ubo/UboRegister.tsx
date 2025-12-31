@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';

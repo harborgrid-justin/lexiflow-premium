@@ -1,4 +1,3 @@
-
 import { CopyButton } from '@/components/ui/atoms/CopyButton/CopyButton';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';

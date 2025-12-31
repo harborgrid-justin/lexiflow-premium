@@ -1,4 +1,3 @@
-
 // Double Buffer for smooth canvas animation
 export class DoubleBuffer<T> {
     private readBuffer: T;

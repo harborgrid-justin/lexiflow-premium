@@ -1,4 +1,3 @@
-
 import React, { lazy } from 'react';
 import { Clause } from '@/types';
 

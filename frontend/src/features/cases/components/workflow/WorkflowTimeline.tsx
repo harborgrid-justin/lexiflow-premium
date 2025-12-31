@@ -1,4 +1,3 @@
-
 /**
  * @module components/workflow/WorkflowTimeline
  * @category Workflow

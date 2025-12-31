@@ -1,4 +1,3 @@
-
 // BitSet for efficient storage of boolean flags
 export class BitSet {
     private readonly buffer: Uint32Array;

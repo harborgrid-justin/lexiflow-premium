@@ -1,4 +1,3 @@
-
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';

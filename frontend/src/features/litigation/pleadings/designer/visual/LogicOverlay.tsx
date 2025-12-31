@@ -22,10 +22,10 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDo
 
         const calculatePaths = () => {
             if (!svgRef.current) return;
-            
+
             // Optimization: Batch Read - Get container dimensions once
             const svgRect = svgRef.current.getBoundingClientRect();
-            
+
             // Optimization: Batch Read - Collect all target elements first
             const targets = pleadingDoc.sections
                 .filter(s => (s.linkedEvidenceIds?.length || s.linkedArgumentId))
@@ -43,23 +43,23 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDo
             const newPaths = targets.map(({ section, rect }) => {
                 const startX = rect.right - svgRect.left - 12; // Adjusted offset
                 const startY = rect.top - svgRect.top + rect.height / 2;
-                
+
                 // Draw to imaginary sidebar nodes for visualization effect
-                const endX = svgRect.width - 20; 
-                
+                const endX = svgRect.width - 20;
+
                 // Deterministic pseudo-random Y for visual distribution based on ID hash
                 const pseudoRandomY = (section.id.charCodeAt(section.id.length-1) % 100) - 50;
                 const endY = startY + pseudoRandomY;
 
                 const controlX1 = startX + (endX - startX) / 2;
                 const strokeColor = section.linkedArgumentId ? theme.chart.colors.secondary : theme.chart.colors.warning;
-                
+
                 return (
                     <g key={section.id}>
-                        <path 
+                        <path
                             d={`M ${startX} ${startY} C ${controlX1} ${startY}, ${controlX1} ${endY}, ${endX} ${endY}`}
-                            stroke={strokeColor} 
-                            strokeWidth="2" 
+                            stroke={strokeColor}
+                            strokeWidth="2"
                             fill="none"
                             strokeDasharray="5,5"
                             className="animate-dash"
@@ -79,7 +79,7 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDo
         // Listeners with throttling
         window.addEventListener('resize', scheduleUpdate);
         window.addEventListener('scroll', scheduleUpdate, true); // Capture scroll on any parent
-        
+
         return () => {
             window.removeEventListener('resize', scheduleUpdate);
             window.removeEventListener('scroll', scheduleUpdate, true);
@@ -88,7 +88,7 @@ export const LogicOverlay: React.FC<LogicOverlayProps> = ({ document: pleadingDo
     }, [pleadingDoc, theme]);
 
     return (
-        <svg 
+        <svg
             ref={svgRef}
             className="absolute inset-0 pointer-events-none z-50 w-full h-full overflow-visible"
         >

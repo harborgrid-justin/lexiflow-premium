@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/molecules/Card';
 import { Button } from '@/components/ui/atoms/Button';

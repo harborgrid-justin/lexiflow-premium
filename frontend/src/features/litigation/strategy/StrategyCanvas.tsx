@@ -1,4 +1,3 @@
-
 /**
  * @module components/litigation/StrategyCanvas
  * @category Litigation

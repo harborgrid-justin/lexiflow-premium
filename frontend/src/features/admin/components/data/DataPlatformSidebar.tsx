@@ -79,8 +79,8 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
                 }}
                 className={cn(
                   "w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 group",
-                  isActive 
-                    ? cn(theme.primary.light, theme.primary.text) 
+                  isActive
+                    ? cn(theme.primary.light, theme.primary.text)
                     : cn(theme.text.secondary, `hover:${theme.surface.highlight}`)
                 )}
               >
@@ -89,7 +89,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
                   {item.label}
                 </div>
                 {hasChildren && (
-                  <div 
+                  <div
                     className={cn(theme.text.tertiary, "hover:text-current transition-colors")}
                     onClick={(e: React.MouseEvent) => {
                       e.stopPropagation();
@@ -100,7 +100,7 @@ export const DataPlatformSidebar: React.FC<DataPlatformSidebarProps> = ({ active
                   </div>
                 )}
               </button>
-              
+
               {hasChildren && isExpanded && item.children && (
                 <div className={cn("ml-4 pl-3 border-l space-y-1 mt-1 mb-1", theme.border.default)}>
                   {item.children.map((sub: MenuItem) => (

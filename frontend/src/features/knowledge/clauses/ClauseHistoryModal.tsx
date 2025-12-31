@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Clause, ClauseVersion } from '@/types';
 import { History, ArrowLeftRight, X } from 'lucide-react';

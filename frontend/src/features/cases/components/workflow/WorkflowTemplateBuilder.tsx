@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback } from 'react';
 import { WorkflowTemplateData, WorkflowTemplateId } from '@/types';
 import { NodeType } from '@/types';

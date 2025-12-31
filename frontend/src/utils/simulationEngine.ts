@@ -1,4 +1,3 @@
-
 export interface SimulationParams {
   low: number;
   high: number;

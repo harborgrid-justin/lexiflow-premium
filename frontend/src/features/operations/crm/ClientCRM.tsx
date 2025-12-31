@@ -1,4 +1,3 @@
-
 import { TabbedPageLayout } from '@/components/layouts';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';

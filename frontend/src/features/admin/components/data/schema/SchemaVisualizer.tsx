@@ -1,4 +1,3 @@
-
 import { ContextMenu } from '@/components/ui/molecules/ContextMenu/ContextMenu';
 import { useCanvasDrag } from '@/hooks/ui';
 import { useTheme } from '@/providers/ThemeContext';

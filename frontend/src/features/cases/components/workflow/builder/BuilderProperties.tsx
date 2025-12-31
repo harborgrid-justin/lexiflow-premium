@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Settings, X, Move, Trash2 } from 'lucide-react';
 import { Input } from '@/components/ui/atoms/Input';

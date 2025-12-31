@@ -1,6 +1,6 @@
 /**
  * Custom hooks for Data Sources Management
- * 
+ *
  * Encapsulates state management and side effects for data source operations.
  * Separates data access from UI rendering concerns.
  */
@@ -8,25 +8,25 @@
 import { useState } from 'react';
 import { useQuery, useMutation, queryClient } from '@/hooks/backend';
 import { DataService } from '@/services/data/dataService';
-import type { 
-  DataSourceConnection, 
-  ConnectionFormData, 
-  ConnectionTestResult 
+import type {
+  DataSourceConnection,
+  ConnectionFormData,
+  ConnectionTestResult
 } from './types';
 import { DEFAULT_CONNECTION_FORM } from './constants';
 
 /**
  * Hook for managing data source connections
- * 
+ *
  * Provides CRUD operations and query state for data source connections.
  * Handles optimistic updates and cache invalidation.
  */
 export function useDataSourceConnections() {
   // Query for fetching all connections
-  const { 
-    data: connections = [], 
-    isLoading, 
-    refetch 
+  const {
+    data: connections = [],
+    isLoading,
+    refetch
   } = useQuery<DataSourceConnection[]>(
     ['admin', 'sources', 'connections'],
     DataService.sources.getConnections,
@@ -42,7 +42,7 @@ export function useDataSourceConnections() {
     {
       onSuccess: (newConnection: DataSourceConnection) => {
         queryClient.setQueryData(
-          ['admin', 'sources', 'connections'], 
+          ['admin', 'sources', 'connections'],
           (old: DataSourceConnection[] | undefined) => [...(old || []), newConnection]
         );
       }
@@ -51,26 +51,26 @@ export function useDataSourceConnections() {
 
   // Mutation for syncing a connection
   const syncMutation = useMutation(
-    DataService.sources.syncConnection, 
+    DataService.sources.syncConnection,
     {
       onMutate: async (id: string) => {
         const previous = queryClient.getQueryState(['admin', 'sources', 'connections'])?.data;
-        
+
         // Optimistic update: set status to 'syncing'
         queryClient.setQueryData<DataSourceConnection[]>(
-          ['admin', 'sources', 'connections'], 
-          (old) => 
+          ['admin', 'sources', 'connections'],
+          (old) =>
             old?.map(c => c.id === id ? { ...c, status: 'syncing' as const } : c) || []
         );
-        
+
         return { previous };
       },
       onSuccess: (_data, id: string) => {
         // Simulate sync completion after 2 seconds
         setTimeout(() => {
           queryClient.setQueryData<DataSourceConnection[]>(
-            ['admin', 'sources', 'connections'], 
-            (old) => 
+            ['admin', 'sources', 'connections'],
+            (old) =>
               old?.map(c => c.id === id ? { ...c, status: 'active' as const, lastSync: 'Just now' } : c) || []
           );
         }, 2000);
@@ -80,11 +80,11 @@ export function useDataSourceConnections() {
 
   // Mutation for deleting a connection
   const deleteMutation = useMutation(
-    DataService.sources.deleteConnection, 
+    DataService.sources.deleteConnection,
     {
       onSuccess: (_result, id: string) => {
         queryClient.setQueryData<DataSourceConnection[]>(
-          ['admin', 'sources', 'connections'], 
+          ['admin', 'sources', 'connections'],
           (old) => old?.filter(c => c.id !== id) || []
         );
       }
@@ -93,7 +93,7 @@ export function useDataSourceConnections() {
 
   // Mutation for testing a connection
   const testMutation = useMutation(
-    DataService.sources.testConnection, 
+    DataService.sources.testConnection,
     {
       onSuccess: (result: ConnectionTestResult) => {
         if (result.success) {
@@ -125,7 +125,7 @@ export function useDataSourceConnections() {
 
 /**
  * Hook for managing connection form state
- * 
+ *
  * Encapsulates form state and validation for creating new connections.
  */
 export function useConnectionForm() {
@@ -140,7 +140,7 @@ export function useConnectionForm() {
   };
 
   const updateField = <K extends keyof ConnectionFormData>(
-    field: K, 
+    field: K,
     value: ConnectionFormData[K]
   ) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -160,7 +160,7 @@ export function useConnectionForm() {
 
 /**
  * Hook for managing local storage data
- * 
+ *
  * Provides access to browser localStorage items with reactive updates.
  */
 export function useLocalStorageFiles() {

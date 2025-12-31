@@ -1,4 +1,3 @@
-
 export type ThemeMode = 'light' | 'dark';
 
 // Base Primitive Colors (Tailwind Reference)

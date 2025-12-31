@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ResearchSession } from '@/types';
 import { useTheme } from '@/providers/ThemeContext';

@@ -1,4 +1,3 @@
-
 export class CuckooFilter {
     private readonly buckets: (string | null)[][];
     private readonly bucketSize: number;

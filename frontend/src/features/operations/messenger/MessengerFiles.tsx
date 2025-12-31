@@ -1,4 +1,3 @@
-
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { FileAttachment } from '@/components/ui/molecules/FileAttachment/FileAttachment';

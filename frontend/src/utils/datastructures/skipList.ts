@@ -1,4 +1,3 @@
-
 class SkipNode<T> {
     constructor(
         public value: T,

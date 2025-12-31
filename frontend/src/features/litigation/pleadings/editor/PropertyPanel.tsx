@@ -1,4 +1,3 @@
-
 import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
 import { useTheme } from '@/providers/ThemeContext';
 import { PleadingSection } from '@/types';

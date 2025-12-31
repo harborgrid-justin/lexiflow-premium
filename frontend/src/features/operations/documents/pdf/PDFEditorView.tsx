@@ -1,4 +1,3 @@
-
 import { PDFViewer } from '@/components/features/discovery/components/PDFViewer/PDFViewer';
 import { SignaturePad } from '@/components/features/discovery/components/SignaturePad/SignaturePad';
 import { Button } from '@/components/ui/atoms/Button/Button';

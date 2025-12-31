@@ -1,4 +1,3 @@
-
 import { EmptyListState } from '@/components/organisms/_legacy/RefactoredCommon';
 import { Button } from '@/components/ui/atoms/Button';
 import { useNotify } from '@/hooks/core';

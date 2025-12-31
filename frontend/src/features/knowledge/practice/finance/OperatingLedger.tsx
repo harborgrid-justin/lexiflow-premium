@@ -1,4 +1,3 @@
-
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';

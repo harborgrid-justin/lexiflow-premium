@@ -1,4 +1,3 @@
-
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Currency } from '@/components/ui/atoms/Currency/Currency';

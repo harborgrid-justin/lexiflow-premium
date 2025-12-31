@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { CheckSquare, Lock} from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';

@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from 'react';
 import { Client, ClientStatus } from '@/types';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';

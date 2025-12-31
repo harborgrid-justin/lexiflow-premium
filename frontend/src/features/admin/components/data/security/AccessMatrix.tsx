@@ -45,7 +45,7 @@ export const AccessMatrix = React.memo(() => {
       const levels: PermissionLevel[] = ['None', 'Read', 'Write', 'Full', 'Own'];
       const nextIndex = (levels.indexOf(current) + 1) % levels.length;
       const nextLevel = levels[nextIndex];
-      
+
       updatePermission({ role, resource, level: nextLevel });
   };
 
@@ -91,8 +91,8 @@ export const AccessMatrix = React.memo(() => {
                         {roles.map(role => {
                             const access = getPermission(role, res);
                             return (
-                                <td 
-                                    key={role} 
+                                <td
+                                    key={role}
                                     onClick={() => cyclePermission(role, res)}
                                     className={cn("px-6 py-4 text-center cursor-pointer transition-colors border-r last:border-r-0 border-dashed", theme.border.default, `hover:${theme.surface.highlight}`)}
                                 >

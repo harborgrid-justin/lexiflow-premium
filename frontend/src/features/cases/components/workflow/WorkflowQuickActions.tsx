@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { CheckSquare, FastForward, Pause, Play } from 'lucide-react';
 import React from 'react';

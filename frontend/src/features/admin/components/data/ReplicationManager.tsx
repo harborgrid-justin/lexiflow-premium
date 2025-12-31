@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 
 import { CheckCircle, Loader2, Power, ShieldAlert } from 'lucide-react';

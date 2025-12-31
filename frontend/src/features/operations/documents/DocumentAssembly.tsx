@@ -1,4 +1,3 @@
-
 // components/DocumentAssembly.tsx
 import { useState } from 'react';
 import { X, Wand2, Minus } from 'lucide-react';

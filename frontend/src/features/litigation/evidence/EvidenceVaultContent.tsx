@@ -1,4 +1,3 @@
-
 /**
  * @module EvidenceVaultContent
  * @category Evidence

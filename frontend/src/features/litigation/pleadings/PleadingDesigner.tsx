@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { queryClient, useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';

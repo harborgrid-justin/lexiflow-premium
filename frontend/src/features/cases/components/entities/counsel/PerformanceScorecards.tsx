@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { RiskMeter } from '@/components/features/cases/components/RiskMeter/RiskMeter';

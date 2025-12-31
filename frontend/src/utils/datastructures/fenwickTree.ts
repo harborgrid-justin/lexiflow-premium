@@ -1,4 +1,3 @@
-
 // Fenwick Tree or Binary Indexed Tree (BIT)
 export class FenwickTree {
     private readonly bit: number[];

@@ -88,7 +88,7 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
   };
 
   return (
-    <div 
+    <div
         className="w-[8.5in] min-h-[11in] bg-white shadow-2xl p-[1in] relative transition-all"
         onClick={() => onSelectSection(null)}
         role="document"
@@ -116,15 +116,15 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
                 {/* Controls Overlay */}
                 {selectedSectionId === section.id && (
                     <div className="absolute -right-10 top-0 flex flex-col gap-1">
-                         <button 
-                            onClick={() => onDeleteSection(section.id)} 
+                         <button
+                            onClick={() => onDeleteSection(section.id)}
                             className="p-2 bg-white shadow rounded-full text-red-500 hover:bg-red-50"
                             aria-label="Delete Section"
                             tabIndex={-1}
                          >
                             <Trash2 className="h-4 w-4"/>
                          </button>
-                         <button 
+                         <button
                             className="p-2 bg-white shadow rounded-full text-slate-500 cursor-grab active:cursor-grabbing"
                             aria-label="Drag Section"
                             tabIndex={-1}
@@ -133,7 +133,7 @@ export const DocumentCanvas: React.FC<DocumentCanvasProps> = ({
                          </button>
                     </div>
                 )}
-                
+
                 {renderSectionContent(section)}
             </div>
         ))}

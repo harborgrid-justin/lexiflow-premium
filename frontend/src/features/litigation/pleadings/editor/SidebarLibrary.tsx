@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Type, Layout, List, PenTool, Hash, GripVertical, FileText } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';

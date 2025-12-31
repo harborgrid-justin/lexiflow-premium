@@ -1,4 +1,3 @@
-
 // Consistent Hashing Ring
 export class ConsistentHashRing {
     private ring: Map<number, string> = new Map();

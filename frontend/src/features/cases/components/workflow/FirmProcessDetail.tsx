@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ArrowLeft, Play, Loader2} from 'lucide-react';
 import { Button } from '@/components/ui/atoms/Button';

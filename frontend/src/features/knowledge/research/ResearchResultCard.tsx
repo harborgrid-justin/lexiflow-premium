@@ -1,4 +1,3 @@
-
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { useReadAnalytics } from '@/hooks/useReadAnalytics';
 import { useTheme } from '@/providers/ThemeContext';

@@ -1,4 +1,3 @@
-
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary';
 import { PageHeader } from '@/components/organisms/PageHeader';
 import { Button } from '@/components/ui/atoms/Button/Button';

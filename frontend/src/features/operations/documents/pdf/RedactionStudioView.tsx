@@ -1,4 +1,3 @@
-
 import { PDFViewer } from '@/components/features/discovery/components/PDFViewer/PDFViewer';
 import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
 import { useSingleSelection } from '@/hooks/useMultiSelection';

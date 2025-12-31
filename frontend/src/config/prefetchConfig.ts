@@ -1,4 +1,3 @@
-
 // config/prefetchConfig.ts
 import { queryKeys } from '../utils/queryKeys';
 import { DataService } from '@/services/data/dataService';

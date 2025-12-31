@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Clock, Loader2 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';

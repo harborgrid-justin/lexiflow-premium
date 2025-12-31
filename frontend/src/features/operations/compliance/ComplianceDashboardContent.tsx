@@ -1,4 +1,3 @@
-
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import React, { lazy, memo } from 'react';

@@ -1,4 +1,3 @@
-
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { useQuery } from '@/hooks/useQueryHooks';

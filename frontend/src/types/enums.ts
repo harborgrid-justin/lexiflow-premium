@@ -1,4 +1,3 @@
-
 // types/enums.ts
 
 export enum CaseStatus {
@@ -360,19 +359,19 @@ export type TaskStatus = 'Pending' | 'In Progress' | 'Review' | 'Done' | 'Comple
 export type StageStatus = 'Pending' | 'Active' | 'Completed';
 
 // Legal Rule Types - aligned with backend JurisdictionRule types
-export type LegalRuleType = 
-  | 'Procedural' 
-  | 'Evidentiary' 
-  | 'Civil' 
-  | 'Criminal' 
-  | 'Administrative' 
-  | 'Local' 
-  | 'Standing Order' 
+export type LegalRuleType =
+  | 'Procedural'
+  | 'Evidentiary'
+  | 'Civil'
+  | 'Criminal'
+  | 'Administrative'
+  | 'Local'
+  | 'Standing Order'
   | 'Practice Guide'
   // Legacy types for backward compatibility
-  | 'FRE' 
-  | 'FRCP' 
-  | 'FRAP' 
+  | 'FRE'
+  | 'FRCP'
+  | 'FRAP'
   | 'State';
 
 export type EntityType = 'Individual' | 'Corporation' | 'Court' | 'Government' | 'Vendor' | 'Law Firm';

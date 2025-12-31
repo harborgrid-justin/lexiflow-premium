@@ -1,4 +1,3 @@
-
 // components/research/ShepardizingTool.tsx
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';

@@ -1,14 +1,14 @@
-// types/pleadingTypes.ts
+// types/pleading-types.ts
 
 import { BaseEntity, CaseId, UserId, MetadataRecord } from './primitives';
 
-export type PleadingSectionType = 
-  | 'Caption' 
-  | 'Heading' 
-  | 'Paragraph' 
-  | 'List' 
-  | 'BlockQuote' 
-  | 'Signature' 
+export type PleadingSectionType =
+  | 'Caption'
+  | 'Heading'
+  | 'Paragraph'
+  | 'List'
+  | 'BlockQuote'
+  | 'Signature'
   | 'Certificate';
 
 export interface PleadingSection {
@@ -24,7 +24,7 @@ export interface PleadingSection {
   linkedEvidenceIds?: string[];
   linkedCitationIds?: string[];
   linkedArgumentId?: string;
-  
+
   complianceIssues?: string[];
   metadata?: MetadataRecord;
 }
@@ -62,12 +62,12 @@ export interface PleadingDocument extends BaseEntity {
   sections: PleadingSection[];
   comments?: PleadingComment[];
   variables?: PleadingVariable[];
-  links?: LogicLink[]; 
-  jurisdictionRulesId: string; 
+  links?: LogicLink[];
+  jurisdictionRulesId: string;
   version: number;
   lastAutoSaved?: string;
   createdBy?: UserId;
-  
+
   court?: string;
   judge?: string;
   plaintiff?: string;

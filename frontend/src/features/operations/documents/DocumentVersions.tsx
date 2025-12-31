@@ -1,5 +1,4 @@
 
-
 import { LegalDocument, DocumentVersion, UserRole } from '@/types';
 import { History, RotateCcw, AlertTriangle, X } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';

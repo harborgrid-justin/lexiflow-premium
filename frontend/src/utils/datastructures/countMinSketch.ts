@@ -1,4 +1,3 @@
-
 export class CountMinSketch {
     private readonly width: number;
     private readonly depth: number;

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar';
 import { Button } from '@/components/ui/atoms/Button';

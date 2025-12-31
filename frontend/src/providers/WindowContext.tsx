@@ -1,4 +1,3 @@
-
 import { ErrorBoundary } from "@/components/organisms/ErrorBoundary";
 import { cn } from '@/utils/cn';
 import { Maximize2, Minus, X } from 'lucide-react';

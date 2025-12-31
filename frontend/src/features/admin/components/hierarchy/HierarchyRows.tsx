@@ -1,4 +1,3 @@
-
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
 import { useTheme } from '@/providers/ThemeContext';
 import { Group, Organization, User as UserType } from '@/types';

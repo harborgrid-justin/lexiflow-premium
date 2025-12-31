@@ -1,4 +1,3 @@
-
 // High-Performance Structure-of-Arrays (SoA) Physics Engine
 // Optimized with Spatial Hashing for O(N) performance.
 

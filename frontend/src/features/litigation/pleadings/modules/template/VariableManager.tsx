@@ -23,7 +23,7 @@ export const VariableManager: React.FC<VariableManagerProps> = ({ variables, onU
           <RefreshCw className="h-3 w-3" />
         </button>
       </div>
-      
+
       <div className="space-y-3">
         {variables.map((variable) => (
           <div key={variable.id} className={cn("p-3 rounded border", theme.surface.default, theme.border.default)}>
@@ -45,7 +45,7 @@ export const VariableManager: React.FC<VariableManagerProps> = ({ variables, onU
             </div>
           </div>
         ))}
-        
+
         {variables.length === 0 && (
           <div className="text-center py-6 text-xs text-slate-400">
             No variables detected in this template.

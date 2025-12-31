@@ -1,4 +1,3 @@
-
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { Button } from '@/components/ui/atoms/Button';
 import { useQuery } from '@/hooks/useQueryHooks';

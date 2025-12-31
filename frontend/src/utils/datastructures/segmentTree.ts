@@ -1,4 +1,3 @@
-
 // Segment Tree for Range Queries
 export class SegmentTree {
     private readonly tree: number[];

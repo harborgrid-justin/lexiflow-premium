@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
 import { DiscoveryView } from '@/hooks/useDiscoveryPlatform';

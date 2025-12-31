@@ -1,4 +1,3 @@
-
 import { BackupSnapshot } from '@/api/data-platform/backups-api';
 import { Button } from '@/components/ui/atoms/Button';
 import { Modal } from '@/components/ui/molecules/Modal';

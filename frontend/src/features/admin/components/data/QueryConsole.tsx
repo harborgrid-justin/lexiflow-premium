@@ -1,4 +1,3 @@
-
 import { dataPlatformApi } from '@/api/data-platform';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { Button } from '@/components/ui/atoms/Button/Button';

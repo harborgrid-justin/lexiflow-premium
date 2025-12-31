@@ -66,6 +66,11 @@ export class PermissionsGuard implements CanActivate {
     );
 
     if (!hasAllPermissions) {
+      console.log('PermissionsGuard failed:', {
+        userRole: (user as any).role,
+        userPermissions: user.permissions,
+        requiredPermissions,
+      });
       throw new InsufficientPermissionsException(requiredPermissions);
     }
 

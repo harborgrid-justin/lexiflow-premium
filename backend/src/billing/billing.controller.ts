@@ -20,7 +20,7 @@ export class BillingController {
   constructor(private readonly billingService: BillingService) {}
 
   @Get('invoices')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Get all invoices' })
   @ApiResponse({ status: 200, description: 'List of invoices' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -30,7 +30,7 @@ export class BillingController {
   }
 
   @Get('invoices/:id')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Get invoice by ID' })
   @ApiResponse({ status: 200, description: 'Invoice details' })
   @ApiResponse({ status: 404, description: 'Invoice not found' })
@@ -42,7 +42,7 @@ export class BillingController {
   }
 
   @Post('invoices')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER)
   @ApiOperation({ summary: 'Create new invoice' })
   @ApiResponse({ status: 201, description: 'Invoice created' })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
@@ -54,7 +54,7 @@ export class BillingController {
   }
 
   @Put('invoices/:id')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER)
   @ApiOperation({ summary: 'Update invoice' })
   @ApiResponse({ status: 200, description: 'Invoice updated' })
   @ApiResponse({ status: 404, description: 'Invoice not found' })
@@ -67,7 +67,7 @@ export class BillingController {
   }
 
   @Delete('invoices/:id')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER)
   @ApiOperation({ summary: 'Delete invoice' })
   @ApiResponse({ status: 200, description: 'Invoice deleted' })
   @ApiResponse({ status: 404, description: 'Invoice not found' })
@@ -79,7 +79,7 @@ export class BillingController {
   }
 
   @Post('invoices/:id/send')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY)
   @ApiOperation({ summary: 'Send invoice to client' })
   @ApiResponse({ status: 200, description: 'Invoice sent' })
   @ApiResponse({ status: 404, description: 'Invoice not found' })
@@ -93,7 +93,7 @@ export class BillingController {
   }
 
   @Post('invoices/:id/mark-paid')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER)
   @ApiOperation({ summary: 'Mark invoice as paid' })
   @ApiResponse({ status: 200, description: 'Invoice marked as paid' })
   @ApiResponse({ status: 404, description: 'Invoice not found' })
@@ -107,7 +107,7 @@ export class BillingController {
   }
 
   @Get('time-entries')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Get all time entries' })
   @ApiResponse({ status: 200, description: 'List of time entries' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -117,7 +117,7 @@ export class BillingController {
   }
 
   @Get('time-entries/case/:caseId')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Get time entries by case' })
   @ApiResponse({ status: 200, description: 'List of time entries for case' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -128,7 +128,7 @@ export class BillingController {
   }
 
   @Post('time-entries')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Create time entry' })
   @ApiResponse({ status: 201, description: 'Time entry created' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
@@ -140,7 +140,7 @@ export class BillingController {
   }
 
   @Put('time-entries/:id')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Update time entry' })
   @ApiResponse({ status: 200, description: 'Time entry updated' })
   @ApiResponse({ status: 404, description: 'Time entry not found' })
@@ -153,7 +153,7 @@ export class BillingController {
   }
 
   @Delete('time-entries/:id')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY)
   @ApiOperation({ summary: 'Delete time entry' })
   @ApiResponse({ status: 200, description: 'Time entry deleted' })
   @ApiResponse({ status: 404, description: 'Time entry not found' })
@@ -165,7 +165,7 @@ export class BillingController {
   }
 
   @Get('time-entries/unbilled/:caseId')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Get unbilled time entries for case' })
   @ApiResponse({ status: 200, description: 'List of unbilled time entries' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -176,7 +176,7 @@ export class BillingController {
   }
 
   @Get('expenses')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Get all expenses' })
   @ApiResponse({ status: 200, description: 'List of expenses' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -186,7 +186,7 @@ export class BillingController {
   }
 
   @Post('expenses')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Create expense' })
   @ApiResponse({ status: 201, description: 'Expense created' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
@@ -198,7 +198,7 @@ export class BillingController {
   }
 
   @Get('expenses/unbilled/:caseId')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Get unbilled expenses for case' })
   @ApiResponse({ status: 200, description: 'List of unbilled expenses' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -209,7 +209,7 @@ export class BillingController {
   }
 
   @Post('generate-invoice')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER)
   @ApiOperation({ summary: 'Generate invoice from unbilled items' })
   @ApiResponse({ status: 201, description: 'Invoice generated' })
   @ApiResponse({ status: 400, description: 'Invalid input' })
@@ -221,7 +221,7 @@ export class BillingController {
   }
 
   @Get('summary/:caseId')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Get billing summary for case' })
   @ApiResponse({ status: 200, description: 'Billing summary' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -232,7 +232,7 @@ export class BillingController {
   }
 
   @Get('wip-stats')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Get WIP (Work In Progress) statistics' })
   @ApiResponse({ status: 200, description: 'WIP statistics by case' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -242,7 +242,7 @@ export class BillingController {
   }
 
   @Get('realization-stats')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Get realization statistics (billed vs write-off)' })
   @ApiResponse({ status: 200, description: 'Realization statistics' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -252,7 +252,7 @@ export class BillingController {
   }
 
   @Get('overview-stats')
-  @Roles(UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
   @ApiOperation({ summary: 'Get billing overview statistics' })
   @ApiResponse({ 
     status: 200, 

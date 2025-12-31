@@ -9,7 +9,7 @@ import { ProcessingJobsApiService } from '../admin/processing-jobs-api';
 import { OCRApiService } from '../admin/ocr-api';
 import { MonitoringApiService } from '../admin/monitoring-api';
 import { HealthApiService } from '../admin/health-api';
-import { AnalyticsApiService } from '../analytics/analytics-api';
+import { AnalyticsApiService } from '../intelligence/analytics-api';
 import { AuditLogsApiService } from '../admin/audit-logs-api';
 import { VersioningApiService } from '../admin/versioning-api';
 import { SyncApiService } from '../admin/sync-api';

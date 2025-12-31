@@ -1,16 +1,16 @@
 /**
  * Consolidated API Services - Domain-Organized Barrel Export
- * 
+ *
  * This file provides a clean, domain-organized export of all API services.
  * Services are organized into focused domain modules for better maintainability.
- * 
+ *
  * Architecture:
  * - Domain modules: auth/, litigation/, discovery/, billing/, trial/, workflow/, etc.
  * - Zero duplicates: All duplicate implementations consolidated
  * - 95%+ backend coverage: All critical endpoints mapped
  * - Type-safe: Full TypeScript definitions with DTOs
  * - Backend-first: Defaults to PostgreSQL + NestJS backend (IndexedDB deprecated)
- * 
+ *
  * Folder Structure:
  * - auth/ - Authentication, users, permissions, security
  * - litigation/ - Cases, docket, motions, pleadings, parties
@@ -26,26 +26,26 @@
  * - data-platform/ - Data sources, schema management, query workbench
  * - hr/ - Staff management, HR operations
  * - types/ - Shared type definitions and interfaces
- * 
+ *
  * Usage - Domain-based imports (RECOMMENDED):
  *   import { api } from '@/api';
  *   const cases = await api.cases.getAll();
- * 
+ *
  * Usage - Direct domain imports:
  *   import * as authApi from '@/api/auth';
  *   import * as litigationApi from '@/api/litigation';
  */
 
 // Export API configuration utilities
-export { 
-  isBackendApiEnabled, 
-  isIndexedDBMode, 
-  getDataMode, 
-  forceBackendMode, 
+export {
+  isBackendApiEnabled,
+  isIndexedDBMode,
+  getDataMode,
+  forceBackendMode,
   enableLegacyIndexedDB,
   isProduction,
   getBackendUrl,
-  logApiConfig 
+  logApiConfig
 } from '@/services/integration/apiConfig';
 
 // ==================== DOMAIN EXPORTS ====================
@@ -78,10 +78,10 @@ export * from './workflow';
 export * from './communications';
 export * from './compliance';
 export * from './integrations';
-export * from './analytics';
+export * from './intelligence';
 
 // Export admin services (excluding classes that data-platform also exports)
-export { 
+export {
   ProcessingJobsApiService,
   DocumentsApiService,
   DocumentVersionsApiService,

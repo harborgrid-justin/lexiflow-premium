@@ -18,7 +18,7 @@ import React from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 import { api } from '@/api';
-import type { OutcomePrediction } from '@/api/analytics';
+import type { OutcomePrediction } from '@/api/intelligence';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';

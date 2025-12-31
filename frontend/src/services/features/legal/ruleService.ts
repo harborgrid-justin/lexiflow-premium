@@ -4,21 +4,21 @@
  * @description Legal rules service with backend API integration. Provides CRUD operations for legal
  * rules with search filtering, connected to jurisdiction rules endpoint.
  * ✅ Backend-connected with query keys (2025-12-21)
- * 
+ *
  * @example
  * ```tsx
  * import { RuleService, ruleQueryKeys } from './services/features/legal/ruleService';
  * import { useQuery, useMutation } from './hooks/useQueryHooks';
- * 
+ *
  * // Fetch all rules
  * const { data: rules } = useQuery(ruleQueryKeys.all(), () => RuleService.getAll());
- * 
+ *
  * // Search rules
  * const { data: searchResults } = useQuery(
  *   ruleQueryKeys.search(searchQuery),
  *   () => RuleService.search(searchQuery)
  * );
- * 
+ *
  * // Create new rule
  * const createMutation = useMutation(
  *   (newRule) => RuleService.add(newRule),
@@ -40,7 +40,7 @@ import { queryClient } from '@/services/infrastructure/queryClient';
 
 // Types
 import { LegalRule } from '@/types';
-import type { JurisdictionRule, CreateJurisdictionRuleDto } from '@/api/analytics';
+import type { JurisdictionRule, CreateJurisdictionRuleDto } from '@/api/intelligence';
 
 // ============================================================================
 // TYPE MAPPING UTILITIES
@@ -118,10 +118,10 @@ export const RuleService = {
     if (!created) {
       throw new OperationError('RuleService.add', 'Failed to create rule');
     }
-    
+
     // Invalidate relevant queries
     queryClient.invalidate(queryKeys.jurisdiction.rules());
-    
+
     return mapToLegalRule(created);
   },
 
@@ -130,7 +130,7 @@ export const RuleService = {
    */
   update: async (id: string, updates: Partial<LegalRule>): Promise<LegalRule> => {
     const updateDto: Partial<Omit<CreateJurisdictionRuleDto, 'jurisdictionId'>> = {};
-    
+
     if (updates.code) updateDto.code = updates.code;
     if (updates.name) updateDto.name = updates.name;
     if (updates.type) updateDto.type = updates.type as JurisdictionRule['type'];
@@ -138,17 +138,17 @@ export const RuleService = {
     if (updates.effectiveDate) updateDto.effectiveDate = updates.effectiveDate;
     if (updates.source) updateDto.fullText = updates.source;
     if (updates.url) updateDto.url = updates.url;
-    
+
     const updated = await api.jurisdiction.updateRule(id, updateDto);
 
     if (!updated) {
       throw new OperationError('RuleService.update', 'Failed to update rule');
     }
-    
+
     // Invalidate relevant queries
     queryClient.invalidate(queryKeys.jurisdiction.rules());
     queryClient.invalidate(queryKeys.jurisdiction.detail(id));
-    
+
     return mapToLegalRule(updated);
   },
 
@@ -161,7 +161,7 @@ export const RuleService = {
     if (!success) {
       throw new OperationError('RuleService.delete', 'Failed to delete rule');
     }
-    
+
     // Invalidate relevant queries
     queryClient.invalidate(queryKeys.jurisdiction.rules());
   },

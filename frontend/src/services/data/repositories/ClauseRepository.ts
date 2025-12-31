@@ -1,7 +1,7 @@
 /**
  * Clause Repository
  * Enterprise-grade repository for legal clause management with backend API integration
- * 
+ *
  * @module ClauseRepository
  * @description Manages all clause-related operations including:
  * - Clause CRUD operations
@@ -9,7 +9,7 @@
  * - Category and jurisdiction filtering
  * - Usage tracking
  * - Search and filtering
- * 
+ *
  * @security
  * - Input validation on all parameters
  * - XSS prevention through type enforcement
@@ -21,7 +21,7 @@ import { Clause, BaseEntity } from '@/types';
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { ClausesApiService } from '@/api/analytics';
+import { ClausesApiService } from '@/api/intelligence';
 import { ValidationError, EntityNotFoundError } from '@/services/core/errors';
 
 export const CLAUSE_QUERY_KEYS = {

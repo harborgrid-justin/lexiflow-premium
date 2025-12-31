@@ -3,20 +3,20 @@
  * Search, analytics dashboards, AI/ML predictions, bluebook, knowledge
  */
 
-import { SearchApiService } from '../analytics/search-api';
-import { DashboardApiService } from '../analytics/dashboard-api';
-import { AIOpsApiService } from '../analytics/ai-ops-api';
-import { AnalyticsDashboardApiService } from '../analytics/analytics-dashboard-api';
+import { SearchApiService } from '../intelligence/search-api';
+import { DashboardApiService } from '../intelligence/dashboard-api';
+import { AIOpsApiService } from '../intelligence/ai-ops-api';
+import { AnalyticsDashboardApiService } from '../intelligence/analytics-dashboard-api';
 import { BillingAnalyticsApiService } from '../billing/billing-analytics-api';
-import { CaseAnalyticsApiService } from '../analytics/case-analytics-api';
+import { CaseAnalyticsApiService } from '../intelligence/case-analytics-api';
 import { DiscoveryAnalyticsApiService } from '../discovery/discovery-analytics-api';
-import { OutcomePredictionsApiService } from '../analytics/outcome-predictions-api';
-import { JudgeStatsApiService } from '../analytics/judge-stats-api';
-import { BluebookApiService } from '../analytics/bluebook-api';
-import { KnowledgeApiService } from '../analytics/knowledge-api';
-import { CitationsApiService } from '../analytics/citations-api';
-import { ClausesApiService } from '../analytics/clauses-api';
-import { JurisdictionApiService } from '../analytics/jurisdiction-api';
+import { OutcomePredictionsApiService } from '../intelligence/outcome-predictions-api';
+import { JudgeStatsApiService } from '../intelligence/judge-stats-api';
+import { BluebookApiService } from '../intelligence/bluebook-api';
+import { KnowledgeApiService } from '../intelligence/knowledge-api';
+import { CitationsApiService } from '../intelligence/citations-api';
+import { ClausesApiService } from '../intelligence/clauses-api';
+import { JurisdictionApiService } from '../intelligence/jurisdiction-api';
 
 // Export singleton instances
 export const analyticsApi = {

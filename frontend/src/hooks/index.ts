@@ -174,7 +174,8 @@ export { useDocumentDragDrop, type UseDocumentDragDropReturn } from './useDocume
 export { useEntityAutocomplete, type UseEntityAutocompleteReturn } from './useEntityAutocomplete';
 export * from './useKeyboardNavigation';
 export * from './usePerformanceTracking';
-export * from './useQueryHooks';
+export { useQuery, useMutation, queryClient } from './useQueryHooks';
+export type { QueryKey, QueryState, UseMutationOptions, UseQueryOptions, MutationContext } from './useQueryHooks';
 export * from './useSync';
 export {
   useTrustAccounts,

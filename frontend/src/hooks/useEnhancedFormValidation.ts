@@ -15,7 +15,7 @@
  */
 
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
-import { SEARCH_DEBOUNCE_MS } from '@/config';
+import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
 import type {
   FieldSchema,
   FormSchema,

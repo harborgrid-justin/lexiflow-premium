@@ -3,5 +3,5 @@
  * Trial preparation, exhibits, and courtroom management
  */
 
-export * from './trial-api';
-export * from './exhibits-api';
+export { ExhibitsApiService } from "./exhibits-api";
+export { TRIAL_QUERY_KEYS, TrialApiService } from "./trial-api";

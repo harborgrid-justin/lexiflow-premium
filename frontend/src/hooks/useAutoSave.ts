@@ -1,9 +1,9 @@
 /**
  * @module hooks/useAutoSave
- * 
+ *
  * Provides automatic data persistence with race condition prevention.
  * Debounces save operations and handles concurrent save attempts.
- * 
+ *
  * @example
  * ```typescript
  * const { forceSave, isSaving } = useAutoSave({
@@ -19,7 +19,7 @@
 
 import { useEffect, useRef, useCallback } from 'react';
 import { useDebouncedCallback } from './useDebounce';
-import { FORM_AUTO_SAVE_DELAY_MS } from '@/config';
+import { FORM_AUTO_SAVE_DELAY_MS } from '@/config/features/forms.config';
 
 // ============================================================================
 // TYPES
@@ -31,7 +31,7 @@ import { FORM_AUTO_SAVE_DELAY_MS } from '@/config';
 export class AutoSaveError extends Error {
   public override readonly cause?: Error;
   public readonly context?: Record<string, unknown>;
-  
+
   constructor(
     message: string,
     cause?: Error,
@@ -77,7 +77,7 @@ export interface UseAutoSaveReturn {
 
 /**
  * Automatically saves data with debouncing and race condition prevention.
- * 
+ *
  * @param options - Configuration options
  * @returns Object with forceSave method and isSaving state
  */
@@ -86,7 +86,7 @@ export function useAutoSave<T>(options: UseAutoSaveOptions<T>): UseAutoSaveRetur
   const pendingSaveRef = useRef(false);
   const lastSavedDataRef = useRef<T>(options.data);
   const mountedRef = useRef(true);
-  
+
   const { data, onSave, delay = FORM_AUTO_SAVE_DELAY_MS, enabled = true, onSuccess, onError } = options;
 
   useEffect(() => {
@@ -112,7 +112,7 @@ export function useAutoSave<T>(options: UseAutoSaveOptions<T>): UseAutoSaveRetur
 
     try {
       await onSave(dataToSave);
-      
+
       if (mountedRef.current) {
         lastSavedDataRef.current = dataToSave;
         onSuccess?.();

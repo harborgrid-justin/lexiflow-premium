@@ -2,7 +2,7 @@
  * @module hooks/useFormValidation
  * @category Hooks
  * @description Real-time form validation with debounced checks and progress tracking.
- * 
+ *
  * FEATURES:
  * - As-you-type validation with configurable debounce
  * - Field interdependency validation
@@ -12,7 +12,7 @@
  */
 
 import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
-import { SEARCH_DEBOUNCE_MS } from '@/config';
+import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -142,10 +142,10 @@ export function useFormValidation<T extends Record<string, unknown>>({
   validateOnMount = false,
   interdependencyValidator,
 }: UseFormValidationOptions<T>): UseFormValidationReturn<T> {
-  
+
   // Form values
   const [values, setValuesState] = useState<T>(initialValues);
-  
+
   // Validation state for each field
   const [validationState, setValidationState] = useState<FormValidationState<T>>(() => {
     const initialState = {} as FormValidationState<T>;
@@ -173,7 +173,7 @@ export function useFormValidation<T extends Record<string, unknown>>({
   ): Promise<boolean> => {
     const fieldValue = value !== undefined ? value : values[field];
     const rules = schema[field];
-    
+
     if (!rules || rules.length === 0) return true;
 
     // Set validating state
@@ -265,7 +265,7 @@ export function useFormValidation<T extends Record<string, unknown>>({
    */
   const setValue = useCallback(<K extends keyof T>(field: K, value: T[K]) => {
     setValuesState(prev => ({ ...prev, [field]: value }));
-    
+
     // Trigger debounced validation
     const validator = debouncedValidators.current.get(field);
     if (validator) {
@@ -278,7 +278,7 @@ export function useFormValidation<T extends Record<string, unknown>>({
    */
   const setValues = useCallback((newValues: Partial<T>) => {
     setValuesState(prev => ({ ...prev, ...newValues }));
-    
+
     // Trigger validation for all changed fields
     Object.keys(newValues).forEach(fieldKey => {
       const field = fieldKey as keyof T;
@@ -395,7 +395,7 @@ export const ValidationRules = {
     name: 'minLength',
     validate: (value: string) => {
       if (!value) return null; // Let 'required' handle empty values
-      return value.length < min 
+      return value.length < min
         ? message || `Must be at least ${min} characters`
         : null;
     },
@@ -405,7 +405,7 @@ export const ValidationRules = {
     name: 'maxLength',
     validate: (value: string) => {
       if (!value) return null;
-      return value.length > max 
+      return value.length > max
         ? message || `Must be at most ${max} characters`
         : null;
     },
@@ -432,7 +432,7 @@ export const ValidationRules = {
     name: 'min',
     validate: (value: number) => {
       if (value === null || value === undefined) return null;
-      return value < min 
+      return value < min
         ? message || `Must be at least ${min}`
         : null;
     },
@@ -442,7 +442,7 @@ export const ValidationRules = {
     name: 'max',
     validate: (value: number) => {
       if (value === null || value === undefined) return null;
-      return value > max 
+      return value > max
         ? message || `Must be at most ${max}`
         : null;
     },
@@ -454,11 +454,11 @@ export const ValidationRules = {
       if (!value || !allValues) return null;
       const compareValue = allValues[compareField];
       if (!compareValue) return null;
-      
+
       const date1 = new Date(value);
       const date2 = new Date(compareValue as string | number | Date);
-      
-      return date1 <= date2 
+
+      return date1 <= date2
         ? message || `Must be after ${compareField}`
         : null;
     },

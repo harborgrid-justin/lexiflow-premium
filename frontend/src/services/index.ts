@@ -35,7 +35,7 @@ export * from "./infrastructure/adapters/WindowAdapter";
 // Import directly: import { db } from '@/services/data/db';
 // export * from "./data/db";
 // export * from "./data/dbSeeder";
-export * from "./data/syncEngine";
+export { SyncEngine, type Mutation } from "./data/syncEngine";
 
 // DO NOT export repositories - they cause circular dependencies with db.ts
 // Import directly: import { UserRepository } from '@/services/data/repositories/UserRepository';
@@ -88,7 +88,7 @@ export * from "./infrastructure/blobManager";
 export * from "./infrastructure/chainService";
 export * from "./infrastructure/collaborationService";
 export * from "./infrastructure/commandHistory";
-export * from "./infrastructure/cryptoService";
+export { CryptoService } from "./infrastructure/cryptoService";
 export * from "./infrastructure/dateCalculationService";
 export * from "./infrastructure/holographicRouting";
 export * from "./infrastructure/moduleRegistry";

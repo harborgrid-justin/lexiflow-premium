@@ -14,9 +14,9 @@
  * - Save status indicators
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { useDebouncedCallback } from './useDebounce';
-import { FORM_AUTO_SAVE_DELAY_MS } from '@/config';
+import { FORM_AUTO_SAVE_DELAY_MS } from "@/config/features/forms.config";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useDebouncedCallback } from "./useDebounce";
 
 // ============================================================================
 // TYPES
@@ -25,17 +25,17 @@ import { FORM_AUTO_SAVE_DELAY_MS } from '@/config';
 /**
  * Save status
  */
-export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error' | 'conflict';
+export type SaveStatus = "idle" | "saving" | "saved" | "error" | "conflict";
 
 /**
  * Conflict resolution strategy
  */
 export type ConflictResolutionStrategy =
-  | 'overwrite' // Overwrite server version
-  | 'merge' // Attempt to merge changes
-  | 'manual' // Require manual resolution
-  | 'keepLocal' // Keep local version
-  | 'keepServer'; // Keep server version
+  | "overwrite" // Overwrite server version
+  | "merge" // Attempt to merge changes
+  | "manual" // Require manual resolution
+  | "keepLocal" // Keep local version
+  | "keepServer"; // Keep server version
 
 /**
  * Version metadata
@@ -120,7 +120,7 @@ export interface UseEnhancedAutoSaveReturn<T> {
   /** Cancel pending save */
   cancelSave: () => void;
   /** Manually resolve conflict */
-  resolveConflict: (resolution: 'local' | 'server' | T) => Promise<void>;
+  resolveConflict: (resolution: "local" | "server" | T) => Promise<void>;
   /** Get conflict data (if any) */
   conflictData: { local: T; server: T } | null;
   /** Error message (if any) */
@@ -144,7 +144,7 @@ function defaultIsEqual<T>(a: T, b: T): boolean {
  * Sleep utility for retries
  */
 function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // ============================================================================
@@ -157,7 +157,7 @@ export function useEnhancedAutoSave<T>({
   delay = FORM_AUTO_SAVE_DELAY_MS,
   enabled = true,
   version: initialVersion,
-  conflictStrategy = 'manual',
+  conflictStrategy = "manual",
   onConflict,
   onSuccess,
   onError,
@@ -168,11 +168,16 @@ export function useEnhancedAutoSave<T>({
   isEqual = defaultIsEqual,
 }: UseEnhancedAutoSaveOptions<T>): UseEnhancedAutoSaveReturn<T> {
   // State
-  const [status, setStatus] = useState<SaveStatus>('idle');
+  const [status, setStatus] = useState<SaveStatus>("idle");
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
-  const [currentVersion, setCurrentVersion] = useState<string | null>(initialVersion || null);
+  const [currentVersion, setCurrentVersion] = useState<string | null>(
+    initialVersion || null
+  );
   const [error, setError] = useState<string | null>(null);
-  const [conflictData, setConflictData] = useState<{ local: T; server: T } | null>(null);
+  const [conflictData, setConflictData] = useState<{
+    local: T;
+    server: T;
+  } | null>(null);
   const [pendingCount, setPendingCount] = useState(0);
 
   // Refs
@@ -196,7 +201,12 @@ export function useEnhancedAutoSave<T>({
    */
   const attemptMerge = useCallback((local: T, server: T): T => {
     // Simple shallow merge - override with custom onConflict for complex merging
-    if (typeof local === 'object' && typeof server === 'object' && local !== null && server !== null) {
+    if (
+      typeof local === "object" &&
+      typeof server === "object" &&
+      local !== null &&
+      server !== null
+    ) {
       return { ...server, ...local };
     }
     return local;
@@ -207,22 +217,26 @@ export function useEnhancedAutoSave<T>({
    */
   const handleConflict = useCallback(
     async (local: T, server: T): Promise<T> => {
-      setStatus('conflict');
+      setStatus("conflict");
       setConflictData({ local, server });
 
       switch (conflictStrategy) {
-        case 'overwrite':
-        case 'keepLocal':
+        case "overwrite":
+        case "keepLocal":
           return local;
-        case 'keepServer':
+        case "keepServer":
           return server;
-        case 'merge':
-          return onConflict ? await onConflict(local, server) : attemptMerge(local, server);
-        case 'manual':
+        case "merge":
+          return onConflict
+            ? await onConflict(local, server)
+            : attemptMerge(local, server);
+        case "manual":
           // Wait for manual resolution
           return new Promise((resolve) => {
             // Store resolver for manual resolution
-            (window as unknown as Record<string, unknown>).__autoSaveConflictResolver = resolve;
+            (
+              window as unknown as Record<string, unknown>
+            ).__autoSaveConflictResolver = resolve;
           });
         default:
           return local;
@@ -235,13 +249,13 @@ export function useEnhancedAutoSave<T>({
    * Manually resolve conflict
    */
   const resolveConflict = useCallback(
-    async (resolution: 'local' | 'server' | T): Promise<void> => {
+    async (resolution: "local" | "server" | T): Promise<void> => {
       if (!conflictData) return;
 
       let resolvedData: T;
-      if (resolution === 'local') {
+      if (resolution === "local") {
         resolvedData = conflictData.local;
-      } else if (resolution === 'server') {
+      } else if (resolution === "server") {
         resolvedData = conflictData.server;
       } else {
         resolvedData = resolution;
@@ -249,13 +263,15 @@ export function useEnhancedAutoSave<T>({
 
       // Clear conflict
       setConflictData(null);
-      setStatus('idle');
+      setStatus("idle");
 
       // Call resolver if exists
-      const resolver = (window as unknown as Record<string, unknown>).__autoSaveConflictResolver;
-      if (resolver && typeof resolver === 'function') {
+      const resolver = (window as unknown as Record<string, unknown>)
+        .__autoSaveConflictResolver;
+      if (resolver && typeof resolver === "function") {
         (resolver as (data: T) => void)(resolvedData);
-        delete (window as unknown as Record<string, unknown>).__autoSaveConflictResolver;
+        delete (window as unknown as Record<string, unknown>)
+          .__autoSaveConflictResolver;
       }
 
       // Trigger save with resolved data
@@ -290,17 +306,17 @@ export function useEnhancedAutoSave<T>({
         try {
           const isValid = await validateBeforeSave(dataToSave);
           if (!isValid) {
-            console.log('Validation failed, skipping auto-save');
+            console.log("Validation failed, skipping auto-save");
             return;
           }
         } catch (err) {
-          console.error('Validation error:', err);
+          console.error("Validation error:", err);
           return;
         }
       }
 
       saveInProgressRef.current = true;
-      setStatus('saving');
+      setStatus("saving");
       setError(null);
 
       let attempts = 0;
@@ -318,7 +334,7 @@ export function useEnhancedAutoSave<T>({
             // Save successful
             lastSavedDataRef.current = dataToSave;
             setLastSaved(new Date());
-            setStatus('saved');
+            setStatus("saved");
 
             // Update version if provided
             if (result.version?.version) {
@@ -345,13 +361,16 @@ export function useEnhancedAutoSave<T>({
             break;
           } else if (result.conflict && result.serverData) {
             // Conflict detected
-            const resolved = await handleConflict(dataToSave, result.serverData);
+            const resolved = await handleConflict(
+              dataToSave,
+              result.serverData
+            );
             lastSavedDataRef.current = resolved;
             // Retry with resolved data
             await performSave(resolved, true);
             return;
           } else {
-            throw result.error || new Error('Save failed');
+            throw result.error || new Error("Save failed");
           }
         } catch (err) {
           lastError = err as Error;
@@ -367,8 +386,8 @@ export function useEnhancedAutoSave<T>({
       // All retries failed
       if (lastError) {
         if (mountedRef.current) {
-          setStatus('error');
-          setError(lastError.message || 'Save failed');
+          setStatus("error");
+          setError(lastError.message || "Save failed");
           onError?.(lastError);
         }
       }
@@ -399,13 +418,10 @@ export function useEnhancedAutoSave<T>({
   /**
    * Debounced save
    */
-  const debouncedSave = useDebouncedCallback(
-    (...args: unknown[]) => {
-      const dataToSave = args[0] as T;
-      performSave(dataToSave, false);
-    },
-    delay
-  );
+  const debouncedSave = useDebouncedCallback((...args: unknown[]) => {
+    const dataToSave = args[0] as T;
+    performSave(dataToSave, false);
+  }, delay);
 
   /**
    * Effect: Trigger auto-save when data changes
@@ -436,7 +452,7 @@ export function useEnhancedAutoSave<T>({
 
   return {
     status,
-    isSaving: status === 'saving',
+    isSaving: status === "saving",
     lastSaved,
     version: currentVersion,
     forceSave,

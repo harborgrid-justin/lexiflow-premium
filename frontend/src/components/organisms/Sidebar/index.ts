@@ -3,7 +3,7 @@
  * @description Main sidebar navigation component with header, nav, and footer
  */
 
-export * from './Sidebar';
-export * from './SidebarHeader';
-export * from './SidebarNav';
-export * from './SidebarFooter';
+export { Sidebar } from "./Sidebar";
+export { SidebarFooter } from "./SidebarFooter";
+export { SidebarHeader } from "./SidebarHeader";
+export { SidebarNav } from "./SidebarNav";

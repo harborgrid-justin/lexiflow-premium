@@ -4,13 +4,22 @@
  * @description Smart loading state management with stale-while-revalidate pattern.
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { API_RETRY_ATTEMPTS, API_RETRY_DELAY_MS, QUERY_CACHE_STALE_TIME_MS } from '@/config';
+import { QUERY_CACHE_STALE_TIME_MS } from "@/config/database/cache.config";
+import {
+  API_RETRY_ATTEMPTS,
+  API_RETRY_DELAY_MS,
+} from "@/config/network/api.config";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * Loading state
  */
-export type LoadingState = 'idle' | 'loading' | 'validating' | 'success' | 'error';
+export type LoadingState =
+  | "idle"
+  | "loading"
+  | "validating"
+  | "success"
+  | "error";
 
 /**
  * Cache entry
@@ -73,13 +82,13 @@ const requestCache = new Map<string, Promise<unknown>>();
 
 /**
  * Adaptive Loading Hook
- * 
+ *
  * Implements stale-while-revalidate pattern:
  * 1. Return cached data immediately (if available)
  * 2. Fetch fresh data in background
  * 3. Update UI when new data arrives
  * 4. Handle errors gracefully with retry
- * 
+ *
  * @example
  * ```tsx
  * const {
@@ -93,11 +102,11 @@ const requestCache = new Map<string, Promise<unknown>>();
  *   cacheDuration: 5 * 60 * 1000, // 5 minutes
  *   revalidateOnMount: true
  * });
- * 
+ *
  * if (isLoading && !data) {
  *   return <AdaptiveLoader contentType="case-detail" />;
  * }
- * 
+ *
  * if (isStale && data) {
  *   return (
  *     <AdaptiveLoader
@@ -107,7 +116,7 @@ const requestCache = new Map<string, Promise<unknown>>();
  *     />
  *   );
  * }
- * 
+ *
  * return <CaseDetail data={data} />;
  * ```
  */
@@ -126,12 +135,12 @@ export function useAdaptiveLoading<T>(
     retryDelay = API_RETRY_DELAY_MS,
     dedupingInterval = QUERY_CACHE_STALE_TIME_MS / 30,
     onSuccess,
-    onError
+    onError,
   } = options;
 
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
-  const [state, setState] = useState<LoadingState>('idle');
+  const [state, setState] = useState<LoadingState>("idle");
   const [isStale, setIsStale] = useState(false);
 
   const retryCountRef = useRef(0);
@@ -158,7 +167,7 @@ export function useAdaptiveLoading<T>(
 
       return entry;
     } catch (error) {
-      console.error('Failed to get cached data:', error);
+      console.error("Failed to get cached data:", error);
       return null;
     }
   }, [cacheKey, cacheDuration]);
@@ -166,83 +175,101 @@ export function useAdaptiveLoading<T>(
   /**
    * Save data to cache
    */
-  const setCachedData = useCallback((data: T) => {
-    if (!cacheKey) return;
+  const setCachedData = useCallback(
+    (data: T) => {
+      if (!cacheKey) return;
 
-    try {
-      const entry: CacheEntry<T> = {
-        data,
-        timestamp: Date.now()
-      };
-      localStorage.setItem(cacheKey, JSON.stringify(entry));
-    } catch (error) {
-      console.error('Failed to cache data:', error);
-    }
-  }, [cacheKey]);
+      try {
+        const entry: CacheEntry<T> = {
+          data,
+          timestamp: Date.now(),
+        };
+        localStorage.setItem(cacheKey, JSON.stringify(entry));
+      } catch (error) {
+        console.error("Failed to cache data:", error);
+      }
+    },
+    [cacheKey]
+  );
 
   /**
    * Execute fetch with retry logic
    */
-  const executeFetch = useCallback(async (isRevalidation = false): Promise<T> => {
-    // Check for in-flight request (deduping)
-    if (cacheKey && requestCache.has(cacheKey)) {
-      const timeSinceLastFetch = Date.now() - lastFetchRef.current;
-      if (timeSinceLastFetch < dedupingInterval) {
-        return requestCache.get(cacheKey)! as T;
+  const executeFetch = useCallback(
+    async (isRevalidation = false): Promise<T> => {
+      // Check for in-flight request (deduping)
+      if (cacheKey && requestCache.has(cacheKey)) {
+        const timeSinceLastFetch = Date.now() - lastFetchRef.current;
+        if (timeSinceLastFetch < dedupingInterval) {
+          return requestCache.get(cacheKey)! as T;
+        }
       }
-    }
 
-    setState(isRevalidation ? 'validating' : 'loading');
-    setError(null);
+      setState(isRevalidation ? "validating" : "loading");
+      setError(null);
 
-    const fetchPromise = (async () => {
-      try {
-        lastFetchRef.current = Date.now();
-        const result = await fetcher();
-        
-        setData(result);
-        setState('success');
-        setIsStale(false);
-        retryCountRef.current = 0;
-        
-        setCachedData(result);
-        
-        if (onSuccess) {
-          onSuccess(result);
+      const fetchPromise = (async () => {
+        try {
+          lastFetchRef.current = Date.now();
+          const result = await fetcher();
+
+          setData(result);
+          setState("success");
+          setIsStale(false);
+          retryCountRef.current = 0;
+
+          setCachedData(result);
+
+          if (onSuccess) {
+            onSuccess(result);
+          }
+
+          return result;
+        } catch (err) {
+          const error = err instanceof Error ? err : new Error(String(err));
+
+          // Retry logic
+          if (retryOnError && retryCountRef.current < maxRetries) {
+            retryCountRef.current++;
+            await new Promise((resolve) =>
+              setTimeout(resolve, retryDelay * retryCountRef.current)
+            );
+            return executeFetch(isRevalidation);
+          }
+
+          setError(error);
+          setState("error");
+
+          if (onError) {
+            onError(error);
+          }
+
+          throw error;
         }
-        
-        return result;
-      } catch (err) {
-        const error = err instanceof Error ? err : new Error(String(err));
-        
-        // Retry logic
-        if (retryOnError && retryCountRef.current < maxRetries) {
-          retryCountRef.current++;
-          await new Promise(resolve => setTimeout(resolve, retryDelay * retryCountRef.current));
-          return executeFetch(isRevalidation);
-        }
-        
-        setError(error);
-        setState('error');
-        
-        if (onError) {
-          onError(error);
-        }
-        
-        throw error;
+      })();
+
+      // Cache promise for deduping
+      if (cacheKey) {
+        requestCache.set(cacheKey, fetchPromise);
+        fetchPromise.finally(() => {
+          requestCache.delete(cacheKey);
+        });
       }
-    })();
 
-    // Cache promise for deduping
-    if (cacheKey) {
-      requestCache.set(cacheKey, fetchPromise);
-      fetchPromise.finally(() => {
-        requestCache.delete(cacheKey);
-      });
-    }
-
-    return fetchPromise;
-  }, [fetcher, cacheKey, dedupingInterval, retryOnError, maxRetries, retryDelay, setCachedData, onSuccess, onError]);
+      return fetchPromise;
+    },
+    [
+      fetcher,
+      cacheKey,
+      dedupingInterval,
+      retryOnError,
+      maxRetries,
+      retryDelay,
+      setCachedData,
+      onSuccess,
+      onError,
+    ]
+  );
 
   /**
    * Refresh data
@@ -254,14 +281,17 @@ export function useAdaptiveLoading<T>(
   /**
    * Mutate data locally (optimistic update)
    */
-  const mutate = useCallback((newData: T | ((current: T | null) => T)) => {
-    if (typeof newData === 'function') {
-      setData(current => (newData as (current: T | null) => T)(current));
-    } else {
-      setData(newData);
-      setCachedData(newData);
-    }
-  }, [setCachedData]);
+  const mutate = useCallback(
+    (newData: T | ((current: T | null) => T)) => {
+      if (typeof newData === "function") {
+        setData((current) => (newData as (current: T | null) => T)(current));
+      } else {
+        setData(newData);
+        setCachedData(newData);
+      }
+    },
+    [setCachedData]
+  );
 
   /**
    * Reset state
@@ -269,10 +299,10 @@ export function useAdaptiveLoading<T>(
   const reset = useCallback(() => {
     setData(null);
     setError(null);
-    setState('idle');
+    setState("idle");
     setIsStale(false);
     retryCountRef.current = 0;
-    
+
     if (cacheKey) {
       localStorage.removeItem(cacheKey);
     }
@@ -284,14 +314,14 @@ export function useAdaptiveLoading<T>(
   useEffect(() => {
     // Try to load from cache first
     const cached = getCachedData();
-    
+
     if (cached) {
       setData(cached.data);
-      setState('success');
-      
+      setState("success");
+
       const age = Date.now() - cached.timestamp;
       const shouldRevalidate = age > cacheDuration * 0.8; // 80% of cache duration
-      
+
       if (shouldRevalidate) {
         setIsStale(true);
         if (revalidateOnMount) {
@@ -320,8 +350,8 @@ export function useAdaptiveLoading<T>(
       }
     };
 
-    window.addEventListener('focus', handleFocus);
-    return () => window.removeEventListener('focus', handleFocus);
+    window.addEventListener("focus", handleFocus);
+    return () => window.removeEventListener("focus", handleFocus);
   }, [revalidateOnFocus, getCachedData, cacheDuration, executeFetch]);
 
   /**
@@ -345,12 +375,12 @@ export function useAdaptiveLoading<T>(
     data,
     error,
     state,
-    isLoading: state === 'loading',
-    isValidating: state === 'validating',
+    isLoading: state === "loading",
+    isValidating: state === "validating",
     isStale,
     refresh,
     mutate,
-    reset
+    reset,
   };
 }
 

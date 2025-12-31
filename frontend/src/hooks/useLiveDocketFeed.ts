@@ -5,15 +5,23 @@
  * and connection status monitoring
  */
 
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { WS_RECONNECT_ATTEMPTS, WS_RECONNECT_DELAY_MS, WS_RECONNECT_BACKOFF_MULTIPLIER } from '@/config';
-import { getWsUrl } from '@/config/network/websocket.config';
+import {
+  WS_RECONNECT_ATTEMPTS,
+  WS_RECONNECT_BACKOFF_MULTIPLIER,
+  WS_RECONNECT_DELAY_MS,
+  getWsUrl,
+} from "@/config/network/websocket.config";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
 
-export type ConnectionStatus = 'disconnected' | 'connecting' | 'connected' | 'error';
+export type ConnectionStatus =
+  | "disconnected"
+  | "connecting"
+  | "connected"
+  | "error";
 
 export interface LiveDocketFeedConfig {
   courtId?: string;
@@ -44,7 +52,9 @@ export interface LiveDocketFeedResult {
 
 const DEFAULT_RECONNECT_ATTEMPTS = WS_RECONNECT_ATTEMPTS;
 const DEFAULT_RECONNECT_DELAY = WS_RECONNECT_DELAY_MS;
-const MAX_RECONNECT_DELAY = WS_RECONNECT_DELAY_MS * Math.pow(WS_RECONNECT_BACKOFF_MULTIPLIER, WS_RECONNECT_ATTEMPTS);
+const MAX_RECONNECT_DELAY =
+  WS_RECONNECT_DELAY_MS *
+  Math.pow(WS_RECONNECT_BACKOFF_MULTIPLIER, WS_RECONNECT_ATTEMPTS);
 
 // ============================================================================
 // HOOK
@@ -59,18 +69,18 @@ export function useLiveDocketFeed({
   onEntry,
   onNewEntry,
   reconnectInterval: _reconnectInterval,
-  maxReconnectAttempts: _maxReconnectAttempts
+  maxReconnectAttempts: _maxReconnectAttempts,
 }: LiveDocketFeedConfig = {}): LiveDocketFeedResult {
-  const [status, setStatus] = useState<ConnectionStatus>('disconnected');
+  const [status, setStatus] = useState<ConnectionStatus>("disconnected");
   const [error, setError] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [entriesReceived, setEntriesReceived] = useState(0);
-  
+
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectCountRef = useRef(0);
   const currentReconnectDelayRef = useRef(reconnectDelay);
-  
+
   /**
    * Calculate exponential backoff delay
    */
@@ -79,7 +89,7 @@ export function useLiveDocketFeed({
     currentReconnectDelayRef.current = Math.min(delay * 2, MAX_RECONNECT_DELAY);
     return delay;
   }, []);
-  
+
   /**
    * Reset reconnection state
    */
@@ -87,7 +97,7 @@ export function useLiveDocketFeed({
     reconnectCountRef.current = 0;
     currentReconnectDelayRef.current = reconnectDelay;
   }, [reconnectDelay]);
-  
+
   /**
    * Connect to WebSocket
    */
@@ -97,22 +107,22 @@ export function useLiveDocketFeed({
       clearTimeout(reconnectTimeoutRef.current);
       reconnectTimeoutRef.current = null;
     }
-    
+
     // Close existing connection
     if (wsRef.current) {
       wsRef.current.close();
       wsRef.current = null;
     }
-    
-    setStatus('connecting');
+
+    setStatus("connecting");
     setError(null);
-    
+
     try {
-      const wsUrl = `${getWsUrl()}/docket/live?courtId=${courtId || ''}&caseId=${caseId || ''}`;
+      const wsUrl = `${getWsUrl()}/docket/live?courtId=${courtId || ""}&caseId=${caseId || ""}`;
       const ws = new WebSocket(wsUrl);
 
       ws.onopen = () => {
-        setStatus('connected');
+        setStatus("connected");
         resetReconnectState();
       };
 
@@ -126,19 +136,19 @@ export function useLiveDocketFeed({
             onNewEntry(entry);
           }
           setLastUpdate(new Date());
-          setEntriesReceived(prev => prev + 1);
+          setEntriesReceived((prev) => prev + 1);
         } catch (e) {
-          console.error('Failed to parse WebSocket message:', e);
+          console.error("Failed to parse WebSocket message:", e);
         }
       };
 
       ws.onerror = () => {
-        setError('WebSocket connection error');
-        setStatus('error');
+        setError("WebSocket connection error");
+        setStatus("error");
       };
 
       ws.onclose = (event) => {
-        setStatus('disconnected');
+        setStatus("disconnected");
 
         // Attempt reconnection if not a normal close
         if (!event.wasClean && reconnectCountRef.current < reconnectAttempts) {
@@ -154,13 +164,22 @@ export function useLiveDocketFeed({
       };
 
       wsRef.current = ws;
-
     } catch (e) {
-      setError(`Connection failed: ${e instanceof Error ? e.message : 'Unknown error'}`);
-      setStatus('error');
+      setError(
+        `Connection failed: ${e instanceof Error ? e.message : "Unknown error"}`
+      );
+      setStatus("error");
     }
-  }, [courtId, caseId, onEntry, onNewEntry, reconnectAttempts, getNextReconnectDelay, resetReconnectState]);
-  
+  }, [
+    courtId,
+    caseId,
+    onEntry,
+    onNewEntry,
+    reconnectAttempts,
+    getNextReconnectDelay,
+    resetReconnectState,
+  ]);
+
   /**
    * Disconnect from WebSocket
    */
@@ -170,17 +189,17 @@ export function useLiveDocketFeed({
       clearTimeout(reconnectTimeoutRef.current);
       reconnectTimeoutRef.current = null;
     }
-    
+
     // Close WebSocket
     if (wsRef.current) {
       wsRef.current.close();
       wsRef.current = null;
     }
-    
-    setStatus('disconnected');
+
+    setStatus("disconnected");
     resetReconnectState();
   }, [resetReconnectState]);
-  
+
   /**
    * Auto-connect when enabled
    */
@@ -190,12 +209,12 @@ export function useLiveDocketFeed({
     } else {
       disconnect();
     }
-    
+
     return () => {
       disconnect();
     };
   }, [enabled, connect, disconnect]);
-  
+
   /**
    * Cleanup on unmount
    */
@@ -209,15 +228,15 @@ export function useLiveDocketFeed({
       }
     };
   }, []);
-  
+
   return {
     status,
-    isConnected: status === 'connected',
+    isConnected: status === "connected",
     error,
     connect,
     disconnect,
     reconnect: connect,
     lastUpdate,
-    entriesReceived
+    entriesReceived,
   };
 }

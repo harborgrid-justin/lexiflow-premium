@@ -1,1 +1,1 @@
-export * from './ConnectionStatus';
+export { ConnectionStatus } from './ConnectionStatus';

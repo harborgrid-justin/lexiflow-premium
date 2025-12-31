@@ -1,9 +1,9 @@
 /**
  * ActiveCaseTable.tsx
- * 
+ *
  * Virtual scrolling table for active case listings with sortable columns.
  * Optimized for large datasets using windowing for performance.
- * 
+ *
  * @module components/case-list/ActiveCaseTable
  * @category Case Management - Table Views
  */
@@ -48,7 +48,7 @@ interface ActiveCaseTableProps {
 
 /**
  * ActiveCaseTable - Virtualized sortable case table
- * 
+ *
  * Features:
  * - Virtual scrolling for 1000+ cases
  * - Sortable columns (title, type, client, value)
@@ -56,8 +56,8 @@ interface ActiveCaseTableProps {
  * - Empty state handling
  * - Row prefetching on hover
  */
-export const ActiveCaseTable: React.FC<ActiveCaseTableProps> = ({ 
-  filteredCases, sortedCases, requestSort, sortConfig, onSelectCase, prefetchCaseDetails 
+export const ActiveCaseTable: React.FC<ActiveCaseTableProps> = ({
+  filteredCases, sortedCases, requestSort, sortConfig, onSelectCase, prefetchCaseDetails
 }) => {
   // ==========================================================================
   // HOOKS - Context
@@ -74,10 +74,10 @@ export const ActiveCaseTable: React.FC<ActiveCaseTableProps> = ({
   };
 
   const renderDesktopRow = useCallback((c: Case) => (
-      <CaseRow 
-        caseData={c} 
-        onSelect={onSelectCase} 
-        onPrefetch={prefetchCaseDetails} 
+      <CaseRow
+        caseData={c}
+        onSelect={onSelectCase}
+        onPrefetch={prefetchCaseDetails}
       />
   ), [onSelectCase, prefetchCaseDetails]);
 
@@ -100,11 +100,11 @@ export const ActiveCaseTable: React.FC<ActiveCaseTableProps> = ({
                     />
                  </div>
             ) : (
-                <VirtualList 
-                  items={sortedCases} 
-                  height="100%" 
-                  itemHeight={64} 
-                  renderItem={renderDesktopRow} 
+                <VirtualList
+                  items={sortedCases}
+                  height="100%"
+                  itemHeight={64}
+                  renderItem={renderDesktopRow}
                 />
             )}
         </div>

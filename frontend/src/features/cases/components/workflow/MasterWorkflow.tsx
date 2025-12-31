@@ -1,8 +1,8 @@
 
 import { ErrorBoundary } from '@/components/organisms/ErrorBoundary';
 import { PageHeader } from '@/components/organisms/PageHeader';
-import { Button } from '@/components/ui/atoms/Button';
-import { EmptyState } from '@/components/ui/molecules/EmptyState';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 import { DataService } from '@/services/data/dataService';
 import { AlertTriangle, Loader2, Play, Plus, RefreshCw } from 'lucide-react';
 import React, { useCallback, useEffect, useMemo, useState, useTransition } from 'react';

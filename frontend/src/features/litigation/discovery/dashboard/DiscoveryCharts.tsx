@@ -25,12 +25,12 @@ const DiscoveryCharts: React.FC = () => {
   const { mode } = useTheme();
   const chartTheme = useChartTheme();
   const chartColors = ChartColorService.getPalette(mode);
-  
+
   const { data: funnelData = [], isLoading: funnelLoading } = useQuery<FunnelDataItem[]>(
       ['discovery-funnel-stats', 'main'],
       DataService.discovery.getFunnelStats as never
   );
-  
+
   const { data: custodianData = [], isLoading: custodianLoading } = useQuery<CustodianDataItem[]>(
       ['discovery-custodian-stats', 'main'],
       DataService.discovery.getCustodianStats as never
@@ -49,16 +49,16 @@ const DiscoveryCharts: React.FC = () => {
         <Card title="EDRM Data Funnel" className="lg:col-span-2">
             <ResponsiveContainer width="100%" height={256}>
                 <BarChart data={funnelData} layout="horizontal" barCategoryGap="20%">
-                    <XAxis 
-                    dataKey="name" 
-                    fontSize={12} 
-                    tickLine={false} 
-                    axisLine={false} 
-                    tick={{fill: chartTheme.text}} 
+                    <XAxis
+                    dataKey="name"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    tick={{fill: chartTheme.text}}
                     />
-                    <Tooltip 
-                    cursor={{fill: 'transparent'}} 
-                    formatter={(value: number | string | undefined) => typeof value === 'number' ? value.toLocaleString() : (value ?? '')} 
+                    <Tooltip
+                    cursor={{fill: 'transparent'}}
+                    formatter={(value: number | string | undefined) => typeof value === 'number' ? value.toLocaleString() : (value ?? '')}
                     contentStyle={chartTheme.tooltipStyle}
                     />
                     <Bar dataKey="value" radius={[4, 4, 0, 0]} label={{ position: 'top', fontSize: 10, fill: chartTheme.text, formatter: (v: unknown) => typeof v === 'number' ? (funnelData.find((d: FunnelDataItem) => d.value === v)?.label ?? '') : '' }}>
@@ -74,15 +74,15 @@ const DiscoveryCharts: React.FC = () => {
             <ResponsiveContainer width="100%" height={256}>
                 <BarChart data={custodianData} layout="vertical" margin={{ left: 20 }}>
                     <XAxis type="number" hide />
-                    <YAxis 
-                    dataKey="name" 
-                    type="category" 
-                    fontSize={11} 
-                    width={60} 
-                    tick={{fill: chartTheme.text}} 
+                    <YAxis
+                    dataKey="name"
+                    type="category"
+                    fontSize={11}
+                    width={60}
+                    tick={{fill: chartTheme.text}}
                     />
-                    <Tooltip 
-                    cursor={{fill: 'transparent'}} 
+                    <Tooltip
+                    cursor={{fill: 'transparent'}}
                     contentStyle={chartTheme.tooltipStyle}
                     />
                     <Bar dataKey="docs" fill={chartColors[0]} radius={[0, 4, 4, 0]} barSize={20} />
@@ -94,4 +94,3 @@ const DiscoveryCharts: React.FC = () => {
 };
 
 export default DiscoveryCharts;
-

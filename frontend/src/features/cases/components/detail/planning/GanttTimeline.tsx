@@ -12,7 +12,7 @@
 import React, { useRef } from 'react';
 
 // Internal Dependencies - Components
-import { Badge } from '@/components/ui/atoms/Badge';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

@@ -24,7 +24,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { queryKeys } from '@/utils/queryKeys';
 
 // Components
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

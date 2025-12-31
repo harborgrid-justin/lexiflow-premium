@@ -1,9 +1,9 @@
 /**
  * CaseListReporters.tsx
- * 
+ *
  * Court reporter management view for deposition scheduling
  * and transcript coordination.
- * 
+ *
  * @module components/case-list/CaseListReporters
  * @category Case Management - Reporter Views
  */
@@ -31,7 +31,7 @@ import { cn } from '@/utils/cn';
 
 export const CaseListReporters: React.FC = () => {
   const { theme } = useTheme();
-  
+
   const { data: reporters = [] } = useQuery(
       ['reporters', 'all'],
       DataService.discovery.getReporters
@@ -64,7 +64,7 @@ export const CaseListReporters: React.FC = () => {
                </div>
                );
            })}
-           
+
            <div className={cn("rounded-lg border-2 border-dashed p-4 flex flex-col items-center justify-center text-center text-slate-400", theme.border.default)}>
                 <p className="text-sm">Manage preferred reporting agencies and individual reporters.</p>
            </div>
@@ -72,5 +72,3 @@ export const CaseListReporters: React.FC = () => {
     </div>
   );
 };
-
-

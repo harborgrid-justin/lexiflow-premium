@@ -48,7 +48,7 @@ export const TemplatePreview = ({ data, onClick }: TemplatePreviewProps) => {
   };
 
   return (
-    <div 
+    <div
       className={cn(
         "rounded-xl border shadow-sm transition-all cursor-pointer group overflow-hidden flex flex-col h-full",
         theme.surface.default,
@@ -70,7 +70,7 @@ export const TemplatePreview = ({ data, onClick }: TemplatePreviewProps) => {
         <h4 className={cn("font-bold text-lg transition-colors leading-tight", theme.text.primary, `group-hover:${theme.primary.text}`)}>
           {data.title}
         </h4>
-        
+
         <div className={cn("flex items-center gap-4 mt-3 text-xs", theme.text.secondary)}>
           <span className="flex items-center">
             <Clock className="h-3 w-3 mr-1"/> {data.duration}

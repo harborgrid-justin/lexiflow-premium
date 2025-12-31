@@ -13,10 +13,10 @@ import React, { useState } from 'react';
 import { Target, Shield, Plus, Scale } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { Button } from '@/components/ui/atoms/Button';
-import { Modal } from '@/components/ui/molecules/Modal';
-import { Input } from '@/components/ui/atoms/Input';
-import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
 import { StrategySection } from './strategy/StrategySection';
 
 // Internal Dependencies - Hooks & Context

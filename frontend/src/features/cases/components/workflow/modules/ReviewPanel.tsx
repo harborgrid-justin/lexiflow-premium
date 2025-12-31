@@ -54,7 +54,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
                 </h3>
                 <span className={cn("text-xs font-mono bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded")}>{comments.filter(c => !c.resolved).length} Open</span>
             </div>
-            <button 
+            <button
                 onClick={handleRequestReview}
                 className={cn("w-full py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded shadow-sm flex items-center justify-center gap-2")}
             >
@@ -95,7 +95,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ comments, caseId, docI
 
         <div className={cn("p-3 border-t", theme.border.default)}>
             <div className="relative">
-                <input 
+                <input
                     className={cn("w-full pl-3 pr-10 py-2 text-xs border rounded-md outline-none focus:ring-1 focus:ring-blue-500", theme.surface.default, theme.border.default, theme.text.primary)}
                     placeholder="Add comment..."
                     value={newComment}

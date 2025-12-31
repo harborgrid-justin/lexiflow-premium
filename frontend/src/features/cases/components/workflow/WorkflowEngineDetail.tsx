@@ -39,7 +39,7 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
   const { theme } = useTheme();
   const notify = useNotify();
   const [activeTab, setActiveTab] = useState<'visualizer' | 'tasks' | 'audit' | 'settings'>('visualizer');
-  
+
   const { data: engineData, isLoading, isError, refetch } = useQuery<EngineDetails>(
     queryKeys.workflows.engineDetail(id),
     () => DataService.workflow.getEngineDetails(id, type)
@@ -66,8 +66,8 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
   if (isError || !engineData) {
     return (
       <div className="h-full flex flex-col items-center justify-center">
-        <ErrorState 
-          title="Workflow Engine Error" 
+        <ErrorState
+          title="Workflow Engine Error"
           message="Could not load workflow engine details."
           onRetry={refetch}
         />
@@ -125,7 +125,7 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
             className="border-none"
           />
         </div>
-        
+
         <div className={cn("flex-1 overflow-y-auto p-6", theme.surface.highlight)}>
           {activeTab === 'visualizer' && (
             <div className="space-y-6">
@@ -149,7 +149,7 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
           )}
 
           {activeTab === 'tasks' && <ParallelTasksManager />}
-          
+
           {activeTab === 'audit' && <AuditTrailViewer />}
 
           {activeTab === 'settings' && (
@@ -190,4 +190,3 @@ export const WorkflowEngineDetail: React.FC<WorkflowEngineDetailProps> = ({ id, 
     </div>
   );
 };
-

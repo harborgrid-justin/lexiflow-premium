@@ -1,9 +1,9 @@
 /**
  * CaseFormFields.tsx
- * 
+ *
  * Form fields for case creation including title, client, matter type,
  * value, and description. Adapts placeholders based on pre-filing vs filed status.
- * 
+ *
  * @module components/case-list/case-form/CaseFormFields
  * @category Case Management - Forms
  */
@@ -42,25 +42,25 @@ export const CaseFormFields: React.FC<CaseFormFieldsProps> = ({ formData, setFor
 
   return (
     <div className="space-y-4">
-      <Input 
-        label="Case / Matter Title" 
-        placeholder={isPreFiling ? "e.g. In Re: TechCorp Investigation" : "e.g. Smith v. Jones"} 
-        value={formData.title} 
+      <Input
+        label="Case / Matter Title"
+        placeholder={isPreFiling ? "e.g. In Re: TechCorp Investigation" : "e.g. Smith v. Jones"}
+        value={formData.title}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, title: e.target.value})}
         autoFocus
         required
       />
-      <Input 
-        label="Client" 
-        placeholder="Client Name" 
-        value={formData.client} 
+      <Input
+        label="Client"
+        placeholder="Client Name"
+        value={formData.client}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, client: e.target.value})}
         required
       />
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Type</label>
-          <select 
+          <select
             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
             value={formData.matterType}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({...formData, matterType: e.target.value as MatterType})}
@@ -72,34 +72,34 @@ export const CaseFormFields: React.FC<CaseFormFieldsProps> = ({ formData, setFor
             <option value="Real Estate">Real Estate</option>
           </select>
         </div>
-        <Input 
-          label="Est. Value ($)" 
+        <Input
+          label="Est. Value ($)"
           type="number"
-          value={formData.value || ''} 
+          value={formData.value || ''}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, value: Number(e.target.value)})}
         />
       </div>
 
       {!isPreFiling && (
         <div className="grid grid-cols-2 gap-6 pt-4 border-t border-slate-100">
-            <Input 
-              label="Original Case Number" 
+            <Input
+              label="Original Case Number"
               placeholder="e.g. 1:24-cv-00123"
-              value={formData.origCaseNumber || ''} 
+              value={formData.origCaseNumber || ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, origCaseNumber: e.target.value})}
             />
-            <Input 
-              label="Assigned Judge" 
+            <Input
+              label="Assigned Judge"
               placeholder="Presiding Judge"
-              value={formData.judge || ''} 
+              value={formData.judge || ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({...formData, judge: e.target.value})}
             />
         </div>
       )}
 
       <div className="pt-2">
-        <TextArea 
-          label="Case Summary / Description" 
+        <TextArea
+          label="Case Summary / Description"
           rows={isPreFiling ? 11 : 3}
           value={formData.description}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({...formData, description: e.target.value})}

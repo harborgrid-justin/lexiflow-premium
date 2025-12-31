@@ -1,5 +1,10 @@
 
-import { Badge, Button, Card, Input, Modal, TextArea } from '@/components';
+import { Badge } from '@/components/ui/atoms/Badge';
+import { Button } from '@/components/ui/atoms/Button';
+import { Input } from '@/components/ui/atoms/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea';
+import { Card } from '@/components/ui/molecules/Card';
+import { Modal } from '@/components/ui/molecules/Modal';
 import { useModalState } from '@/hooks';
 import { useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers';

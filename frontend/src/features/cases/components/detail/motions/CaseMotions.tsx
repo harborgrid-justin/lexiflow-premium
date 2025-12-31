@@ -1,9 +1,9 @@
 /**
  * CaseMotions.tsx
- * 
+ *
  * Motion practice management interface with filing deadlines, conferral tracking,
  * and hearing scheduling.
- * 
+ *
  * @module components/case-detail/motions/CaseMotions
  * @category Case Management - Motions
  */
@@ -43,7 +43,7 @@ export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, caseTitle, doc
   const notify = useNotify();
   const { openWindow, closeWindow } = useWindow();
   const [taskModalMotion, setTaskModalMotion] = useState<Motion | null>(null);
-  
+
   // Query Motions specific to this case
   const { data: motions = [], isLoading } = useQuery<Motion[]>(
     ['motions', caseId],
@@ -54,12 +54,12 @@ export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, caseTitle, doc
   // Mutation to add motion and invalidate cache
   const { mutate: addMotion } = useMutation(
     DataService.motions.add,
-    { 
+    {
         invalidateKeys: [['motions', caseId]],
         onSuccess: () => closeWindow('new-motion-modal')
     }
   );
-  
+
   const { mutate: syncCalendar, isLoading: isSyncing } = useMutation(
       DataService.calendar.sync,
       {
@@ -94,9 +94,9 @@ export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, caseTitle, doc
       openWindow(
           'new-motion-modal',
           'Draft New Motion',
-          <MotionModal 
-            isOpen={true} 
-            onClose={() => closeWindow('new-motion-modal')} 
+          <MotionModal
+            isOpen={true}
+            onClose={() => closeWindow('new-motion-modal')}
             onSave={handleSave}
             documents={documents}
             initialMotion={defaultMotion}
@@ -108,9 +108,9 @@ export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, caseTitle, doc
   return (
     <div className="space-y-6">
       {taskModalMotion && (
-        <TaskCreationModal 
-            isOpen={true} 
-            onClose={() => setTaskModalMotion(null)} 
+        <TaskCreationModal
+            isOpen={true}
+            onClose={() => setTaskModalMotion(null)}
             initialTitle={`Prepare: ${taskModalMotion.title}`}
             relatedModule="Motions"
             relatedItemId={taskModalMotion.id}
@@ -142,4 +142,3 @@ export const CaseMotions: React.FC<CaseMotionsProps> = ({ caseId, caseTitle, doc
     </div>
   );
 };
-

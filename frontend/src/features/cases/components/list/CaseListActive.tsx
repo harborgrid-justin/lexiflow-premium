@@ -1,9 +1,9 @@
 /**
  * CaseListActive.tsx
- * 
+ *
  * Active cases view with advanced filtering, sorting, and search.
  * Supports desktop table view and mobile swipeable cards.
- * 
+ *
  * @module components/case-list/CaseListActive
  * @category Case Management - Active Views
  */
@@ -82,7 +82,7 @@ const getCaseStatusVariant = (status: CaseStatus): 'success' | 'warning' | 'erro
 
 /**
  * CaseListActive - Active cases list with filtering and sorting
- * 
+ *
  * Features:
  * - Multi-criteria filtering (status, type, date range, search)
  * - Desktop table view with virtual scrolling
@@ -104,7 +104,7 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
   const { isOpen: showFilters, toggle: toggleFilters } = useToggle(false);
   const archiveModal = useModalState();
   const [archiveCaseData, setArchiveCaseData] = React.useState<Case | null>(null);
-  
+
   const { items: sortedCases, requestSort, sortConfig } = useSort(filteredCases as unknown as Record<string, unknown>[], 'filingDate', 'desc');
 
   // ==========================================================================
@@ -160,13 +160,13 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
   // Virtualized Row Renderer (Mobile)
   const renderMobileRow = (c: Case) => (
     <div key={c.id} className="px-1 py-1.5 h-[120px]">
-        <SwipeableItem 
+        <SwipeableItem
             onSwipeLeft={() => handleArchiveCase(c)}
             onSwipeRight={() => handleFlagCase(c)}
             leftActionLabel="Archive"
             rightActionLabel="Flag"
         >
-            <div 
+            <div
             onClick={() => onSelectCase(c)}
             onMouseEnter={() => prefetchCaseDetails(c.id)}
             className={cn(
@@ -201,10 +201,10 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
       </div>
 
       <FilterPanel isOpen={showFilters} onClose={toggleFilters} onClear={resetFilters}>
-          <SearchInput 
-              placeholder="Search title, client, ID..." 
-              value={searchTerm} 
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)} 
+          <SearchInput
+              placeholder="Search title, client, ID..."
+              value={searchTerm}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
               className="md:col-span-2"
           />
           <div>
@@ -260,5 +260,3 @@ export const CaseListActive: React.FC<CaseListActiveProps> = ({
     </div>
   );
 };
-
-

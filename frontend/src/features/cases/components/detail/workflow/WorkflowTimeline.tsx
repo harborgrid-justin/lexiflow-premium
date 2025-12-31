@@ -1,9 +1,9 @@
 /**
  * WorkflowTimeline.tsx
- * 
+ *
  * Stage-based workflow timeline with collapsible task lists,
  * assignee avatars, and module navigation.
- * 
+ *
  * @module components/case-detail/workflow/WorkflowTimeline
  * @category Case Management - Workflow
  */
@@ -42,7 +42,7 @@ return (
             return (
                 <div key={stage.id} className={cn("rounded-xl border transition-all duration-300", theme.surface.default, isActive ? cn(theme.action.primary.border, "shadow-md ring-1", theme.surface.highlight) : theme.border.default)}>
                     {/* Stage Header */}
-                    <div 
+                    <div
                         className={cn("p-4 flex items-center justify-between cursor-pointer rounded-t-xl transition-colors", `hover:${theme.surface.highlight}`)}
                         onClick={() => setExpandedStage(isExpanded ? null : stage.id)}
                     >
@@ -73,13 +73,13 @@ return (
                             <div className="h-2"></div>
                             {stage.tasks.map((task) => (
                                 <div key={task.id} className={cn("group relative p-4 rounded-lg border hover:shadow-md transition-all flex flex-col md:flex-row gap-4 items-start md:items-center hover:border-blue-500", theme.surface.default, theme.border.default)}>
-                                    <button 
+                                    <button
                                         onClick={() => onToggleTask(stage.id, task.id)}
                                         title={task.status === TaskStatusBackend.COMPLETED ? 'Mark as incomplete' : 'Mark as complete'}
                                         className={cn(
                                             "shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors hover:border-blue-500",
                                             task.status === TaskStatusBackend.COMPLETED
-                                            ? 'bg-green-500 border-green-500 text-white' 
+                                            ? 'bg-green-500 border-green-500 text-white'
                                             : 'border-slate-300 text-transparent'
                                         )}
                                     >
@@ -109,7 +109,7 @@ return (
                                     </div>
 
                                     {task.relatedModule && onNavigateToModule && (
-                                        <button 
+                                        <button
                                             onClick={() => onNavigateToModule(task.relatedModule!)}
                                             className="w-full md:w-auto mt-2 md:mt-0 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-md text-xs font-bold flex items-center justify-center gap-2 transition-colors whitespace-nowrap"
                                         >

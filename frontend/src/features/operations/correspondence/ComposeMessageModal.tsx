@@ -86,7 +86,7 @@ export function ComposeMessageModal({ isOpen, onClose, onSend, initialData }: Co
     // Strict Mode ready: State updates are idempotent (Principle #7)
     useEffect(() => {
         if (!isOpen) return;
-        
+
         if (initialData) {
             setFormData(prev => ({
                 ...prev,

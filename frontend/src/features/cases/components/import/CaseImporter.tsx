@@ -2,7 +2,7 @@
  * @module components/cases/CaseImporter
  * @category Case Management - Data Import
  * @description Import and parse case data from XML or plain text documents using AI-powered extraction
- * 
+ *
  * FEATURES:
  * - AI-powered structured data extraction using Google Gemini
  * - Parse XML (PACER, CourtListener, custom formats)
@@ -52,7 +52,7 @@ interface ParsedCaseData {
 
 export const CaseImporter: React.FC = () => {
   const { theme } = useTheme();
-  
+
   const [inputText, setInputText] = useState('');
   const [parsedData, setParsedData] = useState<ParsedCaseData | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -80,7 +80,7 @@ export const CaseImporter: React.FC = () => {
 
     try {
       const trimmedInput = inputText.trim();
-      
+
       if (!trimmedInput) {
         setError('Please paste some content to parse');
         setIsProcessing(false);
@@ -88,7 +88,7 @@ export const CaseImporter: React.FC = () => {
       }
 
       // Get API key from storage if available
-      const apiKey = aiProvider === 'gemini' 
+      const apiKey = aiProvider === 'gemini'
         ? (localStorage.getItem('gemini_api_key') || import.meta.env.VITE_GEMINI_API_KEY)
         : (localStorage.getItem('openai_api_key') || import.meta.env.VITE_OPENAI_API_KEY);
 
@@ -175,10 +175,10 @@ export const CaseImporter: React.FC = () => {
       });
 
       setSuccessMessage(`Case "${newCase.title}" created successfully!`);
-      
+
       // Invalidate queries to refresh case lists
       queryClient.invalidate(['cases']);
-      
+
       // Clear form after success
       setTimeout(() => {
         setInputText('');
@@ -207,7 +207,7 @@ export const CaseImporter: React.FC = () => {
       <div>
         <div className="flex items-center justify-between mb-2">
           <h2 className={cn('text-2xl font-bold', theme.text.primary)}>Import Case Data</h2>
-          
+
           {/* AI Toggle */}
           <div className="flex items-center gap-4">
             <label className="flex items-center gap-2 cursor-pointer">
@@ -246,7 +246,7 @@ export const CaseImporter: React.FC = () => {
           </div>
         </div>
         <p className={cn('text-sm', theme.text.secondary)}>
-          {useAI 
+          {useAI
             ? `Using ${aiProvider === 'gemini' ? 'Google Gemini' : 'OpenAI GPT-4'} AI for intelligent data extraction from any format.`
             : 'Using rule-based extraction for XML (PACER, CourtListener) and structured text.'}
         </p>
@@ -263,7 +263,7 @@ export const CaseImporter: React.FC = () => {
             Supports: XML, PACER, CourtListener, structured text
           </div>
         </div>
-        
+
         <textarea
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
@@ -286,7 +286,7 @@ export const CaseImporter: React.FC = () => {
           >
             {isProcessing ? 'Processing...' : 'Parse Document'}
           </Button>
-          
+
           {inputText && (
             <Button
               onClick={() => {
@@ -346,7 +346,7 @@ export const CaseImporter: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {Object.entries(parsedData).map(([key, value]) => {
               if (!value || key === 'metadata') return null;
-              
+
               const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
               const isRequired = key === 'title' || key === 'caseNumber';
 
@@ -356,7 +356,7 @@ export const CaseImporter: React.FC = () => {
                     {label}
                     {isRequired && <span className="text-red-500 ml-1">*</span>}
                   </label>
-                  
+
                   {editMode ? (
                     <input
                       type={key.includes('Date') ? 'date' : 'text'}
@@ -389,7 +389,7 @@ export const CaseImporter: React.FC = () => {
             >
               Create Case
             </Button>
-            
+
             <Button
               onClick={() => {
                 setParsedData(null);

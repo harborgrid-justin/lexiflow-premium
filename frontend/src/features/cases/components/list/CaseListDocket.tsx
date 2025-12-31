@@ -1,9 +1,9 @@
 /**
  * CaseListDocket.tsx
- * 
+ *
  * Unified docket management view combining upcoming hearings,
  * pending motions, and court calendar deadlines.
- * 
+ *
  * @module components/case-list/CaseListDocket
  * @category Case Management - Docket Views
  */
@@ -69,17 +69,17 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
     const svc = DataService.cases;
     return await svc.getAll();
   });
-  
+
   const isLoading = loadingDocket || loadingMotions || loadingCases;
 
   const allDocketItems = useMemo(() => {
       if (isLoading) return [];
-      
+
       // Ensure arrays
       const safeMotions = Array.isArray(motions) ? motions : [];
       const safeCases = Array.isArray(cases) ? cases : [];
       const safeDocket = Array.isArray(docket) ? docket : [];
-      
+
       const items: DocketItem[] = [];
 
       // Add docket entries
@@ -126,7 +126,7 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
       if (found) onSelectCase(found);
     }
   };
-  
+
   const renderRow = (item: DocketItem) => (
       <div key={item.id} className={cn("flex items-center border-b h-[64px] px-6 transition-colors group", theme.border.default, `hover:${theme.surface.highlight}`)}>
           <div className={cn("w-1/4 font-bold whitespace-nowrap", theme.text.primary)}>
@@ -172,7 +172,7 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
           <Button variant="primary" size="sm" icon={Plus}>Add Entry</Button>
         </div>
       </div>
-      
+
       {isLoading ? <LazyLoader /> : (
           <div className="flex-1 flex flex-col min-h-0">
              <div className={cn("flex items-center px-6 py-3 border-b font-bold text-xs uppercase tracking-wider shrink-0", theme.surface.highlight, theme.border.default, theme.text.secondary)}>
@@ -193,7 +193,7 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
                     </div>
                   </div>
                 ) : (
-                  <VirtualList 
+                  <VirtualList
                       items={allDocketItems}
                       height="100%"
                       itemHeight={64}
@@ -207,4 +207,3 @@ export const CaseListDocket: React.FC<CaseListDocketProps> = ({ onSelectCase }) 
     </div>
   );
 };
-

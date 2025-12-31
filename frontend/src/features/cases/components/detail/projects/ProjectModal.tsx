@@ -11,10 +11,10 @@
 import React, { useState } from 'react';
 
 // Internal Dependencies - Components
-import { Modal } from '@/components/ui/molecules/Modal';
-import { Input } from '@/components/ui/atoms/Input';
-import { TextArea } from '@/components/ui/atoms/TextArea';
-import { Button } from '@/components/ui/atoms/Button';
+import { Modal } from '@/components/ui/molecules/Modal/Modal';
+import { Input } from '@/components/ui/atoms/Input/Input';
+import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
+import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

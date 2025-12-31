@@ -28,7 +28,7 @@ export const HearsayAnalyzer: React.FC = () => {
         ['evidence', 'all'],
         () => DataService.evidence.getAll()
     );
-    
+
     // Mock analysis results
     const statements = [
         { id: 1, text: '"He told me the car was red."', exception: 'Not Hearsay (Effect on Listener)', status: 'Analyzed' },
@@ -46,7 +46,7 @@ export const HearsayAnalyzer: React.FC = () => {
                 </select>
                 <Button icon={Wand2}>AI Scan Document</Button>
             </div>
-            
+
             <Card title="Hearsay Statements Identified">
                 {statements.map(stmt => (
                     <div key={stmt.id} className={cn("p-3 border-b last:border-0", theme.border.default)}>

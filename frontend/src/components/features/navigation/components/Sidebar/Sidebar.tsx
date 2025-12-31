@@ -26,7 +26,7 @@ export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, is
     <>
       {/* Mobile Backdrop Overlay */}
       {isOpen && (
-        <div 
+        <div
           className={cn("fixed inset-0 backdrop-blur-sm z-40 md:hidden transition-opacity", theme.backdrop)}
           onClick={onClose}
         />
@@ -39,10 +39,10 @@ export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, is
         theme.border.default,
         isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0 md:static md:inset-auto'
       )}>
-        
+
         <SidebarHeader onClose={onClose} />
 
-        <SidebarNav 
+        <SidebarNav
           activeView={activeView}
           setActiveView={(view: AppView) => {
             setActiveView(view);
@@ -52,7 +52,7 @@ export const Sidebar = React.memo<SidebarProps>(({ activeView, setActiveView, is
         />
 
         {currentUser && (
-          <SidebarFooter 
+          <SidebarFooter
             currentUser={currentUser}
             onSwitchUser={onSwitchUser}
             onNavigate={setActiveView}

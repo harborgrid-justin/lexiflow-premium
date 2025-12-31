@@ -37,7 +37,7 @@ export const TaskReassignmentPanel: React.FC = () => {
       <h3 className={cn("font-bold mb-4 flex items-center", theme.text.primary)}>
         <RefreshCcw className={cn("h-5 w-5 mr-2", theme.text.secondary)}/> Bulk Reassignment
       </h3>
-      
+
       <div className={cn("flex flex-col md:flex-row gap-4 items-center p-4 rounded-lg border", theme.surface.highlight, theme.border.default)}>
         <div className="flex-1 w-full">
           <label className={cn("block text-xs font-bold uppercase mb-1", theme.text.secondary)}>From User</label>
@@ -49,9 +49,9 @@ export const TaskReassignmentPanel: React.FC = () => {
             </select>
           </div>
         </div>
-        
+
         <ArrowRight className={cn("h-6 w-6 hidden md:block mt-5", theme.text.tertiary)} />
-        
+
         <div className="flex-1 w-full">
           <label className={cn("block text-xs font-bold uppercase mb-1", theme.text.secondary)}>To User</label>
           <div className={cn("flex items-center border rounded-md px-3 py-2", theme.surface.default, theme.border.default)}>

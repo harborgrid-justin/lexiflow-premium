@@ -44,7 +44,7 @@ interface TabNavigationProps {
 export const TabNavigation = React.memo<TabNavigationProps>(({ tabs, activeTab, onTabChange, className = '' }) => {
   const { theme } = useTheme();
   const navId = useId();
-  
+
   return (
     <div className={cn("border-b", theme.border.default, className)}>
       <nav id={navId} className="flex space-x-2 overflow-x-auto no-scrollbar px-2" aria-label="Tabs" role="tablist">

@@ -14,7 +14,7 @@ import { useTheme } from '@/providers/ThemeContext';
 
 export const DocketTableSkeleton: React.FC<{ rows?: number }> = ({ rows = 10 }) => {
   const { theme } = useTheme();
-  
+
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -26,7 +26,7 @@ export const DocketTableSkeleton: React.FC<{ rows?: number }> = ({ rows = 10 }) 
         <div className="w-16 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse shrink-0 ml-6" />
         <div className="w-32 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse shrink-0 ml-6" />
       </div>
-      
+
       {/* Rows - IDENTITY-STABLE KEYS */}
       <div className="flex-1 overflow-hidden">
         {Array.from({ length: rows }).map((_, i) => (
@@ -38,35 +38,35 @@ export const DocketTableSkeleton: React.FC<{ rows?: number }> = ({ rows = 10 }) 
             <div className="w-20 shrink-0">
               <div className="w-12 h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
             </div>
-            
+
             {/* Date */}
             <div className="w-24 shrink-0">
               <div className="w-20 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
             </div>
-            
+
             {/* Case Ref */}
             <div className="w-32 shrink-0 px-2">
               <div className="w-28 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
             </div>
-            
+
             {/* Content */}
             <div className="flex-1 px-4 space-y-2">
               <div className="w-3/4 h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
               <div className="w-1/2 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
             </div>
-            
+
             {/* Doc Icon */}
             <div className="w-16 shrink-0 flex justify-center">
               <div className="w-8 h-8 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
             </div>
-            
+
             {/* Status */}
             <div className="w-32 shrink-0 flex justify-end">
               <div className="w-20 h-6 bg-slate-200 dark:bg-slate-700 rounded-full animate-pulse" />
             </div>
           </div>
         ))}
-        
+
         {/* Mobile View - IDENTITY-STABLE KEYS */}
         <div className="md:hidden space-y-3 p-4">
           {Array.from({ length: rows }).map((_, i) => (
@@ -81,12 +81,12 @@ export const DocketTableSkeleton: React.FC<{ rows?: number }> = ({ rows = 10 }) 
                 </div>
                 <div className="w-12 h-5 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
               </div>
-              
+
               <div className="space-y-2">
                 <div className="w-full h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
                 <div className="w-3/4 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
               </div>
-              
+
               <div className="flex justify-between items-center mt-4 pt-3 border-t border-slate-100 dark:border-slate-800">
                 <div className="w-20 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
                 <div className="w-16 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
@@ -105,7 +105,7 @@ export const DocketTableSkeleton: React.FC<{ rows?: number }> = ({ rows = 10 }) 
 
 export const DocketCalendarSkeleton: React.FC = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className={cn("flex flex-col h-full rounded-lg border shadow-sm overflow-hidden", theme.surface.default, theme.border.default)}>
       {/* Header */}
@@ -123,7 +123,7 @@ export const DocketCalendarSkeleton: React.FC = () => {
           <div className="w-8 h-8 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
         </div>
       </div>
-      
+
       {/* Calendar Grid */}
       <div className={cn("flex-1 p-px grid grid-cols-7 gap-px overflow-y-auto", theme.surface.highlight)}>
         {/* Day Headers */}
@@ -132,7 +132,7 @@ export const DocketCalendarSkeleton: React.FC = () => {
             <div className="w-8 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mx-auto" />
           </div>
         ))}
-        
+
         {/* Calendar Days - DETERMINISTIC RENDERING: Use stable pattern instead of Math.random */}
         {Array.from({ length: 35 }).map((_, i) => (
           <div
@@ -140,7 +140,7 @@ export const DocketCalendarSkeleton: React.FC = () => {
             className={cn("p-2 min-h-[120px] flex flex-col", theme.surface.default)}
           >
             <div className="w-6 h-6 bg-slate-200 dark:bg-slate-700 rounded-full animate-pulse mb-2" />
-            
+
             {/* DETERMINISTIC: Show deadlines for specific days (e.g., every 3rd and 5th day) */}
             {(i % 3 === 0 || i % 5 === 0) && (
               <div className="space-y-1">
@@ -163,7 +163,7 @@ export const DocketCalendarSkeleton: React.FC = () => {
 
 export const DocketStatsSkeleton: React.FC = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
       {Array.from({ length: 4 }).map((_, i) => (
@@ -186,17 +186,17 @@ export const DocketStatsSkeleton: React.FC = () => {
 
 export const DocketFilterSkeleton: React.FC = () => {
   const { theme } = useTheme();
-  
+
   return (
     <div className={cn("w-full md:w-64 rounded-lg border shadow-sm flex flex-col shrink-0", theme.surface.default, theme.border.default)}>
       <div className={cn("p-4 border-b", theme.border.default)}>
         <div className="w-24 h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
       </div>
-      
+
       <div className="p-4 space-y-4">
         {/* Search */}
         <div className="w-full h-10 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
-        
+
         {/* Filter Options */}
         <div>
           <div className="w-16 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mb-2" />
@@ -206,7 +206,7 @@ export const DocketFilterSkeleton: React.FC = () => {
             ))}
           </div>
         </div>
-        
+
         {/* Cases */}
         <div>
           <div className="w-20 h-3 bg-slate-200 dark:bg-slate-700 rounded animate-pulse mb-2" />

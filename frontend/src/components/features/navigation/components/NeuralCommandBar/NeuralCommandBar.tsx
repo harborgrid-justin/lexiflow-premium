@@ -56,14 +56,14 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
   const debouncedSearch = useDebounce(globalSearch, SEARCH_DEBOUNCE_MS);
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  
+
   useClickOutside(searchRef as React.RefObject<HTMLElement>, () => setShowResults(false));
-  
+
   // Effect discipline: Synchronize search results with debounced query (Principle #6)
   // Strict Mode ready: Search is idempotent, cleanup prevents stale results (Principle #7)
   useEffect(() => {
     let isMounted = true;
-    
+
     const performSearch = async () => {
       if (debouncedSearch.length >= SEARCH_MIN_QUERY_LENGTH && !isProcessingIntent) {
         const serviceResults = await SearchService.search(debouncedSearch);
@@ -77,9 +77,9 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
         setShowResults(false);
       }
     };
-    
+
     performSearch();
-    
+
     // Cleanup: Prevent stale results from updating state
     return () => {
       isMounted = false;
@@ -96,12 +96,12 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
     if (globalSearch.length > 10 || /open|go to|draft|create|show/.test(globalSearch.toLowerCase())) {
         setIsProcessingIntent(true);
         const intent = await GeminiService.predictIntent(globalSearch);
-        
+
         if (intent.action === 'NAVIGATE' && intent.targetModule) {
             const deepLink = HolographicRouting.resolveTab(intent.targetModule, intent.context);
             intent.context = deepLink || intent.context;
         }
-        
+
         setIsProcessingIntent(false);
 
         if (intent.action !== 'UNKNOWN' && onNeuralCommand) {
@@ -135,19 +135,19 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
         <div className={cn("absolute left-3 top-1/2 -translate-y-1/2 transition-all duration-300", isProcessingIntent ? "scale-110 text-purple-600" : theme.text.tertiary)}>
             {isProcessingIntent ? <Sparkles className="h-5 w-5 animate-pulse" /> : <Command className="h-4 w-4" />}
         </div>
-        
-        <input 
+
+        <input
             ref={inputRef}
-            type="text" 
-            placeholder={isProcessingIntent ? "Analyzing intent..." : "Search or type a command (e.g., 'Draft motion for Martinez')..."} 
+            type="text"
+            placeholder={isProcessingIntent ? "Analyzing intent..." : "Search or type a command (e.g., 'Draft motion for Martinez')..."}
             className={cn(
                 "w-full pl-10 pr-10 py-2.5 rounded-xl text-sm outline-none transition-all border shadow-sm font-medium",
                 theme.surface.input,
                 theme.text.primary,
-                isProcessingIntent 
-                  ? "border-purple-500 ring-2 ring-purple-500/20" 
+                isProcessingIntent
+                  ? "border-purple-500 ring-2 ring-purple-500/20"
                   : cn(theme.border.default, "focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20")
-            )} 
+            )}
             value={globalSearch}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGlobalSearch(e.target.value)}
             onKeyDown={onInputKeyDown}
@@ -156,7 +156,7 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
         />
 
         {globalSearch && !isProcessingIntent && (
-            <button 
+            <button
             onClick={() => { setGlobalSearch(''); setShowResults(false); }}
             className={cn("absolute right-3 top-1/2 -translate-y-1/2", theme.text.tertiary, `hover:${theme.text.primary}`)}
             >
@@ -192,8 +192,8 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
                                 onMouseEnter={() => setActiveIndex(index)}
                                 className={cn(
                                     "w-full text-left px-4 py-2.5 flex items-center gap-3 transition-colors border-b last:border-0",
-                                    activeIndex === index 
-                                        ? cn(theme.surface.highlight, theme.border.default) 
+                                    activeIndex === index
+                                        ? cn(theme.surface.highlight, theme.border.default)
                                         : cn(theme.surface.default, theme.border.default)
                                 )}
                             >
@@ -205,7 +205,7 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
                                         <HighlightedText text={result.subtitle} query={globalSearch} highlightClassName="bg-yellow-200 dark:bg-yellow-900/50 text-slate-900 dark:text-yellow-100" />
                                     </p>
                                 </div>
-                                
+
                                 {activeIndex === index && (
                                     <div className="hidden sm:flex items-center gap-2 text-[10px] text-blue-600 font-medium animate-in fade-in slide-in-from-left-1">
                                         Open <CornerDownLeft className="h-3 w-3"/>
@@ -226,4 +226,3 @@ export const NeuralCommandBar = React.memo<NeuralCommandBarProps>(({
     </div>
   );
 });
-

@@ -1,9 +1,9 @@
 /**
  * ArgumentDetail.tsx
- * 
+ *
  * Detailed argument editor with tabs for core info, authorities, evidence,
  * and AI-powered analysis using Gemini.
- * 
+ *
  * @module components/case-detail/arguments/ArgumentDetail
  * @category Case Management - Arguments
  */
@@ -38,8 +38,8 @@ interface ArgumentDetailProps {
   allCitations: Citation[];
 }
 
-export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({ 
-  argument, onUpdate, onDelete, onClose, allEvidence, allCitations 
+export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
+  argument, onUpdate, onDelete, onClose, allEvidence, allCitations
 }) => {
   const { theme } = useTheme();
   const [activeTab, setActiveTab] = useState<'core' | 'authority' | 'evidence' | 'analysis'>('core');
@@ -86,8 +86,8 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                     <span className={cn("text-xs font-mono border px-1.5 rounded", theme.text.tertiary, theme.border.default)}>ID: {argument.id.slice(-6)}</span>
                     <Badge variant={argument.status === 'Active' ? 'success' : 'warning'}>{argument.status}</Badge>
                 </div>
-                <Input 
-                    value={argument.title} 
+                <Input
+                    value={argument.title}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ ...argument, title: e.target.value })}
                     className={cn("text-lg font-bold border-transparent bg-transparent px-2 -ml-2 transition-all", theme.text.primary, `hover:${theme.surface.default}`, `hover:${theme.border.default}`, `focus:${theme.surface.default}`, `focus:${theme.border.default}`)}
                 />
@@ -224,7 +224,7 @@ export const ArgumentDetail: React.FC<ArgumentDetailProps> = ({
                                  <p className="text-xs text-red-700">AI has identified 2 potential weaknesses in your jurisdiction argument.</p>
                              </div>
                              <div className={cn("whitespace-pre-wrap leading-relaxed", theme.text.secondary)}>{aiAnalysis}</div>
-                             
+
                              <Button variant="outline" className="w-full mt-6" onClick={handleAnalyze}>Regenerate Analysis</Button>
                          </div>
                      ) : (

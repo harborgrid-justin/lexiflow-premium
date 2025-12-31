@@ -96,8 +96,8 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ warRoomData }) => {
       ];
   }, [warRoomData]);
 
-  const activeSection = useMemo(() => 
-      sections.find(s => s.id === selectedSectionId), 
+  const activeSection = useMemo(() =>
+      sections.find(s => s.id === selectedSectionId),
   [sections, selectedSectionId]);
 
   return (
@@ -117,8 +117,8 @@ export const TrialBinder: React.FC<TrialBinderProps> = ({ warRoomData }) => {
                         onClick={() => setSelectedSectionId(section.id)}
                         className={cn(
                             "w-full flex items-center justify-between px-3 py-3 rounded-lg text-sm font-medium transition-all",
-                            selectedSectionId === section.id 
-                                ? cn(theme.surface.default, "shadow-sm border", theme.primary.text, theme.border.default) 
+                            selectedSectionId === section.id
+                                ? cn(theme.surface.default, "shadow-sm border", theme.primary.text, theme.border.default)
                                 : cn(theme.text.secondary, `hover:${theme.surface.default}`)
                         )}
                     >

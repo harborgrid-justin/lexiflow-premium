@@ -1,7 +1,7 @@
 
-import { Badge } from '@/components/ui/atoms/Badge';
-import { Button } from '@/components/ui/atoms/Button';
-import { ErrorState } from '@/components/ui/molecules/ErrorState';
+import { Badge } from '@/components/ui/atoms/Badge/Badge';
+import { Button } from '@/components/ui/atoms/Button/Button';
+import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { useQuery } from '@/hooks/useQueryHooks';

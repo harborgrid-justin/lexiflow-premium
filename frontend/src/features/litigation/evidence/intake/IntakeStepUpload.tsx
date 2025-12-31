@@ -10,7 +10,7 @@ import { CheckCircle, Link, Loader2, ShieldCheck, UploadCloud } from 'lucide-rea
 import React from 'react';
 
 // Common Components
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/components/ui/atoms/Button/Button';
 
 // Context & Utils
 import { useTheme } from '@/providers/ThemeContext';

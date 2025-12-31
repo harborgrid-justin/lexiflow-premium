@@ -1,9 +1,9 @@
 /**
  * RiskDetail.tsx
- * 
+ *
  * Detailed risk editor with AI-powered mitigation suggestions,
  * risk matrix visualization, and probability/impact controls.
- * 
+ *
  * @module components/case-detail/risk/RiskDetail
  * @category Case Management - Risk Assessment
  */
@@ -47,7 +47,7 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
       Description: ${risk.description}
       Category: ${risk.category}
       Severity: ${risk.probability} Probability, ${risk.impact} Impact.`;
-      
+
       const plan = await GeminiService.generateDraft(prompt, 'Mitigation Plan');
       onUpdate({ ...risk, mitigationPlan: plan });
       setIsGenerating(false);
@@ -67,16 +67,16 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
 
         <div className="flex-1 overflow-y-auto p-6 space-y-8">
             <div className="space-y-4">
-                <Input 
-                    label="Risk Title" 
-                    value={risk.title} 
+                <Input
+                    label="Risk Title"
+                    value={risk.title}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ ...risk, title: e.target.value })}
                 />
-                
+
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label className={cn("block text-xs font-semibold uppercase mb-1.5", theme.text.secondary)}>Category</label>
-                        <select 
+                        <select
                             title="Select risk category"
                             className={cn("w-full px-3 py-2 border rounded-md text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                             value={risk.category}
@@ -105,8 +105,8 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
                     </div>
                 </div>
 
-                <TextArea 
-                    label="Description" 
+                <TextArea
+                    label="Description"
                     rows={3}
                     value={risk.description}
                     onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdate({ ...risk, description: e.target.value })}
@@ -163,17 +163,17 @@ export const RiskDetail: React.FC<RiskDetailProps> = ({ risk, onUpdate, onDelete
             <div className={cn("space-y-3 pt-4 border-t", theme.border.default)}>
                 <div className="flex justify-between items-center">
                     <h4 className={cn("font-bold text-sm", theme.text.primary)}>Mitigation Strategy</h4>
-                    <Button 
-                        size="sm" 
-                        variant="outline" 
-                        icon={Wand2} 
+                    <Button
+                        size="sm"
+                        variant="outline"
+                        icon={Wand2}
                         onClick={handleGenerateMitigation}
                         disabled={isGenerating}
                     >
                         {isGenerating ? 'Generating...' : 'AI Suggest'}
                     </Button>
                 </div>
-                <textarea 
+                <textarea
                     className={cn(
                         "w-full p-4 border rounded-lg text-sm leading-relaxed h-40 focus:ring-2 focus:ring-blue-500 outline-none resize-none",
                         theme.surface.default,

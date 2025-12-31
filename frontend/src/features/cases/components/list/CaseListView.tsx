@@ -38,7 +38,7 @@ export const CaseListView = React.memo<CaseListViewProps>(({ filter = 'all' }) =
   const navigate = useCallback((path: string) => {
     window.location.hash = `#/${path}`;
   }, []);
-  
+
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<MatterStatus | 'all'>('all');
   const [priorityFilter, setPriorityFilter] = useState<MatterPriority | 'all'>('all');

@@ -1,9 +1,9 @@
 /**
  * CaseProjects.tsx
- * 
+ *
  * Project management interface for case workstreams with task tracking,
  * milestone visualization, and progress monitoring.
- * 
+ *
  * @module components/case-detail/projects/CaseProjects
  * @category Case Management - Projects
  */
@@ -37,14 +37,14 @@ interface CaseProjectsProps {
 }
 
 // Note: We are shifting to DataService but keeping props for backward compatibility with CaseDetail parent state logic
-export const CaseProjects: React.FC<CaseProjectsProps> = ({ 
-  projects: initialProjects, onAddProject, onAddTask, onUpdateTaskStatus, onNavigateToModule 
+export const CaseProjects: React.FC<CaseProjectsProps> = ({
+  projects: initialProjects, onAddProject, onAddTask, onUpdateTaskStatus, onNavigateToModule
 }) => {
   const { theme } = useTheme();
   const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false);
   const [newTaskModalProjectId, setNewTaskModalProjectId] = useState<string | null>(null);
   const [projects, setProjects] = useState<Project[]>(initialProjects);
-  
+
   // Fetch real data if available (overriding parent props if we want independent loading)
   // For hybrid, we'll sync.
   useEffect(() => {
@@ -61,7 +61,7 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
 
   const handleCreateProject = async (newProjectData: Partial<Project>) => {
     if (!newProjectData.name) return;
-    
+
     const project: Project = {
       id: `proj-${Date.now()}` as ProjectId,
       caseId: (initialProjects[0]?.caseId || 'General') as CaseId,
@@ -76,7 +76,7 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
       updatedAt: new Date().toISOString(),
       tasks: []
     };
-    
+
     await DataService.projects.add(project);
     setProjects([...projects, project]);
     onAddProject(project); // Notify parent
@@ -86,8 +86,8 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
   return (
     <div className="space-y-6 animate-fade-in h-full flex flex-col">
       {newTaskModalProjectId && (
-        <TaskCreationModal 
-            isOpen={true} 
+        <TaskCreationModal
+            isOpen={true}
             onClose={() => setNewTaskModalProjectId(null)}
             relatedItemTitle={projects.find(p => p.id === newTaskModalProjectId)?.title}
             relatedModule="Project"
@@ -95,10 +95,10 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
         />
       )}
 
-      <ProjectModal 
-        isOpen={isNewProjectModalOpen} 
-        onClose={() => setIsNewProjectModalOpen(false)} 
-        onSave={handleCreateProject} 
+      <ProjectModal
+        isOpen={isNewProjectModalOpen}
+        onClose={() => setIsNewProjectModalOpen(false)}
+        onSave={handleCreateProject}
       />
 
       {/* Header */}
@@ -118,7 +118,7 @@ export const CaseProjects: React.FC<CaseProjectsProps> = ({
                 <button onClick={() => setIsNewProjectModalOpen(true)} className={cn("text-sm hover:underline mt-2", theme.text.link)}>Create your first project</button>
             </div>
         ) : (
-            <ProjectList 
+            <ProjectList
                 projects={projects}
                 onAddTask={setNewTaskModalProjectId}
                 onUpdateTaskStatus={onUpdateTaskStatus}

@@ -1,5 +1,5 @@
 import { TabbedPageLayout, TabConfigItem } from '@/components/layouts';
-import { Button } from '@/components/ui/atoms/Button';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { ThemeProvider } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 import type { Meta, StoryObj } from '@storybook/react';

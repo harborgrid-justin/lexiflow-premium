@@ -1,9 +1,9 @@
 /**
  * DocketEntryModal.tsx
- * 
+ *
  * Modal dialog for viewing detailed docket entry information with actions
  * for printing, downloading, and linking to timeline.
- * 
+ *
  * @module components/docket/DocketEntryModal
  * @category Case Management - Docket
  */
@@ -35,11 +35,11 @@ interface DocketEntryModalProps {
   isOrbital?: boolean;
 }
 
-export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({ 
-  entry, onClose, onViewOnTimeline, renderLinkedText, isOrbital = false 
+export const DocketEntryModal: React.FC<DocketEntryModalProps> = ({
+  entry, onClose, onViewOnTimeline, renderLinkedText, isOrbital = false
 }) => {
   const { theme } = useTheme();
-  
+
   if (!entry) return null;
 
   const content = (

@@ -67,7 +67,7 @@ export const KycManager: React.FC<KycManagerProps> = ({ entities }) => {
                     </div>
                 </Card>
             ))}
-            
+
             <div className={cn("border-2 border-dashed rounded-xl flex flex-col items-center justify-center p-8 text-slate-400", theme.border.default)}>
                 <AlertCircle className="h-12 w-12 mb-2 opacity-20"/>
                 <p className="text-sm font-medium">All other entities verified</p>

@@ -1,9 +1,9 @@
 /**
  * ArgumentList.tsx
- * 
+ *
  * Scrollable list of legal arguments with risk meters, status badges,
  * and selection highlighting.
- * 
+ *
  * @module components/case-detail/arguments/ArgumentList
  * @category Case Management - Arguments
  */
@@ -45,14 +45,14 @@ export const ArgumentList: React.FC<ArgumentListProps> = ({ argumentsList, selec
   return (
     <div className={cn("flex-1 overflow-y-auto p-4 space-y-3", theme.surface.highlight)}>
         {argumentsList.map(arg => (
-            <div 
+            <div
                 key={arg.id}
                 onClick={() => onSelect(arg.id)}
                 className={cn(
                     "group relative p-5 rounded-xl border transition-all cursor-pointer hover:shadow-md",
                     theme.surface.default,
-                    selectedId === arg.id 
-                        ? cn(theme.action.primary.border, "ring-1 shadow-md z-10") 
+                    selectedId === arg.id
+                        ? cn(theme.action.primary.border, "ring-1 shadow-md z-10")
                         : cn(theme.border.default, `hover:${theme.primary.border}`)
                 )}
             >

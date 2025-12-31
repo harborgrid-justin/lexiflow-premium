@@ -34,25 +34,25 @@ export function WarRoomManager({ onSelectCase }: WarRoomManagerProps) {
   // Filter cases - prioritize active and trial-ready cases
   const filteredCases = useMemo(() => {
     return allCases.filter(c => {
-      const matchesSearch = searchTerm === '' || 
+      const matchesSearch = searchTerm === '' ||
         c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         c.caseNumber?.toLowerCase().includes(searchTerm.toLowerCase());
-      
+
       const matchesStatus = statusFilter === 'all' || c.status === statusFilter;
       const matchesType = typeFilter === 'all' || c.type === typeFilter;
-      
+
       // War Room is most relevant for active cases
       return matchesSearch && matchesStatus && matchesType;
     });
   }, [allCases, searchTerm, statusFilter, typeFilter]);
 
   // Categorize cases
-  const trialReadyCases = useMemo(() => 
+  const trialReadyCases = useMemo(() =>
     filteredCases.filter(c => c.status === 'Trial' || c.status === 'Active'),
     [filteredCases]
   );
 
-  const activeCases = useMemo(() => 
+  const activeCases = useMemo(() =>
     filteredCases.filter(c => c.status === 'Active' || c.status === 'Discovery'),
     [filteredCases]
   );

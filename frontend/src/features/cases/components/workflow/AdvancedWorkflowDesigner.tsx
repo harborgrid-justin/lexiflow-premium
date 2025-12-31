@@ -2,7 +2,7 @@
  * @file AdvancedWorkflowDesigner.tsx
  * @description Elite workflow designer with 10 fully-integrated advanced features
  * @architecture Frontend-backend integration via DataService facade
- * @features Conditional branching, parallel execution, versioning, SLA monitoring, 
+ * @features Conditional branching, parallel execution, versioning, SLA monitoring,
  *           approval chains, rollback, analytics, AI suggestions, external triggers
  */
 
@@ -52,16 +52,16 @@ interface AdvancedWorkflowDesignerProps {
   onClose?: () => void;
 }
 
-type FeatureTab = 
-  | 'designer' 
-  | 'conditional' 
-  | 'parallel' 
-  | 'versions' 
-  | 'sla' 
-  | 'approvals' 
-  | 'rollback' 
-  | 'analytics' 
-  | 'ai' 
+type FeatureTab =
+  | 'designer'
+  | 'conditional'
+  | 'parallel'
+  | 'versions'
+  | 'sla'
+  | 'approvals'
+  | 'rollback'
+  | 'analytics'
+  | 'ai'
   | 'triggers';
 
 export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> = ({
@@ -630,7 +630,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
 
               <div className="space-y-2">
                 {versions.map(version => (
-                  <div 
+                  <div
                     key={version.id}
                     className={cn("p-4 rounded-lg border", theme.surface.default, theme.border.default)}
                   >
@@ -762,7 +762,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
 
               <div className="space-y-2">
                 {snapshots.map(snapshot => (
-                  <div 
+                  <div
                     key={snapshot.id}
                     className={cn("p-4 rounded-lg border", theme.surface.default, theme.border.default)}
                   >
@@ -784,9 +784,9 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                           {snapshot.createdAt} • {(snapshot.sizeBytes / 1024).toFixed(2)} KB
                         </p>
                       </div>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
+                      <Button
+                        variant="outline"
+                        size="sm"
                         icon={Undo2}
                         onClick={() => rollbackMutation.mutate(snapshot.id)}
                       >
@@ -938,7 +938,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
 
               <div className="space-y-3">
                 {aiSuggestions.map(suggestion => (
-                  <div 
+                  <div
                     key={suggestion.id}
                     className={cn("p-4 rounded-lg border", theme.surface.default, theme.border.default)}
                   >
@@ -956,8 +956,8 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                           {suggestion.description}
                         </p>
                       </div>
-                      <Button 
-                        variant="primary" 
+                      <Button
+                        variant="primary"
                         size="sm"
                         onClick={() => applyAISuggestionMutation.mutate(suggestion.id)}
                       >
@@ -1043,7 +1043,7 @@ export const AdvancedWorkflowDesigner: React.FC<AdvancedWorkflowDesignerProps> =
                     <div>
                       <p className={cn(theme.text.tertiary)}>Success Rate</p>
                       <p className="font-bold text-green-600">
-                        {externalTrigger.metrics.totalTriggers > 0 
+                        {externalTrigger.metrics.totalTriggers > 0
                           ? ((externalTrigger.metrics.successfulTriggers / externalTrigger.metrics.totalTriggers) * 100).toFixed(1)
                           : 0}%
                       </p>

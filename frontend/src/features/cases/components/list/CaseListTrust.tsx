@@ -1,9 +1,9 @@
 /**
  * CaseListTrust.tsx
- * 
+ *
  * Trust accounting ledger view for IOLTA compliance and client fund management.
  * Displays trust balances, transactions, and reconciliation status.
- * 
+ *
  * @module components/case-list/CaseListTrust
  * @category Case Management - Trust Accounting
  */
@@ -31,7 +31,7 @@ import { cn } from '@/utils/cn';
 
 export const CaseListTrust: React.FC = () => {
   const { theme } = useTheme();
-  
+
   // Performance Engine: Caching
   const { data: trustLedger = [], isLoading } = useQuery<unknown[]>(
       ['trust', 'all'],
@@ -74,5 +74,3 @@ export const CaseListTrust: React.FC = () => {
     </div>
   );
 };
-
-

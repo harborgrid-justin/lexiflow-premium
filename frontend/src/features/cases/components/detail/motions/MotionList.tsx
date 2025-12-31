@@ -1,9 +1,9 @@
 /**
  * MotionList.tsx
- * 
+ *
  * Tabular list of motions with status badges, conferral indicators,
  * and deadline tracking.
- * 
+ *
  * @module components/case-detail/motions/MotionList
  * @category Case Management - Motions
  */
@@ -33,7 +33,7 @@ interface MotionListProps {
 
 export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) => {
   const { theme } = useTheme();
-  
+
   // Safety check: ensure motions is always an array
   const safeMotions = Array.isArray(motions) ? motions : [];
 
@@ -139,7 +139,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
               <Badge variant={getStatusColor(motion.status) as any}>{motion.status}</Badge>
             </div>
             <div className={cn("text-xs mb-3", theme.text.secondary)}>{motion.type} • Filed: {motion.filingDate || 'Draft'}</div>
-            
+
             <div className={cn("flex justify-between items-center mb-3 p-2 rounded", theme.surface.highlight)}>
                 <div className="flex items-center text-xs">
                     <Users className={cn("h-3 w-3 mr-1", theme.text.tertiary)}/>
@@ -160,7 +160,7 @@ export const MotionList: React.FC<MotionListProps> = ({ motions, onTaskClick }) 
                 </div>
               </div>
             )}
-            
+
             <div className={cn("flex justify-end gap-2 pt-2 border-t", theme.border.subtle)}>
               <Button size="sm" variant="outline" className="flex-1" icon={GitBranch} onClick={() => onTaskClick(motion)}>To Workflow</Button>
               <Button size="sm" variant="outline" className="flex-1">Details</Button>

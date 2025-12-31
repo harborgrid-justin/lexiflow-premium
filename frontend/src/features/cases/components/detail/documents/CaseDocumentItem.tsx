@@ -1,9 +1,9 @@
 /**
  * CaseDocumentItem.tsx
- * 
+ *
  * Individual document card component with AI analysis trigger,
  * task creation, and tag display.
- * 
+ *
  * @module components/case-detail/documents/CaseDocumentItem
  * @category Case Management - Documents
  */
@@ -53,20 +53,20 @@ export const CaseDocumentItem: React.FC<CaseDocumentItemProps> = ({ doc, analyzi
       </div>
       <div className="flex items-center gap-2 self-end sm:self-center">
         <TagList tags={doc.tags.slice(0, 2)} />
-        <Button 
-          variant="outline" 
-          size="sm" 
-          icon={isAnalyzing ? Loader2 : Wand2} 
-          onClick={() => onAnalyze(doc)} 
+        <Button
+          variant="outline"
+          size="sm"
+          icon={isAnalyzing ? Loader2 : Wand2}
+          onClick={() => onAnalyze(doc)}
           isLoading={isAnalyzing}
           className="w-28"
         >
           {isAnalyzing ? 'Analyzing...' : 'AI Analyze'}
         </Button>
-        <Button 
-          variant="secondary" 
-          size="sm" 
-          icon={CheckSquare} 
+        <Button
+          variant="secondary"
+          size="sm"
+          icon={CheckSquare}
           onClick={() => onTaskClick(doc)}
         >
           Task

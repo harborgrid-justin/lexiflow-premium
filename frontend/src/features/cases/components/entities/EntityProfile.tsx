@@ -95,10 +95,10 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
 
         {/* Tabs */}
         <div className={cn("px-4 border-b", theme.border.default)}>
-            <Tabs 
-                tabs={['overview', 'relationships', 'matters', 'docs']} 
-                activeTab={activeTab} 
-                onChange={setActiveTab} 
+            <Tabs
+                tabs={['overview', 'relationships', 'matters', 'docs']}
+                activeTab={activeTab}
+                onChange={setActiveTab}
                 variant="underline"
             />
         </div>
@@ -172,5 +172,3 @@ export const EntityProfile: React.FC<EntityProfileProps> = ({ entityId, onClose 
     </div>
   );
 };
-
-

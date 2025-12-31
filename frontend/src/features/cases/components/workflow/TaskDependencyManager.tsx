@@ -11,7 +11,7 @@ import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/Adaptiv
 
 export const TaskDependencyManager = () => {
   const { theme } = useTheme();
-  
+
   // Performance Engine: useQuery
   const { data: tasks = [], isLoading } = useQuery(
       queryKeys.tasks.all(),
@@ -24,13 +24,13 @@ export const TaskDependencyManager = () => {
   // Real dependency derivation
   const dependencies = React.useMemo(() => {
       // Filter tasks that have dependencies or are dependencies of others
-      // For visualization, we'll just take a chain of tasks if they exist, 
+      // For visualization, we'll just take a chain of tasks if they exist,
       // or create a synthetic chain from tasks sorted by due date if no explicit dependencies exist (fallback for demo data)
-      
+
       const tasksWithDeps = tasksArray.filter(t => t.dependencies && t.dependencies.length > 0);
-      
+
       if (tasksWithDeps.length > 0) {
-          // If we have real dependencies, use them. 
+          // If we have real dependencies, use them.
           // For this simple list view, we'll just show the first few tasks with dependencies.
           return tasksWithDeps.slice(0, 5).map(t => {
               const isCompleted = t.status === 'Done' || t.status === 'Completed';
@@ -63,10 +63,10 @@ export const TaskDependencyManager = () => {
   return (
     <div className="space-y-4 max-w-lg mx-auto py-4">
       <h3 className={cn("font-bold text-center mb-6", theme.text.primary)}>Task Dependency Chain</h3>
-      
+
       <div className="relative">
         <div className={cn("absolute left-6 top-8 bottom-8 w-0.5 -z-10", theme.border.default)}></div>
-        
+
         {dependencies.map((task, idx) => (
             <div key={task.id} className="flex items-center gap-4 mb-6 last:mb-0">
                 <div className={cn(
@@ -86,9 +86,9 @@ export const TaskDependencyManager = () => {
                     task.type === 'active' ? "ring-2 ring-blue-100" : task.type === 'locked' ? "opacity-75" : ""
                 )}>
                     <p className={cn("font-bold text-sm", task.type === 'completed' ? "line-through opacity-50" : theme.text.primary)}>{task.title}</p>
-                    <p className={cn("text-xs font-medium", 
-                        task.type === 'completed' ? "text-green-600" : 
-                        task.type === 'active' ? "text-blue-600" : 
+                    <p className={cn("text-xs font-medium",
+                        task.type === 'completed' ? "text-green-600" :
+                        task.type === 'active' ? "text-blue-600" :
                         theme.text.tertiary
                     )}>
                         {task.type === 'completed' ? 'Completed' : task.type === 'active' ? 'In Progress' : `Blocked by Task ${idx}`}
@@ -100,5 +100,3 @@ export const TaskDependencyManager = () => {
     </div>
   );
 };
-
-

@@ -60,12 +60,12 @@ const KPIDashboard: React.FC<KPIDashboardProps> = () => (
  */
 const WorkflowContent: React.FC<WorkflowContentProps> = ({ activeTab, onApprove, onReject }) => {
   const ContentComponent = TAB_COMPONENTS[activeTab];
-  
+
   // Special handling for approvals which needs callbacks
   if (activeTab === 'approvals') {
     return <ContentComponent onApprove={onApprove} onReject={onReject} />;
   }
-  
+
   return <ContentComponent />;
 };
 
@@ -75,7 +75,7 @@ const WorkflowContent: React.FC<WorkflowContentProps> = ({ activeTab, onApprove,
 
 /**
  * EnhancedWorkflowPanel - Main workflow management interface
- * 
+ *
  * Uses composition pattern instead of conditional rendering
  * Separated KPI dashboard and tabbed content into focused components
  */

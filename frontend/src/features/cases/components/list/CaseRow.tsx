@@ -18,8 +18,8 @@ import React, { memo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
-import { Currency } from '@/components/ui/atoms/Currency';
-import { StatusBadge } from '@/components/ui/atoms/StatusBadge';
+import { Currency } from '@/components/ui/atoms/Currency/Currency';
+import { StatusBadge } from '@/components/ui/atoms/StatusBadge/StatusBadge';
 
 // Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';

@@ -12,7 +12,7 @@ import { queryKeys } from '@/utils/queryKeys';
 
 export const ParallelTasksManager = () => {
   const { theme } = useTheme();
-  
+
   // Performance Engine: useQuery
   const { data: allTasks = [], isLoading } = useQuery<WorkflowTask[]>(
       queryKeys.tasks.all(),
@@ -33,7 +33,7 @@ export const ParallelTasksManager = () => {
         </h3>
         <span className="text-xs bg-indigo-50 text-indigo-700 px-2 py-1 rounded border border-indigo-100 font-medium">{tasks.length} Active Tracks</span>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {tasks.length === 0 ? (
           <div className="col-span-3">
@@ -52,7 +52,7 @@ export const ParallelTasksManager = () => {
                 <button type="button" aria-label="Task options" className={cn(theme.text.tertiary, `hover:${theme.text.primary}`)}><MoreHorizontal className="h-4 w-4"/></button>
               </div>
               <h4 className={cn("font-bold text-sm mb-3", theme.text.primary)}>{task.title}</h4>
-              
+
               <div className="flex items-center justify-between mt-4">
                 <div className={cn("flex items-center text-xs", theme.text.secondary)}>
                   <User className="h-3 w-3 mr-1"/> {task.assignee}
@@ -66,4 +66,3 @@ export const ParallelTasksManager = () => {
     </div>
   );
 };
-

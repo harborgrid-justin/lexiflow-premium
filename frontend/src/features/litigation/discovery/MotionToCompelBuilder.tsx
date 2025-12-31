@@ -31,22 +31,22 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
           notify.error("Select at least one deficient request and enter meet & confer date.");
           return;
       }
-      
+
       setIsGenerating(true);
       const selectedDetails = requestSelection.selected.map(r => `${r.id}: ${r.title} (${r.type})`).join('\n');
-      
-      const prompt = `Draft a Motion to Compel Discovery pursuant to FRCP Rule 37(a). 
+
+      const prompt = `Draft a Motion to Compel Discovery pursuant to FRCP Rule 37(a).
       The moving party certifies they have conferred in good faith with opposing counsel on ${meetConferDate} but were unable to obtain the disclosure/discovery without court action.
-      
+
       Deficient Requests:
       ${selectedDetails}
-      
+
       Structure:
       1. Certification of Meet and Confer (Rule 37(a)(1))
       2. Argument for Relevancy and Proportionality
       3. Failure to Respond/Insufficient Response
       4. Prayer for Relief (Order Compelling + Sanctions Rule 37(a)(5)(A))`;
-      
+
       const result = await GeminiService.generateDraft(prompt, 'Motion to Compel');
       setDraft(result);
       setIsGenerating(false);
@@ -72,12 +72,12 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
        <div className="flex-1 flex overflow-hidden">
            {/* Left: Configuration */}
            <div className={cn("w-96 border-r p-6 overflow-y-auto space-y-6", theme.surface.highlight, theme.border.default)}>
-               
+
                <Card title="1. Select Deficient Requests">
                    <div className="space-y-2 max-h-60 overflow-y-auto">
                        {deficientRequests.map(req => (
-                           <div 
-                               key={req.id} 
+                           <div
+                               key={req.id}
                                onClick={() => requestSelection.toggle(req)}
                                className={cn(
                                    "p-3 rounded border cursor-pointer transition-all",
@@ -108,8 +108,8 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
                        </p>
                        <div className="space-y-1">
                            <label className={cn("text-xs font-bold", theme.text.primary)}>Conference Date</label>
-                           <input 
-                               type="date" 
+                           <input
+                               type="date"
                                title="Select meet and confer date"
                                className={cn("w-full p-2 border rounded text-sm", theme.surface.default, theme.border.default, theme.text.primary)}
                                value={meetConferDate}
@@ -120,8 +120,8 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
                    </div>
                </Card>
 
-               <Button 
-                   variant="primary" 
+               <Button
+                   variant="primary"
                    className={cn("w-full", theme.status.error.bg, theme.status.error.border, theme.status.error.text, `hover:${theme.status.error.bg}`)} // Red button for aggressive action
                    icon={isGenerating ? undefined : Wand2}
                    disabled={isGenerating}
@@ -155,4 +155,3 @@ export const MotionToCompelBuilder: React.FC<MotionToCompelBuilderProps> = ({ re
 };
 
 export default MotionToCompelBuilder;
-

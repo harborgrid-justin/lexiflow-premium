@@ -7,6 +7,34 @@ import { UpdateProductionDto } from './dto/update-production.dto';
 import { QueryProductionDto } from './dto/query-production.dto';
 import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
 
+/**
+ * ╔=================================================================================================================╗
+ * ║PRODUCTIONS                                                                                                      ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  Data input                                                                                         ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: Data output                                                                                        ║
+
+ * ║                                                                                                                 ║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class ProductionsService {
   constructor(

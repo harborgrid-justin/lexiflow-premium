@@ -8,6 +8,34 @@ import { ModuleShutdownResult } from '../interfaces/module.config.interface';
  * Handles graceful application shutdown
  * Ensures all resources are properly cleaned up and connections are closed
  */
+/**
+ * ╔=================================================================================================================╗
+ * ║SHUTDOWN                                                                                                         ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  Data input                                                                                         ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: Data output                                                                                        ║
+
+ * ║                                                                                                                 ║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class ShutdownService implements BeforeApplicationShutdown, OnApplicationShutdown {
   private readonly logger = new Logger(ShutdownService.name);

@@ -8,6 +8,34 @@ import * as MasterConfig from '@config/master.config';
  * Provides globally injectable access to CORS configuration.
  * Consolidates allowed origins, methods, headers, and credentials settings.
  */
+/**
+ * ╔=================================================================================================================╗
+ * ║CORSCONFIG                                                                                                       ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  Data input                                                                                         ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: Data output                                                                                        ║
+
+ * ║                                                                                                                 ║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class CorsConfigService {
   constructor(private readonly configService: ConfigService) {}

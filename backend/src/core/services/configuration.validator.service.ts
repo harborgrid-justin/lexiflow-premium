@@ -40,6 +40,34 @@ export interface ConfigValidationResult {
  * Checks database and Redis connectivity
  * Validates secret strength and security settings
  */
+/**
+ * ╔=================================================================================================================╗
+ * ║CONFIGURATIONVALIDATOR                                                                                           ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  Data input                                                                                         ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: Data output                                                                                        ║
+
+ * ║                                                                                                                 ║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class ConfigurationValidatorService implements OnModuleInit {
   private readonly logger = new Logger(ConfigurationValidatorService.name);

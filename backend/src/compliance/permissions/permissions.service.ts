@@ -13,6 +13,34 @@ import {
   PermissionCondition,
 } from './dto/permission.dto';
 
+/**
+ * ╔=================================================================================================================╗
+ * ║PERMISSIONS                                                                                                      ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  Data input                                                                                         ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: Data output                                                                                        ║
+
+ * ║                                                                                                                 ║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class PermissionsService {
   private permissions: Map<string, PermissionDto> = new Map();

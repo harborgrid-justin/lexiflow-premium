@@ -1,4 +1,4 @@
-import { Role } from '@common/enums/role.enum';
+import { UserRole } from '@common/enums/role.enum';
 import { Permission } from '@common/enums/permission.enum';
 
 export interface AuthenticatedUser {
@@ -6,7 +6,7 @@ export interface AuthenticatedUser {
   email: string;
   firstName: string;
   lastName: string;
-  role: Role;
+  role: UserRole;
   permissions: Permission[];
   isActive: boolean;
   mfaEnabled: boolean;

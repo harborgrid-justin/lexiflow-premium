@@ -12,6 +12,48 @@ import { UpdatePleadingDto } from './dto/update-pleading.dto';
 import { FilePleadingDto } from './dto/file-pleading.dto';
 import { CreateFromTemplateDto } from './dto/create-from-template.dto';
 
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+ * ║                            PLEADINGS SERVICE - COURT FILING & DOCUMENT TEMPLATES                                   ║
+ * ╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+ * ║                                                                                                                   ║
+ * ║  Attorney / Drafting AI             PleadingsController                   PleadingsService                       ║
+ * ║       │                                   │                                     │                                 ║
+ * ║       │  POST /pleadings                  │                                     │                                 ║
+ * ║       │  POST /pleadings/from-template    │                                     │                                 ║
+ * ║       │  POST /pleadings/:id/file         │                                     │                                 ║
+ * ║       │  GET /pleading-templates          │                                     │                                 ║
+ * ║       └───────────────────────────────────┴─────────────────────────────────────▶                                 ║
+ * ║                                                                                 │                                 ║
+ * ║                                                                 ┌───────────────┴────────────────┐                ║
+ * ║                                                                 │                                │                ║
+ * ║                                                                 ▼                                ▼                ║
+ * ║                                                          Pleading Repository         Template Repository           ║
+ * ║                                                                 │                                │                ║
+ * ║                                                                 ▼                                ▼                ║
+ * ║                                                          PostgreSQL (pleadings)  PostgreSQL (templates)            ║
+ * ║                                                                                                                   ║
+ * ║  DATA IN:  CreatePleadingDto { type, title, caseId, content, drafterId }                                         ║
+ * ║            FilePleadingDto { courtId, filingDate, confirmationNumber }                                           ║
+ * ║            CreateFromTemplateDto { templateId, caseId, variables{} }                                              ║
+ * ║                                                                                                                   ║
+ * ║  DATA OUT: Pleading { id, type, title, status, content, filingDate, docketNumber }                               ║
+ * ║            PleadingTemplate { id, name, type, content, variables[], jurisdiction }                                ║
+ * ║                                                                                                                   ║
+ * ║  OPERATIONS:                                                                                                      ║
+ * ║    • create()           - Create pleading from scratch                                                           ║
+ * ║    • createFromTemplate() - Generate from template with variable substitution                                     ║
+ * ║    • file()             - Mark as filed with court details                                                        ║
+ * ║    • approve()          - Attorney approval workflow                                                              ║
+ * ║    • getTemplates()     - List available pleading templates                                                      ║
+ * ║    • findAll()          - List pleadings with filters                                                            ║
+ * ║                                                                                                                   ║
+ * ║  TYPES: Complaint, Answer, Motion, Brief, Memorandum, Order, Notice, Stipulation, Declaration                    ║
+ * ║  STATUS: Draft, Under Review, Approved, Filed, Served, Withdrawn                                                  ║
+ * ║                                                                                                                   ║
+ * ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ */
+
 @Injectable()
 export class PleadingsService {
   private readonly logger = new Logger(PleadingsService.name);

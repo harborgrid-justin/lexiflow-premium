@@ -5,6 +5,38 @@ import { ComplianceCheck } from './entities/compliance-check.entity';
 import { AuditLog } from './entities/audit-log.entity';
 import { ComplianceRule } from './entities/compliance-rule.entity';
 
+/**
+ * ╔=================================================================================================================╗
+ * ║COMPLIANCE SERVICE - REGULATORY COMPLIANCE & AUDIT                                                               ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  ComplianceCheckDto, PolicyRuleDto, AuditRequestDto                                                 ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: ComplianceReport, Violations[], RemediationSteps[]                                                 ║
+
+ * ║                                                                                                                 ║
+ * ║  FEATURES: • Conflict checks                                                                        ║
+ * ║            • Ethical walls                                                                        ║
+ * ║            • Data retention                                                                        ║
+ * ║            • GDPR compliance║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class ComplianceService {
   private readonly logger = new Logger(ComplianceService.name);

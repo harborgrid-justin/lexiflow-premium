@@ -318,7 +318,10 @@ class ApiClient {
       }
 
       // Handle 401 Unauthorized - attempt token refresh
-      if (response.status === 401) {
+      // Skip redirect for login endpoint to prevent loops
+      const isLoginRequest = response.url.includes('/auth/login');
+
+      if (response.status === 401 && !isLoginRequest) {
         console.warn(
           "[ApiClient] Received 401 Unauthorized, attempting token refresh"
         );

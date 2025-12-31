@@ -21,6 +21,56 @@ import {
   ReportCancellationResult,
 } from './interfaces/report.interfaces';
 
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+ * ║                                  REPORTS SERVICE - REPORT GENERATION & ANALYTICS                                   ║
+ * ╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+ * ║                                                                                                                   ║
+ * ║  User Dashboard / Scheduler         ReportsController                     ReportsService                         ║
+ * ║       │                                   │                                     │                                 ║
+ * ║       │  POST /reports/generate           │                                     │                                 ║
+ * ║       │  POST /reports/schedule           │                                     │                                 ║
+ * ║       │  GET /reports/:id/download        │                                     │                                 ║
+ * ║       │  GET /reports/templates           │                                     │                                 ║
+ * ║       └───────────────────────────────────┴─────────────────────────────────────▶                                 ║
+ * ║                                                                                 │                                 ║
+ * ║                                                                 ┌───────────────┴────────────────┐                ║
+ * ║                                                                 │  In-Memory Cache        │                ║
+ * ║                                                                 │  (1000 reports, 24h)    │                ║
+ * ║                                                                 │  Report Templates       │                ║
+ * ║                                                                 └───────────────┬────────────────┘                ║
+ * ║                                                                              │                                    ║
+ * ║                                               ┌─────────────────────────────┴────────────────────────────┐        ║
+ * ║                                               │  Background Report Generation Queue   │        ║
+ * ║                                               │  (Bull + Redis)                       │        ║
+ * ║                                               └────────────┬───────────────────────────────┘        ║
+ * ║                                                             │                                                  ║
+ * ║                          ┌──────────────────────────────┴──────────────────────────────────────────┐        ║
+ * ║                          │                                                                  │        ║
+ * ║           ┌─────────────┴───────────────┐  ┌─────────────┴────────────┐  ┌────────┴─────────┐  ║
+ * ║           │                           │  │                         │  │                  │  ║
+ * ║           ▼                           ▼  ▼                         ▼  ▼                  ▼  ║
+ * ║    Cases/Billing/Discovery       Analytics       Time Tracking         Documents        File Export         ║
+ * ║    Data Aggregation              Service         Service               Service          (PDF, Excel, CSV)   ║
+ * ║                                                                                                                   ║
+ * ║  DATA IN:  GenerateReportDto { type, format, filters{}, dateRange, parameters{} }                             ║
+ * ║            ScheduleReportDto { templateId, schedule, recipients[], format }                                    ║
+ * ║                                                                                                                   ║
+ * ║  DATA OUT: Report { id, type, status, format, fileUrl, generatedAt, size }                                     ║
+ * ║            Buffer/Stream (PDF, Excel, CSV download)                                                            ║
+ * ║                                                                                                                   ║
+ * ║  REPORT TYPES:                                                                                                  ║
+ * ║    • case-summary        - Case overview with key metrics                                                       ║
+ * ║    • billing-report      - Invoices, time entries, expenses                                                     ║
+ * ║    • discovery-status    - Discovery progress & evidence tracking                                               ║
+ * ║    • trial-preparation   - Trial readiness checklist & exhibits                                                 ║
+ * ║    • compliance-audit    - Compliance violations & remediation                                                  ║
+ * ║                                                                                                                   ║
+ * ║  FEATURES: Background generation via Bull queue, scheduled reports, export to PDF/Excel/CSV, email delivery     ║
+ * ║                                                                                                                   ║
+ * ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ */
+
 @Injectable()
 export class ReportsService implements OnModuleDestroy {
   private readonly logger = new Logger(ReportsService.name);
@@ -46,48 +96,48 @@ export class ReportsService implements OnModuleDestroy {
   private cleanupOldReports(): void {
     const now = Date.now();
     const keysToDelete: string[] = [];
-    
+
     for (const [key, report] of this.reports.entries()) {
       const age = now - new Date(report.createdAt).getTime();
       if (age > this.REPORT_TTL_MS) {
         keysToDelete.push(key);
       }
     }
-    
+
     keysToDelete.forEach(key => this.reports.delete(key));
-    
+
     if (keysToDelete.length > 0) {
       this.logger.debug(`Cleaned up ${keysToDelete.length} old reports`);
     }
-    
+
     if (this.reports.size > this.MAX_REPORTS_IN_MEMORY) {
       const sortedReports = Array.from(this.reports.entries())
         .sort((a, b) => new Date(a[1].createdAt).getTime() - new Date(b[1].createdAt).getTime());
-      
+
       const toRemove = sortedReports.slice(0, sortedReports.length - this.MAX_REPORTS_IN_MEMORY);
       toRemove.forEach(([key]) => this.reports.delete(key));
-      
+
       this.logger.warn(`Memory limit reached, removed ${toRemove.length} oldest reports`);
     }
   }
 
   onModuleDestroy(): void {
     this.logger.log('ReportsService cleanup...');
-    
+
     if (this.cleanupInterval) {
       clearInterval(this.cleanupInterval);
     }
-    
+
     // Clear large data structures
     const reportCount = this.reports.size;
     this.reports.clear();
     this.reportTemplates = [];
-    
+
     // Explicitly trigger GC hint (if available)
     if (global.gc) {
       global.gc();
     }
-    
+
     this.logger.log(`ReportsService cleanup complete (cleared ${reportCount} reports)`);
   }
 

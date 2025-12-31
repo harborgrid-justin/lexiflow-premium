@@ -38,7 +38,7 @@ import { RefreshToken } from './entities/refresh-token.entity';
         return {
           secret: configService.get<string>('app.jwt.secret') ?? 'default-jwt-secret',
           signOptions: {
-            expiresIn: isNaN(Number(expiresIn)) ? expiresIn : parseInt(expiresIn, 10),
+            expiresIn: (isNaN(Number(expiresIn)) ? expiresIn : parseInt(expiresIn, 10)) as any,
           },
         };
       },

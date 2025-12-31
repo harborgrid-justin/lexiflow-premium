@@ -5,6 +5,7 @@ import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { RolesGuard } from '@common/guards/roles.guard';
 import { Roles } from '@common/decorators/roles.decorator';
 import { UserRole } from '@users/entities/user.entity';
+import { Role } from '@common/enums/role.enum';
 import { CreateSimpleInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateSimpleInvoiceDto } from './dto/update-invoice.dto';
 import { CreateTimeEntryDto } from './time-entries/dto/create-time-entry.dto';
@@ -20,7 +21,7 @@ export class BillingController {
   constructor(private readonly billingService: BillingService) {}
 
   @Get('invoices')
-  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(Role.SUPER_ADMIN, Role.ADMINISTRATOR, Role.PARTNER, Role.ASSOCIATE, Role.PARALEGAL)
   @ApiOperation({ summary: 'Get all invoices' })
   @ApiResponse({ status: 200, description: 'List of invoices' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -30,7 +31,7 @@ export class BillingController {
   }
 
   @Get('invoices/:id')
-  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(Role.SUPER_ADMIN, Role.ADMINISTRATOR, Role.PARTNER, Role.ASSOCIATE, Role.PARALEGAL)
   @ApiOperation({ summary: 'Get invoice by ID' })
   @ApiResponse({ status: 200, description: 'Invoice details' })
   @ApiResponse({ status: 404, description: 'Invoice not found' })
@@ -42,7 +43,7 @@ export class BillingController {
   }
 
   @Post('invoices')
-  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER)
+  @Roles(Role.SUPER_ADMIN, Role.ADMINISTRATOR, Role.PARTNER)
   @ApiOperation({ summary: 'Create new invoice' })
   @ApiResponse({ status: 201, description: 'Invoice created' })
   @ApiResponse({ status: 400, description: 'Invalid request data' })
@@ -54,7 +55,7 @@ export class BillingController {
   }
 
   @Put('invoices/:id')
-  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER)
+  @Roles(Role.SUPER_ADMIN, Role.ADMINISTRATOR, Role.PARTNER)
   @ApiOperation({ summary: 'Update invoice' })
   @ApiResponse({ status: 200, description: 'Invoice updated' })
   @ApiResponse({ status: 404, description: 'Invoice not found' })
@@ -67,7 +68,7 @@ export class BillingController {
   }
 
   @Delete('invoices/:id')
-  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER)
+  @Roles(Role.SUPER_ADMIN, Role.ADMINISTRATOR, Role.PARTNER)
   @ApiOperation({ summary: 'Delete invoice' })
   @ApiResponse({ status: 200, description: 'Invoice deleted' })
   @ApiResponse({ status: 404, description: 'Invoice not found' })
@@ -79,7 +80,7 @@ export class BillingController {
   }
 
   @Post('invoices/:id/send')
-  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY)
+  @Roles(Role.SUPER_ADMIN, Role.ADMINISTRATOR, Role.PARTNER, Role.ASSOCIATE)
   @ApiOperation({ summary: 'Send invoice to client' })
   @ApiResponse({ status: 200, description: 'Invoice sent' })
   @ApiResponse({ status: 404, description: 'Invoice not found' })
@@ -93,7 +94,7 @@ export class BillingController {
   }
 
   @Post('invoices/:id/mark-paid')
-  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER)
+  @Roles(Role.SUPER_ADMIN, Role.ADMINISTRATOR, Role.PARTNER)
   @ApiOperation({ summary: 'Mark invoice as paid' })
   @ApiResponse({ status: 200, description: 'Invoice marked as paid' })
   @ApiResponse({ status: 404, description: 'Invoice not found' })
@@ -107,7 +108,7 @@ export class BillingController {
   }
 
   @Get('time-entries')
-  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(Role.SUPER_ADMIN, Role.ADMINISTRATOR, Role.PARTNER, Role.ASSOCIATE, Role.PARALEGAL)
   @ApiOperation({ summary: 'Get all time entries' })
   @ApiResponse({ status: 200, description: 'List of time entries' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -252,10 +253,10 @@ export class BillingController {
   }
 
   @Get('overview-stats')
-  @Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.PARTNER, UserRole.ATTORNEY, UserRole.PARALEGAL)
+  @Roles(Role.SUPER_ADMIN, Role.ADMINISTRATOR, Role.PARTNER, Role.ASSOCIATE, Role.PARALEGAL)
   @ApiOperation({ summary: 'Get billing overview statistics' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Overview statistics including realization rate and total billed',
     schema: {
       type: 'object',

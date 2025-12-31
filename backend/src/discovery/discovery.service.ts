@@ -20,6 +20,48 @@ export interface PaginatedResult<T> {
 }
 
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+ * ║                          DISCOVERY SERVICE - E-DISCOVERY & EVIDENCE ORCHESTRATION                                  ║
+ * ╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+ * ║                                                                                                                   ║
+ * ║  Legal Team / Systems               DiscoveryController                   DiscoveryService                       ║
+ * ║       │                                   │                                     │                                 ║
+ * ║       │  POST /discovery/requests         │                                     │                                 ║
+ * ║       │  POST /legal-holds                │                                     │                                 ║
+ * ║       │  POST /custodians                 │                                     │                                 ║
+ * ║       │  POST /evidence                   │                                     │                                 ║
+ * ║       └───────────────────────────────────┴─────────────────────────────────────▶                                 ║
+ * ║                                                                                 │                                 ║
+ * ║                                               ┌─────────────────────────────┴────────────────────────────┐        ║
+ * ║                                               │  Service Composition Pattern          │        ║
+ * ║                                               │  (Not Direct Repository Injection)    │        ║
+ * ║                                               └────────────┬───────────────────────────────┘        ║
+ * ║                                                             │                                                  ║
+ * ║                          ┌──────────────────────────────┴──────────────────────────────────────────┐        ║
+ * ║                          │                                                                  │        ║
+ * ║           ┌─────────────┴───────────────┐       ┌─────────────┴────────────┐   ┌────────┴─────────┐  ║
+ * ║           │                           │       │                         │   │                  │  ║
+ * ║           ▼                           ▼       ▼                         ▼   ▼                  ▼  ║
+ * ║  DiscoveryRequest Repo     LegalHold Repo  Custodian Repo        Evidence Repo    Production Repo       ║
+ * ║           │                           │       │                         │   │                  │  ║
+ * ║           ▼                           ▼       ▼                         ▼   ▼                  ▼  ║
+ * ║  PostgreSQL (requests)    PostgreSQL     PostgreSQL            PostgreSQL       PostgreSQL            ║
+ * ║                                                                                                                   ║
+ * ║  DATA IN:  DiscoveryRequestDto { type, description, dueDate, assignedTo }                                        ║
+ * ║            LegalHoldDto { custodians[], startDate, instructions }                                                ║
+ * ║            CustodianDto { name, email, department, dataS ources[] }                                              ║
+ * ║                                                                                                                   ║
+ * ║  DATA OUT: DiscoveryRequest { id, type, status, responses[], documents[] }                                       ║
+ * ║            LegalHold { id, status, custodians[], compliance[], releaseDate }                                     ║
+ * ║            Evidence { id, fileName, hash, chain-of-custody[], tags[] }                                           ║
+ * ║                                                                                                                   ║
+ * ║  FEATURES: • Discovery request tracking    • Legal hold management      • Custodian management                    ║
+ * ║            • Evidence chain-of-custody      • Production management      • Privilege logging                        ║
+ * ║                                                                                                                   ║
+ * ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ */
+
+/**
  * Discovery Service
  * Orchestrates discovery operations across all sub-modules
  * Uses service composition pattern rather than direct repository injection
@@ -38,7 +80,7 @@ export class DiscoveryService {
   create(createDto: unknown): Promise<unknown> {
     return this.createRequest(createDto);
   }
-  
+
   constructor(
     @InjectRepository(DiscoveryRequest)
     private readonly discoveryRequestRepository: Repository<DiscoveryRequest>,
@@ -278,11 +320,11 @@ export class DiscoveryService {
     const evidence = await this.evidenceRepository.findOne({
       where: { id },
     });
-    
+
     if (!evidence) {
       throw new NotFoundException(`Evidence with ID ${id} not found`);
     }
-    
+
     return evidence;
   }
 }

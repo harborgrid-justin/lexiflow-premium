@@ -9,6 +9,34 @@ import * as fs from 'fs';
  * Enterprise-grade memory monitoring with proactive alerts and automatic cleanup.
  * Tracks heap usage, triggers garbage collection, and prevents memory leaks.
  */
+/**
+ * ╔=================================================================================================================╗
+ * ║MEMORYMONITORING                                                                                                 ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  Data input                                                                                         ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: Data output                                                                                        ║
+
+ * ║                                                                                                                 ║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class MemoryMonitoringService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(MemoryMonitoringService.name);

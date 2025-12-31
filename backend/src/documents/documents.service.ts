@@ -15,6 +15,56 @@ import { FileStorageService } from '@file-storage/file-storage.service';
 import { TransactionManagerService } from '@common/services/transaction-manager.service';
 import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
 
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+ * ║                              DOCUMENTS SERVICE - DOCUMENT MANAGEMENT & FILE STORAGE                                ║
+ * ╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+ * ║                                                                                                                   ║
+ * ║  Client Upload                      DocumentsController                   DocumentsService                        ║
+ * ║       │                                   │                                     │                                 ║
+ * ║       │  POST /documents (multipart)      │                                     │                                 ║
+ * ║       │  GET /documents                   │                                     │                                 ║
+ * ║       │  GET /documents/:id               │                                     │                                 ║
+ * ║       │  PATCH /documents/:id             │                                     │                                 ║
+ * ║       │  DELETE /documents/:id            │                                     │                                 ║
+ * ║       └───────────────────────────────────┴─────────────────────────────────────▶                                 ║
+ * ║                                                                                 │                                 ║
+ * ║                                                                 ┌───────────────┴────────────────┐                ║
+ * ║                                                                 │                                │                ║
+ * ║                                                                 ▼                                ▼                ║
+ * ║                                                          Document Repository         FileStorageService           ║
+ * ║                                                                 │                                │                ║
+ * ║                                                                 │                                │                ║
+ * ║                                                                 ▼                                ▼                ║
+ * ║                                                          PostgreSQL (docs)      Disk/S3 File Storage              ║
+ * ║                                                                 │                                │                ║
+ * ║                                                                 └────────────┬───────────────────┘                ║
+ * ║                                                                              │                                    ║
+ * ║                                                                              ▼                                    ║
+ * ║                                                                    TransactionManager                             ║
+ * ║                                                                   (Atomic DB + File Ops)                          ║
+ * ║                                                                                                                   ║
+ * ║  DATA IN:  CreateDocumentDto { title, description, type, caseId, file? }                                          ║
+ * ║            UpdateDocumentDto { title?, tags?, metadata? }                                                         ║
+ * ║            DocumentFilterDto { caseId?, type?, search?, page, limit }                                             ║
+ * ║                                                                                                                   ║
+ * ║  DATA OUT: Document { id, title, fileName, filePath, mimeType, size, currentVersion, ... }                        ║
+ * ║            Buffer (file download)                                                                                 ║
+ * ║                                                                                                                   ║
+ * ║  OPERATIONS:                                                                                                      ║
+ * ║    • create()          - Upload & store document with metadata                                                    ║
+ * ║    • findAll()         - List documents with filters & pagination                                                 ║
+ * ║    • findOne()         - Get document metadata by ID                                                              ║
+ * ║    • update()          - Update document metadata                                                                 ║
+ * ║    • remove()          - Delete document & file                                                                   ║
+ * ║    • download()        - Stream document file                                                                     ║
+ * ║    • uploadVersion()   - Create new document version                                                              ║
+ * ║                                                                                                                   ║
+ * ║  FEATURES: Transactional file+DB operations, version control, metadata extraction, search                         ║
+ * ║                                                                                                                   ║
+ * ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ */
+
 @Injectable()
 export class DocumentsService implements OnModuleDestroy {
   private readonly logger = new Logger(DocumentsService.name);

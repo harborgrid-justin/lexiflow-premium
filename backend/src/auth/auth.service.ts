@@ -15,9 +15,54 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { AuthenticatedUser } from './interfaces/authenticated-user.interface';
-import { Role } from '@common/enums/role.enum';
+import { UserRole } from '@common/enums/role.enum';
 import { TokenBlacklistService } from './token-blacklist.service';
 import { TokenStorageService } from './token-storage.service';
+
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+ * ║                                   AUTH SERVICE - AUTHENTICATION & TOKEN MANAGEMENT                                ║
+ * ╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+ * ║                                                                                                                   ║
+ * ║  Client Request                     AuthController                         AuthService                            ║
+ * ║       │                                   │                                     │                                 ║
+ * ║       │  POST /auth/register              │                                     │                                 ║
+ * ║       │  POST /auth/login                 │                                     │                                 ║
+ * ║       │  POST /auth/refresh               │                                     │                                 ║
+ * ║       │  POST /auth/logout                │                                     │                                 ║
+ * ║       └───────────────────────────────────▼                                     │                                 ║
+ * ║                                           │                                     │                                 ║
+ * ║                                           │  register/login/refresh             │                                 ║
+ * ║                                           └─────────────────────────────────────▶                                 ║
+ * ║                                                                                 │                                 ║
+ * ║                                                                 ┌───────────────┴────────────────┐                ║
+ * ║                                                                 │                                │                ║
+ * ║                                                                 ▼                                ▼                ║
+ * ║                                                          UsersService                     JwtService              ║
+ * ║                                                                 │                                │                ║
+ * ║                                                                 │  Verify credentials            │  Sign tokens   ║
+ * ║                                                                 │  Hash passwords                │  Verify tokens ║
+ * ║                                                                 ▼                                ▼                ║
+ * ║                                                          PostgreSQL Users            TokenStorageService          ║
+ * ║                                                                 │                                │                ║
+ * ║                                                                 │                                │                ║
+ * ║                                                                 └────────────┬───────────────────┘                ║
+ * ║                                                                              │                                    ║
+ * ║                                                                              ▼                                    ║
+ * ║                                                                    TokenBlacklistService                          ║
+ * ║                                                                              │                                    ║
+ * ║  DATA IN:  RegisterDto { email, password, firstName, lastName, role }                                             ║
+ * ║            LoginDto { email, password, mfaCode? }                                                                 ║
+ * ║                                                                                                                   ║
+ * ║  DATA OUT: { accessToken, refreshToken, user: { id, email, role, ... } }                                          ║
+ * ║                                                                                                                   ║
+ * ║  FEATURES: • Password hashing (bcrypt)           • JWT token generation                                           ║
+ * ║            • MFA/2FA (TOTP via otplib)           • Token refresh & rotation                                       ║
+ * ║            • Session management                  • Token blacklisting                                             ║
+ * ║            • Password reset flows                • Role-based access control                                      ║
+ * ║                                                                                                                   ║
+ * ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ */
 
 @Injectable()
 export class AuthService {
@@ -37,7 +82,7 @@ export class AuthService {
       password: registerDto.password,
       firstName: registerDto.firstName,
       lastName: registerDto.lastName,
-      role: registerDto.role || Role.CLIENT_USER,
+      role: registerDto.role || UserRole.CLIENT,
       isActive: true,
       mfaEnabled: false,
     });

@@ -25,6 +25,38 @@ import {
  * - 15-minute TTL for cached results
  * - Proper cleanup on module destroy
  */
+/**
+ * ╔=================================================================================================================╗
+ * ║SEARCH SERVICE - FULL-TEXT SEARCH & INDEXING                                                                     ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  SearchQueryDto { query, filters, pagination, facets }                                              ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: SearchResults { hits[], total, facets{}, aggregations{} }                                          ║
+
+ * ║                                                                                                                 ║
+ * ║  FEATURES: • Full-text search                                                                       ║
+ * ║            • Faceted search                                                                       ║
+ * ║            • Fuzzy matching                                                                       ║
+ * ║            • Ranking║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class SearchService implements OnModuleDestroy {
   private readonly logger = new Logger(SearchService.name);

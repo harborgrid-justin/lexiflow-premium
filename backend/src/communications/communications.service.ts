@@ -4,6 +4,38 @@ import { Repository } from 'typeorm';
 import { Communication } from './entities/communication.entity';
 import { Template } from './entities/template.entity';
 
+/**
+ * ╔=================================================================================================================╗
+ * ║COMMUNICATIONS SERVICE - MESSAGING & NOTIFICATIONS                                                               ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  MessageDto, NotificationDto, EmailDto, SMSDto                                                      ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: DeliveryStatus, MessageHistory, Recipients[]                                                       ║
+
+ * ║                                                                                                                 ║
+ * ║  FEATURES: • Email delivery                                                                         ║
+ * ║            • SMS notifications                                                                         ║
+ * ║            • In-app messaging                                                                         ║
+ * ║            • Template rendering║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class CommunicationsService {
   private readonly logger = new Logger(CommunicationsService.name);

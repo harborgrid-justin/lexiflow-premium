@@ -8,6 +8,38 @@ import { calculateOffset, calculateTotalPages } from '@common/utils/math.utils';
 import { validateSortField, validateSortOrder, sanitizeSearchQuery } from '@common/utils/query-validation.util';
 import { IWorkflowQueryFilters, IPaginatedWorkflowResponse, IWorkflowInstantiationResult, IWorkflowTask } from './interfaces/workflow.interfaces';
 
+/**
+ * ╔=================================================================================================================╗
+ * ║WORKFLOW SERVICE - AUTOMATED WORKFLOW & TASK MANAGEMENT                                                          ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  WorkflowDefinitionDto, ExecuteWorkflowDto, TaskDto                                                 ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: WorkflowExecution, TaskList, CompletionStatus                                                      ║
+
+ * ║                                                                                                                 ║
+ * ║  FEATURES: • Workflow templates                                                                     ║
+ * ║            • Task automation                                                                     ║
+ * ║            • Conditional logic                                                                     ║
+ * ║            • Notifications║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class WorkflowService implements OnModuleDestroy {
   // Map camelCase fields to database column names

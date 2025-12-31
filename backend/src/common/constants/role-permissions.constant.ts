@@ -1,8 +1,8 @@
-import { Role } from '@common/enums/role.enum';
+import { UserRole } from '@common/enums/role.enum';
 import { Permission } from '@common/enums/permission.enum';
 
-export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
-  [Role.SUPER_ADMIN]: [
+export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
+  [UserRole.SUPER_ADMIN]: [
     Permission.CASE_CREATE,
     Permission.CASE_READ,
     Permission.CASE_UPDATE,
@@ -18,62 +18,100 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     Permission.USER_MANAGE,
     Permission.SYSTEM_ADMIN,
   ],
-  [Role.SENIOR_PARTNER]: [
+  [UserRole.ADMIN]: [
+    Permission.CASE_READ,
+    Permission.DOCUMENT_READ,
+    Permission.BILLING_READ,
+    Permission.USER_MANAGE,
+  ],
+  [UserRole.PARTNER]: [
     Permission.CASE_CREATE,
     Permission.CASE_READ,
     Permission.CASE_UPDATE,
-    Permission.CASE_DELETE,
     Permission.DOCUMENT_CREATE,
     Permission.DOCUMENT_READ,
     Permission.DOCUMENT_UPDATE,
-    Permission.DOCUMENT_DELETE,
+    Permission.BILLING_CREATE,
+    Permission.BILLING_READ,
+    Permission.BILLING_UPDATE,
+  ],
+  [UserRole.SENIOR_ASSOCIATE]: [
+    Permission.CASE_READ,
+    Permission.CASE_UPDATE,
+    Permission.DOCUMENT_CREATE,
+    Permission.DOCUMENT_READ,
+    Permission.DOCUMENT_UPDATE,
+    Permission.BILLING_READ,
+  ],
+  [UserRole.ASSOCIATE]: [
+    Permission.CASE_READ,
+    Permission.CASE_UPDATE,
+    Permission.DOCUMENT_CREATE,
+    Permission.DOCUMENT_READ,
+    Permission.DOCUMENT_UPDATE,
+    Permission.BILLING_READ,
+  ],
+  [UserRole.JUNIOR_ASSOCIATE]: [
+    Permission.CASE_READ,
+    Permission.CASE_UPDATE,
+    Permission.DOCUMENT_CREATE,
+    Permission.DOCUMENT_READ,
+    Permission.DOCUMENT_UPDATE,
+    Permission.BILLING_READ,
+  ],
+  [UserRole.ATTORNEY]: [
+    Permission.CASE_READ,
+    Permission.CASE_UPDATE,
+    Permission.DOCUMENT_CREATE,
+    Permission.DOCUMENT_READ,
+    Permission.DOCUMENT_UPDATE,
+    Permission.BILLING_READ,
+  ],
+  [UserRole.PARALEGAL]: [
+    Permission.CASE_READ,
+    Permission.DOCUMENT_CREATE,
+    Permission.DOCUMENT_READ,
+    Permission.DOCUMENT_UPDATE,
+  ],
+  [UserRole.LEGAL_ASSISTANT]: [
+    Permission.CASE_READ,
+    Permission.DOCUMENT_CREATE,
+    Permission.DOCUMENT_READ,
+  ],
+  [UserRole.CLERK]: [
+    Permission.CASE_READ,
+    Permission.DOCUMENT_CREATE,
+    Permission.DOCUMENT_READ,
+  ],
+  [UserRole.INTERN]: [
+    Permission.CASE_READ,
+    Permission.DOCUMENT_READ,
+  ],
+  [UserRole.ACCOUNTANT]: [
     Permission.BILLING_CREATE,
     Permission.BILLING_READ,
     Permission.BILLING_UPDATE,
     Permission.BILLING_DELETE,
-    Permission.USER_MANAGE,
   ],
-  [Role.PARTNER]: [
-    Permission.CASE_CREATE,
-    Permission.CASE_READ,
-    Permission.CASE_UPDATE,
-    Permission.DOCUMENT_CREATE,
-    Permission.DOCUMENT_READ,
-    Permission.DOCUMENT_UPDATE,
+  [UserRole.BILLING_SPECIALIST]: [
     Permission.BILLING_CREATE,
     Permission.BILLING_READ,
     Permission.BILLING_UPDATE,
   ],
-  [Role.ASSOCIATE]: [
-    Permission.CASE_READ,
-    Permission.CASE_UPDATE,
-    Permission.DOCUMENT_CREATE,
-    Permission.DOCUMENT_READ,
-    Permission.DOCUMENT_UPDATE,
-    Permission.BILLING_READ,
-  ],
-  [Role.PARALEGAL]: [
-    Permission.CASE_READ,
-    Permission.DOCUMENT_CREATE,
-    Permission.DOCUMENT_READ,
-    Permission.DOCUMENT_UPDATE,
-  ],
-  [Role.LEGAL_SECRETARY]: [
-    Permission.CASE_READ,
-    Permission.DOCUMENT_CREATE,
-    Permission.DOCUMENT_READ,
-  ],
-  [Role.ADMINISTRATOR]: [
-    Permission.CASE_READ,
-    Permission.DOCUMENT_READ,
-    Permission.BILLING_READ,
+  [UserRole.IT_ADMIN]: [
     Permission.USER_MANAGE,
+    Permission.SYSTEM_ADMIN,
   ],
-  [Role.CLIENT_USER]: [
+  [UserRole.STAFF]: [
     Permission.CASE_READ,
     Permission.DOCUMENT_READ,
   ],
-  [Role.GUEST]: [
+  [UserRole.USER]: [
     Permission.CASE_READ,
+    Permission.DOCUMENT_READ,
+  ],
+  [UserRole.CLIENT]: [
+    Permission.CASE_READ,
+    Permission.DOCUMENT_READ,
   ],
 };

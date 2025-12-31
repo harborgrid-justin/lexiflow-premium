@@ -18,7 +18,7 @@ import {
 import { JwtAuthGuard } from './guards';
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
-import { Role } from '@common/enums/role.enum';
+import { UserRole } from '@common/enums/role.enum';
 import { TokenBlacklistService } from './token-blacklist.service';
 import { TokenBlacklistCleanupService } from './token-blacklist-cleanup.service';
 
@@ -31,7 +31,7 @@ import { TokenBlacklistCleanupService } from './token-blacklist-cleanup.service'
 
 @Controller('admin/blacklist')
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.SUPER_ADMIN, Role.ADMINISTRATOR)
+@Roles(UserRole.SUPER_ADMIN, UserRole.ADMIN)
 export class TokenBlacklistAdminController {
   constructor(
     private readonly tokenBlacklistService: TokenBlacklistService,

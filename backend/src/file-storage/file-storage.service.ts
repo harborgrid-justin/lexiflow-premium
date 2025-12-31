@@ -23,6 +23,38 @@ import {
 import { formatBytes } from '@common/utils/format.utils';
 import { validateDiskSpace } from '@common/utils/disk.utils';
 
+/**
+ * ╔=================================================================================================================╗
+ * ║FILE STORAGE SERVICE - FILE UPLOAD & STORAGE MANAGEMENT                                                          ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  File buffer/stream, metadata, filePath                                                             ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: Stored file path, file metadata, file URL                                                          ║
+
+ * ║                                                                                                                 ║
+ * ║  FEATURES: • Local filesystem storage                                                               ║
+ * ║            • Cloud storage (S3-compatible)                                                               ║
+ * ║            • File validation                                                               ║
+ * ║            • Metadata extraction║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class FileStorageService implements OnModuleDestroy {
   private readonly logger = new Logger(FileStorageService.name);

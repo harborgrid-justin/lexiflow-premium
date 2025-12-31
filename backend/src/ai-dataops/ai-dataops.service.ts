@@ -25,6 +25,34 @@ import { UpdateDataOpsModelDto } from './dto/update-model.dto';
  * - Memory footprint: ~200MB for 10K cached vectors (768-dim)
  * - Batch throughput: 5K vectors/sec with streaming
  */
+/**
+ * ╔=================================================================================================================╗
+ * ║AIDATAOPS                                                                                                        ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  Data input                                                                                         ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: Data output                                                                                        ║
+
+ * ║                                                                                                                 ║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class AiDataopsService implements OnModuleDestroy {
   private readonly logger = new Logger(AiDataopsService.name);

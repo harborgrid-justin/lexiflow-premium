@@ -12,6 +12,51 @@ interface SyncHistoryEntry {
   error?: string;
 }
 
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+ * ║                                 INTEGRATIONS SERVICE - EXTERNAL API CONNECTIONS                                   ║
+ * ╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+ * ║                                                                                                                   ║
+ * ║  Admin Console                      IntegrationsController                IntegrationsService                    ║
+ * ║       │                                   │                                     │                                 ║
+ * ║       │  POST /integrations               │                                     │                                 ║
+ * ║       │  POST /integrations/:id/test      │                                     │                                 ║
+ * ║       │  POST /integrations/:id/sync      │                                     │                                 ║
+ * ║       │  GET /integrations/:id/status     │                                     │                                 ║
+ * ║       └───────────────────────────────────┴─────────────────────────────────────▶                                 ║
+ * ║                                                                                 │                                 ║
+ * ║                                                                 ┌───────────────┴────────────────┐                ║
+ * ║                                                                 │  Integration Cache      │                ║
+ * ║                                                                 │  (50 entry LRU)         │                ║
+ * ║                                                                 └───────────────┬────────────────┘                ║
+ * ║                                                                              │                                    ║
+ * ║                                                                              ▼                                    ║
+ * ║                                                                      Integration Repository                        ║
+ * ║                                                                              │                                    ║
+ * ║                                                                              ▼                                    ║
+ * ║                                                                     PostgreSQL (integrations)                       ║
+ * ║                                                                              │                                    ║
+ * ║                                                                              ▼                                    ║
+ * ║                                                                  External APIs (PACER, Google, etc)                ║
+ * ║                                                                                                                   ║
+ * ║  DATA IN:  CreateIntegrationDto { provider, credentials{}, config{}, enabled }                                    ║
+ * ║            UpdateIntegrationDto { credentials?, config?, status? }                                                 ║
+ * ║                                                                                                                   ║
+ * ║  DATA OUT: Integration { id, provider, status, lastSync, syncHistory[], errorCount }                              ║
+ * ║            SyncResult { success, recordsProcessed, errors[] }                                                     ║
+ * ║                                                                                                                   ║
+ * ║  OPERATIONS:                                                                                                      ║
+ * ║    • create()      - Create integration config                                                                   ║
+ * ║    • testConnection() - Verify API credentials & connectivity                                                     ║
+ * ║    • syncData()    - Fetch & sync data from external provider                                                     ║
+ * ║    • disconnect()  - Disable integration & clear cached credentials                                               ║
+ * ║    • getStatus()   - Get sync status & history                                                                    ║
+ * ║                                                                                                                   ║
+ * ║  PROVIDERS: PACER (court filings), Google Calendar, Outlook, Dropbox, Box, CRM systems                            ║
+ * ║                                                                                                                   ║
+ * ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ */
+
 @Injectable()
 export class IntegrationsService implements OnModuleDestroy {
   private readonly logger = new Logger(IntegrationsService.name);
@@ -47,11 +92,11 @@ export class IntegrationsService implements OnModuleDestroy {
   findById(id: string): Promise<Integration | null> {
     return this.findOne(id);
   }
-  
+
   delete(id: string): Promise<void> {
     return this.remove(id);
   }
-  
+
   async connect(id: string, credentials: { accessToken: string; refreshToken: string }): Promise<Integration> {
     const integration = await this.findOne(id);
     integration.status = IntegrationStatus.ACTIVE;
@@ -61,7 +106,7 @@ export class IntegrationsService implements OnModuleDestroy {
     this.integrationCache.delete(id); // Invalidate cache
     return saved;
   }
-  
+
   async disconnect(id: string): Promise<Integration> {
     const integration = await this.findOne(id);
     integration.status = IntegrationStatus.DISCONNECTED;
@@ -70,7 +115,7 @@ export class IntegrationsService implements OnModuleDestroy {
     this.integrationCache.delete(id); // Invalidate cache
     return saved;
   }
-  
+
   async refreshCredentials(id: string): Promise<Integration> {
     const integration = await this.findOne(id);
     if (integration.status !== IntegrationStatus.ACTIVE) {
@@ -80,7 +125,7 @@ export class IntegrationsService implements OnModuleDestroy {
     integration.lastSyncedAt = new Date();
     return this.integrationRepository.save(integration);
   }
-  
+
   async sync(id: string): Promise<Integration> {
     const integration = await this.findOne(id);
     if (!integration.syncEnabled) {
@@ -89,13 +134,13 @@ export class IntegrationsService implements OnModuleDestroy {
     integration.lastSyncedAt = new Date();
     return this.integrationRepository.save(integration);
   }
-  
+
   async setSyncEnabled(id: string, enabled: boolean): Promise<Integration> {
     const integration = await this.findOne(id);
     integration.syncEnabled = enabled;
     return this.integrationRepository.save(integration);
   }
-  
+
   async updateConfig(id: string, newConfig: Record<string, unknown>): Promise<Integration> {
     const integration = await this.findOne(id);
     const updated = {
@@ -104,15 +149,15 @@ export class IntegrationsService implements OnModuleDestroy {
     };
     return this.integrationRepository.save(updated);
   }
-  
+
   async findByType(type: string): Promise<Integration[]> {
     return this.integrationRepository.find({ where: { type } });
   }
-  
+
   async findByProvider(provider: string): Promise<Integration[]> {
     return this.integrationRepository.find({ where: { provider } });
   }
-  
+
   testConnection(id: string): { success: boolean; message: string; latency: number } {
     this.logger.log(`Testing connection for integration ${id}`);
     return { success: true, message: 'Connection successful', latency: 50 };
@@ -122,7 +167,7 @@ export class IntegrationsService implements OnModuleDestroy {
     this.logger.log(`Retrieving sync history for integration ${id}`);
     return [];
   }
-  
+
   async findAll(): Promise<Integration[]> {
     return this.integrationRepository.find();
   }

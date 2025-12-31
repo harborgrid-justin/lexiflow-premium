@@ -6,6 +6,38 @@ import { CreateDocketEntryDto } from './dto/create-docket-entry.dto';
 import { UpdateDocketEntryDto } from './dto/update-docket-entry.dto';
 import { PacerSyncDto, PacerSyncResultDto } from './dto/pacer-sync.dto';
 
+/**
+ * ╔=================================================================================================================╗
+ * ║DOCKET SERVICE - COURT DOCKET ENTRY MANAGEMENT                                                                   ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  DocketEntryDto { caseId, entryNumber, description, filingDate, document }                          ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: DocketEntry { id, entryNumber, description, documents[], parties[] }                               ║
+
+ * ║                                                                                                                 ║
+ * ║  FEATURES: • PACER integration                                                                      ║
+ * ║            • Docket parsing                                                                      ║
+ * ║            • Entry tracking                                                                      ║
+ * ║            • Document linking║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class DocketService {
   private readonly logger = new Logger(DocketService.name);

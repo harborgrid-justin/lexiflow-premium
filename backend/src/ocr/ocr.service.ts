@@ -19,6 +19,50 @@ import {
   TesseractCreateWorkerOptions,
 } from './interfaces/tesseract.interface';
 
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+ * ║                                  OCR SERVICE - OPTICAL CHARACTER RECOGNITION                                      ║
+ * ╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+ * ║                                                                                                                   ║
+ * ║  Document Upload                    OCRController                         OcrService                             ║
+ * ║       │                                   │                                     │                                 ║
+ * ║       │  POST /ocr/process                │                                     │                                 ║
+ * ║       │  POST /ocr/batch                  │                                     │                                 ║
+ * ║       │  POST /ocr/extract-structured     │                                     │                                 ║
+ * ║       │  GET /ocr/status/:jobId           │                                     │                                 ║
+ * ║       └───────────────────────────────────┴─────────────────────────────────────▶                                 ║
+ * ║                                                                                 │                                 ║
+ * ║                                                                 ┌───────────────┴────────────────┐                ║
+ * ║                                                                 │  Tesseract.js Worker    │                ║
+ * ║                                                                 │  (eng.traineddata)      │                ║
+ * ║                                                                 └───────────────┬────────────────┘                ║
+ * ║                                                                              │                                    ║
+ * ║                                                                              ▼                                    ║
+ * ║                                                                      FileStorageService                            ║
+ * ║                                                                              │                                    ║
+ * ║                                                                              ▼                                    ║
+ * ║                                                                   Image/PDF File Storage                           ║
+ * ║                                                                                                                   ║
+ * ║  DATA IN:  OcrRequestDto { filePath, language?, psm?, options? }                                                  ║
+ * ║            BatchProcessRequestDto { filePaths[], concurrency? }                                                   ║
+ * ║            ExtractStructuredDataOptionsDto { filePath, patterns[], schemas[] }                                     ║
+ * ║                                                                                                                   ║
+ * ║  DATA OUT: OcrResultDto { text, confidence, words[], lines[], blocks[] }                                          ║
+ * ║            StructuredDataResultDto { entities[], tables[], dates[], amounts[] }                                   ║
+ * ║            OcrProgressDto { status, progress%, currentPage, totalPages }                                          ║
+ * ║                                                                                                                   ║
+ * ║  OPERATIONS:                                                                                                      ║
+ * ║    • processDocument()      - Extract text from image/PDF                                                        ║
+ * ║    • batchProcess()         - Process multiple documents concurrently                                             ║
+ * ║    • extractStructuredData() - Extract entities, tables, dates from OCR text                                      ║
+ * ║    • detectLanguage()       - Auto-detect document language                                                       ║
+ * ║    • getStats()             - OCR processing statistics                                                           ║
+ * ║                                                                                                                   ║
+ * ║  FEATURES: Multi-language support, confidence scoring, layout analysis, background processing via Bull queue      ║
+ * ║                                                                                                                   ║
+ * ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ */
+
 @Injectable()
 export class OcrService {
   private readonly logger = new Logger(OcrService.name);

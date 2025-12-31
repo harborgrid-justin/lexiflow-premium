@@ -1,7 +1,7 @@
 import { IsEmail, IsString, MinLength, MaxLength, IsEnum, IsOptional, IsNotEmpty, Matches } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { Role } from '@common/enums/role.enum';
+import { UserRole } from '@common/enums/role.enum';
 
 /**
  * Registration DTO with enterprise-grade validation
@@ -64,11 +64,11 @@ export class RegisterDto {
   lastName!: string;
 
   @ApiPropertyOptional({
-    description: 'User role (defaults to GUEST if not specified)',
-    enum: Role,
-    example: Role.GUEST,
+    description: 'User role (defaults to CLIENT if not specified)',
+    enum: UserRole,
+    example: UserRole.CLIENT,
   })
-  @IsEnum(Role, { message: 'Invalid role specified' })
+  @IsEnum(UserRole, { message: 'Invalid role specified' })
   @IsOptional()
-  role?: Role;
+  role?: UserRole;
 }

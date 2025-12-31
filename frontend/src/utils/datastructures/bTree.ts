@@ -3,7 +3,7 @@ class BTreeNode<K, V> {
     keys: K[] = [];
     values: V[] = [];
     children: BTreeNode<K, V>[] = [];
-    
+
     constructor(public isLeaf: boolean) {}
 }
 
@@ -15,7 +15,7 @@ export class BTree<K, V> {
         this.t = t;
         this.root = new BTreeNode<K, V>(true);
     }
-    
+
     search(key: K): V | null {
         return this._search(this.root, key);
     }
@@ -33,7 +33,7 @@ export class BTree<K, V> {
         }
         return this._search(node.children[i]!, key);
     }
-    
+
     // Insert and split logic is complex and omitted for this demonstration.
     // This class primarily shows the structure and search capability.
     insert(key: K, value: V) {
@@ -52,14 +52,14 @@ export class BTree<K, V> {
              console.warn("B-Tree insert logic simplified: root is full.");
         }
     }
-    
+
     // A simplified range query for demonstration
     rangeSearch(startKey: K, endKey: K): V[] {
         const results: V[] = [];
         this._rangeSearch(this.root, startKey, endKey, results);
         return results;
     }
-    
+
     private _rangeSearch(node: BTreeNode<K, V>, startKey: K, endKey: K, results: V[]) {
         let i = 0;
         while(i < node.keys.length && startKey > node.keys[i]!) i++;
@@ -67,7 +67,7 @@ export class BTree<K, V> {
         if (!node.isLeaf) {
             this._rangeSearch(node.children[i]!, startKey, endKey, results);
         }
-        
+
         while(i < node.keys.length && node.keys[i]! <= endKey) {
             results.push(node.values[i]!);
             if (!node.isLeaf) {

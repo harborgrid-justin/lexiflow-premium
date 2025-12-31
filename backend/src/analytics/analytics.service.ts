@@ -46,6 +46,38 @@ type AnalyticsCacheData =
  * - Proper cleanup on module destroy
  * - Stream processing for large datasets
  */
+/**
+ * ╔=================================================================================================================╗
+ * ║ANALYTICS SERVICE - BUSINESS INTELLIGENCE & METRICS                                                              ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  MetricsQuery { dateRange, dimensions[], metrics[] }                                                ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: AnalyticsData { series[], aggregations{}, trends[] }                                               ║
+
+ * ║                                                                                                                 ║
+ * ║  FEATURES: • KPI dashboards                                                                         ║
+ * ║            • Trend analysis                                                                         ║
+ * ║            • Predictive analytics                                                                         ║
+ * ║            • Data visualization║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class AnalyticsService implements OnModuleDestroy {
   private readonly MAX_CACHE_ENTRIES = 2000;

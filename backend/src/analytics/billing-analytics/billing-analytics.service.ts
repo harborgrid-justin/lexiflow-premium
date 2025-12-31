@@ -14,6 +14,34 @@ import {
 import { BillingAnalyticsService as RealBillingAnalyticsService } from '@billing/analytics/billing-analytics.service';
 import { AnalyticsFilterDto } from '@billing/analytics/dto/analytics-filter.dto';
 
+/**
+ * ╔=================================================================================================================╗
+ * ║BILLINGANALYTICS                                                                                                 ║
+ * ╠=================================================================================================================╣
+ * ║                                                                                                                 ║
+ * ║  External Request                   Controller                            Service                                ║
+ * ║       │                                   │                                     │                                ║
+ * ║       │  HTTP Endpoints                  │                                     │                                ║
+ * ║       └───────────────────────────────────►                                     │                                ║
+ * ║                                                                                                                 ║
+ * ║                                                                 ┌───────────────┴───────────────┐                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          Repository                    Database                ║
+ * ║                                                                 │                               │                ║
+ * ║                                                                 ▼                               ▼                ║
+ * ║                                                          PostgreSQL                                          ║
+ * ║                                                                                                                 ║
+ * ║  DATA IN:  Data input                                                                                         ║
+
+ * ║                                                                                                                 ║
+ * ║  DATA OUT: Data output                                                                                        ║
+
+ * ║                                                                                                                 ║
+
+ * ╚=================================================================================================================╝
+ */
+
 @Injectable()
 export class BillingAnalyticsService {
   private readonly logger = new Logger(BillingAnalyticsService.name);

@@ -13,9 +13,48 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthenticatedUser } from '@auth/interfaces/authenticated-user.interface';
 import { ROLE_PERMISSIONS } from '@common/constants/role-permissions.constant';
-import { Role } from '@common/enums/role.enum';
 import { User, UserRole, UserStatus } from './entities/user.entity';
 import { UserProfile } from './entities/user-profile.entity';
+
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+ * ║                                      USERS SERVICE - USER & PROFILE MANAGEMENT                                    ║
+ * ╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+ * ║                                                                                                                   ║
+ * ║  AuthService / Controllers          UsersController                        UsersService                           ║
+ * ║       │                                   │                                     │                                 ║
+ * ║       │  Create user                      │                                     │                                 ║
+ * ║       │  Update profile                   │                                     │                                 ║
+ * ║       │  Validate credentials             │                                     │                                 ║
+ * ║       └───────────────────────────────────┴─────────────────────────────────────▶                                 ║
+ * ║                                                                                 │                                 ║
+ * ║                                                               ┌─────────────────┴─────────────┐                   ║
+ * ║                                                               │                               │                   ║
+ * ║                                                               ▼                               ▼                   ║
+ * ║                                                        User Repository              UserProfile Repository         ║
+ * ║                                                               │                               │                   ║
+ * ║                                                               ▼                               ▼                   ║
+ * ║                                                        PostgreSQL (users)       PostgreSQL (user_profiles)        ║
+ * ║                                                                                                                   ║
+ * ║  DATA IN:  CreateUserDto { email, password, firstName, lastName, role }                                          ║
+ * ║            UpdateUserDto { firstName?, lastName?, phone?, avatar?, settings? }                                    ║
+ * ║                                                                                                                   ║
+ * ║  DATA OUT: User { id, email, role, status, firstName, lastName, ... }                                            ║
+ * ║            UserProfile { userId, phone, avatar, bio, preferences, settings }                                      ║
+ * ║                                                                                                                   ║
+ * ║  OPERATIONS:                                                                                                      ║
+ * ║    • create()          - Create user with hashed password                                                        ║
+ * ║    • findAll()         - List users with pagination                                                              ║
+ * ║    • findOne()         - Get user by ID                                                                          ║
+ * ║    • findByEmail()     - Get user by email (for auth)                                                            ║
+ * ║    • update()          - Update user details                                                                     ║
+ * ║    • updateProfile()   - Update user profile                                                                     ║
+ * ║    • deactivate()      - Soft delete / deactivate user                                                           ║
+ * ║    • validatePassword() - bcrypt password comparison                                                             ║
+ * ║    • onModuleInit()    - Bootstrap default admin user                                                            ║
+ * ║                                                                                                                   ║
+ * ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ */
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -217,7 +256,7 @@ export class UsersService implements OnModuleInit {
    * WARNING: Should only be used internally by AuthService
    */
   async findByEmailWithPassword(email: string): Promise<(AuthenticatedUser & { passwordHash: string }) | null> {
-    const user = await this.userRepository.findOne({ 
+    const user = await this.userRepository.findOne({
       where: { email },
       select: ['id', 'email', 'firstName', 'lastName', 'role', 'status', 'passwordHash', 'emailVerified']
     });
@@ -357,14 +396,13 @@ export class UsersService implements OnModuleInit {
 
   private toAuthenticatedUser(user: User): AuthenticatedUser {
     // Map User entity to AuthenticatedUser interface
-    const role = this.mapFromUserRole(user.role);
     return {
       id: user.id,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
-      role: role,
-      permissions: ROLE_PERMISSIONS[role] || [],
+      role: user.role,
+      permissions: ROLE_PERMISSIONS[user.role] || [],
       isActive: user.status === UserStatus.ACTIVE,
       mfaEnabled: user.twoFactorEnabled,
       totpSecret: user.totpSecret,
@@ -372,41 +410,22 @@ export class UsersService implements OnModuleInit {
   }
 
   // Map between old Role enum and new UserRole enum
-  private mapToUserRole(role: string | Role): UserRole {
+  private mapToUserRole(role: string): UserRole {
+    // If it's already a valid UserRole, return it
+    if (Object.values(UserRole).includes(role as UserRole)) {
+      return role as UserRole;
+    }
+
     const roleStr = String(role);
     const roleMapping: Record<string, UserRole> = {
-      super_admin: UserRole.SUPER_ADMIN,
-      admin: UserRole.ADMIN,
-      partner: UserRole.PARTNER,
-      attorney: UserRole.ATTORNEY,
-      paralegal: UserRole.PARALEGAL,
-      staff: UserRole.STAFF,
-      client: UserRole.CLIENT,
-      client_user: UserRole.CLIENT,
+      'SUPER_ADMIN': UserRole.SUPER_ADMIN,
+      'ADMINISTRATOR': UserRole.ADMIN,
+      'PARTNER': UserRole.PARTNER,
+      'ASSOCIATE': UserRole.ASSOCIATE,
+      'PARALEGAL': UserRole.PARALEGAL,
+      'LEGAL_SECRETARY': UserRole.LEGAL_ASSISTANT,
+      'CLIENT_USER': UserRole.CLIENT,
     };
     return roleMapping[roleStr] || UserRole.STAFF;
-  }
-
-  private mapFromUserRole(userRole: UserRole): Role {
-    const roleMapping: Record<UserRole, Role> = {
-      [UserRole.SUPER_ADMIN]: Role.SUPER_ADMIN,
-      [UserRole.ADMIN]: Role.ADMINISTRATOR,
-      [UserRole.PARTNER]: Role.PARTNER,
-      [UserRole.SENIOR_ASSOCIATE]: Role.ASSOCIATE,
-      [UserRole.ASSOCIATE]: Role.ASSOCIATE,
-      [UserRole.JUNIOR_ASSOCIATE]: Role.ASSOCIATE,
-      [UserRole.ATTORNEY]: Role.ASSOCIATE,
-      [UserRole.PARALEGAL]: Role.PARALEGAL,
-      [UserRole.LEGAL_ASSISTANT]: Role.PARALEGAL,
-      [UserRole.CLERK]: Role.LEGAL_SECRETARY,
-      [UserRole.INTERN]: Role.LEGAL_SECRETARY,
-      [UserRole.ACCOUNTANT]: Role.LEGAL_SECRETARY,
-      [UserRole.BILLING_SPECIALIST]: Role.LEGAL_SECRETARY,
-      [UserRole.IT_ADMIN]: Role.ADMINISTRATOR,
-      [UserRole.STAFF]: Role.LEGAL_SECRETARY,
-      [UserRole.USER]: Role.LEGAL_SECRETARY,
-      [UserRole.CLIENT]: Role.CLIENT_USER,
-    };
-    return roleMapping[userRole] || Role.LEGAL_SECRETARY;
   }
 }

@@ -1,6 +1,6 @@
 /**
  * CitationSavedHandler - Research -> Pleadings Integration
- * 
+ *
  * Responsibility: Cache research and create pleading suggestions
  * Integration: Opp #7 from architecture docs
  */
@@ -12,15 +12,15 @@ import { SystemEventType } from '@/types/integration-types';
 
 export class CitationSavedHandler extends BaseEventHandler<SystemEventPayloads[typeof SystemEventType.CITATION_SAVED]> {
   readonly eventType = SystemEventType.CITATION_SAVED;
-  
+
   async handle(payload: SystemEventPayloads[typeof SystemEventType.CITATION_SAVED]) {
     const actions: string[] = [];
     const { citation, queryContext } = payload;
-    
+
     // Cache research results
     await this.cacheResearchResult(citation, queryContext);
     actions.push('Updated Pleading Builder Context Cache');
-    
+
     // Create suggestions for high-relevance citations
     if (citation.relevance && Number(citation.relevance) >= 8) {
       const suggestionCount = await this.createPleadingSuggestions(citation);
@@ -28,10 +28,10 @@ export class CitationSavedHandler extends BaseEventHandler<SystemEventPayloads[t
         actions.push(`Created citation suggestions for ${suggestionCount} active pleading(s)`);
       }
     }
-    
+
     return this.createSuccess(actions);
   }
-  
+
   private async cacheResearchResult(
     citation: SystemEventPayloads[typeof SystemEventType.CITATION_SAVED]['citation'],
     queryContext: string | undefined
@@ -46,10 +46,10 @@ export class CitationSavedHandler extends BaseEventHandler<SystemEventPayloads[t
       relevanceScore: citation.relevance || 0,
       cachedAt: new Date().toISOString()
     };
-    
+
     await db.put('researchCache', cacheEntry);
   }
-  
+
   private async createPleadingSuggestions(
     citation: SystemEventPayloads[typeof SystemEventType.CITATION_SAVED]['citation']
   ): Promise<number> {
@@ -57,7 +57,7 @@ export class CitationSavedHandler extends BaseEventHandler<SystemEventPayloads[t
 
     const activePleadings = await DataService.pleadings.getByIndex('status', 'Draft');
     const casePleadings = activePleadings.filter((pl: unknown) => (pl as {caseId: string}).caseId === citation.caseId);
-    
+
     for (const pleading of casePleadings) {
       await db.put('pleadingSuggestions', {
         id: `sugg-${Date.now()}-${pleading.id}`,
@@ -68,7 +68,7 @@ export class CitationSavedHandler extends BaseEventHandler<SystemEventPayloads[t
         createdAt: new Date().toISOString()
       });
     }
-    
+
     return casePleadings.length;
   }
 }

@@ -5,6 +5,48 @@ import { Invoice, InvoiceStatus } from './invoices/entities/invoice.entity';
 import { TimeEntry, TimeEntryStatus } from './time-entries/entities/time-entry.entity';
 import { Expense, ExpenseStatus } from './expenses/entities/expense.entity';
 
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+ * ║                                    BILLING SERVICE - INVOICE & TIME TRACKING                                      ║
+ * ╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+ * ║                                                                                                                   ║
+ * ║  Time Tracking / Expenses           BillingController                     BillingService                         ║
+ * ║       │                                   │                                     │                                 ║
+ * ║       │  POST /time-entries               │                                     │                                 ║
+ * ║       │  POST /expenses                   │                                     │                                 ║
+ * ║       │  POST /invoices                   │                                     │                                 ║
+ * ║       │  GET /invoices                    │                                     │                                 ║
+ * ║       └───────────────────────────────────┴─────────────────────────────────────▶                                 ║
+ * ║                                                                                 │                                 ║
+ * ║                                                        ┌─────────────────────┴───────────────────┐                   ║
+ * ║                                                        │                                        │                   ║
+ * ║                                 ┌──────────────────────┴────────┐               ┌────────────────────┴─────────┐           ║
+ * ║                                 │                               │               │                               │           ║
+ * ║                                 ▼                               ▼               ▼                               ▼           ║
+ * ║                          Invoice Repository            TimeEntry Repository       Expense Repository                   ║
+ * ║                                 │                               │               │                               │           ║
+ * ║                                 ▼                               ▼               ▼                               ▼           ║
+ * ║                          PostgreSQL (invoices)         PostgreSQL (time)   PostgreSQL (expenses)                      ║
+ * ║                                                                                                                   ║
+ * ║  DATA IN:  TimeEntry { caseId, userId, hours, description, rate, date }                                          ║
+ * ║            Expense { caseId, amount, description, receiptUrl, category }                                          ║
+ * ║            Invoice { caseId, clientId, lineItems[], dueDate }                                                     ║
+ * ║                                                                                                                   ║
+ * ║  DATA OUT: Invoice { id, invoiceNumber, status, totalAmount, lineItems[], payments[] }                           ║
+ * ║            TimeEntry { id, hours, rate, amount, billable, status }                                                ║
+ * ║            Expense { id, amount, category, reimbursable, status }                                                 ║
+ * ║                                                                                                                   ║
+ * ║  OPERATIONS:                                                                                                      ║
+ * ║    • createInvoice()      - Generate invoice from time entries & expenses                                         ║
+ * ║    • findAllInvoices()    - List invoices with pagination                                                         ║
+ * ║    • updateInvoiceStatus() - Mark invoice as sent, paid, cancelled                                                 ║
+ * ║    • recordPayment()       - Record invoice payment                                                                ║
+ * ║    • getUnbilledTime()     - Get unbilled time entries for invoice generation                                      ║
+ * ║    • getUnbilledExpenses() - Get unbilled expenses for invoice generation                                          ║
+ * ║                                                                                                                   ║
+ * ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ */
+
 @Injectable()
 export class BillingService {
   constructor(
@@ -157,7 +199,7 @@ export class BillingService {
       expenses
         .filter(e => e.status === ExpenseStatus.BILLED)
         .reduce((sum, expense) => sum + (expense.amount || 0), 0);
-    
+
     const totalUnbilled = timeEntries
       .filter(e => e.status !== TimeEntryStatus.BILLED && e.billable)
       .reduce((sum, entry) => sum + (entry.total || 0), 0) +
@@ -207,11 +249,11 @@ export class BillingService {
 
   async getRealizationStats(): Promise<unknown> {
     const allTimeEntries = await this.timeEntryRepository.find();
-    
+
     const billed = allTimeEntries
       .filter(e => e.status === TimeEntryStatus.BILLED)
       .reduce((sum, e) => sum + (e.total || 0), 0);
-    
+
     const writeOff = allTimeEntries
       .filter(e => e.billable && e.status !== TimeEntryStatus.BILLED)
       .reduce((sum, e) => sum + (e.total || 0), 0);
@@ -226,26 +268,26 @@ export class BillingService {
     try {
       const allTimeEntries = await this.timeEntryRepository.find();
       const allInvoices = await this.invoiceRepository.find();
-      
+
       // Calculate total billed amount from invoices
       const totalBilled = allInvoices
         .filter(inv => inv.status === InvoiceStatus.SENT || inv.status === InvoiceStatus.PAID)
         .reduce((sum, inv) => sum + (inv.totalAmount || 0), 0);
-      
+
       // Calculate realization rate (billed vs total time)
       const totalTime = allTimeEntries.reduce((sum, e) => sum + (e.total || 0), 0);
       const billedTime = allTimeEntries
         .filter(e => e.status === TimeEntryStatus.BILLED)
         .reduce((sum, e) => sum + (e.total || 0), 0);
-      
+
       const realization = totalTime > 0 ? (billedTime / totalTime) * 100 : 0;
-      
+
       // Get current month name
       const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
                          'July', 'August', 'September', 'October', 'November', 'December'];
       const currentMonth = monthNames[new Date().getMonth()];
       const currentYear = new Date().getFullYear();
-      
+
       return {
         realization: Math.round(realization * 10) / 10,
         totalBilled: Math.round(totalBilled),

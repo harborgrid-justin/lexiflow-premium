@@ -11,6 +11,55 @@ import { CaseStatsDto } from './dto/case-stats.dto';
 import { validateSortField, validateSortOrder } from '@common/utils/query-validation.util';
 
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+ * ║                                CASES SERVICE - CORE CASE LIFECYCLE & MATTER MANAGEMENT                              ║
+ * ╠═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╣
+ * ║                                                                                                                   ║
+ * ║  Frontend / API Clients             CasesController                        CasesService                           ║
+ * ║       │                                   │                                     │                                 ║
+ * ║       │  POST /cases                      │                                     │                                 ║
+ * ║       │  GET /cases                       │                                     │                                 ║
+ * ║       │  GET /cases/:id                   │                                     │                                 ║
+ * ║       │  PATCH /cases/:id                 │                                     │                                 ║
+ * ║       │  DELETE /cases/:id                │                                     │                                 ║
+ * ║       └───────────────────────────────────┴─────────────────────────────────────▶                                 ║
+ * ║                                                                                 │                                 ║
+ * ║                                                             ┌───────────────────┴───────────────────┐             ║
+ * ║                                                             │  LRU Cache (500 entries)     │             ║
+ * ║                                                             │  Stats Cache (5 min TTL)     │             ║
+ * ║                                                             │  Query Cache (1 min TTL)     │             ║
+ * ║                                                             └─────────────────┬───────────────────┘             ║
+ * ║                                                                              │                                    ║
+ * ║                                                                              ▼                                    ║
+ * ║                                                                      Case Repository                               ║
+ * ║                                                                              │                                    ║
+ * ║                                                                              ▼                                    ║
+ * ║                                                                      PostgreSQL (cases)                            ║
+ * ║                                                                                                                   ║
+ * ║  DATA IN:  CreateCaseDto { caseNumber, title, status, jurisdiction, filingDate, ... }                             ║
+ * ║            UpdateCaseDto { title?, status?, notes?, ... }                                                         ║
+ * ║            CaseFilterDto { status?, search?, jurisdictionId?, page, limit }                                       ║
+ * ║                                                                                                                   ║
+ * ║  DATA OUT: Case { id, caseNumber, title, status, parties[], documents[], docket[] }                               ║
+ * ║            PaginatedCaseResponseDto { data: Case[], total, page, limit, hasMore }                                 ║
+ * ║            CaseStatsDto { total, byStatus{}, byJurisdiction{}, recentActivity[] }                                 ║
+ * ║                                                                                                                   ║
+ * ║  OPERATIONS:                                                                                                      ║
+ * ║    • create()      - Create new case with validation                                                              ║
+ * ║    • findAll()     - List cases with filters, search, pagination                                                  ║
+ * ║    • findOne()     - Get case by ID with relations                                                                ║
+ * ║    • update()      - Update case details                                                                          ║
+ * ║    • remove()      - Soft delete case                                                                             ║
+ * ║    • getStats()    - Get case statistics (cached)                                                                 ║
+ * ║    • getMetrics()  - Get case metrics (cached)                                                                    ║
+ * ║    • search()      - Full-text search cases                                                                       ║
+ * ║                                                                                                                   ║
+ * ║  MEMORY OPTS: LRU cache for lookups, TTL-based stats cache, query result caching, cleanup on module destroy      ║
+ * ║                                                                                                                   ║
+ * ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ */
+
+/**
  * Cases Service with Memory Optimizations
  *
  * MEMORY OPTIMIZATIONS:
@@ -85,12 +134,12 @@ export class CasesService implements OnModuleDestroy {
     }
 
     // Compute stats with memory-efficient queries
-    const totalActive = await this.caseRepository.count({ 
+    const totalActive = await this.caseRepository.count({
       where: { status: CaseStatus.ACTIVE },
       cache: 60000 // 1 minute cache
     });
-    
-    const intakePipeline = await this.caseRepository.count({ 
+
+    const intakePipeline = await this.caseRepository.count({
         where: [
             { status: CaseStatus.OPEN },
             { status: CaseStatus.PENDING }
@@ -108,15 +157,15 @@ export class CasesService implements OnModuleDestroy {
 
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    
+
     const atRisk = await this.caseRepository
         .createQueryBuilder('case')
         .where('case.status = :status', { status: CaseStatus.ACTIVE })
         .andWhere('case.updatedAt < :thirtyDaysAgo', { thirtyDaysAgo })
         .getCount();
 
-    const totalValue = 0; 
-    const utilizationRate = 0; 
+    const totalValue = 0;
+    const utilizationRate = 0;
 
     const { avgAge } = await this.caseRepository
         .createQueryBuilder('case')
@@ -468,14 +517,14 @@ export class CasesService implements OnModuleDestroy {
       ...filterDto,
       isArchived: true,
     };
-    
+
     // If no status specified, default to closed/settled cases
     if (!archivedFilter.status) {
       const queryBuilder = this.caseRepository.createQueryBuilder('case');
-      
+
       queryBuilder.where('case.isArchived = :isArchived', { isArchived: true });
-      queryBuilder.orWhere('case.status IN (:...statuses)', { 
-        statuses: ['Closed', 'closed', 'Settled', 'Archived', 'archived'] 
+      queryBuilder.orWhere('case.status IN (:...statuses)', {
+        statuses: ['Closed', 'closed', 'Settled', 'Archived', 'archived']
       });
 
       const { page = 1, limit = 20, sortBy = 'closeDate', sortOrder = 'DESC' } = filterDto;

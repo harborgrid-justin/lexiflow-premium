@@ -4,7 +4,7 @@
  * Does NOT automatically switch - user controls data source selection
  */
 
-import { getApiBaseUrl } from '@/config/network/api.config';
+import { getApiBaseUrl } from "@/config/network/api.config";
 
 export interface BackendStatus {
   available: boolean;
@@ -27,7 +27,12 @@ class BackendDiscoveryService {
   private checkInterval: NodeJS.Timeout | null = null;
   private listeners: Set<BackendStatusCallback> = new Set();
   private readonly CHECK_INTERVAL_MS = 60000; // Check every 60 seconds (optimized for performance)
-  private readonly getHealthEndpoint = () => `${getApiBaseUrl()}/api/health`; // Backend health endpoint (no version prefix)
+
+  // Dynamic getter for health endpoint
+  private getHealthEndpoint(): string {
+    return `${getApiBaseUrl()}/api/health`;
+  }
+
   private readonly TIMEOUT_MS = 3000; // 3 second timeout (faster failure detection)
   private notifyTimeout: NodeJS.Timeout | null = null; // Debounce notifications
 
@@ -35,8 +40,8 @@ class BackendDiscoveryService {
    * Start auto-discovery service
    */
   start(): void {
-    console.log('[BackendDiscovery] Starting auto-discovery service');
-    
+    console.log("[BackendDiscovery] Starting auto-discovery service");
+
     // Perform initial check immediately
     this.checkBackend();
 
@@ -50,8 +55,8 @@ class BackendDiscoveryService {
    * Stop auto-discovery service
    */
   stop(): void {
-    console.log('[BackendDiscovery] Stopping auto-discovery service');
-    
+    console.log("[BackendDiscovery] Stopping auto-discovery service");
+
     if (this.checkInterval) {
       clearInterval(this.checkInterval);
       this.checkInterval = null;
@@ -68,16 +73,18 @@ class BackendDiscoveryService {
    */
   private async checkBackend(): Promise<void> {
     const startTime = Date.now();
-    
+    const endpoint = this.getHealthEndpoint();
+    console.log("[BackendDiscovery] Checking health at:", endpoint);
+
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), this.TIMEOUT_MS);
 
       const response = await fetch(this.getHealthEndpoint(), {
-        method: 'GET',
+        method: "GET",
         signal: controller.signal,
         headers: {
-          'Accept': 'application/json',
+          Accept: "application/json",
         },
       });
 
@@ -86,7 +93,7 @@ class BackendDiscoveryService {
 
       if (response.ok) {
         let version: string | undefined;
-        
+
         try {
           const data = await response.json();
           version = data.version || data.info?.version;
@@ -103,7 +110,9 @@ class BackendDiscoveryService {
           error: undefined,
         });
 
-        console.log(`[BackendDiscovery] Backend is ${this.status.healthy ? 'healthy' : 'available'} (${latency}ms)`);
+        console.log(
+          `[BackendDiscovery] Backend is ${this.status.healthy ? "healthy" : "available"} (${latency}ms)`
+        );
       } else {
         this.updateStatus({
           available: true,
@@ -113,11 +122,14 @@ class BackendDiscoveryService {
           error: `HTTP ${response.status}: ${response.statusText}`,
         });
 
-        console.warn(`[BackendDiscovery] Backend returned error: ${response.status}`);
+        console.warn(
+          `[BackendDiscovery] Backend returned error: ${response.status}`
+        );
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+
       this.updateStatus({
         available: false,
         healthy: false,
@@ -127,7 +139,7 @@ class BackendDiscoveryService {
 
       // Only log if status changed from available to unavailable
       if (this.status.available) {
-        console.warn('[BackendDiscovery] Backend unavailable:', errorMessage);
+        console.warn("[BackendDiscovery] Backend unavailable:", errorMessage);
       }
     }
   }
@@ -142,7 +154,10 @@ class BackendDiscoveryService {
     this.status = newStatus;
 
     // Notify listeners if status changed
-    if (previousAvailable !== newStatus.available || previousHealthy !== newStatus.healthy) {
+    if (
+      previousAvailable !== newStatus.available ||
+      previousHealthy !== newStatus.healthy
+    ) {
       this.notifyListeners();
     }
   }
@@ -158,11 +173,14 @@ class BackendDiscoveryService {
 
     // Debounce notifications by 100ms to batch rapid updates
     this.notifyTimeout = setTimeout(() => {
-      this.listeners.forEach(callback => {
+      this.listeners.forEach((callback) => {
         try {
           callback(this.status);
         } catch (error) {
-          console.error('[BackendDiscovery] Error in listener callback:', error);
+          console.error(
+            "[BackendDiscovery] Error in listener callback:",
+            error
+          );
         }
       });
       this.notifyTimeout = null;
@@ -181,7 +199,7 @@ class BackendDiscoveryService {
    */
   subscribe(callback: BackendStatusCallback): () => void {
     this.listeners.add(callback);
-    
+
     // Immediately notify with current status
     callback(this.status);
 
@@ -217,3 +235,10 @@ class BackendDiscoveryService {
 // Export singleton instance
 export const backendDiscovery = new BackendDiscoveryService();
 
+// HMR Cleanup
+if (import.meta.hot) {
+  import.meta.hot.dispose(() => {
+    console.log("[BackendDiscovery] HMR dispose: stopping service");
+    backendDiscovery.stop();
+  });
+}

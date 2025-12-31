@@ -156,7 +156,8 @@ export function useAppContext(): UseAppControllerReturn {
                 } catch (healthError) {
                     console.error("Backend health check failed:", healthError);
                     setAppStatusMessage('Backend not reachable. Switching to local mode.');
-                    localStorage.setItem('VITE_USE_BACKEND_API', 'false');
+                    // Use VITE_USE_INDEXEDDB to signal local mode (respected by apiConfig.ts)
+                    localStorage.setItem('VITE_USE_INDEXEDDB', 'true');
                     window.location.reload();
                     return;
                 }

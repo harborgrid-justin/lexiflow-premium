@@ -41,6 +41,8 @@
       "@data/*": ["src/api/data/*"],
       "@components/*": ["src/components/*"],
       "@theme/*": ["src/components/theme/*"],
+      "@utils/*": ["src/utils/*"],
+      "@providers/*": ["src/providers/*"],
       "@features/*": ["src/features/*"],
       "@features/litigation": ["src/features/litigation"],
       "@features/document-assembly": ["src/features/drafting"],

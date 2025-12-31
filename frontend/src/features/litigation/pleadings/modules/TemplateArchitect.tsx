@@ -3,8 +3,8 @@ import { LayoutTemplate, Settings, Sliders } from 'lucide-react';
 import { VariableManager } from './template/VariableManager';
 import { JurisdictionRules } from './template/JurisdictionRules';
 import { PleadingVariable } from '@/types';
-import { useTheme } from '@providers/ThemeContext';
-import { cn } from '@utils/cn';
+import { useTheme } from '@/providers/ThemeContext';
+import { cn } from '@/utils/cn';
 
 interface TemplateArchitectProps {
   variables?: PleadingVariable[];

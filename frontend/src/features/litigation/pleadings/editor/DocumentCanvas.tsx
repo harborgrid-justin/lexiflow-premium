@@ -1,6 +1,6 @@
 import React from 'react';
 import { PleadingSection } from '@/types';
-import { cn } from '@utils/cn';
+import { cn } from '@/utils/cn';
 import { Trash2, GripVertical } from 'lucide-react';
 import { CaseId } from '@/types';
 

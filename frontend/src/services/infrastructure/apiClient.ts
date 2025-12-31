@@ -38,7 +38,6 @@
  */
 
 import { getApiBaseUrl } from "@/config/network/api.config";
-import { keysToCamel } from "@/utils/caseConverter";
 import {
   ApiTimeoutError,
   AuthenticationError,
@@ -46,6 +45,7 @@ import {
   OperationError,
   ValidationError,
 } from "@/services/core/errors";
+import { keysToCamel } from "@/utils/caseConverter";
 import { defaultStorage } from "./adapters/StorageAdapter";
 
 const getBaseUrl = () => getApiBaseUrl();
@@ -109,14 +109,18 @@ export type { PaginatedResponse as PaginatedApiResponse };
  * Enterprise-grade HTTP client with authentication and health monitoring
  */
 class ApiClient {
-  private readonly baseURL: string;
+  // Dynamic getter to support HMR and runtime config changes
+  private get baseURL(): string {
+    return getBaseUrl();
+  }
+
   private readonly authTokenKey: string;
   private readonly refreshTokenKey: string;
   private readonly DEFAULT_TIMEOUT = 30000; // 30 seconds
   private readonly HEALTH_CHECK_TIMEOUT = 5000; // 5 seconds
 
   constructor() {
-    this.baseURL = getBaseUrl();
+    // this.baseURL is now a getter
     this.authTokenKey =
       import.meta.env?.VITE_AUTH_TOKEN_KEY || "lexiflow_auth_token";
     this.refreshTokenKey =

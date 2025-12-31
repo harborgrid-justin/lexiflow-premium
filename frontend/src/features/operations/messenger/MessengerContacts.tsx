@@ -4,7 +4,7 @@ import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell 
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
 

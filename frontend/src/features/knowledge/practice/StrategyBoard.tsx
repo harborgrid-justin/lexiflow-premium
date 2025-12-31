@@ -26,7 +26,7 @@ import { useTheme } from '@/providers/ThemeContext';
 
 // Components
 import { MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
-import { KanbanBoard, KanbanCard, KanbanColumn } from '@/components/organisms/KanbanBoard/KanbanBoard';
+import { KanbanBoard, KanbanCard, KanbanColumn } from '@/components/features/cases/components/Kanban/Kanban';
 import { ProgressBar } from '@/components/ui/atoms/ProgressBar/ProgressBar';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';

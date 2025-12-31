@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { Input } from '@/components/ui/atoms/Input/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea/TextArea';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { DataService } from '@/services/data/dataService';
 import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { LegalRule } from '@/types';

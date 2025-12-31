@@ -19,7 +19,7 @@ import React, { lazy, Suspense, useCallback, useEffect, useMemo } from 'react';
 // Components
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
-import { PageHeader } from '@/components/ui/organisms/PageHeader/PageHeader';
+import { PageHeader } from '@/components/organisms/PageHeader/PageHeader';
 import { EvidenceErrorBoundary } from './EvidenceErrorBoundary';
 import { EvidenceDetailSkeleton, EvidenceInventorySkeleton } from './EvidenceSkeleton';
 import { EvidenceVaultContent } from './EvidenceVaultContent';

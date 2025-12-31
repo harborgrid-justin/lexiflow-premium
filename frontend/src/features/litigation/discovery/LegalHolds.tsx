@@ -1,9 +1,9 @@
 /**
  * LegalHolds.tsx
- * 
+ *
  * Legal hold management for litigation preservation obligations.
  * Tracks custodians, scope, and compliance with FRCP 37(e) requirements.
- * 
+ *
  * @module components/discovery/LegalHolds
  * @category Discovery - Preservation
  */
@@ -20,7 +20,7 @@ import { AlertCircle, Plus, User, Building2, Calendar } from 'lucide-react';
 // Components
 import { Button } from '@/components/ui/atoms/Button';
 import { Badge } from '@/components/ui/atoms/Badge';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 
 // Hooks & Context
@@ -60,10 +60,10 @@ export const LegalHolds: React.FC = () => {
           onMutate: async (holdId) => {
               // Cancel outgoing queries
               await queryClient.cancelQueries(discoveryQueryKeys.discovery.holds.all);
-              
+
               // Snapshot previous value
               const previousHolds = queryClient.getQueryState<LegalHold[]>(discoveryQueryKeys.discovery.holds.all)?.data;
-              
+
               // Optimistically update
               if (previousHolds) {
                   queryClient.setQueryData<LegalHold[]>(
@@ -75,7 +75,7 @@ export const LegalHolds: React.FC = () => {
                       )
                   );
               }
-              
+
               return { previousHolds };
           },
           onError: (_, __, context) => {
@@ -144,8 +144,8 @@ export const LegalHolds: React.FC = () => {
                     <TableCell>{hold.dept}</TableCell>
                     <TableCell>{hold.issued}</TableCell>
                     <TableCell>
-                      {hold.status === 'Acknowledged' 
-                        ? <Badge variant="success">Acknowledged</Badge> 
+                      {hold.status === 'Acknowledged'
+                        ? <Badge variant="success">Acknowledged</Badge>
                         : <Badge variant="warning">Pending Ack</Badge>
                       }
                     </TableCell>
@@ -171,12 +171,12 @@ export const LegalHolds: React.FC = () => {
                   <User className="h-4 w-4 text-blue-500"/>
                   <span className={cn("font-bold", theme.text.primary)}>{hold.custodian}</span>
                 </div>
-                {hold.status === 'Acknowledged' 
-                  ? <Badge variant="success">Ack</Badge> 
+                {hold.status === 'Acknowledged'
+                  ? <Badge variant="success">Ack</Badge>
                   : <Badge variant="warning">Pending</Badge>
                 }
              </div>
-             
+
              <div className={cn("grid grid-cols-2 gap-4 text-xs mb-4", theme.text.secondary)}>
                <div className="flex items-center gap-1">
                  <Building2 className={cn("h-3 w-3", theme.text.tertiary)}/>

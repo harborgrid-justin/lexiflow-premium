@@ -38,7 +38,7 @@ const InnerApp: React.FC = () => {
     initialTab,
     isAppLoading,
     appStatusMessage,
-  } = useAppController();
+  } = useAppController(); // Uses renamed hook to avoid ad blockers
 
   // Create wrapper functions to match expected signatures
   const handleSwitchUser = () => switchUser(0); // Switch to first user by default

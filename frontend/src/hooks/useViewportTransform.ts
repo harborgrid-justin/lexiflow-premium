@@ -1,20 +1,20 @@
 /**
  * @module hooks/usePanZoom
  * @category Hooks - UI Interactions
- * 
+ *
  * Provides pan and zoom state management with intent-based controls.
  * Useful for canvas, maps, and zoomable diagrams.
- * 
+ *
  * @example
  * ```typescript
- * const panZoom = usePanZoom(1.0);
- * 
+ * const panZoom = useViewportTransform(1.0);
+ *
  * <div style={{
  *   transform: `scale(${panZoom.state.scale}) translate(${panZoom.state.pan.x}px, ${panZoom.state.pan.y}px)`
  * }}>
  *   Zoomable content
  * </div>
- * 
+ *
  * <button onClick={panZoom.zoomIn}>+</button>
  * <button onClick={panZoom.zoomOut}>-</button>
  * <button onClick={panZoom.reset}>Reset</button>
@@ -66,35 +66,37 @@ const MAX_SCALE = 3;
 
 /**
  * Manages pan and zoom state with intent-based controls.
- * 
+ *
  * @param initialScale - Initial zoom scale (default: 0.8)
  * @returns Object with state and control methods
  */
-export function usePanZoom(initialScale: number = DEFAULT_SCALE): PanZoomControls {
+export function useViewportTransform(initialScale: number = DEFAULT_SCALE): PanZoomControls {
+  // Re-export as usePanZoom for backward compatibility
+  // This avoids ad blocker issues while maintaining API
   const [scale, setScale] = useState(initialScale);
   const [pan, setPan] = useState({ x: 0, y: 0 });
-  
+
   const reset = useCallback(() => {
     setScale(initialScale);
     setPan({ x: 0, y: 0 });
   }, [initialScale]);
-  
+
   const zoomIn = useCallback(() => {
     setScale(prev => Math.min(prev + ZOOM_STEP, MAX_SCALE));
   }, []);
-  
+
   const zoomOut = useCallback(() => {
     setScale(prev => Math.max(prev - ZOOM_STEP, MIN_SCALE));
   }, []);
-  
+
   const setZoom = useCallback((scale: number) => {
     setScale(Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale)));
   }, []);
-  
+
   const panTo = useCallback((x: number, y: number) => {
     setPan({ x, y });
   }, []);
-  
+
   return {
     state: { scale, pan },
     zoomIn,

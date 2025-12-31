@@ -1,7 +1,7 @@
 /**
  * Citation Repository
  * Enterprise-grade repository for legal citation management with backend API integration
- * 
+ *
  * @module CitationRepository
  * @description Manages all citation-related operations including:
  * - Citation CRUD operations
@@ -9,7 +9,7 @@
  * - Shepard's Citations integration
  * - Quick-add functionality
  * - Integration event publishing
- * 
+ *
  * @security
  * - Input validation on all parameters
  * - XSS prevention through type enforcement

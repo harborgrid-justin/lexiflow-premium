@@ -27,7 +27,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useNexusGraph } from '@/hooks/useNexusGraph';
 import { useChartTheme } from '@/components/organisms/ChartHelpers/ChartHelpers';
 import { useResizeObserver } from '@/hooks/useResizeObserver';
-import { usePanZoom } from '@/hooks/usePanZoom';
+import { usePanZoom } from '@/hooks/useViewportTransform';
 
 // Components
 import { GraphOverlay } from './GraphOverlay';
@@ -74,7 +74,7 @@ export const NexusGraph = React.memo<NexusGraphProps>(({
 
   // Custom hooks for state management (Practice #3)
   const dimensions = useResizeObserver(containerRef as React.RefObject<HTMLElement>);
-  const panZoom = usePanZoom(0.8);
+  const panZoom = usePanZoom(0.8); // Uses useViewportTransform internally
   const { scale, pan } = panZoom.state;
 
   // Wrap setZoom to match React.Dispatch signature expected by GraphOverlay

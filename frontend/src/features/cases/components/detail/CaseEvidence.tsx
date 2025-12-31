@@ -17,7 +17,7 @@ import { EvidenceInventory } from '@features/litigation';
 import { EmptyState } from '@/components/ui/molecules/EmptyState/EmptyState';
 
 // Internal Dependencies - Hooks & Context
-import { useEvidenceVault } from '@/hooks/useEvidenceVault';
+import { useEvidenceManager } from '@/hooks/useEvidenceManager';
 
 interface CaseEvidenceProps {
   caseId: string;
@@ -33,7 +33,7 @@ export const CaseEvidence: React.FC<CaseEvidenceProps> = ({ caseId }) => {
     setFilters,
     handleItemClick,
     handleIntakeComplete: _handleIntakeComplete
-  } = useEvidenceVault(caseId);
+  } = useEvidenceManager(caseId);
 
   // isLoading can be derived from the hook's underlying useQuery if needed,
   // but for simplicity we can check the items array.

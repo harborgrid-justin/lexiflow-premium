@@ -24,7 +24,7 @@ import { DataService } from '@/services/data/dataService';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { queryKeys } from '@/utils/queryKeys';
 import { EvidenceItem } from '@/types';
-import { ViewMode } from '@/hooks/useEvidenceVault';
+import { ViewMode } from '@/hooks/useEvidenceManager';
 
 interface EvidenceDashboardProps {
   onNavigate: (view: ViewMode) => void;

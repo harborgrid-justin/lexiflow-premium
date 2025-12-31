@@ -2,18 +2,18 @@
 // ============================================================================
 // Hooks Barrel Export - COMPLETE (For Backward Compatibility)
 // ============================================================================
-// 
+//
 // ⚠️ PERFORMANCE WARNING: This barrel exports ALL hooks, which can slow down
 // module resolution and increase bundle size.
-// 
+//
 // 📦 RECOMMENDED: Import from focused sub-barrels instead:
-// 
+//
 //   import { useToggle, useDebounce } from '@/hooks/core';           // State & utilities
 //   import { useListNavigation } from '@/hooks/ui';                  // UI interactions
 //   import { useOptimizedFilter } from '@/hooks/performance';        // React 18 optimizations
 //   import { useCaseList } from '@/hooks/domain';                    // Domain logic (heavy)
 //   import { useBackendHealth } from '@/hooks/backend';              // Backend integration
-// 
+//
 // This file remains for backward compatibility. New code should use focused imports.
 // ============================================================================
 
@@ -35,12 +35,13 @@ export { useBackendHealth } from './useBackendHealth';
 
 // UI Interaction Hooks (Best Practices Applied)
 export { useResizeObserver, type Dimensions } from './useResizeObserver';
-export { usePanZoom, type PanZoomState, type PanZoomControls } from './usePanZoom';
+export { useViewportTransform as usePanZoom, type PanZoomState, type PanZoomControls } from './useViewportTransform';
 
 // ============================================================================
 // CORE LOGIC & UTILITIES
 // ============================================================================
-export * from './useAppController';
+export { useAppContext, type UseAppControllerReturn } from './useAppContext';
+export { useAppContext as useAppController } from './useAppContext'; // Backward compatibility alias
 export { useAutoSave, type UseAutoSaveOptions, type UseAutoSaveReturn, AutoSaveError } from './useAutoSave';
 export * from './useAutoTimeCapture';
 export * from './useBlobRegistry';
@@ -69,9 +70,9 @@ export { useSort, type UseSortReturn, type SortConfig, type SortDirection } from
 export { useToggle, type UseToggleReturn } from './useToggle';
 export * from './useWizard';
 export * from './useWorkerSearch';
-export * from './useTimeTracker';
-export * from './useSettlementSimulation';
-export * from './useSLAMonitoring';
+export { useTimeTracker, type TimeTrackerOptions, type UseTimeTrackerReturn } from './useTimeTracker';
+export { useSettlementSimulation, type SettlementScenario, type UseSettlementSimulationReturn } from './useSettlementSimulation';
+export { useSLAMonitoring, type SLAItem, type UseSLAMonitoringReturn } from './useSLAMonitoring';
 export * from './useFilterAndSearch';
 export * from './useModalState';
 export { useArrayState, type UseArrayStateReturn } from './useArrayState';
@@ -81,26 +82,39 @@ export { useArrayState, type UseArrayStateReturn } from './useArrayState';
 // ============================================================================
 export * from './useCalendarView';
 export * from './useCanvasDrag';
-export * from './useCaseDetail';
-export * from './useCaseList';
-export * from './useCaseOverview';
-export * from './useDiscoveryPlatform';
-export * from './useDocumentManager'; // Now includes optional drag-drop
-export * from './useDomainData'; // Aggregated Domain Data
-export * from './useEvidenceVault';
-export * from './useGanttDrag';
-export * from './useLitigationBuilder';
+export { useCaseDetail, type UseCaseDetailReturn } from './useCaseDetail';
+export { useCaseList, type UseCaseListReturn } from './useCaseList';
+export { useCaseOverview, type UseCaseOverviewReturn } from './useCaseOverview';
+export { useDiscoveryPlatform, type UseDiscoveryPlatformReturn } from './useDiscoveryPlatform';
+export { useDocumentManager, type UseDocumentManagerReturn } from './useDocumentManager';
+export {
+  useCases,
+  useDocuments,
+  useDocket,
+  useTasks,
+  useEvidence,
+  useExhibits,
+  useStaff,
+  useClients,
+  useUsers,
+  useProjects,
+  useConversations,
+  useResearchHistory,
+  useSchemaTables,
+  usePipelines,
+  useConnectors,
+  useDataDictionary,
+  type UseQueryResult
+} from './useDomainData';
+export { useEvidenceManager, type UseEvidenceManagerReturn } from './useEvidenceManager';
+export * from './useGanttController';
+export { useLitigationBuilder, type UseLitigationBuilderReturn } from './useLitigationBuilder';
 export * from './useNexusGraph';
-export * from './useRuleSearchAndSelection';
+export { useRuleSearchAndSelection, type UseRuleSearchReturn } from './useRuleSearchAndSelection';
 export * from './useSecureMessenger';
 export * from './useWorkflowBuilder';
 
-// Analytics & Monitoring Hooks
-export { useTimeTracker } from './useTimeTracker';
-export { useSettlementSimulation } from './useSettlementSimulation';
-export { useSLAMonitoring } from './useSLAMonitoring';
-export type { SLAItem } from './useSLAMonitoring';
-
+// Analytics & Monitoring Hooks (already exported above)
 // Data Management Hooks
 export { useFilterAndSearch } from './useFilterAndSearch';
 export type { FilterConfig, UseFilterAndSearchOptions, UseFilterAndSearchReturn } from './useFilterAndSearch';
@@ -108,9 +122,9 @@ export type { FilterConfig, UseFilterAndSearchOptions, UseFilterAndSearchReturn 
 // ============================================================================
 // STRATEGY CANVAS & COMMAND MANAGEMENT
 // ============================================================================
-export * from './useStrategyCanvas';
-export * from './useCommandHistory'; // Imperative command pattern - see JSDoc for when to use
-export * from './useKeyboardShortcuts';
+export { useStrategyCanvas, type UseStrategyCanvasReturn } from './useStrategyCanvas';
+export { useCommandHistory, type Command, type UseCommandHistoryReturn } from './useCommandHistory';
+export { useKeyboardShortcuts, type KeyboardShortcutConfig, type UseKeyboardShortcutsReturn } from './useKeyboardShortcuts';
 
 // Form Validation
 export { useFormValidation, ValidationRules } from './useFormValidation';
@@ -144,20 +158,30 @@ export type { LoadingState, UseAdaptiveLoadingOptions, UseAdaptiveLoadingReturn 
 // DOCKET-SPECIFIC HOOKS
 // ============================================================================
 export * from './useVirtualizedDocket';
-export * from './useLiveDocketFeed';
+export {
+  useLiveDocketFeed,
+  type ConnectionStatus,
+  type LiveDocketFeedConfig,
+  type LiveDocketFeedResult
+} from './useLiveDocketFeed';
 
 // ============================================================================
 // ADDITIONAL HOOKS (Previously Missing)
 // ============================================================================
-export * from './useBackendDiscovery';
-export * from './useDataServiceCleanup';
-export * from './useDocumentDragDrop';
-export * from './useEntityAutocomplete';
+export { useBackendDiscovery, type BackendDiscoveryState } from './useBackendDiscovery';
+export { useDataServiceCleanup } from './useDataServiceCleanup';
+export { useDocumentDragDrop, type UseDocumentDragDropReturn } from './useDocumentDragDrop';
+export { useEntityAutocomplete, type UseEntityAutocompleteReturn } from './useEntityAutocomplete';
 export * from './useKeyboardNavigation';
 export * from './usePerformanceTracking';
 export * from './useQueryHooks';
 export * from './useSync';
-export * from './useTrustAccounts';
+export {
+  useTrustAccounts,
+  useCreateTrustAccount,
+  useTrustAccountValidation,
+  type TrustAccountFilters
+} from './useTrustAccounts';
 
 // ============================================================================
 // PERFORMANCE OPTIMIZATION HOOKS

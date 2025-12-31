@@ -67,9 +67,16 @@ async function bootstrap(): Promise<INestApplication> {
     }),
   );
 
+  const corsOrigin = configService.get<string | string[] | boolean>('cors.origin');
+  logger.log(`CORS Configuration: ${JSON.stringify(corsOrigin)}`);
+
   app.enableCors({
-    origin: configService.get<string | string[] | boolean>('cors.origin'),
+    origin: corsOrigin,
     credentials: configService.get<boolean>('cors.credentials'),
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-API-Version', 'X-Correlation-ID'],
+    exposedHeaders: ['X-Total-Count', 'X-Page-Count', 'X-Correlation-ID'],
+    maxAge: 86400,
   });
 
   app.setGlobalPrefix('api');

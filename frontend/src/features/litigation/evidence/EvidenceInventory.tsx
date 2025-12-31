@@ -25,7 +25,7 @@ import { Button } from '@/components/ui/atoms/Button';
 import { EvidenceTypeIcon } from '@/components/ui/atoms/EvidenceTypeIcon';
 
 // Context & Utils
-import { EvidenceFilters } from '@/hooks/useEvidenceVault';
+import { EvidenceFilters } from '@/hooks/useEvidenceManager';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useToggle } from '@/hooks/useToggle';
 import { useWorkerSearch } from '@/hooks/useWorkerSearch';

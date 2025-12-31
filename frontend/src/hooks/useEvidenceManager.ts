@@ -36,10 +36,10 @@
  * @example
  * ```typescript
  * // Case-scoped usage
- * const vault = useEvidenceVault('case-123');
+ * const vault = useEvidenceManager('case-123');
  *
  * // Global usage
- * const vault = useEvidenceVault();
+ * const vault = useEvidenceManager();
  *
  * // Access filtered evidence
  * const items = vault.filteredItems;
@@ -212,7 +212,7 @@ export interface UseEvidenceVaultReturn {
  * @param caseId - Optional case ID for scoped evidence access
  * @returns Evidence vault management interface
  */
-export function useEvidenceVault(caseId?: string): UseEvidenceVaultReturn {
+export function useEvidenceManager(caseId?: string): UseEvidenceVaultReturn {
   // ============================================================================
   // STATE MANAGEMENT
   // ============================================================================

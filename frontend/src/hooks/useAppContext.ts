@@ -7,7 +7,7 @@
  *
  * @example
  * ```typescript
- * const app = useAppController();
+ * const app = useAppContext();
  *
  * // Navigation
  * app.navigateToView(PATHS.CASES);
@@ -96,7 +96,8 @@ export interface UseAppControllerReturn {
  *
  * @returns Object with app state and navigation methods
  */
-export function useAppController(): UseAppControllerReturn {
+export function useAppContext(): UseAppControllerReturn {
+  // Re-export as useAppController for backward compatibility
   const [activeView, setActiveView] = useSessionStorage<AppView>(`lexiflow_active_view`, PATHS.DASHBOARD);
   const [selectedCaseId, setSelectedCaseId] = useSessionStorage<string | null>(`lexiflow_selected_case_id`, null);
   const [selectedCase, setSelectedCase] = useState<Case | null>(null);

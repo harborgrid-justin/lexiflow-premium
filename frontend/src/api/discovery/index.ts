@@ -3,16 +3,16 @@
  * Evidence, custodians, depositions, legal holds, and ESI management
  */
 
-export * from './evidence-api';
-export * from './custodians-api';
-export * from './examinations-api';
-export * from './witnesses-api';
-export * from './depositions-api';
-export * from './legal-holds-api';
-export * from './productions-api';
-export * from './discovery-requests-api';
-export * from './esi-sources-api';
-export * from './privilege-log-api';
-export * from './custodian-interviews-api';
-export * from './discovery-api';
-export * from './discovery-analytics-api';
+export { EvidenceApiService } from './evidence-api';
+export { CustodiansApiService } from './custodians-api';
+export { ExaminationsApiService } from './examinations-api';
+export { WitnessesApiService, type Witness } from './witnesses-api';
+export { DepositionsApiService } from './depositions-api';
+export { LegalHoldsApiService } from './legal-holds-api';
+export { ProductionsApiService } from './productions-api';
+export { DiscoveryRequestsApiService } from './discovery-requests-api';
+export { ESISourcesApiService } from './esi-sources-api';
+export { PrivilegeLogApiService } from './privilege-log-api';
+export { CustodianInterviewsApiService } from './custodian-interviews-api';
+export { DiscoveryApiService } from './discovery-api';
+export { DiscoveryAnalyticsApiService } from './discovery-analytics-api';

@@ -1,18 +1,18 @@
 /**
  * @module hooks/useGanttDrag
  * @category Hooks - Workflow Management
- * 
+ *
  * Gantt chart drag-and-drop with move and resize modes.
  * Uses RAF for 60fps visual updates without React re-renders.
- * 
+ *
  * @example
  * ```typescript
- * const drag = useGanttDrag({
+ * const drag = useGanttController({
  *   pixelsPerDay: 30,
  *   tasks,
  *   onTaskUpdate: (id, start, end) => updateTask(id, { start, end })
  * });
- * 
+ *
  * <TaskBar
  *   onMouseDown={(e) => drag.initDrag(e, task.id, 'move', e.currentTarget)}
  * />
@@ -70,11 +70,11 @@ export interface UseGanttDragReturn {
 
 /**
  * Gantt chart drag-and-drop with smooth visual updates.
- * 
+ *
  * @param options - Configuration options
  * @returns Object with initDrag method
  */
-export function useGanttDrag({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions): UseGanttDragReturn {
+export function useGanttController({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions): UseGanttDragReturn {
     const dragRef = useRef<{
         taskId: string;
         mode: DragMode;
@@ -128,23 +128,23 @@ export function useGanttDrag({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions)
         if (!dragRef.current) return;
         const { taskId, mode, startX, element } = dragRef.current;
         const dx = e.clientX - startX;
-        
+
         // Cleanup
         window.removeEventListener('mousemove', handleMouseMove);
         window.removeEventListener('mouseup', handleMouseUp);
         activeListenersRef.current = { move: null, up: null };
         document.body.style.cursor = '';
-        
+
         // Reset visual overrides (React state update will snap it to correct place)
         element.style.transform = '';
-        element.style.width = ''; 
+        element.style.width = '';
         element.style.zIndex = '';
 
         dragRef.current = null;
 
         // Logic: Calculate new dates
         const daysDelta = Math.round(dx / pixelsPerDay);
-        
+
         if (daysDelta !== 0) {
             const task = tasks.find(t => t.id === taskId);
             if (task && task.dueDate) {
@@ -153,7 +153,7 @@ export function useGanttDrag({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions)
                 const currentStart = task.startDate
                     ? new Date(task.startDate)
                     : new Date(currentDue.getTime() - (5 * 24 * 60 * 60 * 1000));
-                
+
                 const newStart = new Date(currentStart);
                 const newDue = new Date(currentDue);
 
@@ -172,8 +172,8 @@ export function useGanttDrag({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions)
                 }
 
                 onTaskUpdate(
-                    taskId, 
-                    newStart.toISOString().split('T')[0], 
+                    taskId,
+                    newStart.toISOString().split('T')[0],
                     newDue.toISOString().split('T')[0]
                 );
             }
@@ -183,19 +183,19 @@ export function useGanttDrag({ pixelsPerDay, tasks, onTaskUpdate }: DragOptions)
     const onMouseDown = useCallback((e: React.MouseEvent, taskId: string, mode: DragMode) => {
         // Only left click
         if (e.button !== 0) return;
-        
+
         e.preventDefault();
         e.stopPropagation();
-        
+
         const target = e.currentTarget as HTMLElement;
         // If dragging handles, the target is the handle, parent is the bar.
         // If moving, target is the bar.
         const element = mode === 'move' ? target : target.parentElement as HTMLElement;
-        
+
         if (!element) return;
 
         const rect = element.getBoundingClientRect();
-        
+
         dragRef.current = {
             taskId,
             mode,

@@ -8,11 +8,11 @@ export const JurisdictionService = {
     getAll: async () => {
         return await JurisdictionAPI.getAll() || [];
     },
-    
+
     getFederal: async () => {
         return await JurisdictionAPI.getFederal() || [];
     },
-    
+
     getState: async () => {
         return await JurisdictionAPI.getState() || [];
     },
@@ -31,7 +31,7 @@ export const JurisdictionService = {
             ];
         }
     },
-    
+
     getTreaties: async () => {
         try {
             return await JurisdictionAPI.getInternational();
@@ -46,7 +46,7 @@ export const JurisdictionService = {
             ];
         }
     },
-    
+
     getArbitrationProviders: async () => {
         try {
             return await JurisdictionAPI.getArbitration();
@@ -60,7 +60,7 @@ export const JurisdictionService = {
             ];
         }
     },
-    
+
     getMapNodes: async () => {
         try {
             return await JurisdictionAPI.getMapNodes();

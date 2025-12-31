@@ -17,7 +17,7 @@ import { Badge } from '@/components/ui/atoms/Badge/Badge';
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
-import { useGanttDrag } from '@/hooks/useGanttDrag';
+import { useGanttController } from '@/hooks/useGanttController';
 
 // Internal Dependencies - Services & Utils
 import { GanttHelpers } from '@/utils/ganttHelpers';
@@ -45,7 +45,7 @@ export const GanttTimeline: React.FC<GanttTimelineProps> = ({
   const { openWindow } = useWindow();
   const timelineRef = useRef<HTMLDivElement>(null);
 
-  const { onMouseDown } = useGanttDrag({
+  const { onMouseDown } = useGanttController({
       pixelsPerDay,
       tasks,
       onTaskUpdate: onUpdateTask

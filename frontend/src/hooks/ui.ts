@@ -1,6 +1,6 @@
 /**
  * UI Interaction Hooks Barrel Export
- * 
+ *
  * Hooks for UI interactions, keyboard navigation, and visual effects.
  * Import from '@/hooks/ui' for better tree-shaking.
  */
@@ -22,7 +22,7 @@ export { useDragToReorder } from './useDragToReorder';
 export { useDocumentDragDrop } from './useDocumentDragDrop';
 
 // Pan & Zoom
-export { usePanZoom, type PanZoomState, type PanZoomControls } from './usePanZoom';
+export { useViewportTransform as usePanZoom, type PanZoomState, type PanZoomControls } from './useViewportTransform';
 
 // Wizards & Forms
 export { useWizard } from './useWizard';

@@ -7,7 +7,7 @@
 import React from 'react';
 import { EvidenceDashboard } from '@/features/litigation/evidence/EvidenceDashboard';
 import { PageContainerLayout } from '@/components/layouts';
-import { ViewMode } from '@/hooks/useEvidenceVault';
+import { ViewMode } from '@/hooks/useEvidenceManager';
 
 interface EvidencePageProps {
   onNavigate: (view: ViewMode) => void;

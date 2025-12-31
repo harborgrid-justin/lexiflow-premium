@@ -25,7 +25,7 @@ import { EvidenceDetailSkeleton, EvidenceInventorySkeleton } from './EvidenceSke
 import { EvidenceVaultContent } from './EvidenceVaultContent';
 
 // Context & Utils
-import { useEvidenceVault, ViewMode } from '@/hooks/useEvidenceVault';
+import { useEvidenceManager, ViewMode } from '@/hooks/useEvidenceManager';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -58,7 +58,7 @@ const EvidenceVaultInternal: React.FC<EvidenceVaultProps> = ({ onNavigateToCase,
     handleIntakeComplete,
     handleCustodyUpdate,
     isLoading
-  } = useEvidenceVault(caseId);
+  } = useEvidenceManager(caseId);
 
   useEffect(() => {
     if (initialTab) setView(initialTab);

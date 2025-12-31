@@ -1,6 +1,6 @@
 import React from 'react';
 import { Database, Cloud, CheckCircle, XCircle } from 'lucide-react';
-import { useDataSource } from '@/providers/DataSourceContext';
+import { useDataSource } from '@/providers';
 
 interface ServiceCoverageProps {
   className?: string;

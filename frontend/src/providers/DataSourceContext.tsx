@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { DataService } from '../services/data/dataService';
-import { isBackendApiEnabled as checkBackendEnabled } from '../services/integration/apiConfig';
+import { isBackendApiEnabled as checkBackendEnabled } from '../config/network/api.config';
 import type {
   DataSourceActionsValue,
   DataSourceProviderProps,
@@ -97,6 +97,9 @@ function getInitialDataSource(): DataSourceType {
 }
 
 // BP3: Split contexts for state and actions
+const contextId = Math.random().toString(36).substring(7);
+console.log('[DataSourceContext] Module loaded, ID:', contextId);
+
 const DataSourceStateContext = createContext<DataSourceStateValue | undefined>(undefined);
 const DataSourceActionsContext = createContext<DataSourceActionsValue | undefined>(undefined);
 
@@ -105,6 +108,7 @@ export function useDataSourceState(): DataSourceStateValue {
   const context = useContext(DataSourceStateContext);
   // BP5: Fail fast when provider is missing
   if (!context) {
+    console.error('[useDataSourceState] Context is missing! Provider not found in tree. Module ID:', contextId);
     throw new Error('useDataSourceState must be used within a DataSourceProvider');
   }
   return context;
@@ -155,6 +159,8 @@ export const DataSourceProvider = ({
   repositories: mockRepositories,
   config: overrideConfig,
 }: DataSourceProviderProps) => {
+  console.log('[DataSourceProvider] Rendering, Module ID:', contextId);
+  // Pattern 12: SSR-safe initialization
   // Pattern 12: SSR-safe initialization
   const [currentSource, setCurrentSource] = useState<DataSourceType>(
     initialSource || getInitialDataSource

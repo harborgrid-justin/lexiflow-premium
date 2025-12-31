@@ -32,7 +32,7 @@ import {
     ReviewBatch, ProcessingJob, LegalDocument
 } from '@/types';
 import { db, STORES } from '@/services/data/db';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 import { discoveryApi } from '@/api/domains/discovery.api';
 import { OperationError, ValidationError, EntityNotFoundError } from '@/services/core/errors';
 

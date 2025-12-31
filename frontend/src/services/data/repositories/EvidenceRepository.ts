@@ -30,7 +30,7 @@ import { EvidenceItem } from '@/types';
 import { delay } from '@/utils/async';
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 import { EvidenceApiService } from '@/api/discovery/evidence-api';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';

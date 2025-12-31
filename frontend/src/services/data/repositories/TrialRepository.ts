@@ -7,7 +7,7 @@ import { Juror, Witness, TrialExhibit, Fact} from '@/types';
 import { Repository } from '@/services/core/Repository';
 import { ValidationError, OperationError } from '@/services/core/errors';
 import { STORES, db } from '@/services/data/db';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 
 export const TRIAL_QUERY_KEYS = {
     exhibits: {

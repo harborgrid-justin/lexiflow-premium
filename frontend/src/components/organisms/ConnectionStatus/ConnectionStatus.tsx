@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Database, Cloud, WifiOff, AlertCircle, Activity, Info } from 'lucide-react';
 import { apiClient } from '@/services/infrastructure/apiClient';
-import { useDataSource } from '@/providers/DataSourceContext';
+import { useDataSource } from '@/providers';
 import { BackendHealthMonitor } from '../BackendHealthMonitor/BackendHealthMonitor';
 import { SystemHealthDisplay } from '../SystemHealthDisplay/SystemHealthDisplay';
 

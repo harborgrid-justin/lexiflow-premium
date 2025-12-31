@@ -1,23 +1,38 @@
 {
   "compilerOptions": {
-    /* Base Options */
+    /* -------------------------------------------------------------------------- */
+    /* PERFORMANCE & BUILD ARTIFACTS                                              */
+    /* Essential for enterprise apps to keep IDE and CI/CD fast as code grows.    */
+    /* -------------------------------------------------------------------------- */
+    "incremental": true,
+    "tsBuildInfoFile": "./node_modules/.cache/tsconfig.tsbuildinfo",
+
+    /* -------------------------------------------------------------------------- */
+    /* BASE OPTIONS                                                               */
+    /* -------------------------------------------------------------------------- */
     "target": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Bundler mode (Required for Vite 7) */
+    /* -------------------------------------------------------------------------- */
+    /* BUNDLER MODE (Vite / Rollup / Webpack 5)                                   */
+    /* -------------------------------------------------------------------------- */
     "moduleResolution": "Bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
 
-    /* JSX (Modern React Transform) */
+    /* -------------------------------------------------------------------------- */
+    /* REACT / JSX                                                                */
+    /* -------------------------------------------------------------------------- */
     "jsx": "react-jsx",
     "jsxImportSource": "react",
 
-    /* Strictness & Reliability */
+    /* -------------------------------------------------------------------------- */
+    /* STRICTNESS & SAFETY                                                        */
+    /* -------------------------------------------------------------------------- */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -26,13 +41,21 @@
     "noImplicitOverride": true,
     "useDefineForClassFields": true,
 
-    /* Interop & Resolution */
+    /* THE "BILLION DOLLAR MISTAKE" FIX */
+    /* Forces you to check if array[index] is defined before using it. */
+    "noUncheckedIndexedAccess": true,
+
+    /* -------------------------------------------------------------------------- */
+    /* INTEROP & RESOLUTION                                                       */
+    /* -------------------------------------------------------------------------- */
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
 
-    /* Path Mapping */
+    /* -------------------------------------------------------------------------- */
+    /* PATH MAPPING (DOMAIN DRIVEN DESIGN)                                        */
+    /* -------------------------------------------------------------------------- */
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
@@ -52,7 +75,6 @@
       "@features/admin": ["src/features/admin"],
       "@features/visual": ["src/features/visual"],
       "@hooks/*": ["src/hooks/*"],
-      "@providers/*": ["src/providers/*"],
       "@providers/ToastContext": ["src/providers/ToastContext.tsx"],
       "@providers/ThemeContext": ["src/providers/ThemeContext.tsx"],
       "@services/*": ["src/services/*"],
@@ -64,7 +86,6 @@
       "@services/repositories": ["src/services/data/repositories"],
       "@services/core": ["src/services/core"],
       "@types/*": ["src/types/*"],
-      "@utils/*": ["src/utils/*"],
       "@config/*": ["src/config/*"],
       "@config/tabs.config": ["src/config/tabs.config.ts"],
       "@constants/*": ["src/constants/*"]

@@ -6,7 +6,7 @@
 import { Organization } from '@/types';
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 import { OrganizationsApiService } from '@/api/integrations/organizations-api';
 import { ValidationError } from '@/services/core/errors';
 

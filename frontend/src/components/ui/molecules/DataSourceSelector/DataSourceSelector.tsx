@@ -6,9 +6,9 @@
 
 import React, { useState} from 'react';
 import { Database, Cloud, HardDrive, Wifi, WifiOff, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
-import { useDataSource } from '@/providers/DataSourceContext';
+import { useDataSource } from '@/providers';
 import { useBackendHealth } from '@/hooks/useBackendHealth';
-import type { DataSourceType } from '@/providers/DataSourceContext';
+import type { DataSourceType } from '@/providers';
 
 interface DataSourceOption {
   value: DataSourceType;
@@ -47,14 +47,14 @@ export function DataSourceSelector() {
   const { status, isAvailable, isHealthy, latency, version, error, refresh } = useBackendHealth();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [timeSinceCheck, setTimeSinceCheck] = useState(0);
-  
+
   // Update time since last check every second
   React.useEffect(() => {
     const interval = setInterval(() => {
       const seconds = Math.floor((Date.now() - status.lastChecked.getTime()) / 1000);
       setTimeSinceCheck(seconds);
     }, 1000);
-    
+
     return () => clearInterval(interval);
   }, [status.lastChecked]);
 
@@ -62,7 +62,7 @@ export function DataSourceSelector() {
     if (source === currentSource) return;
 
     const option = DATA_SOURCE_OPTIONS.find(opt => opt.value === source);
-    
+
     // Prevent switching to backend sources if backend is not available
     if (option?.requiresBackend && !isAvailable) {
       alert('Backend is not available. Please ensure the backend server is running.');
@@ -111,7 +111,7 @@ export function DataSourceSelector() {
         <div className="flex-1 text-sm">
           <p className="font-medium text-blue-900 mb-1">Real-Time Backend Monitoring</p>
           <p className="text-blue-700 text-xs">
-            Backend status is monitored continuously every 30 seconds, regardless of your current data source. 
+            Backend status is monitored continuously every 30 seconds, regardless of your current data source.
             You can switch to the backend at any time when it's available.
           </p>
         </div>
@@ -125,7 +125,7 @@ export function DataSourceSelector() {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </div>
         )}
-        
+
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             {getStatusIcon()}
@@ -176,12 +176,12 @@ export function DataSourceSelector() {
               disabled={isDisabled}
               className={`
                 w-full text-left p-4 rounded-lg border-2 transition-all
-                ${isSelected 
-                  ? 'border-blue-500 bg-blue-50' 
+                ${isSelected
+                  ? 'border-blue-500 bg-blue-50'
                   : 'border-slate-200 hover:border-slate-300 bg-white'
                 }
-                ${isDisabled 
-                  ? 'opacity-50 cursor-not-allowed' 
+                ${isDisabled
+                  ? 'opacity-50 cursor-not-allowed'
                   : 'cursor-pointer'
                 }
               `}

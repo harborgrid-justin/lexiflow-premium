@@ -99,7 +99,7 @@ import { TimeEntry, Invoice, RateTable, TrustTransaction, Client, WIPStat, UUID,
 import { Repository } from '@/services/core/Repository';
 import { STORES, db } from '@/services/data/db';
 import { delay } from '@/utils/async';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 
 // Backend API Integration (Primary Data Source)
 import { BillingApiService } from '@/api/billing/finance-api';

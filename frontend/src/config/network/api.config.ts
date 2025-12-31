@@ -26,6 +26,53 @@ export const API_TIMEOUT_MS = 30000; // 30 seconds
 export const API_RETRY_ATTEMPTS = 3;
 export const API_RETRY_DELAY_MS = 1000;
 
+// =============================================================================
+// FEATURE FLAGS & MODE DETECTION
+// =============================================================================
+
+/**
+ * Check if backend API mode is enabled
+ * Always returns true as IndexedDB mode is deprecated/removed
+ */
+export const isBackendApiEnabled = () => true;
+
+/**
+ * Check if IndexedDB fallback mode is enabled
+ * Always returns false
+ */
+export const isIndexedDBMode = () => false;
+
+/**
+ * Get current data persistence mode
+ */
+export const getDataMode = () => 'backend';
+
+/**
+ * No-op: Backend mode is always enabled
+ */
+export const forceBackendMode = () => {};
+
+/**
+ * No-op: Legacy mode is removed
+ */
+export const enableLegacyIndexedDB = () => {};
+
+/**
+ * Check if running in production mode
+ */
+export const isProduction = () => import.meta.env.PROD;
+
+/**
+ * Get the backend URL (alias for getApiBaseUrl)
+ */
+export const getBackendUrl = getApiBaseUrl;
+
+/**
+ * Log API configuration (no-op)
+ */
+export const logApiConfig = () => {};
+
+
 // API Request Settings
 export const API_MAX_CONCURRENT_REQUESTS = 6;
 export const API_REQUEST_QUEUE_ENABLED = true;

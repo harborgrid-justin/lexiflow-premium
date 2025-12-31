@@ -13,7 +13,7 @@
  */
 
 import { defaultWindowAdapter } from '../infrastructure/adapters/WindowAdapter';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 
 /**
  * (Documentation continued below imports)

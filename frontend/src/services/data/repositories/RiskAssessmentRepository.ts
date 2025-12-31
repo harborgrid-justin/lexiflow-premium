@@ -8,7 +8,7 @@ import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 import { RisksApiService } from '@/api/workflow/risk-assessments-api';
 import { ValidationError } from '@/services/core/errors';
 

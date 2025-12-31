@@ -33,7 +33,7 @@ export {
   isIndexedDBMode,
   isProduction,
   logApiConfig,
-} from "./integration/apiConfig";
+} from "@/config/network/api.config";
 
 // Export API object
 export { api } from "@/api";

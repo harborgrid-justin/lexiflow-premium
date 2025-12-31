@@ -18,7 +18,7 @@ export {
   isProduction,
   getBackendUrl,
   logApiConfig
-} from './integration/apiConfig';
+} from '@/config/network/api.config';
 
 // Backend Discovery
 export * from './integration/backendDiscovery';

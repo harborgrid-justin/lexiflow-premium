@@ -46,7 +46,7 @@ export {
   isIndexedDBMode,
   isProduction,
   logApiConfig,
-} from "@/services/integration/apiConfig";
+} from "@/config/network/api.config";
 
 // ==================== DOMAIN EXPORTS ====================
 // Re-export domain API services for direct access

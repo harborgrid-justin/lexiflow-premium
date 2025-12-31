@@ -19,7 +19,7 @@
 
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 import { WitnessesApiService, Witness } from '@/api/discovery/witnesses-api';
 import { ValidationError } from '@/services/core/errors';
 

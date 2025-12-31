@@ -28,7 +28,7 @@
 import { WorkflowTask, CaseId, UserId, TaskStatusBackend, TaskPriorityBackend } from '@/types';
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 import { TasksApiService } from '@/api/workflow/tasks-api';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';

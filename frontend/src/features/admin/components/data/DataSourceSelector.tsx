@@ -8,7 +8,7 @@
 import React, { useState } from 'react';
 import { Database, Server, Cloud, Power, RefreshCw } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
-import { useDataSource } from '@/providers/DataSourceContext';
+import { useDataSource } from '@/providers';
 import { cn } from '@/utils/cn';
 
 type DataSourceType = 'indexeddb' | 'postgresql' | 'cloud';

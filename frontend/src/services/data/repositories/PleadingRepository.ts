@@ -32,7 +32,7 @@ import { STORES, db } from '@/services/data/db';
 import { IdGenerator } from '@/utils/idGenerator';
 import { createTemplateContext, hydrateTemplateSections } from '@/utils/templateEngine';
 import { validateTemplate } from '@/utils/validation';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 import { PleadingsApiService } from '@/api/litigation/pleadings-api';
 import { ValidationError, OperationError } from '@/services/core/errors';
 

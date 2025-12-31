@@ -7,7 +7,7 @@ import { LegalRule } from '@/types';
 import { Repository } from '@/services/core/Repository';
 import { ValidationError } from '@/services/core/errors';
 import { STORES } from '@/services/data/db';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 
 export const RULE_QUERY_KEYS = {
     all: () => ['rules'] as const,

@@ -7,7 +7,7 @@ import { WorkflowTemplateData } from '@/types';
 import { Repository } from '@/services/core/Repository';
 import { ValidationError } from '@/services/core/errors';
 import { STORES } from '@/services/data/db';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 
 export const TEMPLATE_QUERY_KEYS = {
     all: () => ['templates'] as const,

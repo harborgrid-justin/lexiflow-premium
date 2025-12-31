@@ -7,7 +7,7 @@
 // 📦 RECOMMENDED: Import from focused sub-modules instead:
 //
 //   import { DataService } from '@/services/data/dataService';       // Data layer
-//   import { api, isBackendApiEnabled } from '@/services/integration/apiConfig';  // Backend integration
+//   import { api, isBackendApiEnabled } from '@/config/network/api.config';  // Backend integration
 //   import { UserRepository } from '@/services/data/repositories/UserRepository';  // Specific repositories
 //   import { cryptoService } from '@/services/infrastructure/cryptoService';       // Utility services
 //   import { GeminiService } from '@/services/features/research/geminiService';    // Feature services
@@ -75,7 +75,7 @@ export {
   isIndexedDBMode,
   isProduction,
   logApiConfig,
-} from "./integration/apiConfig";
+} from "@/config/network/api.config";
 
 // ==================== INTEGRATION & ORCHESTRATION ====================
 // DO NOT export integrationOrchestrator or handlers here - they cause circular dependencies

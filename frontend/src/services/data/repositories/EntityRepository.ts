@@ -9,7 +9,7 @@ import { ValidationError } from '@/services/core/errors';
 import { STORES } from '@/services/data/db';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 import { LegalEntitiesApiService } from '@/api/domains/legal-entities.api';
 
 export const ENTITY_QUERY_KEYS = {

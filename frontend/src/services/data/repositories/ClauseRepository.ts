@@ -20,7 +20,7 @@
 import { Clause, BaseEntity } from '@/types';
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 import { ClausesApiService } from '@/api/intelligence/clauses-api';
 import { ValidationError, EntityNotFoundError } from '@/services/core/errors';
 

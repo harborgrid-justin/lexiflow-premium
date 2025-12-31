@@ -3,7 +3,7 @@ import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
 import { Matter, MatterId, MatterStatus } from '@/types';
 import { casesApi } from '@/api/litigation/cases-api';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 
 export class MatterRepository extends Repository<Matter> {
   private readonly useBackend: boolean;

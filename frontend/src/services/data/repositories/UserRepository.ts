@@ -6,7 +6,7 @@
 import { User } from '@/types';
 import { Repository } from '@/services/core/Repository';
 import { STORES } from '@/services/data/db';
-import { isBackendApiEnabled } from '@/services/integration/apiConfig';
+import { isBackendApiEnabled } from '@/config/network/api.config';
 import { UsersApiService } from '@/api/auth/users-api';
 
 export const USER_QUERY_KEYS = {

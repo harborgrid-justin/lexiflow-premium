@@ -3,7 +3,7 @@ import { Activity, AlertTriangle, CheckCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { useDataSource } from '@/providers/DataSourceContext';
+import { useDataSource } from '@/providers';
 
 const BACKEND_SERVICES = [
   'cases', 'docket', 'documents', 'evidence', 'billing', 'users',

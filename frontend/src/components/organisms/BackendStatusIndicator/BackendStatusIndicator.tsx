@@ -7,7 +7,7 @@
 import React from 'react';
 import { Server, Database, HardDrive } from 'lucide-react';
 import { useBackendHealth } from '@/hooks/useBackendHealth';
-import { useDataSource } from '@/providers/DataSourceContext';
+import { useDataSource } from '@/providers';
 
 interface BackendStatusIndicatorProps {
   showLabel?: boolean;
@@ -15,7 +15,7 @@ interface BackendStatusIndicatorProps {
   showPulse?: boolean; // Show pulse animation when monitoring
 }
 
-export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({ 
+export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
   showLabel = true,
   variant = 'compact',
   showPulse = true
@@ -36,27 +36,27 @@ export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
   };
 
   const getTooltipText = () => {
-    const baseStatus = currentSource === 'indexeddb' 
+    const baseStatus = currentSource === 'indexeddb'
       ? `Local Mode - Backend ${isAvailable ? 'detected' : 'not detected'}`
-      : !isAvailable 
-        ? 'Backend offline' 
-        : isHealthy 
+      : !isAvailable
+        ? 'Backend offline'
+        : isHealthy
           ? `Backend online${latency ? ` (${latency}ms)` : ''}`
           : 'Backend degraded';
-    
+
     const lastCheckedDate = typeof lastChecked === 'string' ? new Date(lastChecked) : lastChecked;
     const timeSinceCheck = Math.floor((Date.now() - lastCheckedDate.getTime()) / 1000);
     return `${baseStatus}\nLast checked: ${timeSinceCheck}s ago`;
   };
 
   const Icon = getIcon();
-  
+
   // Show pulse on icon when backend is being monitored and available
   const shouldPulse = showPulse && isAvailable;
 
   if (variant === 'compact') {
     return (
-      <div 
+      <div
         className={`flex items-center gap-2 px-2 py-1 rounded-md ${getStatusColor()} relative`}
         title={getTooltipText()}
       >
@@ -66,7 +66,7 @@ export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
         <Icon className={`h-3.5 w-3.5 relative z-10 ${shouldPulse ? 'animate-pulse' : ''}`} />
         {showLabel && (
           <span className="text-xs font-medium relative z-10">
-            {currentSource === 'indexeddb' 
+            {currentSource === 'indexeddb'
               ? isAvailable ? 'Local (Backend Ready)' : 'Local Only'
               : isAvailable ? 'Online' : 'Offline'
             }
@@ -77,7 +77,7 @@ export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
   }
 
   return (
-    <div 
+    <div
       className={`flex items-center gap-3 px-3 py-2 rounded-lg border ${getStatusColor()} relative overflow-hidden`}
       title={getTooltipText()}
     >
@@ -88,17 +88,17 @@ export const BackendStatusIndicator: React.FC<BackendStatusIndicatorProps> = ({
       {showLabel && (
         <div className="flex flex-col relative z-10">
           <span className="text-xs font-medium">
-            {currentSource === 'indexeddb' 
+            {currentSource === 'indexeddb'
               ? isAvailable ? 'Local Storage (Backend Detected)' : 'Local Storage Only'
               : 'Backend Server'
             }
           </span>
           <span className="text-[10px] opacity-75">
-            {currentSource === 'indexeddb' 
-              ? isAvailable 
-                ? `Backend ready • ${latency}ms` 
+            {currentSource === 'indexeddb'
+              ? isAvailable
+                ? `Backend ready • ${latency}ms`
                 : 'No backend connection'
-              : isAvailable 
+              : isAvailable
                 ? `${isHealthy ? 'Healthy' : 'Degraded'}${latency ? ` • ${latency}ms` : ''}`
                 : 'Disconnected'
             }

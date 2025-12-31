@@ -1,6 +1,6 @@
 /**
  * Event Handler Registry
- * 
+ *
  * Purpose: Central registry for all event handlers
  * Pattern: Registry + Factory
  */
@@ -17,7 +17,7 @@ export { CitationSavedHandler } from './CitationSavedHandler';
 export { WallErectedHandler } from './WallErectedHandler';
 export { StaffHiredHandler } from './StaffHiredHandler';
 export { ServiceCompletedHandler } from './ServiceCompletedHandler';
-export { DataSourceConnectedHandler } from './DataSourceConnectedHandler';
+export { SourceLinkedHandler } from './SourceLinkedHandler';
 
 // Import handlers for registry
 import { LeadStageChangedHandler } from './LeadStageChangedHandler';
@@ -30,13 +30,13 @@ import { CitationSavedHandler } from './CitationSavedHandler';
 import { WallErectedHandler } from './WallErectedHandler';
 import { StaffHiredHandler } from './StaffHiredHandler';
 import { ServiceCompletedHandler } from './ServiceCompletedHandler';
-import { DataSourceConnectedHandler } from './DataSourceConnectedHandler';
+import { SourceLinkedHandler } from './SourceLinkedHandler';
 import type { BaseEventHandler } from './BaseEventHandler';
 
 /**
  * Registry of all event handlers
  * Maps event types to handler instances
- * 
+ *
  * Benefits:
  * - Single source of truth for event routing
  * - Easy to add new handlers without modifying core logic
@@ -44,7 +44,7 @@ import type { BaseEventHandler } from './BaseEventHandler';
  */
 export class EventHandlerRegistry {
   private static handlers = new Map<string, BaseEventHandler>();
-  
+
   static {
     // Register all handlers (executed once on module load)
     this.register(new LeadStageChangedHandler());
@@ -57,37 +57,37 @@ export class EventHandlerRegistry {
     this.register(new WallErectedHandler());
     this.register(new StaffHiredHandler());
     this.register(new ServiceCompletedHandler());
-    this.register(new DataSourceConnectedHandler());
+    this.register(new SourceLinkedHandler());
   }
-  
+
   /**
    * Register a handler for an event type
    */
   static register(handler: BaseEventHandler): void {
     this.handlers.set(handler.eventType, handler);
   }
-  
+
   /**
    * Get handler for an event type
    */
   static getHandler(eventType: string): BaseEventHandler | undefined {
     return this.handlers.get(eventType);
   }
-  
+
   /**
    * Check if handler exists for event type
    */
   static hasHandler(eventType: string): boolean {
     return this.handlers.has(eventType);
   }
-  
+
   /**
    * Get all registered event types
    */
   static getRegisteredEvents(): string[] {
     return Array.from(this.handlers.keys());
   }
-  
+
   /**
    * Get statistics about registered handlers
    */

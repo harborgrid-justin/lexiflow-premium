@@ -4,19 +4,19 @@
  * ║                  Enterprise Financial Management Layer v2.0               ║
  * ║                       PhD-Level Systems Architecture                      ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
- * 
+ *
  * @module services/domain/BillingDomain
  * @architecture Backend-First Financial Management with Trust Accounting
  * @author LexiFlow Engineering Team
  * @since 2025-12-22
  * @status PRODUCTION READY
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                            ARCHITECTURAL OVERVIEW
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * This module provides enterprise-grade financial management with:
- * 
+ *
  * ┌─────────────────────────────────────────────────────────────────────────┐
 
  * │  TIME TRACKING & BILLING                                                │
@@ -26,7 +26,7 @@
  * │  • Rate table management with effective dating                          │
  * │  • Realization metrics and write-off tracking                           │
  * └─────────────────────────────────────────────────────────────────────────┘
- * 
+ *
  * ┌─────────────────────────────────────────────────────────────────────────┐
  * │  INVOICE MANAGEMENT                                                     │
  * │  • Invoice generation from unbilled time                                │
@@ -35,35 +35,35 @@
  * │  • WIP (Work In Progress) analytics                                     │
  * │  • Financial performance dashboards                                     │
  * └─────────────────────────────────────────────────────────────────────────┘
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                              DESIGN PRINCIPLES
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * 1. **Financial Integrity**: ACID compliance for all financial transactions
  * 2. **Audit Trail**: Complete logging of all financial operations
  * 3. **Backend-First**: PostgreSQL with transaction support
  * 4. **Separation of Concerns**: Time tracking, invoicing, trust accounting
  * 5. **Type Safety**: Full validation of rates, amounts, LEDES codes
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                           PERFORMANCE METRICS
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * • Time Entry Queries: O(1) API call with indexed lookups
  * • Invoice Generation: O(n) over unbilled entries
  * • WIP Calculation: O(n) with aggregation
  * • Rate Lookups: O(1) via indexed effective dates
  * • Trust Transactions: O(log n) with chronological index
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  *                          USAGE EXAMPLES
  * ═══════════════════════════════════════════════════════════════════════════
- * 
+ *
  * @example Time Entry Management
  * ```typescript
  * const repo = new BillingRepository();
- * 
+ *
  * // Add time entry
  * const entry = await repo.add({
  *   caseId: 'case-123',
@@ -72,26 +72,26 @@
  *   description: 'Legal research',
  *   ledesCode: 'L110'
  * });
- * 
+ *
  * // Get case time entries
  * const caseEntries = await repo.getTimeEntries('case-123');
- * 
+ *
  * // Approve for billing
  * await repo.update(entry.id, { status: 'Approved' });
  * ```
- * 
+ *
  * @example Invoice Operations
  * ```typescript
  * // Get unbilled entries
  * const unbilled = await repo.getUnbilledEntries('case-123');
- * 
+ *
  * // Generate invoice
  * const invoice = await BillingService.generateInvoice('case-123', unbilled);
- * 
+ *
  * // Get WIP stats
  * const wipStats = await BillingService.getWIPStats();
  * ```
- * 
+ *
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
@@ -102,7 +102,7 @@ import { delay } from '@/utils/async';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
 
 // Backend API Integration (Primary Data Source)
-import { BillingApiService } from '@/api/billing/billing-api';
+import { BillingApiService } from '@/api/billing/finance-api';
 import { apiClient } from '@/services/infrastructure/apiClient';
 
 // Error Classes
@@ -123,7 +123,7 @@ class EntityNotFoundError extends Error {
 /**
  * Query keys for React Query integration
  * Use these constants for cache invalidation and refetching
- * 
+ *
  * @example
  * queryClient.invalidateQueries({ queryKey: BILLING_QUERY_KEYS.all() });
  * queryClient.invalidateQueries({ queryKey: BILLING_QUERY_KEYS.timeEntries(caseId) });
@@ -131,8 +131,8 @@ class EntityNotFoundError extends Error {
  */
 export const BILLING_QUERY_KEYS = {
     all: () => ['billing'] as const,
-    timeEntries: (caseId?: string) => caseId 
-        ? ['billing', 'time-entries', caseId] as const 
+    timeEntries: (caseId?: string) => caseId
+        ? ['billing', 'time-entries', caseId] as const
         : ['billing', 'time-entries'] as const,
     invoices: () => ['billing', 'invoices'] as const,
     invoice: (id: string) => ['billing', 'invoice', id] as const,
@@ -150,12 +150,12 @@ export const BILLING_QUERY_KEYS = {
 /**
  * Billing Repository Class
  * Implements backend-first pattern with IndexedDB fallback
- * 
+ *
  * **Backend-First Architecture:**
  * - Uses BillingApiService (PostgreSQL + NestJS) by default
  * - Falls back to IndexedDB only if backend is disabled
  * - Automatic routing via isBackendApiEnabled() check
- * 
+ *
  * @class BillingRepository
  * @extends Repository<TimeEntry>
  */
@@ -163,7 +163,7 @@ export class BillingRepository extends Repository<TimeEntry> {
     private readonly useBackend: boolean;
     private readonly billingApi: BillingApiService;
 
-    constructor() { 
+    constructor() {
         super(STORES.BILLING);
         this.useBackend = isBackendApiEnabled();
         this.billingApi = new BillingApiService();
@@ -238,7 +238,7 @@ export class BillingRepository extends Repository<TimeEntry> {
      */
     override async getById(id: string): Promise<TimeEntry | undefined> {
         this.validateId(id, 'getById');
-        
+
         if (this.useBackend) {
             try {
                 return await apiClient.get<TimeEntry>(`/billing/time-entries/${id}`);
@@ -272,7 +272,7 @@ export class BillingRepository extends Repository<TimeEntry> {
      */
     override async update(id: string, updates: Partial<TimeEntry>): Promise<TimeEntry> {
         this.validateId(id, 'update');
-        
+
         if (this.useBackend) {
             return apiClient.patch<TimeEntry>(`/billing/time-entries/${id}`, updates);
         }
@@ -287,7 +287,7 @@ export class BillingRepository extends Repository<TimeEntry> {
      */
     override async delete(id: string): Promise<void> {
         this.validateId(id, 'delete');
-        
+
         if (this.useBackend) {
             await apiClient.delete(`/billing/time-entries/${id}`);
             return;
@@ -301,11 +301,11 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Get rate tables for a specific timekeeper
-     * 
+     *
      * @param timekeeperId - Timekeeper ID
      * @returns Promise<RateTable[]> Array of rate tables
      * @throws Error if timekeeperId is invalid or fetch fails
-     * 
+     *
      * @example
      * const rates = await repo.getRates('tk-123');
      */
@@ -330,11 +330,11 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Get time entries, optionally filtered by case
-     * 
+     *
      * @param caseId - Optional case ID filter
      * @returns Promise<TimeEntry[]> Array of time entries
      * @throws Error if fetch fails
-     * 
+     *
      * @example
      * const allEntries = await repo.getTimeEntries();
      * const caseEntries = await repo.getTimeEntries('case-123');
@@ -361,11 +361,11 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Add a new time entry
-     * 
+     *
      * @param entry - Time entry data
      * @returns Promise<TimeEntry> Created time entry
      * @throws Error if validation fails or create fails
-     * 
+     *
      * @example
      * const entry = await repo.addTimeEntry({
      *   id: 'time-123',
@@ -401,7 +401,7 @@ export class BillingRepository extends Repository<TimeEntry> {
             try {
                 const { IntegrationOrchestrator } = await import('@/services/integration/integrationOrchestrator');
                 const { SystemEventType } = await import('@/types/integration-types');
-                
+
                 await IntegrationOrchestrator.publish(SystemEventType.TIME_LOGGED, {
                     entry: result
                 });
@@ -422,10 +422,10 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Get work-in-progress statistics
-     * 
+     *
      * @returns Promise<WIPStat[]> Array of WIP statistics by client
      * @throws Error if fetch fails
-     * 
+     *
      * @example
      * const wipStats = await repo.getWIPStats();
      * // Returns: [{ name: 'ClientA', wip: 50000, billed: 120000 }, ...]
@@ -451,10 +451,10 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Get realization statistics
-     * 
+     *
      * @returns Promise<RealizationStat[]> Realization statistics data
      * @throws Error if fetch fails
-     * 
+     *
      * @example
      * const stats = await repo.getRealizationStats();
      */
@@ -478,10 +478,10 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Get all invoices
-     * 
+     *
      * @returns Promise<Invoice[]> Array of invoices
      * @throws Error if fetch fails
-     * 
+     *
      * @example
      * const invoices = await repo.getInvoices();
      */
@@ -500,13 +500,13 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Create a new invoice from time entries
-     * 
+     *
      * @param clientName - Client name for the invoice
      * @param caseId - Associated case ID
      * @param entries - Array of time entries to bill
      * @returns Promise<Invoice> Created invoice
      * @throws Error if validation fails or creation fails
-     * 
+     *
      * @example
      * const invoice = await repo.createInvoice('ACME Corp', 'case-123', timeEntries);
      */
@@ -566,10 +566,10 @@ export class BillingRepository extends Repository<TimeEntry> {
 
             // Update time entries to mark as billed
             for (const entry of entries) {
-                const updatedEntry = { 
-                    ...entry, 
-                    status: 'Billed' as const, 
-                    invoiceId: invoice.id 
+                const updatedEntry = {
+                    ...entry,
+                    status: 'Billed' as const,
+                    invoiceId: invoice.id
                 };
                 await db.put(STORES.BILLING, updatedEntry);
             }
@@ -592,15 +592,15 @@ export class BillingRepository extends Repository<TimeEntry> {
             throw new OperationError('Failed to create invoice');
         }
     }
-    
+
     /**
      * Update an existing invoice
-     * 
+     *
      * @param id - Invoice ID
      * @param updates - Partial invoice updates
      * @returns Promise<Invoice> Updated invoice
      * @throws Error if validation fails or update fails
-     * 
+     *
      * @example
      * const updated = await repo.updateInvoice('INV-123', { status: 'Sent' });
      */
@@ -630,14 +630,14 @@ export class BillingRepository extends Repository<TimeEntry> {
             throw new OperationError('Failed to update invoice');
         }
     }
-    
+
     /**
      * Send an invoice to the client
-     * 
+     *
      * @param id - Invoice ID
      * @returns Promise<boolean> Success status
      * @throws Error if id is invalid or send fails
-     * 
+     *
      * @example
      * await repo.sendInvoice('INV-123');
      */
@@ -668,11 +668,11 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Get trust transactions for an account
-     * 
+     *
      * @param accountId - Trust account ID
      * @returns Promise<TrustTransaction[]> Array of trust transactions
      * @throws Error if accountId is invalid or fetch fails
-     * 
+     *
      * @example
      * const transactions = await repo.getTrustTransactions('trust-123');
      */
@@ -693,10 +693,10 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Get all trust accounts
-     * 
+     *
      * @returns Promise<unknown[]> Array of trust accounts
      * @throws Error if fetch fails
-     * 
+     *
      * @example
      * const accounts = await repo.getTrustAccounts();
      */
@@ -715,10 +715,10 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Get top client accounts by billing
-     * 
+     *
      * @returns Promise<Client[]> Top 4 client accounts
      * @throws Error if fetch fails
-     * 
+     *
      * @example
      * const topClients = await repo.getTopAccounts();
      */
@@ -740,18 +740,18 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Get billing overview statistics
-     * 
+     *
      * @returns Promise with overview stats
      * @throws Error if fetch fails
-     * 
+     *
      * @example
      * const stats = await repo.getOverviewStats();
      * // Returns: { realization: 92.4, totalBilled: 482000, month: 'March 2024' }
      */
-    async getOverviewStats(): Promise<{ 
-        realization: number; 
-        totalBilled: number; 
-        month: string; 
+    async getOverviewStats(): Promise<{
+        realization: number;
+        totalBilled: number;
+        month: string;
     }> {
         try {
             if (this.useBackend) {
@@ -759,23 +759,23 @@ export class BillingRepository extends Repository<TimeEntry> {
             }
 
             await delay(50);
-            return { 
-                realization: 92.4, 
-                totalBilled: 482000, 
-                month: 'March 2024' 
+            return {
+                realization: 92.4,
+                totalBilled: 482000,
+                month: 'March 2024'
             };
         } catch (error) {
             console.error('[BillingRepository.getOverviewStats] Error:', error);
             throw new OperationError('Failed to fetch overview statistics');
         }
     }
-    
+
     /**
      * Get operating summary
-     * 
+     *
      * @returns Promise<OperatingSummary> Operating summary data
      * @throws Error if fetch fails
-     * 
+     *
      * @example
      * const summary = await repo.getOperatingSummary();
      */
@@ -786,10 +786,10 @@ export class BillingRepository extends Repository<TimeEntry> {
             }
 
             const summary = await db.get<OperatingSummary>(STORES.OPERATING_SUMMARY, 'op-summary-main');
-            return summary || { 
-                balance: 0, 
-                expensesMtd: 0, 
-                cashFlowMtd: 0 
+            return summary || {
+                balance: 0,
+                expensesMtd: 0,
+                cashFlowMtd: 0
             };
         } catch (error) {
             console.error('[BillingRepository.getOperatingSummary] Error:', error);
@@ -799,10 +799,10 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Get financial performance data
-     * 
+     *
      * @returns Promise<FinancialPerformanceData> Financial performance data
      * @throws Error if fetch fails
-     * 
+     *
      * @example
      * const performance = await repo.getFinancialPerformance();
      */
@@ -842,10 +842,10 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Sync billing data with external systems
-     * 
+     *
      * @returns Promise<void>
      * @throws Error if sync fails
-     * 
+     *
      * @example
      * await repo.sync();
      */
@@ -865,11 +865,11 @@ export class BillingRepository extends Repository<TimeEntry> {
 
     /**
      * Export billing data in specified format
-     * 
+     *
      * @param format - Export format (e.g., 'pdf', 'xlsx', 'csv')
      * @returns Promise<string> File path or URL of exported file
      * @throws Error if format is invalid or export fails
-     * 
+     *
      * @example
      * const file = await repo.export('pdf');
      * // Returns: 'report.pdf'

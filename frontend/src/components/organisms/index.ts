@@ -2,12 +2,12 @@
  * @module components/organisms
  * @category Organisms
  * @description Complex composed components organized by business domain.
- * 
+ *
  * ARCHITECTURE PRINCIPLES:
  * 1. Organisms are complex components composed of molecules and atoms
  * 2. Domain-organized for better discoverability and maintenance
  * 3. Components are feature-rich and business-focused
- * 
+ *
  * USAGE:
  * ```tsx
  * import { Table, ErrorBoundary, Sidebar } from '@/components/organisms';
@@ -23,7 +23,7 @@ export * from './BackendHealthMonitor';
 export * from './BackendStatusIndicator';
 export * from './ConnectionStatus';
 export * from './ConnectivityHUD';
-export * from './ServiceCoverageIndicator';
+export * from './SystemHealthDisplay';
 export * from './PageHeader';
 
 // ============================================================================

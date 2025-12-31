@@ -12,7 +12,7 @@ import { DataSourceProvider, SyncProvider, ThemeProvider, ToastProvider, WindowP
 import { backendDiscovery } from '@/services/integration/backendDiscovery';
 import { IntegrationOrchestrator } from '@/services/integration/integrationOrchestrator';
 import type { Case } from '@/types';
-import type { IntentResult } from '@/types/ai';
+import type { IntentResult } from '@/types/intelligence';
 import React, { useEffect } from 'react';
 import { useDataServiceCleanup } from './hooks/useDataServiceCleanup';
 import { GlobalSearchResult } from './services/search/searchService';

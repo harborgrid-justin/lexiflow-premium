@@ -5,7 +5,7 @@
 
 export { CALENDAR_QUERY_KEYS, CalendarApiService } from "./calendar-api";
 export { ProjectsApiService } from "./projects-api";
-export { RisksApiService } from "./risks-api";
+export { RisksApiService } from "./risk-assessments-api";
 export { TASKS_QUERY_KEYS, TasksApiService } from "./tasks-api";
 export { WarRoomApiService } from "./war-room-api";
 export {

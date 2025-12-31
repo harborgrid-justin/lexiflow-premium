@@ -1,7 +1,7 @@
 // types.ts - Main types barrel export
 // Alphabetically sorted to prevent duplicates
 
-export * from "./types/ai";
+export * from "./types/intelligence";
 export * from "./types/analytics";
 export * from "./types/api-responses";
 export * from "./types/auth";

@@ -1,4 +1,4 @@
-// types/ai.ts
+// types/intelligence.ts
 
 import type { SearchResult } from './search';
 

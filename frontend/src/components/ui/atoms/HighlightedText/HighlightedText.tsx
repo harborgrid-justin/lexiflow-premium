@@ -16,7 +16,7 @@ import React, { memo } from 'react';
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Utils & Constants
-import { getHighlightClass, defaultHighlightClass } from './HighlightedText.styles';
+import { getHighlightClass, defaultHighlightClass } from './TextHighlight.styles';
 
 // ============================================================================
 // TYPES & INTERFACES

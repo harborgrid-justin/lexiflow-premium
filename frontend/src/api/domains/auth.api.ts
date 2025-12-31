@@ -5,10 +5,10 @@
 
 import { AuthApiService } from '../auth/auth-api';
 import { UsersApiService } from '../auth/users-api';
-import { ApiKeysApiService } from '../auth/api-keys-api';
-import { PermissionsApiService } from '../auth/permissions-api';
-import { EthicalWallsApiService } from '../auth/ethical-walls-api';
-import { TokenBlacklistAdminApiService } from '../auth/token-blacklist-admin-api';
+import { ApiKeysApiService } from '../auth/security-credentials-api';
+import { PermissionsApiService } from '../auth/access-rights-api';
+import { EthicalWallsApiService } from '../auth/info-barriers-api';
+import { TokenBlacklistAdminApiService } from '../auth/token-blocklist-api';
 
 // Export service classes
 export {

@@ -4,7 +4,7 @@
  */
 
 export { BillingAnalyticsApiService } from "./billing-analytics-api";
-export { BILLING_QUERY_KEYS, BillingApiService } from "./billing-api";
+export { BILLING_QUERY_KEYS, BillingApiService } from "./finance-api";
 export {
   ExpensesApiService,
   type CreateExpenseDto,
@@ -28,7 +28,7 @@ export {
   type TimeEntryFilters,
   type TimeEntryTotals,
   type UpdateTimeEntryDto,
-} from "./time-entries-api";
+} from "./work-logs-api";
 export {
   TrustAccountsApiService,
   trustAccountsApi,

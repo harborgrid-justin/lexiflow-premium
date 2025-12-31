@@ -9,7 +9,7 @@ export { AIOpsApiService, type AIOperation } from './ai-ops-api';
 export { AnalyticsDashboardApiService, type AnalyticsDashboard } from './analytics-dashboard-api';
 export { AnalyticsApiService, type AnalyticsEvent, type Dashboard, type MetricData, type TimeSeriesData } from './analytics-api';
 export { CaseAnalyticsApiService, type CaseAnalytics } from './case-analytics-api';
-export { OutcomePredictionsApiService, type OutcomePrediction } from './outcome-predictions-api';
+export { OutcomePredictionsApiService, type OutcomePrediction } from './case-forecasts-api';
 export { JudgeStatsApiService, type JudgeStatistics } from './judge-stats-api';
 export { BluebookApiService, bluebookApi, type CitationValidation, type CitationParseResult } from './bluebook-api';
 export { KnowledgeApiService, type KnowledgeArticle, type KnowledgeFilters } from './knowledge-api';

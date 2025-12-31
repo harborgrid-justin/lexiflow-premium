@@ -1,5 +1,5 @@
 /**
- * Type definitions for Gantt Dependencies
+ * Type definitions for Schedule Dependencies
  */
 
 export type DependencyType = 'finish-to-start' | 'start-to-start' | 'finish-to-finish' | 'start-to-finish';
@@ -12,7 +12,7 @@ export interface TaskDependency {
   lagDays?: number;
 }
 
-export interface GanttTask {
+export interface ScheduleTask {
   id: string;
   name: string;
   startDate: Date;
@@ -35,7 +35,7 @@ export interface CriticalPath {
   slackTime: Map<string, number>;
 }
 
-export interface UseGanttDependenciesReturn {
+export interface UseScheduleDependenciesReturn {
   dependencies: TaskDependency[];
   criticalPath: CriticalPath | null;
   addDependency: (dependency: Omit<TaskDependency, 'id'>) => string;

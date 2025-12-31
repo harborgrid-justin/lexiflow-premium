@@ -1,7 +1,7 @@
 /**
  * Integration Orchestrator - Enterprise event-driven integration bus
  * Mediator pattern with handler registry for cross-domain side-effects
- * 
+ *
  * @module services/integration/integrationOrchestrator
  * @description Production-ready integration orchestrator providing:
  * - Event-driven integration bus for cross-domain communication
@@ -11,27 +11,27 @@
  * - Statistics tracking for monitoring
  * - Type-safe event payloads via SystemEventPayloads
  * - Zero business logic (delegated to handlers)
- * 
+ *
  * @architecture
  * - Pattern: Mediator + Event Bus + Registry
  * - Routing: Type-based dispatch to handler registry
  * - Handlers: BaseEventHandler implementations
  * - Error isolation: Handler failures don't crash bus
  * - Logging: Console-based with structured output
- * 
+ *
  * @performance
  * - Handler lookup: O(1) via Map-based registry
  * - Async execution: Non-blocking event processing
  * - No queuing: Handlers execute immediately
  * - Memory: Minimal (stateless orchestrator)
- * 
+ *
  * @refactoring
  * - Completed: 2025-12-19
  * - Before: 358 lines with 300+ line switch statement
  * - After: 87 lines (76% reduction)
  * - Extracted: 11 event handlers into separate modules
  * - Improvements: Type safety, maintainability, testability
- * 
+ *
  * @handlers
  * - CASE_CREATED → CaseCreatedHandler (conflict checks, analytics)
  * - DOCKET_INGESTED → DocketIngestedHandler (keyword extraction, timeline sync)
@@ -42,9 +42,9 @@
  * - INVOICE_STATUS_CHANGED → InvoiceStatusChangedHandler (revenue recognition)
  * - TASK_COMPLETED → TaskCompletedHandler (workflow progression)
  * - LEAD_STAGE_CHANGED → LeadStageChangedHandler (CRM pipeline)
- * - DATA_SOURCE_CONNECTED → DataSourceConnectedHandler (catalog sync)
+ * - DATA_SOURCE_CONNECTED → SourceLinkedHandler (catalog sync)
  * - Plus: SERVICE_COMPLETED, STAFF_HIRED, WALL_ERECTED handlers
- * 
+ *
  * @usage
  * ```typescript
  * // Publish event to trigger integrations
@@ -53,13 +53,13 @@
  *   clientId: 'client-456',
  *   userId: 'user-789'
  * });
- * 
+ *
  * if (result.success) {
  *   console.log(`Triggered ${result.triggeredActions.length} actions`);
  * } else {
  *   console.error('Integration errors:', result.errors);
  * }
- * 
+ *
  * // Get handler statistics
  * const stats = IntegrationOrchestrator.getStats();
  * console.log(`${stats.handlerCount} handlers registered`);
@@ -190,13 +190,13 @@ export class IntegrationOrchestrator {
             };
         }
     }
-    
+
     /**
      * Get integration statistics
      * Returns handler count and registration info
-     * 
+     *
      * @returns Object - Statistics from handler registry
-     * 
+     *
      * @example
      * const stats = IntegrationOrchestrator.getStats();
      * console.log(`Handlers: ${stats.handlerCount}`);

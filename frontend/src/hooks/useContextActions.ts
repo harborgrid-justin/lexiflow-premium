@@ -1,5 +1,5 @@
 /**
- * @module hooks/useContextToolbar
+ * @module hooks/useContextActions
  * @category Hooks
  * @description Context-sensitive toolbar that adapts based on selection and user behavior.
  */
@@ -87,31 +87,31 @@ export interface UseContextToolbarReturn {
  */
 function getContextSignature(context: ToolbarContext): string {
   const parts: string[] = [];
-  
+
   if (context.selection) {
     parts.push(`sel:${context.selection.type}`);
     if (context.selection.length) {
       parts.push(`len:${context.selection.length > 100 ? 'long' : 'short'}`);
     }
   }
-  
+
   if (context.document) {
     parts.push(`doc:${context.document.type}`);
     parts.push(`edit:${context.document.canEdit}`);
   }
-  
+
   return parts.join('|');
 }
 
 /**
  * Context-Sensitive Toolbar Hook
- * 
+ *
  * Adapts toolbar based on:
  * - Current selection type
  * - Document type and permissions
  * - User preferences and favorites
  * - Usage patterns (ML-like learning)
- * 
+ *
  * @example
  * ```tsx
  * const {
@@ -123,7 +123,7 @@ function getContextSignature(context: ToolbarContext): string {
  *   maxVisible: 8,
  *   enableLearning: true
  * });
- * 
+ *
  * // Update context when selection changes
  * useEffect(() => {
  *   setContext({
@@ -157,7 +157,7 @@ export function useContextToolbar(
       const stored = localStorage.getItem(storageKey);
       if (stored) {
         const data = JSON.parse(stored);
-        
+
         // Restore stats
         const statsMap = new Map<string, ActionStats>();
         Object.entries(data.stats || {}).forEach(([id, stat]: [string, any]) => {
@@ -168,7 +168,7 @@ export function useContextToolbar(
           });
         });
         setActionStats(statsMap);
-        
+
         // Restore preferences
         if (data.favorites) setFavorites(new Set(data.favorites));
         if (data.hidden) setHidden(new Set(data.hidden));
@@ -234,7 +234,7 @@ export function useContextToolbar(
     // Recent usage boost
     const timeSinceUse = Date.now() - stats.lastUsed.getTime();
     const daysSinceUse = timeSinceUse / (1000 * 60 * 60 * 24);
-    
+
     if (daysSinceUse < 1) {
       priority += 15; // Used today
     } else if (daysSinceUse < 7) {
@@ -266,7 +266,7 @@ export function useContextToolbar(
     return allActions.filter(action => {
       // Filter by context-specific rules
       if (action.disabled) return false;
-      
+
       // Selection-based filtering
       if (context.selection) {
         // Example: Format actions only relevant when text is selected
@@ -291,7 +291,7 @@ export function useContextToolbar(
    */
   const sortedActions = useMemo(() => {
     const relevant = getRelevantActions();
-    
+
     return relevant
       .map(action => ({
         action,
@@ -307,7 +307,7 @@ export function useContextToolbar(
   const { visibleActions, overflowActions } = useMemo(() => {
     const visible = sortedActions.slice(0, maxVisible);
     const overflow = sortedActions.slice(maxVisible);
-    
+
     return { visibleActions: visible, overflowActions: overflow };
   }, [sortedActions, maxVisible]);
 

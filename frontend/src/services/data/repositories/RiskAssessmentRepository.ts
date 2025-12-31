@@ -9,7 +9,7 @@ import { STORES } from '@/services/data/db';
 import { IntegrationEventPublisher } from '@/services/data/integration/IntegrationEventPublisher';
 import { SystemEventType } from '@/types/integration-types';
 import { isBackendApiEnabled } from '@/services/integration/apiConfig';
-import { RisksApiService } from '@/api/workflow/risks-api';
+import { RisksApiService } from '@/api/workflow/risk-assessments-api';
 import { ValidationError } from '@/services/core/errors';
 
 export const RISK_QUERY_KEYS = {

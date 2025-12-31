@@ -1,4 +1,4 @@
-import type { TaskDependency, ValidationResult, GanttTask } from './types';
+import type { TaskDependency, ValidationResult, ScheduleTask } from './types';
 
 /**
  * Check for circular dependencies using DFS
@@ -18,7 +18,7 @@ export function hasCircularDependency(
     recursionStack.add(currentId);
 
     const outgoingDeps = dependencies.filter(dep => dep.fromTaskId === currentId);
-    
+
     for (const dep of outgoingDeps) {
       if (dep.toTaskId === toTaskId || dfs(dep.toTaskId)) {
         return true;
@@ -37,7 +37,7 @@ export function hasCircularDependency(
  */
 export function validateDependency(
   dependency: Omit<TaskDependency, 'id'>,
-  taskMap: Map<string, GanttTask>,
+  taskMap: Map<string, ScheduleTask>,
   dependencies: TaskDependency[]
 ): ValidationResult {
   const errors: string[] = [];
@@ -59,7 +59,7 @@ export function validateDependency(
   }
 
   const duplicate = dependencies.find(
-    d => d.fromTaskId === dependency.fromTaskId && 
+    d => d.fromTaskId === dependency.fromTaskId &&
          d.toTaskId === dependency.toTaskId &&
          d.type === dependency.type
   );

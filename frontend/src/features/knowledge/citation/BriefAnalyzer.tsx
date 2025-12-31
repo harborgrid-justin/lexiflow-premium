@@ -45,7 +45,7 @@ import { cn } from '@/utils/cn';
 // TYPES & INTERFACES
 // ============================================================================
 import { Case, Citation } from '@/types';
-import { BriefCritique } from '@/types/ai';
+import { BriefCritique } from '@/types/intelligence';
 import { sanitizeHtml } from './utils';
 
 export const BriefAnalyzer: React.FC = () => {

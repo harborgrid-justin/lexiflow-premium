@@ -1,6 +1,6 @@
 /**
  * Cloud Database View Component
- * 
+ *
  * Manages cloud database connections including adding, syncing,
  * deleting, and testing connections.
  */
@@ -12,7 +12,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import type { ThemeContextValue } from '@/providers/ThemeContext.types';
 import { cn } from '@/utils/cn';
 import { ConnectionCard } from './ConnectionCard';
-import { ServiceCoverageIndicator } from './ServiceCoverageIndicator';
+import { SystemHealthDisplay } from './SystemHealthDisplay';
 import { DATA_PROVIDERS } from './constants';
 import { useDataSourceConnections, useConnectionForm } from './hooks';
 import { DataSourceSelector } from './DataSourceSelector';
@@ -25,12 +25,12 @@ export const CloudDatabaseView = React.memo(() => {
   const { theme } = useTheme();
   const { isAdding, setIsAdding, formData, setFormData } = useConnectionForm();
   const { selectedProvider, setSelectedProvider, resetForm } = useConnectionForm();
-  
+
   return (
     <div className="space-y-6">
       <DataSourceSelector />
-      <ServiceCoverageIndicator />
-      <CloudDatabaseContent 
+      <SystemHealthDisplay />
+      <CloudDatabaseContent
         theme={theme}
         isAdding={isAdding}
         setIsAdding={setIsAdding}
@@ -59,13 +59,13 @@ interface CloudDatabaseContentProps {
   resetForm: () => void;
 }
 
-const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({ 
-  theme, 
-  isAdding, 
+const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
+  theme,
+  isAdding,
   setIsAdding,
-  selectedProvider, 
+  selectedProvider,
   setSelectedProvider,
-  formData, 
+  formData,
   setFormData,
   resetForm
 }) => {
@@ -83,14 +83,14 @@ const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedProvider) return;
-    
+
     const provider = DATA_PROVIDERS.find(p => p.id === selectedProvider);
     addConnection({
       ...formData,
       type: provider?.name,
       providerId: selectedProvider
     });
-    
+
     resetForm();
   };
 
@@ -105,7 +105,7 @@ const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <button 
+          <button
             onClick={() => refetch()}
             disabled={isLoading}
             className={cn(
@@ -118,11 +118,11 @@ const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
             <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} />
             Refresh
           </button>
-          <button 
+          <button
             onClick={() => setIsAdding(!isAdding)}
             className={cn(
               "px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 shadow-sm",
-              isAdding 
+              isAdding
                 ? "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-slate-800 dark:text-gray-300"
                 : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-500/25"
             )}
@@ -144,7 +144,7 @@ const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
           >
             <div className={cn("p-6 rounded-xl border border-blue-100 bg-blue-50/50 dark:bg-blue-900/10 dark:border-blue-800 mb-6")}>
               {!selectedProvider ? (
-                <ProviderSelection 
+                <ProviderSelection
                   providers={DATA_PROVIDERS}
                   onSelect={setSelectedProvider}
                   theme={theme}
@@ -170,16 +170,16 @@ const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <AnimatePresence>
           {connections.map((conn) => (
-            <ConnectionCard 
-              key={conn.id} 
-              connection={conn} 
+            <ConnectionCard
+              key={conn.id}
+              connection={conn}
               onSync={syncConnection}
               onDelete={deleteConnection}
               onTest={testConnection}
             />
           ))}
         </AnimatePresence>
-        
+
         {/* Empty State */}
         {connections.length === 0 && !isLoading && (
           <div className="col-span-full py-12 flex flex-col items-center justify-center text-center border-2 border-dashed border-gray-200 rounded-xl">
@@ -190,7 +190,7 @@ const CloudDatabaseContent: React.FC<CloudDatabaseContentProps> = ({
             <p className={cn("text-sm text-gray-500 mt-1 max-w-sm")}>
               Connect your first data source to start syncing data across your enterprise.
             </p>
-            <button 
+            <button
               onClick={() => setIsAdding(true)}
               className="mt-4 text-blue-600 font-medium text-sm hover:underline"
             >
@@ -214,8 +214,8 @@ const ProviderSelection: React.FC<ProviderSelectionProps> = ({ providers, onSele
     <h4 className={cn("text-sm font-bold mb-4", theme.text.primary)}>Select Provider</h4>
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {providers.map(p => (
-        <button 
-          key={p.id} 
+        <button
+          key={p.id}
           onClick={() => onSelect(p.id)}
           className="group flex flex-col items-center justify-center p-6 rounded-xl border bg-white dark:bg-slate-800 hover:border-blue-500 hover:shadow-md transition-all gap-3"
         >
@@ -254,9 +254,9 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({
 }) => (
   <form onSubmit={onSubmit} className="space-y-4 max-w-2xl">
     <div className="flex items-center gap-2 mb-6">
-      <button 
-        type="button" 
-        onClick={() => { /* Navigate back to provider selection */ }} 
+      <button
+        type="button"
+        onClick={() => { /* Navigate back to provider selection */ }}
         className="text-sm text-blue-600 hover:underline flex items-center gap-1"
       >
         ← Providers
@@ -266,14 +266,14 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({
         Configure {providers.find(p => p.id === selectedProvider)?.name}
       </span>
     </div>
-    
+
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
           Connection Name
         </label>
-        <input 
-          type="text" 
+        <input
+          type="text"
           required
           className={cn("w-full px-4 py-2.5 rounded-lg border text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all", theme.surface.default, theme.border.default, theme.text.primary)}
           value={formData.name}
@@ -285,8 +285,8 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({
         <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">
           Host / Endpoint
         </label>
-        <input 
-          type="text" 
+        <input
+          type="text"
           required
           className={cn("w-full px-4 py-2.5 rounded-lg border text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all", theme.surface.default, theme.border.default, theme.text.primary)}
           value={formData.host}
@@ -295,16 +295,16 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({
         />
       </div>
     </div>
-    
+
     <div className="flex justify-end gap-3 pt-4">
-      <button 
+      <button
         type="button"
-        onClick={onCancel} 
+        onClick={onCancel}
         className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
       >
         Cancel
       </button>
-      <button 
+      <button
         type="submit"
         disabled={isSubmitting}
         className="px-6 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 shadow-lg shadow-blue-500/30 transition-all hover:scale-105 active:scale-95"

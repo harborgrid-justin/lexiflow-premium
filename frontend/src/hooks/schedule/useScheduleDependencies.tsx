@@ -1,11 +1,11 @@
 /**
- * @module hooks/useGanttDependencies
+ * @module hooks/useScheduleDependencies
  * @category Hooks
  * @description Manages Gantt chart dependencies with critical path calculation and cascade updates.
  */
 
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import type { GanttTask, TaskDependency, UseGanttDependenciesReturn } from './types';
+import type { ScheduleTask, TaskDependency, UseScheduleDependenciesReturn } from './types';
 import { validateDependency, hasCircularDependency } from './validation';
 import { calculateCriticalPath } from './criticalPath';
 import { getDependentTasks, getPredecessorTasks, cascadeTaskUpdate } from './dependencies';
@@ -15,20 +15,20 @@ export * from './types';
 
 /**
  * Hook for managing Gantt chart dependencies
- * 
+ *
  * @param tasks - Array of Gantt tasks
  * @param initialDependencies - Initial dependencies
  * @returns Dependency management utilities
  */
-export function useGanttDependencies(
-  tasks: GanttTask[],
+export function useScheduleDependencies(
+  tasks: ScheduleTask[],
   initialDependencies: TaskDependency[] = []
-): UseGanttDependenciesReturn {
+): UseScheduleDependenciesReturn {
   const [dependencies, setDependencies] = useState<TaskDependency[]>(initialDependencies);
   const [criticalPath, setCriticalPath] = useState<ReturnType<typeof calculateCriticalPath>>(null);
 
   const taskMap = useMemo(() => {
-    const map = new Map<string, GanttTask>();
+    const map = new Map<string, ScheduleTask>();
     tasks.forEach(task => map.set(task.id, task));
     return map;
   }, [tasks]);
@@ -41,14 +41,14 @@ export function useGanttDependencies(
 
   const addDependency = useCallback((dependency: Omit<TaskDependency, 'id'>): string => {
     const validation = validateDependency(dependency, taskMap, dependencies);
-    
+
     if (!validation.isValid) {
       throw new Error(validation.errors.join(', '));
     }
 
     const id = `dep-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const newDep: TaskDependency = { ...dependency, id };
-    
+
     setDependencies(prev => [...prev, newDep]);
     return id;
   }, [taskMap, dependencies]);
@@ -123,4 +123,4 @@ export function useGanttDependencies(
   };
 }
 
-export default useGanttDependencies;
+export default useScheduleDependencies;

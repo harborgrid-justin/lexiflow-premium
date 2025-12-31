@@ -1,12 +1,12 @@
-import type { TaskDependency, GanttTask } from './types';
+import type { TaskDependency, ScheduleTask } from './types';
 
 /**
  * Get dependency path coordinates for visualization
- * 
+ *
  * This function calculates SVG arrow coordinates for Gantt chart dependency lines.
  * If DOM-based positioning is needed, the consuming component should provide
  * task element refs and calculate getBoundingClientRect() positions.
- * 
+ *
  * @param dependencyId - The dependency to visualize
  * @param dependencies - All dependencies
  * @param tasks - All Gantt tasks with positioning data
@@ -16,7 +16,7 @@ import type { TaskDependency, GanttTask } from './types';
 export function getDependencyPath(
   dependencyId: string,
   dependencies: TaskDependency[],
-  tasks?: GanttTask[],
+  tasks?: ScheduleTask[],
   getTaskPosition?: (taskId: string) => { x: number; y: number; width: number; height: number } | null
 ): { start: { x: number; y: number }; end: { x: number; y: number } } | null {
   const dep = dependencies.find(d => d.id === dependencyId);
@@ -26,12 +26,12 @@ export function getDependencyPath(
   if (getTaskPosition) {
     const fromPos = getTaskPosition(dep.fromTaskId);
     const toPos = getTaskPosition(dep.toTaskId);
-    
+
     if (!fromPos || !toPos) return null;
-    
+
     // Calculate connection points based on dependency type
     let startX: number, startY: number, endX: number, endY: number;
-    
+
     switch (dep.type) {
       case 'finish-to-start':
         // From task right edge to target task left edge
@@ -40,7 +40,7 @@ export function getDependencyPath(
         endX = toPos.x;
         endY = toPos.y + toPos.height / 2;
         break;
-        
+
       case 'start-to-start':
         // From task left edge to target task left edge
         startX = fromPos.x;
@@ -48,7 +48,7 @@ export function getDependencyPath(
         endX = toPos.x;
         endY = toPos.y + toPos.height / 2;
         break;
-        
+
       case 'finish-to-finish':
         // From task right edge to target task right edge
         startX = fromPos.x + fromPos.width;
@@ -56,7 +56,7 @@ export function getDependencyPath(
         endX = toPos.x + toPos.width;
         endY = toPos.y + toPos.height / 2;
         break;
-        
+
       case 'start-to-finish':
         // From task left edge to target task right edge
         startX = fromPos.x;
@@ -64,41 +64,41 @@ export function getDependencyPath(
         endX = toPos.x + toPos.width;
         endY = toPos.y + toPos.height / 2;
         break;
-        
+
       default:
         return null;
     }
-    
+
     return {
       start: { x: startX, y: startY },
       end: { x: endX, y: endY }
     };
   }
-  
+
   // Fallback: calculate from task data if available
   if (tasks) {
     const fromTask = tasks.find(t => t.id === dep.fromTaskId);
     const toTask = tasks.find(t => t.id === dep.toTaskId);
-    
+
     if (!fromTask || !toTask) return null;
-    
+
     // Use task scheduling data for relative positioning
     // This provides logical dependency connections without DOM coordinates
     const fromStart = new Date(fromTask.startDate).getTime();
     const fromEnd = new Date(fromTask.endDate).getTime();
     const toStart = new Date(toTask.startDate).getTime();
     const toEnd = new Date(toTask.endDate).getTime();
-    
+
     // Calculate relative timeline positions (normalized 0-1000 scale)
     const timelineStart = Math.min(fromStart, toStart);
     const timelineEnd = Math.max(fromEnd, toEnd);
     const timelineSpan = timelineEnd - timelineStart || 1;
-    
+
     const fromStartNorm = ((fromStart - timelineStart) / timelineSpan) * 1000;
     const fromEndNorm = ((fromEnd - timelineStart) / timelineSpan) * 1000;
     const toStartNorm = ((toStart - timelineStart) / timelineSpan) * 1000;
     const toEndNorm = ((toEnd - timelineStart) / timelineSpan) * 1000;
-    
+
     // Position based on dependency type
     switch (dep.type) {
       case 'finish-to-start':
@@ -125,7 +125,7 @@ export function getDependencyPath(
         return null;
     }
   }
-  
+
   // No positioning data available
   return null;
 }
@@ -141,7 +141,7 @@ export function getDependencyColor(
   const dep = dependencies.find(d => d.id === dependencyId);
   if (!dep) return '#94a3b8'; // slate-400
 
-  const isCritical = criticalPathIds.includes(dep.fromTaskId) && 
+  const isCritical = criticalPathIds.includes(dep.fromTaskId) &&
                      criticalPathIds.includes(dep.toTaskId);
 
   if (isCritical) return '#ef4444'; // red-500

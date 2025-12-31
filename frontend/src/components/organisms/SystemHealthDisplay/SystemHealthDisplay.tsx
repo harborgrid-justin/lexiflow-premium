@@ -20,14 +20,14 @@ const SERVICE_COVERAGE: ServiceInfo[] = [
   { name: 'Docket', category: 'Core Data', hasBackend: true },
   { name: 'Evidence', category: 'Core Data', hasBackend: true },
   { name: 'Documents', category: 'Core Data', hasBackend: true },
-  
+
   // Litigation (5/5 - 100%)
   { name: 'Pleadings', category: 'Litigation', hasBackend: true },
   { name: 'Motions', category: 'Litigation', hasBackend: true },
   { name: 'Parties', category: 'Litigation', hasBackend: true },
   { name: 'Clauses', category: 'Litigation', hasBackend: true },
   { name: 'Case Phases', category: 'Litigation', hasBackend: true },
-  
+
   // Discovery (7/7 - 100%)
   { name: 'Legal Holds', category: 'Discovery', hasBackend: true },
   { name: 'Depositions', category: 'Discovery', hasBackend: true },
@@ -36,7 +36,7 @@ const SERVICE_COVERAGE: ServiceInfo[] = [
   { name: 'Privilege Log', category: 'Discovery', hasBackend: true },
   { name: 'Productions', category: 'Discovery', hasBackend: true },
   { name: 'Custodian Interviews', category: 'Discovery', hasBackend: true },
-  
+
   // Billing (9/9 - 100%)
   { name: 'Time Entries', category: 'Billing', hasBackend: true },
   { name: 'Invoices', category: 'Billing', hasBackend: true },
@@ -47,7 +47,7 @@ const SERVICE_COVERAGE: ServiceInfo[] = [
   { name: 'Billing Analytics', category: 'Billing', hasBackend: true },
   { name: 'Processing Jobs', category: 'Billing', hasBackend: true },
   { name: 'Reports', category: 'Billing', hasBackend: true },
-  
+
   // Compliance (6/6 - 100%)
   { name: 'Conflict Checks', category: 'Compliance', hasBackend: true },
   { name: 'Ethical Walls', category: 'Compliance', hasBackend: true },
@@ -55,7 +55,7 @@ const SERVICE_COVERAGE: ServiceInfo[] = [
   { name: 'Permissions', category: 'Compliance', hasBackend: true },
   { name: 'RLS Policies', category: 'Compliance', hasBackend: true },
   { name: 'Compliance Reports', category: 'Compliance', hasBackend: true },
-  
+
   // Operations (7/7 - 100%)
   { name: 'Projects', category: 'Operations', hasBackend: true },
   { name: 'Communications', category: 'Operations', hasBackend: true },
@@ -64,31 +64,31 @@ const SERVICE_COVERAGE: ServiceInfo[] = [
   { name: 'Examinations', category: 'Operations', hasBackend: true },
   { name: 'Case Teams', category: 'Operations', hasBackend: true },
   { name: 'Time Entries (Extended)', category: 'Operations', hasBackend: true },
-  
+
   // Workflow & Task Management (2/2 - 100%)
   { name: 'Tasks', category: 'Workflow', hasBackend: true },
   { name: 'Risks', category: 'Workflow', hasBackend: true },
   { name: 'Workflow Templates', category: 'Workflow', hasBackend: true },
-  
+
   // HR & Administration (1/1 - 100%)
   { name: 'HR', category: 'HR', hasBackend: true },
-  
+
   // Trial & Exhibits (2/2 - 100%)
   { name: 'Trial Management', category: 'Trial', hasBackend: true },
   { name: 'Exhibits', category: 'Trial', hasBackend: true },
-  
+
   // Client Relationship Management (1/1 - 100%)
   { name: 'Clients', category: 'CRM', hasBackend: true },
-  
+
   // Research & Knowledge (2/2 - 100%)
   { name: 'Citations', category: 'Research', hasBackend: true },
   { name: 'Knowledge Base', category: 'Research', hasBackend: true },
-  
+
   // Collaboration & Communication (3/3 - 100%)
   { name: 'Calendar', category: 'Collaboration', hasBackend: true },
   { name: 'Messenger', category: 'Collaboration', hasBackend: true },
   { name: 'War Room', category: 'Collaboration', hasBackend: true },
-  
+
   // Analytics & Reporting (1/1 - 100%)
   { name: 'Analytics Dashboard', category: 'Analytics', hasBackend: true },
 ];
@@ -98,11 +98,11 @@ const SERVICE_COVERAGE: ServiceInfo[] = [
  */
 const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCoverageBadge({ className = '', compact = false }) {
   const { isBackendApiEnabled } = useDataSource();
-  
+
   const totalServices = SERVICE_COVERAGE.length;
   const backendServices = SERVICE_COVERAGE.filter(s => s.hasBackend).length;
   const coveragePercent = Math.round((backendServices / totalServices) * 100);
-  
+
   if (!isBackendApiEnabled) {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
@@ -113,7 +113,7 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
       </div>
     );
   }
-  
+
   if (compact) {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
@@ -125,7 +125,7 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
       </div>
     );
   }
-  
+
   // Group services by category
   const categories = SERVICE_COVERAGE.reduce((acc: Record<string, { total: number; backend: number }>, service) => {
     if (!acc[service.category]) {
@@ -135,7 +135,7 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
     if (service.hasBackend) acc[service.category].backend++;
     return acc;
   }, {} as Record<string, { total: number; backend: number }>);
-  
+
   return (
     <div className={`space-y-3 ${className}`}>
       <div className="flex items-center justify-between">
@@ -149,7 +149,7 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
           </span>
         </div>
       </div>
-      
+
       <div className="space-y-2">
         {Object.entries(categories).map(([category, stats]) => {
           const categoryPercent = Math.round((stats.backend / stats.total) * 100);
@@ -173,10 +173,10 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
           );
         })}
       </div>
-      
+
       <div className="pt-3 border-t border-gray-200 dark:border-slate-700">
         <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-          When backend mode is enabled, {backendServices} services use PostgreSQL. 
+          When backend mode is enabled, {backendServices} services use PostgreSQL.
           {totalServices - backendServices > 0 && (
             <> {totalServices - backendServices} services still use local IndexedDB storage.</>
           )}
@@ -186,15 +186,15 @@ const ServiceCoverageBadge = React.memo<ServiceCoverageProps>(function ServiceCo
   );
 });
 
-export const ServiceCoverageIndicator: React.FC<{
+export const SystemHealthDisplay: React.FC<{
   isOpen: boolean;
   onClose: () => void;
 }> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
-  
+
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center" onClick={onClose}>
-      <div 
+      <div
         className="bg-white dark:bg-slate-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-y-auto mx-4"
         onClick={e => e.stopPropagation()}
       >
@@ -210,14 +210,14 @@ export const ServiceCoverageIndicator: React.FC<{
               ✕
             </button>
           </div>
-          
+
           <ServiceCoverageBadge />
-          
+
           <div className="mt-6 space-y-4">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
               Service Details
             </h3>
-            
+
             {Object.entries(
               SERVICE_COVERAGE.reduce((acc: Record<string, ServiceInfo[]>, service) => {
                 if (!acc[service.category]) acc[service.category] = [];

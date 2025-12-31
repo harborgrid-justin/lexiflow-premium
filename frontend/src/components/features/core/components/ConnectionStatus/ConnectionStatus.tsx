@@ -3,7 +3,7 @@ import { Database, Cloud, WifiOff, AlertCircle, Activity, Info } from 'lucide-re
 import { apiClient } from '@/services/infrastructure/apiClient';
 import { useDataSource } from '@/providers/DataSourceContext';
 import { BackendHealthMonitor } from '@/components/organisms/BackendHealthMonitor/BackendHealthMonitor';
-import { ServiceCoverageIndicator } from '@/components/organisms/ServiceCoverageIndicator/ServiceCoverageIndicator';
+import { SystemHealthDisplay } from '@/components/organisms/SystemHealthDisplay/SystemHealthDisplay';
 
 interface ConnectionStatusProps {
   className?: string;
@@ -116,7 +116,7 @@ export const ConnectionStatus: React.FC<ConnectionStatusProps> = ({ className = 
         )}
       </div>
 
-      <ServiceCoverageIndicator
+      <SystemHealthDisplay
         isOpen={showCoverage}
         onClose={() => setShowCoverage(false)}
       />

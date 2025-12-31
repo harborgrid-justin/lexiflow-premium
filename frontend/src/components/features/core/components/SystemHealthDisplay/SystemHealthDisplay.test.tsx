@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { ServiceCoverageIndicator } from './ServiceCoverageIndicator';
+import { SystemHealthDisplay } from './SystemHealthDisplay';
 
-describe('ServiceCoverageIndicator Organism', () => {
+describe('SystemHealthDisplay Organism', () => {
   it('renders correctly', () => {
-    // render(<ServiceCoverageIndicator />);
+    // render(<SystemHealthDisplay />);
     // expect(screen.getByText(/content/i)).toBeInTheDocument();
   });
 });

@@ -10,7 +10,7 @@ import { AnalyticsDashboardApiService } from '../intelligence/analytics-dashboar
 import { BillingAnalyticsApiService } from '../billing/billing-analytics-api';
 import { CaseAnalyticsApiService } from '../intelligence/case-analytics-api';
 import { DiscoveryAnalyticsApiService } from '../discovery/discovery-analytics-api';
-import { OutcomePredictionsApiService } from '../intelligence/outcome-predictions-api';
+import { OutcomePredictionsApiService } from '../intelligence/case-forecasts-api';
 import { JudgeStatsApiService } from '../intelligence/judge-stats-api';
 import { BluebookApiService } from '../intelligence/bluebook-api';
 import { KnowledgeApiService } from '../intelligence/knowledge-api';

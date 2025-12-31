@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
 import { DataSourceSelector } from './DataSourceSelector';
-import { ServiceCoverageIndicator } from './ServiceCoverageIndicator';
+import { SystemHealthDisplay } from './SystemHealthDisplay';
 import { IndexedDBStoreList } from './IndexedDBStoreList';
 import { IndexedDBDataTable } from './IndexedDBDataTable';
 import type { StoreInfo, StoreRecord } from './types';
@@ -82,7 +82,7 @@ export const IndexedDBView: React.FC = () => {
   const filteredData = storeData.filter(item => {
     if (!searchTerm) return true;
     const searchLower = searchTerm.toLowerCase();
-    return Object.values(item).some(value => 
+    return Object.values(item).some(value =>
       String(value).toLowerCase().includes(searchLower)
     );
   });
@@ -90,17 +90,17 @@ export const IndexedDBView: React.FC = () => {
   return (
     <div className="space-y-6">
       <DataSourceSelector />
-      <ServiceCoverageIndicator />
-      
+      <SystemHealthDisplay />
+
       <div className={cn("p-6 rounded-xl border shadow-sm", theme.surface.default, theme.border.default)}>
         <div className="flex justify-between items-center mb-6">
           <h3 className={cn("text-lg font-semibold flex items-center gap-2", theme.text.primary)}>
-            <Database className="h-5 w-5 text-blue-500" /> 
+            <Database className="h-5 w-5 text-blue-500" />
             {selectedStore ? `${selectedStore} Data` : 'IndexedDB Stores'}
           </h3>
           <div className="flex items-center gap-2">
             {selectedStore && (
-              <button 
+              <button
                 onClick={handleBackToStores}
                 className={cn(
                   "px-4 py-2 text-sm font-medium rounded-lg border flex items-center gap-2",
@@ -112,7 +112,7 @@ export const IndexedDBView: React.FC = () => {
                 Back to Stores
               </button>
             )}
-            <button 
+            <button
               onClick={() => refetch()}
               className={cn(
                 "px-4 py-2 text-sm font-medium rounded-lg border flex items-center gap-2",
@@ -121,7 +121,7 @@ export const IndexedDBView: React.FC = () => {
                 theme.text.primary
               )}
             >
-              <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} /> 
+              <RefreshCw className={cn("h-4 w-4", isLoading && "animate-spin")} />
               Refresh
             </button>
           </div>

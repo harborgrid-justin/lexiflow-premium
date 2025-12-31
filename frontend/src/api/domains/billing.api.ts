@@ -3,8 +3,8 @@
  * Time entries, invoices, expenses, fee agreements, rate tables, trust accounts
  */
 
-import { BillingApiService } from '../billing/billing-api';
-import { TimeEntriesApiService } from '../billing/time-entries-api';
+import { BillingApiService } from '../billing/finance-api';
+import { TimeEntriesApiService } from '../billing/work-logs-api';
 import { InvoicesApiService } from '../billing/invoices-api';
 import { ExpensesApiService } from '../billing/expenses-api';
 import { FeeAgreementsApiService } from '../billing/fee-agreements-api';

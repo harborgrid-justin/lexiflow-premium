@@ -7,19 +7,19 @@ import { useDataSource } from '@/providers/DataSourceContext';
 
 const BACKEND_SERVICES = [
   'cases', 'docket', 'documents', 'evidence', 'billing', 'users',
-  'pleadings', 'trustAccounts', 'billingAnalytics', 'reports', 
+  'pleadings', 'trustAccounts', 'billingAnalytics', 'reports',
   'processingJobs', 'casePhases', 'caseTeams', 'motions', 'parties',
-  'clauses', 'legalHolds', 'depositions', 'discoveryRequests', 
+  'clauses', 'legalHolds', 'depositions', 'discoveryRequests',
   'esiSources', 'privilegeLog', 'productions', 'custodianInterviews',
   'conflictChecks', 'ethicalWalls', 'auditLogs', 'permissions',
   'rlsPolicies', 'complianceReports', 'rateTables', 'feeAgreements',
-  'custodians', 'examinations', 'discoveryMain', 'search', 'ocr', 
-  'serviceJobs', 'messaging', 'complianceMain', 'tokenBlacklist', 
-  'analytics', 'judgeStats', 'outcomePredictions', 'documentVersions', 
+  'custodians', 'examinations', 'discoveryMain', 'search', 'ocr',
+  'serviceJobs', 'messaging', 'complianceMain', 'tokenBlacklist',
+  'analytics', 'judgeStats', 'outcomePredictions', 'documentVersions',
   'dataSourcesIntegration', 'metrics', 'production'
 ];
 
-export const ServiceCoverageIndicator: React.FC = () => {
+export const SystemHealthDisplay: React.FC = () => {
   const { theme } = useTheme();
   const { currentSource } = useDataSource();
   const [showDetails, setShowDetails] = useState(false);
@@ -102,8 +102,8 @@ export const ServiceCoverageIndicator: React.FC = () => {
                   key={service}
                   className={cn(
                     "px-3 py-2 rounded-lg text-xs font-mono flex items-center gap-2",
-                    currentSource === 'postgresql' 
-                      ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300" 
+                    currentSource === 'postgresql'
+                      ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
                       : "bg-gray-50 dark:bg-slate-800 text-gray-600 dark:text-gray-400"
                   )}
                 >

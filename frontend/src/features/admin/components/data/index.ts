@@ -28,10 +28,10 @@ export { Configuration } from './Configuration';
 // Components
 export { default as DataSourcesManager } from './DataSourcesManager';
 export { ConnectionCard } from './ConnectionCard';
-export { ServiceCoverageIndicator } from './ServiceCoverageIndicator';
+export { SystemHealthDisplay } from './SystemHealthDisplay';
 
 // Hooks
-export { 
+export {
   useDataSourceConnections,
   useConnectionForm,
   useLocalStorageFiles

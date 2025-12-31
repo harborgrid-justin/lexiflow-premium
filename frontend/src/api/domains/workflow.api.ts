@@ -7,7 +7,7 @@ import { TasksApiService } from '../workflow/tasks-api';
 import { CalendarApiService } from '../workflow/calendar-api';
 import { WorkflowApiService } from '../workflow/workflow-api';
 import { ProjectsApiService } from '../workflow/projects-api';
-import { RisksApiService } from '../workflow/risks-api';
+import { RisksApiService } from '../workflow/risk-assessments-api';
 import { WarRoomApiService } from '../workflow/war-room-api';
 
 // Export service classes

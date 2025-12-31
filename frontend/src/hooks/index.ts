@@ -138,13 +138,13 @@ export type { ProgressStep, ProgressStatus, UseProgressOptions, UseProgressRetur
 export { useDragToReorder } from './useDragToReorder';
 export type { DraggableItem, UseDragToReorderOptions, UseDragToReorderReturn } from './useDragToReorder';
 
-// Gantt Dependencies
-export { useGanttDependencies } from './gantt';
-export type { TaskDependency, DependencyType, GanttTask, ValidationResult, CriticalPath, UseGanttDependenciesReturn } from './gantt';
+// Schedule Dependencies
+export { useScheduleDependencies } from './schedule';
+export type { TaskDependency, DependencyType, ScheduleTask, ValidationResult, CriticalPath, UseScheduleDependenciesReturn } from './schedule';
 
 // Context Toolbar
-export { useContextToolbar } from './useContextToolbar';
-export type { ToolbarAction, ToolbarContext, UseContextToolbarOptions, UseContextToolbarReturn } from './useContextToolbar';
+export { useContextToolbar } from './useContextActions';
+export type { ToolbarAction, ToolbarContext, UseContextToolbarOptions, UseContextToolbarReturn } from './useContextActions';
 
 // Elastic Scroll
 export { useElasticScroll } from './useElasticScroll';

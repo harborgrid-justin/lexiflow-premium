@@ -12,7 +12,7 @@ import {
   IntentResult,
   ResearchResponse,
   ShepardizeResult,
-} from "@/types/ai";
+} from "@/types/intelligence";
 import { withRetry } from "@/utils/apiUtils";
 import OpenAI from "openai";
 

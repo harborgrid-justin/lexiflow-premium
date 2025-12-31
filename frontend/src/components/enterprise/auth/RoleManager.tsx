@@ -14,7 +14,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { PermissionsApiService } from '@/api/auth/permissions-api';
+import { PermissionsApiService } from '@/api/auth/access-rights-api';
 import type { Permission } from '@/types';
 
 export interface RoleManagerProps {

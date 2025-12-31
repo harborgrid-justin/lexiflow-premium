@@ -1,4 +1,4 @@
-import type { GanttTask, TaskDependency } from './types';
+import type { ScheduleTask, TaskDependency } from './types';
 
 /**
  * Get dependent tasks (successors)
@@ -22,13 +22,13 @@ export function getDependentTasks(
   while (queue.length > 0) {
     const current = queue.shift()!;
     if (visited.has(current)) continue;
-    
+
     visited.add(current);
-    
+
     const directDeps = dependencies
       .filter(d => d.fromTaskId === current)
       .map(d => d.toTaskId);
-    
+
     result.push(...directDeps.filter(id => !visited.has(id)));
     queue.push(...directDeps);
   }
@@ -58,13 +58,13 @@ export function getPredecessorTasks(
   while (queue.length > 0) {
     const current = queue.shift()!;
     if (visited.has(current)) continue;
-    
+
     visited.add(current);
-    
+
     const directPreds = dependencies
       .filter(d => d.toTaskId === current)
       .map(d => d.fromTaskId);
-    
+
     result.push(...directPreds.filter(id => !visited.has(id)));
     queue.push(...directPreds);
   }
@@ -78,7 +78,7 @@ export function getPredecessorTasks(
 export function cascadeTaskUpdate(
   taskId: string,
   newEndDate: Date,
-  taskMap: Map<string, GanttTask>,
+  taskMap: Map<string, ScheduleTask>,
   dependencies: TaskDependency[]
 ): Map<string, Date> {
   const updates = new Map<string, Date>();
@@ -89,7 +89,7 @@ export function cascadeTaskUpdate(
   if (dateShift === 0) return updates;
 
   const dependentTaskIds = getDependentTasks(taskId, dependencies, 'all');
-  
+
   dependentTaskIds.forEach(depId => {
     const depTask = taskMap.get(depId);
     if (depTask) {

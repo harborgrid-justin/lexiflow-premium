@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { RiskMeter } from '@/components/organisms/RiskMeter/RiskMeter';
+import { RiskMeter } from '@/components/features/cases/components/RiskMeter/RiskMeter';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Star, DollarSign, Scale} from 'lucide-react';
 import { LegalEntity } from '@/types';
@@ -14,7 +14,7 @@ interface PerformanceScorecardsProps {
 
 export const PerformanceScorecards: React.FC<PerformanceScorecardsProps> = ({ entities }) => {
   const { theme } = useTheme();
-  
+
   const lawFirms = entities.filter(e => e.type === 'Law Firm');
 
   return (
@@ -56,7 +56,7 @@ export const PerformanceScorecards: React.FC<PerformanceScorecardsProps> = ({ en
                     </div>
                 </Card>
             ))}
-            
+
             {lawFirms.length === 0 && (
                 <div className={cn("col-span-2 text-center py-12 text-slate-400 italic")}>
                     No law firm entities found. Add 'Law Firm' type entities to view scorecards.

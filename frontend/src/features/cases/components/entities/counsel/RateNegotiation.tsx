@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 import { Button } from '@/components/ui/atoms/Button';
 import { TrendingDown, Clock, CheckCircle} from 'lucide-react';
 import { LegalEntity } from '@/types';

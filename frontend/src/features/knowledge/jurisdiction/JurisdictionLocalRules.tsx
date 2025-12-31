@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, Book } from 'lucide-react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
 import { Input } from '@/components/ui/atoms/Input/Input';

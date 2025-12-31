@@ -11,7 +11,7 @@ import React, { useMemo, useState } from 'react';
 
 // Common Components
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Context & Utils
 import { useTheme } from '@/providers/ThemeContext';

@@ -1,6 +1,6 @@
 
 import React, { useMemo } from 'react';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { ActionRow, MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
@@ -21,7 +21,7 @@ interface UboRegisterProps {
 
 export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntities, onSelect }) => {
   const { theme } = useTheme();
-  
+
   // ✅ Fetch entities from backend API
   const { data: apiEntities = [], isLoading, error, refetch } = useQuery(
     queryKeys.entities.byType('Corporation'),
@@ -50,12 +50,12 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
 
   const handleExportFinCEN = () => {
     console.log('[UboRegister] Export FinCEN Report');
-    
+
   };
 
   const handleAddUBO = () => {
     console.log('[UboRegister] Add UBO Entry');
-    
+
   };
 
   if (isLoading) return <AdaptiveLoader contentType="list" itemCount={8} shimmer />;
@@ -64,22 +64,22 @@ export const UboRegister: React.FC<UboRegisterProps> = ({ entities: legacyEntiti
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <MetricTile 
-              label="Entities Tracked" 
-              value={metrics.entitiesTracked} 
-              icon={Building} 
+          <MetricTile
+              label="Entities Tracked"
+              value={metrics.entitiesTracked}
+              icon={Building}
               className="border-l-4 border-l-blue-600"
           />
-          <MetricTile 
-              label="UBOs Identified" 
-              value={metrics.ubosIdentified} 
-              icon={User} 
+          <MetricTile
+              label="UBOs Identified"
+              value={metrics.ubosIdentified}
+              icon={User}
               className="border-l-4 border-l-purple-600"
           />
-          <MetricTile 
-              label="Verification Pending" 
-              value={metrics.verificationPending} 
-              icon={AlertTriangle} 
+          <MetricTile
+              label="Verification Pending"
+              value={metrics.verificationPending}
+              icon={AlertTriangle}
               trend={metrics.verificationPending > 0 ? "High Priority" : undefined}
               trendUp={false}
               className="border-l-4 border-l-amber-500"

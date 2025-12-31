@@ -1,8 +1,8 @@
 /**
  * DocketFilterPanel.tsx
- * 
+ *
  * Sidebar filter panel for docket entries with search and case selection.
- * 
+ *
  * @module components/docket/DocketFilterPanel
  * @category Case Management - Docket
  */
@@ -12,7 +12,7 @@ import React from 'react';
 import { Filter } from 'lucide-react';
 
 // Internal Dependencies - Components
-import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 
 // Internal Dependencies - Hooks & Context
 import { useTheme } from '@/providers/ThemeContext';
@@ -33,8 +33,8 @@ interface DocketFilterPanelProps {
   cases: Case[];
 }
 
-export const DocketFilterPanel: React.FC<DocketFilterPanelProps> = ({ 
-  searchTerm, setSearchTerm, activeTab, setActiveTab, selectedCaseId, setSelectedCaseId, cases 
+export const DocketFilterPanel: React.FC<DocketFilterPanelProps> = ({
+  searchTerm, setSearchTerm, activeTab, setActiveTab, selectedCaseId, setSelectedCaseId, cases
 }) => {
   const { theme } = useTheme();
 
@@ -44,44 +44,44 @@ export const DocketFilterPanel: React.FC<DocketFilterPanelProps> = ({
         <h3 className={cn("font-bold flex items-center", theme.text.primary)}><Filter className="h-4 w-4 mr-2"/> Docket Filters</h3>
       </div>
       <div className="p-4 space-y-4 flex-1 overflow-y-auto">
-        <SearchToolbar 
-            value={searchTerm} 
-            onChange={setSearchTerm} 
-            placeholder="Search docket..." 
+        <SearchToolbar
+            value={searchTerm}
+            onChange={setSearchTerm}
+            placeholder="Search docket..."
             className="p-0 border-none shadow-none"
         />
-        
+
         <div>
           <label className={cn("block text-xs font-semibold uppercase mb-2", theme.text.secondary)}>Docket Type</label>
           <div className="space-y-1">
-            <button 
-                onClick={() => setActiveTab('all')} 
+            <button
+                onClick={() => setActiveTab('all')}
                 className={cn("w-full text-left px-3 py-2 rounded text-sm transition-colors", activeTab === 'all' ? cn(theme.primary.light, theme.primary.text, "font-medium") : cn(theme.text.secondary, `hover:${theme.surface.highlight}`))}
             >
                 All Entries
             </button>
-            <button 
-                onClick={() => setActiveTab('filings')} 
+            <button
+                onClick={() => setActiveTab('filings')}
                 className={cn("w-full text-left px-3 py-2 rounded text-sm transition-colors", activeTab === 'filings' ? cn(theme.primary.light, theme.primary.text, "font-medium") : cn(theme.text.secondary, `hover:${theme.surface.highlight}`))}
             >
                 Filings Only
             </button>
-            <button 
-                onClick={() => setActiveTab('orders')} 
+            <button
+                onClick={() => setActiveTab('orders')}
                 className={cn("w-full text-left px-3 py-2 rounded text-sm transition-colors", activeTab === 'orders' ? cn(theme.primary.light, theme.primary.text, "font-medium") : cn(theme.text.secondary, `hover:${theme.surface.highlight}`))}
             >
                 Orders & Judgments
             </button>
           </div>
         </div>
-        
+
         {!selectedCaseId && (
           <div>
             <label className={cn("block text-xs font-semibold uppercase mb-2", theme.text.secondary)}>Active Cases</label>
             <div className="space-y-1 max-h-64 overflow-y-auto custom-scrollbar">
               {cases.map(c => (
-                <button 
-                  key={c.id} 
+                <button
+                  key={c.id}
                   onClick={() => setSelectedCaseId(c.id)}
                   className={cn("w-full text-left px-3 py-2 rounded text-sm truncate transition-colors", theme.text.secondary, `hover:${theme.surface.highlight}`, `hover:${theme.primary.text}`)}
                 >

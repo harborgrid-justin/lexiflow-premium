@@ -28,7 +28,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { getTodayString } from '@/utils/dateUtils';
 
 // Components
-import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';

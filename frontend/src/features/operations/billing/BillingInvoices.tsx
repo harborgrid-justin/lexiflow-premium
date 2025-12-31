@@ -26,7 +26,7 @@ import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';

@@ -20,7 +20,7 @@ import { Building2, Calendar, FileCheck } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/organisms/Table';
+import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 
@@ -40,7 +40,7 @@ interface EntityGovernanceProps {
 
 export const EntityGovernance: React.FC<EntityGovernanceProps> = ({ entities, onSelect }) => {
   const { theme } = useTheme();
-  
+
   const corps = useMemo(() => entities.filter(e => e.type === 'Corporation'), [entities]);
 
   return (

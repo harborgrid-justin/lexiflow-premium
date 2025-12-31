@@ -28,7 +28,7 @@ import { MetricTile } from '@/components/organisms/_legacy/RefactoredCommon';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

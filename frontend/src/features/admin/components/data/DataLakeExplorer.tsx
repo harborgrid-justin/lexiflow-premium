@@ -4,7 +4,7 @@ import { ChevronRight, Download, File, FileText, Folder, HardDrive, Home, Loader
 
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { DocumentPreviewPanel } from '@/features/operations/documents/viewer/DocumentPreviewPanel';
 import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';

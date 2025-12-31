@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/atoms/Button/Button';
 import { UserAvatar } from '@/components/ui/atoms/UserAvatar/UserAvatar';
 import { ConfirmDialog } from '@/components/ui/molecules/ConfirmDialog/ConfirmDialog';
 import { MetricCard } from '@/components/ui/molecules/MetricCard/MetricCard';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';

@@ -24,7 +24,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { useWindow } from '@/providers/WindowContext';
 
 // Components
-import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { DocumentPreviewPanel } from '@features/operations';
 import { WallItemCard } from './cards/WallItemCard';
 

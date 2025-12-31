@@ -25,12 +25,12 @@ import { DataService } from '@/services/data/dataService';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
-import { KanbanBoard, KanbanCard, KanbanColumn } from '@/components/organisms/KanbanBoard/KanbanBoard';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
+import { KanbanBoard, KanbanCard, KanbanColumn } from '@/components/features/cases/components/Kanban/Kanban';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Tabs } from '@/components/ui/molecules/Tabs/Tabs';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/ui/organisms/Table/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

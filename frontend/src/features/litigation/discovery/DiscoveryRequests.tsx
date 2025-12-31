@@ -19,7 +19,7 @@ import { Wand2, Upload, CheckSquare } from 'lucide-react';
 // Components
 import { Button } from '@/components/ui/atoms/Button';
 import { Badge } from '@/components/ui/atoms/Badge';
-import { TaskCreationModal } from '@/features/cases/components/TaskCreationModal/TaskCreationModal';
+import { TaskCreationModal } from '@/components/features/cases/components/TaskCreationModal/TaskCreationModal';
 import { VirtualList } from '@/components/organisms/VirtualList/VirtualList';
 
 // Hooks & Context
@@ -67,9 +67,9 @@ const DiscoveryRequestsComponent: React.FC<DiscoveryRequestsProps> = ({ onNaviga
           winId,
           'Create Discovery Task',
           <div className="p-4">
-              <TaskCreationModal 
-                isOpen={true} 
-                onClose={() => closeWindow(winId)} 
+              <TaskCreationModal
+                isOpen={true}
+                onClose={() => closeWindow(winId)}
                 initialTitle={`Respond to: ${req.title}`}
                 relatedModule="Discovery"
                 relatedItemId={req.id}
@@ -144,7 +144,7 @@ const DiscoveryRequestsComponent: React.FC<DiscoveryRequestsProps> = ({ onNaviga
             </div>
 
             <div className="flex-1 relative">
-                <VirtualList 
+                <VirtualList
                     items={items}
                     height="100%"
                     itemHeight={72}
@@ -159,9 +159,9 @@ const DiscoveryRequestsComponent: React.FC<DiscoveryRequestsProps> = ({ onNaviga
             {items.map((req) => {
                 const daysLeft = getDaysRemaining(req.dueDate);
                 return (
-                    <div 
-                        key={req.id} 
-                        onClick={() => onNavigate('response', req.id)} 
+                    <div
+                        key={req.id}
+                        onClick={() => onNavigate('response', req.id)}
                         className={cn("p-4 rounded-lg shadow-sm border cursor-pointer active:scale-[0.98] transition-transform", theme.surface.default, theme.border.default)}
                     >
                         <div className="flex justify-between items-start mb-2">
@@ -174,7 +174,7 @@ const DiscoveryRequestsComponent: React.FC<DiscoveryRequestsProps> = ({ onNaviga
                         <div className="flex gap-2 mb-3">
                             <Badge variant="neutral">{req.type}</Badge>
                         </div>
-                        
+
                         <div className={cn("flex justify-between items-center text-xs p-2 rounded mb-3", theme.surface.highlight, theme.text.secondary)}>
                             <span className="flex items-center">Due: {req.dueDate}</span>
                             {req.status !== 'Responded' && (

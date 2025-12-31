@@ -30,7 +30,7 @@ import { useCallback } from 'react';
 // Components
 import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table/Table';
 import { Button } from '@/components/ui/atoms/Button/Button';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar/SearchToolbar';
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';

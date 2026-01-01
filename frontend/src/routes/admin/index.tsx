@@ -10,6 +10,7 @@
  * @module routes/admin/index
  */
 
+import { requireAdmin } from '@/utils/route-guards';
 import { Link } from 'react-router';
 import type { Route } from "./+types/index";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
@@ -31,13 +32,14 @@ export function meta({}: Route.MetaArgs) {
 // ============================================================================
 
 export async function loader({ request }: Route.LoaderArgs) {
-  // TODO: Implement admin data fetching with auth check
-  // const user = await requireAuth(request);
-  // if (!user.permissions.includes('admin')) {
-  //   throw new Response("Forbidden", { status: 403 });
-  // }
+  // Require admin role to access this route
+  const { user } = requireAdmin(request);
+
+  // TODO: Fetch actual admin stats from API
+  // const stats = await adminApi.getStats();
 
   return {
+    user,
     stats: {
       totalUsers: 0,
       activeUsers: 0,

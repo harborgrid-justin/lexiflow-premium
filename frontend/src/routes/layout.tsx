@@ -55,13 +55,36 @@ export function meta({ }: Route.MetaArgs) {
  * - Setting up server-side context
  */
 export async function loader({ request }: Route.LoaderArgs) {
-  // TODO: In production, implement actual auth check
-  // const user = await getAuthUser(request);
-  // if (!user) {
-  //   throw redirect("/login");
-  // }
-  // return { user, authenticated: true };
+  // Check for authentication token in localStorage (client-side check)
+  // Note: In SSR context, this would check cookies/headers
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('lexiflow_auth_token');
+    const userJson = localStorage.getItem('lexiflow_auth_user');
 
+    if (!token || !userJson) {
+      // Not authenticated - redirect to login
+      const url = new URL(request.url);
+      throw new Response(null, {
+        status: 302,
+        headers: {
+          Location: `/login?redirect=${encodeURIComponent(url.pathname)}`,
+        },
+      });
+    }
+
+    try {
+      const user = JSON.parse(userJson);
+      return { authenticated: true, user };
+    } catch {
+      // Invalid user data - redirect to login
+      throw new Response(null, {
+        status: 302,
+        headers: { Location: '/login' },
+      });
+    }
+  }
+
+  // Server-side: Allow through (will be checked client-side)
   return { authenticated: true };
 }
 

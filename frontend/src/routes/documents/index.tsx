@@ -10,11 +10,16 @@
  * @module routes/documents/index
  */
 
+import { useState } from 'react';
 import { Link } from 'react-router';
 import type { Route } from "./+types/index";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { RouteLoadingSkeleton } from '../_shared/RouteLoading';
 import { createListMeta } from '../_shared/meta-utils';
+import { DocumentsApiService } from '@/api/admin/documents-api';
+import { DocumentList, DocumentFilters, type DocumentFilterOptions, type ViewMode } from '@/components/features/documents/components';
+
+const documentsApi = new DocumentsApiService();
 
 // ============================================================================
 // Meta Tags
@@ -33,13 +38,27 @@ export function meta({ data }: Route.MetaArgs) {
 // ============================================================================
 
 export async function loader({ request }: Route.LoaderArgs) {
-  // TODO: Implement document fetching
-  // const documents = await api.documents.getAll();
+  try {
+    const url = new URL(request.url);
+    const filters = {
+      type: url.searchParams.get('type') || undefined,
+      status: url.searchParams.get('status') || undefined,
+      caseId: url.searchParams.get('caseId') || undefined,
+    };
 
-  return {
-    documents: [],
-    totalCount: 0,
-  };
+    const documents = await documentsApi.getAll(filters);
+
+    return {
+      documents,
+      totalCount: documents.length,
+    };
+  } catch (error) {
+    console.error('[Documents Loader] Error:', error);
+    return {
+      documents: [],
+      totalCount: 0,
+    };
+  }
 }
 
 // ============================================================================
@@ -50,17 +69,26 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
-  switch (intent) {
-    case "upload":
-      // TODO: Handle file upload
-      return { success: true, message: "Document uploaded" };
+  try {
+    switch (intent) {
+      case "delete": {
+        const id = formData.get("id") as string;
+        await documentsApi.delete(id);
+        return { success: true };
+      }
 
-    case "delete":
-      // TODO: Handle document deletion
-      return { success: true };
+      case "bulk-delete": {
+        const ids = JSON.parse(formData.get("ids") as string) as string[];
+        await Promise.all(ids.map(id => documentsApi.delete(id)));
+        return { success: true };
+      }
 
-    default:
-      return { success: false, error: "Invalid action" };
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    console.error('[Documents Action] Error:', error);
+    return { success: false, error: String(error) };
   }
 }
 
@@ -70,6 +98,107 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function DocumentsIndexRoute({ loaderData }: Route.ComponentProps) {
   const { documents, totalCount } = loaderData;
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [filters, setFilters] = useState<DocumentFilterOptions>({});
+  const [filteredDocs, setFilteredDocs] = useState(documents);
+
+  // Apply filters
+  const handleFilterChange = (newFilters: DocumentFilterOptions) => {
+    setFilters(newFilters);
+
+    let filtered = [...documents];
+
+    if (newFilters.search) {
+      const search = newFilters.search.toLowerCase();
+      filtered = filtered.filter(doc =>
+        doc.title.toLowerCase().includes(search) ||
+        doc.content.toLowerCase().includes(search) ||
+        doc.tags.some(tag => tag.toLowerCase().includes(search))
+      );
+    }
+
+    if (newFilters.type) {
+      filtered = filtered.filter(doc => doc.type === newFilters.type);
+    }
+
+    if (newFilters.status) {
+      filtered = filtered.filter(doc => doc.status === newFilters.status);
+    }
+
+    if (newFilters.caseId) {
+      filtered = filtered.filter(doc => doc.caseId === newFilters.caseId);
+    }
+
+    if (newFilters.dateFrom) {
+      filtered = filtered.filter(doc => new Date(doc.uploadDate) >= new Date(newFilters.dateFrom!));
+    }
+
+    if (newFilters.dateTo) {
+      filtered = filtered.filter(doc => new Date(doc.uploadDate) <= new Date(newFilters.dateTo!));
+    }
+
+    if (newFilters.author) {
+      const author = newFilters.author.toLowerCase();
+      filtered = filtered.filter(doc =>
+        doc.author?.toLowerCase().includes(author)
+      );
+    }
+
+    if (newFilters.ocrProcessed) {
+      filtered = filtered.filter(doc => doc.ocrProcessed);
+    }
+
+    if (newFilters.isRedacted) {
+      filtered = filtered.filter(doc => doc.isRedacted);
+    }
+
+    setFilteredDocs(filtered);
+  };
+
+  const handleDownload = async (id: string) => {
+    try {
+      const blob = await documentsApi.download(id);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = documents.find(d => d.id === id)?.title || 'document.pdf';
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Failed to download document');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this document?')) return;
+
+    try {
+      await documentsApi.delete(id);
+      window.location.reload();
+    } catch (error) {
+      console.error('Delete failed:', error);
+      alert('Failed to delete document');
+    }
+  };
+
+  const handleBulkDownload = async (ids: string[]) => {
+    for (const id of ids) {
+      await handleDownload(id);
+    }
+  };
+
+  const handleBulkDelete = async (ids: string[]) => {
+    if (!confirm(`Delete ${ids.length} documents?`)) return;
+
+    try {
+      await Promise.all(ids.map(id => documentsApi.delete(id)));
+      window.location.reload();
+    } catch (error) {
+      console.error('Bulk delete failed:', error);
+      alert('Failed to delete documents');
+    }
+  };
 
   return (
     <div className="p-8">
@@ -95,31 +224,28 @@ export default function DocumentsIndexRoute({ loaderData }: Route.ComponentProps
         </Link>
       </div>
 
-      {/* Placeholder Content */}
-      <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-12 text-center dark:border-gray-700 dark:bg-gray-800/50">
-        <svg
-          className="mx-auto h-12 w-12 text-gray-400"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1}
-            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-          />
-        </svg>
-        <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-gray-100">
-          Documents Module
-        </h3>
-        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          This module is under development. Document management features coming soon.
-        </p>
-        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
-          {totalCount} documents in system
-        </p>
+      {/* Filters */}
+      <div className="mb-6">
+        <DocumentFilters
+          filters={filters}
+          onChange={handleFilterChange}
+          onClear={() => {
+            setFilters({});
+            setFilteredDocs(documents);
+          }}
+        />
       </div>
+
+      {/* Document List */}
+      <DocumentList
+        documents={filteredDocs}
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
+        onDownload={handleDownload}
+        onDelete={handleDelete}
+        onBulkDownload={handleBulkDownload}
+        onBulkDelete={handleBulkDelete}
+      />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { DiscoveryRequest } from '@/types';
 
-export type DiscoveryView = 
+export type DiscoveryView =
   | 'dashboard'
   | 'requests'
   | 'privilege'
@@ -14,7 +14,11 @@ export type DiscoveryView =
   | 'esi'
   | 'interviews'
   | 'custodians'
-  | 'examinations';
+  | 'examinations'
+  | 'collections'
+  | 'processing'
+  | 'review'
+  | 'timeline';
 
 export interface DiscoveryPlatformProps {
     initialTab?: DiscoveryView;

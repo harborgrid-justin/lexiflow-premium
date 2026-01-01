@@ -8,6 +8,7 @@ import * as crud from './documents/crud';
 import * as fileOps from './documents/fileOps';
 import * as versions from './documents/versions';
 import * as queries from './documents/queries';
+import * as annotations from './documents/annotations';
 
 export { DOCUMENTS_QUERY_KEYS } from './documents';
 
@@ -40,4 +41,10 @@ export class DocumentsApiService {
   getByCaseId = queries.getByCaseId;
   getFolders = queries.getFolders;
   getContent = queries.getContent;
+
+  // Annotation Operations
+  getAnnotations = annotations.getAnnotations;
+  addAnnotation = annotations.addAnnotation;
+  deleteAnnotation = annotations.deleteAnnotation;
+  updateAnnotation = annotations.updateAnnotation;
 }

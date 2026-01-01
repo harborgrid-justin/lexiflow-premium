@@ -569,6 +569,9 @@ export const FormattersService = {
  * @deprecated Use FormattersService instead
  * Maintained for backward compatibility
  */
+// Export formatDate helper for convenience
+export { formatDate, formatDateShort, formatDateLong, formatDateTime } from './formatDate';
+
 export const Formatters = {
   currency: FormattersService.currency,
   date: FormattersService.date,

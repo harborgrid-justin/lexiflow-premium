@@ -3,29 +3,29 @@
  * @category Services - Memory Management
  * @description Centralized blob URL lifecycle management service to prevent memory leaks.
  * Tracks all created blob URLs and provides automatic cleanup.
- * 
+ *
  * CRITICAL MEMORY MANAGEMENT:
  * Blob URLs created with URL.createObjectURL() MUST be revoked with URL.revokeObjectURL()
  * or they will cause permanent memory leaks until page reload. This service ensures
  * proper cleanup across the entire application.
- * 
+ *
  * USAGE:
  * ```typescript
  * // Create managed blob URL
  * const url = BlobManager.create(blob, 'document-preview-123');
- * 
+ *
  * // Use the URL
  * <img src={url} />
- * 
+ *
  * // Clean up when done
  * BlobManager.revoke(url);
- * 
+ *
  * // Or clean up all URLs for a specific context
  * BlobManager.revokeByContext('document-preview-123');
  * ```
  */
 
-import { defaultWindowAdapter } from './adapters/WindowAdapter';
+import { defaultWindowAdapter } from "./adapters/WindowAdapter";
 
 // ============================================================================
 // TYPES
@@ -52,16 +52,16 @@ class BlobManagerService {
    */
   create(blob: Blob | File, context?: string): string {
     const url = URL.createObjectURL(blob);
-    
+
     const entry: BlobRegistryEntry = {
       url,
       context,
       createdAt: Date.now(),
-      blob: import.meta.env.DEV ? blob : undefined // Keep reference in dev for debugging
+      blob: import.meta.env.DEV ? blob : undefined, // Keep reference in dev for debugging
     };
-    
+
     this.registry.set(url, entry);
-    
+
     // Index by context for batch cleanup
     if (context) {
       if (!this.contextIndex.has(context)) {
@@ -69,7 +69,7 @@ class BlobManagerService {
       }
       this.contextIndex.get(context)!.add(url);
     }
-    
+
     return url;
   }
 
@@ -82,11 +82,11 @@ class BlobManagerService {
     if (entry) {
       URL.revokeObjectURL(url);
       this.registry.delete(url);
-      
+
       // Remove from context index
       if (entry.context && this.contextIndex.has(entry.context)) {
         this.contextIndex.get(entry.context)!.delete(url);
-        
+
         // Clean up empty context
         if (this.contextIndex.get(entry.context)!.size === 0) {
           this.contextIndex.delete(entry.context);
@@ -102,7 +102,7 @@ class BlobManagerService {
   revokeByContext(context: string): void {
     const urls = this.contextIndex.get(context);
     if (urls) {
-      urls.forEach(url => this.revoke(url));
+      urls.forEach((url) => this.revoke(url));
     }
   }
 
@@ -114,14 +114,14 @@ class BlobManagerService {
     const now = Date.now();
     const threshold = now - maxAgeMs;
     let revokedCount = 0;
-    
+
     this.registry.forEach((entry, url) => {
       if (entry.createdAt < threshold) {
         this.revoke(url);
         revokedCount++;
       }
     });
-    
+
     return revokedCount;
   }
 
@@ -147,20 +147,20 @@ class BlobManagerService {
     const byContext: Record<string, number> = {};
     let oldestAge = 0;
     const now = Date.now();
-    
+
     this.contextIndex.forEach((urls, context) => {
       byContext[context] = urls.size;
     });
-    
-    this.registry.forEach(entry => {
+
+    this.registry.forEach((entry) => {
       const age = now - entry.createdAt;
       if (age > oldestAge) oldestAge = age;
     });
-    
+
     return {
       total: this.registry.size,
       byContext,
-      oldestAge
+      oldestAge,
     };
   }
 
@@ -176,12 +176,12 @@ class BlobManagerService {
    * Useful for immediate downloads
    */
   createTemporary(blob: Blob | File, ttlMs: number = 5000): string {
-    const url = this.create(blob, 'temporary');
-    
+    const url = this.create(blob, "temporary");
+
     setTimeout(() => {
       this.revoke(url);
     }, ttlMs);
-    
+
     return url;
   }
 }
@@ -194,36 +194,38 @@ export const BlobManager = new BlobManagerService();
 // ============================================================================
 // AUTO-CLEANUP ON PAGE UNLOAD
 // ============================================================================
-if (typeof window !== 'undefined') {
-  defaultWindowAdapter.addEventListener('beforeunload', (() => {
+if (typeof window !== "undefined") {
+  defaultWindowAdapter.addEventListener("beforeunload", (() => {
     BlobManager.revokeAll();
   }) as EventListener);
-  
+
   // Periodic cleanup of old URLs (every 2 minutes)
-  setInterval(() => {
-    const revoked = BlobManager.revokeOld(5 * 60 * 1000); // 5 minutes
-    if (revoked > 0) {
-      console.debug(`[BlobManager] Auto-cleaned ${revoked} old blob URLs`);
-    }
-  }, 2 * 60 * 1000);
+  setInterval(
+    () => {
+      const revoked = BlobManager.revokeOld(5 * 60 * 1000); // 5 minutes
+      if (revoked > 0) {
+        console.debug(`[BlobManager] Auto-cleaned ${revoked} old blob URLs`);
+      }
+    },
+    2 * 60 * 1000
+  );
 }
 
 // ============================================================================
 // DEVELOPMENT HELPERS
 // ============================================================================
-if (import.meta.env.DEV) {
+if (import.meta.env.DEV && typeof window !== "undefined") {
   // Expose to window for debugging
   (window as unknown as Record<string, unknown>).__blobManager = BlobManager;
-  
+
   // Log warnings for URLs not cleaned up after 10 minutes
   setInterval(() => {
     const stats = BlobManager.getStats();
     if (stats.oldestAge > 10 * 60 * 1000) {
       console.warn(
         `[BlobManager] Memory leak warning: ${stats.total} blob URLs tracked, ` +
-        `oldest is ${Math.round(stats.oldestAge / 1000 / 60)} minutes old`
+          `oldest is ${Math.round(stats.oldestAge / 1000 / 60)} minutes old`
       );
     }
   }, 60 * 1000);
 }
-

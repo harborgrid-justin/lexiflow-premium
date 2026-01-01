@@ -12,39 +12,29 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
+import { Download, Plus } from 'lucide-react';
 import React, { Suspense, useTransition } from 'react';
-import { Plus, Download } from 'lucide-react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Components
 import { TabbedPageLayout } from '@/components/layouts';
-import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { Button } from '@/components/ui/atoms/Button';
-import { CaseListActive } from '@features/cases';
-import { CaseListIntake } from '@features/cases';
-import { CaseListDocket } from '@features/cases';
-import { CaseListTasks } from './CaseListTasks';
-import { CaseListConflicts } from '@features/cases';
-import { CaseListResources } from '@features/cases';
-import { CaseListTrust } from './CaseListTrust';
-import { CaseListClosing } from '@features/cases';
-import { CaseListArchived } from '@features/cases';
-// DEPRECATED: CreateCaseModal removed - use full-page CreateCase component via navigation
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 
 // Hooks
 import { useCaseList } from '@/hooks/useCaseList';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 // Utils & Config
-import { cn } from '@/utils/cn';
 import { CASE_LIST_TAB_CONFIG } from '@/config/tabs.config';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
-import { Case, AppView } from '@/types';
+import { AppView, Case } from '@/types';
 
 export type CaseListView = 'active' | 'intake' | 'docket' | 'tasks' | 'conflicts' | 'resources' | 'trust' | 'closing' | 'archived';
 
@@ -76,20 +66,6 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab, se
   const [activeTab, _setActiveTab] = useSessionStorage<string>('case_list_active_tab', initialTab || 'active');
 
   const caseListData = useCaseList();
-  const {
-    statusFilter,
-    setStatusFilter,
-    typeFilter,
-    setTypeFilter,
-    searchTerm,
-    setSearchTerm,
-    dateFrom,
-    setDateFrom,
-    dateTo,
-    setDateTo,
-    filteredCases,
-    resetFilters
-  } = caseListData;
 
   // ==========================================================================
   // CALLBACKS
@@ -113,62 +89,7 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab, se
     }
   };
 
-  // ==========================================================================
-  // RENDER HELPERS
-  // ==========================================================================
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'active':
-        return <CaseListActive
-          onSelectCase={onSelectCase}
-          filteredCases={filteredCases}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-          typeFilter={typeFilter}
-          setTypeFilter={setTypeFilter}
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          dateFrom={dateFrom}
-          setDateFrom={setDateFrom}
-          dateTo={dateTo}
-          setDateTo={setDateTo}
-          resetFilters={resetFilters}
-        />;
-      case 'intake':
-        return <CaseListIntake />;
-      case 'docket':
-        return <CaseListDocket onSelectCase={onSelectCase} />;
-      case 'tasks':
-        return <CaseListTasks onSelectCase={onSelectCase} />;
-      case 'conflicts':
-        return <CaseListConflicts onSelectCase={onSelectCase} />;
-      case 'resources':
-        return <CaseListResources />;
-      case 'trust':
-        return <CaseListTrust />;
-      case 'closing':
-        return <CaseListClosing />;
-      case 'archived':
-        return <CaseListArchived onSelectCase={onSelectCase} />;
-      default:
-        return <CaseListActive
-          onSelectCase={onSelectCase}
-          filteredCases={filteredCases}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-          typeFilter={typeFilter}
-          setTypeFilter={setTypeFilter}
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          dateFrom={dateFrom}
-          setDateFrom={setDateFrom}
-          dateTo={dateTo}
-          setDateTo={setDateTo}
-          resetFilters={resetFilters}
-        />;
-    }
-  };
 
   return (
     <TabbedPageLayout
@@ -182,16 +103,20 @@ export const CaseList: React.FC<CaseListProps> = ({ onSelectCase, initialTab, se
           </Button>
         </div>
       }
-        tabConfig={CASE_LIST_TAB_CONFIG}
-        activeTabId={activeTab}
-        onTabChange={setActiveTab}
-      >
-        <Suspense fallback={<LazyLoader message="Loading Matter Management..." />}>
-          <div className={cn(isPending && 'opacity-60 transition-opacity')}>
-            {renderContent()}
-          </div>
-        </Suspense>
-      </TabbedPageLayout>
+      tabConfig={CASE_LIST_TAB_CONFIG}
+      activeTabId={activeTab}
+      onTabChange={setActiveTab}
+    >
+      <Suspense fallback={<LazyLoader message="Loading Matter Management..." />}>
+        <div className={cn(isPending && 'opacity-60 transition-opacity')}>
+          <CaseListContent
+            activeTab={activeTab}
+            onSelectCase={onSelectCase}
+            caseListData={caseListData}
+          />
+        </div>
+      </Suspense>
+    </TabbedPageLayout>
   );
 };
 

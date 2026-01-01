@@ -3,7 +3,7 @@
  * Displays a list of notifications with filtering and grouping
  */
 
-import React, { useState } from 'react';
+import React, { useState, useTransition, useMemo, useCallback } from 'react';
 import type { ApiNotification } from '@/api/communications/notifications-api';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -32,43 +32,62 @@ export function NotificationList({
 }: NotificationListProps) {
   const [filter, setFilter] = useState<'all' | 'unread' | 'high'>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
+  const [isPending, startTransition] = useTransition();
 
-  // Apply filters
-  const filteredNotifications = notifications.filter((notification) => {
-    const matchesReadFilter =
-      filter === 'all' ||
-      (filter === 'unread' && !notification.read) ||
-      (filter === 'high' && notification.priority === 'high');
+  const handleFilterChange = useCallback((newFilter: 'all' | 'unread' | 'high') => {
+    startTransition(() => {
+      setFilter(newFilter);
+    });
+  }, []);
 
-    const matchesTypeFilter = typeFilter === 'all' || notification.type === typeFilter;
+  const handleTypeFilterChange = useCallback((newTypeFilter: string) => {
+    startTransition(() => {
+      setTypeFilter(newTypeFilter);
+    });
+  }, []);
 
-    return matchesReadFilter && matchesTypeFilter;
-  });
+  // Apply filters (memoized for performance)
+  const filteredNotifications = useMemo(() =>
+    notifications.filter((notification) => {
+      const matchesReadFilter =
+        filter === 'all' ||
+        (filter === 'unread' && !notification.read) ||
+        (filter === 'high' && notification.priority === 'high');
 
-  // Group notifications by date
-  const groupedNotifications = filteredNotifications.reduce((groups, notification) => {
-    const date = new Date(notification.createdAt);
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
+      const matchesTypeFilter = typeFilter === 'all' || notification.type === typeFilter;
 
-    let groupKey: string;
-    if (date.toDateString() === today.toDateString()) {
-      groupKey = 'Today';
-    } else if (date.toDateString() === yesterday.toDateString()) {
-      groupKey = 'Yesterday';
-    } else {
-      groupKey = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
-    }
+      return matchesReadFilter && matchesTypeFilter;
+    }),
+    [notifications, filter, typeFilter]
+  );
 
-    if (!groups[groupKey]) {
-      groups[groupKey] = [];
-    }
-    groups[groupKey].push(notification);
-    return groups;
-  }, {} as Record<string, ApiNotification[]>);
+  // Group notifications by date (memoized)
+  const groupedNotifications = useMemo(() =>
+    filteredNotifications.reduce((groups, notification) => {
+      const date = new Date(notification.createdAt);
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
 
-  const getNotificationIcon = (type: ApiNotification['type']) => {
+      let groupKey: string;
+      if (date.toDateString() === today.toDateString()) {
+        groupKey = 'Today';
+      } else if (date.toDateString() === yesterday.toDateString()) {
+        groupKey = 'Yesterday';
+      } else {
+        groupKey = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+      }
+
+      if (!groups[groupKey]) {
+        groups[groupKey] = [];
+      }
+      groups[groupKey].push(notification);
+      return groups;
+    }, {} as Record<string, ApiNotification[]>),
+    [filteredNotifications]
+  );
+
+  const getNotificationIcon = useCallback((type: ApiNotification['type']) => {
     switch (type) {
       case 'success':
         return (
@@ -170,11 +189,10 @@ export function NotificationList({
               <button
                 key={filterType}
                 onClick={() => setFilter(filterType)}
-                className={`rounded-md px-3 py-1 text-sm font-medium capitalize ${
-                  filter === filterType
+                className={`rounded-md px-3 py-1 text-sm font-medium capitalize ${filter === filterType
                     ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
                     : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
-                }`}
+                  }`}
               >
                 {filterType === 'high' ? 'High Priority' : filterType}
               </button>
@@ -230,11 +248,10 @@ export function NotificationList({
                   <div
                     key={notification.id}
                     onClick={() => onNotificationClick?.(notification)}
-                    className={`group relative flex gap-3 rounded-lg p-4 transition-colors ${
-                      notification.read
+                    className={`group relative flex gap-3 rounded-lg p-4 transition-colors ${notification.read
                         ? 'bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-750'
                         : 'bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30'
-                    } ${onNotificationClick ? 'cursor-pointer' : ''}`}
+                      } ${onNotificationClick ? 'cursor-pointer' : ''}`}
                   >
                     {/* Icon */}
                     {getNotificationIcon(notification.type)}
@@ -242,11 +259,10 @@ export function NotificationList({
                     {/* Content */}
                     <div className="flex-1 overflow-hidden">
                       <div className="flex items-start justify-between gap-2">
-                        <h4 className={`text-sm font-semibold ${
-                          notification.read
+                        <h4 className={`text-sm font-semibold ${notification.read
                             ? 'text-gray-900 dark:text-gray-100'
                             : 'text-blue-900 dark:text-blue-100'
-                        }`}>
+                          }`}>
                           {notification.title}
                         </h4>
                         <span className="flex-shrink-0 text-xs text-gray-500 dark:text-gray-400">

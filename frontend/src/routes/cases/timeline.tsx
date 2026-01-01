@@ -10,13 +10,12 @@
  * @module routes/cases/timeline
  */
 
-import { DataService } from '@/services/data/dataService';
-import { Suspense } from 'react';
-import { useNavigate } from 'react-router';
-import type { Route } from "./+types/timeline";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { CaseTimeline, type TimelineEvent } from '@/components/features/cases/components/CaseTimeline';
+import { DataService } from '@/services/data/dataService';
+import { useNavigate } from 'react-router';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import type { Route } from "./+types/timeline";
 
 // ============================================================================
 // Meta Tags

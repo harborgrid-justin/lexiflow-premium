@@ -4,20 +4,20 @@
  * @description Enterprise Bluebook citation formatter with batch processing, validation, and export
  */
 
-import React, { useState, useCallback } from 'react';
-import { BookOpen } from 'lucide-react';
 import { useNotify } from '@/hooks/useNotify';
-import { BluebookParser } from '@/services/features/bluebook/bluebookParser';
 import { BluebookFormatter as Formatter } from '@/services/features/bluebook/bluebookFormatter';
+import { BluebookParser } from '@/services/features/bluebook/bluebookParser';
 import { CitationFormat, ExportFormat } from '@/types/bluebook';
-import { StatsBar } from './StatsBar';
+import { BookOpen } from 'lucide-react';
+import React, { useCallback, useDeferredValue, useState } from 'react';
+import { exportToHTML, exportToJSON, exportToText, generateTableOfAuthorities } from './exportUtils';
+import { HelpSection } from './HelpSection';
 import { InputSection } from './InputSection';
 import { ResultsSection } from './ResultsSection';
-import { HelpSection } from './HelpSection';
-import { useFormattingStats } from './useFormattingStats';
+import { StatsBar } from './StatsBar';
+import type { FilterOptions, FormatOptions, FormattingResult } from './types';
 import { useFilteredResults } from './useFilteredResults';
-import { exportToText, exportToHTML, exportToJSON, generateTableOfAuthorities } from './exportUtils';
-import type { FormattingResult, FormatOptions, FilterOptions } from './types';
+import { useFormattingStats } from './useFormattingStats';
 
 const SAMPLE_CITATIONS = `Brown v. Board of Education, 347 U.S. 483 (1954)
 42 U.S.C. § 1983 (2018)
@@ -40,8 +40,11 @@ export const BluebookFormatter: React.FC = () => {
     showOnlyErrors: false
   });
 
+  // Defer filter updates for better UX
+  const deferredFilters = useDeferredValue(filters);
+
   const stats = useFormattingStats(results);
-  const filteredResults = useFilteredResults(results, filters);
+  const filteredResults = useFilteredResults(results, deferredFilters);
 
   const handleFormat = useCallback(async () => {
     if (!inputText.trim()) {
@@ -56,10 +59,10 @@ export const BluebookFormatter: React.FC = () => {
         const citation = BluebookParser.parse(line);
         const formatted = citation
           ? Formatter.format(citation, {
-              italicizeCaseNames: formatOptions.italicizeCaseNames,
-              useSmallCaps: formatOptions.useSmallCaps,
-              format: formatOptions.format.toLowerCase() as "full" | "short"
-            })
+            italicizeCaseNames: formatOptions.italicizeCaseNames,
+            useSmallCaps: formatOptions.useSmallCaps,
+            format: formatOptions.format.toLowerCase() as "full" | "short"
+          })
           : line;
 
         return {

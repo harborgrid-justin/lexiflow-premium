@@ -11,112 +11,9 @@
  */
 
 import { AuthApiService } from '@/api/auth/auth-api';
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react';
-
-// ============================================================================
-// Types
-// ============================================================================
-
-/**
- * Represents an authenticated user
- */
-export interface AuthUser {
-  id: string;
-  email: string;
-  name: string;
-  role: 'admin' | 'attorney' | 'paralegal' | 'staff';
-  avatarUrl?: string;
-  permissions: string[];
-}
-
-/**
- * Authentication state exposed to consumers
- */
-interface AuthStateValue {
-  /** Current authenticated user, null if not authenticated */
-  user: AuthUser | null;
-  /** Whether authentication is being checked */
-  isLoading: boolean;
-  /** Whether user is authenticated */
-  isAuthenticated: boolean;
-  /** Authentication error message */
-  error: string | null;
-}
-
-/**
- * Authentication actions exposed to consumers
- */
-interface AuthActionsValue {
-  /** Login with credentials */
-  login: (email: string, password: string) => Promise<boolean>;
-  /** Logout current user */
-  logout: () => Promise<void>;
-  /** Refresh authentication token */
-  refreshToken: () => Promise<boolean>;
-  /** Check if user has specific permission */
-  hasPermission: (permission: string) => boolean;
-  /** Check if user has any of the specified roles */
-  hasRole: (...roles: AuthUser['role'][]) => boolean;
-}
-
-// ============================================================================
-// Context
-// ============================================================================
-
-/**
- * Split contexts for performance optimization (BP3)
- * - State context triggers re-renders only for state consumers
- * - Actions context is stable and doesn't trigger re-renders
- */
-const AuthStateContext = createContext<AuthStateValue | undefined>(undefined);
-const AuthActionsContext = createContext<AuthActionsValue | undefined>(undefined);
-
-// ============================================================================
-// Custom Hooks (BP4: Export only hooks, not raw contexts)
-// ============================================================================
-
-/**
- * Access authentication state
- * @throws Error if used outside AuthProvider
- */
-export function useAuthState(): AuthStateValue {
-  const context = useContext(AuthStateContext);
-  if (!context) {
-    throw new Error('useAuthState must be used within an AuthProvider');
-  }
-  return context;
-}
-
-/**
- * Access authentication actions
- * @throws Error if used outside AuthProvider
- */
-export function useAuthActions(): AuthActionsValue {
-  const context = useContext(AuthActionsContext);
-  if (!context) {
-    throw new Error('useAuthActions must be used within an AuthProvider');
-  }
-  return context;
-}
-
-/**
- * Convenience hook for accessing both state and actions
- * Use sparingly - prefer specific hooks for better performance
- */
-export function useAuth() {
-  return {
-    ...useAuthState(),
-    ...useAuthActions(),
-  };
-}
+import { useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { AuthActionsContext, AuthStateContext } from './authContexts';
+import type { AuthActionsValue, AuthStateValue, AuthUser } from './authTypes';
 
 // ============================================================================
 // Constants
@@ -281,54 +178,46 @@ export function AuthProvider({ children }: AuthProviderProps) {
 }
 
 // ============================================================================
-// Utility Functions for Loaders
+// Hooks - defined here for proper module resolution
 // ============================================================================
 
 /**
- * Get current user from request cookies/headers
- * Use in route loaders for SSR authentication
+ * Access authentication state
+ * @throws Error if used outside AuthProvider
  */
-export async function getAuthUser(request: Request): Promise<AuthUser | null> {
-  // TODO: Implement actual session/JWT validation from request
-  // const token = request.headers.get('Authorization')?.replace('Bearer ', '');
-  // if (!token) return null;
-  // return await validateAndDecodeToken(token);
-
-  // Placeholder - in real app, validate server-side
-  return null;
+export function useAuthState(): AuthStateValue {
+  const context = useContext(AuthStateContext);
+  if (!context) {
+    throw new Error('useAuthState must be used within an AuthProvider');
+  }
+  return context;
 }
 
 /**
- * Require authentication in route loader
- * Throws redirect to login if not authenticated
+ * Access authentication actions
+ * @throws Error if used outside AuthProvider
  */
-export async function requireAuth(request: Request): Promise<AuthUser> {
-  const user = await getAuthUser(request);
-
-  if (!user) {
-    // In React Router v7, throw a Response to redirect
-    throw new Response(null, {
-      status: 302,
-      headers: { Location: '/login' },
-    });
+export function useAuthActions(): AuthActionsValue {
+  const context = useContext(AuthActionsContext);
+  if (!context) {
+    throw new Error('useAuthActions must be used within an AuthProvider');
   }
-
-  return user;
+  return context;
 }
 
 /**
- * Require specific role(s) in route loader
- * Throws 403 if user doesn't have required role
+ * Convenience hook for accessing both state and actions
+ * Use sparingly - prefer specific hooks for better performance
  */
-export async function requireRole(
-  request: Request,
-  ...roles: AuthUser['role'][]
-): Promise<AuthUser> {
-  const user = await requireAuth(request);
-
-  if (!roles.includes(user.role)) {
-    throw new Response('Forbidden', { status: 403 });
-  }
-
-  return user;
+export function useAuth() {
+  return {
+    ...useAuthState(),
+    ...useAuthActions(),
+  };
 }
+
+// ============================================================================
+// Type re-exports
+// ============================================================================
+
+export type { AuthActionsValue, AuthStateValue, AuthUser } from './authTypes';

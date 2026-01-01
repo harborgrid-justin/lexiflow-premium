@@ -4,7 +4,7 @@
  * Shows backend availability status and only enables backend option when available
  */
 
-import React, { useState} from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { Database, Cloud, HardDrive, Wifi, WifiOff, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
 import { useDataSource } from '@/providers';
 import { useBackendHealth } from '@/hooks/useBackendHealth';
@@ -58,7 +58,7 @@ export function DataSourceSelector() {
     return () => clearInterval(interval);
   }, [status.lastChecked]);
 
-  const handleSourceChange = async (source: DataSourceType) => {
+  const handleSourceChange = useCallback(async (source: DataSourceType) => {
     if (source === currentSource) return;
 
     const option = DATA_SOURCE_OPTIONS.find(opt => opt.value === source);
@@ -74,9 +74,9 @@ export function DataSourceSelector() {
     if (!confirm(confirmMessage)) return;
 
     await switchDataSource(source);
-  };
+  }, [currentSource, isAvailable, switchDataSource]);
 
-  const handleRefresh = async () => {
+  const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
     try {
       await refresh();

@@ -10,12 +10,12 @@
  * @module routes/cases/parties
  */
 
-import { DataService } from '@/services/data/dataService';
-import { useNavigate } from 'react-router';
-import type { Route } from "./+types/parties";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { PartiesTable } from '@/components/features/cases/components/PartiesTable';
+import { DataService } from '@/services/data/dataService';
+import { useNavigate } from 'react-router';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import type { Route } from "./+types/parties";
 
 // ============================================================================
 // Meta Tags

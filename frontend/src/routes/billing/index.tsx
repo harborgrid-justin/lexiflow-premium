@@ -9,10 +9,13 @@
  * @module routes/billing/index
  */
 
-import { Link } from 'react-router';
-import type { Route } from "./+types/index";
+import { api } from '@/api';
+import type { Invoice } from '@/types';
+import { format } from 'date-fns';
+import { Form, Link, useNavigation } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags
@@ -30,23 +33,33 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
-  // TODO: Implement billing data fetching
-  // const [invoices, payments, summary] = await Promise.all([
-  //   api.billing.getInvoices(),
-  //   api.billing.getPayments(),
-  //   api.billing.getSummary(),
-  // ]);
+export async function loader({ request: _ }: Route.LoaderArgs) {
+  try {
+    const [invoices, stats] = await Promise.all([
+      api.invoices.getAll(),
+      api.invoices.getStats().catch(() => ({
+        total: 0,
+        outstanding: 0,
+        paid: 0,
+        overdue: 0,
+        totalAmount: 0,
+        paidAmount: 0,
+        outstandingAmount: 0,
+      })),
+    ]);
 
-  return {
-    invoices: [],
-    payments: [],
-    summary: {
-      totalOutstanding: 0,
-      totalReceived: 0,
-      overdueCount: 0,
-    },
-  };
+    return {
+      invoices: invoices as Invoice[],
+      summary: {
+        totalOutstanding: stats.outstandingAmount,
+        totalReceived: stats.paidAmount,
+        overdueCount: stats.overdue,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to load billing data:", error);
+    throw error;
+  }
 }
 
 // ============================================================================
@@ -57,21 +70,58 @@ export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
-  switch (intent) {
-    case "create-invoice":
-      // TODO: Handle invoice creation
-      return { success: true, message: "Invoice created" };
+  try {
+    switch (intent) {
+      case "create-invoice": {
+        // Basic implementation - in real app would likely redirect to a dedicated create page
+        // or handle a complex form submission
+        const caseId = formData.get("caseId") as string;
+        const invoiceNumber = formData.get("invoiceNumber") as string;
 
-    case "mark-paid":
-      // TODO: Handle payment recording
-      return { success: true, message: "Payment recorded" };
+        if (!caseId || !invoiceNumber) {
+          return { success: false, error: "Missing required fields" };
+        }
 
-    case "send-reminder":
-      // TODO: Handle reminder sending
-      return { success: true, message: "Reminder sent" };
+        await api.invoices.create({
+          caseId,
+          invoiceNumber,
+          date: new Date().toISOString(),
+          dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // +30 days
+          items: [], // Empty items for now
+        });
+        return { success: true, message: "Invoice created" };
+      }
 
-    default:
-      return { success: false, error: "Invalid action" };
+      case "mark-paid": {
+        const id = formData.get("id") as string;
+        const amount = parseFloat(formData.get("amount") as string);
+
+        if (!id || isNaN(amount)) {
+          return { success: false, error: "Invalid payment data" };
+        }
+
+        await api.invoices.recordPayment(id, {
+          amount,
+          date: new Date().toISOString(),
+          method: 'Check', // Default
+        });
+        return { success: true, message: "Payment recorded" };
+      }
+
+      case "send-reminder": {
+        const id = formData.get("id") as string;
+        if (!id) return { success: false, error: "Missing ID" };
+
+        await api.invoices.send(id);
+        return { success: true, message: "Reminder sent" };
+      }
+
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    console.error("Action failed:", error);
+    return { success: false, error: "Operation failed" };
   }
 }
 
@@ -81,6 +131,8 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function BillingIndexRoute({ loaderData }: Route.ComponentProps) {
   const { invoices, summary } = loaderData;
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
 
   return (
     <div className="p-8">
@@ -137,6 +189,78 @@ export default function BillingIndexRoute({ loaderData }: Route.ComponentProps) 
             {summary.overdueCount} invoices
           </p>
         </div>
+      </div>
+
+      {/* Invoices List */}
+      <div className="mb-8 overflow-hidden rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800">
+        <div className="border-b border-gray-200 bg-gray-50 px-6 py-4 dark:border-gray-700 dark:bg-gray-900/50">
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Recent Invoices</h3>
+        </div>
+        {invoices.length === 0 ? (
+          <div className="p-12 text-center">
+            <p className="text-gray-500 dark:text-gray-400">No invoices found.</p>
+          </div>
+        ) : (
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-900/50">
+              <tr>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Invoice #</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Date</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Client</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Amount</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Status</th>
+                <th scope="col" className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+              {invoices.map((invoice) => (
+                <tr key={invoice.id}>
+                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
+                    {invoice.invoiceNumber}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    {invoice.invoiceDate ? format(new Date(invoice.invoiceDate), 'MMM d, yyyy') : 'N/A'}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                    {invoice.clientName || invoice.clientId || 'Unknown Client'}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                    ${invoice.totalAmount?.toLocaleString() ?? '0.00'}
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4 text-sm">
+                    <span className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${invoice.status === 'Paid' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' :
+                      invoice.status === 'Overdue' ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' :
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300'
+                      }`}>
+                      {invoice.status}
+                    </span>
+                  </td>
+                  <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                    <div className="flex justify-end gap-2">
+                      {invoice.status !== 'Paid' && (
+                        <Form method="post" className="inline-block">
+                          <input type="hidden" name="intent" value="mark-paid" />
+                          <input type="hidden" name="id" value={invoice.id} />
+                          <input type="hidden" name="amount" value={invoice.totalAmount} />
+                          <button
+                            type="submit"
+                            className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 disabled:opacity-50"
+                            disabled={isSubmitting}
+                          >
+                            Mark Paid
+                          </button>
+                        </Form>
+                      )}
+                      <Link to={`/billing/invoices/${invoice.id}`} className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">
+                        View
+                      </Link>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {/* Quick Links */}

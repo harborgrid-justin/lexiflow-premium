@@ -22,10 +22,10 @@ import { api } from '@/api';
 import { CaseManagement } from '@/features/cases/components/list/CaseManagement';
 import type { Case } from '@/types';
 import { useCallback } from 'react';
-import { Link, redirect, useNavigate } from 'react-router';
-import type { Route } from "./+types/index";
+import { redirect, useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags
@@ -58,7 +58,7 @@ export async function loader({ request }: Route.LoaderArgs) {
   // Fetch data in parallel for performance
   const [cases, invoices] = await Promise.all([
     api.cases.getAll(),
-    api.billing.getInvoices(),
+    api.invoices.getAll(),
   ]);
 
   return { cases, invoices };

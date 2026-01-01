@@ -69,7 +69,8 @@ export const CaseCalendar: React.FC = () => {
     ['calendar', 'events', currentDate.toISOString().split('T')[0]],
     async (): Promise<CalendarEvent[]> => {
       // Fetch docket entries which contain court dates and deadlines
-      const docketEntries = await api.docket.getAll();
+      const response = await api.docket.getAll({ limit: 1000 });
+      const docketEntries = response.data;
       const matters = await api.cases.getAll();
 
       const calendarEvents: CalendarEvent[] = [];

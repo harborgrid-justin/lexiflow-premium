@@ -24,6 +24,7 @@ import { Sidebar } from '@/components/organisms/Sidebar/Sidebar';
 import { AppShell } from '@/components/ui/layouts/AppShell/AppShell';
 import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { useAppController } from '@/hooks/core';
+import { useAuthState } from '@/providers/AuthProvider';
 import type { GlobalSearchResult } from '@/services/search/searchService';
 import type { AppView } from '@/types';
 import type { IntentResult } from '@/types/intelligence';
@@ -98,6 +99,9 @@ export default function Layout() {
   const navigate = useNavigate();
   const { caseId } = useParams();
 
+  // Auth state
+  const { isLoading: authIsLoading } = useAuthState();
+
   // App controller provides global state
   const {
     isSidebarOpen,
@@ -149,16 +153,16 @@ export default function Layout() {
   }, [navigate]);
 
   // Loading state while app initializes
-  // Add safety timeout - if loading takes >10s, show error
+  // Add safety timeout - but exclude auth loading from timeout
   React.useEffect(() => {
-    if (isAppLoading) {
+    if (isAppLoading && !authIsLoading) {
       const timeout = setTimeout(() => {
         console.error('[Layout] App loading timeout - redirecting to login');
         navigate('/login');
-      }, 10000); // 10 second timeout
+      }, 15000); // 15 second timeout (increased from 10s)
       return () => clearTimeout(timeout);
     }
-  }, [isAppLoading, navigate]);
+  }, [isAppLoading, authIsLoading, navigate]);
 
   if (isAppLoading || !currentUser) {
     return (

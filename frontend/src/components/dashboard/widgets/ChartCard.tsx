@@ -5,11 +5,11 @@
  * Provides loading states, error handling, and export capabilities
  */
 
-import React, { useState } from 'react';
-import { Download, RefreshCw, Maximize2, LucideIcon } from 'lucide-react';
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/providers/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/ui/atoms/Button/Button';
+import { Download, LucideIcon, Maximize2, RefreshCw } from 'lucide-react';
+import React, { useCallback, useState } from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -66,7 +66,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({
   const { theme } = useTheme();
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const handleRefresh = async () => {
+  const handleRefresh = useCallback(async () => {
     if (onRefresh && !isRefreshing) {
       setIsRefreshing(true);
       try {
@@ -75,7 +75,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({
         setTimeout(() => setIsRefreshing(false), 500);
       }
     }
-  };
+  }, [onRefresh, isRefreshing]);
 
   return (
     <div

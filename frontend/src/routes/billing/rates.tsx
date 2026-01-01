@@ -3,12 +3,12 @@
  * Manage billing rates and rate tables
  */
 
-import { Link } from 'react-router';
-import type { Route } from "./+types/rates";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createListMeta } from '../_shared/meta-utils';
 import { RateTablesApiService } from '@/api/billing';
 import RateTableManagement from '@/features/operations/billing/rate-tables/RateTableManagement';
+import { Suspense } from 'react';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { createListMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/rates";
 
 // ============================================================================
 // Meta Tags
@@ -51,20 +51,22 @@ export default function RateTablesRoute({ loaderData }: Route.ComponentProps) {
   const { rateTables } = loaderData;
 
   return (
-    <div className="p-8">
-      {/* Page Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          Rate Tables
-        </h1>
-        <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-          Manage billing rates for timekeepers and services
-        </p>
-      </div>
+    <Suspense fallback={<div className="flex items-center justify-center h-full"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>}>
+      <div className="p-8">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            Rate Tables
+          </h1>
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            Manage billing rates for timekeepers and services
+          </p>
+        </div>
 
-      {/* Rate Table Management */}
-      <RateTableManagement />
-    </div>
+        {/* Rate Table Management */}
+        <RateTableManagement />
+      </div>
+    </Suspense>
   );
 }
 

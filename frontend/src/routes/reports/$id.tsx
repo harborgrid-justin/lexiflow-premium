@@ -3,18 +3,25 @@
  * View and export individual reports
  */
 
-import React, { useState } from 'react';
+import { ChartCard } from '@/components/enterprise/analytics';
+import { exportToCSV, exportToExcel } from '@/components/enterprise/data/export';
+import { ArrowLeft, Download, RefreshCw, Share2 } from 'lucide-react';
+import { useState } from 'react';
 import { Link } from 'react-router';
-import type { Route } from "./+types/$id";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis, YAxis
+} from 'recharts';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
-import { ChartCard } from '@/components/enterprise/analytics';
-import {
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
-} from 'recharts';
-import { ArrowLeft, Download, Share2, RefreshCw, Calendar, FileText } from 'lucide-react';
-import { exportToPDF, exportToExcel, exportToCSV } from '@/components/enterprise/data/export';
+import type { Route } from "./+types/$id";
 
 export function meta({ params }: Route.MetaArgs) {
   return createMeta({

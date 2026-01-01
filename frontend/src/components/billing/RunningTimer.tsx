@@ -4,8 +4,8 @@
  * Stores state in localStorage to persist across page reloads
  */
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, Square, Clock } from 'lucide-react';
+import { Clock, Pause, Play, Square } from 'lucide-react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 interface RunningTimerProps {
   onComplete?: (elapsedHours: number) => void;
@@ -120,14 +120,22 @@ export const RunningTimer: React.FC<RunningTimerProps> = ({
     localStorage.removeItem(STORAGE_KEY);
   };
 
-  const formatTime = (seconds: number) => {
+  const formatTime = useCallback((seconds: number) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
+  }, []);
 
-  const elapsedHours = (timerState.elapsedSeconds / 3600).toFixed(2);
+  const elapsedHours = useMemo(
+    () => (timerState.elapsedSeconds / 3600).toFixed(2),
+    [timerState.elapsedSeconds]
+  );
+
+  const formattedTime = useMemo(
+    () => formatTime(timerState.elapsedSeconds),
+    [timerState.elapsedSeconds, formatTime]
+  );
 
   return (
     <div className="rounded-lg border-2 border-blue-500 bg-blue-50 p-6 dark:border-blue-400 dark:bg-blue-900/20">
@@ -136,7 +144,7 @@ export const RunningTimer: React.FC<RunningTimerProps> = ({
           <Clock className="h-8 w-8 text-blue-600 dark:text-blue-400" />
           <div>
             <div className="text-3xl font-mono font-bold text-blue-900 dark:text-blue-100">
-              {formatTime(timerState.elapsedSeconds)}
+              {formattedTime}
             </div>
             <div className="text-sm text-blue-700 dark:text-blue-300">
               {elapsedHours} hours

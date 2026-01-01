@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DataService } from '../services/data/dataService';
 import { isBackendApiEnabled as checkBackendEnabled } from '../config/network/api.config';
+import { DataService } from '../services/data/dataService';
+import { backendDiscovery } from '../services/integration/backendDiscovery';
 import type {
   DataSourceActionsValue,
   DataSourceProviderProps,
   DataSourceStateValue,
   DataSourceType,
 } from './DataSourceContext.types';
-import { DataSourceStateContext, DataSourceActionsContext } from './DataSourceHooks';
+import { DataSourceActionsContext, DataSourceStateContext } from './DataSourceHooks';
 import type { DataSourceConfig } from './repository/config';
 import { createConfigFromEnv } from './repository/config';
 import type { RepositoryRegistry } from './repository/types';
@@ -47,10 +48,10 @@ import type { RepositoryRegistry } from './repository/types';
 
 // Re-export types for convenience
 export type { DataSourceType } from './DataSourceContext.types';
+export * from './DataSourceHooks';
 export type { DataSourceConfig } from './repository/config';
 export * from './repository/errors';
 export type { RepositoryRegistry } from './repository/types';
-export * from './DataSourceHooks';
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                         REPOSITORY FACTORY
@@ -198,6 +199,17 @@ export const DataSourceProvider = ({
       environment: config.environment.environment,
       apiVersion: config.environment.apiVersion,
     });
+
+    // Start backend health monitoring service
+    // This enables real-time backend availability tracking
+    console.log('[DataSourceProvider] Starting backend health monitoring...');
+    backendDiscovery.start();
+
+    // Cleanup: Stop monitoring on unmount
+    return () => {
+      console.log('[DataSourceProvider] Stopping backend health monitoring...');
+      backendDiscovery.stop();
+    };
   }, [currentSource, config]);
 
   // Pattern 8: Memoize provider values explicitly - state context

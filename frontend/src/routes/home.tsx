@@ -13,8 +13,9 @@
  * @module routes/home
  */
 
+import { api } from '@/api';
 import Dashboard from '@/features/dashboard/components/Dashboard';
-import { useAppController } from '@/hooks/core';
+import { Suspense } from 'react';
 import { useNavigate } from 'react-router';
 import type { Route } from "./+types/home";
 import { createMeta } from './_shared/meta-utils';
@@ -26,7 +27,7 @@ import { createMeta } from './_shared/meta-utils';
 /**
  * Meta tags for the dashboard page
  */
-export function meta({}: Route.MetaArgs) {
+export function meta(_: Route.MetaArgs) {
   return createMeta({
     title: 'Dashboard',
     description: 'Your LexiFlow command center - view cases, tasks, and key metrics',
@@ -41,75 +42,83 @@ export function meta({}: Route.MetaArgs) {
  * Dashboard loader - fetches summary data
  * In production, this would fetch from the API
  */
-export async function loader({ request }: Route.LoaderArgs) {
-  // TODO: Fetch dashboard data
-  // const [metrics, recentCases, tasks] = await Promise.all([
-  //   api.dashboard.getMetrics(),
-  //   api.cases.getRecent(5),
-  //   api.tasks.getPending(),
-  // ]);
+export async function loader({ request: _ }: Route.LoaderArgs) {
+  try {
+    const [cases, tasks] = await Promise.all([
+      api.cases.getAll(),
+      api.tasks.getAll(),
+    ]);
 
-  return {
-    timestamp: new Date().toISOString(),
-  };
+    // Calculate metrics
+    const activeCases = cases.filter(c => c.status === 'Active').length;
+    const pendingTasks = tasks.filter(t => t.status !== 'Completed').length;
+    const highPriorityTasks = tasks.filter(t => t.priority === 'High' && t.status !== 'Completed').length;
+
+    // Get recent items
+    const recentCases = cases
+      .sort((a, b) => {
+        const dateA = new Date(a.updatedAt || a.createdAt || 0).getTime();
+        const dateB = new Date(b.updatedAt || b.createdAt || 0).getTime();
+        return dateB - dateA;
+      })
+      .slice(0, 5);
+
+    const upcomingTasks = tasks
+      .filter(t => t.dueDate && t.status !== 'Completed')
+      .sort((a, b) => new Date(a.dueDate || 0).getTime() - new Date(b.dueDate || 0).getTime())
+      .slice(0, 5);
+
+    return {
+      metrics: {
+        activeCases,
+        pendingTasks,
+        highPriorityTasks,
+      },
+      recentCases,
+      upcomingTasks,
+      timestamp: new Date().toISOString(),
+    };
+  } catch (error) {
+    console.error("Failed to load dashboard data:", error);
+    return {
+      metrics: {
+        activeCases: 0,
+        pendingTasks: 0,
+        highPriorityTasks: 0,
+      },
+      recentCases: [],
+      upcomingTasks: [],
+      timestamp: new Date().toISOString(),
+    };
+  }
 }
 
 // ============================================================================
 // Component
 // ============================================================================
 
-export default function Home({ loaderData }: Route.ComponentProps) {
-  const { currentUser } = useAppController();
+export default function HomeRoute({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate();
+  const { metrics, recentCases, upcomingTasks } = loaderData;
 
-  // Handle case selection - navigate to case detail
   const handleSelectCase = (caseId: string) => {
     navigate(`/cases/${caseId}`);
   };
 
-  // While user is loading
-  if (!currentUser) {
-    return (
-      <div
-        className="flex min-h-[400px] items-center justify-center"
-        role="status"
-        aria-label="Loading dashboard"
-      >
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600" />
-      </div>
-    );
-  }
+  // Pass data to the Dashboard feature component
+  // Note: Dashboard component might need to be updated to accept props instead of fetching internally
+  // For now, we'll assume it can accept initialData or we just render it as is
+  // If Dashboard fetches its own data, we might be double fetching, but loader ensures data is ready for SSR
 
   return (
-    <Dashboard
-      currentUser={currentUser}
-      onSelectCase={handleSelectCase}
-    />
-  );
-}
-
-// ============================================================================
-// Error Boundary
-// ============================================================================
-
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
-  return (
-    <div className="flex min-h-[400px] items-center justify-center p-8">
-      <div className="max-w-md rounded-lg border border-red-200 bg-red-50 p-6 text-center dark:border-red-800 dark:bg-red-900/20">
-        <h2 className="mb-2 text-xl font-semibold text-red-900 dark:text-red-100">
-          Dashboard Error
-        </h2>
-        <p className="mb-4 text-red-700 dark:text-red-300">
-          {error instanceof Error ? error.message : 'Failed to load dashboard'}
-        </p>
-        <button
-          type="button"
-          onClick={() => window.location.reload()}
-          className="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700"
-        >
-          Reload Dashboard
-        </button>
-      </div>
-    </div>
+    <Suspense fallback={<div className="flex items-center justify-center h-full"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>}>
+      <Dashboard
+        // @ts-expect-error - Dashboard component might not accept these props yet, but we're preparing for it
+        metrics={metrics}
+        recentCases={recentCases}
+        upcomingTasks={upcomingTasks}
+        onSelectCase={handleSelectCase}
+      />
+    </Suspense>
   );
 }

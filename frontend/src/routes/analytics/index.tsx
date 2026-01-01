@@ -10,34 +10,40 @@
  * @module routes/analytics/index
  */
 
-import React, { useState } from 'react';
-import { Link } from 'react-router';
-import type { Route } from "./+types/index";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createMeta } from '../_shared/meta-utils';
 import {
-  MetricCard,
   ChartCard,
   DateRangeSelector,
-  TimeSeriesChart,
-  RevenueTrendChart,
-  CaseDistributionChart,
-  TeamPerformanceChart
+  MetricCard
 } from '@/components/enterprise/analytics';
-import {
-  BarChart, Bar, LineChart, Line, AreaChart, Area,
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
-  PieChart, Pie, Cell
-} from 'recharts';
 import type { MetricCardData } from '@/types/analytics-enterprise';
 import { subDays } from 'date-fns';
-import { TrendingUp, Users, FileText, DollarSign, Clock, Award, Target, Activity } from 'lucide-react';
+import { Activity, DollarSign, FileText, Users } from 'lucide-react';
+import { useDeferredValue, useState } from 'react';
+import { Link } from 'react-router';
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Line,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis, YAxis
+} from 'recharts';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return createMeta({
     title: 'Analytics Dashboard',
     description: 'Business intelligence, performance metrics, and trend analysis',
@@ -84,6 +90,7 @@ export default function AnalyticsIndexRoute({ loaderData }: Route.ComponentProps
     end: new Date(),
     label: 'Last 30 Days',
   });
+  const deferredDateRange = useDeferredValue(dateRange);
 
   // Mock data for charts
   const revenueData = [
@@ -292,8 +299,8 @@ export default function AnalyticsIndexRoute({ loaderData }: Route.ComponentProps
             <AreaChart data={revenueData}>
               <defs>
                 <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
+                  <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />

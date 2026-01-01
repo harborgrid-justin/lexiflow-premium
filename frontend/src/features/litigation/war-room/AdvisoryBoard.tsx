@@ -13,7 +13,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Filter, Layout, UserPlus } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -31,10 +31,10 @@ import { useToggle } from '@/hooks/useToggle';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Components
+import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { AdaptiveLoader } from '@/components/ui/molecules/AdaptiveLoader/AdaptiveLoader';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
-import { SearchToolbar } from '@/components/organisms/SearchToolbar';
 import { AdvisorDetail } from './advisory/AdvisorDetail';
 import { Advisor, AdvisorList } from './advisory/AdvisorList';
 import { AdvisorySidebar } from './advisory/AdvisorySidebar';
@@ -69,6 +69,18 @@ export const AdvisoryBoard: React.FC<AdvisoryBoardProps> = ({ caseId }) => {
   const [filterRole, setFilterRole] = useState<string>('all');
   const [filterSpecialty, setFilterSpecialty] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
+
+  const handleRoleFilterChange = useCallback((role: string) => {
+    setFilterRole(role);
+  }, []);
+
+  const handleSpecialtyFilterChange = useCallback((specialty: string) => {
+    setFilterSpecialty(specialty);
+  }, []);
+
+  const handleStatusFilterChange = useCallback((status: string) => {
+    setFilterStatus(status);
+  }, []);
 
   // ============================================================================
   // DATA FETCHING

@@ -4,6 +4,7 @@
 
 import { CaseFinancialsCenter } from '@/features/cases/components/financials/CaseFinancialsCenter';
 import { DataService } from '@/services/data/dataService';
+import { Suspense } from 'react';
 import type { Route } from "./+types/financials";
 
 export function meta({ data }: Route.MetaArgs) {
@@ -24,7 +25,11 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function CaseFinancialsRoute({ loaderData }: Route.ComponentProps) {
-  return <CaseFinancialsCenter caseId={loaderData.case.id} />;
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-full"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>}>
+      <CaseFinancialsCenter caseId={loaderData.case.id} />
+    </Suspense>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

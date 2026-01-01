@@ -4,16 +4,15 @@
  * Full-featured document review with coding panel
  */
 
-import React, { useState } from 'react';
-import { Search, Filter, ChevronLeft, ChevronRight, Flag, Eye, FileText, Download, Tag, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/atoms/Button';
-import { Badge } from '@/components/ui/atoms/Badge';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
-import { useTheme } from '@/providers/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
+import { useTheme } from '@/providers/ThemeContext';
+import type { DocumentCoding, ReviewDocument } from '@/types/discovery-enhanced';
 import { cn } from '@/utils/cn';
-import type { ReviewDocument, DocumentCoding, AdvancedSearchQuery } from '@/types/discovery-enhanced';
+import { ChevronLeft, ChevronRight, Download, Eye, FileText, Filter, Flag, MessageSquare, Search, Tag } from 'lucide-react';
+import React, { useCallback, useMemo, useState, useTransition } from 'react';
 
 export const Review: React.FC = () => {
   const { theme } = useTheme();
@@ -93,6 +92,13 @@ export const Review: React.FC = () => {
   });
   const [notes, setNotes] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isPending, startTransition] = useTransition();
+
+  const handleSearchChange = useCallback((value: string) => {
+    startTransition(() => {
+      setSearchQuery(value);
+    });
+  }, []);
   const [showFilters, setShowFilters] = useState(false);
 
   const currentDoc = documents[currentDocIndex];
@@ -122,13 +128,13 @@ export const Review: React.FC = () => {
     setCurrentCoding(prev => ({ ...prev, [field]: value }));
   };
 
-  const stats = {
+  const stats = useMemo(() => ({
     total: documents.length,
     reviewed: documents.filter(d => d.reviewStatus === 'reviewed').length,
     responsive: documents.filter(d => d.coding.responsive === 'yes').length,
     privileged: documents.filter(d => d.coding.privileged === 'yes').length,
     flagged: documents.filter(d => d.coding.hotDocument).length
-  };
+  }), [documents]);
 
   return (
     <div className="h-full flex flex-col space-y-4 animate-fade-in">
@@ -151,7 +157,7 @@ export const Review: React.FC = () => {
               type="text"
               placeholder="Search documents..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className={cn("w-full pl-10 pr-4 py-2 border rounded-lg text-sm", theme.surface.default, theme.border.default)}
             />
           </div>

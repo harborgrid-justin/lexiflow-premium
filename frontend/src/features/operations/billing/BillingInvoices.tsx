@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { CheckCircle, Download, Filter, Mail, Plus } from 'lucide-react';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useDeferredValue, useMemo, useState, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -55,6 +55,11 @@ const BillingInvoicesComponent: React.FC = () => {
   const notify = useNotify();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
+  const [isPending, startTransition] = useTransition();
+
+  // Defer search and filter for responsiveness
+  const deferredSearchTerm = useDeferredValue(searchTerm);
+  const deferredFilterStatus = useDeferredValue(filterStatus);
 
   // Enterprise Data Access with query keys
   const { data: invoices = [] } = useQuery<Invoice[]>(

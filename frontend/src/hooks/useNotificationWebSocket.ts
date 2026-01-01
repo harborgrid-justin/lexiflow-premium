@@ -17,8 +17,8 @@
  * @module useNotificationWebSocket
  */
 
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { useCallback, useEffect, useRef, useState } from "react";
+import { io, Socket } from "socket.io-client";
 
 /**
  * WebSocket notification event payload
@@ -38,7 +38,11 @@ export interface WebSocketNotification {
 /**
  * Connection state
  */
-export type ConnectionState = 'disconnected' | 'connecting' | 'connected' | 'error';
+export type ConnectionState =
+  | "disconnected"
+  | "connecting"
+  | "connected"
+  | "error";
 
 /**
  * Hook options
@@ -66,13 +70,19 @@ export interface UseNotificationWebSocketOptions {
   onNotification?: (notification: WebSocketNotification) => void;
 
   /** Callback when notification marked as read */
-  onNotificationRead?: (data: { notificationId: string; userId: string }) => void;
+  onNotificationRead?: (data: {
+    notificationId: string;
+    userId: string;
+  }) => void;
 
   /** Callback when all notifications marked as read */
   onAllNotificationsRead?: (data: { userId: string }) => void;
 
   /** Callback when notification deleted */
-  onNotificationDeleted?: (data: { notificationId: string; userId: string }) => void;
+  onNotificationDeleted?: (data: {
+    notificationId: string;
+    userId: string;
+  }) => void;
 
   /** Callback when unread count changes */
   onUnreadCountChange?: (count: number) => void;
@@ -117,10 +127,10 @@ export interface UseNotificationWebSocketReturn {
  * useNotificationWebSocket Hook
  */
 export const useNotificationWebSocket = (
-  options: UseNotificationWebSocketOptions = {},
+  options: UseNotificationWebSocketOptions = {}
 ): UseNotificationWebSocketReturn => {
   const {
-    url = window.location.origin,
+    url: providedUrl,
     token,
     autoReconnect = true,
     reconnectDelay = 1000,
@@ -135,7 +145,14 @@ export const useNotificationWebSocket = (
     onError,
   } = options;
 
-  const [connectionState, setConnectionState] = useState<ConnectionState>('disconnected');
+  const url =
+    providedUrl ||
+    (typeof window !== "undefined"
+      ? window.location.origin
+      : "http://localhost:3000");
+
+  const [connectionState, setConnectionState] =
+    useState<ConnectionState>("disconnected");
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const socketRef = useRef<Socket | null>(null);
   const reconnectAttemptsRef = useRef<number>(0);
@@ -147,7 +164,7 @@ export const useNotificationWebSocket = (
         console.log(`[NotificationWebSocket] ${message}`, ...args);
       }
     },
-    [debug],
+    [debug]
   );
 
   const updateConnectionState = useCallback(
@@ -156,7 +173,7 @@ export const useNotificationWebSocket = (
       onConnectionChange?.(state);
       log(`Connection state: ${state}`);
     },
-    [onConnectionChange, log],
+    [onConnectionChange, log]
   );
 
   /**
@@ -164,17 +181,17 @@ export const useNotificationWebSocket = (
    */
   const connect = useCallback((): void => {
     if (!token) {
-      log('Cannot connect: No authentication token provided');
+      log("Cannot connect: No authentication token provided");
       return;
     }
 
     if (socketRef.current?.connected) {
-      log('Already connected');
+      log("Already connected");
       return;
     }
 
-    log('Connecting to WebSocket...', url);
-    updateConnectionState('connecting');
+    log("Connecting to WebSocket...", url);
+    updateConnectionState("connecting");
 
     try {
       // Create socket connection
@@ -182,70 +199,76 @@ export const useNotificationWebSocket = (
         auth: {
           token,
         },
-        transports: ['websocket', 'polling'],
+        transports: ["websocket", "polling"],
         reconnection: autoReconnect,
         reconnectionDelay: reconnectDelay,
         reconnectionAttempts: maxReconnectAttempts,
       });
 
       // Connection established
-      socket.on('connect', () => {
-        log('Connected', socket.id);
-        updateConnectionState('connected');
+      socket.on("connect", () => {
+        log("Connected", socket.id);
+        updateConnectionState("connected");
         reconnectAttemptsRef.current = 0;
       });
 
       // Connection acknowledgment
-      socket.on('connected', (data: { userId: string; socketId: string }) => {
-        log('Connection acknowledged', data);
+      socket.on("connected", (data: { userId: string; socketId: string }) => {
+        log("Connection acknowledged", data);
       });
 
       // New notification received
-      socket.on('notification:new', (notification: WebSocketNotification) => {
-        log('New notification', notification);
+      socket.on("notification:new", (notification: WebSocketNotification) => {
+        log("New notification", notification);
         onNotification?.(notification);
       });
 
       // Notification marked as read
-      socket.on('notification:read', (data: { notificationId: string; userId: string }) => {
-        log('Notification read', data);
-        onNotificationRead?.(data);
-      });
+      socket.on(
+        "notification:read",
+        (data: { notificationId: string; userId: string }) => {
+          log("Notification read", data);
+          onNotificationRead?.(data);
+        }
+      );
 
       // All notifications marked as read
-      socket.on('notification:all-read', (data: { userId: string }) => {
-        log('All notifications read', data);
+      socket.on("notification:all-read", (data: { userId: string }) => {
+        log("All notifications read", data);
         onAllNotificationsRead?.(data);
       });
 
       // Notification deleted
-      socket.on('notification:deleted', (data: { notificationId: string; userId: string }) => {
-        log('Notification deleted', data);
-        onNotificationDeleted?.(data);
-      });
+      socket.on(
+        "notification:deleted",
+        (data: { notificationId: string; userId: string }) => {
+          log("Notification deleted", data);
+          onNotificationDeleted?.(data);
+        }
+      );
 
       // Unread count update
-      socket.on('notification:count', (data: { count: number }) => {
-        log('Unread count', data.count);
+      socket.on("notification:count", (data: { count: number }) => {
+        log("Unread count", data.count);
         setUnreadCount(data.count);
         onUnreadCountChange?.(data.count);
       });
 
       // Disconnection
-      socket.on('disconnect', (reason: string) => {
-        log('Disconnected', reason);
-        updateConnectionState('disconnected');
+      socket.on("disconnect", (reason: string) => {
+        log("Disconnected", reason);
+        updateConnectionState("disconnected");
 
         // Auto-reconnect if not manual disconnect
-        if (reason !== 'io client disconnect' && autoReconnect) {
+        if (reason !== "io client disconnect" && autoReconnect) {
           scheduleReconnect();
         }
       });
 
       // Connection error
-      socket.on('connect_error', (error: Error) => {
-        log('Connection error', error.message);
-        updateConnectionState('error');
+      socket.on("connect_error", (error: Error) => {
+        log("Connection error", error.message);
+        updateConnectionState("error");
         onError?.(error);
 
         if (autoReconnect) {
@@ -254,16 +277,17 @@ export const useNotificationWebSocket = (
       });
 
       // Error
-      socket.on('error', (error: Error) => {
-        log('Socket error', error.message);
+      socket.on("error", (error: Error) => {
+        log("Socket error", error.message);
         onError?.(error);
       });
 
       socketRef.current = socket;
     } catch (error) {
-      const err = error instanceof Error ? error : new Error('Unknown connection error');
-      log('Connection failed', err.message);
-      updateConnectionState('error');
+      const err =
+        error instanceof Error ? error : new Error("Unknown connection error");
+      log("Connection failed", err.message);
+      updateConnectionState("error");
       onError?.(err);
     }
   }, [
@@ -287,16 +311,18 @@ export const useNotificationWebSocket = (
    */
   const scheduleReconnect = useCallback((): void => {
     if (reconnectAttemptsRef.current >= maxReconnectAttempts) {
-      log('Max reconnect attempts reached');
+      log("Max reconnect attempts reached");
       return;
     }
 
     const delay = Math.min(
       reconnectDelay * Math.pow(2, reconnectAttemptsRef.current),
-      30000, // Max 30 seconds
+      30000 // Max 30 seconds
     );
 
-    log(`Scheduling reconnect in ${delay}ms (attempt ${reconnectAttemptsRef.current + 1})`);
+    log(
+      `Scheduling reconnect in ${delay}ms (attempt ${reconnectAttemptsRef.current + 1})`
+    );
 
     reconnectTimerRef.current = setTimeout(() => {
       reconnectAttemptsRef.current += 1;
@@ -314,10 +340,10 @@ export const useNotificationWebSocket = (
     }
 
     if (socketRef.current) {
-      log('Disconnecting...');
+      log("Disconnecting...");
       socketRef.current.disconnect();
       socketRef.current = null;
-      updateConnectionState('disconnected');
+      updateConnectionState("disconnected");
     }
   }, [log, updateConnectionState]);
 
@@ -327,14 +353,14 @@ export const useNotificationWebSocket = (
   const markAsRead = useCallback(
     (notificationId: string): void => {
       if (!socketRef.current?.connected) {
-        log('Cannot mark as read: Not connected');
+        log("Cannot mark as read: Not connected");
         return;
       }
 
-      log('Marking as read', notificationId);
-      socketRef.current.emit('notification:mark-read', { notificationId });
+      log("Marking as read", notificationId);
+      socketRef.current.emit("notification:mark-read", { notificationId });
     },
-    [log],
+    [log]
   );
 
   /**
@@ -342,12 +368,12 @@ export const useNotificationWebSocket = (
    */
   const markAllAsRead = useCallback((): void => {
     if (!socketRef.current?.connected) {
-      log('Cannot mark all as read: Not connected');
+      log("Cannot mark all as read: Not connected");
       return;
     }
 
-    log('Marking all as read');
-    socketRef.current.emit('notification:mark-all-read');
+    log("Marking all as read");
+    socketRef.current.emit("notification:mark-all-read");
   }, [log]);
 
   /**
@@ -356,14 +382,17 @@ export const useNotificationWebSocket = (
   const deleteNotification = useCallback(
     (notificationId: string, wasUnread = false): void => {
       if (!socketRef.current?.connected) {
-        log('Cannot delete: Not connected');
+        log("Cannot delete: Not connected");
         return;
       }
 
-      log('Deleting notification', notificationId);
-      socketRef.current.emit('notification:delete', { notificationId, wasUnread });
+      log("Deleting notification", notificationId);
+      socketRef.current.emit("notification:delete", {
+        notificationId,
+        wasUnread,
+      });
     },
-    [log],
+    [log]
   );
 
   // Auto-connect on mount
@@ -386,7 +415,7 @@ export const useNotificationWebSocket = (
     deleteNotification,
     connect,
     disconnect,
-    isConnected: connectionState === 'connected',
+    isConnected: connectionState === "connected",
   };
 };
 

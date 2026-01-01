@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Book, Loader2, Search, Star } from 'lucide-react';
-import React, { useState, useTransition } from 'react';
+import React, { useCallback, useMemo, useState, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -64,13 +64,16 @@ export const WikiView: React.FC = () => {
 
   const filteredArticles = filteredItems as unknown as WikiArticle[];
 
-  const activeArticle = articles.find(a => a.id === activeArticleId);
+  const activeArticle = useMemo(
+    () => articles.find(a => a.id === activeArticleId),
+    [articles, activeArticleId]
+  );
 
-  const handleSelectArticle = (id: string) => {
+  const handleSelectArticle = useCallback((id: string) => {
     startTransition(() => {
       setActiveArticleId(id);
     });
-  };
+  }, []);
 
   if (isLoading) {
     return <AdaptiveLoader contentType="document" shimmer message="Loading wiki articles..." />;

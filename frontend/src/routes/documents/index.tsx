@@ -10,14 +10,13 @@
  * @module routes/documents/index
  */
 
+import { DocumentsApiService } from '@/api/admin/documents-api';
+import { DocumentFilters, DocumentList, type DocumentFilterOptions, type ViewMode } from '@/components/features/documents/components';
 import { useState } from 'react';
 import { Link } from 'react-router';
-import type { Route } from "./+types/index";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { RouteLoadingSkeleton } from '../_shared/RouteLoading';
 import { createListMeta } from '../_shared/meta-utils';
-import { DocumentsApiService } from '@/api/admin/documents-api';
-import { DocumentList, DocumentFilters, type DocumentFilterOptions, type ViewMode } from '@/components/features/documents/components';
+import type { Route } from "./+types/index";
 
 const documentsApi = new DocumentsApiService();
 

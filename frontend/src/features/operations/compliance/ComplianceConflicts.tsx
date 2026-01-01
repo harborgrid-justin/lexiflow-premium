@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Download, Filter, Plus, User } from 'lucide-react';
-import React, { memo, useState } from 'react';
+import React, { memo, useMemo, useState, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -46,11 +46,21 @@ interface ComplianceConflictsProps {
 const ComplianceConflictsComponent: React.FC<ComplianceConflictsProps> = ({ conflicts }) => {
   const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
+  const [isPending, startTransition] = useTransition();
 
-  const filteredConflicts = conflicts.filter(c =>
-    c.entityName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    c.checkedBy.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredConflicts = useMemo(() =>
+    conflicts.filter(c =>
+      c.entityName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.checkedBy.toLowerCase().includes(searchTerm.toLowerCase())
+    ),
+    [conflicts, searchTerm]
   );
+
+  const handleSearchChange = (value: string) => {
+    startTransition(() => {
+      setSearchTerm(value);
+    });
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -64,7 +74,7 @@ const ComplianceConflictsComponent: React.FC<ComplianceConflictsProps> = ({ conf
 
       <SearchToolbar
         value={searchTerm}
-        onChange={setSearchTerm}
+        onChange={handleSearchChange}
         placeholder="Search by entity or requester..."
         actions={
           <div className="flex gap-2">

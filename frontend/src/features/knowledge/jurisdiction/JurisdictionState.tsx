@@ -10,7 +10,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState, useTransition } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -35,6 +35,7 @@ import { filterStates } from './utils';
 export const JurisdictionState: React.FC = () => {
   const { theme } = useTheme();
   const [filter, setFilter] = useState('');
+  const [isPending, startTransition] = useTransition();
 
   // Performance Engine: useQuery
   const { data: rawStates = [], isLoading } = useQuery<unknown[]>(
@@ -44,7 +45,16 @@ export const JurisdictionState: React.FC = () => {
 
   // Defensive array validation
   const states = Array.isArray(rawStates) ? rawStates : [];
-  const filteredStates = filterStates(states as Array<{ name: string; region: string }>, filter);
+  const filteredStates = useMemo(
+    () => filterStates(states as Array<{ name: string; region: string }>, filter),
+    [states, filter]
+  );
+
+  const handleFilterChange = useCallback((value: string) => {
+    startTransition(() => {
+      setFilter(value);
+    });
+  }, []);
 
   if (isLoading) return <AdaptiveLoader contentType="list" itemCount={10} shimmer />;
 
@@ -52,7 +62,7 @@ export const JurisdictionState: React.FC = () => {
     <div className="space-y-4">
       <SearchToolbar
         value={filter}
-        onChange={setFilter}
+        onChange={handleFilterChange}
         placeholder="Search state courts..."
         actions={
           <div className={cn("text-xs font-medium px-3 py-1.5 rounded-full border", theme.surface.highlight, theme.border.default, theme.text.secondary)}>

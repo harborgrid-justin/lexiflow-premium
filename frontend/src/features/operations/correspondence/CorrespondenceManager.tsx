@@ -11,7 +11,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Filter, Mail, MapPin, Plus } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -22,8 +22,8 @@ import { DataService } from '@/services/data/dataService';
 import { correspondenceQueryKeys } from '@/services/infrastructure/queryKeys';
 
 // Hooks & Context
-import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useModalState } from '@/hooks/core';
+import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useSelection } from '@/hooks/useSelectionState';
 import { useToggle } from '@/hooks/useToggle';
 import { useTheme } from '@/providers/ThemeContext';
@@ -258,9 +258,13 @@ const CorrespondenceManagerInternal: React.FC<CorrespondenceManagerProps> = ({ i
     );
 };
 
-// Export with error boundary wrapper
+// Export with ErrorBoundary wrapper for resilience
 const CorrespondenceManager: React.FC<CorrespondenceManagerProps> = (props) => (
-    <CorrespondenceManagerInternal {...props} />
+    <CorrespondenceErrorBoundary>
+        <Suspense fallback={<CommunicationLogSkeleton />}>
+            <CorrespondenceManagerInternal {...props} />
+        </Suspense>
+    </CorrespondenceErrorBoundary>
 );
 
 export default CorrespondenceManager;

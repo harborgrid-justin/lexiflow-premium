@@ -13,7 +13,7 @@ import { LegalDocument } from '@/types';
 import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { CheckCircle, Clock, FileSignature, Loader2, Plus, Search, Send } from 'lucide-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useDeferredValue, useEffect, useMemo, useState, useTransition } from 'react';
 import { AcrobatToolbar, PDFTool } from "../preview/AcrobatToolbar";
 import { Field, InteractiveOverlay } from "../preview/InteractiveOverlay";
 
@@ -27,6 +27,10 @@ export const FormsSigningView = () => {
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [activeList, setActiveList] = useState<FilterCategory>('Templates');
     const [searchTerm, setSearchTerm] = useState('');
+    const [isPending, startTransition] = useTransition();
+
+    // Defer search for better input responsiveness
+    const deferredSearchTerm = useDeferredValue(searchTerm);
 
     // Load documents from IndexedDB via useQuery for accurate, cached data
     const { data: allDocs = [], isLoading, error, refetch } = useQuery(
@@ -75,7 +79,7 @@ export const FormsSigningView = () => {
 
     const filteredDocuments = useMemo(() => {
         return documents.filter(doc => {
-            const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesSearch = doc.title.toLowerCase().includes(deferredSearchTerm.toLowerCase());
             let matchesList = false;
             if (activeList === 'Templates') matchesList = doc.tags.includes('Template');
             else if (activeList === 'Draft') matchesList = doc.status === 'Draft' && doc.tags.includes('Form');
@@ -84,7 +88,7 @@ export const FormsSigningView = () => {
 
             return matchesSearch && matchesList;
         });
-    }, [documents, searchTerm, activeList]);
+    }, [documents, deferredSearchTerm, activeList]);
 
     const handleFieldClick = (field: Field) => {
         if (field.type === 'signature' || field.type === 'initials') {

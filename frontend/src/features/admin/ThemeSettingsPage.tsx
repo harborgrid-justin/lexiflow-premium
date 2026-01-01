@@ -8,17 +8,24 @@
  * - Testing component theme consistency
  */
 
-import React, { useState } from 'react';
 import { useTheme } from '@/providers/ThemeContext';
 import { ChartColorService } from '@/services/theme/chartColorService';
-import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { getChartTheme } from '@/utils/chartConfig';
-import { Sun, Moon, Palette, CheckCircle2, XCircle } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import { CheckCircle2, Moon, Palette, Sun, XCircle } from 'lucide-react';
+import React, { useCallback, useState, useTransition } from 'react';
+import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export const ThemeSettingsPage: React.FC = () => {
   const { mode, toggleTheme, theme } = useTheme();
   const [selectedSection, setSelectedSection] = useState<'tokens' | 'charts' | 'components'>('tokens');
+  const [isPending, startTransition] = useTransition();
+
+  const handleSectionChange = useCallback((section: 'tokens' | 'charts' | 'components') => {
+    startTransition(() => {
+      setSelectedSection(section);
+    });
+  }, []);
 
   const chartTheme = getChartTheme(mode);
   const riskColors = ChartColorService.getRiskColors(mode);

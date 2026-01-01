@@ -155,6 +155,17 @@ class ApiClient {
   }
 
   /**
+   * Get current origin safely (handles SSR)
+   * @private
+   */
+  private getOrigin(): string {
+    if (typeof window !== "undefined") {
+      return window.location.origin;
+    }
+    return "http://localhost:3000";
+  }
+
+  /**
    * Validate endpoint parameter
    * @private
    */
@@ -336,7 +347,9 @@ class ApiClient {
                 "[ApiClient] Token refresh failed, clearing tokens and redirecting"
               );
               this.clearAuthTokens();
-              window.location.href = "/login";
+              if (typeof window !== "undefined") {
+                window.location.href = "/login";
+              }
               throw new AuthenticationError(
                 "Session expired. Please login again."
               );
@@ -350,7 +363,9 @@ class ApiClient {
             }
             console.error("[ApiClient] Token refresh failed:", error);
             this.clearAuthTokens();
-            window.location.href = "/login";
+            if (typeof window !== "undefined") {
+              window.location.href = "/login";
+            }
             throw new AuthenticationError(
               "Session expired. Please login again."
             );
@@ -360,7 +375,9 @@ class ApiClient {
             "[ApiClient] No refresh token available, redirecting to login"
           );
           this.clearAuthTokens();
-          window.location.href = "/login";
+          if (typeof window !== "undefined") {
+            window.location.href = "/login";
+          }
         }
       }
 
@@ -409,7 +426,7 @@ class ApiClient {
         const fullUrl = this.baseURL
           ? `${this.baseURL}/auth/refresh`
           : "/auth/refresh";
-        const url = new URL(fullUrl, window.location.origin);
+        const url = new URL(fullUrl, this.getOrigin());
         const response = await fetch(url.toString(), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -466,7 +483,7 @@ class ApiClient {
     try {
       // Handle empty baseURL (for Vite proxy mode)
       const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
-      const url = new URL(fullUrl, window.location.origin);
+      const url = new URL(fullUrl, this.getOrigin());
       if (params) {
         Object.keys(params).forEach((key) => {
           if (params[key] !== undefined && params[key] !== null) {
@@ -512,7 +529,7 @@ class ApiClient {
     this.validateData(data, "post");
     try {
       const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
-      const url = new URL(fullUrl, window.location.origin);
+      const url = new URL(fullUrl, this.getOrigin());
       const response = await fetch(url.toString(), {
         method: "POST",
         headers: this.getHeaders(options?.headers),
@@ -547,7 +564,7 @@ class ApiClient {
     this.validateData(data, "put");
     try {
       const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
-      const url = new URL(fullUrl, window.location.origin);
+      const url = new URL(fullUrl, this.getOrigin());
       const response = await fetch(url.toString(), {
         method: "PUT",
         headers: this.getHeaders(),
@@ -581,7 +598,7 @@ class ApiClient {
     this.validateData(data, "patch");
     try {
       const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
-      const url = new URL(fullUrl, window.location.origin);
+      const url = new URL(fullUrl, this.getOrigin());
       const response = await fetch(url.toString(), {
         method: "PATCH",
         headers: this.getHeaders(),
@@ -613,7 +630,7 @@ class ApiClient {
     this.validateEndpoint(endpoint, "delete");
     try {
       const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
-      const url = new URL(fullUrl, window.location.origin);
+      const url = new URL(fullUrl, this.getOrigin());
       const response = await fetch(url.toString(), {
         method: "DELETE",
         headers: this.getHeaders(),
@@ -675,7 +692,7 @@ class ApiClient {
       // Do NOT set Content-Type for multipart/form-data (browser sets it with boundary)
 
       const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
-      const url = new URL(fullUrl, window.location.origin);
+      const url = new URL(fullUrl, this.getOrigin());
       const response = await fetch(url.toString(), {
         method: "POST",
         headers,
@@ -735,7 +752,7 @@ class ApiClient {
 
     try {
       const fullUrl = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
-      const url = new URL(fullUrl, window.location.origin);
+      const url = new URL(fullUrl, this.getOrigin());
       const response = await fetch(url.toString(), {
         method: "HEAD",
         headers: this.getHeaders(),

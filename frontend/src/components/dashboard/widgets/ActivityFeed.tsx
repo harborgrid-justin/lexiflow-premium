@@ -5,23 +5,23 @@
  * Displays case updates, document uploads, tasks completed, and system events
  */
 
-import React from 'react';
+import { useTheme } from '@/providers/ThemeContext';
+import { Activity, ActivityType } from '@/types/dashboard';
+import { cn } from '@/utils/cn';
+import { formatDistanceToNow } from 'date-fns';
 import {
-  FileText,
+  AlertTriangle,
   Briefcase,
   CheckCircle2,
   Clock,
   DollarSign,
-  UserPlus,
-  MessageSquare,
-  AlertTriangle,
-  Upload,
+  FileText,
   LucideIcon,
+  MessageSquare,
+  Upload,
+  UserPlus,
 } from 'lucide-react';
-import { useTheme } from '@/providers/ThemeContext';
-import { cn } from '@/utils/cn';
-import { Activity, ActivityType } from '@/types/dashboard';
-import { formatDistanceToNow } from 'date-fns';
+import React from 'react';
 
 // ============================================================================
 // TYPES & INTERFACES

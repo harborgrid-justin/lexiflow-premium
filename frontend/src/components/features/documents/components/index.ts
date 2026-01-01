@@ -1,9 +1,15 @@
 /**
  * @module features/documents/components
  * @category Document Components
- * @description Placeholder for document components
+ * @description Document management components
  */
 
-// Document components will be imported here
-// Currently empty - components to be organized
-export {};
+export * from "./DocumentAnnotations";
+export * from "./DocumentCard";
+export * from "./DocumentFilters";
+export * from "./DocumentList";
+export * from "./DocumentRow";
+export * from "./DocumentUploader";
+export * from "./DocumentViewer";
+export * from "./MetadataPanel";
+export * from "./VersionHistory";

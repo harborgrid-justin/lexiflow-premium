@@ -6,7 +6,7 @@ import { useTheme } from '@/providers/ThemeContext';
 import { DataService } from '@/services/data/dataService';
 import { LegalDocument, UserRole } from '@/types';
 import { cn } from '@/utils/cn';
-import { useState } from 'react';
+import { useDeferredValue, useState } from 'react';
 import { DocumentDragOverlay } from './DocumentDragOverlay';
 import { DocumentFilters } from './DocumentFilters';
 import { DocumentToolbar } from './DocumentToolbar';
@@ -35,6 +35,8 @@ export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExpl
         isDetailsOpen, setIsDetailsOpen, previewDoc, setPreviewDoc, updateDocument, isLoading,
         isDragging, handleDragEnter, handleDragLeave, handleDrop
     } = useDocumentManager({ enableDragDrop: true });
+
+    const deferredSearchTerm = useDeferredValue(searchTerm);
 
     const [viewMode, setViewMode] = useState<'list' | 'grid'>('list');
     const [taggingDoc, setTaggingDoc] = useState<LegalDocument | null>(null);

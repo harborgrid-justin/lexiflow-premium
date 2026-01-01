@@ -1,8 +1,8 @@
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { Modal } from '@/components/ui/molecules/Modal';
-import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table/Table';
 import { useModalState } from '@/hooks/core';
 import { useNotify } from '@/hooks/useNotify';
 import { useQuery } from '@/hooks/useQueryHooks';
@@ -12,7 +12,7 @@ import { DataService } from '@/services/data/dataService';
 import { cn } from '@/utils/cn';
 import { queryKeys } from '@/utils/queryKeys';
 import { Edit, Mail, Plus, Search, Shield, Trash2, Users } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useDeferredValue, useState, useTransition } from 'react';
 
 interface UserData {
   id: string;
@@ -40,6 +40,8 @@ export const UserManagement: React.FC = () => {
   );
 
   const [searchQuery, setSearchQuery] = useState('');
+  const deferredSearchQuery = useDeferredValue(searchQuery);
+  const [isPending, startTransition] = useTransition();
   const createModal = useModalState();
   const editModal = useModalState();
   const deleteModal = useModalState();
@@ -47,9 +49,9 @@ export const UserManagement: React.FC = () => {
   const [formData, setFormData] = useState<Partial<UserData>>({});
 
   const filteredUsers = users.filter(u =>
-    u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    u.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    u.lastName.toLowerCase().includes(searchQuery.toLowerCase())
+    u.email.toLowerCase().includes(deferredSearchQuery.toLowerCase()) ||
+    u.firstName.toLowerCase().includes(deferredSearchQuery.toLowerCase()) ||
+    u.lastName.toLowerCase().includes(deferredSearchQuery.toLowerCase())
   );
 
   const handleCreate = async () => {

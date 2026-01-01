@@ -6,10 +6,7 @@
  * @module routes/docket/detail
  */
 
-import { useNavigate } from 'react-router';
-import type { Route } from "./+types/detail";
-import { RouteErrorBoundary, NotFoundError } from '../_shared/RouteErrorBoundary';
-import { createDetailMeta } from '../_shared/meta-utils';
+import { api } from '@/api';
 
 // ============================================================================
 // Meta Tags
@@ -18,7 +15,7 @@ import { createDetailMeta } from '../_shared/meta-utils';
 export function meta({ data }: Route.MetaArgs) {
   return createDetailMeta({
     entityType: 'Docket',
-    entityName: data?.item?.title,
+    entityName: data?.item?.title || data?.item?.description,
     entityId: data?.item?.id,
   });
 }
@@ -35,13 +32,16 @@ export async function loader({ params }: Route.LoaderArgs) {
     throw new Response("Docket ID is required", { status: 400 });
   }
 
-  // TODO: Fetch data
-  // const item = await api.docket.get(docketId);
-  // if (!item) {
-  //   throw new Response("Docket not found", { status: 404 });
-  // }
-
-  return { item: null };
+  try {
+    const item = await api.docket.getById(docketId);
+    if (!item) {
+      throw new Response("Docket entry not found", { status: 404 });
+    }
+    return { item };
+  } catch (error) {
+    console.error("Failed to load docket entry:", error);
+    throw error;
+  }
 }
 
 // ============================================================================
@@ -76,6 +76,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function DocketDetailRoute({ loaderData }: Route.ComponentProps) {
+  const { item } = loaderData;
   const navigate = useNavigate();
 
   return (
@@ -92,14 +93,89 @@ export default function DocketDetailRoute({ loaderData }: Route.ComponentProps) 
         </button>
       </div>
 
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-        Docket Detail
-      </h1>
+      <div className="mb-8 flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            {item.title || item.description}
+          </h1>
+          <div className="mt-2 flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+            <span>Filed: {item.dateFiled ? format(new Date(item.dateFiled), 'PPP') : 'N/A'}</span>
+            <span>•</span>
+            <span>Type: {item.type}</span>
+            {item.docketNumber && (
+              <>
+                <span>•</span>
+                <span>Docket #: {item.docketNumber}</span>
+              </>
+            )}
+          </div>
+        </div>
+        <div className="flex gap-2">
+          {item.documentUrl && (
+            <a
+              href={item.documentUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-200 dark:ring-gray-600 dark:hover:bg-gray-700"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              View Document
+            </a>
+          )}
+        </div>
+      </div>
 
-      <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-12 text-center dark:border-gray-700 dark:bg-gray-800/50">
-        <p className="text-gray-500 dark:text-gray-400">
-          Detail view under development.
-        </p>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2 space-y-6">
+          {/* Description */}
+          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Description</h3>
+            <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+              {item.description}
+            </p>
+          </div>
+
+          {/* Metadata */}
+          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Metadata</h3>
+            <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Filed By</dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100">{item.filedBy || 'Unknown'}</dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Sequence Number</dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100">{item.sequenceNumber}</dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-gray-100">
+                  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${item.isSealed ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300' : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                    }`}>
+                    {item.isSealed ? 'Sealed' : 'Public'}
+                  </span>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          {/* Related Actions */}
+          <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Actions</h3>
+            <div className="space-y-3">
+              <button className="w-full rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500">
+                Add Note
+              </button>
+              <button className="w-full rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-100 dark:ring-gray-600 dark:hover:bg-gray-600">
+                Set Reminder
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

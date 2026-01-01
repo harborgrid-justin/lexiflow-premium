@@ -60,7 +60,7 @@ export class AuthApiService {
 
   async getCurrentUser(): Promise<User> {
     const response = await apiClient.get<{ success: boolean; data: User }>(
-      "/auth/me"
+      "/auth/profile"
     );
     return response.data;
   }

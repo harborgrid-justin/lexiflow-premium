@@ -9,6 +9,7 @@
 
 import Dashboard from '@/features/dashboard/components/Dashboard';
 import { useAppController } from '@/hooks/core';
+import { Suspense } from 'react';
 import { useNavigate } from 'react-router';
 import type { Route } from "./+types/dashboard";
 import { createMeta } from './_shared/meta-utils';
@@ -17,7 +18,7 @@ import { createMeta } from './_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return createMeta({
     title: 'Dashboard',
     description: 'Your LexiFlow command center - view cases, tasks, and key metrics',
@@ -59,10 +60,20 @@ export default function DashboardRoute({ loaderData }: Route.ComponentProps) {
   }
 
   return (
-    <Dashboard
-      currentUser={currentUser}
-      onSelectCase={handleSelectCase}
-    />
+    <Suspense fallback={
+      <div
+        className="flex min-h-[400px] items-center justify-center"
+        role="status"
+        aria-label="Loading dashboard"
+      >
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600" />
+      </div>
+    }>
+      <Dashboard
+        currentUser={currentUser}
+        onSelectCase={handleSelectCase}
+      />
+    </Suspense>
   );
 }
 

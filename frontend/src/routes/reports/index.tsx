@@ -1,25 +1,53 @@
 /**
  * Reports Route
- * Report builder and management interface
+ *
+ * Report builder and management interface with:
+ * - Server-side data loading via loader
+ * - Report generation and scheduling
+ * - Filtering and search
+ * - Export capabilities
+ *
+ * @module routes/reports/index
  */
 
-import React, { useState } from 'react';
-import { Link } from 'react-router';
-import type { Route } from "./+types/index";
+import type { Report, ReportCategory } from '@/types/analytics-enterprise';
+import {
+  Calendar,
+  Edit,
+  FileText,
+  MoreVertical,
+  Play,
+  Plus,
+  Search
+} from 'lucide-react';
+import { Form, Link, useSubmit } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
-import { Plus, FileText, Calendar, Download, Play, Edit, Trash2, Search } from 'lucide-react';
-import type { Report } from '@/types/analytics-enterprise';
+import type { Route } from "./+types/index";
 
-export function meta({}: Route.MetaArgs) {
+// ============================================================================
+// Meta Tags
+// ============================================================================
+
+export function meta(_: Route.MetaArgs) {
   return createMeta({
     title: 'Reports',
-    description: 'Create and manage custom reports',
+    description: 'Create, manage, and schedule custom reports',
   });
 }
 
+// ============================================================================
+// Loader
+// ============================================================================
+
 export async function loader({ request }: Route.LoaderArgs) {
-  // TODO: Fetch real reports from API
+  const url = new URL(request.url);
+  const search = url.searchParams.get("q") || "";
+  const category = url.searchParams.get("category") || "all";
+
+  // TODO: Replace with actual API call
+  // const reports = await api.reports.getAll({ search, category });
+
   const mockReports: Report[] = [
     {
       id: '1',
@@ -41,6 +69,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       nextRun: '2024-02-01T09:00:00Z',
       createdAt: '2023-01-01T00:00:00Z',
       updatedAt: '2024-01-15T10:30:00Z',
+      userId: 'user-1',
     },
     {
       id: '2',
@@ -55,263 +84,296 @@ export async function loader({ request }: Route.LoaderArgs) {
       status: 'active',
       schedule: {
         frequency: 'quarterly',
+        dayOfMonth: 1,
+        time: '08:00',
       },
-      lastRun: '2024-01-01T09:00:00Z',
-      createdAt: '2023-03-15T00:00:00Z',
-      updatedAt: '2024-01-10T14:20:00Z',
+      lastRun: '2024-01-01T08:00:00Z',
+      nextRun: '2024-04-01T08:00:00Z',
+      createdAt: '2023-02-15T00:00:00Z',
+      updatedAt: '2023-12-20T14:15:00Z',
+      userId: 'user-1',
     },
     {
       id: '3',
-      name: 'A/R Aging Report',
-      description: 'Accounts receivable aging analysis',
-      type: 'ar-aging',
-      category: 'financial',
+      name: 'Associate Productivity',
+      description: 'Billable hours and realization rates by associate',
+      type: 'productivity',
+      category: 'performance',
       format: ['excel', 'csv'],
       parameters: {
-        dateRange: { type: 'absolute', start: '2024-01-01', end: '2024-01-31' },
+        dateRange: { type: 'relative', period: 'this-month' },
+      },
+      status: 'draft',
+      createdAt: '2024-01-10T00:00:00Z',
+      updatedAt: '2024-01-10T16:45:00Z',
+      userId: 'user-1',
+    },
+    {
+      id: '4',
+      name: 'Compliance Audit Log',
+      description: 'System access and data modification logs',
+      type: 'custom',
+      category: 'compliance',
+      format: ['csv'],
+      parameters: {
+        dateRange: { type: 'relative', period: 'last-week' },
       },
       status: 'active',
       schedule: {
         frequency: 'weekly',
         dayOfWeek: 1,
-        time: '08:00',
+        time: '06:00',
       },
-      lastRun: '2024-01-29T08:00:00Z',
-      nextRun: '2024-02-05T08:00:00Z',
-      createdAt: '2023-06-01T00:00:00Z',
-      updatedAt: '2024-01-28T16:45:00Z',
-    },
-    {
-      id: '4',
-      name: 'Client Profitability Dashboard',
-      description: 'Revenue and profitability by client',
-      type: 'client-profitability',
-      category: 'executive',
-      format: ['pdf', 'html'],
-      parameters: {
-        dateRange: { type: 'relative', period: 'ytd' },
-      },
-      status: 'active',
-      createdAt: '2023-09-12T00:00:00Z',
-      updatedAt: '2024-01-20T11:15:00Z',
-    },
-    {
-      id: '5',
-      name: 'Attorney Productivity Metrics',
-      description: 'Utilization and billable hours by attorney',
-      type: 'productivity',
-      category: 'performance',
-      format: ['excel'],
-      parameters: {
-        dateRange: { type: 'relative', period: 'last-month' },
-      },
-      status: 'draft',
-      createdAt: '2024-01-15T00:00:00Z',
-      updatedAt: '2024-01-25T09:30:00Z',
+      lastRun: '2024-01-22T06:00:00Z',
+      nextRun: '2024-01-29T06:00:00Z',
+      createdAt: '2023-11-05T00:00:00Z',
+      updatedAt: '2023-11-05T09:20:00Z',
+      userId: 'user-1',
     },
   ];
 
-  return { reports: mockReports };
+  let filteredReports = mockReports;
+
+  if (search) {
+    const lowerSearch = search.toLowerCase();
+    filteredReports = filteredReports.filter(r =>
+      r.name.toLowerCase().includes(lowerSearch) ||
+      r.description?.toLowerCase().includes(lowerSearch)
+    );
+  }
+
+  if (category !== 'all') {
+    filteredReports = filteredReports.filter(r => r.category === category);
+  }
+
+  return {
+    reports: filteredReports,
+    search,
+    category,
+  };
 }
 
-export default function ReportsRoute({ loaderData }: Route.ComponentProps) {
-  const { reports } = loaderData;
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState<string>('all');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
+// ============================================================================
+// Action
+// ============================================================================
 
-  const filteredReports = reports.filter(report => {
-    const matchesSearch = report.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         report.description?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = filterCategory === 'all' || report.category === filterCategory;
-    const matchesStatus = filterStatus === 'all' || report.status === filterStatus;
-    return matchesSearch && matchesCategory && matchesStatus;
-  });
+export async function action({ request }: Route.ActionArgs) {
+  const formData = await request.formData();
+  const intent = formData.get("intent");
+  const _id = formData.get("id");
 
-  const getCategoryColor = (category: string) => {
-    const colors = {
-      financial: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
-      operational: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
-      compliance: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
-      performance: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300',
-      executive: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
-    };
-    return colors[category as keyof typeof colors] || 'bg-gray-100 text-gray-800';
-  };
+  try {
+    switch (intent) {
+      case "delete": {
+        // await api.reports.delete(id as string);
+        return { success: true, message: "Report deleted" };
+      }
+      case "run-now": {
+        // await api.reports.run(id as string);
+        return { success: true, message: "Report generation started" };
+      }
+      case "duplicate": {
+        // await api.reports.duplicate(id as string);
+        return { success: true, message: "Report duplicated" };
+      }
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    console.error("Action failed:", error);
+    return { success: false, error: "Operation failed" };
+  }
+}
 
-  const getStatusColor = (status: string) => {
-    const colors = {
-      active: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
-      draft: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
-      paused: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300',
-      archived: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300',
-    };
-    return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800';
-  };
+// ============================================================================
+// Component
+// ============================================================================
 
-  const getFrequencyLabel = (frequency?: string) => {
-    const labels = {
-      daily: 'Daily',
-      weekly: 'Weekly',
-      monthly: 'Monthly',
-      quarterly: 'Quarterly',
-      custom: 'Custom',
-    };
-    return frequency ? labels[frequency as keyof typeof labels] || frequency : 'On Demand';
-  };
+export default function ReportsIndexRoute({ loaderData }: Route.ComponentProps) {
+  const { reports, search, category } = loaderData;
+  const submit = useSubmit();
+
+  const categories: { value: ReportCategory | 'all'; label: string }[] = [
+    { value: 'all', label: 'All Reports' },
+    { value: 'financial', label: 'Financial' },
+    { value: 'operational', label: 'Operational' },
+    { value: 'performance', label: 'Performance' },
+    { value: 'compliance', label: 'Compliance' },
+    { value: 'executive', label: 'Executive' },
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8 dark:bg-gray-900">
+    <div className="flex h-full flex-col bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-            Reports
-          </h1>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            Create, schedule, and manage custom reports
-          </p>
-        </div>
-
-        <Link
-          to="/reports/create"
-          className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
-        >
-          <Plus className="h-4 w-4" />
-          Create Report
-        </Link>
-      </div>
-
-      {/* Filters */}
-      <div className="mb-6 flex flex-wrap items-center gap-4">
-        <div className="relative flex-1 min-w-[300px]">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search reports..."
-            className="w-full rounded-lg border border-gray-300 pl-10 pr-4 py-2 text-sm dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
-          />
-        </div>
-
-        <select
-          value={filterCategory}
-          onChange={(e) => setFilterCategory(e.target.value)}
-          className="rounded-lg border border-gray-300 px-4 py-2 text-sm dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
-        >
-          <option value="all">All Categories</option>
-          <option value="financial">Financial</option>
-          <option value="operational">Operational</option>
-          <option value="compliance">Compliance</option>
-          <option value="performance">Performance</option>
-          <option value="executive">Executive</option>
-        </select>
-
-        <select
-          value={filterStatus}
-          onChange={(e) => setFilterStatus(e.target.value)}
-          className="rounded-lg border border-gray-300 px-4 py-2 text-sm dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
-        >
-          <option value="all">All Statuses</option>
-          <option value="active">Active</option>
-          <option value="draft">Draft</option>
-          <option value="paused">Paused</option>
-          <option value="archived">Archived</option>
-        </select>
-      </div>
-
-      {/* Reports Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredReports.map((report) => (
-          <div
-            key={report.id}
-            className="rounded-lg border border-gray-200 bg-white p-6 transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
-          >
-            <div className="mb-4 flex items-start justify-between">
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-gray-400" />
-                  <h3 className="font-semibold text-gray-900 dark:text-gray-100">
-                    {report.name}
-                  </h3>
-                </div>
-                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                  {report.description}
-                </p>
-              </div>
-            </div>
-
-            <div className="mb-4 flex flex-wrap gap-2">
-              <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getCategoryColor(report.category)}`}>
-                {report.category}
-              </span>
-              <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(report.status)}`}>
-                {report.status}
-              </span>
-              {report.schedule && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300">
-                  <Calendar className="h-3 w-3" />
-                  {getFrequencyLabel(report.schedule.frequency)}
-                </span>
-              )}
-            </div>
-
-            <div className="mb-4 text-xs text-gray-500 dark:text-gray-400">
-              {report.lastRun && (
-                <div>Last run: {new Date(report.lastRun).toLocaleDateString()}</div>
-              )}
-              {report.nextRun && (
-                <div>Next run: {new Date(report.nextRun).toLocaleDateString()}</div>
-              )}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Link
-                to={`/reports/${report.id}`}
-                className="flex-1 rounded-md bg-blue-50 px-3 py-2 text-center text-sm font-medium text-blue-600 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/30"
-              >
-                View
-              </Link>
-              <button className="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700 dark:hover:text-gray-300">
-                <Play className="h-4 w-4" />
-              </button>
-              <button className="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700 dark:hover:text-gray-300">
-                <Edit className="h-4 w-4" />
-              </button>
-              <button className="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-red-600 dark:hover:bg-gray-700 dark:hover:text-red-400">
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
+      <div className="border-b border-gray-200 bg-white px-6 py-4 dark:border-gray-800 dark:bg-gray-900">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Reports</h1>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              Generate and schedule insights across your firm
+            </p>
           </div>
-        ))}
+          <Link
+            to="new"
+            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            <Plus className="h-4 w-4" />
+            New Report
+          </Link>
+        </div>
+
+        {/* Filters */}
+        <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
+            {categories.map((cat) => (
+              <Link
+                key={cat.value}
+                to={`?category=${cat.value}${search ? `&q=${search}` : ''}`}
+                className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${category === cat.value
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                  : 'bg-white text-gray-600 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700'
+                  }`}
+              >
+                {cat.label}
+              </Link>
+            ))}
+          </div>
+
+          <Form method="get" className="relative w-full sm:w-64">
+            <input type="hidden" name="category" value={category} />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <input
+              type="search"
+              name="q"
+              defaultValue={search}
+              placeholder="Search reports..."
+              className="w-full rounded-lg border border-gray-300 bg-white py-2 pl-10 pr-4 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              onChange={(e) => {
+                const isFirstSearch = search === null;
+                submit(e.currentTarget.form, {
+                  replace: !isFirstSearch,
+                });
+              }}
+            />
+          </Form>
+        </div>
       </div>
 
-      {filteredReports.length === 0 && (
-        <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-12 text-center dark:border-gray-700 dark:bg-gray-800/50">
-          <FileText className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-gray-100">
-            No reports found
-          </h3>
-          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-            {searchTerm || filterCategory !== 'all' || filterStatus !== 'all'
-              ? 'Try adjusting your filters'
-              : 'Get started by creating your first report'}
-          </p>
-          {!searchTerm && filterCategory === 'all' && filterStatus === 'all' && (
-            <Link
-              to="/reports/create"
-              className="mt-4 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
-            >
-              <Plus className="h-4 w-4" />
-              Create Report
-            </Link>
-          )}
-        </div>
-      )}
+      {/* Report List */}
+      <div className="flex-1 overflow-auto p-6">
+        {reports.length === 0 ? (
+          <div className="flex h-64 flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-800">
+            <FileText className="h-12 w-12 text-gray-400" />
+            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No reports found</h3>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              {search || category !== 'all'
+                ? 'Try adjusting your search or filters'
+                : 'Get started by creating a new report'}
+            </p>
+            {!(search || category !== 'all') && (
+              <Link
+                to="new"
+                className="mt-6 inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              >
+                <Plus className="h-4 w-4" />
+                Create Report
+              </Link>
+            )}
+          </div>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {reports.map((report: Report) => (
+              <ReportCard key={report.id} report={report} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+
+function ReportCard({ report }: { report: Report }) {
+  const submit = useSubmit();
+
+  return (
+    <div className="group relative flex flex-col justify-between rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
+      <div>
+        <div className="flex items-start justify-between">
+          <div className={`rounded-lg p-2 ${report.category === 'financial' ? 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400' :
+            report.category === 'operational' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' :
+              report.category === 'compliance' ? 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' :
+                'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
+            }`}>
+            <FileText className="h-6 w-6" />
+          </div>
+          <div className="relative">
+            <button className="rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700">
+              <MoreVertical className="h-5 w-5" />
+            </button>
+            {/* Dropdown menu would go here */}
+          </div>
+        </div>
+
+        <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">
+          <Link to={report.id} className="hover:underline focus:outline-none">
+            <span className="absolute inset-0" aria-hidden="true" />
+            {report.name}
+          </Link>
+        </h3>
+        <p className="mt-1 text-sm text-gray-500 line-clamp-2 dark:text-gray-400">
+          {report.description}
+        </p>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+            {report.type.replace('-', ' ')}
+          </span>
+          {report.schedule && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+              <Calendar className="h-3 w-3" />
+              {report.schedule.frequency}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div className="mt-6 flex items-center justify-between border-t border-gray-100 pt-4 dark:border-gray-700">
+        <div className="text-xs text-gray-500 dark:text-gray-400">
+          {report.lastRun ? (
+            <>Last run: {new Date(report.lastRun).toLocaleDateString()}</>
+          ) : (
+            <>Never run</>
+          )}
+        </div>
+        <div className="flex gap-2 relative z-10">
+          <button
+            onClick={() => {
+              const formData = new FormData();
+              formData.append("intent", "run-now");
+              formData.append("id", report.id);
+              submit(formData, { method: "post" });
+            }}
+            className="rounded p-1.5 text-gray-400 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-900/30 dark:hover:text-blue-400"
+            title="Run Now"
+          >
+            <Play className="h-4 w-4" />
+          </button>
+          <Link
+            to={`${report.id}/edit`}
+            className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700"
+            title="Edit"
+          >
+            <Edit className="h-4 w-4" />
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
+// Error Boundary
+// ============================================================================
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   return (
@@ -319,8 +381,6 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       error={error}
       title="Failed to Load Reports"
       message="We couldn't load your reports. Please try again."
-      backTo="/"
-      backLabel="Back to Dashboard"
     />
   );
 }

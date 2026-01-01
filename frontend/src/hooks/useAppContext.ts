@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * @module hooks/useAppController
  * @category Hooks - Application
@@ -38,6 +40,7 @@ import { apiClient } from "@/services/infrastructure/apiClient";
 
 // Hooks & Context
 import { useToast } from "@/providers";
+import { useAuthState } from "@/providers/AuthProvider";
 import { useUsers } from "./useDomainData";
 import { useSessionStorage } from "./useSessionStorage";
 
@@ -127,18 +130,35 @@ export function useAppContext(): UseAppControllerReturn {
   // Critical for preventing duplicate API calls and race conditions
   const isInitialized = useRef(false);
 
-  // Domain Data
+  // Get authenticated user from AuthProvider
+  const { user: authUser, isAuthenticated: authIsAuthenticated } =
+    useAuthState();
+
+  // Domain Data - only fetch if we have an authenticated user
   const { data: users = [] } = useUsers();
 
-  const currentUser = users[currentUserIndex] || {
-    id: "temp-user",
-    email: "loading@lexiflow.com",
-    firstName: "Loading",
-    lastName: "User",
-    role: "user" as const,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
+  // Use authenticated user if available, otherwise fallback to fetched users or default guest
+  const currentUser: User = authUser
+    ? {
+        id: authUser.id,
+        email: authUser.email,
+        firstName: authUser.name?.split(" ")[0] || authUser.email.split("@")[0],
+        lastName: authUser.name?.split(" ").slice(1).join(" ") || "",
+        role: authUser.role as any,
+        avatarUrl: authUser.avatarUrl,
+        permissions: authUser.permissions || [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }
+    : users[currentUserIndex] || {
+        id: "temp-user",
+        email: "Guest",
+        firstName: "Guest",
+        lastName: "User",
+        role: "user" as const,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
 
   // ==========================================================================
   // INITIALIZATION LOGIC
@@ -153,98 +173,38 @@ export function useAppContext(): UseAppControllerReturn {
     const init = async () => {
       try {
         console.log("[useAppController] Starting initialization...");
+
+        // Authentication is handled by AuthProvider
+        // Just verify backend connectivity
         const backendApiEnabled = isBackendApiEnabled();
 
         if (backendApiEnabled) {
           setAppStatusMessage("Connecting to backend API...");
 
-          // 1. Check Health First
+          // Check Health
           try {
             await apiClient.healthCheck();
+            setAppStatusMessage("Connected to backend");
           } catch (healthError) {
             console.error("Backend health check failed:", healthError);
             setAppStatusMessage(
               "Backend not reachable. Switching to local mode."
             );
-            // Use VITE_USE_INDEXEDDB to signal local mode (respected by apiConfig.ts)
             localStorage.setItem("VITE_USE_INDEXEDDB", "true");
             window.location.reload();
             return;
           }
-
-          // 2. Authenticate
-          try {
-            const existingToken = apiClient.getAuthToken();
-            if (!existingToken) {
-              setAppStatusMessage("Authenticating...");
-              // Auto-login logic (Dev Mode)
-              const loginResponse = await apiClient.post<{
-                accessToken?: string;
-                refreshToken?: string;
-                data?: { accessToken?: string; refreshToken?: string };
-              }>("/auth/login", {
-                email: "admin@lexiflow.com",
-                password: "Demo123!",
-              });
-
-              // Handle wrapped response format (common in NestJS with interceptors)
-              const accessToken =
-                loginResponse?.accessToken || loginResponse?.data?.accessToken;
-              const refreshToken =
-                loginResponse?.refreshToken ||
-                loginResponse?.data?.refreshToken;
-
-              // Validate response before setting tokens
-              if (accessToken) {
-                apiClient.setAuthTokens(accessToken, refreshToken);
-                setIsAuthenticated(true);
-                console.log("✅ Auto-login successful");
-              } else {
-                console.error(
-                  "❌ Auto-login failed: Invalid response format",
-                  loginResponse
-                );
-                throw new Error("Invalid login response");
-              }
-            } else {
-              setIsAuthenticated(true);
-            }
-            setIsAppLoading(false);
-          } catch (authError) {
-            console.error("Authentication failed:", authError);
-            setAppStatusMessage(
-              "Authentication failed. Redirecting to login..."
-            );
-            // Clear any invalid tokens
-            apiClient.clearAuthTokens();
-            setIsAppLoading(false);
-            // Redirect to login after a short delay
-            setTimeout(() => {
-              window.location.href = "/login";
-            }, 1500);
-          }
         } else {
-          // IndexedDB mode (DEPRECATED - for development only)
           console.warn("IndexedDB mode is deprecated. Please use backend API.");
-          // IndexedDB fallback for offline support
-          setIsAppLoading(false);
-
-          // Check if data exists via backend API
-          try {
-            const casesCount = await DataService.cases
-              .getAll()
-              .then((cases: Case[]) => cases.length);
-            if (casesCount === 0) {
-              addToast(
-                "No data found. Backend seeding may be required.",
-                "info"
-              );
-            }
-          } catch (e) {
-            console.error("Failed to check for existing data", e);
-            addToast("Unable to connect to backend API", "error");
-          }
         }
+
+        // Wait for auth to complete
+        if (!authIsAuthenticated && !authUser) {
+          console.log("[useAppController] Waiting for authentication...");
+          return;
+        }
+
+        setIsAppLoading(false);
       } catch (e) {
         console.error("Initialization failed:", e);
         setAppStatusMessage("Error initializing application.");
@@ -253,7 +213,7 @@ export function useAppContext(): UseAppControllerReturn {
     };
 
     init();
-  }, [addToast]);
+  }, [addToast, authUser, authIsAuthenticated]);
 
   // Restore Case Context when ID changes
   useEffect(() => {

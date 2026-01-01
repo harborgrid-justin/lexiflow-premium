@@ -122,10 +122,14 @@ export default [
 
     // Admin Routes (Admin Only)
     route("admin", "routes/admin/index.tsx"),
+    route("admin/settings", "routes/admin/settings.tsx"),
     route("admin/theme-settings", "routes/admin/theme-settings.tsx"),
     route("admin/users", "routes/admin/users.tsx"),
     route("admin/roles", "routes/admin/roles.tsx"),
     route("admin/permissions", "routes/admin/permissions.tsx"),
+    route("admin/audit", "routes/admin/audit.tsx"),
+    route("admin/integrations", "routes/admin/integrations.tsx"),
+    route("admin/backup", "routes/admin/backup.tsx"),
 
     // Real Estate Division (nested routes with prefix)
     ...prefix("real_estate", [

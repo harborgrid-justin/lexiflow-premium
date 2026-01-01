@@ -13,9 +13,9 @@
  */
 
 import { Form, Link, useNavigate } from 'react-router';
-import type { Route } from "./+types/compose";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/compose";
 
 // ============================================================================
 // Types
@@ -52,7 +52,7 @@ interface ActionData {
 // Meta Tags
 // ============================================================================
 
-export function meta({}: Route.MetaArgs) {
+export function meta() {
   return createMeta({
     title: 'Compose Correspondence',
     description: 'Create and send legal correspondence, letters, and documents',

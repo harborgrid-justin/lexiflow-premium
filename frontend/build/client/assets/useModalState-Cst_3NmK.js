@@ -1,0 +1,1 @@
+import{r as e}from"./vendor-core-V-oW58GW.js";function u(t=!1){const[a,s]=e.useState(t),o=e.useCallback(()=>s(!0),[]),l=e.useCallback(()=>s(!1),[]),c=e.useCallback(()=>s(n=>!n),[]);return{isOpen:a,open:o,close:l,toggle:c}}export{u};

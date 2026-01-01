@@ -118,7 +118,9 @@ export interface UseCaseDetailReturn {
  */
 export function useCaseDetail(
   caseData: Case,
-  initialTab: string = "Overview"
+  initialTab: string = "Overview",
+  initialDocuments?: LegalDocument[],
+  initialParties?: Party[]
 ): UseCaseDetailReturn {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [generatingWorkflow, setGeneratingWorkflow] = useState(false);
@@ -134,7 +136,10 @@ export function useCaseDetail(
   const { data: documents = [] } = useQuery<LegalDocument[]>(
     queryKeys.documents.byCaseId(caseData?.id),
     () => DataService.documents.getByCaseId(caseData.id),
-    { enabled: !!caseData?.id }
+    {
+      enabled: !!caseData?.id,
+      initialData: initialDocuments,
+    }
   );
 
   // 2. Tasks / Workflow
@@ -166,7 +171,9 @@ export function useCaseDetail(
   );
 
   // Local state for parties (as they are often edited locally before save)
-  const [parties, setParties] = useState<Party[]>(caseData.parties || []);
+  const [parties, setParties] = useState<Party[]>(
+    initialParties || caseData.parties || []
+  );
 
   // Derived Stages from Tasks
   // Groups tasks into Active and Completed stages for workflow visualization

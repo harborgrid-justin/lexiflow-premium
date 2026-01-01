@@ -1,0 +1,38 @@
+import { api } from '@/api';
+import { CaseManagement } from '@/features/cases/components/list/CaseManagement';
+import type { Case, Invoice } from '@/types';
+import { type LoaderFunctionArgs, useLoaderData, useNavigate } from 'react-router';
+
+// Note: In a real setup with 'react-router typegen', you would import type { Route } from './+types/cases';
+// and use Route.MetaArgs, Route.LoaderArgs, Route.ComponentProps.
+// Since we cannot generate types in this environment, we use standard types.
+
+export function meta({ data }: { data: { cases: Case[] } }) {
+  return [
+    { title: `Cases (${data?.cases?.length || 0}) - LexiFlow` },
+    { name: "description", content: "Manage your legal cases and matters." },
+  ];
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  // Prioritize Server Loaders: Fetch data in parallel
+  const [cases, invoices] = await Promise.all([
+    api.cases.getAll(),
+    api.billing.getInvoices()
+  ]);
+  return { cases, invoices };
+}
+
+export default function CasesRoute() {
+  // Use Automatic Type Safety (simulated here with casting)
+  const { cases, invoices } = useLoaderData() as { cases: Case[], invoices: Invoice[] };
+  const navigate = useNavigate();
+
+  return (
+    <CaseManagement
+      initialCases={cases}
+      initialInvoices={invoices}
+      onSelectCase={(id) => navigate(`/cases/${id}`)}
+    />
+  );
+}

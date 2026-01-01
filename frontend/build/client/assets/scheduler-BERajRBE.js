@@ -1,0 +1,1 @@
+const d={defer:(e,n="normal")=>{if(typeof window<"u"&&"requestIdleCallback"in window){const o=n==="background"?5e3:1e3;window.requestIdleCallback(()=>{e()},{timeout:o})}else setTimeout(e,1)},scheduleTask:(e,n="normal")=>new Promise(o=>{d.defer(()=>{const r=e();o(r)},n)})};export{d as S};

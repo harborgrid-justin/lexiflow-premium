@@ -1,9 +1,9 @@
 /**
  * CaseDetail.tsx
- * 
+ *
  * Main case detail view component - lazy-loaded for code splitting.
  * Production-grade tabbed interface with full navigation and data management.
- * 
+ *
  * @module components/case-detail/CaseDetail
  * @category Case Management - Core
  */
@@ -11,65 +11,68 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useState, useCallback, useMemo } from 'react';
 import { Plus } from 'lucide-react';
+import { useCallback, useMemo, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES - COMPONENTS
 // ============================================================================
 import { CaseDetailHeader } from '@/features/cases/components/detail/CaseDetailHeader';
-import { CaseDetailNavigation } from '@/features/cases/components/detail/layout/CaseDetailNavigation';
 import { CaseDetailMobileMenu } from '@/features/cases/components/detail/CaseDetailMobileMenu';
+import { CaseDetailNavigation } from '@/features/cases/components/detail/layout/CaseDetailNavigation';
 import { MobileTimelineOverlay } from '@/features/cases/components/detail/MobileTimelineOverlay';
 
 // Tab Content Components
-import { CaseOverview } from '@/features/cases/components/detail/overview/CaseOverview';
-import { CaseParties } from '@/features/cases/components/detail/CaseParties';
-import { CaseTimeline } from '@/features/cases/components/detail/CaseTimeline';
-import { CaseStrategy } from '@/features/cases/components/detail/CaseStrategy';
 import { CaseArgumentManager } from '@/features/cases/components/detail/CaseArgumentManager';
-import { CaseRiskManager } from '@/features/cases/components/detail/CaseRiskManager';
+import { CaseBilling } from '@/features/cases/components/detail/CaseBilling';
+import { CaseContractReview } from '@/features/cases/components/detail/CaseContractReview';
+import { CaseDiscovery } from '@/features/cases/components/detail/CaseDiscovery';
+import { CaseDocuments } from '@/features/cases/components/detail/CaseDocuments';
+import { CaseDrafting } from '@/features/cases/components/detail/CaseDrafting';
+import { CaseEvidence } from '@/features/cases/components/detail/CaseEvidence';
+import { CaseParties } from '@/features/cases/components/detail/CaseParties';
 import { CasePlanning } from '@/features/cases/components/detail/CasePlanning';
-import { CaseProjects } from '@/features/cases/components/detail/projects/CaseProjects';
+import { CaseRiskManager } from '@/features/cases/components/detail/CaseRiskManager';
+import { CaseStrategy } from '@/features/cases/components/detail/CaseStrategy';
+import { CaseTimeline } from '@/features/cases/components/detail/CaseTimeline';
 import { CaseWorkflow } from '@/features/cases/components/detail/CaseWorkflow';
 import { CaseCollaboration } from '@/features/cases/components/detail/collaboration/CaseCollaboration';
 import { CaseMotions } from '@/features/cases/components/detail/motions/CaseMotions';
-import { CaseDiscovery } from '@/features/cases/components/detail/CaseDiscovery';
-import { CaseEvidence } from '@/features/cases/components/detail/CaseEvidence';
-import { CaseDocuments } from '@/features/cases/components/detail/CaseDocuments';
-import { CaseDrafting } from '@/features/cases/components/detail/CaseDrafting';
-import { CaseContractReview } from '@/features/cases/components/detail/CaseContractReview';
-import { CaseBilling } from '@/features/cases/components/detail/CaseBilling';
+import { CaseOverview } from '@/features/cases/components/detail/overview/CaseOverview';
+import { CaseProjects } from '@/features/cases/components/detail/projects/CaseProjects';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES - HOOKS & CONTEXT
 // ============================================================================
-import { useTheme } from '@/providers/ThemeContext';
 import { useCaseDetail } from '@/hooks/useCaseDetail';
+import { useTheme } from '@/providers/ThemeContext';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES - SERVICES & UTILS
 // ============================================================================
-import { cn } from '@/utils/cn';
 import { CASE_DETAIL_TABS } from '@/features/cases/components/detail/CaseDetailConfig';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
 // ============================================================================
 import { Case } from '@/types/case';
-import { TimeEntry } from '@/types/financial';
 import { LegalDocument } from '@/types/documents';
+import { TimeEntry } from '@/types/financial';
 
 interface CaseDetailProps {
   caseData: Case;
   onBack?: () => void;
   onSelectCase?: (c: Case) => void;
   initialTab?: string;
+  // Pre-loaded data from router loader
+  initialDocuments?: LegalDocument[];
+  initialParties?: Party[];
 }
 
 /**
  * CaseDetail - Production-grade case detail interface with full tabbed navigation
- * 
+ *
  * Features:
  * - Two-level tab navigation (parent categories + sub-tabs)
  * - Mobile-responsive with overlay menus
@@ -77,11 +80,13 @@ interface CaseDetailProps {
  * - Integrated data management via useCaseDetail hook
  * - Real-time timeline and collaboration features
  */
-export const CaseDetail = ({ 
-  caseData, 
-  onBack, 
+export const CaseDetail = ({
+  caseData,
+  onBack,
   onSelectCase,
-  initialTab = 'Overview'
+  initialTab = 'Overview',
+  initialDocuments,
+  initialParties
 }: CaseDetailProps) => {
   const { theme } = useTheme();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -112,7 +117,7 @@ export const CaseDetail = ({
     analyzeWithAI,
     draftDocument,
     generateAIWorkflow
-  } = useCaseDetail(caseData, initialTab);
+  } = useCaseDetail(caseData, initialTab, initialDocuments, initialParties);
 
   // Compatibility wrappers for UI that expects old method names
   const handleAnalyze = (doc: unknown) => analyzeWithAI((doc as LegalDocument).id);
@@ -142,76 +147,76 @@ export const CaseDetail = ({
     switch (activeTab) {
       case 'Overview':
         return <CaseOverview caseData={caseData} onTimeEntryAdded={handleTimeEntryAdded} onNavigateToCase={onSelectCase} />;
-      
+
       case 'Parties':
         return <CaseParties parties={parties} onUpdate={setParties} />;
-      
+
       case 'Timeline':
         return <CaseTimeline events={timelineEvents} onEventClick={(e) => console.log('Event clicked:', e)} />;
-      
+
       case 'Research':
         return <CaseStrategy caseId={caseData.id} evidence={[]} />;
-      
+
       case 'Arguments':
         return <CaseArgumentManager caseData={caseData} evidence={[]} />;
-      
+
       case 'Risk':
         return <CaseRiskManager caseData={caseData} />;
-      
+
       case 'Strategy':
         return <CaseStrategy caseId={caseData.id} evidence={[]} />;
-      
+
       case 'Planning':
         return <CasePlanning caseData={caseData} />;
-      
+
       case 'Projects':
         return (
-          <CaseProjects 
+          <CaseProjects
             projects={projects}
             onAddProject={addProject}
             onAddTask={addTaskToProject}
             onUpdateTaskStatus={updateProjectTaskStatus}
           />
         );
-      
+
       case 'Workflow':
         return (
-          <CaseWorkflow 
+          <CaseWorkflow
             stages={stages}
             generatingWorkflow={generatingWorkflow}
             onGenerateWorkflow={handleGenerateWorkflow}
             onNavigateToModule={(module) => setActiveTab(module)}
           />
         );
-      
+
       case 'Collaboration':
         return <CaseCollaboration caseId={caseData.id} />;
-      
+
       case 'Motions':
         return <CaseMotions caseId={caseData.id} caseTitle={caseData.title} />;
-      
+
       case 'Discovery':
         return <CaseDiscovery caseId={caseData.id} />;
-      
+
       case 'Evidence':
         return <CaseEvidence caseId={caseData.id} />;
-      
+
       case 'Exhibits':
         return <CaseEvidence caseId={caseData.id} />;
-      
+
       case 'Documents':
         return (
-          <CaseDocuments 
+          <CaseDocuments
             documents={documents}
             analyzingId={analyzingId}
             onAnalyze={handleAnalyze}
             onDocumentCreated={handleDocumentCreated}
           />
         );
-      
+
       case 'Drafting':
         return (
-          <CaseDrafting 
+          <CaseDrafting
             caseTitle={caseData.title}
             draftPrompt={draftPrompt}
             setDraftPrompt={setDraftPrompt}
@@ -220,10 +225,10 @@ export const CaseDetail = ({
             onDraft={handleDraft}
           />
         );
-      
+
       case 'Contract Review':
         return <CaseContractReview />;
-      
+
       case 'Billing':
         return (
           <CaseBilling
@@ -232,7 +237,7 @@ export const CaseDetail = ({
             entries={billingEntries}
           />
         );
-      
+
       default:
         return (
           <div className={cn("flex items-center justify-center h-96", theme.text.tertiary)}>
@@ -244,8 +249,8 @@ export const CaseDetail = ({
         );
     }
   }, [
-    activeTab, caseData, parties, timelineEvents, projects, stages, documents, 
-    billingEntries, analyzingId, generatingWorkflow, draftPrompt, draftResult, 
+    activeTab, caseData, parties, timelineEvents, projects, stages, documents,
+    billingEntries, analyzingId, generatingWorkflow, draftPrompt, draftResult,
     isDrafting, setParties, addProject, addTaskToProject, updateProjectTaskStatus,
     handleAnalyze, handleDraft, handleGenerateWorkflow, handleTimeEntryAdded,
     handleDocumentCreated, onSelectCase, theme, setActiveTab
@@ -261,7 +266,7 @@ export const CaseDetail = ({
         client={caseData.client}
         clientId={caseData.clientId || caseData.id}
         jurisdiction={caseData.jurisdiction}
-        onBack={onBack || (() => {})}
+        onBack={onBack || (() => { })}
         onShowTimeline={() => setShowTimelineOverlay(true)}
       />
 

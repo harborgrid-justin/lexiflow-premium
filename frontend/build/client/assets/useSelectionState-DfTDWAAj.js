@@ -1,0 +1,1 @@
+import{r as t}from"./vendor-core-V-oW58GW.js";function i(n=null){const[l,u]=t.useState(n),a=t.useCallback(e=>{u(e)},[]),r=t.useCallback(()=>{u(null)},[]),o=t.useCallback((e,s)=>{u(c=>c&&(s?s(c,e):c===e)?null:e)},[]),f=t.useCallback((e,s)=>l?s?s(l,e):l===e:!1,[l]);return{selected:l,select:a,deselect:r,toggle:o,isSelected:f}}export{i as u};

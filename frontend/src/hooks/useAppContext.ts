@@ -26,26 +26,26 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { isBackendApiEnabled } from '@/api';
-import { DataService } from '@/services/data/dataService';
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { isBackendApiEnabled } from "@/api";
+import { DataService } from "@/services/data/dataService";
+import { apiClient } from "@/services/infrastructure/apiClient";
 
 // Hooks & Context
-import { useToast } from '@/providers';
-import { useUsers } from './useDomainData';
-import { useSessionStorage } from './useSessionStorage';
+import { useToast } from "@/providers";
+import { useUsers } from "./useDomainData";
+import { useSessionStorage } from "./useSessionStorage";
 
 // Utils & Constants
-import { PATHS } from '@/config/paths.config';
+import { PATHS } from "@/config/paths.config";
 
 // Types
-import { AppView, Case, User } from '@/types';
+import { AppView, Case, User } from "@/types";
 
 // ============================================================================
 // TYPES
@@ -98,14 +98,20 @@ export interface UseAppControllerReturn {
  */
 export function useAppContext(): UseAppControllerReturn {
   // Re-export as useAppController for backward compatibility
-  const [activeView, setActiveView] = useSessionStorage<AppView>(`lexiflow_active_view`, PATHS.DASHBOARD);
-  const [selectedCaseId, setSelectedCaseId] = useSessionStorage<string | null>(`lexiflow_selected_case_id`, null);
+  const [activeView, setActiveView] = useSessionStorage<AppView>(
+    `lexiflow_active_view`,
+    PATHS.DASHBOARD
+  );
+  const [selectedCaseId, setSelectedCaseId] = useSessionStorage<string | null>(
+    `lexiflow_selected_case_id`,
+    null
+  );
   const [selectedCase, setSelectedCase] = useState<Case | null>(null);
   const { addToast } = useToast();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
-  const [globalSearch] = useState('');
+  const [globalSearch] = useState("");
   const [, startTransition] = useTransition();
 
   const [initialTab, setInitialTab] = useState<string | undefined>(undefined);
@@ -113,7 +119,9 @@ export function useAppContext(): UseAppControllerReturn {
   // App Initialization State
   const [isAppLoading, setIsAppLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [appStatusMessage, setAppStatusMessage] = useState('Initializing Secure Data Layer...');
+  const [appStatusMessage, setAppStatusMessage] = useState(
+    "Initializing Secure Data Layer..."
+  );
 
   // Strict Mode readiness: Prevent double-initialization (Principle #7)
   // Critical for preventing duplicate API calls and race conditions
@@ -123,13 +131,13 @@ export function useAppContext(): UseAppControllerReturn {
   const { data: users = [] } = useUsers();
 
   const currentUser = users[currentUserIndex] || {
-    id: 'temp-user',
-    email: 'loading@lexiflow.com',
-    firstName: 'Loading',
-    lastName: 'User',
-    role: 'user' as const,
+    id: "temp-user",
+    email: "loading@lexiflow.com",
+    firstName: "Loading",
+    lastName: "User",
+    role: "user" as const,
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
   };
 
   // ==========================================================================
@@ -143,81 +151,105 @@ export function useAppContext(): UseAppControllerReturn {
     isInitialized.current = true;
 
     const init = async () => {
-        try {
-            console.log('[useAppController] Starting initialization...');
-            const backendApiEnabled = isBackendApiEnabled();
+      try {
+        console.log("[useAppController] Starting initialization...");
+        const backendApiEnabled = isBackendApiEnabled();
 
-            if (backendApiEnabled) {
-                setAppStatusMessage('Connecting to backend API...');
+        if (backendApiEnabled) {
+          setAppStatusMessage("Connecting to backend API...");
 
-                // 1. Check Health First
-                try {
-                    await apiClient.healthCheck();
-                } catch (healthError) {
-                    console.error("Backend health check failed:", healthError);
-                    setAppStatusMessage('Backend not reachable. Switching to local mode.');
-                    // Use VITE_USE_INDEXEDDB to signal local mode (respected by apiConfig.ts)
-                    localStorage.setItem('VITE_USE_INDEXEDDB', 'true');
-                    window.location.reload();
-                    return;
-                }
+          // 1. Check Health First
+          try {
+            await apiClient.healthCheck();
+          } catch (healthError) {
+            console.error("Backend health check failed:", healthError);
+            setAppStatusMessage(
+              "Backend not reachable. Switching to local mode."
+            );
+            // Use VITE_USE_INDEXEDDB to signal local mode (respected by apiConfig.ts)
+            localStorage.setItem("VITE_USE_INDEXEDDB", "true");
+            window.location.reload();
+            return;
+          }
 
-                // 2. Authenticate
-                try {
-                    const existingToken = apiClient.getAuthToken();
-                    if (!existingToken) {
-                        setAppStatusMessage('Authenticating...');
-                        // Auto-login logic (Dev Mode)
-                        const loginResponse = await apiClient.post<{ accessToken?: string; refreshToken?: string; data?: { accessToken?: string; refreshToken?: string } }>('/auth/login', {
-                            email: 'admin@lexiflow.com',
-                            password: 'Demo123!'
-                        });
+          // 2. Authenticate
+          try {
+            const existingToken = apiClient.getAuthToken();
+            if (!existingToken) {
+              setAppStatusMessage("Authenticating...");
+              // Auto-login logic (Dev Mode)
+              const loginResponse = await apiClient.post<{
+                accessToken?: string;
+                refreshToken?: string;
+                data?: { accessToken?: string; refreshToken?: string };
+              }>("/auth/login", {
+                email: "admin@lexiflow.com",
+                password: "Demo123!",
+              });
 
-                        // Handle wrapped response format (common in NestJS with interceptors)
-                        const accessToken = loginResponse?.accessToken || loginResponse?.data?.accessToken;
-                        const refreshToken = loginResponse?.refreshToken || loginResponse?.data?.refreshToken;
+              // Handle wrapped response format (common in NestJS with interceptors)
+              const accessToken =
+                loginResponse?.accessToken || loginResponse?.data?.accessToken;
+              const refreshToken =
+                loginResponse?.refreshToken ||
+                loginResponse?.data?.refreshToken;
 
-                        // Validate response before setting tokens
-                        if (accessToken) {
-                            apiClient.setAuthTokens(accessToken, refreshToken);
-                            setIsAuthenticated(true);
-                            console.log('✅ Auto-login successful');
-                        } else {
-                            console.error('❌ Auto-login failed: Invalid response format', loginResponse);
-                            throw new Error('Invalid login response');
-                        }
-                    } else {
-                        setIsAuthenticated(true);
-                    }
-                    setIsAppLoading(false);
-                } catch (authError) {
-                    console.error("Authentication failed:", authError);
-                    setAppStatusMessage('Authentication failed. Please check backend logs.');
-                    // Do NOT reload here - let the user see the error
-                    setIsAppLoading(false);
-                }
+              // Validate response before setting tokens
+              if (accessToken) {
+                apiClient.setAuthTokens(accessToken, refreshToken);
+                setIsAuthenticated(true);
+                console.log("✅ Auto-login successful");
+              } else {
+                console.error(
+                  "❌ Auto-login failed: Invalid response format",
+                  loginResponse
+                );
+                throw new Error("Invalid login response");
+              }
             } else {
-                // IndexedDB mode (DEPRECATED - for development only)
-                console.warn('IndexedDB mode is deprecated. Please use backend API.');
-                // IndexedDB fallback for offline support
-                setIsAppLoading(false);
-
-                // Check if data exists via backend API
-                try {
-                    const casesCount = await DataService.cases.getAll().then((cases: Case[]) => cases.length);
-                    if (casesCount === 0) {
-                        addToast('No data found. Backend seeding may be required.', 'info');
-                    }
-                } catch (e) {
-                    console.error("Failed to check for existing data", e);
-                    addToast('Unable to connect to backend API', 'error');
-                }
+              setIsAuthenticated(true);
             }
-        } catch (e) {
-            console.error("Initialization failed:", e);
-            setAppStatusMessage('Error initializing application.');
             setIsAppLoading(false);
+          } catch (authError) {
+            console.error("Authentication failed:", authError);
+            setAppStatusMessage(
+              "Authentication failed. Redirecting to login..."
+            );
+            // Clear any invalid tokens
+            apiClient.clearAuthTokens();
+            setIsAppLoading(false);
+            // Redirect to login after a short delay
+            setTimeout(() => {
+              window.location.href = "/login";
+            }, 1500);
+          }
+        } else {
+          // IndexedDB mode (DEPRECATED - for development only)
+          console.warn("IndexedDB mode is deprecated. Please use backend API.");
+          // IndexedDB fallback for offline support
+          setIsAppLoading(false);
+
+          // Check if data exists via backend API
+          try {
+            const casesCount = await DataService.cases
+              .getAll()
+              .then((cases: Case[]) => cases.length);
+            if (casesCount === 0) {
+              addToast(
+                "No data found. Backend seeding may be required.",
+                "info"
+              );
+            }
+          } catch (e) {
+            console.error("Failed to check for existing data", e);
+            addToast("Unable to connect to backend API", "error");
+          }
         }
+      } catch (e) {
+        console.error("Initialization failed:", e);
+        setAppStatusMessage("Error initializing application.");
+        setIsAppLoading(false);
+      }
     };
 
     init();
@@ -226,19 +258,19 @@ export function useAppContext(): UseAppControllerReturn {
   // Restore Case Context when ID changes
   useEffect(() => {
     if (selectedCaseId) {
-        const loadCase = async () => {
-            try {
-              const found = await DataService.cases.getById(selectedCaseId);
-              if (found) setSelectedCase(found);
-              else {
-                setSelectedCaseId(null);
-                addToast("Case not found or access denied.", "warning");
-              }
-            } catch (e) {
-              console.error("Failed to restore case context", e);
-            }
-        };
-        loadCase();
+      const loadCase = async () => {
+        try {
+          const found = await DataService.cases.getById(selectedCaseId);
+          if (found) setSelectedCase(found);
+          else {
+            setSelectedCaseId(null);
+            addToast("Case not found or access denied.", "warning");
+          }
+        } catch (e) {
+          console.error("Failed to restore case context", e);
+        }
+      };
+      loadCase();
     } else {
       setSelectedCase(null);
     }
@@ -248,44 +280,53 @@ export function useAppContext(): UseAppControllerReturn {
   // CALLBACK HANDLERS
   // ==========================================================================
 
-  const handleSelectCaseById = useCallback((caseId: string) => {
-    startTransition(async () => {
+  const handleSelectCaseById = useCallback(
+    (caseId: string) => {
+      startTransition(async () => {
         const found = await DataService.cases.getById(caseId);
         if (found) {
-            setSelectedCase(found);
-            setSelectedCaseId(caseId);
-            setInitialTab(undefined);
-            setActiveView(PATHS.CASES);
-            addToast(`Context switched to ${found.title}`, 'info');
+          setSelectedCase(found);
+          setSelectedCaseId(caseId);
+          setInitialTab(undefined);
+          setActiveView(PATHS.CASES);
+          addToast(`Context switched to ${found.title}`, "info");
         }
-    });
-  }, [setSelectedCaseId, addToast, setActiveView]);
+      });
+    },
+    [setSelectedCaseId, addToast, setActiveView]
+  );
 
   // Removed unused handleSelectCase - can be re-added if needed
 
-  const handleNavigation = useCallback((view: AppView) => {
+  const handleNavigation = useCallback(
+    (view: AppView) => {
       startTransition(() => {
-          // Always clear case selection when navigating, including to Cases view
-          // This allows users to return to the case list by clicking Cases in sidebar
-          setSelectedCase(null);
-          setSelectedCaseId(null);
-          setActiveView(view);
-          setInitialTab(undefined);
-          setIsSidebarOpen(false);
+        // Always clear case selection when navigating, including to Cases view
+        // This allows users to return to the case list by clicking Cases in sidebar
+        setSelectedCase(null);
+        setSelectedCaseId(null);
+        setActiveView(view);
+        setInitialTab(undefined);
+        setIsSidebarOpen(false);
       });
-  }, [setActiveView, setSelectedCaseId]);
+    },
+    [setActiveView, setSelectedCaseId]
+  );
 
-  const navigateToCaseTab = useCallback((caseId: string, tab: string) => {
-    startTransition(async () => {
+  const navigateToCaseTab = useCallback(
+    (caseId: string, tab: string) => {
+      startTransition(async () => {
         const found = await DataService.cases.getById(caseId);
         if (found) {
-            setInitialTab(tab);
-            setSelectedCase(found);
-            setSelectedCaseId(caseId);
-            setActiveView(PATHS.CASES);
+          setInitialTab(tab);
+          setSelectedCase(found);
+          setSelectedCaseId(caseId);
+          setActiveView(PATHS.CASES);
         }
-    });
-  }, [setSelectedCaseId, setActiveView]);
+      });
+    },
+    [setSelectedCaseId, setActiveView]
+  );
 
   // Removed unused handlers - can be re-added to interface if needed
   // const handleSearchResultClick = useCallback((result: GlobalSearchResult) => { ... });
@@ -293,21 +334,21 @@ export function useAppContext(): UseAppControllerReturn {
 
   const handleSwitchUser = useCallback(() => {
     startTransition(() => {
-        if (users.length > 0) {
-            setCurrentUserIndex((prev) => (prev + 1) % users.length);
-            addToast(`Switched user profile`, 'info');
-        }
+      if (users.length > 0) {
+        setCurrentUserIndex((prev) => (prev + 1) % users.length);
+        addToast(`Switched user profile`, "info");
+      }
     });
   }, [addToast, users]);
 
   const handleBackToMain = useCallback(() => {
-      startTransition(() => {
-          setSelectedCase(null);
-          setSelectedCaseId(null);
-          setInitialTab(undefined);
-          // Return to Cases list instead of Dashboard for better UX
-          setActiveView(PATHS.CASES);
-      });
+    startTransition(() => {
+      setSelectedCase(null);
+      setSelectedCaseId(null);
+      setInitialTab(undefined);
+      // Return to Cases list instead of Dashboard for better UX
+      setActiveView(PATHS.CASES);
+    });
   }, [setSelectedCaseId, setActiveView]);
 
   // Removed unused focusSearch - can be re-added to interface if needed
@@ -337,6 +378,6 @@ export function useAppContext(): UseAppControllerReturn {
     isAppLoading,
     isAuthenticated,
     appStatusMessage,
-    initialTab
+    initialTab,
   };
-};
+}

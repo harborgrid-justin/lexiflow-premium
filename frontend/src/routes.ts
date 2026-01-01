@@ -21,6 +21,9 @@ import {
 } from "@react-router/dev/routes";
 
 export default [
+  // Authentication routes (outside main layout)
+  route("login", "routes/auth/login.tsx"),
+
   // App layout with authentication, sidebar, and header
   // Note: root.tsx is automatically used by React Router v7 framework mode
   layout("routes/layout.tsx", [

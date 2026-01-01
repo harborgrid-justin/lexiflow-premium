@@ -27,7 +27,7 @@ import { useAppController } from '@/hooks/core';
 import type { GlobalSearchResult } from '@/services/search/searchService';
 import type { AppView } from '@/types';
 import type { IntentResult } from '@/types/intelligence';
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Outlet, useLocation, useNavigate, useParams } from "react-router";
 import type { Route } from "./+types/layout";
 
@@ -39,7 +39,7 @@ import type { Route } from "./+types/layout";
  * Meta tags for the authenticated layout
  * Child routes will override/merge their own meta tags
  */
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [{ title: "LexiFlow AI Legal Suite" }];
 }
 
@@ -126,6 +126,17 @@ export default function Layout() {
   }, [navigate]);
 
   // Loading state while app initializes
+  // Add safety timeout - if loading takes >10s, show error
+  React.useEffect(() => {
+    if (isAppLoading) {
+      const timeout = setTimeout(() => {
+        console.error('[Layout] App loading timeout - redirecting to login');
+        navigate('/login');
+      }, 10000); // 10 second timeout
+      return () => clearTimeout(timeout);
+    }
+  }, [isAppLoading, navigate]);
+
   if (isAppLoading || !currentUser) {
     return (
       <div

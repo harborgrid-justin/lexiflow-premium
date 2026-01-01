@@ -33,3 +33,6 @@ storybook-static
 .env.*.local
 frontend/.env
 backend/.env
+
+frontend/build
+frontend/dist/

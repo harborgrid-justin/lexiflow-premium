@@ -14,6 +14,9 @@ type Pages = {
   "/": {
     params: {};
   };
+  "/login": {
+    params: {};
+  };
   "/dashboard": {
     params: {};
   };
@@ -237,7 +240,11 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/dashboard" | "/cases" | "/cases/create" | "/cases/:caseId" | "/cases/:caseId/overview" | "/cases/:caseId/calendar" | "/cases/:caseId/analytics" | "/cases/:caseId/operations" | "/cases/:caseId/insights" | "/cases/:caseId/financials" | "/docket" | "/docket/:docketId" | "/documents" | "/documents/:documentId" | "/correspondence" | "/correspondence/compose" | "/workflows" | "/workflows/:workflowId" | "/discovery" | "/discovery/:discoveryId" | "/evidence" | "/evidence/:evidenceId" | "/exhibits" | "/exhibits/:exhibitId" | "/research" | "/research/:researchId" | "/citations" | "/war_room" | "/war_room/:roomId" | "/pleading_builder" | "/drafting" | "/litigation_builder" | "/billing" | "/crm" | "/crm/:clientId" | "/compliance" | "/practice" | "/daf" | "/entities" | "/data_platform" | "/analytics" | "/library" | "/clauses" | "/jurisdiction" | "/rules_engine" | "/calendar" | "/messages" | "/profile" | "/admin" | "/admin/theme-settings" | "/real_estate/portfolio_summary" | "/real_estate/inventory" | "/real_estate/utilization" | "/real_estate/outgrants" | "/real_estate/solicitations" | "/real_estate/relocation" | "/real_estate/cost_share" | "/real_estate/disposal" | "/real_estate/acquisition" | "/real_estate/encroachment" | "/real_estate/user_management" | "/real_estate/audit_readiness";
+    page: "/" | "/login" | "/dashboard" | "/cases" | "/cases/create" | "/cases/:caseId" | "/cases/:caseId/overview" | "/cases/:caseId/calendar" | "/cases/:caseId/analytics" | "/cases/:caseId/operations" | "/cases/:caseId/insights" | "/cases/:caseId/financials" | "/docket" | "/docket/:docketId" | "/documents" | "/documents/:documentId" | "/correspondence" | "/correspondence/compose" | "/workflows" | "/workflows/:workflowId" | "/discovery" | "/discovery/:discoveryId" | "/evidence" | "/evidence/:evidenceId" | "/exhibits" | "/exhibits/:exhibitId" | "/research" | "/research/:researchId" | "/citations" | "/war_room" | "/war_room/:roomId" | "/pleading_builder" | "/drafting" | "/litigation_builder" | "/billing" | "/crm" | "/crm/:clientId" | "/compliance" | "/practice" | "/daf" | "/entities" | "/data_platform" | "/analytics" | "/library" | "/clauses" | "/jurisdiction" | "/rules_engine" | "/calendar" | "/messages" | "/profile" | "/admin" | "/admin/theme-settings" | "/real_estate/portfolio_summary" | "/real_estate/inventory" | "/real_estate/utilization" | "/real_estate/outgrants" | "/real_estate/solicitations" | "/real_estate/relocation" | "/real_estate/cost_share" | "/real_estate/disposal" | "/real_estate/acquisition" | "/real_estate/encroachment" | "/real_estate/user_management" | "/real_estate/audit_readiness";
+  };
+  "routes/auth/login.tsx": {
+    id: "routes/auth/login";
+    page: "/login";
   };
   "routes/layout.tsx": {
     id: "routes/layout";
@@ -499,6 +506,7 @@ type RouteFiles = {
 
 type RouteModules = {
   "root": typeof import("./src/root.tsx");
+  "routes/auth/login": typeof import("./src/routes/auth/login.tsx");
   "routes/layout": typeof import("./src/routes/layout.tsx");
   "routes/home": typeof import("./src/routes/home.tsx");
   "routes/dashboard": typeof import("./src/routes/dashboard.tsx");

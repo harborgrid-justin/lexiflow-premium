@@ -10,6 +10,7 @@
  * @module providers/AuthProvider
  */
 
+import { AuthApiService } from '@/api/auth/auth-api';
 import {
   createContext,
   useCallback,
@@ -179,25 +180,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setError(null);
 
     try {
-      // TODO: Replace with actual API call
-      // const response = await api.auth.login({ email, password });
+      console.log('[AuthProvider] Starting login for:', email);
+      const authApi = new AuthApiService();
+      const response = await authApi.login(email, password);
+      console.log('[AuthProvider] Login response received:', { hasToken: !!response.accessToken, userId: response.user?.id });
 
-      // Placeholder for demo - simulate API response
-      const mockUser: AuthUser = {
-        id: '1',
-        email,
-        name: email.split('@')[0],
-        role: 'attorney',
-        permissions: ['cases:read', 'cases:write', 'documents:read'],
+      // Convert API user response to AuthUser format
+      const authUser: AuthUser = {
+        id: response.user.id,
+        email: response.user.email,
+        name: response.user.firstName ? `${response.user.firstName} ${response.user.lastName}`.trim() : response.user.email.split('@')[0],
+        role: (response.user.role || 'attorney') as AuthUser['role'],
+        avatarUrl: response.user.avatarUrl,
+        permissions: response.user.permissions || [],
       };
 
       // Store token and user
-      localStorage.setItem(AUTH_STORAGE_KEY, 'mock_token_' + Date.now());
-      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(mockUser));
+      localStorage.setItem(AUTH_STORAGE_KEY, response.accessToken);
+      localStorage.setItem(AUTH_USER_KEY, JSON.stringify(authUser));
 
-      setUser(mockUser);
+      setUser(authUser);
+      console.log('[AuthProvider] Login successful');
       return true;
     } catch (err) {
+      console.error('[AuthProvider] Login error:', err);
       const message = err instanceof Error ? err.message : 'Login failed';
       setError(message);
       return false;
@@ -208,8 +214,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = useCallback(async (): Promise<void> => {
     try {
-      // TODO: Call logout API endpoint
-      // await api.auth.logout();
+      const authApi = new AuthApiService();
+      await authApi.logout();
 
       // Clear storage
       localStorage.removeItem(AUTH_STORAGE_KEY);
@@ -220,14 +226,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     } catch (err) {
       console.error('Logout error:', err);
       // Still clear local state even if API fails
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      localStorage.removeItem(AUTH_USER_KEY);
       setUser(null);
     }
   }, []);
 
   const refreshToken = useCallback(async (): Promise<boolean> => {
     try {
-      // TODO: Implement token refresh
-      // const newToken = await api.auth.refresh();
+      const authApi = new AuthApiService();
+      const response = await authApi.refreshToken();
+      localStorage.setItem(AUTH_STORAGE_KEY, response.accessToken);
       return true;
     } catch {
       await logout();

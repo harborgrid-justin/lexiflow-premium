@@ -54,7 +54,13 @@ export class RolesGuard implements CanActivate {
       throw new InsufficientPermissionsException(requiredRoles);
     }
 
-    const hasRole = requiredRoles.some((role) => user.role === role);
+    // Normalize roles for case-insensitive comparison
+    // Handles both 'SUPER_ADMIN' and 'super_admin' formats
+    const normalizedUserRole = String(user.role).toUpperCase();
+    const hasRole = requiredRoles.some((role) => {
+      const normalizedRequiredRole = String(role).toUpperCase();
+      return normalizedUserRole === normalizedRequiredRole;
+    });
 
     if (!hasRole) {
       this.logger.warn(

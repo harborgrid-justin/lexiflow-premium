@@ -1,1 +1,0 @@
-import{D as e}from"./dataService-BWLMkXM4.js";import{q as s}from"./queryKeys-BBVgMz36.js";import{u as r}from"./useQueryHooks-Oyt-TMLP.js";function l(){return r(s.staff.all(),()=>e.hr.getStaff())}function f(){return r(s.clients.all(),()=>e.clients.getAll())}function n(){return r(s.users.all(),()=>e.users.getAll())}export{f as a,l as b,n as u};

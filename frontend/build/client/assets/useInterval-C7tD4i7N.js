@@ -1,1 +1,0 @@
-import{r as e}from"./vendor-core-V-oW58GW.js";function c(t,r){const n=e.useRef(t);e.useEffect(()=>{n.current=t},[t]),e.useEffect(()=>{function u(){n.current()}if(r!==null){const s=setInterval(u,r);return()=>{clearInterval(s)}}return()=>{}},[r])}export{c as u};

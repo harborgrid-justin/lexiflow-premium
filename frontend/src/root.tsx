@@ -34,9 +34,9 @@ import type { Route } from "./+types/root";
 import "./index.css";
 
 // Import providers
+import { AppProviders } from "@/providers/AppProviders";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { QueryClientProvider } from "@/providers/QueryClientProvider";
-import { ThemeProvider } from "@/providers/ThemeProvider";
 
 // ============================================================================
 // Meta Tags
@@ -46,7 +46,7 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
  * Global meta tags for the application
  * These are merged with route-specific meta tags
  */
-export function meta({}: Route.MetaArgs) {
+export function meta({ }: Route.MetaArgs) {
   return [
     { title: "LexiFlow AI Legal Suite" },
     {
@@ -58,7 +58,7 @@ export function meta({}: Route.MetaArgs) {
     { charSet: "utf-8" },
     // PWA & Mobile
     { name: "theme-color", content: "#1e40af" },
-    { name: "apple-mobile-web-app-capable", content: "yes" },
+    { name: "mobile-web-app-capable", content: "yes" },
     { name: "apple-mobile-web-app-status-bar-style", content: "default" },
     // Open Graph defaults
     { property: "og:type", content: "website" },
@@ -140,11 +140,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="min-h-screen bg-gray-50 antialiased dark:bg-gray-900">
-        {/* Provider order matters: QueryClient > Theme > Auth */}
+        {/* Provider order matters: AppProviders composes all required providers */}
         <QueryClientProvider>
-          <ThemeProvider>
-            <AuthProvider>{children}</AuthProvider>
-          </ThemeProvider>
+          <AuthProvider>
+            <AppProviders>{children}</AppProviders>
+          </AuthProvider>
         </QueryClientProvider>
         <ScrollRestoration />
         <Scripts />

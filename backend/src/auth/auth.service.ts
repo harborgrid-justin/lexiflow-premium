@@ -1,23 +1,23 @@
+import { UserRole } from "@common/enums/role.enum";
 import {
-  Injectable,
-  UnauthorizedException,
   BadRequestException,
+  Injectable,
   Logger,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcrypt';
-import { authenticator } from 'otplib';
-import * as qrcode from 'qrcode';
-import { v4 as uuidv4 } from 'uuid';
-import { UsersService } from '@users/users.service';
-import { RegisterDto } from './dto/register.dto';
-import { LoginDto } from './dto/login.dto';
-import { JwtPayload } from './interfaces/jwt-payload.interface';
-import { AuthenticatedUser } from './interfaces/authenticated-user.interface';
-import { UserRole } from '@common/enums/role.enum';
-import { TokenBlacklistService } from './token-blacklist.service';
-import { TokenStorageService } from './token-storage.service';
+  UnauthorizedException,
+} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { JwtService } from "@nestjs/jwt";
+import { UsersService } from "@users/users.service";
+import * as bcrypt from "bcrypt";
+import { authenticator } from "otplib";
+import * as qrcode from "qrcode";
+import { v4 as uuidv4 } from "uuid";
+import { LoginDto } from "./dto/login.dto";
+import { RegisterDto } from "./dto/register.dto";
+import { AuthenticatedUser } from "./interfaces/authenticated-user.interface";
+import { JwtPayload } from "./interfaces/jwt-payload.interface";
+import { TokenBlacklistService } from "./token-blacklist.service";
+import { TokenStorageService } from "./token-storage.service";
 
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
@@ -73,7 +73,7 @@ export class AuthService {
     private jwtService: JwtService,
     private configService: ConfigService,
     private tokenBlacklistService: TokenBlacklistService,
-    private tokenStorage: TokenStorageService,
+    private tokenStorage: TokenStorageService
   ) {}
 
   async register(registerDto: RegisterDto) {
@@ -90,16 +90,21 @@ export class AuthService {
     const tokens = await this.generateTokens(user);
 
     // Store refresh token with TTL
-    const ttlDays = parseInt(this.configService.get('REFRESH_TOKEN_TTL_DAYS', '7'), 10);
+    const ttlDays = parseInt(
+      this.configService.get("REFRESH_TOKEN_TTL_DAYS", "7"),
+      10
+    );
     await this.tokenStorage.storeRefreshToken(
       user.id,
       {
         userId: user.id,
         token: tokens.refreshToken,
         createdAt: new Date().toISOString(),
-        expiresAt: new Date(Date.now() + ttlDays * 24 * 60 * 60 * 1000).toISOString(),
+        expiresAt: new Date(
+          Date.now() + ttlDays * 24 * 60 * 60 * 1000
+        ).toISOString(),
       },
-      ttlDays * 24 * 60 * 60,
+      ttlDays * 24 * 60 * 60
     );
 
     return {
@@ -112,7 +117,7 @@ export class AuthService {
     const user = await this.validateUser(loginDto.email, loginDto.password);
 
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException("Invalid credentials");
     }
 
     // If MFA is enabled, generate MFA token
@@ -127,21 +132,26 @@ export class AuthService {
     const tokens = await this.generateTokens(user);
 
     // Store refresh token with TTL
-    const ttlDays = parseInt(this.configService.get('REFRESH_TOKEN_TTL_DAYS', '7'), 10);
+    const ttlDays = parseInt(
+      this.configService.get("REFRESH_TOKEN_TTL_DAYS", "7"),
+      10
+    );
     await this.tokenStorage.storeRefreshToken(
       user.id,
       {
         userId: user.id,
         token: tokens.refreshToken,
         createdAt: new Date().toISOString(),
-        expiresAt: new Date(Date.now() + ttlDays * 24 * 60 * 60 * 1000).toISOString(),
+        expiresAt: new Date(
+          Date.now() + ttlDays * 24 * 60 * 60 * 1000
+        ).toISOString(),
       },
-      ttlDays * 24 * 60 * 60,
+      ttlDays * 24 * 60 * 60
     );
 
     // Log authentication event (in production, use proper audit logging)
     this.logger.log(
-      `[AUTH] User ${user.email} logged in at ${new Date().toISOString()}`,
+      `[AUTH] User ${user.email} logged in at ${new Date().toISOString()}`
     );
 
     return {
@@ -152,51 +162,63 @@ export class AuthService {
 
   async refresh(refreshToken: string) {
     try {
-      const refreshSecret = this.configService.get<string>('app.jwt.refreshSecret');
+      const refreshSecret = this.configService.get<string>(
+        "app.jwt.refreshSecret"
+      );
       if (!refreshSecret) {
-        throw new UnauthorizedException('Server configuration error');
+        throw new UnauthorizedException("Server configuration error");
       }
       const payload = await this.jwtService.verifyAsync<JwtPayload>(
         refreshToken,
         {
           secret: refreshSecret,
-        },
+        }
       );
 
-      if (payload.type !== 'refresh') {
-        throw new UnauthorizedException('Invalid token type');
+      if (payload.type !== "refresh") {
+        throw new UnauthorizedException("Invalid token type");
       }
 
       // Verify refresh token is in storage
-      const storedTokenData = await this.tokenStorage.getRefreshToken(payload.sub);
+      const storedTokenData = await this.tokenStorage.getRefreshToken(
+        payload.sub
+      );
       if (!storedTokenData || storedTokenData.token !== refreshToken) {
-        throw new UnauthorizedException('Invalid refresh token');
+        throw new UnauthorizedException("Invalid refresh token");
       }
 
       const user = await this.usersService.findById(payload.sub);
       if (!user) {
-        throw new UnauthorizedException('User not found');
+        throw new UnauthorizedException("User not found");
       }
 
       const tokens = await this.generateTokens(user);
 
       // Update stored refresh token with TTL
-      const ttlDays = parseInt(this.configService.get('REFRESH_TOKEN_TTL_DAYS', '7'), 10);
+      const ttlDays = parseInt(
+        this.configService.get("REFRESH_TOKEN_TTL_DAYS", "7"),
+        10
+      );
       await this.tokenStorage.storeRefreshToken(
         user.id,
         {
           userId: user.id,
           token: tokens.refreshToken,
           createdAt: new Date().toISOString(),
-          expiresAt: new Date(Date.now() + ttlDays * 24 * 60 * 60 * 1000).toISOString(),
+          expiresAt: new Date(
+            Date.now() + ttlDays * 24 * 60 * 60 * 1000
+          ).toISOString(),
         },
-        ttlDays * 24 * 60 * 60,
+        ttlDays * 24 * 60 * 60
       );
 
       return tokens;
     } catch (error) {
-      this.logger.error('Failed to refresh token', error instanceof Error ? error.stack : String(error));
-      throw new UnauthorizedException('Invalid refresh token');
+      this.logger.error(
+        "Failed to refresh token",
+        error instanceof Error ? error.stack : String(error)
+      );
+      throw new UnauthorizedException("Invalid refresh token");
     }
   }
 
@@ -212,31 +234,33 @@ export class AuthService {
     }
 
     // Log logout event
-    this.logger.log(`[AUTH] User ${userId} logged out at ${new Date().toISOString()}`);
+    this.logger.log(
+      `[AUTH] User ${userId} logged out at ${new Date().toISOString()}`
+    );
 
-    return { message: 'Logged out successfully' };
+    return { message: "Logged out successfully" };
   }
 
   async changePassword(
     userId: string,
     currentPassword: string,
-    newPassword: string,
+    newPassword: string
   ) {
     const user = await this.usersService.findByEmail(
-      (await this.usersService.findById(userId))?.email || '',
+      (await this.usersService.findById(userId))?.email || ""
     );
 
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new UnauthorizedException("User not found");
     }
 
     const isPasswordValid = await bcrypt.compare(
       currentPassword,
-      user.password || '',
+      user.password || ""
     );
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Current password is incorrect');
+      throw new UnauthorizedException("Current password is incorrect");
     }
 
     await this.usersService.updatePassword(userId, newPassword);
@@ -249,10 +273,13 @@ export class AuthService {
 
     // Log password change event
     this.logger.log(
-      `[AUTH] User ${userId} changed password at ${new Date().toISOString()}`,
+      `[AUTH] User ${userId} changed password at ${new Date().toISOString()}`
     );
 
-    return { message: 'Password changed successfully. All sessions have been invalidated.' };
+    return {
+      message:
+        "Password changed successfully. All sessions have been invalidated.",
+    };
   }
 
   async forgotPassword(email: string) {
@@ -261,22 +288,26 @@ export class AuthService {
     if (!user) {
       // Don't reveal if user exists
       return {
-        message: 'If an account with that email exists, a reset link has been sent',
+        message:
+          "If an account with that email exists, a reset link has been sent",
       };
     }
 
     // Generate reset token
-    const ttlHours = parseInt(this.configService.get('RESET_TOKEN_TTL_HOURS', '1'), 10);
-    const jwtSecret = this.configService.get<string>('app.jwt.secret');
+    const ttlHours = parseInt(
+      this.configService.get("RESET_TOKEN_TTL_HOURS", "1"),
+      10
+    );
+    const jwtSecret = this.configService.get<string>("app.jwt.secret");
     if (!jwtSecret) {
-      throw new BadRequestException('Server configuration error');
+      throw new BadRequestException("Server configuration error");
     }
     const resetToken = await this.jwtService.signAsync(
-      { sub: user.id, type: 'reset' },
+      { sub: user.id, type: "reset" },
       {
         secret: jwtSecret,
         expiresIn: `${ttlHours}h`,
-      },
+      }
     );
 
     // Store reset token with TTL
@@ -285,18 +316,21 @@ export class AuthService {
       {
         userId: user.id,
         createdAt: new Date().toISOString(),
-        expiresAt: new Date(Date.now() + ttlHours * 60 * 60 * 1000).toISOString(),
+        expiresAt: new Date(
+          Date.now() + ttlHours * 60 * 60 * 1000
+        ).toISOString(),
       },
-      ttlHours * 60 * 60,
+      ttlHours * 60 * 60
     );
 
     // In production, send email with reset link
     this.logger.log(
-      `[AUTH] Password reset requested for ${email}. Token: ${resetToken}`,
+      `[AUTH] Password reset requested for ${email}. Token: ${resetToken}`
     );
 
     return {
-      message: 'If an account with that email exists, a reset link has been sent',
+      message:
+        "If an account with that email exists, a reset link has been sent",
     };
   }
 
@@ -304,7 +338,7 @@ export class AuthService {
     const resetData = await this.tokenStorage.getResetToken(token);
 
     if (!resetData || new Date(resetData.expiresAt) < new Date()) {
-      throw new BadRequestException('Invalid or expired reset token');
+      throw new BadRequestException("Invalid or expired reset token");
     }
 
     await this.usersService.updatePassword(resetData.userId, newPassword);
@@ -320,10 +354,13 @@ export class AuthService {
 
     // Log password reset event
     this.logger.log(
-      `[AUTH] User ${resetData.userId} reset password at ${new Date().toISOString()}`,
+      `[AUTH] User ${resetData.userId} reset password at ${new Date().toISOString()}`
     );
 
-    return { message: 'Password reset successfully. All sessions have been invalidated.' };
+    return {
+      message:
+        "Password reset successfully. All sessions have been invalidated.",
+    };
   }
 
   /**
@@ -333,7 +370,7 @@ export class AuthService {
   async setupMfa(userId: string) {
     const user = await this.usersService.findById(userId);
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new UnauthorizedException("User not found");
     }
 
     // Generate TOTP secret
@@ -345,8 +382,8 @@ export class AuthService {
     // Generate otpauth URL for QR code
     const otpauthUrl = authenticator.keyuri(
       user.email,
-      'LexiFlow Premium',
-      secret,
+      "LexiFlow Premium",
+      secret
     );
 
     // Generate QR code as data URL
@@ -365,12 +402,14 @@ export class AuthService {
   async enableMfa(userId: string, verificationCode: string) {
     const user = await this.usersService.findById(userId);
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new UnauthorizedException("User not found");
     }
 
     const totpSecret = await this.usersService.getTotpSecret(userId);
     if (!totpSecret) {
-      throw new BadRequestException('MFA not set up. Please call /auth/mfa/setup first');
+      throw new BadRequestException(
+        "MFA not set up. Please call /auth/mfa/setup first"
+      );
     }
 
     // Verify the code
@@ -380,13 +419,13 @@ export class AuthService {
     });
 
     if (!isValid) {
-      throw new UnauthorizedException('Invalid verification code');
+      throw new UnauthorizedException("Invalid verification code");
     }
 
     // Enable MFA for the user
     await this.usersService.setMfaEnabled(userId, true);
 
-    return { message: 'MFA enabled successfully' };
+    return { message: "MFA enabled successfully" };
   }
 
   /**
@@ -395,16 +434,16 @@ export class AuthService {
   async disableMfa(userId: string, verificationCode: string) {
     const user = await this.usersService.findById(userId);
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new UnauthorizedException("User not found");
     }
 
     if (!user.mfaEnabled) {
-      throw new BadRequestException('MFA is not enabled for this user');
+      throw new BadRequestException("MFA is not enabled for this user");
     }
 
     const totpSecret = await this.usersService.getTotpSecret(userId);
     if (!totpSecret) {
-      throw new BadRequestException('MFA secret not found');
+      throw new BadRequestException("MFA secret not found");
     }
 
     // Verify the code before disabling
@@ -414,52 +453,57 @@ export class AuthService {
     });
 
     if (!isValid) {
-      throw new UnauthorizedException('Invalid verification code');
+      throw new UnauthorizedException("Invalid verification code");
     }
 
     // Disable MFA and clear the secret
     await this.usersService.setMfaEnabled(userId, false);
-    await this.usersService.setTotpSecret(userId, '');
+    await this.usersService.setTotpSecret(userId, "");
 
-    return { message: 'MFA disabled successfully' };
+    return { message: "MFA disabled successfully" };
   }
 
   async verifyMfa(mfaToken: string, code: string) {
     const mfaData = await this.tokenStorage.getMfaToken(mfaToken);
 
     if (!mfaData || new Date(mfaData.expiresAt) < new Date()) {
-      throw new UnauthorizedException('Invalid or expired MFA token');
+      throw new UnauthorizedException("Invalid or expired MFA token");
     }
 
     // Validate code format
     if (!/^\d{6}$/.test(code)) {
-      throw new UnauthorizedException('Invalid MFA code format');
+      throw new UnauthorizedException("Invalid MFA code format");
     }
 
     // Verify the MFA code against user's stored TOTP secret
     const user = await this.usersService.findById(mfaData.userId);
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      throw new UnauthorizedException("User not found");
     }
 
     const isValidCode = await this.verifyTotpCode(user, code);
     if (!isValidCode) {
-      throw new UnauthorizedException('Invalid MFA code');
+      throw new UnauthorizedException("Invalid MFA code");
     }
 
     const tokens = await this.generateTokens(user);
 
     // Store refresh token with TTL
-    const ttlDays = parseInt(this.configService.get('REFRESH_TOKEN_TTL_DAYS', '7'), 10);
+    const ttlDays = parseInt(
+      this.configService.get("REFRESH_TOKEN_TTL_DAYS", "7"),
+      10
+    );
     await this.tokenStorage.storeRefreshToken(
       user.id,
       {
         userId: user.id,
         token: tokens.refreshToken,
         createdAt: new Date().toISOString(),
-        expiresAt: new Date(Date.now() + ttlDays * 24 * 60 * 60 * 1000).toISOString(),
+        expiresAt: new Date(
+          Date.now() + ttlDays * 24 * 60 * 60 * 1000
+        ).toISOString(),
       },
-      ttlDays * 24 * 60 * 60,
+      ttlDays * 24 * 60 * 60
     );
 
     // Remove MFA token
@@ -467,7 +511,7 @@ export class AuthService {
 
     // Log MFA verification event
     this.logger.log(
-      `[AUTH] User ${user.id} verified MFA at ${new Date().toISOString()}`,
+      `[AUTH] User ${user.id} verified MFA at ${new Date().toISOString()}`
     );
 
     return {
@@ -478,7 +522,7 @@ export class AuthService {
 
   async validateUser(
     email: string,
-    password: string,
+    password: string
   ): Promise<AuthenticatedUser | null> {
     const user = await this.usersService.findByEmailWithPassword(email);
 
@@ -490,7 +534,9 @@ export class AuthService {
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
 
     if (!isPasswordValid) {
-      this.logger.warn(`Authentication failed: Invalid password for user ${user.id}`);
+      this.logger.warn(
+        `Authentication failed: Invalid password for user ${user.id}`
+      );
       return null;
     }
 
@@ -506,7 +552,7 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       role: user.role,
-      type: 'access',
+      type: "access",
       jti: accessJti,
     };
 
@@ -514,28 +560,33 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       role: user.role,
-      type: 'refresh',
+      type: "refresh",
       jti: refreshJti,
     };
 
-    const jwtSecret = this.configService.get<string>('app.jwt.secret');
-    const refreshSecret = this.configService.get<string>('app.jwt.refreshSecret');
+    const jwtSecret = this.configService.get<string>("app.jwt.secret");
+    const refreshSecret = this.configService.get<string>(
+      "app.jwt.refreshSecret"
+    );
 
     if (!jwtSecret || !refreshSecret) {
-      throw new UnauthorizedException('Server configuration error');
+      throw new UnauthorizedException("Server configuration error");
     }
 
-    const accessExpiresIn = parseInt(this.configService.get<string>('app.jwt.expiresIn') || '900', 10);
-    const refreshExpiresIn = parseInt(this.configService.get<string>('app.jwt.refreshExpiresIn') || '604800', 10);
+    // Handle both string durations ('1h', '7d') and numeric seconds
+    const accessExpiresIn =
+      this.configService.get<string>("app.jwt.expiresIn") || "15m";
+    const refreshExpiresIn =
+      this.configService.get<string>("app.jwt.refreshExpiresIn") || "7d";
 
     const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(accessPayload as unknown as Record<string, unknown>, {
+      this.jwtService.signAsync(accessPayload as any, {
         secret: jwtSecret,
-        expiresIn: accessExpiresIn,
+        expiresIn: accessExpiresIn as any, // TypeScript workaround - jsonwebtoken accepts string durations
       }),
-      this.jwtService.signAsync(refreshPayload as unknown as Record<string, unknown>, {
+      this.jwtService.signAsync(refreshPayload as any, {
         secret: refreshSecret,
-        expiresIn: refreshExpiresIn,
+        expiresIn: refreshExpiresIn as any, // TypeScript workaround - jsonwebtoken accepts string durations
       }),
     ]);
 
@@ -546,18 +597,21 @@ export class AuthService {
   }
 
   private async generateMfaToken(userId: string): Promise<string> {
-    const ttlMinutes = parseInt(this.configService.get('MFA_TOKEN_TTL_MINUTES', '5'), 10);
-    const jwtSecret = this.configService.get<string>('app.jwt.secret');
+    const ttlMinutes = parseInt(
+      this.configService.get("MFA_TOKEN_TTL_MINUTES", "5"),
+      10
+    );
+    const jwtSecret = this.configService.get<string>("app.jwt.secret");
     if (!jwtSecret) {
-      throw new UnauthorizedException('Server configuration error');
+      throw new UnauthorizedException("Server configuration error");
     }
 
     const mfaToken = await this.jwtService.signAsync(
-      { sub: userId, type: 'mfa' },
+      { sub: userId, type: "mfa" },
       {
         secret: jwtSecret,
         expiresIn: `${ttlMinutes}m`,
-      },
+      }
     );
 
     // Store MFA token with TTL
@@ -568,7 +622,7 @@ export class AuthService {
         createdAt: new Date().toISOString(),
         expiresAt: new Date(Date.now() + ttlMinutes * 60 * 1000).toISOString(),
       },
-      ttlMinutes * 60,
+      ttlMinutes * 60
     );
 
     return mfaToken;
@@ -580,7 +634,7 @@ export class AuthService {
    */
   private async verifyTotpCode(
     user: AuthenticatedUser,
-    code: string,
+    code: string
   ): Promise<boolean> {
     if (!user.mfaEnabled) {
       return false;
@@ -600,7 +654,7 @@ export class AuthService {
 
       return isValid;
     } catch (error) {
-      this.logger.error('[AUTH] TOTP verification error:', error);
+      this.logger.error("[AUTH] TOTP verification error:", error);
       return false;
     }
   }

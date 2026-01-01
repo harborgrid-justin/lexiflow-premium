@@ -1,1 +1,0 @@
-import{r as a}from"./vendor-core-V-oW58GW.js";function x(r,s=1){const[n,o]=a.useState(s);return{currentStep:n,next:()=>o(t=>Math.min(t+1,r)),back:()=>o(t=>Math.max(t-1,1)),goTo:t=>{t>=1&&t<=r&&o(t)},isFirst:n===1,isLast:n===r}}export{x as u};

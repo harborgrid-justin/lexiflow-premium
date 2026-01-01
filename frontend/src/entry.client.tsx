@@ -1,12 +1,13 @@
-import { startTransition, StrictMode } from "react";
-import { hydrateRoot } from "react-dom/client";
-import { HydratedRouter } from "react-router/dom";
+/**
+ * Entry Client
+ *
+ * Client-side entry point for React Router application.
+ * Delegates to the rendering module's client initialization.
+ *
+ * @see @rendering/client for implementation details
+ */
 
-startTransition(() => {
-  hydrateRoot(
-    document,
-    <StrictMode>
-      <HydratedRouter />
-    </StrictMode>
-  );
-});
+import { initializeClient } from "@rendering/client";
+
+// Initialize the client-side application
+initializeClient();

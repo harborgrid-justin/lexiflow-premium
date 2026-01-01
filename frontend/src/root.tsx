@@ -98,40 +98,11 @@ export function links() {
 /**
  * Shows during client-side hydration
  * This is displayed before the JavaScript bundle loads and executes
+ *
+ * Re-exported from rendering/hydration module for compatibility
+ * @see @rendering/hydration/HydrateFallback
  */
-export function HydrateFallback() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900"
-      role="status"
-      aria-label="Loading application"
-    >
-      <div className="flex flex-col items-center gap-4">
-        {/* Animated Logo/Spinner */}
-        <div className="relative">
-          <div className="h-16 w-16 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600 dark:border-gray-700 dark:border-t-blue-400" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
-              L
-            </span>
-          </div>
-        </div>
-        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-          Loading LexiFlow...
-        </p>
-      </div>
-    </div>
-  );
-}
-
-// ============================================================================
-// Layout - Document Structure with Providers
-// ============================================================================
-
-/**
- * Main layout component that wraps all routes
- * Provides the HTML document structure and global providers
- */
+export { HydrateFallback } from "@rendering/hydration";
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>

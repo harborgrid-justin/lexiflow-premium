@@ -10,8 +10,8 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React from 'react';
 import { Scale, X } from 'lucide-react';
+import React from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -46,25 +46,25 @@ interface SidebarHeaderProps {
  */
 export const SidebarHeader = React.memo<SidebarHeaderProps>(({ onClose }) => {
   const { theme } = useTheme();
-  
+
   const { data: tenantConfig } = useQuery<TenantConfig>(
-      ['admin', 'tenant'],
-      DataService.admin.getTenantConfig,
-      { initialData: { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' } }
+    ['admin', 'tenant'],
+    () => DataService.admin.getTenantConfig(),
+    { initialData: { name: 'LexiFlow', tier: 'Enterprise Suite', version: '2.5', region: 'US-East-1' } }
   );
 
   return (
     <div className={styles.getHeaderContainer(theme)}>
       <div className={styles.brandingContainer}>
         <div className={styles.getLogoContainer(theme)}>
-            <Scale className={styles.logoIcon} />
+          <Scale className={styles.logoIcon} />
         </div>
         <div className={styles.textContainer}>
           <h1 className={styles.getTenantName(theme)}>{tenantConfig?.name}</h1>
           <p className={styles.getTenantTier(theme)}>{tenantConfig?.tier}</p>
         </div>
       </div>
-      <button 
+      <button
         onClick={onClose}
         aria-label="Close sidebar"
         className={styles.getCloseButton(theme)}
@@ -74,4 +74,3 @@ export const SidebarHeader = React.memo<SidebarHeaderProps>(({ onClose }) => {
     </div>
   );
 });
-

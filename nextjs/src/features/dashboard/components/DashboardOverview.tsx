@@ -1,0 +1,137 @@
+/**
+ * @module components/dashboard/DashboardOverview
+ * @category Dashboard
+ * @description Main overview dashboard combining metrics, analytics, and sidebar.
+ *
+ * THEME SYSTEM USAGE:
+ * This component delegates to child components that use the theme system.
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
+import React, { useEffect, useState } from 'react';
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { useQuery } from '@/hooks/useQueryHooks';
+import { DataService } from '@/services/data/dataService';
+// ✅ Migrated to backend API (2025-12-21)
+
+// Components
+import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
+import { DashboardAnalytics } from './DashboardAnalytics';
+import { DashboardMetrics } from './DashboardMetrics';
+import { DashboardSidebar } from './DashboardSidebar';
+
+// Utils & Constants
+import { Scheduler } from '@/utils/scheduler';
+
+// Types
+import type { CaseId, TaskId, WorkflowTask } from '@/types';
+import { TaskStatusBackend } from '@/types';
+import type { ChartDataPoint as DashboardChartData } from '@/types/dashboard';
+
+// ============================================================================
+// TYPES & INTERFACES
+// ============================================================================
+interface DashboardOverviewProps {
+  /** Callback when a case is selected. */
+  onSelectCase: (caseId: string) => void;
+}
+
+interface ActiveProject {
+  id: TaskId;
+  title: string;
+  case: string | CaseId;
+  progress: number;
+  status: TaskStatusBackend;
+  due: string;
+}
+
+// ============================================================================
+// COMPONENT
+// ============================================================================
+
+export const DashboardOverview: React.FC<DashboardOverviewProps> = ({ onSelectCase }) => {
+  // Enterprise Data Access: Parallel Queries with Caching
+  const { data: stats, isLoading: statsLoading } = useQuery<{
+    activeCases: number;
+    pendingMotions: number;
+    billableHours: number;
+    highRisks: number;
+  } | null>(['dashboard', 'stats'], () => DataService.dashboard.getStats());
+  const { data: tasks = [] } = useQuery<WorkflowTask[]>(['tasks', 'all'], () => DataService.tasks.getAll());
+  const { data: rawChartData = [] } = useQuery<DashboardChartData[]>(['dashboard', 'charts'], () => DataService.dashboard.getChartData());
+
+  // Transform chart data from { name, value } to { name, count } for DashboardAnalytics
+  const chartData = rawChartData.map(item => ({ name: item.name, count: item.value }));
+
+  interface RawAlert {
+    id?: number | string;
+    message?: string;
+    detail?: string;
+    time?: string;
+    caseId?: string;
+  }
+
+  const { data: rawAlerts = [] } = useQuery<RawAlert[]>(['dashboard', 'alerts'], () => DataService.dashboard.getRecentAlerts());
+
+  // Transform alerts to match DashboardAlert type
+  const alerts = rawAlerts.map((alert: unknown, index: number) => {
+    if (typeof alert !== 'object' || alert === null) {
+      return { id: index, message: '', detail: '', time: '', caseId: '' };
+    }
+    const alertId = 'id' in alert && typeof alert.id === 'number' ? alert.id :
+      'id' in alert ? (parseInt(String(alert.id), 10) || index) : index;
+    const alertMessage = 'message' in alert ? String(alert.message) : '';
+    const alertDetail = 'detail' in alert ? String(alert.detail) : '';
+    const alertTime = 'time' in alert ? String(alert.time) : '';
+    const alertCaseId = 'caseId' in alert ? String(alert.caseId) : '';
+
+    return {
+      id: alertId,
+      message: alertMessage,
+      detail: alertDetail,
+      time: alertTime,
+      caseId: alertCaseId
+    };
+  });
+
+  // Optimization: Defer heavy processing of tasks to idle time
+  const [activeProjects, setActiveProjects] = useState<ActiveProject[]>([]);
+
+  useEffect(() => {
+    if (tasks.length > 0) {
+      // Process heavy filtering/mapping in idle time to unblock initial paint
+      Scheduler.defer(() => {
+        const processed = tasks
+          .filter((t: WorkflowTask) => t.priority === 'High' && t.status !== TaskStatusBackend.COMPLETED)
+          .slice(0, 5)
+          .map((t: WorkflowTask) => ({
+            id: t.id,
+            title: t.title,
+            case: t.caseId || 'General',
+            progress: t.status === 'In Progress' ? 50 : 10,
+            status: t.status,
+            due: t.dueDate || 'No due date'
+          }));
+        setActiveProjects(processed);
+      });
+    }
+  }, [tasks]);
+
+  if (statsLoading) return <LazyLoader message="Aggregating Firm Intelligence..." />;
+
+  return (
+    <div className="space-y-6 animate-fade-in">
+      <DashboardMetrics stats={stats || null} />
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <DashboardAnalytics activeProjects={activeProjects} chartData={chartData} />
+        <DashboardSidebar onSelectCase={onSelectCase} alerts={alerts} />
+      </div>
+    </div>
+  );
+};

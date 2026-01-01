@@ -86,6 +86,7 @@
       "@services/domains": ["src/services/domain"],
       "@services/repositories": ["src/services/data/repositories"],
       "@services/core": ["src/services/core"],
+      "@rendering/*": ["rendering/*"],
       "@types/*": ["src/types/*"],
       "@config/*": ["src/config/*"],
       "@config/tabs.config": ["src/config/tabs.config.ts"],
@@ -93,7 +94,13 @@
     },
     "types": ["vite/client"]
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.d.ts",
+    "rendering/**/*.ts",
+    "rendering/**/*.tsx"
+  ],
   "exclude": [
     "node_modules",
     "dist",

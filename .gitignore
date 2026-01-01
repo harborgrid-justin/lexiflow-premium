@@ -36,3 +36,4 @@ backend/.env
 
 frontend/build
 frontend/dist/
+nextjs/node_moduless

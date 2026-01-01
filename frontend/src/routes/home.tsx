@@ -35,27 +35,34 @@ export function meta(_: Route.MetaArgs) {
 }
 
 // ============================================================================
-// Loader
+// Client Loader (runs only on client where localStorage is available)
 // ============================================================================
 
 /**
- * Dashboard loader - fetches summary data
- * In production, this would fetch from the API
+ * Dashboard client loader - fetches summary data on client side only
+ * This runs only in the browser where localStorage auth tokens are available
+ *
+ * Note: Using clientLoader instead of loader because authentication tokens
+ * are stored in localStorage which is not available during SSR
  */
-export async function loader({ request: _ }: Route.LoaderArgs) {
+export async function clientLoader({ request: _ }: Route.ClientLoaderArgs) {
   try {
     const [cases, tasks] = await Promise.all([
       api.cases.getAll(),
       api.tasks.getAll(),
     ]);
 
+    // Ensure we have arrays (defensive programming)
+    const casesArray = Array.isArray(cases) ? cases : [];
+    const tasksArray = Array.isArray(tasks) ? tasks : [];
+
     // Calculate metrics
-    const activeCases = cases.filter(c => c.status === 'Active').length;
-    const pendingTasks = tasks.filter(t => t.status !== 'Completed').length;
-    const highPriorityTasks = tasks.filter(t => t.priority === 'High' && t.status !== 'Completed').length;
+    const activeCases = casesArray.filter(c => c.status === 'Active').length;
+    const pendingTasks = tasksArray.filter(t => t.status !== 'Completed').length;
+    const highPriorityTasks = tasksArray.filter(t => t.priority === 'High' && t.status !== 'Completed').length;
 
     // Get recent items
-    const recentCases = cases
+    const recentCases = casesArray
       .sort((a, b) => {
         const dateA = new Date(a.updatedAt || a.createdAt || 0).getTime();
         const dateB = new Date(b.updatedAt || b.createdAt || 0).getTime();
@@ -63,7 +70,7 @@ export async function loader({ request: _ }: Route.LoaderArgs) {
       })
       .slice(0, 5);
 
-    const upcomingTasks = tasks
+    const upcomingTasks = tasksArray
       .filter(t => t.dueDate && t.status !== 'Completed')
       .sort((a, b) => new Date(a.dueDate || 0).getTime() - new Date(b.dueDate || 0).getTime())
       .slice(0, 5);

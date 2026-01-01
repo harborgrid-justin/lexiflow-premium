@@ -1,0 +1,179 @@
+/**
+ * @module services/api/dashboard-metrics.service
+ * @category API Services
+ * @description Dashboard metrics API service for fetching KPIs, analytics, and dashboard data
+ */
+
+import { apiClient } from '@/services/infrastructure/apiClient';
+import type { Activity, Deadline } from '@/components/dashboard/widgets';
+
+// ============================================================================
+// TYPES
+// ============================================================================
+
+export interface DashboardKPIs {
+  activeCases: {
+    value: number;
+    previousValue: number;
+    change: number;
+    trend: 'up' | 'down' | 'neutral';
+  };
+  billableHours: {
+    value: number;
+    previousValue: number;
+    change: number;
+    trend: 'up' | 'down' | 'neutral';
+    target?: number;
+  };
+  revenue: {
+    value: number;
+    previousValue: number;
+    change: number;
+    trend: 'up' | 'down' | 'neutral';
+    target?: number;
+  };
+  upcomingDeadlines: {
+    value: number;
+    critical: number;
+    thisWeek: number;
+  };
+  collectionRate: {
+    value: number;
+    previousValue: number;
+    change: number;
+  };
+  clientSatisfaction: {
+    value: number;
+    previousValue: number;
+    change: number;
+  };
+}
+
+export interface CaseStatusBreakdown {
+  status: string;
+  count: number;
+  percentage: number;
+  color?: string;
+}
+
+export interface BillingOverview {
+  period: string;
+  billed: number;
+  collected: number;
+  outstanding: number;
+  writeOffs: number;
+}
+
+export interface RecentActivity extends Activity {}
+
+export interface UpcomingDeadline extends Deadline {}
+
+export interface TeamMetrics {
+  userId: string;
+  userName: string;
+  billableHours: number;
+  activeCases: number;
+  completedTasks: number;
+  efficiency: number;
+}
+
+export interface DashboardFilters {
+  dateRange?: {
+    start: string;
+    end: string;
+  };
+  caseTypes?: string[];
+  departments?: string[];
+  users?: string[];
+}
+
+// ============================================================================
+// SERVICE
+// ============================================================================
+
+export class DashboardMetricsService {
+  private readonly baseUrl = '/api/dashboard';
+
+  /**
+   * Get executive summary KPIs
+   */
+  async getKPIs(filters?: DashboardFilters): Promise<DashboardKPIs> {
+    const params = filters ? new URLSearchParams(filters as any) : undefined;
+    return apiClient.get<DashboardKPIs>(
+      `${this.baseUrl}/kpis${params ? `?${params}` : ''}`
+    );
+  }
+
+  /**
+   * Get case status breakdown
+   */
+  async getCaseStatusBreakdown(filters?: DashboardFilters): Promise<CaseStatusBreakdown[]> {
+    const params = filters ? new URLSearchParams(filters as any) : undefined;
+    return apiClient.get<CaseStatusBreakdown[]>(
+      `${this.baseUrl}/cases/status-breakdown${params ? `?${params}` : ''}`
+    );
+  }
+
+  /**
+   * Get billing overview
+   */
+  async getBillingOverview(filters?: DashboardFilters): Promise<BillingOverview[]> {
+    const params = filters ? new URLSearchParams(filters as any) : undefined;
+    return apiClient.get<BillingOverview[]>(
+      `${this.baseUrl}/billing/overview${params ? `?${params}` : ''}`
+    );
+  }
+
+  /**
+   * Get recent activity feed
+   */
+  async getRecentActivity(limit = 20): Promise<RecentActivity[]> {
+    return apiClient.get<RecentActivity[]>(
+      `${this.baseUrl}/activity/recent?limit=${limit}`
+    );
+  }
+
+  /**
+   * Get upcoming deadlines
+   */
+  async getUpcomingDeadlines(filters?: { days?: number; priority?: string[] }): Promise<UpcomingDeadline[]> {
+    const params = new URLSearchParams();
+    if (filters?.days) params.append('days', String(filters.days));
+    if (filters?.priority) filters.priority.forEach(p => params.append('priority', p));
+
+    return apiClient.get<UpcomingDeadline[]>(
+      `${this.baseUrl}/deadlines/upcoming${params.toString() ? `?${params}` : ''}`
+    );
+  }
+
+  /**
+   * Get team performance metrics
+   */
+  async getTeamMetrics(filters?: DashboardFilters): Promise<TeamMetrics[]> {
+    const params = filters ? new URLSearchParams(filters as any) : undefined;
+    return apiClient.get<TeamMetrics[]>(
+      `${this.baseUrl}/team/metrics${params ? `?${params}` : ''}`
+    );
+  }
+
+  /**
+   * Get role-specific dashboard data
+   */
+  async getRoleDashboard(role: 'attorney' | 'paralegal' | 'admin' | 'partner'): Promise<any> {
+    return apiClient.get(`${this.baseUrl}/role/${role}`);
+  }
+
+  /**
+   * Export dashboard data
+   */
+  async exportDashboard(format: 'pdf' | 'excel' | 'csv', filters?: DashboardFilters): Promise<Blob> {
+    const params = filters ? new URLSearchParams(filters as any) : undefined;
+    return apiClient.get<Blob>(
+      `${this.baseUrl}/export/${format}${params ? `?${params}` : ''}`,
+      { responseType: 'blob' }
+    );
+  }
+}
+
+// Export singleton instance
+export const dashboardMetricsService = new DashboardMetricsService();

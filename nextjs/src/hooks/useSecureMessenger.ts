@@ -1,0 +1,324 @@
+/**
+ * @module hooks/useSecureMessenger
+ * @category Hooks - Messaging
+ *
+ * Secure messenger managing conversations, messages, and file attachments.
+ * Handles conversation sorting, filtering, and draft persistence.
+ *
+ * @example
+ * ```typescript
+ * const messenger = useSecureMessenger();
+ *
+ * // Select conversation
+ * messenger.selectConversation(convId);
+ *
+ * // Send message
+ * messenger.sendMessage();
+ *
+ * // Handle attachments
+ * messenger.handleFileSelect(files);
+ *
+ * // Toggle privilege mode
+ * messenger.setPrivilegedMode(true);
+ * ```
+ */
+
+// ============================================================================
+// EXTERNAL DEPENDENCIES
+// ============================================================================
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+// ============================================================================
+// INTERNAL DEPENDENCIES
+// ============================================================================
+// Services & Data
+import { DataService } from "@/services/data/dataService";
+
+// Utils & Constants
+import { Scheduler } from "@/utils/scheduler";
+
+// Types
+import { Contact } from "@/api";
+import { Attachment, Conversation, Message } from "@/types";
+
+// Re-export types for consumers
+export type { Attachment, Contact, Conversation, Message };
+
+// ============================================================================
+// TYPES
+// ============================================================================
+
+/**
+ * Return type for useSecureMessenger hook
+ */
+export interface UseSecureMessengerReturn {
+  /** Current view */
+  view: "chats" | "contacts" | "files" | "archived";
+  /** Set view */
+  setView: (view: "chats" | "contacts" | "files" | "archived") => void;
+  /** All conversations */
+  conversations: Conversation[];
+  /** Contacts list */
+  contacts: Contact[];
+  /** All file attachments */
+  allFiles: Attachment[];
+  /** Active conversation ID */
+  activeConvId: string | null;
+  /** Set active conversation ID */
+  setActiveConvId: (id: string | null) => void;
+  /** Active conversation */
+  activeConversation: Conversation | undefined;
+  /** Search term */
+  searchTerm: string;
+  /** Set search term */
+  setSearchTerm: (term: string) => void;
+  /** Message input text */
+  inputText: string;
+  /** Set input text */
+  setInputText: (text: string) => void;
+  /** Pending attachments */
+  pendingAttachments: Attachment[];
+  /** Set pending attachments */
+  setPendingAttachments: Dispatch<SetStateAction<Attachment[]>>;
+  /** Handle file selection */
+  handleFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  /** Privileged mode flag */
+  isPrivilegedMode: boolean;
+  /** Set privileged mode */
+  setIsPrivilegedMode: Dispatch<SetStateAction<boolean>>;
+  /** Filtered conversations */
+  filteredConversations: Conversation[];
+  /** Select conversation */
+  handleSelectConversation: (id: string) => void;
+  /** Send message */
+  handleSendMessage: () => void;
+  /** Format timestamp */
+  formatTime: (isoString: string) => string;
+}
+
+// ============================================================================
+// HOOK
+// ============================================================================
+
+/**
+ * Secure messenger state management.
+ *
+ * @returns Object with messenger state and operations
+ */
+export function useSecureMessenger(): UseSecureMessengerReturn {
+  const [view, setView] = useState<"chats" | "contacts" | "files" | "archived">(
+    "chats"
+  );
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [contactsList, setContactsList] = useState<Contact[]>([]);
+  const [allFiles, setAllFiles] = useState<Attachment[]>([]);
+  const [activeConvId, setActiveConvId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [inputText, setInputText] = useState("");
+  const [pendingAttachments, setPendingAttachments] = useState<Attachment[]>(
+    []
+  );
+  const [isPrivilegedMode, setIsPrivilegedMode] = useState(false);
+
+  // Initial Data Fetch
+  useEffect(() => {
+    const loadData = async () => {
+      const messengerService = await DataService.messenger;
+      const [convs, conts] = await Promise.all([
+        messengerService.getConversations(),
+        messengerService.getContacts(),
+      ]);
+      setConversations(convs);
+      setContactsList(conts);
+    };
+    loadData();
+  }, []);
+
+  // Deferred calculation for allFiles to improve performance
+  useEffect(() => {
+    Scheduler.defer(() => {
+      const files: Attachment[] = [];
+      const safeConversations = Array.isArray(conversations)
+        ? conversations
+        : [];
+      safeConversations.forEach((c) => {
+        c.messages.forEach((m) => {
+          if (m.attachments) {
+            m.attachments.forEach((a) => {
+              files.push({
+                ...a,
+                sender: m.senderId === "me" ? "Me" : c.name,
+                date: m.timestamp,
+              });
+            });
+          }
+        });
+      });
+      const filtered = files.filter((f) =>
+        f.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setAllFiles(filtered);
+    });
+  }, [conversations, searchTerm]);
+
+  const sortedConversations = useMemo(() => {
+    // Ensure conversations is an array before spreading
+    const safeConversations = Array.isArray(conversations) ? conversations : [];
+    return [...safeConversations].sort((a, b) => {
+      const lastMsgA = a.messages[a.messages.length - 1];
+      const lastMsgB = b.messages[b.messages.length - 1];
+      // Handle potential empty messages array although robust data usually has one
+      const timeA = lastMsgA ? new Date(lastMsgA.timestamp).getTime() : 0;
+      const timeB = lastMsgB ? new Date(lastMsgB.timestamp).getTime() : 0;
+      return timeB - timeA;
+    });
+  }, [conversations]);
+
+  const filteredConversations = useMemo(() => {
+    const term = searchTerm.toLowerCase();
+    return sortedConversations.filter(
+      (c) =>
+        c.name.toLowerCase().includes(term) ||
+        c.role.toLowerCase().includes(term) ||
+        c.messages.some((m) => m.text.toLowerCase().includes(term))
+    );
+  }, [sortedConversations, searchTerm]);
+
+  const contacts = useMemo(() => {
+    // Ensure contactsList is an array before filtering
+    const safeContactsList = Array.isArray(contactsList) ? contactsList : [];
+    return safeContactsList.filter(
+      (c) =>
+        c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (c.role || "").toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [contactsList, searchTerm]);
+
+  const activeConversation = Array.isArray(conversations)
+    ? conversations.find((c) => c.id === activeConvId)
+    : undefined;
+
+  const handleSelectConversation = (id: string) => {
+    if (activeConvId === id) return;
+
+    if (activeConvId) {
+      setConversations((prev) =>
+        prev.map((c) =>
+          c.id === activeConvId ? { ...c, draft: inputText } : c
+        )
+      );
+    }
+
+    const targetConv = conversations.find((c) => c.id === id);
+    setInputText(targetConv?.draft || "");
+    setPendingAttachments([]);
+    setIsPrivilegedMode(targetConv?.role.includes("Client") || false);
+    setActiveConvId(id);
+
+    setConversations((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, unread: 0 } : c))
+    );
+  };
+
+  const handleSendMessage = async () => {
+    if ((!inputText.trim() && pendingAttachments.length === 0) || !activeConvId)
+      return;
+
+    const newMessage: Message = {
+      id: `new-${Date.now()}`,
+      senderId: "me",
+      text: inputText,
+      timestamp: new Date().toISOString(),
+      status: "sent",
+      isPrivileged: isPrivilegedMode,
+      attachments:
+        pendingAttachments.length > 0 ? [...pendingAttachments] : undefined,
+    };
+
+    // Optimistic UI Update
+    setConversations((prev) =>
+      prev.map((c) => {
+        if (c.id === activeConvId) {
+          return {
+            ...c,
+            messages: [...c.messages, newMessage],
+            draft: "",
+          };
+        }
+        return c;
+      })
+    );
+
+    // Persist
+    await DataService.messenger.sendMessage(activeConvId, newMessage);
+
+    setInputText("");
+    setPendingAttachments([]);
+
+    // Update delivery status after message is processed
+    // In production with WebSocket: server would push status updates
+    setTimeout(() => {
+      setConversations((prev) =>
+        prev.map((c) =>
+          c.id === activeConvId
+            ? {
+                ...c,
+                messages: c.messages.map((m) =>
+                  m.id === newMessage.id
+                    ? { ...m, status: "delivered" as const }
+                    : m
+                ),
+              }
+            : c
+        )
+      );
+    }, 1000);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      const newAtt: Attachment = {
+        name: file.name,
+        type: file.type.includes("image") ? "image" : "doc",
+        size: "1.2 MB",
+      };
+      setPendingAttachments([...pendingAttachments, newAtt]);
+    }
+  };
+
+  const formatTime = (isoString: string) => {
+    const date = new Date(isoString);
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
+  return {
+    view,
+    setView,
+    conversations,
+    activeConvId,
+    setActiveConvId,
+    searchTerm,
+    setSearchTerm,
+    inputText,
+    setInputText,
+    pendingAttachments,
+    setPendingAttachments,
+    isPrivilegedMode,
+    setIsPrivilegedMode,
+    activeConversation,
+    filteredConversations,
+    handleSelectConversation,
+    handleSendMessage,
+    handleFileSelect,
+    formatTime,
+    contacts,
+    allFiles,
+  };
+}

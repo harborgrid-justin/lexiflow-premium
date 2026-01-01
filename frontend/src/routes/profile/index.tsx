@@ -28,10 +28,10 @@ export function meta(_: Route.MetaArgs) {
 }
 
 // ============================================================================
-// Loader
+// Client Loader (client-side only for localStorage auth)
 // ============================================================================
 
-export async function loader({ request: _ }: Route.LoaderArgs) {
+export async function clientLoader({ request: _ }: Route.ClientLoaderArgs) {
   try {
     const user = await api.auth.getCurrentUser();
     // Mock preferences for now as they might not be in user object or need separate call

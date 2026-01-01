@@ -44,16 +44,24 @@ import { DiscoveryRequest } from '@/types';
 const DiscoveryDashboard = lazy(() => import('./dashboard/DiscoveryDashboard'));
 const DiscoveryRequests = lazy(() => import('./DiscoveryRequests'));
 const PrivilegeLog = lazy(() => import('./PrivilegeLog'));
+const PrivilegeLogEnhanced = lazy(() => import('./PrivilegeLogEnhanced'));
 const LegalHolds = lazy(() => import('./LegalHolds'));
+const LegalHoldsEnhanced = lazy(() => import('./LegalHoldsEnhanced'));
 const DiscoveryDocumentViewer = lazy(() => import('./DiscoveryDocumentViewer'));
 const DiscoveryResponse = lazy(() => import('./DiscoveryResponse'));
 const DiscoveryProduction = lazy(() => import('./DiscoveryProduction'));
 const DiscoveryProductions = lazy(() => import('./DiscoveryProductions'));
+const ProductionWizard = lazy(() => import('./ProductionWizard'));
 const DiscoveryDepositions = lazy(() => import('./DiscoveryDepositions'));
 const DiscoveryESI = lazy(() => import('./DiscoveryESI'));
+const ESISourcesList = lazy(() => import('./ESISourcesList'));
 const DiscoveryInterviews = lazy(() => import('./DiscoveryInterviews'));
 const Examinations = lazy(() => import('./Examinations'));
 const Custodians = lazy(() => import('./Custodians'));
+const Collections = lazy(() => import('./Collections'));
+const Processing = lazy(() => import('./Processing'));
+const Review = lazy(() => import('./Review'));
+const DiscoveryTimeline = lazy(() => import('./DiscoveryTimeline'));
 
 import { DiscoveryErrorBoundary } from './DiscoveryErrorBoundary';
 import { DiscoveryRequestsSkeleton, ESIDashboardSkeleton, LegalHoldsSkeleton, PrivilegeLogSkeleton } from './DiscoverySkeleton';
@@ -157,11 +165,15 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
     'depositions': <DiscoveryDepositions />,
     'examinations': <Examinations />,
     'custodians': <Custodians />,
-    'esi': <DiscoveryESI />,
+    'esi': <ESISourcesList />,
     'productions': <DiscoveryProductions onCreateClick={() => setActiveTab('production_wizard')} />,
     'interviews': <DiscoveryInterviews />,
-    'privilege': <PrivilegeLog />,
-    'holds': <LegalHolds />,
+    'privilege': <PrivilegeLogEnhanced />,
+    'holds': <LegalHoldsEnhanced />,
+    'collections': <Collections />,
+    'processing': <Processing />,
+    'review': <Review />,
+    'timeline': <DiscoveryTimeline />,
     'plan': (
       <div className={cn("p-12 flex flex-col items-center justify-center h-full text-center rounded-lg border-2 border-dashed", theme.border.default)}>
         <Users className={cn("h-16 w-16 mb-4 opacity-20", theme.text.primary)} />
@@ -183,7 +195,7 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
             <div className="p-6 h-full"><DiscoveryResponse request={requests.find(r => r.id === contextId) || null} onBack={() => setActiveTab('requests')} onSave={handleSaveResponse} /></div>
           )}
           {activeTab === 'production_wizard' && (
-            <div className="p-6 h-full"><DiscoveryProduction request={requests.find(r => r.id === contextId) || null} onBack={() => setActiveTab('productions')} /></div>
+            <div className="h-full"><ProductionWizard onComplete={() => setActiveTab('productions')} onCancel={() => setActiveTab('productions')} /></div>
           )}
         </Suspense>
       </div>

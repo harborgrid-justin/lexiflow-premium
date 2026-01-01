@@ -58,13 +58,25 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({ activeView, setActiveVie
   }, []);
 
   const visibleItems = useMemo(() => {
-    const isAuthorizedAdmin = currentUserRole === 'Administrator' || currentUserRole === 'Senior Partner';
+    // Map current user role to authorization levels
+    const isAdmin = currentUserRole === 'admin' || currentUserRole === 'Administrator';
+    const isAttorneyOrAdmin = isAdmin || currentUserRole === 'attorney' || currentUserRole === 'Senior Partner';
+    const isStaff = isAttorneyOrAdmin || currentUserRole === 'paralegal' || currentUserRole === 'staff';
+
     return modules.filter(item => {
       // Filter out hidden routes (accessed via other pages, not directly in sidebar)
       if (item.hidden) return false;
-      // Filter out admin-only routes for non-admin users
-      return !(item.requiresAdmin && !isAuthorizedAdmin);
 
+      // Filter out admin-only routes for non-admin users
+      if (item.requiresAdmin && !isAdmin) return false;
+
+      // Filter out attorney-only routes for non-attorney users
+      if (item.requiresAttorney && !isAttorneyOrAdmin) return false;
+
+      // Filter out staff-only routes for client users
+      if (item.requiresStaff && !isStaff) return false;
+
+      return true;
     });
   }, [currentUserRole, modules]);
 

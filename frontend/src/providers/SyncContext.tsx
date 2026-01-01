@@ -260,7 +260,7 @@ export const SyncProvider = ({
     };
     // Note: _onSyncSuccess and onSyncError are function props that may change, but we intentionally
     // exclude them from dependencies to avoid recreating event handlers on every render
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [processQueue, refreshCounts]);
 
   // BP10: Stabilize function references with useCallback
@@ -295,7 +295,7 @@ export const SyncProvider = ({
     }
     // Note: _onSyncSuccess is a function prop that may change, but we intentionally
     // exclude it from dependencies to maintain stable callback identity
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [processQueue, refreshCounts]);
 
   // BP7: Memoize provider values explicitly - state context

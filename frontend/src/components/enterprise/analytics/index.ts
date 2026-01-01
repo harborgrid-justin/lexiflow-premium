@@ -66,3 +66,29 @@ export {
   type ExportFormat,
   type ExportOptions
 } from './ReportExport';
+
+// ============================================================================
+// UTILITY COMPONENTS
+// ============================================================================
+
+export {
+  MetricCard,
+  type MetricCardProps
+} from './MetricCard';
+
+export {
+  ChartCard,
+  type ChartCardProps
+} from './ChartCard';
+
+export {
+  DateRangeSelector,
+  type DateRangeSelectorProps,
+  type DateRange as DateRangeType,
+  type DatePreset as DatePresetType
+} from './DateRangeSelector';
+
+export {
+  FilterPanel,
+  type FilterPanelProps
+} from './FilterPanel';

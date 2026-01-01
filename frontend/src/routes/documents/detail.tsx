@@ -6,10 +6,21 @@
  * @module routes/documents/detail
  */
 
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import type { Route } from "./+types/detail";
 import { RouteErrorBoundary, NotFoundError } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
+import { DocumentsApiService } from '@/api/admin/documents-api';
+import {
+  DocumentViewer,
+  MetadataPanel,
+  VersionHistory,
+  DocumentAnnotations,
+  type Annotation
+} from '@/components/features/documents/components';
+
+const documentsApi = new DocumentsApiService();
 
 // ============================================================================
 // Meta Tags
@@ -18,8 +29,8 @@ import { createDetailMeta } from '../_shared/meta-utils';
 export function meta({ data }: Route.MetaArgs) {
   return createDetailMeta({
     entityType: 'Document',
-    entityName: data?.item?.title,
-    entityId: data?.item?.id,
+    entityName: data?.document?.title,
+    entityId: data?.document?.id,
   });
 }
 
@@ -35,13 +46,19 @@ export async function loader({ params }: Route.LoaderArgs) {
     throw new Response("Document ID is required", { status: 400 });
   }
 
-  // TODO: Fetch data
-  // const item = await api.documents.get(documentId);
-  // if (!item) {
-  //   throw new Response("Document not found", { status: 404 });
-  // }
+  try {
+    const document = await documentsApi.getById(documentId);
+    const versions = await documentsApi.getVersions(documentId);
 
-  return { item: null };
+    return {
+      document,
+      versions,
+      annotations: [] as Annotation[], // TODO: Fetch from API
+    };
+  } catch (error) {
+    console.error('[Document Detail Loader] Error:', error);
+    throw new Response("Document not found", { status: 404 });
+  }
 }
 
 // ============================================================================
@@ -58,16 +75,28 @@ export async function action({ params, request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
 
-  switch (intent) {
-    case "update":
-      // TODO: Implement update
-      return { success: true };
-    case "delete":
-      // TODO: Implement delete
-      // return redirect("/documents");
-      return { success: true };
-    default:
-      return { success: false, error: "Invalid action" };
+  try {
+    switch (intent) {
+      case "update": {
+        const updates = JSON.parse(formData.get("data") as string);
+        await documentsApi.update(documentId, updates);
+        return { success: true };
+      }
+      case "delete": {
+        await documentsApi.delete(documentId);
+        return { success: true, redirect: "/documents" };
+      }
+      case "restore-version": {
+        const versionId = formData.get("versionId") as string;
+        await documentsApi.restoreVersion(documentId, versionId);
+        return { success: true };
+      }
+      default:
+        return { success: false, error: "Invalid action" };
+    }
+  } catch (error) {
+    console.error('[Document Detail Action] Error:', error);
+    return { success: false, error: String(error) };
   }
 }
 
@@ -77,29 +106,217 @@ export async function action({ params, request }: Route.ActionArgs) {
 
 export default function DocumentDetailRoute({ loaderData }: Route.ComponentProps) {
   const navigate = useNavigate();
+  const { document, versions, annotations } = loaderData;
+  const [activeTab, setActiveTab] = useState<'viewer' | 'metadata' | 'versions' | 'annotations'>('viewer');
+
+  const handleUpdate = async (updates: Partial<typeof document>) => {
+    try {
+      await documentsApi.update(document.id, updates);
+      window.location.reload();
+    } catch (error) {
+      console.error('Update failed:', error);
+      alert('Failed to update document');
+    }
+  };
+
+  const handleRestoreVersion = async (versionNumber: number) => {
+    if (!confirm(`Restore to version ${versionNumber}?`)) return;
+
+    try {
+      const versionId = versions.find(v => v.versionNumber === versionNumber)?.id;
+      if (!versionId) throw new Error('Version not found');
+
+      await documentsApi.restoreVersion(document.id, versionId as string);
+      window.location.reload();
+    } catch (error) {
+      console.error('Restore failed:', error);
+      alert('Failed to restore version');
+    }
+  };
+
+  const handleCompare = async (v1: number, v2: number) => {
+    try {
+      const version1 = versions.find(v => v.versionNumber === v1);
+      const version2 = versions.find(v => v.versionNumber === v2);
+      if (!version1 || !version2) throw new Error('Versions not found');
+
+      const result = await documentsApi.compareVersions(
+        document.id,
+        version1.id as string,
+        version2.id as string
+      );
+      console.log('Comparison result:', result);
+      // TODO: Display comparison in UI
+      alert('Version comparison feature coming soon');
+    } catch (error) {
+      console.error('Compare failed:', error);
+      alert('Failed to compare versions');
+    }
+  };
+
+  const handleDownload = async () => {
+    try {
+      const blob = await documentsApi.download(document.id);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = document.title;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Failed to download document');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm('Are you sure you want to delete this document?')) return;
+
+    try {
+      await documentsApi.delete(document.id);
+      navigate('/documents');
+    } catch (error) {
+      console.error('Delete failed:', error);
+      alert('Failed to delete document');
+    }
+  };
 
   return (
-    <div className="p-8">
-      <div className="mb-6">
-        <button
-          onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
-        >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Back
-        </button>
+    <div className="h-screen flex flex-col">
+      {/* Header */}
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+        <div className="flex items-center justify-between mb-4">
+          <button
+            onClick={() => navigate(-1)}
+            className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+          >
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Documents
+          </button>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleDownload}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Download
+            </button>
+            <button
+              onClick={handleDelete}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800 dark:hover:bg-red-900/30"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              Delete
+            </button>
+          </div>
+        </div>
+
+        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+          {document.title}
+        </h1>
+
+        {/* Tabs */}
+        <div className="flex items-center gap-1 border-b border-gray-200 dark:border-gray-700 -mb-px">
+          <button
+            onClick={() => setActiveTab('viewer')}
+            className={`px-4 py-2 text-sm font-medium border-b-2 ${
+              activeTab === 'viewer'
+                ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
+            }`}
+          >
+            Document
+          </button>
+          <button
+            onClick={() => setActiveTab('metadata')}
+            className={`px-4 py-2 text-sm font-medium border-b-2 ${
+              activeTab === 'metadata'
+                ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
+            }`}
+          >
+            Metadata
+          </button>
+          <button
+            onClick={() => setActiveTab('versions')}
+            className={`px-4 py-2 text-sm font-medium border-b-2 ${
+              activeTab === 'versions'
+                ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
+            }`}
+          >
+            Versions ({versions.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('annotations')}
+            className={`px-4 py-2 text-sm font-medium border-b-2 ${
+              activeTab === 'annotations'
+                ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
+            }`}
+          >
+            Annotations ({annotations.length})
+          </button>
+        </div>
       </div>
 
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-        Document Detail
-      </h1>
+      {/* Content */}
+      <div className="flex-1 overflow-hidden">
+        {activeTab === 'viewer' && (
+          <DocumentViewer document={document} />
+        )}
 
-      <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-12 text-center dark:border-gray-700 dark:bg-gray-800/50">
-        <p className="text-gray-500 dark:text-gray-400">
-          Detail view under development.
-        </p>
+        {activeTab === 'metadata' && (
+          <div className="p-6 overflow-auto h-full">
+            <div className="max-w-2xl mx-auto">
+              <MetadataPanel
+                document={document}
+                editable={true}
+                onUpdate={handleUpdate}
+              />
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'versions' && (
+          <div className="p-6 overflow-auto h-full">
+            <div className="max-w-3xl mx-auto">
+              <VersionHistory
+                versions={versions}
+                currentVersion={document.currentVersion}
+                onRestore={handleRestoreVersion}
+                onCompare={handleCompare}
+              />
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'annotations' && (
+          <div className="p-6 overflow-auto h-full">
+            <div className="max-w-3xl mx-auto">
+              <DocumentAnnotations
+                documentId={document.id}
+                annotations={annotations}
+                onAdd={async (annotation) => {
+                  console.log('Add annotation:', annotation);
+                  // TODO: Implement API call
+                  alert('Annotation feature coming soon');
+                }}
+                onDelete={async (id) => {
+                  console.log('Delete annotation:', id);
+                  // TODO: Implement API call
+                }}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -21,11 +21,23 @@ import {
 } from "@react-router/dev/routes";
 
 export default [
+  // ============================================================================
+  // Public Routes (No Authentication Required)
+  // ============================================================================
+
   // Authentication routes (outside main layout)
   route("login", "routes/auth/login.tsx"),
+  route("register", "routes/auth/register.tsx"),
+  route("forgot-password", "routes/auth/forgot-password.tsx"),
+  route("reset-password", "routes/auth/reset-password.tsx"),
+
+  // ============================================================================
+  // Protected Routes (Authentication Required)
+  // ============================================================================
 
   // App layout with authentication, sidebar, and header
   // Note: root.tsx is automatically used by React Router v7 framework mode
+  // The layout.tsx loader enforces authentication for all child routes
   layout("routes/layout.tsx", [
     // Home/Dashboard routes
     index("routes/home.tsx"),
@@ -50,6 +62,7 @@ export default [
 
     // Documents
     route("documents", "routes/documents/index.tsx"),
+    route("documents/upload", "routes/documents/upload.tsx"),
     route("documents/:documentId", "routes/documents/detail.tsx"),
 
     // Correspondence
@@ -105,8 +118,14 @@ export default [
 
     // Profile & Settings
     route("profile", "routes/profile/index.tsx"),
+    route("settings", "routes/settings/index.tsx"), // Redirects to profile
+
+    // Admin Routes (Admin Only)
     route("admin", "routes/admin/index.tsx"),
     route("admin/theme-settings", "routes/admin/theme-settings.tsx"),
+    route("admin/users", "routes/admin/users.tsx"),
+    route("admin/roles", "routes/admin/roles.tsx"),
+    route("admin/permissions", "routes/admin/permissions.tsx"),
 
     // Real Estate Division (nested routes with prefix)
     ...prefix("real_estate", [
@@ -124,4 +143,10 @@ export default [
       route("audit_readiness", "routes/real-estate/audit-readiness.tsx"),
     ]),
   ]),
+
+  // ============================================================================
+  // Catch-All 404 Route
+  // ============================================================================
+  // This must be the last route to catch all unmatched paths
+  route("*", "routes/404.tsx"),
 ] satisfies RouteConfig;

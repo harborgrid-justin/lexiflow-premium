@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import { proxyToBackend } from "@/lib/backend-proxy";
+import { NextRequest } from "next/server";
 
 /**
  * Mark All Notifications as Read API Route
@@ -6,20 +7,5 @@ import { NextRequest, NextResponse } from "next/server";
 
 // PUT /api/notifications/mark-all-read - Mark all notifications as read for user
 export async function PUT(request: NextRequest) {
-  try {
-    // TODO: Implement authentication check
-    // TODO: Get userId from auth context
-
-    // TODO: Update all unread notifications for user in database
-
-    const mockResult = {
-      updated: 0,
-      updatedAt: new Date().toISOString(),
-    };
-
-    return NextResponse.json(mockResult, { status: 200 });
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json({ error: message }, { status: 500 });
-  }
+  return proxyToBackend(request, "/api/notifications/mark-all-read");
 }

@@ -1,7 +1,11 @@
+"use client";
+
 /**
  * SYSTEMS ENGINEERING: OFF-MAIN-THREAD SEARCH ENGINE
  * This worker handles CPU-intensive string matching, Levenshtein distance calculation,
  * and filtering to keep the UI thread (60fps) completely unblocked.
+ *
+ * Next.js 16: Client-only (uses Worker API)
  */
 
 const createSearchWorker = (): Worker | null => {

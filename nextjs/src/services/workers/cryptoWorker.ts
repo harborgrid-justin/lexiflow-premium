@@ -1,3 +1,11 @@
+"use client";
+
+/**
+ * Crypto Worker - Off-thread cryptographic operations
+ *
+ * Next.js 16: Client-only (uses Worker API)
+ */
+
 const createCryptoWorker = (): Worker | null => {
   // Check if Worker API is available (not available in SSR)
   if (typeof Worker === "undefined") {

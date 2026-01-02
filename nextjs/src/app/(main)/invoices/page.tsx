@@ -1,0 +1,66 @@
+/**
+ * Invoices List Page - Server Component with Data Fetching
+ * List view of all invoices
+ */
+import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { Suspense } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Invoices | LexiFlow',
+  description: 'Manage invoices and billing',
+};
+
+export default async function InvoicesPage() {
+  // Fetch invoices from backend
+  let invoices = [];
+
+  try {
+    invoices = await apiFetch(API_ENDPOINTS.INVOICES.LIST);
+  } catch (error) {
+    console.error('Failed to load invoices:', error);
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold">Invoices</h1>
+        <Link
+          href="/invoices/new"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
+          Create Invoice
+        </Link>
+      </div>
+
+      <Suspense fallback={<div>Loading invoices...</div>}>
+        <div className="grid grid-cols-1 gap-4">
+          {invoices && invoices.length > 0 ? (
+            invoices.map((invoice: any) => (
+              <Link
+                key={invoice.id}
+                href={`/invoices/${invoice.id}`}
+                className="block p-6 bg-white dark:bg-slate-800 rounded-lg border hover:shadow-lg transition-shadow"
+              >
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="text-lg font-semibold">Invoice #{invoice.invoiceNumber}</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">{invoice.clientName}</p>
+                    <p className="text-xs text-slate-500 mt-1">Due: {invoice.dueDate}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold">${invoice.total}</div>
+                    <div className="text-sm text-slate-600 dark:text-slate-400">{invoice.status}</div>
+                  </div>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p className="text-slate-600 dark:text-slate-400">No invoices available</p>
+          )}
+        </div>
+      </Suspense>
+    </div>
+  );
+}

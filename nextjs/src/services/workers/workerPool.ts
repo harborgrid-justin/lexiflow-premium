@@ -1,7 +1,12 @@
+"use client";
+
 /**
  * @module WorkerPool
  * @description Enterprise-grade Web Worker pool manager for efficient parallel processing
- *  * ARCHITECTURAL COMPLIANCE (2025-12-28):
+ *
+ * Next.js 16: Client-only (uses Worker API, navigator.hardwareConcurrency)
+ *
+ * ARCHITECTURAL COMPLIANCE (2025-12-28):
  * - Uses WindowAdapter for framework-agnostic timer/event handling
  * - Uses domain-specific errors (ValidationError, WorkerPoolInitializationError, OperationError)
  * - No direct window/localStorage references (portable to workers, SSR, tests)

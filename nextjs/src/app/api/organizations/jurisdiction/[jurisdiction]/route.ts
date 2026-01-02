@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import { proxyToBackend } from "@/lib/backend-proxy";
+import { NextRequest } from "next/server";
 
 /**
  * Organizations by Jurisdiction API Route
@@ -9,20 +10,9 @@ export async function GET(
   request: NextRequest,
   context: { params: Promise<{ jurisdiction: string }> }
 ) {
-  try {
-    // TODO: Implement authentication check
-    const { jurisdiction } = await context.params;
-
-    // TODO: Implement database query filtering by jurisdiction
-    const mockData = {
-      data: [],
-      total: 0,
-      jurisdiction,
-    };
-
-    return NextResponse.json(mockData, { status: 200 });
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json({ error: message }, { status: 500 });
-  }
+  const { jurisdiction } = await context.params;
+  return proxyToBackend(
+    request,
+    `/api/organizations/jurisdiction/${jurisdiction}`
+  );
 }

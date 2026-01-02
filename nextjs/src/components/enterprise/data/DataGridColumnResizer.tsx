@@ -18,7 +18,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -278,6 +278,12 @@ export function distributeColumnWidths(
 
 /**
  * Saves column widths to localStorage
+ *
+ * ⚠️ CONCURRENT MODE: NEVER call during render (Rule #2)
+ * Only call from:
+ * - useEffect
+ * - Event handlers
+ * - Callbacks
  */
 export function saveColumnWidths(
   key: string,
@@ -286,19 +292,27 @@ export function saveColumnWidths(
   try {
     localStorage.setItem(`column-widths-${key}`, JSON.stringify(widths));
   } catch (error) {
-    console.error('Failed to save column widths:', error);
+    // Errors should be handled by caller in proper side-effect context
+    throw error;
   }
 }
 
 /**
  * Loads column widths from localStorage
+ *
+ * ⚠️ CONCURRENT MODE: NEVER call during render (Rule #2)
+ * Only call from:
+ * - useEffect (initial load)
+ * - Event handlers
+ * - Callbacks
+ *
+ * For render-time access, use state initialized in useEffect
  */
 export function loadColumnWidths(key: string): Record<string, number> | null {
   try {
     const stored = localStorage.getItem(`column-widths-${key}`);
     return stored ? JSON.parse(stored) : null;
   } catch (error) {
-    console.error('Failed to load column widths:', error);
     return null;
   }
 }

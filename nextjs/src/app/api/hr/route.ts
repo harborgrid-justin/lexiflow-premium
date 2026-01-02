@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import { proxyToBackend } from "@/lib/backend-proxy";
+import { NextRequest } from "next/server";
 
 /**
  * HR Module API Routes
@@ -7,10 +8,5 @@ import { NextRequest, NextResponse } from "next/server";
 
 // GET /api/hr - Health check
 export async function GET(request: NextRequest) {
-  try {
-    // TODO: Implement authentication check
-    return NextResponse.json({ status: "ok", service: "hr" }, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+  return proxyToBackend(request, "/api/hr");
 }

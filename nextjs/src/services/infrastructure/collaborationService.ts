@@ -1,6 +1,10 @@
+"use client";
+
 /**
  * Real-Time Collaboration Service - Multi-user document editing with operational transformation
  * Enterprise WebSocket-based collaboration for live cursors, presence, and conflict resolution
+ *
+ * Next.js 16: Client-only (uses window.matchMedia, WebSocket)
  *
  * @module services/infrastructure/collaborationService
  * @description Production-ready real-time collaboration service providing:

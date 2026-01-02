@@ -65,7 +65,10 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
         }
       } catch (error) {
         if (isMounted) {
-          console.error('Failed to load data:', error);
+          // Rule #2: Move console.error to dev-only
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Failed to load data:', error);
+          }
           addToast('Failed to load data', 'error');
         }
       }
@@ -101,7 +104,9 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
         setVariableValues(initialValues);
       } catch (error) {
         if (isMounted) {
-          console.error('Failed to load template:', error);
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Failed to load template:', error);
+          }
           addToast('Failed to load template', 'error');
         }
       }

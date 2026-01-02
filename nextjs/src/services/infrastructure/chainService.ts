@@ -1,6 +1,10 @@
+"use client";
+
 /**
  * Blockchain Chain Service - Cryptographic audit log with tamper detection
  * Production-grade blockchain-style chaining for legal audit logs and evidence integrity
+ *
+ * Next.js 16: Client-only (uses document.createElement for downloads)
  *
  * @module services/infrastructure/chainService
  * @description Comprehensive blockchain service providing:
@@ -172,7 +176,7 @@
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Types
-import { AuditLogEntry, UUID } from '@/types';
+import { AuditLogEntry, UUID } from "@/types";
 
 // =============================================================================
 // TYPES & INTERFACES
@@ -182,18 +186,18 @@ import { AuditLogEntry, UUID } from '@/types';
  * Chained log entry with cryptographic linkage
  */
 export interface ChainedLogEntry extends AuditLogEntry {
-  hash: string;      // SHA-256 hash of entry data
-  prevHash: string;  // Hash of previous block (linkage)
+  hash: string; // SHA-256 hash of entry data
+  prevHash: string; // Hash of previous block (linkage)
 }
 
 /**
  * Integrity verification report
  */
 export interface IntegrityReport {
-    isValid: boolean;     // True if entire chain verified
-    totalBlocks: number;  // Total entries in chain
-    brokenIndex: number;  // Index of first broken block (-1 if valid)
-    verifiedAt: string;   // ISO 8601 verification timestamp
+  isValid: boolean; // True if entire chain verified
+  totalBlocks: number; // Total entries in chain
+  brokenIndex: number; // Index of first broken block (-1 if valid)
+  verifiedAt: string; // ISO 8601 verification timestamp
 }
 
 // =============================================================================
@@ -207,9 +211,9 @@ export interface IntegrityReport {
  */
 const generateHash = async (data: string): Promise<string> => {
   const msgBuffer = new TextEncoder().encode(data);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 };
 
 // =============================================================================
@@ -226,8 +230,12 @@ export const ChainService = {
   /**
    * Creates a new cryptographically chained entry.
    */
-  createEntry: async (entry: Omit<AuditLogEntry, 'id'>, prevHash: string): Promise<ChainedLogEntry> => {
-    const id = `log-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` as UUID;
+  createEntry: async (
+    entry: Omit<AuditLogEntry, "id">,
+    prevHash: string
+  ): Promise<ChainedLogEntry> => {
+    const id =
+      `log-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` as UUID;
     // The data string includes the previous hash, locking the chain.
     const dataString = `${id}:${entry.timestamp}:${entry.user}:${entry.action}:${entry.resource}:${prevHash}`;
     const hash = await generateHash(dataString);
@@ -236,7 +244,7 @@ export const ChainService = {
       ...entry,
       id,
       prevHash,
-      hash
+      hash,
     };
   },
 
@@ -245,26 +253,42 @@ export const ChainService = {
    */
   verifyChain: async (chain: ChainedLogEntry[]): Promise<IntegrityReport> => {
     // Genesis block assumption
-    const genesisHash = '0000000000000000000000000000000000000000000000000000000000000000';
+    const genesisHash =
+      "0000000000000000000000000000000000000000000000000000000000000000";
 
     for (let i = 0; i < chain.length; i++) {
       const current = chain[i];
       if (!current) {
-        return { isValid: false, brokenIndex: i, totalBlocks: chain.length, verifiedAt: new Date().toISOString() };
+        return {
+          isValid: false,
+          brokenIndex: i,
+          totalBlocks: chain.length,
+          verifiedAt: new Date().toISOString(),
+        };
       }
 
       // Skip verification if block lacks hash (legacy data)
       if (!current.hash) {
-          return { isValid: false, brokenIndex: i, totalBlocks: chain.length, verifiedAt: new Date().toISOString() };
+        return {
+          isValid: false,
+          brokenIndex: i,
+          totalBlocks: chain.length,
+          verifiedAt: new Date().toISOString(),
+        };
       }
 
       const prevBlock = chain[i - 1];
-      const expectedPrevHash = i === 0 ? genesisHash : (prevBlock?.hash || '');
+      const expectedPrevHash = i === 0 ? genesisHash : prevBlock?.hash || "";
 
       // 1. Verify Linkage (Pointer Check)
       if (current.prevHash !== expectedPrevHash) {
         console.error(`Chain Broken at index ${i}: prevHash mismatch`);
-        return { isValid: false, brokenIndex: i, totalBlocks: chain.length, verifiedAt: new Date().toISOString() };
+        return {
+          isValid: false,
+          brokenIndex: i,
+          totalBlocks: chain.length,
+          verifiedAt: new Date().toISOString(),
+        };
       }
 
       // 2. Verify Content Integrity (Hash Check)
@@ -272,28 +296,38 @@ export const ChainService = {
       const calculatedHash = await generateHash(dataString);
 
       if (calculatedHash !== current.hash) {
-         console.error(`Chain Broken at index ${i}: Data tampered`);
-         return { isValid: false, brokenIndex: i, totalBlocks: chain.length, verifiedAt: new Date().toISOString() };
+        console.error(`Chain Broken at index ${i}: Data tampered`);
+        return {
+          isValid: false,
+          brokenIndex: i,
+          totalBlocks: chain.length,
+          verifiedAt: new Date().toISOString(),
+        };
       }
     }
 
-    return { isValid: true, brokenIndex: -1, totalBlocks: chain.length, verifiedAt: new Date().toISOString() };
+    return {
+      isValid: true,
+      brokenIndex: -1,
+      totalBlocks: chain.length,
+      verifiedAt: new Date().toISOString(),
+    };
   },
 
   /**
    * Exports the ledger as a JSON file for external auditing.
    */
   exportLedger: (chain: ChainedLogEntry[]) => {
-      const dataStr = JSON.stringify(chain, null, 2);
-      const blob = new Blob([dataStr], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
+    const dataStr = JSON.stringify(chain, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
 
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `lexiflow_ledger_export_${new Date().toISOString().split('T')[0]}.json`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-  }
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `lexiflow_ledger_export_${new Date().toISOString().split("T")[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  },
 };

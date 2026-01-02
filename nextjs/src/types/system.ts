@@ -41,8 +41,8 @@ export interface ComplianceMetrics {
   activeWalls: number;
 }
 
-export interface User extends BaseEntity { 
-  id: UserId; 
+export interface User extends BaseEntity {
+  id: UserId;
   // Core fields (aligned with backend)
   email: string; // Backend: unique, indexed
   password?: string; // Backend field (not exposed in frontend typically)
@@ -52,36 +52,36 @@ export interface User extends BaseEntity {
   role: UserRole; // Backend: enum (indexed)
   department?: string; // Backend: varchar(200), indexed
   title?: string; // Backend: varchar(100)
-  
+
   // Contact info
   phone?: string; // Backend: varchar(50)
   extension?: string; // Backend: varchar(50)
   mobilePhone?: string; // Backend: varchar(50)
   avatarUrl?: string; // Backend: varchar(500)
   office?: string;
-  
+
   // Organization
   orgId?: OrgId;
   groupIds?: GroupId[];
   userType?: 'Internal' | 'External';
-  
+
   // Status & security
   status?: 'online' | 'offline' | 'away' | 'busy'; // Frontend real-time status
   isActive?: boolean; // Backend: boolean (default: true, indexed)
   isVerified?: boolean; // Backend: boolean (default: false)
   verificationToken?: string; // Backend field
   verificationTokenExpiry?: string; // Backend: timestamp
-  
+
   // Password reset
   resetPasswordToken?: string; // Backend field
   resetPasswordExpiry?: string; // Backend: timestamp
-  
+
   // Login tracking
   lastLoginAt?: string; // Backend: timestamp
   lastLoginIp?: string; // Backend: varchar(100)
   loginAttempts?: number; // Backend: int (default: 0)
   lockedUntil?: string; // Backend: timestamp
-  
+
   // Two-factor auth
   twoFactorEnabled?: boolean; // Backend: boolean (default: false)
 }
@@ -108,8 +108,8 @@ export enum OrganizationStatusEnum {
   BANKRUPT = 'bankrupt'
 }
 
-export interface Organization extends BaseEntity { 
-  id: OrgId; 
+export interface Organization extends BaseEntity {
+  id: OrgId;
   // Core fields (EXACTLY aligned with backend Organization entity)
   name: string; // Backend: varchar(255) (required)
   legalName?: string; // Backend: legal_name varchar(255)
@@ -120,20 +120,20 @@ export interface Organization extends BaseEntity {
   incorporationDate?: string; // Backend: incorporation_date date
   dissolutionDate?: string; // Backend: dissolution_date date
   status: OrganizationStatusEnum; // Backend: enum (default: ACTIVE)
-  
+
   // Address fields (backend stores flat, not nested)
   address?: string; // Backend: text
   city?: string; // Backend: varchar(100)
   state?: string; // Backend: varchar(100)
   zipCode?: string; // Backend: zip_code varchar(20)
   country?: string; // Backend: varchar(100)
-  
+
   // Contact fields (backend stores flat, not nested)
   phone?: string; // Backend: varchar(50)
   email?: string; // Backend: varchar(255)
   website?: string; // Backend: varchar(500)
   fax?: string; // Backend: varchar(50)
-  
+
   // Additional backend fields
   primaryContactName?: string; // Backend: primary_contact_name varchar(255)
   primaryContactTitle?: string; // Backend: primary_contact_title varchar(100)
@@ -144,7 +144,7 @@ export interface Organization extends BaseEntity {
   parentOrganizationId?: string; // Backend: parent_organization_id uuid
   notes?: string; // Backend: text
   metadata?: MetadataRecord; // Backend: jsonb
-  
+
   // Legacy aliases for backward compatibility
   type?: OrganizationType; // Deprecated - use organizationType
   domain?: string; // Frontend extension
@@ -174,6 +174,21 @@ export enum JurisdictionType {
 }
 
 export interface Jurisdiction extends BaseEntity {
+  caseCount: number;
+  phone: ReactNode;
+  state: ReactNode;
+  level: ReactNode;
+  address: ReactNode;
+  courtName: ReactNode;
+  level: ReactNode;
+  state: ReactNode;
+  county: string;
+  courtName: ReactNode;
+  address: ReactNode;
+  phone: any;
+  caseCount: number;
+  judgeCount: number;
+  filingFee: any;
   name: string; // Backend: varchar(255) (required)
   system: JurisdictionSystem; // Backend: enum (required)
   type: JurisdictionType; // Backend: enum (required)
@@ -192,26 +207,26 @@ export interface Jurisdiction extends BaseEntity {
   rules?: unknown[]; // Backend: OneToMany JurisdictionRule relation
 }
 
-export interface Group extends BaseEntity { 
-  id: GroupId; 
-  orgId: OrgId; 
-  name: string; 
-  description: string; 
-  permissions: string[]; 
+export interface Group extends BaseEntity {
+  id: GroupId;
+  orgId: OrgId;
+  name: string;
+  description: string;
+  permissions: string[];
 }
 
-export interface FeatureFlag extends BaseEntity { 
-  key: string; 
-  enabled: boolean; 
-  rules?: Array<{ id: string; name: string; content: string }>; 
-  description: string; 
+export interface FeatureFlag extends BaseEntity {
+  key: string;
+  enabled: boolean;
+  rules?: Array<{ id: string; name: string; content: string }>;
+  description: string;
 }
 
-export interface IntegrationMapping extends BaseEntity { 
-  system: string; 
-  entity: string; 
-  fieldMap: Record<string, string>; 
-  direction: 'Inbound' | 'Outbound' | 'Bi-directional'; 
+export interface IntegrationMapping extends BaseEntity {
+  system: string;
+  entity: string;
+  fieldMap: Record<string, string>;
+  direction: 'Inbound' | 'Outbound' | 'Bi-directional';
 }
 
 // Granular Profile System

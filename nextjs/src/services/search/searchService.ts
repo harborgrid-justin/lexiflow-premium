@@ -1,6 +1,10 @@
+"use client";
+
 /**
  * Global Search Service - Multi-domain full-text search with Web Worker
  * @module services/search/searchService
+ *
+ * Next.js 16: Client-only (uses Worker, localStorage for history)
  *
  * Features:
  * - Web Worker-based full-text search (off-thread indexing)
@@ -14,10 +18,10 @@
  * const history = SearchService.getHistory();
  */
 
-import { GlobalSearchEngine, saveHistory, getHistory } from './core';
-import type { GlobalSearchResult } from './core';
+import type { GlobalSearchResult } from "./core";
+import { getHistory, GlobalSearchEngine, saveHistory } from "./core";
 
-export type { SearchResultType, GlobalSearchResult } from './core';
+export type { GlobalSearchResult, SearchResultType } from "./core";
 
 // Singleton search engine instance
 const engine = new GlobalSearchEngine();
@@ -25,7 +29,8 @@ const engine = new GlobalSearchEngine();
 /** SearchService - Public API for global search operations */
 export const SearchService = {
   /** Search across all domains */
-  search: (query: string): Promise<GlobalSearchResult[]> => engine.search(query),
+  search: (query: string): Promise<GlobalSearchResult[]> =>
+    engine.search(query),
 
   /** Save search term to history - maintains last 10 unique searches */
   saveHistory,

@@ -1,9 +1,13 @@
+"use client";
+
 /**
  * ╔═══════════════════════════════════════════════════════════════════════════╗
  * ║                       LEXIFLOW SYNC ENGINE                                ║
  * ║                  Enterprise Offline-First Sync Layer v2.0                 ║
  * ║                       PhD-Level Systems Architecture                      ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝
+ *
+ * Next.js 16: Client-only (manages client-side sync state)
  *
  * @module services/data/syncEngine
  * @architecture Optimistic UI with CRDT-Inspired Conflict Resolution
@@ -12,8 +16,8 @@
  * @status PRODUCTION READY
  */
 
-import { defaultWindowAdapter } from '../infrastructure/adapters/WindowAdapter';
-import { isBackendApiEnabled } from '@/config/network/api.config';
+import { isBackendApiEnabled } from "@/config/network/api.config";
+import { defaultWindowAdapter } from "../infrastructure/adapters/WindowAdapter";
 
 /**
  * (Documentation continued below imports)
@@ -129,10 +133,10 @@ import { isBackendApiEnabled } from '@/config/network/api.config';
 //                          CORE DEPENDENCIES
 // ═══════════════════════════════════════════════════════════════════════════
 
-import { StorageUtils } from '@/utils/storage';
-import { LinearHash } from '@/utils/datastructures/linearHash';
-import { SYNC_CACHE_MAX_SIZE } from '@/config/database/cache.config';
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { SYNC_CACHE_MAX_SIZE } from "@/config/database/cache.config";
+import { apiClient } from "@/services/infrastructure/apiClient";
+import { LinearHash } from "@/utils/datastructures/linearHash";
+import { StorageUtils } from "@/utils/storage";
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                            TYPE DEFINITIONS
@@ -156,7 +160,7 @@ export interface Mutation {
   payload: unknown;
   patch?: unknown; // JSON Patch array
   timestamp: number;
-  status: 'pending' | 'syncing' | 'failed';
+  status: "pending" | "syncing" | "failed";
   retryCount: number;
   lastError?: string;
 }
@@ -177,7 +181,7 @@ interface CacheEntry {
 // ═══════════════════════════════════════════════════════════════════════════
 
 /** Storage key for persistent mutation queue */
-const QUEUE_KEY = 'lexiflow_sync_queue';
+const QUEUE_KEY = "lexiflow_sync_queue";
 
 /** Maximum cache entries before LRU eviction */
 const MAX_CACHE_SIZE = SYNC_CACHE_MAX_SIZE;
@@ -224,15 +228,23 @@ const processedCache = new LinearHash<string, CacheEntry>();
  * ```
  */
 const createPatch = (oldData: unknown, newData: unknown) => {
-    const patch: Record<string, unknown> = {};
-    if (newData && typeof newData === 'object' && oldData && typeof oldData === 'object') {
-        for (const key in newData) {
-            if (JSON.stringify((oldData as Record<string, unknown>)[key]) !== JSON.stringify((newData as Record<string, unknown>)[key])) {
-                patch[key] = (newData as Record<string, unknown>)[key];
-            }
-        }
+  const patch: Record<string, unknown> = {};
+  if (
+    newData &&
+    typeof newData === "object" &&
+    oldData &&
+    typeof oldData === "object"
+  ) {
+    for (const key in newData) {
+      if (
+        JSON.stringify((oldData as Record<string, unknown>)[key]) !==
+        JSON.stringify((newData as Record<string, unknown>)[key])
+      ) {
+        patch[key] = (newData as Record<string, unknown>)[key];
+      }
     }
-    return patch;
+  }
+  return patch;
 };
 
 /**
@@ -250,21 +262,21 @@ const createPatch = (oldData: unknown, newData: unknown) => {
  * ```
  */
 const cleanupCache = () => {
-    const now = Date.now();
-    const keys = processedCache.keys();
-    let cleanedCount = 0;
+  const now = Date.now();
+  const keys = processedCache.keys();
+  let cleanedCount = 0;
 
-    for (const key of keys) {
-        const entry = processedCache.get(key);
-        if (entry && (now - entry.timestamp > CACHE_TTL_MS)) {
-            processedCache.delete(key);
-            cleanedCount++;
-        }
+  for (const key of keys) {
+    const entry = processedCache.get(key);
+    if (entry && now - entry.timestamp > CACHE_TTL_MS) {
+      processedCache.delete(key);
+      cleanedCount++;
     }
+  }
 
-    if (cleanedCount > 0) {
-        console.log(`[SyncEngine] Cleaned ${cleanedCount} expired cache entries`);
-    }
+  if (cleanedCount > 0) {
+    console.log(`[SyncEngine] Cleaned ${cleanedCount} expired cache entries`);
+  }
 };
 
 /**
@@ -282,29 +294,31 @@ const cleanupCache = () => {
  * ```
  */
 const enforceCacheLimit = () => {
-    const size = processedCache.size();
-    if (size > MAX_CACHE_SIZE) {
-        const keys = processedCache.keys();
-        const entries: [string, CacheEntry][] = [];
+  const size = processedCache.size();
+  if (size > MAX_CACHE_SIZE) {
+    const keys = processedCache.keys();
+    const entries: [string, CacheEntry][] = [];
 
-        for (const key of keys) {
-            const entry = processedCache.get(key);
-            if (entry) {
-                entries.push([key, entry]);
-            }
-        }
-
-        // Sort by timestamp (oldest first)
-        entries.sort((a, b) => a[1].timestamp - b[1].timestamp);
-
-        // Remove oldest 20% of entries
-        const toRemove = Math.floor(size * 0.2);
-        for (let i = 0; i < toRemove && i < entries.length; i++) {
-            processedCache.delete(entries[i][0]);
-        }
-
-        console.log(`[SyncEngine] Evicted ${toRemove} oldest cache entries to maintain size limit`);
+    for (const key of keys) {
+      const entry = processedCache.get(key);
+      if (entry) {
+        entries.push([key, entry]);
+      }
     }
+
+    // Sort by timestamp (oldest first)
+    entries.sort((a, b) => a[1].timestamp - b[1].timestamp);
+
+    // Remove oldest 20% of entries
+    const toRemove = Math.floor(size * 0.2);
+    for (let i = 0; i < toRemove && i < entries.length; i++) {
+      processedCache.delete(entries[i][0]);
+    }
+
+    console.log(
+      `[SyncEngine] Evicted ${toRemove} oldest cache entries to maintain size limit`
+    );
+  }
 };
 
 /**
@@ -322,12 +336,15 @@ const enforceCacheLimit = () => {
  */
 let cleanupInterval: number | null = null;
 const startCleanupTimer = () => {
-    if (cleanupInterval) return;
+  if (cleanupInterval) return;
 
-    cleanupInterval = defaultWindowAdapter.setInterval(() => {
-        cleanupCache();
-        enforceCacheLimit();
-    }, 60 * 60 * 1000); // Every hour
+  cleanupInterval = defaultWindowAdapter.setInterval(
+    () => {
+      cleanupCache();
+      enforceCacheLimit();
+    },
+    60 * 60 * 1000
+  ); // Every hour
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -355,22 +372,28 @@ const startCleanupTimer = () => {
  */
 const processMutation = async (mutation: Mutation): Promise<boolean> => {
   if (!isBackendApiEnabled()) {
-    console.warn('[SyncEngine] Backend API disabled, skipping sync');
+    console.warn("[SyncEngine] Backend API disabled, skipping sync");
     return false;
   }
 
   try {
     // Map mutation type to backend operation
-    const operation = mutation.type.includes('CREATE') ? 'create'
-                    : mutation.type.includes('UPDATE') ? 'update'
-                    : mutation.type.includes('DELETE') ? 'delete'
-                    : 'update';
+    const operation = mutation.type.includes("CREATE")
+      ? "create"
+      : mutation.type.includes("UPDATE")
+        ? "update"
+        : mutation.type.includes("DELETE")
+          ? "delete"
+          : "update";
 
     // Extract entity type from mutation type (e.g., 'CASE_UPDATE' -> 'case')
-    const entityType = mutation.type.split('_')[0].toLowerCase();
+    const entityType = mutation.type.split("_")[0].toLowerCase();
 
     // Prepare backend payload
-    const payloadObj = mutation.payload && typeof mutation.payload === 'object' ? mutation.payload as Record<string, unknown> : {};
+    const payloadObj =
+      mutation.payload && typeof mutation.payload === "object"
+        ? (mutation.payload as Record<string, unknown>)
+        : {};
     const backendPayload = {
       id: mutation.id,
       operation,
@@ -378,22 +401,29 @@ const processMutation = async (mutation: Mutation): Promise<boolean> => {
       entityId: payloadObj.id || payloadObj._id || mutation.id,
       payload: mutation.patch || mutation.payload, // Prefer patch for efficiency
       timestamp: mutation.timestamp,
-      retryCount: mutation.retryCount
+      retryCount: mutation.retryCount,
     };
 
     // Send to backend sync queue
-    await apiClient.post('/sync/queue', backendPayload);
+    await apiClient.post("/sync/queue", backendPayload);
 
-    console.log(`[SyncEngine] Successfully synced mutation ${mutation.id} to backend`);
+    console.log(
+      `[SyncEngine] Successfully synced mutation ${mutation.id} to backend`
+    );
     return true;
-
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error(`[SyncEngine] Failed to sync mutation ${mutation.id}:`, errorMessage);
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
+    console.error(
+      `[SyncEngine] Failed to sync mutation ${mutation.id}:`,
+      errorMessage
+    );
 
     // Check if we should retry
     if (mutation.retryCount >= MAX_RETRY_ATTEMPTS) {
-      console.error(`[SyncEngine] Mutation ${mutation.id} exceeded max retries, marking as failed`);
+      console.error(
+        `[SyncEngine] Mutation ${mutation.id} exceeded max retries, marking as failed`
+      );
     }
 
     return false;
@@ -436,14 +466,14 @@ const calculateBackoffDelay = (retryCount: number): number => {
  * console.log(`Synced: ${result.synced}, Failed: ${result.failed}`);
  * ```
  */
-const processQueue = async (): Promise<{synced: number, failed: number}> => {
+const processQueue = async (): Promise<{ synced: number; failed: number }> => {
   let synced = 0;
   let failed = 0;
   let mutation = SyncEngine.peek();
 
-  while (mutation && mutation.status !== 'syncing') {
+  while (mutation && mutation.status !== "syncing") {
     // Mark as syncing
-    SyncEngine.update(mutation.id, { status: 'syncing' });
+    SyncEngine.update(mutation.id, { status: "syncing" });
 
     // Process the mutation
     const success = await processMutation(mutation);
@@ -455,12 +485,13 @@ const processQueue = async (): Promise<{synced: number, failed: number}> => {
     } else {
       // Update retry count and status
       const newRetryCount = mutation.retryCount + 1;
-      const newStatus = newRetryCount >= MAX_RETRY_ATTEMPTS ? 'failed' : 'pending';
+      const newStatus =
+        newRetryCount >= MAX_RETRY_ATTEMPTS ? "failed" : "pending";
 
       SyncEngine.update(mutation.id, {
-        status: newStatus as 'pending' | 'failed',
+        status: newStatus as "pending" | "failed",
         retryCount: newRetryCount,
-        lastError: `Sync failed (attempt ${newRetryCount}/${MAX_RETRY_ATTEMPTS})`
+        lastError: `Sync failed (attempt ${newRetryCount}/${MAX_RETRY_ATTEMPTS})`,
       });
 
       failed++;
@@ -534,10 +565,18 @@ export const SyncEngine = {
 
     // Optimization: Calculate patch if updating
     let patch = undefined;
-    if (type.includes('UPDATE') && oldPayload) {
-        patch = createPatch(oldPayload, payload);
-        // If no changes, skip enqueue
-        if (patch && typeof patch === 'object' && Object.keys(patch).length === 0) return { id: '', type, payload, timestamp: 0, status: 'pending', retryCount: 0 };
+    if (type.includes("UPDATE") && oldPayload) {
+      patch = createPatch(oldPayload, payload);
+      // If no changes, skip enqueue
+      if (patch && typeof patch === "object" && Object.keys(patch).length === 0)
+        return {
+          id: "",
+          type,
+          payload,
+          timestamp: 0,
+          status: "pending",
+          retryCount: 0,
+        };
     }
 
     const mutation: Mutation = {
@@ -546,14 +585,14 @@ export const SyncEngine = {
       payload,
       patch, // Use patch for network transmission in real API implementation
       timestamp: Date.now(),
-      status: 'pending',
-      retryCount: 0
+      status: "pending",
+      retryCount: 0,
     };
 
     const cached = processedCache.get(mutation.id);
     if (cached) {
-        console.log(`[Sync] Skipping duplicate mutation: ${mutation.id}`);
-        return mutation; // Don't re-add
+      console.log(`[Sync] Skipping duplicate mutation: ${mutation.id}`);
+      return mutation; // Don't re-add
     }
 
     queue.push(mutation);
@@ -583,9 +622,9 @@ export const SyncEngine = {
     const queue = SyncEngine.getQueue();
     if (queue.length === 0) return undefined;
     const item = queue.shift();
-    if(item) {
-        processedCache.set(item.id, { processed: true, timestamp: Date.now() });
-        enforceCacheLimit(); // Check size limit on each dequeue
+    if (item) {
+      processedCache.set(item.id, { processed: true, timestamp: Date.now() });
+      enforceCacheLimit(); // Check size limit on each dequeue
     }
     StorageUtils.set(QUEUE_KEY, queue);
     return item;
@@ -637,12 +676,12 @@ export const SyncEngine = {
    * ```
    */
   update: (id: string, updates: Partial<Mutation>) => {
-      const queue = SyncEngine.getQueue();
-      const index = queue.findIndex(m => m.id === id);
-      if (index !== -1) {
-          queue[index] = { ...queue[index], ...updates };
-          StorageUtils.set(QUEUE_KEY, queue);
-      }
+    const queue = SyncEngine.getQueue();
+    const index = queue.findIndex((m) => m.id === id);
+    if (index !== -1) {
+      queue[index] = { ...queue[index], ...updates };
+      StorageUtils.set(QUEUE_KEY, queue);
+    }
   },
 
   /**
@@ -682,7 +721,7 @@ export const SyncEngine = {
    * ```
    */
   getFailed: (): Mutation[] => {
-      return SyncEngine.getQueue().filter(m => m.status === 'failed');
+    return SyncEngine.getQueue().filter((m) => m.status === "failed");
   },
 
   /**
@@ -700,9 +739,13 @@ export const SyncEngine = {
    * ```
    */
   resetFailed: () => {
-      const queue = SyncEngine.getQueue();
-      const updated = queue.map(m => m.status === 'failed' ? { ...m, status: 'pending', retryCount: 0, lastError: undefined } : m);
-      StorageUtils.set(QUEUE_KEY, updated);
+    const queue = SyncEngine.getQueue();
+    const updated = queue.map((m) =>
+      m.status === "failed"
+        ? { ...m, status: "pending", retryCount: 0, lastError: undefined }
+        : m
+    );
+    StorageUtils.set(QUEUE_KEY, updated);
   },
 
   /**
@@ -771,17 +814,17 @@ export const SyncEngine = {
     let oldestTimestamp = Date.now();
 
     for (const key of keys) {
-        const entry = processedCache.get(key);
-        if (entry && entry.timestamp < oldestTimestamp) {
-            oldestTimestamp = entry.timestamp;
-        }
+      const entry = processedCache.get(key);
+      if (entry && entry.timestamp < oldestTimestamp) {
+        oldestTimestamp = entry.timestamp;
+      }
     }
 
     return {
-        size,
-        maxSize: MAX_CACHE_SIZE,
-        oldestEntryAge: Date.now() - oldestTimestamp,
-        ttlMs: CACHE_TTL_MS
+      size,
+      maxSize: MAX_CACHE_SIZE,
+      oldestEntryAge: Date.now() - oldestTimestamp,
+      ttlMs: CACHE_TTL_MS,
     };
   },
 
@@ -805,8 +848,8 @@ export const SyncEngine = {
    */
   stopCleanupTimer: () => {
     if (cleanupInterval) {
-        clearInterval(cleanupInterval);
-        cleanupInterval = null;
+      clearInterval(cleanupInterval);
+      cleanupInterval = null;
     }
   },
 
@@ -851,7 +894,7 @@ export const SyncEngine = {
    * }
    * ```
    */
-  processQueue: async (): Promise<{synced: number, failed: number}> => {
+  processQueue: async (): Promise<{ synced: number; failed: number }> => {
     return await processQueue();
   },
 
@@ -872,36 +915,45 @@ export const SyncEngine = {
    */
   syncFromBackend: async (): Promise<void> => {
     if (!isBackendApiEnabled()) {
-      console.warn('[SyncEngine] Backend API disabled, skipping backend sync');
+      console.warn("[SyncEngine] Backend API disabled, skipping backend sync");
       return;
     }
 
     try {
       // Fetch backend sync status
-      const response = await apiClient.get<{ data: unknown[] }>('/sync/queue', {
-        params: { status: 'pending', limit: 100 }
+      const response = await apiClient.get<{ data: unknown[] }>("/sync/queue", {
+        params: { status: "pending", limit: 100 },
       });
 
       const backendQueue = Array.isArray(response.data) ? response.data : [];
       const localQueue = SyncEngine.getQueue();
-      const localIds = new Set(localQueue.map(m => m.id));
+      const localIds = new Set(localQueue.map((m) => m.id));
 
       // Add backend mutations that aren't in local queue
       let added = 0;
       for (const item of backendQueue) {
-        if (item && typeof item === 'object') {
+        if (item && typeof item === "object") {
           const itemObj = item as Record<string, unknown>;
-          const itemId = typeof itemObj.id === 'string' ? itemObj.id : '';
+          const itemId = typeof itemObj.id === "string" ? itemObj.id : "";
           if (itemId && !localIds.has(itemId)) {
             const mutation: Mutation = {
               id: itemId,
-              type: `${String(itemObj.entityType || '').toUpperCase()}_${String(itemObj.operation || '').toUpperCase()}`,
+              type: `${String(itemObj.entityType || "").toUpperCase()}_${String(itemObj.operation || "").toUpperCase()}`,
               payload: itemObj.payload,
               patch: undefined,
-              timestamp: itemObj.createdAt ? new Date(String(itemObj.createdAt)).getTime() : Date.now(),
-              status: (itemObj.status === 'pending' || itemObj.status === 'syncing' || itemObj.status === 'failed') ? itemObj.status : 'pending',
-              retryCount: typeof itemObj.retryCount === 'number' ? itemObj.retryCount : 0,
-              lastError: typeof itemObj.error === 'string' ? itemObj.error : undefined
+              timestamp: itemObj.createdAt
+                ? new Date(String(itemObj.createdAt)).getTime()
+                : Date.now(),
+              status:
+                itemObj.status === "pending" ||
+                itemObj.status === "syncing" ||
+                itemObj.status === "failed"
+                  ? itemObj.status
+                  : "pending",
+              retryCount:
+                typeof itemObj.retryCount === "number" ? itemObj.retryCount : 0,
+              lastError:
+                typeof itemObj.error === "string" ? itemObj.error : undefined,
             };
             localQueue.push(mutation);
             added++;
@@ -913,9 +965,11 @@ export const SyncEngine = {
         StorageUtils.set(QUEUE_KEY, localQueue);
         console.log(`[SyncEngine] Synced ${added} mutations from backend`);
       }
-
     } catch (error: unknown) {
-      console.error('[SyncEngine] Failed to sync from backend:', error instanceof Error ? error.message : 'Unknown error');
+      console.error(
+        "[SyncEngine] Failed to sync from backend:",
+        error instanceof Error ? error.message : "Unknown error"
+      );
     }
   },
 
@@ -939,11 +993,17 @@ export const SyncEngine = {
     }
 
     try {
-      return await apiClient.get('/sync/status');
+      return await apiClient.get("/sync/status");
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      console.error('[SyncEngine] Failed to get backend status:', errorMessage);
-      return { pending: 0, conflicts: 0, isHealthy: false, error: errorMessage };
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      console.error("[SyncEngine] Failed to get backend status:", errorMessage);
+      return {
+        pending: 0,
+        conflicts: 0,
+        isHealthy: false,
+        error: errorMessage,
+      };
     }
   },
 
@@ -964,10 +1024,9 @@ export const SyncEngine = {
    */
   getBackoffDelay: (retryCount: number): number => {
     return calculateBackoffDelay(retryCount);
-  }
+  },
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
 //                              END OF MODULE
 // ═══════════════════════════════════════════════════════════════════════════
-

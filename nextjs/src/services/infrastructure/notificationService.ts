@@ -1,6 +1,10 @@
+"use client";
+
 /**
  * Notification Service - Enterprise notification management with grouping, priority, and actions
  * Production-grade toast, desktop, and in-app notification system
+ *
+ * Next.js 16: Client-only (uses window, Notification API)
  *
  * @module services/infrastructure/notificationService
  * @description Comprehensive notification service providing:

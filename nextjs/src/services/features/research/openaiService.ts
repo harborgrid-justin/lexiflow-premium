@@ -1,6 +1,10 @@
+"use client";
+
 /**
  * OpenAI Service - Alternative AI Provider for LexiFlow
  * Provides fallback when Gemini quota is exceeded
+ *
+ * Next.js 16: Client-only (uses localStorage for API key)
  */
 
 import { MissingConfigurationError } from "@/services/core/errors";
@@ -415,11 +419,11 @@ export const OpenAIService = {
     const firstCitation = citations[0];
     if (!firstCitation) {
       return {
-        caseName: 'Unknown Case',
-        citation: '',
-        summary: 'No citation found',
+        caseName: "Unknown Case",
+        citation: "",
+        summary: "No citation found",
         history: [],
-        treatment: []
+        treatment: [],
       };
     }
     return this.shepardizeCitation(firstCitation);

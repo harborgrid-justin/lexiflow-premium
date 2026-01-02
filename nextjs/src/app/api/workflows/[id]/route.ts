@@ -1,9 +1,39 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { proxyToBackend } from "@/lib/backend-proxy";
+import { NextRequest } from "next/server";
+
+/**
+ * Workflow Detail API Route Handler
+ * Proxies all requests to NestJS backend
+ */
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  return NextResponse.json({ message: `${module} ${id} API endpoint` });
+  return proxyToBackend(request, `/api/workflows/${id}`);
+}
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  return proxyToBackend(request, `/api/workflows/${id}`);
+}
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  return proxyToBackend(request, `/api/workflows/${id}`);
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  return proxyToBackend(request, `/api/workflows/${id}`);
 }

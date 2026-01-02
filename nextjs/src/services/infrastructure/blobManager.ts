@@ -1,8 +1,12 @@
+"use client";
+
 /**
  * @module services/blobManager
  * @category Services - Memory Management
  * @description Centralized blob URL lifecycle management service to prevent memory leaks.
  * Tracks all created blob URLs and provides automatic cleanup.
+ *
+ * Next.js 16: Client-only (uses Blob, URL.createObjectURL)
  *
  * CRITICAL MEMORY MANAGEMENT:
  * Blob URLs created with URL.createObjectURL() MUST be revoked with URL.revokeObjectURL()

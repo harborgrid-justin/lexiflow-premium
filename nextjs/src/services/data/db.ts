@@ -1,3 +1,13 @@
+"use client";
+
+/**
+ * IndexedDB Database Service (DEPRECATED - Backend-first as of 2025-12-18)
+ *
+ * Next.js 16: Client-only (uses IndexedDB API)
+ *
+ * @deprecated Use backend API via DataService instead. IndexedDB mode is legacy fallback only.
+ */
+
 import {
   DB_BTREE_ORDER,
   DB_FORCE_FLUSH_THRESHOLD,

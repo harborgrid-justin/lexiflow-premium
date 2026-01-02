@@ -1,5 +1,9 @@
+"use client";
+
 /**
  * AI Provider Selector - Choose between Gemini and OpenAI
+ *
+ * Next.js 16: Client-only (uses localStorage for provider selection)
  */
 
 import { defaultStorage } from "@/services/infrastructure/adapters/StorageAdapter";

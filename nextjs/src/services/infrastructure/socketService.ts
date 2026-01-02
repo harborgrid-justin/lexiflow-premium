@@ -1,6 +1,10 @@
+"use client";
+
 /**
  * Socket.io Service
  * Real-time communication service for messaging, notifications, and presence
+ *
+ * Next.js 16: Client-only (Socket.io/WebSocket is browser-only)
  *
  * @module SocketService
  * @description Provides real-time features including:
@@ -11,9 +15,13 @@
  * - Connection management and reconnection logic
  */
 
-import { io, Socket } from 'socket.io-client';
-import type { Message, TypingIndicator, OnlinePresence } from '@/api/communications/messaging-api';
-import type { ApiNotification } from '@/api/communications/notifications-api';
+import type {
+  Message,
+  OnlinePresence,
+  TypingIndicator,
+} from "@/api/communications/messaging-api";
+import type { ApiNotification } from "@/api/communications/notifications-api";
+import { io, Socket } from "socket.io-client";
 
 export interface SocketConfig {
   url: string;
@@ -53,14 +61,17 @@ class SocketService {
   /**
    * Initialize Socket.io connection
    */
-  async connect(config: SocketConfig, handlers: SocketEventHandlers = {}): Promise<void> {
+  async connect(
+    config: SocketConfig,
+    handlers: SocketEventHandlers = {}
+  ): Promise<void> {
     if (this.socket?.connected) {
-      console.log('[SocketService] Already connected');
+      console.log("[SocketService] Already connected");
       return;
     }
 
     if (this.isConnecting) {
-      console.log('[SocketService] Connection already in progress');
+      console.log("[SocketService] Connection already in progress");
       return;
     }
 
@@ -69,14 +80,14 @@ class SocketService {
     this.handlers = handlers;
 
     try {
-      console.log('[SocketService] Connecting to', config.url);
+      console.log("[SocketService] Connecting to", config.url);
 
       this.socket = io(config.url, {
         auth: config.auth,
         reconnection: config.reconnection ?? true,
         reconnectionAttempts: config.reconnectionAttempts ?? 5,
         reconnectionDelay: config.reconnectionDelay ?? 1000,
-        transports: ['websocket', 'polling'],
+        transports: ["websocket", "polling"],
       });
 
       this.registerEventHandlers();
@@ -84,24 +95,24 @@ class SocketService {
 
       return new Promise((resolve, reject) => {
         const timeout = setTimeout(() => {
-          reject(new Error('Socket connection timeout'));
+          reject(new Error("Socket connection timeout"));
         }, 10000);
 
-        this.socket?.once('connect', () => {
+        this.socket?.once("connect", () => {
           clearTimeout(timeout);
-          console.log('[SocketService] Connected successfully');
+          console.log("[SocketService] Connected successfully");
           resolve();
         });
 
-        this.socket?.once('connect_error', (error) => {
+        this.socket?.once("connect_error", (error) => {
           clearTimeout(timeout);
-          console.error('[SocketService] Connection error:', error);
+          console.error("[SocketService] Connection error:", error);
           reject(error);
         });
       });
     } catch (error) {
       this.isConnecting = false;
-      console.error('[SocketService] Failed to initialize socket:', error);
+      console.error("[SocketService] Failed to initialize socket:", error);
       throw error;
     }
   }
@@ -113,60 +124,66 @@ class SocketService {
     if (!this.socket) return;
 
     // Connection events
-    this.socket.on('connect', () => {
-      console.log('[SocketService] Connected');
+    this.socket.on("connect", () => {
+      console.log("[SocketService] Connected");
       this.reconnectAttempts = 0;
       this.handlers.onConnect?.();
     });
 
-    this.socket.on('disconnect', (reason) => {
-      console.log('[SocketService] Disconnected:', reason);
+    this.socket.on("disconnect", (reason) => {
+      console.log("[SocketService] Disconnected:", reason);
       this.handlers.onDisconnect?.(reason);
     });
 
-    this.socket.on('connect_error', (error) => {
-      console.error('[SocketService] Connection error:', error);
+    this.socket.on("connect_error", (error) => {
+      console.error("[SocketService] Connection error:", error);
       this.handlers.onError?.(error);
     });
 
-    this.socket.on('reconnect', (attempt) => {
-      console.log('[SocketService] Reconnected after', attempt, 'attempts');
+    this.socket.on("reconnect", (attempt) => {
+      console.log("[SocketService] Reconnected after", attempt, "attempts");
       this.reconnectAttempts = attempt;
       this.handlers.onReconnect?.(attempt);
     });
 
     // Messaging events
-    this.socket.on('message:new', (message: Message) => {
-      console.log('[SocketService] New message received:', message.id);
+    this.socket.on("message:new", (message: Message) => {
+      console.log("[SocketService] New message received:", message.id);
       this.handlers.onNewMessage?.(message);
     });
 
-    this.socket.on('message:delivered', (data: { messageId: string; userId: string }) => {
-      console.log('[SocketService] Message delivered:', data.messageId);
-      this.handlers.onMessageDelivered?.(data.messageId, data.userId);
-    });
+    this.socket.on(
+      "message:delivered",
+      (data: { messageId: string; userId: string }) => {
+        console.log("[SocketService] Message delivered:", data.messageId);
+        this.handlers.onMessageDelivered?.(data.messageId, data.userId);
+      }
+    );
 
-    this.socket.on('message:read', (data: { messageId: string; userId: string }) => {
-      console.log('[SocketService] Message read:', data.messageId);
-      this.handlers.onMessageRead?.(data.messageId, data.userId);
-    });
+    this.socket.on(
+      "message:read",
+      (data: { messageId: string; userId: string }) => {
+        console.log("[SocketService] Message read:", data.messageId);
+        this.handlers.onMessageRead?.(data.messageId, data.userId);
+      }
+    );
 
-    this.socket.on('user:typing', (indicator: TypingIndicator) => {
+    this.socket.on("user:typing", (indicator: TypingIndicator) => {
       this.handlers.onTyping?.(indicator);
     });
 
-    this.socket.on('user:presence', (presence: OnlinePresence) => {
+    this.socket.on("user:presence", (presence: OnlinePresence) => {
       this.handlers.onPresenceUpdate?.(presence);
     });
 
     // Notification events
-    this.socket.on('notification:new', (notification: ApiNotification) => {
-      console.log('[SocketService] New notification:', notification.id);
+    this.socket.on("notification:new", (notification: ApiNotification) => {
+      console.log("[SocketService] New notification:", notification.id);
       this.handlers.onNewNotification?.(notification);
     });
 
-    this.socket.on('notification:read', (notificationId: string) => {
-      console.log('[SocketService] Notification read:', notificationId);
+    this.socket.on("notification:read", (notificationId: string) => {
+      console.log("[SocketService] Notification read:", notificationId);
       this.handlers.onNotificationRead?.(notificationId);
     });
   }
@@ -176,7 +193,7 @@ class SocketService {
    */
   disconnect(): void {
     if (this.socket) {
-      console.log('[SocketService] Disconnecting');
+      console.log("[SocketService] Disconnecting");
       this.socket.disconnect();
       this.socket = null;
       this.config = null;
@@ -196,11 +213,11 @@ class SocketService {
    */
   joinConversation(conversationId: string): void {
     if (!this.socket?.connected) {
-      console.warn('[SocketService] Cannot join conversation - not connected');
+      console.warn("[SocketService] Cannot join conversation - not connected");
       return;
     }
-    this.socket.emit('conversation:join', { conversationId });
-    console.log('[SocketService] Joined conversation:', conversationId);
+    this.socket.emit("conversation:join", { conversationId });
+    console.log("[SocketService] Joined conversation:", conversationId);
   }
 
   /**
@@ -210,8 +227,8 @@ class SocketService {
     if (!this.socket?.connected) {
       return;
     }
-    this.socket.emit('conversation:leave', { conversationId });
-    console.log('[SocketService] Left conversation:', conversationId);
+    this.socket.emit("conversation:leave", { conversationId });
+    console.log("[SocketService] Left conversation:", conversationId);
   }
 
   /**
@@ -221,7 +238,7 @@ class SocketService {
     if (!this.socket?.connected) {
       return;
     }
-    this.socket.emit('typing', { conversationId, isTyping });
+    this.socket.emit("typing", { conversationId, isTyping });
   }
 
   /**
@@ -231,7 +248,7 @@ class SocketService {
     if (!this.socket?.connected) {
       return;
     }
-    this.socket.emit('presence:update', { isOnline });
+    this.socket.emit("presence:update", { isOnline });
   }
 
   /**
@@ -241,7 +258,7 @@ class SocketService {
     if (!this.socket?.connected) {
       return;
     }
-    this.socket.emit('message:delivered', { messageId, conversationId });
+    this.socket.emit("message:delivered", { messageId, conversationId });
   }
 
   /**
@@ -251,7 +268,7 @@ class SocketService {
     if (!this.socket?.connected) {
       return;
     }
-    this.socket.emit('message:read', { messageId, conversationId });
+    this.socket.emit("message:read", { messageId, conversationId });
   }
 
   /**
@@ -261,8 +278,8 @@ class SocketService {
     if (!this.socket?.connected) {
       return;
     }
-    this.socket.emit('notifications:subscribe');
-    console.log('[SocketService] Subscribed to notifications');
+    this.socket.emit("notifications:subscribe");
+    console.log("[SocketService] Subscribed to notifications");
   }
 
   /**
@@ -272,8 +289,8 @@ class SocketService {
     if (!this.socket?.connected) {
       return;
     }
-    this.socket.emit('notifications:unsubscribe');
-    console.log('[SocketService] Unsubscribed from notifications');
+    this.socket.emit("notifications:unsubscribe");
+    console.log("[SocketService] Unsubscribed from notifications");
   }
 
   /**
@@ -317,7 +334,9 @@ class SocketService {
    */
   on(event: string, handler: (...args: unknown[]) => void): void {
     if (!this.socket) {
-      console.warn(`[SocketService] Cannot listen to ${event} - socket not initialized`);
+      console.warn(
+        `[SocketService] Cannot listen to ${event} - socket not initialized`
+      );
       return;
     }
     this.socket.on(event, handler);

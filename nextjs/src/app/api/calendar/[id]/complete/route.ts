@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import { proxyToBackend } from "@/lib/backend-proxy";
+import { NextRequest } from "next/server";
 
 /**
  * Calendar Event Completion API Route
@@ -9,22 +10,6 @@ export async function PUT(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
-  try {
-    // TODO: Implement authentication check
-    const { id } = await context.params;
-
-    // TODO: Update event status in database to completed
-
-    const mockEvent = {
-      id,
-      completed: true,
-      completedAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    return NextResponse.json(mockEvent, { status: 200 });
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json({ error: message }, { status: 500 });
-  }
+  const { id } = await context.params;
+  return proxyToBackend(request, `/api/calendar/${id}/complete`);
 }

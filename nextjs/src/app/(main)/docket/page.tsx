@@ -1,18 +1,32 @@
 /**
- * Docket Page - Server Component
+ * Docket Page - Server Component with Data Fetching
+ * Fetches docket entries from backend
  */
 import DocketManager from '@/components/docket/DocketManager';
+import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'Docket | LexiFlow',
   description: 'Manage court dockets and filings',
 };
 
-export default function DocketPage() {
+export default async function DocketPage() {
+  // Fetch docket entries from backend
+  let docketEntries = [];
+
+  try {
+    docketEntries = await apiFetch(API_ENDPOINTS.DOCKET.LIST);
+  } catch (error) {
+    console.error('Failed to load docket entries:', error);
+  }
+
   return (
     <div className="h-[calc(100vh-4rem)]">
-      <DocketManager />
+      <Suspense fallback={<div className="p-8">Loading docket...</div>}>
+        <DocketManager initialEntries={docketEntries} />
+      </Suspense>
     </div>
   );
 }

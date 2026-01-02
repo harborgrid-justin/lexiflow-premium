@@ -1,6 +1,10 @@
+"use client";
+
 /**
  * API Client for Backend Communication
  * Enterprise-grade HTTP client with authentication, error handling, and health monitoring
+ *
+ * Next.js 16: Client-only (uses localStorage for JWT tokens)
  *
  * @module ApiClient
  * @description Comprehensive HTTP client for NestJS backend communication including:

@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import { proxyToBackend } from "@/lib/backend-proxy";
+import { NextRequest } from "next/server";
 
 /**
  * Time Off Approval API Route
@@ -9,25 +10,5 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  try {
-    // TODO: Implement authentication check
-    // TODO: Extract user ID from auth context
-    const { id } = params;
-    const approverId = "system"; // TODO: Get from auth
-
-    // TODO: Update status in database
-    // TODO: Send notification to employee
-
-    const mockTimeOff = {
-      id,
-      status: "approved",
-      approverId,
-      approvedAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    return NextResponse.json(mockTimeOff, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+  return proxyToBackend(request, `/api/hr/time-off/${params.id}/approve`);
 }

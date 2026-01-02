@@ -1,18 +1,32 @@
 /**
- * CRM Page - Server Component
+ * CRM Page - Server Component with Data Fetching
+ * Fetches client list from backend
  */
 import ClientCRM from '@/components/crm/ClientCRM';
+import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'CRM | LexiFlow',
   description: 'Client Relationship Management',
 };
 
-export default function Page() {
+export default async function CrmPage() {
+  // Fetch clients from backend
+  let clients = [];
+
+  try {
+    clients = await apiFetch(API_ENDPOINTS.CLIENTS.LIST);
+  } catch (error) {
+    console.error('Failed to load clients:', error);
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <ClientCRM />
+      <Suspense fallback={<div>Loading CRM...</div>}>
+        <ClientCRM initialClients={clients} />
+      </Suspense>
     </div>
   );
 }

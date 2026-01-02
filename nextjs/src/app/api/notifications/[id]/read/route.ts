@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import { proxyToBackend } from "@/lib/backend-proxy";
+import { NextRequest } from "next/server";
 
 /**
  * Mark Notification as Read API Route
@@ -9,22 +10,6 @@ export async function PUT(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
-  try {
-    // TODO: Implement authentication check
-    const { id } = await context.params;
-
-    // TODO: Update read status in database
-
-    const mockNotification = {
-      id,
-      read: true,
-      readAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    return NextResponse.json(mockNotification, { status: 200 });
-  } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json({ error: message }, { status: 500 });
-  }
+  const { id } = await context.params;
+  return proxyToBackend(request, `/api/notifications/${id}/read`);
 }

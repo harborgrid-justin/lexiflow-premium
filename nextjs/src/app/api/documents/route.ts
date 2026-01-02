@@ -1,27 +1,27 @@
-import { NextResponse } from "next/server";
+import { proxyToBackend } from "@/lib/backend-proxy";
+import { NextRequest } from "next/server";
 
-const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3000";
+/**
+ * Documents API Route Handler
+ * Proxies all requests to NestJS backend
+ */
 
-export async function GET() {
-  try {
-    const res = await fetch(`${BACKEND_URL}/documents`, {
-      cache: "no-store",
-    });
+export async function GET(request: NextRequest) {
+  return proxyToBackend(request, "/api/documents");
+}
 
-    if (!res.ok) {
-      return NextResponse.json(
-        { message: `Backend error: ${res.statusText}` },
-        { status: res.status }
-      );
-    }
+export async function POST(request: NextRequest) {
+  return proxyToBackend(request, "/api/documents");
+}
 
-    const data = await res.json();
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error("Error fetching documents:", error);
-    return NextResponse.json(
-      { message: "Failed to fetch documents" },
-      { status: 500 }
-    );
-  }
+export async function PUT(request: NextRequest) {
+  return proxyToBackend(request, "/api/documents");
+}
+
+export async function PATCH(request: NextRequest) {
+  return proxyToBackend(request, "/api/documents");
+}
+
+export async function DELETE(request: NextRequest) {
+  return proxyToBackend(request, "/api/documents");
 }

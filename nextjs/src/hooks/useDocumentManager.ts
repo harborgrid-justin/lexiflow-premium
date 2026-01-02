@@ -74,10 +74,10 @@ import React, {
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Services & Data
-import { DataService } from "@/services/data/dataService";
+import { documentsService } from "@/services/documents.service";
 import { DocumentService } from "@/services/features/documents/documentService";
 import { queryKeys } from "@/utils/queryKeys";
-import { queryClient, useMutation, useQuery } from "./useQueryHooks";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Hooks & Context
 import { useNotify } from "./useNotify";
@@ -240,6 +240,7 @@ export function useDocumentManager(
   // ============================================================================
 
   const notify = useNotify();
+  const queryClient = useQueryClient();
 
   // Log initialization
   useEffect(() => {
@@ -351,17 +352,17 @@ export function useDocumentManager(
    * Fetch all documents from backend
    * Automatically cached and synchronized
    */
-  const { data: documents = [], isLoading } = useQuery<LegalDocument[]>(
-    queryKeys.documents.all(),
-    async () => {
+  const { data: documents = [], isLoading } = useQuery({
+    queryKey: queryKeys.documents.all(),
+    queryFn: async () => {
       try {
-        return await DataService.documents.getAll();
+        return await documentsService.getAll();
       } catch (error) {
         console.error("[useDocumentManager] Error fetching documents:", error);
         throw error;
       }
-    }
-  );
+    },
+  });
 
   /** Ensure documents is always an array for type safety */
   const documentsArray = useMemo(() => {
@@ -420,19 +421,22 @@ export function useDocumentManager(
    * Mutation for updating documents
    * Handles partial updates with cache invalidation
    */
-  const { mutate: performUpdate } = useMutation(
-    async (payload: { id: string; updates: Partial<LegalDocument> }) => {
+  const { mutate: performUpdate } = useMutation({
+    mutationFn: async (payload: {
+      id: string;
+      updates: Partial<LegalDocument>;
+    }) => {
       try {
-        return await DataService.documents.update(payload.id, payload.updates);
+        return await documentsService.update(payload.id, payload.updates);
       } catch (error) {
         console.error("[useDocumentManager] Update mutation error:", error);
         throw error;
       }
     },
-    {
-      invalidateKeys: [queryKeys.documents.all()],
-    }
-  );
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.documents.all() });
+    },
+  });
 
   /**
    * Update a document with validation and optimistic UI

@@ -1,18 +1,14 @@
 /**
  * Billing Page - Server Component
  */
+import BillingDashboard from '@/components/billing/BillingDashboard';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Billing',
-  description: 'Manage billing and invoices',
+  title: 'Billing & Finance | LexiFlow',
+  description: 'Manage invoices, track time, and monitor financial health',
 };
 
 export default function BillingPage() {
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-6">Billing</h1>
-      <p className="text-slate-600 dark:text-slate-400">Billing management interface coming soon.</p>
-    </div>
-  );
+  return <BillingDashboard />;
 }

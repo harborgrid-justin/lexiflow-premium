@@ -1,18 +1,18 @@
 /**
  * Evidence Page - Server Component
  */
+import EvidenceVault from '@/components/evidence/EvidenceVault';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Evidence',
-  description: 'Manage case evidence',
+  title: 'Evidence Vault | LexiFlow',
+  description: 'Secure chain of custody and forensic asset management',
 };
 
 export default function EvidencePage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-6">Evidence</h1>
-      <p className="text-slate-600 dark:text-slate-400">Evidence management interface coming soon.</p>
+    <div className="h-[calc(100vh-4rem)] overflow-hidden">
+      <EvidenceVault />
     </div>
   );
 }

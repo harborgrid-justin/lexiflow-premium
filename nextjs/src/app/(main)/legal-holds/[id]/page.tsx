@@ -17,7 +17,7 @@ export async function generateMetadata({
   const { id } = await params;
 
   try {
-    const hold = await apiFetch(API_ENDPOINTS.LEGAL_HOLDS.DETAIL(id));
+    const hold = await apiFetch(API_ENDPOINTS.LEGAL_HOLDS.DETAIL(id)) as any;
     return {
       title: `Legal Hold: ${hold.name} | LexiFlow`,
       description: hold.description || 'Legal hold details',
@@ -30,9 +30,9 @@ export async function generateMetadata({
 export default async function LegalHoldDetailPage({ params }: LegalHoldDetailPageProps) {
   const { id } = await params;
 
-  let hold;
+  let hold: any;
   try {
-    hold = await apiFetch(API_ENDPOINTS.LEGAL_HOLDS.DETAIL(id));
+    hold = await apiFetch(API_ENDPOINTS.LEGAL_HOLDS.DETAIL(id)) as any;
   } catch (error) {
     notFound();
   }

@@ -14,10 +14,10 @@ export const metadata: Metadata = {
 
 export default async function ClientsPage() {
   // Fetch clients from backend
-  let clients = [];
+  let clients: any[] = [];
 
   try {
-    clients = await apiFetch(API_ENDPOINTS.CLIENTS.LIST);
+    clients = await apiFetch(API_ENDPOINTS.CLIENTS.LIST) as any[];
   } catch (error) {
     console.error('Failed to load clients:', error);
   }

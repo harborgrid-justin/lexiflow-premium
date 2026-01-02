@@ -30,9 +30,9 @@ export async function generateMetadata({
 export default async function CitationDetailPage({ params }: CitationDetailPageProps) {
   const { id } = await params;
 
-  let citation;
+  let citation: any;
   try {
-    citation = await apiFetch(API_ENDPOINTS.CITATIONS.LIST + `/${id}`);
+    citation = await apiFetch(API_ENDPOINTS.CITATIONS.DETAIL(id)) as any;
   } catch (error) {
     notFound();
   }

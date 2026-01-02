@@ -18,8 +18,8 @@ export default async function CaseInsightsPage() {
 
   try {
     const [analyticsData, predictionsData] = await Promise.all([
-      apiFetch(API_ENDPOINTS.ANALYTICS.CASES).catch(() => null),
-      apiFetch(API_ENDPOINTS.ANALYTICS.OUTCOME_PREDICTIONS).catch(() => []),
+      apiFetch(API_ENDPOINTS.ANALYTICS.CASES).catch(() => null) as Promise<any>,
+      apiFetch(API_ENDPOINTS.ANALYTICS.OUTCOME_PREDICTIONS).catch(() => []) as Promise<any[]>,
     ]);
     insights = analyticsData;
     predictions = predictionsData;

@@ -69,8 +69,34 @@ export const API_ENDPOINTS = {
     VERSIONS: (id: string) => `/documents/${id}/versions`,
     REDACT: (id: string) => `/documents/${id}/redact`,
   },
+  TEMPLATES: {
+    LIST: "/templates",
+    DETAIL: (id: string) => `/templates/${id}`,
+    CREATE: "/templates",
+    UPDATE: (id: string) => `/templates/${id}`,
+    DELETE: (id: string) => `/templates/${id}`,
+    VERSIONS: (id: string) => `/templates/${id}/versions`,
+  },
+  CONTRACTS: {
+    LIST: "/contracts",
+    DETAIL: (id: string) => `/contracts/${id}`,
+    CREATE: "/contracts",
+    UPDATE: (id: string) => `/contracts/${id}`,
+    DELETE: (id: string) => `/contracts/${id}`,
+    MILESTONES: (id: string) => `/contracts/${id}/milestones`,
+    AMENDMENTS: (id: string) => `/contracts/${id}/amendments`,
+  },
+  ENGAGEMENT_LETTERS: {
+    LIST: "/engagement-letters",
+    DETAIL: (id: string) => `/engagement-letters/${id}`,
+    CREATE: "/engagement-letters",
+    UPDATE: (id: string) => `/engagement-letters/${id}`,
+    DELETE: (id: string) => `/engagement-letters/${id}`,
+    SIGN: (id: string) => `/engagement-letters/${id}/sign`,
+  },
   DOCUMENT_VERSIONS: {
     LIST: (documentId: string) => `/documents/${documentId}/versions`,
+    ALL: "/document-versions/all",
     DETAIL: (documentId: string, versionId: string) =>
       `/documents/${documentId}/versions/${versionId}`,
     CREATE: (documentId: string) => `/documents/${documentId}/versions`,
@@ -268,6 +294,8 @@ export const API_ENDPOINTS = {
   RATE_TABLES: {
     LIST: "/billing/rates",
     DETAIL: (id: string) => `/billing/rates/${id}`,
+    RATES: (id: string) => `/billing/rates/${id}/rates`,
+    HISTORY: (id: string) => `/billing/rates/${id}/history`,
     CREATE: "/billing/rates",
     UPDATE: (id: string) => `/billing/rates/${id}`,
     DELETE: (id: string) => `/billing/rates/${id}`,
@@ -307,6 +335,41 @@ export const API_ENDPOINTS = {
     UPDATE: (id: string) => `/billing/write-offs/${id}`,
     APPROVE: (id: string) => `/billing/write-offs/${id}/approve`,
   },
+  PAYMENT_PLANS: {
+    LIST: "/billing/payment-plans",
+    DETAIL: (id: string) => `/billing/payment-plans/${id}`,
+    CREATE: "/billing/payment-plans",
+    UPDATE: (id: string) => `/billing/payment-plans/${id}`,
+    DELETE: (id: string) => `/billing/payment-plans/${id}`,
+    SCHEDULE: (id: string) => `/billing/payment-plans/${id}/schedule`,
+    TRANSACTIONS: (id: string) => `/billing/payment-plans/${id}/transactions`,
+  },
+  BUDGET_FORECASTING: {
+    LIST: "/billing/budget-forecasting",
+    DETAIL: (id: string) => `/billing/budget-forecasting/${id}`,
+    SUMMARY: "/billing/budget-forecasting/summary",
+    ANALYTICS: "/billing/budget-forecasting/analytics",
+  },
+  CONFLICT_WAIVERS: {
+    LIST: "/compliance/conflict-waivers",
+    DETAIL: (id: string) => `/compliance/conflict-waivers/${id}`,
+    CREATE: "/compliance/conflict-waivers",
+    UPDATE: (id: string) => `/compliance/conflict-waivers/${id}`,
+    DELETE: (id: string) => `/compliance/conflict-waivers/${id}`,
+  },
+  COMPLIANCE_ALERTS: {
+    LIST: "/compliance/alerts",
+    DETAIL: (id: string) => `/compliance/alerts/${id}`,
+    CREATE: "/compliance/alerts",
+    UPDATE: (id: string) => `/compliance/alerts/${id}`,
+    RESOLVE: (id: string) => `/compliance/alerts/${id}/resolve`,
+  },
+  BAR_REQUIREMENTS: {
+    LIST: "/compliance/bar-requirements",
+    DETAIL: (id: string) => `/compliance/bar-requirements/${id}`,
+    UPDATE: (id: string) => `/compliance/bar-requirements/${id}`,
+    CLE_TRACKING: (id: string) => `/compliance/bar-requirements/${id}/cle`,
+  },
 
   // ==================== Analytics & Reporting ====================
   DASHBOARD: {
@@ -345,6 +408,14 @@ export const API_ENDPOINTS = {
     LIST: "/notifications",
     READ: (id: string) => `/notifications/${id}/read`,
     READ_ALL: "/notifications/read-all",
+    MARK_READ: (id: string) => `/notifications/${id}/mark-read`,
+  },
+  ANNOUNCEMENTS: {
+    LIST: "/announcements",
+    DETAIL: (id: string) => `/announcements/${id}`,
+    CREATE: "/announcements",
+    UPDATE: (id: string) => `/announcements/${id}`,
+    DELETE: (id: string) => `/announcements/${id}`,
   },
   CORRESPONDENCE: {
     LIST: "/correspondence",
@@ -354,6 +425,28 @@ export const API_ENDPOINTS = {
   WAR_ROOM: {
     ROOT: "/war-room",
     DETAIL: (id: string) => `/war-room/${id}`,
+  },
+  CLIENT_PORTAL: {
+    LIST: "/client-portal",
+    DETAIL: (id: string) => `/client-portal/${id}`,
+    UPDATE_ACCESS: (id: string) => `/client-portal/${id}/access`,
+    SHARED_DOCUMENTS: (id: string) => `/client-portal/${id}/documents`,
+  },
+  COURT_DATES: {
+    LIST: "/court-dates",
+    DETAIL: (id: string) => `/court-dates/${id}`,
+    CREATE: "/court-dates",
+    UPDATE: (id: string) => `/court-dates/${id}`,
+    DELETE: (id: string) => `/court-dates/${id}`,
+    CALENDAR: "/court-dates/calendar",
+  },
+  DOCUMENT_APPROVALS: {
+    LIST: "/document-approvals",
+    DETAIL: (id: string) => `/document-approvals/${id}`,
+    CREATE: "/document-approvals",
+    UPDATE: (id: string) => `/document-approvals/${id}`,
+    APPROVE: (id: string) => `/document-approvals/${id}/approve`,
+    REJECT: (id: string) => `/document-approvals/${id}/reject`,
   },
 
   // ==================== Compliance & Security ====================
@@ -467,6 +560,93 @@ export const API_ENDPOINTS = {
     DETAIL: (id: string) => `/jurisdictions/${id}`,
   },
 
+  // ==================== Firm Operations ====================
+  VENDORS: {
+    LIST: "/vendors",
+    DETAIL: (id: string) => `/vendors/${id}`,
+    CREATE: "/vendors",
+    UPDATE: (id: string) => `/vendors/${id}`,
+    DELETE: (id: string) => `/vendors/${id}`,
+    CONTRACTS: (id: string) => `/vendors/${id}/contracts`,
+    INVOICES: (id: string) => `/vendors/${id}/invoices`,
+    PERFORMANCE: (id: string) => `/vendors/${id}/performance`,
+  },
+  EXPERT_WITNESSES: {
+    LIST: "/expert-witnesses",
+    DETAIL: (id: string) => `/expert-witnesses/${id}`,
+    CREATE: "/expert-witnesses",
+    UPDATE: (id: string) => `/expert-witnesses/${id}`,
+    DELETE: (id: string) => `/expert-witnesses/${id}`,
+    CV: (id: string) => `/expert-witnesses/${id}/cv`,
+    TESTIMONY: (id: string) => `/expert-witnesses/${id}/testimony`,
+    REPORTS: (id: string) => `/expert-witnesses/${id}/reports`,
+  },
+  PROCESS_SERVERS: {
+    LIST: "/process-servers",
+    DETAIL: (id: string) => `/process-servers/${id}`,
+    CREATE: "/process-servers",
+    UPDATE: (id: string) => `/process-servers/${id}`,
+    DELETE: (id: string) => `/process-servers/${id}`,
+    HISTORY: (id: string) => `/process-servers/${id}/history`,
+    PROOF: (id: string) => `/process-servers/${id}/proof`,
+  },
+  STATUTE_TRACKER: {
+    LIST: "/statute-tracker",
+    DETAIL: (id: string) => `/statute-tracker/${id}`,
+    CREATE: "/statute-tracker",
+    UPDATE: (id: string) => `/statute-tracker/${id}`,
+    DELETE: (id: string) => `/statute-tracker/${id}`,
+  },
+  DEADLINES: {
+    LIST: "/deadlines",
+    DETAIL: (id: string) => `/deadlines/${id}`,
+    CREATE: "/deadlines",
+    UPDATE: (id: string) => `/deadlines/${id}`,
+    DELETE: (id: string) => `/deadlines/${id}`,
+  },
+  APPEALS: {
+    LIST: "/appeals",
+    DETAIL: (id: string) => `/appeals/${id}`,
+    CREATE: "/appeals",
+    UPDATE: (id: string) => `/appeals/${id}`,
+    DELETE: (id: string) => `/appeals/${id}`,
+  },
+  MEDIATION: {
+    LIST: "/mediation",
+    DETAIL: (id: string) => `/mediation/${id}`,
+    CREATE: "/mediation",
+    UPDATE: (id: string) => `/mediation/${id}`,
+    DELETE: (id: string) => `/mediation/${id}`,
+  },
+  ARBITRATION: {
+    LIST: "/arbitration",
+    DETAIL: (id: string) => `/arbitration/${id}`,
+    CREATE: "/arbitration",
+    UPDATE: (id: string) => `/arbitration/${id}`,
+    DELETE: (id: string) => `/arbitration/${id}`,
+  },
+  JUDGMENTS: {
+    LIST: "/judgments",
+    DETAIL: (id: string) => `/judgments/${id}`,
+    CREATE: "/judgments",
+    UPDATE: (id: string) => `/judgments/${id}`,
+    DELETE: (id: string) => `/judgments/${id}`,
+  },
+  CONFLICTS: {
+    LIST: "/conflicts",
+    DETAIL: (id: string) => `/conflicts/${id}`,
+    CREATE: "/conflicts",
+    UPDATE: (id: string) => `/conflicts/${id}`,
+    DELETE: (id: string) => `/conflicts/${id}`,
+  },
+  INTAKE_FORMS: {
+    LIST: "/intake-forms",
+    DETAIL: (id: string) => `/intake-forms/${id}`,
+    CREATE: "/intake-forms",
+    UPDATE: (id: string) => `/intake-forms/${id}`,
+    DELETE: (id: string) => `/intake-forms/${id}`,
+  },
+
   // ==================== Processing & OCR ====================
   OCR: {
     PROCESS: "/ocr/process",
@@ -503,15 +683,85 @@ export const API_ENDPOINTS = {
     BLACKLIST: "/admin/blacklist",
   },
 
+  // ==================== Resource Management ====================
+  CONFERENCE_ROOMS: {
+    LIST: "/conference-rooms",
+    DETAIL: (id: string) => `/conference-rooms/${id}`,
+    CREATE: "/conference-rooms",
+    UPDATE: (id: string) => `/conference-rooms/${id}`,
+    DELETE: (id: string) => `/conference-rooms/${id}`,
+    BOOKINGS: (id: string) => `/conference-rooms/${id}/bookings`,
+    CALENDAR: (id: string) => `/conference-rooms/${id}/calendar`,
+  },
+  EQUIPMENT: {
+    LIST: "/equipment",
+    DETAIL: (id: string) => `/equipment/${id}`,
+    CREATE: "/equipment",
+    UPDATE: (id: string) => `/equipment/${id}`,
+    DELETE: (id: string) => `/equipment/${id}`,
+    CHECKOUT: (id: string) => `/equipment/${id}/checkout`,
+    HISTORY: (id: string) => `/equipment/${id}/history`,
+    MAINTENANCE: (id: string) => `/equipment/${id}/maintenance`,
+  },
+
   // ==================== Integrations ====================
   INTEGRATIONS: {
     ROOT: "/integrations",
+    LIST: "/integrations",
+    DETAIL: (id: string) => `/integrations/${id}`,
+    SYNC: (id: string) => `/integrations/${id}/sync`,
     PACER: "/integrations/pacer",
     DATA_SOURCES: "/integrations/data-sources",
   },
   WEBHOOKS: {
     LIST: "/webhooks",
     CREATE: "/webhooks",
+  },
+
+  // ==================== System Administration ====================
+  SYSTEM_SETTINGS: {
+    GET: "/system-settings",
+    UPDATE: "/system-settings",
+  },
+  BACKUP_RESTORE: {
+    LIST: "/backup-restore",
+    CREATE: "/backup-restore",
+    RESTORE: (id: string) => `/backup-restore/${id}/restore`,
+    DOWNLOAD: (id: string) => `/backup-restore/${id}/download`,
+  },
+  TIMESHEETS: {
+    LIST: "/timesheets",
+    DETAIL: (id: string) => `/timesheets/${id}`,
+    ENTRIES: (id: string) => `/timesheets/${id}/entries`,
+    CREATE: "/timesheets",
+    UPDATE: (id: string) => `/timesheets/${id}`,
+    SUBMIT: (id: string) => `/timesheets/${id}/submit`,
+    APPROVE: (id: string) => `/timesheets/${id}/approve`,
+  },
+  TRUST_LEDGER: {
+    TRANSACTIONS: "/trust-ledger/transactions",
+    SUMMARY: "/trust-ledger/summary",
+    RECONCILE: "/trust-ledger/reconcile",
+    DEPOSIT: "/trust-ledger/deposit",
+    WITHDRAWAL: "/trust-ledger/withdrawal",
+  },
+  COLLECTIONS_QUEUE: {
+    LIST: "/collections-queue",
+    DETAIL: (id: string) => `/collections-queue/${id}`,
+    CONTACT: (id: string) => `/collections-queue/${id}/contact`,
+    PAYMENT_PLAN: (id: string) => `/collections-queue/${id}/payment-plan`,
+  },
+  CONFLICT_ALERTS: {
+    LIST: "/conflict-alerts",
+    DETAIL: (id: string) => `/conflict-alerts/${id}`,
+    RESOLVE: (id: string) => `/conflict-alerts/${id}/resolve`,
+    WAIVER: (id: string) => `/conflict-alerts/${id}/waiver`,
+  },
+  STATUTE_ALERTS: {
+    LIST: "/statute-alerts",
+    DETAIL: (id: string) => `/statute-alerts/${id}`,
+    COMPLETE: (id: string) => `/statute-alerts/${id}/complete`,
+    EXTEND: (id: string) => `/statute-alerts/${id}/extend`,
   },
 
   // ==================== AI Operations ====================
@@ -526,6 +776,32 @@ export const API_ENDPOINTS = {
   TRIAL: {
     ROOT: "/trial",
     PREPARATION: "/trial/preparation",
+  },
+  JURY_SELECTION: {
+    LIST: "/jury-selection",
+    DETAIL: (id: string) => `/jury-selection/${id}`,
+    CREATE: "/jury-selection",
+    UPDATE: (id: string) => `/jury-selection/${id}`,
+    DELETE: (id: string) => `/jury-selection/${id}`,
+    JURORS: (id: string) => `/jury-selection/${id}/jurors`,
+  },
+  TRIAL_EXHIBITS: {
+    LIST: "/trial-exhibits",
+    DETAIL: (id: string) => `/trial-exhibits/${id}`,
+    CREATE: "/trial-exhibits",
+    UPDATE: (id: string) => `/trial-exhibits/${id}`,
+    DELETE: (id: string) => `/trial-exhibits/${id}`,
+    ADMIT: (id: string) => `/trial-exhibits/${id}/admit`,
+    OBJECTIONS: (id: string) => `/trial-exhibits/${id}/objections`,
+  },
+  COURT_REPORTERS: {
+    LIST: "/court-reporters",
+    DETAIL: (id: string) => `/court-reporters/${id}`,
+    CREATE: "/court-reporters",
+    UPDATE: (id: string) => `/court-reporters/${id}`,
+    DELETE: (id: string) => `/court-reporters/${id}`,
+    ASSIGNMENTS: (id: string) => `/court-reporters/${id}/assignments`,
+    TRANSCRIPTS: (id: string) => `/court-reporters/${id}/transcripts`,
   },
   SETTLEMENTS: {
     LIST: "/settlements",

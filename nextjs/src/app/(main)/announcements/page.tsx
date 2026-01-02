@@ -1,0 +1,33 @@
+/**
+ * Announcements Page - Server Component with Data Fetching
+ * Displays firm-wide and department announcements
+ */
+import { AnnouncementsList } from '@/components/announcements/AnnouncementsList';
+import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { Metadata } from 'next';
+import { Suspense } from 'react';
+
+export const metadata: Metadata = {
+  title: 'Announcements',
+  description: 'Firm-wide and department announcements',
+};
+
+export default async function AnnouncementsPage() {
+  // Fetch initial announcements from backend
+  let announcements = [];
+
+  try {
+    const data = await apiFetch(API_ENDPOINTS.ANNOUNCEMENTS.LIST).catch(() => ({ data: [] })) as any;
+    announcements = data?.data || [];
+  } catch (error) {
+    console.error('Failed to load announcements:', error);
+  }
+
+  return (
+    <div className="h-full flex flex-col">
+      <Suspense fallback={<div className="p-8">Loading announcements...</div>}>
+        <AnnouncementsList initialAnnouncements={announcements} />
+      </Suspense>
+    </div>
+  );
+}

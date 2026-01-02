@@ -17,7 +17,7 @@ export async function generateMetadata({
   const { id } = await params;
 
   try {
-    const custodian = await apiFetch(API_ENDPOINTS.CUSTODIANS.DETAIL(id));
+    const custodian = await apiFetch(API_ENDPOINTS.CUSTODIANS.DETAIL(id)) as any;
     return {
       title: `Custodian: ${custodian.name} | LexiFlow`,
       description: `Custodian profile for ${custodian.name}`,
@@ -30,9 +30,9 @@ export async function generateMetadata({
 export default async function CustodianDetailPage({ params }: CustodianDetailPageProps) {
   const { id } = await params;
 
-  let custodian;
+  let custodian: any;
   try {
-    custodian = await apiFetch(API_ENDPOINTS.CUSTODIANS.DETAIL(id));
+    custodian = await apiFetch(API_ENDPOINTS.CUSTODIANS.DETAIL(id)) as any;
   } catch (error) {
     notFound();
   }

@@ -14,10 +14,10 @@ export const metadata: Metadata = {
 
 export default async function MattersPage() {
   // Fetch matters from backend
-  let matters = [];
+  let matters: any[] = [];
 
   try {
-    matters = await apiFetch(API_ENDPOINTS.MATTERS.LIST);
+    matters = await apiFetch(API_ENDPOINTS.MATTERS.LIST) as any[];
   } catch (error) {
     console.error('Failed to load matters:', error);
   }

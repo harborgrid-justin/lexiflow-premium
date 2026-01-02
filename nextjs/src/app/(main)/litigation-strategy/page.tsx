@@ -18,8 +18,8 @@ export default async function LitigationStrategyPage() {
 
   try {
     const [trial, risksData] = await Promise.all([
-      apiFetch(API_ENDPOINTS.TRIAL.ROOT).catch(() => null),
-      apiFetch(API_ENDPOINTS.RISKS.LIST).catch(() => []),
+      apiFetch(API_ENDPOINTS.TRIAL.ROOT).catch(() => null) as Promise<any>,
+      apiFetch(API_ENDPOINTS.RISKS.LIST).catch(() => []) as Promise<any[]>,
     ]);
     trialData = trial;
     risks = risksData;

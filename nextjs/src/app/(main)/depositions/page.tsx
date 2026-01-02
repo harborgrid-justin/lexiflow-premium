@@ -14,10 +14,10 @@ export const metadata: Metadata = {
 
 export default async function DepositionsPage() {
   // Fetch depositions from backend
-  let depositions = [];
+  let depositions: any[] = [];
 
   try {
-    depositions = await apiFetch(API_ENDPOINTS.DEPOSITIONS.LIST);
+    depositions = await apiFetch(API_ENDPOINTS.DEPOSITIONS.LIST) as any[];
   } catch (error) {
     console.error('Failed to load depositions:', error);
   }

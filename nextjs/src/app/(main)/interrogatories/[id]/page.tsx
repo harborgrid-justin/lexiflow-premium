@@ -17,7 +17,7 @@ export async function generateMetadata({
   const { id } = await params;
 
   try {
-    const interrogatory = await apiFetch(API_ENDPOINTS.INTERROGATORIES.DETAIL(id));
+    const interrogatory = await apiFetch(API_ENDPOINTS.INTERROGATORIES.DETAIL(id)) as any;
     return {
       title: `Interrogatory: ${interrogatory.title} | LexiFlow`,
       description: interrogatory.description || 'Interrogatory details',
@@ -30,9 +30,9 @@ export async function generateMetadata({
 export default async function InterrogatoryDetailPage({ params }: InterrogatoryDetailPageProps) {
   const { id } = await params;
 
-  let interrogatory;
+  let interrogatory: any;
   try {
-    interrogatory = await apiFetch(API_ENDPOINTS.INTERROGATORIES.DETAIL(id));
+    interrogatory = await apiFetch(API_ENDPOINTS.INTERROGATORIES.DETAIL(id)) as any;
   } catch (error) {
     notFound();
   }

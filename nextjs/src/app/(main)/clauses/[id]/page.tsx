@@ -17,7 +17,7 @@ export async function generateMetadata({
   const { id } = await params;
 
   try {
-    const clause = await apiFetch(API_ENDPOINTS.CLAUSES.DETAIL(id));
+    const clause = await apiFetch(API_ENDPOINTS.CLAUSES.DETAIL(id)) as any;
     return {
       title: `${clause.title || 'Clause'} | LexiFlow`,
       description: clause.description || 'Clause details',
@@ -30,9 +30,9 @@ export async function generateMetadata({
 export default async function ClauseDetailPage({ params }: ClauseDetailPageProps) {
   const { id } = await params;
 
-  let clause;
+  let clause: any;
   try {
-    clause = await apiFetch(API_ENDPOINTS.CLAUSES.DETAIL(id));
+    clause = await apiFetch(API_ENDPOINTS.CLAUSES.DETAIL(id)) as any;
   } catch (error) {
     notFound();
   }

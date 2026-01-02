@@ -14,10 +14,10 @@ export const metadata: Metadata = {
 
 export default async function InvoicesPage() {
   // Fetch invoices from backend
-  let invoices = [];
+  let invoices: any[] = [];
 
   try {
-    invoices = await apiFetch(API_ENDPOINTS.INVOICES.LIST);
+    invoices = await apiFetch(API_ENDPOINTS.INVOICES.LIST) as any[];
   } catch (error) {
     console.error('Failed to load invoices:', error);
   }

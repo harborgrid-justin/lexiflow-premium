@@ -17,7 +17,7 @@ export async function generateMetadata({
   const { id } = await params;
 
   try {
-    const depo = await apiFetch(API_ENDPOINTS.DEPOSITIONS.DETAIL(id));
+    const depo = await apiFetch(API_ENDPOINTS.DEPOSITIONS.DETAIL(id)) as any;
     return {
       title: `Deposition: ${depo.deponentName} | LexiFlow`,
       description: `Deposition of ${depo.deponentName}`,
@@ -30,9 +30,9 @@ export async function generateMetadata({
 export default async function DepositionDetailPage({ params }: DepositionDetailPageProps) {
   const { id } = await params;
 
-  let depo;
+  let depo: any;
   try {
-    depo = await apiFetch(API_ENDPOINTS.DEPOSITIONS.DETAIL(id));
+    depo = await apiFetch(API_ENDPOINTS.DEPOSITIONS.DETAIL(id)) as any;
   } catch (error) {
     notFound();
   }

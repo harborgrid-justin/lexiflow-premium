@@ -14,10 +14,10 @@ export const metadata: Metadata = {
 
 export default async function LegalHoldsPage() {
   // Fetch legal holds from backend
-  let legalHolds = [];
+  let legalHolds: any[] = [];
 
   try {
-    legalHolds = (await apiFetch(API_ENDPOINTS.LEGAL_HOLDS.LIST)) as any[];
+    legalHolds = await apiFetch(API_ENDPOINTS.LEGAL_HOLDS.LIST) as any[];
   } catch (error) {
     console.error('Failed to load legal holds:', error);
   }

@@ -17,7 +17,7 @@ export async function generateMetadata({
   const { id } = await params;
 
   try {
-    const expense = await apiFetch(API_ENDPOINTS.EXPENSES.DETAIL(id));
+    const expense = await apiFetch(API_ENDPOINTS.EXPENSES.DETAIL(id)) as any;
     return {
       title: `Expense: ${expense.description} | LexiFlow`,
       description: `Expense details for ${expense.description}`,

@@ -14,10 +14,10 @@ export const metadata: Metadata = {
 
 export default async function ExpensesPage() {
   // Fetch expenses from backend
-  let expenses = [];
+  let expenses: any[] = [];
 
   try {
-    expenses = await apiFetch(API_ENDPOINTS.EXPENSES.LIST);
+    expenses = await apiFetch(API_ENDPOINTS.EXPENSES.LIST) as any[];
   } catch (error) {
     console.error('Failed to load expenses:', error);
   }

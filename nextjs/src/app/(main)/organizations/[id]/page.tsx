@@ -17,7 +17,7 @@ export async function generateMetadata({
   const { id } = await params;
 
   try {
-    const org = await apiFetch(API_ENDPOINTS.ORGANIZATIONS.DETAIL(id));
+    const org: any = await apiFetch(API_ENDPOINTS.ORGANIZATIONS.DETAIL(id));
     return {
       title: `${org.name} | LexiFlow`,
       description: `Organization profile for ${org.name}`,
@@ -30,7 +30,7 @@ export async function generateMetadata({
 export default async function OrganizationDetailPage({ params }: OrganizationDetailPageProps) {
   const { id } = await params;
 
-  let org;
+  let org: any;
   try {
     org = await apiFetch(API_ENDPOINTS.ORGANIZATIONS.DETAIL(id));
   } catch (error) {

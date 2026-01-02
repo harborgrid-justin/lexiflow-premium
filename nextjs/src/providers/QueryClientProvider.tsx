@@ -1,24 +1,45 @@
 /**
- * Query Client Provider for React Router v7
+ * Query Client Provider for Next.js
  *
- * Provides query client context to the application.
- * This is a simple passthrough provider since the custom QueryClient
- * implementation uses a singleton pattern.
+ * Provides TanStack Query client context to the application.
+ * This wraps the entire app with React Query provider for data fetching and caching.
  *
  * @module providers/QueryClientProvider
  */
 
-import { ReactNode } from 'react';
+'use client';
+
+import { QueryClient, QueryClientProvider as TanStackQueryClientProvider } from '@tanstack/react-query';
+import { ReactNode, useState } from 'react';
 
 /**
  * Query Client Provider Component
  *
- * The underlying queryClient is a singleton exported from
- * @/services/infrastructure/queryClient, so no context is needed.
- * This provider exists for future extensibility and API consistency.
+ * Creates and provides a TanStack Query client instance for the application.
+ * Uses client-side state to ensure a single instance per user session.
  */
 export function QueryClientProvider({ children }: { children: ReactNode }) {
-  // The custom queryClient is a singleton, so no provider context needed
-  // This wrapper exists for API consistency and future extensibility
-  return <>{children}</>;
+  // Create a stable QueryClient instance for the session
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 5 * 60 * 1000, // 5 minutes
+            gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+            retry: 1,
+            refetchOnWindowFocus: false,
+          },
+          mutations: {
+            retry: 1,
+          },
+        },
+      })
+  );
+
+  return (
+    <TanStackQueryClientProvider client={queryClient}>
+      {children}
+    </TanStackQueryClientProvider>
+  );
 }

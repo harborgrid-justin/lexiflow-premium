@@ -1,0 +1,678 @@
+{
+  "audit_date": "2026-01-02",
+  "total_controllers": 101,
+  "priority_controllers": {
+    "cases.controller.ts": {
+      "base_path": "cases",
+      "routes": [
+        {
+          "path": "/cases/import/parse",
+          "method": "POST",
+          "full_route": "/api/cases/import/parse",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/cases/stats",
+          "method": "GET",
+          "full_route": "/api/cases/stats",
+          "public": true,
+          "requires_auth": false
+        },
+        {
+          "path": "/cases",
+          "method": "GET",
+          "full_route": "/api/cases",
+          "public": true,
+          "requires_auth": false,
+          "note": "List all cases - FRONTEND CALLING THIS"
+        },
+        {
+          "path": "/cases/archived",
+          "method": "GET",
+          "full_route": "/api/cases/archived",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/cases/:id",
+          "method": "GET",
+          "full_route": "/api/cases/:id",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/cases",
+          "method": "POST",
+          "full_route": "/api/cases",
+          "public": true,
+          "requires_auth": false,
+          "note": "Temporarily public for import script testing"
+        },
+        {
+          "path": "/cases/:id",
+          "method": "PUT",
+          "full_route": "/api/cases/:id",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/cases/:id",
+          "method": "DELETE",
+          "full_route": "/api/cases/:id",
+          "public": false,
+          "requires_auth": true
+        }
+      ]
+    },
+    "documents.controller.ts": {
+      "base_path": "documents",
+      "routes": [
+        {
+          "path": "/documents",
+          "method": "POST",
+          "full_route": "/api/documents",
+          "public": false,
+          "requires_auth": true,
+          "note": "File upload with multipart/form-data"
+        },
+        {
+          "path": "/documents",
+          "method": "GET",
+          "full_route": "/api/documents",
+          "public": true,
+          "requires_auth": false
+        },
+        {
+          "path": "/documents/:id",
+          "method": "GET",
+          "full_route": "/api/documents/:id",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/documents/:id/download",
+          "method": "GET",
+          "full_route": "/api/documents/:id/download",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/documents/:id",
+          "method": "PUT",
+          "full_route": "/api/documents/:id",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/documents/:id",
+          "method": "DELETE",
+          "full_route": "/api/documents/:id",
+          "public": false,
+          "requires_auth": true
+        }
+      ]
+    },
+    "discovery.controller.ts": {
+      "base_path": "discovery",
+      "routes": [
+        {
+          "path": "/discovery",
+          "method": "HEAD",
+          "full_route": "/api/discovery",
+          "public": false,
+          "requires_auth": true,
+          "note": "Health check"
+        },
+        {
+          "path": "/discovery/evidence",
+          "method": "HEAD",
+          "full_route": "/api/discovery/evidence",
+          "public": false,
+          "requires_auth": true,
+          "note": "Health check"
+        },
+        {
+          "path": "/discovery/evidence",
+          "method": "GET",
+          "full_route": "/api/discovery/evidence",
+          "public": true,
+          "requires_auth": false
+        },
+        {
+          "path": "/discovery/evidence",
+          "method": "POST",
+          "full_route": "/api/discovery/evidence",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/discovery",
+          "method": "GET",
+          "full_route": "/api/discovery",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/discovery/:id",
+          "method": "GET",
+          "full_route": "/api/discovery/:id",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/discovery",
+          "method": "POST",
+          "full_route": "/api/discovery",
+          "public": false,
+          "requires_auth": true
+        }
+      ]
+    },
+    "billing-analytics.controller.ts": {
+      "base_path": "billing",
+      "routes": [
+        {
+          "path": "/billing/metrics",
+          "method": "GET",
+          "full_route": "/api/billing/metrics",
+          "public": true,
+          "requires_auth": false,
+          "note": "FRONTEND CALLING THIS - Currently returns 404!"
+        },
+        {
+          "path": "/billing/wip-stats",
+          "method": "GET",
+          "full_route": "/api/billing/wip-stats",
+          "public": true,
+          "requires_auth": false
+        },
+        {
+          "path": "/billing/realization",
+          "method": "GET",
+          "full_route": "/api/billing/realization",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/operating-summary",
+          "method": "GET",
+          "full_route": "/api/billing/operating-summary",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/ar-aging",
+          "method": "GET",
+          "full_route": "/api/billing/ar-aging",
+          "public": false,
+          "requires_auth": true
+        }
+      ]
+    },
+    "billing.controller.ts": {
+      "base_path": "billing",
+      "note": "CONFLICT: This controller ALSO uses 'billing' base path - causes route conflicts!",
+      "routes": [
+        {
+          "path": "/billing/invoices",
+          "method": "GET",
+          "full_route": "/api/billing/invoices",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/invoices/:id",
+          "method": "GET",
+          "full_route": "/api/billing/invoices/:id",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/invoices",
+          "method": "POST",
+          "full_route": "/api/billing/invoices",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/invoices/:id",
+          "method": "PUT",
+          "full_route": "/api/billing/invoices/:id",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/invoices/:id",
+          "method": "DELETE",
+          "full_route": "/api/billing/invoices/:id",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/invoices/:id/send",
+          "method": "POST",
+          "full_route": "/api/billing/invoices/:id/send",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/invoices/:id/mark-paid",
+          "method": "POST",
+          "full_route": "/api/billing/invoices/:id/mark-paid",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/time-entries",
+          "method": "GET",
+          "full_route": "/api/billing/time-entries",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/time-entries/case/:caseId",
+          "method": "GET",
+          "full_route": "/api/billing/time-entries/case/:caseId",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/time-entries",
+          "method": "POST",
+          "full_route": "/api/billing/time-entries",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/time-entries/:id",
+          "method": "PUT",
+          "full_route": "/api/billing/time-entries/:id",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/time-entries/:id",
+          "method": "DELETE",
+          "full_route": "/api/billing/time-entries/:id",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/time-entries/unbilled/:caseId",
+          "method": "GET",
+          "full_route": "/api/billing/time-entries/unbilled/:caseId",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/expenses",
+          "method": "GET",
+          "full_route": "/api/billing/expenses",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/expenses",
+          "method": "POST",
+          "full_route": "/api/billing/expenses",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/expenses/unbilled/:caseId",
+          "method": "GET",
+          "full_route": "/api/billing/expenses/unbilled/:caseId",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/generate-invoice",
+          "method": "POST",
+          "full_route": "/api/billing/generate-invoice",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/summary/:caseId",
+          "method": "GET",
+          "full_route": "/api/billing/summary/:caseId",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/wip-stats",
+          "method": "GET",
+          "full_route": "/api/billing/wip-stats",
+          "public": false,
+          "requires_auth": true,
+          "note": "DUPLICATE PATH - also defined in billing-analytics.controller.ts!"
+        },
+        {
+          "path": "/billing/realization-stats",
+          "method": "GET",
+          "full_route": "/api/billing/realization-stats",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/billing/overview-stats",
+          "method": "GET",
+          "full_route": "/api/billing/overview-stats",
+          "public": false,
+          "requires_auth": true
+        }
+      ]
+    },
+    "knowledge.controller.ts": {
+      "base_path": "knowledge",
+      "routes": [
+        {
+          "path": "/knowledge",
+          "method": "GET",
+          "full_route": "/api/knowledge",
+          "public": true,
+          "requires_auth": false,
+          "note": "Health check endpoint"
+        },
+        {
+          "path": "/knowledge/articles",
+          "method": "GET",
+          "full_route": "/api/knowledge/articles",
+          "public": true,
+          "requires_auth": false
+        },
+        {
+          "path": "/knowledge/articles/popular",
+          "method": "GET",
+          "full_route": "/api/knowledge/articles/popular",
+          "public": true,
+          "requires_auth": false
+        },
+        {
+          "path": "/knowledge/articles/recent",
+          "method": "GET",
+          "full_route": "/api/knowledge/articles/recent",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/knowledge/articles/:id",
+          "method": "GET",
+          "full_route": "/api/knowledge/articles/:id",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/knowledge/search",
+          "method": "GET",
+          "full_route": "/api/knowledge/search",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/knowledge/categories",
+          "method": "GET",
+          "full_route": "/api/knowledge/categories",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/knowledge/tags",
+          "method": "GET",
+          "full_route": "/api/knowledge/tags",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/knowledge/articles",
+          "method": "POST",
+          "full_route": "/api/knowledge/articles",
+          "public": false,
+          "requires_auth": true,
+          "roles": ["admin", "attorney"]
+        },
+        {
+          "path": "/knowledge/articles/:id",
+          "method": "PUT",
+          "full_route": "/api/knowledge/articles/:id",
+          "public": false,
+          "requires_auth": true,
+          "roles": ["admin", "attorney"]
+        }
+      ]
+    },
+    "calendar.controller.ts": {
+      "base_path": "calendar",
+      "routes": [
+        {
+          "path": "/calendar",
+          "method": "GET",
+          "full_route": "/api/calendar",
+          "public": true,
+          "requires_auth": false
+        },
+        {
+          "path": "/calendar/upcoming",
+          "method": "GET",
+          "full_route": "/api/calendar/upcoming",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/calendar/statute-of-limitations",
+          "method": "GET",
+          "full_route": "/api/calendar/statute-of-limitations",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/calendar/:id",
+          "method": "GET",
+          "full_route": "/api/calendar/:id",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/calendar",
+          "method": "POST",
+          "full_route": "/api/calendar",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/calendar/:id",
+          "method": "PUT",
+          "full_route": "/api/calendar/:id",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/calendar/:id/complete",
+          "method": "PUT",
+          "full_route": "/api/calendar/:id/complete",
+          "public": false,
+          "requires_auth": true
+        },
+        {
+          "path": "/calendar/:id",
+          "method": "DELETE",
+          "full_route": "/api/calendar/:id",
+          "public": false,
+          "requires_auth": true
+        }
+      ]
+    },
+    "auth.controller.ts": {
+      "base_path": "auth",
+      "routes": [
+        {
+          "path": "/auth/health",
+          "method": "HEAD",
+          "full_route": "/api/auth/health",
+          "public": true,
+          "requires_auth": false
+        },
+        {
+          "path": "/auth/health",
+          "method": "GET",
+          "full_route": "/api/auth/health",
+          "public": true,
+          "requires_auth": false
+        },
+        {
+          "path": "/auth/register",
+          "method": "POST",
+          "full_route": "/api/auth/register",
+          "public": true,
+          "requires_auth": false,
+          "throttle": "20 requests per minute"
+        },
+        {
+          "path": "/auth/login",
+          "method": "POST",
+          "full_route": "/api/auth/login",
+          "public": true,
+          "requires_auth": false,
+          "throttle": "20 requests per minute"
+        },
+        {
+          "path": "/auth/refresh",
+          "method": "POST",
+          "full_route": "/api/auth/refresh",
+          "public": true,
+          "requires_auth": false,
+          "throttle": "10 requests per minute"
+        }
+      ]
+    },
+    "users.controller.ts": {
+      "base_path": "users",
+      "routes": [
+        {
+          "path": "/users",
+          "method": "POST",
+          "full_route": "/api/users",
+          "public": false,
+          "requires_auth": true,
+          "permissions": ["USER_MANAGE"]
+        },
+        {
+          "path": "/users",
+          "method": "GET",
+          "full_route": "/api/users",
+          "public": false,
+          "requires_auth": true,
+          "permissions": ["USER_MANAGE"]
+        },
+        {
+          "path": "/users/:id",
+          "method": "GET",
+          "full_route": "/api/users/:id",
+          "public": false,
+          "requires_auth": true,
+          "permissions": ["USER_MANAGE"]
+        },
+        {
+          "path": "/users/:id",
+          "method": "PUT",
+          "full_route": "/api/users/:id",
+          "public": false,
+          "requires_auth": true,
+          "permissions": ["USER_MANAGE"]
+        },
+        {
+          "path": "/users/:id",
+          "method": "DELETE",
+          "full_route": "/api/users/:id",
+          "public": false,
+          "requires_auth": true,
+          "permissions": ["USER_MANAGE"]
+        }
+      ]
+    }
+  },
+  "critical_issues": [
+    {
+      "severity": "HIGH",
+      "issue": "Route Conflict - Duplicate Base Path",
+      "description": "Both billing.controller.ts AND billing-analytics.controller.ts use @Controller('billing'). This causes route registration conflicts.",
+      "affected_controllers": [
+        "billing.controller.ts",
+        "billing-analytics.controller.ts"
+      ],
+      "duplicate_routes": ["/billing/wip-stats"],
+      "recommendation": "Rename billing-analytics.controller.ts to use @Controller('billing/analytics') to avoid conflicts"
+    },
+    {
+      "severity": "HIGH",
+      "issue": "Frontend 401 Unauthorized Errors",
+      "description": "Frontend is getting 401 errors when calling /api/cases, but the backend shows this route is marked @Public()",
+      "affected_route": "/api/cases (GET)",
+      "current_state": "Route is marked @Public() but still requiring authentication",
+      "possible_causes": [
+        "Global JWT guard overriding @Public() decorator",
+        "Middleware intercepting before @Public() check",
+        "Frontend not in list of allowed origins for public routes"
+      ]
+    },
+    {
+      "severity": "HIGH",
+      "issue": "Frontend 404 Error - Route Not Found",
+      "description": "Frontend is calling /api/billing/metrics but getting 404",
+      "affected_route": "/api/billing/metrics (GET)",
+      "current_state": "Route exists in billing-analytics.controller.ts with @Public() decorator",
+      "possible_causes": [
+        "Module not properly imported in app.module.ts",
+        "Route conflict with billing.controller.ts preventing registration",
+        "Controller not being instantiated"
+      ]
+    },
+    {
+      "severity": "MEDIUM",
+      "issue": "Authentication Mismatch",
+      "description": "Some routes marked @Public() but frontend still needs to handle 401 responses",
+      "public_routes_requiring_investigation": [
+        "/api/cases (GET)",
+        "/api/cases/stats (GET)",
+        "/api/billing/metrics (GET)",
+        "/api/billing/wip-stats (GET)",
+        "/api/documents (GET)",
+        "/api/discovery/evidence (GET)",
+        "/api/knowledge (GET)",
+        "/api/knowledge/articles (GET)",
+        "/api/calendar (GET)"
+      ]
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": 1,
+      "action": "Fix Route Conflicts",
+      "steps": [
+        "Change billing-analytics.controller.ts @Controller('billing') to @Controller('billing/analytics')",
+        "Update all routes in billing-analytics.controller.ts to remove 'billing/' prefix from method decorators",
+        "Update frontend API calls from /api/billing/metrics to /api/billing/analytics/metrics"
+      ]
+    },
+    {
+      "priority": 2,
+      "action": "Fix @Public() Decorator Not Working",
+      "steps": [
+        "Check app.module.ts for global JWT guard configuration",
+        "Verify JWT guard's handleRequest() method respects @Public() decorator",
+        "Check if StreamProcessingMiddleware is running before guards",
+        "Verify Reflector is properly checking for PUBLIC_KEY metadata"
+      ]
+    },
+    {
+      "priority": 3,
+      "action": "Verify Module Registration",
+      "steps": [
+        "Check that BillingModule properly imports BillingAnalyticsModule",
+        "Verify all controllers are in the 'controllers' array of their modules",
+        "Check app.module.ts imports all required feature modules"
+      ]
+    }
+  ]
+}

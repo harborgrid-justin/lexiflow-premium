@@ -2,11 +2,10 @@
  * Correspondence Page - Server Component with Data Fetching
  * Manage legal correspondence and letters
  */
-import React from 'react';
-import CorrespondenceManager from '@/components/correspondence/CorrespondenceManager';
+import CorrespondenceManager from '@/features/operations/correspondence/CorrespondenceManager';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'Correspondence | LexiFlow',

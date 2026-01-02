@@ -1,56 +1,60 @@
+import { BullModule } from "@nestjs/bull";
 import {
-  Module,
-  MiddlewareConsumer,
-  NestModule,
-  OnModuleInit,
   ClassSerializerInterceptor,
   DynamicModule,
-} from '@nestjs/common';
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, Reflector } from '@nestjs/core';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { BullModule } from '@nestjs/bull';
-import { ScheduleModule } from '@nestjs/schedule';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { EventEmitterModule } from '@nestjs/event-emitter';
-import * as path from 'path';
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  OnModuleInit,
+} from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import {
+  APP_FILTER,
+  APP_GUARD,
+  APP_INTERCEPTOR,
+  Reflector,
+} from "@nestjs/core";
+import { EventEmitterModule } from "@nestjs/event-emitter";
+import { ScheduleModule } from "@nestjs/schedule";
+import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import * as path from "path";
 
-import { SystemStartupReporter } from './bootstrap/system-startup.reporter';
+import { SystemStartupReporter } from "./bootstrap/system-startup.reporter";
 
-import * as MasterConfig from './config/master.config';
-import configuration from './config/configuration';
-import resourceLimitsConfig from './config/resource-limits.config';
-import memoryConfig from './config/memory.config';
-import { getDatabaseConfig } from './config/database.config';
-import { validationSchema, validationOptions } from './config/env.validation';
-import { GlobalConfigModule } from './config/global-config.module';
+import configuration from "./config/configuration";
+import { getDatabaseConfig } from "./config/database.config";
+import { validationOptions, validationSchema } from "./config/env.validation";
+import { GlobalConfigModule } from "./config/global-config.module";
+import * as MasterConfig from "./config/master.config";
+import memoryConfig from "./config/memory.config";
+import resourceLimitsConfig from "./config/resource-limits.config";
 
-import { CoreModule } from './core/core.module';
-import { MemoryModule } from './common/memory.module';
-import { MemoryManagementModule } from './common/memory-management.module';
-import { DatabaseModule } from './config/database.module';
+import { MemoryManagementModule } from "./common/memory-management.module";
+import { MemoryModule } from "./common/memory.module";
+import { DatabaseModule } from "./config/database.module";
+import { CoreModule } from "./core/core.module";
 
-import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
+import { JwtAuthGuard } from "./common/guards/jwt-auth.guard";
 
-import { SanitizationMiddleware } from './common/middleware/sanitization.middleware';
-import { StreamProcessingMiddleware } from './common/middleware/stream-processing.middleware';
-import { CorrelationIdInterceptor } from './common/interceptors/correlation-id.interceptor';
-import { ResponseTransformInterceptor } from './common/interceptors/response-transform.interceptor';
-import { MemoryManagementInterceptor } from './common/interceptors/memory-management.interceptor';
-import { EnterpriseExceptionFilter } from './common/filters/enterprise-exception.filter';
+import { EnterpriseExceptionFilter } from "./common/filters/enterprise-exception.filter";
+import { CorrelationIdInterceptor } from "./common/interceptors/correlation-id.interceptor";
+import { MemoryManagementInterceptor } from "./common/interceptors/memory-management.interceptor";
+import { ResponseTransformInterceptor } from "./common/interceptors/response-transform.interceptor";
+import { SanitizationMiddleware } from "./common/middleware/sanitization.middleware";
+import { StreamProcessingMiddleware } from "./common/middleware/stream-processing.middleware";
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
 
-import { APP_IMPORTS, APP_IMPORT_NAMES } from './app.imports';
+import { APP_IMPORTS, APP_IMPORT_NAMES } from "./app.imports";
 
 /* ------------------------------------------------------------------ */
 /* Redis / Bull Feature Gate                                           */
 /* ------------------------------------------------------------------ */
 
 const redisEnabled =
-  process.env.REDIS_ENABLED !== 'false' &&
-  process.env.DEMO_MODE !== 'true';
+  process.env.REDIS_ENABLED !== "false" && process.env.DEMO_MODE !== "true";
 
 function queueModules(): DynamicModule[] {
   if (!redisEnabled) {
@@ -62,15 +66,15 @@ function queueModules(): DynamicModule[] {
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        const url = config.get<string>('redis.url');
+        const url = config.get<string>("redis.url");
         return url
           ? { url }
           : {
               redis: {
-                host: config.get<string>('redis.host'),
-                port: config.get<number>('redis.port'),
-                password: config.get<string>('redis.password'),
-                username: config.get<string>('redis.username'),
+                host: config.get<string>("redis.host"),
+                port: config.get<number>("redis.port"),
+                password: config.get<string>("redis.password"),
+                username: config.get<string>("redis.username"),
               },
             };
       },
@@ -87,7 +91,7 @@ function queueModules(): DynamicModule[] {
     /* Configuration */
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: path.resolve(__dirname, '../.env'),
+      envFilePath: path.resolve(__dirname, "../.env"),
       load: [configuration, resourceLimitsConfig, memoryConfig],
       validationSchema,
       validationOptions,
@@ -114,7 +118,7 @@ function queueModules(): DynamicModule[] {
     /* Domain Events */
     EventEmitterModule.forRoot({
       wildcard: true,
-      delimiter: '.',
+      delimiter: ".",
       maxListeners: 10,
     }),
 
@@ -140,7 +144,11 @@ function queueModules(): DynamicModule[] {
     AppService,
 
     /* Global Guards */
-    { provide: APP_GUARD, useClass: JwtAuthGuard },
+    {
+      provide: APP_GUARD,
+      useFactory: (reflector: Reflector) => new JwtAuthGuard(reflector),
+      inject: [Reflector],
+    },
     { provide: APP_GUARD, useClass: ThrottlerGuard },
 
     /* Global Interceptors */
@@ -172,38 +180,47 @@ export class AppModule implements NestModule, OnModuleInit {
     /* Core Infrastructure                                            */
     /* -------------------------------------------------------------- */
 
-    SystemStartupReporter.section('Core Infrastructure');
-    SystemStartupReporter.module({ name: 'ConfigModule', status: 'ENABLED' });
-    SystemStartupReporter.module({ name: 'GlobalConfigModule', status: 'ENABLED' });
-    SystemStartupReporter.module({ name: 'TypeOrmModule', status: 'ENABLED' });
+    SystemStartupReporter.section("Core Infrastructure");
+    SystemStartupReporter.module({ name: "ConfigModule", status: "ENABLED" });
     SystemStartupReporter.module({
-      name: 'Bull / Redis',
-      status: redisEnabled ? 'ENABLED' : 'DISABLED',
+      name: "GlobalConfigModule",
+      status: "ENABLED",
     });
-    SystemStartupReporter.module({ name: 'ScheduleModule', status: 'ENABLED' });
-    SystemStartupReporter.module({ name: 'EventEmitterModule', status: 'ENABLED' });
-    SystemStartupReporter.module({ name: 'ThrottlerModule', status: 'ENABLED' });
+    SystemStartupReporter.module({ name: "TypeOrmModule", status: "ENABLED" });
+    SystemStartupReporter.module({
+      name: "Bull / Redis",
+      status: redisEnabled ? "ENABLED" : "DISABLED",
+    });
+    SystemStartupReporter.module({ name: "ScheduleModule", status: "ENABLED" });
+    SystemStartupReporter.module({
+      name: "EventEmitterModule",
+      status: "ENABLED",
+    });
+    SystemStartupReporter.module({
+      name: "ThrottlerModule",
+      status: "ENABLED",
+    });
 
     /* -------------------------------------------------------------- */
     /* Core Platform                                                   */
     /* -------------------------------------------------------------- */
 
-    SystemStartupReporter.section('Core Platform');
-    SystemStartupReporter.module({ name: 'CoreModule', status: 'ENABLED' });
-    SystemStartupReporter.module({ name: 'DatabaseModule', status: 'ENABLED' });
-    SystemStartupReporter.module({ name: 'MemoryModule', status: 'ENABLED' });
+    SystemStartupReporter.section("Core Platform");
+    SystemStartupReporter.module({ name: "CoreModule", status: "ENABLED" });
+    SystemStartupReporter.module({ name: "DatabaseModule", status: "ENABLED" });
+    SystemStartupReporter.module({ name: "MemoryModule", status: "ENABLED" });
     SystemStartupReporter.module({
-      name: 'MemoryManagementModule',
-      status: 'ENABLED',
+      name: "MemoryManagementModule",
+      status: "ENABLED",
     });
 
     /* -------------------------------------------------------------- */
     /* Application Services                                           */
     /* -------------------------------------------------------------- */
 
-    SystemStartupReporter.section('Application Services');
+    SystemStartupReporter.section("Application Services");
     for (const name of APP_IMPORT_NAMES) {
-      SystemStartupReporter.module({ name, status: 'ENABLED' });
+      SystemStartupReporter.module({ name, status: "ENABLED" });
     }
 
     /* -------------------------------------------------------------- */
@@ -214,6 +231,6 @@ export class AppModule implements NestModule, OnModuleInit {
   configure(consumer: MiddlewareConsumer): void {
     consumer
       .apply(SanitizationMiddleware, StreamProcessingMiddleware)
-      .forRoutes('*');
+      .forRoutes("*");
   }
 }

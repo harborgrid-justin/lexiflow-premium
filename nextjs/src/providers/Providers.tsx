@@ -3,6 +3,7 @@
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { QueryClientProvider } from '@/providers/QueryClientProvider';
 import { ThemeProvider } from '@/providers/ThemeProvider';
+import { ToastProvider } from '@/providers/ToastContext';
 import { Provider as JotaiProvider } from 'jotai';
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -16,7 +17,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <ToastProvider>
+              {children}
+            </ToastProvider>
           </ThemeProvider>
         </QueryClientProvider>
       </JotaiProvider>

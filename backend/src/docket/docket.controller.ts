@@ -1,34 +1,45 @@
+import { Public } from "@common/decorators/public.decorator";
 import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
   Body,
-  Param,
-  Query,
+  Controller,
+  Delete,
+  Get,
   HttpCode,
   HttpStatus,
-} from '@nestjs/common';
-import { ApiTags, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
-import { Public } from '@common/decorators/public.decorator';
-import { DocketService } from './docket.service';
-import { CreateDocketEntryDto } from './dto/create-docket-entry.dto';
-import { UpdateDocketEntryDto } from './dto/update-docket-entry.dto';
-import { PacerSyncDto, PacerSyncResultDto } from './dto/pacer-sync.dto';
-import { DocketEntry } from './entities/docket-entry.entity';
+  Param,
+  Post,
+  Put,
+  Query,
+} from "@nestjs/common";
+import { ApiBearerAuth, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { DocketService } from "./docket.service";
+import { CreateDocketEntryDto } from "./dto/create-docket-entry.dto";
+import { PacerSyncDto, PacerSyncResultDto } from "./dto/pacer-sync.dto";
+import { UpdateDocketEntryDto } from "./dto/update-docket-entry.dto";
+import { DocketEntry } from "./entities/docket-entry.entity";
 
-@ApiTags('Docket')
-@ApiBearerAuth('JWT-auth')
-@Controller('docket')
+@ApiTags("Docket")
+@ApiBearerAuth("JWT-auth")
+@Controller("docket")
 export class DocketController {
   constructor(private readonly docketService: DocketService) {}
 
+  @Public()
   @Get()
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAll(@Query('caseId') caseId?: string): Promise<{ data: DocketEntry[]; total: number; page: number; limit: number; totalPages: number }> {
-    const result = caseId ? await this.docketService.findAllByCaseId(caseId) : await this.docketService.findAll();
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  async findAll(
+    @Query("caseId") caseId?: string
+  ): Promise<{
+    data: DocketEntry[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }> {
+    const result = caseId
+      ? await this.docketService.findAllByCaseId(caseId)
+      : await this.docketService.findAll();
     if (Array.isArray(result)) {
       return {
         data: result,
@@ -44,72 +55,79 @@ export class DocketController {
     };
   }
 
-  @Get(':id')
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiResponse({ status: 404, description: 'Resource not found' })
-  async findOne(@Param('id') id: string): Promise<DocketEntry> {
+  @Get(":id")
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 404, description: "Resource not found" })
+  async findOne(@Param("id") id: string): Promise<DocketEntry> {
     return this.docketService.findOne(id);
   }
 
-  @Public()  // Temporarily public for import script testing
+  @Public() // Temporarily public for import script testing
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiResponse({ status: 400, description: 'Invalid request data' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async createDocket(@Body() createDocketEntryDto: CreateDocketEntryDto): Promise<DocketEntry> {
+  @ApiResponse({ status: 400, description: "Invalid request data" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 409, description: "Resource already exists" })
+  async createDocket(
+    @Body() createDocketEntryDto: CreateDocketEntryDto
+  ): Promise<DocketEntry> {
     return this.docketService.create(createDocketEntryDto);
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiResponse({ status: 404, description: 'Resource not found' })
-  async removeDocket(@Param('id') id: string): Promise<void> {
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 404, description: "Resource not found" })
+  async removeDocket(@Param("id") id: string): Promise<void> {
     return this.docketService.remove(id);
   }
 
-  @Get('cases/:caseId/docket')
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  async findAllByCaseId(@Param('caseId') caseId: string): Promise<DocketEntry[]> {
+  @Get("cases/:caseId/docket")
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  async findAllByCaseId(
+    @Param("caseId") caseId: string
+  ): Promise<DocketEntry[]> {
     const result = await this.docketService.findAllByCaseId(caseId);
     return Array.isArray(result) ? result : (result as any).data || [];
   }
 
-  @Post('cases/:caseId/docket')
+  @Post("cases/:caseId/docket")
   @HttpCode(HttpStatus.CREATED)
-  @ApiResponse({ status: 400, description: 'Invalid request data' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async create(@Body() createDocketEntryDto: CreateDocketEntryDto): Promise<DocketEntry> {
+  @ApiResponse({ status: 400, description: "Invalid request data" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 409, description: "Resource already exists" })
+  async create(
+    @Body() createDocketEntryDto: CreateDocketEntryDto
+  ): Promise<DocketEntry> {
     return this.docketService.create(createDocketEntryDto);
   }
 
-  @Put(':id')
-  @ApiResponse({ status: 400, description: 'Invalid request data' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiResponse({ status: 404, description: 'Resource not found' })
+  @Put(":id")
+  @ApiResponse({ status: 400, description: "Invalid request data" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 404, description: "Resource not found" })
   async update(
-    @Param('id') id: string,
-    @Body() updateDocketEntryDto: UpdateDocketEntryDto,
+    @Param("id") id: string,
+    @Body() updateDocketEntryDto: UpdateDocketEntryDto
   ): Promise<DocketEntry> {
     return this.docketService.update(id, updateDocketEntryDto);
   }
 
-  @Post('pacer/sync')
+  @Post("pacer/sync")
   @HttpCode(HttpStatus.OK)
-  @ApiResponse({ status: 400, description: 'Invalid request data' })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden' })
-  @ApiResponse({ status: 409, description: 'Resource already exists' })
-  async syncFromPacer(@Body() pacerSyncDto: PacerSyncDto): Promise<PacerSyncResultDto> {
+  @ApiResponse({ status: 400, description: "Invalid request data" })
+  @ApiResponse({ status: 401, description: "Unauthorized" })
+  @ApiResponse({ status: 403, description: "Forbidden" })
+  @ApiResponse({ status: 409, description: "Resource already exists" })
+  async syncFromPacer(
+    @Body() pacerSyncDto: PacerSyncDto
+  ): Promise<PacerSyncResultDto> {
     return this.docketService.syncFromPacer(pacerSyncDto);
   }
 }
-

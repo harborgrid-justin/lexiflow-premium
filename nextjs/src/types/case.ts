@@ -1,29 +1,34 @@
 // types/case.ts
 // Auto-generated from models.ts split
 
+import { CaseTeamMember } from "./case-team";
 import {
-  BaseEntity, UserId, OrgId,
-  EntityId, PartyId,
-  CaseId, MatterId, Money, JurisdictionObject, MetadataRecord, JsonValue
-} from './primitives';
-import { CaseTeamMember } from './case-team';
+  BillingArrangement,
+  BillingModel,
+  CaseStatus,
+  MatterPriority,
+  MatterStatus,
+  MatterType,
+} from "./enums";
+import { FeeAgreement } from "./financial";
+import { Citation, Defense, LegalArgument } from "./legal-research";
 import {
-  CaseStatus, MatterType, BillingModel,
-  
-  
-  
-  
-  
-  
-  
-  MatterStatus, MatterPriority, BillingArrangement
-} from './enums';
-import { FeeAgreement } from './financial';
-import { Citation, LegalArgument, Defense } from './legal-research';
-import { Project } from './workflow';
+  BaseEntity,
+  CaseId,
+  EntityId,
+  JsonValue,
+  JurisdictionObject,
+  MatterId,
+  MetadataRecord,
+  Money,
+  OrgId,
+  PartyId,
+  UserId,
+} from "./primitives";
+import { Project } from "./workflow";
 
 // --- CLUSTER 2: CASE & LITIGATION ---
-export interface Case extends BaseEntity { 
+export interface Case extends BaseEntity {
   id: CaseId;
   // Core fields (aligned with backend)
   title: string;
@@ -43,18 +48,18 @@ export interface Case extends BaseEntity {
   closeDate?: string; // Backend field
   dateTerminated?: string; // Backend: date_terminated
   juryDemand?: string; // Backend: jury_demand
-  
+
   // Team & ownership
   assignedTeamId?: string; // Backend field
   leadAttorneyId?: string; // Backend field (maps to ownerId)
   ownerId?: UserId; // Frontend legacy
   ownerOrgId?: OrgId;
   team?: CaseTeamMember[];
-  
+
   // Client relationship
   client: string; // Display name
   clientId?: UserId | EntityId; // Backend: uuid (required)
-  
+
   // Relationships
   parties: Party[];
   citations: Citation[];
@@ -62,7 +67,7 @@ export interface Case extends BaseEntity {
   leadCaseId?: CaseId;
   isConsolidated?: boolean;
   associatedCases?: { caseId: CaseId; relationship: string }[];
-  
+
   // Litigation details
   arguments: LegalArgument[];
   defenses: Defense[];
@@ -75,7 +80,7 @@ export interface Case extends BaseEntity {
   natureOfSuit?: string; // Backend: nature_of_suit
   natureOfSuitCode?: string; // Backend: nature_of_suit_code (e.g., '422')
   relatedCases?: { court: string; caseNumber: string; relationship?: string }[]; // Backend: jsonb
-  
+
   // Financial
   value?: number;
   valuation?: Money;
@@ -84,7 +89,7 @@ export interface Case extends BaseEntity {
   feeAgreement?: FeeAgreement;
   budget?: Money;
   budgetAlertThreshold?: number;
-  
+
   // Metadata
   matterType: MatterType;
   matterSubType?: string;
@@ -92,7 +97,7 @@ export interface Case extends BaseEntity {
   metadata?: MetadataRecord; // Backend: jsonb field
   isArchived: boolean; // Backend field (default: false)
   projects?: Project[];
-  
+
   // Statute of limitations
   solDate?: string;
   solTriggerDate?: string;
@@ -102,40 +107,40 @@ export interface Case extends BaseEntity {
  * Party type discriminated union for type safety
  * @see Backend: parties/entities/party.entity.ts
  */
-export type PartyType = 
-  | 'Plaintiff' 
-  | 'Defendant' 
-  | 'Petitioner' 
-  | 'Respondent' 
-  | 'Appellant' 
-  | 'Appellee' 
-  | 'Third Party' 
-  | 'Witness' 
-  | 'Expert Witness' 
-  | 'Other' 
-  | 'Individual' 
-  | 'Corporation' 
-  | 'Government';
+export type PartyType =
+  | "Plaintiff"
+  | "Defendant"
+  | "Petitioner"
+  | "Respondent"
+  | "Appellant"
+  | "Appellee"
+  | "Third Party"
+  | "Witness"
+  | "Expert Witness"
+  | "Other"
+  | "Individual"
+  | "Corporation"
+  | "Government";
 
 /**
  * Party role in case
  */
-export type PartyRole = 
-  | 'Primary' 
-  | 'Co-Party' 
-  | 'Interested Party' 
-  | 'Guardian' 
-  | 'Representative' 
+export type PartyRole =
+  | "Primary"
+  | "Co-Party"
+  | "Interested Party"
+  | "Guardian"
+  | "Representative"
   | string;
 
 /**
  * Party entity representing individuals or organizations involved in a case
  * @see Backend: parties/entities/party.entity.ts
- * 
+ *
  * Represents plaintiffs, defendants, witnesses, and other case participants.
  * Includes attorney representation and contact information.
  */
-export type Party = BaseEntity & { 
+export type Party = BaseEntity & {
   readonly id: PartyId;
   // Core fields (aligned with backend Party entity)
   readonly caseId: CaseId; // Backend: uuid (required), FK to cases
@@ -143,10 +148,10 @@ export type Party = BaseEntity & {
   readonly description?: string; // Backend: varchar(500) - e.g., 'A Community Association'
   readonly type: PartyType; // Backend: enum PartyType
   readonly role: PartyRole; // Backend: enum PartyRole
-  
+
   // Organization
   organization?: string; // Backend: varchar(255)
-  
+
   // Contact information
   email?: string; // Backend: varchar(255)
   phone?: string; // Backend: varchar(50)
@@ -155,7 +160,7 @@ export type Party = BaseEntity & {
   state?: string; // Backend: varchar(100)
   zipCode?: string; // Backend: varchar(20)
   country?: string; // Backend: varchar(100)
-  
+
   // Legal representation
   counsel?: string; // Backend: varchar(255)
   attorneyName?: string; // Backend: attorney_name
@@ -168,11 +173,11 @@ export type Party = BaseEntity & {
   isLeadAttorney?: boolean; // Backend: is_lead_attorney (default: false)
   isAttorneyToBeNoticed?: boolean; // Backend: is_attorney_to_be_noticed (default: false)
   isProSe?: boolean; // Backend: is_pro_se (default: false)
-  
+
   // Additional data
   notes?: string; // Backend: text
   metadata?: MetadataRecord; // Backend: jsonb
-  
+
   // Frontend-specific (legacy)
   contact?: string;
   partyGroup?: string;
@@ -204,7 +209,7 @@ export type Attorney = {
  */
 export type CaseTeamMemberRole = {
   readonly userId: UserId;
-  readonly role: 'Lead' | 'Support' | 'Paralegal';
+  readonly role: "Lead" | "Support" | "Paralegal";
   readonly rateOverride?: Money;
 };
 
@@ -212,10 +217,10 @@ export type CaseTeamMemberRole = {
  * Matter Management entity
  * @see Backend: matters/entities/matter.entity.ts
  * @see Backend: matters table
- * 
+ *
  * Represents client matters with billing, assignment, and lifecycle tracking.
  * EXACTLY aligned with backend Matter entity field names and types.
- * 
+ *
  * @property matterNumber - Unique matter identifier (required, indexed)
  * @property status - Lifecycle state (INTAKE → ACTIVE → CLOSED)
  * @property matterType - Classification (LITIGATION, TRANSACTIONAL, etc.)
@@ -223,32 +228,32 @@ export type CaseTeamMemberRole = {
  */
 export type Matter = BaseEntity & {
   readonly id: MatterId;
-  
+
   // Core Identification (backend field names)
   matterNumber: string; // Backend: matternumber varchar unique (required)
   title: string; // Backend: varchar (required)
   description?: string; // Backend: text
-  
+
   // Status & Classification (backend enums)
   status: MatterStatus; // Backend: enum (default: INTAKE -> ACTIVE in DB)
   matterType: MatterType; // Backend: type enum (default: OTHER)
   priority: MatterPriority; // Backend: enum (default: MEDIUM)
   practiceArea?: string; // Backend: practicearea varchar
-  
+
   // Client Information (backend exact fields)
   clientId?: string; // Backend: clientid uuid
   clientName?: string; // Backend: clientname varchar
-  
+
   // Attorney Assignment (backend exact field names)
   leadAttorneyId?: string; // Backend: responsibleattorneyid uuid
   leadAttorneyName?: string; // Backend: responsibleattorneyname varchar
   originatingAttorneyId?: string; // Backend: originatingattorneyid uuid
   originatingAttorneyName?: string; // Backend: originatingattorneyname varchar
-  
+
   // Jurisdictional Information
   jurisdiction?: string; // Backend: varchar
   venue?: string; // Backend: varchar
-  
+
   // Financial (backend exact fields)
   billingType?: string; // Backend: billingarrangement varchar
   hourlyRate?: number; // Backend: hourlyrate decimal(10,2)
@@ -257,38 +262,38 @@ export type Matter = BaseEntity & {
   retainerAmount?: number; // Backend: retaineramount decimal(10,2)
   estimatedValue?: number; // Backend: estimatedvalue decimal(12,2)
   budgetAmount?: number; // Backend: budgetamount decimal(12,2)
-  
+
   // Important Dates (backend exact field names)
   openedDate: string; // Backend: openeddate date (required)
   targetCloseDate?: string; // Backend: targetclosedate date
   closedDate?: string; // Backend: actualclosedate date
   statute_of_limitations?: string; // Backend: statuteoflimitationsdate date
-  
+
   // Tags & Opposing Party
   tags?: string[]; // Backend: jsonb
   opposingPartyName?: string; // Backend: opposingpartyname varchar (from DTO)
   opposingCounsel?: JsonValue; // Backend: opposingcounsel jsonb
   opposingCounselFirm?: string; // Backend: opposingcounselfirm varchar (from DTO)
-  
+
   // Conflict Check (backend exact fields)
   conflictCheckCompleted: boolean; // Backend: conflictcheckcompleted boolean (default: false)
   conflictCheckDate?: string; // Backend: conflictcheckdate date
   conflictCheckNotes?: string; // Backend: conflictchecknotes text
-  
+
   // Risk Management (from CreateMatterDto)
   riskLevel?: string; // Backend DTO: riskLevel varchar
   riskNotes?: string; // Backend DTO: riskNotes text (max 5000)
-  
+
   // Resources & Location
   officeLocation?: string; // Backend: officelocation varchar
   relatedMatterIds?: JsonValue; // Backend: relatedmatterids jsonb
   linkedCaseIds?: string[]; // Backend DTO: linkedCaseIds string array
   linkedDocumentIds?: string[]; // Backend DTO: linkedDocumentIds string array
-  
+
   // Notes & Custom Fields
   internalNotes?: string; // Backend: internalnotes text
   customFields?: MetadataRecord; // Backend: customfields jsonb
-  
+
   // Metadata (backend exact fields)
   createdBy: UserId; // Backend: createdby varchar (required)
   updatedBy?: UserId; // Backend: updatedby varchar
@@ -312,8 +317,8 @@ export type Matter = BaseEntity & {
   caseNumber?: string;
   judgeAssigned?: string;
   jurisdictions?: string[];
-  conflictCheckStatus?: 'pending' | 'cleared' | 'conflict' | 'waived';
-}
+  conflictCheckStatus?: "pending" | "cleared" | "conflict" | "waived";
+};
 
 /**
  * PACER case data structure
@@ -342,5 +347,5 @@ export interface DeadlineComputation {
   jurisdiction: string;
   rule: string;
   daysFromTrigger: number;
-  status: 'pending' | 'completed' | 'missed' | 'cancelled';
+  status: "pending" | "completed" | "missed" | "cancelled";
 }

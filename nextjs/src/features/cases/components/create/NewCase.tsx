@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * NewMatter Component (Default Export)
  *

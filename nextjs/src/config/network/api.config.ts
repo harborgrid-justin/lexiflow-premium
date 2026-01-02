@@ -5,22 +5,22 @@
 
 import { isBrowser } from "@rendering/utils";
 
-// Lazy getters to avoid accessing import.meta.env before Vite initialization
+// Lazy getters for Next.js environment
 export const getApiBaseUrl = () => {
-  // In development, use relative path to leverage Vite proxy (fixes CORS in Codespaces)
+  // In development, use relative path to leverage Next.js proxy (fixes CORS in Codespaces)
   // Also check for github.dev hostname to ensure we use proxy in Codespaces even if mode is somehow different
   if (
-    import.meta.env.DEV ||
+    process.env.NODE_ENV === "development" ||
     (isBrowser() && window.location.hostname.includes("github.dev"))
   ) {
     return "";
   }
-  return import.meta.env.VITE_API_URL || "";
+  return process.env.NEXT_PUBLIC_API_URL || "";
 };
-export const getApiPrefix = () => import.meta.env.VITE_API_PREFIX || "/api";
+export const getApiPrefix = () => process.env.NEXT_PUBLIC_API_PREFIX || "/api";
 
 // Export constants for backward compatibility
-export const API_PREFIX = import.meta.env.VITE_API_PREFIX || "/api";
+export const API_PREFIX = process.env.NEXT_PUBLIC_API_PREFIX || "/api";
 
 // Note: Don't access import.meta.env at module load
 export const API_TIMEOUT_MS = 30000; // 30 seconds

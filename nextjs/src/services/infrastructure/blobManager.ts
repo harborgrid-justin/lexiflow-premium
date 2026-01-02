@@ -61,7 +61,7 @@ class BlobManagerService {
       url,
       context,
       createdAt: Date.now(),
-      blob: import.meta.env.DEV ? blob : undefined, // Keep reference in dev for debugging
+      blob: process.env.NODE_ENV === "development" ? blob : undefined, // Keep reference in dev for debugging
     };
 
     this.registry.set(url, entry);
@@ -218,7 +218,7 @@ if (typeof window !== "undefined") {
 // ============================================================================
 // DEVELOPMENT HELPERS
 // ============================================================================
-if (import.meta.env.DEV && typeof window !== "undefined") {
+if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
   // Expose to window for debugging
   (window as unknown as Record<string, unknown>).__blobManager = BlobManager;
 

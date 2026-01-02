@@ -7,7 +7,7 @@
 
 import { API_ENDPOINTS } from '@/lib/api-config';
 import { cn } from '@/lib/utils';
-import { Case, CaseStatus } from '@/types';
+import { Case, CaseStatus, MatterPriority } from '@/types';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 

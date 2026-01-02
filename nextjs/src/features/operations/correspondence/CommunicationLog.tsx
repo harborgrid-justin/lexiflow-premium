@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @module components/correspondence/CommunicationLog
  * @category Correspondence

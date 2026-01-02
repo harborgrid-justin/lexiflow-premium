@@ -266,7 +266,7 @@ export const API_ENDPOINTS = {
   // ==================== Billing & Finance ====================
   BILLING: {
     ROOT: "/billing",
-    METRICS: "/billing/metrics",
+    METRICS: "/billing/analytics/metrics",
     ANALYTICS: "/billing/analytics",
   },
   TIME_ENTRIES: {
@@ -542,8 +542,8 @@ export const API_ENDPOINTS = {
 
   // ==================== Calendar & Events ====================
   CALENDAR: {
-    EVENTS: "/calendar/events",
-    CREATE: "/calendar/events",
+    EVENTS: "/calendar",
+    CREATE: "/calendar",
   },
 
   // ==================== HR & Organization ====================

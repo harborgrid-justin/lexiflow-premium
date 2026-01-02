@@ -62,7 +62,7 @@ const navigation: NavItem[] = [
     icon: <Zap className="h-5 w-5" />,
     children: [
       { name: 'Research', href: '/research', icon: <FileSearch className="h-5 w-5" /> },
-      { name: 'Calendar', href: '/calendar', icon: <Calendar className="h-5 w-5" /> },
+      { name: 'Calendar', href: '/case-calendar', icon: <Calendar className="h-5 w-5" /> },
       { name: 'Compliance', href: '/compliance', icon: <Lock className="h-5 w-5" /> },
     ],
   },

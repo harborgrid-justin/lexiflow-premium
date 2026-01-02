@@ -2,16 +2,17 @@ import { proxyToBackend } from "@/lib/backend-proxy";
 import { NextRequest } from "next/server";
 
 /**
- * GET /api/documents/:documentId/versions/:version/download - Download a specific version
+ * GET /api/documents/:id/versions/:version/download - Download a specific version
  * @headers Authorization: Bearer <token>
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ documentId: string; version: string }> }
+  { params }: { params: Promise<{ id: string; version: string }> }
 ) {
+  const { id, version } = await params;
   return proxyToBackend(
     request,
-    `/api/documents/${params.documentId}/versions/${params.version}/download`,
+    `/api/documents/${id}/versions/${version}/download`,
     { stream: true }
   );
 }

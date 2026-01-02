@@ -2,11 +2,21 @@
  * Arbitration List Page - Server Component with Data Fetching
  * Manage arbitration matters and proceedings
  */
-import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
+
+interface Arbitration {
+  id: string;
+  matterName: string;
+  caseNumber?: string;
+  arbitratorName?: string;
+  hearingDate?: string;
+  status?: string;
+  award?: unknown;
+  [key: string]: unknown;
+}
 
 export const metadata: Metadata = {
   title: 'Arbitration | LexiFlow',
@@ -14,7 +24,7 @@ export const metadata: Metadata = {
 };
 
 async function ArbitrationList() {
-  const arbitrations = await apiFetch(API_ENDPOINTS.ARBITRATION.LIST);
+  const arbitrations = await apiFetch<Arbitration[]>(API_ENDPOINTS.ARBITRATION.LIST);
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden">
@@ -46,9 +56,9 @@ async function ArbitrationList() {
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className={`px-2 py-1 rounded-full text-xs font-semibold ${arb.status === 'Awarded' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-                    arb.status === 'In Progress' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
-                      arb.status === 'Initiated' ? 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200' :
-                        'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300'
+                  arb.status === 'In Progress' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
+                    arb.status === 'Initiated' ? 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200' :
+                      'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300'
                   }`}>
                   {arb.status}
                 </span>

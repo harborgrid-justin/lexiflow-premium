@@ -9,9 +9,6 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
 
 interface FeeAgreementDetailPageProps {
   params: Promise<{ id: string }>;

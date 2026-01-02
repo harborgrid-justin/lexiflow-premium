@@ -14,7 +14,37 @@
  */
 
 // ============================================================================
-// ATOMIC DESIGN LAYERS
+// NEW UI COMPONENTS (NextJS App)
+// ============================================================================
+
+// Layout Components
+export { Breadcrumb } from "./Breadcrumb";
+export { Card, CardBody, CardFooter, CardHeader } from "./Card";
+export { PageHeader } from "./PageHeader";
+
+// Data Display Components
+export { Badge } from "./Badge";
+export { StatCard } from "./StatCard";
+export { Table } from "./Table";
+
+// Form Components
+export { Button } from "./Button";
+export { Input } from "./Input";
+export { Select } from "./Select";
+
+// Feedback Components
+export { Alert } from "./Alert";
+export { Modal } from "./Modal";
+
+// Navigation Components
+export { Tabs } from "./Tabs";
+
+// Utility Components
+export { EmptyState } from "./EmptyState";
+export { Skeleton, SkeletonLine } from "./Skeleton";
+
+// ============================================================================
+// LEGACY ATOMIC DESIGN LAYERS (Commented out)
 // ============================================================================
 
 // NOTE: Commented out to prevent Vite ERR_INSUFFICIENT_RESOURCES during dev

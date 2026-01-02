@@ -1,72 +1,126 @@
 /**
- * Tasks List Page - Server Component with Data Fetching
- * List view of all tasks
+ * Tasks Management Page
  */
-import React from 'react';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
-import { Metadata } from 'next';
-import Link from 'next/link';
+
+import { PageHeader } from '@/components/layout';
+import { Badge, Button, Card, CardBody, EmptyState, SkeletonLine, Table } from '@/components/ui';
+import { apiFetch } from '@/lib/api-config';
+import { Plus } from 'lucide-react';
 import { Suspense } from 'react';
 
-export const metadata: Metadata = {
-  title: 'Tasks | LexiFlow',
-  description: 'Manage tasks and assignments',
-};
+interface Task {
+  id: string;
+  title: string;
+  assignee: string;
+  dueDate: string;
+  priority: 'High' | 'Medium' | 'Low';
+  status: 'Todo' | 'In Progress' | 'Completed';
+}
 
-export default async function TasksPage(): Promise<React.JSX.Element> {
-  // Fetch tasks from backend
-  let tasks = [];
+async function TasksList() {
+  let tasks: Task[] = [];
+  let error = null;
 
   try {
-    tasks = await apiFetch(API_ENDPOINTS.TASKS.LIST);
-  } catch (error) {
-    console.error('Failed to load tasks:', error);
+    const response = await apiFetch('/api/tasks');
+    tasks = Array.isArray(response) ? response : [];
+  } catch (err) {
+    error = err instanceof Error ? err.message : 'Failed to load tasks';
   }
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Tasks</h1>
-        <Link
-          href="/tasks/new"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Create Task
-        </Link>
-      </div>
+  if (error) {
+    return (
+      <Card>
+        <CardBody>
+          <p className="text-red-600 dark:text-red-400">Error: {error}</p>
+        </CardBody>
+      </Card>
+    );
+  }
 
-      <Suspense fallback={<div>Loading tasks...</div>}>
-        <div className="space-y-3">
-          {tasks && tasks.length > 0 ? (
-            tasks.map((task: any) => (
-              <Link
-                key={task.id}
-                href={`/tasks/${task.id}`}
-                className="block p-4 bg-white dark:bg-slate-800 rounded-lg border hover:shadow-lg transition-shadow"
-              >
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <h3 className="font-semibold">{task.title}</h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                      {task.description}
-                    </p>
-                  </div>
-                  <div className="flex gap-2 ml-4">
-                    <span className="px-2 py-1 text-xs rounded bg-slate-100 dark:bg-slate-700">
-                      {task.priority}
-                    </span>
-                    <span className="px-2 py-1 text-xs rounded bg-blue-100 dark:bg-blue-900">
-                      {task.status}
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))
-          ) : (
-            <p className="text-slate-600 dark:text-slate-400">No tasks available</p>
-          )}
-        </div>
+  const columns = [
+    { header: 'Task', accessor: 'title' as const },
+    { header: 'Assignee', accessor: 'assignee' as const },
+    { header: 'Due Date', accessor: 'dueDate' as const },
+    {
+      header: 'Priority',
+      accessor: (row: Task) => (
+        <Badge
+          variant={
+            row.priority === 'High' ? 'danger' : row.priority === 'Medium' ? 'warning' : 'default'
+          }
+        >
+          {row.priority}
+        </Badge>
+      ),
+    },
+    {
+      header: 'Status',
+      accessor: (row: Task) => (
+        <Badge
+          variant={
+            row.status === 'Completed'
+              ? 'success'
+              : row.status === 'In Progress'
+                ? 'primary'
+                : 'default'
+          }
+        >
+          {row.status}
+        </Badge>
+      ),
+    },
+  ];
+
+  return (
+    <Card>
+      <CardBody className="p-0">
+        {tasks.length > 0 ? (
+          <Table columns={columns} data={tasks} />
+        ) : (
+          <EmptyState
+            title="No tasks found"
+            description="Create your first task"
+            action={<Button size="sm">New Task</Button>}
+          />
+        )}
+      </CardBody>
+    </Card>
+  );
+}
+
+export default function TasksPage() {
+  return (
+    <>
+      <PageHeader
+        title="Tasks"
+        description="Manage team tasks and assignments"
+        breadcrumbs={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Tasks' }]}
+        actions={<Button icon={<Plus className="h-4 w-4" />}>New Task</Button>}
+      />
+
+      <Card className="mb-6">
+        <CardBody>
+          <input
+            placeholder="Search tasks..."
+            className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50"
+          />
+        </CardBody>
+      </Card>
+
+      <Suspense
+        fallback={
+          <Card>
+            <CardBody className="p-0">
+              <div className="px-6 py-4">
+                <SkeletonLine lines={5} className="h-12" />
+              </div>
+            </CardBody>
+          </Card>
+        }
+      >
+        <TasksList />
       </Suspense>
-    </div>
+    </>
   );
 }

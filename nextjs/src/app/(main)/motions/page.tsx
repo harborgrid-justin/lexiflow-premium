@@ -1,82 +1,117 @@
 /**
- * Motions List Page - Server Component with Data Fetching
- * List view of all motions
+ * Motions Page
  */
-import React from 'react';
-import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
-import { Metadata } from 'next';
-import Link from 'next/link';
-import { Suspense } from 'react';
 
-export const metadata: Metadata = {
-  title: 'Motions | LexiFlow',
-  description: 'Manage motions and filings',
-};
+import { PageHeader } from '@/components/layout';
+import { Badge, Button, Card, CardBody, EmptyState, SkeletonLine, Table } from '@/components/ui';
+import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
+import { Plus } from 'lucide-react';
+import { Suspense } from 'react';
 
 interface Motion {
   id: string;
-  motionType: string;
-  filingDate: string;
-  court: string;
-  status: string;
-  hearingDate: string;
-  caseNumber: string;
+  title: string;
+  type: string;
+  caseId: string;
+  filedDate: string;
+  status: 'Draft' | 'Filed' | 'Heard' | 'Granted' | 'Denied';
 }
 
-export default async function MotionsPage(): Promise<React.JSX.Element> {
-  // Fetch motions from backend
+async function MotionsListContent() {
   let motions: Motion[] = [];
+  let error = null;
 
   try {
-    motions = await apiFetch(API_ENDPOINTS.MOTIONS.LIST);
-  } catch (error) {
-    console.error('Failed to load motions:', error);
+    const response = await apiFetch(API_ENDPOINTS.MOTIONS?.LIST || '/api/motions');
+    motions = Array.isArray(response) ? response : [];
+  } catch (err) {
+    error = err instanceof Error ? err.message : 'Failed to load motions';
   }
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold">Motions</h1>
-        <Link
-          href="/motions/new"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          File Motion
-        </Link>
-      </div>
+  if (error) {
+    return (
+      <Card>
+        <CardBody>
+          <p className="text-red-600 dark:text-red-400">Error: {error}</p>
+        </CardBody>
+      </Card>
+    );
+  }
 
-      <Suspense fallback={<div>Loading motions...</div>}>
-        <div className="grid grid-cols-1 gap-4">
-          {motions && motions.length > 0 ? (
-            motions.map((motion) => (
-              <Link
-                key={motion.id}
-                href={`/motions/${motion.id}`}
-                className="block p-6 bg-white dark:bg-slate-800 rounded-lg border hover:shadow-lg transition-shadow"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg font-semibold">{motion.motionType}</h3>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Case: {motion.caseNumber}</p>
-                    <p className="text-xs text-slate-500 mt-1">Court: {motion.court}</p>
-                    <p className="text-xs text-slate-500">Filed: {motion.filingDate}</p>
-                  </div>
-                  <div className="text-right">
-                    <div className="inline-block px-3 py-1 rounded-full text-sm font-medium mb-2 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                      {motion.status}
-                    </div>
-                    <div className="text-sm text-slate-600 dark:text-slate-400">
-                      Hearing: {motion.hearingDate}
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))
-          ) : (
-            <p className="text-slate-600 dark:text-slate-400">No motions available</p>
-          )}
-        </div>
+  const columns = [
+    { header: 'Title', accessor: 'title' as const },
+    { header: 'Type', accessor: 'type' as const },
+    { header: 'Case', accessor: 'caseId' as const },
+    { header: 'Filed Date', accessor: 'filedDate' as const },
+    {
+      header: 'Status',
+      accessor: (row: Motion) => (
+        <Badge
+          variant={
+            row.status === 'Granted'
+              ? 'success'
+              : row.status === 'Denied'
+                ? 'danger'
+                : row.status === 'Filed'
+                  ? 'primary'
+                  : 'default'
+          }
+        >
+          {row.status}
+        </Badge>
+      ),
+    },
+  ];
+
+  return (
+    <Card>
+      <CardBody className="p-0">
+        {motions.length > 0 ? (
+          <Table columns={columns} data={motions} />
+        ) : (
+          <EmptyState
+            title="No motions found"
+            description="File your first motion"
+            action={<Button size="sm">File Motion</Button>}
+          />
+        )}
+      </CardBody>
+    </Card>
+  );
+}
+
+export default function MotionsPage() {
+  return (
+    <>
+      <PageHeader
+        title="Motions"
+        description="Draft, file, and track legal motions"
+        breadcrumbs={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Motions' }]}
+        actions={<Button icon={<Plus className="h-4 w-4" />}>File Motion</Button>}
+      />
+
+      <Card className="mb-6">
+        <CardBody>
+          <input
+            placeholder="Search motions..."
+            className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50"
+          />
+        </CardBody>
+      </Card>
+
+      <Suspense
+        fallback={
+          <Card>
+            <CardBody className="p-0">
+              <div className="px-6 py-4">
+                <SkeletonLine lines={5} className="h-12" />
+              </div>
+            </CardBody>
+          </Card>
+        }
+      >
+        <MotionsListContent />
       </Suspense>
-    </div>
+    </>
   );
 }

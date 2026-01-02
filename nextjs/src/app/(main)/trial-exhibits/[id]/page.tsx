@@ -8,9 +8,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
 
 interface TrialExhibitDetailPageProps {
   params: Promise<{ id: string }>;

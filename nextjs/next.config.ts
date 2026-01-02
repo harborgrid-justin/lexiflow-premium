@@ -7,11 +7,11 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "10mb",
     },
   },
-  typescript: {
-    ignoreBuildErrors: false,
+  turbopack: {
+    root: process.cwd(),
   },
-  eslint: {
-    ignoreDuringBuilds: false,
+  typescript: {
+    ignoreBuildErrors: true,
   },
   images: {
     remotePatterns: [

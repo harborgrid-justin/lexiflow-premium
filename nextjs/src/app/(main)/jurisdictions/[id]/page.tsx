@@ -9,9 +9,6 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { Jurisdiction } from '../../../../types';
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
 
 interface JurisdictionDetailPageProps {
   params: Promise<{ id: string }>;

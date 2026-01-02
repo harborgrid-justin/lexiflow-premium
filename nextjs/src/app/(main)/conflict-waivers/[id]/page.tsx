@@ -7,9 +7,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
->;
-}
-
 // Static Site Generation (SSG) Configuration
 export const dynamic = 'force-static';
 export const revalidate = 3600; // Revalidate every 60 minutes
@@ -77,8 +74,8 @@ async function ConflictWaiverDetail({ id }: { id: string }) {
             <dt className="text-sm font-medium text-slate-500 dark:text-slate-400">Status</dt>
             <dd className="mt-1">
               <span className={`px-2 py-1 rounded-full text-xs font-semibold ${waiver.status === 'Active'
-                  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                  : 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300'
+                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                : 'bg-slate-100 text-slate-800 dark:bg-slate-700 dark:text-slate-300'
                 }`}>
                 {waiver.status}
               </span>

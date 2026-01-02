@@ -7,9 +7,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
->;
-}
-
 // Static Site Generation (SSG) Configuration
 export const dynamic = 'force-static';
 export const revalidate = 3600; // Revalidate every 60 minutes

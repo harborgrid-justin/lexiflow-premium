@@ -8,9 +8,6 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
 
 interface ConflictDetailPageProps {
   params: Promise<{ id: string }>;

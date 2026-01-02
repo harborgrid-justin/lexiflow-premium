@@ -2,14 +2,10 @@
  * Payment Plan Detail Page - Server Component with Data Fetching
  * Detailed view of payment plan with schedule, transactions, and auto-pay settings
  */
-import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Suspense } from 'react';
-
->;
-}
+import React, { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'Payment Plan Details | LexiFlow',

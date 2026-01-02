@@ -1,46 +1,100 @@
 /**
- * Knowledge Base Page - Server Component with Data Fetching
- * Legal knowledge and article repository
+ * Knowledge Base Page
  */
-import React from 'react';
+
+import { PageHeader } from '@/components/layout';
+import { Button, Card, CardBody, EmptyState, SkeletonLine, Table } from '@/components/ui';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
-import { Metadata } from 'next';
+import { Plus } from 'lucide-react';
 import { Suspense } from 'react';
 
-export const metadata: Metadata = {
-  title: 'Knowledge Base | LexiFlow',
-  description: 'Legal knowledge and article repository',
-};
+interface KnowledgeArticle {
+  id: string;
+  title: string;
+  category: string;
+  author: string;
+  createdDate: string;
+  views: number;
+}
 
-export default async function KnowledgeBasePage(): Promise<React.JSX.Element> {
-  // Fetch knowledge articles
-  let articles = [];
+async function KnowledgeListContent() {
+  let articles: KnowledgeArticle[] = [];
+  let error = null;
 
   try {
-    articles = await apiFetch(API_ENDPOINTS.KNOWLEDGE.ARTICLES);
-  } catch (error) {
-    console.error('Failed to load knowledge base:', error);
+    const response = await apiFetch(API_ENDPOINTS.KNOWLEDGE?.ARTICLES || '/api/knowledge-base');
+    articles = Array.isArray(response) ? response : [];
+  } catch (err) {
+    error = err instanceof Error ? err.message : 'Failed to load knowledge base';
   }
 
+  if (error) {
+    return (
+      <Card>
+        <CardBody>
+          <p className="text-red-600 dark:text-red-400">Error: {error}</p>
+        </CardBody>
+      </Card>
+    );
+  }
+
+  const columns = [
+    { header: 'Title', accessor: 'title' as const },
+    { header: 'Category', accessor: 'category' as const },
+    { header: 'Author', accessor: 'author' as const },
+    { header: 'Created', accessor: 'createdDate' as const },
+    { header: 'Views', accessor: 'views' as const },
+  ];
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50 mb-6">Knowledge Base</h1>
-      <Suspense fallback={<div>Loading articles...</div>}>
-        {articles && articles.length > 0 ? (
-          <div className="grid grid-cols-1 gap-4">
-            {articles.map((article: any) => (
-              <div key={article.id} className="bg-white dark:bg-slate-800 p-4 rounded-lg border">
-                <h3 className="font-semibold">{article.title}</h3>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                  {article.summary}
-                </p>
-              </div>
-            ))}
-          </div>
+    <Card>
+      <CardBody className="p-0">
+        {articles.length > 0 ? (
+          <Table columns={columns} data={articles} />
         ) : (
-          <p className="text-slate-600 dark:text-slate-400">No articles available</p>
+          <EmptyState
+            title="No articles found"
+            description="Create the first knowledge base article"
+            action={<Button size="sm">New Article</Button>}
+          />
         )}
+      </CardBody>
+    </Card>
+  );
+}
+
+export default function KnowledgeBasePage() {
+  return (
+    <>
+      <PageHeader
+        title="Knowledge Base"
+        description="Company legal procedures and best practices"
+        breadcrumbs={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Knowledge Base' }]}
+        actions={<Button icon={<Plus className="h-4 w-4" />}>New Article</Button>}
+      />
+
+      <Card className="mb-6">
+        <CardBody>
+          <input
+            placeholder="Search knowledge base..."
+            className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50"
+          />
+        </CardBody>
+      </Card>
+
+      <Suspense
+        fallback={
+          <Card>
+            <CardBody className="p-0">
+              <div className="px-6 py-4">
+                <SkeletonLine lines={5} className="h-12" />
+              </div>
+            </CardBody>
+          </Card>
+        }
+      >
+        <KnowledgeListContent />
       </Suspense>
-    </div>
+    </>
   );
 }

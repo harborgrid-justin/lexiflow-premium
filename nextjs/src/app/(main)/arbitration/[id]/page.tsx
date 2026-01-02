@@ -2,14 +2,40 @@
  * Arbitration Detail Page - Server Component with Data Fetching
  * Detailed view of arbitration matter with agreement, submissions, and award
  */
-import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 
-interface PageProps {
-  params: Promise<{ id: string }>;
+interface Arbitration {
+  id?: string;
+  matterName: string;
+  caseNumber?: string;
+  arbitratorName?: string;
+  forum?: string;
+  status?: string;
+  hearingDate?: string;
+  description?: string;
+  agreement?: {
+    date?: string;
+    rules?: string;
+    documentUrl?: string;
+  };
+  submissions?: Array<{
+    id?: string;
+    title?: string;
+    type?: string;
+    filedBy?: string;
+    date?: string;
+    documentUrl?: string;
+  }>;
+  award?: {
+    date?: string;
+    amount?: string;
+    summary?: string;
+    documentUrl?: string;
+  };
+  [key: string]: unknown;
 }
 
 interface ArbitrationDetailPageProps {
@@ -62,7 +88,7 @@ export async function generateMetadata({ params }: ArbitrationDetailPageProps): 
 }
 
 async function ArbitrationDetails({ id }: { id: string }) {
-  const arbitration = await apiFetch(API_ENDPOINTS.ARBITRATION.DETAIL(id));
+  const arbitration = await apiFetch<Arbitration>(API_ENDPOINTS.ARBITRATION.DETAIL(id));
 
   return (
     <>

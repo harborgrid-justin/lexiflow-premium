@@ -1,94 +1,115 @@
 /**
- * Reports Page - Server Component with Data Fetching
- * Report templates, schedules, and generation
+ * Reports Page
  */
+
+import { PageHeader } from '@/components/layout';
+import { Badge, Button, Card, CardBody, EmptyState, SkeletonLine, Table } from '@/components/ui';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
-import { Metadata } from 'next';
+import { Plus } from 'lucide-react';
 import { Suspense } from 'react';
 
-export const metadata: Metadata = {
-  title: 'Reports | LexiFlow',
-  description: 'Report templates and scheduled reports',
-};
+interface Report {
+  id: string;
+  name: string;
+  type: string;
+  createdDate: string;
+  createdBy: string;
+  format: 'PDF' | 'Excel' | 'Word';
+}
 
-async function ReportsList() {
-  const reports = await apiFetch(API_ENDPOINTS.REPORTS.LIST);
+async function ReportsListContent() {
+  let reports: Report[] = [];
+  let error = null;
+
+  try {
+    const response = await apiFetch(API_ENDPOINTS.REPORTS?.LIST || '/api/reports');
+    reports = Array.isArray(response) ? response : [];
+  } catch (err) {
+    error = err instanceof Error ? err.message : 'Failed to load reports';
+  }
+
+  if (error) {
+    return (
+      <Card>
+        <CardBody>
+          <p className="text-red-600 dark:text-red-400">Error: {error}</p>
+        </CardBody>
+      </Card>
+    );
+  }
+
+  const columns = [
+    { header: 'Report Name', accessor: 'name' as const },
+    { header: 'Type', accessor: 'type' as const },
+    { header: 'Created By', accessor: 'createdBy' as const },
+    { header: 'Created Date', accessor: 'createdDate' as const },
+    {
+      header: 'Format',
+      accessor: (row: Report) => (
+        <Badge
+          variant={
+            row.format === 'PDF'
+              ? 'danger'
+              : row.format === 'Excel'
+                ? 'success'
+                : 'primary'
+          }
+        >
+          {row.format}
+        </Badge>
+      ),
+    },
+  ];
 
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden">
-      <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
-        <thead className="bg-slate-50 dark:bg-slate-900">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Template Name</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Category</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Schedule</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Last Run</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Actions</th>
-          </tr>
-        </thead>
-        <tbody className="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
-          {reports.map((report: any) => (
-            <tr key={report.id} className="hover:bg-slate-50 dark:hover:bg-slate-700">
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900 dark:text-slate-100">
-                {report.name}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
-                {report.category}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
-                {report.schedule || 'Manual'}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">
-                {report.lastRun ? new Date(report.lastRun).toLocaleDateString() : 'Never'}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm space-x-3">
-                <button className="text-blue-600 hover:underline">Run Now</button>
-                <button className="text-green-600 hover:underline">Export</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Card>
+      <CardBody className="p-0">
+        {reports.length > 0 ? (
+          <Table columns={columns} data={reports} />
+        ) : (
+          <EmptyState
+            title="No reports found"
+            description="Generate your first report"
+            action={<Button size="sm">Generate Report</Button>}
+          />
+        )}
+      </CardBody>
+    </Card>
   );
 }
 
 export default function ReportsPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-6 flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Reports</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">Generate and schedule reports</p>
-        </div>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-          Create Template
-        </button>
-      </div>
+    <>
+      <PageHeader
+        title="Reports"
+        description="Generate and manage legal reports"
+        breadcrumbs={[{ label: 'Dashboard', href: '/dashboard' }, { label: 'Reports' }]}
+        actions={<Button icon={<Plus className="h-4 w-4" />}>Generate Report</Button>}
+      />
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4">
-          <p className="text-sm text-slate-500 dark:text-slate-400">Total Templates</p>
-          <p className="text-2xl font-bold text-slate-900 dark:text-slate-100">24</p>
-        </div>
-        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4">
-          <p className="text-sm text-slate-500 dark:text-slate-400">Scheduled</p>
-          <p className="text-2xl font-bold text-blue-600">8</p>
-        </div>
-        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4">
-          <p className="text-sm text-slate-500 dark:text-slate-400">Run Today</p>
-          <p className="text-2xl font-bold text-green-600">3</p>
-        </div>
-        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4">
-          <p className="text-sm text-slate-500 dark:text-slate-400">Favorites</p>
-          <p className="text-2xl font-bold text-amber-600">5</p>
-        </div>
-      </div>
+      <Card className="mb-6">
+        <CardBody>
+          <input
+            placeholder="Search reports..."
+            className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50"
+          />
+        </CardBody>
+      </Card>
 
-      <Suspense fallback={<div className="text-center py-12">Loading reports...</div>}>
-        <ReportsList />
+      <Suspense
+        fallback={
+          <Card>
+            <CardBody className="p-0">
+              <div className="px-6 py-4">
+                <SkeletonLine lines={5} className="h-12" />
+              </div>
+            </CardBody>
+          </Card>
+        }
+      >
+        <ReportsListContent />
       </Suspense>
-    </div>
+    </>
   );
 }

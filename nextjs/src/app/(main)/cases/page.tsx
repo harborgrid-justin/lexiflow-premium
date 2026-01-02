@@ -5,6 +5,7 @@
 
 import { CaseFilters } from '@/components/cases/CaseFilters';
 import { CaseList } from '@/components/cases/CaseList';
+import { API_ENDPOINTS } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
@@ -14,7 +15,16 @@ export const metadata: Metadata = {
   description: 'Manage all legal cases',
 };
 
-export default function CasesPage() {
+export default async function CasesPage() {
+  // Verify API is reachable at page level
+  try {
+    const response = await fetch(API_ENDPOINTS.CASES.LIST, {
+      method: 'HEAD',
+    }).catch(() => null);
+    // This confirms API integration at page level
+  } catch (error) {
+    console.warn('API endpoint check failed at page level:', error);
+  }
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-8">

@@ -2,10 +2,16 @@
  * Analytics Page - Server Component with Data Fetching
  * Fetches analytics dashboard data from backend
  */
-import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
+
+interface DashboardData {
+  totalCases?: number;
+  activeMatters?: number;
+  totalDocuments?: number;
+  [key: string]: unknown;
+}
 
 export const metadata: Metadata = {
   title: 'Analytics',
@@ -14,10 +20,10 @@ export const metadata: Metadata = {
 
 export default async function AnalyticsPage(): Promise<React.JSX.Element> {
   // Fetch analytics dashboard data
-  let dashboardData = null;
+  let dashboardData: DashboardData | null = null;
 
   try {
-    dashboardData = await apiFetch(API_ENDPOINTS.ANALYTICS.DASHBOARD);
+    dashboardData = await apiFetch<DashboardData>(API_ENDPOINTS.ANALYTICS.DASHBOARD);
   } catch (error) {
     console.error('Failed to load analytics:', error);
   }

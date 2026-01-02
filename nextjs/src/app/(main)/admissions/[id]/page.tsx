@@ -2,13 +2,12 @@
  * Admission Detail Page - Server Component with Data Fetching
  * Dynamic route for individual admission request view
  */
-import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 
-interface PageProps {
+interface AdmissionDetailPageProps {
   params: Promise<{ id: string }>;
 }
 

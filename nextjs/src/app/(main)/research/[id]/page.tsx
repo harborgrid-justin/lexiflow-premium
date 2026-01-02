@@ -5,9 +5,6 @@
 import React from 'react';
 import { Metadata } from 'next';
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
 
 interface ResearchDetailPageProps {
   params: Promise<{ id: string }>;

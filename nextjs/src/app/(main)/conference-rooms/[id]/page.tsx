@@ -7,9 +7,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
->;
-}
-
 // Static Site Generation (SSG) Configuration
 export const dynamic = 'force-static';
 export const revalidate = 3600; // Revalidate every 60 minutes
@@ -75,8 +72,8 @@ async function ConferenceRoomDetails({ id }: { id: string }) {
           <div>
             <span className="text-slate-500 dark:text-slate-400">Status:</span>
             <span className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold ${room.currentStatus === 'Available'
-                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+              ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+              : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
               }`}>
               {room.currentStatus || 'Available'}
             </span>

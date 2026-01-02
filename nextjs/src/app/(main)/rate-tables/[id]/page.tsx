@@ -6,9 +6,6 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
->;
-}
-
 // Static Site Generation (SSG) Configuration
 export const dynamic = 'force-static';
 export const revalidate = 3600; // Revalidate every 60 minutes

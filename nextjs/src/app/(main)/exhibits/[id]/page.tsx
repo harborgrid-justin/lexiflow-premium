@@ -7,9 +7,6 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
 
 interface ExhibitDetailPageProps {
   params: Promise<{ id: string }>;

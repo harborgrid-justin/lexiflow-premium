@@ -8,9 +8,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-interface PageProps {
-  params: Promise<{ id: string }>;
-}
 
 interface ContractDetailPageProps {
   params: Promise<{ id: string }>;

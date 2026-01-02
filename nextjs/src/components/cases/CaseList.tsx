@@ -7,7 +7,7 @@
 
 import { API_ENDPOINTS } from '@/lib/api-config';
 import { cn } from '@/lib/utils';
-import { Case, CaseStatus, Priority } from '@/types';
+import { Case, CaseStatus } from '@/types';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -18,11 +18,11 @@ const statusColors: Record<CaseStatus, string> = {
   [CaseStatus.ARCHIVED]: 'bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-400',
 };
 
-const priorityColors: Record<Priority, string> = {
-  [Priority.LOW]: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-  [Priority.MEDIUM]: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-  [Priority.HIGH]: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400',
-  [Priority.URGENT]: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
+const priorityColors: Record<MatterPriority, string> = {
+  [MatterPriority.LOW]: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
+  [MatterPriority.MEDIUM]: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
+  [MatterPriority.HIGH]: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400',
+  [MatterPriority.URGENT]: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
 };
 
 export function CaseList() {

@@ -2,21 +2,18 @@
  * Document Approvals Page - Server Component with Data Fetching
  * Displays document approval workflow and status tracking
  */
+import React from 'react';
 import { DocumentApprovalsList } from '@/components/document-approvals/DocumentApprovalsList';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Document Approvals',
   description: 'Manage document approval workflows',
 };
 
-export default async function DocumentApprovalsPage(): Promise<JSX.Element> {
+export default async function DocumentApprovalsPage(): Promise<React.JSX.Element> {
   // Fetch initial document approvals from backend
   let approvals = [];
 

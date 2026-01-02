@@ -2,6 +2,7 @@
  * Fee Agreement Detail Page - Server Component
  * Rate schedule, payment terms, and billing details
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -61,7 +62,7 @@ export async function generateMetadata({ params }: FeeAgreementDetailPageProps):
   }
 }
 
-export default async function FeeAgreementDetailPage({ params }: FeeAgreementDetailPageProps): Promise<JSX.Element> {
+export default async function FeeAgreementDetailPage({ params }: FeeAgreementDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let agreement: any;

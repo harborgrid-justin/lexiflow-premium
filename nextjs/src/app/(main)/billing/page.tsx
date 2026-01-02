@@ -2,14 +2,11 @@
  * Billing Page - Server Component with Data Fetching
  * Fetches billing data on server, passes to client component
  */
+import React from 'react';
 import BillingDashboard from '@/components/billing/BillingDashboard';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Billing & Finance | LexiFlow',
@@ -17,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 // Server Component - fetch data on server
-export default async function BillingPage(): Promise<JSX.Element> {
+export default async function BillingPage(): Promise<React.JSX.Element> {
   // Fetch billing metrics from backend
   let metrics = null;
   try {

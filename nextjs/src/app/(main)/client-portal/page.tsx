@@ -2,21 +2,18 @@
  * Client Portal Page - Server Component with Data Fetching
  * Displays client portal access status and document sharing
  */
+import React from 'react';
 import { ClientPortalList } from '@/components/client-portal/ClientPortalList';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Client Portal',
   description: 'Manage client portal access and document sharing',
 };
 
-export default async function ClientPortalPage(): Promise<JSX.Element> {
+export default async function ClientPortalPage(): Promise<React.JSX.Element> {
   // Fetch initial client portal data from backend
   let clients = [];
 

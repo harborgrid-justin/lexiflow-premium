@@ -3,6 +3,7 @@
  * Displays detailed information about a specific case
  */
 
+import React from 'react';
 import { CaseDocuments } from '@/components/cases/CaseDocuments';
 import { CaseHeader } from '@/components/cases/CaseHeader';
 import { CaseOverview } from '@/components/cases/CaseOverview';
@@ -72,7 +73,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function CasePage({ params }: CasePageProps): Promise<JSX.Element> {
+export default async function CasePage({ params }: CasePageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   // Fetch case data on the server

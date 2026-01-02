@@ -2,21 +2,18 @@
  * Case Calendar Page - Server Component with Data Fetching
  * Calendar view of case events and deadlines
  */
+import React from 'react';
 import { CaseCalendar } from '@/components/case-calendar/CaseCalendar';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Case Calendar | LexiFlow',
   description: 'Case events and deadlines calendar',
 };
 
-export default async function CaseCalendarPage(): Promise<JSX.Element> {
+export default async function CaseCalendarPage(): Promise<React.JSX.Element> {
   // Fetch calendar events
   let events = [];
 

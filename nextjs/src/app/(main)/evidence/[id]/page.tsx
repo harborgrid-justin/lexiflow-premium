@@ -2,6 +2,7 @@
  * Evidence Detail Page - Server Component with Data Fetching
  * Fetches specific evidence item from backend
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -59,7 +60,7 @@ export async function generateMetadata({ params }: EvidenceDetailPageProps): Pro
   }
 }
 
-export default async function EvidenceDetailPage({ params }: EvidenceDetailPageProps): Promise<JSX.Element> {
+export default async function EvidenceDetailPage({ params }: EvidenceDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let evidence;

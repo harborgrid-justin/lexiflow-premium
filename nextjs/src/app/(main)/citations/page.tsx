@@ -2,21 +2,18 @@
  * Citations Page - Server Component with Data Fetching
  * Fetches citations library from backend
  */
+import React from 'react';
 import { CitationManager } from '@/components/citations/CitationManager';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Citation Manager',
   description: 'Manage legal citations and analyze briefs',
 };
 
-export default async function CitationsPage(): Promise<JSX.Element> {
+export default async function CitationsPage(): Promise<React.JSX.Element> {
   // Fetch citations from backend
   let citations = [];
 

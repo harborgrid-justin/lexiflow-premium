@@ -2,6 +2,7 @@
  * Contract Detail Page - Server Component
  * Contract details with terms, milestones, and amendments
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -60,7 +61,7 @@ export async function generateMetadata({ params }: ContractDetailPageProps): Pro
   }
 }
 
-export default async function ContractDetailPage({ params }: ContractDetailPageProps): Promise<JSX.Element> {
+export default async function ContractDetailPage({ params }: ContractDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let contract;

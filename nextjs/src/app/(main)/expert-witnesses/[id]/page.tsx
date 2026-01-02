@@ -2,6 +2,7 @@
  * Expert Witness Detail Page - Server Component with Data Fetching
  * Detailed profile of expert witness
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -60,7 +61,7 @@ export async function generateMetadata({ params }: ExpertWitnessDetailPageProps)
   }
 }
 
-export default async function ExpertWitnessDetailPage({ params }: ExpertWitnessDetailPageProps): Promise<JSX.Element> {
+export default async function ExpertWitnessDetailPage({ params }: ExpertWitnessDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let expert: any;

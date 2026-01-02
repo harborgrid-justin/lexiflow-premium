@@ -2,6 +2,7 @@
  * War Room Detail Page - Server Component with Data Fetching
  * Fetches specific war room from backend
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -59,7 +60,7 @@ export async function generateMetadata({ params }: WarRoomDetailPageProps): Prom
   }
 }
 
-export default async function WarRoomDetailPage({ params }: WarRoomDetailPageProps): Promise<JSX.Element> {
+export default async function WarRoomDetailPage({ params }: WarRoomDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let warRoom;

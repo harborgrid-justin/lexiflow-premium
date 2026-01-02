@@ -2,20 +2,17 @@
  * Case Operations Page - Server Component with Data Fetching
  * Case operational management tools with backend data
  */
+import React from 'react';
 import { apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Case Operations | LexiFlow',
   description: 'Case operational management tools',
 };
 
-export default async function CaseOperationsPage(): Promise<JSX.Element> {
+export default async function CaseOperationsPage(): Promise<React.JSX.Element> {
   // Fetch case operations data
   let operations = [];
 

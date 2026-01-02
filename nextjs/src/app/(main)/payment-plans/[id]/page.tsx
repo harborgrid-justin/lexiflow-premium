@@ -2,13 +2,13 @@
  * Payment Plan Detail Page - Server Component with Data Fetching
  * Detailed view of payment plan with schedule, transactions, and auto-pay settings
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
-interface PageProps {
-  params: Promise<{ id: string }>;
+>;
 }
 
 export const metadata: Metadata = {
@@ -208,7 +208,6 @@ function LoadingSkeleton() {
   );
 }
 
-
 // Static Site Generation (SSG) Configuration
 export const dynamic = 'force-static';
 export const revalidate = 3600; // Revalidate every 60 minutes
@@ -240,7 +239,7 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
   }
 }
 
-export default async function PaymentPlanDetailPage({ params }: { params: { id: string } }): Promise<JSX.Element> {
+export default async function PaymentPlanDetailPage({ params }: { params: { id: string } }): Promise<React.JSX.Element> {
   const { id } = await params;
 
   return (

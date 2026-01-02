@@ -2,21 +2,18 @@
  * Custodians List Page - Server Component with Data Fetching
  * List view of all custodians
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Custodians | LexiFlow',
   description: 'Manage custodians and data sources',
 };
 
-export default async function CustodiansPage(): Promise<JSX.Element> {
+export default async function CustodiansPage(): Promise<React.JSX.Element> {
   // Fetch custodians from backend
   let custodians = [];
 

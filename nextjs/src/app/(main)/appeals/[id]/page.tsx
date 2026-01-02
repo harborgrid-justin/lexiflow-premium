@@ -2,6 +2,7 @@
  * Appeal Detail Page - Server Component with Data Fetching
  * Detailed view of appellate case
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -60,7 +61,7 @@ export async function generateMetadata({ params }: AppealDetailPageProps): Promi
   }
 }
 
-export default async function AppealDetailPage({ params }: AppealDetailPageProps): Promise<JSX.Element> {
+export default async function AppealDetailPage({ params }: AppealDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let appeal: any;

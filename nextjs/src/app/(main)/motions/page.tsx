@@ -2,14 +2,11 @@
  * Motions List Page - Server Component with Data Fetching
  * List view of all motions
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Motions | LexiFlow',
@@ -26,7 +23,7 @@ interface Motion {
   caseNumber: string;
 }
 
-export default async function MotionsPage(): Promise<JSX.Element> {
+export default async function MotionsPage(): Promise<React.JSX.Element> {
   // Fetch motions from backend
   let motions: Motion[] = [];
 

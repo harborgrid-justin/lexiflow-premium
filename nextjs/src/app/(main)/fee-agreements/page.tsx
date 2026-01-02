@@ -2,21 +2,18 @@
  * Fee Agreements List Page - Server Component
  * Overview of all fee agreements with client, billing method, and rates
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Fee Agreements | LexiFlow',
   description: 'Manage client fee agreements and billing structures',
 };
 
-export default async function FeeAgreementsPage(): Promise<JSX.Element> {
+export default async function FeeAgreementsPage(): Promise<React.JSX.Element> {
   const agreements = await apiFetch(API_ENDPOINTS.FEE_AGREEMENTS.LIST) as any[];
 
   return (

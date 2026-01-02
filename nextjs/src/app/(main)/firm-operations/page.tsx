@@ -2,20 +2,17 @@
  * Firm Operations Page - Server Component with Data Fetching
  * Administrative and operational management with backend data
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Firm Operations | LexiFlow',
   description: 'Firm administrative and operational management',
 };
 
-export default async function FirmOperationsPage(): Promise<JSX.Element> {
+export default async function FirmOperationsPage(): Promise<React.JSX.Element> {
   // Fetch firm operations data
   let hrData = null;
   let orgData = null;

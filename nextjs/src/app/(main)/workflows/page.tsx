@@ -2,21 +2,18 @@
  * Workflows Page - Server Component with Data Fetching
  * Manage legal workflows and task automation
  */
+import React from 'react';
 import MasterWorkflow from '@/components/workflows/MasterWorkflow';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Workflows | LexiFlow',
   description: 'Manage legal workflows and tasks',
 };
 
-export default async function WorkflowsPage(): Promise<JSX.Element> {
+export default async function WorkflowsPage(): Promise<React.JSX.Element> {
   // Fetch workflow templates and instances
   let workflows = [];
   let tasks = [];

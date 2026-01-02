@@ -2,6 +2,7 @@
  * Ethical Wall Detail Page - Server Component with Data Fetching
  * Detailed view of ethical wall configuration
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -60,7 +61,7 @@ export async function generateMetadata({ params }: EthicalWallDetailPageProps): 
   }
 }
 
-export default async function EthicalWallDetailPage({ params }: EthicalWallDetailPageProps): Promise<JSX.Element> {
+export default async function EthicalWallDetailPage({ params }: EthicalWallDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let wall: any;

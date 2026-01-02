@@ -2,20 +2,17 @@
  * Case Insights Page - Server Component with Data Fetching
  * AI-powered case insights and predictions with backend data
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Case Insights | LexiFlow',
   description: 'AI-powered case insights and predictions',
 };
 
-export default async function CaseInsightsPage(): Promise<JSX.Element> {
+export default async function CaseInsightsPage(): Promise<React.JSX.Element> {
   // Fetch case analytics and predictions
   let insights = null;
   let predictions = [];

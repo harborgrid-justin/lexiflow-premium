@@ -32,7 +32,7 @@ export function NotificationList({
 }: NotificationListProps) {
   const [filter, setFilter] = useState<'all' | 'unread' | 'high'>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const handleFilterChange = useCallback((newFilter: 'all' | 'unread' | 'high') => {
     startTransition(() => {
@@ -188,7 +188,7 @@ export function NotificationList({
             {(['all', 'unread', 'high'] as const).map((filterType) => (
               <button
                 key={filterType}
-                onClick={() => setFilter(filterType)}
+                onClick={() => handleFilterChange(filterType)}
                 className={`rounded-md px-3 py-1 text-sm font-medium capitalize ${filter === filterType
                   ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
                   : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
@@ -202,7 +202,7 @@ export function NotificationList({
           {/* Type filter */}
           <select
             value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
+            onChange={(e) => handleTypeFilterChange(e.target.value)}
             className="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
           >
             <option value="all">All Types</option>

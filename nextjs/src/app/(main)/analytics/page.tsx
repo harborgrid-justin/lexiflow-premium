@@ -2,20 +2,17 @@
  * Analytics Page - Server Component with Data Fetching
  * Fetches analytics dashboard data from backend
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Analytics',
   description: 'Business intelligence and analytics',
 };
 
-export default async function AnalyticsPage(): Promise<JSX.Element> {
+export default async function AnalyticsPage(): Promise<React.JSX.Element> {
   // Fetch analytics dashboard data
   let dashboardData = null;
 

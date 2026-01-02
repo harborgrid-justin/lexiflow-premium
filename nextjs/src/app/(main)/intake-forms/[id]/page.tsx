@@ -2,6 +2,7 @@
  * Intake Form Detail Page - Server Component with Data Fetching
  * Dynamic route for individual intake form with fields, client info, convert to case
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -63,7 +64,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function IntakeFormDetailPage({ params }: IntakeFormDetailPageProps): Promise<JSX.Element> {
+export default async function IntakeFormDetailPage({ params }: IntakeFormDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let form: any;

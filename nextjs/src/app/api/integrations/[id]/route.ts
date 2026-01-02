@@ -8,21 +8,24 @@ import { NextRequest } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  props: { params: Promise<{ id: string }> }
 ) {
-  return proxyToBackend(request, `/api/integrations/${params.id}`);
+  const { id } = await props.params;
+  return proxyToBackend(request, `/api/integrations/${id}`);
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  props: { params: Promise<{ id: string }> }
 ) {
-  return proxyToBackend(request, `/api/integrations/${params.id}`);
+  const { id } = await props.params;
+  return proxyToBackend(request, `/api/integrations/${id}`);
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  props: { params: Promise<{ id: string }> }
 ) {
-  return proxyToBackend(request, `/api/integrations/${params.id}`);
+  const { id } = await props.params;
+  return proxyToBackend(request, `/api/integrations/${id}`);
 }

@@ -2,21 +2,18 @@
  * Organizations List Page - Server Component with Data Fetching
  * List view of all organizations
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Organizations | LexiFlow',
   description: 'Manage organizations and entities',
 };
 
-export default async function OrganizationsPage(): Promise<JSX.Element> {
+export default async function OrganizationsPage(): Promise<React.JSX.Element> {
   // Fetch organizations from backend
   let organizations = [];
 

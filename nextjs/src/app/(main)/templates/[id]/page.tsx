@@ -2,6 +2,7 @@
  * Template Detail Page - Server Component
  * Template editor with variables, preview, and versions
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -60,7 +61,7 @@ export async function generateMetadata({ params }: TemplateDetailPageProps): Pro
   }
 }
 
-export default async function TemplateDetailPage({ params }: TemplateDetailPageProps): Promise<JSX.Element> {
+export default async function TemplateDetailPage({ params }: TemplateDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let template;

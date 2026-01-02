@@ -2,14 +2,11 @@
  * Budget Forecasting Dashboard - Server Component with Data Fetching
  * Matter budgets with actual vs forecast comparison and variance analysis
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Budget Forecasting | LexiFlow',
@@ -208,7 +205,7 @@ function LoadingSkeleton() {
   );
 }
 
-export default async function BudgetForecastingPage(): Promise<JSX.Element> {
+export default async function BudgetForecastingPage(): Promise<React.JSX.Element> {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">

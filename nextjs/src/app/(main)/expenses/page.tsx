@@ -2,21 +2,18 @@
  * Expenses List Page - Server Component with Data Fetching
  * List view of all expenses
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Expenses | LexiFlow',
   description: 'Manage expenses and reimbursements',
 };
 
-export default async function ExpensesPage(): Promise<JSX.Element> {
+export default async function ExpensesPage(): Promise<React.JSX.Element> {
   // Fetch expenses from backend
   let expenses: any[] = [];
 

@@ -2,6 +2,7 @@
  * Trust Account Detail Page - Server Component with Data Fetching
  * Dynamic route for individual trust account view
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -88,7 +89,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function TrustAccountDetailPage({ params }: TrustAccountDetailPageProps): Promise<JSX.Element> {
+export default async function TrustAccountDetailPage({ params }: TrustAccountDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let account: TrustAccountDetail;

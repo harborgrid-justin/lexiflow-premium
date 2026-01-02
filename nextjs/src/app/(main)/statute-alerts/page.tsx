@@ -7,10 +7,6 @@
 import { API_ENDPOINTS, clientFetch } from '@/lib/api-config';
 import { Suspense, useEffect, useState } from 'react';
 
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
-
 async function StatuteAlerts() {
   const [alerts, setAlerts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

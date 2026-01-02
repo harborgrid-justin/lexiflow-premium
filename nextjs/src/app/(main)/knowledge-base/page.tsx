@@ -2,20 +2,17 @@
  * Knowledge Base Page - Server Component with Data Fetching
  * Legal knowledge and article repository
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Knowledge Base | LexiFlow',
   description: 'Legal knowledge and article repository',
 };
 
-export default async function KnowledgeBasePage(): Promise<JSX.Element> {
+export default async function KnowledgeBasePage(): Promise<React.JSX.Element> {
   // Fetch knowledge articles
   let articles = [];
 

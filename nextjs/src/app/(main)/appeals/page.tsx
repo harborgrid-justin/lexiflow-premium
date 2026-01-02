@@ -2,21 +2,18 @@
  * Appeals Page - Server Component with Data Fetching
  * List of all appellate cases
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Appeals | LexiFlow',
   description: 'Manage appellate cases and proceedings',
 };
 
-export default async function AppealsPage(): Promise<JSX.Element> {
+export default async function AppealsPage(): Promise<React.JSX.Element> {
   let appeals: any[] = [];
 
   try {

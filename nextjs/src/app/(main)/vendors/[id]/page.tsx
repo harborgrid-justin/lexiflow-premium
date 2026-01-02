@@ -2,6 +2,7 @@
  * Vendor Detail Page - Server Component with Data Fetching
  * Detailed view of vendor information
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -60,7 +61,7 @@ export async function generateMetadata({ params }: VendorDetailPageProps): Promi
   }
 }
 
-export default async function VendorDetailPage({ params }: VendorDetailPageProps): Promise<JSX.Element> {
+export default async function VendorDetailPage({ params }: VendorDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let vendor;

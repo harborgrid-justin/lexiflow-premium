@@ -2,21 +2,18 @@
  * Case Analytics Page - Server Component with Data Fetching
  * Fetches case analytics from backend
  */
+import React from 'react';
 import { CaseAnalytics } from '@/components/case-analytics/CaseAnalytics';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Case Analytics | LexiFlow',
   description: 'Advanced case analytics and insights',
 };
 
-export default async function CaseAnalyticsPage(): Promise<JSX.Element> {
+export default async function CaseAnalyticsPage(): Promise<React.JSX.Element> {
   // Fetch analytics data
   let analyticsData = null;
 

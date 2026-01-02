@@ -2,20 +2,17 @@
  * Clauses Page - Server Component with Data Fetching
  * Fetches clause library from backend
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Clauses',
   description: 'Manage clause library and templates',
 };
 
-export default async function ClausesPage(): Promise<JSX.Element> {
+export default async function ClausesPage(): Promise<React.JSX.Element> {
   // Fetch clauses from backend
   let clauses = [];
 

@@ -2,6 +2,7 @@
  * Retainer Detail Page - Server Component with Data Fetching
  * Dynamic route for individual retainer view
  */
+import React from 'react';
 import { apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -86,7 +87,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function RetainerDetailPage({ params }: RetainerDetailPageProps): Promise<JSX.Element> {
+export default async function RetainerDetailPage({ params }: RetainerDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let retainer: RetainerDetail;

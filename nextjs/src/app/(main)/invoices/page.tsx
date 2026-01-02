@@ -2,21 +2,18 @@
  * Invoices List Page - Server Component with Data Fetching
  * List view of all invoices
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Invoices | LexiFlow',
   description: 'Manage invoices and billing',
 };
 
-export default async function InvoicesPage(): Promise<JSX.Element> {
+export default async function InvoicesPage(): Promise<React.JSX.Element> {
   // Fetch invoices from backend
   let invoices: any[] = [];
 

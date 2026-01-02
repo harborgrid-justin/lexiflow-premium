@@ -2,21 +2,18 @@
  * Court Dates Page - Server Component with Data Fetching
  * Displays upcoming court hearings with calendar and list views
  */
+import React from 'react';
 import { CourtDatesList } from '@/components/court-dates/CourtDatesList';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Court Dates',
   description: 'Manage court hearings and calendar',
 };
 
-export default async function CourtDatesPage(): Promise<JSX.Element> {
+export default async function CourtDatesPage(): Promise<React.JSX.Element> {
   // Fetch initial court dates from backend
   let courtDates = [];
 

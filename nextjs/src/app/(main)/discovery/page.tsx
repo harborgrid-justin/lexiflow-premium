@@ -2,21 +2,18 @@
  * Discovery Page - Server Component with Data Fetching
  * Fetches discovery data and requests from backend
  */
+import React from 'react';
 import DiscoveryPlatform from '@/components/discovery/DiscoveryPlatform';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Discovery | LexiFlow',
   description: 'Manage discovery process, requests, and legal holds',
 };
 
-export default async function DiscoveryPage(): Promise<JSX.Element> {
+export default async function DiscoveryPage(): Promise<React.JSX.Element> {
   // Fetch discovery data from backend
   let discoveryRequests = [];
   let legalHolds = [];

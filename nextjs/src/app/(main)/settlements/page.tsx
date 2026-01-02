@@ -2,14 +2,11 @@
  * Settlements List Page - Server Component with Data Fetching
  * List view of all settlements
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Settlements | LexiFlow',
@@ -26,7 +23,7 @@ interface Settlement {
   offerType: string;
 }
 
-export default async function SettlementsPage(): Promise<JSX.Element> {
+export default async function SettlementsPage(): Promise<React.JSX.Element> {
   // Fetch settlements from backend
   let settlements: Settlement[] = [];
 

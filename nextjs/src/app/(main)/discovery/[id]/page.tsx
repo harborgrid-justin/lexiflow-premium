@@ -2,6 +2,7 @@
  * Discovery Detail Page - Server Component with Data Fetching
  * Fetches specific discovery request from backend
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -59,7 +60,7 @@ export async function generateMetadata({ params }: DiscoveryDetailPageProps): Pr
   }
 }
 
-export default async function DiscoveryDetailPage({ params }: DiscoveryDetailPageProps): Promise<JSX.Element> {
+export default async function DiscoveryDetailPage({ params }: DiscoveryDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let request;

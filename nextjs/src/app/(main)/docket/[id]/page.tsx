@@ -2,6 +2,7 @@
  * Docket Detail Page - Server Component with Data Fetching
  * Fetches specific docket entry from backend
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -59,7 +60,7 @@ export async function generateMetadata({ params }: DocketDetailPageProps): Promi
   }
 }
 
-export default async function DocketDetailPage({ params }: DocketDetailPageProps): Promise<JSX.Element> {
+export default async function DocketDetailPage({ params }: DocketDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let docket;

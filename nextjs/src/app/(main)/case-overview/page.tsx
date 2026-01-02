@@ -2,21 +2,18 @@
  * Case Overview Page - Server Component with Data Fetching
  * Enterprise matter management command center
  */
+import React from 'react';
 import { CaseOverviewDashboard } from '@/components/case-overview/CaseOverviewDashboard';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Case Overview | LexiFlow',
   description: 'Enterprise Matter Management Command Center',
 };
 
-export default async function CaseOverviewPage(): Promise<JSX.Element> {
+export default async function CaseOverviewPage(): Promise<React.JSX.Element> {
   // Fetch all cases for overview
   let cases = [];
 

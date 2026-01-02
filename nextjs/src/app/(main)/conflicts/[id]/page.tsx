@@ -2,6 +2,7 @@
  * Conflict Detail Page - Server Component with Data Fetching
  * Dynamic route for individual conflict check with analysis, waiver, ethical review
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -63,7 +64,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function ConflictDetailPage({ params }: ConflictDetailPageProps): Promise<JSX.Element> {
+export default async function ConflictDetailPage({ params }: ConflictDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let conflict: any;

@@ -2,20 +2,17 @@
  * Jurisdiction Page - Server Component with Data Fetching
  * Manage jurisdictions and court information
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Jurisdiction | LexiFlow',
   description: 'Manage jurisdictions and court information',
 };
 
-export default async function JurisdictionPage(): Promise<JSX.Element> {
+export default async function JurisdictionPage(): Promise<React.JSX.Element> {
   // Fetch jurisdictions from backend
   let jurisdictions = [];
 

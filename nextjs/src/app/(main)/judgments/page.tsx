@@ -2,21 +2,18 @@
  * Judgments Page - Server Component with Data Fetching
  * List of court judgments and enforcement
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Judgments | LexiFlow',
   description: 'Track court judgments and enforcement',
 };
 
-export default async function JudgmentsPage(): Promise<JSX.Element> {
+export default async function JudgmentsPage(): Promise<React.JSX.Element> {
   let judgments: any[] = [];
 
   try {

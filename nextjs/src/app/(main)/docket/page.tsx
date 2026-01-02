@@ -2,21 +2,18 @@
  * Docket Page - Server Component with Data Fetching
  * Fetches docket entries from backend
  */
+import React from 'react';
 import DocketManager from '@/components/docket/DocketManager';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Docket | LexiFlow',
   description: 'Manage court dockets and filings',
 };
 
-export default async function DocketPage(): Promise<JSX.Element> {
+export default async function DocketPage(): Promise<React.JSX.Element> {
   // Fetch docket entries from backend
   let docketEntries = [];
 

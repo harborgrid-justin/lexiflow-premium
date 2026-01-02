@@ -2,20 +2,17 @@
  * Database Control Page - Server Component with Data Fetching
  * Admin interface for database management
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Database Control | LexiFlow',
   description: 'Database administration and control',
 };
 
-export default async function DatabaseControlPage(): Promise<JSX.Element> {
+export default async function DatabaseControlPage(): Promise<React.JSX.Element> {
   // Fetch database schema info
   let schemaInfo = null;
 

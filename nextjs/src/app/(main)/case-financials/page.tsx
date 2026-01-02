@@ -2,20 +2,17 @@
  * Case Financials Page - Server Component with Data Fetching
  * Financial tracking per case with backend data
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Case Financials | LexiFlow',
   description: 'Case-specific financial tracking',
 };
 
-export default async function CaseFinancialsPage(): Promise<JSX.Element> {
+export default async function CaseFinancialsPage(): Promise<React.JSX.Element> {
   // Fetch case financial data
   let financials = null;
 

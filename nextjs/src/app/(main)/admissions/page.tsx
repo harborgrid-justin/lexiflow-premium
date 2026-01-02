@@ -2,21 +2,18 @@
  * Admissions List Page - Server Component with Data Fetching
  * List view of all admissions requests
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Requests for Admission | LexiFlow',
   description: 'Manage requests for admission and responses',
 };
 
-export default async function AdmissionsPage(): Promise<JSX.Element> {
+export default async function AdmissionsPage(): Promise<React.JSX.Element> {
   // Fetch admissions from backend
   let admissions = [];
 

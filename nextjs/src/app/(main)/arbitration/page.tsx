@@ -2,14 +2,11 @@
  * Arbitration List Page - Server Component with Data Fetching
  * Manage arbitration matters and proceedings
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Arbitration | LexiFlow',
@@ -82,7 +79,7 @@ function LoadingSkeleton() {
   );
 }
 
-export default async function ArbitrationPage(): Promise<JSX.Element> {
+export default async function ArbitrationPage(): Promise<React.JSX.Element> {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6 flex justify-between items-center">

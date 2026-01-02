@@ -7,9 +7,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
-
-interface PageProps {
-  params: Promise<{ id: string }>;
+>;
 }
 
 // Static Site Generation (SSG) Configuration

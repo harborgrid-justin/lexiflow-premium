@@ -2,21 +2,18 @@
  * Documents Page - Server Component with Data Fetching
  * Fetches initial document list from backend
  */
+import React from 'react';
 import { DocumentManager } from '@/components/documents/DocumentManager';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Documents',
   description: 'Manage legal documents',
 };
 
-export default async function DocumentsPage(): Promise<JSX.Element> {
+export default async function DocumentsPage(): Promise<React.JSX.Element> {
   // Fetch initial documents and folders from backend
   let documents = [];
   let folders = [];

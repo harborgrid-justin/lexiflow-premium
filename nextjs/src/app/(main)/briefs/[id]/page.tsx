@@ -2,6 +2,7 @@
  * Brief Detail Page - Server Component with Data Fetching
  * Dynamic route for individual brief view
  */
+import React from 'react';
 import { apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -78,7 +79,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function BriefDetailPage({ params }: BriefDetailPageProps): Promise<JSX.Element> {
+export default async function BriefDetailPage({ params }: BriefDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let brief: BriefDetail;

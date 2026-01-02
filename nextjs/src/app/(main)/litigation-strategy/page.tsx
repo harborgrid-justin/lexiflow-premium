@@ -2,20 +2,17 @@
  * Litigation Strategy Page - Server Component with Data Fetching
  * Strategic litigation planning and analysis with backend data
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Litigation Strategy | LexiFlow',
   description: 'Strategic litigation planning and analysis',
 };
 
-export default async function LitigationStrategyPage(): Promise<JSX.Element> {
+export default async function LitigationStrategyPage(): Promise<React.JSX.Element> {
   // Fetch trial and risk data
   let trialData = null;
   let risks = [];

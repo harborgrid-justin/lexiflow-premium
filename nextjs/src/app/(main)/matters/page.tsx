@@ -2,21 +2,18 @@
  * Matters List Page - Server Component with Data Fetching
  * List view of all matters
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Matters | LexiFlow',
   description: 'Manage legal matters and engagements',
 };
 
-export default async function MattersPage(): Promise<JSX.Element> {
+export default async function MattersPage(): Promise<React.JSX.Element> {
   // Fetch matters from backend
   let matters: any[] = [];
 

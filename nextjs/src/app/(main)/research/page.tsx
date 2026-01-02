@@ -6,10 +6,6 @@ import { ResearchTool } from '@/components/research/ResearchTool';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
-
 export const metadata: Metadata = {
   title: 'Legal Research',
   description: 'AI-powered legal research',

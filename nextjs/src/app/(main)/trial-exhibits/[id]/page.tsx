@@ -2,6 +2,7 @@
  * Trial Exhibit Detail Page - Server Component with Data Fetching
  * Detailed view of trial exhibit with preview and chain of custody
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -143,7 +144,7 @@ function LoadingSkeleton() {
   );
 }
 
-export default async function TrialExhibitDetailPage({ params }: TrialExhibitDetailPageProps): Promise<JSX.Element> {
+export default async function TrialExhibitDetailPage({ params }: TrialExhibitDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   return (

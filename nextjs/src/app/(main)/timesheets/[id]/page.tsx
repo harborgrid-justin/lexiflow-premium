@@ -6,9 +6,7 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
-
-interface PageProps {
-  params: Promise<{ id: string }>;
+>;
 }
 
 // Static Site Generation (SSG) Configuration

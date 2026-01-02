@@ -2,6 +2,7 @@
  * Research Detail Page - Server Component
  * Research session detail view
  */
+import React from 'react';
 import { Metadata } from 'next';
 
 interface PageProps {
@@ -49,7 +50,7 @@ export async function generateStaticParams(): Promise<{ id: string }[]> {
   }
 }
 
-export default async function ResearchDetailPage({ params }: ResearchDetailPageProps): Promise<JSX.Element> {
+export default async function ResearchDetailPage({ params }: ResearchDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
   return (
     <div className="container mx-auto px-4 py-8">

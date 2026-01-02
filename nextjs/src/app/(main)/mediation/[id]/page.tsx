@@ -2,6 +2,7 @@
  * Mediation Detail Page - Server Component
  * Complete mediation session with brief, offers, agreements, and follow-up
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -61,7 +62,7 @@ export async function generateMetadata({ params }: MediationDetailPageProps): Pr
   }
 }
 
-export default async function MediationDetailPage({ params }: MediationDetailPageProps): Promise<JSX.Element> {
+export default async function MediationDetailPage({ params }: MediationDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let session: any;

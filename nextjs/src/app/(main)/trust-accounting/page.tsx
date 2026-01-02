@@ -2,14 +2,11 @@
  * Trust Accounting List Page - Server Component with Data Fetching
  * List view of all trust accounts
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Trust Accounting | LexiFlow',
@@ -27,7 +24,7 @@ interface TrustAccount {
   clientName: string;
 }
 
-export default async function TrustAccountingPage(): Promise<JSX.Element> {
+export default async function TrustAccountingPage(): Promise<React.JSX.Element> {
   // Fetch trust accounts from backend
   let accounts: TrustAccount[] = [];
 

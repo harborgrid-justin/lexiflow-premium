@@ -2,6 +2,7 @@
  * Engagement Letter Detail Page - Server Component
  * Full engagement letter with scope, signatures, and terms
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -61,7 +62,7 @@ export async function generateMetadata({ params }: EngagementLetterDetailPagePro
   }
 }
 
-export default async function EngagementLetterDetailPage({ params }: EngagementLetterDetailPageProps): Promise<JSX.Element> {
+export default async function EngagementLetterDetailPage({ params }: EngagementLetterDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let letter: any;

@@ -2,6 +2,7 @@
  * Process Server Detail Page - Server Component with Data Fetching
  * Detailed view of process server records
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -60,7 +61,7 @@ export async function generateMetadata({ params }: ProcessServerDetailPageProps)
   }
 }
 
-export default async function ProcessServerDetailPage({ params }: ProcessServerDetailPageProps): Promise<JSX.Element> {
+export default async function ProcessServerDetailPage({ params }: ProcessServerDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let server;

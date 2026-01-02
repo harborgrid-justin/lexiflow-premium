@@ -2,21 +2,18 @@
  * Profile Page - Server Component with Data Fetching
  * Fetches user profile from backend
  */
+import React from 'react';
 import UserProfileManager from '@/components/profile/UserProfileManager';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Profile | LexiFlow',
   description: 'User Profile',
 };
 
-export default async function ProfilePage(): Promise<JSX.Element> {
+export default async function ProfilePage(): Promise<React.JSX.Element> {
   // Fetch current user profile
   let userProfile = null;
 

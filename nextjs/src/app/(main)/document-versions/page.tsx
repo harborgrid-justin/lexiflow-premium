@@ -2,21 +2,18 @@
  * Document Versions Page - Server Component with Data Fetching
  * Displays document version history and management
  */
+import React from 'react';
 import { DocumentVersionsList } from '@/components/document-versions/DocumentVersionsList';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Document Versions',
   description: 'Manage document version history',
 };
 
-export default async function DocumentVersionsPage(): Promise<JSX.Element> {
+export default async function DocumentVersionsPage(): Promise<React.JSX.Element> {
   // Fetch initial document versions from backend
   let versions = [];
 

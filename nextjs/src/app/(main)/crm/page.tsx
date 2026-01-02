@@ -2,21 +2,18 @@
  * CRM Page - Server Component with Data Fetching
  * Fetches client list from backend
  */
+import React from 'react';
 import ClientCRM from '@/components/crm/ClientCRM';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'CRM | LexiFlow',
   description: 'Client Relationship Management',
 };
 
-export default async function CrmPage(): Promise<JSX.Element> {
+export default async function CrmPage(): Promise<React.JSX.Element> {
   // Fetch clients from backend
   let clients = [];
 

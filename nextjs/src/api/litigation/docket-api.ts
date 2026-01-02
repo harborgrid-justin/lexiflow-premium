@@ -271,6 +271,7 @@ export class DocketApiService {
    */
   async getByCaseId(caseId: string): Promise<DocketEntry[]> {
     this.validateId(caseId, "getByCaseId");
-    return this.getAll(caseId);
+    const response = await this.getAll(caseId);
+    return response.data || [];
   }
 }

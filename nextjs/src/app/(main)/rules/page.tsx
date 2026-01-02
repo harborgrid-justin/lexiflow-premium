@@ -2,20 +2,17 @@
  * Rules Page - Server Component with Data Fetching
  * Court rules and procedures reference with backend data
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Rules | LexiFlow',
   description: 'Court rules and procedures reference',
 };
 
-export default async function RulesPage(): Promise<JSX.Element> {
+export default async function RulesPage(): Promise<React.JSX.Element> {
   // Fetch court rules and jurisdictions
   let jurisdictions = [];
 

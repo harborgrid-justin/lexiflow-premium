@@ -2,6 +2,7 @@
  * Task Detail Page - Server Component with Data Fetching
  * Dynamic route for individual task view
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -71,7 +72,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function TaskDetailPage({ params }: TaskDetailPageProps): Promise<JSX.Element> {
+export default async function TaskDetailPage({ params }: TaskDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let task: Task;

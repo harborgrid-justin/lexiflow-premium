@@ -2,14 +2,11 @@
  * Templates List Page - Server Component
  * Lists document templates with filtering
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Templates | LexiFlow',
@@ -79,7 +76,7 @@ function LoadingState() {
   );
 }
 
-export default async function TemplatesPage(): Promise<JSX.Element> {
+export default async function TemplatesPage(): Promise<React.JSX.Element> {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">

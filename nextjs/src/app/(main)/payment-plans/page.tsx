@@ -2,14 +2,11 @@
  * Payment Plans List Page - Server Component with Data Fetching
  * Manage client payment plans with installments and balances
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Payment Plans | LexiFlow',
@@ -90,7 +87,7 @@ function LoadingSkeleton() {
   );
 }
 
-export default async function PaymentPlansPage(): Promise<JSX.Element> {
+export default async function PaymentPlansPage(): Promise<React.JSX.Element> {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">

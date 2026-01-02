@@ -2,21 +2,18 @@
  * Conflicts List Page - Server Component with Data Fetching
  * Lists all conflict checks with type, parties, cleared date, resolution
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Conflict Checks | LexiFlow',
   description: 'Manage conflict of interest checks',
 };
 
-export default async function ConflictsPage(): Promise<JSX.Element> {
+export default async function ConflictsPage(): Promise<React.JSX.Element> {
   let conflicts: any[] = [];
 
   try {

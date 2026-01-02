@@ -2,21 +2,18 @@
  * Parties List Page - Server Component with Data Fetching
  * List view of all parties
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Parties | LexiFlow',
   description: 'Manage parties and attorneys',
 };
 
-export default async function PartiesPage(): Promise<JSX.Element> {
+export default async function PartiesPage(): Promise<React.JSX.Element> {
   // Fetch parties from backend
   let parties = [];
 

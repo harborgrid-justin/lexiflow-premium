@@ -143,7 +143,7 @@ const AdminIntegrations = () => (
   </div>
 );
 
-export default function AdminPanel() {
+export default function AdminPanel({ initialHealth, initialUsersCount }: { initialHealth?: any; initialUsersCount?: number }) {
   const [activeTab, setActiveTab] = useState('hierarchy');
 
   const tabs = [

@@ -2,14 +2,11 @@
  * Write-Offs List Page - Server Component with Data Fetching
  * List view of all write-offs
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Write-Offs | LexiFlow',
@@ -28,7 +25,7 @@ interface WriteOff {
   category: string;
 }
 
-export default async function WriteOffsPage(): Promise<JSX.Element> {
+export default async function WriteOffsPage(): Promise<React.JSX.Element> {
   // Fetch write-offs from backend
   let writeOffs: WriteOff[] = [];
 

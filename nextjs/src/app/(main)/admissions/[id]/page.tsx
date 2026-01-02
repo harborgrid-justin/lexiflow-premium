@@ -2,6 +2,7 @@
  * Admission Detail Page - Server Component with Data Fetching
  * Dynamic route for individual admission request view
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -81,7 +82,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function AdmissionDetailPage({ params }: AdmissionDetailPageProps): Promise<JSX.Element> {
+export default async function AdmissionDetailPage({ params }: AdmissionDetailPageProps): Promise<React.JSX.Element> {
   const { id } = await params;
 
   let admission: Admission;

@@ -2,21 +2,18 @@
  * Interrogatories List Page - Server Component with Data Fetching
  * List view of all interrogatories
  */
+import React from 'react';
 import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
-
-interface PageProps {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
 
 export const metadata: Metadata = {
   title: 'Interrogatories | LexiFlow',
   description: 'Manage interrogatories and written questions',
 };
 
-export default async function InterrogatoriesPage(): Promise<JSX.Element> {
+export default async function InterrogatoriesPage(): Promise<React.JSX.Element> {
   // Fetch interrogatories from backend
   let interrogatories = [];
 

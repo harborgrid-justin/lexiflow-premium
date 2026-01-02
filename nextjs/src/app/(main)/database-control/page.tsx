@@ -6,12 +6,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Database Control | LexiFlow',
   description: 'Database administration and control',
 };
 
-export default async function DatabaseControlPage() {
+export default async function DatabaseControlPage(): Promise<JSX.Element> {
   // Fetch database schema info
   let schemaInfo = null;
 

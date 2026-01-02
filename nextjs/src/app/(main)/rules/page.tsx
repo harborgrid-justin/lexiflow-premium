@@ -6,12 +6,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Rules | LexiFlow',
   description: 'Court rules and procedures reference',
 };
 
-export default async function RulesPage() {
+export default async function RulesPage(): Promise<JSX.Element> {
   // Fetch court rules and jurisdictions
   let jurisdictions = [];
 

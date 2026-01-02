@@ -7,6 +7,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Briefs | LexiFlow',
   description: 'Manage legal briefs and filings',
@@ -22,7 +26,7 @@ interface Brief {
   author: string;
 }
 
-export default async function BriefsPage() {
+export default async function BriefsPage(): Promise<JSX.Element> {
   // Fetch briefs from backend
   let briefs: Brief[] = [];
 

@@ -7,12 +7,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Subpoenas | LexiFlow',
   description: 'Manage subpoenas and service records',
 };
 
-export default async function SubpoenasPage() {
+export default async function SubpoenasPage(): Promise<JSX.Element> {
   // Fetch subpoenas from backend
   let subpoenas = [];
 

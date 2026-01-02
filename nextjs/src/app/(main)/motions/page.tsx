@@ -7,6 +7,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Motions | LexiFlow',
   description: 'Manage motions and filings',
@@ -22,7 +26,7 @@ interface Motion {
   caseNumber: string;
 }
 
-export default async function MotionsPage() {
+export default async function MotionsPage(): Promise<JSX.Element> {
   // Fetch motions from backend
   let motions: Motion[] = [];
 

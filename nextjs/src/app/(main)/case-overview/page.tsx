@@ -7,12 +7,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Case Overview | LexiFlow',
   description: 'Enterprise Matter Management Command Center',
 };
 
-export default async function CaseOverviewPage() {
+export default async function CaseOverviewPage(): Promise<JSX.Element> {
   // Fetch all cases for overview
   let cases = [];
 

@@ -6,12 +6,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Litigation Strategy | LexiFlow',
   description: 'Strategic litigation planning and analysis',
 };
 
-export default async function LitigationStrategyPage() {
+export default async function LitigationStrategyPage(): Promise<JSX.Element> {
   // Fetch trial and risk data
   let trialData = null;
   let risks = [];

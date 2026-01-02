@@ -7,7 +7,7 @@ import { NextRequest } from "next/server";
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { jobId: string } }
+  { params }: { params: Promise<{ jobId: string }> }
 ) {
   return proxyToBackend(request, `/api/ocr/progress/${params.jobId}`);
 }

@@ -7,13 +7,17 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Compliance Alerts | LexiFlow',
   description: 'Compliance monitoring dashboard and alert management',
 };
 
 async function ComplianceAlertsDashboard() {
-  const alerts: any = await apiFetch(API_ENDPOINTS.COMPLIANCE_ALERTS.LIST);
+  const alerts: unknown = await apiFetch(API_ENDPOINTS.COMPLIANCE_ALERTS.LIST);
 
   const getSeverityColor = (severity: string) => {
     switch (severity?.toLowerCase()) {

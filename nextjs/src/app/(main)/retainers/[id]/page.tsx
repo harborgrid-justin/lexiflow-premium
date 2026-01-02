@@ -7,6 +7,10 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
 interface RetainerDetailPageProps {
   params: Promise<{ id: string }>;
 }
@@ -34,6 +38,38 @@ interface RetainerDetail {
   startDate: string;
 }
 
+
+// Static Site Generation (SSG) Configuration
+export const dynamic = 'force-static';
+export const revalidate = 3600; // Revalidate every 60 minutes
+
+/**
+ * Generate static params for retainers detail pages
+ *
+ * Next.js 16 will pre-render these pages at build time.
+ * With revalidate, pages are regenerated in the background when stale.
+ *
+ * @returns Array of { id: string } objects for static generation
+ */
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+  try {
+    // Fetch list of retainers IDs for static generation
+    const response = await apiFetch<any[]>(
+      API_ENDPOINTS.RETAINERS.LIST + '?limit=100&fields=id'
+    );
+
+    // Map to the required { id: string } format
+    return (response || []).map((item: any) => ({
+      id: String(item.id),
+    }));
+  } catch (error) {
+    console.warn(`[generateStaticParams] Failed to fetch retainers list:`, error);
+    // Return empty array to continue build without static params
+    // Pages will be generated on-demand (ISR) instead
+    return [];
+  }
+}
+
 export async function generateMetadata({
   params,
 }: RetainerDetailPageProps): Promise<Metadata> {
@@ -50,7 +86,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function RetainerDetailPage({ params }: RetainerDetailPageProps) {
+export default async function RetainerDetailPage({ params }: RetainerDetailPageProps): Promise<JSX.Element> {
   const { id } = await params;
 
   let retainer: RetainerDetail;

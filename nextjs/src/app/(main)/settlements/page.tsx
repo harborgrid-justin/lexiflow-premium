@@ -7,6 +7,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Settlements | LexiFlow',
   description: 'Manage settlements and offers',
@@ -22,7 +26,7 @@ interface Settlement {
   offerType: string;
 }
 
-export default async function SettlementsPage() {
+export default async function SettlementsPage(): Promise<JSX.Element> {
   // Fetch settlements from backend
   let settlements: Settlement[] = [];
 

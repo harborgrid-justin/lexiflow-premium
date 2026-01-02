@@ -4,6 +4,10 @@
  */
 import { Metadata } from 'next';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Settings',
   description: 'User and system settings',

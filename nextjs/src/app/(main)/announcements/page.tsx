@@ -7,12 +7,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Announcements',
   description: 'Firm-wide and department announcements',
 };
 
-export default async function AnnouncementsPage() {
+export default async function AnnouncementsPage(): Promise<JSX.Element> {
   // Fetch initial announcements from backend
   let announcements = [];
 

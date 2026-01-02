@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @module components/common/RuleSelector
  * @category Common
@@ -11,7 +13,7 @@
 // EXTERNAL DEPENDENCIES
 // ============================================================================
 import { Book, Loader2, Search, X } from 'lucide-react';
-import React, { useId, useState } from 'react';
+import React, { useDeferredValue, useId, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -21,11 +23,9 @@ import { useQuery } from '@/hooks/useQueryHooks';
 import { RuleService } from '@/services/features/rules/ruleService';
 
 // Hooks & Context
-import { useDebounce } from '@/hooks/useDebounce';
 import { useTheme } from '@/providers/ThemeContext';
 
 // Utils & Constants
-import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
 import { cn } from '@/utils/cn';
 
 // Types
@@ -45,13 +45,13 @@ export const RuleSelector: React.FC<RuleSelectorProps> = ({ selectedRules, onRul
   const inputId = useId();
   const [searchTerm, setSearchTerm] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const debouncedSearch = useDebounce(searchTerm, SEARCH_DEBOUNCE_MS);
+  const deferredSearch = useDeferredValue(searchTerm);
 
   // Use Query for caching search results
   const { data: availableRules = [], isLoading } = useQuery<LegalRule[]>(
-    ['rules', 'search', debouncedSearch],
-    () => RuleService.search(debouncedSearch),
-    { enabled: !!debouncedSearch }
+    ['rules', 'search', deferredSearch],
+    () => RuleService.search(deferredSearch),
+    { enabled: !!deferredSearch }
   );
 
   const addRule = (code: string) => {

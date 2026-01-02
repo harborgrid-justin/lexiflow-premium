@@ -7,12 +7,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Discovery | LexiFlow',
   description: 'Manage discovery process, requests, and legal holds',
 };
 
-export default async function DiscoveryPage() {
+export default async function DiscoveryPage(): Promise<JSX.Element> {
   // Fetch discovery data from backend
   let discoveryRequests = [];
   let legalHolds = [];

@@ -7,12 +7,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Users | LexiFlow',
   description: 'Manage users and permissions',
 };
 
-export default async function UsersPage() {
+export default async function UsersPage(): Promise<JSX.Element> {
   // Fetch users from backend
   let users = [];
 

@@ -8,7 +8,7 @@ import { NextRequest } from "next/server";
 // POST /api/hr/time-off/[id]/deny - Deny time off request
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return proxyToBackend(request, `/api/hr/time-off/${params.id}/deny`);
 }

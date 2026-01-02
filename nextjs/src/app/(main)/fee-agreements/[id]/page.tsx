@@ -8,8 +8,44 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
 interface FeeAgreementDetailPageProps {
   params: Promise<{ id: string }>;
+}
+
+
+// Static Site Generation (SSG) Configuration
+export const dynamic = 'force-static';
+export const revalidate = 3600; // Revalidate every 60 minutes
+
+/**
+ * Generate static params for fee-agreements detail pages
+ *
+ * Next.js 16 will pre-render these pages at build time.
+ * With revalidate, pages are regenerated in the background when stale.
+ *
+ * @returns Array of { id: string } objects for static generation
+ */
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+  try {
+    // Fetch list of fee-agreements IDs for static generation
+    const response = await apiFetch<any[]>(
+      API_ENDPOINTS.FEE_AGREEMENTS.LIST + '?limit=100&fields=id'
+    );
+
+    // Map to the required { id: string } format
+    return (response || []).map((item: any) => ({
+      id: String(item.id),
+    }));
+  } catch (error) {
+    console.warn(`[generateStaticParams] Failed to fetch fee-agreements list:`, error);
+    // Return empty array to continue build without static params
+    // Pages will be generated on-demand (ISR) instead
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: FeeAgreementDetailPageProps): Promise<Metadata> {
@@ -25,7 +61,7 @@ export async function generateMetadata({ params }: FeeAgreementDetailPageProps):
   }
 }
 
-export default async function FeeAgreementDetailPage({ params }: FeeAgreementDetailPageProps) {
+export default async function FeeAgreementDetailPage({ params }: FeeAgreementDetailPageProps): Promise<JSX.Element> {
   const { id } = await params;
 
   let agreement: any;

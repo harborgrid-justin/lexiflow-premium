@@ -7,6 +7,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Arbitration | LexiFlow',
   description: 'Arbitration matter management and tracking',
@@ -78,7 +82,7 @@ function LoadingSkeleton() {
   );
 }
 
-export default async function ArbitrationPage() {
+export default async function ArbitrationPage(): Promise<JSX.Element> {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6 flex justify-between items-center">

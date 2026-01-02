@@ -6,12 +6,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Analytics',
   description: 'Business intelligence and analytics',
 };
 
-export default async function AnalyticsPage() {
+export default async function AnalyticsPage(): Promise<JSX.Element> {
   // Fetch analytics dashboard data
   let dashboardData = null;
 

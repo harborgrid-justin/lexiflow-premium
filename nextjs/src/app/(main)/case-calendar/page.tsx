@@ -7,12 +7,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Case Calendar | LexiFlow',
   description: 'Case events and deadlines calendar',
 };
 
-export default async function CaseCalendarPage() {
+export default async function CaseCalendarPage(): Promise<JSX.Element> {
   // Fetch calendar events
   let events = [];
 

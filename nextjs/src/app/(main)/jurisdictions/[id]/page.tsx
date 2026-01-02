@@ -8,8 +8,44 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { Jurisdiction } from '../../../../types';
 
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
 interface JurisdictionDetailPageProps {
   params: Promise<{ id: string }>;
+}
+
+
+// Static Site Generation (SSG) Configuration
+export const dynamic = 'force-static';
+export const revalidate = 3600; // Revalidate every 60 minutes
+
+/**
+ * Generate static params for jurisdictions detail pages
+ *
+ * Next.js 16 will pre-render these pages at build time.
+ * With revalidate, pages are regenerated in the background when stale.
+ *
+ * @returns Array of { id: string } objects for static generation
+ */
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+  try {
+    // Fetch list of jurisdictions IDs for static generation
+    const response = await apiFetch<any[]>(
+      API_ENDPOINTS.JURISDICTIONS.LIST + '?limit=100&fields=id'
+    );
+
+    // Map to the required { id: string } format
+    return (response || []).map((item: any) => ({
+      id: String(item.id),
+    }));
+  } catch (error) {
+    console.warn(`[generateStaticParams] Failed to fetch jurisdictions list:`, error);
+    // Return empty array to continue build without static params
+    // Pages will be generated on-demand (ISR) instead
+    return [];
+  }
 }
 
 export async function generateMetadata({
@@ -28,7 +64,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function JurisdictionDetailPage({ params }: JurisdictionDetailPageProps) {
+export default async function JurisdictionDetailPage({ params }: JurisdictionDetailPageProps): Promise<JSX.Element> {
   const { id } = await params;
 
   let jurisdiction: Jurisdiction;

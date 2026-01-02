@@ -6,12 +6,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Entity Director | LexiFlow',
   description: 'Legal entity management and directory',
 };
 
-export default async function EntityDirectorPage() {
+export default async function EntityDirectorPage(): Promise<JSX.Element> {
   // Fetch legal entities
   let entities = [];
 

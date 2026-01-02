@@ -7,12 +7,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Admin | LexiFlow',
   description: 'System Administration',
 };
 
-export default async function AdminPage() {
+export default async function AdminPage(): Promise<JSX.Element> {
   // Fetch system health and admin data
   let healthData = null;
   let usersCount = 0;

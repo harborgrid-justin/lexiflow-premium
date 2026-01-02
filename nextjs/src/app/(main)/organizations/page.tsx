@@ -7,12 +7,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Organizations | LexiFlow',
   description: 'Manage organizations and entities',
 };
 
-export default async function OrganizationsPage() {
+export default async function OrganizationsPage(): Promise<JSX.Element> {
   // Fetch organizations from backend
   let organizations = [];
 

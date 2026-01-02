@@ -7,6 +7,10 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
 interface AdmissionStatement {
   statement: string;
   response?: string;
@@ -29,6 +33,38 @@ interface AdmissionDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
+
+// Static Site Generation (SSG) Configuration
+export const dynamic = 'force-static';
+export const revalidate = 3600; // Revalidate every 60 minutes
+
+/**
+ * Generate static params for admissions detail pages
+ *
+ * Next.js 16 will pre-render these pages at build time.
+ * With revalidate, pages are regenerated in the background when stale.
+ *
+ * @returns Array of { id: string } objects for static generation
+ */
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+  try {
+    // Fetch list of admissions IDs for static generation
+    const response = await apiFetch<any[]>(
+      API_ENDPOINTS.ADMISSIONS.LIST + '?limit=100&fields=id'
+    );
+
+    // Map to the required { id: string } format
+    return (response || []).map((item: any) => ({
+      id: String(item.id),
+    }));
+  } catch (error) {
+    console.warn(`[generateStaticParams] Failed to fetch admissions list:`, error);
+    // Return empty array to continue build without static params
+    // Pages will be generated on-demand (ISR) instead
+    return [];
+  }
+}
+
 export async function generateMetadata({
   params,
 }: AdmissionDetailPageProps): Promise<Metadata> {
@@ -45,7 +81,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function AdmissionDetailPage({ params }: AdmissionDetailPageProps) {
+export default async function AdmissionDetailPage({ params }: AdmissionDetailPageProps): Promise<JSX.Element> {
   const { id } = await params;
 
   let admission: Admission;

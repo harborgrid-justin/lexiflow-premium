@@ -7,12 +7,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Conflict Checks | LexiFlow',
   description: 'Manage conflict of interest checks',
 };
 
-export default async function ConflictsPage() {
+export default async function ConflictsPage(): Promise<JSX.Element> {
   let conflicts: any[] = [];
 
   try {

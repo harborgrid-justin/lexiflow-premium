@@ -7,6 +7,10 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
 interface SettlementDetailPageProps {
   params: Promise<{ id: string }>;
 }
@@ -32,6 +36,38 @@ interface SettlementDetail {
   effectiveDate: string | null;
 }
 
+
+// Static Site Generation (SSG) Configuration
+export const dynamic = 'force-static';
+export const revalidate = 3600; // Revalidate every 60 minutes
+
+/**
+ * Generate static params for settlements detail pages
+ *
+ * Next.js 16 will pre-render these pages at build time.
+ * With revalidate, pages are regenerated in the background when stale.
+ *
+ * @returns Array of { id: string } objects for static generation
+ */
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+  try {
+    // Fetch list of settlements IDs for static generation
+    const response = await apiFetch<any[]>(
+      API_ENDPOINTS.SETTLEMENTS.LIST + '?limit=100&fields=id'
+    );
+
+    // Map to the required { id: string } format
+    return (response || []).map((item: any) => ({
+      id: String(item.id),
+    }));
+  } catch (error) {
+    console.warn(`[generateStaticParams] Failed to fetch settlements list:`, error);
+    // Return empty array to continue build without static params
+    // Pages will be generated on-demand (ISR) instead
+    return [];
+  }
+}
+
 export async function generateMetadata({
   params,
 }: SettlementDetailPageProps): Promise<Metadata> {
@@ -48,7 +84,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function SettlementDetailPage({ params }: SettlementDetailPageProps) {
+export default async function SettlementDetailPage({ params }: SettlementDetailPageProps): Promise<JSX.Element> {
   const { id } = await params;
 
   let settlement: SettlementDetail;

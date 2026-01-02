@@ -7,12 +7,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Notifications',
   description: 'View and manage system notifications',
 };
 
-export default async function NotificationsPage() {
+export default async function NotificationsPage(): Promise<JSX.Element> {
   // Fetch initial notifications from backend
   let notifications = [];
 

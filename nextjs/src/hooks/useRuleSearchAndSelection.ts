@@ -18,13 +18,11 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useDebounce } from "./useDebounce";
 
 // Types
 import { LegalRule } from "@/types";
 
 // Config
-import { SEARCH_DEBOUNCE_MS } from "@/config/features/search.config";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -74,7 +72,7 @@ export function useRuleSearchAndSelection(
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
   const [isPending, startTransition] = useTransition();
 
-  const debouncedSearchTerm = useDebounce(searchTerm, SEARCH_DEBOUNCE_MS);
+  const deferredSearchTerm = useDeferredValue(searchTerm);
 
   // Memoize full hierarchy building (expensive operation)
   const fullHierarchy = useMemo(() => {
@@ -100,11 +98,11 @@ export function useRuleSearchAndSelection(
 
   // Filter & Search Logic
   const { displayHierarchy, searchExpandedIds } = useMemo(() => {
-    if (!debouncedSearchTerm.trim()) {
+    if (!deferredSearchTerm.trim()) {
       return { displayHierarchy: fullHierarchy, searchExpandedIds: null };
     }
 
-    const lowerTerms = debouncedSearchTerm
+    const lowerTerms = deferredSearchTerm
       .toLowerCase()
       .split(" ")
       .filter(Boolean);
@@ -134,23 +132,23 @@ export function useRuleSearchAndSelection(
 
     const filtered = filterRecursive(fullHierarchy);
     return { displayHierarchy: filtered, searchExpandedIds: expanded };
-  }, [fullHierarchy, debouncedSearchTerm]);
+  }, [fullHierarchy, deferredSearchTerm]);
 
   // Determine which set of expanded IDs to use (search-driven or user-expanded)
-  const currentExpandedIds = debouncedSearchTerm
+  const currentExpandedIds = deferredSearchTerm
     ? searchExpandedIds!
     : expandedIds;
 
   // Initial Auto-expand first article if no search and no user expansion
   useEffect(() => {
     if (
-      !debouncedSearchTerm &&
+      !deferredSearchTerm &&
       fullHierarchy.length > 0 &&
       expandedIds.size === 0
     ) {
       setExpandedIds(new Set([fullHierarchy[0].id]));
     }
-  }, [fullHierarchy, debouncedSearchTerm, expandedIds]);
+  }, [fullHierarchy, deferredSearchTerm, expandedIds]);
 
   // Toggle expansion for tree view
   const toggleExpand = (id: string) => {

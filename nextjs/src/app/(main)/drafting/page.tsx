@@ -6,12 +6,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Drafting | LexiFlow',
   description: 'Document drafting and templates',
 };
 
-export default async function DraftingPage() {
+export default async function DraftingPage(): Promise<JSX.Element> {
   // Fetch templates from backend
   let templates = [];
 

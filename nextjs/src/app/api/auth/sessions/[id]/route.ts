@@ -8,7 +8,7 @@ import { NextRequest } from "next/server";
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return proxyToBackend(request, `/auth/sessions/${params.id}`);
 }

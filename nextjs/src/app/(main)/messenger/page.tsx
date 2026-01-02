@@ -7,12 +7,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Messenger | LexiFlow',
   description: 'Secure Messenger',
 };
 
-export default async function MessengerPage() {
+export default async function MessengerPage(): Promise<JSX.Element> {
   // Fetch recent messages
   let messages = [];
 

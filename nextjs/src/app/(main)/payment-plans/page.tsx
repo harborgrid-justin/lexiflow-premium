@@ -7,6 +7,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Payment Plans | LexiFlow',
   description: 'Client payment plan management with installment tracking',
@@ -86,7 +90,7 @@ function LoadingSkeleton() {
   );
 }
 
-export default async function PaymentPlansPage() {
+export default async function PaymentPlansPage(): Promise<JSX.Element> {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">

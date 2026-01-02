@@ -7,6 +7,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
 export const metadata: Metadata = {
   title: 'Payment Plan Details | LexiFlow',
   description: 'Payment plan schedule, transactions, and auto-pay configuration',
@@ -204,8 +208,40 @@ function LoadingSkeleton() {
   );
 }
 
-export default async function PaymentPlanDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+
+// Static Site Generation (SSG) Configuration
+export const dynamic = 'force-static';
+export const revalidate = 3600; // Revalidate every 60 minutes
+
+/**
+ * Generate static params for payment-plans detail pages
+ *
+ * Next.js 16 will pre-render these pages at build time.
+ * With revalidate, pages are regenerated in the background when stale.
+ *
+ * @returns Array of { id: string } objects for static generation
+ */
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+  try {
+    // Fetch list of payment-plans IDs for static generation
+    const response = await apiFetch<any[]>(
+      API_ENDPOINTS.PAYMENT_PLANS.LIST + '?limit=100&fields=id'
+    );
+
+    // Map to the required { id: string } format
+    return (response || []).map((item: any) => ({
+      id: String(item.id),
+    }));
+  } catch (error) {
+    console.warn(`[generateStaticParams] Failed to fetch payment-plans list:`, error);
+    // Return empty array to continue build without static params
+    // Pages will be generated on-demand (ISR) instead
+    return [];
+  }
+}
+
+export default async function PaymentPlanDetailPage({ params }: { params: { id: string } }): Promise<JSX.Element> {
+  const { id } = await params;
 
   return (
     <div className="space-y-6">

@@ -7,6 +7,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Write-Offs | LexiFlow',
   description: 'Manage write-offs and adjustments',
@@ -24,7 +28,7 @@ interface WriteOff {
   category: string;
 }
 
-export default async function WriteOffsPage() {
+export default async function WriteOffsPage(): Promise<JSX.Element> {
   // Fetch write-offs from backend
   let writeOffs: WriteOff[] = [];
 

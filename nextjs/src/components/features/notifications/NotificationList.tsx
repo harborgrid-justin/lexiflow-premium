@@ -3,9 +3,9 @@
  * Displays a list of notifications with filtering and grouping
  */
 
-import React, { useState, useTransition, useMemo, useCallback } from 'react';
 import type { ApiNotification } from '@/api/communications/notifications-api';
 import { formatDistanceToNow } from 'date-fns';
+import { useCallback, useMemo, useState, useTransition } from 'react';
 
 export interface NotificationListProps {
   notifications: ApiNotification[];
@@ -146,7 +146,7 @@ export function NotificationList({
           </div>
         );
     }
-  };
+  }, []);
 
   if (isLoading) {
     return (
@@ -190,8 +190,8 @@ export function NotificationList({
                 key={filterType}
                 onClick={() => setFilter(filterType)}
                 className={`rounded-md px-3 py-1 text-sm font-medium capitalize ${filter === filterType
-                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                    : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                  : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700'
                   }`}
               >
                 {filterType === 'high' ? 'High Priority' : filterType}
@@ -249,8 +249,8 @@ export function NotificationList({
                     key={notification.id}
                     onClick={() => onNotificationClick?.(notification)}
                     className={`group relative flex gap-3 rounded-lg p-4 transition-colors ${notification.read
-                        ? 'bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-750'
-                        : 'bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30'
+                      ? 'bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-750'
+                      : 'bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30'
                       } ${onNotificationClick ? 'cursor-pointer' : ''}`}
                   >
                     {/* Icon */}
@@ -260,8 +260,8 @@ export function NotificationList({
                     <div className="flex-1 overflow-hidden">
                       <div className="flex items-start justify-between gap-2">
                         <h4 className={`text-sm font-semibold ${notification.read
-                            ? 'text-gray-900 dark:text-gray-100'
-                            : 'text-blue-900 dark:text-blue-100'
+                          ? 'text-gray-900 dark:text-gray-100'
+                          : 'text-blue-900 dark:text-blue-100'
                           }`}>
                           {notification.title}
                         </h4>

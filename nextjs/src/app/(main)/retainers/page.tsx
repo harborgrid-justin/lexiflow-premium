@@ -7,6 +7,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Retainers | LexiFlow',
   description: 'Manage client retainers and prepaid balances',
@@ -22,7 +26,7 @@ interface Retainer {
   caseNumber: string;
 }
 
-export default async function RetainersPage() {
+export default async function RetainersPage(): Promise<JSX.Element> {
   // Fetch retainers from backend
   let retainers: Retainer[] = [];
 

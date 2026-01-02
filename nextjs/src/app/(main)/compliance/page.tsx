@@ -7,12 +7,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Compliance | LexiFlow',
   description: 'Risk & Compliance Center',
 };
 
-export default async function CompliancePage() {
+export default async function CompliancePage(): Promise<JSX.Element> {
   // Fetch compliance data from backend
   let complianceData = null;
   let conflicts = [];

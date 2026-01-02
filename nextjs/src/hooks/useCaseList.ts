@@ -71,13 +71,11 @@ import { DataService } from "@/services/data/dataService";
 import { queryKeys } from "@/utils/queryKeys";
 
 // Hooks
-import { useDebounce } from "./useDebounce";
 
 // Types
 import { Case } from "@/types";
 
 // Config
-import { SEARCH_DEBOUNCE_MS } from "@/config/features/search.config";
 
 // ============================================================================
 // QUERY KEYS FOR REACT QUERY INTEGRATION
@@ -197,10 +195,10 @@ export function useCaseList(): UseCaseListReturn {
   const [dateTo, setDateTo] = useState("");
 
   /**
-   * Debounce search term to reduce API calls
-   * Configured via SEARCH_DEBOUNCE_MS (default: 300ms)
+   * Defer search term to reduce API calls
+   * React 19 useDeferredValue provides concurrent-safe, device-adaptive deferral
    */
-  const debouncedSearchTerm = useDebounce(searchTerm, SEARCH_DEBOUNCE_MS);
+  const deferredSearchTerm = useDeferredValue(searchTerm);
 
   // ============================================================================
   // VALIDATION HELPERS
@@ -300,7 +298,7 @@ export function useCaseList(): UseCaseListReturn {
       }
 
       // Sanitize search term
-      const sanitizedSearch = validateSearchTerm(debouncedSearchTerm);
+      const sanitizedSearch = validateSearchTerm(deferredSearchTerm);
       const lowerSearch = sanitizedSearch.toLowerCase();
 
       return cases.filter((c: Case) => {
@@ -341,7 +339,7 @@ export function useCaseList(): UseCaseListReturn {
     cases,
     statusFilter,
     typeFilter,
-    debouncedSearchTerm,
+    deferredSearchTerm,
     dateFrom,
     dateTo,
     validateSearchTerm,

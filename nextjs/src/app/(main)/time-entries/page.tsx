@@ -7,12 +7,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Time Entries | LexiFlow',
   description: 'View and manage time entries',
 };
 
-export default async function TimeEntriesPage() {
+export default async function TimeEntriesPage(): Promise<JSX.Element> {
   // Fetch time entries from backend
   let timeEntries = [];
 

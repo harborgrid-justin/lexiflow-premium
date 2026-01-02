@@ -7,6 +7,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Budget Forecasting | LexiFlow',
   description: 'Matter budget forecasting with actual vs forecast variance analysis',
@@ -204,7 +208,7 @@ function LoadingSkeleton() {
   );
 }
 
-export default async function BudgetForecastingPage() {
+export default async function BudgetForecastingPage(): Promise<JSX.Element> {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">

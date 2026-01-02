@@ -7,8 +7,44 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
 interface ExpenseDetailPageProps {
   params: Promise<{ id: string }>;
+}
+
+
+// Static Site Generation (SSG) Configuration
+export const dynamic = 'force-static';
+export const revalidate = 1800; // Revalidate every 30 minutes
+
+/**
+ * Generate static params for expenses detail pages
+ *
+ * Next.js 16 will pre-render these pages at build time.
+ * With revalidate, pages are regenerated in the background when stale.
+ *
+ * @returns Array of { id: string } objects for static generation
+ */
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+  try {
+    // Fetch list of expenses IDs for static generation
+    const response = await apiFetch<any[]>(
+      API_ENDPOINTS.EXPENSES.LIST + '?limit=100&fields=id'
+    );
+
+    // Map to the required { id: string } format
+    return (response || []).map((item: any) => ({
+      id: String(item.id),
+    }));
+  } catch (error) {
+    console.warn(`[generateStaticParams] Failed to fetch expenses list:`, error);
+    // Return empty array to continue build without static params
+    // Pages will be generated on-demand (ISR) instead
+    return [];
+  }
 }
 
 export async function generateMetadata({
@@ -27,7 +63,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function ExpenseDetailPage({ params }: ExpenseDetailPageProps) {
+export default async function ExpenseDetailPage({ params }: ExpenseDetailPageProps): Promise<JSX.Element> {
   const { id } = await params;
 
   let expense: any;

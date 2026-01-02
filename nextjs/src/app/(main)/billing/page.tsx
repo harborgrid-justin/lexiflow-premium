@@ -7,13 +7,17 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Billing & Finance | LexiFlow',
   description: 'Manage invoices, track time, and monitor financial health',
 };
 
 // Server Component - fetch data on server
-export default async function BillingPage() {
+export default async function BillingPage(): Promise<JSX.Element> {
   // Fetch billing metrics from backend
   let metrics = null;
   try {

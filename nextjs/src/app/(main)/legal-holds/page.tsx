@@ -7,12 +7,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Legal Holds | LexiFlow',
   description: 'Manage legal holds and preservation notices',
 };
 
-export default async function LegalHoldsPage() {
+export default async function LegalHoldsPage(): Promise<JSX.Element> {
   // Fetch legal holds from backend
   let legalHolds: any[] = [];
 

@@ -7,12 +7,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Parties | LexiFlow',
   description: 'Manage parties and attorneys',
 };
 
-export default async function PartiesPage() {
+export default async function PartiesPage(): Promise<JSX.Element> {
   // Fetch parties from backend
   let parties = [];
 

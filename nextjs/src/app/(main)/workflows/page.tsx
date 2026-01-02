@@ -7,12 +7,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Workflows | LexiFlow',
   description: 'Manage legal workflows and tasks',
 };
 
-export default async function WorkflowsPage() {
+export default async function WorkflowsPage(): Promise<JSX.Element> {
   // Fetch workflow templates and instances
   let workflows = [];
   let tasks = [];

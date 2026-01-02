@@ -7,12 +7,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Docket | LexiFlow',
   description: 'Manage court dockets and filings',
 };
 
-export default async function DocketPage() {
+export default async function DocketPage(): Promise<JSX.Element> {
   // Fetch docket entries from backend
   let docketEntries = [];
 

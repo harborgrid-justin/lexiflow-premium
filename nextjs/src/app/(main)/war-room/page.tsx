@@ -7,12 +7,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'War Room',
   description: 'Strategic trial planning and case preparation',
 };
 
-export default async function WarRoomPage() {
+export default async function WarRoomPage(): Promise<JSX.Element> {
   // Fetch war room data
   let warRoomData = null;
 

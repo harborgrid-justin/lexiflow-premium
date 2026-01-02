@@ -7,12 +7,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Tasks | LexiFlow',
   description: 'Manage tasks and assignments',
 };
 
-export default async function TasksPage() {
+export default async function TasksPage(): Promise<JSX.Element> {
   // Fetch tasks from backend
   let tasks = [];
 

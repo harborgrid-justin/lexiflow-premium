@@ -6,12 +6,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Case Insights | LexiFlow',
   description: 'AI-powered case insights and predictions',
 };
 
-export default async function CaseInsightsPage() {
+export default async function CaseInsightsPage(): Promise<JSX.Element> {
   // Fetch case analytics and predictions
   let insights = null;
   let predictions = [];

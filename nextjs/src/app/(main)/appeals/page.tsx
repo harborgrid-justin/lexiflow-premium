@@ -7,12 +7,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Appeals | LexiFlow',
   description: 'Manage appellate cases and proceedings',
 };
 
-export default async function AppealsPage() {
+export default async function AppealsPage(): Promise<JSX.Element> {
   let appeals: any[] = [];
 
   try {

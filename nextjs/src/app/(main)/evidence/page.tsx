@@ -7,12 +7,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Evidence Vault | LexiFlow',
   description: 'Secure chain of custody and forensic asset management',
 };
 
-export default async function EvidencePage() {
+export default async function EvidencePage(): Promise<JSX.Element> {
   // Fetch evidence items from backend
   let evidenceItems = [];
 

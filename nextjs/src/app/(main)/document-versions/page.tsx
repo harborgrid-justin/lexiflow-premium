@@ -7,17 +7,21 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Document Versions',
   description: 'Manage document version history',
 };
 
-export default async function DocumentVersionsPage() {
+export default async function DocumentVersionsPage(): Promise<JSX.Element> {
   // Fetch initial document versions from backend
   let versions = [];
 
   try {
-    const data = await apiFetch(API_ENDPOINTS.DOCUMENT_VERSIONS.ALL).catch(() => ({ data: [] }));
+    const data: unknown = await apiFetch(API_ENDPOINTS.DOCUMENT_VERSIONS.ALL).catch(() => ({ data: [] }));
     versions = data?.data || [];
   } catch (error) {
     console.error('Failed to load document versions:', error);

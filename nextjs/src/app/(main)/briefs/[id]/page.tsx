@@ -7,6 +7,10 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
 interface BriefDetailPageProps {
   params: Promise<{ id: string }>;
 }
@@ -26,6 +30,38 @@ interface BriefDetail {
   filedDate: string | null;
 }
 
+
+// Static Site Generation (SSG) Configuration
+export const dynamic = 'force-static';
+export const revalidate = 3600; // Revalidate every 60 minutes
+
+/**
+ * Generate static params for briefs detail pages
+ *
+ * Next.js 16 will pre-render these pages at build time.
+ * With revalidate, pages are regenerated in the background when stale.
+ *
+ * @returns Array of { id: string } objects for static generation
+ */
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+  try {
+    // Fetch list of briefs IDs for static generation
+    const response = await apiFetch<any[]>(
+      API_ENDPOINTS.BRIEFS.LIST + '?limit=100&fields=id'
+    );
+
+    // Map to the required { id: string } format
+    return (response || []).map((item: any) => ({
+      id: String(item.id),
+    }));
+  } catch (error) {
+    console.warn(`[generateStaticParams] Failed to fetch briefs list:`, error);
+    // Return empty array to continue build without static params
+    // Pages will be generated on-demand (ISR) instead
+    return [];
+  }
+}
+
 export async function generateMetadata({
   params,
 }: BriefDetailPageProps): Promise<Metadata> {
@@ -42,7 +78,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function BriefDetailPage({ params }: BriefDetailPageProps) {
+export default async function BriefDetailPage({ params }: BriefDetailPageProps): Promise<JSX.Element> {
   const { id } = await params;
 
   let brief: BriefDetail;

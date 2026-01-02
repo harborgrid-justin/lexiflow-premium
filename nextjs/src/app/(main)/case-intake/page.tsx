@@ -6,12 +6,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Case Intake | LexiFlow',
   description: 'New case intake and onboarding',
 };
 
-export default async function CaseIntakePage() {
+export default async function CaseIntakePage(): Promise<JSX.Element> {
   // Fetch intake templates and workflow
   let templates = [];
 

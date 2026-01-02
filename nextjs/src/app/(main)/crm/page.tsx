@@ -7,12 +7,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'CRM | LexiFlow',
   description: 'Client Relationship Management',
 };
 
-export default async function CrmPage() {
+export default async function CrmPage(): Promise<JSX.Element> {
   // Fetch clients from backend
   let clients = [];
 

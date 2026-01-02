@@ -7,7 +7,7 @@ import { NextRequest } from "next/server";
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { documentId: string } }
+  { params }: { params: Promise<{ documentId: string }> }
 ) {
   return proxyToBackend(
     request,
@@ -22,7 +22,7 @@ export async function GET(
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { documentId: string } }
+  { params }: { params: Promise<{ documentId: string }> }
 ) {
   return proxyToBackend(
     request,

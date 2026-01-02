@@ -7,12 +7,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Mediation | LexiFlow',
   description: 'Track mediation sessions and alternative dispute resolution',
 };
 
-export default async function MediationPage() {
+export default async function MediationPage(): Promise<JSX.Element> {
   const sessions = await apiFetch(API_ENDPOINTS.MEDIATION.LIST);
 
   return (

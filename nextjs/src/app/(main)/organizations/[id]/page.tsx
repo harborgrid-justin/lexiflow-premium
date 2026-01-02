@@ -7,8 +7,44 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
 interface OrganizationDetailPageProps {
   params: Promise<{ id: string }>;
+}
+
+
+// Static Site Generation (SSG) Configuration
+export const dynamic = 'force-static';
+export const revalidate = 3600; // Revalidate every 60 minutes
+
+/**
+ * Generate static params for organizations detail pages
+ *
+ * Next.js 16 will pre-render these pages at build time.
+ * With revalidate, pages are regenerated in the background when stale.
+ *
+ * @returns Array of { id: string } objects for static generation
+ */
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+  try {
+    // Fetch list of organizations IDs for static generation
+    const response = await apiFetch<any[]>(
+      API_ENDPOINTS.ORGANIZATIONS.LIST + '?limit=100&fields=id'
+    );
+
+    // Map to the required { id: string } format
+    return (response || []).map((item: any) => ({
+      id: String(item.id),
+    }));
+  } catch (error) {
+    console.warn(`[generateStaticParams] Failed to fetch organizations list:`, error);
+    // Return empty array to continue build without static params
+    // Pages will be generated on-demand (ISR) instead
+    return [];
+  }
 }
 
 export async function generateMetadata({
@@ -17,7 +53,7 @@ export async function generateMetadata({
   const { id } = await params;
 
   try {
-    const org: any = await apiFetch(API_ENDPOINTS.ORGANIZATIONS.DETAIL(id));
+    const org: unknown = await apiFetch(API_ENDPOINTS.ORGANIZATIONS.DETAIL(id));
     return {
       title: `${org.name} | LexiFlow`,
       description: `Organization profile for ${org.name}`,
@@ -27,7 +63,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function OrganizationDetailPage({ params }: OrganizationDetailPageProps) {
+export default async function OrganizationDetailPage({ params }: OrganizationDetailPageProps): Promise<JSX.Element> {
   const { id } = await params;
 
   let org: any;

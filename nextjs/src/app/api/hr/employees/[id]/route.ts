@@ -8,7 +8,7 @@ import { NextRequest } from "next/server";
 // GET /api/hr/employees/[id] - Get employee by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return proxyToBackend(request, `/api/hr/employees/${params.id}`);
 }
@@ -16,7 +16,7 @@ export async function GET(
 // PUT /api/hr/employees/[id] - Update employee
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return proxyToBackend(request, `/api/hr/employees/${params.id}`);
 }
@@ -24,7 +24,7 @@ export async function PUT(
 // DELETE /api/hr/employees/[id] - Delete employee
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return proxyToBackend(request, `/api/hr/employees/${params.id}`);
 }

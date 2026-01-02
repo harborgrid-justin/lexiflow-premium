@@ -7,8 +7,44 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
 interface TemplateDetailPageProps {
   params: Promise<{ id: string }>;
+}
+
+
+// Static Site Generation (SSG) Configuration
+export const dynamic = 'force-static';
+export const revalidate = 7200; // Revalidate every 120 minutes
+
+/**
+ * Generate static params for templates detail pages
+ *
+ * Next.js 16 will pre-render these pages at build time.
+ * With revalidate, pages are regenerated in the background when stale.
+ *
+ * @returns Array of { id: string } objects for static generation
+ */
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+  try {
+    // Fetch list of templates IDs for static generation
+    const response = await apiFetch<any[]>(
+      API_ENDPOINTS.TEMPLATES.LIST + '?limit=100&fields=id'
+    );
+
+    // Map to the required { id: string } format
+    return (response || []).map((item: any) => ({
+      id: String(item.id),
+    }));
+  } catch (error) {
+    console.warn(`[generateStaticParams] Failed to fetch templates list:`, error);
+    // Return empty array to continue build without static params
+    // Pages will be generated on-demand (ISR) instead
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: TemplateDetailPageProps): Promise<Metadata> {
@@ -24,7 +60,7 @@ export async function generateMetadata({ params }: TemplateDetailPageProps): Pro
   }
 }
 
-export default async function TemplateDetailPage({ params }: TemplateDetailPageProps) {
+export default async function TemplateDetailPage({ params }: TemplateDetailPageProps): Promise<JSX.Element> {
   const { id } = await params;
 
   let template;

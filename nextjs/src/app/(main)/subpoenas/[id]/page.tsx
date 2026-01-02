@@ -7,8 +7,44 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
 interface SubpoenaDetailPageProps {
   params: Promise<{ id: string }>;
+}
+
+
+// Static Site Generation (SSG) Configuration
+export const dynamic = 'force-static';
+export const revalidate = 3600; // Revalidate every 60 minutes
+
+/**
+ * Generate static params for subpoenas detail pages
+ *
+ * Next.js 16 will pre-render these pages at build time.
+ * With revalidate, pages are regenerated in the background when stale.
+ *
+ * @returns Array of { id: string } objects for static generation
+ */
+export async function generateStaticParams(): Promise<{ id: string }[]> {
+  try {
+    // Fetch list of subpoenas IDs for static generation
+    const response = await apiFetch<any[]>(
+      API_ENDPOINTS.SUBPOENAS.LIST + '?limit=100&fields=id'
+    );
+
+    // Map to the required { id: string } format
+    return (response || []).map((item: any) => ({
+      id: String(item.id),
+    }));
+  } catch (error) {
+    console.warn(`[generateStaticParams] Failed to fetch subpoenas list:`, error);
+    // Return empty array to continue build without static params
+    // Pages will be generated on-demand (ISR) instead
+    return [];
+  }
 }
 
 export async function generateMetadata({
@@ -17,7 +53,7 @@ export async function generateMetadata({
   const { id } = await params;
 
   try {
-    const subpoena: any = await apiFetch(API_ENDPOINTS.SUBPOENAS.DETAIL(id));
+    const subpoena: unknown = await apiFetch(API_ENDPOINTS.SUBPOENAS.DETAIL(id));
     return {
       title: `Subpoena: ${subpoena.type} | LexiFlow`,
       description: subpoena.description || 'Subpoena details',
@@ -27,7 +63,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function SubpoenaDetailPage({ params }: SubpoenaDetailPageProps) {
+export default async function SubpoenaDetailPage({ params }: SubpoenaDetailPageProps): Promise<JSX.Element> {
   const { id } = await params;
 
   let subpoena: any;

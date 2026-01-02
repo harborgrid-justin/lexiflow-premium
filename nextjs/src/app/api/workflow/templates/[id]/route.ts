@@ -8,7 +8,7 @@ import { NextRequest } from "next/server";
 // GET /api/workflow/templates/[id] - Get workflow template by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return proxyToBackend(request, `/api/workflow/templates/${params.id}`);
 }
@@ -16,7 +16,7 @@ export async function GET(
 // PUT /api/workflow/templates/[id] - Update workflow template
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return proxyToBackend(request, `/api/workflow/templates/${params.id}`);
 }
@@ -24,7 +24,7 @@ export async function PUT(
 // DELETE /api/workflow/templates/[id] - Delete workflow template
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   return proxyToBackend(request, `/api/workflow/templates/${params.id}`);
 }

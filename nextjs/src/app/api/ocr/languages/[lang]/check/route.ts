@@ -7,7 +7,7 @@ import { NextRequest } from "next/server";
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { lang: string } }
+  { params }: { params: Promise<{ lang: string }> }
 ) {
   return proxyToBackend(request, `/api/ocr/languages/${params.lang}/check`);
 }

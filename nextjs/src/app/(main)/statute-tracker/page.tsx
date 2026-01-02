@@ -7,12 +7,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Statute Tracker | LexiFlow',
   description: 'Track statute of limitations deadlines',
 };
 
-export default async function StatuteTrackerPage() {
+export default async function StatuteTrackerPage(): Promise<JSX.Element> {
   let statutes = [];
 
   try {

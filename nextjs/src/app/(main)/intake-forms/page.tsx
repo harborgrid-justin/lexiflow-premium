@@ -7,12 +7,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Intake Forms | LexiFlow',
   description: 'Manage client intake forms',
 };
 
-export default async function IntakeFormsPage() {
+export default async function IntakeFormsPage(): Promise<JSX.Element> {
   let intakeForms: any[] = [];
 
   try {

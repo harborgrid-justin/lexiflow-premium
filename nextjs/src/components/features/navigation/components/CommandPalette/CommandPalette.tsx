@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @module components/navigation/CommandPalette
  * @category Navigation
@@ -15,25 +17,24 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import type { LucideIcon } from 'lucide-react';
 import {
+  ArrowRight,
+  Clock,
   Command,
+  CornerDownLeft,
   Search,
   Sparkles,
-  Clock,
-  X,
-  CornerDownLeft,
-  ArrowRight
+  X
 } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import React, { useCallback, useDeferredValue, useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
 // Hooks & Context
-import { useTheme } from '@/providers/ThemeContext';
-import { useDebounce } from '@/hooks/useDebounce';
 import { useListNavigation } from '@/hooks/useListNavigation';
+import { useTheme } from '@/providers/ThemeContext';
 
 // Utils & Constants
 import { cn } from '@/utils/cn';
@@ -186,9 +187,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   const [query, setQuery] = useState('');
   const [recentCommands, setRecentCommands] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const debouncedQuery = useDebounce(query, 150);
+  const deferredQuery = useDeferredValue(query);
 
-  // Memoization with purpose: Role filtering is expensive for large command lists (Principle #13)
+  // Memoization with purpose: Role filtering is expensive for large command lists
   const visibleCommands = React.useMemo(() => {
     return commands.filter(command => {
       if (!command.allowedRoles || command.allowedRoles.length === 0) {
@@ -203,7 +204,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   // Filter and score commands based on query
   const filteredCommands = React.useMemo(() => {
-    if (!debouncedQuery) {
+    if (!deferredQuery) {
       // Show recent commands when no query
       const recent = visibleCommands.filter(cmd =>
         recentCommands.includes(cmd.id)
@@ -214,13 +215,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     return visibleCommands
       .map(command => ({
         command,
-        score: scoreCommand(command, debouncedQuery),
+        score: scoreCommand(command, deferredQuery),
       }))
       .filter(({ score }) => score > 0)
       .sort((a, b) => b.score - a.score)
       .map(({ command }) => command)
       .slice(0, 20);
-  }, [visibleCommands, debouncedQuery, recentCommands, maxRecentCommands]);
+  }, [visibleCommands, deferredQuery, recentCommands, maxRecentCommands]);
 
   // Group commands by category
   const groupedCommands = React.useMemo(() => {
@@ -234,7 +235,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
 
     filteredCommands.forEach(command => {
       // If no query, mark as recent
-      if (!debouncedQuery && recentCommands.includes(command.id)) {
+      if (!deferredQuery && recentCommands.includes(command.id)) {
         groups.recent.push(command);
       } else {
         groups[command.category].push(command);
@@ -248,7 +249,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         label: getCategoryLabel(category as CommandCategory),
         commands: items,
       }));
-  }, [filteredCommands, debouncedQuery, recentCommands]);
+  }, [filteredCommands, deferredQuery, recentCommands]);
 
   // Flatten commands for navigation
   const flatCommands = groupedCommands.flatMap(group => group.commands);

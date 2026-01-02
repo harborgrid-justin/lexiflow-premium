@@ -6,12 +6,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Clauses',
   description: 'Manage clause library and templates',
 };
 
-export default async function ClausesPage() {
+export default async function ClausesPage(): Promise<JSX.Element> {
   // Fetch clauses from backend
   let clauses = [];
 

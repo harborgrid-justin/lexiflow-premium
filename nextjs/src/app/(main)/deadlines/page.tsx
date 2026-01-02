@@ -7,12 +7,16 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Deadlines | LexiFlow',
   description: 'Manage legal deadlines and due dates',
 };
 
-export default async function DeadlinesPage() {
+export default async function DeadlinesPage(): Promise<JSX.Element> {
   let deadlines: any[] = [];
 
   try {

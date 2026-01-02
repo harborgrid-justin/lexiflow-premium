@@ -1,10 +1,6 @@
-"use client";
-
 /**
  * Window Adapter Interface
  * Browser-agnostic window/global object abstractions for service layer portability
- *
- * Next.js 16: Client-only (uses window, document, performance APIs)
  *
  * @module services/infrastructure/adapters/WindowAdapter
  * @description Provides window/document interfaces that services can depend on

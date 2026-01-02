@@ -7,12 +7,16 @@ import { API_ENDPOINTS, apiFetch } from '@/lib/api-config';
 import { Metadata } from 'next';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Profile | LexiFlow',
   description: 'User Profile',
 };
 
-export default async function ProfilePage() {
+export default async function ProfilePage(): Promise<JSX.Element> {
   // Fetch current user profile
   let userProfile = null;
 

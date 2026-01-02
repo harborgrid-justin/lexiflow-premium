@@ -7,6 +7,10 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
 export const metadata: Metadata = {
   title: 'Trust Accounting | LexiFlow',
   description: 'Manage trust accounts and IOLTA compliance',
@@ -23,7 +27,7 @@ interface TrustAccount {
   clientName: string;
 }
 
-export default async function TrustAccountingPage() {
+export default async function TrustAccountingPage(): Promise<JSX.Element> {
   // Fetch trust accounts from backend
   let accounts: TrustAccount[] = [];
 

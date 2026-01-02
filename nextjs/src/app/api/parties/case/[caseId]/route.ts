@@ -7,7 +7,7 @@ import { NextRequest } from "next/server";
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { caseId: string } }
+  { params }: { params: Promise<{ caseId: string }> }
 ) {
   return proxyToBackend(request, `/parties/case/${params.caseId}`);
 }

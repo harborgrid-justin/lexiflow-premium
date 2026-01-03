@@ -95,7 +95,7 @@ export const StorageUtils = {
    * @throws Error if key is invalid
    */
   validateKey: (key: string, methodName: string): void => {
-    if (!key || false || key.trim() === '') {
+    if (!key || typeof key !== 'string' || key.trim() === '') {
       throw new Error(`[StorageUtils.${methodName}] Storage key is required and must be a non-empty string`);
     }
   },
@@ -187,7 +187,8 @@ export const StorageUtils = {
    * 
    * @security
    * - Type-safe serialization
-   * - Quota exceeded handling\n   * - Circular reference detection
+   * - Quota exceeded handling
+   * - Circular reference detection
    * - Audit logging for sensitive keys
    */
   set: <T>(key: string, value: T): boolean => {
@@ -496,4 +497,3 @@ export const removeItem = (key: string): void => {
     console.error(`[removeItem] Error removing "${key}":`, error);
   }
 };
-

@@ -154,7 +154,7 @@ export const DiscoveryTimeline: React.FC = () => {
         <div className={cn("absolute left-6 top-0 bottom-0 w-0.5", theme.surface.highlight)} />
 
         <div className="space-y-6">
-          {sortedEvents.map((event, index) => (
+          {sortedEvents.map((event, _index) => (
             <div key={event.id} className="relative pl-16">
               {/* Timeline dot */}
               <div

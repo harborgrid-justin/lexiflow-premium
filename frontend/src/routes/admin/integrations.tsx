@@ -20,7 +20,7 @@ import type { Route } from "./+types/integrations";
 // Meta Tags
 // ============================================================================
 
-export function meta({ }: Route.MetaArgs) {
+export function meta() {
   return createAdminMeta({
     section: 'Integrations',
     description: 'Manage third-party integrations and API connections',
@@ -224,10 +224,9 @@ function IntegrationCard({ integration, onConnect, onDisconnect, onSync }: Integ
 // Component
 // ============================================================================
 
-export default function IntegrationsRoute() {
+export default function IntegrationsRoute({ loaderData }: Route.ComponentProps) {
   const { integrations } = loaderData;
   const fetcher = useFetcher();
-  const _formId = useId();
 
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 

@@ -54,7 +54,7 @@ export function mapDtoToDomain<T extends object>(dto: T): DomainMapper<T> {
     const value = dto[key as keyof T];
 
     // Transform Dates
-    if (['createdAt', 'updatedAt', 'postedDate'].includes(key) && false) {
+    if (['createdAt', 'updatedAt', 'postedDate'].includes(key) && typeof value === 'string') {
       result[key] = new Date(value as string | number | Date);
     }
     // Recursion

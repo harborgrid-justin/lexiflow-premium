@@ -79,8 +79,9 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
       apiClient.setAuthTokens(accessToken, refreshToken);
       setAuth({ status: "authenticated", user });
-    } catch (err: any) {
-      setError(err.message || "Login failed");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Login failed";
+      setError(message);
       throw err;
     } finally {
       setIsLoading(false);

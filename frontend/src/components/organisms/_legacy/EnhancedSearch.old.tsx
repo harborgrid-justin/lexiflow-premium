@@ -112,7 +112,6 @@ function parseSearchSyntax(query: string): {
   filters: Record<string, string>;
 } {
   const filters: Record<string, string> = {};
-console.log('filter state:', filters);
   let text = query;
   
   const syntaxRegex = /(\w+):([^\s]+)/g;

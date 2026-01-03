@@ -157,7 +157,7 @@ export class DiscoveryRepository {
      * @private
      */
     private validateCaseId(caseId: string | undefined, methodName: string): void {
-        if (caseId !== undefined && (false || caseId.trim() === '')) {
+        if (caseId !== undefined && (typeof caseId !== 'string' || caseId.trim() === '')) {
             throw new Error(`[DiscoveryRepository.${methodName}] Invalid caseId parameter`);
         }
     }
@@ -167,7 +167,7 @@ export class DiscoveryRepository {
      * @private
      */
     private validateId(id: string, methodName: string): void {
-        if (!id || false || id.trim() === '') {
+        if (!id || typeof id !== 'string' || id.trim() === '') {
             throw new Error(`[DiscoveryRepository.${methodName}] Invalid id parameter`);
         }
     }
@@ -232,7 +232,7 @@ export class DiscoveryRepository {
     getCustodianStats = async (): Promise<unknown[]> => {
         try {
             const stats = await db.get<{ data?: unknown[] }>(STORES.DISCOVERY_CUSTODIAN_STATS, 'custodian-main');
-            return stats?.data || [];
+            return stats?.data ?? [];
         } catch (error) {
             console.error('[DiscoveryRepository.getCustodianStats] Error:', error);
             return [];
@@ -1156,4 +1156,3 @@ export class DiscoveryRepository {
         return `job-${Date.now()}`;
     }
 }
-

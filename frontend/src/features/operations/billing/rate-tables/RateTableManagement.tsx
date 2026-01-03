@@ -62,7 +62,7 @@ const RateTableManagementComponent: React.FC = () => {
       createModal.close();
       setFormData({ rates: [] });
       notify.success('Rate table created successfully');
-    } catch (error) {
+    } catch (_error) {
       notify.error('Failed to create rate table');
     }
   };
@@ -76,7 +76,7 @@ const RateTableManagementComponent: React.FC = () => {
       tableSelection.deselect();
       setFormData({ rates: [] });
       notify.success('Rate table updated successfully');
-    } catch (error) {
+    } catch (_error) {
       console.error('[RateTableManagement.handleEdit] Error:', error);
       notify.error('Failed to update rate table');
     }
@@ -90,7 +90,7 @@ const RateTableManagementComponent: React.FC = () => {
       deleteModal.close();
       tableSelection.deselect();
       notify.success('Rate table deleted successfully');
-    } catch (error) {
+    } catch (_error) {
       notify.error('Failed to delete rate table');
     }
   };

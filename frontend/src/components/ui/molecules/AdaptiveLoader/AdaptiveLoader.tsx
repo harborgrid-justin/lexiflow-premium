@@ -197,9 +197,8 @@ export const AdaptiveLoader: React.FC<AdaptiveLoaderProps> = ({
       case 'paragraph': {
         const lineCount = item.count || 3;
         return (
-        }
           <div key={index} className="space-y-2" role="status" aria-label="Loading paragraph">
-            {Array.from({ length: lineCount }).map((_) => (
+            {Array.from({ length: lineCount }).map((_, i) => (
               <div
                 key={i}
                 className={cn(baseClasses, "h-4")}
@@ -208,6 +207,7 @@ export const AdaptiveLoader: React.FC<AdaptiveLoaderProps> = ({
             ))}
           </div>
         );
+      }
 
       case 'image':
         return (
@@ -241,9 +241,8 @@ export const AdaptiveLoader: React.FC<AdaptiveLoaderProps> = ({
       case 'list': {
         const listCount = item.count || 3;
         return (
-        }
           <div key={index} className="space-y-3" role="status" aria-label="Loading list">
-            {Array.from({ length: listCount }).map((_) => (
+            {Array.from({ length: listCount }).map((_, i) => (
               <div key={i} className="flex items-center gap-3">
                 <div className={cn(baseClasses, "rounded-full")} style={{ width: 40, height: 40 }} />
                 <div className="flex-1 space-y-2">
@@ -254,11 +253,11 @@ export const AdaptiveLoader: React.FC<AdaptiveLoaderProps> = ({
             ))}
           </div>
         );
+      }
 
       case 'table': {
         const rowCount = item.count || 5;
         return (
-        }
           <div key={index} className="space-y-2" role="status" aria-label="Loading table">
             {/* Header */}
             <div className={cn("flex gap-4 py-3 px-4 border-b", theme.border.default)}>
@@ -268,7 +267,7 @@ export const AdaptiveLoader: React.FC<AdaptiveLoaderProps> = ({
               <div className={cn(baseClasses, "h-4 w-20")} />
             </div>
             {/* Rows */}
-            {Array.from({ length: rowCount }).map((_) => (
+            {Array.from({ length: rowCount }).map((_, i) => (
               <div key={i} className="flex gap-4 py-2 px-4">
                 <div className={cn(baseClasses, "h-4 flex-1")} />
                 <div className={cn(baseClasses, "h-4 flex-1")} />
@@ -278,6 +277,7 @@ export const AdaptiveLoader: React.FC<AdaptiveLoaderProps> = ({
             ))}
           </div>
         );
+      }
 
       case 'button':
         return (
@@ -356,7 +356,7 @@ export const AdaptiveLoader: React.FC<AdaptiveLoaderProps> = ({
         <React.Fragment key={index}>
           {item.count && item.count > 1 && ['paragraph', 'list', 'table', 'card', 'input'].includes(item.type)
             ? renderSkeletonItem(item, index)
-            : Array.from({ length: item.count || 1 }).map((_) =>
+            : Array.from({ length: item.count || 1 }).map((_, i) =>
                 renderSkeletonItem({ ...item, count: undefined }, index * 1000 + i)
               )}
         </React.Fragment>

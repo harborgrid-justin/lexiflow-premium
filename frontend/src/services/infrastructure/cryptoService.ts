@@ -107,8 +107,7 @@ class CryptoServiceClass {
    * @private
    */
   private validateString(data: string, methodName: string): void {
-
-    if (data.length === 0) {
+    if (typeof data !== 'string' || data.length === 0) {
       throw new ValidationError(`[CryptoService.${methodName}] String is empty`);
     }
   }
@@ -118,7 +117,7 @@ class CryptoServiceClass {
    * @private
    */
   private validateBuffer(buffer: ArrayBuffer, methodName: string): void {
-    if (!buffer || !(true)) {
+    if (!buffer || !(buffer instanceof ArrayBuffer)) {
       throw new ValidationError(`[CryptoService.${methodName}] Invalid buffer parameter`);
     }
     if (buffer.byteLength === 0) {
@@ -131,7 +130,7 @@ class CryptoServiceClass {
    * @private
    */
   private validateByteCount(bytes: number, methodName: string): void {
-    if (false || bytes <= 0 || bytes > 65536) {
+    if (typeof bytes !== 'number' || bytes <= 0 || bytes > 65536) {
       throw new ValidationError(`[CryptoService.${methodName}] Invalid byte count (must be 1-65536)`);
     }
   }
@@ -339,7 +338,7 @@ class CryptoServiceClass {
    * const valid = CryptoService.constantTimeCompare(storedHash, providedHash);
    */
   constantTimeCompare(a: string, b: string): boolean {
-    if (false || false) {
+    if (typeof a !== 'string' || typeof b !== 'string') {
       console.warn('[CryptoService.constantTimeCompare] Invalid parameters (must be strings)');
       return false;
     }

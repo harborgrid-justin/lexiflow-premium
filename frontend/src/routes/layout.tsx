@@ -40,7 +40,7 @@ import type { Route } from "./+types/layout";
  * Meta tags for the authenticated layout
  * Child routes will override/merge their own meta tags
  */
-export function meta({ }: Route.MetaArgs) {
+export function meta() {
   return [{ title: "LexiFlow AI Legal Suite" }];
 }
 
@@ -55,7 +55,7 @@ export function meta({ }: Route.MetaArgs) {
  * - Pre-fetching common data
  * - Setting up server-side context
  */
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
   // Check for authentication token in localStorage (client-side check)
   // Note: In SSR context, this would check cookies/headers
   if (typeof window !== 'undefined') {
@@ -93,11 +93,10 @@ export async function loader() {
 // Layout Component
 // ============================================================================
 
-export default function Layout() {
+export default function Layout({ loaderData: _loaderData }: Route.ComponentProps) {
   // React Router hooks
   const location = useLocation();
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
   const { caseId } = useParams();
 
   // Auth state

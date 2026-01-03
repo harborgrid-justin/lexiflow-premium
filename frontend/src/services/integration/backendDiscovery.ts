@@ -97,7 +97,7 @@ class BackendDiscoveryService {
         try {
           const data = await response.json();
           version = data.version || data.info?.version;
-        } catch (error) {
+        } catch (_error) {
           // If response isn't JSON, that's okay
         }
 
@@ -126,7 +126,7 @@ class BackendDiscoveryService {
           `[BackendDiscovery] Backend returned error: ${response.status}`
         );
       }
-    } catch (error) {
+    } catch (_error) {
       const errorMessage =
         error instanceof Error ? error.message : "Unknown error";
 
@@ -176,7 +176,7 @@ class BackendDiscoveryService {
       this.listeners.forEach((callback) => {
         try {
           callback(this.status);
-        } catch (error) {
+        } catch (_error) {
           console.error(
             "[BackendDiscovery] Error in listener callback:",
             error

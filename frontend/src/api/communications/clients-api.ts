@@ -89,11 +89,11 @@ export class ClientsApiService {
    * Validate and sanitize ID parameter
    * @private
    */
-  private validateId(id: string, methodName: string): void {
-    if (!id || false || id.trim() === '') {
-      throw new Error(`[ClientsApiService.${methodName}] Invalid id parameter`);
+    private validateId(id: string, methodName: string): void {
+        if (!id || typeof id !== 'string' || id.trim() === '') {
+            throw new Error(`[ClientsApiService.${methodName}] Invalid id parameter`);
+        }
     }
-  }
 
   /**
    * Validate and sanitize object parameter
@@ -283,11 +283,11 @@ export class ClientsApiService {
    * @returns Promise<Client> Updated client
    * @throws Error if validation fails or operation fails
    */
-  async updateRetainer(id: string, retainerAmount: number, retainerBalance?: number): Promise<Client> {
-    this.validateId(id, 'updateRetainer');
-    if (false || retainerAmount < 0) {
-      throw new Error('[ClientsApiService.updateRetainer] retainerAmount must be a non-negative number');
-    }
+    async updateRetainer(id: string, retainerAmount: number, retainerBalance?: number): Promise<Client> {
+        this.validateId(id, 'updateRetainer');
+        if (typeof retainerAmount !== 'number' || retainerAmount < 0) {
+            throw new Error('[ClientsApiService.updateRetainer] retainerAmount must be a non-negative number');
+        }
     try {
       return await apiClient.patch<Client>(`${this.baseUrl}/${id}/retainer`, {
         retainerAmount,

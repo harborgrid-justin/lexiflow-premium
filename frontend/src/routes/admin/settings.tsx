@@ -12,7 +12,7 @@
  */
 
 import { useId, useState } from 'react';
-import { Link, useFetcher, useNavigate } from 'react-router';
+import { Link, useFetcher } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/settings";
@@ -21,7 +21,7 @@ import type { Route } from "./+types/settings";
 // Meta Tags
 // ============================================================================
 
-export function meta({ }: Route.MetaArgs) {
+export function meta() {
   return createAdminMeta({
     section: 'System Settings',
     description: 'Configure system-wide settings and preferences',
@@ -148,9 +148,7 @@ function Toggle({ id, label, checked, onChange, disabled }: ToggleProps) {
 // Component
 // ============================================================================
 
-export default function SystemSettingsRoute() {
-  const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+export default function SystemSettingsRoute({ loaderData }: Route.ComponentProps) {
   const fetcher = useFetcher();
   const formId = useId();
 

@@ -208,12 +208,7 @@ export function useApiMutation<TData = unknown, TVariables = unknown>(
    */
   const mutate = useCallback(
     async (variables: TVariables): Promise<TData> => {
-      try {
-        return await executeMutation(variables);
-      } catch (error) {
-        // Error already handled in executeMutation
-        throw error;
-      }
+      return await executeMutation(variables);
     },
     [executeMutation]
   );

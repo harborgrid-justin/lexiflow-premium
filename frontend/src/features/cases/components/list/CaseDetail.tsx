@@ -70,17 +70,19 @@ console.log('useNavigate:', navigate);
     }
   );
 
+  // Navigate to matters list if invalid - moved before conditional return
+  useEffect(() => {
+    if (!isValidMatterId || error || (!loading && !matter)) {
+      if (!isValidMatterId && matterId) {
+        console.error(`[MatterDetail] Invalid UUID format: ${matterId}`);
+      }
+      navigate(PATHS.MATTERS);
+    }
+  }, [isValidMatterId, error, loading, matter, matterId, navigate]);
+
   // PREDICTABLE ERROR STATE: Render structured error view instead of null
   // Prevents hydration mismatch and provides user feedback
   if (!isValidMatterId || error || (!loading && !matter)) {
-    if (!isValidMatterId && matterId) {
-      console.error(`[MatterDetail] Invalid UUID format: ${matterId}`);
-    }
-    // Navigate in effect, not during render
-    useEffect(() => {
-      navigate(PATHS.MATTERS);
-    }, [navigate]);
-
     return (
       <div className="flex items-center justify-center h-full p-8">
         <div className="text-center max-w-md">

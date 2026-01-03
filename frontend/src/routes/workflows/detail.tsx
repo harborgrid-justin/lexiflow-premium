@@ -6,7 +6,7 @@
  * @module routes/workflows/detail
  */
 
-import { Link } from 'react-router';
+// import { Link } from 'react-router';
 import type { Route } from "./+types/detail";
 import { createDetailMeta } from '../_shared/meta-utils';
 import { api } from '../../api';

@@ -125,7 +125,7 @@ export function requireRole(
   request: Request,
   ...allowedRoles: UserRole[]
 ): RouteGuardResult {
-  const { user } = requireAuthentication(request);
+  const { user } = requireAuthentication(_request);
 
   const hasRequiredRole = allowedRoles.some((role) => role === user.role);
   if (!user || !hasRequiredRole) {
@@ -187,7 +187,7 @@ export function requirePermission(
   request: Request,
   permission: string
 ): RouteGuardResult {
-  const { user } = requireAuthentication(request);
+  const { user } = requireAuthentication(_request);
 
   if (!user || !user.permissions.includes(permission)) {
     throw new Response("Forbidden - Missing required permission", {
@@ -211,7 +211,7 @@ export function requireAllPermissions(
   request: Request,
   permissions: string[]
 ): RouteGuardResult {
-  const { user } = requireAuthentication(request);
+  const { user } = requireAuthentication(_request);
 
   if (!user) {
     throw new Response("Unauthorized", { status: 401 });
@@ -243,7 +243,7 @@ export function requireAnyPermission(
   request: Request,
   permissions: string[]
 ): RouteGuardResult {
-  const { user } = requireAuthentication(request);
+  const { user } = requireAuthentication(_request);
 
   if (!user) {
     throw new Response("Unauthorized", { status: 401 });

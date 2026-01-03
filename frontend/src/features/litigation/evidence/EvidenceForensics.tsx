@@ -77,7 +77,7 @@ class VerificationQueue {
         blockHeight: '18452' + randomBlockSuffix
       };
       job.resolve(result);
-    } catch (error) {
+    } catch (_error) {
       job.reject(error);
     }
   }
@@ -139,7 +139,7 @@ export const EvidenceForensics: React.FC<EvidenceForensicsProps> = ({ selectedIt
           expiresAt: Date.now() + 86400000 // 24 hour TTL
         }
       );
-    } catch (error) {
+    } catch (_error) {
       setVerificationStatus('failed');
     } finally {
       verificationRef.current = false;

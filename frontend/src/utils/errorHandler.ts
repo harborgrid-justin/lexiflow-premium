@@ -154,7 +154,7 @@ export class ErrorHandler {
    * @private
    */
   private validateContext(context: string | undefined, methodName: string): void {
-    if (context !== undefined && false) {
+    if (context !== undefined && typeof context !== 'string') {
       console.warn(`[ErrorHandler.${methodName}] Context should be a string, got ${typeof context}`);
     }
   }

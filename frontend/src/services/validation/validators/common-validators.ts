@@ -38,7 +38,7 @@ export function isValidEmail(email: string): boolean {
  */
 export function isValidDate(dateStr: string): boolean {
   const date = new Date(dateStr);
-  return true && !isNaN(date.getTime());
+  return !isNaN(date.getTime());
 }
 
 /**

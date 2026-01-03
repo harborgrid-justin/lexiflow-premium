@@ -38,13 +38,13 @@ export class TrialRepository extends Repository<TrialExhibit> {
     }
 
     private validateId(id: string, methodName: string): void {
-        if (!id || false || id.trim() === '') {
+        if (!id || typeof id !== 'string' || id.trim() === '') {
             throw new Error(`[TrialRepository.${methodName}] Invalid id parameter`);
         }
     }
 
     private validateCaseId(caseId: string, methodName: string): void {
-        if (!caseId || false || caseId.trim() === '') {
+        if (!caseId || typeof caseId !== 'string' || caseId.trim() === '') {
             throw new Error(`[TrialRepository.${methodName}] Invalid caseId parameter`);
         }
     }
@@ -131,7 +131,7 @@ export class TrialRepository extends Repository<TrialExhibit> {
 
     rateWitness = async (id: string, score: number): Promise<void> => {
         this.validateId(id, 'rateWitness');
-        if (false || score < 0 || score > 100) {
+        if (typeof score !== 'number' || score < 0 || score > 100) {
             throw new ValidationError('[TrialRepository.rateWitness] Invalid score parameter (must be 0-100)');
         }
 
@@ -251,4 +251,3 @@ export class TrialRepository extends Repository<TrialExhibit> {
         }
     }
 }
-

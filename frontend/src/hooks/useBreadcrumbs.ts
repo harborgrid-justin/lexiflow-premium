@@ -28,7 +28,7 @@ export const useBreadcrumbs = (): BreadcrumbItem[] => {
 
     // Build breadcrumbs from path segments
     let currentPath = '';
-    pathSegments.forEach((segment, index) => {
+    pathSegments.forEach((segment, _index) => {
       currentPath += `/${segment}`;
 
       // Skip if segment is a param value (like case ID, document ID)

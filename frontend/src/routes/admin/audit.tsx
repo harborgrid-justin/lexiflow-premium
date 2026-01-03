@@ -20,7 +20,7 @@ import type { Route } from "./+types/audit";
 // Meta Tags
 // ============================================================================
 
-export function meta({ }: Route.MetaArgs) {
+export function meta() {
   return createAdminMeta({
     section: 'Audit Logs',
     description: 'View system activity and security logs',
@@ -50,10 +50,10 @@ interface AuditLogEntry {
 // Loader
 // ============================================================================
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const page = parseInt(url.searchParams.get('page') || '1');
-  const _filter = url.searchParams.get('filter') || 'all';
+  const filter = url.searchParams.get('filter') || 'all';
 
   // Mock audit log data
   const logs: AuditLogEntry[] = [
@@ -203,9 +203,9 @@ function formatTimestamp(timestamp: string): string {
 // Component
 // ============================================================================
 
-export default function AuditLogsRoute() {
+export default function AuditLogsRoute({ loaderData }: Route.ComponentProps) {
   const { logs, pagination, filters } = loaderData;
-  const [_searchParams, _setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const formId = useId();
 
   const [selectedAction, setSelectedAction] = useState<string>('all');

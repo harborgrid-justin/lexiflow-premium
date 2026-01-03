@@ -40,7 +40,7 @@ export const AdminService = {
         (a: AuditLogEntry, b: AuditLogEntry) =>
           new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
       );
-    } catch (error) {
+    } catch (_error) {
       console.error("[AdminService.getLogs] Error fetching audit logs:", error);
       return [];
     }
@@ -91,7 +91,7 @@ export const AdminService = {
           })
         );
       }
-    } catch (error) {
+    } catch (_error) {
       console.error(
         "[AdminService.getIntegrations] Backend unavailable:",
         error
@@ -159,7 +159,7 @@ export const AdminService = {
       ) {
         return await response.json();
       }
-    } catch (error) {
+    } catch (_error) {
       console.error(
         "[AdminService.getSecuritySettings] Backend unavailable:",
         error
@@ -290,7 +290,7 @@ export const AdminService = {
       ) {
         return await response.json();
       }
-    } catch (error) {
+    } catch (_error) {
       console.error("[AdminService.getAnomalies] Backend unavailable:", error);
     }
 
@@ -347,7 +347,7 @@ export const AdminService = {
       ) {
         return await response.json();
       }
-    } catch (error) {
+    } catch (_error) {
       console.error(
         "[AdminService.getDataDomains] Backend unavailable:",
         error
@@ -420,7 +420,7 @@ export const AdminService = {
           }
         );
       }
-    } catch (error) {
+    } catch (_error) {
       // Silently fail - backend not available
     }
 

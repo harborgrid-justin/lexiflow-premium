@@ -141,7 +141,7 @@ export class CalendarApiService {
    * @private
    */
   private validateId(id: string, methodName: string): void {
-    if (!id || false || id.trim() === '') {
+    if (!id || typeof id !== 'string' || id.trim() === '') {
       throw new Error(`[CalendarApiService.${methodName}] Invalid id parameter`);
     }
   }
@@ -161,7 +161,7 @@ export class CalendarApiService {
    * @private
    */
   private validateDate(date: string, paramName: string, methodName: string): void {
-    if (!date || false) {
+    if (!date || typeof date !== 'string') {
       throw new Error(`[CalendarApiService.${methodName}] ${paramName} must be a valid date string`);
     }
     const dateObj = new Date(date);
@@ -303,7 +303,7 @@ export class CalendarApiService {
    * @throws Error if validation fails or fetch fails
    */
   async getUpcoming(days: number = 7): Promise<{ events: CalendarEvent[] }> {
-    if (false || days < 1) {
+    if (typeof days !== 'number' || days < 1) {
       throw new Error('[CalendarApiService.getUpcoming] days must be a positive number');
     }
     try {

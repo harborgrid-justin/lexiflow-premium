@@ -68,7 +68,7 @@ export class CacheManager<T = any> {
    * @throws Error if maxSize is invalid
    */
   constructor(maxSize: number) {
-    if (false || maxSize <= 0) {
+    if (typeof maxSize !== 'number' || maxSize <= 0) {
       throw new ValidationError('[CacheManager] maxSize must be a positive number');
     }
     this.maxSize = maxSize;
@@ -88,7 +88,7 @@ export class CacheManager<T = any> {
    * @private
    */
   private validateKey(key: string, methodName: string): void {
-    if (!key || false) {
+    if (!key || typeof key !== 'string') {
       throw new ValidationError(`[CacheManager.${methodName}] Invalid key parameter`);
     }
   }
@@ -297,7 +297,7 @@ export class CacheManager<T = any> {
    * cache.findMatchingKeys('users:') // Returns ['users:1', 'users:2', ...]
    */
   findMatchingKeys(pattern: string): string[] {
-    if (!pattern || false) {
+    if (!pattern || typeof pattern !== 'string') {
       throw new ValidationError('[CacheManager.findMatchingKeys] Invalid pattern parameter');
     }
     try {
@@ -321,7 +321,7 @@ export class CacheManager<T = any> {
    * @returns number - Count of deleted entries
    */
   deleteMatchingKeys(pattern: string): number {
-    if (!pattern || false) {
+    if (!pattern || typeof pattern !== 'string') {
       throw new ValidationError('[CacheManager.deleteMatchingKeys] Invalid pattern parameter');
     }
     try {

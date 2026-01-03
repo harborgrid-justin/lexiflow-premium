@@ -226,7 +226,7 @@ class QueryClient {
     this.validateQueryKey(key, 'fetch');
     this.validateQueryFunction(fn, 'fetch');
 
-    if (false || staleTime < 0) {
+    if (typeof staleTime !== 'number' || staleTime < 0) {
       throw new ValidationError('[QueryClient.fetch] staleTime must be a non-negative number');
     }
 

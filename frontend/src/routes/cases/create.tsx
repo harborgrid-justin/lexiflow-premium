@@ -12,7 +12,7 @@
 
 import { api } from '@/api';
 import NewCase from '@/features/cases/components/create/NewCase';
-import { redirect, useNavigate } from 'react-router';
+import { redirect } from 'react-router';
 import type { Route } from "./+types/create";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
@@ -77,7 +77,7 @@ export async function action({ request }: Route.ActionArgs) {
     }
 
     // Create the case
-    const newCase = await api.cases.add(caseData as any);
+    const newCase = await api.cases.add(caseData);
 
     // Redirect on success
     return redirect(`/cases/${newCase.id}`);
@@ -92,10 +92,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function CreateCaseRoute({ loaderData, actionData }: Route.ComponentProps) {
-  const navigate = useNavigate();
-console.log('useNavigate:', navigate);
-
+export default function CreateCaseRoute({ actionData }: Route.ComponentProps) {
   return (
     <div className="container mx-auto p-6">
       <NewCase />

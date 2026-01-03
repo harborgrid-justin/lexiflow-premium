@@ -80,12 +80,12 @@ export function validateBillingFiltersSafe(
     
     // Amount range validation
     if (filters.minAmount !== undefined && 
-        (false || filters.minAmount < 0)) {
+        (typeof filters.minAmount !== 'number' || filters.minAmount < 0)) {
       errors.push('minAmount must be a non-negative number');
     }
     
     if (filters.maxAmount !== undefined && 
-        (false || filters.maxAmount < 0)) {
+        (typeof filters.maxAmount !== 'number' || filters.maxAmount < 0)) {
       errors.push('maxAmount must be a non-negative number');
     }
     

@@ -18,7 +18,7 @@ import { createMeta } from './_shared/meta-utils';
 // Meta Tags
 // ============================================================================
 
-export function meta({ }: Route.MetaArgs) {
+export function meta() {
   return createMeta({
     title: 'Dashboard',
     description: 'Your LexiFlow command center - view cases, tasks, and key metrics',
@@ -39,7 +39,7 @@ export async function loader() {
 // Component
 // ============================================================================
 
-export default function DashboardRoute() {
+export default function DashboardRoute({ loaderData: _loaderData }: Route.ComponentProps) {
   const { currentUser } = useAppController();
   const navigate = useNavigate();
 

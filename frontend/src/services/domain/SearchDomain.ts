@@ -52,7 +52,7 @@ export const SearchService = {
         if (filters?.caseId) params.caseId = filters.caseId;
 
         return await apiClient.get<SearchResult[]>('/search', params);
-      } catch (error) {
+      } catch (_error) {
         console.error('[SearchService.search] Backend error:', error);
       }
     }
@@ -71,7 +71,7 @@ export const SearchService = {
     try {
       const stored = localStorage.getItem(RECENT_SEARCHES_KEY);
       return stored ? JSON.parse(stored) : [];
-    } catch (error) {
+    } catch (_error) {
       return [];
     }
   },
@@ -82,7 +82,7 @@ export const SearchService = {
       const updated = [query, ...recent.filter(q => q !== query)].slice(0, MAX_RECENT_SEARCHES);
       localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(updated));
       return true;
-    } catch (error) {
+    } catch (_error) {
       return false;
     }
   },
@@ -93,7 +93,7 @@ export const SearchService = {
         await apiClient.post(`/search/index/document/${documentId}`, {});
         console.log(`[SearchService] Document ${documentId} indexed successfully`);
         return true;
-      } catch (error) {
+      } catch (_error) {
         console.error('[SearchService.indexDocument] Backend error:', error);
         return false;
       }

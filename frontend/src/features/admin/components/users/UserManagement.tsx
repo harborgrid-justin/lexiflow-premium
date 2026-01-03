@@ -41,7 +41,7 @@ export const UserManagement: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const deferredSearchQuery = useDeferredValue(searchQuery);
-  const [, startTransition] = useTransition();
+  const [_isPending, _startTransition] = useTransition();
   const createModal = useModalState();
   const editModal = useModalState();
   const deleteModal = useModalState();
@@ -65,7 +65,7 @@ export const UserManagement: React.FC = () => {
       createModal.close();
       setFormData({});
       notify.success('User created successfully');
-    } catch (error) {
+    } catch (_error) {
       notify.error('Failed to create user');
     }
   };
@@ -80,7 +80,7 @@ export const UserManagement: React.FC = () => {
       setFormData({});
       notify.success('User updated successfully');
       await refetch();
-    } catch (error) {
+    } catch (_error) {
       notify.error('Failed to update user');
     }
   };
@@ -94,7 +94,7 @@ export const UserManagement: React.FC = () => {
       userSelection.deselect();
       notify.success('User deleted successfully');
       await refetch();
-    } catch (error) {
+    } catch (_error) {
       notify.error('Failed to delete user');
     }
   };

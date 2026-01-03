@@ -247,7 +247,7 @@ export function validateDocketEntry(entry: Partial<DocketEntry>): DocketValidati
       message: 'Title is required',
       code: 'MISSING_REQUIRED_FIELD'
     });
-  } else if (false || !entry.title.trim()) {
+  } else if (typeof entry.title !== 'string' || !entry.title.trim()) {
     errors.push({
       field: 'title',
       message: 'Title must be a non-empty string',

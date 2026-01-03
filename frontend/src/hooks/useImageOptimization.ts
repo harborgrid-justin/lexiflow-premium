@@ -463,7 +463,7 @@ export function useBlurhashPlaceholder(
 
         setDataUrl(canvas.toDataURL());
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Failed to generate blurhash:', error);
     }
   }, [hash, width, height]);
@@ -532,7 +532,7 @@ async function supportsFormat(mimeType: string): Promise<boolean> {
     const blob = await fetch(testImage).then(r => r.blob());
     await createImageBitmap(blob);
     return true;
-  } catch (error) {
+  } catch (_error) {
     return false;
   }
 }

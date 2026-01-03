@@ -38,7 +38,7 @@ const initializePDFJS = async () => {
     pdfjs.GlobalWorkerOptions.workerSrc = 'https://esm.sh/pdfjs-dist@4.0.379/build/pdf.worker.min.mjs';
     pdfjsLib = pdfjs;
     return pdfjs;
-  } catch () {
+  } catch (error) {
     console.error('Failed to load PDF.js:', error);
     throw error;
   }

@@ -70,7 +70,7 @@ const CHART_COLORS = {
 
 export const EnhancedDashboardOverview: React.FC<EnhancedDashboardOverviewProps> = ({
   onSelectCase,
-  userRole = 'attorney',
+  _userRole = 'attorney',
 }) => {
   const { theme } = useTheme();
   const [dateRange] = useState<'week' | 'month' | 'quarter' | 'year'>('month');

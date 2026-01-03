@@ -21,7 +21,7 @@ import type { Route } from "./+types/backup";
 // Meta Tags
 // ============================================================================
 
-export function meta({ }: Route.MetaArgs) {
+export function meta() {
   return createAdminMeta({
     section: 'Backup & Restore',
     description: 'Manage system backups and data recovery',
@@ -168,7 +168,7 @@ export async function action({ request }: Route.ActionArgs) {
       }
 
     case "toggle-schedule": {
-      const _scheduleId = formData.get("scheduleId") as string;
+      const scheduleId = formData.get("scheduleId") as string;
       const enabled = formData.get("enabled") === "true";
       // TODO: Toggle schedule
       return { success: true, message: `Schedule ${enabled ? 'enabled' : 'disabled'}` };
@@ -233,10 +233,9 @@ function getTypeColor(type: Backup['type']): string {
 // Component
 // ============================================================================
 
-export default function BackupRoute() {
+export default function BackupRoute({ loaderData }: Route.ComponentProps) {
   const { backups, schedules, stats } = loaderData;
   const fetcher = useFetcher();
-  const _formId = useId();
 
   const [showCreateModal, setShowCreateModal] = useState(false);
 

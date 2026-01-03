@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useTransition } from 'react';
+import React, { useEffect, useRef, useState, useTransition } from 'react';
 
 interface OptimisticInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   value: string;
@@ -20,16 +20,20 @@ export const OptimisticInput: React.FC<OptimisticInputProps> = ({
 }) => {
   // Local state for immediate feedback
   const [localValue, setLocalValue] = useState(externalValue);
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
+  const localValueRef = useRef(localValue);
+
+  useEffect(() => {
+    localValueRef.current = localValue;
+  }, [localValue]);
 
   // Sync local state if external value changes (e.g. reset form)
   // But ONLY if we are not currently pending an update to avoid race conditions/cursor jumps
   useEffect(() => {
-    if (!isPending && externalValue !== localValue) {
+    if (!isPending && externalValue !== localValueRef.current) {
       setLocalValue(externalValue);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [externalValue]);
+  }, [externalValue, isPending]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;

@@ -5,6 +5,7 @@
 import { CaseFinancialsCenter } from '@/features/cases/components/financials/CaseFinancialsCenter';
 import { DataService } from '@/services/data/dataService';
 import { Suspense } from 'react';
+import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/financials";
 
 export function meta({ data }: Route.MetaArgs) {
@@ -25,9 +26,10 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function CaseFinancialsRoute() {
+  const { case: caseData } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-full"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>}>
-      <CaseFinancialsCenter caseId={loaderData.case.id} />
+      <CaseFinancialsCenter caseId={caseData.id} />
     </Suspense>
   );
 }

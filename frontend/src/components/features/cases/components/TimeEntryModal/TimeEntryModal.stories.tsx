@@ -16,8 +16,8 @@ type Story = StoryObj<typeof TimeEntryModal>;
 export const Default: Story = {
   args: {
     isOpen: true,
-    onClose: () => {},
-    caseId: 'case-1' as any,
+    onClose: () => { },
+    caseId: 'case-1',
     onSave: (entry: unknown) => { console.log(entry); },
   },
 };

@@ -1,7 +1,7 @@
 /**
  * Domain Error Classes
  * Type-safe, semantic error hierarchy for LexiFlow services
- * 
+ *
  * @module services/core/errors
  * @description Provides domain-specific error classes that replace generic
  * Error() throws. Enables:
@@ -10,13 +10,13 @@
  * - HTTP status code mapping for API responses
  * - Better debugging with error codes and context
  * - Centralized error logging and monitoring
- * 
+ *
  * @architecture
  * - Pattern: Error Hierarchy + Factory
  * - Base: DomainError extends Error
  * - Categories: NotFound, Validation, Authorization, Conflict, External
  * - Usage: throw new CaseNotFoundError(caseId)
- * 
+ *
  * @usage
  * ```typescript
  * // In service
@@ -27,7 +27,7 @@
  *   }
  *   return case;
  * }
- * 
+ *
  * // In error handler
  * try {
  *   await caseService.getCase(id);
@@ -88,66 +88,76 @@ export class DomainError extends Error {
 
 export class EntityNotFoundError extends DomainError {
   constructor(entityType: string, id: string) {
-    super(
-      `${entityType} not found: ${id}`,
-      'ENTITY_NOT_FOUND',
-      404,
-      { entityType, id }
-    );
+    super(`${entityType} not found: ${id}`, "ENTITY_NOT_FOUND", 404, {
+      entityType,
+      id,
+    });
   }
 }
 
 export class CaseNotFoundError extends DomainError {
   constructor(caseId: string) {
-    super(`Case not found: ${caseId}`, 'CASE_NOT_FOUND', 404, { caseId });
+    super(`Case not found: ${caseId}`, "CASE_NOT_FOUND", 404, { caseId });
   }
 }
 
 export class UserNotFoundError extends DomainError {
   constructor(userId: string) {
-    super(`User not found: ${userId}`, 'USER_NOT_FOUND', 404, { userId });
+    super(`User not found: ${userId}`, "USER_NOT_FOUND", 404, { userId });
   }
 }
 
 export class DocumentNotFoundError extends DomainError {
   constructor(documentId: string) {
-    super(`Document not found: ${documentId}`, 'DOCUMENT_NOT_FOUND', 404, { documentId });
+    super(`Document not found: ${documentId}`, "DOCUMENT_NOT_FOUND", 404, {
+      documentId,
+    });
   }
 }
 
 export class DocketEntryNotFoundError extends DomainError {
   constructor(entryId: string) {
-    super(`Docket entry not found: ${entryId}`, 'DOCKET_ENTRY_NOT_FOUND', 404, { entryId });
+    super(`Docket entry not found: ${entryId}`, "DOCKET_ENTRY_NOT_FOUND", 404, {
+      entryId,
+    });
   }
 }
 
 export class EvidenceNotFoundError extends DomainError {
   constructor(evidenceId: string) {
-    super(`Evidence not found: ${evidenceId}`, 'EVIDENCE_NOT_FOUND', 404, { evidenceId });
+    super(`Evidence not found: ${evidenceId}`, "EVIDENCE_NOT_FOUND", 404, {
+      evidenceId,
+    });
   }
 }
 
 export class ClientNotFoundError extends DomainError {
   constructor(clientId: string) {
-    super(`Client not found: ${clientId}`, 'CLIENT_NOT_FOUND', 404, { clientId });
+    super(`Client not found: ${clientId}`, "CLIENT_NOT_FOUND", 404, {
+      clientId,
+    });
   }
 }
 
 export class InvoiceNotFoundError extends DomainError {
   constructor(invoiceId: string) {
-    super(`Invoice not found: ${invoiceId}`, 'INVOICE_NOT_FOUND', 404, { invoiceId });
+    super(`Invoice not found: ${invoiceId}`, "INVOICE_NOT_FOUND", 404, {
+      invoiceId,
+    });
   }
 }
 
 export class TaskNotFoundError extends DomainError {
   constructor(taskId: string) {
-    super(`Task not found: ${taskId}`, 'TASK_NOT_FOUND', 404, { taskId });
+    super(`Task not found: ${taskId}`, "TASK_NOT_FOUND", 404, { taskId });
   }
 }
 
 export class WorkflowNotFoundError extends DomainError {
   constructor(workflowId: string) {
-    super(`Workflow not found: ${workflowId}`, 'WORKFLOW_NOT_FOUND', 404, { workflowId });
+    super(`Workflow not found: ${workflowId}`, "WORKFLOW_NOT_FOUND", 404, {
+      workflowId,
+    });
   }
 }
 
@@ -157,7 +167,7 @@ export class WorkflowNotFoundError extends DomainError {
 
 export class ValidationError extends DomainError {
   constructor(message: string, context?: Record<string, unknown>) {
-    super(message, 'VALIDATION_ERROR', 400, context);
+    super(message, "VALIDATION_ERROR", 400, context);
   }
 }
 
@@ -165,7 +175,7 @@ export class InvalidInputError extends DomainError {
   constructor(field: string, reason: string) {
     super(
       `Invalid input for field '${field}': ${reason}`,
-      'INVALID_INPUT',
+      "INVALID_INPUT",
       400,
       { field, reason }
     );
@@ -174,12 +184,9 @@ export class InvalidInputError extends DomainError {
 
 export class MissingRequiredFieldError extends DomainError {
   constructor(field: string) {
-    super(
-      `Missing required field: ${field}`,
-      'MISSING_REQUIRED_FIELD',
-      400,
-      { field }
-    );
+    super(`Missing required field: ${field}`, "MISSING_REQUIRED_FIELD", 400, {
+      field,
+    });
   }
 }
 
@@ -187,7 +194,7 @@ export class InvalidDateRangeError extends DomainError {
   constructor(startDate: string, endDate: string) {
     super(
       `Invalid date range: start (${startDate}) must be before end (${endDate})`,
-      'INVALID_DATE_RANGE',
+      "INVALID_DATE_RANGE",
       400,
       { startDate, endDate }
     );
@@ -198,7 +205,7 @@ export class InvalidStatusTransitionError extends DomainError {
   constructor(entityType: string, from: string, to: string) {
     super(
       `Invalid status transition for ${entityType}: ${from} → ${to}`,
-      'INVALID_STATUS_TRANSITION',
+      "INVALID_STATUS_TRANSITION",
       400,
       { entityType, from, to }
     );
@@ -210,20 +217,20 @@ export class InvalidStatusTransitionError extends DomainError {
 // ============================================================================
 
 export class UnauthorizedError extends DomainError {
-  constructor(message: string = 'Authentication required') {
-    super(message, 'UNAUTHORIZED', 401);
+  constructor(message: string = "Authentication required") {
+    super(message, "UNAUTHORIZED", 401);
   }
 }
 
 export class AuthenticationError extends DomainError {
-  constructor(message: string = 'Authentication failed') {
-    super(message, 'AUTHENTICATION_ERROR', 401);
+  constructor(message: string = "Authentication failed") {
+    super(message, "AUTHENTICATION_ERROR", 401);
   }
 }
 
 export class ForbiddenError extends DomainError {
-  constructor(message: string = 'Access denied') {
-    super(message, 'FORBIDDEN', 403);
+  constructor(message: string = "Access denied") {
+    super(message, "FORBIDDEN", 403);
   }
 }
 
@@ -231,7 +238,7 @@ export class InsufficientPermissionsError extends DomainError {
   constructor(requiredPermission: string) {
     super(
       `Insufficient permissions: requires '${requiredPermission}'`,
-      'INSUFFICIENT_PERMISSIONS',
+      "INSUFFICIENT_PERMISSIONS",
       403,
       { requiredPermission }
     );
@@ -242,7 +249,7 @@ export class EthicalWallViolationError extends DomainError {
   constructor(userId: string, caseId: string) {
     super(
       `Ethical wall violation: user ${userId} cannot access case ${caseId}`,
-      'ETHICAL_WALL_VIOLATION',
+      "ETHICAL_WALL_VIOLATION",
       403,
       { userId, caseId }
     );
@@ -255,7 +262,7 @@ export class EthicalWallViolationError extends DomainError {
 
 export class ConflictError extends DomainError {
   constructor(message: string, context?: Record<string, unknown>) {
-    super(message, 'CONFLICT', 409, context);
+    super(message, "CONFLICT", 409, context);
   }
 }
 
@@ -263,7 +270,7 @@ export class DuplicateEntityError extends DomainError {
   constructor(entityType: string, identifier: string) {
     super(
       `${entityType} already exists: ${identifier}`,
-      'DUPLICATE_ENTITY',
+      "DUPLICATE_ENTITY",
       409,
       { entityType, identifier }
     );
@@ -274,7 +281,7 @@ export class ConcurrentModificationError extends DomainError {
   constructor(entityType: string, id: string) {
     super(
       `${entityType} ${id} was modified by another user`,
-      'CONCURRENT_MODIFICATION',
+      "CONCURRENT_MODIFICATION",
       409,
       { entityType, id }
     );
@@ -285,7 +292,7 @@ export class BusinessRuleViolationError extends DomainError {
   constructor(rule: string, reason: string) {
     super(
       `Business rule violation: ${rule} - ${reason}`,
-      'BUSINESS_RULE_VIOLATION',
+      "BUSINESS_RULE_VIOLATION",
       409,
       { rule, reason }
     );
@@ -300,7 +307,7 @@ export class ExternalServiceError extends DomainError {
   constructor(service: string, message: string) {
     super(
       `External service error (${service}): ${message}`,
-      'EXTERNAL_SERVICE_ERROR',
+      "EXTERNAL_SERVICE_ERROR",
       502,
       { service }
     );
@@ -311,7 +318,7 @@ export class ApiTimeoutError extends DomainError {
   constructor(endpoint: string, timeoutMs: number) {
     super(
       `API timeout: ${endpoint} exceeded ${timeoutMs}ms`,
-      'API_TIMEOUT',
+      "API_TIMEOUT",
       504,
       { endpoint, timeoutMs }
     );
@@ -320,12 +327,9 @@ export class ApiTimeoutError extends DomainError {
 
 export class ServiceUnavailableError extends DomainError {
   constructor(service: string) {
-    super(
-      `Service unavailable: ${service}`,
-      'SERVICE_UNAVAILABLE',
-      503,
-      { service }
-    );
+    super(`Service unavailable: ${service}`, "SERVICE_UNAVAILABLE", 503, {
+      service,
+    });
   }
 }
 
@@ -337,7 +341,7 @@ export class OperationError extends DomainError {
   constructor(operation: string, reason: string) {
     super(
       `Operation failed: ${operation} - ${reason}`,
-      'OPERATION_ERROR',
+      "OPERATION_ERROR",
       500,
       { operation, reason }
     );
@@ -348,7 +352,7 @@ export class WorkerPoolInitializationError extends DomainError {
   constructor(workerCount: number) {
     super(
       `Failed to initialize worker pool with ${workerCount} workers`,
-      'WORKER_POOL_INIT_ERROR',
+      "WORKER_POOL_INIT_ERROR",
       500,
       { workerCount }
     );
@@ -359,7 +363,7 @@ export class WorkflowExecutionError extends DomainError {
   constructor(workflowId: string, nodeId: string, reason: string) {
     super(
       `Workflow execution failed: ${workflowId} at node ${nodeId} - ${reason}`,
-      'WORKFLOW_EXECUTION_ERROR',
+      "WORKFLOW_EXECUTION_ERROR",
       500,
       { workflowId, nodeId, reason }
     );
@@ -368,12 +372,9 @@ export class WorkflowExecutionError extends DomainError {
 
 export class SearchIndexError extends DomainError {
   constructor(reason: string) {
-    super(
-      `Search index error: ${reason}`,
-      'SEARCH_INDEX_ERROR',
-      500,
-      { reason }
-    );
+    super(`Search index error: ${reason}`, "SEARCH_INDEX_ERROR", 500, {
+      reason,
+    });
   }
 }
 
@@ -381,10 +382,16 @@ export class FileProcessingError extends DomainError {
   constructor(fileName: string, reason: string) {
     super(
       `File processing error: ${fileName} - ${reason}`,
-      'FILE_PROCESSING_ERROR',
+      "FILE_PROCESSING_ERROR",
       500,
       { fileName, reason }
     );
+  }
+}
+
+export class NetworkError extends DomainError {
+  constructor(message: string = "Network error occurred") {
+    super(message, "NETWORK_ERROR", 0);
   }
 }
 
@@ -396,7 +403,7 @@ export class ConfigurationError extends DomainError {
   constructor(setting: string, reason: string) {
     super(
       `Configuration error: ${setting} - ${reason}`,
-      'CONFIGURATION_ERROR',
+      "CONFIGURATION_ERROR",
       500,
       { setting, reason }
     );
@@ -405,12 +412,9 @@ export class ConfigurationError extends DomainError {
 
 export class InvalidEndpointError extends DomainError {
   constructor(endpoint: string) {
-    super(
-      `Invalid endpoint: ${endpoint}`,
-      'INVALID_ENDPOINT',
-      400,
-      { endpoint }
-    );
+    super(`Invalid endpoint: ${endpoint}`, "INVALID_ENDPOINT", 400, {
+      endpoint,
+    });
   }
 }
 
@@ -418,7 +422,7 @@ export class MissingConfigurationError extends DomainError {
   constructor(configKey: string) {
     super(
       `Missing required configuration: ${configKey}`,
-      'MISSING_CONFIGURATION',
+      "MISSING_CONFIGURATION",
       500,
       { configKey }
     );
@@ -443,10 +447,10 @@ export function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message;
   }
-  if (typeof error === 'string') {
+  if (typeof error === "string") {
     return error;
   }
-  return 'Unknown error occurred';
+  return "Unknown error occurred";
 }
 
 /**
@@ -466,7 +470,7 @@ export function toDomainError(error: unknown): DomainError {
   if (error instanceof DomainError) {
     return error;
   }
-  
+
   const message = getErrorMessage(error);
-  return new OperationError('unknown', message);
+  return new OperationError("unknown", message);
 }

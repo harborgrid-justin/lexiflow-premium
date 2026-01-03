@@ -10,10 +10,10 @@
  * @module routes/library/index
  */
 
-import { Link } from 'react-router';
-import type { Route } from "./+types/index";
+import { Link, useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags
@@ -31,7 +31,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
   // Parse search/filter params
   const url = new URL(request.url);
   const category = url.searchParams.get("category") || "all";
@@ -80,7 +80,7 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function LibraryIndexRoute() {
-  const { resources, categories, currentCategory } = loaderData;
+  const { resources, categories, currentCategory } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
     <div className="p-8">
@@ -110,23 +110,21 @@ export default function LibraryIndexRoute() {
       <div className="mb-6 flex gap-2 border-b border-gray-200 dark:border-gray-700">
         <Link
           to="?category=all"
-          className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-            currentCategory === 'all'
+          className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${currentCategory === 'all'
               ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
               : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-          }`}
+            }`}
         >
           All
         </Link>
-        {categories.map((cat) => (
+        {categories.map((cat: any) => (
           <Link
             key={cat.id}
             to={`?category=${cat.id}`}
-            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
-              currentCategory === cat.id
+            className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${currentCategory === cat.id
                 ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
                 : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-            }`}
+              }`}
           >
             {cat.name}
             {cat.count > 0 && (

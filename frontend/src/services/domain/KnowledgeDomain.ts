@@ -212,14 +212,15 @@ export class KnowledgeRepository {
 
         // WIKI_ARTICLE_CREATED event type may not be defined, using generic event
         if ("WIKI_ARTICLE_CREATED" in SystemEventType) {
-          await IntegrationOrchestrator.publish(
-            (SystemEventType as unknown as Record<string, string>)
-              .WIKI_ARTICLE_CREATED,
-            {
+          const eventType = (
+            SystemEventType as unknown as Record<string, SystemEventType>
+          ).WIKI_ARTICLE_CREATED;
+          if (eventType) {
+            await IntegrationOrchestrator.publish(eventType, {
               article,
               title: article.title,
-            }
-          );
+            });
+          }
         }
       } catch (eventError) {
         console.warn(

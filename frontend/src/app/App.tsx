@@ -36,7 +36,7 @@ type RoutePolicy = {
   requireFlag?: keyof ReturnType<typeof useFlags>["flags"];
 
   /** Optional custom predicate for business-specific constraints (e.g., entitlement checks). */
-  when?: () => boolean;
+  when?: (context: { entitlements: ReturnType<typeof useEntitlements>["entitlements"] }) => boolean;
 
   /** Where to send the user if they do not meet requirements. */
   fallback: string;
@@ -84,7 +84,7 @@ const GuardedRoute: React.FC<GuardedRouteProps> = ({ policy, element }) => {
    *
    * If you prefer strict purity, pass required values into the policy builder instead.
    */
-  const whenOk = policy.when ? policy.when() : true;
+  const whenOk = policy.when ? policy.when({ entitlements }) : true;
 
   // Example: you may optionally want to ensure admin routes are also entitled.
   // You can encode this via policy.when (shown below in route config).
@@ -126,11 +126,9 @@ const ROUTES = {
       requireFlag: "enableAdminTools",
       fallback: "/app",
       // Demonstrates an entitlement constraint. Uses contexts via closure.
-      when: () => {
+      when: ({ entitlements }) => {
         // Note: This relies on the hook being called inside GuardedRoute
         // which is valid as long as GuardedRoute is the component invoking it.
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const { entitlements } = useEntitlements();
         return entitlements.canUseAdminTools;
       }
     } satisfies RoutePolicy

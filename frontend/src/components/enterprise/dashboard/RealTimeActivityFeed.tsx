@@ -96,7 +96,7 @@ export const RealTimeActivityFeed: React.FC<RealTimeActivityFeedProps> = ({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
-  const handleRefresh = async () => {
+  const handleRefresh = useCallback(async () => {
     if (onRefresh && !isRefreshing) {
       setIsRefreshing(true);
       try {
@@ -106,7 +106,7 @@ export const RealTimeActivityFeed: React.FC<RealTimeActivityFeedProps> = ({
         setTimeout(() => setIsRefreshing(false), 500);
       }
     }
-  };
+  }, [onRefresh, isRefreshing]);
 
   useEffect(() => {
     if (autoRefresh && onRefresh) {
@@ -117,7 +117,7 @@ export const RealTimeActivityFeed: React.FC<RealTimeActivityFeedProps> = ({
       return () => clearInterval(interval);
     }
     return undefined;
-  }, [autoRefresh, onRefresh, refreshInterval, isRefreshing]);
+  }, [autoRefresh, onRefresh, refreshInterval, handleRefresh]);
 
   const filteredActivities = useMemo(() => {
     let filtered = activities;

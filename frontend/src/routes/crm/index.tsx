@@ -10,10 +10,10 @@
  * @module routes/crm/index
  */
 
-import { Link } from 'react-router';
-import type { Route } from "./+types/index";
+import { Link, useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags
@@ -76,7 +76,7 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function CRMIndexRoute() {
-  const { _clients, totalCount } = loaderData;
+  const { totalCount } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
     <div className="p-8">

@@ -92,7 +92,7 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function ComplianceIndexRoute() {
-  const { alerts, pendingReports, conflictChecks } = loaderData;
+  const { alerts, pendingReports, conflictChecks } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
     <div className="p-8">

@@ -11,7 +11,10 @@
  * - TypeScript type narrowing
  */
 
-import type { PaginatedResponse, ApiError } from '@/services/infrastructure/apiClient';
+import type {
+  ApiError,
+  PaginatedResponse,
+} from "@/services/infrastructure/apiClient";
 
 /**
  * Standard API response wrapper
@@ -27,7 +30,7 @@ export interface ApiResponse<T> {
  * Check if value is an object
  */
 export function isObject(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null && !Array.isArray(value);
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 /**
@@ -41,21 +44,21 @@ export function isArray(value: unknown): value is unknown[] {
  * Check if value is a string
  */
 export function isString(value: unknown): value is string {
-  return typeof value === 'string';
+  return typeof value === "string";
 }
 
 /**
  * Check if value is a number
  */
 export function isNumber(value: unknown): value is number {
-  return typeof value === 'number' && !isNaN(value);
+  return typeof value === "number" && !isNaN(value);
 }
 
 /**
  * Check if value is a boolean
  */
 export function isBoolean(value: unknown): value is boolean {
-  return typeof value === 'boolean';
+  return typeof value === "boolean";
 }
 
 /**
@@ -74,9 +77,9 @@ export function isApiError(error: unknown): error is ApiError {
   if (!isObject(error)) return false;
 
   return (
-    'message' in error &&
+    "message" in error &&
     isString(error.message) &&
-    'statusCode' in error &&
+    "statusCode" in error &&
     isNumber(error.statusCode)
   );
 }
@@ -84,32 +87,34 @@ export function isApiError(error: unknown): error is ApiError {
 /**
  * Check if response is a valid API success response
  */
-export function isApiResponse<T>(response: unknown): response is ApiResponse<T> {
+export function isApiResponse<T>(
+  response: unknown
+): response is ApiResponse<T> {
   if (!isObject(response)) return false;
 
   return (
-    'success' in response &&
-    isBoolean(response.success) &&
-    'data' in response
+    "success" in response && isBoolean(response.success) && "data" in response
   );
 }
 
 /**
  * Check if response is a paginated response
  */
-export function isPaginatedResponse<T>(response: unknown): response is PaginatedResponse<T> {
+export function isPaginatedResponse<T>(
+  response: unknown
+): response is PaginatedResponse<T> {
   if (!isObject(response)) return false;
 
   return (
-    'data' in response &&
+    "data" in response &&
     isArray(response.data) &&
-    'total' in response &&
+    "total" in response &&
     isNumber(response.total) &&
-    'page' in response &&
+    "page" in response &&
     isNumber(response.page) &&
-    'limit' in response &&
+    "limit" in response &&
     isNumber(response.limit) &&
-    'totalPages' in response &&
+    "totalPages" in response &&
     isNumber(response.totalPages)
   );
 }
@@ -123,23 +128,23 @@ export function validatePaginatedResponse<T>(
   response: unknown
 ): asserts response is PaginatedResponse<T> {
   if (!isPaginatedResponse(response)) {
-    throw new Error('Invalid paginated response structure');
+    throw new Error("Invalid paginated response structure");
   }
 
   if (response.page < 1) {
-    throw new Error('Page number must be >= 1');
+    throw new Error("Page number must be >= 1");
   }
 
   if (response.limit < 1) {
-    throw new Error('Limit must be >= 1');
+    throw new Error("Limit must be >= 1");
   }
 
   if (response.total < 0) {
-    throw new Error('Total must be >= 0');
+    throw new Error("Total must be >= 0");
   }
 
   if (response.totalPages < 0) {
-    throw new Error('Total pages must be >= 0');
+    throw new Error("Total pages must be >= 0");
   }
 }
 
@@ -152,11 +157,11 @@ export function validateApiResponse<T>(
   response: unknown
 ): asserts response is ApiResponse<T> {
   if (!isApiResponse(response)) {
-    throw new Error('Invalid API response structure');
+    throw new Error("Invalid API response structure");
   }
 
   if (!response.success && !response.data) {
-    throw new Error('Failed response must contain error information');
+    throw new Error("Failed response must contain error information");
   }
 }
 
@@ -193,7 +198,8 @@ export function isId(value: unknown): value is string | number {
  */
 export function isUuid(value: unknown): value is string {
   if (!isString(value)) return false;
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   return uuidRegex.test(value);
 }
 
@@ -262,11 +268,11 @@ export function extractError(error: unknown): Error {
     return error;
   }
 
-  if (isObject(error) && 'message' in error && isString(error.message)) {
+  if (isObject(error) && "message" in error && isString(error.message)) {
     return new Error(error.message);
   }
 
-  return new Error('An unknown error occurred');
+  return new Error("An unknown error occurred");
 }
 
 /**
@@ -276,7 +282,7 @@ export function extractError(error: unknown): Error {
  */
 export function assertDefined<T>(
   value: T | null | undefined,
-  message: string = 'Value is null or undefined'
+  message: string = "Value is null or undefined"
 ): asserts value is T {
   if (value === null || value === undefined) {
     throw new Error(message);
@@ -290,7 +296,7 @@ export function assertDefined<T>(
  */
 export function assertTruthy<T>(
   value: T,
-  message: string = 'Value is falsy'
+  message: string = "Value is falsy"
 ): asserts value is NonNullable<T> {
   if (!value) {
     throw new Error(message);
@@ -330,7 +336,7 @@ export function validateAndTransform<TInput, TOutput>(
   transformer: (value: TInput) => TOutput
 ): TOutput {
   if (!validator(data)) {
-    throw new Error('Data validation failed');
+    throw new Error("Data validation failed");
   }
   return transformer(data);
 }
@@ -355,7 +361,9 @@ export function isComplete<T extends Record<string, unknown>>(
   requiredProps: (keyof T)[]
 ): obj is T {
   if (!isObject(obj)) return false;
-  return requiredProps.every((prop) => prop in obj && obj[prop] !== undefined);
+  return requiredProps.every(
+    (prop) => prop in obj && (obj as any)[prop] !== undefined
+  );
 }
 
 /**
@@ -367,7 +375,7 @@ export function isSuccessResponse(response: unknown): boolean {
   }
 
   if (isObject(response)) {
-    return !('error' in response) && !('statusCode' in response);
+    return !("error" in response) && !("statusCode" in response);
   }
 
   return false;
@@ -377,5 +385,8 @@ export function isSuccessResponse(response: unknown): boolean {
  * Check if response indicates error
  */
 export function isErrorResponse(response: unknown): boolean {
-  return isApiError(response) || (isApiResponse(response) && response.success === false);
+  return (
+    isApiError(response) ||
+    (isApiResponse(response) && response.success === false)
+  );
 }

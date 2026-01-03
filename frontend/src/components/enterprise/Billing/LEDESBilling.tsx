@@ -78,7 +78,7 @@ interface ValidationWarning {
 interface LEDESBillingProps {
   onExport?: (format: LEDESFormat, invoiceId: string) => void;
   onImport?: (file: File) => void;
-  onValidate?: (data: any) => Promise<LEDESValidation>;
+  onValidate?: (data: unknown) => Promise<LEDESValidation>;
 }
 
 export const LEDESBilling: React.FC<LEDESBillingProps> = ({
@@ -99,7 +99,7 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
     }
   };
 
-  const handleValidate = async (data: any) => {
+  const handleValidate = async (data: unknown) => {
     if (onValidate) {
       const results = await onValidate(data);
       setValidationResults(results);
@@ -308,8 +308,8 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
             <div
               key={format.id}
               className={`cursor-pointer rounded-lg border-2 p-4 transition-colors ${selectedFormat === format.version
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
+                ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-600'
                 }`}
               onClick={() => setSelectedFormat(format.version)}
             >
@@ -339,8 +339,8 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
               key={tab}
               onClick={() => setSelectedTab(tab)}
               className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${selectedTab === tab
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
                 }`}
             >
               {tab === 'utbms' ? 'UTBMS Codes' : tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -404,10 +404,10 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
                       <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                         <span
                           className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${code.category === 'Task'
-                              ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
-                              : code.category === 'Activity'
-                                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                                : 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300'
+                            ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300'
+                            : code.category === 'Activity'
+                              ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                              : 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300'
                             }`}
                         >
                           {code.category}
@@ -540,8 +540,8 @@ export const LEDESBilling: React.FC<LEDESBillingProps> = ({
                     <td className="whitespace-nowrap px-6 py-4">
                       <span
                         className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${portal.status === 'active'
-                            ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                            : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                          : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
                           }`}
                       >
                         {portal.status.toUpperCase()}

@@ -44,8 +44,8 @@ import { CaseProjects } from '@/features/cases/components/detail/projects/CasePr
 // ============================================================================
 // INTERNAL DEPENDENCIES - HOOKS & CONTEXT
 // ============================================================================
-import { useCaseDetail } from '@/hooks/useCaseDetail';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useCaseDetail } from '@/hooks/useCaseDetail';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES - SERVICES & UTILS
@@ -253,7 +253,7 @@ export const CaseDetail = ({
     billingEntries, analyzingId, generatingWorkflow, draftPrompt, draftResult,
     isDrafting, setParties, addProject, addTaskToProject, updateProjectTaskStatus,
     handleAnalyze, handleDraft, handleGenerateWorkflow, handleTimeEntryAdded,
-    handleDocumentCreated, onSelectCase, theme, setActiveTab
+    handleDocumentCreated, onSelectCase, theme, setActiveTab, setDraftPrompt
   ]);
 
   return (

@@ -6,6 +6,7 @@
 
 import { CaseOverviewDashboard } from '@/features/cases/components/overview/CaseOverviewDashboard';
 import { DataService } from '@/services/data/dataService';
+import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/overview";
 
 export function meta({ data }: Route.MetaArgs) {
@@ -25,7 +26,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function CaseOverviewRoute() {
-  return <CaseOverviewDashboard caseId={loaderData.case.id} />;
+  const { case: caseData } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  return <CaseOverviewDashboard caseId={caseData.id} />;
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

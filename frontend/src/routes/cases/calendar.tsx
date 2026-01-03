@@ -6,6 +6,7 @@
 
 import { CaseCalendar } from '@/features/cases/components/calendar/CaseCalendar';
 import { DataService } from '@/services/data/dataService';
+import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/calendar";
 
 export function meta({ data }: Route.MetaArgs) {
@@ -25,7 +26,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function CaseCalendarRoute() {
-  return <CaseCalendar caseId={loaderData.case.id} />;
+  const { case: caseData } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  return <CaseCalendar caseId={caseData.id} />;
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

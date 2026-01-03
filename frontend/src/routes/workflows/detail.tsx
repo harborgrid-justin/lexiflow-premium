@@ -6,10 +6,10 @@
  * @module routes/workflows/detail
  */
 
-// import { Link } from 'react-router';
-import type { Route } from "./+types/detail";
-import { createDetailMeta } from '../_shared/meta-utils';
+import { Form, useLoaderData, useNavigate, useNavigation } from 'react-router';
 import { api } from '../../api';
+import { createDetailMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/detail";
 
 // ============================================================================
 // Meta Tags
@@ -67,18 +67,18 @@ export async function action({ params, request }: Route.ActionArgs) {
         const description = formData.get("description") as string;
         await api.workflow.updateTemplate(workflowId, { name, description });
         return { success: true, message: "Workflow updated" };
-        }
-        
+      }
+
       case "delete":
         await api.workflow.deleteTemplate(workflowId);
         // Redirect handled by client-side navigation usually, but here we return success
         // and let the component handle redirect or use redirect() from react-router
         return { success: true, message: "Workflow deleted" };
-        
+
       case "activate":
         await api.workflow.updateTemplate(workflowId, { status: 'active' });
         return { success: true, message: "Workflow activated" };
-        
+
       case "deactivate":
         await api.workflow.updateTemplate(workflowId, { status: 'inactive' });
         return { success: true, message: "Workflow deactivated" };
@@ -97,9 +97,9 @@ export async function action({ params, request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function WorkflowDetailRoute() {
-  const { template } = loaderData;
+  const { template } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
@@ -128,25 +128,24 @@ console.log('useNavigate:', navigate);
         </div>
         <div className="flex space-x-3">
           <Form method="post">
-            <input 
-              type="hidden" 
-              name="intent" 
-              value={template.status === 'active' ? 'deactivate' : 'activate'} 
+            <input
+              type="hidden"
+              name="intent"
+              value={template.status === 'active' ? 'deactivate' : 'activate'}
             />
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`inline-flex items-center rounded-md px-4 py-2 text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                template.status === 'active'
+              className={`inline-flex items-center rounded-md px-4 py-2 text-sm font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 ${template.status === 'active'
                   ? 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600'
                   : 'bg-green-600 text-white hover:bg-green-700 focus:ring-green-500'
-              }`}
+                }`}
             >
               {template.status === 'active' ? 'Deactivate' : 'Activate'}
             </button>
           </Form>
-          
-          <Form method="post" onSubmit={(e) => {
+
+          <Form method="post" onSubmit={(e: React.FormEvent) => {
             if (!confirm('Are you sure you want to delete this workflow?')) {
               e.preventDefault();
             }
@@ -206,11 +205,10 @@ console.log('useNavigate:', navigate);
                 <div>
                   <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
                   <dd className="mt-1">
-                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                      template.status === 'active' 
+                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${template.status === 'active'
                         ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
                         : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-                    }`}>
+                      }`}>
                       {template.status}
                     </span>
                   </dd>

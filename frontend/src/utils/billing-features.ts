@@ -353,5 +353,5 @@ export function calculateDueDate(
       break;
   }
 
-  return date.toISOString().split("T")[0];
+  return date.toISOString().split("T")[0] || "";
 }

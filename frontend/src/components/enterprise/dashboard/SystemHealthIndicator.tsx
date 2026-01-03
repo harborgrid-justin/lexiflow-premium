@@ -60,7 +60,7 @@ export const SystemHealthIndicator: React.FC<SystemHealthIndicatorProps> = ({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
-  const handleRefresh = async () => {
+  const handleRefresh = useCallback(async () => {
     if (onRefresh && !isRefreshing) {
       setIsRefreshing(true);
       try {
@@ -70,7 +70,7 @@ export const SystemHealthIndicator: React.FC<SystemHealthIndicatorProps> = ({
         setTimeout(() => setIsRefreshing(false), 500);
       }
     }
-  };
+  }, [onRefresh, isRefreshing]);
 
   useEffect(() => {
     if (autoRefresh && onRefresh) {
@@ -81,7 +81,7 @@ export const SystemHealthIndicator: React.FC<SystemHealthIndicatorProps> = ({
       return () => clearInterval(interval);
     }
     return undefined;
-  }, [autoRefresh, onRefresh, refreshInterval, isRefreshing]);
+  }, [autoRefresh, onRefresh, refreshInterval, handleRefresh]);
 
   const getStatusIcon = (status: HealthStatus) => {
     switch (status) {

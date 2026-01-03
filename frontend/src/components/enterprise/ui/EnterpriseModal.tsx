@@ -15,26 +15,26 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  X,
+  AlertTriangle,
+  Check,
+  CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Check,
-  AlertTriangle,
   Info,
-  CheckCircle2,
+  X,
   XCircle,
 } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
+import { Button } from '@/components/ui/atoms/Button/Button';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
-import { Button } from '@/components/ui/atoms/Button/Button';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -157,7 +157,7 @@ export const EnterpriseModal: React.FC<EnterpriseModalProps> = ({
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, closeOnEscape]);
+  }, [isOpen, closeOnEscape, handleClose]);
 
   // ============================================================================
   // HANDLERS
@@ -229,9 +229,9 @@ export const EnterpriseModal: React.FC<EnterpriseModalProps> = ({
     try {
       await onConfirm?.();
       handleClose();
-      } catch (error) {
-        console.error('Confirmation error:', error);
-      } finally {
+    } catch (error) {
+      console.error('Confirmation error:', error);
+    } finally {
       setIsProcessing(false);
     }
   }, [onConfirm, handleClose]);
@@ -301,8 +301,8 @@ export const EnterpriseModal: React.FC<EnterpriseModalProps> = ({
                   index < currentStepIndex
                     ? 'bg-blue-600 border-blue-600 text-white'
                     : index === currentStepIndex
-                    ? 'border-blue-600 text-blue-600 dark:text-blue-400'
-                    : 'border-slate-300 dark:border-slate-700 text-slate-400'
+                      ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                      : 'border-slate-300 dark:border-slate-700 text-slate-400'
                 )}
               >
                 {index < currentStepIndex ? (

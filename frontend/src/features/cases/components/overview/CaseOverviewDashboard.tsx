@@ -25,8 +25,8 @@ import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { ErrorState } from '@/components/ui/molecules/ErrorState/ErrorState';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { CaseStatus } from '@/types';
 import { cn } from '@/utils/cn';
 import {
@@ -73,7 +73,7 @@ interface RecentActivity {
   priority: 'high' | 'medium' | 'low';
 }
 
-export const CaseOverviewDashboard: React.FC = () => {
+export const CaseOverviewDashboard: React.FC<{ caseId?: string }> = ({ caseId }) => {
   const { isDark } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<CaseStatus | 'all'>('all');
@@ -81,8 +81,8 @@ export const CaseOverviewDashboard: React.FC = () => {
 
   // Fetch matters data
   const { data: matters, isLoading: mattersLoading, error: mattersError } = useQuery(
-    ['matters', 'all'],
-    () => api.cases.getAll()
+    ['matters', 'all', caseId],
+    () => caseId ? api.cases.getById(caseId).then(c => [c]) : api.cases.getAll()
   );
 
   // Fetch KPIs

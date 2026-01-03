@@ -12,10 +12,10 @@
  * @module routes/litigation/builder
  */
 
-import { Form, Link, useNavigate } from 'react-router';
-import type { Route } from "./+types/builder";
+import { Form, Link, useLoaderData, useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/builder";
 
 // ============================================================================
 // Types
@@ -74,11 +74,11 @@ export function meta() {
 // Loader
 // ============================================================================
 
-export async function loader(): Promise<LoaderData> {
+export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData> {
   const url = new URL(request.url);
-  const { caseId: _caseId } = url.searchParams.get('case');
+  const _caseId = url.searchParams.get('case');
   const templateId = url.searchParams.get('template');
-console.log('template ID:', templateId);
+  console.log('template ID:', templateId);
 
   // TODO: Fetch strategy templates from API
   const templates: StrategyTemplate[] = [
@@ -123,7 +123,7 @@ console.log('template ID:', templateId);
   ];
 
   // TODO: Fetch existing strategies
-  const { caseId: _caseId } = [];
+  const existingStrategies: Strategy[] = [];
 
   return {
     templates,
@@ -143,8 +143,8 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
   switch (intent) {
     case "save": {
       const name = formData.get("name") as string;
-      const { caseId: _caseId } = formData.get("caseId") as string;
-console.log('case ID:', caseId);
+      const caseId = formData.get("caseId") as string;
+      console.log('case ID:', caseId);
       const templateId = formData.get("templateId") as string;
       const objectives = formData.get("objectives") as string;
 
@@ -248,7 +248,7 @@ console.log('case ID:', caseId);
 
 export default function LitigationBuilderRoute() {
   const navigate = useNavigate();
-  const { templates, caseTypes } = loaderData as LoaderData;
+  const { templates, caseTypes } = useLoaderData() as LoaderData;
 
   const handleCancel = () => {
     navigate('/litigation');

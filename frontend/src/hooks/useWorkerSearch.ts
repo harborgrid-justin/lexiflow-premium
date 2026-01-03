@@ -81,6 +81,11 @@ export function useWorkerSearch<T>(
   const requestIdRef = useRef(0);
   const cancelTokenRef = useRef<number | null>(null);
   const prevItemsRef = useRef<T[]>(stableItems);
+  const queryRef = useRef(query);
+
+  useEffect(() => {
+    queryRef.current = query;
+  }, [query]);
 
   // Initialize Worker
   useEffect(() => {
@@ -131,7 +136,7 @@ export function useWorkerSearch<T>(
 
     // If query is empty, reset display immediately
     // But ONLY if we haven't already done this for this items reference
-    if (!query) {
+    if (!queryRef.current) {
       // Only update filteredItems once per items reference to prevent loops
       setFilteredItems(stableItems);
     } else {
@@ -142,14 +147,13 @@ export function useWorkerSearch<T>(
       worker.postMessage({
         type: "SEARCH",
         payload: {
-          query,
+          query: queryRef.current,
           requestId: currentRequestId,
         },
       });
     }
     // Intentionally only depend on data changes, not query/fields
     // Query changes are handled in separate effect below to avoid re-indexing on every keystroke
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- Separated concerns: data updates vs query updates
   }, [stableItems, fieldsKey, idKey]);
 
   // Dispatch Search Task (Only when query changes) with cancellation

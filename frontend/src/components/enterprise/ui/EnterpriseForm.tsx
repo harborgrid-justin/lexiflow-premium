@@ -15,26 +15,26 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   AlertCircle,
   CheckCircle2,
-  Loader2,
-  Save,
-  Info,
+  ChevronRight,
   Eye,
   EyeOff,
-  ChevronRight,
+  Info,
+  Loader2,
+  Save,
 } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
 // ============================================================================
-import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Input } from '@/components/ui/atoms/Input/Input';
+import { useTheme } from '@/contexts/theme/ThemeContext';
+import { cn } from '@/utils/cn';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -58,14 +58,14 @@ export type FieldType =
 
 export interface ValidationRule {
   type: 'required' | 'minLength' | 'maxLength' | 'pattern' | 'email' | 'min' | 'max' | 'custom';
-  value?: any;
+  value?: unknown;
   message?: string;
-  validator?: (value: any, formData: Record<string, any>) => boolean | Promise<boolean>;
+  validator?: (value: unknown, formData: Record<string, unknown>) => boolean | Promise<boolean>;
 }
 
 export interface FieldDependency {
   field: string;
-  condition: (value: any) => boolean;
+  condition: (value: unknown) => boolean;
 }
 
 export interface FormField {
@@ -73,10 +73,10 @@ export interface FormField {
   label: string;
   type: FieldType;
   placeholder?: string;
-  defaultValue?: any;
+  defaultValue?: unknown;
   validation?: ValidationRule[];
   dependencies?: FieldDependency[];
-  options?: Array<{ label: string; value: any }>;
+  options?: Array<{ label: string; value: unknown }>;
   disabled?: boolean;
   readOnly?: boolean;
   helpText?: string;
@@ -98,12 +98,12 @@ export interface FormSection {
 
 export interface EnterpriseFormProps {
   sections: FormSection[];
-  onSubmit: (data: Record<string, any>) => void | Promise<void>;
-  onChange?: (data: Record<string, any>) => void;
-  initialData?: Record<string, any>;
+  onSubmit: (data: Record<string, unknown>) => void | Promise<void>;
+  onChange?: (data: Record<string, unknown>) => void;
+  initialData?: Record<string, unknown>;
   autoSave?: boolean;
   autoSaveDelay?: number;
-  onAutoSave?: (data: Record<string, any>) => void | Promise<void>;
+  onAutoSave?: (data: Record<string, unknown>) => void | Promise<void>;
   submitLabel?: string;
   cancelLabel?: string;
   onCancel?: () => void;
@@ -123,8 +123,8 @@ export interface FieldError {
 
 const validateField = async (
   field: FormField,
-  value: any,
-  formData: Record<string, any>
+  value: unknown,
+  formData: Record<string, unknown>
 ): Promise<string | null> => {
   if (!field.validation) return null;
 
@@ -285,7 +285,7 @@ export const EnterpriseForm: React.FC<EnterpriseFormProps> = ({
   // ============================================================================
 
   const handleFieldChange = useCallback(
-    async (fieldName: string, value: any) => {
+    async (fieldName: string, value: unknown) => {
       const newFormData = { ...formData, [fieldName]: value };
       setFormData(newFormData);
       setTouched({ ...touched, [fieldName]: true });

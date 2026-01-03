@@ -344,12 +344,12 @@ export const AnalyticsWidgets: React.FC<AnalyticsWidgetsProps> = ({
             <ResponsiveContainer width="100%" height="100%">
               <RechartsPieChart>
                 <Pie
-                  data={arAging as any}
+                  data={arAging}
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={(props: any) => {
-                    const { range, percentage } = props.payload || props;
+                  label={(props: unknown) => {
+                    const { range, percentage } = (props as any).payload || props;
                     return range && percentage ? `${range}: ${percentage.toFixed(1)}%` : '';
                   }}
                   outerRadius={100}
@@ -361,7 +361,7 @@ export const AnalyticsWidgets: React.FC<AnalyticsWidgetsProps> = ({
                   ))}
                 </Pie>
                 <Tooltip
-                  formatter={(value: number | undefined) => value ? `$${(value / 1000).toFixed(0)}K` : '$0'}
+                  formatter={((value: number | undefined) => value ? `$${(value / 1000).toFixed(0)}K` : '$0') as any}
                   contentStyle={{
                     backgroundColor: 'rgba(255, 255, 255, 0.95)',
                     border: '1px solid #e5e7eb',

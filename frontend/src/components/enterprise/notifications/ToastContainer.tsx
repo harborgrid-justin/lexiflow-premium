@@ -154,7 +154,7 @@ export const ToastContainer: React.FC<React.PropsWithChildren<ToastContainerProp
 
       return id;
     },
-    [maxVisible, playSound]
+    [maxVisible, playSound, removeToast]
   );
 
   // Remove toast

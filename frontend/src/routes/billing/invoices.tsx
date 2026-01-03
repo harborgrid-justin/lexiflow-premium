@@ -3,12 +3,11 @@
  * Displays invoice management list with filtering
  */
 
-import { Link } from 'react-router';
-import type { Route } from "./+types/invoices";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createListMeta } from '../_shared/meta-utils';
 import { InvoicesApiService } from '@/api/billing';
 import { InvoiceList } from '@/components/billing/InvoiceList';
+import { Link } from 'react-router';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { createListMeta } from '../_shared/meta-utils';
 
 // ============================================================================
 // Meta Tags
@@ -26,7 +25,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const caseId = url.searchParams.get('caseId');
   console.log('case ID:', caseId);
@@ -40,7 +39,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       invoicesApi.getAll({
         caseId: caseId || undefined,
         clientId: clientId || undefined,
-        status: (status as 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled') || undefined,
+        status: (status as "Draft" | "Sent" | "Paid" | "Overdue" | "Cancelled") || undefined,
       }),
       invoicesApi.getStats(),
     ]);
@@ -50,7 +49,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       stats,
       filters: { caseId, clientId, status },
     };
-  } catch {
+  } catch (error) {
     console.error('Failed to load invoices:', error);
     return {
       invoices: [],
@@ -72,7 +71,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
   const invoicesApi = new InvoicesApiService();
@@ -84,24 +83,36 @@ export async function action({ request }: Route.ActionArgs) {
       try {
         await invoicesApi.send(sendId, recipients ? JSON.parse(recipients) : undefined);
         return { success: true, message: "Invoice sent" };
-      } catch {
+      } catch (_error) {
         return { success: false, error: "Failed to send invoice" };
       }
     }
 
     case "record-payment": {
       const invoiceId = formData.get("invoiceId") as string;
+      const methodRaw = formData.get("method") as string;
+      let method: "Check" | "Wire" | "Credit Card" | "ACH" | "Cash" = "Check";
+
+      switch (methodRaw) {
+        case 'check': method = 'Check'; break;
+        case 'wire': method = 'Wire'; break;
+        case 'credit_card': method = 'Credit Card'; break;
+        case 'ach': method = 'ACH'; break;
+        case 'cash': method = 'Cash'; break;
+        default: method = 'Check';
+      }
+
       const payment = {
         amount: parseFloat(formData.get("amount") as string),
         date: formData.get("date") as string,
-        method: formData.get("method") as 'check' | 'credit_card' | 'wire' | 'ach' | 'cash' | 'other',
+        method,
         reference: formData.get("reference") as string || undefined,
         notes: formData.get("notes") as string || undefined,
       };
       try {
         await invoicesApi.recordPayment(invoiceId, payment);
         return { success: true, message: "Payment recorded" };
-      } catch {
+      } catch (_error) {
         return { success: false, error: "Failed to record payment" };
       }
     }
@@ -125,8 +136,9 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function InvoicesRoute({ loaderData, actionData }: Route.ComponentProps) {
-  const { invoices, stats, filters } = loaderData;
+export default function InvoicesRoute() {
+  const { invoices, stats, filters } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
 
   return (
     <div className="p-8">

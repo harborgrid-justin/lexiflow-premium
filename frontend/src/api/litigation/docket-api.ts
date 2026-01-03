@@ -122,7 +122,7 @@ export class DocketApiService {
   ): Promise<PaginatedResponse<DocketEntry>> {
     try {
       // Backward compatibility for string argument
-      const params: Record<string, any> =
+      const params: Record<string, unknown> =
         typeof filters === "string" ? { caseId: filters } : { ...filters };
 
       return await apiClient.get<PaginatedResponse<DocketEntry>>(

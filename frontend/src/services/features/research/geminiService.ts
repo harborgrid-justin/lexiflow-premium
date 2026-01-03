@@ -281,27 +281,63 @@
 declare module "@google/generative-ai" {
   export interface ModelParams {
     model: string;
-    [key: string]: any;
+    [key: string]: unknown;
   }
   export interface RequestOptions {
-    [key: string]: any;
+    [key: string]: unknown;
   }
+
+  export interface GenerateContentResult {
+    response: {
+      text(): string;
+    };
+  }
+
+  export interface GenerativeModel {
+    generateContent(prompt: unknown): Promise<GenerateContentResult>;
+    generateContentStream(
+      prompt: unknown
+    ): Promise<{ stream: AsyncIterable<GenerateContentResult> }>;
+  }
+
   export class GoogleGenerativeAI {
     constructor(apiKey: string);
-    getGenerativeModel(modelParams: ModelParams, requestOptions?: RequestOptions): any;
+    getGenerativeModel(
+      modelParams: ModelParams,
+      requestOptions?: RequestOptions
+    ): GenerativeModel;
   }
 }
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-import { ParsedDocket } from '@/types';
-import type { SearchResult } from '@/types';
-import { Prompts } from '@/services/ai/prompts';
-import { AnalyzedDocSchema, BriefCritiqueSchema, IntentResultSchema, DocketSchema, ShepardizeSchema, StrategyGraphSchema, LinterResultSchema } from '@/services/ai/schemas';
-import { safeParseJSON, withRetry } from '@/utils/apiUtils';
-import { AnalyzedDoc, ResearchResponse, IntentResult, BriefCritique, GroundingChunk, ShepardizeResult } from '@/types/intelligence';
+import { Prompts } from "@/services/ai/prompts";
+import {
+  AnalyzedDocSchema,
+  BriefCritiqueSchema,
+  DocketSchema,
+  IntentResultSchema,
+  LinterResultSchema,
+  ShepardizeSchema,
+  StrategyGraphSchema,
+} from "@/services/ai/schemas";
+import type { SearchResult } from "@/types";
+import { ParsedDocket } from "@/types";
+import {
+  AnalyzedDoc,
+  BriefCritique,
+  GroundingChunk,
+  IntentResult,
+  ResearchResponse,
+  ShepardizeResult,
+} from "@/types/intelligence";
+import { safeParseJSON, withRetry } from "@/utils/apiUtils";
 
 // Re-export IntentResult, ShepardizeResult, and TreatmentType for external use
-export type { IntentResult, ShepardizeResult, TreatmentType } from '@/types/intelligence';
+export type {
+  IntentResult,
+  ShepardizeResult,
+  TreatmentType,
+} from "@/types/intelligence";
 
 // =============================================================================
 // CLIENT FACTORY (Private)
@@ -314,12 +350,17 @@ export type { IntentResult, ShepardizeResult, TreatmentType } from '@/types/inte
  */
 const getClient = () => {
   // Check environment variables (Vite-prefixed and standard)
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY ||
-                 import.meta.env.GEMINI_API_KEY ||
-                 (typeof localStorage !== 'undefined' ? localStorage.getItem('gemini_api_key') : null);
+  const apiKey =
+    import.meta.env.VITE_GEMINI_API_KEY ||
+    import.meta.env.GEMINI_API_KEY ||
+    (typeof localStorage !== "undefined"
+      ? localStorage.getItem("gemini_api_key")
+      : null);
 
   if (!apiKey) {
-    throw new Error('Gemini API key not configured. Please set VITE_GEMINI_API_KEY environment variable or gemini_api_key in storage.');
+    throw new Error(
+      "Gemini API key not configured. Please set VITE_GEMINI_API_KEY environment variable or gemini_api_key in storage."
+    );
   }
   return new GoogleGenerativeAI(apiKey);
 };
@@ -333,387 +374,421 @@ const getClient = () => {
  * Provides AI-powered legal intelligence via Google Gemini API
  */
 export const GeminiService = {
-    async analyzeDocument(content: string): Promise<AnalyzedDoc> {
-        return withRetry(async () => {
-            try {
-                const model = getClient().getGenerativeModel({
-                    model: 'gemini-2.0-flash-exp',
-                    generationConfig: {
-                        responseMimeType: 'application/json',
-                        responseSchema: AnalyzedDocSchema
-                    }
-                });
-
-                const result = await model.generateContent(Prompts.Analysis(content));
-                const response = result.response;
-                const text = response.text();
-
-                if (!text) throw new Error("No response text from Gemini");
-                return safeParseJSON(text, { summary: "Analysis failed to parse", riskScore: 0 });
-            } catch {
-                console.error("Gemini Analysis Error:", e);
-                return { summary: "Analysis unavailable due to service error.", riskScore: 0 };
-            }
+  async analyzeDocument(content: string): Promise<AnalyzedDoc> {
+    return withRetry(async () => {
+      try {
+        const model = getClient().getGenerativeModel({
+          model: "gemini-2.0-flash-exp",
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: AnalyzedDocSchema,
+          },
         });
-    },
 
-    async critiqueBrief(text: string): Promise<BriefCritique> {
-        return withRetry(async () => {
-            try {
-                const model = getClient().getGenerativeModel({
-                    model: 'gemini-2.0-flash-exp',
-                    generationConfig: {
-                        responseMimeType: 'application/json',
-                        responseSchema: BriefCritiqueSchema
-                    }
-                });
+        const result = await model.generateContent(Prompts.Analysis(content));
+        const response = result.response;
+        const text = response.text();
 
-                const result = await model.generateContent(Prompts.Critique(text));
-                const responseText = result.response.text();
-
-                if (!responseText) throw new Error("No response text from Gemini");
-                return safeParseJSON(responseText, {
-                    score: 0,
-                    strengths: [],
-                    weaknesses: ["Analysis unavailable"],
-                    suggestions: [],
-                    missingAuthority: []
-                });
-            } catch {
-                console.error("Gemini Critique Error:", e);
-                return { score: 0, strengths: [], weaknesses: ["Service Error"], suggestions: [], missingAuthority: [] };
-            }
+        if (!text) throw new Error("No response text from Gemini");
+        return safeParseJSON(text, {
+          summary: "Analysis failed to parse",
+          riskScore: 0,
         });
-    },
+      } catch (e) {
+        console.error("Gemini Analysis Error:", e);
+        return {
+          summary: "Analysis unavailable due to service error.",
+          riskScore: 0,
+        };
+      }
+    });
+  },
 
-    async reviewContract(text: string): Promise<string> {
-        return withRetry(async () => {
-            try {
-                const model = getClient().getGenerativeModel({
-                    model: 'gemini-2.0-flash-exp'
-                });
-                const result = await model.generateContent(Prompts.Review(text));
-                return result.response.text() || "Error reviewing contract.";
-            } catch {
-                return "Contract review service unavailable.";
-            }
+  async critiqueBrief(text: string): Promise<BriefCritique> {
+    return withRetry(async () => {
+      try {
+        const model = getClient().getGenerativeModel({
+          model: "gemini-2.0-flash-exp",
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: BriefCritiqueSchema,
+          },
         });
-    },
 
-    async *streamDraft(context: string, type: string): AsyncGenerator<string, void, unknown> {
-        try {
-            const model = getClient().getGenerativeModel({
-                model: 'gemini-2.0-flash-exp'
-            });
-            const result = await model.generateContentStream(Prompts.Draft(context, type));
-            for await (const chunk of result.stream) {
-                const chunkText = chunk.text();
-                if (chunkText) yield chunkText;
-            }
-        } catch {
-            yield "Error streaming content.";
-        }
-    },
+        const result = await model.generateContent(Prompts.Critique(text));
+        const responseText = result.response.text();
 
-    async refineTimeEntry(desc: string): Promise<string> {
-        return withRetry(async () => {
-            try {
-                const model = getClient().getGenerativeModel({
-                    model: 'gemini-2.0-flash-exp'
-                });
-                const result = await model.generateContent(Prompts.Refine(desc));
-                return result.response.text() || desc;
-            } catch {
-                return desc;
-            }
+        if (!responseText) throw new Error("No response text from Gemini");
+        return safeParseJSON(responseText, {
+          score: 0,
+          strengths: [],
+          weaknesses: ["Analysis unavailable"],
+          suggestions: [],
+          missingAuthority: [],
         });
-    },
+      } catch (e) {
+        console.error("Gemini Critique Error:", e);
+        return {
+          score: 0,
+          strengths: [],
+          weaknesses: ["Service Error"],
+          suggestions: [],
+          missingAuthority: [],
+        };
+      }
+    });
+  },
 
-    async generateDraft(prompt: string, type: string): Promise<string> {
-        return withRetry(async () => {
-            try {
-                const model = getClient().getGenerativeModel({
-                    model: 'gemini-2.0-flash-exp'
-                });
-                const result = await model.generateContent(Prompts.Draft(prompt, type));
-                return result.response.text() || "Error generating content.";
-            } catch {
-                return "Generation failed.";
-            }
+  async reviewContract(text: string): Promise<string> {
+    return withRetry(async () => {
+      try {
+        const model = getClient().getGenerativeModel({
+          model: "gemini-2.0-flash-exp",
         });
-    },
+        const result = await model.generateContent(Prompts.Review(text));
+        return result.response.text() || "Error reviewing contract.";
+      } catch {
+        return "Contract review service unavailable.";
+      }
+    });
+  },
 
-    async predictIntent(query: string): Promise<IntentResult> {
-        return withRetry(async () => {
-            try {
-                const model = getClient().getGenerativeModel({
-                    model: 'gemini-2.0-flash-exp',
-                    generationConfig: {
-                        responseMimeType: 'application/json',
-                        responseSchema: IntentResultSchema
-                    }
-                });
-
-                const result = await model.generateContent(Prompts.Intent(query));
-                const responseText = result.response.text();
-
-                if (!responseText) throw new Error("No response text from Gemini");
-                return safeParseJSON(responseText, { action: 'UNKNOWN', confidence: 0 });
-            } catch {
-                return { action: 'UNKNOWN', confidence: 0 };
-            }
-        });
-    },
-
-    async parseDocket(text: string): Promise<Partial<ParsedDocket>> {
-        return withRetry(async () => {
-            try {
-                const model = getClient().getGenerativeModel({
-                    model: 'gemini-2.0-flash-exp',
-                    generationConfig: {
-                        responseMimeType: 'application/json',
-                        responseSchema: DocketSchema
-                    }
-                });
-
-                const result = await model.generateContent(Prompts.Docket(text));
-                const responseText = result.response.text();
-
-                if (!responseText) throw new Error("No response text from Gemini");
-                return safeParseJSON<Partial<ParsedDocket>>(responseText, {});
-            } catch(e) {
-                console.error("Docket Parse Error", e);
-                return {};
-            }
-        });
-    },
-
-    async conductResearch(query: string): Promise<ResearchResponse> {
-        return withRetry(async () => {
-            try {
-                const model = getClient().getGenerativeModel({
-                    model: 'gemini-2.0-flash-exp',
-                    tools: [{ googleSearch: {} }],
-                });
-
-                const result = await model.generateContent(Prompts.Research(query));
-                const response = result.response;
-
-                const sources: SearchResult[] = [];
-                const candidates = response.candidates;
-                if (candidates && candidates[0]?.groundingMetadata?.groundingChunks) {
-                    const chunks = candidates[0].groundingMetadata.groundingChunks as GroundingChunk[];
-                    chunks.forEach((c: GroundingChunk) => {
-                        if (c.web) {
-                            sources.push({
-                                id: crypto.randomUUID(),
-                                type: 'web',
-                                title: c.web.title,
-                                score: 1.0,
-                                url: c.web.uri
-                            });
-                        }
-                    });
-                }
-                const researchResponse: ResearchResponse = {
-                    text: response.text() || "No text response.",
-                    sources
-                };
-                return researchResponse;
-            } catch {
-                const errorResponse: ResearchResponse = {
-                    text: "Research service unavailable.",
-                    sources: []
-                };
-                return errorResponse;
-            }
-        });
-    },
-
-    async generateReply(lastMsg: string, role: string): Promise<string> {
-        return withRetry(async () => {
-            try {
-                const model = getClient().getGenerativeModel({
-                    model: 'gemini-2.0-flash-exp'
-                });
-                const result = await model.generateContent(
-                    `Draft a professional reply to this message from a ${role}: "${lastMsg}"`
-                );
-                return result.response.text() || "";
-            } catch {
-                return "Unable to generate reply.";
-            }
-        });
-    },
-
-    async shepardizeCitation(citation: string): Promise<ShepardizeResult | null> {
-        return withRetry<ShepardizeResult | null>(async () => {
-            try {
-                const model = getClient().getGenerativeModel({
-                    model: 'gemini-2.0-flash-exp',
-                    generationConfig: {
-                        responseMimeType: 'application/json',
-                        responseSchema: ShepardizeSchema
-                    }
-                });
-
-                const result = await model.generateContent(Prompts.Shepardize(citation));
-                const responseText = result.response.text();
-
-                if (!responseText) return null;
-                const defaultValue: ShepardizeResult = {
-                    caseName: '',
-                    citation: '',
-                    summary: '',
-                    history: [],
-                    treatment: []
-                };
-                return safeParseJSON<ShepardizeResult>(responseText, defaultValue);
-            } catch {
-                return null;
-            }
-        });
-    },
-
-    // --- NEW FOR LITIGATION BUILDER ---
-    async generateStrategyFromPrompt(prompt: string): Promise<{ nodes: unknown[], connections: unknown[] } | null> {
-        return withRetry(async () => {
-            try {
-                const model = getClient().getGenerativeModel({
-                    model: 'gemini-2.0-flash-exp',
-                    generationConfig: {
-                        responseMimeType: 'application/json',
-                        responseSchema: StrategyGraphSchema
-                    }
-                });
-                const result = await model.generateContent(Prompts.Strategy(prompt));
-                const responseText = result.response.text();
-                if (!responseText) return null;
-                return safeParseJSON(responseText, { nodes: [], connections: [] });
-            } catch(e) {
-                console.error("Gemini Strategy Generation Error:", e);
-                return null;
-            }
-        });
-    },
-
-    async lintStrategy(graphData: unknown): Promise<{ suggestions: unknown[] } | null> {
-        return withRetry(async () => {
-            try {
-                const model = getClient().getGenerativeModel({
-                    model: 'gemini-2.0-flash-exp',
-                    generationConfig: {
-                        responseMimeType: 'application/json',
-                        responseSchema: LinterResultSchema
-                    }
-                });
-                const result = await model.generateContent(Prompts.Lint(JSON.stringify(graphData)));
-                const responseText = result.response.text();
-                if (!responseText) return null;
-                return safeParseJSON(responseText, { suggestions: [] });
-            } catch(e) {
-                console.error("Gemini Strategy Linter Error:", e);
-                return null;
-            }
-        });
-    },
-
-    async extractCaseData(text: string): Promise<Partial<ParsedDocket>> {
-        return withRetry(async () => {
-            try {
-                const model = getClient().getGenerativeModel({
-                    model: 'gemini-2.0-flash-exp',
-                    generationConfig: {
-                        responseMimeType: 'application/json',
-                        responseSchema: DocketSchema
-                    }
-                });
-
-                const result = await model.generateContent(
-                    `Extract structured case data from the following text. Include all parties, attorneys, dates, court information, case numbers, and any other relevant case details:\n\n${text.slice(0, 15000)}`
-                );
-                const responseText = result.response.text();
-
-                if (!responseText) throw new Error("No response text from Gemini");
-                return safeParseJSON<Partial<ParsedDocket>>(responseText, {});
-            } catch(e) {
-                console.error("Extract Case Data Error:", e);
-                return {};
-            }
-        });
-    },
-
-    // ============================================================================
-    // AIServiceInterface Compatibility Methods
-    // ============================================================================
-
-    /**
-     * Legal research (wrapper for conductResearch)
-     * @param query - Research query
-     * @param jurisdiction - Optional jurisdiction filter
-     */
-    async legalResearch(query: string, _jurisdiction?: string): Promise<ResearchResponse> {
-        return this.conductResearch(query);
-    },
-
-    /**
-     * Validate citations (wrapper for shepardizeCitation)
-     * @param citations - Array of citations to validate
-     */
-    async validateCitations(citations: string[]): Promise<ShepardizeResult> {
-        // Validate first citation for now (API limitation)
-        if (citations.length === 0) {
-            return {
-                caseName: 'No citations provided',
-                citation: '',
-                summary: 'No citations to validate',
-                history: [],
-                treatment: []
-            };
-        }
-        const firstCitation = citations[0];
-        if (!firstCitation) {
-            return {
-                caseName: 'Unknown Case',
-                citation: '',
-                summary: 'No citation found',
-                history: [],
-                treatment: []
-            };
-        }
-        const result = await this.shepardizeCitation(firstCitation);
-        if (!result) {
-            return {
-                caseName: 'Unknown Case',
-                citation: firstCitation,
-                summary: 'Analysis unavailable',
-                history: [],
-                treatment: []
-            };
-        }
-        return result;
-    },
-
-    /**
-     * Draft document (wrapper for generateDraft with callback support)
-     * @param prompt - Draft prompt
-     * @param onChunk - Callback for streaming chunks
-     */
-    async draftDocument(prompt: string, onChunk: (chunk: string) => void): Promise<void> {
-        const stream = this.streamDraft(prompt, 'document');
-        for await (const chunk of stream) {
-            onChunk(chunk);
-        }
-    },
-
-    /**
-     * Suggest reply (wrapper for generateReply)
-     * @param threadMessages - Array of thread messages
-     */
-    async suggestReply(threadMessages: string[]): Promise<string> {
-        // Use the last message for context
-        const lastMessage = threadMessages[threadMessages.length - 1] || '';
-        return this.generateReply(lastMessage, 'professional');
+  async *streamDraft(
+    context: string,
+    type: string
+  ): AsyncGenerator<string, void, unknown> {
+    try {
+      const model = getClient().getGenerativeModel({
+        model: "gemini-2.0-flash-exp",
+      });
+      const result = await model.generateContentStream(
+        Prompts.Draft(context, type)
+      );
+      for await (const chunk of result.stream) {
+        const chunkText = chunk.text();
+        if (chunkText) yield chunkText;
+      }
+    } catch {
+      yield "Error streaming content.";
     }
-};
+  },
 
+  async refineTimeEntry(desc: string): Promise<string> {
+    return withRetry(async () => {
+      try {
+        const model = getClient().getGenerativeModel({
+          model: "gemini-2.0-flash-exp",
+        });
+        const result = await model.generateContent(Prompts.Refine(desc));
+        return result.response.text() || desc;
+      } catch {
+        return desc;
+      }
+    });
+  },
+
+  async generateDraft(prompt: string, type: string): Promise<string> {
+    return withRetry(async () => {
+      try {
+        const model = getClient().getGenerativeModel({
+          model: "gemini-2.0-flash-exp",
+        });
+        const result = await model.generateContent(Prompts.Draft(prompt, type));
+        return result.response.text() || "Error generating content.";
+      } catch {
+        return "Generation failed.";
+      }
+    });
+  },
+
+  async predictIntent(query: string): Promise<IntentResult> {
+    return withRetry(async () => {
+      try {
+        const model = getClient().getGenerativeModel({
+          model: "gemini-2.0-flash-exp",
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: IntentResultSchema,
+          },
+        });
+
+        const result = await model.generateContent(Prompts.Intent(query));
+        const responseText = result.response.text();
+
+        if (!responseText) throw new Error("No response text from Gemini");
+        return safeParseJSON(responseText, {
+          action: "UNKNOWN",
+          confidence: 0,
+        });
+      } catch {
+        return { action: "UNKNOWN", confidence: 0 };
+      }
+    });
+  },
+
+  async parseDocket(text: string): Promise<Partial<ParsedDocket>> {
+    return withRetry(async () => {
+      try {
+        const model = getClient().getGenerativeModel({
+          model: "gemini-2.0-flash-exp",
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: DocketSchema,
+          },
+        });
+
+        const result = await model.generateContent(Prompts.Docket(text));
+        const responseText = result.response.text();
+
+        if (!responseText) throw new Error("No response text from Gemini");
+        return safeParseJSON<Partial<ParsedDocket>>(responseText, {});
+      } catch (e) {
+        console.error("Docket Parse Error", e);
+        return {};
+      }
+    });
+  },
+
+  async conductResearch(query: string): Promise<ResearchResponse> {
+    return withRetry(async () => {
+      try {
+        const model = getClient().getGenerativeModel({
+          model: "gemini-2.0-flash-exp",
+          tools: [{ googleSearch: {} }],
+        });
+
+        const result = await model.generateContent(Prompts.Research(query));
+        const response = result.response;
+
+        const sources: SearchResult[] = [];
+        const candidates = response.candidates;
+        if (candidates && candidates[0]?.groundingMetadata?.groundingChunks) {
+          const chunks = candidates[0].groundingMetadata
+            .groundingChunks as GroundingChunk[];
+          chunks.forEach((c: GroundingChunk) => {
+            if (c.web) {
+              sources.push({
+                id: crypto.randomUUID(),
+                type: "web",
+                title: c.web.title,
+                score: 1.0,
+                url: c.web.uri,
+              });
+            }
+          });
+        }
+        const researchResponse: ResearchResponse = {
+          text: response.text() || "No text response.",
+          sources,
+        };
+        return researchResponse;
+      } catch {
+        const errorResponse: ResearchResponse = {
+          text: "Research service unavailable.",
+          sources: [],
+        };
+        return errorResponse;
+      }
+    });
+  },
+
+  async generateReply(lastMsg: string, role: string): Promise<string> {
+    return withRetry(async () => {
+      try {
+        const model = getClient().getGenerativeModel({
+          model: "gemini-2.0-flash-exp",
+        });
+        const result = await model.generateContent(
+          `Draft a professional reply to this message from a ${role}: "${lastMsg}"`
+        );
+        return result.response.text() || "";
+      } catch {
+        return "Unable to generate reply.";
+      }
+    });
+  },
+
+  async shepardizeCitation(citation: string): Promise<ShepardizeResult | null> {
+    return withRetry<ShepardizeResult | null>(async () => {
+      try {
+        const model = getClient().getGenerativeModel({
+          model: "gemini-2.0-flash-exp",
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: ShepardizeSchema,
+          },
+        });
+
+        const result = await model.generateContent(
+          Prompts.Shepardize(citation)
+        );
+        const responseText = result.response.text();
+
+        if (!responseText) return null;
+        const defaultValue: ShepardizeResult = {
+          caseName: "",
+          citation: "",
+          summary: "",
+          history: [],
+          treatment: [],
+        };
+        return safeParseJSON<ShepardizeResult>(responseText, defaultValue);
+      } catch {
+        return null;
+      }
+    });
+  },
+
+  // --- NEW FOR LITIGATION BUILDER ---
+  async generateStrategyFromPrompt(
+    prompt: string
+  ): Promise<{ nodes: unknown[]; connections: unknown[] } | null> {
+    return withRetry(async () => {
+      try {
+        const model = getClient().getGenerativeModel({
+          model: "gemini-2.0-flash-exp",
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: StrategyGraphSchema,
+          },
+        });
+        const result = await model.generateContent(Prompts.Strategy(prompt));
+        const responseText = result.response.text();
+        if (!responseText) return null;
+        return safeParseJSON(responseText, { nodes: [], connections: [] });
+      } catch (e) {
+        console.error("Gemini Strategy Generation Error:", e);
+        return null;
+      }
+    });
+  },
+
+  async lintStrategy(
+    graphData: unknown
+  ): Promise<{ suggestions: unknown[] } | null> {
+    return withRetry(async () => {
+      try {
+        const model = getClient().getGenerativeModel({
+          model: "gemini-2.0-flash-exp",
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: LinterResultSchema,
+          },
+        });
+        const result = await model.generateContent(
+          Prompts.Lint(JSON.stringify(graphData))
+        );
+        const responseText = result.response.text();
+        if (!responseText) return null;
+        return safeParseJSON(responseText, { suggestions: [] });
+      } catch (e) {
+        console.error("Gemini Strategy Linter Error:", e);
+        return null;
+      }
+    });
+  },
+
+  async extractCaseData(text: string): Promise<Partial<ParsedDocket>> {
+    return withRetry(async () => {
+      try {
+        const model = getClient().getGenerativeModel({
+          model: "gemini-2.0-flash-exp",
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: DocketSchema,
+          },
+        });
+
+        const result = await model.generateContent(
+          `Extract structured case data from the following text. Include all parties, attorneys, dates, court information, case numbers, and any other relevant case details:\n\n${text.slice(0, 15000)}`
+        );
+        const responseText = result.response.text();
+
+        if (!responseText) throw new Error("No response text from Gemini");
+        return safeParseJSON<Partial<ParsedDocket>>(responseText, {});
+      } catch (e) {
+        console.error("Extract Case Data Error:", e);
+        return {};
+      }
+    });
+  },
+
+  // ============================================================================
+  // AIServiceInterface Compatibility Methods
+  // ============================================================================
+
+  /**
+   * Legal research (wrapper for conductResearch)
+   * @param query - Research query
+   * @param jurisdiction - Optional jurisdiction filter
+   */
+  async legalResearch(
+    query: string,
+    _jurisdiction?: string
+  ): Promise<ResearchResponse> {
+    return this.conductResearch(query);
+  },
+
+  /**
+   * Validate citations (wrapper for shepardizeCitation)
+   * @param citations - Array of citations to validate
+   */
+  async validateCitations(citations: string[]): Promise<ShepardizeResult> {
+    // Validate first citation for now (API limitation)
+    if (citations.length === 0) {
+      return {
+        caseName: "No citations provided",
+        citation: "",
+        summary: "No citations to validate",
+        history: [],
+        treatment: [],
+      };
+    }
+    const firstCitation = citations[0];
+    if (!firstCitation) {
+      return {
+        caseName: "Unknown Case",
+        citation: "",
+        summary: "No citation found",
+        history: [],
+        treatment: [],
+      };
+    }
+    const result = await this.shepardizeCitation(firstCitation);
+    if (!result) {
+      return {
+        caseName: "Unknown Case",
+        citation: firstCitation,
+        summary: "Analysis unavailable",
+        history: [],
+        treatment: [],
+      };
+    }
+    return result;
+  },
+
+  /**
+   * Draft document (wrapper for generateDraft with callback support)
+   * @param prompt - Draft prompt
+   * @param onChunk - Callback for streaming chunks
+   */
+  async draftDocument(
+    prompt: string,
+    onChunk: (chunk: string) => void
+  ): Promise<void> {
+    const stream = this.streamDraft(prompt, "document");
+    for await (const chunk of stream) {
+      onChunk(chunk);
+    }
+  },
+
+  /**
+   * Suggest reply (wrapper for generateReply)
+   * @param threadMessages - Array of thread messages
+   */
+  async suggestReply(threadMessages: string[]): Promise<string> {
+    // Use the last message for context
+    const lastMessage = threadMessages[threadMessages.length - 1] || "";
+    return this.generateReply(lastMessage, "professional");
+  },
+};

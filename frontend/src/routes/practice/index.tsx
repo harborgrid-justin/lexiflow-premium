@@ -11,9 +11,9 @@
  */
 
 import { Link } from 'react-router';
-import type { Route } from "./+types/index";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags
@@ -50,7 +50,7 @@ export async function loader() {
 // Component
 // ============================================================================
 
-export default function PracticeIndexRoute() {
+export default function PracticeIndexRoute({ loaderData }: Route.ComponentProps) {
   const { staffCount, activeMatters, utilizationRate, pendingTasks } = loaderData;
 
   return (

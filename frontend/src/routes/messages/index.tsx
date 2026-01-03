@@ -43,7 +43,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const conversationId = url.searchParams.get("conversationId");
   const search = url.searchParams.get("q") || "";
@@ -132,7 +132,7 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function MessagesIndexRoute() {
+export default function MessagesIndexRoute({ loaderData }: Route.ComponentProps) {
   const { conversations, selectedConversation, messages, search } = loaderData;
   const submit = useSubmit();
   const navigation = useNavigation();
@@ -254,7 +254,7 @@ export default function MessagesIndexRoute() {
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-6">
               <div className="space-y-4">
-                {messages.map((msg) => (
+                {messages.map((msg: Message) => (
                   <div
                     key={msg.id}
                     className={`flex ${msg.senderId === 'current-user-id' ? 'justify-end' : 'justify-start'}`}

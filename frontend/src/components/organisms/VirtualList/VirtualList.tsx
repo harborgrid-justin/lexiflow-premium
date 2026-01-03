@@ -91,21 +91,9 @@ const VirtualListComponent = <T = Record<string, unknown>>(
     return () => observer.disconnect();
   }, []);
 
-  // Safety check for invalid height calculations - must be before hooks
-  if (!itemHeight || itemHeight <= 0 || !Number.isFinite(itemHeight)) {
-    console.error('[VirtualList] Invalid itemHeight:', itemHeight);
-    return (
-      <div
-        ref={containerRef}
-        className={cn("flex items-center justify-center text-sm h-full overflow-hidden", className, theme.text.tertiary)}
-        style={{ height: typeof height === 'number' ? `${height}px` : height }}
-      >
-        Error: Invalid item height
-      </div>
-    );
-  }
-
+  // All hooks must be called unconditionally
   const safeItems = useMemo(() => deferredItems || [], [deferredItems]);
+  const totalItemsHeight = useMemo(() => safeItems.length * itemHeight, [safeItems.length, itemHeight]);
 
   const overscan = 5;
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
@@ -125,7 +113,7 @@ const VirtualListComponent = <T = Record<string, unknown>>(
     return visible;
   }, [safeItems, startIndex, endIndex, itemHeight]);
 
-  // Safety check for invalid height calculations
+  // Safety check for invalid height calculations - after all hooks
   if (!itemHeight || itemHeight <= 0 || !Number.isFinite(itemHeight)) {
     console.error('[VirtualList] Invalid itemHeight:', itemHeight);
     return (

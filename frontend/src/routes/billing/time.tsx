@@ -3,12 +3,12 @@
  * Displays time entries list with filtering and search
  */
 
-import { Link } from 'react-router';
-import type { Route } from "./+types/time";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createListMeta } from '../_shared/meta-utils';
 import { TimeEntriesApiService } from '@/api/billing';
 import { TimeEntryList } from '@/components/billing/TimeEntryList';
+import { Link, useLoaderData } from 'react-router';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { createListMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/time";
 
 // ============================================================================
 // Meta Tags
@@ -40,7 +40,7 @@ export async function loader({ request }: Route.LoaderArgs) {
     const entries = await timeApi.getAll({
       caseId: caseId || undefined,
       userId: userId || undefined,
-      status: (status as 'draft' | 'submitted' | 'approved' | 'invoiced') || undefined,
+      status: (status as any) || undefined,
       billable: billable === 'true' ? true : billable === 'false' ? false : undefined,
     });
 
@@ -48,7 +48,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       entries,
       filters: { caseId, userId, status, billable },
     };
-  } catch {
+  } catch (error) {
     console.error('Failed to load time entries:', error);
     return {
       entries: [],
@@ -106,8 +106,8 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function TimeEntriesRoute({ loaderData, actionData }: Route.ComponentProps) {
-  const { entries, filters } = loaderData;
+export default function TimeEntriesRoute({ actionData }: Route.ComponentProps) {
+  const { entries, filters } = useLoaderData() as Route.ComponentProps['loaderData'];
 
   return (
     <div className="p-8">

@@ -206,7 +206,7 @@ class ApiClient {
   public getAuthToken(): string | null {
     try {
       return defaultStorage.getItem(this.authTokenKey);
-    } catch {
+    } catch (error) {
       console.error("[ApiClient.getAuthToken] Error:", error);
       return null;
     }
@@ -220,7 +220,7 @@ class ApiClient {
   public getRefreshToken(): string | null {
     try {
       return defaultStorage.getItem(this.refreshTokenKey);
-    } catch {
+    } catch (error) {
       console.error("[ApiClient.getRefreshToken] Error:", error);
       return null;
     }
@@ -245,7 +245,7 @@ class ApiClient {
         defaultStorage.setItem(this.refreshTokenKey, refreshToken);
       }
       console.log("[ApiClient] Auth tokens stored successfully");
-    } catch {
+    } catch (error) {
       console.error("[ApiClient.setAuthTokens] Error:", error);
       throw new OperationError(
         "ApiClient.setAuthTokens",
@@ -263,7 +263,7 @@ class ApiClient {
       defaultStorage.removeItem(this.authTokenKey);
       defaultStorage.removeItem(this.refreshTokenKey);
       console.log("[ApiClient] Auth tokens cleared");
-    } catch {
+    } catch (error) {
       console.error("[ApiClient.clearAuthTokens] Error:", error);
     }
   }
@@ -358,7 +358,7 @@ class ApiClient {
                 "Session expired. Please login again."
               );
             }
-          } catch {
+          } catch (error) {
             if (
               error instanceof AuthenticationError &&
               error.message === "TOKEN_REFRESHED"
@@ -409,7 +409,7 @@ class ApiClient {
 
       // Convert snake_case keys to camelCase for frontend consumption
       return keysToCamel<T>(jsonData);
-    } catch {
+    } catch (error) {
       console.error("[ApiClient] Failed to parse response:", error);
       throw new ValidationError("Invalid response format from server");
     }
@@ -459,7 +459,7 @@ class ApiClient {
           response.status
         );
         return false;
-      } catch {
+      } catch (error) {
         console.error("[ApiClient] Token refresh error:", error);
         return false;
       } finally {
@@ -503,7 +503,7 @@ class ApiClient {
       });
 
       return await this.handleResponse<T>(response);
-    } catch {
+    } catch (error) {
       if (
         error instanceof AuthenticationError &&
         error.message === "TOKEN_REFRESHED"
@@ -543,7 +543,7 @@ class ApiClient {
       });
 
       return await this.handleResponse<T>(response);
-    } catch {
+    } catch (error) {
       if (
         error instanceof AuthenticationError &&
         error.message === "TOKEN_REFRESHED"
@@ -577,7 +577,7 @@ class ApiClient {
       });
 
       return await this.handleResponse<T>(response);
-    } catch {
+    } catch (error) {
       if (
         error instanceof AuthenticationError &&
         error.message === "TOKEN_REFRESHED"
@@ -611,7 +611,7 @@ class ApiClient {
       });
 
       return await this.handleResponse<T>(response);
-    } catch {
+    } catch (error) {
       if (
         error instanceof AuthenticationError &&
         error.message === "TOKEN_REFRESHED"
@@ -642,7 +642,7 @@ class ApiClient {
       });
 
       return await this.handleResponse<T>(response);
-    } catch {
+    } catch (error) {
       if (
         error instanceof AuthenticationError &&
         error.message === "TOKEN_REFRESHED"
@@ -705,7 +705,7 @@ class ApiClient {
       });
 
       return await this.handleResponse<T>(response);
-    } catch {
+    } catch (error) {
       if (
         error instanceof AuthenticationError &&
         error.message === "TOKEN_REFRESHED"
@@ -736,7 +736,7 @@ class ApiClient {
         signal: AbortSignal.timeout(this.HEALTH_CHECK_TIMEOUT),
       });
       return await response.json();
-    } catch {
+    } catch (error) {
       console.error("[ApiClient.healthCheck] Error:", error);
       throw new ApiTimeoutError("/health", 5000);
     }

@@ -132,8 +132,15 @@ export function requireRole(
 ): RouteGuardResult {
   const { user } = requireAuthentication(_request);
 
+  if (!user) {
+    throw new Response("Forbidden - Insufficient permissions", {
+      status: 403,
+      statusText: "Forbidden",
+    });
+  }
+
   const hasRequiredRole = allowedRoles.some((role) => role === user.role);
-  if (!user || !hasRequiredRole) {
+  if (!hasRequiredRole) {
     throw new Response("Forbidden - Insufficient permissions", {
       status: 403,
       statusText: "Forbidden",

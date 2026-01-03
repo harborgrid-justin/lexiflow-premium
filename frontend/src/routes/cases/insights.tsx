@@ -4,6 +4,7 @@
 
 import { CaseInsightsDashboard } from '@/features/cases/components/insights/CaseInsightsDashboard';
 import { DataService } from '@/services/data/dataService';
+import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/insights";
 
 export function meta({ data }: Route.MetaArgs) {
@@ -20,7 +21,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function CaseInsightsRoute() {
-  return <CaseInsightsDashboard caseId={loaderData.case.id} />;
+  const { case: caseData } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  return <CaseInsightsDashboard caseId={caseData.id} />;
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

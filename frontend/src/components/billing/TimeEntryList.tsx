@@ -3,14 +3,14 @@
  * Display and filter time entries with bulk operations
  */
 
-import React, { useState } from 'react';
-import { Link, Form } from 'react-router';
-import { Clock, DollarSign, Filter, Check } from 'lucide-react';
 import type { TimeEntry } from '@/types/financial';
+import { Check, Clock, DollarSign, Filter } from 'lucide-react';
+import React, { useState } from 'react';
+import { Form, Link } from 'react-router';
 
 interface TimeEntryListProps {
   entries: TimeEntry[];
-  filters?: any;
+  filters?: Record<string, unknown>;
 }
 
 export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }) => {
@@ -42,9 +42,8 @@ export const TimeEntryList: React.FC<TimeEntryListProps> = ({ entries, filters }
 
     return (
       <span
-        className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
-          styles[status as keyof typeof styles] || styles.Draft
-        }`}
+        className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${styles[status as keyof typeof styles] || styles.Draft
+          }`}
       >
         {status}
       </span>

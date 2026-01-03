@@ -20,8 +20,8 @@
 import { api } from '@/api';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { CaseStatus } from '@/types';
 import { cn } from '@/utils/cn';
 import {
@@ -37,15 +37,15 @@ import {
 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
-export const CaseAnalyticsDashboard: React.FC = () => {
+export const CaseAnalyticsDashboard: React.FC<{ caseId?: string }> = ({ caseId }) => {
   const { isDark } = useTheme();
   const [dateRange, setDateRange] = useState<'7d' | '30d' | '90d' | 'ytd' | 'all'>('30d');
   const practiceAreaFilter = 'all';
 
   // Fetch matters data
   const { data: matters } = useQuery(
-    ['matters', 'all'],
-    () => api.cases.getAll()
+    ['matters', 'all', caseId],
+    () => caseId ? api.cases.getById(caseId).then(c => [c]) : api.cases.getAll()
   );
 
   // Fetch time entries for revenue calculation
@@ -63,7 +63,7 @@ export const CaseAnalyticsDashboard: React.FC = () => {
   // Calculate analytics metrics
   const metrics = useMemo(() => {
     if (!matters) return { totalMatters: 0, revenue: 0, avgResolution: 0, utilization: 0 };
-console.log('metrics data:', metrics);
+    console.log('metrics data:', metrics);
 
     const now = new Date();
     const cutoffDate = new Date();

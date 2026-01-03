@@ -71,7 +71,7 @@ export interface TimelineEvent {
   relatedEvents?: string[]; // IDs of related events
   documents?: string[];
   tags?: string[];
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   createdBy?: string;
   createdAt?: string;
   updatedAt?: string;

@@ -7,19 +7,20 @@
  */
 
 import { useNavigate } from 'react-router';
-import type { Route } from "./+types/detail";
-import { RouteErrorBoundary, NotFoundError } from '../_shared/RouteErrorBoundary';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/detail";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
 export function meta({ data }: Route.MetaArgs) {
+  const item = data?.item as Record<string, any> | null;
   return createDetailMeta({
     entityType: 'Discovery',
-    entityName: data?.item?.title,
-    entityId: data?.item?.id,
+    entityName: item?.title,
+    entityId: item?.id,
   });
 }
 

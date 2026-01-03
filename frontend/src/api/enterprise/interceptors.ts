@@ -22,7 +22,7 @@ export type RequestInterceptor = (
 /**
  * Response interceptor function type
  */
-export type ResponseInterceptor<T = any> = (
+export type ResponseInterceptor<T = unknown> = (
   response: Response,
   data: T
 ) => T | Promise<T>;
@@ -30,7 +30,7 @@ export type ResponseInterceptor<T = any> = (
 /**
  * Error interceptor function type
  */
-export type ErrorInterceptor = (error: any) => any | Promise<any>;
+export type ErrorInterceptor = (error: unknown) => unknown | Promise<unknown>;
 
 /**
  * Request configuration
@@ -39,9 +39,9 @@ export interface RequestConfig {
   url: string;
   method: string;
   headers: Record<string, string>;
-  body?: any;
+  body?: unknown;
   signal?: AbortSignal;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 /**
@@ -124,7 +124,7 @@ export class InterceptorManager {
   /**
    * Execute error interceptors
    */
-  public async executeErrorInterceptors(error: any): Promise<any> {
+  public async executeErrorInterceptors(error: unknown): Promise<unknown> {
     let currentError = error;
     for (const interceptor of this.errorInterceptors) {
       currentError = await interceptor(currentError);
@@ -229,7 +229,7 @@ export function createRequestLoggingInterceptor(
 export function createResponseLoggingInterceptor(
   enabled: boolean = true
 ): ResponseInterceptor {
-  return async (response: Response, data: any) => {
+  return async (response: Response, data: unknown) => {
     if (enabled) {
       console.log("[API Response]", {
         status: response.status,
@@ -257,11 +257,13 @@ export function createPerformanceInterceptor(): {
       };
       return config;
     },
-    response: async (response: Response, data: any) => {
+    response: async (response: Response, data: unknown) => {
       const requestConfig = (response as any).requestConfig;
       if (requestConfig?.metadata?.startTime) {
         const duration = performance.now() - requestConfig.metadata.startTime;
-        console.log(`[Performance] ${requestConfig.url}: ${duration.toFixed(2)}ms`);
+        console.log(
+          `[Performance] ${requestConfig.url}: ${duration.toFixed(2)}ms`
+        );
       }
       return data;
     },
@@ -272,7 +274,7 @@ export function createPerformanceInterceptor(): {
  * Parse rate limit headers
  */
 export function createRateLimitInterceptor(): ResponseInterceptor {
-  return async (response: Response, data: any) => {
+  return async (response: Response, data: unknown) => {
     const limit = response.headers.get("X-RateLimit-Limit");
     const remaining = response.headers.get("X-RateLimit-Remaining");
     const reset = response.headers.get("X-RateLimit-Reset");
@@ -293,7 +295,7 @@ export function createRateLimitInterceptor(): ResponseInterceptor {
  * Transform snake_case to camelCase
  */
 export function createCaseConversionInterceptor(): ResponseInterceptor {
-  return async (response: Response, data: any) => {
+  return async (response: Response, data: unknown) => {
     if (typeof data !== "object" || data === null) {
       return data;
     }
@@ -306,22 +308,19 @@ export function createCaseConversionInterceptor(): ResponseInterceptor {
  * Transform object keys recursively
  */
 function transformKeys(
-  obj: any,
+  obj: unknown,
   transformer: (key: string) => string
-): any {
+): unknown {
   if (Array.isArray(obj)) {
     return obj.map((item) => transformKeys(item, transformer));
   }
 
   if (obj !== null && typeof obj === "object") {
-    return Object.keys(obj).reduce(
-      (result, key) => {
-        const newKey = transformer(key);
-        result[newKey] = transformKeys(obj[key], transformer);
-        return result;
-      },
-      {} as any
-    );
+    return Object.keys(obj).reduce((result, key) => {
+      const newKey = transformer(key);
+      (result as any)[newKey] = transformKeys((obj as any)[key], transformer);
+      return result;
+    }, {} as any);
   }
 
   return obj;
@@ -340,13 +339,14 @@ function snakeToCamel(str: string): string {
 export function createErrorLoggingInterceptor(
   enabled: boolean = true
 ): ErrorInterceptor {
-  return async (error: any) => {
+  return async (error: unknown) => {
+    const err = error as any;
     if (enabled) {
       console.error("[API Error]", {
-        message: error.message,
-        status: error.statusCode || error.status,
-        url: error.path,
-        timestamp: error.timestamp,
+        message: err.message,
+        status: err.statusCode || err.status,
+        url: err.path,
+        timestamp: err.timestamp,
       });
     }
     return error;
@@ -358,10 +358,11 @@ export function createErrorLoggingInterceptor(
  * Converts API errors to user-friendly messages
  */
 export function createErrorTransformInterceptor(): ErrorInterceptor {
-  return async (error: any) => {
+  return async (error: unknown) => {
+    const err = error as any;
     // Add user-friendly message if available
-    if (error.getUserMessage && typeof error.getUserMessage === "function") {
-      error.userMessage = error.getUserMessage();
+    if (err.getUserMessage && typeof err.getUserMessage === "function") {
+      err.userMessage = err.getUserMessage();
     }
     return error;
   };
@@ -371,9 +372,10 @@ export function createErrorTransformInterceptor(): ErrorInterceptor {
  * Retry after rate limit interceptor
  */
 export function createRetryAfterInterceptor(): ErrorInterceptor {
-  return async (error: any) => {
-    if (error.statusCode === 429) {
-      const retryAfter = error.retryAfter || 60;
+  return async (error: unknown) => {
+    const err = error as any;
+    if (err.statusCode === 429) {
+      const retryAfter = err.retryAfter || 60;
       console.warn(
         `[Rate Limit] Request throttled. Retry after ${retryAfter} seconds.`
       );
@@ -411,7 +413,9 @@ export function setupDefaultInterceptors(
   // Request interceptors
   manager.addRequestInterceptor(createRequestIdInterceptor());
   manager.addRequestInterceptor(createTimestampInterceptor());
-  manager.addRequestInterceptor(createClientInfoInterceptor(appName, appVersion));
+  manager.addRequestInterceptor(
+    createClientInfoInterceptor(appName, appVersion)
+  );
 
   if (getAuthToken) {
     manager.addRequestInterceptor(createAuthInterceptor(getAuthToken));

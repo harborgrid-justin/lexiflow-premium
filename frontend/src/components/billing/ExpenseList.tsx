@@ -3,14 +3,14 @@
  * Display and filter expenses with receipt viewing
  */
 
-import React, { useState } from 'react';
-import { Link, Form } from 'react-router';
-import { Receipt, DollarSign, Filter, FileText } from 'lucide-react';
 import type { FirmExpense } from '@/types/financial';
+import { DollarSign, FileText, Filter, Receipt } from 'lucide-react';
+import React, { useState } from 'react';
+import { Form, Link } from 'react-router';
 
 interface ExpenseListProps {
   expenses: FirmExpense[];
-  filters?: any;
+  filters?: Record<string, unknown>;
 }
 
 export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) => {
@@ -29,9 +29,8 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) =
 
     return (
       <span
-        className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
-          styles[status as keyof typeof styles] || styles.Draft
-        }`}
+        className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${styles[status as keyof typeof styles] || styles.Draft
+          }`}
       >
         {status}
       </span>
@@ -177,7 +176,7 @@ export const ExpenseList: React.FC<ExpenseListProps> = ({ expenses, filters }) =
                   {getStatusBadge(expense.status)}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4">
-                  {(expense as any).receipt ? (
+                  {(expense as unknown as { receipt: boolean }).receipt ? (
                     <button
                       type="button"
                       className="flex items-center gap-1 text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"

@@ -20,8 +20,8 @@ import type { WorkflowInstance } from '@/api/workflow/workflow-api';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import type { User } from '@/types';
 import { cn } from '@/utils/cn';
 import {
@@ -36,15 +36,15 @@ import React, { useMemo, useState } from 'react';
 
 type ViewMode = 'list' | 'kanban' | 'calendar';
 
-export const CaseOperationsCenter: React.FC = () => {
+export const CaseOperationsCenter: React.FC<{ caseId?: string }> = ({ caseId }) => {
   const { isDark } = useTheme();
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [filterStatus, setFilterStatus] = useState('all');
 
   // Fetch tasks from workflow API with error handling
   const { data: tasks, isLoading: tasksLoading } = useQuery(
-    ['workflow', 'instances'],
-    () => api.workflow.getInstances(),
+    ['workflow', 'instances', caseId],
+    () => api.workflow.getInstances(caseId ? { caseId } : undefined),
     {
       retry: false,
       onError: (error: Error) => console.warn('[CaseOperationsCenter] Workflow API not available:', error)

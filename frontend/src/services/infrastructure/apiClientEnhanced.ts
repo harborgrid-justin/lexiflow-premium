@@ -26,13 +26,12 @@
  * - POST mutations require explicit retry flag
  */
 
-import { apiClient } from './apiClient';
 import {
   ApiTimeoutError,
   ExternalServiceError,
   NetworkError,
-  
-} from '@/services/core/errors';
+} from "@/services/core/errors";
+import { apiClient } from "./apiClient";
 
 /**
  * Retry configuration options
@@ -64,14 +63,19 @@ export interface RequestConfig extends RetryConfig {
 export type RequestInterceptor = (
   endpoint: string,
   config?: RequestConfig
-) => { endpoint: string; config?: RequestConfig } | Promise<{ endpoint: string; config?: RequestConfig }>;
+) =>
+  | { endpoint: string; config?: RequestConfig }
+  | Promise<{ endpoint: string; config?: RequestConfig }>;
 
 export type ResponseInterceptor = <T>(
   response: T,
   endpoint: string
 ) => T | Promise<T>;
 
-export type ErrorInterceptor = (error: unknown, endpoint: string) => unknown | Promise<unknown>;
+export type ErrorInterceptor = (
+  error: unknown,
+  endpoint: string
+) => unknown | Promise<unknown>;
 
 /**
  * Enhanced API Client Class
@@ -81,7 +85,9 @@ class ApiClientEnhanced {
   private readonly DEFAULT_INITIAL_DELAY_MS = 1000;
   private readonly DEFAULT_MAX_DELAY_MS = 30000;
   private readonly DEFAULT_BACKOFF_MULTIPLIER = 2;
-  private readonly DEFAULT_RETRYABLE_STATUS_CODES = [408, 429, 500, 502, 503, 504];
+  private readonly DEFAULT_RETRYABLE_STATUS_CODES = [
+    408, 429, 500, 502, 503, 504,
+  ];
 
   private inflightRequests = new Map<string, Promise<unknown>>();
   private requestInterceptors: RequestInterceptor[] = [];
@@ -98,11 +104,14 @@ class ApiClientEnhanced {
    */
   private logInitialization(): void {
     if (this.isDevelopment) {
-      console.log('[ApiClientEnhanced] Initialized with retry logic and interceptors', {
-        maxRetries: this.DEFAULT_MAX_RETRIES,
-        initialDelay: this.DEFAULT_INITIAL_DELAY_MS,
-        retryableStatusCodes: this.DEFAULT_RETRYABLE_STATUS_CODES,
-      });
+      console.log(
+        "[ApiClientEnhanced] Initialized with retry logic and interceptors",
+        {
+          maxRetries: this.DEFAULT_MAX_RETRIES,
+          initialDelay: this.DEFAULT_INITIAL_DELAY_MS,
+          retryableStatusCodes: this.DEFAULT_RETRYABLE_STATUS_CODES,
+        }
+      );
     }
   }
 
@@ -168,7 +177,10 @@ class ApiClientEnhanced {
     endpoint: string,
     config?: RequestConfig
   ): Promise<{ endpoint: string; config?: RequestConfig }> {
-    let result = { endpoint, config };
+    let result: { endpoint: string; config?: RequestConfig } = {
+      endpoint,
+      config,
+    };
     for (const interceptor of this.requestInterceptors) {
       result = await interceptor(result.endpoint, result.config);
     }
@@ -178,7 +190,10 @@ class ApiClientEnhanced {
   /**
    * Apply all response interceptors
    */
-  private async applyResponseInterceptors<T>(response: T, endpoint: string): Promise<T> {
+  private async applyResponseInterceptors<T>(
+    response: T,
+    endpoint: string
+  ): Promise<T> {
     let result = response;
     for (const interceptor of this.responseInterceptors) {
       result = await interceptor(result, endpoint);
@@ -189,7 +204,10 @@ class ApiClientEnhanced {
   /**
    * Apply all error interceptors
    */
-  private async applyErrorInterceptors(error: unknown, endpoint: string): Promise<unknown> {
+  private async applyErrorInterceptors(
+    error: unknown,
+    endpoint: string
+  ): Promise<unknown> {
     let result = error;
     for (const interceptor of this.errorInterceptors) {
       result = await interceptor(result, endpoint);
@@ -210,7 +228,8 @@ class ApiClientEnhanced {
     maxDelay: number,
     backoffMultiplier: number
   ): number {
-    const exponentialDelay = initialDelay * Math.pow(backoffMultiplier, attempt);
+    const exponentialDelay =
+      initialDelay * Math.pow(backoffMultiplier, attempt);
     const delayWithJitter = exponentialDelay * (0.5 + Math.random() * 0.5); // Add ±50% jitter
     return Math.min(delayWithJitter, maxDelay);
   }
@@ -219,13 +238,16 @@ class ApiClientEnhanced {
    * Sleep for specified milliseconds
    */
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   /**
    * Determine if error is retryable
    */
-  private isRetryableError(error: unknown, retryableStatusCodes: number[]): boolean {
+  private isRetryableError(
+    error: unknown,
+    retryableStatusCodes: number[]
+  ): boolean {
     // Network errors are retryable
     if (error instanceof NetworkError || error instanceof ApiTimeoutError) {
       return true;
@@ -234,7 +256,10 @@ class ApiClientEnhanced {
     // Check if it's an API error with retryable status code
     if (error instanceof ExternalServiceError) {
       const apiError = error as unknown as { statusCode?: number };
-      if (apiError.statusCode && retryableStatusCodes.includes(apiError.statusCode)) {
+      if (
+        apiError.statusCode &&
+        retryableStatusCodes.includes(apiError.statusCode)
+      ) {
         return true;
       }
     }
@@ -243,10 +268,10 @@ class ApiClientEnhanced {
     if (error instanceof Error) {
       const message = error.message.toLowerCase();
       if (
-        message.includes('network') ||
-        message.includes('timeout') ||
-        message.includes('aborted') ||
-        message.includes('fetch')
+        message.includes("network") ||
+        message.includes("timeout") ||
+        message.includes("aborted") ||
+        message.includes("fetch")
       ) {
         return true;
       }
@@ -266,8 +291,10 @@ class ApiClientEnhanced {
     const maxRetries = config.maxRetries ?? this.DEFAULT_MAX_RETRIES;
     const initialDelay = config.initialDelayMs ?? this.DEFAULT_INITIAL_DELAY_MS;
     const maxDelay = config.maxDelayMs ?? this.DEFAULT_MAX_DELAY_MS;
-    const backoffMultiplier = config.backoffMultiplier ?? this.DEFAULT_BACKOFF_MULTIPLIER;
-    const retryableStatusCodes = config.retryableStatusCodes ?? this.DEFAULT_RETRYABLE_STATUS_CODES;
+    const backoffMultiplier =
+      config.backoffMultiplier ?? this.DEFAULT_BACKOFF_MULTIPLIER;
+    const retryableStatusCodes =
+      config.retryableStatusCodes ?? this.DEFAULT_RETRYABLE_STATUS_CODES;
 
     let lastError: unknown;
 
@@ -276,7 +303,10 @@ class ApiClientEnhanced {
         const result = await requestFn();
 
         if (attempt > 0 && this.isDevelopment) {
-          console.log(`[ApiClientEnhanced] Request succeeded after ${attempt} retries:`, endpoint);
+          console.log(
+            `[ApiClientEnhanced] Request succeeded after ${attempt} retries:`,
+            endpoint
+          );
         }
 
         return result;
@@ -285,18 +315,30 @@ class ApiClientEnhanced {
 
         // Check if we should retry
         const shouldRetryCustom = config.shouldRetry?.(error, attempt);
-        const shouldRetryDefault = this.isRetryableError(error, retryableStatusCodes);
+        const shouldRetryDefault = this.isRetryableError(
+          error,
+          retryableStatusCodes
+        );
         const shouldRetry = shouldRetryCustom ?? shouldRetryDefault;
 
         if (!shouldRetry || attempt >= maxRetries) {
           if (this.isDevelopment) {
-            console.error(`[ApiClientEnhanced] Request failed after ${attempt} attempts:`, endpoint, error);
+            console.error(
+              `[ApiClientEnhanced] Request failed after ${attempt} attempts:`,
+              endpoint,
+              error
+            );
           }
           throw error;
         }
 
         // Calculate delay and wait before retry
-        const delay = this.calculateRetryDelay(attempt, initialDelay, maxDelay, backoffMultiplier);
+        const delay = this.calculateRetryDelay(
+          attempt,
+          initialDelay,
+          maxDelay,
+          backoffMultiplier
+        );
 
         if (this.isDevelopment) {
           console.warn(
@@ -319,8 +361,12 @@ class ApiClientEnhanced {
   /**
    * Generate request fingerprint for deduplication
    */
-  private getRequestFingerprint(method: string, endpoint: string, data?: unknown): string {
-    const dataHash = data ? JSON.stringify(data) : '';
+  private getRequestFingerprint(
+    method: string,
+    endpoint: string,
+    data?: unknown
+  ): string {
+    const dataHash = data ? JSON.stringify(data) : "";
     return `${method}:${endpoint}:${dataHash}`;
   }
 
@@ -341,7 +387,7 @@ class ApiClientEnhanced {
     const existing = this.inflightRequests.get(fingerprint);
     if (existing) {
       if (this.isDevelopment) {
-        console.log('[ApiClientEnhanced] Deduplicating request:', fingerprint);
+        console.log("[ApiClientEnhanced] Deduplicating request:", fingerprint);
       }
       return existing as Promise<T>;
     }
@@ -370,7 +416,11 @@ class ApiClientEnhanced {
     // Apply request interceptors
     const intercepted = await this.applyRequestInterceptors(endpoint, config);
 
-    const fingerprint = this.getRequestFingerprint('GET', intercepted.endpoint, params);
+    const fingerprint = this.getRequestFingerprint(
+      "GET",
+      intercepted.endpoint,
+      params
+    );
 
     try {
       const result = await this.executeWithDeduplication(
@@ -393,7 +443,10 @@ class ApiClientEnhanced {
       return await this.applyResponseInterceptors(result, intercepted.endpoint);
     } catch (error) {
       // Apply error interceptors
-      const transformedError = await this.applyErrorInterceptors(error, intercepted.endpoint);
+      const transformedError = await this.applyErrorInterceptors(
+        error,
+        intercepted.endpoint
+      );
       throw transformedError;
     }
   }
@@ -411,13 +464,20 @@ class ApiClientEnhanced {
     // Apply request interceptors
     const intercepted = await this.applyRequestInterceptors(endpoint, config);
 
-    const fingerprint = this.getRequestFingerprint('POST', intercepted.endpoint, data);
+    const fingerprint = this.getRequestFingerprint(
+      "POST",
+      intercepted.endpoint,
+      data
+    );
 
     try {
       const result = await this.executeWithDeduplication(
         fingerprint,
         async () => {
-          if (intercepted.config?.skipRetry || !intercepted.config?.retryOnPost) {
+          if (
+            intercepted.config?.skipRetry ||
+            !intercepted.config?.retryOnPost
+          ) {
             return apiClient.post<T>(intercepted.endpoint, data);
           }
 
@@ -434,7 +494,10 @@ class ApiClientEnhanced {
       return await this.applyResponseInterceptors(result, intercepted.endpoint);
     } catch (error) {
       // Apply error interceptors
-      const transformedError = await this.applyErrorInterceptors(error, intercepted.endpoint);
+      const transformedError = await this.applyErrorInterceptors(
+        error,
+        intercepted.endpoint
+      );
       throw transformedError;
     }
   }
@@ -443,11 +506,19 @@ class ApiClientEnhanced {
    * Enhanced PUT request with retry logic
    * PUT is idempotent, so retries are enabled by default
    */
-  async put<T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<T> {
+  async put<T>(
+    endpoint: string,
+    data?: unknown,
+    config?: RequestConfig
+  ): Promise<T> {
     // Apply request interceptors
     const intercepted = await this.applyRequestInterceptors(endpoint, config);
 
-    const fingerprint = this.getRequestFingerprint('PUT', intercepted.endpoint, data);
+    const fingerprint = this.getRequestFingerprint(
+      "PUT",
+      intercepted.endpoint,
+      data
+    );
 
     try {
       const result = await this.executeWithDeduplication(
@@ -470,7 +541,10 @@ class ApiClientEnhanced {
       return await this.applyResponseInterceptors(result, intercepted.endpoint);
     } catch (error) {
       // Apply error interceptors
-      const transformedError = await this.applyErrorInterceptors(error, intercepted.endpoint);
+      const transformedError = await this.applyErrorInterceptors(
+        error,
+        intercepted.endpoint
+      );
       throw transformedError;
     }
   }
@@ -478,11 +552,19 @@ class ApiClientEnhanced {
   /**
    * Enhanced PATCH request with retry logic
    */
-  async patch<T>(endpoint: string, data?: unknown, config?: RequestConfig): Promise<T> {
+  async patch<T>(
+    endpoint: string,
+    data?: unknown,
+    config?: RequestConfig
+  ): Promise<T> {
     // Apply request interceptors
     const intercepted = await this.applyRequestInterceptors(endpoint, config);
 
-    const fingerprint = this.getRequestFingerprint('PATCH', intercepted.endpoint, data);
+    const fingerprint = this.getRequestFingerprint(
+      "PATCH",
+      intercepted.endpoint,
+      data
+    );
 
     try {
       const result = await this.executeWithDeduplication(
@@ -505,7 +587,10 @@ class ApiClientEnhanced {
       return await this.applyResponseInterceptors(result, intercepted.endpoint);
     } catch (error) {
       // Apply error interceptors
-      const transformedError = await this.applyErrorInterceptors(error, intercepted.endpoint);
+      const transformedError = await this.applyErrorInterceptors(
+        error,
+        intercepted.endpoint
+      );
       throw transformedError;
     }
   }
@@ -518,7 +603,10 @@ class ApiClientEnhanced {
     // Apply request interceptors
     const intercepted = await this.applyRequestInterceptors(endpoint, config);
 
-    const fingerprint = this.getRequestFingerprint('DELETE', intercepted.endpoint);
+    const fingerprint = this.getRequestFingerprint(
+      "DELETE",
+      intercepted.endpoint
+    );
 
     try {
       const result = await this.executeWithDeduplication(
@@ -541,7 +629,10 @@ class ApiClientEnhanced {
       return await this.applyResponseInterceptors(result, intercepted.endpoint);
     } catch (error) {
       // Apply error interceptors
-      const transformedError = await this.applyErrorInterceptors(error, intercepted.endpoint);
+      const transformedError = await this.applyErrorInterceptors(
+        error,
+        intercepted.endpoint
+      );
       throw transformedError;
     }
   }
@@ -561,13 +652,20 @@ class ApiClientEnhanced {
     try {
       const result = await (async () => {
         if (intercepted.config?.skipRetry) {
-          return apiClient.upload<T>(intercepted.endpoint, file, additionalData);
+          return apiClient.upload<T>(
+            intercepted.endpoint,
+            file,
+            additionalData
+          );
         }
 
         // File uploads can be retried
         return this.executeWithRetry(
           () => apiClient.upload<T>(intercepted.endpoint, file, additionalData),
-          { ...intercepted.config, retryableStatusCodes: [408, 500, 502, 503, 504] },
+          {
+            ...intercepted.config,
+            retryableStatusCodes: [408, 500, 502, 503, 504],
+          },
           intercepted.endpoint
         );
       })();
@@ -576,7 +674,10 @@ class ApiClientEnhanced {
       return await this.applyResponseInterceptors(result, intercepted.endpoint);
     } catch (error) {
       // Apply error interceptors
-      const transformedError = await this.applyErrorInterceptors(error, intercepted.endpoint);
+      const transformedError = await this.applyErrorInterceptors(
+        error,
+        intercepted.endpoint
+      );
       throw transformedError;
     }
   }
@@ -633,14 +734,17 @@ class ApiClientEnhanced {
   public clearInflightCache(): void {
     this.inflightRequests.clear();
     if (this.isDevelopment) {
-      console.log('[ApiClientEnhanced] Cleared in-flight request cache');
+      console.log("[ApiClientEnhanced] Cleared in-flight request cache");
     }
   }
 
   /**
    * Get statistics
    */
-  public getStats(): { inflightRequests: number; interceptors: { request: number; response: number; error: number } } {
+  public getStats(): {
+    inflightRequests: number;
+    interceptors: { request: number; response: number; error: number };
+  } {
     return {
       inflightRequests: this.inflightRequests.size,
       interceptors: {
@@ -659,4 +763,4 @@ export const apiClientEnhanced = new ApiClientEnhanced();
 export { ApiClientEnhanced };
 
 // Re-export types from base client
-export type {  PaginatedResponse } from './apiClient';
+export type { PaginatedResponse } from "./apiClient";

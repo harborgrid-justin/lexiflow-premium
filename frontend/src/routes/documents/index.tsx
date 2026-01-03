@@ -13,7 +13,7 @@
 import { DocumentsApiService } from '@/api/admin/documents-api';
 import { DocumentFilters, DocumentList, type DocumentFilterOptions, type ViewMode } from '@/components/features/documents/components';
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -36,7 +36,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
   try {
     const url = new URL(request.url);
     const filters = {
@@ -96,7 +96,7 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function DocumentsIndexRoute() {
-  const { documents, totalCount: _totalCount } = loaderData;
+  const { documents, totalCount: _totalCount } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [filters, setFilters] = useState<DocumentFilterOptions>({});
   const [filteredDocs, setFilteredDocs] = useState(documents);
@@ -112,7 +112,7 @@ export default function DocumentsIndexRoute() {
       filtered = filtered.filter(doc =>
         doc.title.toLowerCase().includes(search) ||
         doc.content.toLowerCase().includes(search) ||
-        doc.tags.some(tag => tag.toLowerCase().includes(search))
+        doc.tags.some((tag: string) => tag.toLowerCase().includes(search))
       );
     }
 
@@ -160,7 +160,7 @@ export default function DocumentsIndexRoute() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = documents.find(d => d.id === id)?.title || 'document.pdf';
+      a.download = documents.find((d: any) => d.id === id)?.title || 'document.pdf';
       a.click();
       URL.revokeObjectURL(url);
     } catch (error) {

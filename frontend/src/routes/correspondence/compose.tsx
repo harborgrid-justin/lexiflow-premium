@@ -12,7 +12,7 @@
  * @module routes/correspondence/compose
  */
 
-import { Form, Link, useNavigate } from 'react-router';
+import { Form, Link, useLoaderData, useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/compose";
@@ -63,11 +63,11 @@ export function meta() {
 // Loader
 // ============================================================================
 
-export async function loader(): Promise<LoaderData> {
+export async function loader({ request }: Route.LoaderArgs): Promise<LoaderData> {
   const url = new URL(request.url);
   const draftId = url.searchParams.get('draft');
   const templateId = url.searchParams.get('template');
-console.log('template ID:', templateId);
+  console.log('template ID:', templateId);
 
   // TODO: Fetch templates from API
   const templates: Template[] = [
@@ -199,7 +199,7 @@ export async function action({ request }: Route.ActionArgs): Promise<ActionData>
 
 export default function ComposeCorrespondenceRoute() {
   const navigate = useNavigate();
-  const { templates, draftId } = loaderData as LoaderData;
+  const { templates, draftId } = useLoaderData<typeof loader>();
 
   const handleCancel = () => {
     navigate('/correspondence');

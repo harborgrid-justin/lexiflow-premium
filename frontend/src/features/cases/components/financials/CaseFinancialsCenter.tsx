@@ -21,8 +21,8 @@ import { api } from '@/api';
 import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/utils/cn';
 import {
   BarChart3,
@@ -34,21 +34,21 @@ import {
 } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 
-export const CaseFinancialsCenter: React.FC = () => {
+export const CaseFinancialsCenter: React.FC<{ caseId?: string }> = ({ caseId }) => {
   const { isDark } = useTheme();
   const [dateRange, setDateRange] = useState<'30d' | '90d' | 'ytd' | 'all'>('30d');
   const [viewMode, setViewMode] = useState<'overview' | 'billing' | 'expenses' | 'budget'>('overview');
 
   // Fetch invoices
   const { data: invoices } = useQuery(
-    ['billing', 'invoices'],
-    () => api.billing.getInvoices()
+    ['billing', 'invoices', caseId],
+    () => api.billing.getInvoices(caseId ? { caseId } : undefined)
   );
 
   // Fetch time entries
   const { data: timeEntries } = useQuery(
-    ['billing', 'time-entries'],
-    () => api.billing.getTimeEntries()
+    ['billing', 'time-entries', caseId],
+    () => api.billing.getTimeEntries(caseId ? { caseId } : undefined)
   );
 
   // Fetch matters for revenue attribution

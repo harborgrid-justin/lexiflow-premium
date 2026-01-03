@@ -57,7 +57,7 @@ export interface ActivityItem {
   action: string;
   target?: string;
   timestamp: Date;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface ActivityFeedProps {

@@ -93,7 +93,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 // Layout Component
 // ============================================================================
 
-export default function Layout({ loaderData: _loaderData }: Route.ComponentProps) {
+export default function Layout() {
   // React Router hooks
   const location = useLocation();
   const navigate = useNavigate();

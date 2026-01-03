@@ -12,47 +12,57 @@
  */
 
 // API Clients
-export { apiClient, ApiClient } from './apiClient';
-export type { ApiError, PaginatedResponse, ServiceHealth, SystemHealth } from './apiClient';
-
-export { apiClientEnhanced, ApiClientEnhanced } from './apiClientEnhanced';
+export { ApiClient, apiClient } from "./apiClient";
 export type {
-  RetryConfig,
+  ApiError,
+  PaginatedResponse,
+  ServiceHealth,
+  SystemHealth,
+} from "./apiClient";
+
+export { ApiClientEnhanced, apiClientEnhanced } from "./apiClientEnhanced";
+export type {
+  ErrorInterceptor,
   RequestConfig,
   RequestInterceptor,
   ResponseInterceptor,
-  ErrorInterceptor,
-} from './apiClientEnhanced';
+  RetryConfig,
+} from "./apiClientEnhanced";
 
 // WebSocket Client
-export { websocketClient, WebSocketClient } from './websocketClient';
-export type { ConnectionState, EventHandler, WebSocketError, RoomSubscription } from './websocketClient';
+export { WebSocketClient, websocketClient } from "./websocketClient";
+export type {
+  ConnectionState,
+  EventHandler,
+  RoomSubscription,
+  WebSocketError,
+} from "./websocketClient";
 
 // Query Client
-export { queryClient, QueryClient } from './queryClient';
-export type { QueryKey, QueryFunction, QueryState } from './queryTypes';
+export { QueryClient, queryClient } from "./queryClient";
+export type { QueryFunction, QueryKey, QueryState } from "./queryTypes";
 
 // Interceptors
 export {
-  setupInterceptors,
-  setupDevelopmentInterceptors,
-  setupErrorInterceptors,
+  authErrorInterceptor,
   loggingRequestInterceptor,
   loggingResponseInterceptor,
+  networkErrorInterceptor,
   performanceRequestInterceptor,
   performanceResponseInterceptor,
-  authErrorInterceptor,
   rateLimitErrorInterceptor,
-  networkErrorInterceptor,
-  validationErrorInterceptor,
-  serverErrorInterceptor,
   requestIdInterceptor,
+  serverErrorInterceptor,
+  setupDevelopmentInterceptors,
+  setupErrorInterceptors,
+  setupInterceptors,
   tenantIsolationInterceptor,
-} from './interceptors';
+  validationErrorInterceptor,
+} from "./interceptors";
 
 // Cache Manager
-export { CacheManager } from './CacheManager';
+export { CacheManager } from "./CacheManager";
 
 // Storage Adapters
-export { defaultStorage, createStorageAdapter } from './adapters/StorageAdapter';
-export type { StorageAdapter } from './adapters/StorageAdapter';
+export { defaultStorage } from "./adapters/StorageAdapter";
+export type { IStorageAdapter as StorageAdapter } from "./adapters/StorageAdapter";

@@ -22,10 +22,14 @@
 import { CaseDetail } from '@/components/features/cases/pages/CaseDetailPage';
 import { DataService } from '@/services/data/dataService';
 import { Suspense, useCallback } from 'react';
-import { useNavigate } from 'react-router';
-import type { Route } from "./+types/case-detail";
-import { RouteErrorBoundary, NotFoundError } from '../_shared/RouteErrorBoundary';
+import { Await, redirect, useLoaderData, useNavigate } from 'react-router';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createCaseMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/case-detail";
+
+function CardSkeleton() {
+  return <div className="h-64 rounded-lg bg-gray-200 dark:bg-gray-700" />;
+}
 
 // ============================================================================
 // Meta Tags
@@ -117,7 +121,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 
         await DataService.cases.update(caseId, updates);
         return { success: true, message: "Case updated successfully" };
-      } catch {
+      } catch (error) {
         return {
           success: false,
           error: error instanceof Error ? error.message : "Failed to update case",
@@ -130,7 +134,7 @@ export async function action({ params, request }: Route.ActionArgs) {
         await DataService.cases.delete(caseId);
         // Redirect to cases list on successful delete
         return redirect("/cases");
-      } catch {
+      } catch (error) {
         return {
           success: false,
           error: error instanceof Error ? error.message : "Failed to delete case",
@@ -178,7 +182,7 @@ function CaseDetailSkeleton() {
 
       {/* Tabs Skeleton */}
       <div className="mb-6 flex gap-4 border-b border-gray-200 dark:border-gray-700">
-        {Array.from({ length: 5 }).map((_) => (
+        {Array.from({ length: 5 }).map((_, i) => (
           <div
             key={i}
             className="h-10 w-24 rounded-t bg-gray-200 dark:bg-gray-700"
@@ -216,7 +220,7 @@ function StreamedDataLoading({ label }: { label: string }) {
 // ============================================================================
 
 export default function CaseDetailRoute() {
-  const { caseData, documents, parties } = loaderData;
+  const { caseData, documents, parties } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
 
   // Memoized navigation handlers
@@ -239,12 +243,12 @@ export default function CaseDetailRoute() {
         resolve={documents}
         errorElement={<StreamedDataLoading label="documents (error)" />}
       >
-        {(resolvedDocuments) => (
+        {(resolvedDocuments: any) => (
           <Await
             resolve={parties}
             errorElement={<StreamedDataLoading label="parties (error)" />}
           >
-            {(resolvedParties) => (
+            {(resolvedParties: any) => (
               <CaseDetail
                 caseData={caseData}
                 initialDocuments={resolvedDocuments}

@@ -4,8 +4,8 @@
  */
 
 import { TrustAccountsApiService } from '@/api/billing';
-import TrustAccountDashboard from '@/features/operations/billing/trust/TrustAccountDashboard';
-import { Link } from 'react-router';
+import { TrustAccountDashboard } from '@/features/operations/billing/trust/TrustAccountDashboard';
+import { Link, useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/trust";
@@ -34,16 +34,16 @@ export async function loader({ request }: Route.LoaderArgs) {
   const trustApi = new TrustAccountsApiService();
 
   try {
-    const _accounts = await trustApi.getAll({
+    const accounts = await trustApi.getAll({
       clientId: clientId || undefined,
-      status: (status as 'active' | 'inactive' | 'closed') || undefined,
+      status: (status as any) || undefined,
     });
 
     return {
       accounts,
       filters: { clientId, status },
     };
-  } catch {
+  } catch (error) {
     console.error('Failed to load trust accounts:', error);
     return {
       accounts: [],
@@ -66,7 +66,7 @@ export async function action({ request }: Route.ActionArgs) {
       const depositAccountId = formData.get("accountId") as string;
       const depositData = {
         amount: parseFloat(formData.get("amount") as string),
-        date: formData.get("date") as string,
+        transactionDate: new Date(formData.get("date") as string),
         description: formData.get("description") as string,
         checkNumber: formData.get("checkNumber") as string || undefined,
         payorName: formData.get("payorName") as string,
@@ -84,7 +84,7 @@ export async function action({ request }: Route.ActionArgs) {
       const withdrawAccountId = formData.get("accountId") as string;
       const withdrawData = {
         amount: parseFloat(formData.get("amount") as string),
-        date: formData.get("date") as string,
+        transactionDate: new Date(formData.get("date") as string),
         description: formData.get("description") as string,
         checkNumber: formData.get("checkNumber") as string || undefined,
         payeeName: formData.get("payeeName") as string,
@@ -101,7 +101,7 @@ export async function action({ request }: Route.ActionArgs) {
     case "reconcile": {
       const reconcileAccountId = formData.get("accountId") as string;
       const reconcileData = {
-        reconciliationDate: formData.get("reconciliationDate") as string,
+        reconciliationDate: new Date(formData.get("reconciliationDate") as string),
         bankStatementBalance: parseFloat(formData.get("bankStatementBalance") as string),
         mainLedgerBalance: parseFloat(formData.get("mainLedgerBalance") as string),
         clientLedgersTotalBalance: parseFloat(formData.get("clientLedgersTotalBalance") as string),
@@ -125,8 +125,8 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function TrustAccountsRoute({ loaderData, actionData }: Route.ComponentProps) {
-  const { accounts: _accounts, filters: _filters } = loaderData;
+export default function TrustAccountsRoute({ actionData }: Route.ComponentProps) {
+  const { accounts: _accounts, filters: _filters } = useLoaderData() as Route.ComponentProps['loaderData'];
 
   return (
     <div className="p-8">

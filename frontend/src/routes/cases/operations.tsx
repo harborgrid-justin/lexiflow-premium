@@ -4,6 +4,7 @@
 
 import { CaseOperationsCenter } from '@/features/cases/components/operations/CaseOperationsCenter';
 import { DataService } from '@/services/data/dataService';
+import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/operations";
 
 export function meta({ data }: Route.MetaArgs) {
@@ -20,7 +21,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function CaseOperationsRoute() {
-  return <CaseOperationsCenter caseId={loaderData.case.id} />;
+  const { case: caseData } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  return <CaseOperationsCenter caseId={caseData.id} />;
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

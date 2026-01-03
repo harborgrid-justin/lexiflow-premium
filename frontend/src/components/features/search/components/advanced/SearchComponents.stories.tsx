@@ -15,8 +15,8 @@ type Story = StoryObj<typeof CategoryFilter>;
 
 export const Default: Story = {
   args: {
-  "activeCategory": undefined,
-  onCategoryChange: () => {},
-  "theme": {} as any
-},
+    "activeCategory": undefined,
+    onCategoryChange: () => { },
+    "theme": {} as unknown as any
+  },
 };

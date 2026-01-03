@@ -12,9 +12,30 @@
 
 import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { DataService } from '@/services/data/dataService';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import type { Route } from "./+types/billing";
+
+interface TimeEntry {
+  id: string;
+  description?: string;
+  user?: string;
+  date: string;
+  hours: number;
+  amount: number;
+}
+
+interface ExpenseEntry {
+  amount?: number;
+}
+
+interface Invoice {
+  id: string;
+  number?: string;
+  date: string;
+  status: string;
+  total: number;
+}
 
 // ============================================================================
 // Meta Tags
@@ -52,9 +73,6 @@ export async function loader({ params }: Route.LoaderArgs) {
   }
 
   // Calculate totals
-  interface TimeEntry { hours?: number; amount?: number }
-  interface ExpenseEntry { amount?: number }
-  interface Invoice { total?: number }
   const totalHours = timeEntries.reduce((sum: number, entry: TimeEntry) => sum + (entry.hours || 0), 0);
   const totalBilled = timeEntries.reduce((sum: number, entry: TimeEntry) => sum + (entry.amount || 0), 0);
   const totalExpenses = expenses.reduce((sum: number, entry: ExpenseEntry) => sum + (entry.amount || 0), 0);
@@ -94,7 +112,7 @@ function formatHours(hours: number): string {
 // ============================================================================
 
 export default function CaseBillingRoute() {
-  const { caseData, timeEntries, invoices, expenses, totals } = loaderData;
+  const { caseData, timeEntries, invoices, expenses, totals } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
   console.log('useNavigate:', navigate);
 
@@ -223,12 +241,12 @@ export default function CaseBillingRoute() {
             <div className="mb-4 h-4 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
               <div
                 className={`h-full transition-all ${budgetUtilization >= 100
-                    ? 'bg-red-500'
-                    : budgetUtilization >= 80
-                      ? 'bg-orange-500'
-                      : budgetUtilization >= 60
-                        ? 'bg-yellow-500'
-                        : 'bg-green-500'
+                  ? 'bg-red-500'
+                  : budgetUtilization >= 80
+                    ? 'bg-orange-500'
+                    : budgetUtilization >= 60
+                      ? 'bg-yellow-500'
+                      : 'bg-green-500'
                   }`}
                 style={{ width: `${Math.min(budgetUtilization, 100)}%` }}
               />
@@ -286,7 +304,7 @@ export default function CaseBillingRoute() {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Time Entries</h3>
             </div>
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
-              {timeEntries.slice(0, 5).map((entry: any) => (
+              {timeEntries.slice(0, 5).map((entry: TimeEntry) => (
                 <div key={entry.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <div className="flex items-center justify-between">
                     <div className="min-w-0 flex-1">
@@ -322,7 +340,7 @@ export default function CaseBillingRoute() {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Invoices</h3>
             </div>
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
-              {invoices.slice(0, 5).map((invoice: any) => (
+              {invoices.slice(0, 5).map((invoice: Invoice) => (
                 <div key={invoice.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50">
                   <div className="flex items-center justify-between">
                     <div className="min-w-0 flex-1">

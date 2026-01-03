@@ -87,7 +87,7 @@ export function InlineEditor({
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [value]);
+  }, [handleSave]);
 
   const handleSave = useCallback(() => {
     // Convert value to appropriate type

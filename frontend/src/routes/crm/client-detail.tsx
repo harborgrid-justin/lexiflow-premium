@@ -7,19 +7,20 @@
  */
 
 import { useNavigate } from 'react-router';
-import type { Route } from "./+types/client-detail";
-import { RouteErrorBoundary, NotFoundError } from '../_shared/RouteErrorBoundary';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/client-detail";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
 export function meta({ data }: Route.MetaArgs) {
+  const item = (data as any)?.item;
   return createDetailMeta({
     entityType: 'Client',
-    entityName: data?.item?.name,
-    entityId: data?.item?.id,
+    entityName: item?.name ?? 'Unknown Client',
+    entityId: item?.id ?? 'unknown',
   });
 }
 
@@ -41,7 +42,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   //   throw new Response("Client not found", { status: 404 });
   // }
 
-  return { item: null };
+  return { item: null as { id: string; name: string } | null };
 }
 
 // ============================================================================

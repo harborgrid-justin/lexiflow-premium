@@ -10,16 +10,16 @@
  * @module routes/calendar/index
  */
 
-import { Link } from 'react-router';
-import type { Route } from "./+types/index";
+import { Link, useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ _data }: Route.MetaArgs) {
+export function meta({ data: _data }: Route.MetaArgs) {
   return createMeta({
     title: 'Master Calendar',
     description: 'View and manage all deadlines, court dates, and appointments',
@@ -30,7 +30,7 @@ export function meta({ _data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
   // Parse URL for date range
   const url = new URL(request.url);
   const view = url.searchParams.get("view") || "month";
@@ -78,7 +78,7 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function CalendarIndexRoute() {
-  const { events, view, currentDate } = loaderData;
+  const { events, view, currentDate } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
 
   return (
     <div className="p-8">
@@ -98,31 +98,28 @@ export default function CalendarIndexRoute() {
           <div className="flex rounded-lg border border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
             <Link
               to="?view=month"
-              className={`px-3 py-2 text-sm font-medium ${
-                view === 'month'
-                  ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
-                  : 'text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700'
-              }`}
+              className={`px-3 py-2 text-sm font-medium ${view === 'month'
+                ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
+                : 'text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700'
+                }`}
             >
               Month
             </Link>
             <Link
               to="?view=week"
-              className={`border-l border-r border-gray-200 px-3 py-2 text-sm font-medium dark:border-gray-700 ${
-                view === 'week'
-                  ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
-                  : 'text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700'
-              }`}
+              className={`border-l border-r border-gray-200 px-3 py-2 text-sm font-medium dark:border-gray-700 ${view === 'week'
+                ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
+                : 'text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700'
+                }`}
             >
               Week
             </Link>
             <Link
               to="?view=day"
-              className={`px-3 py-2 text-sm font-medium ${
-                view === 'day'
-                  ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
-                  : 'text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700'
-              }`}
+              className={`px-3 py-2 text-sm font-medium ${view === 'day'
+                ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
+                : 'text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700'
+                }`}
             >
               Day
             </Link>

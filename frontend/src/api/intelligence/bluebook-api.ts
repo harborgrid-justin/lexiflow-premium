@@ -3,13 +3,13 @@
  * Enterprise-grade Bluebook citation management and formatting
  */
 
-import { apiClient } from '@/services/infrastructure/apiClient';
+import { apiClient } from "@/services/infrastructure/apiClient";
 import {
   BatchFormatRequest,
   BatchFormatResult,
+  CitationFormat,
   FormattedCitation,
-  CitationFormat
-} from '@/types/bluebook';
+} from "@/types/bluebook";
 
 export interface CitationValidation {
   citation: string;
@@ -27,13 +27,15 @@ export interface CitationParseResult {
 }
 
 export class BluebookApiService {
-  private readonly baseUrl = '/bluebook';
+  private readonly baseUrl = "/bluebook";
 
   /**
    * Parse a raw citation
    */
   async parseCitation(citation: string): Promise<CitationParseResult> {
-    return apiClient.post<CitationParseResult>(`${this.baseUrl}/parse`, { citation });
+    return apiClient.post<CitationParseResult>(`${this.baseUrl}/parse`, {
+      citation,
+    });
   }
 
   /**
@@ -46,10 +48,15 @@ export class BluebookApiService {
       italicizeCaseNames?: boolean;
       useSmallCaps?: boolean;
     }
-  ): Promise<{ original: string; formatted: string; type: string; parsed: any }> {
-    return apiClient.post('/bluebook/format', {
+  ): Promise<{
+    original: string;
+    formatted: string;
+    type: string;
+    parsed: unknown;
+  }> {
+    return apiClient.post("/bluebook/format", {
       citation,
-      ...options
+      ...options,
     });
   }
 
@@ -66,9 +73,9 @@ export class BluebookApiService {
     errors: unknown[];
     parsed: unknown;
   }> {
-    return apiClient.post('/bluebook/validate', {
+    return apiClient.post("/bluebook/validate", {
       citation,
-      expectedType
+      expectedType,
     });
   }
 
@@ -77,7 +84,10 @@ export class BluebookApiService {
    */
   async getCitationHistory(documentId?: string): Promise<FormattedCitation[]> {
     const params = documentId ? { documentId } : {};
-    return apiClient.get<FormattedCitation[]>(`${this.baseUrl}/history`, params);
+    return apiClient.get<FormattedCitation[]>(
+      `${this.baseUrl}/history`,
+      params
+    );
   }
 
   /**
@@ -92,14 +102,16 @@ export class BluebookApiService {
    * Batch format multiple citations
    */
   async batchFormat(request: BatchFormatRequest): Promise<BatchFormatResult> {
-    return apiClient.post('/bluebook/batch', request);
+    return apiClient.post("/bluebook/batch", request);
   }
 
   /**
    * Generate table of authorities
    */
-  async generateTableOfAuthorities(citations: string[]): Promise<{ html: string; count: number }> {
-    return apiClient.post('/bluebook/table-of-authorities', { citations });
+  async generateTableOfAuthorities(
+    citations: string[]
+  ): Promise<{ html: string; count: number }> {
+    return apiClient.post("/bluebook/table-of-authorities", { citations });
   }
 }
 

@@ -16,7 +16,7 @@
 
 import { ApiKeysApiService } from '@/api/auth/security-credentials-api';
 import type { ApiKey } from '@/types';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { z } from 'zod';
 
 const apiKeySchema = z.object({
@@ -65,10 +65,9 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
 
   const apiKeysService = new ApiKeysApiService();
 
-  const loadData = async () => {
-    setIsLoading(true);
-
+  const loadData = useCallback(async () => {
     try {
+      setIsLoading(true);
       const [keys, scopes] = await Promise.all([
         apiKeysService.getAll(),
         apiKeysService.getAvailableScopes(),
@@ -82,11 +81,11 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
   const handleInputChange = (field: keyof ApiKeyFormData) => (
     e: React.ChangeEvent<HTMLInputElement>

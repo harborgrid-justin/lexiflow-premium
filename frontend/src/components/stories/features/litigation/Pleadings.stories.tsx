@@ -1,20 +1,17 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { PleadingDocument } from '@/types';
-import { PleadingBuilder } from '../../../../features/litigation/pleadings/PleadingBuilder';
-import { PleadingDashboard } from '@features/litigation/pleadings';
-import PleadingDesigner from '../../../../features/litigation/pleadings/PleadingDesigner';
-import { PleadingTemplates } from '@features/litigation/pleadings';
-import { PleadingDrafts } from '@features/litigation/pleadings';
-import { PleadingFilingQueue } from '@features/litigation/pleadings';
-import { PleadingAnalytics } from '@features/litigation/pleadings';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
 import { ToastProvider } from '@/providers';
+import type { PleadingDocument } from '@/types';
+import type { CaseId } from '@/types/primitives';
+import { PleadingAnalytics, PleadingDashboard, PleadingDrafts, PleadingFilingQueue, PleadingTemplates } from '@features/litigation/pleadings';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import React from "react";
+import { PleadingBuilder } from '../../../../features/litigation/pleadings/PleadingBuilder';
+import PleadingDesigner from '../../../../features/litigation/pleadings/PleadingDesigner';
 
 /**
  * Pleading components provide comprehensive tools for drafting, managing, and filing
  * court documents including complaints, motions, briefs, and orders.
- * 
+ *
  * ## Features
  * - Visual pleading builder and designer
  * - Template library with customization
@@ -79,10 +76,10 @@ export const WithTemplate: Story = {
       <ToastProvider>
         <div className="min-h-screen bg-slate-50">
           <PleadingDashboard caseId="case-123" onCreate={function (_newDoc: PleadingDocument): void {
-                        throw new Error('Function not implemented.');
-                    } } onEdit={function (_id: string): void {
-                        throw new Error('Function not implemented.');
-                    } } />
+            throw new Error('Function not implemented.');
+          }} onEdit={function (_id: string): void {
+            throw new Error('Function not implemented.');
+          }} />
         </div>
       </ToastProvider>
     </ThemeProvider>
@@ -103,8 +100,8 @@ export const WithTemplate: Story = {
 export const Designer: StoryObj<Meta<typeof PleadingDesigner>> = {
   render: () => {
     const mockPleading: PleadingDocument = {
-      id: 'pleading-123' as any,
-      caseId: 'case-123' as any,
+      id: 'pleading-123' as DocumentId,
+      caseId: 'case-123' as CaseId,
       title: 'Motion to Dismiss',
       status: 'Draft',
       filingStatus: 'Pre-Filing',

@@ -3,12 +3,13 @@
  * Form for creating/editing expenses with receipt upload
  */
 
+import type { FirmExpense } from '@/types/financial';
+import { FileText, Upload, X } from 'lucide-react';
 import React, { useState } from 'react';
 import { Form } from 'react-router';
-import { Upload, X, FileText } from 'lucide-react';
 
 interface ExpenseFormProps {
-  expense?: any;
+  expense?: Partial<FirmExpense>;
   onCancel?: () => void;
   actionError?: string;
 }
@@ -258,8 +259,8 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
                         {selectedFile?.size
                           ? `${(selectedFile.size / 1024).toFixed(1)} KB`
                           : expense?.receipt?.size
-                          ? `${(expense.receipt.size / 1024).toFixed(1)} KB`
-                          : ''}
+                            ? `${(expense.receipt.size / 1024).toFixed(1)} KB`
+                            : ''}
                       </p>
                     </div>
                   </div>

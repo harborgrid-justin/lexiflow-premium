@@ -67,9 +67,9 @@ interface RequestInfo {
  */
 interface QueuedRequest {
   endpoint: string;
-  execute: () => Promise<any>;
-  resolve: (value: any) => void;
-  reject: (error: any) => void;
+  execute: () => Promise<unknown>;
+  resolve: (value: unknown) => void;
+  reject: (error: unknown) => void;
   addedAt: number;
 }
 
@@ -282,10 +282,7 @@ export class RateLimiter {
    * @returns Promise with function result
    * @throws RateLimitError if rate limit exceeded and queuing disabled
    */
-  public async execute<T>(
-    endpoint: string,
-    fn: () => Promise<T>
-  ): Promise<T> {
+  public async execute<T>(endpoint: string, fn: () => Promise<T>): Promise<T> {
     const status = this.isAllowed(endpoint);
 
     if (status.allowed) {

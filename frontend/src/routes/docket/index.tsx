@@ -11,7 +11,7 @@
 
 import { api } from '@/api';
 import { format } from 'date-fns';
-import { Form, Link, useNavigation } from 'react-router';
+import { Form, Link, useLoaderData, useLocation, useNavigation, useSearchParams } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -32,7 +32,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const search = url.searchParams.get("search") || undefined;
   const type = url.searchParams.get("type") || undefined;
@@ -107,10 +107,10 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function DocketIndexRoute() {
-  const { entries, totalCount, page, totalPages } = loaderData;
+  const { entries, totalCount, page, totalPages } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigation = useNavigation();
   const location = useLocation();
-console.log('location data:', location);
+  console.log('location data:', location);
   const [searchParams] = useSearchParams();
   const isSubmitting = navigation.state === "submitting";
 

@@ -6,10 +6,10 @@
  * @module routes/workflows/new
  */
 
-import { useNavigate, Form, useNavigation, redirect } from 'react-router';
-import type { Route } from "./+types/new";
-import { createMeta } from '../_shared/meta-utils';
+import { Form, redirect, useNavigate, useNavigation } from 'react-router';
 import { api } from '../../api';
+import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/new";
 
 // ============================================================================
 // Meta Tags
@@ -44,7 +44,7 @@ export async function action({ request }: Route.ActionArgs) {
       status: 'draft',
       steps: []
     });
-    
+
     return redirect(`/workflows/${template.id}`);
   } catch (error) {
     console.error("Error creating workflow:", error);
@@ -58,7 +58,6 @@ export async function action({ request }: Route.ActionArgs) {
 
 export default function NewWorkflowRoute({ actionData }: Route.ComponentProps) {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 

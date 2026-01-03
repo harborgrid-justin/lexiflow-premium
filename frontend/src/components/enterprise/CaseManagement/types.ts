@@ -8,60 +8,64 @@
 
 // Re-export types from EnterpriseCaseList
 export type {
+  BulkOperation,
+  ColumnConfig,
+  EnterpriseCaseListProps,
   FilterCriteria,
   SavedView,
-  ColumnConfig,
-  BulkOperation,
-  EnterpriseCaseListProps,
-} from './EnterpriseCaseList';
+} from "./EnterpriseCaseList";
 
 // Re-export types from CaseTemplates
 export type {
   CaseTemplate,
-  TemplateField,
-  ChecklistItem,
-  TemplateDocument,
-  TemplateMilestone,
-  PracticeArea,
   CaseTemplatesProps,
-} from './CaseTemplates';
+  ChecklistItem,
+  PracticeArea,
+  TemplateDocument,
+  TemplateField,
+  TemplateMilestone,
+} from "./CaseTemplates";
 
 // Re-export types from EnhancedCaseTimeline
 export type {
-  EventType,
+  EnhancedCaseTimelineProps,
   EventStatus,
+  EventType,
   TimelineEvent,
   TimelineGroup,
   ViewMode,
-  EnhancedCaseTimelineProps,
-} from './EnhancedCaseTimeline';
+} from "./EnhancedCaseTimeline";
 
 // Re-export types from CaseTeam
 export type {
-  TeamMemberRole,
-  Permission,
-  TeamMember,
-  RoleTemplate,
-  WorkloadSummary,
   CaseTeamProps,
-} from './CaseTeam';
+  Permission,
+  RoleTemplate,
+  TeamMember,
+  TeamMemberRole,
+  WorkloadSummary,
+} from "./CaseTeam";
 
 // Re-export types from CaseBudget
 export type {
-  BudgetCategory,
   BudgetAlert,
-  Expense,
+  BudgetCategory,
   BudgetPeriod,
   CaseBudgetProps,
-} from './CaseBudget';
+  Expense,
+} from "./CaseBudget";
 
 // Common Enterprise Features
 export interface ConflictCheckResult {
   hasConflict: boolean;
-  conflictType?: 'client' | 'opposing-party' | 'adverse-interest' | 'prior-representation';
+  conflictType?:
+    | "client"
+    | "opposing-party"
+    | "adverse-interest"
+    | "prior-representation";
   conflictedCases?: string[];
   conflictedParties?: string[];
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   recommendation: string;
   details?: string;
   reviewedBy?: string;
@@ -72,18 +76,28 @@ export interface RelatedMatter {
   id: string;
   caseNumber: string;
   title: string;
-  relationshipType: 'parent' | 'child' | 'related' | 'consolidated' | 'cross-reference';
+  relationshipType:
+    | "parent"
+    | "child"
+    | "related"
+    | "consolidated"
+    | "cross-reference";
   description?: string;
   status: string;
 }
 
 export interface MassOperation {
-  operationType: 'status-update' | 'bulk-assign' | 'bulk-tag' | 'bulk-archive' | 'bulk-export';
+  operationType:
+    | "status-update"
+    | "bulk-assign"
+    | "bulk-tag"
+    | "bulk-archive"
+    | "bulk-export";
   targetCaseIds: string[];
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   executedBy?: string;
   executedAt?: string;
-  status: 'pending' | 'in-progress' | 'completed' | 'failed';
+  status: "pending" | "in-progress" | "completed" | "failed";
   results?: {
     successful: number;
     failed: number;
@@ -115,7 +129,7 @@ export interface PracticeAreaConfig {
   optionalFields: string[];
   customFields?: Array<{
     name: string;
-    type: 'text' | 'number' | 'date' | 'select' | 'multiselect';
+    type: "text" | "number" | "date" | "select" | "multiselect";
     required: boolean;
     options?: string[];
   }>;
@@ -148,12 +162,12 @@ export interface AdvancedSearchCriteria {
   trialDateRange?: { start: string; end: string };
   budgetRange?: { min: number; max: number };
   tags?: string[];
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 }
 
 // Export configuration
 export interface ExportConfig {
-  format: 'csv' | 'xlsx' | 'pdf' | 'json';
+  format: "csv" | "xlsx" | "pdf" | "json";
   caseIds: string[];
   includeFields: string[];
   includeDocuments?: boolean;
@@ -165,7 +179,7 @@ export interface ExportConfig {
 
 // Import configuration
 export interface ImportConfig {
-  format: 'csv' | 'xlsx' | 'json';
+  format: "csv" | "xlsx" | "json";
   file: File | string;
   mapping: Record<string, string>; // Map import columns to case fields
   validateOnly?: boolean;

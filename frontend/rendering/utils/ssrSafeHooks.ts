@@ -60,6 +60,7 @@ export function useClientEffect(
     if (isBrowser()) {
       return effect();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 }
 

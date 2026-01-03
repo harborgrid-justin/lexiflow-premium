@@ -10,12 +10,12 @@
  * @module routes/cases/filings
  */
 
-import { DataService } from '@/services/data/dataService';
-import { useNavigate } from 'react-router';
-import type { Route } from "./+types/filings";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { FilingsTable, type Filing } from '@/components/features/cases/components/FilingsTable';
+import { DataService } from '@/services/data/dataService';
+import { useLoaderData, useNavigate } from 'react-router';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import type { Route } from "./+types/filings";
 
 // ============================================================================
 // Meta Tags
@@ -72,13 +72,13 @@ export async function loader({ params }: Route.LoaderArgs) {
 // ============================================================================
 
 export default function CaseFilingsRoute() {
-  const { caseData, filings } = loaderData;
+  const { caseData, filings } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
 
   // Count filings by status
   const draftCount = filings.filter((f: Filing) => f.status === 'draft').length;
-console.log('draft count:', draftCount);
+  console.log('draft count:', draftCount);
   const pendingCount = filings.filter((f: Filing) => f.status === 'pending').length;
   const filedCount = filings.filter((f: Filing) => f.status === 'filed').length;
 

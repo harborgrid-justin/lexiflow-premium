@@ -22,8 +22,8 @@ import { Badge } from '@/components/ui/atoms/Badge/Badge';
 import { Button } from '@/components/ui/atoms/Button/Button';
 import { Card } from '@/components/ui/molecules/Card/Card';
 import { Modal } from '@/components/ui/molecules/Modal/Modal';
-import { useQuery } from '@/hooks/useQueryHooks';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useQuery } from '@/hooks/useQueryHooks';
 import { cn } from '@/utils/cn';
 import {
   Calendar as CalendarIcon, ChevronLeft, ChevronRight,
@@ -55,7 +55,7 @@ interface CalendarEvent {
   };
 }
 
-export const CaseCalendar: React.FC = () => {
+export const CaseCalendar: React.FC<{ caseId?: string }> = ({ caseId }) => {
   const { isDark } = useTheme();
   const [view, setView] = useState<CalendarView>('month');
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -66,12 +66,12 @@ export const CaseCalendar: React.FC = () => {
 
   // Fetch calendar events
   const { data: events } = useQuery(
-    ['calendar', 'events', currentDate.toISOString().split('T')[0]],
+    ['calendar', 'events', currentDate.toISOString().split('T')[0], caseId],
     async (): Promise<CalendarEvent[]> => {
       // Fetch docket entries which contain court dates and deadlines
-      const response = await api.docket.getAll({ limit: 1000 });
+      const response = await api.docket.getAll({ limit: 1000, caseId });
       const docketEntries = response.data;
-      const matters = await api.cases.getAll();
+      const matters = caseId ? [await api.cases.getById(caseId)] : await api.cases.getAll();
 
       const calendarEvents: CalendarEvent[] = [];
 

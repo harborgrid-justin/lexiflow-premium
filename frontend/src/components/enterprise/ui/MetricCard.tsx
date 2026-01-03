@@ -7,9 +7,9 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, TrendingDown, Minus, LucideIcon } from 'lucide-react';
+import { LucideIcon, Minus, TrendingDown, TrendingUp } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -64,6 +64,11 @@ export const MetricCard: React.FC<MetricCardProps> = ({
 }) => {
   const { theme } = useTheme();
   const [displayValue, setDisplayValue] = useState(0);
+  const displayValueRef = useRef(displayValue);
+
+  useEffect(() => {
+    displayValueRef.current = displayValue;
+  }, [displayValue]);
 
   // Animated counter effect
   useEffect(() => {
@@ -73,7 +78,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
     }
 
     const startTime = performance.now();
-    const startValue = displayValue;
+    const startValue = displayValueRef.current;
     const endValue = value;
     const duration = animationDuration;
 

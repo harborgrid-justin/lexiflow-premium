@@ -13,7 +13,7 @@
  */
 
 import { AuthApiService } from '@/api/auth/auth-api';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { z } from 'zod';
 
 const verificationSchema = z.object({
@@ -48,7 +48,7 @@ export const MFASetup: React.FC<MFASetupProps> = ({
 
   const authService = new AuthApiService();
 
-  const initializeMFASetup = async () => {
+  const initializeMFASetup = useCallback(async () => {
     setIsLoading(true);
     setError('');
 
@@ -63,11 +63,11 @@ export const MFASetup: React.FC<MFASetupProps> = ({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     initializeMFASetup();
-  }, []);
+  }, [initializeMFASetup]);
 
   const handleVerificationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -6,6 +6,7 @@
 
 import { CaseAnalyticsDashboard } from '@/features/cases/components/analytics/CaseAnalyticsDashboard';
 import { DataService } from '@/services/data/dataService';
+import { useLoaderData } from 'react-router';
 import type { Route } from "./+types/analytics";
 
 export function meta({ data }: Route.MetaArgs) {
@@ -28,7 +29,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 
 export default function CaseAnalyticsRoute() {
-  return <CaseAnalyticsDashboard caseData={loaderData.case} />;
+  const { case: caseData } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
+  return <CaseAnalyticsDashboard caseId={caseData.id} />;
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

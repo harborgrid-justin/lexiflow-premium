@@ -130,7 +130,7 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function BillingIndexRoute() {
-  const { invoices, summary } = loaderData;
+  const { invoices, summary } = useLoaderData<typeof loader>();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
@@ -213,7 +213,7 @@ export default function BillingIndexRoute() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-              {invoices.map((invoice) => (
+              {invoices.map((invoice: Invoice) => (
                 <tr key={invoice.id}>
                   <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
                     {invoice.invoiceNumber}

@@ -10,18 +10,18 @@
  * @module routes/cases/documents
  */
 
+import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { DataService } from '@/services/data/dataService';
 import type { LegalDocument } from '@/types';
 import { useState } from 'react';
-import type { Route } from "./+types/documents";
+import { useLoaderData, useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: any }) {
   const caseTitle = data?.caseData?.title || 'Case Documents';
   return [
     { title: `Documents - ${caseTitle} | LexiFlow` },
@@ -33,7 +33,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { caseId } = params;
 
   if (!caseId) {
@@ -58,9 +58,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 // ============================================================================
 
 export default function CaseDocumentsRoute() {
-  const { caseData, documents } = loaderData;
+  const { caseData, documents } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
 
@@ -128,25 +127,23 @@ console.log('useNavigate:', navigate);
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setFilterType('all')}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
-                filterType === 'all'
-                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'
-              }`}
+              className={`rounded-lg px-3 py-1.5 text-sm font-medium ${filterType === 'all'
+                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'
+                }`}
             >
               All
             </button>
             {documentTypes.map((type) => (
               <button
-                key={type}
-                onClick={() => setFilterType(type)}
-                className={`rounded-lg px-3 py-1.5 text-sm font-medium ${
-                  filterType === type
-                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'
-                }`}
+                key={type as string}
+                onClick={() => setFilterType(type as string)}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium ${filterType === type
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'
+                  }`}
               >
-                {type}
+                {type as string}
               </button>
             ))}
           </div>
@@ -216,7 +213,7 @@ console.log('useNavigate:', navigate);
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

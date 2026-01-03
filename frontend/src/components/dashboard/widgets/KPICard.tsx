@@ -5,7 +5,7 @@
  * Designed for executive dashboards with professional styling and animations
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { TrendingUp, TrendingDown, Minus, LucideIcon } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
@@ -146,11 +146,14 @@ export const KPICard: React.FC<KPICardProps> = ({
   }, [value, previousValue, changePercentage, trend]);
 
   // Animate numeric values
+  const displayValueRef = useRef(displayValue);
+  displayValueRef.current = displayValue;
+
   useEffect(() => {
     if (typeof value === 'number' && !isLoading) {
       const duration = 1000;
       const startTime = performance.now();
-      const startValue = displayValue;
+      const startValue = displayValueRef.current;
       const endValue = value;
 
       const animate = (currentTime: number) => {
@@ -175,8 +178,8 @@ export const KPICard: React.FC<KPICardProps> = ({
   const colors = colorClasses[color];
   const TrendIcon = change.trend === 'up' ? TrendingUp : change.trend === 'down' ? TrendingDown : Minus;
   const trendColor = change.trend === 'up' ? 'text-emerald-600 dark:text-emerald-400' :
-                     change.trend === 'down' ? 'text-red-600 dark:text-red-400' :
-                     'text-gray-500 dark:text-gray-400';
+    change.trend === 'down' ? 'text-red-600 dark:text-red-400' :
+      'text-gray-500 dark:text-gray-400';
 
   return (
     <div

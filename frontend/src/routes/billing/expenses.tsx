@@ -3,18 +3,17 @@
  * Displays expense tracking list with filtering
  */
 
-import { Link } from 'react-router';
-import type { Route } from "./+types/expenses";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import { createListMeta } from '../_shared/meta-utils';
 import { ExpensesApiService } from '@/api/billing';
 import { ExpenseList } from '@/components/billing/ExpenseList';
+import { Link, useActionData, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { createListMeta } from '../_shared/meta-utils';
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: any }) {
   return createListMeta({
     entityType: 'Expenses',
     count: data?.expenses?.length,
@@ -26,7 +25,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ request }: Route.LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const caseId = url.searchParams.get('caseId');
   console.log('case ID:', caseId);
@@ -39,14 +38,14 @@ export async function loader({ request }: Route.LoaderArgs) {
     const expenses = await expensesApi.getAll({
       caseId: caseId || undefined,
       category: category || undefined,
-      status: (status as 'pending' | 'approved' | 'rejected') || undefined,
+      status: (status as "Draft" | "Approved" | "Rejected" | "Billed" | "Submitted") || undefined,
     });
 
     return {
       expenses,
       filters: { caseId, category, status },
     };
-  } catch {
+  } catch (error) {
     console.error('Failed to load expenses:', error);
     return {
       expenses: [],
@@ -59,7 +58,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request }: Route.ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
   const expensesApi = new ExpensesApiService();
@@ -70,7 +69,7 @@ export async function action({ request }: Route.ActionArgs) {
       try {
         await expensesApi.approve(approveId);
         return { success: true, message: "Expense approved" };
-      } catch {
+      } catch (_error) {
         return { success: false, error: "Failed to approve expense" };
       }
     }
@@ -80,7 +79,7 @@ export async function action({ request }: Route.ActionArgs) {
       try {
         await expensesApi.delete(deleteId);
         return { success: true, message: "Expense deleted" };
-      } catch {
+      } catch (_error) {
         return { success: false, error: "Failed to delete expense" };
       }
     }
@@ -94,8 +93,9 @@ export async function action({ request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function ExpensesRoute({ loaderData, actionData }: Route.ComponentProps) {
-  const { expenses, filters } = loaderData;
+export default function ExpensesRoute() {
+  const { expenses, filters } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
 
   return (
     <div className="p-8">

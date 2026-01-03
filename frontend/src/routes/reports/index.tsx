@@ -20,7 +20,7 @@ import {
   Plus,
   Search
 } from 'lucide-react';
-import { Form, Link, useSubmit } from 'react-router';
+import { Form, Link, useLoaderData, useSubmit } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/index";
@@ -40,7 +40,7 @@ export function meta(_: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const search = url.searchParams.get("q") || "";
   const category = url.searchParams.get("category") || "all";
@@ -69,7 +69,7 @@ export async function loader() {
       nextRun: '2024-02-01T09:00:00Z',
       createdAt: '2023-01-01T00:00:00Z',
       updatedAt: '2024-01-15T10:30:00Z',
-      userId: 'user-1',
+      // userId: 'user-1',
     },
     {
       id: '2',
@@ -91,7 +91,7 @@ export async function loader() {
       nextRun: '2024-04-01T08:00:00Z',
       createdAt: '2023-02-15T00:00:00Z',
       updatedAt: '2023-12-20T14:15:00Z',
-      userId: 'user-1',
+      // userId: 'user-1',
     },
     {
       id: '3',
@@ -106,7 +106,7 @@ export async function loader() {
       status: 'draft',
       createdAt: '2024-01-10T00:00:00Z',
       updatedAt: '2024-01-10T16:45:00Z',
-      userId: 'user-1',
+      // userId: 'user-1',
     },
     {
       id: '4',
@@ -128,7 +128,7 @@ export async function loader() {
       nextRun: '2024-01-29T06:00:00Z',
       createdAt: '2023-11-05T00:00:00Z',
       updatedAt: '2023-11-05T09:20:00Z',
-      userId: 'user-1',
+      // userId: 'user-1',
     },
   ];
 
@@ -160,7 +160,7 @@ export async function loader() {
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
-  const _id = formData.get("id");
+  // const _id = formData.get("id");
 
   try {
     switch (intent) {
@@ -190,7 +190,7 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function ReportsIndexRoute() {
-  const { reports, search, category } = loaderData;
+  const { reports, search, category } = useLoaderData() as Route.ComponentProps['loaderData'];
   const submit = useSubmit();
 
   const categories: { value: ReportCategory | 'all'; label: string }[] = [

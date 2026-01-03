@@ -572,7 +572,7 @@ export function useEnhancedFormValidation<
     if (validateOnMount) {
       validateAll();
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [validateOnMount, validateAll]);
 
   // Computed values
   const errors = useMemo(() => {

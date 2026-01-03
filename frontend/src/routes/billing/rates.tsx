@@ -6,15 +6,15 @@
 import { RateTablesApiService } from '@/api/billing';
 import RateTableManagement from '@/features/operations/billing/rate-tables/RateTableManagement';
 import { Suspense } from 'react';
+import { useLoaderData } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createListMeta } from '../_shared/meta-utils';
-import type { Route } from "./+types/rates";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: any }) {
   return createListMeta({
     entityType: 'Rate Tables',
     count: data?.rateTables?.length,
@@ -30,7 +30,7 @@ export async function loader() {
   const rateTablesApi = new RateTablesApiService();
 
   try {
-    const _rateTables = await rateTablesApi.getAll();
+    const rateTables = await rateTablesApi.getAll();
 
     return {
       rateTables,
@@ -48,7 +48,7 @@ export async function loader() {
 // ============================================================================
 
 export default function RateTablesRoute() {
-  const { rateTables: _rateTables } = loaderData;
+  const { rateTables: _rateTables } = useLoaderData<typeof loader>();
 
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-full"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>}>

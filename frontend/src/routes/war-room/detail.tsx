@@ -7,9 +7,9 @@
  */
 
 import { useNavigate } from 'react-router';
-import type { Route } from "./+types/detail";
-import { RouteErrorBoundary, NotFoundError } from '../_shared/RouteErrorBoundary';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/detail";
 
 // ============================================================================
 // Meta Tags
@@ -18,8 +18,8 @@ import { createDetailMeta } from '../_shared/meta-utils';
 export function meta({ data }: Route.MetaArgs) {
   return createDetailMeta({
     entityType: 'War Room',
-    entityName: data?.item?.name,
-    entityId: data?.item?.id,
+    entityName: (data as any)?.item?.name,
+    entityId: (data as any)?.item?.id,
   });
 }
 

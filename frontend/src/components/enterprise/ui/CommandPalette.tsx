@@ -15,22 +15,23 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Search,
-  Command,
-  Clock,
-  FileText,
-  Users,
-  Settings,
-  HelpCircle,
-  ChevronRight,
-  Hash,
   BarChart,
   Calendar,
-  Folder} from 'lucide-react';
+  ChevronRight,
+  Clock,
+  Command,
+  FileText,
+  Folder,
+  Hash,
+  HelpCircle,
+  Search,
+  Settings,
+  Users
+} from 'lucide-react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 // ============================================================================
 // INTERNAL DEPENDENCIES
@@ -60,7 +61,7 @@ export interface SearchResult {
   description?: string;
   type: 'case' | 'client' | 'document' | 'contact' | 'task' | 'other';
   icon?: React.ElementType;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   onClick: () => void;
 }
 
@@ -101,7 +102,8 @@ const getIconForType = (type: string): React.ElementType => {
     task: Calendar,
     settings: Settings,
     help: HelpCircle,
-    analytics: BarChart};
+    analytics: BarChart
+  };
   return iconMap[type] || Hash;
 };
 
@@ -115,7 +117,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   placeholder = 'Search or type a command...',
   recentItems = [],
   maxRecent = 5,
-  className}) => {
+  className }) => {
   const { theme } = useTheme();
 
   // ============================================================================
@@ -261,6 +263,29 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   }, [query, currentActions, searchResults, recentItems, maxRecent]);
 
   // ============================================================================
+  // ITEM SELECTION
+  // ============================================================================
+
+  const handleSelectItem = useCallback((item: typeof items[0]) => {
+    if (item.type === 'action') {
+      const action = item.data as CommandAction;
+
+      if (action.children && action.children.length > 0) {
+        setCurrentPath([...currentPath, action]);
+        setQuery('');
+        setSelectedIndex(0);
+      } else {
+        action.onSelect();
+        setIsOpen(false);
+      }
+    } else if (item.type === 'result' || item.type === 'recent') {
+      const result = item.data as SearchResult;
+      result.onClick();
+      setIsOpen(false);
+    }
+  }, [currentPath, setIsOpen]);
+
+  // ============================================================================
   // KEYBOARD NAVIGATION
   // ============================================================================
 
@@ -290,31 +315,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           break;
       }
     },
-    [items, selectedIndex, query, currentPath]
+    [items, selectedIndex, query, currentPath, handleSelectItem]
   );
-
-  // ============================================================================
-  // ITEM SELECTION
-  // ============================================================================
-
-  const handleSelectItem = (item: typeof items[0]) => {
-    if (item.type === 'action') {
-      const action = item.data as CommandAction;
-
-      if (action.children && action.children.length > 0) {
-        setCurrentPath([...currentPath, action]);
-        setQuery('');
-        setSelectedIndex(0);
-      } else {
-        action.onSelect();
-        setIsOpen(false);
-      }
-    } else if (item.type === 'result' || item.type === 'recent') {
-      const result = item.data as SearchResult;
-      result.onClick();
-      setIsOpen(false);
-    }
-  };
 
   // Scroll selected item into view
   useEffect(() => {

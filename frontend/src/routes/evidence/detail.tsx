@@ -7,9 +7,9 @@
  */
 
 import { useNavigate } from 'react-router';
-import type { Route } from "./+types/detail";
-import { RouteErrorBoundary, NotFoundError } from '../_shared/RouteErrorBoundary';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createDetailMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/detail";
 
 // ============================================================================
 // Meta Tags
@@ -18,8 +18,8 @@ import { createDetailMeta } from '../_shared/meta-utils';
 export function meta({ data }: Route.MetaArgs) {
   return createDetailMeta({
     entityType: 'Evidence',
-    entityName: data?.item?.title,
-    entityId: data?.item?.id,
+    entityName: data?.item?.title ?? 'Unknown Evidence',
+    entityId: data?.item?.id ?? 'unknown',
   });
 }
 
@@ -41,7 +41,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   //   throw new Response("Evidence not found", { status: 404 });
   // }
 
-  return { item: null };
+  return { item: null as { id: string; title: string } | null };
 }
 
 // ============================================================================

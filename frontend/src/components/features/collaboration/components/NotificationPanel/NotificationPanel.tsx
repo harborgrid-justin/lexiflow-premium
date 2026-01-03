@@ -49,9 +49,9 @@ export const NotificationPanel = React.memo(function NotificationPanel() {
       const allNotifications = (await NotificationService.getNotifications()) as Notification[];
       setNotifications(allNotifications);
       // Group notifications by similar titles
-      const grouped = allNotifications.reduce((acc: (Notification | any)[], notification) => {
-        const existing = acc.find(item => 'notifications' in item && item.notifications[0].title === notification.title);
-        if (existing && 'notifications' in existing) {
+      const grouped = allNotifications.reduce((acc: (Notification | NotificationGroup)[], notification) => {
+        const existing = acc.find((item): item is NotificationGroup => 'notifications' in item && item.notifications[0].title === notification.title);
+        if (existing) {
           existing.notifications.push(notification);
           existing.count++;
           const notifDate = notification.createdAt || notification.timestamp;
@@ -64,13 +64,14 @@ export const NotificationPanel = React.memo(function NotificationPanel() {
           const groupIndex = acc.indexOf(single);
           const singleDate = single.createdAt || single.timestamp || new Date().toISOString();
           const notifDate = notification.createdAt || notification.timestamp || new Date().toISOString();
-          acc[groupIndex] = {
+          const newGroup: NotificationGroup = {
             groupKey: notification.title,
             notifications: [single, notification],
             count: 2,
             latestTimestamp: Math.max(new Date(singleDate).getTime(), new Date(notifDate).getTime()),
             collapsed: false,
           };
+          acc[groupIndex] = newGroup;
         } else {
           acc.push(notification);
         }

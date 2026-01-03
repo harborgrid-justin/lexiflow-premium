@@ -7,8 +7,8 @@
 import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
-import { useNotify } from '@/hooks/useNotify';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { useNotify } from '@/hooks/useNotify';
 import type { DocumentCoding, ReviewDocument } from '@/types/discovery-enhanced';
 import { cn } from '@/utils/cn';
 import { ChevronLeft, ChevronRight, Download, Eye, FileText, Filter, Flag, MessageSquare, Search, Tag } from 'lucide-react';
@@ -124,7 +124,7 @@ export const Review: React.FC = () => {
     // In production, this would call API to save coding
   };
 
-  const handleCodingChange = (field: keyof DocumentCoding, value: any) => {
+  const handleCodingChange = (field: keyof DocumentCoding, value: DocumentCoding[keyof DocumentCoding]) => {
     setCurrentCoding(prev => ({ ...prev, [field]: value }));
   };
 

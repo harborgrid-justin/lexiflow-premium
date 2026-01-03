@@ -63,7 +63,7 @@ export function CaseFilters({
 
   const statuses = getAllStatuses();
 
-  const handleFilterChange = (key: keyof CaseFilterValues, value: any) => {
+  const handleFilterChange = (key: keyof CaseFilterValues, value: unknown) => {
     onFiltersChange({
       ...filters,
       [key]: value,

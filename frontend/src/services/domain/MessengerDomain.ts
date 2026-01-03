@@ -3,8 +3,8 @@
  * @updated 2025-12-19
  */
 
-import { api } from '@/api';
-import type { Conversation, Message } from '@/api/communications/messaging-api';
+import { api } from "@/api";
+import type { Conversation, Message } from "@/api/communications/messaging-api";
 
 export const MessengerService = {
   getAll: async () => {
@@ -16,8 +16,17 @@ export const MessengerService = {
     return api.messaging.getConversation(id);
   },
 
-  add: async (item: { participants: string[]; subject?: string; initialMessage?: string }) => {
-    return api.messaging.createConversation(item);
+  add: async (item: {
+    participants: string[];
+    subject?: string;
+    initialMessage?: string;
+  }) => {
+    return api.messaging.createConversation({
+      participantIds: item.participants,
+      type: item.participants.length > 1 ? "group" : "direct",
+      subject: item.subject,
+      initialMessage: item.initialMessage,
+    });
   },
 
   update: async (id: string, updates: Partial<Conversation>) => {
@@ -38,12 +47,31 @@ export const MessengerService = {
     return api.messaging.getContacts(filters);
   },
 
-  sendMessage: async (data: { conversationId: string; body: string; priority?: Message['priority']; attachments?: string[] }) => {
-    return api.messaging.sendMessage(data);
+  sendMessage: async (data: {
+    conversationId: string;
+    body: string;
+    priority?: Message["priority"];
+    attachments?: string[];
+  }) => {
+    return api.messaging.sendMessage({
+      conversationId: data.conversationId,
+      content: data.body,
+      priority: data.priority,
+      attachments: data.attachments,
+    });
   },
 
-  createConversation: async (data: { participants: string[]; subject?: string; initialMessage?: string }) => {
-    return api.messaging.createConversation(data);
+  createConversation: async (data: {
+    participants: string[];
+    subject?: string;
+    initialMessage?: string;
+  }) => {
+    return api.messaging.createConversation({
+      participantIds: data.participants,
+      type: data.participants.length > 1 ? "group" : "direct",
+      subject: data.subject,
+      initialMessage: data.initialMessage,
+    });
   },
 
   getMessages: async (conversationId: string) => {

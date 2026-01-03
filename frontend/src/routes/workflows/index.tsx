@@ -7,11 +7,11 @@
  * @module routes/workflows/index
  */
 
-import { Link, useNavigate, Form, useNavigation } from 'react-router';
-import type { Route } from "./+types/index";
-import { createListMeta } from '../_shared/meta-utils';
-import { api } from '../../api';
 import { useState } from 'react';
+import { Form, Link, useLoaderData, useNavigate, useNavigation } from 'react-router';
+import { api } from '../../api';
+import { createListMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/index";
 
 // ============================================================================
 // Meta Tags
@@ -29,7 +29,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const status = url.searchParams.get('status') as any;
   const category = url.searchParams.get('category') || undefined;
@@ -57,8 +57,7 @@ export async function action({ request }: Route.ActionArgs) {
         const name = formData.get("name") as string;
         const category = formData.get("category") as string;
         if (!name || !category) return { success: false, error: "Name and category are required" };
-        }
-        
+
         await api.workflow.createTemplate({
           name,
           category,
@@ -66,22 +65,23 @@ export async function action({ request }: Route.ActionArgs) {
           steps: [] // Initialize with empty steps
         });
         return { success: true, message: "Workflow template created" };
-        
+      }
+
       case "delete":
         if (!id) return { success: false, error: "ID is required" };
         await api.workflow.deleteTemplate(id);
         return { success: true, message: "Workflow template deleted" };
-        
+
       case "activate":
         if (!id) return { success: false, error: "ID is required" };
         await api.workflow.updateTemplate(id, { status: 'active' });
         return { success: true, message: "Workflow activated" };
-        
+
       case "deactivate":
         if (!id) return { success: false, error: "ID is required" };
         await api.workflow.updateTemplate(id, { status: 'inactive' });
         return { success: true, message: "Workflow deactivated" };
-        
+
       default:
         return { success: false, error: "Invalid action" };
     }
@@ -96,9 +96,9 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function WorkflowsIndexRoute() {
-  const { templates, instances } = loaderData;
+  const { templates, instances } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const [activeTab, setActiveTab] = useState<'templates' | 'instances'>('templates');
@@ -131,21 +131,19 @@ console.log('useNavigate:', navigate);
         <nav className="-mb-px flex space-x-8">
           <button
             onClick={() => setActiveTab('templates')}
-            className={`${
-              activeTab === 'templates'
-                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-            } whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium`}
+            className={`${activeTab === 'templates'
+              ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+              : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+              } whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium`}
           >
             Templates ({templates.length})
           </button>
           <button
             onClick={() => setActiveTab('instances')}
-            className={`${
-              activeTab === 'instances'
-                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-            } whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium`}
+            className={`${activeTab === 'instances'
+              ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+              : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+              } whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium`}
           >
             Active Instances ({instances.length})
           </button>
@@ -182,11 +180,10 @@ console.log('useNavigate:', navigate);
               >
                 <div className="flex flex-1 flex-col p-6">
                   <div className="flex items-center justify-between">
-                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                      template.status === 'active' 
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                        : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-                    }`}>
+                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${template.status === 'active'
+                      ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                      : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                      }`}>
                       {template.status}
                     </span>
                     <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -207,10 +204,10 @@ console.log('useNavigate:', navigate);
                   <div className="flex space-x-2">
                     <Form method="post" className="inline">
                       <input type="hidden" name="id" value={template.id} />
-                      <input 
-                        type="hidden" 
-                        name="intent" 
-                        value={template.status === 'active' ? 'deactivate' : 'activate'} 
+                      <input
+                        type="hidden"
+                        name="intent"
+                        value={template.status === 'active' ? 'deactivate' : 'activate'}
                       />
                       <button
                         type="submit"
@@ -279,13 +276,12 @@ console.log('useNavigate:', navigate);
                       {instance.id.substring(0, 8)}...
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                        instance.status === 'running' 
-                          ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
-                          : instance.status === 'completed'
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${instance.status === 'running'
+                        ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
+                        : instance.status === 'completed'
                           ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
                           : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-                      }`}>
+                        }`}>
                         {instance.status}
                       </span>
                     </td>
@@ -295,8 +291,8 @@ console.log('useNavigate:', navigate);
                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       <div className="flex items-center">
                         <div className="h-2 w-16 rounded-full bg-gray-200 dark:bg-gray-700">
-                          <div 
-                            className="h-2 rounded-full bg-blue-600" 
+                          <div
+                            className="h-2 rounded-full bg-blue-600"
                             style={{ width: `${instance.progress || 0}%` }}
                           />
                         </div>

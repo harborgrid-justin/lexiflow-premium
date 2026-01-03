@@ -11,7 +11,7 @@
  * - URL query parameter generation
  */
 
-import type { PaginatedResponse } from '@/services/infrastructure/apiClient';
+import type { PaginatedResponse } from "@/services/infrastructure/apiClient";
 
 /**
  * Pagination parameters
@@ -86,7 +86,10 @@ export function pageToOffset(
   page: number = DEFAULT_PAGE,
   limit: number = DEFAULT_PAGE_SIZE
 ): { offset: number; limit: number } {
-  const { page: validPage, limit: validLimit } = buildPaginationParams(page, limit);
+  const { page: validPage, limit: validLimit } = buildPaginationParams(
+    page,
+    limit
+  );
   const offset = (validPage - 1) * validLimit;
 
   return {
@@ -143,13 +146,18 @@ export function offsetToPage(
  * // }
  * ```
  */
-export function getPaginationMeta<T>(response: PaginatedResponse<T>): PaginationMeta {
+export function getPaginationMeta<T>(
+  response: PaginatedResponse<T>
+): PaginationMeta {
   const { page, limit, total, totalPages } = response;
 
   const currentPage = Math.max(1, page);
   const pageSize = Math.max(1, limit);
   const totalItems = Math.max(0, total);
-  const calculatedTotalPages = Math.max(1, totalPages || Math.ceil(totalItems / pageSize));
+  const calculatedTotalPages = Math.max(
+    1,
+    totalPages || Math.ceil(totalItems / pageSize)
+  );
 
   const hasNextPage = currentPage < calculatedTotalPages;
   const hasPreviousPage = currentPage > 1;
@@ -213,7 +221,7 @@ export function getPageNumbers(
 
   // Add ellipsis after first page if needed
   if (startPage > 2) {
-    pages.push('...');
+    pages.push("...");
   }
 
   // Add middle pages
@@ -223,7 +231,7 @@ export function getPageNumbers(
 
   // Add ellipsis before last page if needed
   if (endPage < totalPages - 1) {
-    pages.push('...');
+    pages.push("...");
   }
 
   // Always show last page
@@ -241,7 +249,10 @@ export function getPageNumbers(
  * @param totalPages - Total number of pages
  * @returns Next page number or null if on last page
  */
-export function getNextPage(currentPage: number, totalPages: number): number | null {
+export function getNextPage(
+  currentPage: number,
+  totalPages: number
+): number | null {
   return currentPage < totalPages ? currentPage + 1 : null;
 }
 
@@ -271,15 +282,15 @@ export function buildPaginationQuery(params: PaginationParams): string {
   const queryParams = new URLSearchParams();
 
   if (params.page !== undefined) {
-    queryParams.set('page', String(params.page));
+    queryParams.set("page", String(params.page));
   }
 
   if (params.limit !== undefined) {
-    queryParams.set('limit', String(params.limit));
+    queryParams.set("limit", String(params.limit));
   }
 
   if (params.offset !== undefined) {
-    queryParams.set('offset', String(params.offset));
+    queryParams.set("offset", String(params.offset));
   }
 
   return queryParams.toString();
@@ -308,6 +319,16 @@ export function mergePaginatedResponses<T>(
   const data = responses.flatMap((r) => r.data);
   const lastResponse = responses[responses.length - 1];
 
+  if (!lastResponse) {
+    return {
+      data,
+      total: 0,
+      page: 1,
+      limit: 10,
+      totalPages: 0,
+    };
+  }
+
   return {
     data,
     total: lastResponse.total,
@@ -330,7 +351,10 @@ export function paginateArray<T>(
   page: number = DEFAULT_PAGE,
   limit: number = DEFAULT_PAGE_SIZE
 ): PaginatedResponse<T> {
-  const { page: validPage, limit: validLimit } = buildPaginationParams(page, limit);
+  const { page: validPage, limit: validLimit } = buildPaginationParams(
+    page,
+    limit
+  );
   const { offset } = pageToOffset(validPage, validLimit);
 
   const data = items.slice(offset, offset + validLimit);

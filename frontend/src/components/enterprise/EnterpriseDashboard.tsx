@@ -514,7 +514,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
                       return [`$${(value / 1000).toFixed(0)}K`, 'Total Value'];
                     }
                     return [value, 'Cases'];
-                  }) as any}
+                  }) as unknown as any}
                 />
                 <Legend />
                 <Bar dataKey="count" name="Cases" radius={[8, 8, 0, 0]}>

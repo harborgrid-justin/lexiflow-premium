@@ -349,21 +349,22 @@ export class ServerError extends ApiErrorBase {
  * Parse error from API response
  * Converts API error responses into typed error objects
  */
-export function parseApiError(error: any): ApiErrorBase {
+export function parseApiError(error: unknown): ApiErrorBase {
+  const err = error as any;
   // Network errors
-  if (error.name === "TypeError" && error.message.includes("fetch")) {
+  if (err.name === "TypeError" && err.message.includes("fetch")) {
     return new NetworkError("Network connection failed");
   }
 
   // Timeout errors
-  if (error.name === "AbortError" || error.message?.includes("timeout")) {
+  if (err.name === "AbortError" || err.message?.includes("timeout")) {
     return new TimeoutError();
   }
 
   // HTTP errors
-  const statusCode = error.statusCode || error.status;
-  const message = error.message || error.error || "An error occurred";
-  const details = error.details || error.data;
+  const statusCode = err.statusCode || err.status;
+  const message = err.message || err.error || "An error occurred";
+  const details = err.details || err.data;
 
   switch (statusCode) {
     case 400:
@@ -404,18 +405,19 @@ export function parseApiError(error: any): ApiErrorBase {
 /**
  * Check if error is retryable
  */
-export function isRetryableError(error: any): boolean {
+export function isRetryableError(error: unknown): boolean {
   if (error instanceof NetworkError) return error.retryable;
   if (error instanceof TimeoutError) return error.retryable;
   if (error instanceof ServiceUnavailableError) return error.retryable;
-  if (error instanceof ServerError) return error.statusCode === 503 || error.statusCode === 504;
+  if (error instanceof ServerError)
+    return error.statusCode === 503 || error.statusCode === 504;
   return false;
 }
 
 /**
  * Get retry delay for error (in milliseconds)
  */
-export function getRetryDelay(error: any, retryCount: number): number {
+export function getRetryDelay(error: unknown, retryCount: number): number {
   // Rate limit errors have explicit retry-after
   if (error instanceof RateLimitError) {
     return error.retryAfter * 1000;

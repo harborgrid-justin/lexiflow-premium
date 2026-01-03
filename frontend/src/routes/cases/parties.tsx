@@ -13,15 +13,14 @@
 import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { PartiesTable } from '@/components/features/cases/components/PartiesTable';
 import { DataService } from '@/services/data/dataService';
-import { useNavigate } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import type { Route } from "./+types/parties";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: any }) {
   const caseTitle = data?.caseData?.title || 'Case Parties';
   return [
     { title: `Parties - ${caseTitle} | LexiFlow` },
@@ -33,7 +32,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { caseId } = params;
 
   if (!caseId) {
@@ -61,7 +60,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 // ============================================================================
 
 export default function CasePartiesRoute() {
-  const { caseData, parties } = loaderData;
+  const { caseData, parties } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
   console.log('useNavigate:', navigate);
 
@@ -174,7 +173,7 @@ export default function CasePartiesRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

@@ -35,10 +35,7 @@
  */
 
 import { getApiBaseUrl, getApiPrefix } from "@/config/network/api.config";
-import {
-  parseApiError,
-  ValidationError,
-} from "./errors";
+import { parseApiError, ValidationError } from "./errors";
 import {
   InterceptorManager,
   RequestConfig,
@@ -47,14 +44,10 @@ import {
 import {
   createRateLimiter,
   globalRateLimiter,
-  RateLimiter,
   RateLimitConfig,
+  RateLimiter,
 } from "./rate-limiter";
-import {
-  createRetryHandler,
-  RetryConfig,
-  RetryHandler,
-} from "./retry-handler";
+import { createRetryHandler, RetryConfig, RetryHandler } from "./retry-handler";
 
 /**
  * API client configuration
@@ -185,7 +178,7 @@ export class EnterpriseApiClient {
   private retryHandler: RetryHandler;
   private rateLimiter: RateLimiter;
   private interceptors: InterceptorManager;
-  private cache: Map<string, CacheEntry<any>> = new Map();
+  private cache: Map<string, CacheEntry<unknown>> = new Map();
   private authTokenKey: string = "lexiflow_auth_token";
   private refreshTokenKey: string = "lexiflow_refresh_token";
 
@@ -343,13 +336,12 @@ export class EnterpriseApiClient {
    */
   private async executeRequest<T>(
     config: RequestConfig,
-    body?: any,
+    body?: unknown,
     options: RequestOptions = {}
   ): Promise<T> {
     // Execute request interceptors
-    const processedConfig = await this.interceptors.executeRequestInterceptors(
-      config
-    );
+    const processedConfig =
+      await this.interceptors.executeRequestInterceptors(config);
 
     // Create fetch function
     const fetchFn = async (): Promise<T> => {
@@ -384,10 +376,8 @@ export class EnterpriseApiClient {
         const data = await response.json();
 
         // Execute response interceptors
-        const processedData = await this.interceptors.executeResponseInterceptors(
-          response,
-          data
-        );
+        const processedData =
+          await this.interceptors.executeResponseInterceptors(response, data);
 
         return processedData;
       } catch (error) {
@@ -395,9 +385,8 @@ export class EnterpriseApiClient {
         const parsedError = parseApiError(error);
 
         // Execute error interceptors
-        const processedError = await this.interceptors.executeErrorInterceptors(
-          parsedError
-        );
+        const processedError =
+          await this.interceptors.executeErrorInterceptors(parsedError);
 
         throw processedError;
       }
@@ -421,7 +410,7 @@ export class EnterpriseApiClient {
    */
   public async get<T>(
     endpoint: string,
-    params?: Record<string, any>,
+    params?: Record<string, string | number | boolean | null | undefined>,
     options: RequestOptions = {}
   ): Promise<T> {
     // Build URL with query params
@@ -462,7 +451,7 @@ export class EnterpriseApiClient {
    */
   public async post<T>(
     endpoint: string,
-    data?: any,
+    data?: unknown,
     options: RequestOptions = {}
   ): Promise<T> {
     const config = this.buildRequestConfig("POST", endpoint, options);
@@ -474,7 +463,7 @@ export class EnterpriseApiClient {
    */
   public async put<T>(
     endpoint: string,
-    data?: any,
+    data?: unknown,
     options: RequestOptions = {}
   ): Promise<T> {
     const config = this.buildRequestConfig("PUT", endpoint, options);
@@ -486,7 +475,7 @@ export class EnterpriseApiClient {
    */
   public async patch<T>(
     endpoint: string,
-    data?: any,
+    data?: unknown,
     options: RequestOptions = {}
   ): Promise<T> {
     const config = this.buildRequestConfig("PATCH", endpoint, options);
@@ -510,7 +499,7 @@ export class EnterpriseApiClient {
   public async upload<T>(
     endpoint: string,
     file: File,
-    additionalData?: Record<string, any>,
+    additionalData?: Record<string, string | Blob>,
     options: RequestOptions = {}
   ): Promise<T> {
     const formData = new FormData();

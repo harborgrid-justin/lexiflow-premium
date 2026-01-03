@@ -575,7 +575,7 @@ export const EvidenceChainOfCustody: React.FC<EvidenceChainOfCustodyProps> = ({
               ].map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
+                  onClick={() => setActiveTab(tab.id as 'transfers' | 'handling' | 'authentication')}
                   className={cn(
                     'flex items-center gap-2 px-4 py-3 border-b-2 font-medium text-sm transition-colors',
                     activeTab === tab.id

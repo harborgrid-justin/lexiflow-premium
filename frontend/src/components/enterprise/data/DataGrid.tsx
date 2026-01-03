@@ -264,6 +264,7 @@ export function DataGrid<T extends Record<string, unknown>>({
                 return false;
               }
               return true;
+            }
 
             case 'date': {
               const dateValue = new Date(cellValue as string);
@@ -405,7 +406,7 @@ export function DataGrid<T extends Record<string, unknown>>({
     });
 
     return widths;
-  }, [columns, containerWidth, enableSelection, columnWidths]);
+  }, [columns, columnWidths]);
 
   // Render header
   const renderHeader = () => (

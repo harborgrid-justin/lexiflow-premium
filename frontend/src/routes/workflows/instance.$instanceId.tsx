@@ -6,10 +6,10 @@
  * @module routes/workflows/instance.detail
  */
 
-import { Link, Form, useNavigate, useNavigation } from 'react-router';
-import type { Route } from "./+types/instance.$instanceId";
-import { createDetailMeta } from '../_shared/meta-utils';
+import { Form, Link, useLoaderData, useNavigate, useNavigation } from 'react-router';
 import { api } from '../../api';
+import { createDetailMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/instance.$instanceId";
 
 // ============================================================================
 // Meta Tags
@@ -39,7 +39,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     if (!instance) {
       throw new Response("Workflow instance not found", { status: 404 });
     }
-    
+
     // Fetch template to get step names
     let template = null;
     try {
@@ -75,11 +75,11 @@ export async function action({ params, request }: Route.ActionArgs) {
       case "pause":
         await api.workflow.pauseWorkflow(instanceId);
         return { success: true, message: "Workflow paused" };
-        
+
       case "resume":
         await api.workflow.resumeWorkflow(instanceId);
         return { success: true, message: "Workflow resumed" };
-        
+
       case "cancel":
         await api.workflow.cancelWorkflow(instanceId);
         return { success: true, message: "Workflow cancelled" };
@@ -97,7 +97,8 @@ export async function action({ params, request }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function WorkflowInstanceDetailRoute({ loaderData }: Route.ComponentProps) {
+export default function WorkflowInstanceDetailRoute() {
+  const { instance, template } = useLoaderData() as Route.ComponentProps['loaderData'];
   const { instance, template } = loaderData;
   const navigate = useNavigate();
   const navigation = useNavigation();
@@ -144,7 +145,7 @@ export default function WorkflowInstanceDetailRoute({ loaderData }: Route.Compon
               </button>
             </Form>
           )}
-          
+
           {instance.status === 'paused' && (
             <Form method="post">
               <input type="hidden" name="intent" value="resume" />
@@ -157,7 +158,7 @@ export default function WorkflowInstanceDetailRoute({ loaderData }: Route.Compon
               </button>
             </Form>
           )}
-          
+
           {(instance.status === 'running' || instance.status === 'paused') && (
             <Form method="post" onSubmit={(e) => {
               if (!confirm('Are you sure you want to cancel this workflow?')) {
@@ -191,12 +192,12 @@ export default function WorkflowInstanceDetailRoute({ loaderData }: Route.Compon
                 <span>{instance.progress || 0}%</span>
               </div>
               <div className="h-4 w-full rounded-full bg-gray-200 dark:bg-gray-700">
-                <div 
-                  className="h-4 rounded-full bg-blue-600 transition-all duration-500" 
+                <div
+                  className="h-4 rounded-full bg-blue-600 transition-all duration-500"
                   style={{ width: `${instance.progress || 0}%` }}
                 />
               </div>
-              
+
               <div className="mt-6">
                 <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-4">Current Step</h4>
                 {instance.currentStep ? (
@@ -236,15 +237,14 @@ export default function WorkflowInstanceDetailRoute({ loaderData }: Route.Compon
                 <div>
                   <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
                   <dd className="mt-1">
-                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                      instance.status === 'running' 
+                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${instance.status === 'running'
                         ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
                         : instance.status === 'completed'
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                        : instance.status === 'failed'
-                        ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-                        : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
-                    }`}>
+                          ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                          : instance.status === 'failed'
+                            ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+                            : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                      }`}>
                       {instance.status}
                     </span>
                   </dd>

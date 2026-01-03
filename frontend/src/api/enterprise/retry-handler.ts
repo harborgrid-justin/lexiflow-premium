@@ -67,17 +67,17 @@ export interface RetryConfig {
    * Custom retry predicate
    * Return true to retry, false to throw immediately
    */
-  shouldRetry?: (error: any, attemptNumber: number) => boolean;
+  shouldRetry?: (error: unknown, attemptNumber: number) => boolean;
 
   /**
    * Called before each retry attempt
    */
-  onRetry?: (error: any, attemptNumber: number, delay: number) => void;
+  onRetry?: (error: unknown, attemptNumber: number, delay: number) => void;
 
   /**
    * Called when max retries exceeded
    */
-  onMaxRetriesExceeded?: (error: any) => void;
+  onMaxRetriesExceeded?: (error: unknown) => void;
 }
 
 /**
@@ -90,15 +90,18 @@ export const DEFAULT_RETRY_CONFIG: Required<RetryConfig> = {
   backoffFactor: 2,
   useJitter: true,
   timeout: 30000,
-  shouldRetry: (error: any) => isRetryableError(error),
-  onRetry: (error: any, attemptNumber: number, delay: number) => {
+  shouldRetry: (error: unknown) => isRetryableError(error),
+  onRetry: (error: unknown, attemptNumber: number, delay: number) => {
     console.warn(
       `[RetryHandler] Retrying request (attempt ${attemptNumber}) after ${delay}ms due to:`,
-      error.message
+      (error as any).message
     );
   },
-  onMaxRetriesExceeded: (error: any) => {
-    console.error("[RetryHandler] Max retries exceeded:", error.message);
+  onMaxRetriesExceeded: (error: unknown) => {
+    console.error(
+      "[RetryHandler] Max retries exceeded:",
+      (error as any).message
+    );
   },
 };
 
@@ -115,7 +118,7 @@ function sleep(ms: number): Promise<void> {
 function calculateDelay(
   attemptNumber: number,
   config: Required<RetryConfig>,
-  error?: any
+  error?: unknown
 ): number {
   // Check for rate limit with retry-after
   if (error instanceof RateLimitError) {
@@ -162,7 +165,7 @@ export async function retryWithBackoff<T>(
     ...config,
   };
 
-  let lastError: any;
+  let lastError: unknown;
   let attemptNumber = 0;
 
   while (attemptNumber <= fullConfig.maxRetries) {
@@ -274,10 +277,7 @@ export class RetryHandler {
       const result = await retryWithBackoff(fn, this.config);
 
       // Success - reset circuit breaker
-      if (
-        this.circuitBreakerState === "half-open" ||
-        this.failureCount > 0
-      ) {
+      if (this.circuitBreakerState === "half-open" || this.failureCount > 0) {
         this.resetCircuitBreaker();
       }
 
@@ -338,7 +338,7 @@ export function createRetryHandler(config?: RetryConfig): RetryHandler {
 /**
  * Utility to wrap a function with retry logic
  */
-export function withRetry<T extends (...args: any[]) => Promise<any>>(
+export function withRetry<T extends (...args: unknown[]) => Promise<unknown>>(
   fn: T,
   config?: RetryConfig
 ): T {

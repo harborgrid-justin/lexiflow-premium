@@ -29,7 +29,7 @@
  * ```
  */
 
-import { useCallback, useMemo, useRef, DependencyList } from 'react';
+import { DependencyList, useCallback, useRef } from "react";
 
 /**
  * Configuration options for memoization
@@ -83,18 +83,35 @@ export interface MemoizationConfig {
 export function useMemoizedValue<T>(
   factory: () => T,
   deps: DependencyList,
-  config: MemoizationConfig = {},
+  config: MemoizationConfig = {}
 ): T {
   const {
-    name = 'anonymous',
+    name = "anonymous",
     enableWarnings = import.meta.env.DEV,
     warnThreshold = 10,
     debug = false,
   } = config;
 
   const computationCountRef = useRef(0);
+  const ref = useRef<{ deps: DependencyList; value: T } | undefined>(undefined);
 
-  return useMemo(() => {
+  let isValid = true;
+  if (!ref.current) {
+    isValid = false;
+  } else {
+    if (ref.current.deps.length !== deps.length) {
+      isValid = false;
+    } else {
+      for (let i = 0; i < deps.length; i++) {
+        if (!Object.is(deps[i], ref.current.deps[i])) {
+          isValid = false;
+          break;
+        }
+      }
+    }
+  }
+
+  if (!isValid) {
     const startTime = performance.now();
     computationCountRef.current++;
 
@@ -105,20 +122,22 @@ export function useMemoizedValue<T>(
     if (enableWarnings && duration > warnThreshold) {
       console.warn(
         `[useMemoizedValue] "${name}" computation #${computationCountRef.current} took ${duration.toFixed(2)}ms ` +
-        `(threshold: ${warnThreshold}ms). Consider optimizing or code splitting.`
+          `(threshold: ${warnThreshold}ms). Consider optimizing or code splitting.`
       );
     }
 
     if (debug) {
       console.log(
         `[useMemoizedValue] "${name}" computed in ${duration.toFixed(2)}ms ` +
-        `(#${computationCountRef.current})`
+          `(#${computationCountRef.current})`
       );
     }
 
+    ref.current = { deps, value };
     return value;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps);
+  }
+
+  return ref.current!.value;
 }
 
 /**
@@ -146,17 +165,33 @@ export function useMemoizedValue<T>(
 export function useMemoizedCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
   deps: DependencyList,
-  config: MemoizationConfig = {},
+  config: MemoizationConfig = {}
 ): T {
-  const {
-    name = 'anonymous',
-    debug = false,
-  } = config;
+  const { name = "anonymous", debug = false } = config;
 
   const creationCountRef = useRef(0);
   const lastCreatedRef = useRef<number>(0);
+  const ref = useRef<{ deps: DependencyList; callback: T } | undefined>(
+    undefined
+  );
 
-  return useCallback((...args: Parameters<T>) => {
+  let isValid = true;
+  if (!ref.current) {
+    isValid = false;
+  } else {
+    if (ref.current.deps.length !== deps.length) {
+      isValid = false;
+    } else {
+      for (let i = 0; i < deps.length; i++) {
+        if (!Object.is(deps[i], ref.current.deps[i])) {
+          isValid = false;
+          break;
+        }
+      }
+    }
+  }
+
+  if (!isValid) {
     const now = performance.now();
     const timeSinceLastCreation = now - lastCreatedRef.current;
 
@@ -170,14 +205,16 @@ export function useMemoizedCallback<T extends (...args: unknown[]) => unknown>(
       if (debug) {
         console.log(
           `[useMemoizedCallback] "${name}" recreated (#${creationCountRef.current}) ` +
-          `after ${timeSinceLastCreation.toFixed(0)}ms`
+            `after ${timeSinceLastCreation.toFixed(0)}ms`
         );
       }
     }
 
-    return callback(...args);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps) as T;
+    ref.current = { deps, callback };
+    return callback;
+  }
+
+  return ref.current!.callback;
 }
 
 /**
@@ -198,10 +235,7 @@ export function useMemoizedCallback<T extends (...args: unknown[]) => unknown>(
  * );
  * ```
  */
-export function useDeepMemo<T>(
-  factory: () => T,
-  deps: DependencyList,
-): T {
+export function useDeepMemo<T>(factory: () => T, deps: DependencyList): T {
   const depsRef = useRef<DependencyList>(deps);
   const valueRef = useRef<T | undefined>(undefined);
 
@@ -225,7 +259,7 @@ export function useDeepMemo<T>(
  */
 export function useDeepCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
-  deps: DependencyList,
+  deps: DependencyList
 ): T {
   const depsRef = useRef<DependencyList>(deps);
   const callbackRef = useRef<T>(callback);
@@ -291,38 +325,41 @@ export function useConstant<T>(factory: () => T): T {
  */
 export function useMemoCache<TInput, TOutput>(
   factory: (input: TInput) => TOutput,
-  maxSize: number = 100,
+  maxSize: number = 100
 ): (input: TInput) => TOutput {
   const cacheRef = useRef<Map<TInput, TOutput>>(new Map());
 
-  return useCallback((input: TInput) => {
-    const cache = cacheRef.current;
+  return useCallback(
+    (input: TInput) => {
+      const cache = cacheRef.current;
 
-    // Check cache
-    if (cache.has(input)) {
-      const value = cache.get(input)!;
-      // Move to end (LRU)
-      cache.delete(input);
-      cache.set(input, value);
-      return value;
-    }
-
-    // Compute new value
-    const value = factory(input);
-
-    // Add to cache
-    cache.set(input, value);
-
-    // Evict oldest if over size
-    if (cache.size > maxSize) {
-      const firstKey = cache.keys().next().value;
-      if (firstKey !== undefined) {
-        cache.delete(firstKey);
+      // Check cache
+      if (cache.has(input)) {
+        const value = cache.get(input)!;
+        // Move to end (LRU)
+        cache.delete(input);
+        cache.set(input, value);
+        return value;
       }
-    }
 
-    return value;
-  }, [factory, maxSize]);
+      // Compute new value
+      const value = factory(input);
+
+      // Add to cache
+      cache.set(input, value);
+
+      // Evict oldest if over size
+      if (cache.size > maxSize) {
+        const firstKey = cache.keys().next().value;
+        if (firstKey !== undefined) {
+          cache.delete(firstKey);
+        }
+      }
+
+      return value;
+    },
+    [factory, maxSize]
+  );
 }
 
 /**
@@ -347,7 +384,7 @@ export interface MemoStats {
  */
 export function useMemoWithStats<T>(
   factory: () => T,
-  deps: DependencyList,
+  deps: DependencyList
 ): [T, MemoStats] {
   const statsRef = useRef<{
     computations: number;
@@ -392,7 +429,8 @@ export function useMemoWithStats<T>(
       cacheHits: stats.cacheHits,
       cacheMisses: stats.cacheMisses,
       hitRate: totalAccesses > 0 ? (stats.cacheHits / totalAccesses) * 100 : 0,
-      averageComputationTime: stats.computations > 0 ? stats.totalTime / stats.computations : 0,
+      averageComputationTime:
+        stats.computations > 0 ? stats.totalTime / stats.computations : 0,
     },
   ];
 }
@@ -409,7 +447,7 @@ function deepEqual(a: unknown, b: unknown): boolean {
     return a.every((val, idx) => deepEqual(val, b[idx]));
   }
 
-  if (typeof a === 'object' && typeof b === 'object') {
+  if (typeof a === "object" && typeof b === "object") {
     const objA = a as Record<string, unknown>;
     const objB = b as Record<string, unknown>;
     const keysA = Object.keys(objA);
@@ -417,7 +455,7 @@ function deepEqual(a: unknown, b: unknown): boolean {
 
     if (keysA.length !== keysB.length) return false;
 
-    return keysA.every(key => deepEqual(objA[key], objB[key]));
+    return keysA.every((key) => deepEqual(objA[key], objB[key]));
   }
 
   return false;

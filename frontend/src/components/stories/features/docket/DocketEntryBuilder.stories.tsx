@@ -1,14 +1,15 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn, expect, userEvent, within } from 'storybook/test';
-import { DocketEntryBuilder } from '@/features/cases/components/docket/DocketEntryBuilder';
-import { DocketEntry, DocketEntryType } from '@/types';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
+import { DocketEntryBuilder } from '@/features/cases/components/docket/DocketEntryBuilder';
 import { ToastProvider } from '@/providers';
+import { DocketEntry, DocketEntryType } from '@/types';
+import type { DocketId } from '@/types/primitives';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent, within } from 'storybook/test';
 
 /**
  * DocketEntryBuilder provides a comprehensive form for creating and editing
  * docket entries with automatic task generation and rule association capabilities.
- * 
+ *
  * ## Features
  * - Complete docket entry form
  * - Entry type selection
@@ -97,7 +98,7 @@ const mockParties = [
 ];
 
 const mockExistingEntry: Partial<DocketEntry> = {
-  id: 'docket-1' as any,
+  id: 'docket-1' as DocketId,
   sequenceNumber: 42,
   dateFiled: '2024-12-15',
   description: 'MOTION to Dismiss for Failure to State a Claim',
@@ -264,17 +265,17 @@ export const FormFillInteraction: Story = {
   },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
-    
+
     // Fill in sequence number
     const sequenceInput = canvas.getByLabelText(/sequence number/i);
     await userEvent.clear(sequenceInput);
     await userEvent.type(sequenceInput, '150');
     await expect(sequenceInput).toHaveValue(150);
-    
+
     // Fill in date filed
     const dateInput = canvas.getByLabelText(/date filed/i);
     await userEvent.type(dateInput, '2024-12-23');
-    
+
     // Fill in description
     const descriptionInput = canvas.getByLabelText(/description/i);
     await userEvent.type(
@@ -282,19 +283,19 @@ export const FormFillInteraction: Story = {
       'MOTION to Compel Discovery Responses'
     );
     await expect(descriptionInput).toHaveValue('MOTION to Compel Discovery Responses');
-    
+
     // Select entry type
     const typeSelect = canvas.getByLabelText(/type/i);
     await userEvent.selectOptions(typeSelect, 'Filing');
-    
+
     // Select filing party
     const partySelect = canvas.getByLabelText(/filed by/i);
     await userEvent.selectOptions(partySelect, mockParties[0]);
-    
+
     // Attempt to save
     const saveButton = canvas.getByRole('button', { name: /save|submit/i });
     await userEvent.click(saveButton);
-    
+
     // Verify onSave was called
     await expect(args.onSave).toHaveBeenCalled();
   },
@@ -318,15 +319,15 @@ export const CancelInteraction: Story = {
   },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
-    
+
     // Start filling form
     const sequenceInput = canvas.getByLabelText(/sequence number/i);
     await userEvent.type(sequenceInput, '200');
-    
+
     // Click cancel
     const cancelButton = canvas.getByRole('button', { name: /cancel/i });
     await userEvent.click(cancelButton);
-    
+
     // Verify onCancel was called
     await expect(args.onCancel).toHaveBeenCalled();
   },

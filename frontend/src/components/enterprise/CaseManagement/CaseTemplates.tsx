@@ -62,7 +62,7 @@ export interface TemplateField {
   type: 'text' | 'number' | 'date' | 'select' | 'multiselect' | 'textarea';
   required: boolean;
   options?: string[];
-  defaultValue?: any;
+  defaultValue?: unknown;
   helpText?: string;
 }
 
@@ -310,7 +310,7 @@ const DEFAULT_TEMPLATES: CaseTemplate[] = [
       status: CaseStatus.Active,
       practiceArea: 'Personal Injury',
       matterType: MatterType.LITIGATION,
-      billingModel: 'contingency' as any,
+      billingModel: 'contingency',
     },
     checklist: [
       { id: 'cl-1', title: 'Obtain police report', order: 1, dueInDays: 3 },

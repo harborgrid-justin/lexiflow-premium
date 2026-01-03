@@ -6,19 +6,19 @@
  * @module routes/documents/detail
  */
 
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
-import type { Route } from "./+types/detail";
-import { RouteErrorBoundary, NotFoundError } from '../_shared/RouteErrorBoundary';
-import { createDetailMeta } from '../_shared/meta-utils';
 import { DocumentsApiService } from '@/api/admin/documents-api';
 import {
+  DocumentAnnotations,
   DocumentViewer,
   MetadataPanel,
   VersionHistory,
-  DocumentAnnotations,
   type Annotation
 } from '@/components/features/documents/components';
+import { useState } from 'react';
+import { useLoaderData, useNavigate } from 'react-router';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import { createDetailMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/detail";
 
 const documentsApi = new DocumentsApiService();
 
@@ -106,13 +106,12 @@ export async function action({ params, request }: Route.ActionArgs) {
 
 export default function DocumentDetailRoute() {
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
-  const { document, versions, annotations } = loaderData;
+  const { document: doc, versions, annotations } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const [activeTab, setActiveTab] = useState<'viewer' | 'metadata' | 'versions' | 'annotations'>('viewer');
 
-  const handleUpdate = async (updates: Partial<typeof document>) => {
+  const handleUpdate = async (updates: Partial<typeof doc>) => {
     try {
-      await documentsApi.update(document.id, updates);
+      await documentsApi.update(doc.id, updates);
       window.location.reload();
     } catch (error) {
       console.error('Update failed:', error);
@@ -124,10 +123,10 @@ console.log('useNavigate:', navigate);
     if (!confirm(`Restore to version ${versionNumber}?`)) return;
 
     try {
-      const versionId = versions.find(v => v.versionNumber === versionNumber)?.id;
+      const versionId = versions.find((v) => v.versionNumber === versionNumber)?.id;
       if (!versionId) throw new Error('Version not found');
 
-      await documentsApi.restoreVersion(document.id, versionId as string);
+      await documentsApi.restoreVersion(doc.id, versionId as string);
       window.location.reload();
     } catch (error) {
       console.error('Restore failed:', error);
@@ -137,8 +136,8 @@ console.log('useNavigate:', navigate);
 
   const handleCompare = async (v1: number, v2: number) => {
     try {
-      const version1 = versions.find(v => v.versionNumber === v1);
-      const version2 = versions.find(v => v.versionNumber === v2);
+      const version1 = versions.find((v: any) => v.versionNumber === v1);
+      const version2 = versions.find((v: any) => v.versionNumber === v2);
       if (!version1 || !version2) throw new Error('Versions not found');
 
       const result = await documentsApi.compareVersions(
@@ -227,41 +226,37 @@ console.log('useNavigate:', navigate);
         <div className="flex items-center gap-1 border-b border-gray-200 dark:border-gray-700 -mb-px">
           <button
             onClick={() => setActiveTab('viewer')}
-            className={`px-4 py-2 text-sm font-medium border-b-2 ${
-              activeTab === 'viewer'
-                ? 'border-blue-600 text-blue-600 dark:text-blue-400'
-                : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
-            }`}
+            className={`px-4 py-2 text-sm font-medium border-b-2 ${activeTab === 'viewer'
+              ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+              : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
+              }`}
           >
             Document
           </button>
           <button
             onClick={() => setActiveTab('metadata')}
-            className={`px-4 py-2 text-sm font-medium border-b-2 ${
-              activeTab === 'metadata'
-                ? 'border-blue-600 text-blue-600 dark:text-blue-400'
-                : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
-            }`}
+            className={`px-4 py-2 text-sm font-medium border-b-2 ${activeTab === 'metadata'
+              ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+              : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
+              }`}
           >
             Metadata
           </button>
           <button
             onClick={() => setActiveTab('versions')}
-            className={`px-4 py-2 text-sm font-medium border-b-2 ${
-              activeTab === 'versions'
-                ? 'border-blue-600 text-blue-600 dark:text-blue-400'
-                : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
-            }`}
+            className={`px-4 py-2 text-sm font-medium border-b-2 ${activeTab === 'versions'
+              ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+              : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
+              }`}
           >
             Versions ({versions.length})
           </button>
           <button
             onClick={() => setActiveTab('annotations')}
-            className={`px-4 py-2 text-sm font-medium border-b-2 ${
-              activeTab === 'annotations'
-                ? 'border-blue-600 text-blue-600 dark:text-blue-400'
-                : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
-            }`}
+            className={`px-4 py-2 text-sm font-medium border-b-2 ${activeTab === 'annotations'
+              ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+              : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'
+              }`}
           >
             Annotations ({annotations.length})
           </button>

@@ -3,14 +3,14 @@
  * Display and filter invoices with status tracking
  */
 
-import React, { useState } from 'react';
-import { Link, Form } from 'react-router';
-import { FileText, Filter, Send } from 'lucide-react';
 import type { Invoice } from '@/types/financial';
+import { FileText, Filter, Send } from 'lucide-react';
+import React, { useState } from 'react';
+import { Form, Link } from 'react-router';
 
 interface InvoiceListProps {
   invoices: Invoice[];
-  filters?: any;
+  filters?: Record<string, unknown>;
 }
 
 export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) => {
@@ -28,9 +28,8 @@ export const InvoiceList: React.FC<InvoiceListProps> = ({ invoices, filters }) =
 
     return (
       <span
-        className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${
-          styles[status as keyof typeof styles] || styles.Draft
-        }`}
+        className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold ${styles[status as keyof typeof styles] || styles.Draft
+          }`}
       >
         {status}
       </span>

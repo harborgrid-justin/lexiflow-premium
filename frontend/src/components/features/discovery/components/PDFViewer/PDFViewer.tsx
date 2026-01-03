@@ -69,7 +69,7 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [pdfDoc, setPdfDoc] = useState<any | null>(null);
+  const [pdfDoc, setPdfDoc] = useState<unknown | null>(null);
   const [pageNum, setPageNum] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -78,8 +78,8 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
   const [pdfjsReady, setPdfjsReady] = useState(false);
 
   // Refs for tracking async state
-  const renderTaskRef = useRef<any | null>(null);
-  const loadingTaskRef = useRef<any | null>(null);
+  const renderTaskRef = useRef<unknown | null>(null);
+  const loadingTaskRef = useRef<unknown | null>(null);
   const isMounted = useRef(false);
   const resizeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -234,7 +234,7 @@ export const PDFViewer = React.memo<PDFViewerProps>(({
           viewport: viewport,
         };
 
-      const newTask = page.render(renderContext as any);
+      const newTask = page.render(renderContext as unknown as any);
       renderTaskRef.current = newTask;
 
       await newTask.promise;

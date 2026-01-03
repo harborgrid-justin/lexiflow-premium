@@ -222,7 +222,7 @@ const validateEvidenceItem = (
     errors.push({ path: "title", message: "Title too long" });
   }
 
-  if (!evidenceTypes.includes(record.type as string)) {
+  if (!evidenceTypes.includes(record.type as any)) {
     errors.push({ path: "type", message: "Invalid evidence type" });
   }
 
@@ -273,7 +273,7 @@ const validateEvidenceItem = (
     errors.push({ path: "location", message: "Location too long" });
   }
 
-  if (!admissibilityStatuses.includes(record.admissibility as string)) {
+  if (!admissibilityStatuses.includes(record.admissibility as any)) {
     errors.push({
       path: "admissibility",
       message: "Invalid admissibility status",
@@ -341,7 +341,7 @@ const validateCustodyEvent = (
     errors.push({ path: "date", message: "Invalid date format" });
   }
 
-  if (!custodyActions.includes(record.action as string)) {
+  if (!custodyActions.includes(record.action as any)) {
     errors.push({ path: "action", message: "Invalid custody action" });
   }
 

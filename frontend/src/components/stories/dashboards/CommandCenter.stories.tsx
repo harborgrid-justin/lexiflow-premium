@@ -1,13 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CommandCenter } from '@features/litigation/war-room';
 import { ThemeProvider } from '@/contexts/theme/ThemeContext';
-import { ToastProvider } from '@providers/ToastContext';
 import { CaseStatus, MatterType } from '@/types/enums';
+import type { CaseId } from '@/types/primitives';
+import { CommandCenter } from '@features/litigation/war-room';
+import { ToastProvider } from '@providers/ToastContext';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 /**
  * CommandCenter is the litigation war room providing real-time case monitoring,
  * strategic planning, and team coordination during active litigation.
- * 
+ *
  * ## Features
  * - Real-time case status monitoring
  * - Strategic planning board
@@ -51,7 +52,7 @@ type Story = StoryObj<typeof meta>;
 // Mock data for stories
 const mockWarRoomData = {
   case: {
-    id: 'case-123' as any,
+    id: 'case-123' as CaseId,
     caseNumber: 'CV-2024-001',
     title: 'Smith v. Johnson Corp.',
     status: CaseStatus.Active,

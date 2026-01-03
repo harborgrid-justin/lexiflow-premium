@@ -66,11 +66,12 @@ export async function clientLoader({ request: _ }: Route.ClientLoaderArgs) {
     const recentCases = casesArray
       .sort((a, b) => {
         const dateA = new Date(a.updatedAt || a.createdAt || 0).getTime();
-console.log('recent cases data:', recentCases);
         const dateB = new Date(b.updatedAt || b.createdAt || 0).getTime();
         return dateB - dateA;
       })
       .slice(0, 5);
+
+    console.log('recent cases data:', recentCases);
 
     const upcomingTasks = tasksArray
       .filter(t => t.dueDate && t.status !== 'Completed')
@@ -109,6 +110,7 @@ console.log('recent cases data:', recentCases);
 export default function HomeRoute() {
   const navigate = useNavigate();
   const { currentUser } = useAppController();
+  const loaderData = useLoaderData() as Route.ComponentProps['loaderData'];
   const { metrics: _metrics, recentCases: _recentCases, upcomingTasks: _upcomingTasks } = loaderData;
 
   const handleSelectCase = (caseId: string) => {

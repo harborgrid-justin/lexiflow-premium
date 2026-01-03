@@ -7,6 +7,11 @@
  */
 
 import { api } from '@/api';
+import { format } from 'date-fns';
+import { useLoaderData, useNavigate } from 'react-router';
+import { createDetailMeta } from '../_shared/meta-utils';
+import { NotFoundError, RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
+import type { Route } from "./+types/detail";
 
 // ============================================================================
 // Meta Tags
@@ -76,7 +81,7 @@ export async function action({ params, request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function DocketDetailRoute() {
-  const { item } = loaderData;
+  const { item } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
 
   return (

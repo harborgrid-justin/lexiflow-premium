@@ -224,7 +224,7 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
         <div className="flex gap-3">
           <select
             value={selectedPeriod}
-            onChange={(e) => setSelectedPeriod(e.target.value as any)}
+            onChange={(e) => setSelectedPeriod(e.target.value as 'monthly' | 'quarterly' | 'yearly')}
             className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
           >
             <option value="monthly">Monthly</option>
@@ -256,8 +256,8 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
               key={tab}
               onClick={() => setSelectedTab(tab)}
               className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${selectedTab === tab
-                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
                 }`}
             >
               {tab === 'wip' ? 'WIP' : tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -620,10 +620,10 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                       {period.actualRevenue > 0 ? formatCurrency(period.actualRevenue) : '-'}
                     </td>
                     <td className={`whitespace-nowrap px-6 py-4 text-sm font-medium ${period.variance > 0
-                        ? 'text-green-600 dark:text-green-400'
-                        : period.variance < 0
-                          ? 'text-red-600 dark:text-red-400'
-                          : 'text-gray-500'
+                      ? 'text-green-600 dark:text-green-400'
+                      : period.variance < 0
+                        ? 'text-red-600 dark:text-red-400'
+                        : 'text-gray-500'
                       }`}>
                       {period.variance !== 0 ? (
                         <>
@@ -633,10 +633,10 @@ export const FinancialReports: React.FC<FinancialReportsProps> = ({
                       ) : '-'}
                     </td>
                     <td className={`whitespace-nowrap px-6 py-4 text-sm font-medium ${period.variancePercent > 0
-                        ? 'text-green-600 dark:text-green-400'
-                        : period.variancePercent < 0
-                          ? 'text-red-600 dark:text-red-400'
-                          : 'text-gray-500'
+                      ? 'text-green-600 dark:text-green-400'
+                      : period.variancePercent < 0
+                        ? 'text-red-600 dark:text-red-400'
+                        : 'text-gray-500'
                       }`}>
                       {period.variancePercent !== 0 ? (
                         <>

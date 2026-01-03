@@ -23,6 +23,13 @@ import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/$id";
 
+interface ChartData {
+  id: string;
+  type: string;
+  title: string;
+  data: any[];
+}
+
 export function meta({ params }: Route.MetaArgs) {
   return createMeta({
     title: `Report ${params.id}`,
@@ -95,8 +102,8 @@ export async function loader({ params }: Route.LoaderArgs) {
   return { report: mockReport };
 }
 
-export default function ReportViewerRoute({ loaderData }: Route.ComponentProps) {
-  const { report } = loaderData;
+export default function ReportViewerRoute() {
+  const { report } = useLoaderData() as Route.ComponentProps['loaderData'];
   const [isExporting, setIsExporting] = useState(false);
 
   const handleExport = async (format: 'pdf' | 'excel' | 'csv') => {
@@ -135,8 +142,8 @@ export default function ReportViewerRoute({ loaderData }: Route.ComponentProps) 
             Value: value,
           }));
           const columns = [
-            { key: 'Metric', header: 'Metric' },
-            { key: 'Value', header: 'Value' },
+            { id: 'Metric', key: 'Metric', header: 'Metric' },
+            { id: 'Value', key: 'Value', header: 'Value' },
           ];
           await exportToCSV(csvData, columns, `${report.name}-${Date.now()}.csv`);
           break;
@@ -259,7 +266,7 @@ export default function ReportViewerRoute({ loaderData }: Route.ComponentProps) 
                 ? key.toLowerCase().includes('rate')
                   ? `${value.toFixed(1)}%`
                   : `$${value.toLocaleString()}`
-                : value}
+                : String(value)}
             </p>
           </div>
         ))}
@@ -267,7 +274,7 @@ export default function ReportViewerRoute({ loaderData }: Route.ComponentProps) 
 
       {/* Charts */}
       <div className="grid gap-6 lg:grid-cols-2">
-        {report.data.charts.map((chart: any) => (
+        {report.data.charts.map((chart: ChartData) => (
           <ChartCard key={chart.id} title={chart.title}>
             <ResponsiveContainer width="100%" height="100%">
               {chart.type === 'line' ? (

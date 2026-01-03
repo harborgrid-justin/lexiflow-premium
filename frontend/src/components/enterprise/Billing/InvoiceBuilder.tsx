@@ -59,9 +59,9 @@ interface Currency {
 interface InvoiceBuilderProps {
   clientId?: string;
   matterId?: string;
-  onSave?: (invoice: any) => void;
-  onSend?: (invoice: any) => void;
-  onPreview?: (invoice: any) => void;
+  onSave?: (invoice: unknown) => void;
+  onSend?: (invoice: unknown) => void;
+  onPreview?: (invoice: unknown) => void;
 }
 
 export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
@@ -163,7 +163,7 @@ export const InvoiceBuilder: React.FC<InvoiceBuilderProps> = ({
     setLineItems([...lineItems, newItem]);
   };
 
-  const updateLineItem = (id: string, field: keyof InvoiceLineItem, value: any) => {
+  const updateLineItem = (id: string, field: keyof InvoiceLineItem, value: unknown) => {
     setLineItems(lineItems.map(item => {
       if (item.id === id) {
         const updated = { ...item, [field]: value };

@@ -103,7 +103,7 @@ export interface EnterpriseDataTableProps<T = Record<string, unknown>> {
 // COMPONENT
 // ============================================================================
 
-export const EnterpriseDataTable = <T extends Record<string, any>>({
+export const EnterpriseDataTable = <T extends Record<string, unknown>>({
   data,
   columns: initialColumns,
   rowHeight = 48,

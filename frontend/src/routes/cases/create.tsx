@@ -13,9 +13,9 @@
 import { api } from '@/api';
 import NewCase from '@/features/cases/components/create/NewCase';
 import { redirect } from 'react-router';
-import type { Route } from "./+types/create";
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createMeta } from '../_shared/meta-utils';
+import type { Route } from "./+types/create";
 
 // ============================================================================
 // Meta Tags
@@ -43,7 +43,7 @@ export async function loader() {
   // Pre-fetch reference data (jurisdictions, case types, etc.)
   const [jurisdictions, templates] = await Promise.all([
     api.jurisdiction.getAll().catch(() => []),
-    api.templates.getAll().catch(() => []),
+    api.drafting.getAllTemplates().catch(() => []),
   ]);
 
   return { jurisdictions, templates };
@@ -63,8 +63,8 @@ export async function action({ request }: Route.ActionArgs) {
     const caseData = {
       title: formData.get("title") as string,
       caseNumber: formData.get("caseNumber") as string,
-      jurisdictionId: formData.get("jurisdictionId") as string,
-      status: "Active",
+      jurisdiction: formData.get("jurisdictionId") as string,
+      status: "Active" as any,
       // ... extract all form fields
     };
 
@@ -77,7 +77,10 @@ export async function action({ request }: Route.ActionArgs) {
     }
 
     // Create the case
-    const newCase = await api.cases.add(caseData);
+    const newCase = await api.cases.add({
+      ...caseData,
+      jurisdiction: caseData.jurisdiction,
+    });
 
     // Redirect on success
     return redirect(`/cases/${newCase.id}`);

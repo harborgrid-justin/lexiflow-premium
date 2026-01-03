@@ -13,15 +13,14 @@
 import { CaseHeader } from '@/components/features/cases/components/CaseHeader';
 import { CaseTimeline, type TimelineEvent } from '@/components/features/cases/components/CaseTimeline';
 import { DataService } from '@/services/data/dataService';
-import { useNavigate } from 'react-router';
+import { useLoaderData, useNavigate, type LoaderFunctionArgs } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
-import type { Route } from "./+types/timeline";
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: any }) {
   const caseTitle = data?.caseData?.title || 'Case Timeline';
   return [
     { title: `Timeline - ${caseTitle} | LexiFlow` },
@@ -33,7 +32,7 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { caseId } = params;
 
   if (!caseId) {
@@ -108,7 +107,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 // ============================================================================
 
 export default function CaseTimelineRoute() {
-  const { caseData, events } = loaderData;
+  const { caseData, events } = useLoaderData() as Awaited<ReturnType<typeof loader>>;
   const navigate = useNavigate();
   console.log('useNavigate:', navigate);
 
@@ -155,7 +154,7 @@ export default function CaseTimelineRoute() {
 // Error Boundary
 // ============================================================================
 
-export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: { error: unknown }) {
   return (
     <RouteErrorBoundary
       error={error}

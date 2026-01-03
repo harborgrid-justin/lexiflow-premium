@@ -126,11 +126,11 @@ export class IntegrationOrchestrator {
 
     // Subscribe to all known event types and track cleanup functions
     Object.values(SystemEventType).forEach((type) => {
-      const unsubscribe = IntegrationEventPublisher.subscribe(type, ((
+      const unsubscribe = IntegrationEventPublisher.subscribe(type, (async (
         payload: unknown
-      ) => this.publish(type as SystemEventType, payload)) as (
-        payload: unknown
-      ) => void);
+      ) => {
+        await this.publish(type as SystemEventType, payload);
+      }) as any);
       this.subscriptionCleanups.push(unsubscribe as () => void);
     });
 

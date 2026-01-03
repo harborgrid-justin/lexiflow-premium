@@ -4,16 +4,15 @@
  * Industry-standard production workflow with Bates stamping
  */
 
-import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight, Check, FileText, Settings, Package, CheckCircle } from 'lucide-react';
+import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { Input } from '@/components/ui/atoms/Input';
 import { TextArea } from '@/components/ui/atoms/TextArea';
-import { Badge } from '@/components/ui/atoms/Badge';
 import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { cn } from '@/utils/cn';
-import type { _ProductionSet } from '@/types/discovery-enhanced';
+import { Check, CheckCircle, ChevronLeft, ChevronRight, FileText, Package, Settings } from 'lucide-react';
+import React, { useState } from 'react';
 
 interface ProductionWizardProps {
   onComplete: () => void;
@@ -75,7 +74,7 @@ export const ProductionWizard: React.FC<ProductionWizardProps> = ({ onComplete, 
     onComplete();
   };
 
-  const updateFormData = (field: string, value: any) => {
+  const updateFormData = (field: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -106,8 +105,8 @@ export const ProductionWizard: React.FC<ProductionWizardProps> = ({ onComplete, 
                       isCompleted
                         ? "bg-green-600 text-white"
                         : isActive
-                        ? "bg-blue-600 text-white"
-                        : cn(theme.surface.highlight, theme.text.tertiary, theme.border.default, "border")
+                          ? "bg-blue-600 text-white"
+                          : cn(theme.surface.highlight, theme.text.tertiary, theme.border.default, "border")
                     )}
                   >
                     {isCompleted ? <Check className="h-5 w-5" /> : <StepIcon className="h-5 w-5" />}

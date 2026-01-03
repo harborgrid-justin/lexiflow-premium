@@ -3,17 +3,16 @@
  * Display single invoice with payment tracking and PDF preview
  */
 
-import { Link, useNavigate } from 'react-router';
-import type { Route } from "./+types/invoices.$id";
-import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { InvoicesApiService } from '@/api/billing';
 import { InvoiceDetail } from '@/components/billing/InvoiceDetail';
+import { Link, useActionData, useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from 'react-router';
+import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 
 // ============================================================================
 // Meta Tags
 // ============================================================================
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data }: { data: any }) {
   return [
     { title: `Invoice ${data?.invoice?.invoiceNumber || ''} | LexiFlow` },
     { name: 'description', content: `View invoice details and record payments` },
@@ -24,16 +23,16 @@ export function meta({ data }: Route.MetaArgs) {
 // Loader
 // ============================================================================
 
-export async function loader({ params }: Route.LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const invoicesApi = new InvoicesApiService();
 
   try {
-    const invoice = await invoicesApi.getById(params.id);
+    const invoice = await invoicesApi.getById(params.id!);
 
     return {
       invoice,
     };
-  } catch {
+  } catch (error) {
     console.error('Failed to load invoice:', error);
     throw new Response('Invoice not found', { status: 404 });
   }
@@ -43,7 +42,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 // Action
 // ============================================================================
 
-export async function action({ request, params }: Route.ActionArgs) {
+export async function action({ request, params }: ActionFunctionArgs) {
   const formData = await request.formData();
   const intent = formData.get("intent");
   const invoicesApi = new InvoicesApiService();
@@ -52,32 +51,44 @@ export async function action({ request, params }: Route.ActionArgs) {
     case "send": {
       const recipients = formData.get("recipients") as string;
       try {
-        await invoicesApi.send(params.id, recipients ? JSON.parse(recipients) : undefined);
+        await invoicesApi.send(params.id!, recipients ? JSON.parse(recipients) : undefined);
         return { success: true, message: "Invoice sent successfully" };
-      } catch {
+      } catch (_error) {
         return { success: false, error: "Failed to send invoice" };
       }
     }
 
     case "record-payment": {
+      const methodRaw = formData.get("method") as string;
+      let method: "Check" | "Wire" | "Credit Card" | "ACH" | "Cash" = "Check";
+
+      switch (methodRaw) {
+        case 'check': method = 'Check'; break;
+        case 'wire': method = 'Wire'; break;
+        case 'credit_card': method = 'Credit Card'; break;
+        case 'ach': method = 'ACH'; break;
+        case 'cash': method = 'Cash'; break;
+        default: method = 'Check';
+      }
+
       const payment = {
         amount: parseFloat(formData.get("amount") as string),
         date: formData.get("date") as string,
-        method: formData.get("method") as 'check' | 'credit_card' | 'wire' | 'ach' | 'cash' | 'other',
+        method,
         reference: formData.get("reference") as string || undefined,
         notes: formData.get("notes") as string || undefined,
       };
       try {
-        await invoicesApi.recordPayment(params.id, payment);
+        await invoicesApi.recordPayment(params.id!, payment);
         return { success: true, message: "Payment recorded successfully" };
-      } catch {
+      } catch (_error) {
         return { success: false, error: "Failed to record payment" };
       }
     }
 
     case "download-pdf":
       try {
-        const pdfBlob = await invoicesApi.getPdf(params.id);
+        const pdfBlob = await invoicesApi.getPdf(params.id!);
         const url = URL.createObjectURL(pdfBlob);
         const a = document.createElement('a');
         a.href = url;
@@ -85,7 +96,7 @@ export async function action({ request, params }: Route.ActionArgs) {
         a.click();
         URL.revokeObjectURL(url);
         return { success: true, message: "PDF downloaded" };
-      } catch {
+      } catch (_error) {
         return { success: false, error: "Failed to download PDF" };
       }
 
@@ -98,10 +109,11 @@ export async function action({ request, params }: Route.ActionArgs) {
 // Component
 // ============================================================================
 
-export default function InvoiceDetailRoute({ loaderData, actionData }: Route.ComponentProps) {
-  const { invoice } = loaderData;
+export default function InvoiceDetailRoute() {
+  const { invoice } = useLoaderData<typeof loader>();
+  const actionData = useActionData<typeof action>();
   const navigate = useNavigate();
-console.log('useNavigate:', navigate);
+  console.log('useNavigate:', navigate);
 
   return (
     <div className="p-8">

@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
-import { FormattingRule, PleadingSection } from '@/types';
-import { AlertOctagon, Info, Zap, AlertTriangle } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
+import { FormattingRule, PleadingSection } from '@/types';
 import { cn } from '@/utils/cn';
+import { AlertOctagon, AlertTriangle, Info, Zap } from 'lucide-react';
+import React, { useMemo } from 'react';
 
 interface ComplianceHUDProps {
     rules: FormattingRule;
@@ -16,13 +16,13 @@ const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ sections, score: propScor
     const issues = useMemo(() => [
         { id: 2, type: 'warning', msg: 'Heading capitalization inconsistent', blockId: 'b2' },
         { id: 3, type: 'info', msg: 'Exhibit A referenced but not attached', blockId: 'b3' }
-    ], [sections]);
+    ], []);
 
     const dynamicScore = useMemo(() => {
         if (issues.length === 0) return 100;
         const errorWeight = 10;
         const warningWeight = 5;
-        const penalty = issues.reduce((acc: unknown, issue: unknown) => (acc as number) + ((issue as {type: string}).type === 'error' ? errorWeight : (issue as {type: string}).type === 'warning' ? warningWeight : 0), 0);
+        const penalty = issues.reduce((acc: unknown, issue: unknown) => (acc as number) + ((issue as { type: string }).type === 'error' ? errorWeight : (issue as { type: string }).type === 'warning' ? warningWeight : 0), 0);
         return Math.max(0, 100 - (penalty as number));
     }, [issues]);
 
@@ -32,7 +32,7 @@ const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ sections, score: propScor
         <div className={cn("absolute top-8 right-8 w-64 h-auto bg-white/80 backdrop-blur-md rounded-lg shadow-2xl border flex-col z-30 hidden lg:flex", theme.border.default)}>
             <div className={cn("p-3 border-b flex justify-between items-center", theme.surface.highlight, theme.border.default)}>
                 <h3 className={cn("font-bold text-xs uppercase tracking-wider flex items-center gap-2", theme.text.tertiary)}>
-                    <Zap className="h-4 w-4 text-amber-500"/> Genius Linter
+                    <Zap className="h-4 w-4 text-amber-500" /> Genius Linter
                 </h3>
             </div>
 
@@ -49,9 +49,9 @@ const ComplianceHUD: React.FC<ComplianceHUDProps> = ({ sections, score: propScor
                         {issues.map(issue => (
                             <div key={issue.id} className={cn("p-2 rounded border text-xs flex gap-2 transition-colors cursor-pointer", theme.surface.default, theme.border.default, `hover:${theme.surface.highlight}`)}>
                                 <div className="mt-0.5">
-                                    {issue.type === 'error' && <AlertOctagon className="h-4 w-4 text-red-500"/>}
-                                    {issue.type === 'warning' && <AlertTriangle className="h-4 w-4 text-amber-500"/>}
-                                    {issue.type === 'info' && <Info className="h-4 w-4 text-blue-500"/>}
+                                    {issue.type === 'error' && <AlertOctagon className="h-4 w-4 text-red-500" />}
+                                    {issue.type === 'warning' && <AlertTriangle className="h-4 w-4 text-amber-500" />}
+                                    {issue.type === 'info' && <Info className="h-4 w-4 text-blue-500" />}
                                 </div>
                                 <div>
                                     <p className={cn("font-medium", theme.text.primary)}>{issue.msg}</p>

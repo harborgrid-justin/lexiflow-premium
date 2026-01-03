@@ -23,11 +23,11 @@ import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 import { DiscoveryNavigation, getFirstTabOfParent, getParentTabForView } from './layout/DiscoveryNavigation';
 
 // Hooks & Context
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useNotify } from '@/hooks/useNotify';
 import { queryClient, useMutation, useQuery } from '@/hooks/useQueryHooks';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 
 // Services & Utils
 import { DataService } from '@/services/data/dataService';
@@ -182,7 +182,7 @@ const DiscoveryPlatformInternal = ({ initialTab, caseId }: DiscoveryPlatformProp
         <Button variant="outline" onClick={handleBackToDashboard}>Return to Dashboard</Button>
       </div>
     ),
-  }), [requests, theme, handleNavigate, handleBackToDashboard]);
+  }), [requests, theme, handleNavigate, handleBackToDashboard, setActiveTab]);
 
   if (isWizardView) {
     return (

@@ -15,10 +15,10 @@ import { Stepper } from '@/components/ui/molecules/Stepper/Stepper';
 import { TagInput } from '@/components/ui/molecules/TagInput/TagInput';
 
 // Context & Utils
+import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useAutoSave } from '@/hooks/useAutoSave';
 import { useNotify } from '@/hooks/useNotify';
 import { useWizard } from '@/hooks/useWizard';
-import { useTheme } from '@/contexts/theme/ThemeContext';
 import { cn } from '@/utils/cn';
 
 // Services & Types
@@ -83,7 +83,7 @@ export const EvidenceIntake: React.FC<EvidenceIntakeProps> = ({ handleBack, onCo
         console.error('Failed to restore draft', e);
       }
     }
-  }, []);
+  }, [notify]);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {

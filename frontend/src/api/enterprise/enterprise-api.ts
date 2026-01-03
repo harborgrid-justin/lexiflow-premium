@@ -36,13 +36,10 @@
 
 import { getApiBaseUrl, getApiPrefix } from "@/config/network/api.config";
 import {
-  ApiErrorBase,
-  AuthError,
   parseApiError,
   ValidationError,
 } from "./errors";
 import {
-  globalInterceptors,
   InterceptorManager,
   RequestConfig,
   setupDefaultInterceptors,

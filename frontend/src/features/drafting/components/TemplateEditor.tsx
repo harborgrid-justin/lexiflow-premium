@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { FileText, Save, X, Eye, Code } from 'lucide-react';
-import { useToast } from '@providers/ToastContext';
-import { draftingApi, DraftingTemplate, TemplateVariable, TemplateCategory, ClauseReference } from '@api/domains/drafting.api';
 import { api } from '@/api';
+import { ClauseReference, draftingApi, DraftingTemplate, TemplateCategory, TemplateVariable } from '@api/domains/drafting.api';
+import { useToast } from '@providers/ToastContext';
+import { Code, Eye, FileText, Save, X } from 'lucide-react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 interface TemplateEditorProps {
   template?: DraftingTemplate;
@@ -35,11 +35,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
   const [availableClauses, setAvailableClauses] = useState<ClauseItem[]>([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    loadClauses();
-  }, []);
-
-  const loadClauses = async () => {
+  const loadClauses = useCallback(async () => {
     try {
       const clauses = await api.clauses.getAll();
       setAvailableClauses(Array.isArray(clauses) ? clauses as unknown as ClauseItem[] : []);
@@ -47,7 +43,11 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
       console.error('Failed to load clauses:', error);
       setAvailableClauses([]);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadClauses();
+  }, [loadClauses]);
 
   const handleAddVariable = () => {
     setVariables([

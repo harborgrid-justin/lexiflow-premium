@@ -1,17 +1,17 @@
-import { useState, useMemo } from 'react';
-import { Client, ClientStatus } from '@/types';
 import { SearchToolbar } from '@/components/organisms/SearchToolbar';
-import { TableContainer, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/organisms/Table';
+import { TableBody, TableCell, TableContainer, TableHead, TableHeader, TableRow } from '@/components/organisms/Table';
 import { Badge } from '@/components/ui/atoms/Badge';
 import { Button } from '@/components/ui/atoms/Button';
 import { Currency } from '@/components/ui/atoms/Currency';
-import { Lock, MoreVertical } from 'lucide-react';
 import { useTheme } from '@/contexts/theme/ThemeContext';
-import { cn } from '@/utils/cn';
+import { useClients } from '@/hooks/useDomainData';
+import { useNotify } from '@/hooks/useNotify';
 import { useMutation } from '@/hooks/useQueryHooks';
 import { DataService } from '@/services/data/dataService';
-import { useNotify } from '@/hooks/useNotify';
-import { useClients } from '@/hooks/useDomainData';
+import { Client, ClientStatus } from '@/types';
+import { cn } from '@/utils/cn';
+import { Lock, MoreVertical } from 'lucide-react';
+import { useMemo, useState } from 'react';
 import { ClientCard } from './ClientCard';
 
 interface ClientDirectoryProps {
@@ -29,30 +29,30 @@ export function ClientDirectory({ clients: propClients, onOpenPortal }: ClientDi
   const { data: fetchedClients = [] } = useClients();
 
   const { mutate: generateToken } = useMutation(
-      DataService.clients.generatePortalToken,
-      {
-          onSuccess: (token, clientId) => {
-               const tokenStr = token as string;
-               notify.success(`Portal Access Token Generated: ${tokenStr.substring(0, 12)}...`);
-               const client = clientsToRender.find(c => c.id === clientId);
-               if (client) onOpenPortal(client);
-          }
+    DataService.clients.generatePortalToken,
+    {
+      onSuccess: (token, clientId) => {
+        const tokenStr = token as string;
+        notify.success(`Portal Access Token Generated: ${tokenStr.substring(0, 12)}...`);
+        const client = clientsToRender.find(c => c.id === clientId);
+        if (client) onOpenPortal(client);
       }
+    }
   );
 
-  // Ensure clientsToRender is always an array
-  const clientsToRender = Array.isArray(propClients)
-    ? propClients
-    : Array.isArray(fetchedClients)
-      ? fetchedClients
-      : [];
-
   const filteredClients = useMemo(() => {
+    // Ensure clientsToRender is always an array (moved inside useMemo)
+    const clientsToRender = Array.isArray(propClients)
+      ? propClients
+      : Array.isArray(fetchedClients)
+        ? fetchedClients
+        : [];
+
     return clientsToRender.filter(c =>
-        (c.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (c.industry || '').toLowerCase().includes(searchTerm.toLowerCase())
+      (c.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (c.industry || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
-  }, [clientsToRender, searchTerm]);
+  }, [propClients, fetchedClients, searchTerm]);
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -82,11 +82,11 @@ export function ClientDirectory({ clients: propClients, onOpenPortal }: ClientDi
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredClients.map(client => (
-              <ClientCard
-                key={client.id}
-                client={client}
-                onGenerateToken={generateToken}
-              />
+            <ClientCard
+              key={client.id}
+              client={client}
+              onGenerateToken={generateToken}
+            />
           ))}
         </div>
       ) : (
@@ -120,7 +120,7 @@ export function ClientDirectory({ clients: propClients, onOpenPortal }: ClientDi
                   <div className="flex justify-end gap-2">
                     <Button size="sm" variant="ghost" className={theme.text.secondary} icon={Lock} onClick={() => generateToken(client.id)}>Portal</Button>
                     <button className={cn("p-1.5 rounded hover:bg-slate-100", theme.text.tertiary)}>
-                      <MoreVertical className="h-4 w-4"/>
+                      <MoreVertical className="h-4 w-4" />
                     </button>
                   </div>
                 </TableCell>
@@ -132,4 +132,3 @@ export function ClientDirectory({ clients: propClients, onOpenPortal }: ClientDi
     </div>
   );
 }
-

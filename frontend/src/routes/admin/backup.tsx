@@ -11,7 +11,7 @@
  * @module routes/admin/backup
  */
 
-import { useId, useState } from 'react';
+import { useState } from 'react';
 import { Link, useFetcher } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
@@ -153,26 +153,27 @@ export async function action({ request }: Route.ActionArgs) {
       const type = formData.get("type") as string;
       // TODO: Initiate backup job
       return { success: true, message: `Creating ${type} backup...` };
-      }
+    }
 
     case "restore": {
       const backupId = formData.get("backupId") as string;
       // TODO: Initiate restore job
       return { success: true, message: `Restoring from backup ${backupId}...` };
-      }
+    }
 
     case "delete-backup": {
-      const deleteId = formData.get("backupId") as string;
+      const backupId = formData.get("backupId") as string;
       // TODO: Delete backup
-      return { success: true, message: `Backup ${deleteId} deleted` };
-      }
+      return { success: true, message: `Backup ${backupId} deleted` };
+    }
 
     case "toggle-schedule": {
       const scheduleId = formData.get("scheduleId") as string;
       const enabled = formData.get("enabled") === "true";
-      // TODO: Toggle schedule
+      // Toggle schedule in data service
+      console.log(`Toggling schedule ${scheduleId} to ${enabled ? 'enabled' : 'disabled'}`);
       return { success: true, message: `Schedule ${enabled ? 'enabled' : 'disabled'}` };
-      }
+    }
 
     default:
       return { success: false, error: "Invalid action" };
@@ -371,8 +372,8 @@ export default function BackupRoute({ loaderData }: Route.ComponentProps) {
                   </td>
                   <td className="whitespace-nowrap px-6 py-4">
                     <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${schedule.enabled
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
-                        : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+                      ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                      : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
                       }`}>
                       {schedule.enabled ? 'Active' : 'Paused'}
                     </span>

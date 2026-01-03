@@ -10,7 +10,7 @@
  * @module routes/admin/integrations
  */
 
-import { useId, useState } from 'react';
+import { useState } from 'react';
 import { Link, useFetcher } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';

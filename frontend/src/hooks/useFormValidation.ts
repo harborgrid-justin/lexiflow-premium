@@ -11,8 +11,8 @@
  * - Type-safe validation rules
  */
 
-import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
-import { SEARCH_DEBOUNCE_MS } from '@/config/features/search.config';
+import { SEARCH_DEBOUNCE_MS } from "@/config/features/search.config";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -22,7 +22,10 @@ export type ValidationRule<T = unknown> = {
   /** Rule name for identification */
   name: string;
   /** Validation function returning error message or null */
-  validate: (value: T, allValues?: Record<string, unknown>) => string | null | Promise<string | null>;
+  validate: (
+    value: T,
+    allValues?: Record<string, unknown>
+  ) => string | null | Promise<string | null>;
   /** Debounce delay in milliseconds (default: 300) */
   debounce?: number;
   /** Run validation on mount */
@@ -120,7 +123,7 @@ function calculateCompletionPercentage<T extends Record<string, unknown>>(
   const fields = Object.keys(schema) as (keyof T)[];
   if (fields.length === 0) return 100;
 
-  const completedFields = fields.filter(field => {
+  const completedFields = fields.filter((field) => {
     const value = values[field];
     if (value === null || value === undefined) return false;
 
@@ -142,14 +145,15 @@ export function useFormValidation<T extends Record<string, unknown>>({
   validateOnMount = false,
   interdependencyValidator,
 }: UseFormValidationOptions<T>): UseFormValidationReturn<T> {
-
   // Form values
   const [values, setValuesState] = useState<T>(initialValues);
 
   // Validation state for each field
-  const [validationState, setValidationState] = useState<FormValidationState<T>>(() => {
+  const [validationState, setValidationState] = useState<
+    FormValidationState<T>
+  >(() => {
     const initialState = {} as FormValidationState<T>;
-    Object.keys(schema).forEach(key => {
+    Object.keys(schema).forEach((key) => {
       initialState[key as keyof T] = {
         error: null,
         isValidating: false,
@@ -162,74 +166,78 @@ export function useFormValidation<T extends Record<string, unknown>>({
   });
 
   // Debounced validation functions per field
-  const debouncedValidators = useRef<Map<keyof T, ReturnType<typeof debounce>>>(new Map());
+  const debouncedValidators = useRef<Map<keyof T, ReturnType<typeof debounce>>>(
+    new Map()
+  );
 
   /**
    * Validate field immediately (without debounce)
    */
-  const validateFieldImmediate = useCallback(async <K extends keyof T>(
-    field: K,
-    value?: T[K]
-  ): Promise<boolean> => {
-    const fieldValue = value !== undefined ? value : values[field];
-    const rules = schema[field];
+  const validateFieldImmediate = useCallback(
+    async <K extends keyof T>(field: K, value?: T[K]): Promise<boolean> => {
+      const fieldValue = value !== undefined ? value : values[field];
+      const rules = schema[field];
 
-    if (!rules || rules.length === 0) return true;
+      if (!rules || rules.length === 0) return true;
 
-    // Set validating state
-    setValidationState(prev => ({
-      ...prev,
-      [field]: { ...prev[field], isValidating: true, isValidated: true },
-    }));
+      // Set validating state
+      setValidationState((prev) => ({
+        ...prev,
+        [field]: { ...prev[field], isValidating: true, isValidated: true },
+      }));
 
-    let firstError: string | null = null;
+      let firstError: string | null = null;
 
-    // Run all validation rules
-    for (const rule of rules) {
-      try {
-        const error = await rule.validate(fieldValue, values);
-        if (error && true) {
-          firstError = error;
-          break; // Stop on first error
+      // Run all validation rules
+      for (const rule of rules) {
+        try {
+          const error = await rule.validate(fieldValue, values);
+          if (error && true) {
+            firstError = error;
+            break; // Stop on first error
+          }
+        } catch (err) {
+          console.error(`Validation error for field ${String(field)}:`, err);
+          firstError = "Validation failed";
+          break;
         }
-      } catch (err) {
-        console.error(`Validation error for field ${String(field)}:`, err);
-        firstError = 'Validation failed';
-        break;
       }
-    }
 
-    // Check interdependencies
-    if (!firstError && interdependencyValidator) {
-      const interdependencyErrors = interdependencyValidator(values);
-      const fieldKey = field as string;
-      if (interdependencyErrors[fieldKey]) {
-        firstError = interdependencyErrors[fieldKey];
+      // Check interdependencies
+      if (!firstError && interdependencyValidator) {
+        const interdependencyErrors = interdependencyValidator(values);
+        const fieldKey = field as string;
+        if (interdependencyErrors[fieldKey]) {
+          firstError = interdependencyErrors[fieldKey];
+        }
       }
-    }
 
-    // Update validation state
-    setValidationState(prev => ({
-      ...prev,
-      [field]: {
-        ...prev[field],
-        error: firstError,
-        isValidating: false,
-        isValid: !firstError,
-        isValidated: true,
-      },
-    }));
+      // Update validation state
+      setValidationState((prev) => ({
+        ...prev,
+        [field]: {
+          ...prev[field],
+          error: firstError,
+          isValidating: false,
+          isValid: !firstError,
+          isValidated: true,
+        },
+      }));
 
-    return !firstError;
-  }, [values, schema, interdependencyValidator]);
+      return !firstError;
+    },
+    [values, schema, interdependencyValidator]
+  );
 
   // Initialize debounced validators
   useEffect(() => {
-    Object.keys(schema).forEach(fieldKey => {
+    Object.keys(schema).forEach((fieldKey) => {
       const field = fieldKey as keyof T;
       if (!debouncedValidators.current.has(field)) {
         const validator = debounce(
-          ((value: T[keyof T]) => validateFieldImmediate(field, value)) as (...args: unknown[]) => void,
+          ((value: T[keyof T]) => validateFieldImmediate(field, value)) as (
+            ...args: unknown[]
+          ) => void,
           debounceDelay
         );
         debouncedValidators.current.set(field, validator);
@@ -240,14 +248,17 @@ export function useFormValidation<T extends Record<string, unknown>>({
   /**
    * Validate field (debounced)
    */
-  const validateField = useCallback(async <K extends keyof T>(field: K): Promise<boolean> => {
-    const validator = debouncedValidators.current.get(field);
-    if (validator) {
-      validator(values[field]);
-    }
-    // Return immediate validation for awaitable result
-    return validateFieldImmediate(field);
-  }, [values, validateFieldImmediate]);
+  const validateField = useCallback(
+    async <K extends keyof T>(field: K): Promise<boolean> => {
+      const validator = debouncedValidators.current.get(field);
+      if (validator) {
+        validator(values[field]);
+      }
+      // Return immediate validation for awaitable result
+      return validateFieldImmediate(field);
+    },
+    [values, validateFieldImmediate]
+  );
 
   /**
    * Validate all fields
@@ -255,16 +266,16 @@ export function useFormValidation<T extends Record<string, unknown>>({
   const validateAll = useCallback(async (): Promise<boolean> => {
     const fields = Object.keys(schema) as (keyof T)[];
     const results = await Promise.all(
-      fields.map(field => validateFieldImmediate(field))
+      fields.map((field) => validateFieldImmediate(field))
     );
-    return results.every(isValid => isValid);
+    return results.every((isValid) => isValid);
   }, [schema, validateFieldImmediate]);
 
   /**
    * Set value for a field and trigger validation
    */
   const setValue = useCallback(<K extends keyof T>(field: K, value: T[K]) => {
-    setValuesState(prev => ({ ...prev, [field]: value }));
+    setValuesState((prev) => ({ ...prev, [field]: value }));
 
     // Trigger debounced validation
     const validator = debouncedValidators.current.get(field);
@@ -277,10 +288,10 @@ export function useFormValidation<T extends Record<string, unknown>>({
    * Set multiple values at once
    */
   const setValues = useCallback((newValues: Partial<T>) => {
-    setValuesState(prev => ({ ...prev, ...newValues }));
+    setValuesState((prev) => ({ ...prev, ...newValues }));
 
     // Trigger validation for all changed fields
-    Object.keys(newValues).forEach(fieldKey => {
+    Object.keys(newValues).forEach((fieldKey) => {
       const field = fieldKey as keyof T;
       const validator = debouncedValidators.current.get(field);
       if (validator) {
@@ -292,21 +303,24 @@ export function useFormValidation<T extends Record<string, unknown>>({
   /**
    * Mark field as touched
    */
-  const setTouched = useCallback(<K extends keyof T>(field: K, touched: boolean = true) => {
-    setValidationState(prev => ({
-      ...prev,
-      [field]: { ...prev[field], isTouched: touched },
-    }));
-  }, []);
+  const setTouched = useCallback(
+    <K extends keyof T>(field: K, touched: boolean = true) => {
+      setValidationState((prev) => ({
+        ...prev,
+        [field]: { ...prev[field], isTouched: touched },
+      }));
+    },
+    []
+  );
 
   /**
    * Reset form to initial values
    */
   const reset = useCallback(() => {
     setValuesState(initialValues);
-    setValidationState(prev => {
+    setValidationState((prev) => {
       const resetState = {} as FormValidationState<T>;
-      Object.keys(prev).forEach(key => {
+      Object.keys(prev).forEach((key) => {
         resetState[key as keyof T] = {
           error: null,
           isValidating: false,
@@ -324,21 +338,30 @@ export function useFormValidation<T extends Record<string, unknown>>({
     if (validateOnMount) {
       validateAll();
     }
-  }, [validateOnMount]); // Only run on mount
+  }, [validateOnMount, validateAll]);
 
   // Computed properties
   const isValid = useMemo(
-    () => Object.values(validationState).every((state: FieldValidation) => state.isValid),
+    () =>
+      Object.values(validationState).every(
+        (state: FieldValidation) => state.isValid
+      ),
     [validationState]
   );
 
   const hasErrors = useMemo(
-    () => Object.values(validationState).some((state: FieldValidation) => state.error !== null),
+    () =>
+      Object.values(validationState).some(
+        (state: FieldValidation) => state.error !== null
+      ),
     [validationState]
   );
 
   const isValidating = useMemo(
-    () => Object.values(validationState).some((state: FieldValidation) => state.isValidating),
+    () =>
+      Object.values(validationState).some(
+        (state: FieldValidation) => state.isValidating
+      ),
     [validationState]
   );
 
@@ -349,7 +372,7 @@ export function useFormValidation<T extends Record<string, unknown>>({
 
   const errors = useMemo(() => {
     const errorMap: Partial<Record<keyof T, string>> = {};
-    Object.keys(validationState).forEach(key => {
+    Object.keys(validationState).forEach((key) => {
       const field = key as keyof T;
       const state = validationState[field];
       if (state.error) {
@@ -381,18 +404,19 @@ export function useFormValidation<T extends Record<string, unknown>>({
 // ============================================================================
 
 export const ValidationRules = {
-  required: (message: string = 'This field is required'): ValidationRule => ({
-    name: 'required',
+  required: (message: string = "This field is required"): ValidationRule => ({
+    name: "required",
     validate: (value: unknown) => {
       if (value === null || value === undefined) return message;
-      if (typeof value === 'string' && value.trim().length === 0) return message;
+      if (typeof value === "string" && value.trim().length === 0)
+        return message;
       if (Array.isArray(value) && value.length === 0) return message;
       return null;
     },
   }),
 
   minLength: (min: number, message?: string): ValidationRule<string> => ({
-    name: 'minLength',
+    name: "minLength",
     validate: (value: string) => {
       if (!value) return null; // Let 'required' handle empty values
       return value.length < min
@@ -402,7 +426,7 @@ export const ValidationRules = {
   }),
 
   maxLength: (max: number, message?: string): ValidationRule<string> => ({
-    name: 'maxLength',
+    name: "maxLength",
     validate: (value: string) => {
       if (!value) return null;
       return value.length > max
@@ -411,8 +435,10 @@ export const ValidationRules = {
     },
   }),
 
-  email: (message: string = 'Invalid email address'): ValidationRule<string> => ({
-    name: 'email',
+  email: (
+    message: string = "Invalid email address"
+  ): ValidationRule<string> => ({
+    name: "email",
     validate: (value: string) => {
       if (!value) return null;
       const emailRegex = /^[^\s@]+@[^\s@]+.[^\s@]+$/;
@@ -421,7 +447,7 @@ export const ValidationRules = {
   }),
 
   pattern: (regex: RegExp, message: string): ValidationRule<string> => ({
-    name: 'pattern',
+    name: "pattern",
     validate: (value: string) => {
       if (!value) return null;
       return regex.test(value) ? null : message;
@@ -429,27 +455,26 @@ export const ValidationRules = {
   }),
 
   min: (min: number, message?: string): ValidationRule<number> => ({
-    name: 'min',
+    name: "min",
     validate: (value: number) => {
       if (value === null || value === undefined) return null;
-      return value < min
-        ? message || `Must be at least ${min}`
-        : null;
+      return value < min ? message || `Must be at least ${min}` : null;
     },
   }),
 
   max: (max: number, message?: string): ValidationRule<number> => ({
-    name: 'max',
+    name: "max",
     validate: (value: number) => {
       if (value === null || value === undefined) return null;
-      return value > max
-        ? message || `Must be at most ${max}`
-        : null;
+      return value > max ? message || `Must be at most ${max}` : null;
     },
   }),
 
-  dateAfter: (compareField: string, message?: string): ValidationRule<string> => ({
-    name: 'dateAfter',
+  dateAfter: (
+    compareField: string,
+    message?: string
+  ): ValidationRule<string> => ({
+    name: "dateAfter",
     validate: (value: string, allValues?: Record<string, unknown>) => {
       if (!value || !allValues) return null;
       const compareValue = allValues[compareField];
@@ -458,15 +483,16 @@ export const ValidationRules = {
       const date1 = new Date(value);
       const date2 = new Date(compareValue as string | number | Date);
 
-      return date1 <= date2
-        ? message || `Must be after ${compareField}`
-        : null;
+      return date1 <= date2 ? message || `Must be after ${compareField}` : null;
     },
   }),
 
   custom: <T = unknown>(
-    validateFn: (value: T, allValues?: Record<string, unknown>) => string | null,
-    name: string = 'custom'
+    validateFn: (
+      value: T,
+      allValues?: Record<string, unknown>
+    ) => string | null,
+    name: string = "custom"
   ): ValidationRule<T> => ({
     name,
     validate: validateFn,

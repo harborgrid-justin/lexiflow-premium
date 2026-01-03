@@ -136,22 +136,26 @@ export function fuzzySearch<T extends Record<string, unknown>>(
       let similarity = 0;
 
       switch (algorithm) {
-        case 'levenshtein':
+        case 'levenshtein': {
           similarity = levenshteinSimilarity(normalizedQuery, normalizedValue);
           break;
-        case 'damerau-levenshtein':
+        }
+        case 'damerau-levenshtein': {
           similarity = damerauLevenshteinSimilarity(normalizedQuery, normalizedValue);
           break;
-        case 'trigram':
+        }
+        case 'trigram': {
           similarity = trigramSimilarity(normalizedQuery, normalizedValue);
           break;
+        }
         case 'combined':
-        default:
+        default: {
           // Use weighted combination of algorithms
           const lev = levenshteinSimilarity(normalizedQuery, normalizedValue);
           const tri = trigramSimilarity(normalizedQuery, normalizedValue);
           similarity = (lev * 0.6) + (tri * 0.4);
           break;
+        }
       }
 
       // Apply phonetic matching boost
@@ -258,21 +262,25 @@ export function searchIndex<T extends Record<string, unknown>>(
       let similarity = 0;
 
       switch (algorithm) {
-        case 'levenshtein':
+        case 'levenshtein': {
           similarity = levenshteinSimilarity(normalizedQuery, normalizedValue);
           break;
-        case 'damerau-levenshtein':
+        }
+        case 'damerau-levenshtein': {
           similarity = damerauLevenshteinSimilarity(normalizedQuery, normalizedValue);
           break;
-        case 'trigram':
+        }
+        case 'trigram': {
           similarity = trigramSimilarity(normalizedQuery, normalizedValue);
           break;
+        }
         case 'combined':
-        default:
+        default: {
           const lev = levenshteinSimilarity(normalizedQuery, normalizedValue);
           const tri = trigramSimilarity(normalizedQuery, normalizedValue);
           similarity = (lev * 0.6) + (tri * 0.4);
           break;
+        }
       }
 
       const weight = fieldWeights[field] || 1;

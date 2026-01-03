@@ -43,14 +43,14 @@ export const JurisdictionState: React.FC = () => {
     DataService.jurisdiction.getState
   );
 
-  // Defensive array validation
-  const states = Array.isArray(rawStates) ? rawStates : [];
+  // Defensive array validation and filtering
   const filteredStates = useMemo(
     () => {
+      const states = Array.isArray(rawStates) ? rawStates : [];
       if (!states) return [];
       return filterStates(states as Array<{ name: string; region: string }>, filter);
     },
-    [filter, states]
+    [filter, rawStates]
   );
 
   const handleFilterChange = useCallback((value: string) => {

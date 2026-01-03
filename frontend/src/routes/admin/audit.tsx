@@ -11,7 +11,7 @@
  */
 
 import { useId, useState } from 'react';
-import { Link, useSearchParams } from 'react-router';
+import { Link } from 'react-router';
 import { RouteErrorBoundary } from '../_shared/RouteErrorBoundary';
 import { createAdminMeta } from '../_shared/meta-utils';
 import type { Route } from "./+types/audit";
@@ -53,7 +53,6 @@ interface AuditLogEntry {
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const page = parseInt(url.searchParams.get('page') || '1');
-  const filter = url.searchParams.get('filter') || 'all';
 
   // Mock audit log data
   const logs: AuditLogEntry[] = [
@@ -205,7 +204,6 @@ function formatTimestamp(timestamp: string): string {
 
 export default function AuditLogsRoute({ loaderData }: Route.ComponentProps) {
   const { logs, pagination, filters } = loaderData;
-  const [searchParams, setSearchParams] = useSearchParams();
   const formId = useId();
 
   const [selectedAction, setSelectedAction] = useState<string>('all');

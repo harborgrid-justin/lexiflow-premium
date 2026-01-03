@@ -3,6 +3,7 @@ import { TabNavigation } from '@/components/organisms/TabNavigation/TabNavigatio
 import { cn } from '@/utils/cn';
 import { draftingApi, DraftingTemplate, GeneratedDocument, DraftingStats as StatsType } from '@api/domains/drafting.api';
 import { useTheme } from '@providers/ThemeContext';
+import { useCallback, useEffect, useState } from 'react';
 import { useToast } from '@providers/ToastContext';
 import { BarChart3, Clock, FileText, FolderOpen, Plus } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
@@ -30,13 +31,7 @@ const DraftingDashboard: React.FC = () => {
   const [editingTemplate, setEditingTemplate] = useState<DraftingTemplate | undefined>(undefined);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | undefined>(undefined);
 
-  useEffect(() => {
-    if (!editorView) {
-      loadData();
-    }
-  }, [editorView, activeTab]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       const [draftsData, templatesData, approvalsData, statsData] = await Promise.all([

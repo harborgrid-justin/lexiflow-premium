@@ -96,6 +96,11 @@ export function requireAuthentication(request: Request): RouteGuardResult {
 export function requireGuest(request: Request): RouteGuardResult {
   const user = getCurrentUser();
 
+  // Log request metadata for security auditing
+  const userAgent = request.headers.get("User-Agent") || "Unknown";
+  const referer = request.headers.get("Referer") || "Direct";
+  console.debug(`Guest route access: ${userAgent}, from: ${referer}`);
+
   if (user) {
     // Already authenticated - redirect to dashboard
     throw new Response(null, {
@@ -122,7 +127,7 @@ export function requireGuest(request: Request): RouteGuardResult {
  * @throws Response with 403 Forbidden if user doesn't have required role
  */
 export function requireRole(
-  request: Request,
+  _request: Request,
   ...allowedRoles: UserRole[]
 ): RouteGuardResult {
   const { user } = requireAuthentication(_request);
@@ -184,7 +189,7 @@ export function requireStaff(request: Request): RouteGuardResult {
  * @throws Response with 403 Forbidden if user doesn't have permission
  */
 export function requirePermission(
-  request: Request,
+  _request: Request,
   permission: string
 ): RouteGuardResult {
   const { user } = requireAuthentication(_request);
@@ -208,7 +213,7 @@ export function requirePermission(
  * @throws Response with 403 Forbidden if user doesn't have all permissions
  */
 export function requireAllPermissions(
-  request: Request,
+  _request: Request,
   permissions: string[]
 ): RouteGuardResult {
   const { user } = requireAuthentication(_request);
@@ -240,7 +245,7 @@ export function requireAllPermissions(
  * @throws Response with 403 Forbidden if user doesn't have any permission
  */
 export function requireAnyPermission(
-  request: Request,
+  _request: Request,
   permissions: string[]
 ): RouteGuardResult {
   const { user } = requireAuthentication(_request);

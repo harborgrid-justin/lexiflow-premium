@@ -1,18 +1,18 @@
 /**
  * @module hooks/useBlobRegistry
  * @category Hooks - Memory Management
- * 
+ *
  * Manages Blob URL lifecycle to prevent memory leaks.
  * Automatically revokes URLs on unmount.
- * 
+ *
  * @example
  * ```typescript
  * const blobRegistry = useBlobRegistry();
- * 
+ *
  * // Create preview URL
  * const previewUrl = blobRegistry.register(pdfBlob);
  * <iframe src={previewUrl} />
- * 
+ *
  * // Manual cleanup when done
  * blobRegistry.revoke(previewUrl);
  * ```
@@ -21,7 +21,7 @@
 // ============================================================================
 // EXTERNAL DEPENDENCIES
 // ============================================================================
-import { useEffect, useRef, useCallback } from 'react';
+import { useCallback, useEffect, useRef } from "react";
 
 // ============================================================================
 // TYPES
@@ -43,7 +43,7 @@ export interface UseBlobRegistryReturn {
 
 /**
  * Manages Blob URL lifecycle with automatic cleanup.
- * 
+ *
  * @returns Object with register and revoke methods
  */
 export function useBlobRegistry(): UseBlobRegistryReturn {
@@ -64,11 +64,12 @@ export function useBlobRegistry(): UseBlobRegistryReturn {
 
   // Automatic cleanup on unmount
   useEffect(() => {
+    const currentRegistry = registry.current;
     return () => {
-      registry.current.forEach(url => {
+      currentRegistry.forEach((url) => {
         URL.revokeObjectURL(url);
       });
-      registry.current.clear();
+      currentRegistry.clear();
     };
   }, []);
 

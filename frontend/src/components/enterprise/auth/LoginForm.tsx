@@ -119,8 +119,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           refreshToken: response.refreshToken,
         });
       }
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Invalid email or password. Please try again.';
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Invalid email or password. Please try again.';
       setErrors({
         general: message,
       });
@@ -152,8 +152,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       } else {
         setErrors({ code: 'Invalid MFA code. Please try again.' });
       }
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Invalid MFA code. Please try again.';
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Invalid MFA code. Please try again.';
       setErrors({
         code: message,
       });

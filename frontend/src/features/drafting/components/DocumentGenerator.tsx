@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from 'react';
 import {
   draftingApi,
   DraftingTemplate,
@@ -281,14 +282,14 @@ export const DocumentGenerator: React.FC<DocumentGeneratorProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [step, selectedTemplate, fieldValues, addToast]);
 
   // Automatically refresh preview when moving to preview tab
   useEffect(() => {
     if (step === 'preview') {
       handleRefreshPreview();
     }
-  }, [step]);
+  }, [step, handleRefreshPreview]);
 
   const renderTemplateSelection = () => (
     <div className="space-y-4">

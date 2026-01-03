@@ -56,8 +56,8 @@ export const WebhookManagement: React.FC = () => {
       createModal.close();
       setFormData({ events: [] });
       notify.success('Webhook created successfully');
-    } catch (error) {
-      console.error(error);
+    } catch {
+      notify.error('Failed to create webhook');
     }
   };
 

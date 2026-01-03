@@ -70,7 +70,7 @@ export const StrategyCanvas: React.FC<StrategyCanvasProps> = ({
     setSelectedNodeId(id);
     setSelectedConnectionId(null);
     propertiesToggle.open();
-  }, [pan, scale, addNode, updateNode]);
+  }, [pan, scale, addNode, updateNode, propertiesToggle]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (draggingNodeId && canvasRef.current) {

@@ -62,7 +62,7 @@ const RateTableManagementComponent: React.FC = () => {
       createModal.close();
       setFormData({ rates: [] });
       notify.success('Rate table created successfully');
-    } catch (error) {
+    } catch {
       notify.error('Failed to create rate table');
     }
   };
@@ -90,7 +90,7 @@ const RateTableManagementComponent: React.FC = () => {
       deleteModal.close();
       tableSelection.deselect();
       notify.success('Rate table deleted successfully');
-    } catch (error) {
+    } catch {
       notify.error('Failed to delete rate table');
     }
   };

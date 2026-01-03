@@ -96,7 +96,7 @@ export async function action({ request }: Route.ActionArgs) {
 // ============================================================================
 
 export default function DocumentsIndexRoute() {
-  const { documents, totalCount } = loaderData;
+  const { documents, totalCount: _totalCount } = loaderData;
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [filters, setFilters] = useState<DocumentFilterOptions>({});
   const [filteredDocs, setFilteredDocs] = useState(documents);

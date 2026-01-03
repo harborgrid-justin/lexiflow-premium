@@ -14,7 +14,7 @@ import { useTheme } from '@/contexts/theme/ThemeContext';
 import { useNotify } from '@/hooks/useNotify';
 import { useModalState } from '@/hooks/core';
 import { cn } from '@/utils/cn';
-import type { LegalHoldEnhanced, LegalHoldNotification } from '@/types/discovery-enhanced';
+import type { LegalHoldEnhanced } from '@/types/discovery-enhanced';
 
 export const LegalHoldsEnhanced: React.FC = () => {
   const { theme } = useTheme();

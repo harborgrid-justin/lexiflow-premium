@@ -477,18 +477,18 @@ export class DraftingValidationService {
           }
         }
 
-        if (v.validation) {
-          if (v.validation.pattern) {
-            try {
-              new RegExp(v.validation.pattern);
-            } catch (error) {
-              errors.push({
-                field: `variables[${index}].validation.pattern`,
-                message: "Invalid regex pattern",
-                code: "INVALID_REGEX",
-              });
+          if (v.validation) {
+            if (v.validation.pattern) {
+              try {
+                new RegExp(v.validation.pattern);
+              } catch {
+                errors.push({
+                  field: `variables[${index}].validation.pattern`,
+                  message: "Invalid regex pattern",
+                  code: "INVALID_REGEX",
+                });
+              }
             }
-          }
 
           if (
             v.validation.minLength !== undefined &&

@@ -28,12 +28,12 @@ import {
 export const PartnerDashboard: React.FC = () => {
   const { theme } = useTheme();
 
-  const { data: roleDashboard, isLoading } = useQuery(
+  const { isLoading } = useQuery(
     ['dashboard', 'partner'],
     () => dashboardMetricsService.getRoleDashboard('partner')
   );
 
-  const { data: billingData } = useQuery(
+  useQuery(
     ['dashboard', 'partner-billing'],
     () => dashboardMetricsService.getBillingOverview()
   );

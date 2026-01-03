@@ -275,7 +275,7 @@ export function useNexusGraph(
       workerRef.current?.terminate();
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, [initialData]);
+  }, [initialData, containerRef, tickWorker]);
 
   const tickWorker = useCallback(() => {
     if (!workerRef.current) return;

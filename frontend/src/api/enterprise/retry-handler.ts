@@ -17,12 +17,10 @@
  */
 
 import {
-  getRetryDelay,
   isRetryableError,
   NetworkError,
   parseApiError,
   RateLimitError,
-  TimeoutError,
 } from "./errors";
 
 /**

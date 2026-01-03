@@ -16,7 +16,7 @@ import { LazyLoader } from '@/components/ui/molecules/LazyLoader/LazyLoader';
 export const ParalegalDashboard: React.FC = () => {
   const { theme } = useTheme();
 
-  const { data: roleDashboard, isLoading } = useQuery(
+  const { isLoading } = useQuery(
     ['dashboard', 'paralegal'],
     () => dashboardMetricsService.getRoleDashboard('paralegal')
   );

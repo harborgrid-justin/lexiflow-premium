@@ -57,7 +57,7 @@ export const DocumentExplorer = ({ currentUserRole = 'Associate' }: DocumentExpl
         }
     );
 
-    const renderGridCell = (item: LegalDocument, index: number) => {
+    const renderGridCell = (item: LegalDocument) => {
         return (
             <DocumentGridCard
                 doc={item}

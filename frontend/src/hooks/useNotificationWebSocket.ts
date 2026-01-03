@@ -298,6 +298,7 @@ export const useNotificationWebSocket = (
     maxReconnectAttempts,
     onNotification,
     onNotificationRead,
+    scheduleReconnect,
     onAllNotificationsRead,
     onNotificationDeleted,
     onUnreadCountChange,
